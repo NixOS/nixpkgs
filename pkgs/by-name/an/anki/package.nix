@@ -288,7 +288,7 @@ python3Packages.buildPythonApplication rec {
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Spaced repetition flashcard program";
     mainProgram = "anki";
     longDescription = ''
@@ -304,9 +304,9 @@ python3Packages.buildPythonApplication rec {
       or even practicing guitar chords!
     '';
     homepage = "https://apps.ankiweb.net";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       euank
       junestepp
       oxij

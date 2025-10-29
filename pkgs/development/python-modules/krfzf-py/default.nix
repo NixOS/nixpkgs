@@ -20,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fzf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Fzf Wrapper";
     downloadPage = "https://github.com/justfoolingaround/fzf.py";
     homepage = "https://pypi.org/project/krfzf-py/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

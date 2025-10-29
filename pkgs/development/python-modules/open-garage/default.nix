@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opengarage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with opengarage.io";
     homepage = "https://github.com/Danielhiversen/pyOpenGarage";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

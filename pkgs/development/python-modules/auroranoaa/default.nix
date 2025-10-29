@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "auroranoaa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Aurora API";
     homepage = "https://github.com/djtimca/aurora-api";
     changelog = "https://github.com/djtimca/aurora-api/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

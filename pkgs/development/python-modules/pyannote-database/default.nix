@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.database" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reproducible experimental protocols for multimedia (audio, video, text) database";
     homepage = "https://github.com/pyannote/pyannote-database";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "pyannote-database";
   };
 }

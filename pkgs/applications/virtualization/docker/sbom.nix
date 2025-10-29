@@ -35,11 +35,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for Docker CLI to support SBOM creation using Syft";
     mainProgram = "docker-sbom";
     homepage = "https://github.com/docker/sbom-cli-plugin";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

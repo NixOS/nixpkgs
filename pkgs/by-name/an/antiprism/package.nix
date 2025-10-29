@@ -29,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     libglut
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.antiprism.com";
     description = "Collection of programs for generating, manipulating, transforming and viewing polyhedra";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 })

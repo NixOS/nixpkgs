@@ -149,12 +149,12 @@ mixRelease rec {
     elixirPackage = beamPackages.elixir;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
     changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       erictapen
     ];

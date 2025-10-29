@@ -38,10 +38,10 @@ stdenv.mkDerivation {
     extensionPortalSlug = "impatience";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Speed up builtin gnome-shell animations";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       timbertson
       tiramiseb
     ];

@@ -39,16 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       doronbehar
       pentane
       aleksana
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-gtk";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

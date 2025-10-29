@@ -70,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slixmpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
     changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymunk" ];
 
-  meta = with lib; {
+  meta = {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
     changelog = "https://github.com/viblo/pymunk/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
   };
 }

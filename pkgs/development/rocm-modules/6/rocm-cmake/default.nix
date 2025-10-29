@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/ROCm/rocm-cmake";
-    license = licenses.mit;
-    teams = [ teams.rocm ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.unix;
   };
 })

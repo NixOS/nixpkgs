@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "test_corsair_scan_origin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to check for Cross-Origin Resource Sharing (CORS) misconfigurations";
     mainProgram = "corsair";
     homepage = "https://github.com/Santandersecurityresearch/corsair_scan";
     changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

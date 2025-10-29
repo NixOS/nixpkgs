@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "McCabe-style function complexity and line counting for C and C++";
     homepage = "https://people.debian.org/~bame/pmccabe/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       pmccabe calculates McCabe-style cyclomatic complexity for C and
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       trees or files; and vifn, to invoke vi given a function name rather
       than a file name.
     '';
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

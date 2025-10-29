@@ -73,11 +73,11 @@ bepastyPython.pkgs.buildPythonPackage rec {
     "src/bepasty/tests/test_website.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bepasty/bepasty-server";
     description = "Binary pastebin server";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       aither64
       makefu
     ];

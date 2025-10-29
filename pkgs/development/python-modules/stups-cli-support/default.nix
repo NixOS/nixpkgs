@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper library for all STUPS command line tools";
     homepage = "https://github.com/zalando-stups/stups-cli-support";
-    license = licenses.asl20;
-    maintainers = [ maintainers.mschuwalow ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.mschuwalow ];
   };
 }

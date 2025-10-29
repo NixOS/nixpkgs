@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "TN3270 client Library";
     homepage = "https://github.com/PerryWerneck/lib3270";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.vifino ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -554,9 +554,9 @@ let
         description = "Event-driven I/O framework for the V8 JavaScript engine";
         homepage = "https://nodejs.org";
         changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
-        license = licenses.mit;
-        maintainers = with maintainers; [ aduh95 ];
-        platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ aduh95 ];
+        platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
         # This broken condition is likely too conservative. Feel free to loosen it if it works.
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);

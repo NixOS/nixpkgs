@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XCB utility functions for the X resource manager";
     homepage = "https://github.com/Airblader/xcb-util-xrm";
-    license = licenses.mit; # X11 variant
-    platforms = with platforms; unix;
+    license = lib.licenses.mit; # X11 variant
+    platforms = with lib.platforms; unix;
   };
 }

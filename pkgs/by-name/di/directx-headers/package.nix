@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   # tests require WSL2
   mesonFlags = [ "-Dbuild-test=false" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official D3D12 headers from Microsoft";
     homepage = "https://github.com/microsoft/DirectX-Headers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

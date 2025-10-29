@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "itemadapter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common interface for data container classes";
     homepage = "https://github.com/scrapy/itemadapter";
     changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

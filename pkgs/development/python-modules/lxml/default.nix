@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "lxml.etree"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lxml/lxml/blob/lxml-${version}/CHANGES.txt";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

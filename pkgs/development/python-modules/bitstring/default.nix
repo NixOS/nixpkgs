@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitstring" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
     changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

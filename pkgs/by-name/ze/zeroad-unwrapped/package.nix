@@ -165,15 +165,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21
       mit
       cc-by-sa-30
-      licenses.zlib # otherwise masked by pkgs.zlib
+      lib.licenses.zlib # otherwise masked by pkgs.zlib
     ];
-    maintainers = with maintainers; [ chvp ];
-    platforms = subtractLists platforms.i686 platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = subtractLists lib.platforms.i686 lib.platforms.linux;
     mainProgram = "0ad";
   };
 }

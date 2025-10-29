@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coordinates" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convenience class for doing maths with explicit coordinates";
     homepage = "https://github.com/clbarnes/coordinates";
     changelog = "https://github.com/clbarnes/coordinates/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

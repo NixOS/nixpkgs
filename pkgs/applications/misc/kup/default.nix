@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     libgit2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup tool for KDE";
     homepage = "https://apps.kde.org/kup";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pwoelfel ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.pwoelfel ];
   };
 }

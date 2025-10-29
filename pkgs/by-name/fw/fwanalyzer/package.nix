@@ -36,11 +36,11 @@ buildGoModule rec {
   # The tests requires an additional setup (unpacking images, etc.)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze filesystem images";
     homepage = "https://github.com/cruise-automation/fwanalyzer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fwanalyzer";
   };
 }

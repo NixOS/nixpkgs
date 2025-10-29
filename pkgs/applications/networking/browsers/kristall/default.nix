@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
         done
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical small-internet client, supports gemini, http, https, gopher, finger";
     mainProgram = "kristall";
     homepage = "https://random-projects.net/projects/kristall.gemini";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (qtmultimedia.meta) platforms;
   };
 }

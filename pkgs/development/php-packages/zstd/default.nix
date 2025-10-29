@@ -26,9 +26,9 @@ buildPecl {
 
   configureFlags = [ "--with-libzstd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zstd Extension for PHP";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/kjdev/php-ext-zstd";
     maintainers = [ ];
   };

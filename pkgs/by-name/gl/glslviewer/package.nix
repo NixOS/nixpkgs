@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.20" ];
-  meta = with lib; {
+  meta = {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.hodapp ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.hodapp ];
+    platforms = lib.platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

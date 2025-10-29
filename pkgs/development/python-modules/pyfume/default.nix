@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfume" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for fuzzy model estimation";
     homepage = "https://github.com/CaroFuchs/pyFUME";
     changelog = "https://github.com/CaroFuchs/pyFUME/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

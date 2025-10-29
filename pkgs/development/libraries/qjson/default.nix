@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase ];
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight data-interchange format";
     homepage = "https://qjson.sourceforge.net/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-xstatic/font-awesome";
     description = "Font Awesome packaged for python";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ aither64 ];
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ aither64 ];
   };
 }

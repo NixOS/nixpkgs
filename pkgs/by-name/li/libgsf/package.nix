@@ -90,11 +90,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME's Structured File Library";
     homepage = "https://www.gnome.org/projects/libgsf";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

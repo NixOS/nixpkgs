@@ -90,10 +90,10 @@ buildPythonPackage rec {
     "test_transaction_close_tx_from_parent"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

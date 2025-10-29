@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitter API library";
     homepage = "https://mike.verdone.ca/twitter/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

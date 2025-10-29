@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese TrueType Gothic, P Gothic, Mincho, P Mincho fonts";
     homepage = "https://launchpad.net/takao-fonts";
-    license = licenses.ipa;
+    license = lib.licenses.ipa;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

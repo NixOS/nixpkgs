@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylzma" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.joachim-bauch.de/projects/pylzma/";
     description = "Platform independent python bindings for the LZMA compression library";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

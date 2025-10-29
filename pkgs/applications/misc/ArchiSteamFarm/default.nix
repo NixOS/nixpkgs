@@ -100,11 +100,11 @@ buildDotnetModule rec {
     ui = callPackage ./web-ui { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

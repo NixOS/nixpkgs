@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     cli = callPackage ./test-cli.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation ORM for Node.js and TypeScript";
     homepage = "https://www.prisma.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aqrln ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aqrln ];
     mainProgram = "prisma";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

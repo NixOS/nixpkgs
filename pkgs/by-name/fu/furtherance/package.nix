@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Track your time without being tracked";
     mainProgram = "furtherance";
     homepage = "https://github.com/lakoliu/Furtherance";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ CaptainJawZ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ CaptainJawZ ];
   };
 })

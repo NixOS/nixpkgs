@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openant" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     mainProgram = "openant";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

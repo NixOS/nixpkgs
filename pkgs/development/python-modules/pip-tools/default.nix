@@ -102,11 +102,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "piptools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
     changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ curl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/keesL/metar";
     description = "Downloads weather reports and optionally decodes them";
     longDescription = ''
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
       more work in the area of clouds need to be done, as support for Cumulus or
       Cumulunimbus is not yet decoded.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zalakain ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zalakain ];
     mainProgram = "metar";
   };
 }

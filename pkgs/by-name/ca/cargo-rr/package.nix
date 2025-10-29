@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [ rr ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     mainProgram = "cargo-rr";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];

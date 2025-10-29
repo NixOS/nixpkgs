@@ -60,12 +60,12 @@ mkDerivation rec {
 
   installCheckPhase = "$out/bin/chiaki --help";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "chiaki";
   };
 }

@@ -26,14 +26,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "fusuma";
 
-  meta = with lib; {
+  meta = {
     description = "Multitouch gestures with libinput driver on X11, Linux";
     homepage = "https://github.com/iberianpig/fusuma";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
       Br1ght0ne
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

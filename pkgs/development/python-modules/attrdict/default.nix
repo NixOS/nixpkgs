@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "attrdict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dict with attribute-style access";
     homepage = "https://github.com/bcj/AttrDict";
     changelog = "https://github.com/bcj/AttrDict/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

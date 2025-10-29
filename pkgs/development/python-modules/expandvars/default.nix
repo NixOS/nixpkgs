@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Expand system variables Unix style";
     homepage = "https://github.com/sayanarijit/expandvars";
-    license = licenses.mit;
-    maintainers = with maintainers; [ geluk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ geluk ];
   };
 }

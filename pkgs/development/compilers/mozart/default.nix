@@ -87,15 +87,15 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source implementation of Oz 3";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       layus
       h7x4
     ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://mozart.github.io";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # Trace/BPT trap: 5
     broken = stdenv.hostPlatform.isDarwin;
   };

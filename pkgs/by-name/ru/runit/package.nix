@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     cp -r ../man $man/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UNIX init scheme with service supervision";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

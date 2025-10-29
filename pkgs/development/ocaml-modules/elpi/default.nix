@@ -104,10 +104,10 @@ buildDunePackage {
       ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Embeddable λProlog Interpreter";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/LPCIC/elpi";
   };
 

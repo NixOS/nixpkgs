@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bboxtype.com/fira/";
     description = "Monospace font for Firefox OS";
     longDescription = ''
@@ -32,8 +32,8 @@ stdenvNoCC.mkDerivation rec {
       Type Design for Mozilla Firefox OS. Available in Regular,
       Medium, and Bold.
     '';
-    license = licenses.ofl;
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.all;
   };
 }

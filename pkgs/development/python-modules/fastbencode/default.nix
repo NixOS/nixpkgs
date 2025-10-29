@@ -46,11 +46,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
     changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

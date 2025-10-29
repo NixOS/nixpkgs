@@ -38,10 +38,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Sans-I/O implementation of SOCKS4, SOCKS4A, and SOCKS5";
     homepage = "https://github.com/sethmlarson/socksio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

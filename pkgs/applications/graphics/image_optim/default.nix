@@ -75,7 +75,7 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "image_optim";
 
-  meta = with lib; {
+  meta = {
     description = "Optimize images using multiple utilities";
     longDescription = ''
       Command line tool and ruby interface to optimize (lossless compress,
@@ -84,11 +84,11 @@ bundlerApp {
       jpegtran, optipng, oxipng, pngcrush, pngout, pngquant, svgo)
     '';
     homepage = "https://github.com/toy/image_optim";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "image_optim";
   };
 }

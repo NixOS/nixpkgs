@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";
     homepage = "https://openquantumsafe.org";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.sigmanificient ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sigmanificient ];
   };
 })

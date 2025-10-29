@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal assistant, powered by Generative AI";
     homepage = "https://github.com/micr0-dev/lexido";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ daru-san ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "lexido";
   };
 }

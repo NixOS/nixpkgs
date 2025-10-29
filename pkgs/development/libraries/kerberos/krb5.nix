@@ -169,11 +169,11 @@ stdenv.mkDerivation rec {
     bashNonInteractive
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MIT Kerberos 5";
     homepage = "http://web.mit.edu/kerberos/";
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
   passthru = {

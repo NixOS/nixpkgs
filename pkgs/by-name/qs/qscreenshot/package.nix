@@ -33,12 +33,12 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required( VERSION 3.2.0 )" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple creation and editing of screenshots";
     mainProgram = "qScreenshot";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

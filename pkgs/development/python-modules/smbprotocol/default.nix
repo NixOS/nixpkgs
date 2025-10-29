@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smbprotocol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
     changelog = "https://github.com/jborean93/smbprotocol/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

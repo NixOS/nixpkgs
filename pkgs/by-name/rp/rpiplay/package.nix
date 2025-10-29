@@ -57,13 +57,13 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 3.4.1)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/FD-/RPiPlay";
     description = "Open-source implementation of an AirPlay mirroring server";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "rpiplay";
   };
 }

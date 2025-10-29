@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "regex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative regular expression module, to replace re";
     homepage = "https://github.com/mrabarnett/mrab-regex";
     license = [
-      licenses.asl20
-      licenses.cnri-python
+      lib.licenses.asl20
+      lib.licenses.cnri-python
     ];
     maintainers = [ ];
   };

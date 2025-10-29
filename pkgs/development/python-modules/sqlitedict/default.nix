@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Persistent, thread-safe dict";
     homepage = "https://github.com/RaRe-Technologies/sqlitedict";
     changelog = "https://github.com/piskvorky/sqlitedict/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arnoldfarkas ];
   };
 }

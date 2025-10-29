@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tool/gen-search-table.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EDID and DisplayID library";
     mainProgram = "di-edid-decode";
     homepage = "https://gitlab.freedesktop.org/emersion/libdisplay-info";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pedrohlc ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pedrohlc ];
   };
 })

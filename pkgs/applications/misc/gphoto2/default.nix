@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ready to use set of digital camera software applications";
     longDescription = ''
 
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
 
     '';
     homepage = "http://www.gphoto.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jcumming ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jcumming ];
     mainProgram = "gphoto2";
   };
 }

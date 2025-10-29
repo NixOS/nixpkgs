@@ -17,11 +17,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-2fsYeSZYzadLmikUJbuHE4XMAp38jTZvtRo9xgaZVzg=";
 
-  meta = with lib; {
+  meta = {
     description = "Script to monitor & download Twitter Spaces 24/7";
     homepage = "https://github.com/HitomaruKonpaku/twspace-crawler";
     changelog = "https://github.com/HitomaruKonpaku/twspace-crawler/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
     mainProgram = "twspace-crawler";
   };

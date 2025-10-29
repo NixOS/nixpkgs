@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-iIBqx52fD12R+7MSjQNihMYYtZ9vPAdJndOG4YJVhy4=";
 
-  meta = with lib; {
+  meta = {
     description = "Go kernel for Jupyter notebooks";
     homepage = "https://github.com/gopherdata/gophernotes";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.costrouc ];
     mainProgram = "gophernotes";
   };
 }

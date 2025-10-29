@@ -72,11 +72,11 @@ mkDerivation rec {
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "DAW similar to FL Studio (music production software)";
     mainProgram = "lmms";
     homepage = "https://lmms.io";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

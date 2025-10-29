@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "google.cloud.vpcaccess_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Virtual Private Cloud";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vpc-access";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vpc-access-v${version}/packages/google-cloud-vpc-access/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -32,11 +32,11 @@ buildPythonPackage {
     "sqlcipher3"
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "sqlcipher3";
     homepage = "https://github.com/coleifer/sqlcipher3";
     description = "Python 3 bindings for SQLCipher";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

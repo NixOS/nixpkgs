@@ -95,11 +95,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
     changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

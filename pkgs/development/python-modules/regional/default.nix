@@ -39,10 +39,10 @@ buildPythonPackage {
     "test_mask"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple manipualtion and display of spatial regions";
     homepage = "https://github.com/freeman-lab/regional";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

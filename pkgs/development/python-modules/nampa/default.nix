@@ -30,11 +30,11 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the FLIRT technology";
     homepage = "https://github.com/thebabush/nampa";
     changelog = "https://github.com/thebabush/nampa/commits/cb6a63aae64324f57bdc296064bc6aa2b99ff99a/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

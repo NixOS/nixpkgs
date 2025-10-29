@@ -52,11 +52,11 @@ buildPythonPackage rec {
     "test_list_products"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Vision API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vision";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vision-v${version}/packages/google-cloud-vision/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

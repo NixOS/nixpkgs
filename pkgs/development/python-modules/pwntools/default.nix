@@ -98,12 +98,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwn" ];
 
-  meta = with lib; {
+  meta = {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bennofs
       kristoff3r
       pamplemousse

@@ -87,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       epl20 # or
       gpl2Plus
     ];

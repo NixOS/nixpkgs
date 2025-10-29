@@ -62,11 +62,11 @@ buildDunePackage rec {
     hello = callPackage ./tests/hello { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://reasonml.github.io/";
     downloadPage = "https://github.com/reasonml/reason";
     description = "User-friendly programming language built on OCaml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

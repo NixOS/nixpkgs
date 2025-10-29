@@ -34,12 +34,12 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Source code formatter for cmake listfiles";
     homepage = "https://github.com/cheshirekow/cmake_format";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.tobim ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.tobim ];
     mainProgram = "cmake-format";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

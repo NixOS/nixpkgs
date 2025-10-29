@@ -58,12 +58,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wfxr/forgit";
     description = "Utility tool powered by fzf for using git interactively";
     mainProgram = "git-forgit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.all;
   };
 })

@@ -43,11 +43,11 @@ stdenv.mkDerivation (final: {
 
   cmakeFlags = [ "-DLIBUNICODE_UCD_DIR=${ucd-src}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern C++20 Unicode library";
     mainProgram = "unicode-query";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ moni ];
   };
 })

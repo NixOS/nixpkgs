@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
     homepage = "https://github.com/myriadrf/LimeSuite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
     badPlatforms = lib.optionals withGui platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
   };
 }
