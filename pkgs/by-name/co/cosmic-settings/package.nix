@@ -20,11 +20,7 @@
   nix-update-script,
   nixosTests,
 }:
-let
-  libcosmicAppHook' = (libcosmicAppHook.__spliced.buildHost or libcosmicAppHook).override {
-    includeSettings = false;
-  };
-in
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
   version = "1.0.0-beta.3";
@@ -42,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     just
-    libcosmicAppHook'
+    libcosmicAppHook
     pkg-config
     rustPlatform.bindgenHook
     util-linux

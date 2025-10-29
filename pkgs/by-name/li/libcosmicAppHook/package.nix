@@ -16,7 +16,7 @@
   wayland,
   vulkan-loader,
 
-  includeSettings ? true,
+  includeSettings ? false,
 }:
 
 makeSetupHook {
