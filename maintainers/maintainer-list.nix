@@ -10683,6 +10683,12 @@
     github = "hxtmdev";
     githubId = 7771007;
   };
+  hydrafog = {
+    email = "surfinwave@proton.me";
+    github = "hydrafog";
+    githubId = 240524466;
+    name = "hydrafog";
+  };
   hypersw = {
     email = "baltic@hypersw.net";
     github = "hypersw";
