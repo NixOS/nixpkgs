@@ -113,6 +113,7 @@ lib.makeOverridable (
     revWithTag = if tag != null then "refs/tags/${tag}" else rev;
 
     fetcherArgs =
+      finalAttrs:
       passthruAttrs
       // (
         if useFetchGit then
@@ -127,6 +128,12 @@ lib.makeOverridable (
               ;
             url = gitRepoUrl;
             inherit passthru;
+            derivationArgs = {
+              inherit
+                owner
+                repo
+                ;
+            };
           }
           // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
@@ -139,7 +146,7 @@ lib.makeOverridable (
             url =
               if private then
                 let
-                  endpoint = "/repos/${owner}/${repo}/tarball/${revWithTag}";
+                  endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
                 in
                 if githubBase == "github.com" then
                   "https://api.github.com${endpoint}"
@@ -148,7 +155,12 @@ lib.makeOverridable (
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-
+            derivationArgs = {
+              inherit
+                owner
+                repo
+                ;
+            };
             passthru = {
               inherit gitRepoUrl;
             }
