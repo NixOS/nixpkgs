@@ -42,6 +42,11 @@ lib.extendMkDerivation {
       # an appropriate unpacking tool.
       extension ? null,
 
+      # Additional stdenvNoCC.mkDerivation arguments.
+      # It is typically for derived fetchers to pass down additional arguments,
+      # and the specified arguments have lower precedence than other mkDerivation arguments.
+      derivationArgs ? { },
+
       # the rest are given to fetchurl as is
       ...
     }@args:
@@ -110,7 +115,7 @@ lib.extendMkDerivation {
       # ^ Remove non-owner write permissions
       # Fixes https://github.com/NixOS/nixpkgs/issues/38649
 
-      derivationArgs = {
+      derivationArgs = derivationArgs // {
         inherit
           extension
           stripRoot
