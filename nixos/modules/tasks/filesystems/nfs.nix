@@ -158,10 +158,8 @@ in
         environment.etc = {
           "idmapd.conf".source = idmapdConfFile;
           "nfs.conf".source = nfsConfFile;
-          "request-key.d/id_resolver.conf".text = ''
+          "request-key.conf".text = ''
             create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
-          '';
-          "request-key.d/dns_resolver.conf".text = ''
             create dns_resolver * * ${pkgs.keyutils}/bin/key.dns_resolver %k
           '';
         };
