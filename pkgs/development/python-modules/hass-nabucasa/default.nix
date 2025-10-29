@@ -9,6 +9,7 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  josepy,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -20,13 +21,15 @@
   setuptools,
   snitun,
   syrupy,
+  voluptuous,
   webrtc-models,
   xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.1.1";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -35,7 +38,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-4wqlV3stqbraiDBp/g5XNMiUR8SsmGggqXlq6MXXgbM=";
+    hash = "sha256-BYRVr8YWYG+6vmCFCEJH0v2s+EpefDxmcBMHkXHRCrA=";
   };
 
   postPatch = ''
@@ -58,11 +61,14 @@ buildPythonPackage rec {
     attrs
     ciso8601
     cryptography
+    josepy
     pycognito
     pyjwt
     sentence-stream
     snitun
+    voluptuous
     webrtc-models
+    yarl
   ];
 
   nativeCheckInputs = [
@@ -73,11 +79,6 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     xmltodict
-  ];
-
-  disabledTests = [
-    # mock time 10800s (3h) vs 43200s (12h)
-    "test_subscription_reconnection_handler_renews_and_starts"
   ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];
