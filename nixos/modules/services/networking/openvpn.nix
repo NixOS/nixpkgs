@@ -11,8 +11,6 @@ let
 
   cfg = config.services.openvpn;
 
-  inherit (pkgs) openvpn;
-
   makeOpenVPNJob =
     cfg: name:
     let
@@ -77,7 +75,7 @@ let
         pkgs.net-tools
       ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+      serviceConfig.ExecStart = "@${cfg.package}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -165,6 +163,8 @@ in
                 `config = "config /path/to/config.ovpn"`
               '';
             };
+
+            package = lib.mkPackageOption pkgs "openvpn" { };
 
             up = mkOption {
               default = "";
