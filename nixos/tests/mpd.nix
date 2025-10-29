@@ -69,7 +69,6 @@ in
           };
           musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
         })
-        { networking.firewall.allowedTCPPorts = [ 6600 ]; }
       ];
 
     serverPulseAudio =

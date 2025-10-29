@@ -99,6 +99,18 @@ in
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = lib.elem cfg.bind_to_address [
+          "any"
+          "0.0.0.0"
+        ];
+        defaultText = lib.literalExpression ''
+          elem config.services.mpd.bind_to_address ["any" "0.0.0.0"]
+        '';
+        description = "Open ports in the firewall for mpd.";
+      };
+
       music_directory = lib.mkOption {
         type = with lib.types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
@@ -303,6 +315,8 @@ in
           ];
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.port ];
 
     users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
