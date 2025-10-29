@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
       nickcao
       joshniemela
       thomasjm
+      taranarmo
     ];
     platforms = [
       "x86_64-linux"
