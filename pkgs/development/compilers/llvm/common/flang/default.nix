@@ -77,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "MLIR_DIR" "${mlir.dev}/lib/cmake/mlir")
     (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
     (lib.cmakeFeature "MLIR_TABLEGEN_TARGET" "MLIR-TBLGen")
+    (lib.cmakeBool "MLIR_LINK_MLIR_DYLIB" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "LLVM_LIT_ARGS" "-v")
     (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
     (lib.cmakeBool "LLVM_ENABLE_PLUGINS" false)
     (lib.cmakeBool "FLANG_STANDALONE_BUILD" true)
