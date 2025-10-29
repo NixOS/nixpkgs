@@ -62,7 +62,7 @@ lib.makeOverridable (
           rev ? null,
           name ? urlToName {
             inherit url;
-            rev = lib.revOrTag rev finalAttrs.tag;
+            rev = lib.revOrTag finalAttrs.revCustom finalAttrs.tag;
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
@@ -174,9 +174,10 @@ lib.makeOverridable (
               gitConfigFile
               ;
             inherit tag;
+            revCustom = rev;
             rev = getRevWithTag {
               inherit (finalAttrs) tag;
-              inherit rev;
+              rev = finalAttrs.revCustom;
             };
 
             postHook =
