@@ -332,10 +332,47 @@ let
     */
     genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
 
+    # Like genJqSecretsReplacementSnippet, but inserts dummy secrets values.
+    # This can be useful to validate configuration files at build-time.
+    # NOTE: This can result in non-valid configuration files if secrets with `quote = false` are used.
+    genJqSecretsReplacementSnippetDummy = genJqSecretsReplacementSnippetDummy' "_secret";
+
     # Like genJqSecretsReplacementSnippet, but allows the name of the
     # attr which identifies the secret to be changed.
     genJqSecretsReplacementSnippet' =
+      let
+        genSecretsEnv =
+          attr: secrets:
+          concatStringsSep "\n" (
+            imap1 (index: name: ''
+              secret${toString index}=$(<'${secrets.${name}.${attr}}')
+              export secret${toString index}
+            '') (attrNames secrets)
+          );
+      in
       attr: set: output:
+      genJqSecretsReplacementSnippetCustom attr genSecretsEnv set output;
+
+    # Like genJqSecretsReplacementSnippetDummy, but allows the name of the
+    # attr which identifies the secret to be changed.
+    genJqSecretsReplacementSnippetDummy' =
+      let
+        genSecretsEnv =
+          _attr: secrets:
+          concatStringsSep "\n" (
+            imap1 (index: name: ''
+              secret${toString index}=${if secrets.${name}.quote then "\"DUMMY\"" else "DUMMY"}
+              export secret${toString index}
+            '') (attrNames secrets)
+          );
+      in
+      attr: set: output:
+      genJqSecretsReplacementSnippetCustom attr genSecretsEnv set output;
+
+    # Like genJqSecretsReplacementSnippet, but allows the name of the
+    # attr which identifies the secret to be changed.
+    genJqSecretsReplacementSnippetCustom =
+      attr: secretsEnvGen: set: output:
       let
         secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
         # Set default option values
@@ -357,12 +394,9 @@ let
         shopt -pq inherit_errexit && inherit_errexit_enabled=1
         shopt -s inherit_errexit
       ''
-      + concatStringsSep "\n" (
-        imap1 (index: name: ''
-          secret${toString index}=$(<'${secrets.${name}.${attr}}')
-          export secret${toString index}
-        '') (attrNames secrets)
-      )
+        secretsEnvGen
+        attr
+        secrets
       + "\n"
       + "${pkgs.jq}/bin/jq >'${output}' "
       + escapeShellArg (
