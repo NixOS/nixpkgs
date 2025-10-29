@@ -1,13 +1,7 @@
 { pkgs, ... }:
 
 let
-  hello-world = pkgs.writeText "hello-world" ''
-    {-# OPTIONS --guardedness #-}
-    open import IO
-    open import Level
-
-    main = run {0ℓ} (putStrLn "Hello World!")
-  '';
+  hello-world = ./files/HelloWorld.agda;
 in
 {
   name = "agda";
@@ -30,6 +24,10 @@ in
     };
 
   testScript = ''
+    # agda and agda-mode are in path
+    machine.succeed("agda --version")
+    machine.succeed("agda-mode")
+
     # Minimal script that typechecks
     machine.succeed("touch TestEmpty.agda")
     machine.succeed("agda TestEmpty.agda")

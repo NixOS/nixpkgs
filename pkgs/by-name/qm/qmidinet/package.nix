@@ -2,33 +2,35 @@
   stdenv,
   lib,
   fetchurl,
+  cmake,
   pkg-config,
   alsa-lib,
   libjack2,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.4";
+  version = "1.0.1";
   pname = "qmidinet";
 
   src = fetchurl {
     url = "mirror://sourceforge/qmidinet/qmidinet-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7Ui4kUgYgpPVAaaINrd6WGZoYon5UuHszGVaHafb/p0=";
+    hash = "sha256-9V1KXK6LAYxM+kei14pof93hZQUDs7/ywRaSz6pwyyk=";
   };
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qttools
+    qt6.qtbase
+    qt6.qttools
     alsa-lib
     libjack2
   ];
 
   nativeBuildInputs = [
+    cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   meta = {
