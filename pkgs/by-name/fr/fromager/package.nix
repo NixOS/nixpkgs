@@ -53,6 +53,11 @@ python3.pkgs.buildPythonApplication rec {
     "fromager"
   ];
 
+  disabledTestPaths = [
+    # Depends on wheel.cli module that is private since wheel 0.46.0
+    "tests/test_wheels.py"
+  ];
+
   meta = {
     description = "Wheel maker";
     homepage = "https://pypi.org/project/fromager/";
