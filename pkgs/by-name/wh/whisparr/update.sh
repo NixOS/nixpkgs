@@ -22,7 +22,7 @@ updateHash()
   hashKey="${system}-hash"
 
   echo "Updating the hash for the \`${system}\` system..."
-  url="https://whisparr.servarr.com/v1/update/nightly/updatefile?runtime=netcore&version=${version}&arch=${arch}&os=${os}"
+  url="https://whisparr.servarr.com/v1/update/eros/updatefile?runtime=netcore&version=${version}&arch=${arch}&os=${os}"
   hash=$(nix-prefetch-url --type sha256 --name "whisparr-$system-$version.tar.gz" "$url")
   sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$hash")"
 
@@ -36,7 +36,7 @@ echo "Current version: \`$currentVersion\`."
 
 echo "Fetching the latest version..."
 latestVersion=$(
-  curl -s "https://whisparr.servarr.com/v1/update/nightly/changes?runtime=netcore&os=linux" |
+  curl -s "https://whisparr.servarr.com/v1/update/eros/changes?runtime=netcore&os=linux" |
   jq -r .[0].version
 )
 
