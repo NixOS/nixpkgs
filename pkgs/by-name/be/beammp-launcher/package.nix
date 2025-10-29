@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BeamMP/BeamMP-Launcher";
     license = lib.licenses.agpl3Only;
     mainProgram = "BeamMP-Launcher";
-    maintainers = [ lib.maintainers.Andy3153 ];
+    maintainers = with lib.maintainers; [
+      Andy3153
+      mochienya
+    ];
     platforms = lib.platforms.linux;
   };
 })
