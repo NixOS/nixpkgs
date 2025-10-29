@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     maintainers = lib.teams.stardust-xr.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
