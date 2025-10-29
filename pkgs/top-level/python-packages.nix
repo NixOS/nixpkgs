@@ -8185,7 +8185,8 @@ self: super: with self; {
 
   legacy-api-wrap = callPackage ../development/python-modules/legacy-api-wrap { };
 
-  legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
+  legacy-cgi =
+    if pythonOlder "3.13" then null else callPackage ../development/python-modules/legacy-cgi { };
 
   leidenalg = callPackage ../development/python-modules/leidenalg { igraph-c = pkgs.igraph; };
 

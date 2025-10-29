@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   legacy-cgi,
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  checkInputs = [ legacy-cgi ];
 
   enabledTestPaths = [
     "tests/*.py"
