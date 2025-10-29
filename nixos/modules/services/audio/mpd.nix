@@ -138,24 +138,24 @@ in
         '';
       };
 
-        bind_to_address = lib.mkOption {
-          type = lib.types.str;
-          default = "127.0.0.1";
-          example = "any";
-          description = ''
-            The address for the daemon to listen on.
-            Use `any` to listen on all addresses.
-          '';
-        };
+      bind_to_address = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1";
+        example = "any";
+        description = ''
+          The address for the daemon to listen on.
+          Use `any` to listen on all addresses.
+        '';
+      };
 
-        port = lib.mkOption {
-          type = lib.types.port;
-          default = 6600;
-          description = ''
-            This setting is the TCP port that is desired for the daemon to get assigned
-            to.
-          '';
-        };
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 6600;
+        description = ''
+          This setting is the TCP port that is desired for the daemon to get assigned
+          to.
+        '';
+      };
 
       db_file = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
