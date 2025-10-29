@@ -2299,8 +2299,6 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
-
   b2sum = callPackage ../tools/security/b2sum {
     inherit (llvmPackages) openmp;
   };
