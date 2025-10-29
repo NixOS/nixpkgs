@@ -4105,8 +4105,6 @@ with pkgs;
 
   trackma-qt = trackma.override { withQT = true; };
 
-  tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
-
   trezorctl = with python3Packages; toPythonApplication trezor;
 
   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
