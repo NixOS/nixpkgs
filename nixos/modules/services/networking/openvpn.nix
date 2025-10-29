@@ -75,7 +75,7 @@ let
         pkgs.net-tools
       ];
 
-      serviceConfig.ExecStart = "@${cfg.package}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+      serviceConfig.ExecStart = "@${config.services.openvpn.package}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -102,6 +102,7 @@ in
   ###### interface
 
   options = {
+    services.openvpn.package = lib.mkPackageOption pkgs "openvpn" { };
 
     services.openvpn.servers = mkOption {
       default = { };
@@ -163,8 +164,6 @@ in
                 `config = "config /path/to/config.ovpn"`
               '';
             };
-
-            package = lib.mkPackageOption pkgs "openvpn" { };
 
             up = mkOption {
               default = "";
@@ -254,7 +253,7 @@ in
       ))
       // restartService;
 
-    environment.systemPackages = [ openvpn ];
+    environment.systemPackages = [ cfg.package ];
 
     boot.kernelModules = [ "tun" ];
 
