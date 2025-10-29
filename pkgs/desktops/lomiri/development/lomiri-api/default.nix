@@ -1,56 +1,52 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, makeFontsConf
-, testers
-, cmake
-, cmake-extras
-, dbus
-, doxygen
-, glib
-, graphviz
-, gtest
-, libqtdbustest
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  makeFontsConf,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  doxygen,
+  glib,
+  graphviz,
+  gtest,
+  libqtdbustest,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
-    rev = finalAttrs.version;
-    hash = "sha256-UTl0vObSlEvHuLmDt7vS3yEqZWGklJ9tVwlUAtRSTlU=";
+    tag = finalAttrs.version;
+    hash = "sha256-ypz15XX0ESkOWI6G+a9/36bRg5gBG0X4Y/EvB/m7qm8=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
-
-  patches = [
-    (fetchpatch {
-      name = "0001-lomiri-api-Add-missing-headers-for-GCC13.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-api/-/commit/029b42a9b4d5467951595dff8bc536eb5a9e3ef7.patch";
-      hash = "sha256-eWrDQGrwf22X49rtUAVbrd+QN+OwyGacVLCWYFsS02o=";
-    })
+  outputs = [
+    "out"
+    "dev"
+    "doc"
   ];
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')
 
-    substituteInPlace data/*.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
+    substituteInPlace data/liblomiri-api.pc.in \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
 
     # Variable is queried via pkg-config by reverse dependencies
     # TODO This is likely not supposed to be the regular Qt QML import prefix
     # but otherwise i.e. lomiri-notifications cannot be found in lomiri
     substituteInPlace CMakeLists.txt \
-      --replace 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;
@@ -79,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   preBuild = ''
     # Makes fontconfig produce less noise in logs
@@ -99,12 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
-    license = with licenses; [ lgpl3Only gpl3Only ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl3Only
+      gpl3Only
+    ];
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
       "lomiri-shell-api"

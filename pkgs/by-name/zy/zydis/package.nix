@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  cmake,
+  python3,
 }:
 
 let
@@ -13,17 +14,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zydis";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zydis";
     rev = "v${version}";
-    hash = "sha256-akusu0T7q5RX4KGtjRqqOFpW5i9Bd1L4RVZt8Rg3PJY=";
+    hash = "sha256-6J4pTUm3xQXwlQNBldjXVWRcse+auSFJtxGWaPRVzLg=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zycore ];
+  propagatedBuildInputs = [ zycore ];
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -33,12 +34,15 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ python3 ];
   passthru = { inherit zycore; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zydis.re/";
     changelog = "https://github.com/zyantific/zydis/releases/tag/v${version}";
     description = "Fast and lightweight x86/x86-64 disassembler library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbcrail AndersonTorres athre0z ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      jbcrail
+      athre0z
+    ];
+    platforms = lib.platforms.all;
   };
 }

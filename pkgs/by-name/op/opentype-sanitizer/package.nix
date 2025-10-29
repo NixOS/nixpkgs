@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, freetype
-, gtest
-, lz4
-, meson
-, ninja
-, pkg-config
-, woff2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freetype,
+  gtest,
+  lz4,
+  meson,
+  ninja,
+  pkg-config,
+  woff2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QRbF2GUDQsp8i6qVYlafSb9HaaozRuJ8dn1mhMMLeLc=";
   };
 
-  mesonFlags = [ "-Dcpp_std=c++14" ];
+  mesonFlags = [ "-Dcpp_std=c++17" ]; # required by gtest
 
   buildInputs = [
     freetype

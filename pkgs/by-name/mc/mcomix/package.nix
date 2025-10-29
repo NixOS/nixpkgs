@@ -1,22 +1,23 @@
-{ lib
-, fetchurl
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, mcomix
-, python3
-, testers
-, wrapGAppsHook3
+{
+  lib,
+  fetchurl,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  mcomix,
+  python312, # TODO: Revert to python3 when upgrading past 3.1.0
+  testers,
+  wrapGAppsHook3,
 
   # Recommended Dependencies:
-, p7zip
-, unrar
-, chardetSupport ? true
-, pdfSupport ? true
-, unrarSupport ? false  # unfree software
+  p7zip,
+  unrar,
+  chardetSupport ? true,
+  pdfSupport ? true,
+  unrarSupport ? false, # unfree software
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   pname = "mcomix";
   version = "3.1.0";
   pyproject = true;
@@ -33,17 +34,19 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3.pkgs.setuptools
+    python312.pkgs.setuptools
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pillow
-    pycairo
-    pygobject3
-  ]
-  ++ lib.optionals chardetSupport [ chardet ]
-  ++ lib.optionals pdfSupport [ pymupdf ];
+  propagatedBuildInputs =
+    with python312.pkgs;
+    [
+      pillow
+      pycairo
+      pygobject3
+    ]
+    ++ lib.optionals chardetSupport [ chardet ]
+    ++ lib.optionals pdfSupport [ pymupdf ];
 
   # No tests included in .tar.gz
   doCheck = false;

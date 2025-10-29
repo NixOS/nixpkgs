@@ -3,13 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
-  pytest7CheckHook,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   jsonschema,
   numpy,
   pydicom,
   simpleitk,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +22,12 @@ buildPythonPackage rec {
   version = "0.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "razorx89";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2Y3fZHKfZqdp5EU8HfVsmJ5JFfVGZuAR7+Kj7qaTiPM=";
+    repo = "pydicom-seg";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-2Y3fZHKfZqdp5EU8HfVsmJ5JFfVGZuAR7+Kj7qaTiPM=";
   };
 
   patches = [
@@ -36,7 +39,10 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonRelaxDeps = [ "jsonschema" ];
+  pythonRelaxDeps = [
+    "jsonschema"
+    "numpy"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -47,15 +53,17 @@ buildPythonPackage rec {
     simpleitk
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pydicom_seg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical segmentation file reading and writing";
     homepage = "https://github.com/razorx89/pydicom-seg";
     changelog = "https://github.com/razorx89/pydicom-seg/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    # ModuleNotFoundError: No module named 'pydicom._storage_sopclass_uids'
+    broken = true;
   };
 }

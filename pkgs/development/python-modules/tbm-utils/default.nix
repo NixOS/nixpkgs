@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "tbm-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AEKawsAxDSDNkIaXEFFgdEBOY2PpASDrhlDrsnM5eyA=";
   };
 
@@ -47,10 +47,12 @@ buildPythonPackage rec {
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
-  pythonRelaxDeps = [ "attrs" ];
+  pythonRelaxDeps = [
+    "attrs"
+    "pendulum"
+  ];
 
   build-system = [ poetry-core ];
-
 
   propagatedBuildInputs = [
     attrs

@@ -21,12 +21,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/COMMAND git describe.*\(>>.*\)/COMMAND echo ${finalAttrs.src.rev} \1/' canokey-core/CMakeLists.txt
+
+    # CMake 2.8.12 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace canokey-core/canokey-crypto/mbedtls/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.12)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
     cmake
     python3
   ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      (lib.optionalString stdenv.cc.isClang "-Wno-error=documentation")
+    ];
+  };
 
   postInstall = ''
     install -D --target-directory=$out/bin canokey-usbip

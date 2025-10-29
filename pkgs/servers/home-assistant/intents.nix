@@ -1,37 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# codegen
-, hassil
-, python
-, pyyaml
-, voluptuous
-, regex
-, jinja2
+  # codegen
+  hassil,
+  python,
+  pyyaml,
+  voluptuous,
+  regex,
+  jinja2,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.11.4";
+  version = "2025.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "home-assistant";
+    owner = "OHF-Voice";
     repo = "intents-package";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-6SgvRaiPOfXM5OxrBQ/w600k7E+AKZEB8vukic6M4lA=";
+    hash = "sha256-xYmPbiDDnznm9fl8rtnkMAswGAX+3iWwticqaOzF9Jk=";
   };
 
   build-system = [
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    # https://github.com/home-assistant/intents-package/blob/main/script/package#L23-L24
+    # https://github.com/OHF-Voice/intents-package/blob/main/script/package#L23-L24
     PACKAGE_DIR=$out/${python.sitePackages}/home_assistant_intents
     ${python.pythonOnBuildForHost.interpreter} script/merged_output.py $PACKAGE_DIR/data
     ${python.pythonOnBuildForHost.interpreter} script/write_languages.py $PACKAGE_DIR/data > $PACKAGE_DIR/languages.py
@@ -57,15 +58,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "intents/tests"
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/home-assistant/intents/releases/tag/${version}";
+    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
     description = "Intents to be used with Home Assistant";
-    homepage = "https://github.com/home-assistant/intents";
+    homepage = "https://github.com/OHF-Voice/intents-package";
     license = licenses.cc-by-40;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

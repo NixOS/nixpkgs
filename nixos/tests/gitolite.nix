@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...}:
+{ pkgs, ... }:
 
 let
   adminPrivateKey = pkgs.writeText "id_ed25519" ''
@@ -78,8 +78,12 @@ in
             # there's nobody around that can input password
             PreferredAuthentications publickey
         '';
-        users.users.alice = { isNormalUser = true; };
-        users.users.bob = { isNormalUser = true; };
+        users.users.alice = {
+          isNormalUser = true;
+        };
+        users.users.bob = {
+          isNormalUser = true;
+        };
       };
 
   };
@@ -135,4 +139,4 @@ in
     with subtest("bob cannot clone alice-project.git"):
         client.fail("sudo -i -u bob git clone gitolite@server:alice-project.git")
   '';
-})
+}

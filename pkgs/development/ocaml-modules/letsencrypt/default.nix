@@ -1,29 +1,30 @@
-{ buildDunePackage
-, lib
-, fetchurl
-, uri
-, base64
-, digestif
-, logs
-, fmt
-, lwt
-, mirage-crypto
-, mirage-crypto-ec
-, mirage-crypto-pk
-, x509
-, yojson
-, ounit2
-, ptime
-, domain-name
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  uri,
+  base64,
+  digestif,
+  logs,
+  fmt,
+  lwt,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-pk,
+  x509,
+  yojson,
+  ounit2,
+  ptime,
+  domain-name,
 }:
 
 buildDunePackage rec {
   pname = "letsencrypt";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-${version}.tbz";
-    hash = "sha256-koNG19aoLY28Hb7GyuPuJUyrCAE59n2vjbH4z0ykGvA=";
+    hash = "sha256-Iw55GffyG5tWA49hao1z9BX6p4N2+EKuhLIoOwG8EKM=";
   };
 
   minimalOCamlVersion = "4.08";

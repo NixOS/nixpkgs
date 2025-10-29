@@ -1,36 +1,39 @@
-{ stdenv
-, lib
-, checkbashisms
-, coreutils
-, ethtool
-, fetchFromGitHub
-, gawk
-, gnugrep
-, gnused
-, hdparm
-, iw
-, kmod
-, makeWrapper
-, pciutils
-, perl
-, perlcritic
-, shellcheck
-, smartmontools
-, systemd
-, util-linux
-, x86_energy_perf_policy
+{
+  stdenv,
+  lib,
+  checkbashisms,
+  coreutils,
+  ethtool,
+  fetchFromGitHub,
+  gawk,
+  gnugrep,
+  gnused,
+  hdparm,
+  iw,
+  kmod,
+  makeWrapper,
+  pciutils,
+  perl,
+  perlcritic,
+  shellcheck,
+  smartmontools,
+  systemd,
+  udevCheckHook,
+  util-linux,
+  x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
-, enableRDW ? false
-, networkmanager
-}: stdenv.mkDerivation rec {
+  enableRDW ? false,
+  networkmanager,
+}:
+stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
+    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -44,7 +47,10 @@
   '';
 
   buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    udevCheckHook
+  ];
 
   # XXX: While [1] states that DESTDIR should not be used, and that the correct
   # variable to set is, in fact, PREFIX, tlp thinks otherwise. The Makefile for
@@ -61,34 +67,48 @@
     "DESTDIR=${placeholder "out"}"
   ];
 
-  installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+  installTargets = [
+    "install-tlp"
+    "install-man"
+  ]
+  ++ lib.optionals enableRDW [
+    "install-rdw"
+    "install-man-rdw"
+  ];
 
   doCheck = true;
-  nativeCheckInputs = [ checkbashisms perlcritic shellcheck ];
+  nativeCheckInputs = [
+    checkbashisms
+    perlcritic
+    shellcheck
+  ];
   checkTarget = [ "checkall" ];
 
+  doInstallCheck = true;
+
   # TODO: Consider using resholve here
-  postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        util-linux
-      ] ++ lib.optional enableRDW networkmanager
+  postInstall =
+    let
+      paths = lib.makeBinPath (
+        [
+          coreutils
+          ethtool
+          gawk
+          gnugrep
+          gnused
+          hdparm
+          iw
+          kmod
+          pciutils
+          perl
+          smartmontools
+          systemd
+          util-linux
+        ]
+        ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
-    );
-  in
+      );
+    in
     ''
       fixup_perl=(
         $out/share/tlp/tlp-pcilist
@@ -118,12 +138,13 @@
 
   meta = with lib; {
     description = "Advanced Power Management for Linux";
-    homepage =
-      "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
     platforms = platforms.linux;
     mainProgram = "tlp";
-    maintainers = with maintainers; [ abbradar lovesegfault ];
+    maintainers = with maintainers; [
+      lovesegfault
+    ];
     license = licenses.gpl2Plus;
   };
 }

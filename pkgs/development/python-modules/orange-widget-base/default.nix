@@ -1,8 +1,10 @@
 {
   lib,
+  gitUpdater,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  setuptools,
+  fetchFromGitHub,
   pyqt5,
   pyqtwebengine,
   matplotlib,
@@ -17,22 +19,27 @@
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.24.0";
-  format = "setuptools";
+  version = "4.26.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2cBg7s4+qMrb2G4sMk5yednOzJCNheHIQ3lty4KAg18=";
+  src = fetchFromGitHub {
+    owner = "biolab";
+    repo = "orange-widget-base";
+    tag = version;
+    hash = "sha256-XoQlZaY6pAflL0vWzSALDABOPybqV28xB/AS8L0DcBc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     orange-canvas-core
     pyqt5
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 
@@ -53,10 +60,12 @@ buildPythonPackage rec {
     "orangewidget/tests/test_widget.py"
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";
     homepage = "https://github.com/biolab/orange-widget-base";
     license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

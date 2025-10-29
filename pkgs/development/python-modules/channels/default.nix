@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "channels";
-  version = "4.1.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "channels";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JUU1N+Sc7t//0vEdkgQy20iVKgHr4Ys+XnLgqPMcKM8=";
+    tag = version;
+    hash = "sha256-dRKK6AQNlPdBQumbLmPyOTW96N/PJ9yUY6GYe5x/c+A=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,13 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-django
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  # won't run in sandbox
+  disabledTestPaths = [
+    "tests/sample_project/tests/test_selenium.py"
+  ];
 
   pythonImportsCheck = [ "channels" ];
 

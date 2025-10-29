@@ -1,35 +1,31 @@
-{ renode
-, fetchurl
-, writeScript
+{
+  fetchFromGitHub,
+  nix-update-script,
+  renode,
 }:
-
-renode.overrideAttrs (finalAttrs: _: {
+renode.overrideAttrs (old: rec {
   pname = "renode-unstable";
-  version = "1.15.3+20241004git4b8a8f170";
+  version = "1.16.0-unstable-2025-08-08";
 
-  src = fetchurl {
-    url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-/+fH5DHL/kg4IlJyOlCuOMsUocaBsA8GYvq5iP7Ip+4=";
+  src = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode";
+    rev = "194d90650a9337a05cd81e8855474773d23d4396";
+    hash = "sha256-oRtbjup5RKbVzKMTa0yiY1gGhDqUrQ4N3SgwQ7lm8Ho=";
+    fetchSubmodules = true;
   };
 
-  passthru.updateScript =
-    let
-      versionRegex = "[0-9\.\+]+[^\+]*.";
-    in
-    writeScript "${finalAttrs.pname}-updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
+  prePatch = ''
+    substituteInPlace tools/building/createAssemblyInfo.sh \
+      --replace CURRENT_INFORMATIONAL_VERSION="`git rev-parse --short=8 HEAD`" \
+      CURRENT_INFORMATIONAL_VERSION="${builtins.substring 0 8 src.rev}"
+  '';
 
-      latestVersion=$(
-        curl -sS https://builds.renode.io \
-          | pup 'a text{}' \
-          | egrep 'renode-${versionRegex}\.linux-dotnet\.tar\.gz' \
-          | head -n1 \
-          | sed -e 's,renode-\(.*\)\.linux-dotnet\.tar\.gz,\1,g'
-      )
-
-      update-source-version ${finalAttrs.pname} "$latestVersion" \
-        --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
-        --system=x86_64-linux
-    '';
+  passthru = old.passthru // {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+      ];
+    };
+  };
 })

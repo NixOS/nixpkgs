@@ -1,4 +1,4 @@
-import ./make-test-python.nix {
+{
   name = "mediatomb";
 
   nodes = {
@@ -27,10 +27,11 @@ import ./make-test-python.nix {
       ];
     };
 
-    client = {};
+    client = { };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       serverIP = nodes.server.networking.primaryIPAddress;
       serverIPv6 = nodes.server.networking.primaryIPv6Address;

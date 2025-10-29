@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  zlib,
+  dune-configurator,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "cryptokit";
@@ -9,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "cryptokit";
-    rev = "release${lib.replaceStrings ["."] [""] version}";
+    rev = "release${lib.replaceStrings [ "." ] [ "" ] version}";
     hash = "sha256-VFY10jGctQfIUVv7dK06KP8zLZHLXTxvLyTCObS+W+E=";
   };
 
@@ -20,7 +27,10 @@ buildDunePackage rec {
   '';
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ zarith zlib ];
+  propagatedBuildInputs = [
+    zarith
+    zlib
+  ];
 
   doCheck = true;
 
@@ -28,8 +38,5 @@ buildDunePackage rec {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "Library of cryptographic primitives for OCaml";
     license = lib.licenses.lgpl2Only;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
   };
 }

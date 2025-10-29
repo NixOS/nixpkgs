@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
-  cacert,
-  unzip,
+  nix-update-script,
   pkg-config,
   libGL,
   libX11,
@@ -17,33 +15,17 @@
   mupdf,
   fontconfig,
   freetype,
-  apple-sdk_11,
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.27.0";
+  version = "5.41.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "refs/tags/v${version}";
-
-    nativeBuildInputs = [
-      cacert
-      unzip
-    ];
-
-    # also fetch pdf.js files
-    # note: the version is locked in the file
-    postFetch = ''
-      cd $out/server/pdf
-      substituteInPlace refresh-pdf.js.sh \
-          --replace-fail '/bin/rm' 'rm'
-      . refresh-pdf.js.sh
-    '';
-
-    hash = "sha256-QVkyemBQ7RrV3dpP3n7Pg0XljdxWtCphZIj2T77nKtU=";
+    tag = "v${version}";
+    hash = "sha256-PPlz3DRwkKN0nZSFKJvl/axow6LxqyA3JPzZmfEkIsM=";
   };
 
   modPostBuild = ''
@@ -51,47 +33,24 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-+vCc1g5noAl/iwEYhNZJYPiScKqKGKlsuruoUO/4tiU=";
-
-  frontend = buildNpmPackage {
-    name = "${pname}-${version}-frontend";
-
-    inherit src;
-    sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-VWTJg/pluRYVVBDiJ+t2uhyodRuIFfHpzCZMte1krDM=";
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r dist $out/dist
-      runHook postInstall
-    '';
-  };
-
-  postPatch = ''
-    cp -r ${frontend}/dist server/frontend/dist
-  '';
+  vendorHash = "sha256-LfRzNmjJe6hBhWuN5fUfFpB3nKmURZhM/wpdrcYr9jU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      mupdf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXrandr
-      libXinerama
-      libXi
-      libXxf86vm
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    mupdf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXrandr
+    libXinerama
+    libXi
+    libXxf86vm
+    fontconfig
+    freetype
+  ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a" ];
@@ -106,6 +65,8 @@ buildGoModule rec {
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";

@@ -1,33 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gi-docgen
-, meson
-, ninja
-, gnome
-, desktop-file-utils
-, appstream-glib
-, gettext
-, itstool
-, gtk4
-, libadwaita
-, glib
-, atk
-, gobject-introspection
-, vala
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gi-docgen,
+  meson,
+  ninja,
+  gnome,
+  desktop-file-utils,
+  gettext,
+  itstool,
+  gtk4,
+  libadwaita,
+  glib,
+  atk,
+  gobject-introspection,
+  vala,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "46.0";
+  version = "48.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ghex/${lib.versions.major version}/ghex-${version}.tar.xz";
-    hash = "sha256-ocRvMCDLNYuDIwJds6U5yX2ZSkxG9wH0jtxjV/f7y9E=";
+    url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
+    hash = "sha256-qh0KtfdDBKqjGYehgtQh1j8ZzgJGXXxkJpbjFhI+MKg=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +54,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  nativeCheckInputs = [
-    appstream-glib
-    desktop-file-utils
-  ];
-
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dvapi=true"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # mremap does not exist on darwin
     "-Dmmap-buffer-backend=false"
   ];
@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
-    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
-}
+})

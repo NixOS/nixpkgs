@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "6.3";
+  version = "6.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelcluster";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AUVl2aidjW7Uu//3HlAod7pxzj6Gs1Xd0uTt3NrrqAU=";
+    tag = "v${version}";
+    hash = "sha256-JoDDHvZ9N+7hcIxRsbVrYW8/95iUcNHDQkvtmDVUzws=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-  ] ++ optional-dependencies.taggit;
+  ]
+  ++ optional-dependencies.taggit;
 
   pythonImportsCheck = [ "modelcluster" ];
 
@@ -48,6 +49,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/torchbox/django-modelcluster/";
     changelog = "https://github.com/wagtail/django-modelcluster/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

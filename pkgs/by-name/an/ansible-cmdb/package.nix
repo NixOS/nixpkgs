@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   python3Packages,
   testers,
   ansible-cmdb,
@@ -26,13 +26,12 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "fboender";
     repo = "ansible-cmdb";
-    rev = version;
+    tag = version;
     hash = "sha256-HOFLX8fiid+xJOVYNyVbz5FunrhteAUPlvS3ctclVHo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./setup.patch;
+    (replaceVars ./setup.patch {
       inherit version;
     })
   ];

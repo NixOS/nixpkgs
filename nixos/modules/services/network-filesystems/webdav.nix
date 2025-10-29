@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.webdav;
   format = pkgs.formats.yaml { };
@@ -7,6 +12,8 @@ in
   options = {
     services.webdav = {
       enable = lib.mkEnableOption "WebDAV server";
+
+      package = lib.mkPackageOption pkgs "webdav" { };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -90,7 +97,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.webdav}/bin/webdav -c ${cfg.configFile}";
+        ExecStart = "${lib.getExe cfg.package} -c ${cfg.configFile}";
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;

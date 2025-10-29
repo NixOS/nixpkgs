@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,9 @@ stdenv.mkDerivation {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "darwin" ] ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [ "unix" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "darwin" ]
+  ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [ "unix" ];
 
   meta = with lib; {
     description = "Netcat-clone, designed to be portable and offer strong encryption";

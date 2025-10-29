@@ -3,9 +3,10 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud28Packages,
-  nextcloud29Packages,
-  nextcloud30Packages,
+  cacert,
+  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
+  nextcloud31Packages,
+  nextcloud32Packages,
 }:
 
 let
@@ -33,6 +34,10 @@ let
         inherit packages;
       };
 
+      postPatch = ''
+        cp ${caBundle} resources/config/ca-bundle.crt
+      '';
+
       installPhase = ''
         runHook preInstall
         mkdir -p $out/
@@ -44,12 +49,7 @@ let
         changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
         description = "Sharing solution for files, calendars, contacts and more";
         homepage = "https://nextcloud.com";
-        maintainers = with lib.maintainers; [
-          schneefux
-          bachp
-          globin
-          ma27
-        ];
+        teams = [ lib.teams.nextcloud ];
         license = lib.licenses.agpl3Plus;
         platforms = lib.platforms.linux;
         knownVulnerabilities =
@@ -58,22 +58,16 @@ let
     };
 in
 {
-  nextcloud28 = generic {
-    version = "28.0.11";
-    hash = "sha256-S6rs7GpvFFgy28PGNdcuIM1IBKytmmZOanS5CnmB40g=";
-    packages = nextcloud28Packages;
+  nextcloud31 = generic {
+    version = "31.0.10";
+    hash = "sha256-6FZxPwIo8+Ju6F72+ZFetNBYwNIYML1Y7l10K+3wpmk=";
+    packages = nextcloud31Packages;
   };
 
-  nextcloud29 = generic {
-    version = "29.0.8";
-    hash = "sha256-CrVLUX92zSbyvTi2/hhLn7rtMvc0JGxYwaz4NHPApLk=";
-    packages = nextcloud29Packages;
-  };
-
-  nextcloud30 = generic {
-    version = "30.0.1";
-    hash = "sha256-eewv+tYjG9j8xKuqzBLlrFHmcNCJr/s3lINZLNoP3Ms=";
-    packages = nextcloud30Packages;
+  nextcloud32 = generic {
+    version = "32.0.1";
+    hash = "sha256-WBCwbnVng4SXPY2GOH7jn0wIbXnfqS8V/LdDqro26qk=";
+    packages = nextcloud32Packages;
   };
 
   # tip: get the sha with:

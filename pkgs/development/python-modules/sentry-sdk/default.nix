@@ -1,80 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, urllib3
+  # dependencies
+  certifi,
+  urllib3,
 
-# optional-dependencies
-, aiohttp
-, anthropic
-, asyncpg
-, apache-beam
-, bottle
-, celery
-, celery-redbeat
-, chalice
-, clickhouse-driver
-, django
-, falcon
-, fastapi
-, flask
-, blinker
-, markupsafe
-, grpcio
-, protobuf
-, httpx
-, huey
-, huggingface-hub
-, langchain
-, loguru
-, openai
-, tiktoken
-, pure-eval
-, executing
-, asttokens
-, pymongo
-, pyspark
-, quart
-, rq
-, sanic
-, sqlalchemy
-, starlette
-, tornado
+  # optional-dependencies
+  aiohttp,
+  anthropic,
+  apache-beam,
+  asttokens,
+  asyncpg,
+  blinker,
+  bottle,
+  celery,
+  celery-redbeat,
+  chalice,
+  clickhouse-driver,
+  django,
+  executing,
+  falcon,
+  fastapi,
+  flask,
+  grpcio,
+  httpcore,
+  httpx,
+  huey,
+  huggingface-hub,
+  langchain,
+  litestar,
+  loguru,
+  markupsafe,
+  openai,
+  protobuf,
+  pure-eval,
+  pymongo,
+  pyspark,
+  quart,
+  rq,
+  sanic,
+  sqlalchemy,
+  starlette,
+  tiktoken,
+  tornado,
 
-# checks
-, ipdb
-, jsonschema
-, pip
-, pyrsistent
-, pysocks
-, pytest-asyncio
-, pytestCheckHook
-, pytest-forked
-, pytest-localserver
-, pytest-xdist
-, pytest-watch
-, responses
+  # checks
+  brotli,
+  jsonschema,
+  pip,
+  pyrsistent,
+  pysocks,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-forked,
+  pytest-localserver,
+  pytest-xdist,
+  pytest-watch,
+  responses,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.15.0";
+  version = "2.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jrApaDZ+R/bMOqOuQZguP9ySt6nKJeJYNpJTNTxq3no=";
+    tag = version;
+    hash = "sha256-2M5Uvo8dl6hOqY13Eqjo4aKFySdlqEO8BHrPxZ/l+fw=";
   };
 
   postPatch = ''
-    sed -i "/addopts =/d" pytest.ini
+    sed -i "/addopts =/d" pyproject.toml
   '';
 
   build-system = [
@@ -109,15 +113,19 @@ buildPythonPackage rec {
       grpcio
       protobuf
     ];
+    http2 = [ httpcore ] ++ httpcore.optional-dependencies.http2;
     httpx = [ httpx ];
     huey = [ huey ];
     huggingface-hub = [ huggingface-hub ];
     langchain = [ langchain ];
+    # TODO: launchdarkly
+    litestar = [ litestar ];
     loguru = [ loguru ];
     openai = [
       openai
       tiktoken
     ];
+    # TODO: openfeature
     # TODO: opentelemetry
     # TODO: opentelemetry-experimental
     pure_eval = [
@@ -136,11 +144,13 @@ buildPythonPackage rec {
     sqlalchemy = [ sqlalchemy ];
     starlette = [ starlette ];
     # TODO: starlite
+    # TODO: statsig
     tornado = [ tornado ];
+    # TODO: unleash
   };
 
   nativeCheckInputs = [
-    ipdb
+    brotli
     pyrsistent
     responses
     pysocks
@@ -154,9 +164,15 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # darwin: 'profiler should not be running'
+    "tests/profiler/test_continuous_profiler.py"
+  ];
 
   disabledTests = [
     # depends on git revision
@@ -189,7 +205,16 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
-    "test_continuous_profiler_manual_start_and_stop"
+    "test_continuous_profiler_auto"
+    "test_continuous_profiler_manual"
+    "test_stacktrace_big_recursion"
+    # assert ('socks' in "<class 'httpcore.connectionpool'>") == True
+    "test_socks_proxy"
+    # requires socksio to mock, but that crashes pytest-forked
+    "test_http_timeout"
+    # KeyError: 'sentry.release'
+    "test_logs_attributes"
+    "test_logger_with_all_attributes"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
@@ -197,7 +222,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/sentry-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

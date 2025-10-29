@@ -14,14 +14,18 @@
   gtest,
 
   # dependencies
+  ml-dtypes,
   numpy,
+  typing-extensions,
 
+  # tests
   google-re2,
   nbval,
   parameterized,
   pillow,
   pytestCheckHook,
   tabulate,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -29,14 +33,14 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.17.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
+    tag = "v${version}";
+    hash = "sha256-dDc7ugzQHcArf9TRcF9Ofv16jc3gqhMWCZrYKJ7Udfw=";
   };
 
   build-system = [
@@ -52,25 +56,22 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    protobuf
+    ml-dtypes
     numpy
+    protobuf
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     google-re2
+    ml-dtypes
     nbval
     parameterized
     pillow
     pytestCheckHook
     tabulate
+    writableTmpDirAsHomeHook
   ];
-
-  postPatch = ''
-    rm -r third_party
-
-    chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.sh.in
-  '';
 
   preConfigure = ''
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
@@ -92,14 +93,12 @@ buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
+  # detecting source dir as a python package confuses pytest
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # detecting source dir as a python package confuses pytest
-    mv onnx/__init__.py onnx/__init__.py.hidden
+    rm onnx/__init__.py
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "onnx/test"
     "examples"
   ];
@@ -116,7 +115,7 @@ buildPythonPackage rec {
   meta = {
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
-    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/onnx/onnx/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ acairncross ];
   };

@@ -3,7 +3,6 @@
   buildPythonPackage,
   chardet,
   docutils,
-  fetchpatch,
   fetchPypi,
   pbr,
   pygments,
@@ -17,33 +16,24 @@
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "1.1.2";
-  format = "pyproject";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EiXzAUThzJfjiNuvf+PpltKJdHOlOm2uJo3d4hw1S5g=";
+    hash = "sha256-EmetMnWJcfvPmRRCQXo5Nce8nlJVDnNiLg5WulXqHUA=";
   };
 
-  patches = [
-    # https://github.com/PyCQA/doc8/pull/146
-    (fetchpatch {
-      name = "remove-setuptools-scm-git-archive.patch";
-      url = "https://github.com/PyCQA/doc8/commit/06416e95041db92e4295b13ab596351618f6b32e.patch";
-      hash = "sha256-IIE3cDNOx+6RLjidGrokyazaX7MOVbMKUb7yQIM5sI0=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
     wheel
   ];
 
   buildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     chardet
     stevedore
@@ -53,16 +43,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonRelaxDeps = [ "docutils" ];
-
   pythonImportsCheck = [ "doc8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Style checker for Sphinx (or other) RST documentation";
     mainProgram = "doc8";
     homepage = "https://github.com/pycqa/doc8";
     changelog = "https://github.com/PyCQA/doc8/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -1,10 +1,9 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
-  config,
 
   # build-system
   setuptools,
@@ -20,23 +19,23 @@
   tensorboard,
 
   # tests
-  cudaSupport ? config.cudaSupport,
   pytestCheckHook,
-  torchvision
+  torchvision,
+  writableTmpDirAsHomeHook,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-metric-learning";
-  version = "2.7.0";
+  version = "2.9.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mxAl4GMyAWtvocc68Ac3z1+W13k9OOK7aQFfB7X0f9c=";
+    repo = "pytorch-metric-learning";
+    tag = "v${version}";
+    hash = "sha256-JKWE2wVXVx8xp2kpiX6CxvCKkrwYRW80A20K/UTxIaQ=";
   };
 
   build-system = [
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   };
 
   preCheck = ''
-    export HOME=$TMP
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
@@ -73,7 +71,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     torchvision
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # network access
@@ -83,10 +83,8 @@ buildPythonPackage rec {
     "test_get_nearest_neighbors"
     "test_list_of_text"
     "test_untrained_indexer"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
-    "test_single_proc"
-  ] ++ lib.optionals cudaSupport [
+  ]
+  ++ lib.optionals cudaSupport [
     # crashes with SIGBART
     "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
     "test_accuracy_calculator_large_k"
@@ -101,10 +99,16 @@ buildPythonPackage rec {
     "test_with_same_parent_label_tester"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Segmentation fault
+    "tests/testers/"
+    "tests/utils/"
+  ];
+
   meta = {
     description = "Metric learning library for PyTorch";
     homepage = "https://github.com/KevinMusgrave/pytorch-metric-learning";
-    changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
+    changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

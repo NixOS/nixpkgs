@@ -15,7 +15,8 @@ let
   selectedPanelModulePackages = [
     gnome-panel
     gnome-flashback
-  ] ++ panelModulePackages;
+  ]
+  ++ panelModulePackages;
 
   panelModulesEnv = buildEnv {
     name = "gnome-panel-modules-env";
@@ -33,8 +34,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    selectedPanelModulePackages
-    ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
+    selectedPanelModulePackages ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
 
   dontUnpack = true;
   dontConfigure = true;
@@ -54,9 +54,8 @@ stdenv.mkDerivation {
 
     rm $out/share/applications/gnome-panel.desktop
 
-    substitute ${gnome-panel}/share/applications/gnome-panel.desktop \
-      $out/share/applications/gnome-panel.desktop --replace \
-      "Exec=${gnome-panel}/bin/gnome-panel" "Exec=$out/bin/gnome-panel"
+    ln -s ${gnome-panel}/share/applications/gnome-panel.desktop \
+      $out/share/applications/gnome-panel.desktop
 
     runHook postInstall
   '';

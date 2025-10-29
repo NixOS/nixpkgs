@@ -1,4 +1,11 @@
-{lib, stdenv, fetchpatch, fetchurl, fetchFromGitHub, jre}:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  fetchFromGitHub,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -47,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.antlr.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ lib.maintainers.farlion ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.workflow ];
   };
 }

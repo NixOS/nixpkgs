@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 let
   execOptions = [
     "Boot"
@@ -71,9 +71,10 @@ let
 
   optionsToConfig = opts: builtins.listToAttrs (map (n: lib.nameValuePair n "testdata") opts);
 
-  grepForOptions = opts: ''node.succeed(
-    "for o in ${builtins.concatStringsSep " " opts} ; do grep --quiet $o ${configFile} || exit 1 ; done"
-  )'';
+  grepForOptions = opts: ''
+    node.succeed(
+        "for o in ${builtins.concatStringsSep " " opts} ; do grep --quiet $o ${configFile} || exit 1 ; done"
+      )'';
 
   unitName = "options-test";
   configFile = "/etc/systemd/nspawn/${unitName}.nspawn";
@@ -83,29 +84,31 @@ in
   name = "systemd-nspawn-configfile";
 
   nodes = {
-    node = { pkgs, ... }: {
-      systemd.nspawn."${unitName}" = {
-        enable = true;
+    node =
+      { pkgs, ... }:
+      {
+        systemd.nspawn."${unitName}" = {
+          enable = true;
 
-        execConfig = optionsToConfig execOptions // {
-          Boot = true;
-          ProcessTwo = true;
-          NotifyReady = true;
-        };
+          execConfig = optionsToConfig execOptions // {
+            Boot = true;
+            ProcessTwo = true;
+            NotifyReady = true;
+          };
 
-        filesConfig = optionsToConfig filesOptions // {
-          ReadOnly = true;
-          Volatile = "state";
-          PrivateUsersChown = true;
-          PrivateUsersOwnership = "auto";
-        };
+          filesConfig = optionsToConfig filesOptions // {
+            ReadOnly = true;
+            Volatile = "state";
+            PrivateUsersChown = true;
+            PrivateUsersOwnership = "auto";
+          };
 
-        networkConfig = optionsToConfig networkOptions // {
-          Private = true;
-          VirtualEthernet = true;
+          networkConfig = optionsToConfig networkOptions // {
+            Private = true;
+            VirtualEthernet = true;
+          };
         };
       };
-    };
   };
 
   testScript = ''
@@ -125,4 +128,4 @@ in
   meta.maintainers = [
     lib.maintainers.zi3m5f
   ];
-})
+}

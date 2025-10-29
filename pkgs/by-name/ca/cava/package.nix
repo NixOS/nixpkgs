@@ -22,36 +22,35 @@
 
 stdenv.mkDerivation rec {
   pname = "cava";
-  version = "0.10.2";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    hash = "sha256-y6RslsU/zmr0Ai/rnr73N3OtjuBcWa3JCwh9P5GkNss=";
+    hash = "sha256-dWPW9vd9LdGALt7Po4nZnW5HkivtZcIUBlXEFurq2os=";
   };
 
-  buildInputs =
-    [
-      fftw
-      iniparser
-      libpulseaudio
-      libtool
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      portaudio
-    ]
-    ++ lib.optionals withSDL2 [
-      libGL
-      SDL2
-    ]
-    ++ lib.optionals withPipewire [
-      pipewire
-    ];
+  buildInputs = [
+    fftw
+    iniparser
+    libpulseaudio
+    libtool
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    portaudio
+  ]
+  ++ lib.optionals withSDL2 [
+    libGL
+    SDL2
+  ]
+  ++ lib.optionals withPipewire [
+    pipewire
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

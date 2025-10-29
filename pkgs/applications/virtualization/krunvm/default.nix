@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, asciidoctor
-, buildah
-, buildah-unwrapped
-, cargo
-, libiconv
-, libkrun
-, makeWrapper
-, rustc
-, sigtool
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  asciidoctor,
+  buildah,
+  buildah-unwrapped,
+  cargo,
+  libiconv,
+  libkrun,
+  makeWrapper,
+  rustc,
+  sigtool,
 }:
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "krunvm";
     rev = "v${version}";
-    hash = "sha256-IXofYsOmbrjq8Zq9+a6pvBYsvZFcKzN5IvCuHaxwazI=";
+    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Y0FNi/+HuN5SqexHTKjcW6lEaeis7xZDYc2/FOAANIA=";
+    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +36,13 @@ stdenv.mkDerivation rec {
     rustc
     asciidoctor
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs = [ libkrun ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    libkrun
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

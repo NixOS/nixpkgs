@@ -1,0 +1,47 @@
+diff --git a/MsBinaryFile/XlsFile/Format/Logic/Biff_structures/StringPtgParser.cpp b/MsBinaryFile/XlsFile/Format/Logic/Biff_structures/StringPtgParser.cpp
+index 08f56fb64e..dfbc4e4e15 100644
+--- a/MsBinaryFile/XlsFile/Format/Logic/Biff_structures/StringPtgParser.cpp
++++ b/MsBinaryFile/XlsFile/Format/Logic/Biff_structures/StringPtgParser.cpp
+@@ -73,7 +73,6 @@ const bool StringPtgParser::parseToPtgs(const std::wstring& assembled_formula, R
+ 
+     for(std::wstring::const_iterator it = assembled_formula.begin(), itEnd = assembled_formula.end(); it != itEnd;)
+     {
+-        #pragma region Operators
+         if(SyntaxPtg::is_operators(it, itEnd) || SyntaxPtg::is_PtgIsect(it, itEnd))
+         {
+             OperatorPtgPtr found_operator;
+@@ -182,8 +181,6 @@ const bool StringPtgParser::parseToPtgs(const std::wstring& assembled_formula, R
+             ptg_stack.push(found_operator);
+             last_ptg = found_operator;
+         }
+-        #pragma endregion
+-        #pragma region Parenthesis
+         else if(SyntaxPtg::extract_LeftParenthesis(it, itEnd))
+         {
+             PtgFuncPtr func;
+@@ -246,8 +243,6 @@ const bool StringPtgParser::parseToPtgs(const std::wstring& assembled_formula, R
+             rgce.addPtg(last_ptg);
+             operand_expected = false;
+         }
+-        #pragma endregion
+-        #pragma region Comma and PtgUnion
+         else if(SyntaxPtg::extract_comma(it, itEnd))
+         {
+             PtgParenPtr left_p;
+@@ -271,8 +266,6 @@ const bool StringPtgParser::parseToPtgs(const std::wstring& assembled_formula, R
+             last_ptg = left_p; // PtgParen. Mostly to differ unary and binary minuses and pluses
+             operand_expected = true;
+         }
+-        #pragma endregion
+-        #pragma region Operands
+         else
+         {
+             OperandPtgPtr found_operand;
+@@ -401,7 +394,6 @@ const bool StringPtgParser::parseToPtgs(const std::wstring& assembled_formula, R
+             last_ptg = found_operand;
+             operand_expected = false;
+         }
+-        #pragma endregion
+     }
+ 
+     while(ptg_stack.size())

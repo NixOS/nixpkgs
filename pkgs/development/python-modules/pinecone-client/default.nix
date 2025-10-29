@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   dnspython,
-  fetchPypi,
+  fetchFromGitHub,
   loguru,
   numpy,
   poetry-core,
@@ -13,24 +13,24 @@
   setuptools,
   tqdm,
   typing-extensions,
+  pinecone-plugin-assistant,
+  pinecone-plugin-interface,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "4.1.2";
+  version = "7.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "pinecone_client";
-    inherit version;
-    hash = "sha256-+onGBXkuyU3jbUyVhSULR7C2Q0B0VwU+yokAhCS+YoE=";
+  src = fetchFromGitHub {
+    owner = "pinecone-io";
+    repo = "pinecone-python-client";
+    tag = "v${version}";
+    hash = "sha256-PT8Jr3sq5iZ9VFt6H6t4lLk72FXnHdyPUbcNGftg4QU=";
   };
-
-  pythonRelaxDeps = [ "urllib3" ];
-
 
   build-system = [
     setuptools
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     loguru
     numpy
     python-dateutil
+    pinecone-plugin-assistant
+    pinecone-plugin-interface
     pyyaml
     requests
     tqdm
@@ -49,16 +51,13 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  # Tests require network access
-  doCheck = false;
-
   pythonImportsCheck = [ "pinecone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pinecone python client";
     homepage = "https://www.pinecone.io/";
-    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

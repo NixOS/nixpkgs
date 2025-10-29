@@ -36,7 +36,10 @@ let
   generateConfig = if cfg.validateSettings then generateValidatedConfig else json.generate;
 in
 {
-  meta.maintainers = with lib.maintainers; [ marie natsukium ];
+  meta.maintainers = with lib.maintainers; [
+    marie
+    natsukium
+  ];
 
   options.services.renovate = {
     enable = mkEnableOption "renovate";
@@ -58,6 +61,27 @@ in
       };
       default = { };
     };
+    environment = mkOption {
+      type =
+        with types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
+      description = ''
+        Extra environment variables to export to the Renovate process
+        from the systemd unit configuration.
+
+        See <https://docs.renovatebot.com/config-overview> for available environment variables.
+      '';
+      example = {
+        LOG_LEVEL = "debug";
+      };
+      default = { };
+    };
     runtimePackages = mkOption {
       type = with types; listOf package;
       description = "Packages available to renovate.";
@@ -66,7 +90,7 @@ in
     validateSettings = mkOption {
       type = types.bool;
       default = true;
-      description = "Weither to run renovate's config validator on the built configuration.";
+      description = "Whether to run renovate's config validator on the built configuration.";
     };
     settings = mkOption {
       type = json.type;
@@ -79,14 +103,22 @@ in
       description = ''
         Renovate's global configuration.
         If you want to pass secrets to renovate, please use {option}`services.renovate.credentials` for that.
+
+        See <https://docs.renovatebot.com/config-overview> for available settings.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.renovate.settings = {
-      cacheDir = "/var/cache/renovate";
-      baseDir = "/var/lib/renovate";
+    services.renovate = {
+      settings = {
+        cacheDir = "/var/cache/renovate";
+        baseDir = "/var/lib/renovate";
+      };
+      environment = {
+        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
+        HOME = "/var/lib/renovate";
+      };
     };
 
     systemd.services.renovate = {
@@ -97,14 +129,15 @@ in
       path = [
         config.systemd.package
         pkgs.git
-      ] ++ cfg.runtimePackages;
+      ]
+      ++ cfg.runtimePackages;
+      inherit (cfg) environment;
 
       serviceConfig = {
         User = "renovate";
         Group = "renovate";
         DynamicUser = true;
         LoadCredential = lib.mapAttrsToList (name: value: "SECRET-${name}:${value}") cfg.credentials;
-        Restart = "on-failure";
         CacheDirectory = "renovate";
         StateDirectory = "renovate";
 
@@ -136,17 +169,13 @@ in
 
       script = ''
         ${lib.concatStringsSep "\n" (
-          builtins.map (name: "export ${name}=$(systemd-creds cat 'SECRET-${name}')") (
-            lib.attrNames cfg.credentials
-          )
+          builtins.map (name: ''
+            ${name}="$(systemd-creds cat 'SECRET-${name}')"
+            export ${name}
+          '') (lib.attrNames cfg.credentials)
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';
-
-      environment = {
-        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
-        HOME = "/var/lib/renovate";
-      };
     };
   };
 }

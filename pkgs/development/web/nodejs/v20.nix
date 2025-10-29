@@ -1,4 +1,10 @@
-{ callPackage, fetchpatch2, openssl, python3, enableNpm ? true }:
+{
+  callPackage,
+  fetchpatch2,
+  openssl,
+  python3,
+  enableNpm ? true,
+}:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -7,46 +13,46 @@ let
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    # Fixes builds with Nix sandbox on Darwin for gyp.
+    # See https://github.com/NixOS/nixpkgs/issues/261820
+    # and https://github.com/nodejs/gyp-next/pull/216
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/gyp-next/commit/706d04aba5bd18f311dc56f84720e99f64c73466.patch?full_index=1";
+      hash = "sha256-iV9qvj0meZkgRzFNur2v1jtLZahbqvSJ237NoM8pPZc=";
+      stripLen = 1;
+      extraPrefix = "tools/gyp/";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/gyp-next/commit/706d04aba5bd18f311dc56f84720e99f64c73466.patch?full_index=1";
+      hash = "sha256-1iyeeAprmWpmLafvOOXW45iZ4jWFSloWJxQ0reAKBOo=";
+      stripLen = 1;
+      extraPrefix = "deps/npm/node_modules/node-gyp/gyp/";
+    })
+
     ./gyp-patches-pre-v22-import-sys.patch
   ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.18.0";
-  sha256 = "7d9433e91fd88d82ba8de86e711ec41907638e227993d22e95126b02f6cd714a";
+  version = "20.19.5";
+  sha256 = "230c899f4e2489c4b8d2232edd6cc02f384fb2397c2a246a22e415837ee5da51";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
-    ./disable-darwin-v8-system-instrumentation-node19.patch
-    ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
+    ./use-nix-codesign.patch
 
-    # Patches for OpenSSL 3.2
-    # Patches not yet released
+    # TODO: remove when included in a release
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/f8b7a171463e775da304bccf4cf165e634525c7e.patch?full_index=1";
-      hash = "sha256-imptUwt2oG8pPGKD3V6m5NQXuahis71UpXiJm4C0E6o=";
+      url = "https://github.com/nodejs/node/commit/8caa1dcee63b2c6fd7a9edf9b9a6222b38a2cf62.patch?full_index=1";
+      hash = "sha256-DtN0bpYfo5twHz2GrLLgq4Bu2gFYTkNPMRKhrgeYRyA=";
+      includes = [ "test/parallel/test-setproctitle.js" ];
     })
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/6dfa3e46d3d2f8cfba7da636d48a5c41b0132cd7.patch?full_index=1";
-      hash = "sha256-ITtGsvZI6fliirCKvbMH9N2Xoy3001bz+hS3NPoqvzg=";
+      url = "https://github.com/nodejs/node/commit/499a5c345165f0d4a94b98d08f1ace7268781564.patch?full_index=1";
+      hash = "sha256-wF4+CytC1OB5egJGOfLm1USsYY12f9kADymVrxotezE=";
     })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/29b9c72b05786061cde58a5ae11cfcb580ab6c28.patch?full_index=1";
-      hash = "sha256-xaqtwsrOIyRV5zzccab+nDNG8kUgO6AjrVYJNmjeNP0=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/cfe58cfdc488da71e655d3da709292ce6d9ddb58.patch?full_index=1";
-      hash = "sha256-9GblpbQcYfoiE5R7fETsdW7v1Mm2Xdr4+xRNgUpLO+8=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/2cec716c48cea816dcd5bf4997ae3cdf1fe4cd90.patch?full_index=1";
-      hash = "sha256-ExIkAj8yRJEK39OfV6A53HiuZsfQOm82/Tvj0nCaI8A=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/0f7bdcc17fbc7098b89f238f4bd8ecad9367887b.patch?full_index=1";
-      hash = "sha256-lXx6QyD2anlY9qAwjNMFM2VcHckBshghUF1NaMoaNl4=";
-    })
-  ] ++ gypPatches;
+  ]
+  ++ gypPatches;
 }

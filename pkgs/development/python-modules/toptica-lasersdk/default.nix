@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "toptica-lasersdk";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "toptica_lasersdk";
     inherit version;
-    hash = "sha256-UNazng4Za3CZeG7eDq0b+l7gmESEXIU8WMLWGGysmBg=";
+    hash = "sha256-VzgQCqfZP9JoFmotG0jPJpHMxLY+unNZqzxQGhtlYC4=";
   };
 
   build-system = [

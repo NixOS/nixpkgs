@@ -1,9 +1,14 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "swap-partition";
 
   nodes.machine =
-    { config, pkgs, lib, ... }:
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     {
       virtualisation.useDefaultFilesystems = false;
 
@@ -45,4 +50,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       # Doesn't matter if the numbers reported by `free` are slightly off due to unit conversions.
       machine.succeed("free -h | grep -E 'Swap:\s+2[45][0-9]Mi'")
   '';
-})
+}

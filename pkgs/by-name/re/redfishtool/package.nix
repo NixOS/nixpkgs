@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 let
@@ -9,21 +10,28 @@ let
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-X/G6osOHCBidKZG/Y2nmHadifDacJhjBIc7WYrUCPn8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ requests python-dateutil ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  meta = with lib; {
+  propagatedBuildInputs = with python3.pkgs; [
+    requests
+    python-dateutil
+  ];
+
+  pythonImportsCheck = [ "redfishtoollib" ];
+
+  meta = {
     description = "Python34 program that implements a command line tool for accessing the Redfish API";
     homepage = "https://github.com/DMTF/Redfishtool";
     changelog = "https://github.com/DMTF/Redfishtool/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "redfishtool";
   };
 }

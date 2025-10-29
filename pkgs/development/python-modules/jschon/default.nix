@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, rfc3986
-, pytestCheckHook
-, hypothesis
-, requests
-, pytest-httpserver
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  rfc3986,
+  pytestCheckHook,
+  hypothesis,
+  requests,
+  pytest-httpserver,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "An object-oriented JSON Schema implementation for Python";
+    description = "Object-oriented JSON Schema implementation for Python";
     homepage = "https://github.com/marksparkza/jschon";
     changelog = "https://github.com/marksparkza/jschon/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

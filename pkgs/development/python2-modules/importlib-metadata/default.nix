@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, zipp
-, pathlib2
-, contextlib2
-, configparser
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  zipp,
+  pathlib2,
+  contextlib2,
+  configparser,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "importlib_metadata";
@@ -21,8 +23,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ zipp ]
-    ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
+  propagatedBuildInputs = [
+    zipp
+  ]
+  ++ lib.optionals (!isPy3k) [
+    pathlib2
+    contextlib2
+    configparser
+  ];
 
   # Cyclic dependencies
   doCheck = false;

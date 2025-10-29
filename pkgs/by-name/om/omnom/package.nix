@@ -2,24 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   makeWrapper,
+  nixosTests,
+
+  # for addons
+  buildNpmPackage,
+  zip,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0-unstable-2024-08-29";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
-    rev = "1fcd7787886503f703bbcd31b193d4c93acc5610";
-    hash = "sha256-o/n8rgngQkYEn8J0aFpCiD4qrWVFaaa305OxiscU6+8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-auujlRG3RKJYYTi/iptx0Y3Yzqmt6i9AlfjVcqn5YPc=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-dsS5w8JXIwkneWScOFzLSDiXq+clgK+RdYiMw0+FnvY=";
+  vendorHash = "sha256-0usbfvGz+9chLGyHHUUStUh7x91ZGfr/+gAXXVA5iNc=";
 
-  patches = [ ./0001-fix-minimal-go-version.patch ];
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -28,31 +34,60 @@ buildGoModule {
     "-w"
   ];
 
-  postPatch = ''
-    # For the default config to work, we have to put `static/data` and
-    # `db.sqlite3` in a temporary directory since they need to be writeable.
-    #
-    # NOTE: Currently, `static/data` only holds the snapshots directory.
-    substituteInPlace config.yml \
-      --replace-fail 'root: "./static/data"' 'root: "/tmp/omnom/static/data"' \
-      --replace-fail 'connection: "./db.sqlite3"' 'connection: "/tmp/omnom/db.sqlite3"' \
-      --replace-fail 'debug: true' 'debug: false'
-  '';
-
   postInstall = ''
-    mkdir -p $out/share
-    cp -r config.yml static templates $out/share
+    mkdir -p $out/share/addons
 
-    wrapProgram $out/bin/omnom \
-      --chdir $out/share \
-      --set-default GIN_MODE release
+    # Copy Firefox and Chrome addons
+    cp -r ${finalAttrs.passthru.omnom-addons}/*.zip $out/share/addons
+
+    mkdir -p $out/share/examples
+
+    cp -r static templates $out/share
+    cp config.yml_sample $out/share/examples/config.yml
   '';
+
+  passthru = {
+    omnom-addons = buildNpmPackage (finalAttrs': {
+      pname = "omnom-addons";
+      inherit (finalAttrs) version src;
+
+      npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
+      sourceRoot = "${finalAttrs'.src.name}/ext";
+      npmPackFlags = [ "--ignore-scripts" ];
+
+      nativeBuildInputs = [ zip ];
+
+      # Fix path for the `static` directory
+      postConfigure = ''
+        substituteInPlace webpack.config.js \
+        --replace-fail '"..", ".."' '".."'
+      '';
+
+      postBuild = ''
+        mkdir -p $out
+
+        zip -r "$out/omnom_ext_src.zip" README.md src utils package* webpack.config.js
+
+        pushd build
+          zip "$out/omnom_ext_chrome.zip" ./* icons/* -x manifest_ff.json
+          cp manifest_ff.json manifest.json
+          zip "$out/omnom_ext_firefox.zip" ./* icons/* -x manifest_ff.json
+        popd
+      '';
+
+      postCheck = ''
+        npm run build-test
+      '';
+    });
+
+    tests = nixosTests.omnom;
+  };
 
   meta = {
-    description = "A webpage bookmarking and snapshotting service";
+    description = "Webpage bookmarking and snapshotting service";
     homepage = "https://github.com/asciimoo/omnom";
     license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
     mainProgram = "omnom";
   };
-}
+})

@@ -1,41 +1,43 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "systemd-initrd-network-ssh";
   meta.maintainers = [ lib.maintainers.elvishjerricco ];
 
   nodes = {
-    server = { config, pkgs, ... }: {
-      testing.initrdBackdoor = true;
-      boot.initrd.systemd.enable = true;
-      boot.initrd.systemd.contents."/etc/msg".text = "foo";
-      boot.initrd.network = {
-        enable = true;
-        ssh = {
+    server =
+      { config, pkgs, ... }:
+      {
+        testing.initrdBackdoor = true;
+        boot.initrd.systemd.enable = true;
+        boot.initrd.systemd.contents."/etc/msg".text = "foo";
+        boot.initrd.network = {
           enable = true;
-          authorizedKeys = [ (lib.readFile ./initrd-network-ssh/id_ed25519.pub) ];
-          port = 22;
-          hostKeys = [ ./initrd-network-ssh/ssh_host_ed25519_key ];
+          ssh = {
+            enable = true;
+            authorizedKeys = [ (lib.readFile ./initrd-network-ssh/id_ed25519.pub) ];
+            port = 22;
+            hostKeys = [ ./initrd-network-ssh/ssh_host_ed25519_key ];
+          };
         };
       };
-    };
 
-    client = { config, ... }: {
-      environment.etc = {
-        knownHosts = {
-          text = lib.concatStrings [
-            "server,"
-            "${
-              toString (lib.head (lib.splitString " " (toString
-                (lib.elemAt (lib.splitString "\n" config.networking.extraHosts) 2))))
-            } "
-            "${lib.readFile ./initrd-network-ssh/ssh_host_ed25519_key.pub}"
-          ];
-        };
-        sshKey = {
-          source = ./initrd-network-ssh/id_ed25519;
-          mode = "0600";
+    client =
+      { config, ... }:
+      {
+        environment.etc = {
+          knownHosts = {
+            text = lib.concatStrings [
+              "server,"
+              "${toString (lib.head (lib.splitString " " (toString (lib.elemAt (lib.splitString "\n" config.networking.extraHosts) 2))))} "
+              "${lib.readFile ./initrd-network-ssh/ssh_host_ed25519_key.pub}"
+            ];
+          };
+          sshKey = {
+            source = ./initrd-network-ssh/id_ed25519;
+            mode = "0600";
+          };
         };
       };
-    };
   };
 
   testScript = ''
@@ -57,4 +59,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     server.switch_root()
     server.wait_for_unit("multi-user.target")
   '';
-})
+}

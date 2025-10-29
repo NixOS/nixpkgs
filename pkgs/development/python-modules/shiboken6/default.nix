@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchgit,
   llvmPackages,
   python,
   cmake,
@@ -13,23 +13,23 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.8";
+  version = "6.10.0";
 
-  src = fetchurl {
-    # https://download.qt.io/official_releases/QtForPython/shiboken6/
-    # FIXME: inconsistent version numbers in directory name and tarball?
-    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-${finalAttrs.version}.0-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XAWtOufnJ51tudyUpG6woF/Qk1NzCfdDnDhnG9clUZA=";
+  src = fetchgit {
+    url = "https://code.qt.io/pyside/pyside-setup.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zJV4rrqr2bzWFEG1CWOI+y6wbfQDvWAst6T3aSssj6M=";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
+  sourceRoot = "${finalAttrs.src.name}/sources/shiboken6";
 
   patches = [ ./fix-include-qt-headers.patch ];
 
   nativeBuildInputs = [
     cmake
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -38,6 +38,9 @@ stdenv'.mkDerivation (finalAttrs: {
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    python.pkgs.qt6.darwinVersionInputs
   ];
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
@@ -46,10 +49,17 @@ stdenv'.mkDerivation (finalAttrs: {
   # variable available in this file.
   postPatch = ''
     substituteInPlace cmake/ShibokenHelpers.cmake --replace-fail '#!/bin/bash' '#!''${BASH}'
+
+    # raise ValueError('ZIP does not support timestamps before 1980')
+    find \
+      shibokenmodule/files.dir/shibokensupport/ \
+      libshiboken/embed/signature_bootstrap.py \
+      -exec touch -d "1980-01-01T00:00Z" {} \;
   '';
 
   postInstall = ''
     cd ../../..
+    chmod +w .
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=shiboken6
     cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';
@@ -65,7 +75,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,8 +1,10 @@
-{ lib, buildDunePackage
-, menhirLib
+{
+  lib,
+  buildDunePackage,
+  menhirLib,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "menhirSdk";
 
   inherit (menhirLib) version src;
@@ -12,4 +14,3 @@ buildDunePackage rec {
     license = with lib.licenses; [ gpl2Only ];
   };
 }
-

@@ -1,15 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption types literalExpression mkIf mkDefault;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    literalExpression
+    mkIf
+    mkDefault
+    ;
   cfg = config.services.miniflux;
 
-  defaultAddress = "localhost:8080";
+  boolToInt = b: if b then 1 else 0;
 
   pgbin = "${config.services.postgresql.package}/bin";
+  # The hstore extension is no longer needed as of v2.2.14
+  # and would prevent Miniflux from starting.
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
   '';
 in
 
@@ -26,25 +41,58 @@ in
         description = ''
           Whether a PostgreSQL database should be automatically created and
           configured on the local host. If set to `false`, you need provision a
-          database yourself and make sure to create the hstore extension in it.
+          database yourself.
         '';
       };
 
       config = mkOption {
-        type = with types; attrsOf (oneOf [ str int ]);
-        example = literalExpression ''
-          {
-            CLEANUP_FREQUENCY = 48;
-            LISTEN_ADDR = "localhost:8080";
-          }
-        '';
+        type = types.submodule {
+          freeformType =
+            with types;
+            attrsOf (oneOf [
+              str
+              int
+            ]);
+          options = {
+            LISTEN_ADDR = mkOption {
+              type = types.str;
+              default = "localhost:8080";
+              description = ''
+                Address to listen on. Use absolute path for a Unix socket.
+                Multiple addresses can be specified, separated by commas.
+              '';
+              example = "127.0.0.1:8080, 127.0.0.1:8081";
+            };
+            DATABASE_URL = mkOption {
+              type = types.str;
+              defaultText = "user=miniflux host=/run/postgresql dbname=miniflux";
+              description = ''
+                Postgresql connection parameters.
+                See [lib/pq](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters) for more details.
+              '';
+            };
+            RUN_MIGRATIONS = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Run database migrations.";
+            };
+            CREATE_ADMIN = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Create an admin user from environment variables.";
+            };
+            WATCHDOG = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Enable or disable Systemd watchdog.";
+            };
+          };
+        };
+        default = { };
         description = ''
           Configuration for Miniflux, refer to
           <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
-
-          Correct configuration for the database is already provided.
-          By default, listens on ${defaultAddress}.
         '';
       };
 
@@ -54,7 +102,7 @@ in
         description = ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
-          an EnvironmentFile=, as described by systemd.exec(5).
+          an EnvironmentFile=, as described by {manpage}`systemd.exec(5)`.
         '';
         example = "/etc/nixos/miniflux-admin-credentials";
       };
@@ -63,31 +111,33 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
+      {
+        assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
         message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
       }
     ];
     services.miniflux.config = {
-      LISTEN_ADDR = mkDefault defaultAddress;
       DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
-      RUN_MIGRATIONS = 1;
-      CREATE_ADMIN = lib.mkDefault 1;
-      WATCHDOG = 1;
     };
 
     services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
-      ensureUsers = [ {
-        name = "miniflux";
-        ensureDBOwnership = true;
-      } ];
+      ensureUsers = [
+        {
+          name = "miniflux";
+          ensureDBOwnership = true;
+        }
+      ];
       ensureDatabases = [ "miniflux" ];
     };
 
     systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
-      requires = [ "postgresql.service" ];
-      after = [ "network.target" "postgresql.service" ];
+      requires = [ "postgresql.target" ];
+      after = [
+        "network.target"
+        "postgresql.target"
+      ];
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
@@ -99,8 +149,13 @@ in
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
       requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
-      after = [ "network.target" ]
-        ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.createDatabaseLocally [
+        "postgresql.target"
+        "miniflux-dbsetup.service"
+      ];
 
       serviceConfig = {
         Type = "notify";
@@ -131,12 +186,19 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
 

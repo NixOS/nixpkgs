@@ -1,34 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, openssl
-, curl
-, libevent
-, inotify-tools
-, systemd
-, zlib
-, pcre
-, libb64
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
-, libiconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  curl,
+  libevent,
+  inotify-tools,
+  systemd,
+  zlib,
+  pcre,
+  libb64,
+  libutp,
+  miniupnpc,
+  dht,
+  libnatpmp,
+  libiconv,
   # Build options
-, enableGTK3 ? false
-, gtk3
-, xorg
-, wrapGAppsHook3
-, enableQt ? false
-, qt5
-, nixosTests
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, enableDaemon ? true
-, enableCli ? true
-, installLib ? false
-, apparmorRulesFromClosure
+  enableGTK3 ? false,
+  gtk3,
+  xorg,
+  wrapGAppsHook3,
+  enableQt ? false,
+  qt5,
+  nixosTests,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  enableDaemon ? true,
+  enableCli ? true,
+  installLib ? false,
+  apparmorRulesFromClosure,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-n4iEDt9AstDZPZXN47p13brNLbNWS3BTB+A4UuoEjzE=";
     fetchSubmodules = true;
   };
@@ -50,7 +51,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./transmission-3.00-miniupnpc-2.2.8.patch
   ];
 
-  outputs = [ "out" "apparmor" ];
+  # Compatibility with CMake < 3.5 has been removed from CMake.
+  postPatch = ''
+    substituteInPlace \
+      CMakeLists.txt \
+      --replace-fail \
+        "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" \
+        "cmake_minimum_required(VERSION 3.5)"
+  '';
+
+  outputs = [
+    "out"
+    "apparmor"
+  ];
 
   cmakeFlags =
     let
@@ -70,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook3 ]
-  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
-  ;
+  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ];
 
   buildInputs = [
     openssl
@@ -85,8 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     dht
     libnatpmp
   ]
-  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
-  ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
+  ++ lib.optionals enableQt [
+    qt5.qttools
+    qt5.qtbase
+  ]
+  ++ lib.optionals enableGTK3 [
+    gtk3
+    xorg.libpthreadstubs
+  ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
@@ -99,11 +117,21 @@ stdenv.mkDerivation (finalAttrs: {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
-      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libnatpmp miniupnpc
-      ] ++ lib.optionals enableSystemd [ systemd ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-      )}"
+      include "${
+        apparmorRulesFromClosure { name = "transmission-daemon"; } (
+          [
+            curl
+            libevent
+            openssl
+            pcre
+            zlib
+            libnatpmp
+            miniupnpc
+          ]
+          ++ lib.optionals enableSystemd [ systemd ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+        )
+      }"
       r @{PROC}/sys/kernel/random/uuid,
       r @{PROC}/sys/vm/overcommit_memory,
       r @{PROC}/@{pid}/environ,
@@ -117,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  env = {
+    # Fix GCC 14 build
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   passthru.tests = {
     apparmor = nixosTests.transmission_3; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
@@ -124,7 +157,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Fast, easy and free BitTorrent client (deprecated version 3)";
-    mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
+    mainProgram =
+      if enableQt then
+        "transmission-qt"
+      else if enableGTK3 then
+        "transmission-gtk"
+      else
+        "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -138,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "pylint-venv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dJWVfltze4zT0CowBZSn3alqR2Y8obKUCmO8Nfw+ahs=";
   };
 

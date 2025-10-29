@@ -34,7 +34,10 @@ buildPythonPackage rec {
     "GetIP"
     "TestNameServer"
     "TestBCSetup"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "Socket" ];
+    # time sensitive tests
+    "testTimeoutCall"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "Socket" ];
 
   pythonImportsCheck = [ "Pyro5" ];
 

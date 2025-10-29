@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   packaging,
   setuptools,
   torch,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.7.3";
+  version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iEg27b2JVLtAYLFncaSqIh5FyvmmitKAKP7Tl0WWNdk=";
+    owner = "kornia";
+    repo = "kornia";
+    tag = "v${version}";
+    hash = "sha256-LT+F/tskySvSmaBufIaQhI4+wK5DZBNanQbnYj4ywGo=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +49,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://kornia.readthedocs.io";
-    changelog = "https://github.com/kornia/kornia/releases/tag/v${version}";
+    changelog = "https://github.com/kornia/kornia/releases/tag/${src.tag}";
     description = "Differentiable computer vision library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];

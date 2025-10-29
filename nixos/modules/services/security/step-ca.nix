@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.step-ca;
   settingsFormat = (pkgs.formats.json { });
@@ -10,12 +15,7 @@ in
     services.step-ca = {
       enable = lib.mkEnableOption "the smallstep certificate authority server";
       openFirewall = lib.mkEnableOption "opening the certificate authority server port";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.step-ca;
-        defaultText = lib.literalExpression "pkgs.step-ca";
-        description = "Which step-ca package to use.";
-      };
+      package = lib.mkPackageOption pkgs "step-ca" { };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
@@ -55,7 +55,10 @@ in
         '';
       };
       intermediatePasswordFile = lib.mkOption {
-        type = lib.types.path;
+        type = lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        };
         example = "/run/keys/smallstep-password";
         description = ''
           Path to the file containing the password for the intermediate
@@ -73,23 +76,14 @@ in
 
   config = lib.mkIf config.services.step-ca.enable (
     let
-      configFile = settingsFormat.generate "ca.json" (cfg.settings // {
-        address = cfg.address + ":" + toString cfg.port;
-      });
+      configFile = settingsFormat.generate "ca.json" (
+        cfg.settings
+        // {
+          address = cfg.address + ":" + toString cfg.port;
+        }
+      );
     in
     {
-      assertions =
-        [
-          {
-            assertion = !lib.isStorePath cfg.intermediatePasswordFile;
-            message = ''
-              <option>services.step-ca.intermediatePasswordFile</option> points to
-              a file in the Nix store. You should use a quoted absolute path to
-              prevent this.
-            '';
-          }
-        ];
-
       systemd.packages = [ cfg.package ];
 
       # configuration file indirection is needed to support reloading
@@ -132,7 +126,7 @@ in
         isSystemUser = true;
       };
 
-      users.groups.step-ca = {};
+      users.groups.step-ca = { };
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];

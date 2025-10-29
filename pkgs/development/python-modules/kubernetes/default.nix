@@ -4,6 +4,7 @@
   adal,
   buildPythonPackage,
   certifi,
+  durationpy,
   fetchFromGitHub,
   google-auth,
   mock,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "30.1.0";
+  version = "33.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kubernetes-client";
     repo = "python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zOooibXkk0iA6IYJViz+SIMgHwG0fr4WR3ZjhgIeUjE=";
+    tag = "v${version}";
+    hash = "sha256-+jL0XS7Y8qOqzZ5DcG/hZFUpj7krJAaA4fgPNSEgIAE=";
   };
 
   build-system = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   dependencies = [
     certifi
+    durationpy
     google-auth
     python-dateutil
     pyyaml
@@ -58,7 +60,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>
@@ -68,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
-    changelog = "https://github.com/kubernetes-client/python/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };

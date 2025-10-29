@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, crystal, openssl, testers, amqpcat }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  openssl,
+  testers,
+  amqpcat,
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
@@ -7,7 +14,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QLVFAcymj7dERbUiRcseiDuuKgrQ8n4LbkdhUyXPcWw=";
   };
 
@@ -23,11 +30,11 @@ crystal.buildCrystalPackage rec {
     package = amqpcat;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for publishing to and consuming from AMQP servers";
     mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,24 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, buildPackages
-, libiconv
-, perl
-, texinfo
-, xz
-, binlore
-, coreutils
-, gmpSupport ? true, gmp
-, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl, acl
-, attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr, attr
-, selinuxSupport ? false, libselinux, libsepol
-# No openssl in default version, so openssl-induced rebuilds aren't too big.
-# It makes *sum functions significantly faster.
-, minimal ? true
-, withOpenssl ? !minimal, openssl
-, withPrefix ? false
-, singleBinary ? "symlinks" # you can also pass "shebangs" or false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  buildPackages,
+  libiconv,
+  perl,
+  texinfo,
+  xz,
+  binlore,
+  coreutils,
+  gmpSupport ? true,
+  gmp,
+  aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
+  acl,
+  attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr,
+  attr,
+  selinuxSupport ? false,
+  libselinux,
+  libsepol,
+  # No openssl in default version, so openssl-induced rebuilds aren't too big.
+  # It makes *sum functions significantly faster.
+  minimal ? true,
+  withOpenssl ? !minimal,
+  openssl,
+  withPrefix ? false,
+  singleBinary ? "symlinks", # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -29,28 +36,24 @@ assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
 let
-  inherit (lib) concatStringsSep isString optional optionalAttrs optionals optionalString;
+  inherit (lib)
+    concatStringsSep
+    isString
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.5";
+  version = "9.8";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
+    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
   };
-
-  patches = [
-    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
-    # This is not precisely the patch provided - this is a diff of the Makefile.in
-    # after the patch was applied and autoreconf was run, since adding autoreconf
-    # here causes infinite recursion.
-    ./fix-mix-flags-deps-libintl.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
-    ./fix-test-failure-musl.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -91,19 +94,42 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > "$f"
     done
 
+    # These tests sometimes fail on ZFS-backed NFS filesystems
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+    sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
-  '' + (optionalString (stdenv.hostPlatform.libc == "musl") (concatStringsSep "\n" [
-    ''
-      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-    ''
-  ])) + (optionalString stdenv.hostPlatform.isAarch64 ''
+
+    # fails when syscalls related to acl not being available, e.g. in sandboxed environment
+    sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
+  ''
+  + (optionalString (stdenv.hostPlatform.libc == "musl") (
+    concatStringsSep "\n" [
+      ''
+        echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+        echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+      ''
+    ]
+  ))
+  + (optionalString stdenv.hostPlatform.isAarch64 ''
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-  '');
+  '')
+  + (optionalString stdenv.hostPlatform.isPower64
+    # test command fails to parse long fraction part on ppc64
+    # When fraction parsing is fixed, still wrong output due to fraction length mismatch
+    # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=78985
+    ''
+      sed '2i echo Skipping float sort-ing test && exit 77' -i ./tests/sort/sort-float.sh
+    ''
+  );
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
   separateDebugInfo = true;
 
   nativeBuildInputs = [
@@ -116,43 +142,56 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
     ++ optional gmpSupport gmp
     ++ optional withOpenssl openssl
-    ++ optionals selinuxSupport [ libselinux libsepol ]
+    ++ optionals selinuxSupport [
+      libselinux
+      libsepol
+    ]
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  configureFlags = [ "--with-packager=https://nixos.org" ]
-    ++ optional (singleBinary != false)
-      ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
-    ++ optional withOpenssl "--with-openssl"
-    ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
-    ++ optional withPrefix "--program-prefix=g"
-    # the shipped configure script doesn't enable nls, but using autoreconfHook
-    # does so which breaks the build
-    ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
-    ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
-      # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
-      # don't know why it is not properly detected cross building with glibc.
-      "fu_cv_sys_stat_statfs2_bsize=yes"
-    ]
-    # /proc/uptime is available on Linux and produces accurate results even if
-    # the boot time is set to the epoch because the system has no RTC. We
-    # explicitly enable it for cases where it can't be detected automatically,
-    # such as when cross-compiling.
-    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
+  configureFlags = [
+    "--with-packager=https://nixos.org"
+  ]
+  ++ optional (singleBinary != false) (
+    "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
+  )
+  ++ optional withOpenssl "--with-openssl"
+  ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
+  ++ optional withPrefix "--program-prefix=g"
+  # the shipped configure script doesn't enable nls, but using autoreconfHook
+  # does so which breaks the build
+  ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
+  # The VMULL-based CRC implementation produces incorrect results on musl.
+  # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
+  ++ optional (
+    stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
+  ) "utils_cv_vmull_intrinsic_exists=no"
+  ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
+    # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
+    # don't know why it is not properly detected cross building with glibc.
+    "fu_cv_sys_stat_statfs2_bsize=yes"
+  ]
+  # /proc/uptime is available on Linux and produces accurate results even if
+  # the boot time is set to the epoch because the system has no RTC. We
+  # explicitly enable it for cases where it can't be detected automatically,
+  # such as when cross-compiling.
+  ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
-  doCheck = (!isCross)
+  doCheck =
+    (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
     && !stdenv.hostPlatform.isAarch32;
 
@@ -163,10 +202,15 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  env.NIX_CFLAGS_COMPILE = toString ([]
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ ]
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0");
+    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+    # gnulib does not consider Clang-specific warnings to be bugs:
+    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
+  );
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -174,34 +218,38 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (isCross && !minimal) ''
-    rm $out/share/man/man1/*
-    cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
-  ''
-  # du: 8.7 M locale + 0.4 M man pages
-  + optionalString minimal ''
-    rm -r "$out/share"
-  '';
+  postInstall =
+    optionalString (isCross && !minimal) ''
+      rm $out/share/man/man1/*
+      cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
+    ''
+    # du: 8.7 M locale + 0.4 M man pages
+    + optionalString minimal ''
+      rm -r "$out/share"
+    '';
 
-  passthru = {} // optionalAttrs (singleBinary != false) {
-    # everything in the single binary gets the same verdict, so we
-    # override _that case_ with verdicts from separate binaries.
-    #
-    # binlore only spots exec in runcon on some platforms (i.e., not
-    # darwin; see comment on inverse case below)
-    binlore.out = binlore.synthesize coreutils ''
-      execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-      execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
-    '';
-  } // optionalAttrs (singleBinary == false) {
-    # binlore only spots exec in runcon on some platforms (i.e., not
-    # darwin; I have a note that the behavior may need selinux?).
-    # hard-set it so people working on macOS don't miss cases of
-    # runcon until ofBorg fails.
-    binlore.out = binlore.synthesize coreutils ''
-      execer can bin/runcon
-    '';
-  };
+  passthru =
+    { }
+    // optionalAttrs (singleBinary != false) {
+      # everything in the single binary gets the same verdict, so we
+      # override _that case_ with verdicts from separate binaries.
+      #
+      # binlore only spots exec in runcon on some platforms (i.e., not
+      # darwin; see comment on inverse case below)
+      binlore.out = binlore.synthesize coreutils ''
+        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
+        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+      '';
+    }
+    // optionalAttrs (singleBinary == false) {
+      # binlore only spots exec in runcon on some platforms (i.e., not
+      # darwin; I have a note that the behavior may need selinux?).
+      # hard-set it so people working on macOS don't miss cases of
+      # runcon until ofBorg fails.
+      binlore.out = binlore.synthesize coreutils ''
+        execer can bin/runcon
+      '';
+    };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";

@@ -6,16 +6,15 @@
 
   pnpm_9,
   nodejs,
-  cargo-tauri,
+  cargo-tauri_1,
   pkg-config,
   wrapGAppsHook3,
   makeBinaryWrapper,
 
   openssl,
-  libsoup,
-  webkitgtk_4_0,
+  libsoup_2_4,
+  # webkitgtk_4_0,
   gst_all_1,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,48 +24,40 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "franciscoBSalgueiro";
     repo = "en-croissant";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EiGML3oFCJR4TZkd+FekUrJwCYe/nGdWD9mAtKKtITQ=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-hvWXSegUWJvwCU5NLb2vqnl+FIWpCLxw96s9NUIgJTI=";
-  };
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-log-0.0.0" = "sha256-t+zmMMSnD9ASZZvqlhu1ah2OjCUtRXdk/xaI37uI49c=";
-      "vampirc-uci-0.11.1" = "sha256-g2JjHZoAmmZ7xsw4YnkUPRXJxsYmBqflWxCFkFEvMXQ=";
-    };
   };
 
   cargoRoot = "src-tauri";
 
+  cargoHash = "sha256-6cBGOdJ7jz+mOl2EEXxoLNeX9meW+ybQxAxnnHAplIc=";
+
   buildAndTestSubdir = cargoRoot;
 
-  nativeBuildInputs =
-    [
-      pnpm_9.configHook
-      nodejs
-      cargo-tauri.hook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    pnpm_9.configHook
+    nodejs
+    cargo-tauri_1.hook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      libsoup
-      webkitgtk_4_0
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    libsoup_2_4
+    # webkitgtk_4_0
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+  ];
 
   doCheck = false; # many scoring tests fail
 
@@ -75,6 +66,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Ultimate Chess Toolkit";
     homepage = "https://github.com/franciscoBSalgueiro/en-croissant/";
     license = lib.licenses.gpl3Only;

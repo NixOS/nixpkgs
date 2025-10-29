@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "containers-require-bind-mounts";
   meta.maintainers = with lib.maintainers; [ kira-bruneau ];
 
   nodes.machine = {
     containers.require-bind-mounts = {
-      bindMounts = { "/srv/data" = {}; };
-      config = {};
+      bindMounts = {
+        "/srv/data" = { };
+      };
+      config = { };
     };
 
     virtualisation.fileSystems = {
@@ -31,5 +34,5 @@ import ./make-test-python.nix ({ lib, ... }: {
       machine.succeed("systemctl stop srv-data.mount")
       assert "down" in machine.succeed("nixos-container status require-bind-mounts")
       assert "inactive" in machine.fail("systemctl is-active srv-data.mount")
-    '';
-})
+  '';
+}

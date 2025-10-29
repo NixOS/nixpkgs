@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pappl";
-  version = "1.4.7";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "pappl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Npry3H+QbAH19hoqAZuOwjpZwCPhOLewD8uKZlo4gdQ=";
+    tag = "v${version}";
+    hash = "sha256-XHFYwl129iD5rKC1P/roFlX+03uFE8ofwQRIEkUuOCc=";
   };
 
   outputs = [
@@ -34,23 +34,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cups
-      libjpeg
-      libpng
-      libusb1
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # upstream mentions these are not needed for Mac
-      # see: https://github.com/michaelrsweet/pappl#requirements
-      avahi
-      gnutls
-    ]
-    ++ lib.optionals withPAMSupport [
-      pam
-    ];
+  buildInputs = [
+    cups
+    libjpeg
+    libpng
+    libusb1
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # upstream mentions these are not needed for Mac
+    # see: https://github.com/michaelrsweet/pappl#requirements
+    avahi
+    gnutls
+  ]
+  ++ lib.optionals withPAMSupport [
+    pam
+  ];
 
   # testing requires some networking
   # doCheck = true;

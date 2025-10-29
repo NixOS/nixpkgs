@@ -1,12 +1,13 @@
-{ autoreconfHook
-, fetchFromGitHub
-, glib
-, intltool
-, lib
-, libappindicator-gtk2
-, libtool
-, pidgin
-, stdenv
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  glib,
+  intltool,
+  lib,
+  libappindicator-gtk2,
+  libtool,
+  pidgin,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +16,21 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "philipl";
-    repo = pname;
+    repo = "pidgin-indicator";
     rev = version;
     sha256 = "sha256-CdA/aUu+CmCRbVBKpJGydicqFQa/rEsLWS3MBKlH2/M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool ];
-  buildInputs = [ glib libappindicator-gtk2 libtool pidgin ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+  ];
+  buildInputs = [
+    glib
+    libappindicator-gtk2
+    libtool
+    pidgin
+  ];
 
   meta = with lib; {
     description = "AppIndicator and KStatusNotifierItem Plugin for Pidgin";

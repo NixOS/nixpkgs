@@ -4,7 +4,7 @@
   environs,
   fetchFromGitHub,
   httpx,
-  poetry-core,
+  setuptools,
   pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,11 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-d+cN6f6jw8D+noxyYl/TpDAkeTb8Krt+r0/Ai65cvdU=";
+    tag = "v${version}";
+    hash = "sha256-j7FiZJX2YIYs03bKKu2e+ByElp5oYpmpUheVr8BVXZo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [ httpx ];
 

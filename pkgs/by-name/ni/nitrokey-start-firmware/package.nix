@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gcc-arm-embedded,
+  gcc-arm-embedded-13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,12 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-start-firmware";
-    rev = "RTM.${finalAttrs.version}";
+    tag = "RTM.${finalAttrs.version}";
     hash = "sha256-POW1d/fgOyYa7127FSTCtHGyMWYzKW0qqA1WUyvNc3w=";
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     patchShebangs configure
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-certdo"
   ];
 
-  nativeBuildInputs = [ gcc-arm-embedded ];
+  nativeBuildInputs = [ gcc-arm-embedded-13 ];
 
   enableParallelBuilding = true;
 

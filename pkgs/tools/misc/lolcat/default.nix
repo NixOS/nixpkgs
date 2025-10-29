@@ -1,6 +1,11 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  ruby_3_4,
+  bundlerUpdateScript,
+}:
 
-bundlerApp {
+(bundlerApp.override { ruby = ruby_3_4; }) {
   pname = "lolcat";
   gemdir = ./.;
   exes = [ "lolcat" ];
@@ -9,9 +14,13 @@ bundlerApp {
 
   meta = with lib; {
     description = "Rainbow version of cat";
-    homepage    = "https://github.com/busyloop/lolcat";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ StillerHarpo manveru nicknovitski ];
+    homepage = "https://github.com/busyloop/lolcat";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      StillerHarpo
+      manveru
+      nicknovitski
+    ];
     mainProgram = "lolcat";
   };
 }

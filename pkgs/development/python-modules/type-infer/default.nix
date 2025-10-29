@@ -1,54 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   colorlog,
   dataclasses-json,
-  langid,
   nltk,
   numpy,
   pandas,
   psutil,
   py3langid,
+  pytestCheckHook,
   python-dateutil,
+  standard-imghdr,
+  standard-sndhdr,
   scipy,
   toml,
-  nltk-data,
-  symlinkJoin,
 }:
 let
-  testNltkData = symlinkJoin {
-    name = "nltk-test-data";
-    paths = [
-      nltk-data.punkt
-      nltk-data.stopwords
-    ];
-  };
+  testNltkData = nltk.dataDir (d: [
+    d.punkt
+    d.punkt-tab
+    d.stopwords
+  ]);
+
+  version = "0.0.25";
+  tag = "v${version}";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "type-infer";
-  version = "0.0.20";
-  format = "pyproject";
+  inherit version;
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  # using PyPI because the repo does not have tags or release branches
-  src = fetchPypi {
-    pname = "type_infer";
-    inherit version;
-    hash = "sha256-F+gfA7ofrbMEE5SrVt9H3s2mZKQLyr6roNUmL4EMJbI=";
+  src = fetchFromGitHub {
+    owner = "mindsdb";
+    repo = "type_infer";
+    inherit tag;
+    hash = "sha256-WL/2WSy3e2Mg/jNS8afUEnCt10wpXho4uOPAkVdzHWA=";
   };
 
-  pythonRelaxDeps = [ "psutil" ];
+  patches = [
+    # https://github.com/mindsdb/type_infer/pull/83
+    (fetchpatch {
+      url = "https://github.com/mindsdb/type_infer/commit/d09f88d5ddbe55125b1fff4506b03165d019d88b.patch";
+      hash = "sha256-wNBzb+RxoZC8zn5gdOrtJeXJIIH3DTt1gTZfgN/WnQQ=";
+    })
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "psutil"
+    "py3langid"
+    "numpy"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     colorlog
     dataclasses-json
-    langid
     nltk
     numpy
     pandas
@@ -56,11 +66,19 @@ buildPythonPackage rec {
     py3langid
     python-dateutil
     scipy
+    standard-imghdr
+    standard-sndhdr
     toml
   ];
 
-  # PyPI package does not include tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test hangs
+    "test_1_stack_overflow_survey"
+  ];
 
   # Package import requires NLTK data to be downloaded
   # It is the only way to set NLTK_DATA environment variable,
@@ -69,8 +87,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "type_infer" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mindsdb/type_infer/releases/tag/${tag}";
     description = "Automated type inference for Machine Learning pipelines";
-    homepage = "https://pypi.org/project/type-infer/";
+    homepage = "https://github.com/mindsdb/type_infer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
   };

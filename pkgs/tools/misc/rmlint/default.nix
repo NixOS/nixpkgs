@@ -1,21 +1,25 @@
-{ lib, stdenv
-, cairo
-, elfutils
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, gtksourceview3
-, json-glib
-, makeWrapper
-, pango
-, pkg-config
-, polkit
-, python3
-, scons
-, sphinx
-, util-linux
-, wrapGAppsHook3
-, withGui ? false }:
+{
+  lib,
+  stdenv,
+  cairo,
+  elfutils,
+  fetchFromGitHub,
+  fetchpatch,
+  glib,
+  gobject-introspection,
+  gtksourceview3,
+  json-glib,
+  makeWrapper,
+  pango,
+  pkg-config,
+  polkit,
+  python3,
+  scons,
+  sphinx,
+  util-linux,
+  wrapGAppsHook3,
+  withGui ? false,
+}:
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;
 
@@ -33,13 +37,19 @@ stdenv.mkDerivation rec {
   patches = [
     # pass through NIX_* environment variables to scons.
     ./scons-nix-env.patch
+    # fixes https://github.com/sahib/rmlint/issues/664
+    (fetchpatch {
+      url = "https://github.com/sahib/rmlint/commit/f0ca57ec907f7199e3670038d60b4702d1e1d8e2.patch";
+      hash = "sha256-715X+R2BcQIaUV76hoO+EXPfNheOfw4OIHsqSoruIUI=";
+    })
   ];
 
   nativeBuildInputs = [
     pkg-config
     sphinx
     scons
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook3
     gobject-introspection
@@ -49,14 +59,16 @@ stdenv.mkDerivation rec {
     glib
     json-glib
     util-linux
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     cairo
     gtksourceview3
     pango
     polkit
     python3
     python3.pkgs.pygobject3
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ];
 
@@ -85,7 +97,10 @@ stdenv.mkDerivation rec {
     homepage = "https://rmlint.readthedocs.org";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ aaschmid koral ];
+    maintainers = with maintainers; [
+      aaschmid
+      koral
+    ];
     mainProgram = "rmlint";
   };
 }

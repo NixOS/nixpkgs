@@ -1,25 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, llvmPackages
-, boost
-, cmake
-, spdlog
-, libxml2
-, libffi
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages_19,
+  boost,
+  cmake,
+  spdlog,
+  libxml2,
+  libffi,
+  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # The supported version is found in the changelog, the documentation does indicate a minimum version but not a maximum.
+  # The project is also using a `flake.nix` so we can retrieve the used llvm version with:
+  #
+  # ```shell
+  # nix eval --inputs-from .# nixpkgs#llvmPackages.libllvm.version
+  # ```
+  #
+  # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
+  llvmPackages = llvmPackages_19;
+in
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-70vvQGYcer3dosb1ulWO1F4xFwKwfo35l/TFSFa5idM=";
+    sha256 = "sha256-P4syb8v3EY/tHwG8FOvR+kgMew/nwG+pG2weN6172go=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.llvm
     libxml2
     libffi
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
   ];
 
   cmakeFlags = [
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
 

@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, libXNVCtrl, libX11, libXext }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libXNVCtrl,
+  libX11,
+  libXext,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nvfancontrol";
@@ -11,9 +18,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
   };
 
-  cargoHash = "sha256-fEzdghGQSSeyeyiHjw1ggQ38gsETJFl9bq/tizGxIis=";
+  cargoHash = "sha256-nJc1G9R0+o22H1KiBtzfdcIIfKrD+Dksl7HsZ2ICD7U=";
 
-  nativeBuildInputs = [ libXNVCtrl libX11 libXext ];
+  nativeBuildInputs = [
+    libXNVCtrl
+    libX11
+    libXext
+  ];
 
   # Needed for static linking
   preConfigure = ''

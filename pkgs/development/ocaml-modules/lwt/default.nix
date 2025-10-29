@@ -1,23 +1,39 @@
-{ lib, fetchFromGitHub, libev, buildDunePackage
-, cppo, dune-configurator, ocplib-endian
+{
+  lib,
+  fetchFromGitHub,
+  libev,
+  buildDunePackage,
+  cppo,
+  dune-configurator,
+  ocplib-endian,
+  ppxlib,
+  version ? if lib.versionAtLeast ppxlib.version "0.36" then "5.9.2" else "5.9.1",
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "lwt";
-  version = "5.8.0";
+  inherit version;
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";
-    rev = version;
-    hash = "sha256-GX5CSJuTajvZJ0TgG95aHeOCBi2B9Aw2URLZRCdp91A=";
+    tag = version;
+    hash =
+      {
+        "5.9.1" = "sha256-oPYLFugMTI3a+hmnwgUcoMgn5l88NP1Roq0agLhH/vI=";
+        "5.9.2" = "sha256-pzowRN1wwaF2iMfMPE7RCtA2XjlaXC3xD0yznriVfu8=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ libev ocplib-endian ];
+  propagatedBuildInputs = [
+    libev
+    ocplib-endian
+  ];
 
   meta = {
     homepage = "https://ocsigen.org/lwt/";

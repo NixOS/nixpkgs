@@ -1,112 +1,106 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "prometheus-alertmanager";
 
   nodes = {
-    prometheus = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    prometheus =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
 
-        alertmanagers = [
-          {
-            scheme = "http";
-            static_configs = [
-              {
-                targets = [
-                  "alertmanager:${toString config.services.prometheus.alertmanager.port}"
-                ];
-              }
-            ];
-          }
-        ];
-
-        rules = [
-          ''
-            groups:
-              - name: test
-                rules:
-                  - alert: InstanceDown
-                    expr: up == 0
-                    for: 5s
-                    labels:
-                      severity: page
-                    annotations:
-                      summary: "Instance {{ $labels.instance }} down"
-          ''
-        ];
-
-        scrapeConfigs = [
-          {
-            job_name = "alertmanager";
-            static_configs = [
-              {
-                targets = [
-                  "alertmanager:${toString config.services.prometheus.alertmanager.port}"
-                ];
-              }
-            ];
-          }
-          {
-            job_name = "node";
-            static_configs = [
-              {
-                targets = [
-                  "node:${toString config.services.prometheus.exporters.node.port}"
-                ];
-              }
-            ];
-          }
-        ];
-      };
-    };
-
-    alertmanager = { config, pkgs, ... }: {
-      services.prometheus.alertmanager = {
-        enable = true;
-        openFirewall = true;
-
-        configuration = {
-          global = {
-            resolve_timeout = "1m";
-          };
-
-          route = {
-            # Root route node
-            receiver = "test";
-            group_by = ["..."];
-            continue = false;
-            group_wait = "1s";
-            group_interval = "15s";
-            repeat_interval = "24h";
-          };
-
-          receivers = [
+          alertmanagers = [
             {
-              name = "test";
-              webhook_configs = [
-                {
-                  url = "http://logger:6725";
-                  send_resolved = true;
-                  max_alerts = 0;
-                }
+              scheme = "http";
+              static_configs = [
+                { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
+              ];
+            }
+          ];
+
+          rules = [
+            ''
+              groups:
+                - name: test
+                  rules:
+                    - alert: InstanceDown
+                      expr: up == 0
+                      for: 5s
+                      labels:
+                        severity: page
+                      annotations:
+                        summary: "Instance {{ $labels.instance }} down"
+            ''
+          ];
+
+          scrapeConfigs = [
+            {
+              job_name = "alertmanager";
+              static_configs = [
+                { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
+              ];
+            }
+            {
+              job_name = "node";
+              static_configs = [
+                { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
               ];
             }
           ];
         };
       };
-    };
 
-    logger = { config, pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ 6725 ];
+    alertmanager =
+      { config, pkgs, ... }:
+      {
+        services.prometheus.alertmanager = {
+          enable = true;
+          openFirewall = true;
 
-      services.prometheus.alertmanagerWebhookLogger.enable = true;
-    };
+          configuration = {
+            global = {
+              resolve_timeout = "1m";
+            };
+
+            route = {
+              # Root route node
+              receiver = "test";
+              group_by = [ "..." ];
+              continue = false;
+              group_wait = "1s";
+              group_interval = "15s";
+              repeat_interval = "24h";
+            };
+
+            receivers = [
+              {
+                name = "test";
+                webhook_configs = [
+                  {
+                    url = "http://logger:6725";
+                    send_resolved = true;
+                    max_alerts = 0;
+                  }
+                ];
+              }
+            ];
+          };
+        };
+      };
+
+    logger =
+      { config, pkgs, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [ 6725 ];
+
+        services.prometheus.alertmanagerWebhookLogger.enable = true;
+      };
   };
 
   testScript = ''
@@ -149,4 +143,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
 
     alertmanager.log(alertmanager.succeed("systemd-analyze security alertmanager.service | grep -v '✓'"))
   '';
-})
+}

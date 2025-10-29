@@ -1,12 +1,20 @@
-{ vimUtils, vim-full, vimPlugins, pkgs }:
+{
+  vimUtils,
+  vim-full,
+  vimPlugins,
+  pkgs,
+}:
 let
   inherit (vimUtils) buildVimPlugin;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
 in
-  pkgs.recurseIntoAttrs (rec {
-  vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
+pkgs.recurseIntoAttrs {
+  vim_empty_config = vimUtils.vimrcFile {
+    beforePlugins = "";
+    customRC = "";
+  };
 
   ### vim tests
   ##################
@@ -20,4 +28,4 @@ in
     name = "vim-with-vim-addon-nix";
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
-})
+}

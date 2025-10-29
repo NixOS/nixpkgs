@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -16,14 +17,10 @@
   wxsqlite3,
   fluidsynth,
   fontconfig,
-  darwin,
   soundfont-fluid,
   openlilylib-fonts,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
   version = "6.0.1";
@@ -35,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "bump-cmake-minimum-required-version.patch";
+      url = "https://github.com/lenmus/lenmus/commit/cc250ca4ce9a90d8dddb0fc359c5a80609cdafcb.patch";
+      hash = "sha256-aP+ooaSi6vHk+g1XftfjZ39zAgYts1vOCqZWWZhJ+G8=";
+    })
+  ];
+
   env = {
     NIX_CFLAGS_COMPILE = "-fpermissive";
   };
@@ -45,32 +50,27 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      boost
-      portmidi
-      sqlite
-      freetype
-      libpng
-      pngpp
-      zlib
-      wxGTK32
-      wxsqlite3
-      fluidsynth
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    boost
+    portmidi
+    sqlite
+    freetype
+    libpng
+    pngpp
+    zlib
+    wxGTK32
+    wxsqlite3
+    fluidsynth
+    fontconfig
+  ];
 
   preConfigure = ''
     mkdir res/fonts
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "LenMus Phonascus is a program for learning music";
+    description = "Program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
       It allows you to focus on specific skills and exercises, on both theory and aural training.

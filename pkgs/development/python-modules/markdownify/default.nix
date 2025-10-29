@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "0.13.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwithanm";
     repo = "python-markdownify";
-    rev = "refs/tags/${version}";
-    hash = "sha256-EqQ4DKIGaMNivw9cWCSP/Mh+1YxyTaHGPYRjGxPFOnA=";
+    tag = version;
+    hash = "sha256-/u9rjbHeBhiqzpudsv2bFSaFbme1zmCv8/jEflEDNkQ=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTML to Markdown converter";
     homepage = "https://github.com/matthewwithanm/python-markdownify";
-    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${version}";
+    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ McSinyx ];
     mainProgram = "markdownify";

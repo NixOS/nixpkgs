@@ -1,22 +1,26 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nixosTests
-, nix-update-script
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  versionCheckHook,
+  nixosTests,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.3";
+  version = "4.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zalando";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-urNTxaipM4wD+1fp7EFdT7/FGLq86O1nOfst7JyX0fc=";
+    repo = "patroni";
+    tag = "v${version}";
+    sha256 = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     boto3
     click
     consul
@@ -35,18 +39,20 @@ python3Packages.buildPythonApplication rec {
     ydiff
   ];
 
+  pythonImportsCheck = [ "patroni" ];
+
   nativeCheckInputs = with python3Packages; [
     flake8
     mock
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     requests
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = "--version";
 
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
-
-  pythonImportsCheck = [ "patroni" ];
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests.patroni = nixosTests.patroni;
@@ -54,11 +60,12 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = teams.deshaw.members;
+    changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.deshaw ];
   };
 }

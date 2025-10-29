@@ -1,9 +1,10 @@
-{ stdenv
-, fetchurl
-, innoextract
-, runtimeShell
-, wineWow64Packages
-, lib
+{
+  stdenv,
+  fetchurl,
+  innoextract,
+  runtimeShell,
+  wineWow64Packages,
+  lib,
 }:
 
 let
@@ -52,6 +53,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # Stripping causes `$out/bin/Setup.e32` to lose something important and causes the built windows installers to not run on windows "This app can't run on your PC".
+  # They worked in wine but not on real windows.
+  dontStrip = 1;
 
   meta = with lib; {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";

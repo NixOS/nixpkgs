@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, guile
-, libffi
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  guile,
+  libffi,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
       panel, and menu.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

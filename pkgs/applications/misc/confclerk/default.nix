@@ -1,4 +1,10 @@
-{ lib, mkDerivation, fetchurl, qtbase, qmake }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qtbase,
+  qmake,
+}:
 
 mkDerivation rec {
   pname = "confclerk";
@@ -22,7 +28,6 @@ mkDerivation rec {
     mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }

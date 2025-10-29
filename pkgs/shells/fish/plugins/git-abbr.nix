@@ -3,7 +3,7 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "fish-git-abbr";
   version = "0.2.1-unstable-2023-06-19";
 
@@ -18,6 +18,6 @@ buildFishPlugin rec {
     description = "Abbreviations for git for the fish shell 🐟";
     homepage = "https://github.com/lewisacidic/fish-git-abbr";
     license = licenses.mit;
-    maintainers = with maintainers; [hmajid2301];
+    maintainers = with maintainers; [ hmajid2301 ];
   };
 }

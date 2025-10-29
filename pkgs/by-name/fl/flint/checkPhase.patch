@@ -1,0 +1,26 @@
+https://github.com/flintlib/flint/pull/2411
+
+From 9957b17e6b08bd57790f7da1344b4d92eefc0b38 Mon Sep 17 00:00:00 2001
+From: Ross Smyth <18294397+RossSmyth@users.noreply.github.com>
+Date: Sun, 21 Sep 2025 15:58:57 -0400
+Subject: [PATCH] Fix duplicate symbols linker error
+
+When I run `make check` I get linker errors without
+this patch
+---
+ src/double_interval.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/double_interval.h b/src/double_interval.h
+index a423257db2..5f685c283f 100644
+--- a/src/double_interval.h
++++ b/src/double_interval.h
+@@ -13,7 +13,7 @@
+ #define DOUBLE_INTERVAL_H
+ 
+ #ifdef DOUBLE_INTERVAL_INLINES_C
+-#define DOUBLE_INTERVAL_INLINE
++#define DOUBLE_INTERVAL_INLINE static
+ #else
+ #define DOUBLE_INTERVAL_INLINE static inline
+ #endif

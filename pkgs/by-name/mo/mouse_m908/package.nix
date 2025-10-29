@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, libusb1
-, installShellFiles
-, fetchFromGitHub
-, pkg-config
+{
+  stdenv,
+  lib,
+  libusb1,
+  installShellFiles,
+  fetchFromGitHub,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [ libusb1 ];
+
+  doInstallCheck = true;
 
   # Uses proper nix directories rather than the ones specified in the makefile
   installPhase = ''

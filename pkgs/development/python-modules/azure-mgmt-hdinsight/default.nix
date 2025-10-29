@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  msrestazure,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-hdinsight";
   version = "9.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,22 +25,22 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     msrest
-    msrestazure
   ];
 
   # no tests included
   doCheck = false;
 
+  pythonNamespaces = [ "azure.mgmt" ];
+
   pythonImportsCheck = [
-    "azure.common"
     "azure.mgmt.hdinsight"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure HDInsight Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/hdinsight/azure-mgmt-hdinsight";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-hdinsight_${version}/sdk/hdinsight/azure-mgmt-hdinsight/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

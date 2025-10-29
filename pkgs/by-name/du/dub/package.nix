@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, ldc
-, libevent
-, rsync
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  ldc,
+  libevent,
+  rsync,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
-  version = "1.38.1";
+  version = "1.39.0";
 
   enableParallelBuilding = true;
 
@@ -17,14 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dlang";
     repo = "dub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Lr/0sx4SKwU1aNOxZArta0RXpDM+EWl29ZsPDdPWFo=";
+    hash = "sha256-73b15A9+hClD6IbuxTy9QZKpTKjUFYBuqGOclUyhrnM=";
   };
 
   postPatch = ''
     patchShebangs test
   '';
 
-  nativeBuildInputs = [ ldc libevent rsync ];
+  nativeBuildInputs = [
+    ldc
+    libevent
+    rsync
+  ];
   buildInputs = [ curl ];
 
   buildPhase = ''
@@ -154,6 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "dub";
     maintainers = with maintainers; [ jtbx ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

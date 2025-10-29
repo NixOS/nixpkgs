@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/guile-opengl/";
     description = "Guile bindings for the OpenGL graphics API";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "lsp-tree-sitter";
-  version = "0.0.16";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "lsp-tree-sitter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nRzyVZFgb08M0I+xmhuX1LDwPsghlBLdZ2Ou8stKzk0=";
+    tag = version;
+    hash = "sha256-Hjl3EASaOWmLZpBxmyelSUTy7jJEIEo77IIQh5DHIbg=";
   };
 
   build-system = [
@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lsp_tree_sitter" ];
 
-  meta = with lib; {
-    description = "A library to create language servers";
+  meta = {
+    description = "Library to create language servers";
     homepage = "https://github.com/neomutt/lsp-tree-sitter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

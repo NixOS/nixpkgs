@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, asciidoc
-, cryptsetup
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  asciidoc,
+  cryptsetup,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,12 +14,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "latchset";
-    repo = pname;
+    repo = "luksmeta";
     rev = "v${version}";
     sha256 = "10nslwk7m1qwskd12c204ipa3cbad0q6fn0v084z2f7q6xxbkd2d";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    asciidoc
+  ];
   buildInputs = [ cryptsetup ];
 
   meta = {

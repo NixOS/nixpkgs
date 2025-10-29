@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, chmlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  chmlib,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-wx-prefix=${wxGTK32}" ];
 
   preConfigure = ''
-    export LDFLAGS="$LDFLAGS $(${wxGTK32}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk3u_aui-3.2"
+    export LDFLAGS="$LDFLAGS $(${wxGTK32}/bin/wx-config --libs std,aui | sed -e s@-pthread@@)"
   '';
 
   meta = with lib; {
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rzvncj/xCHM";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "xchm";
   };
 }

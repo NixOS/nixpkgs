@@ -7,7 +7,7 @@
 
 let
   bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
-  version = "0.93.0";
+  version = "0.104.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs-ffmpeg-prebuilt";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   src =
     let
       hashes = {
-        "x64" = "sha256-8FcoZ9pN/FKun3QuoFSKKreKCfj8tp2IgkRiDajT5ms=";
-        "ia32" = "sha256-8FcoZ9pN/FKun3QuoFSKKreKCfj8tp2IgkRiDajT5ms=";
+        "x64" = "sha256-01hdumuWRAi1KdvwBDQJqUSk+NV5gYnn6QWQYj2FDUE=";
+        "ia32" = "sha256-01hdumuWRAi1KdvwBDQJqUSk+NV5gYnn6QWQYj2FDUE=";
       };
     in
     fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "An app runtime based on Chromium and node.js";
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [
       "i686-linux"

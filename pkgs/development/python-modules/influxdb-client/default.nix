@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.47.0";
+  version = "1.49.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1QWy+mdVttowdbIBmtW6gYwkJ4p9sL0D+DxsHk3xgvc=";
+    tag = "v${version}";
+    hash = "sha256-lu3we/KXwP3oC9bfv6gzbwacOVLGSuPBf9giwmsHXgI=";
   };
 
   build-system = [ setuptools ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "InfluxDB client library";
     homepage = "https://github.com/influxdata/influxdb-client-python";
-    changelog = "https://github.com/influxdata/influxdb-client-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/influxdata/influxdb-client-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };

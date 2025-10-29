@@ -1,15 +1,18 @@
-{ lib, stdenv
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, pytest
-, markupsafe
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  pytest,
+  markupsafe,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
   version = "2.11.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +20,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ markupsafe setuptools ];
+  propagatedBuildInputs = [
+    markupsafe
+    setuptools
+  ];
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158

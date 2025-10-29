@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, dune_3 }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "chrome-trace";
   inherit (dune_3) src version;
 

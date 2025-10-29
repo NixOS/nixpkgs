@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "west";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iTIANL6HCZ0W519HYKwNHtZ+iXiSjkaKuZPj+6DP6S8=";
+    hash = "sha256-cIj+Dpr+Bxnr7pXFHFKRSfe8/JGdg6ggbTX6nGg+0KU=";
   };
 
   build-system = [ setuptools ];

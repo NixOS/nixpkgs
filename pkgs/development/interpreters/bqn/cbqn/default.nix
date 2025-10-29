@@ -1,28 +1,30 @@
-{ lib
-, callPackage
-, fixDarwinDylibNames
-, libffi
-, mbqn-source
-, pkg-config
-, stdenv
-# Boolean flags
-, enableReplxx ? false
-, enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
-, generateBytecode ? false
-# "Configurable" options
-, bqn-interpreter
+{
+  lib,
+  callPackage,
+  fixDarwinDylibNames,
+  libffi,
+  mbqn-source,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  enableReplxx ? false,
+  enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx),
+  generateBytecode ? false,
+  # "Configurable" options
+  bqn-interpreter,
 }:
 
 let
   sources = callPackage ./sources.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
   inherit (sources.cbqn) version src;
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -39,16 +41,19 @@ stdenv.mkDerivation rec {
     "o3"
     "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
-  ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.avx2Support [
     "has=avx2"
-  ] ++ lib.optionals enableLibcbqn [
+  ]
+  ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
   ];
 
   outputs = [
     "out"
-  ] ++ lib.optionals enableLibcbqn [
+  ]
+  ++ lib.optionals enableLibcbqn [
     "lib"
     "dev"
   ];
@@ -67,13 +72,19 @@ stdenv.mkDerivation rec {
   preBuild = ''
     mkdir -p build/singeliLocal/
     cp -r ${sources.singeli.src}/* build/singeliLocal/
-  '' + (if generateBytecode then ''
-    mkdir -p build/bytecodeLocal/gen
-    ${bqn-interpreter} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
-  '' else ''
-    mkdir -p build/bytecodeLocal/gen
-    cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
-  '')
+  ''
+  + (
+    if generateBytecode then
+      ''
+        mkdir -p build/bytecodeLocal/gen
+        ${bqn-interpreter} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
+      ''
+    else
+      ''
+        mkdir -p build/bytecodeLocal/gen
+        cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
+      ''
+  )
   + lib.optionalString enableReplxx ''
     mkdir -p build/replxxLocal/
     cp -r ${sources.replxx.src}/* build/replxxLocal/
@@ -130,7 +141,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "cbqn";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       detegr
       shnarazk
       sternenseemann

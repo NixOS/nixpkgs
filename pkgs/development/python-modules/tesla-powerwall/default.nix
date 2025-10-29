@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jrester";
     repo = "tesla_powerwall";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cAsJKFM0i0e7w2T4HP4a5ybJGuDvBAGCGmPEKFzNFAY=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_parse_endpoint"
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "tesla_powerwall" ];
 

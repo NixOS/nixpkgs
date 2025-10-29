@@ -24,7 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmpdclient
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.sphinx
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
 
   postInstall = ''
     installShellCompletion --cmd mpc --bash $out/share/doc/mpc/contrib/mpc-completion.bash
@@ -48,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/refs/heads/master/NEWS";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

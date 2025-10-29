@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bluez
-, dmenu
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bluez,
+  dmenu,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu-bluetooth";
-  version = "unstable-2023-07-16";
+  version = "0-unstable-2023-07-16";
 
   src = fetchFromGitHub {
     owner = "Layerex";
@@ -26,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D --target-directory=$out/bin/ ./dmenu-bluetooth
 
     wrapProgram $out/bin/dmenu-bluetooth \
-      --prefix PATH ":" ${lib.makeBinPath [ dmenu bluez ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          dmenu
+          bluez
+        ]
+      }
 
     runHook postInstall
   '';

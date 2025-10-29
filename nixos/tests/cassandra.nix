@@ -1,12 +1,22 @@
-import ./make-test-python.nix ({ pkgs, lib, testPackage ? pkgs.cassandra, ... }:
+{
+  pkgs,
+  lib,
+  getPackage ? pkgs: pkgs.cassandra_4,
+  ...
+}:
 let
+  testPackage = getPackage pkgs;
   clusterName = "NixOS Automated-Test Cluster";
-
   testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
-  jmxRoles = [{ username = "me"; password = "password"; }];
+  jmxRoles = [
+    {
+      username = "me";
+      password = "password";
+    }
+  ];
   jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
-  jmxPort = 7200;  # Non-standard port so it doesn't accidentally work
+  jmxPort = 7200; # Non-standard port so it doesn't accidentally work
   jmxPortStr = toString jmxPort;
 
   # Would usually be assigned to 512M.
@@ -20,28 +30,38 @@ let
     [ 1 -eq "$(echo "$(${getHeapLimitCommand}) < ${numMaxHeapSize}" | ${pkgs.bc}/bin/bc)" ]
   '';
 
-  cassandraCfg = ipAddress:
-    { enable = true;
-      inherit clusterName;
-      listenAddress = ipAddress;
-      rpcAddress = ipAddress;
-      seedAddresses = [ "192.168.1.1" ];
-      package = testPackage;
-      maxHeapSize = "${numMaxHeapSize}M";
-      heapNewSize = "100M";
-      inherit jmxPort;
-    };
-  nodeCfg = ipAddress: extra: {pkgs, config, ...}: rec {
-    environment.systemPackages = [ testPackage ];
-    networking = {
-      firewall.allowedTCPPorts = [ 7000 9042 services.cassandra.jmxPort ];
-      useDHCP = false;
-      interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-        { address = ipAddress; prefixLength = 24; }
-      ];
-    };
-    services.cassandra = cassandraCfg ipAddress // extra;
+  cassandraCfg = pkgs: ipAddress: {
+    enable = true;
+    inherit clusterName;
+    listenAddress = ipAddress;
+    rpcAddress = ipAddress;
+    seedAddresses = [ "192.168.1.1" ];
+    package = getPackage pkgs;
+    maxHeapSize = "${numMaxHeapSize}M";
+    heapNewSize = "100M";
+    inherit jmxPort;
   };
+  nodeCfg =
+    ipAddress: extra:
+    { pkgs, config, ... }:
+    rec {
+      environment.systemPackages = [ (getPackage pkgs) ];
+      networking = {
+        firewall.allowedTCPPorts = [
+          7000
+          9042
+          services.cassandra.jmxPort
+        ];
+        useDHCP = false;
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
+          {
+            address = ipAddress;
+            prefixLength = 24;
+          }
+        ];
+      };
+      services.cassandra = cassandraCfg pkgs ipAddress // extra;
+    };
 in
 {
   name = "cassandra-${testPackage.version}";
@@ -50,8 +70,13 @@ in
   };
 
   nodes = {
-    cass0 = nodeCfg "192.168.1.1" {};
-    cass1 = nodeCfg "192.168.1.2" (lib.optionalAttrs testRemoteAuth { inherit jmxRoles; remoteJmx = true; });
+    cass0 = nodeCfg "192.168.1.1" { };
+    cass1 = nodeCfg "192.168.1.2" (
+      lib.optionalAttrs testRemoteAuth {
+        inherit jmxRoles;
+        remoteJmx = true;
+      }
+    );
     cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };
 
@@ -90,7 +115,8 @@ in
             "nodetool -p ${jmxPortStr} ${jmxAuthArgs} status | egrep -c '^UN' | grep 2"
         )
         cass0.succeed("nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass1'")
-  '' + lib.optionalString testRemoteAuth ''
+  ''
+  + lib.optionalString testRemoteAuth ''
     with subtest("Remote authenticated jmx"):
         # Doesn't work if not enabled
         cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
@@ -100,7 +126,8 @@ in
         # Works if enabled
         cass1.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
         cass0.succeed("nodetool -p ${jmxPortStr} -h 192.168.1.2 ${jmxAuthArgs} status")
-  '' + ''
+  ''
+  + ''
     with subtest("Break and fix node"):
         cass1.block()
         cass0.wait_until_succeeds(
@@ -129,4 +156,4 @@ in
   passthru = {
     inherit testPackage;
   };
-})
+}

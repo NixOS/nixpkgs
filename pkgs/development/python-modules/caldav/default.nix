@@ -5,47 +5,57 @@
   icalendar,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   python,
-  pytz,
   recurring-ical-events,
   requests,
-  setuptools,
+  hatchling,
+  hatch-vcs,
+  proxy-py,
+  pyfakefs,
   toPythonModule,
   tzlocal,
   vobject,
   xandikos,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.3.9";
-
+  version = "2.0.1";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R9zXwD0sZE4bg6MTHWWCWWlZ5wH0H6g650zA7AboAo8=";
+    repo = "caldav";
+    tag = "v${version}";
+    hash = "sha256-n7ZKTBXg66firbS34J41NrTM/PL/OrKMnS4iguRz4Ho=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     vobject
     lxml
     requests
     icalendar
     recurring-ical-events
-    pytz
-    tzlocal
   ];
 
   nativeCheckInputs = [
+    proxy-py
+    pyfakefs
     pytestCheckHook
+    tzlocal
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTestPaths = [
+    "tests/test_docs.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "caldav" ];
@@ -53,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       marenz

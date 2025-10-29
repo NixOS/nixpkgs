@@ -1,18 +1,19 @@
-{ autoPatchelfHook
-, fetchurl
-, gcc-unwrapped
-, gsettings-desktop-schemas
-, gtk3
-, lib
-, libGL
-, makeDesktopItem
-, makeWrapper
-, nwjs
-, stdenv
-, unzip
-, udev
-, wrapGAppsHook3
-, copyDesktopItems
+{
+  autoPatchelfHook,
+  fetchurl,
+  gcc-unwrapped,
+  gsettings-desktop-schemas,
+  gtk3,
+  lib,
+  libGL,
+  makeDesktopItem,
+  makeWrapper,
+  nwjs,
+  stdenv,
+  unzip,
+  udev,
+  wrapGAppsHook3,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,20 +47,30 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev libGL ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gcc-unwrapped.lib
+        gtk3
+        udev
+        libGL
+      ]
+    }"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
   desktopItem = makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      comment = meta.description;
-      genericName = meta.description;
-      type = "Application";
-      desktopName = "Popcorn-Time";
-      categories = [ "Video" "AudioVideo" ];
-    };
+    name = pname;
+    exec = pname;
+    icon = pname;
+    comment = meta.description;
+    genericName = meta.description;
+    type = "Application";
+    desktopName = "Popcorn-Time";
+    categories = [
+      "Video"
+      "AudioVideo"
+    ];
+  };
 
   # Extract and copy executable in $out/bin
   installPhase = ''
@@ -85,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/popcorn-official/popcorn-desktop";
-    description = "An application that streams movies and TV shows from torrents";
+    description = "Application that streams movies and TV shows from torrents";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;

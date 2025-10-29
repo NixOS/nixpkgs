@@ -1,39 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, gettext
-, groff
-, libSM
-, libX11
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, lua
-, makeWrapper
-, pkg-config
-, readline
-, which
-, xmessage
-, xterm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  gettext,
+  groff,
+  libSM,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  libXrandr,
+  lua,
+  makeWrapper,
+  pkg-config,
+  readline,
+  which,
+  xmessage,
+  xterm,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.2";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
-    rev = finalAttrs.version;
-    hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
+    tag = finalAttrs.version;
+    hash = "sha256-L7WL8zn1Qkf5sqrhqZJqFe4B1l9ULXI3pt3Jpc87huk=";
   };
-
-  # error: 'PATH_MAX' undeclared
-  postPatch = ''
-    sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
-  '';
 
   nativeBuildInputs = [
     gettext
@@ -56,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -72,7 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/notion \
-      --prefix PATH ":" "${lib.makeBinPath [ xmessage xterm ]}" \
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          xmessage
+          xterm
+        ]
+      }" \
   '';
 
   meta = {
@@ -80,7 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notionwm.net";
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
-    maintainers = with lib.maintainers; [ jfb AndersonTorres raboof ];
+    maintainers = with lib.maintainers; [
+      raboof
+      NotAShelf
+    ];
     platforms = lib.platforms.linux;
   };
 })

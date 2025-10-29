@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, boost
-, openal, glm, freetype, libGLU, SDL2, libepoxy
-, dejavu_fonts, inkscape, optipng, imagemagick
-, withCrashReporter ? !stdenv.hostPlatform.isDarwin
-,   qtbase ? null
-,   wrapQtAppsHook ? null
-,   curl ? null
-,   gdb  ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  boost,
+  openal,
+  glm,
+  freetype,
+  libGLU,
+  SDL2,
+  libepoxy,
+  dejavu_fonts,
+  inkscape,
+  optipng,
+  imagemagick,
+  withCrashReporter ? !stdenv.hostPlatform.isDarwin,
+  qtbase ? null,
+  wrapQtAppsHook ? null,
+  curl ? null,
+  gdb ? null,
 }:
 
 let
@@ -30,14 +44,28 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake inkscape imagemagick optipng
-  ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
+    cmake
+    inkscape
+    imagemagick
+    optipng
+  ]
+  ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [
-    zlib boost openal glm
-    freetype libGLU SDL2 libepoxy
-  ] ++ optionals withCrashReporter [ qtbase curl ]
-    ++ optionals stdenv.hostPlatform.isLinux    [ gdb ];
+    zlib
+    boost
+    openal
+    glm
+    freetype
+    libGLU
+    SDL2
+    libepoxy
+  ]
+  ++ optionals withCrashReporter [
+    qtbase
+    curl
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -51,12 +79,14 @@ stdenv.mkDerivation rec {
     ln -sf \
       ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
       $out/share/games/arx/misc/dejavusansmono.ttf
-  '' + optionalString withCrashReporter ''
+  ''
+  + optionalString withCrashReporter ''
     wrapQtApp "$out/libexec/arxcrashreporter"
   '';
 
   meta = {
-    description = ''
+    description = "First-person role-playing game / dungeon crawler";
+    longDescription = ''
       A cross-platform, open source port of Arx Fatalis, a 2002
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.

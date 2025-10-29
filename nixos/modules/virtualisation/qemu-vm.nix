@@ -20,25 +20,17 @@ let
 
   cfg = config.virtualisation;
 
-  opt = options.virtualisation;
-
   qemu = cfg.qemu.package;
 
   hostPkgs = cfg.host.pkgs;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOpts =
+  driveOptions =
     { ... }:
     {
 
       options = {
-
-        file = mkOption {
-          type = types.str;
-          description = "The file image used for this drive.";
-        };
-
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -62,8 +54,20 @@ let
     };
 
   selectPartitionTableLayout =
-    { useEFIBoot, useDefaultFilesystems }:
-    if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
+    {
+      useEFIBoot,
+      useDefaultFilesystems,
+      useBIOSBoot,
+    }:
+    if useDefaultFilesystems then
+      if useEFIBoot then
+        "efi"
+      else if useBIOSBoot then
+        "legacy+boot"
+      else
+        "legacy"
+    else
+      "none";
 
   driveCmdline =
     idx:
@@ -125,7 +129,7 @@ let
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
-        echo "Disk image do not exist, creating the virtualisation disk image..."
+        echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
           if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
@@ -182,6 +186,7 @@ let
           -L ${nixStoreFilesystemLabel} \
           -U eb176051-bd15-49b7-9e6b-462e0b467019 \
           -T 0 \
+          --hard-dereference \
           --tar=f \
           "$TMPDIR"/store.img
 
@@ -228,10 +233,37 @@ let
       ${lib.getExe cfg.tpm.package} \
         socket \
         --tpmstate dir="$NIX_SWTPM_DIR" \
-        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+        --server type=unixio,path="$NIX_SWTPM_DIR"/socket \
+        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket.ctrl \
         --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+        --flags not-need-init \
         --tpm2 \
         --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+      (
+        export TPM2TOOLS_TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+        export PATH=${
+          lib.makeBinPath [
+            pkgs.tpm2-tools
+          ]
+        }:$PATH
+
+        tpm2_startup --clear
+        tpm2_startup
+
+        ${lib.optionalString (cfg.tpm.provisioning != null)
+          # Run provisioning in a subshell not to pollute vars
+          ''
+            (
+              export TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+              ${cfg.tpm.provisioning}
+            )
+          ''
+        }
+
+        tpm2_shutdown
+        tpm2_shutdown --clear
+      )
 
       # Enable `fdflags` builtin in Bash
       # We will need it to perform surgical modification of the file descriptor
@@ -249,7 +281,7 @@ let
       # will stop it.
       coproc waitingswtpm {
         read || :
-        echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        ${cfg.tpm.package}/bin/swtpm_ioctl --unix "$NIX_SWTPM_DIR"/socket.ctrl --stop 2>/dev/null
       }
       # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
       fdflags -s-cloexec ''${waitingswtpm[1]}
@@ -257,13 +289,16 @@ let
 
     cd "$TMPDIR"
 
-    ${lib.optionalString (cfg.emptyDiskImages != [ ]) "idx=0"}
-    ${flip concatMapStrings cfg.emptyDiskImages (size: ''
-      if ! test -e "empty$idx.qcow2"; then
-          ${qemu}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
-      fi
-      idx=$((idx + 1))
-    '')}
+    ${lib.pipe cfg.emptyDiskImages [
+      (lib.imap0 (
+        idx:
+        { size, ... }:
+        ''
+          test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
+        ''
+      ))
+      (builtins.concatStringsSep "")
+    ]}
 
     # Start QEMU.
     exec ${qemu-common.qemuBinary qemu} \
@@ -309,7 +344,9 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout {
+      inherit (cfg) useBIOSBoot useDefaultFilesystems useEFIBoot;
+    };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
@@ -363,7 +400,7 @@ in
       type = types.ints.positive;
       default = 1024;
       description = ''
-        The memory size in megabytes of the virtual machine.
+        The memory size of the virtual machine in MiB (1024×1024 bytes).
       '';
     };
 
@@ -403,8 +440,17 @@ in
 
     virtualisation.bootPartition = mkOption {
       type = types.nullOr types.path;
-      default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-      defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+      default =
+        if cfg.useEFIBoot then
+          "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then
+          "/dev/disk/by-label/BOOT"
+        else
+          null;
+      defaultText = literalExpression ''
+        if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then "/dev/disk/by-label/BOOT"
+        else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
         The path (inside the VM) to the device containing the EFI System Partition (ESP).
@@ -425,11 +471,25 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf types.ints.positive;
+      type = types.listOf (
+        types.coercedTo types.ints.positive (size: { inherit size; }) (
+          types.submodule {
+            options.size = mkOption {
+              type = types.ints.positive;
+              description = "The size of the disk in MiB";
+            };
+            options.driveConfig = mkOption {
+              type = lib.types.submodule driveOptions;
+              default = { };
+              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
+            };
+          }
+        )
+      );
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
-        a list of size in megabytes of each disk. These disks are
+        a list of size in MiB (1024×1024 bytes) of each disk. These disks are
         writeable by the VM.
       '';
     };
@@ -777,7 +837,18 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (types.submodule driveOpts);
+        type = types.listOf (
+          types.submodule {
+            imports = [ driveOptions ];
+
+            options = {
+              file = mkOption {
+                type = types.str;
+                description = "The file image used for this drive.";
+              };
+            };
+          }
+        );
         description = "Drives passed to qemu.";
       };
 
@@ -901,6 +972,14 @@ in
       '';
     };
 
+    virtualisation.useBIOSBoot = mkEnableOption null // {
+      description = ''
+        If enabled for legacy MBR VMs, the VM image will have a separate boot
+        partition mounted at /boot.
+        useBIOSBoot is ignored if useEFIBoot == true.
+      '';
+    };
+
     virtualisation.useEFIBoot = mkOption {
       type = types.bool;
       default = false;
@@ -979,6 +1058,26 @@ in
         example = "tpm-tis-device";
         description = "QEMU device model for the TPM, uses the appropriate default based on th guest platform system and the package passed.";
       };
+
+      provisioning = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Script to provision the TPM before control is handed off to the VM.
+
+          `TPM2TOOLS_TCTI` will be provided to configure tpm2-tools to use the
+          swtpm instance transparently.
+          `TCTI` is also provided as a generic value, consumer is expected to
+          re-export it however it may need (`TPM2OPENSSL_TCTI`, `TPM2_PKCS11_TCTI`,
+          ...).
+        '';
+        example = literalExpression ''
+          tpm2_nvdefine 0xcafecafe \
+            -C o \
+            -a "ownerread|policyread|policywrite|ownerwrite|authread|authwrite"
+          echo "foobar" | tpm2_nvwrite 0xcafecafe -C o
+        '';
+      };
     };
 
     virtualisation.useDefaultFilesystems = mkOption {
@@ -1050,7 +1149,7 @@ in
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
-            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047 MiB RAM on 32bit max.
           '';
         }
         {
@@ -1080,6 +1179,9 @@ in
       `useBootLoader` useless. You might want to disable one of those options.
     '';
 
+    # Install Limine on the bootloader device
+    boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
+
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
     # Otherwise, we set the proper bootloader device for this.
@@ -1103,8 +1205,7 @@ in
     '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
-      ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1197,7 +1298,7 @@ in
         "-nographic"
       ])
       (mkIf (cfg.tpm.enable) [
-        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket.ctrl"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
       ])
@@ -1228,10 +1329,16 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0 (
+        idx: imgCfg:
+        lib.mkMerge [
+          {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          }
+          imgCfg.driveConfig
+        ]
+      ) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
@@ -1255,7 +1362,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ] ++ lib.optional (tag == "nix-store") "cache=loose";
+          ]
+          ++ lib.optional (tag == "nix-store") "cache=loose";
         };
       in
       lib.mkMerge [
@@ -1266,6 +1374,7 @@ in
               {
                 device = "tmpfs";
                 fsType = "tmpfs";
+                options = [ "mode=755" ];
               }
             else
               {

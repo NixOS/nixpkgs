@@ -23,20 +23,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SasoPavlic";
     repo = "nianet";
-    rev = "refs/tags/version_${version}";
+    tag = "version_${version}";
     sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     niapy
     numpy
     scikit-learn
     torch
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
   ];
 
   # create niapy and torch dep version consistent

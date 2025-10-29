@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, sudo
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  sudo,
 }:
 
 mkDerivation rec {
@@ -12,7 +13,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "project-trident";
-    repo = pname;
+    repo = "qsudo";
     rev = "v${version}";
     sha256 = "06kg057vwkvafnk69m9rar4wih3vq4h36wbzwbfc2kndsnn47lfl";
   };

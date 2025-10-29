@@ -3,36 +3,34 @@
   python3Packages,
   fetchFromGitHub,
   ffmpeg,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-rc.4";
+  version = "2.1.0";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
   pythonRelaxDeps = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QP3sbZANsyYeZmLZSwQz6E1eysCVojRYHu/z9Szdb6U=";
+    tag = "v${version}";
+    hash = "sha256-A9LM+hdev9/vH4HV2DUhpiA2XqvXYxtSUt2dyUnZwsU=";
   };
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
     [
-      httpx
       aiofiles
       biliass
       dict2xml
-      colorama
+      httpx
       typing-extensions
       pydantic
+      returns
     ]
     ++ (with httpx.optional-dependencies; http2 ++ socks);
 
@@ -41,13 +39,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "yutto" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-    ];
-  };
 
   meta = with lib; {
     description = "Bilibili downloader";

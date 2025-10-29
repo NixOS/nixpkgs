@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+}:
 
 stdenv.mkDerivation {
   pname = "ebtks";
-  version  = "unstable-2017-09-23";
+  version = "unstable-2017-09-23";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = "EBTKS";
-    rev    = "67e4e197d8a32d6462c9bdc7af44d64ebde4fb5c";
+    owner = "BIC-MNI";
+    repo = "EBTKS";
+    rev = "67e4e197d8a32d6462c9bdc7af44d64ebde4fb5c";
     hash = "sha256-+MIRE2NdRH7IQrstK3WRqft6l9I+UGD6j0G7Q6LhOKg=";
   };
 
@@ -31,6 +37,6 @@ stdenv.mkDerivation {
     description = "Library for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

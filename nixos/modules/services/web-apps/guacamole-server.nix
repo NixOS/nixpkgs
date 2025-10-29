@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.guacamole-server;
@@ -61,8 +62,12 @@ in
 
   config = lib.mkIf cfg.enable {
     # Setup configuration files.
-    environment.etc."guacamole/logback.xml" = lib.mkIf (cfg.logbackXml != null) { source = cfg.logbackXml; };
-    environment.etc."guacamole/user-mapping.xml" = lib.mkIf (cfg.userMappingXml != null) { source = cfg.userMappingXml; };
+    environment.etc."guacamole/logback.xml" = lib.mkIf (cfg.logbackXml != null) {
+      source = cfg.logbackXml;
+    };
+    environment.etc."guacamole/user-mapping.xml" = lib.mkIf (cfg.userMappingXml != null) {
+      source = cfg.userMappingXml;
+    };
 
     systemd.services.guacamole-server = {
       description = "Apache Guacamole server (guacd)";
@@ -70,7 +75,8 @@ in
       after = [ "network.target" ];
       environment = {
         HOME = "/run/guacamole-server";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} -f -b ${cfg.host} -l ${toString cfg.port}";
         RuntimeDirectory = "guacamole-server";

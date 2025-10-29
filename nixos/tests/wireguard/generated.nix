@@ -1,32 +1,42 @@
-import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
+{
+  lib,
+  kernelPackages ? null,
+  ...
+}:
+{
   name = "wireguard-generated";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 grahamc ];
-  };
+  meta.maintainers = with lib.maintainers; [
+    ma27
+    grahamc
+  ];
 
   nodes = {
-    peer1 = {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.firewall.allowedUDPPorts = [ 12345 ];
-      networking.wireguard.interfaces.wg0 = {
-        ips = [ "10.10.10.1/24" ];
-        listenPort = 12345;
-        privateKeyFile = "/etc/wireguard/private";
-        generatePrivateKeyFile = true;
+    peer1 =
+      { lib, pkgs, ... }:
+      {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.firewall.allowedUDPPorts = [ 12345 ];
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.10.10.1/24" ];
+          listenPort = 12345;
+          privateKeyFile = "/etc/wireguard/private";
+          generatePrivateKeyFile = true;
 
+        };
       };
-    };
 
-    peer2 = {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.firewall.allowedUDPPorts = [ 12345 ];
-      networking.wireguard.interfaces.wg0 = {
-        ips = [ "10.10.10.2/24" ];
-        listenPort = 12345;
-        privateKeyFile = "/etc/wireguard/private";
-        generatePrivateKeyFile = true;
+    peer2 =
+      { lib, pkgs, ... }:
+      {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.firewall.allowedUDPPorts = [ 12345 ];
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.10.10.2/24" ];
+          listenPort = 12345;
+          privateKeyFile = "/etc/wireguard/private";
+          generatePrivateKeyFile = true;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -60,4 +70,4 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
     peer1.succeed("ping -c1 10.10.10.2")
     peer2.succeed("ping -c1 10.10.10.1")
   '';
-})
+}

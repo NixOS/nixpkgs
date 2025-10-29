@@ -2,11 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
-  cython_0,
+  cython,
   geos,
   numpy,
   oldest-supported-numpy,
@@ -16,18 +17,31 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.6";
+  version = "2.1.1";
   pyproject = true;
-
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mX9hWbFIQFnsI5ysqlNGf9i1Vk2r4YbNhKwpRGY7C/Y=";
+  src = fetchFromGitHub {
+    owner = "shapely";
+    repo = "shapely";
+    tag = version;
+    hash = "sha256-qIITlPym92wfq0byqjRxofpmYYg7vohbi1qPVEu6hRg=";
   };
 
+  patches = [
+    # Fix tests for GEOS 3.14
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/a561132c4e13c1fde597f56a8a7133c3c09b9928.patch";
+      hash = "sha256-a9gDfw2Dw+fd82T9f0BufYd/+gxE+ALvWyLm4vHygzU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/56e16e6eb27c54c6c24b9a251c12414e289fb7d0.patch";
+      hash = "sha256-JyjPVcJswEozF4C73QotKsPou55H41Ct9oVgkxhDhbk=";
+    })
+  ];
+
   nativeBuildInputs = [
-    cython_0
+    cython
     geos # for geos-config
     oldest-supported-numpy
     setuptools
@@ -36,7 +50,7 @@ buildPythonPackage rec {
 
   buildInputs = [ geos ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -59,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shapely" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
+  meta = {
+    changelog = "https://github.com/shapely/shapely/blob/${src.tag}/CHANGES.txt";
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

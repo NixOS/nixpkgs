@@ -15,9 +15,29 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
-  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) basedpyright git go gopls python3;
+  eaf-browser = callPackage ./manual-packages/eaf-browser {
+    inherit (pkgs) aria2;
   };
+
+  eaf-git = callPackage ./manual-packages/eaf-git {
+    inherit (pkgs) ripgrep;
+  };
+
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
+
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
+  };
+
+  lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
+
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 
   structured-haskell-mode = self.shm;
 

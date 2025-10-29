@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  darwin,
+  apple-sdk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "autoraise";
   version = "5.3";
@@ -16,12 +15,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-OsvmNHpQ46+cWkR4Nz/9oIgSFSWLfCwZnAnRKRiNm5E=";
   };
 
-  buildInputs = with darwin.apple_sdk.frameworks; [
-    AppKit
-    SkyLight
+  buildInputs = [
+    apple-sdk.privateFrameworksHook
   ];
-
-  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "AutoRaise (and focus) a window when hovering over it with the mouse";
+    description = "Automatically raise and focus a window when hovering over it with the mouse";
     homepage = "https://github.com/sbmpost/AutoRaise";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nickhu ];

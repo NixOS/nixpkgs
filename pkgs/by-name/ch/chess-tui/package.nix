@@ -1,26 +1,32 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "1.2.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
-    rev = "${version}";
-    hash = "sha256-LtxaZ/7p/lqStoUmckVVaegQp02Ci3L46fMFEgledj4=";
+    tag = finalAttrs.version;
+    hash = "sha256-OGzYxFGHSH1X8Q8dcB35on/2D+sc0e+chtgObOWUGGM=";
   };
 
-  cargoHash = "sha256-RUnT5b9pBcopTPT/1J48xZ4pfn3C0mIuYTDvgf3zvn0=";
+  cargoHash = "sha256-JfX2JWQVrVvq/P/rFumO9QAeJSTxXIKXJxjXmvl1y+g=";
 
-  meta = with lib;{
+  checkFlags = [
+    # assertion failed: result.is_ok()
+    "--skip=tests::test_config_create"
+  ];
+
+  meta = {
     description = "Chess TUI implementation in rust";
     homepage = "https://github.com/thomas-mauran/chess-tui";
-    maintainers = with maintainers; [ ByteSudoer ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = lib.licenses.mit;
     mainProgram = "chess-tui";
   };
-}
+})

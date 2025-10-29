@@ -1,83 +1,111 @@
 {
   lib,
   stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+
+  # build inputs
+  cargo,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustc,
+  rustPlatform,
+  zstd-c,
+
+  # dependencies
   bcrypt,
   build,
-  buildPythonPackage,
-  cargo,
-  chroma-hnswlib,
-  darwin,
   fastapi,
-  fetchFromGitHub,
   grpcio,
   httpx,
-  hypothesis,
   importlib-resources,
+  jsonschema,
   kubernetes,
   mmh3,
-  nixosTests,
   numpy,
   onnxruntime,
-  openssl,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-grpc,
   opentelemetry-instrumentation-fastapi,
   opentelemetry-sdk,
   orjson,
   overrides,
-  pkg-config,
   posthog,
-  protobuf,
-  psutil,
-  pulsar-client,
+  pybase64,
   pydantic,
   pypika,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
-  rustc,
-  rustPlatform,
-  setuptools-scm,
-  setuptools,
   tenacity,
   tokenizers,
   tqdm,
   typer,
   typing-extensions,
   uvicorn,
-  zstd,
+
+  # optional dependencies
+  chroma-hnswlib,
+
+  # tests
+  hnswlib,
+  hypothesis,
+  pandas,
+  psutil,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  sqlite,
+  starlette,
+  writableTmpDirAsHomeHook,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.17";
+  version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ui4wUV9jIvgPtnY5L8mHg9k3l3ccL4u1rir426wwuMg=";
+    tag = version;
+    hash = "sha256-D8vLkV8T1igOoCgJDiccLytxlXdF0oLJZTQpBsLM7Z0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-lF+TpoQF6vZoxjPX3CN6TnWiY72qoxrVu2hilWgNx2E=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-f5lU1ClKEZjzOAkng1B37d4VmHYzLOP2uMvoN1RFFoo=";
   };
+
+  # Can't use fetchFromGitHub as the build expects a zipfile
+  swagger-ui = fetchurl {
+    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.22.0.zip";
+    hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
+  };
+
+  postPatch = ''
+    # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
+    substituteInPlace pyproject.toml \
+      --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
+
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    substituteInPlace chromadb/config.py \
+      --replace-fail "anonymized_telemetry: bool = True" \
+                     "anonymized_telemetry: bool = False"
+  '';
 
   pythonRelaxDeps = [
-    "chroma-hnswlib"
-    "orjson"
+    "fastapi"
+    "posthog"
   ];
 
   build-system = [
-    setuptools
-    setuptools-scm
+    rustPlatform.maturinBuildHook
   ];
 
   nativeBuildInputs = [
@@ -90,17 +118,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+    zstd-c
+  ];
 
   dependencies = [
     bcrypt
     build
-    chroma-hnswlib
     fastapi
     grpcio
     httpx
     importlib-resources
+    jsonschema
     kubernetes
     mmh3
     numpy
@@ -112,7 +140,7 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
+    pybase64
     pydantic
     pypika
     pyyaml
@@ -125,58 +153,112 @@ buildPythonPackage rec {
     uvicorn
   ];
 
+  optional-dependencies = {
+    dev = [ chroma-hnswlib ];
+  };
+
   nativeCheckInputs = [
+    chroma-hnswlib
+    hnswlib
     hypothesis
+    pandas
     psutil
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
+    sqlite
+    starlette
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [ "chromadb" ];
+  # Disable on aarch64-linux due to broken onnxruntime
+  # https://github.com/microsoft/onnxruntime/issues/10038
+  pythonImportsCheck = lib.optionals doCheck [ "chromadb" ];
+
+  # Test collection breaks on aarch64-linux
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlags = [
+    "-v"
+    "-Wignore:DeprecationWarning"
+    "-Wignore:PytestCollectionWarning"
+  ];
 
+  # Skip the distributed and integration tests
+  # See https://github.com/chroma-core/chroma/issues/5315
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export HOME=$(mktemp -d)
+    export CHROMA_RUST_BINDINGS_TEST_ONLY=1
   '';
 
+  enabledTestPaths = [
+    "chromadb/test"
+  ];
+
   disabledTests = [
-    # Tests are laky / timing sensitive
-    "test_fastapi_server_token_authn_allows_when_it_should_allow"
-    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
-    # Issue with event loop
-    "test_http_client_bw_compatibility"
+    # Failure in name resolution
+    "test_collection_query_with_invalid_collection_throws"
+    "test_collection_update_with_invalid_collection_throws"
+    "test_default_embedding"
+    "test_persist_index_loading"
+
+    # Deadlocks intermittently
+    "test_app"
+
+    # Depends on specific floating-point precision
+    "test_base64_conversion_is_identity_f16"
+
+    # No such file or directory: 'openssl'
+    "test_ssl_self_signed_without_ssl_verify"
+    "test_ssl_self_signed"
   ];
 
   disabledTestPaths = [
     # Tests require network access
-    "chromadb/test/auth/test_simple_rbac_authz.py"
-    "chromadb/test/db/test_system.py"
-    "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/property/"
+    "chromadb/test/distributed"
+    "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
-    "chromadb/test/stress/"
-    "chromadb/test/test_api.py"
+    "chromadb/test/stress"
+
+    # Excessively slow
+    "chromadb/test/property/test_add.py"
+    "chromadb/test/property/test_persist.py"
+
+    # ValueError: An instance of Chroma already exists for ephemeral with different settings
+    "chromadb/test/test_chroma.py"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) chromadb;
+  passthru = {
+    tests = {
+      inherit (nixosTests) chromadb;
+    };
+
+    updateScript = nix-update-script {
+      # we have to update both the python hash and the cargo one,
+      # so use nix-update-script
+      extraArgs = [
+        "--version-regex"
+        "([0-9].+)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
     mainProgram = "chroma";
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

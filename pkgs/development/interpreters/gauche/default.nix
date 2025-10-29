@@ -12,7 +12,6 @@
   zlib,
   mbedtls,
   cacert,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "shirok";
-    repo = pname;
+    repo = "gauche";
     rev = "release${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-M2vZqTMkob+WxUnCo4NDxS4pCVNleVBqkiiRp9nG/KA=";
   };
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     zlib
     mbedtls
     cacert
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  ];
 
   autoreconfPhase = ''
     ./DIST gen

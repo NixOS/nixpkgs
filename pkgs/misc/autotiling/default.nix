@@ -1,17 +1,27 @@
-{ lib, buildPythonApplication, fetchFromGitHub, i3ipc, importlib-metadata }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  i3ipc,
+  importlib-metadata,
+}:
 
 buildPythonApplication rec {
   pname = "autotiling";
   version = "1.9.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k+UiAGMB/fJiE+C737yGdyTpER1ciZrMkZezkcn/4yk=";
   };
 
-  propagatedBuildInputs = [ i3ipc importlib-metadata ];
+  propagatedBuildInputs = [
+    i3ipc
+    importlib-metadata
+  ];
   doCheck = false;
 
   meta = with lib; {
@@ -23,4 +33,3 @@ buildPythonApplication rec {
     mainProgram = "autotiling";
   };
 }
-

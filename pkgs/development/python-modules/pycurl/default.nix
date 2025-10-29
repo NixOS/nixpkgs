@@ -3,40 +3,38 @@
   stdenv,
   buildPythonPackage,
   isPyPy,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   curl,
   openssl,
   bottle,
   pytestCheckHook,
   flaky,
+  flask,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.3";
+  version = "7.45.6";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.8"; # https://github.com/pycurl/pycurl/issues/208
+  disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jCRxr5B5rXmOFkXsCw09QiPbaHN50X3TanBjdEn4HWs=";
+  src = fetchFromGitHub {
+    owner = "pycurl";
+    repo = "pycurl";
+    tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-M4rO0CaI2SmjdJVS7hWnJZrL72WvayB4aKn707KoNiQ=";
   };
 
   patches = [
-    # Don't use -flat_namespace on macOS
-    # https://github.com/pycurl/pycurl/pull/855 remove on next update
+    # curl 8.16 compatibility
     (fetchpatch {
-      name = "no_flat_namespace.patch";
-      url = "https://github.com/pycurl/pycurl/commit/7deb85e24981e23258ea411dcc79ca9b527a297d.patch";
-      hash = "sha256-tk0PQy3cHyXxFnoVYNQV+KD/07i7AUYHNJnrw6H8tHk=";
+      url = "https://github.com/pycurl/pycurl/commit/eb7f52eeef85feb6c117678d52803050bbdd7bc8.patch";
+      hash = "sha256-hdwazS7R9duuMd/7S3SNAxVcToo3GhtyWu/1Q6qTMYc=";
     })
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -46,20 +44,25 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [ curl ];
+
   buildInputs = [
     curl
     openssl
   ];
 
-  nativeBuildInputs = [ curl ];
+  pythonImportsCheck = [ "pycurl" ];
 
   nativeCheckInputs = [
     bottle
     flaky
+    flask
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  __darwinAllowLocalNetworking = true;
+
+  enabledTestPaths = [
     # don't pick up the tests directory below examples/
     "tests"
   ];
@@ -68,41 +71,35 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [ "pycurl" ];
+  disabledTests = [
+    # tests that require network access
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_openssl"
+    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_nss"
+    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_gnutls"
+    # AssertionError: assert 'crypto' in ['curl']
+    "test_ssl_in_static_libs"
+    # https://github.com/pycurl/pycurl/issues/819
+    "test_multi_socket_select"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/pycurl/pycurl/issues/729
+    "test_easy_pause_unpause"
+    "test_multi_socket_action"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "cadata_test"
+  ];
 
-  disabledTests =
-    [
-      # tests that require network access
-      "test_keyfunction"
-      "test_keyfunction_bogus_return"
-      # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_openssl"
-      # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_nss"
-      # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_gnutls"
-      # AssertionError: assert 'crypto' in ['curl']
-      "test_ssl_in_static_libs"
-      # tests that require curl with http3Support
-      "test_http_version_3"
-      # https://github.com/pycurl/pycurl/issues/819
-      "test_multi_socket_select"
-      # https://github.com/pycurl/pycurl/issues/729
-      "test_easy_pause_unpause"
-      "test_multi_socket_action"
-      # https://github.com/pycurl/pycurl/issues/822
-      "test_request_with_verifypeer"
-      # https://github.com/pycurl/pycurl/issues/836
-      "test_proxy_tlsauth"
-      # AssertionError: 'Москва' != '\n...
-      "test_encoded_unicode_header"
-      # https://github.com/pycurl/pycurl/issues/856
-      "test_multi_info_read"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # Fatal Python error: Segmentation fault
-      "cadata_test"
-    ];
+  disabledTestPaths = [
+    # https://github.com/pycurl/pycurl/issues/856
+    "tests/multi_test.py"
+  ];
 
   meta = with lib; {
     description = "Python Interface To The cURL library";

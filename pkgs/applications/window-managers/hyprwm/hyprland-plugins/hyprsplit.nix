@@ -2,19 +2,19 @@
   lib,
   meson,
   fetchFromGitHub,
-  hyprland,
   ninja,
   mkHyprlandPlugin,
+  nix-update-script,
 }:
-mkHyprlandPlugin hyprland rec {
+mkHyprlandPlugin (finalAttrs: {
   pluginName = "hyprsplit";
-  version = "0.44.1";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "shezdy";
     repo = "hyprsplit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l+DQHWPMyUCXbKhbIFVooTKKnCRQ97Ic5smw4VzUcTc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7cnfq7fXgJHkmHyvRwx8UsUdUwUEN4A1vUGgsSb4SmI=";
   };
 
   nativeBuildInputs = [
@@ -22,13 +22,14 @@ mkHyprlandPlugin hyprland rec {
     ninja
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/shezdy/hyprsplit";
     description = "Hyprland plugin for awesome / dwm like workspaces";
     license = lib.licenses.bsd3;
-    inherit (hyprland.meta) platforms;
     maintainers = with lib.maintainers; [
       aacebedo
     ];
   };
-}
+})

@@ -1,23 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+  stuffbin,
+  nixosTests,
+  nix-update-script,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "3.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
-    rev = "v${version}";
-    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rb0/T7I6yLGJBXikOHuXwDdW20nFXpssXfgViHSIIOU=";
   };
 
-  vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
+  vendorHash = "sha256-bFUWjaaFHB2pnGHBsvUBS2icQkMrB/CfXFa+3vGFFvU=";
 
   nativeBuildInputs = [
     stuffbin
   ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.versionString=${finalAttrs.version}"
+    "-X \"main.buildString=v${finalAttrs.version} (${stdenv.hostPlatform.system})\""
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/listmonk
@@ -30,28 +44,38 @@ buildGoModule rec {
         "config.toml.sample"
         "schema.sql"
         "queries.sql"
+        "permissions.json"
         "static/public:/public"
         "static/email-templates"
-        "${passthru.frontend}:/admin"
+        "${finalAttrs.passthru.frontend}:/admin"
         "i18n:/i18n"
       ];
     in
-      ''
-        stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
-          ${lib.concatStringsSep " " vfsMappings}
-      '';
+    ''
+      stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
+        ${lib.concatStringsSep " " vfsMappings}
+    '';
 
   passthru = {
-    frontend = callPackage ./frontend.nix { inherit meta version src; };
+    frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard";
     mainProgram = "listmonk";
     homepage = "https://github.com/knadh/listmonk";
-    changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";
-    maintainers = with maintainers; [ raitobezarius ];
-    license = licenses.agpl3Only;
+    changelog = "https://github.com/knadh/listmonk/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      raitobezarius
+      hougo
+    ];
+    license = lib.licenses.agpl3Only;
   };
-}
+})

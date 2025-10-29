@@ -55,7 +55,7 @@ def get_metadata(wheel: str) -> Metadata:
     """
     text = get_manifest_text_from_wheel(wheel)
     raw, _ = parse_email(text)
-    metadata = Metadata.from_raw(raw)
+    metadata = Metadata.from_raw(raw, validate=False)
 
     return metadata
 
@@ -77,6 +77,9 @@ def test_requirement(requirement: Requirement) -> bool:
     except importlib.metadata.PackageNotFoundError:
         error(f"{package_name} not installed")
         return False
+
+    # Allow prereleases, to give to give us some wiggle-room
+    requirement.specifier.prereleases = True
 
     if requirement.specifier and package.version not in requirement.specifier:
         error(

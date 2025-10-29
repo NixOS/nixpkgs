@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-w6RHmVxJjLx9ov2LxXvicxmY8jixfkIRfbfVnV2yhOU=";
   };
 
@@ -59,7 +59,10 @@ buildPythonPackage rec {
     cd "$(mktemp -d)"
   '';
 
-  pytestFlagsArray = [ "--pyargs skmisc" ];
+  pytestFlags = [
+    "--pyargs"
+    "skmisc"
+  ];
 
   pythonImportsCheck = [ "skmisc" ];
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, gccRaw, binutils }:
+{
+  lib,
+  stdenv,
+  gccRaw,
+  binutils,
+}:
 
 stdenv.mkDerivation {
   name = "distcc-masq-${gccRaw.name}";

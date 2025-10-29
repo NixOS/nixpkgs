@@ -1,46 +1,53 @@
-{ lib
-, fetchFromGitHub
-, buildPgrxExtension
-, postgresql
-, nixosTests
-, cargo-pgrx_0_10_2
-, nix-update-script
+{
+  buildPgrxExtension,
+  cargo-pgrx_0_12_6,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "timescaledb_toolkit";
-  version = "1.18.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
-    rev = version;
-    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
+    tag = finalAttrs.version;
+    hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
   };
 
-  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
+  cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
+
+  postInstall = ''
+    cargo run --manifest-path ./tools/post-install/Cargo.toml -- --dir "$out"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      timescaledb_toolkit = nixosTests.timescaledb;
-    };
+    tests = postgresql.pkgs.timescaledb.tests;
   };
 
   # tests take really long
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provide additional tools to ease all things analytic when using TimescaleDB";
     homepage = "https://github.com/timescale/timescaledb-toolkit";
-    maintainers = with maintainers; [ typetetris ];
+    maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.tsl;
-    # PostgreSQL 17 support issue upstream: https://github.com/timescale/timescaledb-toolkit/issues/813
-    # Check after next package update.
-    broken = versionAtLeast postgresql.version "17" && version == "1.18.0";
+    license = lib.licenses.tsl;
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "1.21.0")
+          "Is postgresql18Packages.timescaledb_toolkit still broken?"
+          (lib.versionAtLeast postgresql.version "18");
   };
-}
+})

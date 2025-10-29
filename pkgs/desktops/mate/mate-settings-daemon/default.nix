@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, libxklavier
-, libcanberra-gtk3
-, libnotify
-, libmatekbd
-, libmatemixer
-, nss
-, polkit
-, dconf
-, gtk3
-, mate-desktop
-, pulseaudioSupport ? stdenv.config.pulseaudio or true
-, libpulseaudio
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  libxklavier,
+  libcanberra-gtk3,
+  libnotify,
+  libmatekbd,
+  libmatemixer,
+  nss,
+  polkit,
+  dconf,
+  gtk3,
+  mate-desktop,
+  pulseaudioSupport ? stdenv.config.pulseaudio or true,
+  libpulseaudio,
+  wrapGAppsHook3,
+  mateUpdateScript,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -46,7 +49,8 @@ stdenv.mkDerivation rec {
     gtk3
     dconf
     mate-desktop
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  ]
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
@@ -54,13 +58,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
-    license = with licenses; [ gpl2Plus gpl3Plus lgpl2Plus mit ];
+    license = with licenses; [
+      gpl2Plus
+      gpl3Plus
+      lgpl2Plus
+      mit
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -1,0 +1,13 @@
+diff --git a/vrc-get-gui/Tauri.toml b/vrc-get-gui/Tauri.toml
+index cd180da8..66a81aa9 100644
+--- a/vrc-get-gui/Tauri.toml
++++ b/vrc-get-gui/Tauri.toml
+@@ -34,8 +34,6 @@ icon = [
+ resources = []
+ publisher = "anatawa12"
+ 
+-createUpdaterArtifacts = "v1Compatible"  # remove if ci # we do not generate updater artifacts in CI
+-
+ [[bundle.fileAssociations]]
+ # note: for macOS we directory use info.plist for registering file association.
+ description = "ALCOM Project Template"

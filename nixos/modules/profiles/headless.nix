@@ -3,8 +3,6 @@
 
 { lib, ... }:
 
-with lib;
-
 {
   # Don't start a tty on the serial consoles.
   systemd.services."serial-getty@ttyS0".enable = lib.mkDefault false;
@@ -13,7 +11,12 @@ with lib;
   systemd.services."autovt@".enable = false;
 
   # Since we can't manually respond to a panic, just reboot.
-  boot.kernelParams = [ "panic=1" "boot.panic_on_fail" "vga=0x317" "nomodeset" ];
+  boot.kernelParams = [
+    "panic=1"
+    "boot.panic_on_fail"
+    "vga=0x317"
+    "nomodeset"
+  ];
 
   # Don't allow emergency mode, because we don't have a console.
   systemd.enableEmergencyMode = false;

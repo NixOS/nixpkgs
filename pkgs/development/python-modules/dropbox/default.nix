@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9Fsh06V226vIyJhrlLkh9Xr4UGoEIISnIFCtuKqI218=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner==5.2.0'," ""
+      --replace-fail "'pytest-runner==5.2.0'," ""
   '';
 
   pythonImportsCheck = [ "dropbox" ];
@@ -90,11 +90,11 @@ buildPythonPackage rec {
     "test_bad_pins_session"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
-    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

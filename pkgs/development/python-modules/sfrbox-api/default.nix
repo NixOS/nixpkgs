@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ec3UOserFijBK6goyM6AMOekfLgjBq8l/9sMKYnj240=";
+    tag = "v${version}";
+    hash = "sha256-LUQwBzNNuH+hBAGAF7Qcc22I6u53rh+RDRrUuy9xhu8=";
   };
 
   pythonRelaxDeps = [
@@ -47,14 +47,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "sfrbox_api" ];
 
   meta = with lib; {
     description = "Module for the SFR Box API";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
-    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/v${version}";
+    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "sfrbox-api";

@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchpatch,
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "workbench";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M5iverVDhBI/ijbgwfa6gHrthY4wrUi+/2A/443jBqg=";
   };
 
@@ -50,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libGLU
-  ] ++ (with libsForQt5; [
+  ]
+  ++ (with libsForQt5; [
     qtbase
   ]);
   # note: we should be able to unvendor a few libs (ftgl, quazip, qwt) but they aren't detected properly
@@ -58,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Visualization and discovery tool used to map neuroimaging data";
     homepage = "https://www.humanconnectome.org/software/connectome-workbench";
-    license = with lib.licenses; [ gpl2Plus gpl3Plus mit ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      mit
+    ];
     changelog = "https://github.com/Washington-University/workbench/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "wb_command";

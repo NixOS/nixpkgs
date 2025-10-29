@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+  setuptools,
   matplotlib,
   pydicom,
   python-dateutil,
-  setuptools,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 let
-  deid-data = buildPythonPackage rec {
+  deid-data = buildPythonPackage {
     pname = "deid-data";
     version = "unstable-2022-12-06";
-    format = "pyproject";
-    disabled = pythonOlder "3.7";
+    pyproject = true;
 
-    nativeBuildInputs = [ setuptools ];
-    propagatedBuildInputs = [ pydicom ];
+    build-system = [ setuptools ];
+
+    dependencies = [ pydicom ];
 
     src = fetchFromGitHub {
       owner = "pydicom";
@@ -37,21 +37,21 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.3.22";
-
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.4.6";
+  pyproject = true;
 
   # Pypi version has no tests
   src = fetchFromGitHub {
     owner = "pydicom";
-    repo = pname;
+    repo = "deid";
     # the github repo does not contain Pypi version tags:
-    rev = "40dc96125daeb65856d643e12c3d6dfec756be0d";
-    hash = "sha256-OtxQPF29eqt8I1Q12ga8a1IjBVO+VBk6y0DQmRtCNoU=";
+    rev = "f2e125e5a13ae1c3ccfeb55d9431d3a627a4d0db";
+    hash = "sha256-Vk6MD3MNf1JejqACxjjHkFniK7YDgmdH7k1iQi+enEY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     pydicom
     python-dateutil
@@ -60,15 +60,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deid-data
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "deid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Best-effort anonymization for medical images";
     mainProgram = "deid";
+    changelog = "https://github.com/pydicom/deid/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pydicom.github.io/deid";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

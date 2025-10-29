@@ -1,91 +1,77 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
-  fetchNpmDeps,
-  npmHooks,
+  jq,
+  moreutils,
+  pnpm_10,
   nodejs,
   cargo-tauri,
   pkg-config,
   wrapGAppsHook3,
 
-  openssl,
+  glib-networking,
   libsoup_3,
+  openssl,
   webkitgtk_4_1,
 }:
 
-let
-  cargo-tauri_2 =
-    let
-      pname = "cargo-tauri";
-      version = "2.0.0-rc.3";
-      src = fetchFromGitHub {
-        owner = "tauri-apps";
-        repo = "tauri";
-        rev = "tauri-v${version}";
-        hash = "sha256-PV8m/MzYgbY4Hv71dZrqVbrxmxrwFfOAraLJIaQk6FQ=";
-      };
-    in
-    cargo-tauri.overrideAttrs {
-      inherit src version;
-      cargoDeps = rustPlatform.fetchCargoTarball {
-        inherit pname version src;
-        sourceRoot = "${src.name}/tooling/cli";
-        hash = "sha256-JPlMaoPw6a7D20KQH7iuhHKfGT5oUKf55tMaMYEM/Z4=";
-      };
-    };
-in
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "0.8.11";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-PXK64WD3vb3uVxBFNU+LiGOipUjIAKW9RLWr1o4RigU=";
+    tag = finalAttrs.version;
+    hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
   };
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    hash = "sha256-W0ryt3WH/3SireaOHa9i1vKpuokzIsDlD8R9Fnd0s4k=";
-  };
+  postPatch = ''
+    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-zXZkjSYN6/qNwBh+xUgJPWQvduIUSMVSt/XGbocKTwg=";
+    fetcherVersion = 1;
+    hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
   };
 
   cargoRoot = "src-tauri";
-
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
+  cargoHash = "sha256-tWQRYD6hMU7cvtelGryLdpfoEnUKYt7yYNwHTFZ4pLw=";
+
   nativeBuildInputs = [
-    npmHooks.npmConfigHook
+    jq
+    moreutils
+    pnpm_10.configHook
     nodejs
-    rustPlatform.cargoSetupHook
-    (cargo-tauri.hook.override { cargo-tauri = cargo-tauri_2; })
-    rustPlatform.cargoCheckHook
+    cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs = [
+    glib-networking # needed to load icons
     libsoup_3
-    webkitgtk_4_1
     openssl
+    webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight Thunderstore client";
     homepage = "https://github.com/Kesomannen/gale";
     license = lib.licenses.gpl3Only;
     mainProgram = "gale";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      notohh
+    ];
     platforms = lib.platforms.linux;
   };
 })

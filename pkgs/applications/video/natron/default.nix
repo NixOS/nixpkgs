@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, boost
-, cairo
-, ceres-solver
-, expat
-, extra-cmake-modules
-, glog
-, libXdmcp
-, python3
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  boost,
+  cairo,
+  ceres-solver,
+  expat,
+  extra-cmake-modules,
+  glog,
+  libXdmcp,
+  python312,
+  wayland,
 }:
 
 let
@@ -25,6 +26,7 @@ let
     rev = "Natron-v${minorVersion}";
     hash = "sha256-TD7Uge9kKbFxOmOCn+TSQovnKTmFS3uERTu5lmZFHbc=";
   };
+  python3 = python312;
 in
 stdenv.mkDerivation {
   inherit version;
@@ -44,13 +46,13 @@ stdenv.mkDerivation {
     (fetchpatch {
       name = "gcc-13.patch";
       url = "https://github.com/NatronGitHub/Natron/commit/4b44fb18293035873b35c3a2d2aa29da78cb8740.patch";
-      includes = ["Global/GlobalDefines.h"];
+      includes = [ "Global/GlobalDefines.h" ];
       hash = "sha256-9E1tJCvO7zA1iQAhrlL3GaBFIGpkjxNOr31behQXdhQ=";
     })
     (fetchpatch {
       name = "gcc-13.patch";
       url = "https://github.com/NatronGitHub/Natron/commit/f21f58622e32c1684567c82e2ab361f33030bda7.patch";
-      includes = ["Engine/Noise.cpp"];
+      includes = [ "Engine/Noise.cpp" ];
       hash = "sha256-t2mzTsRuXVs8d1BB/5uAY1OPxWRa3JTK1iAWLAMsrgs=";
     })
   ];
@@ -59,6 +61,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -70,7 +73,6 @@ stdenv.mkDerivation {
     python3
     python3.pkgs.pyside2
     python3.pkgs.shiboken2
-    extra-cmake-modules
     wayland
     glog
     ceres-solver
@@ -84,7 +86,12 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/Natron \
-      --prefix PYTHONPATH : "${python3.pkgs.makePythonPath [ python3.pkgs.qtpy python3.pkgs.pyside2 ]}" \
+      --prefix PYTHONPATH : "${
+        python3.pkgs.makePythonPath [
+          python3.pkgs.qtpy
+          python3.pkgs.pyside2
+        ]
+      }" \
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
@@ -98,6 +105,7 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    # error: 'LogMessageVoidify' is not a member of 'google'
+    broken = true;
   };
 }

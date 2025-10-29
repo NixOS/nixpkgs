@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, xorg
-, pkg-config
-, wrapGAppsHook3
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  pkg-config,
+  wrapGAppsHook3,
+  go,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,13 +38,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-
   meta = with lib; {
     isIbusEngine = true;
     description = "Vietnamese IME for IBus";
     homepage = "https://github.com/BambooEngine/ibus-bamboo";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ astronaut0212 ];
+    maintainers = [ ];
   };
 }

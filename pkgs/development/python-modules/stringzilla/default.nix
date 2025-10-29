@@ -1,42 +1,27 @@
 {
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
   lib,
   numpy,
   pytest-repeat,
   pytestCheckHook,
-  rustPlatform,
-  rustc,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.10.7";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-36W7/PL8nRty8cHuMoTr73tQ4uvtjkwP9lyzNLCuhv0=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-qa03Jd0MMtDwkp2E81MacRMbzD/O7E29BT0tc2OjLiY=";
+    tag = "v${version}";
+    hash = "sha256-J1k8gYPStnnXHFvbHG6nHuQMQy1+XSiS5ERk/reL/Z4=";
   };
 
   build-system = [
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
   ];
 
   pythonImportsCheck = [ "stringzilla" ];
@@ -47,13 +32,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "scripts/test.py" ];
+  enabledTestPaths = [ "scripts/test_stringzilla.py" ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
     homepage = "https://github.com/ashvardanian/stringzilla";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      dotlambda
+    ];
   };
 }

@@ -8,7 +8,6 @@
   pamqp,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   shortuuid,
   testcontainers,
   wrapt,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.4.3";
+  version = "9.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lzBBcfWzhdT2v9RX5C+VWWSxsBCB7EOeCjm6wUrXGtA=";
+    tag = version;
+    hash = "sha256-VpZgAAAt9d0NxSgTGnyBg5fu5GcT3Tg0qOieX7KqmyM=";
   };
 
   build-system = [ poetry-core ];

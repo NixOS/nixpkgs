@@ -5,14 +5,14 @@
 # nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "24.2.5";
+  version = "25.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-GghJVjR9NrlNLAd8c1lG8E6/WECqO+Ti3F6JRMgd2jQ=";
+    hash = "sha256-3ZoC1aY0EMbyoQe4twNfyVHaZeyCbvqTJ57tMuc1YYo=";
   };
 
   meta = {
@@ -30,6 +30,9 @@ rec {
     changelog = "https://docs.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ k900 primeos vcunat ]; # Help is welcome :)
+    maintainers = with lib.maintainers; [
+      k900
+      vcunat
+    ]; # Help is welcome :)
   };
 }

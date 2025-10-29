@@ -15,7 +15,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.4";
+  version = "0.33.9";
 
   pythonDeps =
     with python3.pkgs;
@@ -37,12 +37,11 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "bup";
     owner = "bup";
-    rev = version;
-    hash = "sha256-9rWzHONcu4W/JcnDUGPbuGksroODbhdL6bNF+3Dd2ag=";
+    tag = version;
+    hash = "sha256-MW4kScu81XW89W7WpvOj40+S8bG5QozN30Hfj4TsnX4=";
   };
 
   buildInputs = [
-    git
     python3
   ];
   nativeBuildInputs = [
@@ -51,7 +50,13 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  postPatch = "patchShebangs .";
+  configurePlatforms = [ ];
+
+  postPatch = ''
+    patchShebangs --build .
+    substituteInPlace ./config/configure \
+      --replace-fail 'bup_git=' 'bup_git="${lib.getExe git}" #'
+  '';
 
   dontAddPrefix = true;
 
@@ -62,12 +67,17 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.BUP_PYTHON_CONFIG = lib.getExe' (lib.getDev python3) "python-config";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${lib.makeBinPath [ git par2cmdline ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          par2cmdline
+        ]
+      } \
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 
@@ -84,5 +94,7 @@ stdenv.mkDerivation {
 
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
+    # bespoke ./configure does not like cross
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

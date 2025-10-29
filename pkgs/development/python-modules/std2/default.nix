@@ -7,17 +7,19 @@
 
 buildPythonPackage {
   pname = "std2";
-  version = "0-unstable-2024-09-02";
+  version = "0-unstable-2025-02-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "std2";
-    rev = "205d1f52e9b5438ef2b732c77e1144847cafa8d0";
-    hash = "sha256-WdUefadEk92cGnDI+KbQBpjg+d7KgI6bjlQlyhRRRFA=";
+    rev = "47fda91f8c8db9d5a8faa6f55d739d74afffc440";
+    hash = "sha256-n+6FxVQjzYhjQMJr+i+D8uSiVjI7HFkegxy5keVjKGs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "std2" ];
 
   meta = {
     homepage = "https://github.com/ms-jpq/std2";

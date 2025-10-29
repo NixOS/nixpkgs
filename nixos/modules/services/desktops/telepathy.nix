@@ -1,9 +1,14 @@
 # Telepathy daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   meta = {
-    maintainers = lib.teams.gnome.members;
+    maintainers = [ ];
   };
 
   ###### interface
@@ -25,7 +30,6 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.telepathy.enable {
@@ -33,12 +37,6 @@
     environment.systemPackages = [ pkgs.telepathy-mission-control ];
 
     services.dbus.packages = [ pkgs.telepathy-mission-control ];
-
-    # Enable runtime optional telepathy in gnome-shell
-    services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
-      telepathy-glib
-      telepathy-logger
-    ];
   };
 
 }

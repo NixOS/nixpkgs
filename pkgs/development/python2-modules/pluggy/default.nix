@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools-scm,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
   version = "0.13.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,22 +1,37 @@
-{ lib, buildDunePackage, fetchFromGitLab, ppxlib, ppx_deriving, result }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  ppxlib,
+  ppx_deriving,
+  result,
+  version ? if lib.versionAtLeast ppxlib.version "0.36" then "20251010" else "20250212",
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "visitors";
-  version = "20210608";
-
-  duneVersion = "3";
+  inherit version;
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
     owner = "fpottier";
-    repo = pname;
-    rev = version;
+    repo = "visitors";
+    tag = version;
     domain = "gitlab.inria.fr";
-    sha256 = "1p75x5yqwbwv8yb2gz15rfl3znipy59r45d1f4vcjdghhjws6q2a";
+    hash =
+      {
+        "20250212" = "sha256-AFD4+vriwVGt6lzDyIDuIMadakcgB4j235yty5qqFgQ=";
+        "20251010" = "sha256-3CHXECMHf/UWtLvy7fiOaxx6EizRRtm9HpqRxcRjH3I=";
+      }
+      ."${version}";
   };
 
-  propagatedBuildInputs = [ ppxlib ppx_deriving result ];
+  propagatedBuildInputs = [
+    ppxlib
+    ppx_deriving
+    result
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.inria.fr/fpottier/visitors";

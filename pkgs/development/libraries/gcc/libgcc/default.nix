@@ -1,6 +1,10 @@
-{ lib, stdenvNoLibs, buildPackages
-, gcc, glibc
-, libiberty
+{
+  lib,
+  stdenvNoLibs,
+  buildPackages,
+  gcc,
+  glibc,
+  libiberty,
 }:
 
 let
@@ -20,11 +24,15 @@ let
     "--with-build-sysroot=/"
   ];
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgcc";
   inherit (gcc.cc) src version;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -36,22 +44,20 @@ in stdenv.mkDerivation (finalAttrs: {
     buildRoot=$(readlink -e "./build")
   '';
 
-  postPatch =
-    gcc.cc.passthru.forceLibgccToBuildCrtStuff
-    + ''
-      sourceRoot=$(readlink -e "./libgcc")
-    '';
+  postPatch = gcc.cc.passthru.forceLibgccToBuildCrtStuff + ''
+    sourceRoot=$(readlink -e "./libgcc")
+  '';
 
   hardeningDisable = [ "pie" ];
 
-  preConfigure =
-  ''
+  preConfigure = ''
     # Drop in libiberty, as external builds are not expected
     cd "$buildRoot"
     (
-      mkdir -p build-${stdenv.buildPlatform.config}/libiberty/
-      cd build-${stdenv.buildPlatform.config}/libiberty/
-      ln -s ${buildPackages.libiberty}/lib/libiberty.a ./
+      mkdir -p "build-${stdenv.buildPlatform.config}/libiberty/pic"
+      cd "build-${stdenv.buildPlatform.config}/libiberty/"
+      ln -s "${buildPackages.libiberty}/lib/libiberty.a" ./
+      ln -s "${buildPackages.libiberty}/lib/libiberty_pic.a" pic/libiberty.a
     )
     mkdir -p "$buildRoot/gcc"
     cd "$buildRoot/gcc"
@@ -89,12 +95,18 @@ in stdenv.mkDerivation (finalAttrs: {
         tm.h \
         options.h \
         insn-constants.h \
-  '' + lib.optionalString stdenv.targetPlatform.isM68k ''
-        sysroot-suffix.h \
-  '' + lib.optionalString stdenv.targetPlatform.isAarch32 ''
-        arm-isa.h \
-        arm-cpu.h \
-  '' + ''
+  ''
+  + lib.optionalString stdenv.targetPlatform.isM68k ''
+    sysroot-suffix.h \
+  ''
+  + lib.optionalString stdenv.targetPlatform.isAarch32 ''
+    arm-isa.h \
+    arm-cpu.h \
+  ''
+  + lib.optionalString stdenv.targetPlatform.isLoongArch64 ''
+    loongarch-multilib.h \
+  ''
+  + ''
         insn-modes.h
     )
     mkdir -p "$buildRoot/gcc/include"
@@ -123,7 +135,10 @@ in stdenv.mkDerivation (finalAttrs: {
     export LD_FOR_TARGET=${stdenv.cc.bintools}/bin/$LD_FOR_TARGET
   '';
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
   configureFlags = [
     "cross_compiling=true"
     "--disable-gcov"

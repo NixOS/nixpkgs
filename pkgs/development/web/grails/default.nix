@@ -1,21 +1,35 @@
-{ lib, stdenv, fetchurl, unzip
-# If jdk is null, require JAVA_HOME in runtime environment, else store
-# JAVA_HOME=${jdk.home} into grails.
-, jdk ? null
-, coreutils, ncurses, gnused, gnugrep  # for purity
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  # If jdk is null, require JAVA_HOME in runtime environment, else store
+  # JAVA_HOME=${jdk.home} into grails.
+  jdk ? null,
+  coreutils,
+  ncurses,
+  gnused,
+  gnugrep, # for purity
 }:
 
 let
-  binpath = lib.makeBinPath
-    ([ coreutils ncurses gnused gnugrep ] ++ lib.optional (jdk != null) jdk);
+  binpath = lib.makeBinPath (
+    [
+      coreutils
+      ncurses
+      gnused
+      gnugrep
+    ]
+    ++ lib.optional (jdk != null) jdk
+  );
 in
 stdenv.mkDerivation rec {
   pname = "grails";
-  version = "6.2.1";
+  version = "7.0.0-M3";
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "sha256-+xwQPd9a7NQcrl0pZNCqktGryLTXXI8V/81a8pk/j48=";
+    sha256 = "sha256-BM3fxmf86o+Ob63bE9aSCBh2MlkIS4AsYj7CZr/PVWU=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -29,7 +43,8 @@ stdenv.mkDerivation rec {
     rm -f "$out"/bin/*.bat
     # Improve purity
     sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-  '' + lib.optionalString (jdk != null) ''
+  ''
+  + lib.optionalString (jdk != null) ''
     # Inject JDK path into grails
     sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
   '';

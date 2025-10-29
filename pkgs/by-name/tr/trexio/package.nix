@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gfortran
-, hdf5
-, python3
-, emacs
-, swig
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  hdf5,
+  python3,
+  emacs,
+  swig,
 }:
 
 stdenv.mkDerivation rec {
   pname = "trexio";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "TREX-CoE";
-    repo = pname;
+    repo = "trexio";
     rev = "v${version}";
-    hash = "sha256-KP8tpwBr/ymjcXmCssdn+Xti0UKgazJSGTgVpvE+CiM=";
+    hash = "sha256-mTn/46oIvBbv7X0QwDxXQJH3QyH34u487QpLferC2Uc=";
   };
 
   postPatch = ''
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
     hdf5
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
 

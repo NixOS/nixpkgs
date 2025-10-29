@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "S-expression based json reader/writer for Guile";
     homepage = "https://gitlab.com/dustyweb/guile-sjson";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ galaxy ];
     platforms = guile.meta.platforms;
   };
 })

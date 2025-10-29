@@ -1,13 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
+}:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.14.1";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
-    rev = "${pname}-${version}";
+    rev = "mimir-${version}";
     owner = "grafana";
-    repo = pname;
-    hash = "sha256-AcD3ebbPGzmu90TxmOBG0wptOZBG61wBXAIdJwZNMT4=";
+    repo = "mimir";
+    hash = "sha256-Ob0l+C5LnFL1yl76/cdSX83bHEcamPlb9Sau8rMO2sM=";
   };
 
   vendorHash = null;
@@ -15,20 +21,26 @@ buildGoModule rec {
   subPackages = [
     "cmd/mimir"
     "cmd/mimirtool"
-  ] ++ (map (pathName: "tools/${pathName}") [
+  ]
+  ++ (map (pathName: "tools/${pathName}") [
     "compaction-planner"
     "copyblocks"
     "copyprefix"
     "delete-objects"
     "list-deduplicated-blocks"
     "listblocks"
-    "markblocks"
+    "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
     "undelete-blocks"
   ]);
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "mimir-([0-9.]+)" ];
+      extraArgs = [
+        "--version-regex"
+        "mimir-([0-9.]+)"
+      ];
     };
     tests = {
       inherit (nixosTests) mimir;
@@ -36,9 +48,10 @@ buildGoModule rec {
   };
 
   ldflags =
-    let t = "github.com/grafana/mimir/pkg/util/version";
-    in [
-      ''-extldflags "-static"''
+    let
+      t = "github.com/grafana/mimir/pkg/util/version";
+    in
+    [
       "-s"
       "-w"
       "-X ${t}.Version=${version}"
@@ -47,10 +60,13 @@ buildGoModule rec {
     ];
 
   meta = with lib; {
-    description =
-      "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
+    description = "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada bryanhonof adamcstephens ];
+    maintainers = with maintainers; [
+      happysalada
+      bryanhonof
+      adamcstephens
+    ];
   };
 }

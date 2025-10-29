@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xstatic-bootstrap";
   version = "4.5.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-Bootstrap";

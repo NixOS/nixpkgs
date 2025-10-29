@@ -1,15 +1,17 @@
-{ lib
-, buildPythonApplication
-, click
-, fetchFromGitHub
-, ipy
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonApplication,
+  click,
+  fetchFromGitHub,
+  ipy,
+  pyyaml,
+  requests,
 }:
 
 buildPythonApplication rec {
   pname = "gandi-cli";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Gandi";

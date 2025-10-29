@@ -13,32 +13,34 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.10.0"; # ensure that jellyfin-web has matching version
+  version = "10.11.0"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    hash = "sha256-XeMZEUorRrpS6GJ2qaXbyKUw0EaKCJF0PSoghUmOnrc=";
+    hash = "sha256-8kvN2ZugmjjgSMepDdP9tc48362b6w+RpIsp/IXaivM=";
   };
 
   propagatedBuildInputs = [ sqlite ];
 
   projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
   executables = [ "jellyfin" ];
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
   runtimeDeps = [
     jellyfin-ffmpeg
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [
-    "--add-flags" "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
-    "--add-flags" "--webdir=${jellyfin-web}/share/jellyfin-web"
+    "--add-flags"
+    "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
+    "--add-flags"
+    "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
   passthru.tests = {

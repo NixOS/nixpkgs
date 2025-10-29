@@ -1,13 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let
-  client = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.croc ];
-  };
+  client =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.croc ];
+    };
   pass = "PassRelay";
-in {
+in
+{
   name = "croc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ equirosa SuperSandro2000 ];
+    maintainers = [
+      equirosa
+      SuperSandro2000
+      ryan4yin
+    ];
   };
 
   nodes = {
@@ -48,4 +55,4 @@ in {
     assert "Hello World" in receiver.succeed("cat testfile01.txt")
     assert "Hello Earth" in receiver.succeed("cat testfile02.txt")
   '';
-})
+}

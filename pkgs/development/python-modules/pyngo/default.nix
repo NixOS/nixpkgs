@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "2.2.1";
+  version = "2.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
-    rev = "refs/tags/${version}";
-    hash = "sha256-E3UNgn/L1bbfYljufPp+bGAvSsADpPAvv/eJimD8v50=";
+    tag = version;
+    hash = "sha256-vLQz4qjxOnMUZ/SCR7XSg6yCv5ms0eCpm4Azgi8AeSA=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/yezz123/pyngo/releases/tag/${version}";
+    changelog = "https://github.com/yezz123/pyngo/releases/tag/${src.tag}";
     description = "Pydantic model support for Django & Django-Rest-Framework";
     homepage = "https://github.com/yezz123/pyngo";
     license = licenses.mit;

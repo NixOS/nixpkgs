@@ -1,4 +1,10 @@
-{ stdenv, apulse, libpulseaudio, pkg-config, intltool }:
+{
+  stdenv,
+  apulse,
+  libpulseaudio,
+  pkg-config,
+  intltool,
+}:
 
 stdenv.mkDerivation {
   pname = "libpressureaudio";
@@ -6,7 +12,10 @@ stdenv.mkDerivation {
 
   src = libpulseaudio.src;
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -60,7 +69,7 @@ stdenv.mkDerivation {
   '';
 
   meta = apulse.meta // {
-    description = "libpulse without any sound daemons over pure ALSA";
+    description = "Libpulse without any sound daemons over pure ALSA";
     longDescription = ''
       apulse (${apulse.meta.homepage}) implements most of libpulse
       API over pure ALSA in 5% LOC of the original PulseAudio.

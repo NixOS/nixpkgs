@@ -11,15 +11,22 @@ buildPecl {
   version = "2.0.3";
   hash = "sha256-pCFh5YzcioU7cs/ymJidy96CsPdkVt1ZzgKFTJK3MPc=";
 
-  nativeBuildInputs = [
-    pkg-config
+  buildInputs = [
     rrdtool
   ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   meta = {
     description = "PHP bindings to RRD tool system";
     license = lib.licenses.bsd0;
     homepage = "https://github.com/php/pecl-processing-rrd";
-    maintainers = lib.teams.wdz.members;
+    teams = [ lib.teams.wdz ];
   };
 }

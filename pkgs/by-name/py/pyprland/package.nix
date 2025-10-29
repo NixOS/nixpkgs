@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "2.4.1";
+  version = "2.4.7";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QONnIElYz8UjyLICSm2QGZME5jx+l2Zw4r7kwHW8YEM=";
+    tag = version;
+    hash = "sha256-rtAw6tdZY0BKb6Qjk/LHYYMB9nCPzkmw95wdjhJ191s=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.workspaces_follow_focus"
   ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "pypr";

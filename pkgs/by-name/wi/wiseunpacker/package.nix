@@ -8,12 +8,12 @@ let
   version = "1.3.3";
   pname = "WiseUnpacker";
 in
-buildDotnetModule rec {
+buildDotnetModule {
   inherit version pname;
 
   src = fetchFromGitHub {
     owner = "mnadareski";
-    repo = pname;
+    repo = "WiseUnpacker";
     rev = version;
     hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
   };
@@ -28,7 +28,7 @@ buildDotnetModule rec {
     mv "$out/bin/Test" "$out/bin/WiseUnpacker"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "Test/Test.csproj";
 

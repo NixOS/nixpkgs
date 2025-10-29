@@ -10,55 +10,122 @@ let
     mkEnableOption
     mkPackageOption
     mkDefault
+    mkOption
     types
     mkIf
     ;
+
+  defaultUser = "homebox";
+  defaultGroup = "homebox";
 in
 {
   options.services.homebox = {
     enable = mkEnableOption "homebox";
     package = mkPackageOption pkgs "homebox" { };
-    settings = lib.mkOption {
-      type = types.attrsOf types.str;
-      defaultText = ''
-        HBOX_STORAGE_DATA = "/var/lib/homebox/data";
-        HBOX_STORAGE_SQLITE_URL = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
-        HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
-        HBOX_MODE = "production";
+    user = mkOption {
+      type = types.str;
+      default = defaultUser;
+      description = "User account under which Homebox runs.";
+    };
+    group = mkOption {
+      type = types.str;
+      default = defaultGroup;
+      description = "Group under which Homebox runs.";
+    };
+    settings = mkOption {
+      type = types.submodule { freeformType = types.attrsOf (types.nullOr types.str); };
+      defaultText = lib.literalExpression ''
+        {
+          HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox";
+          HBOX_STORAGE_PREFIX_PATH = "data";
+          HBOX_DATABASE_DRIVER = "sqlite3";
+          HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
+          HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
+          HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
+          HBOX_MODE = "production";
+        }
       '';
       description = ''
-        The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://homebox.software/en/quick-start.html#env-variables-configuration).
+        The homebox configuration as environment variables. For definitions and available options see the upstream
+        [documentation](https://homebox.software/en/configure/#configure-homebox).
       '';
+    };
+    database = {
+      createLocally = mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Homebox.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    users.users.homebox = {
-      isSystemUser = true;
-      group = "homebox";
+    assertions = [
+      {
+        assertion = !(cfg.settings ? HBOX_STORAGE_DATA);
+        message = ''
+          `services.homebox.settings.HBOX_STORAGE_DATA` has been deprecated.
+          Please use `services.homebox.settings.HBOX_STORAGE_CONN_STRING` and `services.homebox.settings.HBOX_STORAGE_PREFIX_PATH` instead.
+        '';
+      }
+    ];
+
+    users = {
+      users = mkIf (cfg.user == defaultUser) {
+        ${defaultUser} = {
+          description = "homebox service user";
+          inherit (cfg) group;
+          isSystemUser = true;
+        };
+      };
+      groups = mkIf (cfg.group == defaultGroup) { ${defaultGroup} = { }; };
     };
-    users.groups.homebox = { };
-    services.homebox.settings = {
-      HBOX_STORAGE_DATA = mkDefault "/var/lib/homebox/data";
-      HBOX_STORAGE_SQLITE_URL = mkDefault "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
-      HBOX_OPTIONS_ALLOW_REGISTRATION = mkDefault "false";
-      HBOX_MODE = mkDefault "production";
+
+    services.homebox.settings = lib.mkMerge [
+      (lib.mapAttrs (_: mkDefault) {
+        HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox";
+        HBOX_STORAGE_PREFIX_PATH = "data";
+        HBOX_DATABASE_DRIVER = "sqlite3";
+        HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
+        HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
+        HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
+        HBOX_MODE = "production";
+      })
+
+      (mkIf cfg.database.createLocally {
+        HBOX_DATABASE_DRIVER = "postgres";
+        HBOX_DATABASE_HOST = "/run/postgresql";
+        HBOX_DATABASE_USERNAME = "homebox";
+        HBOX_DATABASE_DATABASE = "homebox";
+        HBOX_DATABASE_PORT = toString config.services.postgresql.settings.port;
+      })
+    ];
+
+    services.postgresql = mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "homebox" ];
+      ensureUsers = [
+        {
+          name = "homebox";
+          ensureDBOwnership = true;
+        }
+      ];
     };
     systemd.services.homebox = {
-      after = [ "network.target" ];
-      environment = cfg.settings;
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
+      environment = lib.filterAttrs (_: v: v != null) cfg.settings;
       serviceConfig = {
-        User = "homebox";
-        Group = "homebox";
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = lib.getExe cfg.package;
-        StateDirectory = "homebox";
-        WorkingDirectory = "/var/lib/homebox";
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
-        StateDirectoryMode = "0700";
         Restart = "always";
+        StateDirectory = "homebox";
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -76,6 +143,7 @@ in
         ProcSubset = "pid";
         ProtectSystem = "strict";
         RestrictAddressFamilies = [
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
@@ -94,5 +162,8 @@ in
       wantedBy = [ "multi-user.target" ];
     };
   };
-  meta.maintainers = with lib.maintainers; [ patrickdag ];
+  meta.maintainers = with lib.maintainers; [
+    patrickdag
+    swarsel
+  ];
 }

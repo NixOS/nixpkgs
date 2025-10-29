@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, m2libc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  m2libc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m2-planet";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "oriansj";
     repo = "M2-Planet";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-xVwUO67PlRiBj/YBnnTXFGh3jH470fcbaNjABoyYes4=";
+    hash = "sha256-qig+E9rrg168yYTR5n1Y9Iqy1NX+8GOraMhsr7id4lk=";
   };
 
   # Don't use vendored M2libc
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PLAtform NEutral Transpiler";
     homepage = "https://github.com/oriansj/M2-Planet";
     license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Planet";
   };

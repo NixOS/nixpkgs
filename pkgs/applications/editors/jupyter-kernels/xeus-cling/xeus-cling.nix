@@ -1,23 +1,24 @@
-{ lib
-, clangStdenv
-, cmake
-, fetchFromGitHub
-, llvmPackages_13
-# Libraries
-, argparse
-, cling
-, cppzmq
-, libuuid
-, ncurses
-, openssl
-, pugixml
-, xeus
-, xeus-zmq
-, xtl
-, zeromq
-, zlib
-# Settings
-, debug ? false
+{
+  lib,
+  clangStdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages_18,
+  # Libraries
+  argparse,
+  cling,
+  cppzmq,
+  libuuid,
+  ncurses,
+  openssl,
+  pugixml,
+  xeus,
+  xeus-zmq,
+  xtl,
+  zeromq,
+  zlib,
+  # Settings
+  debug ? false,
 }:
 
 let
@@ -31,6 +32,21 @@ let
       rev = "v2.9";
       sha256 = "sha256-vbf4kePi5gfg9ub4aP1cCK1jtiA65bUS9+5Ghgvxt/E=";
     };
+  });
+
+  # Nixpkgs moved to xeus 5.2.0, but we need 3.2.0
+  # https://github.com/jupyter-xeus/xeus-cling/issues/523
+  xeus_3_2_0 = xeus.overrideAttrs (oldAttrs: {
+    version = "3.2.0";
+
+    src = fetchFromGitHub {
+      owner = "jupyter-xeus";
+      repo = "xeus";
+      tag = "3.2.0";
+      sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
+    };
+
+    buildInputs = oldAttrs.buildInputs ++ lib.singleton xtl;
   });
 
 in
@@ -49,6 +65,7 @@ clangStdenv.mkDerivation rec {
   patches = [
     ./0001-Fix-bug-in-extract_filename.patch
     ./0002-Don-t-pass-extra-includes-configure-this-with-flags.patch
+    ./0003-Remove-unsupported-src-root-flag.patch
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -57,11 +74,11 @@ clangStdenv.mkDerivation rec {
     cling.unwrapped
     cppzmq
     libuuid
-    llvmPackages_13.llvm
+    llvmPackages_18.llvm
     ncurses
     openssl
     pugixml
-    xeus
+    xeus_3_2_0
     xeus-zmq
     xtl
     zeromq
@@ -72,11 +89,14 @@ clangStdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/xmagics/executable.cpp \
-      --replace "getDataLayout" "getDataLayoutString"
+      --replace-fail "getDataLayout" "getDataLayoutString"
     substituteInPlace src/xmagics/execution.cpp \
-      --replace "simplisticCastAs" "castAs"
+      --replace-fail "simplisticCastAs" "castAs"
     substituteInPlace src/xmime_internal.hpp \
-      --replace "code.str()" "code.str().str()"
+      --replace-fail "code.str()" "code.str().str()"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.3)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   dontStrip = debug;

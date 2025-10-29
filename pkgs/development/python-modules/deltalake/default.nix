@@ -1,55 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, pyarrow
-, pyarrow-hotfix
-, openssl
-, stdenv
-, darwin
-, libiconv
-, pkg-config
-, pytestCheckHook
-, pytest-benchmark
-, pytest-cov
-, pytest-mock
-, pandas
-, azure-storage-blob
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  arro3-core,
+  pyarrow,
+  openssl,
+  stdenv,
+  libiconv,
+  pkg-config,
+  polars,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-timeout,
+  pandas,
+  deprecated,
+  azure-storage-blob,
 }:
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.20.1";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-serMb6Rirmw+QLpET3NT2djBoFBW/TGu1/5qYjiYpKE=";
+    hash = "sha256-LpeJUNQg4FC73LX2LjvpPTMctRarTJsWlM8aeIfGPiU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-NkXovFsX+qbca+gYeBMQnacNzubloWNW/GrXNeWquE8=";
+    hash = "sha256-4VmNhUijQMC/Wazcx+uT7mQqD+wutXrBJ+HN3AyxQRw=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
 
   dependencies = [
-    pyarrow
-    pyarrow-hotfix
+    arro3-core
+    deprecated
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
   nativeBuildInputs = [
     pkg-config # openssl-sys needs this
-  ] ++ (with rustPlatform; [
+  ]
+  ++ (with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ]);
@@ -59,28 +62,33 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
+    polars
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
+    pytest-timeout
     azure-storage-blob
+    pyarrow
   ];
 
   preCheck = ''
     # For paths in test to work, we have to be in python dir
-    cp pyproject.toml python/
     cd python
 
     # In tests we want to use deltalake that we have built
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
-
   meta = with lib; {
     description = "Native Rust library for Delta Lake, with bindings into Python";
     homepage = "https://github.com/delta-io/delta-rs";
     changelog = "https://github.com/delta-io/delta-rs/blob/python-v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kfollesdal mslingsby harvidsen andershus ];
+    maintainers = with maintainers; [
+      kfollesdal
+      mslingsby
+      harvidsen
+      andershus
+    ];
   };
 }

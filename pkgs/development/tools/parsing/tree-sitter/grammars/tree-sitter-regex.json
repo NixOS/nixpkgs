@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-regex",
-  "rev": "f70251e1f1d72bd6dc1f897f956f9112f8668441",
-  "date": "2024-09-02T03:31:05-04:00",
-  "path": "/nix/store/9shrpsgb7rnk24nwc3xr1xv33wxi0ydk-tree-sitter-regex",
-  "sha256": "08i97gwvf6777h6dkvsd08s2n4pmpz2xghxpn1npn16jcpaknhhv",
-  "hash": "sha256-G0I71WXSBHttsLfD18W/9RIrNAJN79kMPOcYt/k7KSI=",
+  "rev": "b2ac15e27fce703d2f37a79ccd94a5c0cbe9720b",
+  "date": "2025-09-13T00:57:50-04:00",
+  "path": "/nix/store/wx4xlyvffsgkvjy88r955f5lrps9r1iz-tree-sitter-regex",
+  "sha256": "0nhn94skvac3wid2xbxa456m1mgbi7h768imq280pxbm4klhl7bd",
+  "hash": "sha256-bR0K6SR19QuQwDUic+CJ69VQTSGqry5a5IOpPTVJFlo=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

@@ -6,6 +6,7 @@
   pandas,
   typing-extensions,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
   scikit-learn,
 }:
@@ -24,8 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-V5OkgiLUTRNbNt6m94+aYUZd9Nw+/60LfhrqqdFhiUw=";
   };
 
-  patches = [ ./disable-pytest-coverage-flags.patch ];
-
   propagatedBuildInputs = [
     pandas
     typing-extensions
@@ -33,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     scikit-learn
   ];

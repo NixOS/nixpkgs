@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "polychromatic";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eSfyoEu4qQv+R17wgTfATOE1uHkksNxo17btR6swuZo=";
+    tag = "v${version}";
+    hash = "sha256-fw4XLaivf8kRkNaemHvd9zcVKn87ZZhP+ZDJsCJHv/4=";
   };
 
   postPatch = ''
@@ -54,22 +54,25 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ qt6.qtwayland ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    openrazer
-    pyqt6
-    pyqt6-webengine
-    requests
-    setproctitle
-    libxcb
-    openrazer-daemon
-    ibus
-    usbutils
-  ] ++ [
-    libayatana-appindicator
-    psmisc
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      colorama
+      colour
+      openrazer
+      pyqt6
+      pyqt6-webengine
+      requests
+      setproctitle
+      libxcb
+      openrazer-daemon
+      ibus
+      usbutils
+    ]
+    ++ [
+      libayatana-appindicator
+      psmisc
+    ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;

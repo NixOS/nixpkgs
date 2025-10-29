@@ -1,74 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-
+  fetchFromGitHub,
   poetry-core,
-
-  aiohttp,
   googleapis-common-protos,
   grpcio,
   protobuf,
-  requests,
   semver,
-  toposort,
-
-  #, async_exit_stack
-  #, dataclasses
-  google-auth,
-  oauthlib,
-  prometheus-client,
   pygments,
   pyopenssl,
   typing-extensions,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "7.12.0";
+  version = "8.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fbemLaOh1PHBvQAmMy06JWgnOqdy/kLByAZh4U8ghxc=";
+  src = fetchFromGitHub {
+    owner = "digital-asset";
+    repo = "dazl-client";
+    tag = "v${version}";
+    hash = "sha256-GcZVyUx/aYSw7sy1JGeWRKBXifQaG/ygK9jJdG13cO8=";
   };
 
-  patches = [
-    # Merged, remove this next release
-    (fetchpatch {
-      name = "428.patch"; # https://github.com/digital-asset/dazl-client/pull/428
-      url = "https://github.com/digital-asset/dazl-client/commit/a68bad0471d22210f0abf31447a7732477de39d4.patch";
-      sha256 = "sha256-Gx9W1XkvMPg8FAOAXijDF5QnMbntk5mR0q5+o5i2KAE=";
-    })
+  pythonRelaxDeps = [
+    "grpcio"
   ];
 
-  format = "pyproject";
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
-    aiohttp
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
-    requests
     semver
-    toposort
-
-    # optional
-
-    #async-exit-stack
-    #dataclasses
-    google-auth
-    oauthlib
-    prometheus-client
-    pygments
-    pyopenssl
     typing-extensions
   ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    pygments = [ pygments ];
+    tls-testing = [ pyopenssl ];
+  };
+
+  pythonImportsCheck = [ "dazl" ];
+
+  # daml: command not found
+  doCheck = false;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
+
+  meta = {
     description = "High-level Ledger API client for Daml ledgers";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    homepage = "https://github.com/digital-asset/dazl-client";
+    changelog = "https://github.com/digital-asset/dazl-client/releases/tag/${src.tag}";
   };
 }

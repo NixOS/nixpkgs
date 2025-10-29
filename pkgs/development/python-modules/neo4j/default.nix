@@ -8,38 +8,29 @@
   pythonOlder,
   pytz,
   setuptools,
-  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.26.0";
+  version = "6.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4rvs313MU4EXqpnxRZPKy5Z64OJmQnsWRq9T0MIoaOo=";
+    tag = version;
+    hash = "sha256-0Idfa7hFrLSD26PpA/lJcVtYpAPcX+AF3wab092Sbzw=";
   };
 
   postPatch = ''
-    # The dynamic versioning adds a postfix (.dev0) to the version
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools ==" "setuptools >=" \
-      --replace-fail "tomlkit ==" "tomlkit >=" \
-      --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
-      --replace-fail '#readme = "README.rst"' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    pytz
-    tomlkit
-  ];
+  dependencies = [ pytz ];
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -58,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";
     homepage = "https://github.com/neo4j/neo4j-python-driver";
-    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${version}";
+    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

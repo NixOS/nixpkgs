@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl, openssl, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  python3,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fetchmail";
-  version = "6.4.39";
+  version = "6.5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "sha256-dRCaHzB7U4FV+gX17ymOgpjLTerpWu0kwWs402/woYY=";
+    hash = "sha256-c+trHUIbWYaGatSmt3fBFAo5AFKYxjv4R95TeXbL+9s=";
   };
 
-  buildInputs = [ openssl python3 ];
+  buildInputs = [
+    openssl
+    python3
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [ "--with-ssl=${openssl.dev}" ];
 

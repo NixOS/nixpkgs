@@ -1,30 +1,44 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+{ pkgs, ... }:
+{
   name = "hardened";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
   };
 
   nodes.machine =
-    { lib, pkgs, config, ... }:
-    { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
-      users.users.sybil = { isNormalUser = true; group = "wheel"; };
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      users.users.alice = {
+        isNormalUser = true;
+        extraGroups = [ "proc" ];
+      };
+      users.users.sybil = {
+        isNormalUser = true;
+        group = "wheel";
+      };
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
       nix.settings.sandbox = false;
-      virtualisation.emptyDiskImages = [ 4096 ];
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
-      '';
+      virtualisation.emptyDiskImages = [
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "deferred";
+        }
+      ];
       virtualisation.fileSystems = {
-        "/efi" = {
-          device = "/dev/disk/by-label/EFISYS";
+        "/deferred" = {
+          device = "/dev/disk/by-id/virtio-deferred";
           fsType = "vfat";
+          autoFormat = true;
           options = [ "noauto" ];
         };
       };
-      boot.extraModulePackages =
-        pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6")
-          config.boot.kernelPackages.wireguard;
+      boot.extraModulePackages = pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6") config.boot.kernelPackages.wireguard;
       boot.kernelModules = [ "wireguard" ];
     };
 
@@ -76,10 +90,9 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
       # Test deferred mount
       with subtest("Deferred mounts work"):
-          machine.fail("mountpoint -q /efi")  # was deferred
-          machine.execute("mkdir -p /efi")
-          machine.succeed("mount /dev/disk/by-label/EFISYS /efi")
-          machine.succeed("mountpoint -q /efi")  # now mounted
+          machine.fail("mountpoint -q /deferred")  # was deferred
+          machine.systemctl("start deferred.mount")
+          machine.succeed("mountpoint -q /deferred")  # now mounted
 
 
       # Test Nix dæmon usage
@@ -97,4 +110,4 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       with subtest("The hardened memory allocator works"):
           machine.succeed("${hardened-malloc-tests}/bin/run-tests")
     '';
-})
+}

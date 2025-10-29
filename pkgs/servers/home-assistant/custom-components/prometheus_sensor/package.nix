@@ -1,21 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "mweinelt";
   domain = "prometheus_sensor";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "mweinelt";
     repo = "ha-prometheus-sensor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xfLAfTBgJjrRU1EFcbRvzUSq4m+dd6izaxP9DMisz/0=";
+    tag = version;
+    hash = "sha256-d13KJXgRPWrR2ilpEgZbVS/a6/y7DBRdEiGLpBaBsPc=";
   };
-
-  dontBuild = true;
 
   meta = with lib; {
     changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";

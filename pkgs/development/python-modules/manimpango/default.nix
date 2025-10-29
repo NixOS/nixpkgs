@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
   setuptools,
   pango,
   cython,
-  AppKit,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -23,13 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manimpango";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nN+XOnki8fG7URMy2Fhs2X+yNi8Y7wDo53d61xaRa3w=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.2,<3.1" Cython
+  '';
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ pango ];
 
   build-system = [
     setuptools

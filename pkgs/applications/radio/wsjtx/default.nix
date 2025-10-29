@@ -1,22 +1,60 @@
-{ lib, stdenv, fetchgit, asciidoc, asciidoctor, cmake, pkg-config,
-  fftw, fftwFloat, gfortran, hamlib_4, libtool, libusb1, qtbase,
-  qtmultimedia, qtserialport, qttools, boost, texinfo, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  asciidoc,
+  asciidoctor,
+  cmake,
+  pkg-config,
+  fftw,
+  fftwFloat,
+  gfortran,
+  hamlib_4,
+  libtool,
+  libusb1,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
+  qttools,
+  boost,
+  texinfo,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchgit {
     url = "http://git.code.sf.net/p/wsjt/wsjtx";
     rev = "wsjtx-${version}";
-    hash = "sha256-fELx3B9JqCCL5vaIHab3of5ah9qdu5lemqjUnvY5DdM=";
+    hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
   nativeBuildInputs = [
-    asciidoc asciidoctor cmake gfortran libtool
-    pkg-config qttools texinfo wrapQtAppsHook
+    asciidoc
+    asciidoctor
+    cmake
+    gfortran
+    hamlib_4 # rigctl
+    libtool
+    pkg-config
+    qttools
+    texinfo
+    wrapQtAppsHook
   ];
-  buildInputs = [ fftw fftwFloat hamlib_4 libusb1 qtbase qtmultimedia qtserialport boost ];
+  buildInputs = [
+    fftw
+    fftwFloat
+    hamlib_4
+    libusb1
+    qtbase
+    qtmultimedia
+    qtserialport
+    boost
+  ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Weak-signal digital communication modes for amateur radio";
@@ -30,6 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "https://wsjt.sourceforge.io";
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lasandell numinit melling ];
+    maintainers = with maintainers; [
+      lasandell
+      numinit
+      melling
+    ];
   };
 }

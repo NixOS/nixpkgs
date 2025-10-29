@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, substituteAll
-, vala
-, gtk3
-, granite
-, libxml2
-, wingpanel
-, libgee
-, xorg
-, libgnomekbd
-, ibus
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  replaceVars,
+  vala,
+  gtk3,
+  granite,
+  libxml2,
+  wingpanel,
+  libgee,
+  xorg,
+  libgnomekbd,
+  ibus,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,14 +24,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-keyboard";
     rev = version;
     sha256 = "sha256-vPQ+Bt7ggeT3Zzsvbie8Wpu3D2WMEIh8GDOI3frnedM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
     })
   ];
@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-keyboard";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

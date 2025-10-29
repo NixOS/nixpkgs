@@ -1,47 +1,68 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clang
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  llvm,
+  zlib,
+  zstd,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "6.0.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nNyWrPPhUwT7FyASzc3kf5NCTzeqvHybVOc+6hBzkA4=";
+    hash = "sha256-uj25WmGCpwouS1yzW9Oil5Vyrbyj5yRITvWF9WaGozM=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libxml2 ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    perl
+    llvm.rocm-toolchain
+  ];
+
+  buildInputs = [
+    llvm.llvm
+    llvm.clang-unwrapped
+    perl
+    zlib
+    zstd
+  ];
+
+  env.CXXFLAGS = "-I${lib.getInclude llvm.llvm}/include -I${lib.getInclude llvm.clang-unwrapped}/include";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+      --replace-fail "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${llvm.rocm-toolchain}/bin/clang"
+    chmod +x bin/*
   '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   postInstall = ''
-    patchShebangs $out/bin
+    chmod +x $out/bin/*
+    chmod +x $out/libexec/*
+    patchShebangs $out/bin/
+    patchShebangs $out/libexec/
   '';
 
   meta = with lib; {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

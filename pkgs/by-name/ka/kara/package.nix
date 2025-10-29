@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   kdePackages,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kara";
@@ -13,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dhruv8sh";
     repo = "kara";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-an0tA1YQU/wpaY4y6lQfOFiUYm6aLmVTC1M5sukARVA=";
   };
 

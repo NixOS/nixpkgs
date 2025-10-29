@@ -1,36 +1,43 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "endlessh-go";
   meta.maintainers = with lib.maintainers; [ azahi ];
 
   nodes = {
-    server = { ... }: {
-      services.endlessh-go = {
-        enable = true;
-        prometheus.enable = true;
-        openFirewall = true;
-      };
-
-      specialisation = {
-        unprivileged.configuration = {
-          services.endlessh-go = {
-            port = 2222;
-            prometheus.port = 9229;
-          };
+    server =
+      { ... }:
+      {
+        services.endlessh-go = {
+          enable = true;
+          prometheus.enable = true;
+          openFirewall = true;
         };
 
-        privileged.configuration = {
-          services.endlessh-go = {
-            port = 22;
-            prometheus.port = 92;
+        specialisation = {
+          unprivileged.configuration = {
+            services.endlessh-go = {
+              port = 2222;
+              prometheus.port = 9229;
+            };
+          };
+
+          privileged.configuration = {
+            services.endlessh-go = {
+              port = 22;
+              prometheus.port = 92;
+            };
           };
         };
       };
-    };
 
-    client = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [ curl netcat ];
-    };
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          curl
+          netcat
+        ];
+      };
   };
 
   testScript = ''
@@ -59,4 +66,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         server.succeed("curl -sSf server:92/metrics | grep -q endlessh_client_closed_count_total")
         client.fail("curl -sSfm 5 server:92/metrics")
   '';
-})
+}

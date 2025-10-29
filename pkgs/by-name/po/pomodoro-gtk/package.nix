@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gjs
-, gobject-introspection
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, libgda6
-, gsound
-, gst_all_1
-, libportal-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gjs,
+  gobject-introspection,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  libgda6,
+  gsound,
+  gst_all_1,
+  libportal-gtk4,
 }:
 
 stdenv.mkDerivation {
@@ -57,7 +58,10 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/idevecore/pomodoro";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pomodoro";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      iedame
+    ];
     platforms = lib.platforms.unix;
   };
 }

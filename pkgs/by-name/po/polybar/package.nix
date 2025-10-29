@@ -1,43 +1,44 @@
-{ config
-, cairo
-, cmake
-, fetchFromGitHub
-, libuv
-, libXdmcp
-, libpthreadstubs
-, libxcb
-, pcre
-, pkg-config
-, python3
-, python3Packages # sphinx-build
-, lib
-, stdenv
-, xcbproto
-, xcbutil
-, xcbutilcursor
-, xcbutilimage
-, xcbutilrenderutil
-, xcbutilwm
-, xcbutilxrm
-, makeWrapper
-, removeReferencesTo
-, alsa-lib
-, curl
-, libmpdclient
-, libpulseaudio
-, wirelesstools
-, libnl
-, i3
-, jsoncpp
+{
+  config,
+  cairo,
+  cmake,
+  fetchFromGitHub,
+  libuv,
+  libXdmcp,
+  libpthreadstubs,
+  libxcb,
+  pcre,
+  pkg-config,
+  python3,
+  python3Packages, # sphinx-build
+  lib,
+  stdenv,
+  xcbproto,
+  xcbutil,
+  xcbutilcursor,
+  xcbutilimage,
+  xcbutilrenderutil,
+  xcbutilwm,
+  xcbutilxrm,
+  makeWrapper,
+  removeReferencesTo,
+  alsa-lib,
+  curl,
+  libmpdclient,
+  libpulseaudio,
+  wirelesstools,
+  libnl,
+  i3,
+  jsoncpp,
 
   # override the variables ending in 'Support' to enable or disable modules
-, alsaSupport ? true
-, githubSupport ? false
-, mpdSupport ? false
-, pulseSupport ? config.pulseaudio or false
-, iwSupport ? false
-, nlSupport ? true
-, i3Support ? false
+  alsaSupport ? true,
+  githubSupport ? false,
+  mpdSupport ? false,
+  pulseSupport ? config.pulseaudio or false,
+  iwSupport ? false,
+  nlSupport ? true,
+  i3Support ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "polybar";
     repo = "polybar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-5PYKl6Hi4EYEmUBwkV0rLiwxNqIyR5jwm495YnNs0gI=";
     fetchSubmodules = true;
   };
@@ -57,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.sphinx
     removeReferencesTo
-  ] ++ lib.optional i3Support makeWrapper;
+  ]
+  ++ lib.optional i3Support makeWrapper;
 
   buildInputs = [
     cairo
@@ -74,13 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilrenderutil
     xcbutilwm
     xcbutilxrm
-  ] ++ lib.optional alsaSupport alsa-lib
+  ]
+  ++ lib.optional alsaSupport alsa-lib
   ++ lib.optional githubSupport curl
   ++ lib.optional mpdSupport libmpdclient
   ++ lib.optional pulseSupport libpulseaudio
   ++ lib.optional iwSupport wirelesstools
   ++ lib.optional nlSupport libnl
-  ++ lib.optionals i3Support [ jsoncpp i3 ];
+  ++ lib.optionals i3Support [
+    jsoncpp
+    i3
+  ];
 
   patches = [ ./remove-hardcoded-etc.diff ];
 
@@ -90,15 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/utils/file.cpp
   '';
 
-  postInstall =
-    lib.optionalString i3Support ''
-      wrapProgram $out/bin/polybar \
-        --prefix PATH : "${i3}/bin"
-    '';
-
-  postFixup = ''
+  postInstall = ''
     remove-references-to -t ${stdenv.cc} $out/bin/polybar
-  '';
+  ''
+  + (lib.optionalString i3Support ''
+    wrapProgram $out/bin/polybar \
+      --prefix PATH : "${i3}/bin"
+  '');
 
   meta = with lib; {
     homepage = "https://polybar.github.io/";
@@ -110,7 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne moni ];
+    maintainers = with maintainers; [
+      afldcr
+      Br1ght0ne
+      moni
+    ];
     mainProgram = "polybar";
     platforms = platforms.linux;
   };

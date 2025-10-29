@@ -2,28 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.12";
+  version = "0.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zB792ZwDWd74YBYvQ5au0t2RWTIAqrWvNtQ/e+ZEk50=";
+    tag = version;
+    hash = "sha256-D603ZrLbc/6REx6X0bMvZzeyo0fgTsFL7J+iRTiQLgQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  build-system = [ setuptools ];
 
   # Requires root privileges, https://github.com/svinota/pyroute2/issues/778
   doCheck = false;
@@ -49,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
-    changelog = "https://github.com/svinota/pyroute2/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/svinota/pyroute2/blob/${src.tag}/CHANGELOG.rst";
     license = with licenses; [
       asl20 # or
       gpl2Plus

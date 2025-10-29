@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyyaml";
-  version = "6.0.2";
+  version = "6.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IQoZd9Lp0ZHLAQN3PFwMsZVTsIVJyIaT9D6fpkzA8IA=";
+    tag = version;
+    hash = "sha256-jUooIBp80cLxvdU/zLF0X8Yjrf0Yp9peYeiFjuV8AHA=";
   };
 
   build-system = [

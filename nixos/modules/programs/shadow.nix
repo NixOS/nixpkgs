@@ -1,5 +1,11 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.loginDefs;
 in
@@ -31,79 +37,89 @@ in
         description = ''
           Config options for the /etc/login.defs file, that defines
           the site-specific configuration for the shadow password suite.
-          See login.defs(5) man page for available options.
+          See {manpage}`login.defs(5)` man page for available options.
         '';
         type = lib.types.submodule {
           freeformType = (pkgs.formats.keyValue { }).type;
-          /* There are three different sources for user/group id ranges, each of which gets
-             used by different programs:
-             - The login.defs file, used by the useradd, groupadd and newusers commands
-             - The update-users-groups.pl file, used by NixOS in the activation phase to
-               decide on which ids to use for declaratively defined users without a static
-               id
-             - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
-               by systemd for features like ConditionUser=@system and systemd-sysusers
-              */
+          /*
+            There are three different sources for user/group id ranges, each of which gets
+            used by different programs:
+            - The login.defs file, used by the useradd, groupadd and newusers commands
+            - The update-users-groups.pl file, used by NixOS in the activation phase to
+              decide on which ids to use for declaratively defined users without a static
+              id
+            - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+              by systemd for features like ConditionUser=@system and systemd-sysusers
+          */
           options = {
             DEFAULT_HOME = lib.mkOption {
               description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
-              type = lib.types.enum [ "yes" "no" ];
+              type = lib.types.enum [
+                "yes"
+                "no"
+              ];
             };
 
             ENCRYPT_METHOD = lib.mkOption {
               description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
-              type = lib.types.enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
+              type = lib.types.enum [
+                "YESCRYPT"
+                "SHA512"
+                "SHA256"
+                "MD5"
+                "DES"
+              ];
             };
 
             SYS_UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 1000;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 29999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 400;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             SYS_GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 1000;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 29999;
-              type = lib.types.int;
+              type = lib.types.ints.u32;
             };
 
             TTYGROUP = lib.mkOption {
@@ -142,6 +158,8 @@ in
         This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
       '';
+      # /bin/sh is also the compiled in default of the shadow package.
+      default = "/bin/sh";
       example = lib.literalExpression "pkgs.zsh";
       type = lib.types.either lib.types.path lib.types.shellPackage;
     };
@@ -180,7 +198,8 @@ in
 
       security.loginDefs.settings.CHFN_RESTRICT = lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
-      environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
+      environment.systemPackages =
+        lib.optional config.users.mutableUsers cfg.package
         ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
         ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
@@ -191,7 +210,8 @@ in
           toKeyValue = lib.generators.toKeyValue {
             mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
           };
-        in {
+        in
+        {
           # /etc/login.defs: global configuration for pwdutils.
           # You cannot login without it!
           "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
@@ -199,7 +219,7 @@ in
           # /etc/default/useradd: configuration for useradd.
           "default/useradd".source = pkgs.writeText "useradd" ''
             GROUP=100
-            HOME=/home
+            HOME=${config.users.defaultUserHome}
             SHELL=${utils.toShellPath config.users.defaultUserShell}
           '';
         };
@@ -241,17 +261,17 @@ in
             inherit source;
           };
         in
-          {
-            su = mkSetuidRoot "${cfg.package.su}/bin/su";
-            sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
-            newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
-            newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
-            newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
-          }
-          // lib.optionalAttrs config.users.mutableUsers {
-            chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
-            passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
-          };
+        {
+          su = mkSetuidRoot "${cfg.package.su}/bin/su";
+          sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
+          newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
+          newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
+          newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
+        }
+        // lib.optionalAttrs config.users.mutableUsers {
+          chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
+          passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
+        };
     })
   ];
 }

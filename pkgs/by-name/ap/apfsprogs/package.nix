@@ -1,28 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+  nix-update-script,
 }:
-
+let
+  tools = [
+    "apfsck"
+    "apfs-label"
+    "apfs-snap"
+    "mkapfs"
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfsprogs";
-  version = "0-unstable-2024-09-27";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "f31d7c2d69d212ce381399d2bb1e91410f592484";
-    hash = "sha256-+c+wU52XKNOTxSpSrkrNWoGEYw6Zo4CGEOyKMvkXEa0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GhhuielfFvcpe9hL3fUcg2xlwFrzjiUS/ZLn0jkfkh8=";
   };
 
-  postPatch = let
-    shortRev = builtins.substring 0 9 finalAttrs.src.rev;
-  in ''
+  postPatch = ''
     substituteInPlace \
       apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile apfs-label/Makefile \
       --replace-fail \
         '$(shell git describe --always HEAD | tail -c 9)' \
-        '${shortRev}'
+        'v${finalAttrs.version}'
   '';
 
   buildPhase = ''
@@ -43,15 +51,32 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    apfs = nixosTests.apfs;
-  };
+  passthru.tests =
+    let
+      mkVersionTest = tool: {
+        "version-${tool}" = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "${tool} -v";
+          version = "v${finalAttrs.version}";
+        };
+      };
+      versionTestList = map mkVersionTest tools;
+
+      versionTests = lib.mergeAttrsList versionTestList;
+    in
+    {
+      apfs = nixosTests.apfs;
+    }
+    // versionTests;
+
+  passthru.updateScript = nix-update-script { };
 
   strictDeps = true;
 
   meta = with lib; {
     description = "Experimental APFS tools for linux";
     homepage = "https://github.com/linux-apfs/apfsprogs";
+    changelog = "https://github.com/linux-apfs/apfsprogs/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];

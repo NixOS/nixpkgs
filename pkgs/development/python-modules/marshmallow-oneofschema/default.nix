@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-oneofschema";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow-oneofschema";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HXuyUxU8bT5arpUzmgv7m+X2fNT0qHY8S8Rz6klOGiA=";
+    tag = version;
+    hash = "sha256-Hk36wxZV1hVqIbqDOkEDlqABRKE6s/NyA/yBEXzj/yM=";
   };
 
   nativeBuildInputs = [ flit-core ];

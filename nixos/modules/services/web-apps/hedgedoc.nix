@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkOption types literalExpression;
@@ -9,20 +14,26 @@ let
   # versionAtLeast statement remains set to 21.03 for backwards compatibility.
   # See https://github.com/NixOS/nixpkgs/pull/108899 and
   # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if lib.versionAtLeast config.system.stateVersion "21.03" then
-    "hedgedoc"
-  else
-    "codimd";
+  name = if lib.versionAtLeast config.system.stateVersion "21.03" then "hedgedoc" else "codimd";
 
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with lib.maintainers; [ SuperSandro2000 h7x4 ];
+  meta.maintainers = with lib.maintainers; [
+    SuperSandro2000
+    h7x4
+  ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "configuration" ] [ "services" "hedgedoc" "settings" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "groups" ] [ "users" "users" "hedgedoc" "extraGroups" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "configuration" ]
+      [ "services" "hedgedoc" "settings" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "groups" ]
+      [ "users" "users" "hedgedoc" "extraGroups" ]
+    )
     (lib.mkRemovedOptionModule [ "services" "hedgedoc" "workDir" ] ''
       This option has been removed in favor of systemd managing the state directory.
 
@@ -35,6 +46,12 @@ in
   options.services.hedgedoc = {
     package = lib.mkPackageOption pkgs "hedgedoc" { };
     enable = lib.mkEnableOption "the HedgeDoc Markdown Editor";
+
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
 
     settings = mkOption {
       type = types.submodule {
@@ -110,7 +127,10 @@ in
             defaultText = literalExpression ''
               with config.services.hedgedoc.settings; [ host ] ++ lib.optionals (domain != null) [ domain ]
             '';
-            example = [ "localhost" "hedgedoc.org" ];
+            example = [
+              "localhost"
+              "hedgedoc.org"
+            ];
             description = ''
               List of domains to whitelist.
             '';
@@ -228,17 +248,46 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.${name} = { };
-    users.users.${name} = {
-      description = "HedgeDoc service user";
-      group = name;
-      isSystemUser = true;
+    users = {
+      groups.${name} = { };
+      users = {
+        nginx = lib.mkIf cfg.configureNginx {
+          extraGroups = [ "hedgedoc" ];
+        };
+        ${name} = {
+          description = "HedgeDoc service user";
+          group = name;
+          isSystemUser = true;
+        };
+      };
     };
 
-    services.hedgedoc.settings = {
-      defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
-      docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
-      viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
+    services = {
+      hedgedoc.settings = {
+        defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
+        docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+        path = lib.mkIf cfg.configureNginx "/run/hedgedoc/hedgedoc.sock";
+        viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
+      };
+
+      nginx = lib.mkIf cfg.configureNginx {
+        enable = true;
+        upstreams.hedgedoc.servers."unix:${cfg.settings.path}" = { };
+        virtualHosts."${cfg.settings.domain}" = {
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://hedgedoc";
+              recommendedProxySettings = lib.mkDefault true;
+            };
+            "/socket.io/" = {
+              proxyPass = "http://hedgedoc";
+              proxyWebsockets = true;
+              recommendedProxySettings = lib.mkDefault true;
+            };
+          };
+        };
+      };
     };
 
     systemd.services.hedgedoc = {
@@ -269,7 +318,8 @@ in
         WorkingDirectory = "/run/${name}";
         ReadWritePaths = [
           "-${cfg.settings.uploadsPath}"
-        ] ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
+        ]
+        ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=/run/${name}/config.json"
@@ -313,6 +363,7 @@ in
           "@system-service"
           "~@privileged @obsolete"
           "@pkey"
+          "fchown" # needed for filesystem image backend
         ];
         UMask = "0007";
       };

@@ -1,33 +1,31 @@
 {
   lib,
-  stdenv,
   linkFarm,
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
   # nativeBuildInputs
-  pkg-config,
-  setuptools-rust,
-  rustPlatform,
   cargo,
+  pkg-config,
+  rustPlatform,
   rustc,
+  setuptools-rust,
 
   # buildInputs
   openssl,
-  libiconv,
-  Security,
 
   # dependencies
   huggingface-hub,
-  numpy,
 
   # tests
   datasets,
+  numpy,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   tiktoken,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -49,6 +47,10 @@ let
     "bert-base-uncased-vocab.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
       hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
+    };
+    "tokenizer-llama3.json" = fetchurl {
+      url = "https://huggingface.co/Narsil/llama-tokenizer/resolve/main/tokenizer.json";
+      hash = "sha256-eePlImNfMXEwCRO7QhRkqH3mIiGCoFcLmyzLoqlksrQ=";
     };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
@@ -74,66 +76,61 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.20.3";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NPH++kPPaSPR3jm6mfh+4aep6stj0I4bA24kFtaJSKU=";
+    tag = "v${version}";
+    hash = "sha256-1ijP16Fw/dRgNXXX9qEymXNaamZmlNFqbfZee82Qz6c=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-S2AfsKBtitEfprp9vjTyCl772IBe/wqwqYVnnAEK3LE=";
+    hash = "sha256-CKbnFtwsEtJ11Wnn8JFpHd7lnUzQMTwJ1DmmB44qciM=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
+    cargo
     pkg-config
-    setuptools-rust
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
     rustc
+    setuptools-rust
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   dependencies = [
     huggingface-hub
-    numpy
   ];
 
   nativeCheckInputs = [
     datasets
+    numpy
+    pytest-asyncio
     pytestCheckHook
     requests
     tiktoken
+    writableTmpDirAsHomeHook
   ];
 
-  postUnpack = ''
+  postUnpack =
     # Add data files for tests, otherwise tests attempt network access
-    mkdir $sourceRoot/tests/data
-    ln -s ${test-data}/* $sourceRoot/tests/data/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    ''
+      mkdir $sourceRoot/tests/data
+      ln -s ${test-data}/* $sourceRoot/tests/data/
+    '';
 
   pythonImportsCheck = [ "tokenizers" ];
 
@@ -142,6 +139,23 @@ buildPythonPackage rec {
     "test_encode_special_tokens"
     "test_splitting"
     "TestTrainFromIterators"
+
+    # Require downloading from huggingface
+    # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_async_methods_existence"
+    "test_basic_encoding"
+    "test_concurrency"
+    "test_decode"
+    "test_decode_skip_special_tokens"
+    "test_decode_stream_fallback"
+    "test_encode"
+    "test_error_handling"
+    "test_large_batch"
+    "test_numpy_inputs"
+    "test_performance_comparison"
+    "test_various_input_formats"
+    "test_with_special_tokens"
+    "test_with_truncation_padding"
 
     # Those tests require more data
     "test_from_pretrained"

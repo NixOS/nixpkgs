@@ -1,17 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.jenkins;
   jenkinsUrl = "http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}";
-in {
+in
+{
   options = {
     services.jenkins = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to enable the jenkins continuous integration server.
-        '';
-      };
+      enable = lib.mkEnableOption "Jenkins, a continuous integration server";
 
       user = lib.mkOption {
         default = "jenkins";
@@ -33,7 +33,10 @@ in {
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "wheel" "dialout" ];
+        example = [
+          "wheel"
+          "dialout"
+        ];
         description = ''
           List of extra groups that the "jenkins" user should be a part of.
         '';
@@ -80,8 +83,16 @@ in {
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
+      javaPackage = lib.mkPackageOption pkgs "jdk21" { };
+
       packages = lib.mkOption {
-        default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];
+        default = [
+          pkgs.stdenv
+          pkgs.git
+          pkgs.jdk21
+          config.programs.ssh.package
+          pkgs.nix
+        ];
         defaultText = lib.literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
         type = lib.types.listOf lib.types.package;
         description = ''
@@ -156,9 +167,11 @@ in {
       # server references the dejavu fonts
       systemPackages = [
         pkgs.dejavu_fonts
-      ] ++ lib.optional cfg.withCLI cfg.package;
+      ]
+      ++ lib.optional cfg.withCLI cfg.package;
 
-      variables = {}
+      variables =
+        { }
         // lib.optionalAttrs cfg.withCLI {
           # Make it more convenient to use the `jenkins-cli`.
           JENKINS_URL = jenkinsUrl;
@@ -188,39 +201,42 @@ in {
 
       environment =
         let
-          selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
-              config.environment.sessionVariables;
+          selectedSessionVars = lib.filterAttrs (
+            n: v: builtins.elem n [ "NIX_PATH" ]
+          ) config.environment.sessionVariables;
         in
-          selectedSessionVars //
-          { JENKINS_HOME = cfg.home;
-            NIX_REMOTE = "daemon";
-          } //
-          cfg.environment;
+        selectedSessionVars
+        // {
+          JENKINS_HOME = cfg.home;
+          NIX_REMOTE = "daemon";
+        }
+        // cfg.environment;
 
       path = cfg.packages;
 
       # Force .war (re)extraction, or else we might run stale Jenkins.
 
       preStart =
-        let replacePlugins =
-              lib.optionalString (cfg.plugins != null) (
-                let pluginCmds = lib.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
-                      cfg.plugins;
-                in ''
-                  rm -r ${cfg.home}/plugins || true
-                  mkdir -p ${cfg.home}/plugins
-                  ${lib.concatStringsSep "\n" pluginCmds}
-                '');
-        in ''
+        let
+          replacePlugins = lib.optionalString (cfg.plugins != null) (
+            let
+              pluginCmds = lib.mapAttrsToList (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi") cfg.plugins;
+            in
+            ''
+              rm -r ${cfg.home}/plugins || true
+              mkdir -p ${cfg.home}/plugins
+              ${lib.concatStringsSep "\n" pluginCmds}
+            ''
+          );
+        in
+        ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}
         '';
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk17}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${cfg.javaPackage}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \
@@ -235,9 +251,42 @@ in {
 
       serviceConfig = {
         User = cfg.user;
+        Group = cfg.group;
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        StateDirectoryMode = "750";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
+        RuntimeDirectoryMode = "750";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        # MemoryDenyWriteExecute = false;   Breaks execution;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };

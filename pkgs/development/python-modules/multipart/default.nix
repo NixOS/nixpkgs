@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "multipart";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "defnull";
     repo = "multipart";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RaHAV1LapYf0zRW7cxxbe7ysAJ5xB6EvF1bsCbCWS0U=";
+    tag = "v${version}";
+    hash = "sha256-6vlyoi4nayZOKyfO4jbKNzUy7G6K7mySYzkqfp+45O4=";
   };
 
   build-system = [ flit-core ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "multipart" ];
 
   meta = {
-    changelog = "https://github.com/defnull/multipart/blob/${src.rev}/README.rst#changelog";
+    changelog = "https://github.com/defnull/multipart/blob/${src.tag}/CHANGELOG.rst";
     description = "Parser for multipart/form-data";
     homepage = "https://github.com/defnull/multipart";
     license = lib.licenses.mit;

@@ -4,16 +4,6 @@ addCMakeParams() {
     addToSearchPath NIXPKGS_CMAKE_PREFIX_PATH $1
 }
 
-fixCmakeFiles() {
-    # Replace occurences of /usr and /opt by /var/empty.
-    echo "fixing cmake files..."
-    find "$1" -type f \( -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
-        while read fn; do
-            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
-            mv "$fn.tmp" "$fn"
-        done
-}
-
 cmakeConfigurePhase() {
     runHook preConfigure
 
@@ -23,10 +13,6 @@ cmakeConfigurePhase() {
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
-    fi
-
-    if [ -z "${dontFixCmake-}" ]; then
-        fixCmakeFiles .
     fi
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
@@ -93,7 +79,6 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_INSTALL_BINDIR=${!outputBin}/bin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_SBINDIR=${!outputBin}/sbin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
-    prependToVar cmakeFlags "-DCMAKE_INSTALL_OLDINCLUDEDIR=${!outputInclude}/include"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_MANDIR=${!outputMan}/share/man"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INFODIR=${!outputInfo}/share/info"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName}"
@@ -130,6 +115,9 @@ cmakeConfigurePhase() {
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
         echo "cmake: enabled parallel building"
+    fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+        export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
     fi
 
     if ! [[ -v enableParallelInstalling ]]; then

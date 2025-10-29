@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcpp";
-  version = "2.7.2.1";
+  version = "2.7.2.2";
 
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "mcpp";
     rev = finalAttrs.version;
-    hash= "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
+    hash = "sha256-wz225bhBF0lFerOAhl8Rwmw8ItHd9BXQceweD9BqvEQ=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Matsui's C preprocessor";
     mainProgram = "mcpp";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

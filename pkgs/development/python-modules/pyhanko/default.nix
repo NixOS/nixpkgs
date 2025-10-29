@@ -39,17 +39,21 @@
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.25.1";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
+    tag = "v${version}";
+    hash = "sha256-HJkCQ5YDVr17gtY4PW89ep7GwFdP21/ruBEKm7j3+Qo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
 
   dependencies = [
     asn1crypto
@@ -86,11 +90,16 @@ buildPythonPackage rec {
     pytestCheckHook
     python-pae
     requests-mock
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'
     "pyhanko_tests/test_csc.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: One or more parameters passed to a function were not valid.
+    "pyhanko_tests/cli_tests"
   ];
 
   disabledTests = [
@@ -117,6 +126,15 @@ buildPythonPackage rec {
     "test_ocsp_embed"
     "test_ts_fetch_aiohttp"
     "test_ts_fetch_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: One or more parameters passed to a function were not valid.
+    "test_detached_cms_with_duplicated_attr"
+    "test_detached_cms_with_wrong_tst"
+    "test_diff_analysis_add_extensions_dict"
+    "test_diff_analysis_update_indirect_extensions_not_all_path"
+    "test_no_certificates"
+    "test_ocsp_without_nextupdate_embed"
   ];
 
   pythonImportsCheck = [ "pyhanko" ];
@@ -128,8 +146,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # Most tests fail with:
-    # OSError: One or more parameters passed to a function were not valid.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

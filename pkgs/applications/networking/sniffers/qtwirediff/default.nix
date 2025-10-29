@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, qtwayland
-, wrapQtAppsHook
-, wireshark-cli
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  qtwayland,
+  wrapQtAppsHook,
+  wireshark-cli,
 }:
-
 
 stdenv.mkDerivation {
   pname = "qtwirediff";
@@ -27,21 +27,25 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r qtwirediff.app $out/Applications
     makeWrapper $out/{Applications/qtwirediff.app/Contents/MacOS,bin}/qtwirediff
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 -T qtwirediff $out/bin/qtwirediff
     wrapProgram $out/bin/qtwirediff \
       --prefix PATH : "${lib.makeBinPath [ wireshark-cli ]}"
-  '' + ''
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -51,5 +55,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aaptel/qtwirediff";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    # error: assignment of member 'trivial' in read-only object
+    broken = true;
   };
 }

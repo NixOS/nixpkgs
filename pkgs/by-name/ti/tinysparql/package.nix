@@ -1,46 +1,53 @@
-{ stdenv
-, lib
-, fetchurl
-, gettext
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, asciidoc
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, vala
-, python3
-, gi-docgen
-, graphviz
-, libxml2
-, glib
-, wrapGAppsNoGuiHook
-, sqlite
-, libstemmer
-, gnome
-, icu
-, libuuid
-, libsoup_3
-, json-glib
-, avahi
-, systemd
-, dbus
-, man-db
-, writeText
-, testers
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch2,
+  gettext,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  asciidoc,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  python3,
+  libxml2,
+  glib,
+  wrapGAppsNoGuiHook,
+  sqlite,
+  libstemmer,
+  gnome,
+  icu,
+  libuuid,
+  libsoup_3,
+  json-glib,
+  avahi,
+  dbus,
+  man-db,
+  writeText,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.8.0";
+  version = "3.9.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-wPzad1IPUxVIsjlRN9zRk+6c3l4iLTydJz8DDRdipQQ=";
+    url =
+      with finalAttrs;
+      "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
+    hash = "sha256-FM4DkCQTXhgQIrzOSxqtLgA3fdnH2BK5g5HM/HVtrY4=";
   };
 
   strictDeps = true;
@@ -57,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     wrapGAppsNoGuiHook
-    gi-docgen
-    graphviz
     (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-  ] ++ lib.optionals withIntrospection [
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -77,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     avahi
     libstemmer
-    dbus
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
   ];
 
   nativeCheckInputs = [
@@ -89,9 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vapi" withIntrospection)
-  ] ++ (
+  ]
+  ++ (
     let
       # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
       crossFile = writeText "cross-file.conf" ''
@@ -102,26 +108,21 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--cross-file=${crossFile}"
     ]
-  ) ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dsystemd_user_services=false"
+  );
+
+  doCheck = true;
+
+  patches = [
+    (fetchpatch2 {
+      name = "make-dbus-dep-optional.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/31b5a793cd40cdce032e0f7d7c3ef7841c6e3691.patch?full_index=1";
+      hash = "sha256-YoWJEa2bFIjZdPW9pJ3iHTxi0dvveYDjKaDokcIvnj8=";
+    })
   ];
 
-  doCheck =
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/402
-    !stdenv.hostPlatform.isDarwin
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/398
-    && !stdenv.hostPlatform.is32bit
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/474
-    && !stdenv.hostPlatform.isMusl;
-
   postPatch = ''
-    chmod +x \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
     patchShebangs \
-      utils/data-generators/cc/generate \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
+      utils/data-generators/cc/generate
 
     # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
     # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
@@ -144,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/src/libtracker-sparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
+      ln -s $PWD/src/libtinysparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
     '';
 
   checkPhase = ''
@@ -181,10 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
     mainProgram = "tinysparql";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    pkgConfigModules = [ "tracker-sparql-3.0" "tinysparql-3.0" ];
+    pkgConfigModules = [
+      "tracker-sparql-3.0"
+      "tinysparql-3.0"
+    ];
     # Not before <gio/gdesktopappinfo.h> is properly conditioned.
     broken = stdenv.hostPlatform.isDarwin;
   };

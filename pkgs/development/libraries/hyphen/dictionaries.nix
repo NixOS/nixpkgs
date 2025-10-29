@@ -1,7 +1,12 @@
-/* hyphen dictionaries */
+# hyphen dictionaries
 
-{ hyphen, stdenv, lib, fetchgit, fetchurl }:
-
+{
+  hyphen,
+  stdenv,
+  lib,
+  fetchgit,
+  fetchurl,
+}:
 
 let
   libreofficeRepository = "https://anongit.freedesktop.org/git/libreoffice/dictionaries.git";
@@ -9,7 +14,13 @@ let
   libreofficeSubdir = "de";
 
   mkDictFromLibreofficeGit =
-    { subdir, shortName, shortDescription, dictFileName, readmeFileName }:
+    {
+      subdir,
+      shortName,
+      shortDescription,
+      dictFileName,
+      readmeFileName,
+    }:
     stdenv.mkDerivation rec {
       version = "24.8";
       pname = "hyphen-dict-${shortName}-libreoffice";
@@ -33,7 +44,7 @@ let
         install -m644 "hyph_${dictFileName}.dic" "$out/share/hyphen"
         # docs
         install -dm755 "$out/share/doc/"
-        install -m644 "README_hyph_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
+        install -m644 "README_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
         runHook postInstall
       '';
     };
@@ -41,16 +52,21 @@ let
 in
 rec {
 
-  /* ENGLISH */
+  # ENGLISH
 
   en_US = en-us;
-  en-us = stdenv.mkDerivation rec {
+  en-us = stdenv.mkDerivation {
     nativeBuildInputs = hyphen.nativeBuildInputs;
     version = hyphen.version;
     pname = "hyphen-dict-en-us";
-    src =  hyphen.src;
+    src = hyphen.src;
     meta = {
-      inherit (hyphen.meta) homepage platforms license maintainers;
+      inherit (hyphen.meta)
+        homepage
+        platforms
+        license
+        maintainers
+        ;
       description = "Hyphen dictionary for English (United States)";
     };
     installPhase = ''
@@ -60,7 +76,7 @@ rec {
     '';
   };
 
-  /* GERMAN */
+  # GERMAN
 
   de_DE = de-de;
   de-de = mkDictFromLibreofficeGit {
@@ -68,7 +84,7 @@ rec {
     shortName = "de-de";
     shortDescription = "German (Germany)";
     dictFileName = "de_DE";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
   };
 
   de_AT = de-at;
@@ -77,7 +93,7 @@ rec {
     shortName = "de-at";
     shortDescription = "German (Austria)";
     dictFileName = "de_AT";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
   };
 
   de_CH = de-ch;
@@ -86,6 +102,17 @@ rec {
     shortName = "de-ch";
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
+  };
+
+  # RUSSIAN
+
+  ru_RU = ru-ru;
+  ru-ru = mkDictFromLibreofficeGit {
+    subdir = "ru_RU";
+    shortName = "ru-ru";
+    shortDescription = "Russian (Russia)";
+    dictFileName = "ru_RU";
+    readmeFileName = "ru_RU";
   };
 }

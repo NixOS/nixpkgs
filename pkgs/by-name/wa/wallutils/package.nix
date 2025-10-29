@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libX11
-, libXcursor
-, libXmu
-, libXpm
-, libheif
-, pkg-config
-, wayland
-, xbitmaps
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libX11,
+  libXcursor,
+  libXmu,
+  libXpm,
+  libheif,
+  pkg-config,
+  wayland,
+  xbitmaps,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wallutils";
-  version = "5.12.9";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
-    rev = version;
-    hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mcleLQIBG8L5cpA4QYZpDsBdZbJlyDx7XXwDtAV4sjU=";
   };
 
   vendorHash = null;
@@ -46,7 +47,10 @@ buildGoModule rec {
     xbitmaps
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)
@@ -64,10 +68,10 @@ buildGoModule rec {
 
   meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

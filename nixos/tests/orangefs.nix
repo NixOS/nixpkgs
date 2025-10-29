@@ -1,45 +1,55 @@
-import ./make-test-python.nix ({ ... } :
+{ ... }:
 
 let
-  server = { pkgs, ... } : {
-    networking.firewall.allowedTCPPorts = [ 3334 ];
-    boot.initrd.postDeviceCommands = ''
-      ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
-    '';
+  server =
+    { pkgs, ... }:
+    {
+      networking.firewall.allowedTCPPorts = [ 3334 ];
 
-    virtualisation.emptyDiskImages = [ 4096 ];
+      virtualisation.emptyDiskImages = [
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "data";
+        }
+      ];
 
-    virtualisation.fileSystems =
-      { "/data" =
-          { device = "/dev/disk/by-label/data";
-            fsType = "ext4";
-          };
+      virtualisation.fileSystems = {
+        "/data" = {
+          device = "/dev/disk/by-id/virtio-data";
+          fsType = "ext4";
+          autoFormat = true;
+        };
       };
 
-    services.orangefs.server = {
-      enable = true;
-      dataStorageSpace = "/data/storage";
-      metadataStorageSpace = "/data/meta";
-      servers = {
-        server1 = "tcp://server1:3334";
-        server2 = "tcp://server2:3334";
+      services.orangefs.server = {
+        enable = true;
+        dataStorageSpace = "/data/storage";
+        metadataStorageSpace = "/data/meta";
+        servers = {
+          server1 = "tcp://server1:3334";
+          server2 = "tcp://server2:3334";
+        };
       };
     };
-  };
 
-  client = { lib, ... } : {
-    networking.firewall.enable = true;
+  client =
+    { lib, ... }:
+    {
+      networking.firewall.enable = true;
 
-    services.orangefs.client = {
-      enable = true;
-      fileSystems = [{
-        target = "tcp://server1:3334/orangefs";
-        mountPoint = "/orangefs";
-      }];
+      services.orangefs.client = {
+        enable = true;
+        fileSystems = [
+          {
+            target = "tcp://server1:3334/orangefs";
+            mountPoint = "/orangefs";
+          }
+        ];
+      };
     };
-  };
 
-in {
+in
+{
   name = "orangefs";
 
   nodes = {
@@ -79,4 +89,4 @@ in {
         client1.succeed("echo test > /orangefs/file1")
         client2.succeed("grep test /orangefs/file1")
   '';
-})
+}

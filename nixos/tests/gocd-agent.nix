@@ -9,10 +9,14 @@ let
   header = "Accept: application/vnd.go.cd.v2+json";
 in
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "gocd-agent";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ grahamc swarren83 ];
+    maintainers = [
+      grahamc
+      swarren83
+    ];
 
     # gocd agent needs to register with the autoregister key created on first server startup,
     # but NixOS module doesn't seem to allow to pass during runtime currently
@@ -45,4 +49,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep Idle"
     )
   '';
-})
+}

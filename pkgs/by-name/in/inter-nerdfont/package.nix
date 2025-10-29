@@ -8,12 +8,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "inter-nerdfont";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchzip {
     url = "https://github.com/rsms/inter/releases/download/v${finalAttrs.version}/Inter-${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-hFK7xFJt69n+98+juWgMvt+zeB9nDkc8nsR8vohrFIc=";
+    hash = "sha256-5vdKKvHAeZi6igrfpbOdhZlDX2/5+UvzlnCQV6DdqoQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "NerdFont patch of the Inter font";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.midirhee12 ];
+    maintainers = [ lib.maintainers.midischwarz12 ];
   };
 })

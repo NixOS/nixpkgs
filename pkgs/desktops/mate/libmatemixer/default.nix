@@ -1,17 +1,18 @@
-{ config
-, lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, udev
-, pulseaudioSupport ? config.pulseaudio or true
-, libpulseaudio
-, ossSupport ? false
-, mateUpdateScript
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  udev,
+  pulseaudioSupport ? config.pulseaudio or true,
+  libpulseaudio,
+  ossSupport ? false,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +31,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-  ] ++ lib.optionals alsaSupport [
-   alsa-lib
-   udev
-  ] ++ lib.optionals pulseaudioSupport [
+  ]
+  ++ lib.optionals alsaSupport [
+    alsa-lib
+    udev
+  ]
+  ++ lib.optionals pulseaudioSupport [
     libpulseaudio
   ];
 
@@ -48,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmatemixer";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

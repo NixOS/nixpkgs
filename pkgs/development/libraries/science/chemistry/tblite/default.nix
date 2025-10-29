@@ -1,47 +1,65 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gfortran
-, meson
-, ninja
-, pkg-config
-, blas
-, lapack
-, mctc-lib
-, mstore
-, toml-f
-, multicharge
-, dftd4
-, simple-dftd3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  buildType ? "meson",
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  blas,
+  lapack,
+  mctc-lib,
+  mstore,
+  toml-f,
+  multicharge,
+  dftd4,
+  simple-dftd3,
+  python3,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "tblite";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "tblite";
-    repo = pname;
+    repo = "tblite";
     rev = "v${version}";
-    hash = "sha256-R7CAFG/x55k5Ieslxeq+DWq1wPip4cI+Yvn1cBbeVNs=";
+    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
   };
 
   patches = [
-    # toml-f 0.4 compatibility
-    (fetchpatch {
-      url = "https://github.com/tblite/tblite/commit/da759fd02b8fbf470a5c6d3df9657cca6b1d0a9a.diff";
-      hash = "sha256-VaeA2VyK+Eas432HMSpJ0lXxHBBNGpfkUO1eHeWpYl0=";
-    })
+    ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
+
+    # Fix wrong paths in pkg-config file
+    ./pkgconfig.patch
   ];
+
+  # Python scripts in test subdirectories to run the tests
+  postPatch = ''
+    patchShebangs ./
+  '';
 
   nativeBuildInputs = [
     gfortran
+    pkg-config
+  ]
+  ++ lib.optionals (buildType == "meson") [
     meson
     ninja
-    pkg-config
+  ]
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
   ];
 
   buildInputs = [
@@ -55,9 +73,21 @@ stdenv.mkDerivation rec {
     simple-dftd3
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  doCheck = true;
+  checkInputs = [
+    python3
+  ];
+
+  checkFlags = [
+    "-j1" # Tests hang when multiple are run in parallel
+  ];
+
+  doCheck = buildType == "meson";
+
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';
@@ -65,7 +95,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     homepage = "https://github.com/tblite/tblite";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];

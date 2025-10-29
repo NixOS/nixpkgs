@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, lib, fetchurl, cmake, pkg-config, makeWrapper
-, httrack, qtbase, qtmultimedia }:
+{
+  stdenv,
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  httrack,
+  qtbase,
+  qtmultimedia,
+}:
 
 mkDerivation rec {
   pname = "httraqt";
@@ -10,11 +20,25 @@ mkDerivation rec {
     sha256 = "0pjxqnqchpbla4xiq4rklc06484n46cpahnjy03n9rghwwcad25b";
   };
 
-  buildInputs = [ httrack qtbase qtmultimedia ];
+  buildInputs = [
+    httrack
+    qtbase
+    qtmultimedia
+  ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+  ];
 
   prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)" \
+        "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)" \
+      --replace-fail "CMAKE_POLICY(SET CMP0003 OLD)" "" \
+      --replace-fail "CMAKE_POLICY(SET CMP0015 OLD)" ""
+
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
       --replace /usr/include/httrack/ ${httrack}/include/httrack/
 
@@ -32,9 +56,9 @@ mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
     mainProgram = "httraqt";
-    homepage    = "http://www.httrack.com";
-    license     = licenses.gpl3;
+    homepage = "http://www.httrack.com";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = with platforms; unix;
+    platforms = with platforms; unix;
   };
 }

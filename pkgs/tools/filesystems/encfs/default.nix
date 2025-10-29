@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, perl
-, gettext, fuse, openssl, tinyxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  perl,
+  gettext,
+  fuse,
+  openssl,
+  tinyxml-2,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,19 +33,39 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ gettext fuse openssl tinyxml2 ];
-  nativeBuildInputs = [ cmake pkg-config perl ];
+  buildInputs = [
+    fuse
+    openssl
+    tinyxml-2
+    gtest
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    perl
+    gettext
+  ];
+  strictDeps = true;
 
-  cmakeFlags =
-    [ "-DUSE_INTERNAL_TINYXML=OFF"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DINSTALL_LIBENCFS=ON"
-    ];
+  cmakeFlags = [
+    "-DUSE_INTERNAL_TINYXML=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DINSTALL_LIBENCFS=ON"
+
+    # Fix the build with CMake 4.
+    #
+    # Upstream is deprecated, so it won’t be fixed there. We should
+    # probably phase this package out.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ];
 
   meta = with lib; {
     description = "Encrypted filesystem in user-space via FUSE";
     homepage = "https://vgough.github.io/encfs";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     platforms = platforms.unix;
   };
 }

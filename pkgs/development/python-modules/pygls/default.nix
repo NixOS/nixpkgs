@@ -10,6 +10,7 @@
   pythonOlder,
   typeguard,
   websockets,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
@@ -58,6 +59,14 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "pygls" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # Skips pre-releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";

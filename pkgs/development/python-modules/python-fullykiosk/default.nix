@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cgarwood";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "python-fullykiosk";
+    tag = version;
     hash = "sha256-+JBgBi05zNgIt2cXlHjFPI6nBFR7SpMCWIQHKtnZeX4=";
   };
 

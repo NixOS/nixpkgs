@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.dovecot;
@@ -70,7 +76,10 @@ in
     scopes = mkOption {
       type = types.listOf types.str;
       default = [ "user" ];
-      example = [ "user" "global" ];
+      example = [
+        "user"
+        "global"
+      ];
       description = ''
         Stats scopes to query.
       '';
@@ -80,7 +89,7 @@ in
     serviceConfig = {
       DynamicUser = false;
       ExecStart = ''
-        ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
+        ${lib.getExe pkgs.dovecot_exporter} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --dovecot.socket-path ${escapeShellArg cfg.socketPath} \

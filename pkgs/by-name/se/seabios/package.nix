@@ -9,7 +9,7 @@
   ___build-type ? "csm",
 }:
 
-assert lib.elem (___build-type) [
+assert lib.elem ___build-type [
   "coreboot"
   # SeaBIOS with CSM (Compatible Support Module) support; learn more at
   # https://www.electronicshub.org/what-is-csm-bios/
@@ -34,13 +34,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seabios";
-  version = "1.16.3";
+  version = "1.17.0";
 
   src = fetchgit {
     url = "https://git.seabios.org/seabios.git";
     rev = "rel-${finalAttrs.version}";
-    hash = "sha256-hWemj83cxdY8p+Jhkh5GcPvI0Sy5aKYZJCsKDjHTUUk=";
+    hash = "sha256-eDQpl8Mf30p9WRvsNW192ISfBnEtMCdsWjUbWMXWmWw=";
   };
+
+  postPatch = ''
+    echo ${finalAttrs.version} > .version
+  '';
 
   outputs = [
     "out"
@@ -61,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "fortify"
     "pic"
+    "pie" # ld: warning: creating DT_TEXTREL in a PIE (and more)
     "stackprotector"
   ];
 
@@ -103,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       use of coreboot.
     '';
     license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ sigmasquadron ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };

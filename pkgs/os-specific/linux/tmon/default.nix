@@ -1,4 +1,9 @@
-{ lib, stdenv, kernel, ncurses }:
+{
+  lib,
+  stdenv,
+  kernel,
+  ncurses,
+}:
 
 stdenv.mkDerivation {
   pname = "tmon";
@@ -12,7 +17,12 @@ stdenv.mkDerivation {
     cd tools/thermal/tmon
   '';
 
-  makeFlags = kernel.makeFlags ++ [ "INSTALL_ROOT=\"$(out)\"" "BINDIR=bin" ];
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "INSTALL_ROOT=\"$(out)\""
+    "BINDIR=bin"
+  ];
   NIX_CFLAGS_LINK = "-lgcc_s";
 
   enableParallelBuilding = true;

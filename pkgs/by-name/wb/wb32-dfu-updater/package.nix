@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-DKsDVO00JFhR9hIZksFVJLRwC6PF9LCRpf++QywFO2w=";
   };
+
+  patches = [
+    ./fix-cmake4-build.patch # Temporary fix for https://github.com/WestberryTech/wb32-dfu-updater/pull/19
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libusb1 ];

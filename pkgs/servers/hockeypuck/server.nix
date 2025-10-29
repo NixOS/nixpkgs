@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };
@@ -16,6 +21,6 @@ buildGoModule {
     description = "OpenPGP Key Server";
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ ];
   };
 }

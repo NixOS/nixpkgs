@@ -14,7 +14,7 @@
 }:
 let
   pname = "brotli-asgi";
-  version = "1.4.0";
+  version = "1.5.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,9 +24,9 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "fullonic";
-    repo = pname;
+    repo = "brotli-asgi";
     rev = "v${version}";
-    hash = "sha256-hQ6CSXnAoUSaKUSmE+2GHZemkFqd8Dc5+OvcUD7/r5Y=";
+    hash = "sha256-jOow5xrRvuBdg/dVEzAUgs1SxNLZqEItyW9OcvniTSY=";
   };
 
   propagatedBuildInputs = [

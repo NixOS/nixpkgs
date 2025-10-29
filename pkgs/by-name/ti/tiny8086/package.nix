@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, localBios ? true
-, nasm
-, sdlSupport ? true
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  localBios ? true,
+  nasm,
+  sdlSupport ? true,
+  SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "8086tiny";
   version = "1.25";
 
   src = fetchFromGitHub {
     owner = "adriancable";
-    repo = pname;
+    repo = "8086tiny";
     rev = "c79ca2a34d96931d55ef724c815b289d0767ae3a";
     sha256 = "00aydg8f28sgy8l3rd2a7jvp56lx3b63hhak43p7g7vjdikv495w";
   };
 
-  buildInputs = lib.optional localBios nasm
-    ++ lib.optional sdlSupport SDL;
+  buildInputs = lib.optional localBios nasm ++ lib.optional sdlSupport SDL;
 
   makeFlags = [ "8086tiny" ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       "unobfuscated" version :)
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "8086tiny";
   };

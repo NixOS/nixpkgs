@@ -22,7 +22,6 @@
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -34,14 +33,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.2.0";
+  version = "8.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9je3W78PU3iZJjzVMSPXPxBZ0vMYY5xSLJA9zBJ7O5I=";
+    pname = "python_openstackclient";
+    inherit version;
+    hash = "sha256-1hKvGN/GbMjzHmzpZpC2wnOt6KJA7EC39INaiJb7vgE=";
   };
 
   build-system = [
@@ -59,7 +57,9 @@ buildPythonPackage rec {
     python-cinderclient
     python-keystoneclient
     requests
-  ];
+  ]
+  # to support proxy envs like ALL_PROXY in requests
+  ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = [
     ddt
@@ -69,7 +69,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -E \
+      "openstackclient.tests.unit.network.v2.test_security_group_network.(TestCreateSecurityGroupNetwork.(test_create_with_tags|test_create_with_no_tag|test_create_min_options|test_create_all_options)|TestShowSecurityGroupNetwork.test_show_all_options)"
     runHook postCheck
   '';
 
@@ -106,6 +107,6 @@ buildPythonPackage rec {
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

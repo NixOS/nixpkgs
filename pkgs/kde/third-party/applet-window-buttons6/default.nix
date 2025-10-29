@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kdecoration,
@@ -12,16 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "applet-window-buttons6";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "moodyhunter";
     repo = "applet-window-buttons6";
     rev = "v${version}";
-    hash = "sha256-S7JcDPo4QDqi/RtvreFNoPKwTg14bgaFGsuGSDxs5nM=";
+    hash = "sha256-HnlgBQKT99vVkl6DWqMkN8Vz+QzzZBGj5tqOJ22VkJ8=";
   };
 
   dontWrapQtApps = true;
+
+  # kdecoration headers include C++20 spaceship operator
+  env.NIX_CFLAGS_COMPILE = "-std=c++20";
 
   nativeBuildInputs = [
     cmake
@@ -29,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    kcmutils
     kcoreaddons
     kdeclarative
     kdecoration

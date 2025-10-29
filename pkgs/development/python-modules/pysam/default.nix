@@ -13,11 +13,12 @@
   setuptools,
   samtools,
   zlib,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pysam";
-  version = "0.22.1";
+  version = "0.23.3";
   pyproject = true;
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
@@ -26,14 +27,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1sivEf8xN4SJPtJiAcBZG1bbgy66yWXzQis1mPeU+sA=";
+    tag = "v${version}";
+    hash = "sha256-yOLnfuGQW+j0nHy4MRlwurZMpeRHTGmQ9eLmihcAGoQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    samtools
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    samtools
   ];
 
   buildInputs = [
@@ -73,14 +77,18 @@ buildPythonPackage rec {
     "pysam.libchtslib"
     "pysam.libcutils"
     "pysam.libcvcf"
+    "pysam.libcsamtools"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
-    homepage = "https://pysam.readthedocs.io/";
-    maintainers = with maintainers; [ unode ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    changelog = "https://github.com/pysam-developers/pysam/releases/tag/${src.tag}";
+    homepage = "https://pysam.readthedocs.io";
+    maintainers = with lib.maintainers; [ unode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

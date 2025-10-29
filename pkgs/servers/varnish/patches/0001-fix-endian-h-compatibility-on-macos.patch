@@ -1,0 +1,43 @@
+From 7a1c7020db85699e0693d637f6e31d49bf9ca3d0 Mon Sep 17 00:00:00 2001
+From: Rui Chen <rui@chenrui.dev>
+Date: Sun, 25 May 2025 23:54:29 -0400
+Subject: [PATCH] libvarnish: Fix endian.h compatibility for macOS builds
+
+Signed-off-by: Rui Chen <rui@chenrui.dev>
+---
+ lib/libvarnish/vsha256.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/lib/libvarnish/vsha256.c b/lib/libvarnish/vsha256.c
+index 29f97fe40..541b6e612 100644
+--- a/lib/libvarnish/vsha256.c
++++ b/lib/libvarnish/vsha256.c
+@@ -31,7 +31,14 @@
+ 
+ #include "config.h"
+ 
+-#ifndef __DARWIN_BYTE_ORDER
++#ifdef __APPLE__
++#  include <machine/endian.h>
++#  include <libkern/OSByteOrder.h>
++#  define htobe32(x) OSSwapHostToBigInt32(x)
++#  define htobe64(x) OSSwapHostToBigInt64(x)
++#  define VBYTE_ORDER __DARWIN_BYTE_ORDER
++#  define VBIG_ENDIAN __DARWIN_BIG_ENDIAN
++#else
+ #  include <endian.h>
+ #  ifdef _BYTE_ORDER
+ #    define VBYTE_ORDER	_BYTE_ORDER
+@@ -43,9 +50,6 @@
+ #  else
+ #    define VBIG_ENDIAN	__BIG_ENDIAN
+ #  endif
+-#else
+-#  define VBYTE_ORDER	__DARWIN_BYTE_ORDER
+-#  define VBIG_ENDIAN	__DARWIN_BIG_ENDIAN
+ #endif
+ 
+ #ifndef VBYTE_ORDER
+-- 
+2.49.0
+

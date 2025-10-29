@@ -1,17 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, nghttp2
-, openssl
-, boost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nghttp2,
+  openssl,
+  boost186,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libnghttp2_asio";
-  version = "unstable-2022-08-11";
+  version = "0-unstable-2022-08-11";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "nghttp2";
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     nghttp2
     openssl
   ];

@@ -1,16 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, bash
-, bashInteractive
-, util-linux
-, setuptools
-, distro
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  bash,
+  bashInteractive,
+  util-linux,
+  setuptools,
+  distro,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
@@ -20,7 +23,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bash ];
-  propagatedBuildInputs = [ setuptools distro ];
+  propagatedBuildInputs = [
+    setuptools
+    distro
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
@@ -49,7 +59,6 @@ buildPythonPackage rec {
     patchShebangs $out/bin/*
   '';
 
-  doCheck = false;
   pythonImportsCheck = [ "google_compute_engine" ];
 
   meta = with lib; {

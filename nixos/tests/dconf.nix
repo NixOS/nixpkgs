@@ -1,14 +1,22 @@
-import ./make-test-python.nix
-  ({ lib, ... }:
-  {
-    name = "dconf";
+{ lib, ... }:
+{
+  name = "dconf";
 
-    meta.maintainers = with lib.maintainers; [
-      linsui
-    ];
+  meta.maintainers = with lib.maintainers; [
+    linsui
+  ];
 
-    nodes.machine = { config, pkgs, lib, ... }: {
-      users.extraUsers.alice = { isNormalUser = true; };
+  nodes.machine =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      users.extraUsers.alice = {
+        isNormalUser = true;
+      };
       programs.dconf = with lib.gvariant; {
         enable = true;
         profiles.user.databases = [
@@ -25,10 +33,10 @@ import ./make-test-python.nix
       };
     };
 
-    testScript = ''
-      machine.succeed("test $(dconf read -d /test/not/locked) == 1")
-      machine.succeed("test $(dconf read -d /test/is/locked) == \"'locked'\"")
-      machine.fail("sudo -u alice dbus-run-session -- dconf write /test/is/locked \"@s 'unlocked'\"")
-      machine.succeed("sudo -u alice dbus-run-session -- dconf write /test/not/locked \"@i 2\"")
-    '';
-  })
+  testScript = ''
+    machine.succeed("test $(dconf read -d /test/not/locked) == 1")
+    machine.succeed("test $(dconf read -d /test/is/locked) == \"'locked'\"")
+    machine.fail("sudo -u alice dbus-run-session -- dconf write /test/is/locked \"@s 'unlocked'\"")
+    machine.succeed("sudo -u alice dbus-run-session -- dconf write /test/not/locked \"@i 2\"")
+  '';
+}

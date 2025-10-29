@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -16,7 +22,7 @@ in
 
       stateDir = mkOption {
         default = defaultstateDir;
-        type = types.str;
+        type = types.path;
         description = ''
           The directory where Galene stores its internal state. If left as the default
           value this directory will automatically be created before the Galene server
@@ -47,7 +53,7 @@ in
       };
 
       certFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/path/to/your/cert.pem";
         description = ''
@@ -57,7 +63,7 @@ in
       };
 
       keyFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/path/to/your/key.pem";
         description = ''
@@ -78,8 +84,15 @@ in
         description = "HTTP listen port.";
       };
 
-      staticDir = mkOption {
+      turnAddress = mkOption {
         type = types.str;
+        default = "auto";
+        example = "127.0.0.1:1194";
+        description = "Built-in TURN server listen address and port. Set to \"\" to disable.";
+      };
+
+      staticDir = mkOption {
+        type = types.path;
         default = "${cfg.package.static}/static";
         defaultText = literalExpression ''"''${package.static}/static"'';
         example = "/var/lib/galene/static";
@@ -87,7 +100,7 @@ in
       };
 
       recordingsDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultrecordingsDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
         example = "/var/lib/galene/recordings";
@@ -95,7 +108,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultdataDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/data"'';
         example = "/var/lib/galene/data";
@@ -103,7 +116,7 @@ in
       };
 
       groupsDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultgroupsDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/groups"'';
         example = "/var/lib/galene/groups";
@@ -115,25 +128,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
-        message = ''
-          Galene needs both certFile and keyFile defined for encryption, or
-          the insecure flag.
-        '';
-      }
-    ];
-
     systemd.services.galene = {
       description = "galene";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${optionalString (cfg.insecure != true) ''
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ${optionalString (cfg.insecure != true && cfg.certFile != null && cfg.keyFile != null) ''
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
         ''}
       '';
 
@@ -143,20 +146,24 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
-          ${optionalString (cfg.insecure) "-insecure"} \
-          -data ${cfg.dataDir} \
-          -groups ${cfg.groupsDir} \
-          -recordings ${cfg.recordingsDir} \
-          -static ${cfg.staticDir}'';
+          ExecStart = ''
+            ${cfg.package}/bin/galene \
+            ${optionalString (cfg.insecure) "-insecure"} \
+            -http ${cfg.httpAddress}:${toString cfg.httpPort} \
+            -turn ${cfg.turnAddress} \
+            -data ${cfg.dataDir} \
+            -groups ${cfg.groupsDir} \
+            -recordings ${cfg.recordingsDir} \
+            -static ${cfg.staticDir}'';
           Restart = "always";
           # Upstream Requirements
           LimitNOFILE = 65536;
-          StateDirectory = [ ] ++
-            optional (cfg.stateDir == defaultstateDir) "galene" ++
-            optional (cfg.dataDir == defaultdataDir) "galene/data" ++
-            optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
-            optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
+          StateDirectory =
+            [ ]
+            ++ optional (cfg.stateDir == defaultstateDir) "galene"
+            ++ optional (cfg.dataDir == defaultdataDir) "galene/data"
+            ++ optional (cfg.groupsDir == defaultgroupsDir) "galene/groups"
+            ++ optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -179,25 +186,31 @@ in
           ProtectSystem = "strict";
           ReadWritePaths = cfg.recordingsDir;
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];
     };
 
-    users.users = mkIf (cfg.user == "galene")
-      {
-        galene = {
-          description = "galene Service";
-          group = cfg.group;
-          isSystemUser = true;
-        };
+    users.users = mkIf (cfg.user == "galene") {
+      galene = {
+        description = "galene Service";
+        group = cfg.group;
+        isSystemUser = true;
       };
+    };
 
     users.groups = mkIf (cfg.group == "galene") {
       galene = { };

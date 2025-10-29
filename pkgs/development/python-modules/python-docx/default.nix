@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openxml";
     repo = "python-docx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-isxMtq5j5J02GcHMzOJdJw+ZokLoxA6fG1xsN21Irbc=";
   };
 
@@ -51,9 +51,8 @@ buildPythonPackage rec {
     "it_accepts_unicode_providing_there_is_no_encoding_declaration"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {

@@ -1,31 +1,35 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "samba-wsdd";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes = {
-    client_wsdd = { pkgs, ... }: {
-      services.samba-wsdd = {
-        enable = true;
-        openFirewall = true;
-        interface = "eth1";
-        workgroup = "WORKGROUP";
-        hostname = "CLIENT-WSDD";
-        discovery = true;
-        extraOptions = [ "--no-host" ];
+    client_wsdd =
+      { pkgs, ... }:
+      {
+        services.samba-wsdd = {
+          enable = true;
+          openFirewall = true;
+          interface = "eth1";
+          workgroup = "WORKGROUP";
+          hostname = "CLIENT-WSDD";
+          discovery = true;
+          extraOptions = [ "--no-host" ];
+        };
       };
-    };
 
-    server_wsdd = { ... }: {
-      services.samba-wsdd = {
-        enable = true;
-        openFirewall = true;
-        interface = "eth1";
-        workgroup = "WORKGROUP";
-        hostname = "SERVER-WSDD";
+    server_wsdd =
+      { ... }:
+      {
+        services.samba-wsdd = {
+          enable = true;
+          openFirewall = true;
+          interface = "eth1";
+          workgroup = "WORKGROUP";
+          hostname = "SERVER-WSDD";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -39,4 +43,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
         "echo list | ${pkgs.libressl.nc}/bin/nc -N -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
     )
   '';
-})
+}

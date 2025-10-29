@@ -1,29 +1,29 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libudev-zero
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libusb1,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uni-sync";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "EightB1ts";
-    repo = pname;
-    rev = "ca349942c06fabcc028ce24e79fc6ce7c758452b";
-    hash = "sha256-K2zX3rKtTaKO6q76xlxX+rDLL0gEsJ2l8x/s1vsp+ZQ=";
+    repo = "uni-sync";
+    rev = finalAttrs.version;
+    hash = "sha256-Qf4tDj55dBHcnCiSEoWt+uwq/gTm0DSTzlOvdw3QThU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libudev-zero ];
+  buildInputs = [ libusb1 ];
 
   patches = [
-    ./config_path.patch
     ./ignore_read-only_filesystem.patch
   ];
 
-  cargoHash = "sha256-DdmjP0h15cXkHJZxvOcINgoZ/EhTgu/7iYb+bgsIXxU=";
+  cargoHash = "sha256-ot2pbCddvw3njsz36WbFFJ9AAtmojUnRxlUbym1RcgU=";
 
   meta = with lib; {
     description = "Synchronization tool for Lian Li Uni Controllers";
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ yunfachi ];
     mainProgram = "uni-sync";
   };
-}
+})

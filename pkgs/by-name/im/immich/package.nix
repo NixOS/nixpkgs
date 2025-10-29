@@ -1,8 +1,8 @@
 {
   lib,
-  stdenvNoCC,
-  buildNpmPackage,
+  stdenv,
   fetchFromGitHub,
+  pnpm_10,
   python3,
   nodejs,
   node-gyp,
@@ -10,28 +10,53 @@
   nixosTests,
   immich-machine-learning,
   # build-time deps
-  glib,
   pkg-config,
   makeWrapper,
   curl,
   cacert,
   unzip,
   # runtime deps
+  cairo,
+  exiftool,
+  giflib,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
+  libjpeg,
+  libpng,
   libraw,
   libheif,
-  vips,
+  librsvg,
+  pango,
   perl,
+  pixman,
+  vips,
+  buildPackages,
 }:
 let
-  buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
-  sources = lib.importJSON ./sources.json;
-  inherit (sources) version;
+  pnpm = pnpm_10;
+  version = "2.1.0";
+
+  esbuild' = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.5";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
 
   buildLock = {
     sources =
-      builtins.map
+      map
         (p: {
           name = p.pname;
           inherit (p) version;
@@ -48,9 +73,15 @@ let
 
   # The geodata website is not versioned, so we use the internet archive
   geodata =
+    let
+      timestamp = "20250818205425";
+      date =
+        "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
+        + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
+    in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-imqSfzXaEMNo9T9tZr80sr/89n19kiFc8qwidFzRUaY=";
+        outputHash = "sha256-zZHAomW1C4qReFbhme5dkVnTiLw+jmhZhzuYvoBVBCY=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -62,96 +93,85 @@ let
       }
       ''
         mkdir $out
-        url="https://web.archive.org/web/20240724153050/http://download.geonames.org/export/dump"
+        url="https://web.archive.org/web/${timestamp}/http://download.geonames.org/export/dump"
         curl -Lo ./cities500.zip "$url/cities500.zip"
         curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
         curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
-          https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
+          https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
         unzip ./cities500.zip -d $out/
-        echo "2024-07-24T15:30:50Z" > $out/geodata-date.txt
+        echo "${date}" > $out/geodata-date.txt
       '';
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    rev = "v${version}";
-    inherit (sources) hash;
+    tag = "v${version}";
+    hash = "sha256-xbOzTJKutuR5/oRBUyXjZ4FWAmDnWO+nS7dQcNNRHlE=";
   };
 
-  openapi = buildNpmPackage' {
-    pname = "immich-openapi-sdk";
-    inherit version;
-    src = "${src}/open-api/typescript-sdk";
-    inherit (sources.components."open-api/typescript-sdk") npmDepsHash;
-
-    installPhase = ''
-      runHook preInstall
-
-      npm config delete cache
-      npm prune --omit=dev --omit=optional
-
-      mkdir -p $out
-      mv package.json package-lock.json node_modules build $out/
-
-      runHook postInstall
-    '';
-  };
-
-  web = buildNpmPackage' {
-    pname = "immich-web";
+  pnpmDeps = pnpm.fetchDeps {
+    pname = "immich";
     inherit version src;
-    sourceRoot = "${src.name}/web";
-    inherit (sources.components.web) npmDepsHash;
+    fetcherVersion = 2;
+    hash = "sha256-JqI7te2M88CVfvqEOIggGn64Ue0rkrMlC6HvSRW1CU0=";
+  };
 
-    preBuild = ''
-      rm node_modules/@immich/sdk
-      ln -s ${openapi} node_modules/@immich/sdk
-      # Rollup does not find the dependency otherwise
-      ln -s node_modules/@immich/sdk/node_modules/@oazapfts node_modules/
+  web = stdenv.mkDerivation {
+    pname = "immich-web";
+    inherit version src pnpmDeps;
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm
+      pnpm.configHook
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter @immich/sdk build
+      pnpm --filter immich-web build
+
+      runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
 
+      cd web
       cp -r build $out
 
       runHook postInstall
     '';
   };
 
-  node-addon-api = stdenvNoCC.mkDerivation rec {
-    pname = "node-addon-api";
-    version = "8.0.0";
-    src = fetchFromGitHub {
-      owner = "nodejs";
-      repo = "node-addon-api";
-      rev = "v${version}";
-      hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
-    };
-    installPhase = ''
-      mkdir $out
-      cp -r *.c *.h *.gyp *.gypi index.js package-support.json package.json tools $out/
-    '';
-  };
-
+  # Without this thumbnail generation for raw photos fails with
+  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
   vips' = vips.overrideAttrs (prev: {
     mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
   });
 in
-buildNpmPackage' {
+stdenv.mkDerivation {
   pname = "immich";
-  inherit version;
-  src = "${src}/server";
-  inherit (sources.components.server) npmDepsHash;
+  inherit version src pnpmDeps;
+
+  postPatch = ''
+    # pg_dumpall fails without database root access
+    # see https://github.com/immich-app/immich/issues/13971
+    substituteInPlace server/src/services/backup.service.ts \
+      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+  '';
 
   nativeBuildInputs = [
+    nodejs
     pkg-config
+    pnpm_10
+    pnpm_10.configHook
     python3
     makeWrapper
-    glib
-    node-gyp
+    node-gyp # for building node_modules/sharp from source
   ];
 
   buildInputs = [
@@ -159,79 +179,106 @@ buildNpmPackage' {
     imagemagick
     libraw
     libheif
-    vips' # Required for sharp
+    # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+    cairo
+    giflib
+    libjpeg
+    libpng
+    librsvg
+    pango
+    pixman
+    # Required for sharp
+    vips'
   ];
 
-  # Required because vips tries to write to the cache dir
-  makeCacheWritable = true;
+  env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  # fix for node-gyp, see https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919
+  env.npm_config_nodedir = nodejs;
 
-  preBuild = ''
-    cd node_modules/sharp
+  buildPhase = ''
+    runHook preBuild
 
-    mkdir node_modules
-    ln -s ${node-addon-api} node_modules/node-addon-api
+    # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
+    rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
-    ${lib.getExe nodejs} install/check
+    pnpm --filter immich build
 
-    rm -r node_modules
-
-    cd ../..
-    rm -r node_modules/@img/sharp*
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    npm config delete cache
-    npm prune --omit=dev
+    local -r packageOut="$out/lib/node_modules/immich"
 
-    mkdir -p $out/build
-    mv package.json package-lock.json node_modules dist resources $out/
-    ln -s ${web} $out/build/www
-    ln -s ${geodata} $out/build/geodata
+    # install node_modules and built files in $out
+    # upstream uses pnpm deploy to build their docker images
+    pnpm --filter immich deploy --prod --no-optional "$packageOut"
 
-    echo '${builtins.toJSON buildLock}' > $out/build/build-lock.json
+    # remove build artifacts that bloat the closure
+    find "$packageOut/node_modules" \( \
+      -name config.gypi \
+      -o -name .deps \
+      -o -name '*Makefile' \
+      -o -name '*.target.mk' \
+    \) -exec rm -r {} +
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/admin-cli --add-flags $out/dist/main --add-flags cli
-    makeWrapper ${lib.getExe nodejs} $out/bin/server --add-flags $out/dist/main --chdir $out \
-      --set IMMICH_BUILD_DATA $out/build --set NODE_ENV production \
-      --suffix PATH : "${
+    mkdir -p "$packageOut/build"
+    ln -s '${web}' "$packageOut/build/www"
+    ln -s '${geodata}' "$packageOut/build/geodata"
+
+    echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
+
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
+      --add-flags "$packageOut/dist/main" \
+      --add-flags immich-admin
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/server" \
+      --add-flags "$packageOut/dist/main" \
+      --chdir "$packageOut" \
+      --set IMMICH_BUILD_DATA "$packageOut/build" \
+      --set NODE_ENV production \
+      --suffix PATH : '${
         lib.makeBinPath [
-          perl
+          exiftool
           jellyfin-ffmpeg
+          perl # exiftool-vendored checks for Perl even if exiftool comes from $PATH
         ]
-      }"
+      }'
 
     runHook postInstall
   '';
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich;
+      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning;
 
     inherit
       src
-      sources
       web
       geodata
+      pnpm
       ;
-    updateScript = ./update.sh;
   };
 
   meta = {
+    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      agpl3Only
+      cc-by-40 # geonames
+    ];
     maintainers = with lib.maintainers; [
       dotlambda
       jvanbruegge
       Scrumplex
       titaniumtown
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
 }

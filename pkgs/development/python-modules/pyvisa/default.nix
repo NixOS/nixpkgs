@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GKrgUK2nSZi+8oJoS45MjpU9+INEgcla9Kaw6ceNVp0=";
+    tag = version;
+    hash = "sha256-cjKOyBn5O7ThZI7pi6JXeLhe47xGbhQaSRcAqXb3lV8=";
   };
 
   nativeBuildInputs = [

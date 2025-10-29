@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/test_checks.py" ];
+  enabledTestPaths = [ "tests/test_checks.py" ];
 
   meta = {
     description = "Looks at Python code to search for things which look \"dodgy\" such as passwords or diffs";

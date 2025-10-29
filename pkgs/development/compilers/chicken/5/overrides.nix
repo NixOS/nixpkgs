@@ -1,4 +1,9 @@
-{ stdenv, pkgs, lib, chickenEggs }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  chickenEggs,
+}:
 let
   inherit (lib) addMetaAttrs;
   addToNativeBuildInputs = pkg: old: {
@@ -8,16 +13,14 @@ let
     buildInputs = (old.buildInputs or [ ]) ++ lib.toList pkg;
   };
   addToPropagatedBuildInputs = pkg: old: {
-    propagatedBuildInputs = (old.propagatedBuildInputs or [ ])
-      ++ lib.toList pkg;
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
   addPkgConfig = old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
   };
-  addToBuildInputsWithPkgConfig = pkg: old:
-    (addPkgConfig old) // (addToBuildInputs pkg old);
-  addToPropagatedBuildInputsWithPkgConfig = pkg: old:
-    (addPkgConfig old) // (addToPropagatedBuildInputs pkg old);
+  addToBuildInputsWithPkgConfig = pkg: old: (addPkgConfig old) // (addToBuildInputs pkg old);
+  addToPropagatedBuildInputsWithPkgConfig =
+    pkg: old: (addPkgConfig old) // (addToPropagatedBuildInputs pkg old);
   broken = addMetaAttrs { broken = true; };
   brokenOnDarwin = addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
   addToCscOptions = opt: old: {
@@ -25,71 +28,90 @@ let
   };
 in
 {
-  allegro = old:
-    ((addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd pkgs.libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ])) old) // {
-      # depends on 'chicken' egg, which doesn't exist,
-      # so we specify all the deps here
-      propagatedBuildInputs = [
-        chickenEggs.foreigners
-      ];
-    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
-  botan = addToBuildInputsWithPkgConfig pkgs.botan2;
-  cairo = old:
+  botan = broken;
+  cairo =
+    old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
-    // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      srfi-1
+      srfi-13
+    ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  comparse = old: {
-    # For some reason lazy-seq 2 gets interpreted as lazy-seq 0.0.0??
-    postPatch = ''
-      substituteInPlace comparse.egg \
-        --replace-fail 'lazy-seq "0.1.0"' 'lazy-seq "0.0.0"'
-    '';
-  };
-  epoxy = old:
+  epoxy =
+    old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
         "-Wno-error=int-conversion"
       ];
     };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
-  expat = old:
+  expat =
+    old:
     (addToBuildInputsWithPkgConfig pkgs.expat old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
       ];
     };
-  ezxdisp = old:
+  ezxdisp =
+    old:
     (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  gl-math = old: {
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
+  glut =
+    old:
+    (brokenOnDarwin old)
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) (
+      addToCscOptions [
+        "-I${(lib.getDev pkgs.libglut)}/include"
+        "-I${(lib.getDev pkgs.libGL)}/include"
+        "-I${(lib.getDev pkgs.libGLU)}/include"
+      ] old
+    )
+    // (addToBuildInputs pkgs.libglut old);
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
-  inotify = old:
+  inotify =
+    old:
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
-  mdh = old:
+  magic-pipes = addToBuildInputs pkgs.chickenPackages_5.chickenEggs.regex;
+  mdh =
+    old:
     (addToBuildInputs pkgs.pcre old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=implicit-int"
@@ -97,49 +119,80 @@ in
     };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
-  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
+  mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
-  opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]);
+  opencl = addToBuildInputs [
+    pkgs.opencl-headers
+    pkgs.ocl-icd
+  ];
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
-  postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
+  postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
-  scheme2c-compatibility = old:
-    addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [ pkgs.memorymappingHook ])
-      (addPkgConfig old);
-  sdl-base = old:
-    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old) //
-      # needed for sdl-config to be in PATH
-      (addToNativeBuildInputs pkgs.SDL old));
-  sdl2 = old:
-    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old) //
-      # needed for sdl2-config to be in PATH
-      (addToNativeBuildInputs pkgs.SDL2 old));
-  sdl2-image = old:
-    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old) //
-      # needed for sdl2-config to be in PATH
-      (addToNativeBuildInputs pkgs.SDL2 old));
-  sdl2-ttf = old:
-    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old) //
-      # needed for sdl2-config to be in PATH
-      (addToNativeBuildInputs pkgs.SDL2 old));
+  # missing dependency in upstream egg
+  s9fes-char-graphics-shapes = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      utf8
+      s9fes-char-graphics
+    ]
+  );
+  # missing dependency in upstream egg
+  s9fes-char-graphics = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      srfi-1
+      utf8
+      record-variants
+    ]
+  );
+  scheme2c-compatibility = addPkgConfig;
+  sdl-base =
+    old:
+    (
+      (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old)
+      //
+        # needed for sdl-config to be in PATH
+        (addToNativeBuildInputs pkgs.SDL old)
+    );
+  sdl2 =
+    old:
+    (
+      (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old)
+      //
+        # needed for sdl2-config to be in PATH
+        (addToNativeBuildInputs pkgs.SDL2 old)
+    );
+  sdl2-image =
+    old:
+    (
+      (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old)
+      //
+        # needed for sdl2-config to be in PATH
+        (addToNativeBuildInputs pkgs.SDL2 old)
+    );
+  sdl2-ttf =
+    old:
+    (
+      (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old)
+      //
+        # needed for sdl2-config to be in PATH
+        (addToNativeBuildInputs pkgs.SDL2 old)
+    );
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   sqlite3 = addToBuildInputs pkgs.sqlite;
-  stemmer = old:
-    (addToBuildInputs pkgs.libstemmer old)
-    // (addToCscOptions "-L -lstemmer" old);
-  stfl = old:
-    (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old)
-    // (addToCscOptions "-L -lncurses" old);
-  taglib = old:
-    (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
+  stemmer = old: (addToBuildInputs pkgs.libstemmer old) // (addToCscOptions "-L -lstemmer" old);
+  stfl =
+    old: (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old) // (addToCscOptions "-L -lncurses" old);
+  taglib =
+    old:
+    (addToBuildInputs [ pkgs.zlib pkgs.taglib_1 ] old)
+    // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old
+      addToNativeBuildInputs pkgs.taglib_1 old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;
@@ -148,23 +201,31 @@ in
   zstd = addToBuildInputs pkgs.zstd;
 
   # less trivial fixes, should be upstreamed
-  git = old: (addToBuildInputsWithPkgConfig pkgs.libgit2 old) // {
-    postPatch = ''
-      substituteInPlace libgit2.scm \
-        --replace "asize" "reserved"
-    '';
-  };
-  lazy-ffi = old: (addToBuildInputs pkgs.libffi old) // {
-    postPatch = ''
-      substituteInPlace lazy-ffi.scm \
-        --replace "ffi/ffi.h" "ffi.h"
-    '';
-  };
-  opengl = old:
-    (addToBuildInputsWithPkgConfig
-      (lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkgs.libGL pkgs.libGLU ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Foundation pkgs.darwin.apple_sdk.frameworks.OpenGL ])
-      old)
+  git =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.libgit2 old)
+    // {
+      postPatch = ''
+        substituteInPlace libgit2.scm \
+          --replace "asize" "reserved"
+      '';
+    };
+  lazy-ffi =
+    old:
+    (addToBuildInputs pkgs.libffi old)
+    // {
+      postPatch = ''
+        substituteInPlace lazy-ffi.scm \
+          --replace "ffi/ffi.h" "ffi.h"
+      '';
+    };
+  opengl =
+    old:
+    (brokenOnDarwin old)
+    // (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pkgs.libGL
+      pkgs.libGLU
+    ]) old)
     // {
       postPatch = ''
         substituteInPlace opengl.egg \
@@ -183,8 +244,10 @@ in
   unveil = addMetaAttrs { platforms = lib.platforms.openbsd; };
 
   # overrides for chicken 5.4
-  dbus = old:
-    (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old) // {
+  dbus =
+    old:
+    (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old)
+    // {
       # backticks in compiler options
       # aren't supported anymore as of chicken 5.4, it seems.
       preBuild = ''
@@ -211,14 +274,23 @@ in
   };
 
   # mark broken
-  "ephem-v1.1" = broken;
-  F-operator = broken;
-  atom = broken;
-  begin-syntax = broken;
+  allegro =
+    old:
+    (broken old)
+    // {
+      # depends on 'chicken' egg, which doesn't exist, so we specify all the deps here (needs to be
+      # kept around even when marked as broken so that evaluation doesn't break due to the missing
+      # attribute).
+      propagatedBuildInputs = [
+        chickenEggs.foreigners
+      ];
+    };
+  ephem = broken;
   canvas-draw = broken;
-  chicken-doc-admin = broken;
   coops-utils = broken;
   crypt = broken;
+  gemini = broken;
+  gemini-client = broken;
   hypergiant = broken;
   iup = broken;
   kiwi = broken;
@@ -226,11 +298,11 @@ in
   mpi = broken;
   pyffi = broken;
   qt-light = broken;
-  salmonella-html-report = broken;
   sundials = broken;
   svn-client = broken;
-  system = broken;
   tokyocabinet = broken;
+  # webkitgtk_4_0 was removed
+  webview = broken;
 
   # mark broken darwin
 

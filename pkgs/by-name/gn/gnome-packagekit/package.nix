@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
-, packagekit
-, polkit
-, gtk3
-, systemd
-, wrapGAppsHook3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
+  packagekit,
+  polkit,
+  gtk3,
+  systemd,
+  wrapGAppsHook3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };

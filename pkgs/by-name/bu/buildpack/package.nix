@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,19 +8,19 @@
 
 let
   pname = "pack";
-  version = "0.35.1";
+  version = "0.37.0";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "buildpacks";
-    repo = pname;
+    repo = "pack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iQkYtnobhAt73JMRrejk0DkOH1ZW2bqfZx05ZrDG5bA=";
+    hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
   };
 
-  vendorHash = "sha256-gp6Hd0MZxtUX0yYshFIGwrm6yY2pdSOtUs6xmzXBqc4=";
+  vendorHash = "sha256-W8FTk2eJYaTE9gCRwrT+mDhda/ZZeCytqQ9vvVZZHSQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +32,7 @@ buildGoModule {
     "-X github.com/buildpacks/pack.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pack \
       --zsh $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh) \
       --bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash) \

@@ -1,10 +1,13 @@
-{ callPackage, ... } @ args:
+{ callPackage, ... }@args:
 
-callPackage ./generic.nix (args // rec {
-  brand = "Behringer";
-  type = "X32";
-  version = "4.1";
-  url = "https://mediadl.musictribe.com/download/software/behringer/${type}/${type}-Edit_LINUX_${version}.tar.gz";
-  sha256 = "0zsw7qfmcci87skkpq8vx5zxk35phn8y4byispvki9ascifnnb33";
-  homepage = "https://www.behringer.com/behringer/product?modelCode=P0ASF";
-})
+callPackage ./generic.nix (
+  args
+  // rec {
+    brand = "Behringer";
+    type = "X32";
+    version = "4.4";
+    url = "https://cdn.mediavalet.com/aunsw/musictribe/or9fQ8syH0ShGn-Pei63wQ/POJZwJV4MkWLkgr0ex3f6Q/Original/${type}-Edit_LINUX_${version}.tar.gz";
+    hash = "sha256-OOh0UnaKes8U2vNkavsCQF9021lFMPLX1gU1ENaWZHs=";
+    homepage = "https://www.behringer.com/behringer/product?modelCode=P0ASF";
+  }
+)

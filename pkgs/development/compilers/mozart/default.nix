@@ -1,21 +1,24 @@
-{ lib
-, fetchurl
-, fetchpatch
-, cmake
-, unzip
-, makeWrapper
-, boost
-, llvmPackages
-, gmp
-, emacs
-, jre_headless
-, tcl
-, tk
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  unzip,
+  makeWrapper,
+  boost183,
+  llvmPackages,
+  gmp,
+  emacs,
+  jre_headless,
+  tcl,
+  tk,
 }:
 
-let stdenv = llvmPackages.stdenv;
+let
+  stdenv = llvmPackages.stdenv;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mozart2";
   version = "2.0.1";
   name = "${pname}-${version}";
@@ -45,7 +48,11 @@ in stdenv.mkDerivation rec {
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper unzip ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    unzip
+  ];
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
@@ -61,7 +68,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost
+    boost183
     gmp
     emacs
     jre_headless
@@ -69,9 +76,23 @@ in stdenv.mkDerivation rec {
     tk
   ];
 
+  postPatch = ''
+    substituteInPlace {vm,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace vm/vm/test/gtest/{googletest,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace bootcompiler/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace {boosthost,opi,wish,stdlib}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Open source implementation of Oz 3";
-    maintainers = with maintainers; [ layus h7x4 ];
+    maintainers = with maintainers; [
+      layus
+      h7x4
+    ];
     license = licenses.bsd2;
     homepage = "https://mozart.github.io";
     platforms = platforms.all;

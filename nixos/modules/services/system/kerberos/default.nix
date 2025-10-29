@@ -1,16 +1,27 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mkOption types;
+  inherit (lib.types) listOf str;
   cfg = config.services.kerberos_server;
   inherit (config.security.krb5) package;
 
-  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } { enableKdcACLEntries = true; };
+  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } {
+    enableKdcACLEntries = true;
+  };
 in
 
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "kerberos_server" "realms" ] [ "services" "kerberos_server" "settings" "realms" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "kerberos_server" "realms" ]
+      [ "services" "kerberos_server" "settings" "realms" ]
+    )
 
     ./mit.nix
     ./heimdal.nix
@@ -31,6 +42,14 @@ in
         '';
         default = { };
       };
+
+      extraKDCArgs = mkOption {
+        type = listOf str;
+        description = ''
+          Extra arguments to pass to the KDC process. See {manpage}`kdc(8)`.
+        '';
+        default = [ ];
+      };
     };
   };
 
@@ -44,6 +63,17 @@ in
       {
         assertion = lib.length (lib.attrNames cfg.settings.realms) <= 1;
         message = "Only one realm per server is currently supported.";
+      }
+      {
+        assertion =
+          let
+            inherit (builtins) attrValues elem length;
+            realms = attrValues cfg.settings.realms;
+            accesses = lib.concatMap (r: map (a: a.access) r.acl) realms;
+            property = a: !elem "all" a || (length a <= 1) || (length a <= 2 && elem "get-keys" a);
+          in
+          builtins.all property accesses;
+        message = "Cannot specify \"all\" in a list with additional permissions other than \"get-keys\"";
       }
     ];
 

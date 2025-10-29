@@ -25,7 +25,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "ArtifexSoftware";
     repo = "pdf2docx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
   };
 
@@ -47,11 +47,13 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    "./test/test.py::TestConversion"
   ];
 
+  enabledTestPaths = [
+    "./test/test.py::TestConversion"
+  ];
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 

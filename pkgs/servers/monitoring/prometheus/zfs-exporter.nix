@@ -1,20 +1,21 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "zfs_exporter";
-  version = "2.3.4";
+  version = "2.3.10";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-wPahjWTZLt5GapkOmGdGSicAmSGte2BHf6zZBHd7D3g=";
+    hash = "sha256-8of1FdfofkmlTMSJKbpBxI5KNEu2y1Epkl2L6nNAJ/k=";
   };
 
-  vendorHash = "sha256-EUeP7ysMnFeQO8Gaxhhonxk40cUv04MSiEDsaEcjTuM=";
+  vendorHash = "sha256-wXPFR1B86oq/RieyYP1KTrpaUu3xOQnX2ismYt9N2Aw=";
 
   ldflags = [
     "-s"

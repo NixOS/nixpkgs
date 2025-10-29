@@ -1,3 +1,5 @@
+diff --git a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
+index a4a735f498..381522cc1f 100644
 --- a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
 +++ b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
 @@ -10,6 +10,7 @@
@@ -8,20 +10,18 @@
  import SwiftOptions
  
  import func TSCBasic.lookupExecutablePath
-@@ -120,7 +121,20 @@ extension GenericUnixToolchain {
-       // just using `clang` and avoid a dependency on the C++ runtime.
-       let clangTool: Tool =
-         parsedOptions.hasArgument(.enableExperimentalCxxInterop) ? .clangxx : .clang
+@@ -130,7 +131,18 @@
+       }
+ 
+       let clangTool: Tool = cxxCompatEnabled ? .clangxx : .clang
 -      var clangPath = try getToolPath(clangTool)
 +
-+      // For Nix, prefer linking using the wrapped system clang, instead of using
++      // For Nix, prefer linking using the wrapped Nixpkgs clang, instead of using
 +      // the unwrapped clang packaged with swift. The latter is unable to link, but
 +      // we still want to use it for other purposes (clang importer).
 +      var clangPath: AbsolutePath
-+      let env = ProcessInfo.processInfo.environment
-+      if let nixCC = env["NIX_CC"],
-+         let binPath = try? AbsolutePath(validating: "\(nixCC)/bin"),
-+         let tool = lookupExecutablePath(filename: parsedOptions.hasArgument(.enableExperimentalCxxInterop)
++      if let binPath = try? AbsolutePath(validating: "@clang@/bin"),
++         let tool = lookupExecutablePath(filename: cxxCompatEnabled
 +                                                        ? "clang++" : "clang",
 +                                         searchPaths: [binPath]) {
 +        clangPath = tool
@@ -30,11 +30,11 @@
        if let toolsDirPath = parsedOptions.getLastArgument(.toolsDirectory) {
          // FIXME: What if this isn't an absolute path?
          let toolsDir = try AbsolutePath(validating: toolsDirPath.asSingle)
-@@ -136,6 +150,7 @@ extension GenericUnixToolchain {
+@@ -146,6 +158,7 @@
          commandLine.appendFlag("-B")
          commandLine.appendPath(toolsDir)
        }
-+      } // nixCC
++      } // Nix
  
        // Executables on Linux get -pie
        if targetTriple.os == .linux && linkerOutputType == .executable {

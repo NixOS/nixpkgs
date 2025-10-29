@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "duplicacy";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "gilbertchen";
     repo = "duplicacy";
     rev = "v${version}";
-    hash = "sha256-JxBS40g97GPTzKXW+k0RrwLBuK4ItLvnVHzBZRSOEIM=";
+    hash = "sha256-PS1vN5XkyihiiahIdzJmzdr1yyJMkzCpVbXgbZL2jHE=";
   };
 
   vendorHash = "sha256-4M/V4vP9XwHBkZ6UwsAxZ81YAzP4inuNC5yI+5ygQsA=";
@@ -20,6 +24,9 @@ buildGoModule rec {
     description = "New generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ ffinkdevs devusb ];
+    maintainers = with maintainers; [
+      ffinkdevs
+      devusb
+    ];
   };
 }

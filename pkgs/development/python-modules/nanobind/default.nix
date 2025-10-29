@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -21,21 +21,21 @@
   tensorflow-bin,
   jax,
   jaxlib,
+
+  nanobind,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.1.0";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AO/EHx2TlXidalhPb+xuUchaek4ki7fDExu2foBgUp0=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-cC+sf2FUm1jdGMRdDoaQK8rjUVkWjn/53c1HQ5gsUWs=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     cmake
@@ -45,7 +45,13 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ eigen ];
+
   dontUseCmakeBuildDir = true;
+
+  # nanobind check requires heavy dependencies such as tensorflow
+  # which are less than ideal to be imported in children packages that
+  # use it as build-system parameter.
+  doCheck = false;
 
   preCheck = ''
     # build tests
@@ -57,14 +63,20 @@ buildPythonPackage rec {
     numpy
     scipy
     torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
     tensorflow-bin
     jax
     jaxlib
   ];
 
+  passthru.tests = {
+    pytest = nanobind.overridePythonAttrs { doCheck = true; };
+  };
+
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
-    changelog = "https://github.com/wjakob/nanobind/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/wjakob/nanobind/blob/${src.tag}/docs/changelog.rst";
     description = "Tiny and efficient C++/Python bindings";
     longDescription = ''
       nanobind is a small binding library that exposes C++ types in Python and

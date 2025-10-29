@@ -3,25 +3,33 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "fnvhash";
-  version = "0.1.0";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "znerol";
     repo = "py-fnvhash";
-    rev = "v${version}";
-    sha256 = "00h8i70qd3dpsyf2dp7fkcb9m2prd6m3l33qv3wf6idpnqgjz6fq";
+    tag = "v${version}";
+    hash = "sha256-vAflKSvi0PD5r1q6GCTt6a4vTCsdBIebecRCKbbBphE=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "fnvhash" ];
 
   meta = with lib; {
+    changelog = "https://github.com/znerol/py-fnvhash/releases/tag/${src.tag}";
     description = "Python FNV hash implementation";
     homepage = "https://github.com/znerol/py-fnvhash";
     license = with licenses; [ mit ];

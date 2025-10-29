@@ -1,24 +1,23 @@
-{ AppKit
-, cmake
-, fetchFromGitHub
-, fetchpatch2
-, Foundation
-, jsoncpp
-, lib
-, libGL
-, stdenv
-, nix-update-script
+{
+  cmake,
+  fetchFromGitHub,
+  fetchpatch2,
+  jsoncpp,
+  lib,
+  libGL,
+  stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "2.5.1";
+  version = "2.12.14";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bIKjZ7DvJVmDK386WgXaAFQrS0E1TNEUMhfQp7FNnvk=";
+    hash = "sha256-G+xoFIabSbYEaWATGSzHP3SWkaqQhQQ6kMkYfjBXBUU=";
   };
 
   patches = [
@@ -50,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     jsoncpp
     libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Foundation
   ];
 
-  cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_JSONCPP=ON"
+    "-DBUILD_SHARED=1"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

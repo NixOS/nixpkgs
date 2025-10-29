@@ -1,8 +1,7 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
-  fetchpatch,
   dask,
   urllib3,
   geojson,
@@ -13,34 +12,30 @@
   sqlalchemy,
   pytestCheckHook,
   pytz,
+  setuptools,
+  orjson,
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.35.2";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4hGACtsK71hvcn8L9ggID7zR+umtTwvskBxSHBpLyME=";
+  src = fetchFromGitHub {
+    owner = "crate";
+    repo = "crate-python";
+    tag = version;
+    hash = "sha256-K09jezBINTw4sUl1Xvm4lJa68ZpwMy9ju/pxdRwnaE4=";
   };
-  patches = [
-    # Fix a pandas issue https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979
-    (fetchpatch {
-      url = "https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979.patch";
-      hash = "sha256-20g8T0t5gPMbK6kRJ2bzc4BNbB1Dg4hvngXNUPvxi5I=";
-      name = "python-crate-fix-pandas-error.patch";
-      # Patch doesn't apply due to other changes to these files
-      excludes = [
-        "setup.py"
-        "docs/by-example/sqlalchemy/dataframe.rst"
-      ];
-    })
+
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    orjson
     urllib3
     sqlalchemy
     geojson
@@ -69,7 +64,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # imports setuptools.ssl_support, which doesn't exist anymore
-    "src/crate/client/test_http.py"
+    "tests/client/test_http.py"
   ];
 
   meta = with lib; {

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, perl, makeWrapper
-, version, sha256, patches ? [], extraBuildInputs ? []
-, ...
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  makeWrapper,
+  version,
+  sha256,
+  patches ? [ ],
+  extraBuildInputs ? [ ],
+  ...
 }:
 stdenv.mkDerivation rec {
   pname = "patchutils";
@@ -30,7 +38,8 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs tests
     chmod +x scripts/*
-  '' + lib.optionalString (lib.versionOlder version "0.4.2") ''
+  ''
+  + lib.optionalString (lib.versionOlder version "0.4.2") ''
     find tests -type f -name 'run-test' \
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';

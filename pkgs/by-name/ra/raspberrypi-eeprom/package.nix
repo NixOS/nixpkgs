@@ -1,25 +1,26 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, binutils-unwrapped
-, findutils
-, flashrom
-, gawk
-, kmod
-, pciutils
-, libraspberrypi
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  binutils-unwrapped,
+  findutils,
+  flashrom,
+  gawk,
+  kmod,
+  pciutils,
+  libraspberrypi,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2024.09.23-2712";
+  version = "2025.05.08-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-5qqcHMoRT5XfhIX392j4Q1DcKjYGq6NMqy1VrWxg5+4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y3tBYKFyFz7ft82+zWGT6HUXR3hrq3mYMqJeUSsAKtQ=";
   };
 
   buildInputs = [ python3 ];
@@ -50,25 +51,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/$i \
         --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
         ${lib.optionalString stdenvNoCC.hostPlatform.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
-        --prefix PATH : "${lib.makeBinPath ([
-          binutils-unwrapped
-          findutils
-          flashrom
-          gawk
-          kmod
-          pciutils
-          (placeholder "out")
-        ] ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
-          libraspberrypi
-        ])}"
+        --prefix PATH : "${
+          lib.makeBinPath (
+            [
+              binutils-unwrapped
+              findutils
+              flashrom
+              gawk
+              kmod
+              pciutils
+              (placeholder "out")
+            ]
+            ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
+              libraspberrypi
+            ]
+          )
+        }"
     done
   '';
 
   meta = with lib; {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 and 5 bootloader EEPROMs";
     homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
-    license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
-    maintainers = with maintainers; [ das_j Luflosi ];
+    license = with licenses; [
+      bsd3
+      unfreeRedistributableFirmware
+    ];
+    maintainers = with maintainers; [
+      das_j
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 })

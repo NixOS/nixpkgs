@@ -3,32 +3,35 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  jellyfin,
+  nodejs_20,
   nix-update-script,
   pkg-config,
   xcbuild,
   pango,
   giflib,
-  apple-sdk_11,
-  darwinMinVersionHook,
+  jellyfin,
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.10.0";
+  version = "10.11.0";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    hash = "sha256-BuAvdDIvW2mQ+MzVBPGCFV73P6GxR/I3U24kCu+lXbc=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-LcZNfFXM2dFHeUheSnri1t4eBYvlCfF2wlaqWlh+U7A=";
+    };
+
+  nodejs = nodejs_20; # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-EAZm4UTc9+gW7uPiNEp2vLSKA2vOmLKKZ4/DrnGrvYQ=";
+  npmDepsHash = "sha256-w3xMbkxNGFEBR2K1PhJW6pr943DfJvyQvILiF0VuLlw=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -39,15 +42,12 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs =
-    [ pango ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-      apple-sdk_11
-      # node-canvas builds code that requires aligned_alloc,
-      # which on Darwin requires at least the 10.15 SDK
-      (darwinMinVersionHook "10.15")
-    ];
+  buildInputs = [
+    pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    giflib
+  ];
 
   installPhase = ''
     runHook preInstall

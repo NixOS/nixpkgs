@@ -20,19 +20,24 @@
   makeself,
   linuxHeaders,
   openssl,
+  virtualboxVersion,
+  virtualboxSubVersion,
+  virtualboxSha256,
+  platform,
 }:
 
 let
   buildType = "release";
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
-  version = "7.0.22";
+  version = "${virtualboxVersion}${virtualboxSubVersion}";
+
+  inherit virtualboxVersion virtualboxSubVersion;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.version}/VirtualBox-${finalAttrs.version}.tar.bz2";
-    sha256 = "cf3ddf633ca410f1b087b0722413e83247cda4f14d33323dc122a4a42ff61981";
+    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}.tar.bz2";
+    sha256 = virtualboxSha256;
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
@@ -47,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     linuxHeaders
     xz
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
   buildInputs = [
     dbus
     libxslt
@@ -72,18 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r src/libs/zlib*/
   '';
 
-  patches = [
-    ## https://www.virtualbox.org/changeset/100258/vbox
-    ./no-legacy-xorg.patch
-  ];
-
   postPatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++17 \1"@' \
         -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.${platform}/k* tools/linux.${platform}/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker}
 
     substituteInPlace ./include/VBox/dbus-calls.h --replace-fail libdbus-1.so.3 ${dbus.lib}/lib/libdbus-1.so.3
 
@@ -166,11 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-    cp -rv ./out/linux.${
-      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-    }/${buildType}/bin/additions/VBoxGuestAdditions-${
-      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-    }.tar.bz2 $out/
+    cp -rv ./out/linux.${platform}/${buildType}/bin/additions/VBoxGuestAdditions-${platform}.tar.bz2 $out/
 
     runHook postInstall
   '';

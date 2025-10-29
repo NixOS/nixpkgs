@@ -2,11 +2,10 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
-  manubulon-snmp-plugins,
   nix-update-script,
   perlPackages,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "manubulon-snmp-plugins";
@@ -46,22 +45,23 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/check_snmp_int.pl";
+  preVersionCheck = ''
+    version=${builtins.head (lib.splitString "-" version)}
+  '';
+
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-    tests.version = testers.testVersion {
-      package = manubulon-snmp-plugins;
-      # Program returns status code 3
-      command = "check_snmp_int.pl --version || true";
-      version = builtins.head (lib.splitString "-" version);
-    };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/SteScho/manubulon-snmp/releases/tag/v${version}";
     description = "Set of Icinga/Nagios plugins to check hosts and hardware with the SNMP protocol";
     homepage = "https://github.com/SteScho/manubulon-snmp";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jwillikers ];
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jwillikers ];
   };
 }

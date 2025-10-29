@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchsvn
-, jdk
-, jre
-, ant
-, makeWrapper
-, stripJavaArchivesHook
-, doCheck ? true
-, withExamples ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchsvn,
+  jdk,
+  jre,
+  ant,
+  makeWrapper,
+  stripJavaArchivesHook,
+  doCheck ? true,
+  withExamples ? false,
 }:
 let
   deps = import ./deps.nix { inherit fetchurl; };
@@ -16,12 +17,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4922";
+  version = "4923";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "sha256-LgGdV6l9tjRR4BpGTDTm0MeAq2uiOe7Pv0qv87nbbWw=";
+    sha256 = "sha256-tB/0VFLn/ch7XWPz1sJ3kqy/1U5Hk1yV9+wq7ohTRWw=";
   };
 
   patches = [
@@ -30,35 +31,43 @@ stdenv.mkDerivation rec {
     ./ignore-impure-test.patch
   ];
 
-  postPatch = with deps; ''
-    # Manually create version properties file for reproducibility
-    mkdir -p build/classes
-    cat > build/classes/mkgmap-version.properties << EOF
-      svn.version=${version}
-      build.timestamp=unknown
-    EOF
+  postPatch =
+    with deps;
+    ''
+      # Manually create version properties file for reproducibility
+      mkdir -p build/classes
+      cat > build/classes/mkgmap-version.properties << EOF
+        svn.version=${version}
+        build.timestamp=unknown
+      EOF
 
-    # Put pre-fetched dependencies into the right place
-    mkdir -p lib/compile
-    cp ${fastutil} lib/compile/${fastutil.name}
-    cp ${osmpbf} lib/compile/${osmpbf.name}
-    cp ${protobuf} lib/compile/${protobuf.name}
-  '' + lib.optionalString doCheck ''
-    mkdir -p lib/test
-    cp ${fastutil} lib/test/${fastutil.name}
-    cp ${osmpbf} lib/test/${osmpbf.name}
-    cp ${protobuf} lib/test/${protobuf.name}
-    cp ${jaxb-api} lib/test/${jaxb-api.name}
-    cp ${junit} lib/test/${junit.name}
-    cp ${hamcrest-core} lib/test/${hamcrest-core.name}
+      # Put pre-fetched dependencies into the right place
+      mkdir -p lib/compile
+      cp ${fastutil} lib/compile/${fastutil.name}
+      cp ${osmpbf} lib/compile/${osmpbf.name}
+      cp ${protobuf} lib/compile/${protobuf.name}
+    ''
+    + lib.optionalString doCheck ''
+      mkdir -p lib/test
+      cp ${fastutil} lib/test/${fastutil.name}
+      cp ${osmpbf} lib/test/${osmpbf.name}
+      cp ${protobuf} lib/test/${protobuf.name}
+      cp ${jaxb-api} lib/test/${jaxb-api.name}
+      cp ${junit} lib/test/${junit.name}
+      cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
-    mkdir -p test/resources/in/img
-    ${lib.concatMapStringsSep "\n" (res: ''
-      cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
-    '') testInputs}
-  '';
+      mkdir -p test/resources/in/img
+      ${lib.concatMapStringsSep "\n" (res: ''
+        cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
+      '') testInputs}
+    '';
 
-  nativeBuildInputs = [ jdk ant makeWrapper stripJavaArchivesHook ];
+  nativeBuildInputs = [
+    jdk
+    ant
+    makeWrapper
+    stripJavaArchivesHook
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -91,7 +100,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = [ ./update.sh "mkgmap" meta.downloadPage ];
+  passthru.updateScript = [
+    ./update.sh
+    "mkgmap"
+    meta.downloadPage
+  ];
 
   meta = with lib; {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";

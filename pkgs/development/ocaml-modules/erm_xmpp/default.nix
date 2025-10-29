@@ -1,21 +1,45 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
-, erm_xml, mirage-crypto, mirage-crypto-rng, base64, digestif
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  camlp4,
+  cstruct,
+  ocamlbuild,
+  erm_xml,
+  mirage-crypto,
+  mirage-crypto-rng,
+  base64,
+  digestif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.3+20241009";
   pname = "ocaml${ocaml.version}-erm_xmpp";
 
   src = fetchFromGitHub {
-    owner  = "hannesm";
-    repo   = "xmpp";
-    rev    = "54418f77abf47b175e9c1b68a4f745a12b640d6a";
+    owner = "hannesm";
+    repo = "xmpp";
+    rev = "54418f77abf47b175e9c1b68a4f745a12b640d6a";
     sha256 = "sha256-AbzZjNkW1VH/FOnzNruvelZeo3IYg/Usr3enQEknTQs=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    camlp4
+  ];
   buildInputs = [ camlp4 ];
-  propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 digestif ];
+  propagatedBuildInputs = [
+    cstruct
+    erm_xml
+    mirage-crypto
+    mirage-crypto-rng
+    base64
+    digestif
+  ];
 
   strictDeps = true;
 

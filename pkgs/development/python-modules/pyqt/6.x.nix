@@ -2,11 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchurl,
+  fetchzip,
   pkg-config,
   dbus,
   lndir,
-  setuptools,
   dbus-python,
   sip,
   pyqt6-sip,
@@ -20,29 +19,43 @@
   # Not currently part of PyQt6
   #, withConnectivity ? true
   withPrintSupport ? true,
+  withSerialPort ? false,
   cups,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.8.0.dev2410141303";
-  format = "pyproject";
+  version = "6.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  # This is dangerous, how can we get web archive to archive the URL?
-  src = fetchurl {
-    url = "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz";
-    hash = "sha256-eHYqj22us07uFkErJD2d0y0wueZxtQTwTFW9cI7yoK4=";
+  # It looks like a stable release, but is it? Who knows.
+  # It's not on PyPI proper yet, at least, and the current
+  # actually-released version does not build with Qt 6.9,
+  # so we kinda have to use it.
+  # "ffs smdh fam" - K900
+  src = fetchzip {
+    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
+    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
   };
 
   patches = [
     # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
-    # FIXME: make a version for PyQt6?
-    # ./pyqt5-fix-dbus-mainloop-support.patch
+    ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+  ];
+
+  build-system = [
+    sip
+    pyqt-builder
+  ];
+
+  dependencies = [
+    pyqt6-sip
+    dbus-python
   ];
 
   # be more verbose
@@ -53,11 +66,8 @@ buildPythonPackage rec {
     verbose = true
     EOF
 
-    # pythonRelaxDeps doesn't work and the wanted versions are not released AFAIK
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"' \
-      --replace-fail "sip >=6.9, <7" "sip >=6.8.6, <7" \
-      --replace-fail 'PyQt-builder >=1.17, <2' "PyQt-builder >=1.16, <2"
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
   '';
 
   enableParallelBuilding = true;
@@ -83,7 +93,6 @@ buildPythonPackage rec {
     [
       pkg-config
       lndir
-      sip
       qtbase
       qtsvg
       qtdeclarative
@@ -95,7 +104,8 @@ buildPythonPackage rec {
     # ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation;
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport;
 
   buildInputs =
     with qt6Packages;
@@ -104,46 +114,43 @@ buildPythonPackage rec {
       qtbase
       qtsvg
       qtdeclarative
-      pyqt-builder
       qtquick3d
       qtquicktimeline
     ]
     # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation;
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport;
 
   propagatedBuildInputs =
-    [
-      dbus-python
-      pyqt6-sip
-      setuptools
-    ]
     # ld: library not found for -lcups
-    ++ lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
+    lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
     multimediaEnabled = withMultimedia;
     WebSocketsEnabled = withWebSockets;
+    serialPortEnabled = withSerialPort;
   };
 
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
 
-  pythonImportsCheck =
-    [
-      "PyQt6"
-      "PyQt6.QtCore"
-      "PyQt6.QtQml"
-      "PyQt6.QtWidgets"
-      "PyQt6.QtGui"
-      "PyQt6.QtQuick"
-    ]
-    ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-    ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-    # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-    ++ lib.optional withLocation "PyQt6.QtPositioning";
+  pythonImportsCheck = [
+    "PyQt6"
+    "PyQt6.QtCore"
+    "PyQt6.QtQml"
+    "PyQt6.QtWidgets"
+    "PyQt6.QtGui"
+    "PyQt6.QtQuick"
+  ]
+  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+  ++ lib.optional withLocation "PyQt6.QtPositioning"
+  ++ lib.optional withSerialPort "PyQt6.QtSerialPort";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 

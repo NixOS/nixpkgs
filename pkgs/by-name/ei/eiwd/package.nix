@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3Packages  # for tests
-, openssl          # for tests
-, enableManpages ? true
-, docutils         # for manpages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3Packages, # for tests
+  openssl, # for tests
+  enableManpages ? true,
+  docutils, # for manpages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,16 +17,19 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "eiwd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-rmkXR4RZbtD6lh8cGrHLWVGTw4fQqP9+Z9qaftG1ld0=";
     fetchSubmodules = true;
   };
 
   outputs = [
-    "out" "doc"
-  ] ++ lib.optionals enableManpages [
+    "out"
+    "doc"
+  ]
+  ++ lib.optionals enableManpages [
     "man"
-  ] ++ lib.optionals finalAttrs.doCheck [
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
     "test"
   ];
 
@@ -36,8 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optionals enableManpages [
-    docutils    # only for the man pages
+  ]
+  ++ lib.optionals enableManpages [
+    docutils # only for the man pages
   ];
 
   checkInputs = [
@@ -47,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-dbus"
-  ] ++ lib.optionals (!enableManpages) [
+  ]
+  ++ lib.optionals (!enableManpages) [
     "--disable-manual-pages"
   ];
 
@@ -69,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc
     cp -a doc $doc/share/doc/iwd
     cp -a README AUTHORS TODO $doc/share/doc/iwd
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
   '';

@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.code-server;
   defaultUser = "code-server";
   defaultGroup = defaultUser;
-in {
+in
+{
   options = {
     services.code-server = {
       enable = lib.mkEnableOption "code-server";
@@ -36,7 +42,9 @@ in {
           Additional environment variables to pass to code-server.
         '';
         default = { };
-        example = { PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig"; };
+        example = {
+          PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig";
+        };
       };
 
       extraArguments = lib.mkOption {
@@ -69,13 +77,16 @@ in {
         description = ''
           The type of authentication to use.
         '';
-        type = lib.types.enum [ "none" "password" ];
+        type = lib.types.enum [
+          "none"
+          "password"
+        ];
       };
 
       hashedPassword = lib.mkOption {
         default = "";
         description = ''
-          Create the password with: `echo -n 'thisismypassword' | npx argon2-cli -e`.
+          Create the password with: {command}`echo -n 'thisismypassword' | nix run nixpkgs#libargon2 -- "$(head -c 20 /dev/random | base64)" -e`
         '';
         type = lib.types.str;
       };
@@ -121,7 +132,7 @@ in {
       socketMode = lib.mkOption {
         default = null;
         description = ''
-           File mode of the socket.
+          File mode of the socket.
         '';
         type = lib.types.nullOr lib.types.str;
       };
@@ -210,29 +221,39 @@ in {
       path = cfg.extraPackages;
       environment = {
         HASHED_PASSWORD = cfg.hashedPassword;
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = ''
           ${lib.getExe cfg.package} \
             --auth=${cfg.auth} \
             --bind-addr=${cfg.host}:${toString cfg.port} \
-          '' + lib.optionalString (cfg.socket != null) ''
-            --socket=${cfg.socket} \
-          '' + lib.optionalString (cfg.userDataDir != null) ''
-            --user-data-dir=${cfg.userDataDir} \
-          '' + lib.optionalString (cfg.extensionsDir != null) ''
-            --extensions-dir=${cfg.extensionsDir} \
-          '' + lib.optionalString (cfg.disableTelemetry == true) ''
-            --disable-telemetry \
-          '' + lib.optionalString (cfg.disableUpdateCheck == true) ''
-            --disable-update-check \
-          '' + lib.optionalString (cfg.disableFileDownloads == true) ''
-            --disable-file-downloads \
-          '' + lib.optionalString (cfg.disableWorkspaceTrust == true) ''
-            --disable-workspace-trust \
-          '' + lib.optionalString (cfg.disableGettingStartedOverride == true) ''
-            --disable-getting-started-override \
-          '' + lib.escapeShellArgs cfg.extraArguments;
+        ''
+        + lib.optionalString (cfg.socket != null) ''
+          --socket=${cfg.socket} \
+        ''
+        + lib.optionalString (cfg.userDataDir != null) ''
+          --user-data-dir=${cfg.userDataDir} \
+        ''
+        + lib.optionalString (cfg.extensionsDir != null) ''
+          --extensions-dir=${cfg.extensionsDir} \
+        ''
+        + lib.optionalString (cfg.disableTelemetry == true) ''
+          --disable-telemetry \
+        ''
+        + lib.optionalString (cfg.disableUpdateCheck == true) ''
+          --disable-update-check \
+        ''
+        + lib.optionalString (cfg.disableFileDownloads == true) ''
+          --disable-file-downloads \
+        ''
+        + lib.optionalString (cfg.disableWorkspaceTrust == true) ''
+          --disable-workspace-trust \
+        ''
+        + lib.optionalString (cfg.disableGettingStartedOverride == true) ''
+          --disable-getting-started-override \
+        ''
+        + lib.escapeShellArgs cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = cfg.user;
         User = cfg.user;

@@ -1,28 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recoverdm";
-  version = "0.20-8";
+  version = "0.20-9";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "recoverdm";
     rev = "debian/${finalAttrs.version}";
-    hash = "sha256-1iW3Ug85ZLGpvG29N5zJt8oooSQGnLsr+8XIcp4aSSM=";
+    hash = "sha256-HLaiTeeqXn0mgRnG5FZflkPiDiB8CGzq4FR7lDj5oHI=";
   };
 
-  patches = let patch = name: "./debian/patches/${name}"; in [
-    (patch "10_fix-makefile.patch")
-    (patch "20_fix-typo-binary.patch")
-    (patch "30-fix-BTS-mergebad-crash.patch")
-    (patch "40_dev-c.patch")
-    ./0001-darwin-build-fixes.patch
-  ];
+  patches =
+    let
+      patch = name: "./debian/patches/${name}";
+    in
+    [
+      (patch "10_fix-makefile.patch")
+      (patch "20_fix-typo-binary.patch")
+      (patch "30-fix-BTS-mergebad-crash.patch")
+      (patch "40_dev-c.patch")
+      (patch "50_ftbfs-with-gcc-14.patch")
+      ./0001-darwin-build-fixes.patch
+    ];
 
   postPatch = ''
     substituteInPlace Makefile \

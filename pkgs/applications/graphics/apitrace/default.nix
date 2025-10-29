@@ -13,25 +13,46 @@
   libglvnd,
   gtest,
   brotli,
+  enableGui ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
-  version = "12.0";
+  version = "13.0";
 
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
     rev = version;
-    hash = "sha256-Y2ceE0F7q5tP64Mtvkc7JHOZQN30MDVCPHfiWDnfTSQ=";
+    hash = "sha256-ZZ2RL9nvwvHBEuKSDr1tgRhxBeg+XJKPUvSiHz6g/cg=";
     fetchSubmodules = true;
   };
 
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
-  buildInputs = [ libX11 procps python3 libdwarf qtbase gtest brotli ];
+  buildInputs = [
+    libX11
+    procps
+    libdwarf
+    gtest
+    brotli
+  ]
+  ++ lib.optionals enableGui [
+    qtbase
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableGui [
+    wrapQtAppsHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_GUI" enableGui)
+  ];
 
   # Don't automatically wrap all binaries, I prefer to explicitly only wrap
   # `qapitrace`.
@@ -68,9 +89,11 @@ stdenv.mkDerivation rec {
     for i in $out/bin/eglretrace $out/bin/glretrace
     do
       echo "Patching RPath for $i"
-      patchelf --set-rpath "${lib.makeLibraryPath [libglvnd]}:$(patchelf --print-rpath $i)" $i
+      patchelf --set-rpath "${lib.makeLibraryPath [ libglvnd ]}:$(patchelf --print-rpath $i)" $i
     done
 
+  ''
+  + lib.optionalString enableGui ''
     wrapQtApp $out/bin/qapitrace
   '';
 

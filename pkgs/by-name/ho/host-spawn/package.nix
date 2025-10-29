@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "host-spawn";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "1player";
     repo = "host-spawn";
     rev = "v${version}";
-    hash = "sha256-017o50MSSkehn4zMEdCTPW2o2IQaXbI21z8Z+jfRuDs=";
+    hash = "sha256-bCEyoHsISZ2K7fOsOOAhZRv/a6RptVDlwSspomacb/0=";
   };
 
   vendorHash = "sha256-Agc3hl+VDTNW7cnh/0g4G8BgzNAX11hKASYQKieBN4M=";

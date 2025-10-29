@@ -1,6 +1,17 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
-{ channel, version, sha256, vendorHash }:
+{
+  channel,
+  version,
+  sha256,
+  vendorHash,
+}:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
@@ -32,7 +43,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
   ];
 
@@ -40,6 +52,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/linkerd
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd linkerd \
       --bash <($out/bin/linkerd completion bash) \
       --zsh <($out/bin/linkerd completion zsh) \
@@ -59,6 +73,9 @@ buildGoModule rec {
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 Gonzih ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      Gonzih
+    ];
   };
 }

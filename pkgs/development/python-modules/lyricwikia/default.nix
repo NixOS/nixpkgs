@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "enricobacis";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "lyricwikia";
+    tag = version;
     hash = "sha256-P88DrRAa2zptt8JLy0/PLi0oZ/BghF/XGSP0kOObi7E=";
   };
 

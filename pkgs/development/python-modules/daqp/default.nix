@@ -3,21 +3,21 @@
   fetchFromGitHub,
   buildPythonPackage,
   unittestCheckHook,
-  cython_0,
+  cython,
   setuptools,
   wheel,
   numpy,
 }:
 buildPythonPackage rec {
   pname = "daqp";
-  version = "0.5.1";
+  version = "0.7.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    rev = "5a15a3d16731d3d50f867218c1b281567db556fd";
-    hash = "sha256-in7Ci/wM7i0csJ4XVfo1lboWOyfuuU+8E+TzGmMV3x0=";
+    tag = "v${version}";
+    hash = "sha256-I+ObnFAAhRoYtPEDXGP6BI+Zk9CH5yU27JJ+tWbcACQ=";
   };
 
   sourceRoot = "${src.name}/interfaces/daqp-python";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_0
+    cython
     setuptools
     wheel
   ];

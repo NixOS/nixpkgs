@@ -1,6 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -25,12 +28,13 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit3";
   version = "3.5.0";
+  format = "setuptools";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
+    tag = version;
     hash = "sha256-cMGD5Xdf9ElS1NT7Q0NPB//EvUO0MI0VTtps5JRisZ4=";
   };
 
@@ -45,28 +49,37 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-    # The tests want to run the installed executables
-    export PATH=$out/bin:$PATH
-
-    # gdtoolkit tries to write cache variables to $HOME/.cache
-    export HOME=$TMP
-  '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   # The tests are not working on NixOS
-  disabledTests = [ "test_cc_on_empty_file_succeeds" "test_cc_on_file_with_single_function_succeeds" ];
+  disabledTests = [
+    "test_cc_on_empty_file_succeeds"
+    "test_cc_on_file_with_single_function_succeeds"
+  ];
 
-  pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
+  pythonImportsCheck = [
+    "gdtoolkit"
+    "gdtoolkit.formatter"
+    "gdtoolkit.linter"
+    "gdtoolkit.parser"
+  ];
 
   meta = with lib; {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
     license = licenses.mit;
-    maintainers = with maintainers; [ shiryel tmarkus ];
+    maintainers = with maintainers; [
+      shiryel
+      tmarkus
+    ];
   };
 }

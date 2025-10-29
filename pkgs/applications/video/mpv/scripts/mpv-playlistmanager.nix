@@ -6,15 +6,15 @@
   yt-dlp,
 }:
 
-buildLua rec {
+buildLua {
   pname = "mpv-playlistmanager";
-  version = "0-unstable-2024-08-17";
+  version = "0-unstable-2025-09-03";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "d733d8c00cb543a646f2ce5ab5c12bef2dfd6756";
-    hash = "sha256-Pv2+dl9QIIwOYmT4sJmPOBHed5pZLMXZaw80mT4s+WQ=";
+    rev = "b11621e1dc4afd24b41b887aff0748146176c4c1";
+    hash = "sha256-0+ISjWb8aGdRjsFOPURBZzTmJ4X8ayzYfnxYICDmizA=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

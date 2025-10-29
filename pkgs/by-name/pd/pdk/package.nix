@@ -33,6 +33,9 @@ bundlerApp {
     homepage = "https://github.com/puppetlabs/pdk";
     license = lib.licenses.asl20;
     mainProgram = "pdk";
-    maintainers = with lib.maintainers; [ netali anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      netali
+      anthonyroussel
+    ];
   };
 }

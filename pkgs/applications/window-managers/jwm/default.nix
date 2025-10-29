@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, expat
-, fontconfig
-, freetype
-, gettext
-, libX11
-, libXau
-, libXdmcp
-, libXext
-, libXft
-, libXinerama
-, libXmu
-, libXpm
-, libjpeg
-, libpng
-, librsvg
-, pango
-, pkg-config
-, which
-, xorg
-, xorgproto
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  expat,
+  fontconfig,
+  freetype,
+  gettext,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXext,
+  libXft,
+  libXinerama,
+  libXmu,
+  libXpm,
+  libjpeg,
+  libpng,
+  librsvg,
+  pango,
+  pkg-config,
+  which,
+  xorg,
+  xorgproto,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-T0N9UMu+BLRzVWshUB4apiq8H2t1y09n4P1cLT5K/N8=";
+    hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,10 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorgproto
   ];
+
+  postPatch = ''
+    sed -i '/AM_ICONV/i AC_CONFIG_MACRO_DIRS([m4])' configure.ac
+  '';
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 

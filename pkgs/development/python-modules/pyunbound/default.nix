@@ -1,4 +1,16 @@
-{ lib, buildPythonPackage, unbound, openssl, expat, libevent, swig, python, stdenv }:
+{
+  lib,
+  buildPythonPackage,
+  unbound,
+  openssl,
+  expat,
+  libevent,
+  bison,
+  flex,
+  swig,
+  python,
+  stdenv,
+}:
 
 buildPythonPackage rec {
   pname = "pyunbound";
@@ -7,9 +19,18 @@ buildPythonPackage rec {
 
   patches = unbound.patches or null;
 
-  nativeBuildInputs = [ swig ];
+  nativeBuildInputs = [
+    bison
+    flex
+    swig
+  ];
 
-  buildInputs = [ openssl expat libevent python ];
+  buildInputs = [
+    openssl
+    expat
+    libevent
+    python
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in \

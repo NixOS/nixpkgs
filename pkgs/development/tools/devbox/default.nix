@@ -1,24 +1,25 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
 }:
 buildGoModule rec {
   pname = "devbox";
-  version = "0.13.4";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "jetpack-io";
+    owner = "jetify-com";
     repo = pname;
     rev = version;
-    hash = "sha256-+3AKBhxf1m6cBNtEx8xmUmJ2PUk0LNPaS+cZhsXJoTs=";
+    hash = "sha256-+OsFKBtc4UkkI37YJM9uKIJZC1+KkuDJJKjipRzyF7k=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X go.jetpack.io/devbox/internal/build.Version=${version}"
+    "-X go.jetify.com/devbox/internal/build.Version=${version}"
   ];
 
   subPackages = [ "cmd/devbox" ];
@@ -26,7 +27,7 @@ buildGoModule rec {
   # integration tests want file system access
   doCheck = false;
 
-  vendorHash = "sha256-rwmNzYzmZqNcNVV4GgqCVLT6ofIkblVCMJHLGwlhcGw=";
+  vendorHash = "sha256-0lDPK9InxoQzndmQvhKCYvqEt2NL2A+rt3sGg+o1HTY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,8 +40,12 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Instant, easy, predictable shells and containers";
-    homepage = "https://www.jetpack.io/devbox";
+    homepage = "https://www.jetify.com/devbox";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom lagoja ];
+    maintainers = with maintainers; [
+      urandom
+      lagoja
+      madeddie
+    ];
   };
 }

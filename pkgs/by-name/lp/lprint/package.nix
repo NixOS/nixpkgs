@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, pappl
-, cups
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pappl,
+  cups,
+  pkg-config,
+  # Enables support for untested printers. It makes sense to default this to true, as it's unlikely to result in any issues
+  enableExperimental ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +15,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
-    repo = pname;
+    repo = "lprint";
     rev = "v${version}";
     hash = "sha256-1OOLGQ8S4oRNSJanX/AzJ+g5F+jYnE/+o+ie5ucY22U=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +34,8 @@ stdenv.mkDerivation rec {
     cups
   ];
 
+  configureFlags = lib.optional enableExperimental "--enable-experimental";
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/lprint --help
@@ -34,11 +44,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "LPrint implements printing for a variety of common label and receipt printers connected via network or USB";
+    description = "Implements printing for a variety of common label and receipt printers connected via network or USB";
     mainProgram = "lprint";
     homepage = "https://github.com/michaelrsweet/lprint";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }

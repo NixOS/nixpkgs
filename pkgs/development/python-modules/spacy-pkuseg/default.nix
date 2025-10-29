@@ -2,32 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   cython,
+  setuptools,
   numpy,
   srsly,
 }:
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "0.0.33";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-8TFWrE4ERg8aw17f0DbplwTbutGa0KObBsNA+AKinmI=";
+    hash = "sha256-tIB4d1r/80kUN1NE1W9wo37ARBiMyuzj9wgG/TIqR+s=";
   };
 
   # Does not seem to have actual tests, but unittest discover
   # recognizes some non-tests as tests and fails.
   doCheck = false;
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     srsly
   ];

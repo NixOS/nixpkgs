@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 {
   name = "containers-restart_networking";
   meta = {
@@ -18,24 +18,42 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         config = {
           networking.firewall.enable = false;
           networking.interfaces.eth0.ipv4.addresses = [
-            { address = "192.168.1.122"; prefixLength = 24; }
+            {
+              address = "192.168.1.122";
+              prefixLength = 24;
+            }
           ];
         };
       };
 
       networking.bridges.br0 = {
-        interfaces = [];
+        interfaces = [ ];
         rstp = false;
       };
 
-      networking.interfaces.br0.ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+      networking.interfaces.br0.ipv4.addresses = [
+        {
+          address = "192.168.1.1";
+          prefixLength = 24;
+        }
+      ];
+
+      networking.interfaces.eth1 = {
+        ipv4.addresses = lib.mkForce [ ];
+        ipv6.addresses = lib.mkForce [ ];
+      };
 
       specialisation.eth1.configuration = {
         networking.bridges.br0.interfaces = [ "eth1" ];
         networking.interfaces = {
           eth1.ipv4.addresses = lib.mkForce [ ];
           eth1.ipv6.addresses = lib.mkForce [ ];
-          br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          br0.ipv4.addresses = [
+            {
+              address = "192.168.1.2";
+              prefixLength = 24;
+            }
+          ];
         };
       };
 
@@ -48,7 +66,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         networking.interfaces = {
           eth1.ipv4.addresses = lib.mkForce [ ];
           eth1.ipv6.addresses = lib.mkForce [ ];
-          br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          br0.ipv4.addresses = [
+            {
+              address = "192.168.1.2";
+              prefixLength = 24;
+            }
+          ];
         };
       };
     };
@@ -103,4 +126,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         client.fail("grep eth1 /run/br0.interfaces >&2")
   '';
 
-})
+}

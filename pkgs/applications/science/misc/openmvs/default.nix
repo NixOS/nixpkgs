@@ -1,23 +1,23 @@
-{ lib
-, boost
-, breakpad
-, ceres-solver
-, cgal
-, cmake
-, eigen
-, fetchFromGitHub
-, glfw
-, gmp
-, libjpeg
-, libpng
-, libtiff
-, mpfr
-, opencv
-, openmp
-, pkg-config
-, stdenv
-, vcg
-, zstd
+{
+  lib,
+  boost,
+  ceres-solver,
+  cgal,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  glfw,
+  gmp,
+  libjpeg,
+  libpng,
+  libtiff,
+  mpfr,
+  opencv,
+  openmp,
+  pkg-config,
+  stdenv,
+  vcg,
+  zstd,
 }:
 
 let
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boostWithZstd
-    breakpad
     ceres-solver
     cgal
     eigen
@@ -57,7 +56,10 @@ stdenv.mkDerivation rec {
     vcg
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postInstall = ''
     mv $out/bin/OpenMVS/* $out/bin
@@ -66,11 +68,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest
-    runHook postCheck
-  '';
 
   meta = {
     description = "Open Multi-View Stereo reconstruction library";

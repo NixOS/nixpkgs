@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, python3
-, gtest
-, withAnimation ? true
-, withTranscoder ? true
-, eigen
-, ghc_filesystem
-, tinygltf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  python3,
+  gtest,
+  withAnimation ? true,
+  withTranscoder ? true,
+  eigen,
+  ghc_filesystem,
+  tinygltf,
 }:
 
 let
@@ -33,17 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "^Clang" "^AppleClang"
   '';
 
-  buildInputs = [ gtest ]
-    ++ lib.optionals withTranscoder [ eigen ghc_filesystem tinygltf ];
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optionals withTranscoder [
+    eigen
+    ghc_filesystem
+    tinygltf
+  ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   cmakeFlags = [
     "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
     "-DDRACO_GOOGLETEST_PATH=${gtest}"
     "-DBUILD_SHARED_LIBS=${cmakeBool true}"
     "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
-  ] ++ lib.optionals withTranscoder [
+  ]
+  ++ lib.optionals withTranscoder [
     "-DDRACO_EIGEN_PATH=${eigen}/include/eigen3"
     "-DDRACO_FILESYSTEM_PATH=${ghc_filesystem}"
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"

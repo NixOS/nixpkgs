@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, raspberrypifw }:
+{
+  lib,
+  stdenvNoCC,
+  raspberrypifw,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-dtbs";
@@ -31,7 +35,7 @@ stdenvNoCC.mkDerivation {
     # Compatible overlays that may be used
     overlays = "${raspberrypifw}/share/raspberrypi/boot/overlays";
   };
-  meta = with lib; {
+  meta = {
     inherit (raspberrypifw.meta) homepage license;
     description = "DTBs for the Raspberry Pi";
   };

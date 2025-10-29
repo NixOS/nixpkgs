@@ -18,20 +18,19 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2024.9.0";
+  version = "2025.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rO6fUCFYfCVPxfd+vvzWL+sMDDqA/qRSPUUTB90E8zA=";
+    hash = "sha256-QoO4pMAtrsgaJ1yUYHc+otG3eMpw67W8sS7B/H3AoJk=";
   };
 
   build-system = [
@@ -43,16 +42,17 @@ buildPythonPackage rec {
     iso3166
     pycountry
     rstr
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
-    pytest-cov
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "schwifty" ];
 

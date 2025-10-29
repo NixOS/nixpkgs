@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, desktop-file-utils
-, gitUpdater
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  desktop-file-utils,
+  gitUpdater,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gapless";
-  version = "4.0";
+  version = "4.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t9YthW8HZz2kXYPvidVRy7GVB2cRGEOCrXZtIpW65MA=";
+    hash = "sha256-P8hmywS/k+24KfFxpQdnBv0ArD+pKgUNcYk/Mnsx5jY=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-  ] ++ (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good

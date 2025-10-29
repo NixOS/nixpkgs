@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   setuptools,
   pytestCheckHook,
   matplotlib,
+  legacy-cgi,
   python-snap7,
   opencv4,
 }:
@@ -45,6 +47,9 @@ buildPythonPackage rec {
 
   dependencies = [
     setuptools # pkg_resources is referenced at runtime
+  ]
+  ++ lib.optionals (!pythonOlder "3.13") [
+    legacy-cgi
   ];
 
   nativeCheckInputs = [

@@ -1,15 +1,35 @@
-{ lib, buildPythonApplication, click, i3ipc, psutil, natsort, fetchPypi, xprop, xdotool, importlib-metadata }:
+{
+  lib,
+  buildPythonApplication,
+  click,
+  i3ipc,
+  psutil,
+  natsort,
+  fetchPypi,
+  xprop,
+  xdotool,
+  importlib-metadata,
+}:
 
 buildPythonApplication rec {
   pname = "i3-resurrect";
   version = "1.4.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-13FKRvEE4vHq5G51G1UyBnfNiWeS9Q/SYCG16E1Sn4c=";
   };
 
-  propagatedBuildInputs = [ click psutil xprop natsort i3ipc xdotool importlib-metadata ];
+  propagatedBuildInputs = [
+    click
+    psutil
+    xprop
+    natsort
+    i3ipc
+    xdotool
+    importlib-metadata
+  ];
   doCheck = false; # no tests
 
   meta = with lib; {
@@ -17,7 +37,7 @@ buildPythonApplication rec {
     description = "Simple but flexible solution to saving and restoring i3 workspaces";
     mainProgram = "i3-resurrect";
     license = licenses.gpl3;
-    platforms= platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon ];
   };
 }

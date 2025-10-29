@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, python3
-, pkg-config
-, ldc
-, dconf
-, dbus
-, gsettings-desktop-schemas
-, desktop-file-utils
-, gettext
-, gtkd
-, libsecret
-, wrapGAppsHook3
-, libunwind
-, appstream
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  ldc,
+  dconf,
+  dbus,
+  gsettings-desktop-schemas,
+  desktop-file-utils,
+  gettext,
+  gtkd,
+  libsecret,
+  wrapGAppsHook3,
+  libunwind,
+  appstream,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,11 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-  '';
-
-  preFixup = ''
-    substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
-      --replace "Exec=tilix" "Exec=$out/bin/tilix"
+    # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=tilix
+    substituteInPlace source/gx/tilix/{prefeditor/prefdialog.d,terminal/terminal.d} \
+      --replace-fail "(Align." "(GtkAlign."
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.tilix;
@@ -72,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ midchildan jtbx ];
+    maintainers = with maintainers; [
+      midchildan
+      jtbx
+    ];
     platforms = platforms.linux;
     mainProgram = "tilix";
   };

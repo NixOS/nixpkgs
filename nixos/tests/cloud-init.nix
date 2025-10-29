@@ -1,14 +1,10 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+{ lib, pkgs, ... }:
 
 let
   inherit (import ./ssh-keys.nix pkgs)
-    snakeOilPrivateKey snakeOilPublicKey;
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    ;
 
   metadataDrive = pkgs.stdenv.mkDerivation {
     name = "metadata";
@@ -54,15 +50,21 @@ let
             - 'example.com'
       EOF
       ${pkgs.cdrkit}/bin/genisoimage -volid cidata -joliet -rock -o $out/metadata.iso $out/iso
-      '';
+    '';
   };
 
-in makeTest {
+in
+{
   name = "cloud-init";
-  meta.maintainers = with pkgs.lib.maintainers; [ lewo illustris ];
-  nodes.machine = { ... }:
-  {
-    virtualisation.qemu.options = [ "-cdrom" "${metadataDrive}/metadata.iso" ];
+  meta.maintainers = with lib.maintainers; [
+    lewo
+    illustris
+  ];
+  nodes.machine = {
+    virtualisation.qemu.options = [
+      "-cdrom"
+      "${metadataDrive}/metadata.iso"
+    ];
     services.cloud-init = {
       enable = true;
       network.enable = true;

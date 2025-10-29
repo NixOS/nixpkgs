@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkg-config, bash-completion
-, gsl, popt, clightd, systemd, libconfig, libmodule
-, withGeoclue ? true, geoclue2
-, withUpower ? true, upower }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dbus,
+  cmake,
+  pkg-config,
+  bash-completion,
+  gsl,
+  popt,
+  clightd,
+  systemd,
+  libconfig,
+  libmodule,
+  withGeoclue ? true,
+  geoclue2,
+  withUpower ? true,
+  upower,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clight";
@@ -31,8 +45,9 @@ stdenv.mkDerivation rec {
     geoclue2
     libconfig
     libmodule
-  ] ++ lib.optional withGeoclue geoclue2
-    ++ lib.optional withUpower upower;
+  ]
+  ++ lib.optional withGeoclue geoclue2
+  ++ lib.optional withUpower upower;
 
   cmakeFlags = [
     "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"

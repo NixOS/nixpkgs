@@ -1,25 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, ninja
-, qtbase
-, qtwayland
-, qt5
-, xorg
-, useQt6 ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  ninja,
+  qtbase,
+  qtwayland,
+  qt5,
+  xorg,
+  useQt6 ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "adwaita-qt";
   version = "1.4.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
-    repo = pname;
+    repo = "adwaita-qt";
     rev = version;
     sha256 = "sha256-K/+SL52C+M2OC4NL+mhBnm/9BwH0KNNTGIDmPwuUwkM=";
   };
@@ -31,11 +35,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb
-  ] ++ lib.optionals (!useQt6) [
+  ]
+  ++ lib.optionals (!useQt6) [
     qt5.qtx11extras
-  ] ++ lib.optionals useQt6 [
+  ]
+  ++ lib.optionals useQt6 [
     qtwayland
   ];
 

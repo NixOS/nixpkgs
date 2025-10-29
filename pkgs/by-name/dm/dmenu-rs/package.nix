@@ -15,6 +15,7 @@
   fontconfig,
   libXft,
   libXinerama,
+  libxcb,
   aspell,
   xclip,
   xdg-utils,
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Shizcow";
     repo = "dmenu-rs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
   };
 
@@ -56,18 +57,18 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      expat
-      fontconfig
-      libXft
-      libXinerama
-    ]
-    ++ lib.optionals enablePlugins [
-      aspell
-      xclip
-      xdg-utils
-    ];
+  buildInputs = [
+    expat
+    fontconfig
+    libXft
+    libXinerama
+    libxcb
+  ]
+  ++ lib.optionals enablePlugins [
+    aspell
+    xclip
+    xdg-utils
+  ];
 
   # The dmenu-rs repository does not include a Cargo.lock because of its
   # dynamic build and plugin support. Generating it with make and checking it
@@ -78,13 +79,12 @@ stdenv.mkDerivation rec {
   };
 
   # Copy the Cargo.lock stored here in nixpkgs into the build directory.
-  postPatch =
-    ''
-      cp ${cargoLockFile} src/Cargo.lock
-    ''
-    + lib.optionalString enablePlugins ''
-      chmod +w src/Cargo.lock
-    '';
+  postPatch = ''
+    cp ${cargoLockFile} src/Cargo.lock
+  ''
+  + lib.optionalString enablePlugins ''
+    chmod +w src/Cargo.lock
+  '';
 
   # Include all plugins in the dmenu-rs repository under src/plugins.
   # See https://github.com/Shizcow/dmenu-rs/tree/master/src/plugins

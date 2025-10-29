@@ -2,6 +2,8 @@
   buildGoModule,
   cbconvert,
   gtk3,
+  pkg-config,
+  versionCheckHook,
   wrapGAppsHook3,
 }:
 
@@ -10,18 +12,18 @@ buildGoModule rec {
 
   inherit (cbconvert)
     patches
-    proxyVendor
     src
     tags
     version
     ;
 
-  nativeBuildInputs = cbconvert.nativeBuildInputs ++ [
+  nativeBuildInputs = [
+    pkg-config
     wrapGAppsHook3
   ];
   buildInputs = cbconvert.buildInputs ++ [ gtk3 ];
 
-  vendorHash = "sha256-vvCvKecPszhNCQdgm3mQMb5+486BGZ9sz3R0b70eLeQ=";
+  vendorHash = "sha256-oMW5zfAw2VQSVaB+Z1pE51OtNIFr+PnRMM+oBYNLWxk=";
   modRoot = "cmd/cbconvert-gui";
 
   ldflags = [
@@ -31,16 +33,15 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -D --mode=0644 --target-directory=$out/share/applications/ dist/linux/cbconvert.desktop
-    install -D --mode=0644 --target-directory=$out/icons/hicolor/256x256/apps dist/linux/cbconvert.png
-    install -D --mode=0644 --target-directory=$out/share/thumbnailers dist/linux/cbconvert.thumbnailer
-    install -D --mode=0644 dist/linux/flatpak/io.github.gen2brain.cbconvert.metainfo.xml $out/share/metainfo/cbconvert.metainfo.xml
+    install -D --mode=0644 --target-directory=$out/share/icons/hicolor/256x256/apps dist/linux/io.github.gen2brain.cbconvert.png
+    install -D --mode=0644 --target-directory=$out/share/applications/ dist/linux/io.github.gen2brain.cbconvert.desktop
+    install -D --mode=0644 --target-directory=$out/share/metainfo dist/linux/io.github.gen2brain.cbconvert.metainfo.xml
+    install -D --mode=0644 --target-directory=$out/share/thumbnailers dist/linux/io.github.gen2brain.cbconvert.thumbnailer
   '';
 
-  postFixup = ''
-    substituteInPlace $out/share/metainfo/cbconvert.metainfo.xml \
-      --replace-fail "io.github.gen2brain.cbconvert" "cbconvert"
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = cbconvert.meta // {
     mainProgram = "cbconvert-gui";

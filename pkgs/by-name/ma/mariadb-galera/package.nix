@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.20";
+  version = "26.4.24";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
-    rev = "release_${version}";
-    hash = "sha256-R2YQtAuqPkOtcvjS5PPcqAqu153N2+0/WjZt96ZSI1A=";
+    tag = "release_${version}";
+    hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ izorkin ];
+    teams = [ teams.helsinki-systems ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, buildPackages
-, cmake
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, gettext
-, glib
-, glibcLocales
-, withExamples ? true
-, gtk3
-# Uses gtkdoc-scan* tools, which produces a binary linked against lib for hostPlatform and executes it to generate docs
-, withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, gtk-doc
-, pkg-config
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  buildPackages,
+  cmake,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  gettext,
+  glib,
+  glibcLocales,
+  withExamples ? true,
+  gtk3,
+  # Uses gtkdoc-scan* tools, which produces a binary linked against lib for hostPlatform and executes it to generate docs
+  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  gtk-doc,
+  pkg-config,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,10 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withExamples [
+  ]
+  ++ lib.optionals withExamples [
     "bin"
-  ] ++ lib.optionals withDocumentation [
+  ]
+  ++ lib.optionals withDocumentation [
     "devdoc"
+  ];
+
+  patches = [
+    # Fix compat with CMake 4
+    # Remove when https://gitlab.com/ubports/development/core/geonames/-/merge_requests/4 merged & in release
+    ./1001-geonames-cmake4-compat.patch
   ];
 
   postPatch = ''
@@ -51,7 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib # glib-compile-resources
     pkg-config
     validatePkgConfig
-  ] ++ lib.optionals withDocumentation [
+  ]
+  ++ lib.optionals withDocumentation [
     docbook-xsl-nons
     docbook_xml_dtd_45
     gtk-doc
@@ -59,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-  ] ++ lib.optionals withExamples [
+  ]
+  ++ lib.optionals withExamples [
     gtk3
   ];
 
@@ -80,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WANT_TESTS" finalAttrs.finalPackage.doCheck)
     # Keeps finding & using glib-compile-resources from buildInputs otherwise
     (lib.cmakeFeature "CMAKE_PROGRAM_PATH" (lib.makeBinPath [ buildPackages.glib.dev ]))
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # only for cross without native execute support because the canExecute "emulator" call has a format that I can't get CMake to accept
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
   ];
@@ -103,11 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/geonames";
     changelog = "https://gitlab.com/ubports/development/core/geonames/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.all;
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1
-    broken = stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.emulatorAvailable buildPackages;
+    broken =
+      stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.emulatorAvailable buildPackages;
     pkgConfigModules = [
       "geonames"
     ];

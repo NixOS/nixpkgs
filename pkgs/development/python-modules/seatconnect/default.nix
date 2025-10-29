@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "farfar";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "seatconnect";
+    tag = version;
     hash = "sha256-HITVrI0o94a61gy/TYSGFtLBYX4Rw/dK1o2/KsvHLTQ=";
   };
 

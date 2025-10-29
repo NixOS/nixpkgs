@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rabbit-air";
-    repo = pname;
+    repo = "python-rabbitair";
     rev = "v${version}";
     hash = "sha256-CGr7NvnGRNTiKq5BpB/zmfgyd/2ggTbO0nj+Q+MavTs=";
   };
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-asyncio

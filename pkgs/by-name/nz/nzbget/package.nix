@@ -1,34 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, pkg-config
-, gnutls
-, libgcrypt
-, libpar2
-, libcap
-, libsigcxx
-, libxml2
-, ncurses
-, openssl
-, zlib
-, deterministic-uname
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libpar2,
+  libcap,
+  libsigcxx,
+  libxml2,
+  ncurses,
+  openssl,
+  zlib,
+  deterministic-uname,
+  nixosTests,
 }:
 
+let
+  par2TurboSrc = fetchFromGitHub {
+    owner = "nzbgetcom";
+    repo = "par2cmdline-turbo";
+    rev = "v1.3.0-20250808"; # from cmake/par2-turbo.cmake
+    hash = "sha256-ZP8AI5htmEcxQQtvgShcQ8qNoRL+jBR1BdKS6yyuB/E=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.3";
+  version = "25.3";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Gci9bVjmewoEii6OiOuRpLgEBEKApmMmlA5v3OedCo4=";
+    hash = "sha256-ecTz+axqPOlRe0wi7IRiESn2JjLbalI+sQVKqrvrAoU=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  patches = [
+    # remove git usage for fetching modified+vendored par2cmdline-turbo
+    ./remove-git-usage.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -42,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     zlib
   ];
+
+  preConfigure = ''
+    mkdir -p build/par2-turbo/src
+    cp -r ${par2TurboSrc} build/par2-turbo/src/par2-turbo
+    chmod -R u+w build/par2-turbo/src/par2-turbo
+  '';
 
   postPatch = ''
     substituteInPlace daemon/util/Util.cpp \
@@ -61,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     description = "Command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub devusb ];
+    maintainers = with maintainers; [
+      pSub
+      devusb
+    ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";
   };

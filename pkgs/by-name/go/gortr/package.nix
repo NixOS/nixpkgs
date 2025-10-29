@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cloudflare";
-    repo = pname;
+    repo = "gortr";
     rev = "v${version}";
     hash = "sha256-W6+zCLPcORGcRJF0F6/LRPap4SNVn/oKGs21T4nSNO0=";
   };
@@ -22,6 +23,8 @@ buildGoModule rec {
     "-w"
     "-X=main.version=${version}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "RPKI-to-Router server used at Cloudflare";

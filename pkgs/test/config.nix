@@ -1,4 +1,8 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 lib.recurseIntoAttrs {
 
   # https://github.com/NixOS/nixpkgs/issues/175196
@@ -10,12 +14,15 @@ lib.recurseIntoAttrs {
   #
   # Instead of `builtins.seq`, the list may be constructed based on actual package info.
   allowPkgsInPermittedInsecurePackages =
-    let pkgs = import ../.. {
-          config = {
-            permittedInsecurePackages = builtins.seq pkgs.glibc.version [];
-          };
+    let
+      pkgs' = import ../.. {
+        system = pkgs.stdenv.hostPlatform.system;
+        config = {
+          permittedInsecurePackages = builtins.seq pkgs'.glibc.version [ ];
         };
+      };
 
-    in pkgs.hello;
+    in
+    pkgs'.hello;
 
 }

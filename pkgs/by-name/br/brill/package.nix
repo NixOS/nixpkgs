@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "brill";
@@ -10,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  installPhase = with finalAttrs; ''
+  installPhase = ''
     runHook preInstall
 
     install -Dm644 *.ttf          -t $out/share/fonts/truetype

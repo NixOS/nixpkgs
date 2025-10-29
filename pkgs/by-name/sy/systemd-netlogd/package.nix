@@ -13,18 +13,24 @@
   sphinx,
   systemd,
   systemdLibs,
+  testers,
   opensslSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "systemd-netlogd";
-  version = "1.4.2";
+  version = "1.4.4";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-netlogd";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-FwBwhsnVathlRQjKyrsPpZZlCb2rIpVuHGq9mG3mNsw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Kgr6KZp2SSLG8xnqXNWsDgIa9rNnBGcN+TkuAbr+yAA=";
   };
 
   # Fixup a few installation paths
@@ -40,11 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@PKGPREFIX@/systemd-netlogd' '${placeholder "out"}/bin/systemd-netlogd'
   '';
 
-  outputs = [
-    "out"
-    "man"
-  ];
-
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -58,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libcap
     systemdLibs
-  ] ++ lib.optional opensslSupport openssl;
+  ]
+  ++ lib.optional opensslSupport openssl;
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc/systemd"
@@ -69,9 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Make sure x86_64-linux -> aarch64-linux cross compilation works
-    tests = lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+    }
+    // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
       aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
     };
+
     updateScript = nix-update-script { };
   };
 
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/systemd/systemd-netlogd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ getchoo ];
-    inherit (systemd.meta) platforms;
     mainProgram = "systemd-netlogd";
+    inherit (systemd.meta) platforms;
   };
 })

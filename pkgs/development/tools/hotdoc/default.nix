@@ -1,48 +1,61 @@
-{ lib
-, stdenv
-, buildPythonApplication
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, pkg-config
-, cmake
-, flex
-, glib
-, json-glib
-, libxml2
-, appdirs
-, dbus-deviation
-, faust-cchardet
-, feedgen
-, lxml
-, networkx
-, pkgconfig
-, pyyaml
-, schema
-, setuptools
-, toposort
-, wheezy-template
-, llvmPackages
-, gst_all_1
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchpatch,
+  fetchPypi,
+  replaceVars,
+  clang,
+  libclang,
+  pytestCheckHook,
+  pkg-config,
+  cmake,
+  flex,
+  glib,
+  json-glib,
+  libxml2,
+  appdirs,
+  backports-entry-points-selectable,
+  dbus-deviation,
+  faust-cchardet,
+  feedgen,
+  lxml,
+  networkx,
+  pkgconfig,
+  pyyaml,
+  schema,
+  setuptools,
+  toposort,
+  wheezy-template,
+  llvmPackages,
+  gst_all_1,
 }:
 
 buildPythonApplication rec {
   pname = "hotdoc";
-  version = "0.15";
-  format = "setuptools";
+  version = "0.17.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sfQ/iBd1Z+YqnaOg8j32rC2iucdiiK3Tff9NfYFnQyc=";
+    hash = "sha256-xNXf9kfwOqh6HS0GA10oGe3QmbkWNeOy7jkIKTV66fw=";
   };
 
   patches = [
+    (replaceVars ./clang.patch {
+      clang = lib.getExe clang;
+      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+
+    # Fix build with gcc15
     (fetchpatch {
-      name = "fix-test-hotdoc.patch";
-      url = "https://github.com/hotdoc/hotdoc/commit/d2415a520e960a7b540742a0695b699be9189540.patch";
-      hash = "sha256-9ORZ91c+/oRqEp2EKXjKkz7u8mLnWCq3uPsc3G4NB9E=";
+      name = "hotdoc-fix-c_comment_scanner-function-prototypes-gcc15.patch";
+      url = "https://github.com/hotdoc/hotdoc/commit/adf8518431fafb78c9b47862a0a9a58824b6a421.patch";
+      hash = "sha256-5y50Yk+AjV3aSk8H3k9od/Yvy09FyQQOcVOAcstQnw8=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     pkg-config
@@ -56,8 +69,9 @@ buildPythonApplication rec {
     libxml2.dev
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
+    backports-entry-points-selectable
     dbus-deviation
     faust-cchardet
     feedgen
@@ -66,14 +80,12 @@ buildPythonApplication rec {
     pkgconfig
     pyyaml
     schema
-    setuptools  # for pkg_resources
+    setuptools # for pkg_resources
     toposort
     wheezy-template
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
@@ -85,25 +97,42 @@ buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
-  # Run the tests by package instead of current dir
-  pytestFlagsArray = [ "--pyargs" "hotdoc" ];
+  pytestFlags = [
+    # Run the tests by package instead of current dir
+    "--pyargs"
+    "hotdoc"
+  ];
+
+  disabledTestPaths = [
+    # Executing hotdoc exits with code 1
+    "tests/test_hotdoc.py::TestHotdoc::test_basic"
+    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  ];
 
   disabledTests = [
     # Test does not correctly handle path normalization for test comparison
     "test_cli_overrides"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
     "test_index"
   ];
 
-  # Hardcode libclang paths
-  postPatch = ''
-    substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
-  '';
+  postPatch =
+    # Hardcode libclang paths
+    ''
+      substituteInPlace hotdoc/extensions/c/c_extension.py \
+        --replace "shutil.which('llvm-config')" 'True' \
+        --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
+        --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
+        --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
+    ''
+    # <https://github.com/MathieuDuponchelle/cmark/pull/2>
+    + ''
+      patch -p1 -d cmark -i ${./fix-cmake-4.patch}
+    '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''

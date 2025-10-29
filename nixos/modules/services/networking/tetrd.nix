@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.services.tetrd.enable = lib.mkEnableOption "tetrd";
@@ -41,7 +46,12 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -70,8 +80,8 @@
             builtins.storeDir
             "/etc/ssl"
             "/etc/static/ssl"
-            "${pkgs.nettools}/bin/route:/usr/bin/route"
-            "${pkgs.nettools}/bin/ifconfig:/usr/bin/ifconfig"
+            "${pkgs.net-tools}/bin/route:/usr/bin/route"
+            "${pkgs.net-tools}/bin/ifconfig:/usr/bin/ifconfig"
           ];
 
           BindPaths = [

@@ -1,11 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, tpm2-tss
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, qrencode
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tpm2-tss,
+  autoreconfHook,
+  autoconf-archive,
+  pandoc,
+  pkg-config,
+  withPlymouth ? false,
+  plymouth,
+  qrencode,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +30,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
+    pandoc
     pkg-config
   ];
 
   buildInputs = [
     tpm2-tss
     qrencode
-  ];
+  ]
+  ++ lib.optional withPlymouth plymouth;
 
   meta = with lib; {
     description = "Attest the trustworthiness of a device against a human using time-based one-time passwords";

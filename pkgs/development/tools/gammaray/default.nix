@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, qtwayland
-, qtsvg
-, qt3d
-, qtdeclarative
-, qtconnectivity
-, qtlocation
-, qtscxml
-, qtwebengine
-, kdePackages
-, wayland
-, elfutils
-, libbfd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
+  qt3d,
+  qtdeclarative,
+  qtconnectivity,
+  qtlocation,
+  qtscxml,
+  qtwebengine,
+  kdePackages,
+  wayland,
+  elfutils,
+  libbfd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gammaray";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mJw9yckbkFVYZlcakai/hH/gAD0xOQir5JqGMNnB/dE=";
+    hash = "sha256-1d27hDIxf7pFZlRnblwIbXId7EVItdNuHXtZ/MytQQw=";
   };
 
   nativeBuildInputs = [
@@ -64,8 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KDAB/GammaRay";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
     mainProgram = "gammaray";
   };
 }
-

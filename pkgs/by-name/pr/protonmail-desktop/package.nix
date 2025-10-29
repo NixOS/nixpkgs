@@ -1,81 +1,83 @@
 {
+  asar,
   lib,
   stdenv,
   fetchurl,
   makeWrapper,
   dpkg,
   electron,
-  unzip,
+  _7zz,
 }:
-
 let
   mainProgram = "proton-mail";
-  srcHashes = {
-    # Upstream info: It's intended to stay like this in further releases
-    # https://github.com/NixOS/nixpkgs/pull/326152#discussion_r1679558135
-    universal-darwin = "sha256-6b+CNCvrkIA1CvSohSJZq/veZZNsA3lyhVv5SsBlJlw=";
-    x86_64-linux = "sha256-v8ufnQQEqTT5cr7fq8Fozje/NDlBzaCeKIzE6yU/biE=";
-  };
-
+  version = "1.9.1";
+  linuxHash = "sha256-P2i/uX++F1JUgwSUyndYazjLSCK1mP+XSGICPUoo1VE=";
+  darwinHash = "sha256-U+I0ttToDiLLjEaKlvdb7HhE4dMrLryc251GXBVsQEM=";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "protonmail-desktop";
-  # Upstream info: "v"-prefix got dropped
-  version = "1.0.6";
+  inherit version;
 
-  src = fetchurl {
-    url =
-      if stdenv.hostPlatform.isDarwin then
-        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
-      else
-        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
-    sha256 =
-      {
-        x86_64-linux = srcHashes.x86_64-linux;
-        x86_64-darwin = srcHashes.universal-darwin;
-        aarch64-darwin = srcHashes.universal-darwin;
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  };
-
-  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin ".";
+  src =
+    {
+      "x86_64-linux" = fetchurl {
+        url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
+        hash = linuxHash;
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
+        hash = darwinHash;
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
+        hash = darwinHash;
+      };
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs =
-    [
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
       makeWrapper
+      asar
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux dpkg ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      _7zz
+    ];
 
-  installPhase =
-    let
-      darwin = ''
-        mkdir -p $out/{Applications,bin}
-        cp -r "Proton Mail.app" $out/Applications/
-        makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
-      '';
-      linux = ''
-        runHook preInstall
-        mkdir -p $out
-        cp -r usr/share/ $out/
-        cp -r usr/lib/proton-mail/resources/app.asar $out/share/
-      '';
+  # Rebuild the ASAR archive, hardcoding the resourcesPath
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    asar extract usr/lib/proton-mail/resources/app.asar tmp
+    rm usr/lib/proton-mail/resources/app.asar
+    substituteInPlace tmp/.webpack/main/index.js \
+      --replace-fail "process.resourcesPath" "'$out/share/proton-mail'"
+    asar pack tmp/ usr/lib/proton-mail/resources/app.asar
+    rm -fr tmp
+  '';
 
-    in
-    ''
-      runHook preInstall
-
-      ${if stdenv.hostPlatform.isDarwin then darwin else linux}
-
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/proton-mail
+    cp -r usr/share/ $out/
+    cp -r usr/lib/proton-mail/resources/* $out/share/proton-mail/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r "Proton Mail.app" $out/Applications/
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
-      --add-flags $out/share/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags $out/share/proton-mail/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -85,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";
-    homepage = "https://github.com/ProtonMail/inbox-desktop";
+    homepage = "https://github.com/ProtonMail/WebClients";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rsniezek
@@ -94,10 +96,10 @@ stdenv.mkDerivation rec {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+    ]
+    ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+
     inherit mainProgram;
   };
 }

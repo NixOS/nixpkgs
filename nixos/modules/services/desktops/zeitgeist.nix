@@ -1,9 +1,10 @@
 # Zeitgeist
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   meta = with lib; {
@@ -14,13 +15,13 @@ with lib;
 
   options = {
     services.zeitgeist = {
-      enable = mkEnableOption "zeitgeist, a service which logs the users' activities and events";
+      enable = lib.mkEnableOption "zeitgeist, a service which logs the users' activities and events";
     };
   };
 
   ###### implementation
 
-  config = mkIf config.services.zeitgeist.enable {
+  config = lib.mkIf config.services.zeitgeist.enable {
 
     environment.systemPackages = [ pkgs.zeitgeist ];
 

@@ -1,35 +1,37 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, fmt_11
-, proj
-, bzip2
-, cli11
-, zlib
-, boost
-, postgresql
-, python3
-, withLuaJIT ? false
-, lua
-, luajit
-, libosmium
-, nlohmann_json
-, opencv
-, potrace
-, protozero
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  fmt,
+  proj,
+  bzip2,
+  cli11,
+  zlib,
+  boost,
+  libpq,
+  python3,
+  withLuaJIT ? false,
+  lua,
+  luajit,
+  libosmium,
+  nlohmann_json,
+  opencv,
+  potrace,
+  protozero,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-YtG/cwEyCIsNjoEhDikMoI/SUqx8fEtPuolpNkLGTlE=";
+    hash = "sha256-ZKSyMNc+EHY4QBTLtUiWiTMEcmAAbrV1xqxmvNF96f8=";
   };
 
   postPatch = ''
@@ -44,18 +46,24 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cli11
     expat
-    fmt_11
+    fmt
     libosmium
+    libpq
     nlohmann_json
     opencv
-    postgresql
     potrace
     proj
     protozero
-    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
+    (python3.withPackages (
+      p: with p; [
+        psycopg2
+        pyosmium
+      ]
+    ))
     zlib
-  ] ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)
@@ -64,17 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_LUAJIT" withLuaJIT)
   ];
 
-  installFlags = [ "install-gen" ];
-
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://osm2pgsql.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ jglukasik das-g ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchgit
-, cmake
-, doxygen
-, python3
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  doxygen,
+  python3,
 }:
 stdenv.mkDerivation {
   pname = "tclap";
@@ -42,7 +43,7 @@ stdenv.mkDerivation {
     description = "Templatized C++ Command Line Parser Library (v1.4)";
     homepage = "https://tclap.sourceforge.net/";
     license = licenses.mit;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
     platforms = platforms.all;
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, gtest
-, pcsclite
-, pkg-config
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  pcsclite,
+  pkg-config,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -32,7 +33,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "signing and authentication operations with smart cards for the Web eID browser extension";
+    description = "Signing and authentication operations with smart cards for the Web eID browser extension";
     mainProgram = "web-eid";
     longDescription = ''
       The Web eID application performs cryptographic digital signing and

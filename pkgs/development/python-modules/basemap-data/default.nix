@@ -9,7 +9,7 @@ buildPythonPackage rec {
   format = "setuptools";
   inherit (basemap) version src;
 
-  sourceRoot = "${src.name}/packages/basemap_data";
+  sourceRoot = "${src.name}/data/basemap_data";
 
   # no tests
   doCheck = false;
@@ -23,6 +23,6 @@ buildPythonPackage rec {
       mit
       lgpl3Plus
     ];
-    maintainers = [ ];
+    teams = [ teams.geospatial ];
   };
 }

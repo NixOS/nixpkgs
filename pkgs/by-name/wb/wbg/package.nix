@@ -1,33 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, pixman
-, tllist
-, wayland
-, wayland-scanner
-, wayland-protocols
-, enablePNG ? true
-, enableJPEG ? true
-, enableWebp ? true
-# Optional dependencies
-, libpng
-, libjpeg
-, libwebp
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  pixman,
+  tllist,
+  wayland,
+  wayland-scanner,
+  wayland-protocols,
+  libjxl,
+  enablePNG ? true,
+  enableJPEG ? true,
+  enableWebp ? true,
+  # Optional dependencies
+  libpng,
+  libjpeg,
+  libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wbg";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "wbg";
-    rev = version;
-    hash = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-qEdl3dKeAfWWZ7+8MF59fAvtoELLA+C4680yFNsHhrY=";
   };
 
   nativeBuildInputs = [
@@ -38,13 +40,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libjxl
     pixman
     tllist
     wayland
     wayland-protocols
-  ] ++ lib.optional enablePNG libpng
-    ++ lib.optional enableJPEG libjpeg
-    ++ lib.optional enableWebp libwebp;
+  ]
+  ++ lib.optional enablePNG libpng
+  ++ lib.optional enableJPEG libjpeg
+  ++ lib.optional enableWebp libwebp;
 
   mesonBuildType = "release";
 
@@ -54,13 +58,17 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "webp" enableWebp)
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=maybe-uninitialized"
+  ];
+
+  meta = {
     description = "Wallpaper application for Wayland compositors";
     homepage = "https://codeberg.org/dnkl/wbg";
-    changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.isc;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
     mainProgram = "wbg";
   };
-}
+})

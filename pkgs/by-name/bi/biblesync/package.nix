@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, libuuid }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libuuid,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -8,11 +15,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "karlkleinpaste";
     repo = "biblesync";
-    rev = version;
+    tag = version;
     sha256 = "0prmd12jq2cjdhsph5v89y38j7hhd51dr3r1hivgkhczr3m5hf4s";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
   buildInputs = [ libuuid ];
 
   meta = with lib; {
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
       navigation, and handling of incoming packets.
     '';
     license = licenses.publicDomain;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

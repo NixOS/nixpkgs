@@ -12,9 +12,11 @@ let
     self = localPython;
     packageOverrides = final: prev: {
       urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-        pyproject = true;
         version = "1.26.18";
-        nativeBuildInputs = with final; [ setuptools ];
+        build-system = with final; [
+          setuptools
+        ];
+        postPatch = null;
         src = prev.src.override {
           inherit version;
           hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
@@ -33,6 +35,8 @@ localPython.pkgs.buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
   };
+
+  pythonRelaxDeps = [ "aws-encryption-sdk" ];
 
   build-system = with localPython.pkgs; [
     setuptools
@@ -60,9 +64,8 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   # Upstream did not adapt to pytest 8 yet.
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn8Warning"
   ];
 
   passthru = {
@@ -73,12 +76,12 @@ localPython.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aws-encryption-sdk-cli.readthedocs.io/";
     changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${version}/CHANGELOG.rst";
     description = "CLI wrapper around aws-encryption-sdk-python";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "aws-encryption-cli";
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Cross-platform g2p for Korean";
     homepage = "https://github.com/harmlessman/g2pkk";
     license = licenses.asl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

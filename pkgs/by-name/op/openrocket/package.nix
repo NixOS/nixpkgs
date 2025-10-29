@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, ant
-, jdk17
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  ant,
+  jdk17,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 let
@@ -17,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openrocket";
     repo = "openrocket";
-    rev = "release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-Dg/v72N9cDG9Ko5JIcZxGxh+ClRDgf5Jq5DvQyCiYOs=";
     fetchSubmodules = true;
   };

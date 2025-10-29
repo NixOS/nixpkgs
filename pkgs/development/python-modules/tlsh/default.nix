@@ -14,9 +14,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ht4LkcNmxPEvzFHXeS/XhPt/xo+0sE4RBcLCn9N/zwE=";
   };
+
+  patches = [
+    # https://github.com/trendmicro/tlsh/pull/152
+    ./cmake-4-compat.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 

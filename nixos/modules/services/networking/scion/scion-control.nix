@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,7 +16,6 @@ let
     general = {
       id = "cs";
       config_dir = "/etc/scion";
-      reconnect_to_dispatcher = true;
     };
     beacon_db = {
       connection = "${connectionDir}/scion-control/control.beacon.db";
@@ -54,8 +58,14 @@ in
   config = mkIf cfg.enable {
     systemd.services.scion-control = {
       description = "SCION Control Service";
-      after = [ "network-online.target" "scion-dispatcher.service" ];
-      wants = [ "network-online.target" "scion-dispatcher.service" ];
+      after = [
+        "network-online.target"
+        "scion-dispatcher.service"
+      ];
+      wants = [
+        "network-online.target"
+        "scion-dispatcher.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";

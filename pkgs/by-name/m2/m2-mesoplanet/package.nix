@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, m2libc
-, mescc-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  m2libc,
+  mescc-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Macro Expander Saving Our m2-PLANET";
     homepage = "https://github.com/oriansj/M2-Mesoplanet";
     license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Mesoplanet";
   };

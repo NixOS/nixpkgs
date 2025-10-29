@@ -158,7 +158,7 @@ in
 
           This creates a systemd unit `ollama-model-loader.service`.
 
-          Search for models of your choice from: https://ollama.com/library
+          Search for models of your choice from: <https://ollama.com/library>
         '';
       };
       openFirewall = lib.mkOption {
@@ -223,7 +223,10 @@ in
             "char-nvidia-uvm"
             # ROCm
             "char-drm"
+            "char-fb"
             "char-kfd"
+            # WSL (Windows Subsystem for Linux)
+            "/dev/dxg"
           ];
           DevicePolicy = "closed";
           LockPersonality = true;
@@ -267,7 +270,11 @@ in
         "multi-user.target"
         "ollama.service"
       ];
-      after = [ "ollama.service" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "ollama.service"
+        "network-online.target"
+      ];
       bindsTo = [ "ollama.service" ];
       environment = config.systemd.services.ollama.environment;
       serviceConfig = {

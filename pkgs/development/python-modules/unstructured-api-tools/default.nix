@@ -22,7 +22,7 @@
   flake8,
   httpx,
   ipython,
-  pytest-cov,
+  pytest-cov-stub,
   requests,
   requests-toolbelt,
   nbdev,
@@ -41,7 +41,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-api-tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t1fK40ayR2bxc1iMIwvn/OHuyVlR98Gq+NpIhOmaP+4=";
   };
 
@@ -57,7 +57,8 @@ buildPythonPackage {
     types-ujson
     uvicorn
     autoflake
-  ] ++ uvicorn.optional-dependencies.standard;
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   pythonImportsCheck = [ "unstructured_api_tools" ];
 
@@ -77,7 +78,7 @@ buildPythonPackage {
     flake8
     httpx
     ipython
-    pytest-cov
+    pytest-cov-stub
     requests
     requests-toolbelt
     nbdev

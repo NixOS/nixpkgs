@@ -9,22 +9,22 @@
   requests-mock,
   rich,
   setuptools,
-  tomli,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.2.0";
+  version = "5.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2NsF00jaW2wl99sTxTQ5xJkqNOYh9RaecmBMcWP3TI8=";
+    tag = "v${version}";
+    hash = "sha256-VlPhW0FL51EQQRlDrd0F3ByXu/xpydXLSCM5umzpIW0=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     requests
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     progress_bar = [ rich ];
@@ -42,11 +42,8 @@ buildPythonPackage rec {
     fixtures
     pytestCheckHook
     requests-mock
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "podman" ];
 
@@ -64,10 +61,16 @@ buildPythonPackage rec {
     "VolumesIntegrationTest"
   ];
 
+  disabledTestPaths = [
+    # Access to the host's filesystem
+    "podman/tests/integration/test_container_create.py"
+    "podman/tests/unit/test_utils.py"
+  ];
+
   meta = with lib; {
     description = "Python bindings for Podman's RESTful API";
     homepage = "https://github.com/containers/podman-py";
-    changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
+    changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

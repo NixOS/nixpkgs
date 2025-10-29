@@ -5,7 +5,6 @@
   buildPackages,
   ld64,
   llvm,
-  memstreamHook,
   meson,
   ninja,
   openssl,
@@ -73,9 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-build-issues-with-misc-redo_prebinding.c.patch
     # Use libcd_is_blob_a_linker_signature as defined in the libcodedirectory.h header
     ./0002-Rely-on-libcd_is_blob_a_linker_signature.patch
-    # cctools uses availability checks for `utimensat`, but it checks the wrong version.
-    # Also, provide a definition to avoid implicit function definition errors.
-    ./0003-Fix-utimensat-compatability-with-the-10.12-SDK.patch
     # Use the nixpkgs clang’s path as the prefix.
     ./0004-Use-nixpkgs-clang-with-the-assembler-driver.patch
     # Make sure cctools can find ld64 in the store
@@ -102,9 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace misc/libtool.c \
       --subst-var-by targetPrefix '${targetPrefix}'
 
-    # The version of this file distributed with cctools defines several CPU types missing from the 10.12 SDK.
-    ln -s machine-cctools.h include/mach/machine.h
-
     # Use libxar from nixpkgs
     for cctool_src in misc/nm.c otool/print_bitcode.c; do
       substituteInPlace $cctool_src \
@@ -130,13 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ld64
     llvm
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
+  ];
 
   mesonBuildType = "release";
 
   mesonFlags = [
     (lib.mesonOption "b_ndebug" "if-release")
-  ] ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
+  ]
+  ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
 
   postInstall = ''
     ln -s ${targetPrefix}libtool "$out/bin/${targetPrefix}ranlib"
@@ -164,13 +158,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = with lib.licenses; [
       apple-psl20
       gpl2 # GNU as
     ];
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.darwin;
   };
 })

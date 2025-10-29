@@ -1,75 +1,70 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeText
-, autoPatchelfHook
-, patchelfUnstable # have to use patchelfUnstable to support --no-clobber-old-sections
-, wrapGAppsHook3
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  writeText,
+  autoPatchelfHook,
+  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
+  wrapGAppsHook3,
+  callPackage,
 
-, atk
-, cairo
-, dbus
-, dbus-glib
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libxcb
-, libX11
-, libXext
-, libXrender
-, libXt
-, libXtst
-, mesa
-, pango
-, pciutils
-, zlib
+  atk,
+  cairo,
+  dbus,
+  dbus-glib,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libxcb,
+  libX11,
+  libXext,
+  libXrender,
+  libXt,
+  libXtst,
+  libgbm,
+  pango,
+  pciutils,
+  zlib,
 
-, libnotifySupport ? stdenv.hostPlatform.isLinux
-, libnotify
+  libnotifySupport ? stdenv.hostPlatform.isLinux,
+  libnotify,
 
-, waylandSupport ? stdenv.hostPlatform.isLinux
-, libxkbcommon
-, libdrm
-, libGL
+  waylandSupport ? stdenv.hostPlatform.isLinux,
+  libxkbcommon,
+  libdrm,
+  libGL,
 
-, mediaSupport ? true
-, ffmpeg
+  mediaSupport ? true,
+  ffmpeg,
 
-, audioSupport ? mediaSupport
+  audioSupport ? mediaSupport,
 
-, pipewireSupport ? audioSupport
-, pipewire
+  pipewireSupport ? audioSupport,
+  pipewire,
 
-, pulseaudioSupport ? audioSupport
-, libpulseaudio
-, apulse
-, alsa-lib
+  pulseaudioSupport ? audioSupport,
+  libpulseaudio,
+  apulse,
+  alsa-lib,
 
-, libvaSupport ? mediaSupport
-, libva
+  libvaSupport ? mediaSupport,
+  libva,
 
-# Hardening
-, graphene-hardened-malloc
-# Whether to use graphene-hardened-malloc
-, useHardenedMalloc ? null
+  # Whether to use IPC for communicating with Tor
+  useIPCTorService ? false,
+  # Whether to disable multiprocess support
+  disableContentSandbox ? false,
 
-# Whether to disable multiprocess support
-, disableContentSandbox ? false
-
-# Extra preferences
-, extraPrefs ? ""
+  # Extra preferences
+  extraPrefs ? "",
 }:
 
-lib.warnIf (useHardenedMalloc != null)
-  "tor-browser: useHardenedMalloc is deprecated and enabling it can cause issues"
-
-(let
+let
   libPath = lib.makeLibraryPath (
     [
       alsa-lib
@@ -88,21 +83,26 @@ lib.warnIf (useHardenedMalloc != null)
       libXrender
       libXt
       libXtst
-      mesa # for libgbm
+      libgbm
       pango
       pciutils
       stdenv.cc.cc
       stdenv.cc.libc
       zlib
-    ] ++ lib.optionals libnotifySupport [ libnotify ]
-      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
-      ++ lib.optionals pipewireSupport [ pipewire ]
-      ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-      ++ lib.optionals libvaSupport [ libva ]
-      ++ lib.optionals mediaSupport [ ffmpeg ]
+    ]
+    ++ lib.optionals libnotifySupport [ libnotify ]
+    ++ lib.optionals waylandSupport [
+      libxkbcommon
+      libdrm
+      libGL
+    ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals libvaSupport [ libva ]
+    ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "14.0.1";
+  version = "14.5.8";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-DQbKMaXgEXNKHPonQF7RZ1TtEqCRnvD81ahyVUkknY8=";
+      hash = "sha256-hf3pkl+J9Hs28XSyNoXCZM0B9A7g4/n6F7WFkD/hl/o=";
     };
 
     i686-linux = fetchurl {
@@ -122,28 +122,34 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-khY/B4c0DjqRd0s9PblEhL0jJONVU5mQCAqZ60M+CjE=";
+      hash = "sha256-iSHeHCyBg66pbGw8glmViTFMvys3EArOkXVpqJBXEfc=";
     };
   };
 
-  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
-    # Some light branding indicating this build uses our distro preferences
-    Global = {
-      id = "nixos";
-      version = "1.0";
-      about = "Tor Browser for NixOS";
-    };
-  });
+  distributionIni = writeText "distribution.ini" (
+    lib.generators.toINI { } {
+      # Some light branding indicating this build uses our distro preferences
+      Global = {
+        id = "nixos";
+        version = "1.0";
+        about = "Tor Browser for NixOS";
+      };
+    }
+  );
 
-  policiesJson = writeText "policies.json" (builtins.toJSON {
-    policies.DisableAppUpdate = true;
-  });
+  policiesJson = writeText "policies.json" (
+    builtins.toJSON {
+      policies.DisableAppUpdate = true;
+    }
+  );
 in
 stdenv.mkDerivation rec {
   pname = "tor-browser";
   inherit version;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -165,23 +171,30 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  desktopItems = [(makeDesktopItem {
-    name = "torbrowser";
-    exec = "tor-browser %U";
-    icon = "tor-browser";
-    desktopName = "Tor Browser";
-    genericName = "Web Browser";
-    comment = meta.description;
-    categories = [ "Network" "WebBrowser" "Security" ];
-    mimeTypes = [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/vnd.mozilla.xul+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-    ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "torbrowser";
+      exec = "tor-browser %U";
+      icon = "tor-browser";
+      desktopName = "Tor Browser";
+      genericName = "Web Browser";
+      comment = meta.description;
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Security"
+      ];
+      mimeTypes = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/vnd.mozilla.xul+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+      startupWMClass = "Tor Browser";
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -241,22 +254,29 @@ stdenv.mkDerivation rec {
     lockPref("extensions.torlauncher.torrc-defaults_path", "$TBB_IN_STORE/TorBrowser/Data/Tor/torrc-defaults");
     lockPref("extensions.torlauncher.tor_path", "$TBB_IN_STORE/TorBrowser/Tor/tor");
 
-    // Insist on using IPC for communicating with Tor
+    // Optionally use IPC for communicating with Tor
     //
-    // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
-    lockPref("extensions.torlauncher.control_port_use_ipc", true);
-    lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+    // Sockets are created at \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
+    ${lib.optionalString useIPCTorService ''
+      lockPref("extensions.torlauncher.control_port_use_ipc", true);
+      lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+    ''}
 
     // Optionally disable multiprocess support.  We always set this to ensure that
     // toggling the pref takes effect.
     lockPref("browser.tabs.remote.autostart.2", ${if disableContentSandbox then "false" else "true"});
 
     // Allow sandbox access to sound devices if using ALSA directly
-    ${if (audioSupport && !pulseaudioSupport) then ''
-      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
-    '' else ''
-      clearPref("security.sandbox.content.write_path_whitelist");
-    ''}
+    ${
+      if (audioSupport && !pulseaudioSupport) then
+        ''
+          pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+        ''
+      else
+        ''
+          clearPref("security.sandbox.content.write_path_whitelist");
+        ''
+    }
 
     ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
@@ -266,7 +286,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the TBB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$TBB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$TBB_IN_STORE/fonts</dir>"
 
@@ -282,8 +302,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     makeWrapper "$TBB_IN_STORE/firefox" "$out/bin/tor-browser" \
-      --prefix LD_PRELOAD : "${lib.optionalString (useHardenedMalloc == true)
-        "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}" \
       --prefix LD_LIBRARY_PATH : "$libPath" \
       --set FONTCONFIG_FILE "$FONTCONFIG_FILE" \
       --set-default MOZ_ENABLE_WAYLAND 1
@@ -325,17 +343,28 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh joachifm hax404 ];
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
+      c4patino
+      felschr
+      hax404
+      joachifm
+      panicgh
+    ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [ mpl20 lgpl21Plus lgpl3Plus free ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [
+      mpl20
+      lgpl21Plus
+      lgpl3Plus
+      free
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}

@@ -8,7 +8,7 @@
   pugixml,
   fmt,
   html-tidy,
-  enablePython? false,
+  enablePython ? false,
   python3Packages,
 }:
 
@@ -34,7 +34,8 @@ stdenv.mkDerivation {
     pugixml
     fmt
     html-tidy
-  ] ++ lib.optionals enablePython [
+  ]
+  ++ lib.optionals enablePython [
     python3Packages.python
     python3Packages.pybind11
   ];

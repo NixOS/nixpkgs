@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "rpcq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J7jtGXJIF3jp0a0IQZmSR4TWf9D02Luau+Bupmi/d68=";
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Don't run tests that spin-up a zmq server
     "rpcq/test/test_base.py"
     "rpcq/test/test_spec.py"

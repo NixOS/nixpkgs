@@ -1,28 +1,36 @@
-{ lib, fetchFromGitHub
-, python3Packages, wrapGAppsHook3, gobject-introspection
-, gtk-layer-shell, pango, gdk-pixbuf, atk
-# Extra packages called by various internal nwg-panel modules
-, hyprland         # hyprctl
-, sway             # swaylock, swaymsg
-, systemd          # systemctl
-, wlr-randr        # wlr-randr
-, nwg-menu         # nwg-menu
-, brightnessctl    # brightnessctl
-, pamixer          # pamixer
-, pulseaudio       # pactl
-, libdbusmenu-gtk3 # tray
-, playerctl
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk-layer-shell,
+  pango,
+  gdk-pixbuf,
+  atk,
+  # Extra packages called by various internal nwg-panel modules
+  hyprland, # hyprctl
+  sway, # swaylock, swaymsg
+  systemd, # systemctl
+  wlr-randr, # wlr-randr
+  nwg-menu, # nwg-menu
+  brightnessctl, # brightnessctl
+  pamixer, # pamixer
+  pulseaudio, # pactl
+  libdbusmenu-gtk3, # tray
+  playerctl,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.9.48";
+  version = "0.10.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/PMUkD2kr8aqmohStntlTOc5XgfR+A3LaeYsk04GvOM=";
+    tag = "v${version}";
+    hash = "sha256-zfWONw72xZy7kYl5jiBcNeCC9YU4s0juDRdeEgyeRrk=";
   };
 
   # No tests
@@ -32,10 +40,28 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
   dontWrapGApps = true;
 
-  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango playerctl ];
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  propagatedBuildInputs = (with python3Packages;
-    [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    gtk-layer-shell
+    pango
+    playerctl
+  ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  propagatedBuildInputs =
+    (with python3Packages; [
+      i3ipc
+      netifaces
+      psutil
+      pybluez
+      pygobject3
+      requests
+      dasbus
+      setuptools
+    ])
     # Run-time GTK dependency required by the Tray module
     ++ [ libdbusmenu-gtk3 ];
 
@@ -49,17 +75,28 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "$out/share"
-      --prefix PATH : "${lib.makeBinPath [ brightnessctl hyprland nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          brightnessctl
+          hyprland
+          nwg-menu
+          pamixer
+          pulseaudio
+          sway
+          systemd
+          wlr-randr
+        ]
+      }"
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-panel";
-    changelog = "https://github.com/nwg-piotr/nwg-panel/releases/tag/v${version}";
+    changelog = "https://github.com/nwg-piotr/nwg-panel/releases/tag/${src.tag}";
     description = "GTK3-based panel for Sway window manager";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ludovicopiero ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
     mainProgram = "nwg-panel";
   };
 }

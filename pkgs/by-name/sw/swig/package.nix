@@ -11,21 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swig";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
+    hash = "sha256-wEqbKDgXVU8kQxdh7uC+EZ0u5leeoYh2d/61qB4guOg=";
   };
 
-  PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
+  strictDeps = true;
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     bison
+    pcre2
   ];
   buildInputs = [ pcre2 ];
 
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     changelog = "https://github.com/swig/swig/blob/${finalAttrs.src.rev}/CHANGES.current";

@@ -1,37 +1,45 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, tailscale
-, gtk4
-, gobject-introspection
-, libadwaita
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  tailscale,
+  gtk4,
+  gobject-introspection,
+  libadwaita,
 }:
 
 buildGoModule rec {
   pname = "trayscale";
-  version = "0.13.5";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
-    rev = "v${version}";
-    hash = "sha256-SBt9bK2fjxIEANjw+Gs+lHiWplzNMfporj+ZVtt50pw=";
+    tag = "v${version}";
+    hash = "sha256-rk4JfK0wBvWLis9XvaZuwAoMyLfoySt3SHLJChYl0SE=";
   };
 
-  vendorHash = "sha256-PPKrtvW0fwzCO+OqJ7S/Kd6WOwN1DqQDhpeQUPCSpUU=";
+  vendorHash = "sha256-8Um5Ps1EEVShJEeCRkGE3pJi2/5PxgEVNqq3JsKdivA=";
 
   subPackages = [ "cmd/trayscale" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=deedles.dev/trayscale/internal/version.version=${version}"
+    "-X=deedles.dev/trayscale/internal/metadata.version=${version}"
   ];
 
-  nativeBuildInputs = [ pkg-config gobject-introspection wrapGAppsHook4 ];
-  buildInputs = [ gtk4 libadwaita ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    wrapGAppsHook4
+  ];
+  buildInputs = [
+    gtk4
+    libadwaita
+  ];
 
   # there are no actual tests, and it takes 20 minutes to rebuild
   doCheck = false;
@@ -52,6 +60,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "trayscale";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

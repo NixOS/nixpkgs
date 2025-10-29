@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JDongian";
     repo = "python-jamo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QHI3Rqf1aQOsW49A/qnIwRnPuerbtyerf+eWIiEvyho=";
   };
 
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Hangul syllable decomposition and synthesis using jamo";
     homepage = "https://github.com/JDongian/python-jamo";
     license = licenses.asl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

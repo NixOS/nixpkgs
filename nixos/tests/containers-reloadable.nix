@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 {
   name = "containers-reloadable";
   meta = {
@@ -6,30 +6,32 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   };
 
   nodes = {
-    machine = { lib, ... }: {
-      containers.test1 = {
-        autoStart = true;
-        config.environment.etc.check.text = "client_base";
-      };
+    machine =
+      { lib, ... }:
+      {
+        containers.test1 = {
+          autoStart = true;
+          config.environment.etc.check.text = "client_base";
+        };
 
-      # prevent make-test-python.nix to change IP
-      networking.interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [ ];
+        # prevent make-test-python.nix to change IP
+        networking.interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [ ];
 
-      specialisation.c1.configuration = {
-        containers.test1.config = {
-          environment.etc.check.text = lib.mkForce "client_c1";
-          services.httpd.enable = true;
-          services.httpd.adminAddr = "nixos@example.com";
+        specialisation.c1.configuration = {
+          containers.test1.config = {
+            environment.etc.check.text = lib.mkForce "client_c1";
+            services.httpd.enable = true;
+            services.httpd.adminAddr = "nixos@example.com";
+          };
+        };
+
+        specialisation.c2.configuration = {
+          containers.test1.config = {
+            environment.etc.check.text = lib.mkForce "client_c2";
+            services.nginx.enable = true;
+          };
         };
       };
-
-      specialisation.c2.configuration = {
-        containers.test1.config = {
-          environment.etc.check.text = lib.mkForce "client_c2";
-          services.nginx.enable = true;
-        };
-      };
-    };
   };
 
   testScript = ''
@@ -54,4 +56,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         machine.fail("systemctl status httpd -M test1 >&2")
   '';
 
-})
+}

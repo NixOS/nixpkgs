@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "1.0.5";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
-    rev = "v${version}";
-    hash = "sha256-0U9eLQDvHnRUJt46AI4bDWZfGynqjaWs9teidWP3RsA=";
+    tag = version;
+    hash = "sha256-p0rB1fPfBL1Vj4p7IZtmLhfB5LwwyRaiCVSeDZAXJAo=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -40,13 +40,15 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/slavaGanzin/await/releases/tag/${version}";
     description = "Small binary that runs a list of commands in parallel and awaits termination";
-    homepage = "https://await-cli.app";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    homepage = "https://github.com/slavaGanzin/await";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    platforms = lib.platforms.all;
     mainProgram = "await";
   };
 }

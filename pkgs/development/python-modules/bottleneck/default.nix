@@ -10,21 +10,22 @@
 
 buildPythonPackage rec {
   pname = "bottleneck";
-  version = "1.4.0";
+  version = "1.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vrNt9Rm4cJ59NXwMljmwO4hcpjVbv15TdSxoXeUWBbg=";
+    hash = "sha256-Ao1G7ksCWtmrTXmSQROBb4JfYrF7h8nh0NjOFEpKDjE=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "$out/${python.sitePackages}" ];
+  preCheck = "pushd $out";
+  postCheck = "popd";
 
   disabledTests = [ "test_make_c_files" ];
 

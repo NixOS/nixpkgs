@@ -1,72 +1,81 @@
 {
   lib,
-  stdenv,
-  alembic,
-  async-generator,
-  beautifulsoup4,
   buildPythonPackage,
-  certipy,
-  configurable-http-proxy,
-  cryptography,
   fetchFromGitHub,
   fetchNpmDeps,
-  idna,
-  importlib-metadata,
-  jinja2,
-  jsonschema,
-  jupyter-events,
-  jupyterlab,
-  mock,
-  nbclassic,
+  configurable-http-proxy,
+
+  # nativeBuildInputs
   nodejs,
   npmHooks,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  alembic,
+  certipy,
+  idna,
+  jinja2,
+  jupyter-events,
   oauthlib,
   packaging,
   pamela,
-  playwright,
   prometheus-client,
   pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
-  requests-mock,
-  setuptools,
-  setuptools-scm,
   sqlalchemy,
   tornado,
   traitlets,
+  pythonOlder,
+  async-generator,
+  importlib-metadata,
+
+  # tests
+  addBinToPathHook,
+  beautifulsoup4,
+  cryptography,
+  jsonschema,
+  jupyterlab,
+  mock,
+  nbclassic,
+  playwright,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests-mock,
+  versionCheckHook,
   virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.2.1";
+  version = "5.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zOWcXpByJRzI9sTjTl+w/vo99suKOEN0TvPn1ZWlNmc=";
+    tag = version;
+    hash = "sha256-eSYoLoPWHQ/HHAFW6X262hrIrmUxDxrYEzVFiwGVqCs=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-My7WUAqIvOrbbVTxSnA6a5NviM6u95+iyykx1xbudpw=";
+    hash = "sha256-IlY0dRHXsrEWNfBqUSk7hwU+CmlUfGPtXTPNcOBT8Bw=";
   };
 
   postPatch = ''
-    substituteInPlace jupyterhub/proxy.py --replace-fail \
-      "'configurable-http-proxy'" \
-      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
+    substituteInPlace jupyterhub/proxy.py \
+      --replace-fail \
+        "'configurable-http-proxy'" \
+        "'${lib.getExe configurable-http-proxy}'"
 
-    substituteInPlace jupyterhub/tests/test_proxy.py --replace-fail \
-      "'configurable-http-proxy'" \
-      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
+    substituteInPlace jupyterhub/tests/test_proxy.py \
+      --replace-fail \
+        "'configurable-http-proxy'" \
+        "'${lib.getExe configurable-http-proxy}'"
   '';
 
   nativeBuildInputs = [
@@ -79,30 +88,32 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      alembic
-      certipy
-      idna
-      jinja2
-      jupyter-events
-      oauthlib
-      packaging
-      pamela
-      prometheus-client
-      pydantic
-      python-dateutil
-      requests
-      sqlalchemy
-      tornado
-      traitlets
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      async-generator
-      importlib-metadata
-    ];
+  dependencies = [
+    alembic
+    certipy
+    idna
+    jinja2
+    jupyter-events
+    oauthlib
+    packaging
+    pamela
+    prometheus-client
+    pydantic
+    python-dateutil
+    requests
+    sqlalchemy
+    tornado
+    traitlets
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    async-generator
+    importlib-metadata
+  ];
+
+  pythonImportsCheck = [ "jupyterhub" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     beautifulsoup4
     cryptography
     jsonschema
@@ -124,12 +135,10 @@ buildPythonPackage rec {
     ))
     pytestCheckHook
     requests-mock
+    versionCheckHook
     virtualenv
   ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH;
-  '';
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip
@@ -164,13 +173,15 @@ buildPythonPackage rec {
     "jupyterhub/tests/test_user.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://github.com/jupyterhub/jupyterhub";
     changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
-    license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
-    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.jupyter ];
+    badPlatforms = [
+      # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

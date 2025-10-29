@@ -18,15 +18,21 @@
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2K55gHYWf2Mrj9fszVCJ+qqEyQNMppQi+IZCX5SlsBs=";
+    hash = "sha256-0PlEo3pREx34zZZ5fyR5gXPEC6L/XAlFgdHKVvxRFzA=";
   };
+
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2" "numpy"
+  '';
 
   nativeBuildInputs = [
     gsl
@@ -77,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tskit-dev/msprime";
     changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alxsimon ];
+    maintainers = [ ];
   };
 }

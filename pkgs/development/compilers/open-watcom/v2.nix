@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, dosbox
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  dosbox,
 
-# Docs cause an immense increase in build time, up to 2 additional hours
-, withDocs ? false
-, ghostscript
-, withGUI ? false
+  # Docs cause an immense increase in build time, up to 2 additional hours
+  withDocs ? false,
+  ghostscript,
+  withGUI ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "${passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "0-unstable-2024-10-13";
+  version = "0-unstable-2025-05-07";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "f0a6465832643ba08b7f94fb814c552804fb395b";
-    hash = "sha256-rT3z0KrkCZ78SbsK2CEHfvJa1TEnRH2kwhzZhi8fZDo=";
+    rev = "b168de07a7c32ad82b77dd56671b6a51a11dab70";
+    hash = "sha256-9NNJcDHxOo+NKZraGqsHqK5whO3nL0QTeh+imzhThTg=";
   };
 
   postPatch = ''
@@ -27,23 +28,25 @@ stdenv.mkDerivation rec {
 
     for dateSource in bld/wipfc/configure; do
       substituteInPlace $dateSource \
-        --replace '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
+        --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
     done
 
     substituteInPlace bld/watcom/h/banner.h \
-      --replace '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
-      --replace '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
+      --replace-fail '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
+      --replace-fail '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
 
     substituteInPlace build/makeinit \
-      --replace '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      --replace-fail '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
-      --replace '-static' ""
+      --replace-fail '-static' ""
   '';
 
   nativeBuildInputs = [
     dosbox
-  ] ++ lib.optionals withDocs [
+  ]
+  ++ lib.optionals withDocs [
     ghostscript
   ];
 
@@ -118,7 +121,8 @@ stdenv.mkDerivation rec {
       - Broken C++ compiler pre-compiled header template support is fixed
       - Many C++ compiler crashes are fixed
       - Debugger has no length limit for any used environment variable
-    '' + lib.optionalString (!withDocs) ''
+    ''
+    + lib.optionalString (!withDocs) ''
 
       The documentation has been excluded from this build for build time reasons. It can be found here:
       https://github.com/open-watcom/open-watcom-v2/wiki/Open-Watcom-Documentation
@@ -126,7 +130,11 @@ stdenv.mkDerivation rec {
     homepage = "https://open-watcom.github.io";
     license = licenses.watcom;
     platforms = with platforms; windows ++ unix;
-    badPlatforms = platforms.riscv ++ [ "powerpc64-linux" "powerpc64le-linux" "mips64el-linux" ];
+    badPlatforms = platforms.riscv ++ [
+      "powerpc64-linux"
+      "powerpc64le-linux"
+      "mips64el-linux"
+    ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }

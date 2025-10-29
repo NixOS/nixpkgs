@@ -1,33 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libdbusmenu-lxqt
-, libdbusmenu ? null
-, libfm-qt
-, libqtxdg
-, lxqt-build-tools
-, gitUpdater
-, qtbase
-, qtsvg
-, qttools
-, wrapQtAppsHook
-, version ? "2.0.0"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libdbusmenu-lxqt,
+  libfm-qt,
+  libqtxdg,
+  lxqt-build-tools,
+  gitUpdater,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-qtplugin";
-  inherit version;
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = {
-      "1.4.1" = "sha256-sp/LvQNfodMYQ4kNbBv4PTNfs38XjYLezuxRltZd4kc=";
-      "2.0.0" = "sha256-o5iD4VzsbN81lwDZJuFj8Ugg1RP752M4unu3J5/h8g8=";
-    }."${version}";
+    repo = "lxqt-qtplugin";
+    tag = finalAttrs.version;
+    hash = "sha256-qXadz9JBk4TURAWj6ByP/lGV1u0Z6rNJ/VraBh5zY+Q=";
   };
+
+  patches = [
+    # fix build against Qt >= 6.10 (https://github.com/lxqt/lxqt-qtplugin/pull/100)
+    # TODO: drop when upgrading beyond version 2.2.0
+    (fetchpatch {
+      name = "cmake-fix-build-with-Qt-6.10.patch";
+      url = "https://github.com/lxqt/lxqt-qtplugin/commit/90473945206dbf21816a00dfba27426a5b5a9e25.patch";
+      hash = "sha256-cCghOJHsveR5IYisEFv3h8WreRDi0kuyj/2YBD+ATsc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (if lib.versionAtLeast version "2.0.0" then libdbusmenu-lxqt else libdbusmenu)
+    libdbusmenu-lxqt
     libfm-qt
     libqtxdg
     qtbase
@@ -51,11 +58,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-qtplugin";
     description = "LXQt Qt platform integration plugin";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

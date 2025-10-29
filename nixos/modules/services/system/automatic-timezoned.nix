@@ -1,15 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.automatic-timezoned;
 in
 {
   options = {
     services.automatic-timezoned = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable `automatic-timezoned`, simple daemon for keeping the system
@@ -23,11 +25,11 @@ in
           to make the choice deliberate. An error will be presented otherwise.
         '';
       };
-      package = mkPackageOption pkgs "automatic-timezoned" { };
+      package = lib.mkPackageOption pkgs "automatic-timezoned" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # This will give users an error if they have set an explicit time
     # zone, rather than having the service silently override it.
     time.timeZone = null;

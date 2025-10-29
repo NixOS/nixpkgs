@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "17.1.0";
+  version = "17.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2RWsrS+W09AY9wWvvM/pYzsM0xzqcwWZYSv4BCsegiw=";
+    hash = "sha256-5dkMskEf/z3G/MFjNGgjPA4OAjlCLAh8dzTRaFBVuPM=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +57,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432

@@ -1,0 +1,20 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -201,7 +201,7 @@
+     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+     add_library(ruri SHARED ${SOURCES})
+-    install (TARGETS ruri DESTINATION /usr/lib/)
++    install (TARGETS ruri)
+ else ()
+ # add the executable
+     set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+@@ -215,7 +215,7 @@
+             VERBATIM
+         )
+     endif()
+-    install (TARGETS ruri DESTINATION /usr/bin/)
++    install (TARGETS ruri)
+ endif()
+ 
+ add_custom_target(

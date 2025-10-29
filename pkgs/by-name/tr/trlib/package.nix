@@ -30,13 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # ref. https://github.com/felixlen/trlib/pull/25
+  # This PR was merged upstream, so the patch can be removed on next release
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.1)" \
+      "cmake_minimum_required (VERSION 3.13)"
+  '';
+
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [ blas ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.cython
-      python3Packages.numpy
-    ];
+  buildInputs = [
+    blas
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.cython
+    python3Packages.numpy
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "TRLIB_BUILD_PYTHON3" pythonSupport) ];
 

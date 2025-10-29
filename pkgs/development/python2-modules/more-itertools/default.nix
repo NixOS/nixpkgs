@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
-, six
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
+  six,
+  stdenv,
 }:
-
 
 buildPythonPackage rec {
   pname = "more-itertools";
   version = "5.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

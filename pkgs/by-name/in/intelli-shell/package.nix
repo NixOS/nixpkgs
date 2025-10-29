@@ -1,30 +1,34 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, sqlite
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  sqlite,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "intelli-shell";
-  version = "0.2.7";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
     rev = "v${version}";
-    hash = "sha256-D7hB1vKi54L7hU3TqTvzxXIr6XohfYLUTidR6wFJmfo=";
+    hash = "sha256-Y1wFmere1Ft7AB1voHpI7KThoGjSpRXmAab35uoM6Ms=";
   };
 
-  cargoHash = "sha256-OAQpOxPWg27kIeM37S5SEGFHMwJPvTGREtG9rd6+lDM=";
+  cargoHash = "sha256-Op96deiAVliE9FuNMh1GExoO0jcmCFEuYGCXMccHAvo=";
 
   nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "extra-features"
   ];
 
   buildInputs = [
@@ -32,8 +36,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {
@@ -44,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     description = "Like IntelliSense, but for shells";
     homepage = "https://github.com/lasantosr/intelli-shell";
     license = licenses.asl20;
-    maintainers = with maintainers; [ iogamaster ];
+    maintainers = with maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
 }

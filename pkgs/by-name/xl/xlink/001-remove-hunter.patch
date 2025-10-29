@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b6be6e8..057a056 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,12 +4,12 @@
+ 
+ cmake_minimum_required(VERSION 3.2)
+ 
+-include("cmake/HunterGate.cmake")
+-HunterGate(
+-    URL "https://github.com/cpp-pm/hunter/archive/9d9242b60d5236269f894efd3ddd60a9ca83dd7f.tar.gz"
+-    SHA1 "16cc954aa723bccd16ea45fc91a858d0c5246376"
+-    LOCAL # Local config for dependencies
+-)
++# include("cmake/HunterGate.cmake")
++# HunterGate(
++#     URL "https://github.com/cpp-pm/hunter/archive/9d9242b60d5236269f894efd3ddd60a9ca83dd7f.tar.gz"
++#     SHA1 "16cc954aa723bccd16ea45fc91a858d0c5246376"
++#     LOCAL # Local config for dependencies
++# )
+ 
+ ### Constants
+ set(TARGET_NAME "XLink")

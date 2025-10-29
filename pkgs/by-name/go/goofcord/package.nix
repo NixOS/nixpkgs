@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs_22,
   nix-update-script,
   electron,
@@ -14,7 +14,7 @@
 }:
 
 let
-  pnpm' = pnpm.override { nodejs = nodejs_22; };
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm'.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-8dSyU9arSvISc2kDWbg/CP6L4sZjZi/Zv7TZN4ONOjQ=";
   };
 
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
       --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 

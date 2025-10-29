@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "c2nim";
@@ -13,6 +17,5 @@ buildNimPackage (finalAttrs: {
     description = "Tool to translate Ansi C code to Nim";
     mainProgram = "c2nim";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ehmry ];
   };
 })

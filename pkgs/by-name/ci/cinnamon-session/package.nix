@@ -1,48 +1,46 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-settings-daemon
-, cinnamon-translations
-, dbus-glib
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, libcanberra
-, libxslt
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, systemd
-, wrapGAppsHook3
-, xapp
-, xorg
-, libexecinfo
-, pango
+{
+  fetchFromGitHub,
+  cinnamon-desktop,
+  cinnamon-settings-daemon,
+  cinnamon-translations,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  libcanberra,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  lib,
+  stdenv,
+  systemd,
+  wrapGAppsHook3,
+  xapp,
+  xorg,
+  libexecinfo,
+  pango,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    python-xapp
-    pygobject3
-    setproctitle
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      python-xapp
+      pygobject3
+      setproctitle
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.2.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-mr+QOFogzoloasGt1uK6zH/KHuH+uWYzXAZxPYkW57A=";
+    repo = "cinnamon-session";
+    tag = version;
+    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
   };
-
-  patches = [
-    ./0001-Use-dbus_glib-instead-of-elogind.patch
-  ];
 
   buildInputs = [
     # meson.build
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
 
     # other (not meson.build)
     cinnamon-settings-daemon
-    dbus-glib
-    glib
     gsettings-desktop-schemas
     pythonEnv # for cinnamon-session-quit
   ];
@@ -88,9 +84,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # patchShebangs requires executable file
-    chmod +x data/meson_install_schemas.py cinnamon-session-quit/cinnamon-session-quit.py
-    patchShebangs --build data/meson_install_schemas.py
-    patchShebangs --host cinnamon-session-quit/cinnamon-session-quit.py
+    chmod +x data/meson_install_schemas.py
+    patchShebangs data/meson_install_schemas.py
   '';
 
   preFixup = ''
@@ -105,6 +100,6 @@ stdenv.mkDerivation rec {
     description = "Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

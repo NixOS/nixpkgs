@@ -5,43 +5,41 @@
   pkg-config,
   openssl,
   rustPlatform,
-  darwin,
   testers,
   komac,
   dbus,
   zstd,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
+  bzip2,
 }:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "komac";
+  version = "2.13.0";
 
-let
-  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YFaa2kU42NlhRivBEPV1mSr3j95P4NFwUKM0Xx8tpfg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wOojfEEzf/NGiyL3Q8ql7t7/gM/hVfgeQmc5cvugKR4=";
   };
-in
-rustPlatform.buildRustPackage {
-  inherit version src;
 
-  pname = "komac";
+  cargoHash = "sha256-Bn2Nq/aH2Ta/3VaNQwLClv9gaz2qjo0Ko+d1XQtVdFY=";
 
-  cargoHash = "sha256-kb18phtY5rRNUw0ZaZu2tipAaOURSy+2duf/+cOj5Y8=";
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs =
-    [
-      dbus
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+    openssl
+    zstd
+    bzip2
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -53,9 +51,16 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/komac";
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd komac \
+      --bash <($out/bin/komac complete bash) \
+      --zsh <($out/bin/komac complete zsh) \
+      --fish <($out/bin/komac complete fish)
+  '';
+
   passthru = {
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
 
       package = komac;
       command = "komac --version";
@@ -67,12 +72,11 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Community Manifest Creator for WinGet";
     homepage = "https://github.com/russellbanks/Komac";
-    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${version}";
+    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      kachick
       HeitorAugustoLN
     ];
     mainProgram = "komac";
   };
-}
+})

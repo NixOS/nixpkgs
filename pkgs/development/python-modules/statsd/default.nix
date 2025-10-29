@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsocol";
     repo = "pystatsd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g830TjFERKUguFKlZeaOhCTlaUs0wcDg4bMdRDr3smw=";
   };
 
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "statsd/tests.py" ];
+  enabledTestPaths = [ "statsd/tests.py" ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = [ ];
     description = "Simple statsd client";
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";

@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-f0OToWGHZwxvqf+0qosfA9FfwJ/IXfjIPP5/WrcvArI=";
       extraPrefix = "";
     })
+    # Resolves a GCC14 missing typecast error
+    ./typecast.diff
   ];
 
   passthru = {

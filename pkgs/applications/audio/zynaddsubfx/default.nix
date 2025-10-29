@@ -1,74 +1,87 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  fetchpatch,
 
   # Required build tools
-, cmake
-, makeWrapper
-, pkg-config
+  cmake,
+  makeWrapper,
+  pkg-config,
 
   # Required dependencies
-, fftw
-, liblo
-, minixml
-, zlib
+  fftw,
+  liblo,
+  minixml,
+  zlib,
 
   # Optional dependencies
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, dssiSupport ? false
-, dssi
-, ladspaH
-, jackSupport ? true
-, libjack2
-, lashSupport ? false
-, lash
-, ossSupport ? true
-, portaudioSupport ? true
-, portaudio
-, sndioSupport ? stdenv.hostPlatform.isOpenBSD
-, sndio
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  dssiSupport ? false,
+  dssi,
+  ladspaH,
+  jackSupport ? true,
+  libjack2,
+  lashSupport ? false,
+  lash,
+  ossSupport ? true,
+  portaudioSupport ? true,
+  portaudio,
+  sndioSupport ? stdenv.hostPlatform.isOpenBSD,
+  sndio,
 
   # Optional GUI dependencies
-, guiModule ? "off"
-, cairo
-, fltk
-, libGL
-, libjpeg
-, libX11
-, libXpm
-, ntk
+  guiModule ? "off",
+  cairo,
+  fltk,
+  libGL,
+  libjpeg,
+  libX11,
+  libXpm,
+  ntk,
 
   # Test dependencies
-, cxxtest
-, ruby
+  cxxtest,
+  ruby,
+  ctestCheckHook,
 }:
 
-assert builtins.any (g: guiModule == g) [ "fltk" "ntk" "zest" "off" ];
+assert builtins.elem guiModule [
+  "fltk"
+  "ntk"
+  "zest"
+  "off"
+];
 
 let
-  guiName = {
-    "fltk" = "FLTK";
-    "ntk" = "NTK";
-    "zest" = "Zyn-Fusion";
-  }.${guiModule};
+  guiName =
+    {
+      "fltk" = "FLTK";
+      "ntk" = "NTK";
+      "zest" = "Zyn-Fusion";
+    }
+    .${guiModule};
 
   mruby-zest = callPackage ./mruby-zest { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zynaddsubfx";
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "zynaddsubfx";
+    repo = "zynaddsubfx";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   patches = [
     # Lazily expand ZYN_DATADIR to fix builtin banks across updates
@@ -82,29 +95,52 @@ in stdenv.mkDerivation rec {
     patchShebangs rtosc/test/test-port-checker.rb src/Tests/check-ports.rb
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ fftw liblo minixml zlib ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals dssiSupport [ dssi ladspaH ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals lashSupport [ lash ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals (guiModule == "fltk") [ fltk libjpeg libXpm ]
-    ++ lib.optionals (guiModule == "ntk") [ ntk cairo libXpm ]
-    ++ lib.optionals (guiModule == "zest") [ libGL libX11 ];
+  buildInputs = [
+    fftw
+    liblo
+    minixml
+    zlib
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals dssiSupport [
+    dssi
+    ladspaH
+  ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals lashSupport [ lash ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals sndioSupport [ sndio ]
+  ++ lib.optionals (guiModule == "fltk") [
+    fltk
+    libjpeg
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "ntk") [
+    ntk
+    cairo
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "zest") [
+    libGL
+    libX11
+  ];
 
-  cmakeFlags =
-    [
-      "-DGuiModule=${guiModule}"
-      "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
-    ]
-    # OSS library is included in glibc.
-    # Must explicitly disable if support is not wanted.
-    ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
-    # Find FLTK without requiring an OpenGL library in buildInputs
-    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+  cmakeFlags = [
+    "-DGuiModule=${guiModule}"
+    "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ]
+  # OSS library is included in glibc.
+  # Must explicitly disable if support is not wanted.
+  ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
+  # Find FLTK without requiring an OpenGL library in buildInputs
+  ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
   CXXFLAGS = [
     # GCC 13: error: 'uint8_t' does not name a type
@@ -112,23 +148,22 @@ in stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ cxxtest ruby ];
+  nativeCheckInputs = [
+    cxxtest
+    ruby
+    ctestCheckHook
+  ];
 
-  # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase = let
-    disabledTests =
-      # PortChecker is non-deterministic. It's fixed in the master
-      # branch, but backporting would require an update to rtosc, so
-      # we'll just disable it until the next release.
-      [ "PortChecker" ]
-
-      # Tests fail on aarch64
-      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "MessageTest" "UnisonTest" ];
-  in ''
-    runHook preCheck
-    ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-    runHook postCheck
-  '';
+  disabledTests =
+    # PortChecker is non-deterministic. It's fixed in the master
+    # branch, but backporting would require an update to rtosc, so
+    # we'll just disable it until the next release.
+    [ "PortChecker" ]
+    # Tests fail on aarch64
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "MessageTest"
+      "UnisonTest"
+    ];
 
   # Use Zyn-Fusion logo for zest build
   # An SVG version of the logo isn't hosted anywhere we can fetch, I
@@ -156,9 +191,10 @@ in stdenv.mkDerivation rec {
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
-      if guiModule == "zest"
-      then "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
-      else "https://zynaddsubfx.sourceforge.io";
+      if guiModule == "zest" then
+        "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
+      else
+        "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kira-bruneau ];

@@ -1,72 +1,97 @@
 let
-  common = { pkgs, ... }: {
-    networking.firewall.enable = false;
-    networking.useDHCP = false;
-    # for a host utility with IPv6 support
-    environment.systemPackages = [ pkgs.bind ];
-  };
-in import ./make-test-python.nix ({ pkgs, ...} : {
+  common =
+    { pkgs, ... }:
+    {
+      networking.firewall.enable = false;
+      networking.useDHCP = false;
+      # for a host utility with IPv6 support
+      environment.systemPackages = [ pkgs.bind ];
+    };
+in
+{ pkgs, ... }:
+{
   name = "nsd";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
   };
 
   nodes = {
-    clientv4 = { lib, nodes, ... }: {
-      imports = [ common ];
-      networking.nameservers = lib.mkForce [
-        (lib.head nodes.server.config.networking.interfaces.eth1.ipv4.addresses).address
-      ];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = "192.168.0.2"; prefixLength = 24; }
-      ];
-    };
-
-    clientv6 = { lib, nodes, ... }: {
-      imports = [ common ];
-      networking.nameservers = lib.mkForce [
-        (lib.head nodes.server.config.networking.interfaces.eth1.ipv6.addresses).address
-      ];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = "dead:beef::2"; prefixLength = 24; }
-      ];
-    };
-
-    server = { lib, ... }: {
-      imports = [ common ];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = "192.168.0.1"; prefixLength = 24; }
-      ];
-      networking.interfaces.eth1.ipv6.addresses = [
-        { address = "dead:beef::1"; prefixLength = 64; }
-      ];
-      services.nsd.enable = true;
-      services.nsd.rootServer = true;
-      services.nsd.interfaces = lib.mkForce [];
-      services.nsd.keys."tsig.example.com." = {
-        algorithm = "hmac-sha256";
-        keyFile = pkgs.writeTextFile { name = "tsig.example.com."; text = "aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc="; };
+    clientv4 =
+      { lib, nodes, ... }:
+      {
+        imports = [ common ];
+        networking.nameservers = lib.mkForce [
+          (lib.head nodes.server.config.networking.interfaces.eth1.ipv4.addresses).address
+        ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          {
+            address = "192.168.0.2";
+            prefixLength = 24;
+          }
+        ];
       };
-      services.nsd.zones."example.com.".data = ''
-        @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
-        ipv4 A 1.2.3.4
-        ipv6 AAAA abcd::eeff
-        deleg NS ns.example.com
-        ns A 192.168.0.1
-        ns AAAA dead:beef::1
-      '';
-      services.nsd.zones."example.com.".provideXFR = [ "0.0.0.0 tsig.example.com." ];
-      services.nsd.zones."deleg.example.com.".data = ''
-        @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
-        @ A 9.8.7.6
-        @ AAAA fedc::bbaa
-      '';
-      services.nsd.zones.".".data = ''
-        @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
-        root A 1.8.7.4
-        root AAAA acbd::4
-      '';
-    };
+
+    clientv6 =
+      { lib, nodes, ... }:
+      {
+        imports = [ common ];
+        networking.nameservers = lib.mkForce [
+          (lib.head nodes.server.config.networking.interfaces.eth1.ipv6.addresses).address
+        ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          {
+            address = "dead:beef::2";
+            prefixLength = 24;
+          }
+        ];
+      };
+
+    server =
+      { lib, ... }:
+      {
+        imports = [ common ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          {
+            address = "192.168.0.1";
+            prefixLength = 24;
+          }
+        ];
+        networking.interfaces.eth1.ipv6.addresses = [
+          {
+            address = "dead:beef::1";
+            prefixLength = 64;
+          }
+        ];
+        services.nsd.enable = true;
+        services.nsd.rootServer = true;
+        services.nsd.interfaces = lib.mkForce [ ];
+        services.nsd.keys."tsig.example.com." = {
+          algorithm = "hmac-sha256";
+          keyFile = pkgs.writeTextFile {
+            name = "tsig.example.com.";
+            text = "aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc=";
+          };
+        };
+        services.nsd.zones."example.com.".data = ''
+          @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
+          ipv4 A 1.2.3.4
+          ipv6 AAAA abcd::eeff
+          deleg NS ns.example.com
+          ns A 192.168.0.1
+          ns AAAA dead:beef::1
+        '';
+        services.nsd.zones."example.com.".provideXFR = [ "0.0.0.0 tsig.example.com." ];
+        services.nsd.zones."deleg.example.com.".data = ''
+          @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
+          @ A 9.8.7.6
+          @ AAAA fedc::bbaa
+        '';
+        services.nsd.zones.".".data = ''
+          @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
+          root A 1.8.7.4
+          root AAAA acbd::4
+        '';
+      };
   };
 
   testScript = ''
@@ -106,4 +131,4 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
             assert_host(ipv, "a", "root", "address 1.8.7.4$")
             assert_host(ipv, "aaaa", "root", "address acbd::4$")
   '';
-})
+}

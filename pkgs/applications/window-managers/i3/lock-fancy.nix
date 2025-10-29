@@ -1,17 +1,18 @@
-{ coreutils
-, fetchFromGitHub
-, fontconfig
-, gawk
-, getopt
-, i3lock-color
-, imagemagick
-, installShellFiles
-, lib
-, makeWrapper
-, scrot
-, stdenv
+{
+  coreutils,
+  fetchFromGitHub,
+  fontconfig,
+  gawk,
+  getopt,
+  i3lock-color,
+  imagemagick,
+  installShellFiles,
+  lib,
+  makeWrapper,
+  scrot,
+  stdenv,
 
-, screenshotCommand ? ""
+  screenshotCommand ? "",
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +36,8 @@ stdenv.mkDerivation {
       -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
       -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
     rm Makefile
-  '' + lib.optionalString (screenshotCommand != "") ''
+  ''
+  + lib.optionalString (screenshotCommand != "") ''
     sed -i i3lock-fancy \
       -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
   '';
@@ -54,11 +56,21 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram $out/bin/i3lock-fancy \
-      --prefix PATH : ${lib.makeBinPath [ coreutils fontconfig gawk getopt i3lock-color imagemagick scrot ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          fontconfig
+          gawk
+          getopt
+          i3lock-color
+          imagemagick
+          scrot
+        ]
+      }
   '';
 
   meta = with lib; {
-    description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+    description = "Bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/meskarune/i3lock-fancy";
     maintainers = [ maintainers.reedrw ];
     mainProgram = "i3lock-fancy";

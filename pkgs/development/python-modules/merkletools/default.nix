@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tierion";
     repo = "pymerkletools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pd7Wxi7Sk95RcrFOTOtl725nIXidva3ftdKSGxHYPTA=";
   };
 
@@ -35,6 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/Tierion/pymerkletools";
     changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
   };
 }

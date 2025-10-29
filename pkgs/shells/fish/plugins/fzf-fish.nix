@@ -1,4 +1,15 @@
-{ lib, stdenv, pkgs, buildFishPlugin, fetchFromGitHub, fd, unixtools, procps, clownfish, fishtape_3, }:
+{
+  lib,
+  stdenv,
+  pkgs,
+  buildFishPlugin,
+  fetchFromGitHub,
+  fd,
+  unixtools,
+  procps,
+  clownfish,
+  fishtape_3,
+}:
 let
   # we want `pkgs.fzf`, not `fishPlugins.fzf`
   inherit (pkgs) fzf;
@@ -14,8 +25,16 @@ buildFishPlugin rec {
     hash = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
   };
 
-  nativeCheckInputs = [ fzf fd unixtools.script procps ];
-  checkPlugins = [ clownfish fishtape_3 ];
+  nativeCheckInputs = [
+    fzf
+    fd
+    unixtools.script
+    procps
+  ];
+  checkPlugins = [
+    clownfish
+    fishtape_3
+  ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''
     # Disable git tests which inspect the project's git repo, which isn't
@@ -30,9 +49,12 @@ buildFishPlugin rec {
 
     # Disable tests that are failing, because there is not 'rev' command
     rm tests/preview_file/custom_file_preview.fish
-  '' + (
-    if stdenv.hostPlatform.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
-    else ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+    else
+      ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 
   meta = with lib; {
@@ -40,6 +62,10 @@ buildFishPlugin rec {
     homepage = "https://github.com/PatrickF1/fzf.fish";
     changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien natsukium ];
+    maintainers = with maintainers; [
+      euxane
+      natsukium
+    ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

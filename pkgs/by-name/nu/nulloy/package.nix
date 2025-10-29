@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, zip
-, imagemagick
-, qt5
-, taglib
-, gst_all_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  zip,
+  imagemagick,
+  qt5,
+  taglib,
+  gst_all_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
     qt5.qtscript
     qt5.qtsvg
     taglib
-  ] ++ (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
     gst-plugins-good

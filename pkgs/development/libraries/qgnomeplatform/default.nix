@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, adwaita-qt
-, adwaita-qt6
-, glib
-, gtk3
-, qtbase
-, qtwayland
-, substituteAll
-, gsettings-desktop-schemas
-, useQt6 ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  adwaita-qt,
+  adwaita-qt6,
+  glib,
+  gtk3,
+  qtbase,
+  qtwayland,
+  replaceVars,
+  gsettings-desktop-schemas,
+  useQt6 ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,13 +29,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Hardcode GSettings schema path to avoid crashes from missing schemas
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
 
     # Backport cursor fix for Qt6 apps
-    # Ajusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
+    # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
     ./qt6-cursor-fix.patch
   ];
 
@@ -48,9 +48,11 @@ stdenv.mkDerivation rec {
     gtk3
     qtbase
     qtwayland
-  ] ++ lib.optionals (!useQt6) [
+  ]
+  ++ lib.optionals (!useQt6) [
     adwaita-qt
-  ] ++ lib.optionals useQt6 [
+  ]
+  ++ lib.optionals useQt6 [
     adwaita-qt6
   ];
 
@@ -60,7 +62,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
     "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-  ] ++ lib.optionals useQt6 [
+
+    # Workaround CMake 4 compat
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.31")
+  ]
+  ++ lib.optionals useQt6 [
     "-DUSE_QT6=true"
   ];
 

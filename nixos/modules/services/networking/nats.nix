@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,16 +13,26 @@ let
 
   format = pkgs.formats.json { };
 
-  configFile = format.generate "nats.conf" cfg.settings;
+  validateConfig =
+    file:
+    pkgs.callPackage (
+      { runCommand, nats-server }:
+      runCommand "validate-nats-conf"
+        {
+          nativeBuildInputs = [ nats-server ];
+        }
+        ''
+          nats-server --config "${file}" -t
+          ln -s "${file}" "$out"
+        ''
+    ) { };
 
-  validateConfig = file:
-  pkgs.runCommand "validate-nats-conf" {
-    nativeBuildInputs = [ pkgs.nats-server ];
-  } ''
-    nats-server --config "${configFile}" -t
-    ln -s "${configFile}" "$out"
-  '';
-in {
+  unvalidatedConfigFile = format.generate "nats.conf" cfg.settings;
+
+  configFile =
+    if cfg.validateConfig then validateConfig unvalidatedConfigFile else unvalidatedConfigFile;
+in
+{
 
   ### Interface
 
@@ -87,6 +102,16 @@ in {
           NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
         '';
       };
+
+      validateConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If true, validate nats config at build time. When the config can't
+          be checked during build time, for example when it includes other
+          files, disable this option.
+        '';
+      };
     };
   };
 
@@ -111,9 +136,17 @@ in {
         })
         {
           Type = "simple";
-          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${validateConfig configFile}";
+          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
+
+          KillMode = "mixed";
+          KillSignal = "SIGUSR2";
+          SuccessExitStatus = [
+            0
+            "SIGUSR2"
+          ];
+
+          TimeoutStopSec = "150"; # must exceed lame_duck_duration, which defaults to 2min
           Restart = "on-failure";
 
           User = cfg.user;
@@ -140,11 +173,17 @@ in {
           ProtectSystem = "strict";
           ReadOnlyPaths = [ ];
           ReadWritePaths = [ cfg.dataDir ];
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];

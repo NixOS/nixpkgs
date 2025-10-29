@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "kbd-setfont-decompress";
 
   meta.maintainers = with lib.maintainers; [ oxalica ];
 
-  nodes.machine = { ... }: {};
+  nodes.machine = { ... }: { };
 
   testScript = ''
     machine.succeed("gzip -cd ${pkgs.terminus_font}/share/consolefonts/ter-v16b.psf.gz >font.psf")
@@ -18,4 +18,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     assert machine.succeed("PATH= ${pkgs.kbd}/bin/setfont font.psf.xz  2>&1") == ""
     assert machine.succeed("PATH= ${pkgs.kbd}/bin/setfont font.psf.zst 2>&1") == ""
   '';
-})
+}

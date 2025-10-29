@@ -1,18 +1,21 @@
 # Test for cntr tool
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../.. { inherit system config; }, lib ? pkgs.lib }:
+
+{ runTest, lib }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-
-  mkOCITest = backend:
-    makeTest {
+  mkOCITest =
+    backend:
+    runTest {
       name = "cntr-${backend}";
 
-      meta = { maintainers = with lib.maintainers; [ sorki mic92 ]; };
+      meta.maintainers = with lib.maintainers; [
+        sorki
+        mic92
+      ];
 
-      nodes = {
-        ${backend} = { pkgs, ... }: {
+      nodes.${backend} =
+        { pkgs, ... }:
+        {
           environment.systemPackages = [ pkgs.cntr ];
           virtualisation.oci-containers = {
             inherit backend;
@@ -23,7 +26,6 @@ let
             };
           };
         };
-      };
 
       testScript = ''
         start_all()
@@ -41,21 +43,26 @@ let
       '';
     };
 
-  mkContainersTest = makeTest {
+  mkContainersTest = runTest {
     name = "cntr-containers";
 
-    meta = with pkgs.lib.maintainers; { maintainers = [ sorki mic92 ]; };
+    meta.maintainers = with lib.maintainers; [
+      sorki
+      mic92
+    ];
 
-    nodes.machine = { lib, ... }: {
-      environment.systemPackages = [ pkgs.cntr ];
-      containers.test = {
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "172.16.0.1";
-        localAddress = "172.16.0.2";
-        config = { };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.cntr ];
+        containers.test = {
+          autoStart = true;
+          privateNetwork = true;
+          hostAddress = "172.16.0.1";
+          localAddress = "172.16.0.2";
+          config = { };
+        };
       };
-    };
 
     testScript = ''
       machine.start()
@@ -69,7 +76,8 @@ let
       assert "0" == machine.succeed("cat /tmp/exitcode").strip(), "non-zero exit code"
     '';
   };
-in {
+in
+{
   nixos-container = mkContainersTest;
-} // (lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; })
-  { } [ "docker" "podman" ])
+}
+// (lib.genAttrs [ "docker" "podman" ] mkOCITest)

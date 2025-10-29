@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchurl, kernel }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+}:
 
 let
-  srcs = import (./srcs.nix) { inherit fetchurl; };
+  srcs = import ./srcs.nix { inherit fetchurl; };
 in
 stdenv.mkDerivation rec {
   pname = "mxu11x0";
 
   src = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.src else srcs.mxu11x0_4.src;
-  mxu_version = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
+  mxu_version =
+    if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
 
   version = mxu_version + "-${kernel.version}";
 

@@ -1,53 +1,58 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, appstream
-, desktop-file-utils
-, glib
-, gtk3
-, pango
-, atk
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, gnome
-, poppler
-, ghostscriptX
-, djvulibre
-, libspectre
-, libarchive
-, libgxps
-, libhandy
-, libsecret
-, wrapGAppsHook3
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gspell
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, texlive
-, gst_all_1
-, gi-docgen
-, supportMultimedia ? true # PDF multimedia
-, withLibsecret ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxml2,
+  appstream,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  pango,
+  atk,
+  gdk-pixbuf,
+  shared-mime-info,
+  itstool,
+  gnome,
+  poppler,
+  ghostscriptX,
+  djvulibre,
+  libspectre,
+  libarchive,
+  libgxps,
+  libhandy,
+  libsecret,
+  wrapGAppsHook3,
+  librsvg,
+  gobject-introspection,
+  yelp-tools,
+  gspell,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  texlive,
+  gst_all_1,
+  gi-docgen,
+  supportMultimedia ? true, # PDF multimedia
+  withLibsecret ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "46.3.1";
+  version = "48.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lFwgpvI4ObDVMycpFxRY6QaA2oJk6Zxvn0HCGcfu7nw=";
+    hash = "sha256-fYuab6OgXT9bkEiFkCdojHOniP9ukjvDlFEmiElD+hA=";
   };
 
   depsBuildBuild = [
@@ -88,23 +93,30 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     poppler
     texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optionals withLibsecret [
+  ]
+  ++ lib.optionals withLibsecret [
     libsecret
-  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]);
+  ]
+  ++ lib.optionals supportMultimedia (
+    with gst_all_1;
+    [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]
+  );
 
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
-  ] ++ lib.optionals (!withLibsecret) [
+  ]
+  ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
-  ] ++ lib.optionals (!supportMultimedia) [
+  ]
+  ++ lib.optionals (!supportMultimedia) [
     "-Dmultimedia=disabled"
   ];
 
@@ -137,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "evince";
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    teams = [
+      teams.gnome
+      teams.pantheon
+    ];
   };
 })

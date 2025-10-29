@@ -2,26 +2,19 @@
   lib,
   ocamlPackages,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   python3,
   dune_3,
   makeWrapper,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   testers,
   docfd,
 }:
 
-let
-  # Needed for x86_64-darwin
-  buildDunePackage' = ocamlPackages.buildDunePackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildDunePackage' rec {
+ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "8.0.3";
+  version = "12.0.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,8 +22,11 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-890/3iBruaQtWwlcvwuz4ujp7+P+5y1/2Axx4Iuik8Q=";
+    hash = "sha256-Tb5J9FgI2JBpl5oejWRT3ixzt7kufnM+Xy6DdiB9s98=";
   };
+
+  # Compatibility with nottui ≥ 0.4
+  patches = [ ./nottui-unix.patch ];
 
   nativeBuildInputs = [
     python3
@@ -42,18 +38,23 @@ buildDunePackage' rec {
     cmdliner
     containers-data
     decompress
+    diet
     digestif
     eio_main
     lwd
     nottui
+    nottui-unix
     notty
+    ocaml_sqlite3
     ocolor
     oseq
     ppx_deriving
     ppxlib
+    progress
     re
     spelll
     timedesc
+    uuseg
     yojson
   ];
 
@@ -61,7 +62,7 @@ buildDunePackage' rec {
     wrapProgram $out/bin/docfd --prefix PATH : "${
       lib.makeBinPath [
         pandoc
-        poppler_utils
+        poppler-utils
       ]
     }"
   '';

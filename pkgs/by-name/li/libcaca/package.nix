@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, imlib2
-, xorg
-, ncurses
-, pkg-config
-, zlib
-, x11Support ? !stdenv.hostPlatform.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  imlib2,
+  xorg,
+  ncurses,
+  pkg-config,
+  zlib,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cacalabs";
-    repo = pname;
+    repo = "libcaca";
     rev = "v${version}";
     hash = "sha256-N0Lfi0d4kjxirEbIjdeearYWvStkKMyV6lgeyNKXcVw=";
   };
@@ -30,16 +31,23 @@ stdenv.mkDerivation rec {
     ncurses
     zlib
     (imlib2.override { inherit x11Support; })
-  ] ++ lib.optionals x11Support [
+  ]
+  ++ lib.optionals x11Support [
     xorg.libX11
     xorg.libXext
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   configureFlags = [
     (if x11Support then "--enable-x11" else "--disable-x11")
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Suppresses a build failure building Cocoa support due to accessing private ivar `_running`,
     # which no longer available.
     (lib.enableFeature false "cocoa")
@@ -72,7 +80,7 @@ stdenv.mkDerivation rec {
       Libcaca was written by Sam Hocevar and Jean-Yves Lamoureux.
     '';
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

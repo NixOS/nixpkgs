@@ -1,140 +1,166 @@
 {
   lib,
   stdenv,
-  python311,
+  python312Packages,
   fetchFromGitHub,
+  replaceVars,
   gitMinimal,
   portaudio,
+  playwright-driver,
+  nix-update-script,
 }:
 
 let
-  python3 = python311.override {
-    self = python3;
-    packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
-  };
-  version = "0.62.0";
-in
-python3.pkgs.buildPythonApplication {
-  pname = "aider-chat";
-  inherit version;
-  pyproject = true;
+  # dont support python 3.13 (Aider-AI/aider#3037)
+  python3Packages = python312Packages;
 
-  src = fetchFromGitHub {
-    owner = "Aider-AI";
-    repo = "aider";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o5vyOaJSUcdwuHBbzgpo5RDpZLnIur5dM+b7Y7PVBXA=";
-  };
+  aider-nltk-data = python3Packages.nltk.dataDir (d: [
+    d.punkt-tab
+    d.stopwords
+  ]);
 
-  pythonRelaxDeps = true;
+  version = "0.86.1";
+  aider-chat = python3Packages.buildPythonApplication {
+    pname = "aider-chat";
+    inherit version;
+    pyproject = true;
 
-  build-system = with python3.pkgs; [ setuptools-scm ];
+    src = fetchFromGitHub {
+      owner = "Aider-AI";
+      repo = "aider";
+      tag = "v${version}";
+      hash = "sha256-UmLcE5gin1iILIY5okl5ac2vtiF30txUFjtC0mouBhs=";
+    };
 
-  dependencies = with python3.pkgs; [
-    aiohappyeyeballs
-    aiohttp
-    aiosignal
-    annotated-types
-    anyio
-    attrs
-    backoff
-    beautifulsoup4
-    certifi
-    cffi
-    charset-normalizer
-    click
-    configargparse
-    diff-match-patch
-    diskcache
-    distro
-    filelock
-    flake8
-    frozenlist
-    fsspec
-    gitdb
-    gitpython
-    grep-ast
-    h11
-    httpcore
-    httpx
-    huggingface-hub
-    idna
-    importlib-resources
-    jinja2
-    jiter
-    json5
-    jsonschema
-    jsonschema-specifications
-    litellm
-    markdown-it-py
-    markupsafe
-    mccabe
-    mdurl
-    multidict
-    networkx
-    numpy
-    openai
-    packaging
-    pathspec
-    pexpect
-    pillow
-    prompt-toolkit
-    psutil
-    ptyprocess
-    pycodestyle
-    pycparser
-    pydantic
-    pydantic-core
-    pydub
-    pyflakes
-    pygments
-    pypandoc
-    pyperclip
-    python-dotenv
-    pyyaml
-    referencing
-    regex
-    requests
-    rich
-    rpds-py
-    scipy
-    smmap
-    sniffio
-    sounddevice
-    soundfile
-    soupsieve
-    tiktoken
-    tokenizers
-    tqdm
-    tree-sitter
-    tree-sitter-languages
-    typing-extensions
-    urllib3
-    wcwidth
-    yarl
-    zipp
+    pythonRelaxDeps = true;
 
-    # Not listed in requirements
-    mixpanel
-    monotonic
-    posthog
-    propcache
-    python-dateutil
-  ];
+    build-system = with python3Packages; [ setuptools-scm ];
 
-  buildInputs = [ portaudio ];
+    dependencies = with python3Packages; [
+      aiohappyeyeballs
+      aiohttp
+      aiosignal
+      annotated-types
+      anyio
+      attrs
+      backoff
+      beautifulsoup4
+      cachetools
+      certifi
+      cffi
+      charset-normalizer
+      click
+      configargparse
+      diff-match-patch
+      diskcache
+      distro
+      filelock
+      flake8
+      frozenlist
+      fsspec
+      gitdb
+      gitpython
+      google-ai-generativelanguage
+      google-generativeai
+      grep-ast
+      h11
+      hf-xet
+      httpcore
+      httpx
+      huggingface-hub
+      idna
+      importlib-resources
+      jinja2
+      jiter
+      json5
+      jsonschema
+      jsonschema-specifications
+      litellm
+      markdown-it-py
+      markupsafe
+      mccabe
+      mdurl
+      multidict
+      networkx
+      numpy
+      openai
+      oslex
+      packaging
+      pathspec
+      pexpect
+      pillow
+      prompt-toolkit
+      psutil
+      ptyprocess
+      pycodestyle
+      pycparser
+      pydantic
+      pydantic-core
+      pydub
+      pyflakes
+      pygments
+      pypandoc
+      pyperclip
+      python-dotenv
+      pyyaml
+      referencing
+      regex
+      requests
+      rich
+      rpds-py
+      scipy
+      shtab
+      smmap
+      sniffio
+      sounddevice
+      socksio
+      soundfile
+      soupsieve
+      tiktoken
+      tokenizers
+      tqdm
+      tree-sitter
+      tree-sitter-language-pack
+      typing-extensions
+      typing-inspection
+      urllib3
+      watchfiles
+      wcwidth
+      yarl
+      zipp
+      pip
 
-  nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ]) ++ [ gitMinimal ];
+      # Not listed in requirements
+      mixpanel
+      monotonic
+      posthog
+      propcache
+      python-dateutil
+    ];
 
-  disabledTestPaths = [
-    # Tests require network access
-    "tests/scrape/test_scrape.py"
-    # Expected 'mock' to have been called once
-    "tests/help/test_help.py"
-  ];
+    buildInputs = [ portaudio ];
 
-  disabledTests =
-    [
+    nativeCheckInputs = [
+      python3Packages.pytestCheckHook
+      gitMinimal
+    ];
+
+    patches = [
+      ./fix-tree-sitter.patch
+
+      (replaceVars ./fix-flake8-invoke.patch {
+        flake8 = lib.getExe python3Packages.flake8;
+      })
+    ];
+
+    disabledTestPaths = [
+      # Tests require network access
+      "tests/scrape/test_scrape.py"
+      # Expected 'mock' to have been called once
+      "tests/help/test_help.py"
+    ];
+
+    disabledTests = [
       # Tests require network
       "test_urls"
       "test_get_commit_message_with_custom_prompt"
@@ -146,33 +172,126 @@ python3.pkgs.buildPythonApplication {
       "test_simple_send_with_retries"
       # Expected 'check_version' to have been called once
       "test_main_exit_calls_version_check"
+      # AssertionError: assert 2 == 1
+      "test_simple_send_non_retryable_error"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin
       "test_dark_mode_sets_code_theme"
       "test_default_env_file_sets_automatic_variable"
+      # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
+      "test_pipe_editor"
     ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export AIDER_CHECK_UPDATE=false
-  '';
-
-  optional-dependencies = with python3.pkgs; {
-    playwright = [
-      greenlet
-      playwright
-      pyee
-      typing-extensions
+    makeWrapperArgs = [
+      "--set"
+      "AIDER_CHECK_UPDATE"
+      "false"
+      "--set"
+      "AIDER_ANALYTICS"
+      "false"
     ];
-  };
 
-  meta = {
-    description = "AI pair programming in your terminal";
-    homepage = "https://github.com/paul-gauthier/aider";
-    changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ taha-yassine ];
-    mainProgram = "aider";
+    preCheck = ''
+      export HOME=$(mktemp -d)
+      export AIDER_ANALYTICS="false"
+    '';
+
+    optional-dependencies = with python3Packages; {
+      playwright = [
+        greenlet
+        playwright
+        pyee
+        typing-extensions
+      ];
+      browser = [
+        streamlit
+      ];
+      help = [
+        llama-index-core
+        llama-index-embeddings-huggingface
+        torch
+        nltk
+      ];
+      bedrock = [
+        boto3
+      ];
+    };
+
+    passthru = {
+      withOptional =
+        {
+          withAll ? false,
+          withPlaywright ? withAll,
+          withBrowser ? withAll,
+          withHelp ? withAll,
+          withBedrock ? withAll,
+          ...
+        }:
+        aider-chat.overridePythonAttrs (
+          {
+            pname,
+            dependencies,
+            makeWrapperArgs,
+            propagatedBuildInputs ? [ ],
+            ...
+          }:
+
+          {
+            pname =
+              pname
+              + lib.optionalString withPlaywright "-playwright"
+              + lib.optionalString withBrowser "-browser"
+              + lib.optionalString withHelp "-help"
+              + lib.optionalString withBedrock "-bedrock";
+
+            dependencies =
+              dependencies
+              ++ lib.optionals withPlaywright aider-chat.optional-dependencies.playwright
+              ++ lib.optionals withBrowser aider-chat.optional-dependencies.browser
+              ++ lib.optionals withHelp aider-chat.optional-dependencies.help
+              ++ lib.optionals withBedrock aider-chat.optional-dependencies.bedrock;
+
+            propagatedBuildInputs =
+              propagatedBuildInputs ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
+
+            makeWrapperArgs =
+              makeWrapperArgs
+              ++ lib.optionals withPlaywright [
+                "--set"
+                "PLAYWRIGHT_BROWSERS_PATH"
+                "${playwright-driver.browsers}"
+                "--set"
+                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                "true"
+              ]
+              ++ lib.optionals withHelp [
+                "--set"
+                "NLTK_DATA"
+                "${aider-nltk-data}"
+              ];
+          }
+        );
+
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^v([0-9.]+)$"
+        ];
+      };
+    };
+
+    meta = {
+      description = "AI pair programming in your terminal";
+      homepage = "https://github.com/Aider-AI/aider";
+      changelog = "https://github.com/Aider-AI/aider/blob/v${version}/HISTORY.md";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        happysalada
+        yzx9
+      ];
+      mainProgram = "aider";
+    };
   };
-}
+in
+aider-chat

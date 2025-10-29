@@ -1,12 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome
-, ApplicationServices }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  pango,
+  glibmm,
+  cairomm,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.42.2";
+  version = "2.42.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
     sha256 = "sha256-GyTJJiSuEnXMtXdYF10198Oa0zQtjAtLpg8NmEnS0Io=";
   };
 
@@ -19,30 +30,47 @@ stdenv.mkDerivation rec {
     ./2.42.2-add-missing-include-attrlist.cc.patch
   ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
+  outputs = [
+    "out"
+    "dev"
   ];
-  propagatedBuildInputs = [ pango glibmm cairomm ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
+  propagatedBuildInputs = [
+    pango
+    glibmm
+    cairomm
+  ];
 
   doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "pangomm";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
   meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "C++ interface to the Pango text rendering library";
-    homepage    = "https://www.pango.org/";
-    license     = with licenses; [ lgpl2 lgpl21 ];
-    maintainers = with maintainers; [ lovek323 raskin ];
-    platforms   = platforms.unix;
+    homepage = "https://www.pango.org/";
+    license = with licenses; [
+      lgpl2
+      lgpl21
+    ];
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    platforms = platforms.unix;
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an

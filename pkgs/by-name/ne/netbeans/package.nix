@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "23";
+  version = "27";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha256-UNTW0K8JlkxOKz9oO3HUBPZ4yZY7uWBkFZd2uenXtZA=";
+    hash = "sha256-/B8qE/Dwv1L6gZ8oTPsfq+zLb3cEyQ2YDdw6UFNim8c=";
   };
 
   buildCommand = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       } \
       --prefix JAVA_HOME : ${jdk21.home} \
       --add-flags "--jdkhome ${jdk21.home} \
-      -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
+      -J-Dawt.useSystemAAFontSettings=gasp -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.

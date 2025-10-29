@@ -1,31 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libpulseaudio
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libpulseaudio,
+  systemd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-audio-idle-inhibit";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayAudioIdleInhibit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6bdIkNosp/mzH5SiyK6Mox/z8kuFk5RLMmcFZ2VIi0g=";
+    hash = "sha256-AIK/2CPXWie72quzCcofZMQ7OVsggNm2Cq9PBJXKyhw=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner
+    meson
+    ninja
+    pkg-config
   ];
 
   buildInputs = [
-    libpulseaudio wayland wayland-protocols
+    libpulseaudio
+    systemd
   ];
 
   meta = with lib; {

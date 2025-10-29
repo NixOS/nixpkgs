@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, glib
-, boost
-, libsigrok
-, libserialport
-, libzip
-, libftdi1
-, hidapi
-, glibmm
-, python3
-, bluez
-, pcre
-, libsForQt5
-, desktopToDarwinBundle
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libserialport,
+  libzip,
+  libftdi1,
+  hidapi,
+  glibmm,
+  python3,
+  bluez,
+  pcre,
+  libsForQt5,
+  desktopToDarwinBundle,
+  qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smuview";
   version = "0.0.5-unstable-2023-04-12";
 
@@ -30,8 +31,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-WH8X75yk0aMivbBBOyODcM1eBWwa5UO/3nTaKV1LCGs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qt5.wrapQtAppsHook ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -45,7 +50,17 @@ stdenv.mkDerivation rec {
     python3
     pcre
     libsForQt5.qwt
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+
+  postPatch = ''
+    substituteInPlace external/pybind11_2.11_dev1/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace external/QtFindReplaceDialog/dialogs/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace manual/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     description = "Qt based source measure unit GUI for sigrok";

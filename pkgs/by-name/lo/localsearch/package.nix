@@ -1,59 +1,59 @@
-{ stdenv
-, lib
-, fetchurl
-, asciidoc
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, gettext
-, itstool
-, libxslt
-, gexiv2
-, tinysparql
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, vala
-, wrapGAppsNoGuiHook
-, bzip2
-, dbus
-, exempi
-, giflib
-, glib
-, gobject-introspection
-, gnome
-, gst_all_1
-, icu
-, json-glib
-, libcue
-, libexif
-, libgsf
-, libgudev
-, libgxps
-, libiptcdata
-, libjpeg
-, libosinfo
-, libpng
-, libseccomp
-, libtiff
-, libuuid
-, libxml2
-, networkmanager
-, poppler
-, systemd
-, taglib
-, upower
-, totem-pl-parser
-, e2fsprogs
+{
+  stdenv,
+  lib,
+  fetchurl,
+  asciidoc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  gettext,
+  itstool,
+  libxslt,
+  gexiv2,
+  tinysparql,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsNoGuiHook,
+  bzip2,
+  dbus,
+  exempi,
+  ffmpeg,
+  giflib,
+  glib,
+  gobject-introspection,
+  gnome,
+  icu,
+  json-glib,
+  libcue,
+  libexif,
+  libgsf,
+  libgudev,
+  libgxps,
+  libiptcdata,
+  libjpeg,
+  libosinfo,
+  libpng,
+  libseccomp,
+  libtiff,
+  libuuid,
+  libxml2,
+  poppler,
+  systemd,
+  taglib,
+  upower,
+  totem-pl-parser,
+  e2fsprogs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5Og6Ha67UmORW0W3GXMeP3BB2VnL1jfqKa++kQySu/k=";
+    hash = "sha256-1C9AjcP7KP5U9amrv18d7PWBjbnC6exRwJRkvf0MFLk=";
   };
 
   patches = [
@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsNoGuiHook
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -83,16 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     dbus
     exempi
+    ffmpeg
     giflib
     gexiv2
     totem-pl-parser
     tinysparql
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gstreamer
-    gst_all_1.gst-libav
     icu
     json-glib
     libcue
@@ -109,19 +105,21 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     poppler
     taglib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    networkmanager
     systemd
     upower
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     e2fsprogs
   ];
 
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dbattery_detection=none"
     "-Dnetwork_manager=disabled"
     "-Dsystemd_user_services=false"
@@ -138,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/localsearch";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "localsearch";

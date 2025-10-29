@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "decopatch" ];
 
-  # Tests would introduce multiple cirucular dependencies
+  # Tests would introduce multiple circular dependencies
   # Affected: makefun, pytest-cases
   doCheck = false;
 

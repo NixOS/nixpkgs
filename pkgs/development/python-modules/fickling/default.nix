@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/cV1XhJ8KMFby9nZ/qXEYxf+P6352Q2DZOLuvebyuHQ=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fickling" ];
 
   meta = with lib; {
-    description = "A Python pickling decompiler and static analyzer";
+    description = "Python pickling decompiler and static analyzer";
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

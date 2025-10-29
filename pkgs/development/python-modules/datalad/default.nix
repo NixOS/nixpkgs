@@ -34,16 +34,15 @@
   python-dateutil,
   # duecredit
   duecredit,
-  # python>=3.8
   distro,
   # win
   colorama,
   # python-version-dependent
   pythonOlder,
-  importlib-resources,
   importlib-metadata,
   typing-extensions,
   # tests
+  pytest-xdist,
   pytestCheckHook,
   p7zip,
   curl,
@@ -52,18 +51,17 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.1.3";
+  version = "1.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Y7P9vRfFUJ5ZhVRTAYeImI9cv1LtWVAeBoBl6wANnrc=";
+    repo = "datalad";
+    tag = version;
+    hash = "sha256-OjWOWdfAQoCQzc2EH5hBhJ3G/Z62U9oRgv8tp23L/Qw=";
   };
 
   postPatch = ''
-    substituteInPlace datalad/distribution/create_sibling.py \
-      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
     # Remove vendorized versioneer.py
     rm versioneer.py
   '';
@@ -79,10 +77,13 @@ buildPythonPackage rec {
   ];
 
   dependencies =
-    [
-      # core
+    optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
+
+  optional-dependencies = {
+    core = [
       platformdirs
       chardet
+      distro
       iso8601
       humanize
       fasteners
@@ -91,43 +92,36 @@ buildPythonPackage rec {
       tqdm
       annexremote
       looseversion
-      setuptools
-      git-annex
-
-      # downloaders-extra
-      # requests-ftp # not in nixpkgs yet
-
-      # downloaders
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    downloaders = [
       boto3
       keyrings-alt
       keyring
       msgpack
       requests
-
-      # publish
-      python-gitlab
-
-      # misc
+    ];
+    downloaders-extra = [
+      # requests-ftp # not in nixpkgs yet
+    ];
+    publish = [ python-gitlab ];
+    misc = [
       argcomplete
       pyperclip
       python-dateutil
-
-      # duecredit
-      duecredit
-
-      # python>=3.8
-      distro
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    ];
+    duecredit = [ duecredit ];
+  };
 
   postInstall = ''
     installShellCompletion --cmd datalad \
-         --bash <($out/bin/datalad shell-completion) \
-         --zsh  <($out/bin/datalad shell-completion)
-    wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
+      --bash <($out/bin/datalad shell-completion) \
+      --zsh  <($out/bin/datalad shell-completion)
+    wrapProgram $out/bin/datalad \
+      --prefix PATH : "${git-annex}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   preCheck = ''
@@ -221,14 +215,23 @@ buildPythonPackage rec {
 
     # pbcopy not found
     "test_wtf"
+
+    # CommandError: 'git -c diff.ignoreSubmodules=none -c core.quotepath=false ls-files -z -m -d' failed with exitcode 128
+    "test_subsuperdataset_save"
   ];
 
   nativeCheckInputs = [
     p7zip
+    pytest-xdist
     pytestCheckHook
     git-annex
     curl
     httpretty
+  ];
+
+  pytestFlags = [
+    # Deprecated in 3.13. Use exc_type_str instead.
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];
@@ -237,6 +240,9 @@ buildPythonPackage rec {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [
+      renesat
+      malik
+    ];
   };
 }

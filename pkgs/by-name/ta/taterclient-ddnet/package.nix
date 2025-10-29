@@ -26,26 +26,25 @@
   vulkan-loader,
   glslang,
   spirv-tools,
-  gtest,
-  darwin,
+  glew,
 }:
 let
   clientExecutable = "TaterClient-DDNet";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "8.6.0";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
-    rev = finalAttrs.version;
-    hash = "sha256-IfTQRMC2wcEH+KhlADHVIhfavlTN4mfTtlN5+/KojA0=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-Z5W+IBiNhEXyBVk6w2YzotBlHam1fELmr3ojJ0q4Ge8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-L6NsLC5hg4/MlTfnOITBNoPIoKxlDx5BwXWnV7W4uT0=";
+    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
   nativeBuildInputs = [
@@ -55,57 +54,57 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     rustPlatform.cargoSetupHook
+    glslang # for glslangValidator
+    python3
   ];
 
-  nativeCheckInputs = [ gtest ];
+  buildInputs = [
+    curl
+    libnotify
+    pcre
+    sqlite
+    freetype
+    libGLU
+    libogg
+    opusfile
+    SDL2
+    wavpack
+    ffmpeg
+    x264
+    vulkan-loader
+    vulkan-headers
+    glslang
+    spirv-tools
+    glew
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
-  buildInputs =
-    [
-      curl
-      libnotify
-      pcre
-      python3
-      sqlite
-      freetype
-      libGLU
-      libogg
-      opusfile
-      SDL2
-      wavpack
-      ffmpeg
-      x264
-      vulkan-loader
-      vulkan-headers
-      glslang
-      spirv-tools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Carbon
-        Cocoa
-        OpenGL
-        Security
-      ]
-    );
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace-fail /usr/ $out/
+      --replace-fail "/usr/" "$out/"
+
+    # Substitute date and time CMake macros. It avoids to the client being banned on some Teeworlds servers.
+    substituteInPlace src/engine/client/client.cpp \
+      --replace-fail "__DATE__" "\"$(date +'%b %e %Y')\"" \
+      --replace-fail "__TIME__" "\"$(date +'%H:%M:%S')\""
   '';
 
   cmakeFlags = [
-    "-DAUTOUPDATE=OFF"
-    "-DCLIENT=ON"
-    "-DSERVER=OFF"
-    "-DTOOLS=OFF"
-    "-DCLIENT_EXECUTABLE=${clientExecutable}"
+    (lib.cmakeBool "AUTOUPDATE" false)
+    (lib.cmakeBool "CLIENT" true)
+    (lib.cmakeBool "SERVER" false)
+    (lib.cmakeBool "TOOLS" false)
+    (lib.cmakeBool "DISCORD" false)
+    (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
-  # Tests loop forever on Darwin for some reason
-  doCheck = !stdenv.hostPlatform.isDarwin;
-  checkTarget = "run_tests";
+  # Since we are not building the server executable, the `run_tests` Makefile target
+  # will not be generated.
+  #
+  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.6.0/CMakeLists.txt#L3179
+  doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet

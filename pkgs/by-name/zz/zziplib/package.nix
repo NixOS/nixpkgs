@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, pkg-config
-, python3
-, xmlto
-, zip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  pkg-config,
+  python3,
+  xmlto,
+  zip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
-  version = "0.13.78";
+  version = "0.13.80";
 
   src = fetchFromGitHub {
     owner = "gdraheim";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8QxQrxqYO4LtB8prMqgz5a0QqvSKL7KzTkgi+VdHp6A=";
+    repo = "zziplib";
+    tag = "v${version}";
+    hash = "sha256-vvPcQBRk1iIPNk5qI7N0Nv9JWndVfFH6oGxyr9ZIt0g=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     xmlto
     zip
   ];
+
   buildInputs = [
     zlib
   ];
@@ -47,9 +49,9 @@ stdenv.mkDerivation rec {
     "-DBUILDTESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gdraheim/zziplib";
-    changelog = "https://github.com/gdraheim/zziplib/blob/${version}/ChangeLog";
+    changelog = "https://github.com/gdraheim/zziplib/blob/v${version}/ChangeLog";
     description = "Library to extract data from files archived in a zip file";
     longDescription = ''
       The zziplib library is intentionally lightweight, it offers the ability to
@@ -58,8 +60,11 @@ stdenv.mkDerivation rec {
       The implementation is based only on the (free) subset of compression with
       the zlib algorithm which is actually used by the zip/unzip tools.
     '';
-    license = with licenses; [ lgpl2Plus mpl11 ];
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [
+      lgpl2Plus
+      mpl11
+    ];
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

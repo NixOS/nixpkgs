@@ -5,43 +5,58 @@
   rustPlatform,
   cargo-about,
   nix-update-script,
+  pkg-config,
+  libbpf,
+  elfutils,
+  libseccomp,
+  zlib,
+  clang,
 }:
-let
+
+rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.5.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PLUB0t9eDR0mYUI6TiUxafo6yMymwdTux7ykF8rTGGc=";
+    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
+    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
   };
 
-  cargoHash = "sha256-PJclGjQTAOvnl8LJTxlDyEuzdWE1R7A2gJe1I1sKde0=";
+  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
 
-  nativeBuildInputs = [ cargo-about ];
+  hardeningDisable = [ "zerocallusedregs" ];
 
+  nativeBuildInputs = [
+    cargo-about
+    pkg-config
+    clang
+  ];
+
+  buildInputs = [
+    libbpf
+    elfutils
+    libseccomp
+    zlib
+  ];
+
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ]
   # Remove RiscV64 specialisation when this is fixed:
   # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
   # * https://github.com/rust-vmm/seccompiler/pull/72
-  cargoBuildFlags = lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  # Tests don't work for native non-x86 compilation
-  # because upstream overrides the name of the linker executables,
-  # see https://github.com/NixOS/nixpkgs/pull/310158#issuecomment-2118845043
-  doCheck = stdenv.hostPlatform.isx86_64;
-
   checkFlags = [
     "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-    "--skip=tracer::test::tracer_emits_exec_event" # needs `/bin/true`
   ];
 
   postInstall = ''

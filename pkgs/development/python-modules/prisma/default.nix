@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RobertCraigie";
     repo = "prisma-client-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F+Up1HHslralt3NvZZ/wT+CKvzKOjhEEuMEeT0L6NZM=";
   };
 
@@ -40,7 +40,8 @@ buildPythonPackage rec {
     python-dotenv
     tomlkit
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ strenum ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ strenum ];
 
   # Building the client requires network access
   doCheck = false;

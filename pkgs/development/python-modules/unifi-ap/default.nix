@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "unifi-ap";
-  version = "0.0.1";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tofuSCHNITZEL";
     repo = "unifi_ap";
-    rev = "v${version}";
-    hash = "sha256-dEaDRcQEx+n+zvxVHD58B1AdFj004L76AtVDesnP+gQ=";
+    tag = "v${version}";
+    hash = "sha256-LQqeXFtrOc1h3yJuDrFRt3mqVcDIJb/23rcu/l6YpUQ=";
   };
 
   build-system = [
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python API for UniFi accesspoints";
     homepage = "https://github.com/tofuSCHNITZEL/unifi_ap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

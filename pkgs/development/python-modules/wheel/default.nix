@@ -7,20 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.44.0";
-  format = "pyproject";
+  version = "0.46.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "wheel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IFJ411H5nItR8gA5R0AYXFs3n6e1SLo2VoMOqgvDnnk=";
-    postFetch = ''
-      cd $out
-      mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
-        tests/testdata/unicode.dist/unicodedist/æɐø_日本價.py
-      patch -p1 < ${./0001-tests-Rename-a-a-o-_-.py-_-.py.patch}
-    '';
+    tag = version;
+    hash = "sha256-iyGfGr3pLVZSEIHetjsPbIIXkuXrmIPiSqqOw31l9Qw=";
   };
 
   nativeBuildInputs = [ flit-core ];

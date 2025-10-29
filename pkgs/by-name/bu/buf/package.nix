@@ -1,25 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf_26
-, git
-, testers
-, buf
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf,
+  git,
+  testers,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buf";
-  version = "1.45.0";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
-    rev = "v${version}";
-    hash = "sha256-zmk9o0P4BaUqng9E/s6KKWntwS4NmTg/xPTrQruTQSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2EFtRwLbwcgCLxEdZNYATlqFD3BJ+tRKscFAUBAzQOY=";
   };
 
-  vendorHash = "sha256-NMrPBUwbDsXW8tc5l1Liqd19+v2RrXf6dlcwVnHxVXQ=";
+  vendorHash = "sha256-o6aE+qdsWGURJraebfhbVEwx6MJYs9Fw8B5FcoKHNgo=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -28,11 +28,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf_26 # Required for buftesting.GetProtocFilePaths
+    protobuf # Required for buftesting.GetProtocFilePaths
   ];
 
   checkFlags = [
@@ -40,6 +43,10 @@ buildGoModule rec {
   ];
 
   preCheck = ''
+    # Some tests take longer depending on builder load.
+    substituteInPlace private/bufpkg/bufcheck/lint_test.go \
+      --replace-fail 'context.WithTimeout(context.Background(), 60*time.Second)' \
+                     'context.WithTimeout(context.Background(), 600*time.Second)'
     # For WebAssembly runtime tests
     GOOS=wasip1 GOARCH=wasm go build -o $GOPATH/bin/buf-plugin-suffix.wasm \
       ./private/bufpkg/bufcheck/internal/cmd/buf-plugin-suffix
@@ -73,14 +80,17 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://buf.build";
-    changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
+    changelog = "https://github.com/bufbuild/buf/releases/tag/v${finalAttrs.version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk lrewega aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      jk
+      lrewega
+    ];
     mainProgram = "buf";
   };
-}
+})

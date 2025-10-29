@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -16,7 +21,7 @@ in
   options.services.tailscaleAuth = {
     enable = mkEnableOption "tailscale.nginx-auth, to authenticate users via tailscale";
 
-    package = mkPackageOption pkgs "tailscale-nginx-auth" {};
+    package = mkPackageOption pkgs "tailscale-nginx-auth" { };
 
     user = mkOption {
       type = types.str;
@@ -63,6 +68,7 @@ in
     systemd.services.tailscale-nginx-auth = {
       description = "Tailscale NGINX Authentication service";
       requires = [ "tailscale-nginx-auth.socket" ];
+      after = [ "tailscaled.service" ];
 
       serviceConfig = {
         ExecStart = getExe cfg.package;
@@ -94,11 +100,22 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
+
+        Restart = "on-failure";
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ dan-theriault phaer ];
+  meta.maintainers = with maintainers; [
+    dan-theriault
+    phaer
+  ];
 }

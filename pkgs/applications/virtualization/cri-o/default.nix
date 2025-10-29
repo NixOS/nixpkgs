@@ -1,34 +1,43 @@
-{ lib
-, btrfs-progs
-, buildGoModule
-, fetchFromGitHub
-, glibc
-, gpgme
-, installShellFiles
-, libapparmor
-, libseccomp
-, libselinux
-, lvm2
-, pkg-config
-, nixosTests
+{
+  lib,
+  btrfs-progs,
+  buildGoModule,
+  fetchFromGitHub,
+  glibc,
+  gpgme,
+  installShellFiles,
+  libapparmor,
+  libseccomp,
+  libselinux,
+  lvm2,
+  pkg-config,
+  nixosTests,
+  go-md2man,
 }:
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.31.2";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    hash = "sha256-xTMQ7YVZ4tKQxaAsH9EVa7W2rTcxP//P3NUgYHojdmw=";
+    hash = "sha256-bx0YloX4Nq1zV9ow0+41hx4KfcmJ5RCCNGVP3EYqiKo=";
   };
   vendorHash = null;
 
   doCheck = false;
 
-  outputs = [ "out" "man" ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  outputs = [
+    "out"
+    "man"
+  ];
+  nativeBuildInputs = [
+    installShellFiles
+    go-md2man
+    pkg-config
+  ];
 
   buildInputs = [
     btrfs-progs
@@ -37,11 +46,16 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
+  ]
+  ++ lib.optionals (glibc != null) [
+    glibc
+    glibc.static
+  ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
     runHook preBuild
+    sed -i 's;\thack/;\tbash ./hack/;g' Makefile
     make binaries docs BUILDTAGS="$BUILDTAGS"
     runHook postBuild
   '';
@@ -70,7 +84,7 @@ buildGoModule rec {
       Kubernetes Container Runtime Interface
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     platforms = platforms.linux;
   };
 }

@@ -16,8 +16,10 @@
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "gremlinpython";
-  version = "3.7.1";
+  version = "3.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2viZXksHNFynOm6+1Vo2a8xrXl4pQcAxAVgehp5y6us=";
+    tag = version;
+    hash = "sha256-Yc0l3kE+6dM9v4QUZPFpm/yjDCrqVO35Vy5srEjAExE=";
   };
 
   sourceRoot = "${src.name}/gremlin-python/src/main/python";
@@ -73,23 +75,20 @@ buildPythonPackage rec {
     "tests/process/test_dsl.py"
     "tests/structure/io/test_functionalityio.py"
   ];
-  pytestFlagsArray =
-    let
-      fullDisabled = builtins.concatStringsSep " or " [
-        "test_transaction_commit"
-        "test_transaction_rollback"
-        "test_transaction_no_begin"
-        "test_multi_commit_transaction"
-        "test_multi_rollback_transaction"
-        "test_multi_commit_and_rollback"
-        "test_transaction_close_tx"
-        "test_transaction_close_tx_from_parent"
-      ];
-    in
-    [
-      # disabledTests doesn't quite allow us to be precise enough for this
-      "-k 'not ((TestFunctionalGraphSONIO and (test_timestamp or test_datetime or test_uuid)) or ${fullDisabled})'"
-    ];
+
+  disabledTests = [
+    "TestFunctionalGraphSONIO and test_timestamp"
+    "TestFunctionalGraphSONIO and test_datetime"
+    "TestFunctionalGraphSONIO and test_uuid"
+    "test_transaction_commit"
+    "test_transaction_rollback"
+    "test_transaction_no_begin"
+    "test_multi_commit_transaction"
+    "test_multi_rollback_transaction"
+    "test_multi_commit_and_rollback"
+    "test_transaction_close_tx"
+    "test_transaction_close_tx_from_parent"
+  ];
 
   meta = with lib; {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";

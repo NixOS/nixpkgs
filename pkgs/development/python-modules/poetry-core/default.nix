@@ -3,58 +3,64 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   build,
-  git,
+  gitMinimal,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   setuptools,
   tomli-w,
+  trove-classifiers,
   virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.9.1";
+  version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
+    tag = version;
+    hash = "sha256-l5WTjKa+A66QfWLmrjCQq7ZrSaeuylGIRZr8jsiYq+A=";
   };
 
   nativeCheckInputs = [
     build
-    git
+    gitMinimal
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     setuptools
     tomli-w
+    trove-classifiers
     virtualenv
   ];
 
-  # Requires git history to work correctly
   disabledTests = [
+    # Requires git history to work correctly
     "default_with_excluded_data"
     "default_src_with_excluded_data"
+    "test_package_with_include"
+    # Distribution timestamp mismatches, as we operate on 1980-01-02
+    "test_sdist_mtime_zero"
+    "test_sdist_members_mtime_default"
+    "test_dist_info_date_time_default_value"
   ];
 
   pythonImportsCheck = [ "poetry.core" ];
 
-  # Allow for package to use pep420's native namespaces
+  # Allow for packages to use PEP420's native namespace
   pythonNamespaces = [ "poetry" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
-  meta = with lib; {
-    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";
-    description = "Core utilities for Poetry";
+  meta = {
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
+    description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }

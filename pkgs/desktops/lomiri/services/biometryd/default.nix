@@ -1,34 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-cpp
-, gtest
-, libapparmor
-, libelf
-, pkg-config
-, process-cpp
-, properties-cpp
-, qtbase
-, qtdeclarative
-, sqlite
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
+  boost186,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-cpp,
+  gtest,
+  libapparmor,
+  libelf,
+  nlohmann_json,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+  qtbase,
+  qtdeclarative,
+  sqlite,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-derU7pKdNf6pwhskaW7gCLcU9ixBG3U0EI/qtANmmTs=";
+    hash = "sha256-OTK+JAm8MnlQGZwcKJPh+N1OfUOko24G+IU9GUBjOjI=";
   };
 
   outputs = [
@@ -42,13 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
 
@@ -62,12 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cmake-extras
     dbus
     dbus-cpp
     libapparmor
     libelf
+    nlohmann_json
     process-cpp
     properties-cpp
     qtbase
@@ -99,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mediates/multiplexes access to biometric devices";
     longDescription = ''
       biometryd mediates and multiplexes access to biometric devices present
@@ -107,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
       them for identification and verification of users.
     '';
     homepage = "https://gitlab.com/ubports/development/core/biometryd";
-    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
+    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "biometryd";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "biometryd"
     ];

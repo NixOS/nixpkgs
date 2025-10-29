@@ -1,26 +1,44 @@
-{ lib, pkgs, config, options, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.peertube;
   opt = options.services.peertube;
 
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   configFile = settingsFormat.generate "production.json" cfg.settings;
 
   env = {
     NODE_CONFIG_DIR = "/var/lib/peertube/config";
     NODE_ENV = "production";
-    NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+    NODE_EXTRA_CA_CERTS = config.security.pki.caBundle;
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
+    XDG_CACHE_HOME = "/var/cache/peertube";
+    # Used for auto video transcription
+    HF_HOME = "/var/cache/peertube/huggingface";
   };
 
-  systemCallsList = [ "@cpu-emulation" "@debug" "@keyring" "@ipc" "@memlock" "@mount" "@obsolete" "@privileged" "@setuid" ];
+  systemCallsList = [
+    "@cpu-emulation"
+    "@debug"
+    "@keyring"
+    "@ipc"
+    "@memlock"
+    "@mount"
+    "@obsolete"
+    "@privileged"
+    "@setuid"
+  ];
 
   cfgService = {
     # Proc filesystem
-    ProcSubset = "pid";
     ProtectProc = "invisible";
     # Access write directories
     UMask = "0027";
@@ -50,10 +68,14 @@ let
     SystemCallArchitectures = "native";
   };
 
-  envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") (
-    (lib.concatLists (lib.mapAttrsToList (name: value:
-      lib.optional (value != null) ''${name}="${toString value}"''
-    ) env))));
+  envFile = pkgs.writeText "peertube.env" (
+    lib.concatMapStrings (s: s + "\n") (
+      lib.concatLists (
+        lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
+      )
+    )
+
+  );
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
     set -a
@@ -61,11 +83,19 @@ let
     eval -- "\$@"
   '';
 
-  nginxCommonHeaders = lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.forceSSL ''
-    add_header Strict-Transport-Security 'max-age=31536000';
-  '' + lib.optionalString (config.services.nginx.virtualHosts.${cfg.localDomain}.quic && config.services.nginx.virtualHosts.${cfg.localDomain}.http3) ''
-    add_header Alt-Svc 'h3=":$server_port"; ma=604800';
-  '';
+  nginxCommonHeaders =
+    lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.forceSSL ''
+      add_header Strict-Transport-Security 'max-age=31536000';
+    ''
+    +
+      lib.optionalString
+        (
+          config.services.nginx.virtualHosts.${cfg.localDomain}.quic
+          && config.services.nginx.virtualHosts.${cfg.localDomain}.http3
+        )
+        ''
+          add_header Alt-Svc 'h3=":$server_port"; ma=604800';
+        '';
 
   nginxCommonHeadersExtra = ''
     add_header Access-Control-Allow-Origin '*';
@@ -73,7 +103,8 @@ let
     add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
   '';
 
-in {
+in
+{
   options.services.peertube = {
     enable = lib.mkEnableOption "Peertube";
 
@@ -116,7 +147,10 @@ in {
     dataDirs = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
-      example = [ "/opt/peertube/storage" "/var/cache/peertube" ];
+      example = [
+        "/opt/peertube/storage"
+        "/var/cache/peertube"
+      ];
       description = "Allow access to custom data locations.";
     };
 
@@ -132,7 +166,39 @@ in {
     };
 
     settings = lib.mkOption {
-      type = settingsFormat.type;
+      type = lib.types.submodule (
+        { config, ... }:
+        {
+          freeformType = settingsFormat.type;
+          options = {
+            video_transcription = {
+              enabled = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Enable automatic transcription of videos.";
+              };
+              engine_path = lib.mkOption {
+                type = with lib.types; either path str;
+                default =
+                  if config.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    # This will be in the error message when someone enables
+                    # transcription manually in the web UI and tries to run a
+                    # transcription job.
+                    "Set `services.peertube.settings.video_transcription.enabled = true`.";
+                defaultText = lib.literalExpression ''
+                  if config.services.peertube.settings.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    "Set `services.peertube.settings.video_transcription.enabled = true`."
+                '';
+                description = "Custom engine path for local transcription.";
+              };
+            };
+          };
+        }
+      );
       example = lib.literalExpression ''
         {
           listen = {
@@ -273,58 +339,63 @@ in {
       };
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.peertube;
-      defaultText = lib.literalExpression "pkgs.peertube";
-      description = "PeerTube package to use.";
-    };
+    package = lib.mkPackageOption pkgs "peertube" { };
   };
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.serviceEnvironmentFile == null || !lib.hasPrefix builtins.storeDir cfg.serviceEnvironmentFile;
-          message = ''
-            <option>services.peertube.serviceEnvironmentFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
-      }
-      { assertion = cfg.secrets.secretsFile != null;
-          message = ''
-            <option>services.peertube.secrets.secretsFile</option> needs to be set.
-          '';
-      }
-      { assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
-          message = ''
-            <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.redis.host</option> or <option>services.peertube.redis.port</option>) enabled. Disable either of them.
+      {
+        assertion =
+          cfg.serviceEnvironmentFile == null || !lib.hasPrefix builtins.storeDir cfg.serviceEnvironmentFile;
+        message = ''
+          <option>services.peertube.serviceEnvironmentFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
         '';
       }
-      { assertion = cfg.redis.enableUnixSocket || (cfg.redis.host != null && cfg.redis.port != null);
-          message = ''
-            <option>services.peertube.redis.host</option> and <option>services.peertube.redis.port</option> needs to be set if <option>services.peertube.redis.enableUnixSocket</option> is not enabled.
+      {
+        assertion = cfg.secrets.secretsFile != null;
+        message = ''
+          <option>services.peertube.secrets.secretsFile</option> needs to be set.
         '';
       }
-      { assertion = cfg.redis.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.redis.passwordFile;
-          message = ''
-            <option>services.peertube.redis.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
+        message = ''
+          <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.redis.host</option> or <option>services.peertube.redis.port</option>) enabled. Disable either of them.
+        '';
       }
-      { assertion = cfg.database.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.database.passwordFile;
-          message = ''
-            <option>services.peertube.database.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion = cfg.redis.enableUnixSocket || (cfg.redis.host != null && cfg.redis.port != null);
+        message = ''
+          <option>services.peertube.redis.host</option> and <option>services.peertube.redis.port</option> needs to be set if <option>services.peertube.redis.enableUnixSocket</option> is not enabled.
+        '';
       }
-      { assertion = cfg.smtp.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.smtp.passwordFile;
-          message = ''
-            <option>services.peertube.smtp.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion =
+          cfg.redis.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.redis.passwordFile;
+        message = ''
+          <option>services.peertube.redis.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
+      }
+      {
+        assertion =
+          cfg.database.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.database.passwordFile;
+        message = ''
+          <option>services.peertube.database.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
+      }
+      {
+        assertion = cfg.smtp.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.smtp.passwordFile;
+        message = ''
+          <option>services.peertube.smtp.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
       }
     ];
 
@@ -355,19 +426,21 @@ in {
           tmp_persistent = lib.mkDefault "/var/lib/peertube/storage/tmp_persistent/";
           bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
+          logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
           web_videos = lib.mkDefault "/var/lib/peertube/storage/web-videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
+          original_video_files = lib.mkDefault "/var/lib/peertube/storage/original-video-files/";
           redundancy = lib.mkDefault "/var/lib/peertube/storage/redundancy/";
-          logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
-          previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           thumbnails = lib.mkDefault "/var/lib/peertube/storage/thumbnails/";
           storyboards = lib.mkDefault "/var/lib/peertube/storage/storyboards/";
-          torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
+          previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
+          torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
-          well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
+          well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
+          uploads = lib.mkDefault "/var/lib/peertube/storage/uploads/";
         };
         import = {
           videos = {
@@ -378,8 +451,15 @@ in {
             };
           };
         };
+        video_transcription = {
+          engine = lib.mkDefault "whisper-ctranslate2";
+        };
       }
-      (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis-peertube/redis.sock"; }; })
+      (lib.mkIf cfg.redis.enableUnixSocket {
+        redis = {
+          socket = "/run/redis-peertube/redis.sock";
+        };
+      })
     ];
 
     systemd.tmpfiles.rules = [
@@ -391,18 +471,23 @@ in {
 
     systemd.services.peertube-init-db = lib.mkIf cfg.database.createLocally {
       description = "Initialization database for PeerTube daemon";
-      after = [ "network.target" "postgresql.service" ];
-      requires = [ "postgresql.service" ];
+      after = [
+        "network.target"
+        "postgresql.target"
+      ];
+      requires = [ "postgresql.target" ];
 
-      script = let
-        psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
-          SELECT 'CREATE USER "${cfg.database.user}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.database.user}')\gexec
-          SELECT 'CREATE DATABASE "${cfg.database.name}" OWNER "${cfg.database.user}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.database.name}')\gexec
-          \c '${cfg.database.name}'
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
-          CREATE EXTENSION IF NOT EXISTS unaccent;
-        '';
-      in "${config.services.postgresql.package}/bin/psql -f ${psqlSetupCommands}";
+      script =
+        let
+          psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
+            SELECT 'CREATE USER "${cfg.database.user}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.database.user}')\gexec
+            SELECT 'CREATE DATABASE "${cfg.database.name}" OWNER "${cfg.database.user}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.database.name}')\gexec
+            \c '${cfg.database.name}'
+            CREATE EXTENSION IF NOT EXISTS pg_trgm;
+            CREATE EXTENSION IF NOT EXISTS unaccent;
+          '';
+        in
+        "${config.services.postgresql.package}/bin/psql -f ${psqlSetupCommands}";
 
       serviceConfig = {
         Type = "oneshot";
@@ -415,40 +500,55 @@ in {
         MemoryDenyWriteExecute = true;
         # System Call Filtering
         SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
-      } // cfgService;
+      }
+      // cfgService;
     };
 
     systemd.services.peertube = {
       description = "PeerTube daemon";
-      after = [ "network.target" ]
-        ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
-        ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
-      requires = lib.optional cfg.redis.createLocally "redis-peertube.service"
-        ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
+      ++ lib.optionals cfg.database.createLocally [
+        "postgresql.target"
+        "peertube-init-db.service"
+      ];
+      requires =
+        lib.optional cfg.redis.createLocally "redis-peertube.service"
+        ++ lib.optionals cfg.database.createLocally [
+          "postgresql.target"
+          "peertube-init-db.service"
+        ];
       wantedBy = [ "multi-user.target" ];
 
       environment = env;
 
-      path = with pkgs; [ nodejs_18 yarn ffmpeg-headless openssl ];
+      path = with pkgs; [
+        nodejs_20
+        yarn
+        ffmpeg-headless
+        openssl
+      ];
 
       script = ''
         umask 077
         cat > /var/lib/peertube/config/local.yaml <<EOF
         ${lib.optionalString (cfg.secrets.secretsFile != null) ''
-        secrets:
-          peertube: '$(cat ${cfg.secrets.secretsFile})'
+          secrets:
+            peertube: '$(cat ${cfg.secrets.secretsFile})'
         ''}
         ${lib.optionalString ((!cfg.database.createLocally) && (cfg.database.passwordFile != null)) ''
-        database:
-          password: '$(cat ${cfg.database.passwordFile})'
+          database:
+            password: '$(cat ${cfg.database.passwordFile})'
         ''}
         ${lib.optionalString (cfg.redis.passwordFile != null) ''
-        redis:
-          auth: '$(cat ${cfg.redis.passwordFile})'
+          redis:
+            auth: '$(cat ${cfg.redis.passwordFile})'
         ''}
         ${lib.optionalString (cfg.smtp.passwordFile != null) ''
-        smtp:
-          password: '$(cat ${cfg.smtp.passwordFile})'
+          smtp:
+            password: '$(cat ${cfg.smtp.passwordFile})'
         ''}
         EOF
         umask 027
@@ -479,11 +579,22 @@ in {
         # Environment
         EnvironmentFile = cfg.serviceEnvironmentFile;
         # Sandboxing
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         MemoryDenyWriteExecute = false;
         # System Call Filtering
-        SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "pipe" "pipe2" ];
-      } // cfgService;
+        SystemCallFilter = [
+          ("~" + lib.concatStringsSep " " systemCallsList)
+          "fchown"
+          "pipe"
+          "pipe2"
+        ];
+      }
+      // cfgService;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {
@@ -507,46 +618,60 @@ in {
           extraConfig = ''
             client_max_body_size 0;
             proxy_request_buffering off;
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
+        };
+
+        locations."~ ^/api/v1/users/[^/]+/imports/import-resumable$" = {
+          tryFiles = "/dev/null @api";
+          priority = 1130;
+
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
           tryFiles = "/dev/null @api";
-          root = cfg.settings.storage.tmp;
-          priority = 1130;
+          priority = 1140;
 
           extraConfig = ''
             limit_except POST HEAD { deny all; }
 
             client_max_body_size 12G;
             add_header X-File-Maximum-Size 8G always;
-          '' + nginxCommonHeaders;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/runners/jobs/[^/]+/(update|success)$" = {
           tryFiles = "/dev/null @api";
-          root = cfg.settings.storage.tmp;
-          priority = 1135;
+          priority = 1150;
 
           extraConfig = ''
-            client_max_body_size 12G;
-            add_header X-File-Maximum-Size 8G always;
-          '' + nginxCommonHeaders;
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
           tryFiles = "/dev/null @api";
-          priority = 1140;
+          priority = 1160;
 
           extraConfig = ''
-            client_max_body_size 6M;
-            add_header X-File-Maximum-Size 4M always;
-          '' + nginxCommonHeaders;
+            client_max_body_size 12M;
+            add_header X-File-Maximum-Size 8M always;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."@api" = {
           proxyPass = "http://peertube";
-          priority = 1150;
+          priority = 1170;
 
           extraConfig = ''
             proxy_set_header Host $host;
@@ -560,7 +685,8 @@ in {
 
             client_max_body_size 100k;
             send_timeout 10m;
-          ''+ nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Websocket
@@ -595,24 +721,27 @@ in {
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Bypass PeerTube for performance reasons.
-        locations."~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$" = {
-          tryFiles = "/client-overrides/$1 /client/$1 $1";
-          priority = 1310;
-
-          extraConfig = nginxCommonHeaders;
-        };
-
-        locations."~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
+        locations."~ ^/client/(.*\\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
           alias = "${cfg.package}/client/dist/$1";
           priority = 1320;
           extraConfig = ''
             add_header Cache-Control 'public, max-age=604800, immutable';
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
+
+        locations."~ ^/client/(assets/images/(default-playlist\\.jpg|default-avatar-account\\.png|default-avatar-account-48x48\\.png|default-avatar-video-channel\\.png|default-avatar-video-channel-48x48\\.png))$" =
+          {
+            tryFiles = "/client-overrides/$1 /client/$1 $1";
+            priority = 1320;
+
+            extraConfig = nginxCommonHeaders;
+          };
 
         locations."^~ /download/" = {
           proxyPass = "http://peertube";
@@ -623,7 +752,8 @@ in {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             proxy_limit_rate 5M;
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/streaming-playlists/hls/private/" = {
@@ -635,7 +765,8 @@ in {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             proxy_limit_rate 5M;
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/web-videos/private/" = {
@@ -647,7 +778,8 @@ in {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             proxy_limit_rate 5M;
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/webseed/private/" = {
@@ -659,19 +791,16 @@ in {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             proxy_limit_rate 5M;
-          '' + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/redundancy/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.redundancy;
+          alias = cfg.settings.storage.redundancy;
           priority = 1450;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -684,8 +813,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -694,21 +821,15 @@ in {
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/redundancy/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/streaming-playlists/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.streaming_playlists;
+          alias = cfg.settings.storage.streaming_playlists;
           priority = 1460;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -721,8 +842,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -731,21 +850,15 @@ in {
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/streaming-playlists/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/web-videos/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.web_videos;
+          alias = cfg.settings.storage.web_videos;
           priority = 1470;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -758,8 +871,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -768,21 +879,15 @@ in {
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/web-videos/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/webseed/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.web_videos;
+          alias = cfg.settings.storage.web_videos;
           priority = 1480;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -795,8 +900,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -805,8 +908,6 @@ in {
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/webseed/(.*)$ /web-videos/$1 break;
           '';
         };
       };
@@ -832,7 +933,7 @@ in {
 
     services.postfix = lib.mkIf cfg.smtp.createLocally {
       enable = true;
-      hostname = lib.mkDefault "${cfg.localDomain}";
+      settings.main.myhostname = lib.mkDefault "${cfg.localDomain}";
     };
 
     users.users = lib.mkMerge [
@@ -843,8 +944,13 @@ in {
           home = cfg.package;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ peertubeEnv pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ])
-      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
+      (lib.attrsets.setAttrByPath
+        [ cfg.user "packages" ]
+        [ peertubeEnv pkgs.nodejs_20 pkgs.yarn pkgs.ffmpeg-headless ]
+      )
+      (lib.mkIf cfg.redis.enableUnixSocket {
+        ${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];
+      })
     ];
 
     users.groups = {

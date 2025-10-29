@@ -2,20 +2,25 @@
   lib,
   php82,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-php82.buildComposerProject (finalAttrs: {
+php82.buildComposerProject2 (finalAttrs: {
   pname = "box";
-  version = "4.6.2";
+  version = "4.6.6";
 
   src = fetchFromGitHub {
     owner = "box-project";
     repo = "box";
-    rev = finalAttrs.version;
-    hash = "sha256-gYIAP9pTjahNkpNNXx0c8sQm+9Kaq6/IAo/xI5bNy7Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-giJAcH2R9hAlUTbwRi7rbmUP+WV8Nfb9XmoHHs4RcbI=";
   };
 
-  vendorHash = "sha256-HCbjW4HdyQNWDEHXj9U1t3S3EKcrPV1z/9I1ClFsMsc=";
+  vendorHash = "sha256-A/hAw0J4Q3kun6soxI6h7kpyGef9q0EFg8HAQHHZUro=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
@@ -23,6 +28,6 @@ php82.buildComposerProject (finalAttrs: {
     homepage = "https://github.com/box-project/box";
     license = lib.licenses.mit;
     mainProgram = "box";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

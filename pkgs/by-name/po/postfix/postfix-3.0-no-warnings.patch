@@ -1,0 +1,86 @@
+diff -ru3 postfix-3.0.3/conf/postfix-script postfix-3.0.3-new/conf/postfix-script
+--- postfix-3.0.3/conf/postfix-script	2014-06-27 18:05:15.000000000 +0400
++++ postfix-3.0.3-new/conf/postfix-script	2016-01-09 17:51:38.545733631 +0300
+@@ -84,24 +84,6 @@
+ 	exit 1
+ }
+ 
+-# If this is a secondary instance, don't touch shared files.
+-
+-instances=`test ! -f $def_config_directory/main.cf ||
+-    $command_directory/postconf -qc $def_config_directory \
+-    -h multi_instance_directories | sed 'y/,/ /'` || {
+-	$FATAL cannot execute $command_directory/postconf!
+-	exit 1
+-}
+-
+-check_shared_files=1
+-for name in $instances
+-do
+-    case "$name" in
+-    "$def_config_directory") ;;
+-    "$config_directory") check_shared_files=; break;;
+-    esac
+-done
+-
+ #
+ # Parse JCL
+ #
+@@ -262,22 +244,6 @@
+ 	    -prune \( -perm -020 -o -perm -002 \) \
+ 	    -exec $WARN group or other writable: {} \;
+ 
+-	# Check Postfix root-owned directory tree owner/permissions.
+-
+-	todo="$config_directory/."
+-	test -n "$check_shared_files" && {
+-		todo="$daemon_directory/. $meta_directory/. $todo"
+-		test "$shlib_directory" = "no" || 
+-		    todo="$shlib_directory/. $todo"
+-	}
+-	todo=`echo "$todo" | tr ' ' '\12' | sort -u`
+-
+-	find $todo ! -user root \
+-	    -exec $WARN not owned by root: {} \;
+-
+-	find $todo \( -perm -020 -o -perm -002 \) \
+-	    -exec $WARN group or other writable: {} \;
+-
+ 	# Check Postfix mail_owner-owned directory tree owner/permissions.
+ 
+ 	find $data_directory/. ! -user $mail_owner \
+@@ -302,18 +268,11 @@
+ 	# Check Postfix setgid_group-owned directory and file group/permissions.
+ 
+ 	todo="$queue_directory/public $queue_directory/maildrop"
+-	test -n "$check_shared_files" && 
+-	   todo="$command_directory/postqueue $command_directory/postdrop $todo"
+ 
+ 	find $todo \
+ 	    -prune ! -group $setgid_group \
+ 	    -exec $WARN not owned by group $setgid_group: {} \;
+ 
+-	test -n "$check_shared_files" &&
+-	find $command_directory/postqueue $command_directory/postdrop \
+-	    -prune ! -perm -02111 \
+-	    -exec $WARN not set-gid or not owner+group+world executable: {} \;
+-
+ 	# Check non-Postfix root-owned directory tree owner/content.
+ 
+ 	for dir in bin etc lib sbin usr
+@@ -334,15 +293,6 @@
+ 
+ 	find corrupt -type f -exec $WARN damaged message: {} \;
+ 
+-	# Check for non-Postfix MTA remnants.
+-
+-	test -n "$check_shared_files" -a -f /usr/sbin/sendmail -a \
+-		-f /usr/lib/sendmail && {
+-	    cmp -s /usr/sbin/sendmail /usr/lib/sendmail || {
+-		$WARN /usr/lib/sendmail and /usr/sbin/sendmail differ
+-		$WARN Replace one by a symbolic link to the other
+-	    }
+-	}
+ 	exit 0
+ 	;;
+ 

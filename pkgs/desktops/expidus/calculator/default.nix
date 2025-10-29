@@ -1,4 +1,8 @@
-{ lib, flutter, fetchFromGitHub }:
+{
+  lib,
+  flutter,
+  fetchFromGitHub,
+}:
 flutter.buildFlutterApplication rec {
   pname = "expidus-calculator";
   version = "0.1.1-alpha";
@@ -40,11 +44,15 @@ flutter.buildFlutterApplication rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "ExpidusOS Calculator";
     homepage = "https://expidusos.com";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "expidus-calculator";
   };
 }

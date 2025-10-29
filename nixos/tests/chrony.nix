@@ -1,19 +1,11 @@
-import ./make-test-python.nix ({ lib, ... }:
 {
   name = "chrony";
 
-  meta = {
-    maintainers = with lib.maintainers; [ fpletz ];
-  };
+  nodes.machine = {
+    services.chrony.enable = true;
 
-  nodes = {
-    machine = {
-      services.chrony.enable = true;
-
-      specialisation.hardened.configuration = {
-        services.chrony.enableMemoryLocking = true;
-        environment.memoryAllocator.provider = "graphene-hardened";
-      };
+    specialisation.hardened.configuration = {
+      environment.memoryAllocator.provider = "graphene-hardened";
     };
   };
 
@@ -25,4 +17,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed('systemctl restart chronyd.service')
     machine.wait_for_unit('chronyd.service')
   '';
-})
+}

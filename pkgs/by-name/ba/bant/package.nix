@@ -3,9 +3,10 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   nix-update-script,
+  cctools,
 }:
 
 let
@@ -13,35 +14,38 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "40bc9ad53e5a59d596935839e7c072679e706266";
-    hash = "sha256-CL0YMQd1ck6/dlvJCLxt9jYyqDuk+iAWfdBOMj864u8=";
+    rev = "1f55d91e1be0e4863a698b9d7582cf097ad456ee";
+    hash = "sha256-ESHF5FhLvn4u4j//6AFiSJRJYSKrI4EKr4oDwvsrcPM=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.8";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-CMqh2v6Y/jvrDC2M4Q+pC0FkNJ95gbGTR1UC6zviwV4=";
+    hash = "sha256-0RWR793+qXc5QYIc7wIL323iDkNts9w4e90FCdHT6t4=";
   };
 
   bazelFlags = [
     "--registry"
     "file://${registry}"
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs scripts/create-workspace-status.sh
   '';
 
+  removeRulesCC = false;
+
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-K+uGH3ox49taSPZ1aLYPrOLNRO3aLQeOSdrkmTC444U=";
-        x86_64-linux = "sha256-yNwD3n7exyG5LbhR2GuKIvoul6UQnyk3+8pLpnDzjFw=";
+        aarch64-linux = "sha256-aGfFbeosrWhNqiHV9ng59DeMZSGjaylPRfolxatauJE";
+        x86_64-linux = "sha256-nbHHkgN4O8bWZzrpQUMZbm4+iRffqdfu7C1kkLJ3GDQ=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -49,7 +53,7 @@ buildBazelPackage rec {
   nativeBuildInputs = [
     jdk
   ];
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   bazelBuildFlags = [ "-c opt" ];
   bazelTestTargets = [ "//..." ];
@@ -66,11 +70,10 @@ buildBazelPackage rec {
   meta = {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       hzeller
       lromor
     ];
-    platforms = lib.platforms.linux;
   };
 }

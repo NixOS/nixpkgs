@@ -74,10 +74,11 @@ hashes for the relevant package, or for all packages.
 
 ### Upgrading the ConTeXt binaries
 
-The LuaMetaTeX sources required for ConTeXt are distributed separately from the
-TeX Live tarballs and must be updated manually (see `texlive.bin.context`). You
-must use the latest tarball at https://tug.org/svn/texlive/trunk/Master/source/
-whose revision number is less than or equal to that of the package `context`.
+ConTeXt in TeX Live is packaged as described
+[here](https://github.com/gucci-on-fleek/context-packaging). With every update
+to the ConTeXt package, the LuaMetaTeX compiler also needs to be updated. For
+this, we fetch the source from the releases of the above repo. Make sure to
+update this in `texlive.bin.context`, when updating TeX Live.
 
 ### Updating the licensing information
 

@@ -1,51 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, cimg
-, cmake
-, common-updater-scripts
-, coreutils
-, curl
-, fftw
-, gmic-qt
-, gnugrep
-, gnused
-, graphicsmagick
-, jq
-, libX11
-, libXext
-, libjpeg
-, libpng
-, libtiff
-, llvmPackages
-, ninja
-, opencv
-, openexr
-, pkg-config
-, writeShellScript
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  buildPackages,
+  cimg,
+  cmake,
+  common-updater-scripts,
+  coreutils,
+  curl,
+  fftw,
+  gmic-qt,
+  gnugrep,
+  gnused,
+  graphicsmagick,
+  jq,
+  libX11,
+  libXext,
+  libjpeg,
+  libpng,
+  libtiff,
+  llvmPackages,
+  ninja,
+  opencv,
+  openexr,
+  pkg-config,
+  writeShellScript,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.4.3";
+  version = "3.6.2";
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-dYHADdt9PboUgIRU6wu5uCs2KQ88z5/FZPXvvyYct00=";
+    hash = "sha256-KiX7yHwuy2AWLqqmiHz9YhbvRBEusE9TuXKtaA9YsME=";
   };
 
   # TODO: build this from source
   # Reference: src/Makefile, directive gmic_stdlib_community.h
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib_community.h";
-    url = "https://gmic.eu/gmic_stdlib_community${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
-    hash = "sha256-M/AL1w9KGi+dIGVQ+vdWY8PSCHi+s/aZef08AxeQMJE=";
+    url = "https://gmic.eu/gmic_stdlib_community${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.h";
+    hash = "sha256-JO8ijrOgrOq7lB8NaxnlsQhDXSMgAGQlOG3lT9NfuMw=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     openexr
     zlib
-  ] ++ lib.optionals stdenv.cc.isClang [
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ];
 
@@ -85,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
+      '${lib.getExe buildPackages.gmic}'
   '';
 
   passthru = {
@@ -95,7 +110,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = writeShellScript "gmic-update-script" ''
       set -o errexit
-      PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused jq ]}
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          curl
+          gnugrep
+          gnused
+          jq
+        ]
+      }
 
       latestVersion=$(curl 'https://gmic.eu/files/source/' \
                        | grep -E 'gmic_[^"]+\.tar\.gz' \
@@ -118,9 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,23 +1,27 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "oauth2l";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "oauth2l";
     rev = "v${version}";
-    hash = "sha256-bL1bys/CBo/P9VfWc/FB8JHW/aBwC521V8DB1sFBIAA=";
+    hash = "sha256-jD8VFyAq6qcQhgvMmJj3D1xWGUvq3tMISbztLf1a72I=";
   };
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = "export HOME=$(mktemp -d)";

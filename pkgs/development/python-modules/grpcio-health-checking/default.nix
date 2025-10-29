@@ -11,13 +11,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
-  version = "1.66.2";
+  version = "1.75.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "grpcio_health_checking";
     inherit version;
-    hash = "sha256-yQ35YiRWBC7DSV03qzC190ckqsW11VMU8HPu9eJHChM=";
+    hash = "sha256-iI6huGrWXALIVHSG6VJjVi4UU2Pj1UAPUkT38sUyPmM=";
   };
 
   propagatedBuildInputs = [

@@ -1,28 +1,30 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvm_16
-, libffi
-, libz
-, libxml2
-, ncurses
-, stdenv
-, makeWrapper
-, callPackage
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvm,
+  libffi,
+  libz,
+  libxml2,
+  ncurses,
+  stdenv,
+  makeWrapper,
+  callPackage,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inko";
-  version = "0.15.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "inko-lang";
     repo = "inko";
-    rev = "v${version}";
-    hash = "sha256-Iojv8pTyILYpLFnoTlgUGmlfWWH0DgsGBRxzd3oRNwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jVfAfR02R2RaTtzFSBoLuq/wdPaaI/eochrZaRVdmHY=";
   };
 
-  cargoHash = "sha256-PaZD7wwcami6EWvOHLislNkwQhCZItN9XZkPSExwo0U=";
+  cargoHash = "sha256-IOMhwcZHB5jVYDM65zifxCjVHWl1EBbxNA3WVmarWcs=";
 
   buildInputs = [
     libffi
@@ -33,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [
-    llvm_16
+    llvm
     makeWrapper
   ];
 
@@ -53,16 +55,22 @@ rustPlatform.buildRustPackage rec {
     cp -r std/src/* $out/lib/
   '';
 
-  passthru.tests = {
-    simple = callPackage ./test.nix { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      simple = callPackage ./test.nix { };
+    };
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Language for building concurrent software with confidence";
     homepage = "https://inko-lang.org/";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "inko";
   };
-}
+})

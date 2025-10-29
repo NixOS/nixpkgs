@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0612";
+  version = "0614";
   pyproject = true;
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "refs/tags/v_${version}";
-    hash = "sha256-6Ps3pmQ8tYwQyv0TliOvUNLy3GjSJ2jdDQTTxfYej0o=";
+    tag = "v_${version}";
+    hash = "sha256-wLvWaJuXMXk7zOaSZfIpsXhQt+eCjOtlh8IRuKbR75o=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -64,7 +64,10 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v_(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v_(.*)"
+    ];
   };
 
   meta = with lib; {

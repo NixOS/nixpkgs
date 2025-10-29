@@ -1,5 +1,10 @@
 # Upower daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.upower;
@@ -65,7 +70,7 @@ in
           on or off. We can't do much to fix these problems, but this is a way
           for users to make the laptop panel vanish, a state that might be used
           by a couple of user-space daemons. On Linux systems, see also
-          logind.conf(5).
+          {manpage}`logind.conf(5)`.
         '';
       };
 
@@ -179,13 +184,31 @@ in
         '';
       };
 
+      allowRiskyCriticalPowerAction = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Enable the risky critical power actions "Suspend" and "Ignore".
+        '';
+      };
+
       criticalPowerAction = lib.mkOption {
-        type = lib.types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
+        type = lib.types.enum [
+          "PowerOff"
+          "Hibernate"
+          "HybridSleep"
+          "Suspend"
+          "Ignore"
+        ];
         default = "HybridSleep";
         description = ''
           The action to take when `timeAction` or
           `percentageAction` has been reached for the batteries
-          (UPS or laptop batteries) supplying the computer
+          (UPS or laptop batteries) supplying the computer.
+
+          When set to `Suspend` or `Ignore`,
+          {option}`services.upower.allowRiskyCriticalPowerAction` must be set
+          to `true`.
         '';
       };
 
@@ -193,10 +216,28 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          let
+            inherit (builtins) elem;
+            riskyActions = [
+              "Suspend"
+              "Ignore"
+            ];
+            riskyActionEnabled = elem cfg.criticalPowerAction riskyActions;
+          in
+          riskyActionEnabled -> cfg.allowRiskyCriticalPowerAction;
+        message = ''
+          services.upower.allowRiskyCriticalPowerAction must be true if
+          services.upower.criticalPowerAction is set to
+          '${cfg.criticalPowerAction}'.
+        '';
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -206,7 +247,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = lib.generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = lib.generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;
@@ -218,6 +259,7 @@ in
         TimeLow = cfg.timeLow;
         TimeCritical = cfg.timeCritical;
         TimeAction = cfg.timeAction;
+        AllowRiskyCriticalPowerAction = cfg.allowRiskyCriticalPowerAction;
         CriticalPowerAction = cfg.criticalPowerAction;
       };
     };

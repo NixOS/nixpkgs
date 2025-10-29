@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "webob";
-  version = "1.8.8";
+  version = "1.8.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "webob";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QN0UMLzO0g8Oalnn5GlOulXUxtXOx89jeeEvJV53rVs=";
+    tag = version;
+    hash = "sha256-axJQwlybuqBS6RgI2z9pbw58vHF9aC9AxCg13CIKCLs=";
   };
 
   build-system = [ setuptools ];

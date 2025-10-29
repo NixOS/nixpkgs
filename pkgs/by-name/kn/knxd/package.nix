@@ -1,27 +1,30 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, indent
-, perl
-, argp-standalone
-, fmt_9
-, libev
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUsb ? stdenv.hostPlatform.isLinux, libusb1
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  indent,
+  perl,
+  argp-standalone,
+  fmt_9,
+  libev,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withUsb ? stdenv.hostPlatform.isLinux,
+  libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.63";
+  version = "0.14.73";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
-    rev = finalAttrs.version;
-    hash = "sha256-Ka4ATC20PS/yqHj+dbcIXxeqFYHDMKu6DvJWGd4rUMI=";
+    tag = finalAttrs.version;
+    hash = "sha256-rBYvwNJ8rIXGv9Hz0xTn+4cUdptdoddCCv6JvF4f1+M=";
   };
 
   postPatch = ''
@@ -29,12 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '2i exit' tools/get_libfmt
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config indent perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    indent
+    perl
+  ];
 
-  buildInputs = [ fmt_9 libev ]
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withUsb libusb1
-    ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
+  buildInputs = [
+    fmt_9
+    libev
+  ]
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withUsb libusb1
+  ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 
   configureFlags = [
     (lib.enableFeature withSystemd "systemd")
@@ -48,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "systemdsysusersdir=$(out)/lib/sysusers.d"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced router/gateway for KNX";
     homepage = "https://github.com/knxd/knxd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })

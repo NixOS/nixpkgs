@@ -1,56 +1,91 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk8_headless
-, jdk11_headless
-, bash
-, coreutils
-, which
-, bzip2
-, cyrus_sasl
-, protobuf
-, snappy
-, zlib
-, zstd
-, openssl
-, nixosTests
-, sparkSupport ? true
-, spark
-, libtirpc
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk8_headless,
+  jdk11_headless,
+  jdk21_headless,
+  bash,
+  coreutils,
+  which,
+  bzip2,
+  cyrus_sasl,
+  protobuf,
+  snappy,
+  zlib,
+  zstd,
+  openssl,
+  nixosTests,
+  sparkSupport ? true,
+  spark,
+  libtirpc,
+  callPackage,
 }:
 
-assert lib.elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+assert lib.elem stdenv.system [
+  "x86_64-linux"
+  "x86_64-darwin"
+  "aarch64-linux"
+  "aarch64-darwin"
+];
 
 let
-  common = { pname, platformAttrs, jdk, tests }:
+  common =
+    {
+      pname,
+      platformAttrs,
+      jdk,
+      tests,
+    }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname jdk;
+      inherit pname;
+      jdk = platformAttrs.${stdenv.system}.jdk or jdk;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
-              + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64" + ".tar.gz";
-        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) hash;
+        url =
+          "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
+          +
+            lib.optionalString (lib.hasAttr "variant" platformAttrs.${stdenv.system})
+              "-${platformAttrs.${stdenv.system}.variant}"
+          + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64"
+          + ".tar.gz";
+        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"))
+          hash
+          ;
       };
       doCheck = true;
 
       # Build the container executor binary from source
       # InstallPhase is not lazily evaluating containerExecutor for some reason
-      containerExecutor = if stdenv.hostPlatform.isLinux then (callPackage ./containerExecutor.nix {
-        inherit (finalAttrs) version;
-        inherit platformAttrs;
-      }) else "";
+      containerExecutor =
+        if stdenv.hostPlatform.isLinux then
+          (callPackage ./containerExecutor.nix {
+            inherit (finalAttrs) version;
+            inherit platformAttrs;
+          })
+        else
+          "";
 
-      nativeBuildInputs = [ makeWrapper ]
-                          ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) openssl protobuf zlib snappy libtirpc ];
+      nativeBuildInputs = [
+        makeWrapper
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+        (lib.getLib stdenv.cc.cc)
+        openssl
+        protobuf
+        zlib
+        snappy
+        libtirpc
+      ];
 
       installPhase = ''
         mkdir $out
         mv * $out/
-      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+      ''
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
         for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
           ln -sf "$n" $out/bin
         done
@@ -73,74 +108,94 @@ let
         # hadoop 3.3+ depends on protobuf 3.18, 3.2 depends on 3.8
         find $out/lib/native -name 'libhdfspp.so*' | \
           xargs -r -n1 patchelf --replace-needed libprotobuf.so.${
-            if (lib.versionAtLeast finalAttrs.version "3.3") then "18"
-            else "8"
+            if (lib.versionAtLeast finalAttrs.version "3.4.1") then
+              "32"
+            else if (lib.versionAtLeast finalAttrs.version "3.3") then
+              "18"
+            else
+              "8"
           } libprotobuf.so
 
         patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
           $out/lib/native/{libhdfs{pp,}.so*,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
 
-      '' + ''
+      ''
+      + ''
         for n in $(find $out/bin -type f ! -name "*.*"); do
           wrapProgram "$n"\
             --set-default JAVA_HOME ${finalAttrs.jdk.home}\
             --set-default HADOOP_HOME $out/\
             --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
             --set-default HADOOP_CONF_DIR $out/etc/hadoop/\
-            --prefix PATH : "${lib.makeBinPath [ bash coreutils which]}"\
+            --prefix PATH : "${
+              lib.makeBinPath [
+                bash
+                coreutils
+                which
+              ]
+            }"\
             --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
         done
-      '' + (lib.optionalString sparkSupport ''
+      ''
+      + (lib.optionalString sparkSupport ''
         # Add the spark shuffle service jar to YARN
         cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/share/hadoop/yarn/
       '');
 
       passthru = { inherit tests; };
 
-      meta = with lib; recursiveUpdate {
-        homepage = "https://hadoop.apache.org/";
-        description = "Framework for distributed processing of large data sets across clusters of computers";
-        license = licenses.asl20;
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      # The recursiveUpdate below breaks default meta.position, so manually override it.
+      pos = __curPos;
+      meta =
+        with lib;
+        recursiveUpdate {
+          homepage = "https://hadoop.apache.org/";
+          description = "Framework for distributed processing of large data sets across clusters of computers";
+          license = licenses.asl20;
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
 
-        longDescription = ''
-          The Apache Hadoop software library is a framework that allows for
-          the distributed processing of large data sets across clusters of
-          computers using a simple programming model. It is designed to
-          scale up from single servers to thousands of machines, each
-          offering local computation and storage. Rather than rely on
-          hardware to deliver high-avaiability, the library itself is
-          designed to detect and handle failures at the application layer,
-          so delivering a highly-availabile service on top of a cluster of
-          computers, each of which may be prone to failures.
-        '';
-        maintainers = with maintainers; [ illustris ];
-        platforms = attrNames platformAttrs;
-      } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);
+          longDescription = ''
+            The Apache Hadoop software library is a framework that allows for
+            the distributed processing of large data sets across clusters of
+            computers using a simple programming model. It is designed to
+            scale up from single servers to thousands of machines, each
+            offering local computation and storage. Rather than rely on
+            hardware to deliver high-avaiability, the library itself is
+            designed to detect and handle failures at the application layer,
+            so delivering a highly-availabile service on top of a cluster of
+            computers, each of which may be prone to failures.
+          '';
+          maintainers = with maintainers; [ illustris ];
+          platforms = attrNames platformAttrs;
+        } (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
     });
 in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_4 = common rec {
+  hadoop_3_4 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
-        version = "3.4.0";
-        hash = "sha256-4xGnhIBBQDD57GNUml1oXmnibyBxA9mr8hpIud0DyGw=";
-        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+        version = "3.4.2";
+        hash = "sha256-YySoP+EeUXiQQ2/G2AvIKVBu0lLL4kZXUrkSIJAN+4M=";
+        srcHash = "sha256-AkZjpHk57S3pYiZambxgRHR7PD51HSI4H1HHW9ICah4=";
+        variant = "lean";
       };
       x86_64-darwin = x86_64-linux;
-      aarch64-linux = x86_64-linux // {
+      aarch64-linux = {
+        version = "3.4.0";
         hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
+        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+        jdk = jdk11_headless;
       };
       aarch64-darwin = aarch64-linux;
     };
-    jdk = jdk11_headless;
+    jdk = jdk21_headless;
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
   };
-  hadoop_3_3 = common rec {
+  hadoop_3_3 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
@@ -158,7 +213,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop_3_3;
   };
-  hadoop2 = common rec {
+  hadoop2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "2.10.2";

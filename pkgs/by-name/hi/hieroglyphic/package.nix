@@ -13,28 +13,24 @@
   glib,
   gtk4,
   libadwaita,
-  gettext,
   appstream,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
-  version = "1.1.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-021qmXZDgeGLpsrhlqMlXiVONltuKFCra0/mTT/Bul0=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "detexify-0.4.0" = "sha256-BPOHNr3pwu2il3/ERko+WHAWby4rPR49i62tXDlDRu0=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-PMHDHRkCMlcv3LrCYH3eU3YgmWR4KFNsIRqiXq9oIcA=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  # needed for darwin
-  env.GETTEXT_DIR = "${gettext}";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";
@@ -65,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome-circle ];
+    # Note: upstream currently has case-insensititvity issues on darwin
+    platforms = lib.platforms.linux;
   };
 })

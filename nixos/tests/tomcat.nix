@@ -1,14 +1,17 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "tomcat";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
-  nodes.machine = { pkgs, ... }: {
-    services.tomcat = {
-      enable = true;
-      port = 8001;
-      axis2.enable = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.tomcat = {
+        enable = true;
+        port = 8001;
+        axis2.enable = true;
+      };
     };
-  };
 
   testScript = ''
     machine.wait_for_unit("tomcat.service")
@@ -25,4 +28,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         "curl -sS --fail http://localhost:8001/axis2/axis2-web/HappyAxis.jsp | grep 'Found Axis2'"
     )
   '';
-})
+}

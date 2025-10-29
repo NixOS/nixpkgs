@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,17 +11,18 @@ let
 
   cfg = config.services.eintopf;
 
-in {
+in
+{
   options.services.eintopf = {
 
-    enable = mkEnableOption "Eintopf community event calendar web app";
+    enable = mkEnableOption "Lauti (Eintopf) community event calendar web app";
 
     settings = mkOption {
       type = types.attrsOf types.str;
       default = { };
       description = ''
         Settings to configure web service. See
-        <https://codeberg.org/Klasse-Methode/eintopf/src/branch/main/DEPLOYMENT.md>
+        <https://codeberg.org/Klasse-Methode/lauti/src/branch/main/DEPLOYMENT.md>
         for available options.
       '';
       example = literalExpression ''
@@ -48,14 +54,14 @@ in {
       wants = [ "network-online.target" ];
       environment = cfg.settings;
       serviceConfig = {
-        ExecStart = "${pkgs.eintopf}/bin/eintopf";
+        ExecStart = lib.getExe pkgs.lauti;
         WorkingDirectory = "/var/lib/eintopf";
-        StateDirectory = "eintopf" ;
+        StateDirectory = "eintopf";
         EnvironmentFile = [ cfg.secrets ];
 
         # hardening
         AmbientCapabilities = "";
-        CapabilityBoundingSet = "" ;
+        CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         DynamicUser = true;
         LockPersonality = true;
@@ -75,12 +81,18 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };

@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchurl
-, nixosTests
-, callPackage
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  nixosTests,
+  callPackage,
 }:
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.29.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.36.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "16"; # Also update kubo-migrator when changing the repo version
 
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-udCVyA3NN3RCmVtdIjccfy/RymvrsGJoxlF8DiapP4g=";
+    hash = "sha256-JbWt6d1cX3F2lmivjszcxcyE+wKYk+Sy03xhb4E3oHw=";
   };
 
   # tarball contains multiple files/directories
@@ -31,13 +32,17 @@ buildGoModule rec {
   subPackages = [ "cmd/ipfs" ];
 
   passthru.tests = {
-    inherit (nixosTests) kubo;
-    repoVersion = callPackage ./test-repoVersion.nix {};
+    inherit (nixosTests) kubo ipget;
+    repoVersion = callPackage ./test-repoVersion.nix { };
   };
 
   vendorHash = null;
 
-  outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
+  outputs = [
+    "out"
+    "systemd_unit"
+    "systemd_unit_hardened"
+  ];
 
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
@@ -63,6 +68,8 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";
-    maintainers = with maintainers; [ Luflosi fpletz ];
+    maintainers = with maintainers; [
+      Luflosi
+    ];
   };
 }

@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, mgba }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  mgba,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-mgba";
@@ -26,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "mGBA for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

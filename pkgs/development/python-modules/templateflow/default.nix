@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools-scm,
+  hatchling,
+  hatch-vcs,
   nipreps-versions,
   pybids,
   requests,
@@ -12,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "24.2.2";
+  version = "25.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,12 +22,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
+    tag = version;
+    hash = "sha256-7N8JJAJwnmesQIoZttcphmUW5HLEi8Rxv70MGNjOO98=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-scm
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     nipreps-versions
     pybids
     requests
@@ -33,12 +40,17 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # most tests try to download data
-  #pythonImportsCheck = [ "templateflow" ];  # touches $HOME/.cache, hence needs https://github.com/NixOS/nixpkgs/pull/120300
+
+  postFixup = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "templateflow" ];
 
   meta = with lib; {
     homepage = "https://templateflow.org/python-client";
     description = "Python API to query TemplateFlow via pyBIDS";
-    changelog = "https://github.com/templateflow/python-client/releases/tag/${version}";
+    changelog = "https://github.com/templateflow/python-client/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

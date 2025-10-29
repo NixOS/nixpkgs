@@ -1,8 +1,8 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1a30d61..bea8d7c 100644
---- a/CMakeLists.txt
+diff --git a/CMakeLists.txt.orig b/CMakeLists.txt
+index ac0488e..a3724bc 100644
+--- a/CMakeLists.txt.orig
 +++ b/CMakeLists.txt
-@@ -50,13 +50,6 @@ include(FetchContent)
+@@ -50,14 +50,6 @@ include(FetchContent)
  
  set(CMAKE_VERBOSE_MAKEFILE ON)
  
@@ -13,13 +13,17 @@ index 1a30d61..bea8d7c 100644
 -if (NOT Git_FOUND)
 -    message(FATAL_ERROR "Required package 'Git' not found on system.")
 -endif ()
- 
+-
  #======================================== LIB IMPORTS =============================================#
  # ======= #
-@@ -68,28 +61,9 @@ include_directories(${OPENSSL_INCLUDE_DIR})
- # ============== #
- # JSON-C library #
- # ============== #
+ # OpenSSL #
+@@ -65,40 +57,17 @@ endif ()
+ find_package(OpenSSL REQUIRED)
+ include_directories(${OPENSSL_INCLUDE_DIR})
+ 
+-# ============== #
+-# JSON-C library #
+-# ============== #
 -set(JSONC_DOWNLOAD_PATH "${TEMP_DIR_PATH}/libjsonc")
 -set(JSONC_INSTALL_PATH "${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}")
 -
@@ -31,24 +35,35 @@ index 1a30d61..bea8d7c 100644
 -        PREFIX         "${JSONC_DOWNLOAD_PATH}"
 -        SOURCE_DIR     "${JSONC_DOWNLOAD_PATH}/src/libjsonc-build"
 -        GIT_REPOSITORY "https://github.com/json-c/json-c.git"
+-        GIT_TAG        "json-c-0.18-20240915"
 -        CMAKE_ARGS     "-DBUILD_STATIC_LIBS=ON"
 -                       "-DBUILD_SHARED_LIBS=OFF"
 -                       "-DCMAKE_INSTALL_PREFIX:PATH=${JSONC_INSTALL_PATH}"
 -                       "-DHAVE_ARC4RANDOM=OFF"
 -                       "-DCMAKE_BUILD_TYPE=release"
+-                       "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
 -)
 -
 -set(JSONC_LIBRARIES
 -        ${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}/lib/libjson-c.a
--        bsd
+-#        bsd
 -)
+-
+ # ============ #
+ # Curl library #
+ # ============ #
+ find_package(CURL REQUIRED)
+ include_directories(${CURL_INCLUDE_DIR})
+ 
 +find_package(PkgConfig REQUIRED)
 +pkg_check_modules(JSONC REQUIRED json-c)
 +include_directories(${JSONC_INCLUDE_DIRS})
- 
- # ============ #
- # Curl library #
-@@ -408,7 +382,7 @@ add_subdirectory(docs)
++
++
+ # ================================ #
+ # nCurses - for the user interface #
+ # ================================ #
+@@ -410,7 +379,7 @@ add_subdirectory(docs)
  #endforeach()
  
  add_executable(ctune ${SOURCE_FILES})
@@ -57,3 +72,10 @@ index 1a30d61..bea8d7c 100644
  include_directories(${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}/include)
  
  add_dependencies(ctune ${CTUNE_PLUGIN_LIST_AUDIO_PLAYER})
+@@ -450,4 +419,4 @@ if(TARGET uninstall)
+ 
+     add_custom_target(uninstall
+             COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/CMakeUninstall.cmake)
+-endif()
+\ No newline at end of file
++endif()

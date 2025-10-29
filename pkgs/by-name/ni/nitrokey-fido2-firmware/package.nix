@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-fido2-firmware";
-    rev = "${version}.nitrokey";
+    tag = "${version}.nitrokey";
     hash = "sha256-7AsnxRf8mdybI6Mup2mV01U09r5C/oUX6fG2ymkkOOo=";
     fetchSubmodules = true;
   };

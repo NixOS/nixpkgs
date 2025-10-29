@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.74";
+  version = "0.0.75";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aURHor+7E0Z4DyN/s1/BMBJo/FmvAlRsKs9Q0Thelyc=";
+    tag = "v${version}";
+    hash = "sha256-2WFfGGEZkM3fWyTo5P6H3ha04Qyx2OiYetlGWv0jXac=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.async ++ optional-dependencies.usb;
+  ]
+  ++ optional-dependencies.async
+  ++ optional-dependencies.usb;
 
   disabledTests = [
     # Requires git but fails anyway

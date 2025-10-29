@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yFEkE1VyeHBuebpsumc6CTvv2kpAw7XAWlyUlXibqz0=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       .png files. clickgen is using anicursorgen and xcursorgen under the hood.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AdsonCicilioti ];
+    maintainers = [ ];
     # fails with:
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "antonioginer";
     repo = "switchres";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/21RcpumWYNBPck7gpH6krwC3Thz/rKDPgeJblN2BDA=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patchPhase = ''
-    runHook preHook
+    runHook prePatch
 
     substituteInPlace ./custom_video_xrandr.cpp \
       --replace-fail libX11.so ${xorg.libX11}/lib/libX11.so \
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./custom_video_drmkms.cpp \
       --replace-fail libdrm.so ${libdrm}/lib/libdrm.so \
 
-    runHook postHook
+    runHook postPatch
   '';
 
   env = {

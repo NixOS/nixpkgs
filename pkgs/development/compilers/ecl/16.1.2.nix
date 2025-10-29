@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libtool
-, autoconf
-, automake
-, gmp
-, mpfr
-, libffi
-, makeWrapper
-, noUnicode ? false
-, gcc
-, threadSupport ? false
-, useBoehmgc ? true
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libtool,
+  autoconf,
+  automake,
+  gmp,
+  mpfr,
+  libffi,
+  makeWrapper,
+  noUnicode ? false,
+  gcc,
+  threadSupport ? false,
+  useBoehmgc ? true,
+  boehmgc,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +26,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LUgrGgpPvV2IFDRRcDInnYCMtkBeIt2R721zNTRGS5k=";
   };
 
-  nativeBuildInputs = [ autoconf automake makeWrapper libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    makeWrapper
+    libtool
+  ];
   propagatedBuildInputs = [
     libffi
     gmp
     mpfr
     gcc
-  ] ++ lib.optionals useBoehmgc [
+  ]
+  ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -42,8 +49,8 @@ stdenv.mkDerivation rec {
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
     # -incdir, -libdir doesn't seem to be supported for libffi
     "--with-libffi-prefix=${lib.getDev libffi}"
-  ] ++ lib.optional (! noUnicode) "--enable-unicode"
-  ;
+  ]
+  ++ lib.optional (!noUnicode) "--enable-unicode";
 
   patches = [
     (fetchpatch {
@@ -70,7 +77,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ecl" \
       --prefix PATH ':' "${
         lib.makeBinPath [
-          gcc                   # for the C compiler
+          gcc # for the C compiler
           gcc.bintools.bintools # for ar
         ]
       }" \
@@ -84,14 +91,15 @@ stdenv.mkDerivation rec {
   + lib.optionalString useBoehmgc ''
     --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
     --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
-  '' + ''
+  ''
+  + ''
     --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
 
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     license = licenses.mit;
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;

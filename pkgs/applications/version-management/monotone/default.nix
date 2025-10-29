@@ -1,13 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, boost, zlib, botan2, libidn
-, lua, pcre, sqlite, perl, pkg-config, expect, less
-, bzip2, gmp, openssl
-, autoreconfHook, texinfo
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  zlib,
+  libidn,
+  lua,
+  pcre,
+  sqlite,
+  perl,
+  pkg-config,
+  expect,
+  less,
+  bzip2,
+  gmp,
+  openssl,
+  autoreconfHook,
+  texinfo,
+  fetchpatch,
+  callPackage,
 }:
 
 let
   version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
+
+  botan = callPackage ./botan2.nix { enableForMonotone = true; };
 in
 
 assert perlVersion != "";
@@ -45,18 +63,35 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
-  '' + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
+  ''
+  + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
     find . -type f -exec sed -i \
       -e 's/ E(/ internal_E(/g' \
       -e 's/{E(/{internal_E(/g' \
       {} +
   '';
 
-  CXXFLAGS=" --std=c++11 ";
+  CXXFLAGS = " --std=c++11 ";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook texinfo ];
-  buildInputs = [ boost zlib botan2 libidn lua pcre sqlite expect
-    openssl gmp bzip2 perl ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    texinfo
+  ];
+  buildInputs = [
+    boost
+    zlib
+    botan
+    libidn
+    lua
+    pcre
+    sqlite
+    expect
+    openssl
+    gmp
+    bzip2
+    perl
+  ];
 
   postInstall = ''
     mkdir -p $out/share/${pname}-${version}

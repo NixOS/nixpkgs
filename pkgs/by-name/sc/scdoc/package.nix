@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MbLDhLn/JY6OcdOz9/mIPAQRp5TZ6IKuQ/FQ/R3wjGc=";
   };
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -24,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
   ];
 
@@ -36,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "scdoc";
-    maintainers = with lib.maintainers; [ primeos AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

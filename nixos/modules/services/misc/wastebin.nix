@@ -1,10 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.wastebin;
   inherit (lib)
-    mkEnableOption mkPackageOption mkIf mkOption
-    types mapAttrs isBool getExe boolToString optionalAttrs;
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    mapAttrs
+    isBool
+    getExe
+    boolToString
+    optionalAttrs
+    ;
 in
 {
 
@@ -48,7 +62,13 @@ in
 
       type = types.submodule {
 
-        freeformType = with types; attrsOf (oneOf [ bool int str ]);
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
 
         options = {
 
@@ -87,7 +107,7 @@ in
           };
 
           WASTEBIN_MAX_BODY_SIZE = mkOption {
-            default = 1024;
+            default = 1048576;
             type = types.int;
             description = "Number of bytes to accept for POST requests";
           };
@@ -101,12 +121,11 @@ in
           RUST_LOG = mkOption {
             default = "info";
             type = types.str;
-            description =
-              ''
-                Influences logging. Besides the typical trace, debug, info etc.
-                keys, you can also set the tower_http key to some log level to get
-                additional information request and response logs.
-              '';
+            description = ''
+              Influences logging. Besides the typical trace, debug, info etc.
+              keys, you can also set the tower_http key to some log level to get
+              additional information request and response logs.
+            '';
           };
         };
       };
@@ -119,39 +138,42 @@ in
     };
   };
 
-  config = mkIf cfg.enable
-    {
-      systemd.services.wastebin = {
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
-        serviceConfig = {
-          DevicePolicy = "closed";
-          DynamicUser = true;
-          ExecStart = "${getExe cfg.package}";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          PrivateDevices = true;
-          PrivateUsers = true;
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          SystemCallArchitectures = [ "native" ];
-          SystemCallFilter = [ "@system-service" ];
-          StateDirectory = baseNameOf cfg.stateDir;
-          ReadWritePaths = cfg.stateDir;
-        } // optionalAttrs (cfg.secretFile != null) {
-          EnvironmentFile = cfg.secretFile;
-        };
+  config = mkIf cfg.enable {
+    systemd.services.wastebin = {
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
+      serviceConfig = {
+        DevicePolicy = "closed";
+        DynamicUser = true;
+        ExecStart = "${getExe cfg.package}";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = [ "native" ];
+        SystemCallFilter = [ "@system-service" ];
+        StateDirectory = baseNameOf cfg.stateDir;
+        ReadWritePaths = cfg.stateDir;
+      }
+      // optionalAttrs (cfg.secretFile != null) {
+        EnvironmentFile = cfg.secretFile;
       };
     };
+  };
 
   meta.maintainers = with lib.maintainers; [ pinpox ];
 }

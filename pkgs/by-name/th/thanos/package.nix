@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "thanos";
-  version = "0.36.1";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Zcc860kQkVP1DPyadBoalhcvwh5HF9CgQyjzWRdeXt0=";
+    tag = "v${version}";
+    hash = "sha256-yKw+HGlqEgQmydZ+PIk5y/z5H57nZ0dtw/kEh8079Ws=";
   };
 
-  vendorHash = "sha256-d+jHGmCfx9Ffm5pajm1RvKnMea99JswL0I8nmILXN50=";
+  vendorHash = "sha256-6qTxCAD1hbS77erG1Z52JU2iOXAU+qtY3yivX+4bjlw=";
 
   subPackages = "cmd/thanos";
 
@@ -50,13 +50,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "thanos";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       basvandijk
       anthonyroussel
     ];

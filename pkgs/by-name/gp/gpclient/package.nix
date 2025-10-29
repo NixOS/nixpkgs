@@ -6,26 +6,42 @@
   openconnect,
   openssl,
   perl,
+  pkg-config,
   vpnc-scripts,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gtk3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "gpclient";
 
-  inherit (gpauth) version src meta;
+  inherit (gpauth)
+    src
+    version
+    cargoHash
+    meta
+    ;
 
   buildAndTestSubdir = "apps/gpclient";
-  cargoHash = "sha256-aJYFBvVrj1n2+9WLLBH5WTRRzTle19LsdJ2DielJYik=";
 
   nativeBuildInputs = [
     perl
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     gpauth
     openconnect
     openssl
     glib-networking
+    glib
+    pango
+    cairo
+    atk
+    gtk3
   ];
 
   preConfigure = ''
@@ -47,6 +63,6 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient $out/bin/gpclient
+      --replace-fail /usr/bin/gpclient gpclient
   '';
 }

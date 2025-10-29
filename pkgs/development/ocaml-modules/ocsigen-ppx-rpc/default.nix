@@ -1,10 +1,13 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppxlib }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ocsigen-ppx-rpc";
   version = "1.0";
-
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
@@ -20,6 +23,7 @@ buildDunePackage rec {
     description = "Syntax for RPCs for Eliom and Ocsigen Start";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
 }

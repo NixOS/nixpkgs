@@ -1,8 +1,12 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-quattro";
-  version = "unstable-2023-06-16";
+  version = "0-unstable-2023-06-16";
 
   src = fetchFromGitHub {
     owner = "iaolo";

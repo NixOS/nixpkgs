@@ -1,24 +1,27 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnome-menus
-, gtk3
-, intltool
-, gobject-introspection
-, wrapGAppsHook3
-, nix-update-script
-, testers
-, menulibre
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnome-menus,
+  gtk3,
+  intltool,
+  gobject-introspection,
+  wrapGAppsHook3,
+  nix-update-script,
+  testers,
+  menulibre,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "menulibre";
   version = "2.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
-    rev = "menulibre-${version}";
+    tag = "menulibre-${version}";
     hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
@@ -34,16 +37,13 @@ python3Packages.buildPythonApplication rec {
     intltool
     gobject-introspection
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'data_dir =' "data_dir = '$out/share/menulibre' #" \
       --replace-fail 'update_desktop_file(desktop_file, script_path)' ""
-  '';
-
-  preBuild = ''
-    export HOME=$TMPDIR
   '';
 
   passthru = {

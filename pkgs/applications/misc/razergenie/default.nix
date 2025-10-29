@@ -1,42 +1,82 @@
-{ stdenv, fetchFromGitHub, lib, meson, ninja, pkg-config, qtbase, qttools
-, wrapQtAppsHook
-, enableExperimental ? false
-, includeMatrixDiscovery ? false
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  qt6,
+  cmake,
 }:
 
 let
-  version = "0.9.0";
-  pname = "razergenie";
+  libopenrazer = stdenv.mkDerivation (finalAttrs: {
+    pname = "libopenrazer";
+    version = "0.4.0";
 
-in stdenv.mkDerivation {
-  inherit pname version;
+    src = fetchFromGitHub {
+      owner = "z3ntu";
+      repo = "libopenrazer";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-2RH4mevJS5HaEkb5lDNwoMaMNACXJGUVA5RWSYSsakI=";
+    };
+
+    nativeBuildInputs = [
+      pkg-config
+      meson
+      ninja
+    ];
+
+    buildInputs = [
+      qt6.qtbase
+      qt6.qttools
+    ];
+
+    dontWrapQtApps = true;
+
+    meta = {
+      homepage = "https://github.com/z3ntu/libopenrazer";
+      description = "Qt wrapper around the D-Bus API from OpenRazer";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+    };
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "razergenie";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "z3ntu";
     repo = "RazerGenie";
-    rev = "v${version}";
-    sha256 = "17xlv26q8sdbav00wdm043449pg2424l3yaf8fvkc9rrlqkv13a4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TxW6IUHmEaNdJPeEGwo57a3EGH6MMyitVTmzStVmZjc=";
   };
 
+  postUnpack = ''ln -s ${libopenrazer} libopenrazer'';
+
   nativeBuildInputs = [
-    pkg-config meson ninja wrapQtAppsHook
+    pkg-config
+    meson
+    ninja
+    cmake
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase qttools
+    qt6.qtbase
+    qt6.qttools
+    libopenrazer
   ];
 
-  mesonFlags = [
-    "-Denable_experimental=${lib.boolToString enableExperimental}"
-    "-Dinclude_matrix_discovery=${lib.boolToString includeMatrixDiscovery}"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/z3ntu/RazerGenie";
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ f4814n Mogria ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      f4814n
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

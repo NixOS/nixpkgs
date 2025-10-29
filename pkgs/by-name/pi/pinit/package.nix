@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinit";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "pinit";
     rev = finalAttrs.version;
-    hash = "sha256-unvlMytZdjVbrWlwkpw90NZoFw9A6Ga0bB2XqFEPuVE=";
+    hash = "sha256-v/GFgEStQPQxwnPiTCa8gSDj8jZqJkUqLRV/WfBx3Tc=";
   };
 
   nativeBuildInputs = [

@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ...} :
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.orangefs.client;
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -11,7 +17,7 @@ in {
 
       extraOptions = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [];
+        default = [ ];
         description = "Extra command line options for pvfs2-client.";
       };
 
@@ -22,37 +28,45 @@ in {
           the pvfs client service needs to be running for it to be mounted.
         '';
 
-        example = [{
-          mountPoint = "/orangefs";
-          target = "tcp://server:3334/orangefs";
-        }];
+        example = [
+          {
+            mountPoint = "/orangefs";
+            target = "tcp://server:3334/orangefs";
+          }
+        ];
 
-        type = with lib.types; listOf (submodule ({ ... } : {
-          options = {
+        type =
+          with lib.types;
+          listOf (
+            submodule (
+              { ... }:
+              {
+                options = {
 
-            mountPoint = lib.mkOption {
-              type = lib.types.str;
-              default = "/orangefs";
-              description = "Mount point.";
-            };
+                  mountPoint = lib.mkOption {
+                    type = lib.types.str;
+                    default = "/orangefs";
+                    description = "Mount point.";
+                  };
 
-            options = lib.mkOption {
-              type = with lib.types; listOf str;
-              default = [];
-              description = "Mount options";
-            };
+                  options = lib.mkOption {
+                    type = with lib.types; listOf str;
+                    default = [ ];
+                    description = "Mount options";
+                  };
 
-            target = lib.mkOption {
-              type = lib.types.str;
-              example = "tcp://server:3334/orangefs";
-              description = "Target URL";
-            };
-          };
-        }));
+                  target = lib.mkOption {
+                    type = lib.types.str;
+                    example = "tcp://server:3334/orangefs";
+                    description = "Target URL";
+                  };
+                };
+              }
+            )
+          );
       };
     };
   };
-
 
   ###### implementation
 
@@ -69,9 +83,9 @@ in {
       serviceConfig = {
         Type = "simple";
 
-         ExecStart = ''
-           ${pkgs.orangefs}/bin/pvfs2-client-core \
-              --logtype=syslog ${lib.concatStringsSep " " cfg.extraOptions}
+        ExecStart = ''
+          ${pkgs.orangefs}/bin/pvfs2-client-core \
+             --logtype=syslog ${lib.concatStringsSep " " cfg.extraOptions}
         '';
 
         TimeoutStopSec = "120";
@@ -90,4 +104,3 @@ in {
     }) cfg.fileSystems;
   };
 }
-

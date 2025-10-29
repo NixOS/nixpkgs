@@ -16,28 +16,29 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.16.0";
+  version = "1.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eymmeWuqFfyJ1EOsjVF3VBHZseWwbcQNRYxWyFdrSKI=";
+    hash = "sha256-7Kh+BmLJZXFbfxNJHV6FjfLAkINB3um94rwDJo5GD1U=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ libgit2 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cached-property
     pycparser
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 

@@ -1,22 +1,37 @@
-{ lib, autoPatchelfHook, bzip2, cairo, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
-, stdenv, runtimeShell, unzip
+{
+  lib,
+  autoPatchelfHook,
+  bzip2,
+  cairo,
+  fetchurl,
+  gdk-pixbuf,
+  glibc,
+  pango,
+  gtk2,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kservice,
+  stdenv,
+  runtimeShell,
+  unzip,
 }:
 
 let
   pname = "bcompare";
-  version = "4.4.6.27483";
+  version = "4.4.7.28397";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-      sha256 = "sha256-1+f/AfyJ8Z80WR4cs1JDjTquTR1mGAUOd27vniSeA0k=";
+      sha256 = "sha256-4AWTSoYpVhGmBBxcwHXdg1CGd/04+8yL9pu+gHrsj6U";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-hUzJfUgfCuvB6ADHbsgmEXXgntm01hPnfSjwl7jI70c=";
+      sha256 = "sha256-qbpM6hJbv+APo+ed45k3GXrl1HnZRxD1uT2lvaN3oM4=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
@@ -25,7 +40,12 @@ let
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
   linux = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     unpackPhase = ''
       ar x $src
       tar xfz data.tar.gz
@@ -69,7 +89,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
@@ -88,11 +113,12 @@ let
     homepage = "https://www.scootersoftware.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ktor arkivm ];
+    maintainers = with maintainers; [
+      ktor
+      arkivm
+    ];
     platforms = builtins.attrNames srcs;
     mainProgram = "bcompare";
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

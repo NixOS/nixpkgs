@@ -2,12 +2,11 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   writeShellScript,
   steam-run,
   fetchpatch2,
   setuptools-scm,
-  setuptools,
   vdf,
   pillow,
   winetricks,
@@ -19,19 +18,19 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.12.0";
+  version = "1.13.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dCb8mcwXoxD4abJjLEwk5tGp65XkvepmOX+Kc9Dl7fQ=";
+    tag = version;
+    hash = "sha256-6z6J31EBXf0FU3fWjjg3dX7OAOiN9Z3ONdKIweJiZBY=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
-    (substituteAll {
-      src = ./steam-run.patch;
+    (replaceVars ./steam-run.patch {
       steamRun = lib.getExe steam-run;
       bash = writeShellScript "steam-run-bash" ''
         exec ${lib.getExe steam-run} bash "$@"
@@ -44,34 +43,26 @@ buildPythonApplication rec {
       revert = true;
       hash = "sha256-1U/LiAliKtk3ygbIBsmoavXN0RSykiiegtml+bO8CnI=";
     })
-
-    # Fix test_run_no_args test
-    (fetchpatch2 {
-      url = "https://github.com/Matoking/protontricks/commit/ff2381ad379a612e73f0d4604f1c9c3a012b3355.patch";
-      hash = "sha256-aiafLbiqS6TBBiQpfTYPVqhQs2OXYg/4yCtbuTv6Ug8=";
-    })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    setuptools # implicit dependency, used to find data/icon_placeholder.png
+  dependencies = [
     vdf
     pillow
   ];
 
-  makeWrapperArgs =
-    [
-      "--prefix PATH : ${
-        lib.makeBinPath [
-          winetricks
-          yad
-        ]
-      }"
-      # Steam Runtime does not work outside of steam-run, so don't use it
-      "--set STEAM_RUNTIME 0"
-    ]
-    ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        winetricks
+        yad
+      ]
+    }"
+    # Steam Runtime does not work outside of steam-run, so don't use it
+    "--set STEAM_RUNTIME 0"
+  ]
+  ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -88,6 +79,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
+    changelog = "https://github.com/Matoking/protontricks/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [

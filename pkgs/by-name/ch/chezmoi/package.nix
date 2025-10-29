@@ -1,53 +1,50 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-let
-  argset = {
-    pname = "chezmoi";
-    version = "2.53.1";
+buildGo125Module (finalAttrs: {
+  pname = "chezmoi";
+  version = "2.66.2";
 
-    src = fetchFromGitHub {
-      owner = "twpayne";
-      repo = "chezmoi";
-      rev = "v${argset.version}";
-      hash = "sha256-E7kr2fKBabbFVmtVRjgYy5TWhvQYb/RjhiNEcXYXL0E=";
-    };
-
-    vendorHash = "sha256-wOdDG/J/JYGNUGSUCPVCNtO+5TFkt5O5kFYniQgcN7A=";
-
-    nativeBuildInputs = [
-      installShellFiles
-    ];
-
-    ldflags = [
-      "-s"
-      "-w"
-      "-X main.version=${argset.version}"
-      "-X main.builtBy=nixpkgs"
-    ];
-
-    doCheck = false;
-
-    postInstall = ''
-      installShellCompletion --bash --name chezmoi.bash completions/chezmoi-completion.bash
-      installShellCompletion --fish completions/chezmoi.fish
-      installShellCompletion --zsh completions/chezmoi.zsh
-    '';
-
-    subPackages = [ "." ];
-
-    meta = {
-      homepage = "https://www.chezmoi.io/";
-      description = "Manage your dotfiles across multiple machines, securely";
-      changelog = "https://github.com/twpayne/chezmoi/releases/tag/${argset.src.rev}";
-      license = lib.licenses.mit;
-      mainProgram = "chezmoi";
-      maintainers = with lib.maintainers; [ AndersonTorres ];
-    };
+  src = fetchFromGitHub {
+    owner = "twpayne";
+    repo = "chezmoi";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TYEVMxebA4dvWMmgx4bMv1UKO2YGH+D+lZuiAu8ZmI4=";
   };
-in
-buildGoModule argset
+
+  vendorHash = "sha256-g9bzsmLKJ7pCmTnO8N9Um1FDBvQA0mqw14fwGYMb/K0=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.builtBy=nixpkgs"
+  ];
+
+  doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --bash --name chezmoi.bash completions/chezmoi-completion.bash
+    installShellCompletion --fish completions/chezmoi.fish
+    installShellCompletion --zsh completions/chezmoi.zsh
+  '';
+
+  meta = {
+    description = "Manage your dotfiles across multiple machines, securely";
+    homepage = "https://www.chezmoi.io/";
+    changelog = "https://github.com/twpayne/chezmoi/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "chezmoi";
+  };
+})

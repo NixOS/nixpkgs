@@ -6,6 +6,7 @@
   bison,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libXdmcp,
   libglvnd,
   libpthreadstubs,
@@ -13,7 +14,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python311Packages,
+  python312Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -32,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.35";
+  version = "1.40";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iBe3JNtG9P1IAd00s/fL2RcImMrTwruld98OFHrIhp4=";
+    hash = "sha256-420UV9I+jJ8sLOQVhfGfkGPqAnN+kgPy8k0rZLt5X+Y=";
   };
 
   outputs = [
@@ -47,20 +48,30 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  buildInputs =
-    [
-      libXdmcp
-      libpthreadstubs
-      python311Packages.pyside2
-      python311Packages.pyside2-tools
-      python311Packages.shiboken2
-      qt5.qtbase
-      qt5.qtsvg
-      vulkan-loader
-    ]
-    ++ lib.optionals waylandSupport [
-      wayland
-    ];
+  patches = [
+    (fetchpatch {
+      # https://github.com/baldurk/renderdoc/issues/2945
+      # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
+      name = "devendor-pcre.patch";
+      url = "https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895.patch?full_index=1";
+      hash = "sha256-uQoSVmgU09tw7ccTnH1MrisDisTUbaXTelA1YdsYPlM=";
+      revert = true;
+    })
+  ];
+
+  buildInputs = [
+    libXdmcp
+    libpthreadstubs
+    python312Packages.pyside2
+    python312Packages.pyside2-tools
+    python312Packages.shiboken2
+    qt5.qtbase
+    qt5.qtsvg
+    vulkan-loader
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+  ];
 
   nativeBuildInputs = [
     addDriverRunpath
@@ -71,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python311Packages.python
+    python312Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -82,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_VER" finalAttrs.version)
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
-    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
   ];
 
   dontWrapQtApps = true;
@@ -113,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapQtApp $out/bin/qrenderdoc \
+        --set QT_QPA_PLATFORM "wayland;xcb" \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
       wrapProgram $out/bin/renderdoccmd \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
@@ -137,7 +149,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
+    maintainers = with lib.maintainers; [
+      pbsds
+      ShyAssassin
+    ];
+    platforms = lib.intersectLists lib.platforms.linux (
+      lib.platforms.x86_64 ++ lib.platforms.i686 ++ lib.platforms.aarch64
+    );
   };
 })

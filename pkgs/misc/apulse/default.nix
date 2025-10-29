@@ -1,22 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, cmake, pkg-config, glib
-, tracingSupport ? true, logToStderr ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  pkg-config,
+  glib,
+  tracingSupport ? true,
+  logToStderr ? true,
+}:
 
-let oz = x: if x then "1" else "0"; in
+let
+  oz = x: if x then "1" else "0";
+in
 
 stdenv.mkDerivation rec {
   pname = "apulse";
-  version = "0.1.13";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
+    sha256 = "sha256-SWvQvS9QBOevOSRpjY3XpyhzWoHAkXzkk8Mh4ovltNI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ alsa-lib glib ];
+  buildInputs = [
+    alsa-lib
+    glib
+  ];
 
   cmakeFlags = [
     "-DWITH_TRACE=${oz tracingSupport}"

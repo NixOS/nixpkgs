@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.fluentd;
 
   pluginArgs = lib.concatStringsSep " " (map (x: "-p ${x}") cfg.plugins);
-in {
+in
+{
   ###### interface
 
   options = {
@@ -21,7 +27,7 @@ in {
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of plugin paths to pass into fluentd. It will make plugins defined in ruby files
           there available in your config.
@@ -30,11 +36,10 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    systemd.services.fluentd = with pkgs; {
+    systemd.services.fluentd = {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

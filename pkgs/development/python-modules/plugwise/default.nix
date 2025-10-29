@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   aiohttp,
   buildPythonPackage,
   defusedxml,
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "1.5.0";
+  version = "1.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "plugwise";
     repo = "python-plugwise";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WcoHK8UZ7qOVoUBCSoTDZ+6fC568AyXFCBys/7sjJx8=";
+    tag = "v${version}";
+    hash = "sha256-E5SJhhvT6KdkMvGo1mxrsSVRixdMjCl0ED/A6ozqn9o=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     aiohttp
     defusedxml
     munch
@@ -58,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
     homepage = "https://github.com/plugwise/python-plugwise";
-    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/v${version}";
+    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

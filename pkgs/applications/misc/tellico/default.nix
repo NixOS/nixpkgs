@@ -1,39 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, mkDerivation
-, cmake
-, exempi
-, extra-cmake-modules
-, karchive
-, kdoctools
-, kfilemetadata
-, khtml
-, kitemmodels
-, knewstuff
-, kxmlgui
-, libcdio
-, libkcddb
-, libksane
-, makeWrapper
-, poppler
-, qtcharts
-, qtwebengine
-, solid
-, taglib
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  exempi,
+  extra-cmake-modules,
+  karchive,
+  kdoctools,
+  kfilemetadata,
+  kitemmodels,
+  knewstuff,
+  kxmlgui,
+  libcdio,
+  libkcddb,
+  libksane,
+  makeWrapper,
+  poppler,
+  qtcharts,
+  qtwebengine,
+  solid,
+  taglib,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tellico";
-  version = "4.0.1";
+  version = "4.1.4";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
-    repo = pname;
+    repo = "tellico";
     rev = "v${version}";
-    hash = "sha256-5oP/uGUw1oYnrnOU83Pocr9YdwAU+DaUaGHg+6NzmRU=";
+    hash = "sha256-eScAOd1da05fqXtbcz8oEJiObB7CUxiYReSrr3R7ybM=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     exempi
     karchive
     kfilemetadata
-    khtml
     kitemmodels
     knewstuff
     kxmlgui
@@ -66,7 +64,11 @@ stdenv.mkDerivation rec {
     description = "Collection management software, free and simple";
     mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
-    license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+      lgpl2Only
+    ];
     maintainers = with maintainers; [ numkem ];
     platforms = platforms.linux;
   };

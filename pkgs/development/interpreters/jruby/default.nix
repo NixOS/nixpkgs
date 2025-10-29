@@ -1,16 +1,26 @@
-{ lib, stdenv, callPackage, fetchurl, gitUpdater, mkRubyVersion, makeBinaryWrapper, jre }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  fetchMavenArtifact,
+  gitUpdater,
+  mkRubyVersion,
+  makeBinaryWrapper,
+  jre,
+}:
 
 let
   # The version number here is whatever is reported by the RUBY_VERSION string
-  rubyVersion = mkRubyVersion "3" "1" "4" "";
+  rubyVersion = mkRubyVersion "3" "4" "2" "";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jruby";
-  version = "9.4.8.0";
+  version = "10.0.2.0";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/jruby.org/downloads/${finalAttrs.version}/jruby-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NHtmkr2ckcSApFryXOiNd76LbkrEp3vJSHDyxbVLySk=";
+    url = "https://repo1.maven.org/maven2/org/jruby/jruby-dist/${finalAttrs.version}/jruby-dist-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-uKAm84qphGGgTtCqCyCJHOJX7L5T4SRxnOnuW4BFJfE=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -18,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -pv $out/share/jruby/docs
     mv * $out
-    rm $out/bin/*.{bat,dll,exe,sh}
+    rm $out/bin/*.{bat,dll,exe}
     mv $out/samples $out/share/jruby/
     mv $out/BSDL $out/COPYING $out/LEGAL $out/LICENSE* $out/share/jruby/docs/
 
@@ -26,8 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $i \
         --set JAVA_HOME ${jre.home}
     done
-
-    ln -s $out/bin/jruby $out/bin/ruby
 
     # Bundler tries to create this directory
     mkdir -pv $out/${finalAttrs.passthru.gemPath}
@@ -61,7 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ruby interpreter written in Java";
     homepage = "https://www.jruby.org/";
     changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    license = with licenses; [
+      cpl10
+      gpl2
+      lgpl21
+    ];
     platforms = jre.meta.platforms;
     maintainers = [ maintainers.fzakaria ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

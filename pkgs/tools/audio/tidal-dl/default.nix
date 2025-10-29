@@ -1,12 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, aigpy
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  aigpy,
 }:
 
 buildPythonApplication rec {
   pname = "tidal-dl";
   version = "2022.10.31.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

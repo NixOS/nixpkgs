@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
   };
 
@@ -43,12 +43,9 @@ buildPythonPackage rec {
   # enabled when building passthru.tests.
   doCheck = false;
 
-  pytestFlagsArray = [
-    # Avoids an ImportMismatchError.
-    "--ignore=build"
-  ];
-
   disabledTestPaths = [
+    # Avoids an ImportMismatchError.
+    "build"
     # Examples are prefixed with test_
     "examples/"
   ];

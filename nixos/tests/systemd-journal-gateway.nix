@@ -1,8 +1,11 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "systemd-journal-gateway";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ minijackson raitobezarius ];
+    maintainers = [
+      minijackson
+      raitobezarius
+    ];
   };
 
   # Named client for coherence with the systemd-journal-upload test, and for
@@ -43,7 +46,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
     def copy_pem(file: str):
       machine.copy_from_host(source=f"{tmpdir}/{file}", target=f"/run/secrets/{file}")
-      machine.succeed(f"chmod 644 /run/secrets/{file}")
+      machine.succeed(f"chmod 600 /run/secrets/{file} && chown systemd-journal-gateway /run/secrets/{file}")
 
     with subtest("Copying keys and certificates"):
       machine.succeed("mkdir -p /run/secrets/{client,server}")
@@ -87,4 +90,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     added_entry = json.loads(entries)
     assert added_entry["SYSLOG_IDENTIFIER"] == identifier and added_entry["MESSAGE"] == message, "journal entry does not correspond"
   '';
-})
+}

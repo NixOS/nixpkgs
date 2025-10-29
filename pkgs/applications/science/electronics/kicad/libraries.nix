@@ -1,30 +1,39 @@
-{ lib, stdenv
-, cmake
-, libSrc
-, stepreduce
-, parallel
-, zip
+{
+  lib,
+  stdenv,
+  cmake,
+  libSrc,
+  stepreduce,
+  parallel,
+  zip,
 }:
 let
-  mkLib = name:
+  mkLib =
+    name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
       version = builtins.substring 0 10 (libSrc name).rev;
 
       src = libSrc name;
 
-      nativeBuildInputs = [ cmake ]
-        ++ lib.optionals (name == "packages3d") [
-          stepreduce
-          parallel
-          zip
-        ];
+      nativeBuildInputs = [
+        cmake
+      ]
+      ++ lib.optionals (name == "packages3d") [
+        stepreduce
+        parallel
+        zip
+      ];
 
-      postInstall = lib.optional (name == "packages3d") ''
-        find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
-      '';
+      postInstall =
+        lib.optionalString (name == "packages3d") ''
+          find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+        ''
+        + lib.optionalString (name == "footprints") ''
+          grep -rl '\.step' $out | xargs sed -i 's/\.step/.stpZ/g'
+        '';
 
-      meta = rec {
+      meta = {
         license = lib.licenses.cc-by-sa-40;
         platforms = lib.platforms.all;
       };

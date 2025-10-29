@@ -1,48 +1,51 @@
-{ lib
-, stdenv
-, git
-, git-lfs
-, fetchurl
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, cairo
-, coreutils
-, cups
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gtk3
-, mesa
-, nss
-, nspr
-, xorg
-, libdrm
-, libsecret
-, libxkbcommon
-, pango
-, systemd
-, hunspellDicts
-, useHunspell ? true
-, languages ? [ "en_US" ]
-, withNemoAction ? true
-, makeDesktopItem
-, copyDesktopItems
-, asar
-, python3
+{
+  lib,
+  stdenv,
+  git,
+  git-lfs,
+  fetchurl,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  cairo,
+  coreutils,
+  cups,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libgbm,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  libsecret,
+  libxkbcommon,
+  pango,
+  systemd,
+  hunspellDicts,
+  useHunspell ? true,
+  languages ? [ "en_US" ],
+  withNemoAction ? true,
+  makeDesktopItem,
+  copyDesktopItems,
+  asar,
+  python3,
 }:
 
 let
   pname = "pulsar";
-  version = "1.122.0";
+  version = "1.129.0";
 
-  sourcesPath = {
-    x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-Sx60cEQ2UAXqMujTaLkgN0Y3tIySg0TmaM0YroaX7nA=";
-    aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-Bhk1WZm9N771CC7j+TQsQCRSPwHOVTXCpleuhXC48K8=";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  sourcesPath =
+    {
+      x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
+      x86_64-linux.hash = "sha256-Iq+mYI8vldBroU/1ztVhWfbDUh9GiFjrSIzW0Qtgnvc=";
+      aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
+      aarch64-linux.hash = "sha256-hQBMxonnUSEoa0ATISuCoWh0scv/GPf6Tq55l+I1/n0=";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
     alsa-lib
@@ -55,7 +58,7 @@ let
     glib
     gtk3
     libsecret
-    mesa
+    libgbm
     nss
     nspr
     libdrm
@@ -75,17 +78,21 @@ let
   ];
 
   # Hunspell
-  hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
+  hunspellDirs = map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
   hunspellTargetDirs = "$out/opt/Pulsar/resources/app.asar.unpacked/node_modules/spellchecker/vendor/hunspell_dictionaries";
-  hunspellCopyCommands = lib.concatMapStringsSep "\n" (lang: "cp -r ${lang}/* ${hunspellTargetDirs};") hunspellDirs;
+  hunspellCopyCommands = lib.concatMapStringsSep "\n" (
+    lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
+  ) hunspellDirs;
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = with sourcesPath; fetchurl {
-    url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
-    inherit hash;
-  };
+  src =
+    with sourcesPath;
+    fetchurl {
+      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
+      inherit hash;
+    };
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -115,7 +122,8 @@ stdenv.mkDerivation {
       # needed for gio executable to be able to delete files
       --prefix "PATH" : "${lib.makeBinPath [ glib ]}"
     )
-  '' + lib.optionalString useHunspell ''
+  ''
+  + lib.optionalString useHunspell ''
     # On all platforms, we must inject our dictionnaries
     ${hunspellCopyCommands}
   '';
@@ -164,13 +172,15 @@ stdenv.mkDerivation {
     # Unlink to avoid a "File exists" error and relink correctly
     unlink $dugite/git/libexec/git-core/git-lfs
     ln -s ${git-lfs}/bin/git-lfs $dugite/git/libexec/git-core/git-lfs
-  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # We have to patch a prebuilt binary in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
 
     rm $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
     ln -s ${python3.interpreter} $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
-  '' + ''
+  ''
+  + ''
     # Patch the bundled node executables
     find $opt -name "*.node" -exec patchelf --set-rpath "${newLibpath}:$opt" {} \;
     # Also patch the node executable for apm
@@ -196,7 +206,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/icons/hicolor/scalable/apps $out/share/icons/hicolor/1024x1024/apps
     cp $opt/resources/pulsar.svg $out/share/icons/hicolor/scalable/apps/pulsar.svg
     cp $opt/resources/pulsar.png $out/share/icons/hicolor/1024x1024/apps/pulsar.png
-  '' + lib.optionalString withNemoAction ''
+  ''
+  + lib.optionalString withNemoAction ''
     # Copy the nemo action file
     mkdir -p $out/share/nemo/actions
     cp ${./pulsar.nemo_action} $out/share/nemo/actions/pulsar.nemo_action
@@ -210,7 +221,11 @@ stdenv.mkDerivation {
       icon = "pulsar";
       comment = "A Community-led Hyper-Hackable Text Editor";
       genericName = "Text Editor";
-      categories = [ "Development" "TextEditor" "Utility" ];
+      categories = [
+        "Development"
+        "TextEditor"
+        "Utility"
+      ];
       mimeTypes = [ "text/plain" ];
     })
   ];
@@ -228,7 +243,10 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bryango pbsds ];
+    maintainers = with lib.maintainers; [
+      bryango
+      pbsds
+    ];
     knownVulnerabilities = [
       # electron 12.2.3, efforts are in place to bump it
       "CVE-2023-5217"

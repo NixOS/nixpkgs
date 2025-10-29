@@ -10,12 +10,18 @@ let
     mkEnableOption
     mkPackageOption
     mkOption
+    literalExpression
+    hasAttr
+    toList
+    length
+    head
+    tail
+    concatStringsSep
     optionalString
     optionalAttrs
     isDerivation
     recursiveUpdate
     getExe
-    literalExpression
     types
     maintainers
     ;
@@ -24,36 +30,47 @@ let
 
   # For the application option to work with systemd PATH, we find the store binary path of
   # the package, concat all of the following strings, and then update the application attribute.
-  # Application can either be a package or a list that has a package as the first element.
-  applicationExists = builtins.hasAttr "application" cfg.config.json;
-  applicationListNotEmpty = (
-    if builtins.isList cfg.config.json.application then
-      (builtins.length cfg.config.json.application) != 0
-    else
-      true
-  );
-  applicationCheck = applicationExists && applicationListNotEmpty;
 
-  applicationBinary = (
-    if builtins.isList cfg.config.json.application then
-      builtins.head cfg.config.json.application
-    else
-      cfg.config.json.application
-  );
-  applicationStrings = builtins.tail cfg.config.json.application;
+  # Since the json config attribute type "configFormat.type" doesn't allow specifying types for
+  # individual attributes, we have to type check manually.
 
-  applicationPath = mkIf applicationCheck applicationBinary;
+  # The application option should be a list with package as the first element, though a single package is also valid.
+  # Note that this module depends on the package containing the meta.mainProgram attribute.
 
-  applicationConcat = (
-    if builtins.isList cfg.config.json.application then
-      builtins.concatStringsSep " " ([ (getExe applicationBinary) ] ++ applicationStrings)
-    else
-      (getExe applicationBinary)
+  # Check if an application is provided
+  applicationAttrExists = hasAttr "application" cfg.config.json;
+  applicationList = toList cfg.config.json.application;
+  applicationListNotEmpty = length applicationList != 0;
+  applicationCheck = applicationAttrExists && applicationListNotEmpty;
+
+  # Manage packages and their exe paths
+  applicationAttr = head applicationList;
+  applicationPackage = mkIf applicationCheck applicationAttr;
+  applicationPackageExe = getExe applicationAttr;
+  serverPackageExe = (
+    if cfg.highPriority then "${config.security.wrapperDir}/wivrn-server" else getExe cfg.package
   );
+
+  # Manage strings
+  applicationStrings = tail applicationList;
+  applicationConcat = concatStringsSep " " ([ applicationPackageExe ] ++ applicationStrings);
+
+  # Manage config file
   applicationUpdate = recursiveUpdate cfg.config.json (
     optionalAttrs applicationCheck { application = applicationConcat; }
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
+  enabledConfig = optionalString cfg.config.enable "-f ${configFile}";
+
+  # Manage server executables and flags
+  serverExec = concatStringsSep " " (
+    [
+      serverPackageExe
+      "--systemd"
+      enabledConfig
+    ]
+    ++ cfg.extraServerFlags
+  );
 in
 {
   options = {
@@ -65,7 +82,7 @@ in
       openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
 
       defaultRuntime = mkEnableOption ''
-        WiVRn Monado as the default OpenXR runtime on the system.
+        WiVRn as the default OpenXR runtime on the system.
         The config can be found at `/etc/xdg/openxr/1/active_runtime.json`.
 
         Note that applications can bypass this option by setting an active
@@ -74,21 +91,29 @@ in
 
       autoStart = mkEnableOption "starting the service by default";
 
+      highPriority = mkEnableOption "high priority capability for asynchronous reprojection";
+
       monadoEnvironment = mkOption {
         type = types.attrs;
         description = "Environment variables to be passed to the Monado environment.";
-        default = {
-          XRT_COMPOSITOR_LOG = "debug";
-          XRT_PRINT_OPTIONS = "on";
-          IPC_EXIT_ON_DISCONNECT = "off";
-        };
+        default = { };
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        description = "Packages to add to the wivrn-application service $PATH.";
+      extraServerFlags = mkOption {
+        type = types.listOf types.str;
+        description = "Flags to add to the wivrn service.";
         default = [ ];
-        example = literalExpression "[ pkgs.bash pkgs.procps ]";
+        example = literalExpression ''[ "--no-publish-service" ]'';
+      };
+
+      steam = {
+        importOXRRuntimes = mkEnableOption ''
+          Sets `PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES` system-wide to allow Steam to automatically discover the WiVRn server.
+
+          Note that you may have to logout for this variable to be visible
+        '';
+
+        package = mkPackageOption pkgs "steam" { };
       };
 
       config = {
@@ -96,17 +121,17 @@ in
         json = mkOption {
           type = configFormat.type;
           description = ''
-            Configuration for WiVRn. The attributes are serialized to JSON in config.json.
+            Configuration for WiVRn. The attributes are serialized to JSON in config.json. The server will fallback to default values for any missing attributes.
 
-            Note that the application option must be either a package or a
-            list with package as the first element.
+            Like upstream, the application option is a list including the application and it's flags. In the case of the NixOS module however, the first element of the list must be a package. The module will assert otherwise.
+            The application can be set to a single package because it gets passed to lib.toList, though this will not allow for flags to be passed.
 
-            See https://github.com/Meumeu/WiVRn/blob/master/docs/configuration.md
+            See <https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md>
           '';
           default = { };
           example = literalExpression ''
             {
-              scale = 0.8;
+              scale = 0.5;
               bitrate = 100000000;
               encoders = [
                 {
@@ -119,7 +144,6 @@ in
                 }
               ];
               application = [ pkgs.wlx-overlay-s ];
-              tcp_only = true;
             }
           '';
         };
@@ -130,73 +154,69 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !applicationCheck || isDerivation applicationBinary;
+        assertion = !applicationCheck || isDerivation applicationAttr;
         message = "The application in WiVRn configuration is not a package. Please ensure that the application is a package or that a package is the first element in the list.";
       }
     ];
 
+    security.wrappers."wivrn-server" = mkIf cfg.highPriority {
+      setuid = false;
+      owner = "root";
+      group = "root";
+      capabilities = "cap_sys_nice+eip";
+      source = getExe cfg.package;
+    };
+
     systemd.user = {
       services = {
-        # The WiVRn server runs in a hardened service and starts the applications in a different service
         wivrn = {
           description = "WiVRn XR runtime service";
-          environment = {
+          environment = recursiveUpdate {
             # Default options
             # https://gitlab.freedesktop.org/monado/monado/-/blob/598080453545c6bf313829e5780ffb7dde9b79dc/src/xrt/targets/service/monado.in.service#L12
             XRT_COMPOSITOR_LOG = "debug";
             XRT_PRINT_OPTIONS = "on";
             IPC_EXIT_ON_DISCONNECT = "off";
-          } // cfg.monadoEnvironment;
-          serviceConfig = {
-            ExecStart = (
-              (getExe cfg.package) + " --systemd" + optionalString cfg.config.enable " -f ${configFile}"
-            );
-            # Hardening options
-            CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
-            AmbientCapabilities = [ "CAP_SYS_NICE" ];
-            LockPersonality = true;
-            NoNewPrivileges = true;
-            PrivateTmp = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            ProtectSystem = "strict";
-            RemoveIPC = true;
-            RestrictNamespaces = true;
-            RestrictSUIDSGID = true;
-          };
+            PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = mkIf cfg.steam.importOXRRuntimes "1";
+          } cfg.monadoEnvironment;
+          serviceConfig = (
+            if cfg.highPriority then
+              {
+                ExecStart = serverExec;
+              }
+            # Hardening options break high-priority
+            else
+              {
+                ExecStart = serverExec;
+                # Hardening options
+                CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
+                AmbientCapabilities = [ "CAP_SYS_NICE" ];
+                LockPersonality = true;
+                NoNewPrivileges = true;
+                PrivateTmp = true;
+                ProtectClock = true;
+                ProtectControlGroups = true;
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectProc = "invisible";
+                ProtectSystem = "strict";
+                RemoveIPC = true;
+                RestrictNamespaces = true;
+                RestrictSUIDSGID = true;
+              }
+          );
+          path = [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package
-            configFile
+            cfg.steam.package
           ];
-        };
-        wivrn-application = mkIf applicationCheck {
-          description = "WiVRn application service";
-          requires = [ "wivrn.service" ];
-          serviceConfig = {
-            ExecStart = (
-              (getExe cfg.package) + " --application" + optionalString cfg.config.enable " -f ${configFile}"
-            );
-            Restart = "on-failure";
-            RestartSec = 0;
-            PrivateTmp = true;
-          };
-          # We need to add the application to PATH so WiVRn can find it
-          path = [ applicationPath ] ++ cfg.extraPackages;
         };
       };
     };
 
     services = {
-      # WiVRn can be used with some wired headsets so we include xr-hardware
-      udev.packages = with pkgs; [
-        android-udev-rules
-        xr-hardware
-      ];
       avahi = {
         enable = true;
         publish = {
@@ -214,8 +234,11 @@ in
     environment = {
       systemPackages = [
         cfg.package
-        applicationPath
+        applicationPackage
       ];
+      sessionVariables = mkIf cfg.steam.importOXRRuntimes {
+        PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = "1";
+      };
       pathsToLink = [ "/share/openxr" ];
       etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
         source = "${cfg.package}/share/openxr/1/openxr_wivrn.json";

@@ -1,64 +1,62 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, appstream
-, desktop-file-utils
-, gtk4
-, glib
-, pango
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, poppler
-, nautilus
-, darwin
-, djvulibre
-, libspectre
-, libarchive
-, libsecret
-, wrapGAppsHook4
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gsettings-desktop-schemas
-, dbus
-, gi-docgen
-, libgxps
-, withLibsecret ? true
-, supportNautilus ? (!stdenv.hostPlatform.isDarwin)
-, libadwaita
-, exempi
-, cargo
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  appstream,
+  desktop-file-utils,
+  gtk4,
+  glib,
+  pango,
+  gdk-pixbuf,
+  shared-mime-info,
+  itstool,
+  poppler,
+  nautilus,
+  djvulibre,
+  libarchive,
+  libsecret,
+  wrapGAppsHook4,
+  librsvg,
+  gobject-introspection,
+  yelp-tools,
+  gsettings-desktop-schemas,
+  dbus,
+  gi-docgen,
+  libsysprof-capture,
+  libspelling,
+  withLibsecret ? true,
+  supportNautilus ? (!stdenv.hostPlatform.isDarwin),
+  libadwaita,
+  exempi,
+  cargo,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "46.2";
+  version = "48.5";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME/Incubator";
-    repo = "papers";
-    rev = finalAttrs.version;
-    hash = "sha256-T67d7xHK23CvmT8omEqNZrV5KloK4QXU973dtP9lTDE=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DMjXLHHT2KqxvhCuGUGkzZLNHip+gwq3aA4sgt+xnAs=";
   };
 
-  cargoRoot = "shell-rs";
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-
-    outputHashes = {
-      "cairo-rs-0.20.0" = "sha256-us8Q1cqHbs0wSfMcRgZx7wTqSagYkLv/aNI8Fle2nNk=";
-      "gdk4-0.9.0" = "sha256-a+fkiCilKbq7sBHZ9Uvq9a/qqbsVomxG6K07B5f4eYM=";
-      "libadwaita-0.7.0" = "sha256-gfkaj/BIqvWj1UNVAGNNXww4aoJPlqvBwIRGmDiv48E=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      src
+      pname
+      version
+      ;
+    hash = "sha256-1HFecOTn84m9lT166HlmYjqP+KN/ZOTWW4ztigrpqNQ=";
   };
 
   nativeBuildInputs = [
@@ -86,30 +84,35 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     libadwaita
     libarchive
-    libgxps
     librsvg
-    libspectre
+    libsysprof-capture
+    libspelling
     pango
     poppler
-  ] ++ lib.optionals withLibsecret [
+  ]
+  ++ lib.optionals withLibsecret [
     libsecret
-  ] ++ lib.optionals supportNautilus [
+  ]
+  ++ lib.optionals supportNautilus [
     nautilus
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
   ];
 
-  mesonFlags = [
-    "-Dps=enabled"
-  ] ++ lib.optionals (!withLibsecret) [
-    "-Dkeyring=disabled"
-  ] ++ lib.optionals (!supportNautilus) [
-    "-Dnautilus=false"
-  ];
+  mesonFlags =
+    lib.optionals (!withLibsecret) [
+      "-Dkeyring=disabled"
+    ]
+    ++ lib.optionals (!supportNautilus) [
+      "-Dnautilus=false"
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
+  # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  postPatch = ''
+    substituteInPlace shell/src/meson.build --replace-fail \
+      "meson.current_build_dir() / rust_target / meson.project_name()" \
+      "meson.current_build_dir() / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
 
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
@@ -119,11 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      # Required to open multiple files.
-      # https://gitlab.gnome.org/GNOME/Incubator/papers/-/issues/176
-      --prefix PATH : "$out/bin"
     )
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
   '';
 
@@ -133,8 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/papers";
-    changelog = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/papers";
+    changelog = "https://gitlab.gnome.org/GNOME/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
 
     longDescription = ''
@@ -147,6 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "papers";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

@@ -1,10 +1,17 @@
-{ lib, buildPythonApplication, pkgsBuildTarget, python, minijail }:
+{
+  lib,
+  buildPythonApplication,
+  pkgsBuildTarget,
+  python,
+  minijail,
+}:
 
 let
   targetClang = pkgsBuildTarget.targetPackages.clangStdenv.cc;
 in
 
 buildPythonApplication {
+  format = "setuptools";
   pname = "minijail-tools";
   inherit (minijail) version src;
 

@@ -1,31 +1,34 @@
-{ python3
-, lib
-, fetchFromGitHub
-, cinnamon-translations
+{
+  python3,
+  lib,
+  fetchFromGitHub,
+  cinnamon-translations,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  version = "6.2.1";
+  version = "6.4.0";
+  pyproject = true;
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = "nemo-emblems-${version}";
-    hash = "sha256-HfWZntG+SHrzkN4fa3qYj9+fM6zF32qFquL/InoUi/k=";
+    rev = version;
+    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
   };
-
-  format = "setuptools";
 
   sourceRoot = "${src.name}/nemo-emblems";
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/share" "share"
+      --replace-fail "/usr/share" "share"
 
     substituteInPlace nemo-extension/nemo-emblems.py \
-      --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
+      --replace-fail "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-emblems";
@@ -36,6 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

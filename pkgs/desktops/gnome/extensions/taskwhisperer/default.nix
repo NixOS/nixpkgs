@@ -1,4 +1,12 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior2, gettext, runtimeShell }:
+{
+  lib,
+  stdenv,
+  replaceVars,
+  fetchFromGitHub,
+  taskwarrior2,
+  gettext,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
@@ -29,17 +37,15 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       task = "${taskwarrior2}/bin/task";
-      shell = runtimeShell;
     })
   ];
 
   meta = with lib; {
     description = "GNOME Shell TaskWarrior GUI";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     homepage = "https://github.com/cinatic/taskwhisperer";
   };
 }

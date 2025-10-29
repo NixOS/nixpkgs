@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, libvpx
-, libyuv
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  game-music-emu,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  libvpx,
+  libyuv,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -84,12 +85,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace src/acs/vm/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Kart racing video game based on Sonic Robo Blast 2 (SRB2), itself based on a modified version of Doom Legacy";
     homepage = "https://kartkrew.org";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ donovanglover thehans255 ];
+    maintainers = with maintainers; [
+      donovanglover
+      thehans255
+    ];
     mainProgram = "ringracers";
   };
 })

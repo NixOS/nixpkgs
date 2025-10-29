@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aesedb";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aesedb";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nYuMWE03Rsw1XuD/bxccpu8rddeXgS/EKJcO1VBLTLU=";
+    tag = version;
+    hash = "sha256-jT5Aru/BqvJf4HpD418+GrkZ0/g2XcTV3oWSOmo0Sbw=";
   };
 
   nativeBuildInputs = [ setuptools ];

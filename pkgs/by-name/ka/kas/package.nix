@@ -1,24 +1,46 @@
-{ lib, fetchFromGitHub, python3, testers, kas }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  testers,
+  kas,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
-  version = "4.5";
+  version = "5.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "siemens";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-J64yy2G8+5uT31Vpwhge5R7ZqId+NzE5ykXBHjc0qgQ=";
+    repo = "kas";
+    tag = version;
+    hash = "sha256-KSmLQBOYyuO9o3YZYPJPDPeGudtNYIC2yghAu98sf3Q=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ setuptools kconfiglib jsonschema distro pyyaml gitpython ];
+  patches = [ ./pass-terminfo-env.patch ];
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    setuptools # pkg_resources is imported during runtime
+    kconfiglib
+    jsonschema
+    distro
+    pyyaml
+    gitpython
+  ];
 
   # Tests require network as they try to clone repos
   doCheck = false;
   passthru.tests.version = testers.testVersion {
     package = kas;
-    command = "${pname} --version";
+    command = "kas --version";
   };
+
+  pythonImportsCheck = [ "kas" ];
 
   meta = with lib; {
     homepage = "https://github.com/siemens/kas";

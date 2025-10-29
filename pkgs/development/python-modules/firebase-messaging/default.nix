@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
-    rev = "refs/tags/${version}";
-    hash = "sha256-duUqDioIBo2QQP/4VGGwklDt4F8pDm/sHrvOx4wcTWQ=";
+    tag = version;
+    hash = "sha256-O1A+hGEhnNcvdXw5QJx+3zYKB+m36N0Ge0XB6cZ6930=";
   };
 
   outputs = [
@@ -47,10 +47,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sphinxHook
-  ] ++ optional-dependencies.docs;
+  ]
+  ++ optional-dependencies.docs;
 
   pythonRelaxDeps = [
     "http-ece"
+    "protobuf"
   ];
 
   dependencies = [
@@ -84,7 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to subscribe to GCM/FCM and receive notifications within a python application";
     homepage = "https://github.com/sdb9696/firebase-messaging";
-    changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
+    changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

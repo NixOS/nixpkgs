@@ -50,24 +50,30 @@ lib:
   iproute2,
   ipset,
   iptables,
+  nftables,
   kmod,
   lib,
   libseccomp,
-  makeWrapper,
+  makeBinaryWrapper,
   nixosTests,
+  overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
+  overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
+  overrideContainerdAttrs ? { }, # An attrSet/function to override the `k3sContainerd` derivation.
   pkg-config,
   pkgsBuildBuild,
   procps,
   rsync,
-  runc,
   runCommand,
+  runc,
   socat,
   sqlite,
   stdenv,
-  systemd,
-  util-linux,
+  su,
+  systemdMinimal,
+  util-linuxMinimal,
   yq-go,
   zstd,
+  versionCheckHook,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -95,7 +101,7 @@ let
     description = "Lightweight Kubernetes distribution";
     license = lib.licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = lib.teams.k3s.members;
+    teams = [ lib.teams.k3s ];
     platforms = lib.platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
@@ -122,41 +128,24 @@ let
   ];
 
   # bundled into the k3s binary
-  traefikChart = fetchurl chartVersions.traefik;
-  traefik-crdChart = fetchurl chartVersions.traefik-crd;
-
-  mutFirstChar =
-    f: s:
-    let
-      firstChar = f (lib.substring 0 1 s);
-      rest = lib.substring 1 (-1) s;
-    in
-    firstChar + rest;
-
-  kebabToCamel =
-    s:
-    mutFirstChar lib.toLower (lib.concatMapStrings (mutFirstChar lib.toUpper) (lib.splitString "-" s));
-
-  # finds the images archive for the desired architecture, aborts in case no suitable archive is found
-  findImagesArchive =
-    arch:
-    let
-      imagesVersionsNames = builtins.attrNames imagesVersions;
-    in
-    lib.findFirst (
-      n: lib.hasInfix arch n
-    ) (abort "k3s: no airgap images for ${arch} available") imagesVersionsNames;
+  traefik = {
+    chart = fetchurl chartVersions.traefik;
+    name = baseNameOf chartVersions.traefik.url;
+  };
+  traefik-crd = {
+    chart = fetchurl chartVersions.traefik-crd;
+    name = baseNameOf chartVersions.traefik-crd.url;
+  };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
-  # aarch64 (arm64) and x86_64 (amd64), aborts on other architectures.
-  airgapImages = fetchurl (
-    if stdenv.hostPlatform.isAarch64 then
-      imagesVersions.${findImagesArchive "arm64"}
-    else if stdenv.hostPlatform.isx86_64 then
-      imagesVersions.${findImagesArchive "amd64"}
-    else
-      abort "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
-  );
+  # aarch64 (arm64) and x86_64 (amd64), throws on other architectures.
+  airgap-images =
+    {
+      x86_64-linux = fetchurl imagesVersions.airgap-images-amd64-tar-zst;
+      aarch64-linux = fetchurl imagesVersions.airgap-images-arm64-tar-zst;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "k3s: no airgap images available for system ${stdenv.hostPlatform.system}, consider using an image archive with an explicit architecture.");
 
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
@@ -173,28 +162,30 @@ let
     sha256 = k3sRootSha256;
     stripRoot = false;
   };
-  k3sCNIPlugins = buildGoModule rec {
-    pname = "k3s-cni-plugins";
-    version = k3sCNIVersion;
-    vendorHash = null;
+  k3sCNIPlugins =
+    (buildGoModule rec {
+      pname = "k3s-cni-plugins";
+      version = k3sCNIVersion;
+      vendorHash = null;
 
-    subPackages = [ "." ];
+      subPackages = [ "." ];
 
-    src = fetchFromGitHub {
-      owner = "rancher";
-      repo = "plugins";
-      rev = "v${version}";
-      sha256 = k3sCNISha256;
-    };
+      src = fetchFromGitHub {
+        owner = "rancher";
+        repo = "plugins";
+        rev = "v${version}";
+        sha256 = k3sCNISha256;
+      };
 
-    postInstall = ''
-      mv $out/bin/plugins $out/bin/cni
-    '';
+      postInstall = ''
+        mv $out/bin/plugins $out/bin/cni
+      '';
 
-    meta = baseMeta // {
-      description = "CNI plugins, as patched by rancher for k3s";
-    };
-  };
+      meta = baseMeta // {
+        description = "CNI plugins, as patched by rancher for k3s";
+      };
+    }).overrideAttrs
+      overrideCniPluginsAttrs;
   # Grab this separately from a build because it's used by both stages of the
   # k3s build.
   k3sRepo = fetchgit {
@@ -211,13 +202,10 @@ let
     sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
 
     # Let killall expect "containerd-shim" in the Nix store
-    to_replace="/data/\[\^/\]\*/bin/containerd-shim"
-    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
-    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
-    if [ -z "$changes" ]; then
-      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
-      exit 1
-    fi
+    substituteInPlace install.sh \
+      --replace-fail '"''${K3S_DATA_DIR}"' "" \
+      --replace-fail '/data/[^/]*/bin/containerd-shim' \
+        '/nix/store/[^/]*k3s-containerd[^/]*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
@@ -260,69 +248,85 @@ let
   # derivation when we've built all the binaries, but haven't bundled them in
   # with generated bindata yet.
 
-  k3sServer = buildGoModule {
-    pname = "k3s-server";
-    version = k3sVersion;
+  k3sBundle =
+    (buildGoModule {
+      pname = "k3s-bin";
+      version = k3sVersion;
 
-    src = k3sRepo;
-    vendorHash = k3sVendorHash;
+      src = k3sRepo;
+      vendorHash = k3sVendorHash;
 
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [
-      libseccomp
-      sqlite.dev
-    ];
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [
+        libseccomp
+        sqlite.dev
+      ];
 
-    subPackages = [ "cmd/server" ];
-    ldflags = versionldflags;
+      subPackages = [ "cmd/server" ];
+      ldflags = versionldflags;
 
-    tags = [
-      "ctrd"
-      "libsqlite3"
-      "linux"
-    ];
+      tags = [
+        "ctrd"
+        "libsqlite3"
+        "linux"
+      ];
 
-    # create the multicall symlinks for k3s
-    postInstall = ''
-      mv $out/bin/server $out/bin/k3s
-      pushd $out
-      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
-      ln -s k3s ./bin/containerd
-      ln -s k3s ./bin/crictl
-      ln -s k3s ./bin/ctr
-      ln -s k3s ./bin/k3s-agent
-      ln -s k3s ./bin/k3s-certificate
-      ln -s k3s ./bin/k3s-completion
-      ln -s k3s ./bin/k3s-etcd-snapshot
-      ln -s k3s ./bin/k3s-secrets-encrypt
-      ln -s k3s ./bin/k3s-server
-      ln -s k3s ./bin/k3s-token
-      ln -s k3s ./bin/kubectl
-      popd
-    '';
+      # Set flags for sqlite dbstat
+      CGO_CFLAGS = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
 
-    meta = baseMeta // {
-      description = "Various binaries that get packaged into the final k3s binary";
-    };
-  };
+      # Copy manifests and static charts pre build so they get embedded during build
+      preBuild = ''
+        cp -av manifests/* ./pkg/deploy/embed/
+
+        mkdir -p ./pkg/static/embed/charts/
+        cp -v ${traefik.chart} ./pkg/static/embed/charts/${traefik.name}
+        cp -v ${traefik-crd.chart} ./pkg/static/embed/charts/${traefik-crd.name}
+      '';
+
+      # create the multicall symlinks for k3s
+      postInstall = ''
+        mv $out/bin/server $out/bin/k3s
+        pushd $out
+        # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
+        ln -s k3s ./bin/containerd
+        ln -s k3s ./bin/crictl
+        ln -s k3s ./bin/ctr
+        ln -s k3s ./bin/k3s-agent
+        ln -s k3s ./bin/k3s-certificate
+        ln -s k3s ./bin/k3s-completion
+        ln -s k3s ./bin/k3s-etcd-snapshot
+        ln -s k3s ./bin/k3s-secrets-encrypt
+        ln -s k3s ./bin/k3s-server
+        ln -s k3s ./bin/k3s-token
+        ln -s k3s ./bin/kubectl
+        popd
+      '';
+
+      meta = baseMeta // {
+        description = "Various binaries that get packaged into the final k3s binary";
+      };
+    }).overrideAttrs
+      overrideBundleAttrs;
   # Only used for the shim since
   # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
-  k3sContainerd = buildGoModule {
-    pname = "k3s-containerd";
-    version = containerdVersion;
-    src = fetchFromGitHub {
-      owner = "k3s-io";
-      repo = "containerd";
-      rev = "v${containerdVersion}";
-      sha256 = containerdSha256;
-    };
-    vendorHash = null;
-    buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd-shim-runc-v2" ];
-    ldflags = versionldflags;
-  };
+  k3sContainerd =
+    (buildGoModule {
+      pname = "k3s-containerd";
+      version = containerdVersion;
+      src = fetchFromGitHub {
+        owner = "k3s-io";
+        repo = "containerd";
+        rev = "v${containerdVersion}";
+        sha256 = containerdSha256;
+      };
+      vendorHash = null;
+      buildInputs = [ btrfs-progs ];
+      subPackages = [ "cmd/containerd-shim-runc-v2" ];
+      ldflags = versionldflags;
+    }).overrideAttrs
+      overrideContainerdAttrs;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3s";
   version = k3sVersion;
   pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
@@ -339,15 +343,13 @@ buildGoModule rec {
     # Nix prefers dynamically linked binaries over static binary.
 
     substituteInPlace scripts/package-cli \
-      --replace '"$LDFLAGS $STATIC" -o' \
-                '"$LDFLAGS" -o' \
-      --replace "STATIC=\"-extldflags \'-static\'\"" \
-                ""
+      --replace-fail '"$LDFLAGS $STATIC" -o' \
+                '"$LDFLAGS" -o'
 
     # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
 
     substituteInPlace scripts/package-cli \
-      --replace '"''${GO}" generate' \
+      --replace-fail '"''${GO}" generate' \
                 'GOFLAGS="" \
                  GOOS="${pkgsBuildBuild.go.GOOS}" \
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
@@ -362,19 +364,21 @@ buildGoModule rec {
     kmod
     socat
     iptables
+    nftables
     iproute2
     ipset
     bridge-utils
     ethtool
-    util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    util-linuxMinimal # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash
+    su
   ];
 
   k3sKillallDeps = [
     bash
-    systemd
+    systemdMinimal
     procps
     coreutils
     gnugrep
@@ -382,10 +386,10 @@ buildGoModule rec {
     gnused
   ];
 
-  buildInputs = k3sRuntimeDeps;
+  buildInputs = finalAttrs.k3sRuntimeDeps;
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     rsync
     yq-go
     zstd
@@ -395,7 +399,7 @@ buildGoModule rec {
   propagatedBuildInputs = [
     k3sCNIPlugins
     k3sContainerd
-    k3sServer
+    k3sBundle
   ];
 
   # We override most of buildPhase due to peculiarities in k3s's build.
@@ -409,14 +413,10 @@ buildGoModule rec {
 
     # copy needed 'go generate' inputs into place
     mkdir -p ./bin/aux
-    rsync -a --no-perms ${k3sServer}/bin/ ./bin/
+    rsync -a --no-perms ${k3sBundle}/bin/ ./bin/
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
     ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
-    mkdir -p ./build/static/charts
-
-    cp ${traefikChart} ./build/static/charts
-    cp ${traefik-crdChart} ./build/static/charts
 
     export ARCH=$GOARCH
     export DRONE_TAG="v${k3sVersion}"
@@ -436,44 +436,50 @@ buildGoModule rec {
     # wildcard to match the arm64 build too
     install -m 0755 dist/artifacts/k3s* -D $out/bin/k3s
     wrapProgram $out/bin/k3s \
-      --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
     install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
     wrapProgram $out/bin/k3s-killall.sh \
-      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
+      --prefix PATH : ${lib.makeBinPath (finalAttrs.k3sRuntimeDeps ++ finalAttrs.k3sKillallDeps)}
     runHook postInstall
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/k3s --version | grep -F "v${k3sVersion}" >/dev/null
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  passthru =
-    {
-      inherit airgapImages;
-      k3sCNIPlugins = k3sCNIPlugins;
-      k3sContainerd = k3sContainerd;
-      k3sRepo = k3sRepo;
-      k3sRoot = k3sRoot;
-      k3sServer = k3sServer;
-      mkTests =
-        version:
-        let
-          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-        in
-        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-      tests = passthru.mkTests k3sVersion;
-      updateScript = updateScript;
-    }
-    // (lib.mapAttrs' (
-      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
-    ) imagesVersions);
+  passthru = {
+    inherit
+      airgap-images
+      k3sCNIPlugins
+      k3sContainerd
+      k3sRepo
+      k3sRoot
+      k3sBundle
+      updateScript
+      ;
+    tests =
+      let
+        mkTests =
+          version:
+          let
+            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+          in
+          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+      in
+      mkTests k3sVersion;
+    imagesList = throw "k3s.imagesList was removed";
+    airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
+    airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";
+    airgapImagesArm64 = throw "k3s.airgapImagesArm64 was renamed to k3s.airgap-images-arm64-tar-zst";
+    airgapImagesArm = throw "k3s.airgapImagesArm was renamed to k3s.airgap-images-arm-tar-zst";
+  }
+  // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = baseMeta;
-}
+  meta = baseMeta // {
+    mainProgram = "k3s";
+  };
+})

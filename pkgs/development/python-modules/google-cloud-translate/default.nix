@@ -11,21 +11,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.16.0";
+  version = "3.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;
-    hash = "sha256-B5fZVMT26gcyKelQASugg6TMl1K0MdwGJOJZTih0ae8=";
+    hash = "sha256-yaDlK4VG8AlkBiifa+dB+Q6kGhTAWpjpbSkr/vGsfnM=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +33,8 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils
@@ -64,8 +62,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Translation API client library";
-    homepage = "https://github.com/googleapis/python-translate";
-    changelog = "https://github.com/googleapis/python-translate/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-translate";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-translate-v${version}/packages/google-cloud-translate/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "pyznap";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

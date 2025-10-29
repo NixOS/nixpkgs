@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
   };
 
@@ -39,14 +39,20 @@ buildPythonPackage rec {
     trio
     outcome
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
-    "-W"
-    "ignore::RuntimeWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::RuntimeWarning"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # TypeError: RaisesGroup.__init__() got an unexpected keyword argument 'strict'
+    # https://github.com/python-trio/trio-asyncio/issues/154
+    "test_run_trio_task_errors"
+    "test_cancel_loop_with_tasks"
   ];
 
   nativeCheckInputs = [

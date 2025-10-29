@@ -3,28 +3,73 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  alsa-lib,
   versionCheckHook,
+  bacon,
+  buildPackages,
   nix-update-script,
+
+  withSound ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  soundDependencies =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # bindgenHook is only included on darwin as it is needed to build `coreaudio-sys`, a darwin-specific crate
+      rustPlatform.bindgenHook
+    ];
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.2.0";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WbTxy8ijXez1x2G7NGGVMcyjgE7J7MDsGgGRpb4jKXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SI84InLMolecdewXvHVFsh9aj9ckFFQOq+uzNFI1FBU=";
   };
 
-  cargoHash = "sha256-rlWNrkzUDs3rbQ5ZV4fKU/EKEy4fVbxEP0+wNwXi7Ag=";
+  cargoHash = "sha256-q+GpRrkcH0lgbL6JSda5eXUay56q8SMSYJcEi/rePyI=";
+
+  buildFeatures = lib.optionals withSound [
+    "sound"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withSound [
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  postInstall =
+    let
+      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd bacon \
+        --bash <(COMPLETE=bash ${bacon}) \
+        --fish <(COMPLETE=fish ${bacon}) \
+        --zsh <(COMPLETE=zsh ${bacon})
+    '';
+
   passthru = {
+    tests = {
+      withSound = bacon.override { withSound = true; };
+    };
     updateScript = nix-update-script { };
   };
 
@@ -32,8 +77,11 @@ rustPlatform.buildRustPackage rec {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      matthiasbeyer
+    ];
   };
-}
+})

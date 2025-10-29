@@ -1,30 +1,35 @@
-{ bash
-, coreutils-prefixed
-, curl
-, fetchFromGitHub
-, gnused
-, gnugrep
-, installShellFiles
-, jq
-, lib
-, makeWrapper
-, mplayer
-, mpv
-, procps
-, scdoc
-, stdenv
-, streamlink
-, vlc
+{
+  bash,
+  coreutils-prefixed,
+  curl,
+  fetchFromGitHub,
+  gnused,
+  gnugrep,
+  installShellFiles,
+  jq,
+  lib,
+  makeWrapper,
+  mplayer,
+  mpv,
+  procps,
+  scdoc,
+  stdenvNoCC,
+  streamlink,
+  vlc,
+  fzf,
+  withMpv ? true,
+  withVlc ? false,
+  withMplayer ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wtwitch";
   version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "krathalan";
-    repo = pname;
-    rev = version;
+    repo = "wtwitch";
+    tag = finalAttrs.version;
     hash = "sha256-2YLBuxGwGkav3zB2qMqM6yRXf7ZLqgULoJV4s5p+hSw=";
   };
 
@@ -34,12 +39,22 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     scdoc < src/wtwitch.1.scd > wtwitch.1
+
+    runHook postBuild
   '';
 
-  nativeBuildInputs = [ scdoc installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     installManPage wtwitch.1
     installShellCompletion --cmd wtwitch \
       --bash src/wtwitch-completion.bash \
@@ -47,26 +62,34 @@ stdenv.mkDerivation rec {
     install -Dm755 src/wtwitch $out/bin/wtwitch
     wrapProgram $out/bin/wtwitch \
       --set-default LANG en_US.UTF-8 \
-      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ vlc ] ++ [
-        bash
-        coreutils-prefixed
-        curl
-        gnused
-        gnugrep
-        jq
-        mplayer
-        mpv
-        procps
-        streamlink
-      ])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            bash
+            coreutils-prefixed
+            curl
+            gnused
+            gnugrep
+            jq
+            procps
+            streamlink
+            fzf
+          ]
+          ++ lib.optional withMpv mpv
+          ++ lib.optional withVlc vlc
+          ++ lib.optional withMplayer mplayer
+        )
+      }
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for Twitch";
     homepage = "https://github.com/krathalan/wtwitch";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.urandom ];
+    platforms = lib.platforms.all;
     mainProgram = "wtwitch";
   };
-}
+})

@@ -4,28 +4,30 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "4.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NpNS8HAacgXm3rFtyd5uFgSURNbDf+YVS1aFx51kwEA=";
+    tag = "v${version}";
+    hash = "sha256-ymzOSPVe0Z82FAgVIagY9lyNiMiubXjSBnXIEwzwC20=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   pythonImportsCheck = [ "immutabledict" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # fails if builder load is highly variable
+    "test_performance"
+  ];
 
   meta = with lib; {
     description = "Fork of frozendict, an immutable wrapper around dictionaries";

@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   fetchFromGitHub,
-  lib
+  lib,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raygui";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1qnChZYsb0e5LnPhvs6a/R5Ammgj2HWFNe9625sBRo8=";
   };
 
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A simple and easy-to-use immediate-mode gui library";
+    description = "Simple and easy-to-use immediate-mode gui library";
     homepage = "https://github.com/raysan5/raygui";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ sigmanificient ];

@@ -1,63 +1,53 @@
-{ lib
-, buildPackages
-, clang
-, fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  version ? "0.7.1",
+  hash ? "sha256-7meBYUN7sG1OAtMEm6I66+ptf4EfsbA+dm5/4P3IRV4=",
+  cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw=",
 }:
-let
-  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
-  # Forcing it to clang 12 fixes the issue.
-  buildRustPackage =
-    if stdenv.hostPlatform.isDarwin then
-      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
-    else
-      rustPlatform.buildRustPackage;
-in
-buildRustPackage rec {
+
+rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.4.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-YyvppmKs6RCIzmn9bezNxjoCSlPY6GCWmy+bsSbCA2A=";
+    inherit hash;
   };
 
-  cargoHash = "sha256-nWwAmthTOzKDLrHN0v/usC8DfmHzywNJs/6xdyCBBZY=";
+  inherit cargoHash;
 
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    (lib.getLib libclang)
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin
 
     # delete fuzzing targets and other binaries no one cares about
-    binsToKeep=(fedimint-cli fedimint-dbtool recoverytool fedimintd gatewayd gateway-cli gateway-cln-extension devimint)
+    binsToKeep=(fedimint-cli fedimint-dbtool recoverytool fedimintd gatewayd gateway-cli devimint)
     keepPattern=$(printf "|%s" "''${binsToKeep[@]}")
     keepPattern=''${keepPattern:1}
     find "$out/bin" -maxdepth 1 -type f | grep -Ev "(''${keepPattern})" | xargs rm -f
@@ -71,7 +61,6 @@ buildRustPackage rec {
     cp -a $releaseDir/gateway-cli $gatewayCli/bin/
 
     cp -a $releaseDir/gatewayd $gateway/bin/
-    cp -a $releaseDir/gateway-cln-extension $gateway/bin/
 
     cp -a $releaseDir/devimint $devimint/bin/
   '';
@@ -79,7 +68,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

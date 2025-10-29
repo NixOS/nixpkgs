@@ -7,6 +7,7 @@
   pytestCheckHook,
   pytest-mock,
   trustme,
+  typing-extensions,
   watchgod,
   wsproto,
 }:
@@ -27,12 +28,14 @@ buildPythonPackage {
     pytestCheckHook
     pytest-mock
     trustme
+    typing-extensions
 
     # strictly optional dependencies
     a2wsgi
     watchgod
     wsproto
-  ] ++ uvicorn.optional-dependencies.standard;
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

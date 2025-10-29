@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PDQLzqQjoBAZM9FKsoRby26Pbh4nik3SltIHUw/xWcY=";
   };
 
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Python 3.8+ toolbox for submitting jobs to Slurm";
     homepage = "https://github.com/facebookincubator/submitit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

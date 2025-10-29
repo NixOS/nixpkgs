@@ -1,12 +1,15 @@
-{ gccStdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, unstableGitUpdater
-, libpng
-, perl
-, SDL2
-, zlib
+{
+  gccStdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  unstableGitUpdater,
+  libGL,
+  libpng,
+  libX11,
+  perl,
+  SDL2,
+  zlib,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {
@@ -58,7 +61,10 @@ gccStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libpng
     zlib
-  ] ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
+  ]
+  ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
+    libGL
+    libX11
     SDL2
   ];
 

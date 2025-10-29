@@ -1,34 +1,43 @@
 {
   lib,
-  arviz,
-  blackjax,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  arviz,
   formulae,
   graphviz,
-  numpyro,
   pandas,
   pymc,
+
+  # tests
+  blackjax,
+  numpyro,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kxrNNbZfC96/XHb1I7aUHYZdFJvGR80ZI8ell/0FQXc=";
+    tag = version;
+    hash = "sha256-EKcURfC4IpLGzr5ibzVlUnRHIhwPP+kYYusW9Mk8R/s=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     arviz
@@ -38,22 +47,29 @@ buildPythonPackage rec {
     pymc
   ];
 
-  # bayeux-ml is not available in nixpkgs
-  # optional-dependencies = {
-  #   jax = [ bayeux-ml ];
-  # };
+  optional-dependencies = {
+    jax = [
+      # not (yet) available in nixpkgs (https://github.com/NixOS/nixpkgs/pull/345438)
+      # bayeux-ml
+    ];
+  };
 
   nativeCheckInputs = [
+    # bayeux-ml
     blackjax
     numpyro
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
+    # ValueError: dtype attribute is not a valid dtype instance
+    "test_vonmises_regression"
+
+    # AssertionError: assert (<xarray.DataArray 'yield' ()> Size: 1B\narray(False) & <xarray.DataArray 'yield' ()> Size: 1B\narray(False))
+    # https://github.com/bambinos/bambi/issues/888
+    "test_beta_regression"
+
     # Tests require network access
     "test_alias_equal_to_name"
     "test_average_by"
@@ -85,6 +101,15 @@ buildPythonPackage rec {
     "test_with_group_and_panel"
     "test_with_groups"
     "test_with_user_values"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Python crash (in matplotlib)
+    # Fatal Python error: Aborted
+    "test_categorical_response"
+    "test_multiple_hsgp_and_by"
+    "test_multiple_outputs_with_alias"
+    "test_plot_priors"
+    "test_term_transformations"
   ];
 
   disabledTestPaths = [
@@ -97,11 +122,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bambi" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level Bayesian model-building interface";
     homepage = "https://bambinos.github.io/bambi";
-    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

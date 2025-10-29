@@ -1,54 +1,97 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook3, glib }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchurl,
+  temurin-jre-bin-21,
+  javaPackages,
+  wrapGAppsHook3,
+  dpkg,
+  xorg,
+  gtk3,
+  libGL,
+  alsa-lib,
+  nix-update-script,
+  desktop-file-utils,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfsam-basic";
-  version = "5.2.9";
+  version = "5.4.1";
 
   src = fetchurl {
-    url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    hash = "sha256-ZLVO2VD0XUVUG/GSot21c6nJ2N8h39vDzyzAzk1pQ6c=";
+    url = "https://github.com/torakiki/pdfsam/releases/download/v${finalAttrs.version}/pdfsam-basic_${finalAttrs.version}-1_amd64.deb";
+    hash = "sha256-iM0avC0YwxaB2prWbiKJZ9Fzd/HcdDWJg5IWRmNlVkM=";
   };
 
-  unpackPhase = ''
-    ar vx ${src}
-    tar xvf data.tar.gz
-  '';
-
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-  buildInputs = [ glib ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(--set JAVA_HOME "${jdk21}" --set PDFSAM_JAVA_PATH "${jdk21}")
-  '';
+  nativeBuildInputs = [
+    dpkg
+    wrapGAppsHook3
+    desktop-file-utils
+  ];
 
   installPhase = ''
-    cp -R opt/pdfsam-basic/ $out/
-    mkdir -p "$out"/share/icons
-    cp --recursive ${desktopItem}/share/applications $out/share
-    cp $out/icon.svg "$out"/share/icons/pdfsam-basic.svg
+    runHook preInstall
+    desktop-file-edit usr/share/applications/pdfsam-basic.desktop \
+         --set-key="Exec" --set-value="pdfsam-basic %F" \
+         --set-key="Path" --set-value="$out/share/pdfsam-basic" \
+         --set-icon="pdfsam-basic"
+       mkdir $out
+       cp -r usr/share $out/share
+       mkdir $out/share/pdfsam-basic
+       cp -r opt/pdfsam-basic/lib $out/share/pdfsam-basic/lib
+       install -Dm0644 opt/pdfsam-basic/splash.png $out/share/pdfsam-basic/splash.png
+       install -Dm0644 opt/pdfsam-basic/icon.svg $out/share/icons/hicolor/scalable/apps/pdfsam-basic.svg
+       mkdir $out/bin
+       makeWrapper ${temurin-jre-bin-21}/bin/java $out/bin/pdfsam-basic \
+         "''${gappsWrapperArgs[@]}" \
+         --set JAVA_HOME ${temurin-jre-bin-21} \
+         --set PDFSAM_JAVA_PATH ${temurin-jre-bin-21} \
+         --prefix LD_LIBRARY_PATH : ${
+           lib.makeLibraryPath [
+             javaPackages.openjfx23 # PDFSam Basic requires JDK 21 and JavaFX 23 https://github.com/torakiki/pdfsam/issues/785#issuecomment-3446564717
+             xorg.libXxf86vm
+             xorg.libXtst
+             gtk3
+             libGL
+             alsa-lib
+           ]
+         } \
+         --add-flags ${
+           lib.escapeShellArg (
+             lib.escapeShellArgs [
+               "--enable-preview"
+               "--module-path"
+               "${placeholder "out"}/share/pdfsam-basic/lib"
+               "--module"
+               "org.pdfsam.basic/org.pdfsam.basic.App"
+               "-Xmx512M"
+               "-splash:${placeholder "out"}/share/pdfsam-basic/splash.png"
+               "-Dapp.name=\"pdfsam-basic\""
+               "-Dapp.pid=\"$$\""
+               "-Dapp.home=\"${placeholder "out"}/share/pdfsam-basic\""
+               "-Dbasedir=\"${placeholder "out"}/share/pdfsam-basic\""
+               "-Dprism.lcdtext=false"
+             ]
+           )
+         }
+    runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = meta.description;
-    desktopName = "PDFsam Basic";
-    genericName = "PDF Split and Merge";
-    mimeTypes = [ "application/pdf" ];
-    categories = [ "Office" ];
-  };
+  dontWrapGApps = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/torakiki/pdfsam";
     description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
     mainProgram = "pdfsam-basic";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000101 ];
+    license = lib.licenses.agpl3Plus;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ _1000101 ];
   };
-}
+})

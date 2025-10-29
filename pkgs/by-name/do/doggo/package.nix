@@ -1,8 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, lib
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -25,7 +27,7 @@ buildGoModule rec {
     "-X main.buildVersion=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd doggo \
       --bash <($out/bin/doggo completions bash) \
       --fish <($out/bin/doggo completions fish) \
@@ -43,6 +45,9 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ georgesalkhouri ma27 ];
+    maintainers = with maintainers; [
+      georgesalkhouri
+      ma27
+    ];
   };
 }

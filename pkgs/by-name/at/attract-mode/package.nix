@@ -9,7 +9,7 @@
   libarchive,
   libjpeg,
   libGLU,
-  sfml,
+  sfml_2,
   zlib,
   openal,
   fontconfig,
@@ -28,21 +28,20 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      expat
-      ffmpeg
-      freetype
-      libarchive
-      libjpeg
-      libGLU
-      sfml
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      openal
-      fontconfig
-    ];
+  buildInputs = [
+    expat
+    ffmpeg
+    freetype
+    libarchive
+    libjpeg
+    libGLU
+    sfml_2
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openal
+    fontconfig
+  ];
 
   makeFlags = [
     "prefix=$(out)"
@@ -53,7 +52,8 @@ stdenv.mkDerivation {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "AR=${stdenv.cc.targetPrefix}ar"
     "BUILD_EXPAT=0"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "USE_FONTCONFIG=0" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "USE_FONTCONFIG=0" ];
 
   enableParallelBuilding = true;
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
-  version = "2024.7.0";
+  version = "2025.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "adlfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-V0Uzfj9xuPfLgfILwVbtId+B81w/25cO+G1Y/KOEOyI=";
+    tag = version;
+    hash = "sha256-e9JO8obFvFHzNeb42Lo2RG21NvLv/eCyWm2fY7MEiTA=";
   };
 
   build-system = [
@@ -40,6 +40,8 @@ buildPythonPackage rec {
     azure-storage-blob
     fsspec
   ];
+
+  pythonRelaxDeps = [ "azure-datalake-store" ];
 
   # Tests require a running Docker instance
   doCheck = false;

@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.4.3";
+  version = "3.4.4";
   pname = "laszip";
 
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
     rev = finalAttrs.version;
-    hash = "sha256-9fzal54YaocONtguOCxnP7h1LejQPQ0dKFiCzfvTjCY=";
+    hash = "sha256-v/oLU69zqDW1o1HTlay7GDh1Kbmv1rarII2Fz5HWCqg=";
   };
+
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 

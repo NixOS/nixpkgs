@@ -1,13 +1,13 @@
 {
   lib,
-  darwin,
   fetchFromGitHub,
+  testers,
   nix-update-script,
   rustPlatform,
-  stdenv,
+  rainfrog,
 }:
 let
-  version = "0.2.9";
+  version = "0.3.8";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -16,26 +16,27 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "achristmascarl";
     repo = "rainfrog";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PiJRVf+rpYFWRmys7Ca2lLfe5F9/ksIzkpKs6CQWu+A=";
+    tag = "v${version}";
+    hash = "sha256-VdfzNBPl32aUBQFHNFdjbZoTKhraOMlTw+tSlGSZ+yk=";
   };
 
-  cargoHash = "sha256-L0gXxV/3+5oRV/Ipm4sRqr9dh9AEChWhtILO3PaNxYY=";
+  cargoHash = "sha256-4Hom/93JU0YL4F/XL3zwWqWjfW5sW6HBeI/IpVbRoVs=";
 
-  buildInputs = lib.optionals stdenv.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      AppKit
-      CoreGraphics
-      SystemConfiguration
-    ]
-  );
+  passthru = {
+    tests.version = testers.testVersion {
+      package = rainfrog;
 
-  passthru.updateScript = nix-update-script { };
+      command = ''
+        RAINFROG_DATA="$(mktemp -d)" rainfrog --version
+      '';
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${version}";
-    description = "A database management TUI for postgres";
+    description = "Database management TUI for postgres";
     homepage = "https://github.com/achristmascarl/rainfrog";
     license = lib.licenses.mit;
     mainProgram = "rainfrog";

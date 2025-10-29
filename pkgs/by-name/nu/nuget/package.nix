@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, makeWrapper, mono, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  mono,
+  lib,
+}:
 
 stdenv.mkDerivation (attrs: {
   pname = "Nuget";

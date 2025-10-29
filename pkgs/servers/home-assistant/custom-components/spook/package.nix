@@ -10,16 +10,21 @@
 buildHomeAssistantComponent rec {
   owner = "frenck";
   domain = "spook";
-  version = "3.0.1";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ChHsevryWuim8BEFqXVkCOW9fGMrt5vol+B2SreMUws=";
+    tag = "v${version}";
+    hash = "sha256-0IihrhATgraGmuMRnrbGTUrtlXAR+CooENSIKSWIknY=";
   };
 
-  patches = [./remove-sub-integration-symlink-hack.patch];
+  patches = [ ./remove-sub-integration-symlink-hack.patch ];
+
+  postPatch = ''
+    substituteInPlace custom_components/spook/manifest.json \
+      --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+  '';
 
   dependencies = [
     pillow
@@ -33,6 +38,6 @@ buildHomeAssistantComponent rec {
     description = "Toolbox for Home Assistant";
     homepage = "https://spook.boo/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [kkoniuszy];
+    maintainers = with lib.maintainers; [ kkoniuszy ];
   };
 }

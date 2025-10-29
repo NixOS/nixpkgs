@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   aioresponses,
+  awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.9.3";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,14 +26,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FJhmipWE3DE4PRWkEq8/j9iz9HQ7G7J5I9hwjU6e3FA=";
+    tag = "v${version}";
+    hash = "sha256-VOUtSHxixGpfeP4G0puB1RPgaqvell1SBO7akEnLzrg=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    awesomeversion
     mashumaro
     orjson
     yarl
@@ -51,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Mealie";
     homepage = "https://github.com/joostlek/python-mealie";
-    changelog = "https://github.com/joostlek/python-mealie/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-mealie/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

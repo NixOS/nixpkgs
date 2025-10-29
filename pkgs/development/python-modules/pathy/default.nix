@@ -23,7 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
-
   pythonRelaxDeps = [ "smart-open" ];
 
   build-system = [ setuptools ];
@@ -49,6 +48,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pathy" ];
 
   meta = with lib; {
+    # https://github.com/justindujardin/pathy/issues/113
+    broken = pathlib-abc.version != "0.1.1";
     description = "Path interface for local and cloud bucket storage";
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";

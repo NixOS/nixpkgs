@@ -1,4 +1,9 @@
-{ lib, buildNimPackage, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 buildNimPackage {
   pname = "nitch";

@@ -1,15 +1,16 @@
-{ mkDerivation
-, lib
-, fetchurl
-, fetchpatch
-, extra-cmake-modules
-, qtbase
-, kcoreaddons
-, python3
-, sqlite
-, postgresql
-, libmysqlclient
-, qttools
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qtbase,
+  kcoreaddons,
+  python3,
+  sqlite,
+  libpq,
+  libmysqlclient,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -17,7 +18,7 @@ mkDerivation rec {
   version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/kdb/src/kdb-${version}.tar.xz";
     sha256 = "0s909x34a56n3xwhqz27irl2gbzidax0685w2kf34f0liny872cg";
   };
 
@@ -34,9 +35,18 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    qttools
+  ];
 
-  buildInputs = [ kcoreaddons python3 sqlite postgresql libmysqlclient ];
+  buildInputs = [
+    kcoreaddons
+    python3
+    sqlite
+    libpq
+    libmysqlclient
+  ];
 
   propagatedBuildInputs = [ qtbase ];
 

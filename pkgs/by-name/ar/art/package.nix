@@ -1,52 +1,61 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, cmake
-, pkg-config
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, lerc
-, libxkbcommon
-, libepoxy
-, libXtst
-, wrapGAppsHook3
-, pixman
-, libpthreadstubs
-, gtkmm3
-, libXau
-, libXdmcp
-, lcms2
-, libraw
-, libiptcdata
-, fftw
-, expat
-, pcre2
-, libsigcxx
-, lensfun
-, librsvg
-, libcanberra-gtk3
-, exiv2
-, exiftool
-, mimalloc
-, openexr_3
-, ilmbase
-, opencolorio
-, color-transformation-language
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  lerc,
+  libxkbcommon,
+  libepoxy,
+  libXtst,
+  wrapGAppsHook3,
+  pixman,
+  libpthreadstubs,
+  gtkmm3,
+  libXau,
+  libXdmcp,
+  lcms2,
+  libraw,
+  libiptcdata,
+  fftw,
+  expat,
+  pcre2,
+  libsigcxx,
+  lensfun,
+  librsvg,
+  libcanberra-gtk3,
+  exiv2,
+  exiftool,
+  mimalloc,
+  openexr,
+  ilmbase,
+  opencolorio,
+  color-transformation-language,
 }:
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.24.1";
+  version = "1.25.10";
 
-  src = fetchFromBitbucket {
-    owner = "agriggio";
-    repo = "art";
-    rev = version;
-    hash = "sha256-uvdqU509ri6CKCEGA8Ln5tMp0pe3r/bcJefbeZGjocE=";
+  src = fetchFromGitHub {
+    owner = "artpixls";
+    repo = "ART";
+    tag = version;
+    hash = "sha256-qGrkRsdQppfIolxAhxWnJrbYotELKga6X7CFY55xCKk=";
   };
+
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.9)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -82,7 +91,7 @@ stdenv.mkDerivation rec {
     exiftool
     libcanberra-gtk3
     mimalloc
-    openexr_3
+    openexr
     ilmbase
     opencolorio
     color-transformation-language
@@ -104,11 +113,11 @@ stdenv.mkDerivation rec {
   env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
   meta = {
-    description = "A raw converter based on RawTherapee";
-    homepage = "https://bitbucket.org/agriggio/art/";
-    license = lib.licenses.gpl3Only;
+    description = "Raw converter based on RawTherapee";
+    homepage = "https://art.pixls.us";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
-    mainProgram = "art";
+    mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
 }

@@ -5,34 +5,30 @@
   fetchFromGitHub,
   hishel,
   httpx,
-  poetry-core,
   pydantic,
   pyjwt,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.11";
+  version = "0.13.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/jtTNQ9r4JJAXLIEEO7lR0IhpJ5vzbV0mNTdKgkH1FE=";
+    tag = "v${version}";
+    hash = "sha256-67Y0r4Po3z4YmnbWC0HBLmsKD68HMIGvHKo5SLe+KRc=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
-  build-system = [ poetry-core ];
-
+  build-system = [ uv-build ];
 
   dependencies = [
     hishel
@@ -59,7 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "githubkit" ];
 
@@ -76,7 +73,7 @@ buildPythonPackage rec {
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/v${version}";
+    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };

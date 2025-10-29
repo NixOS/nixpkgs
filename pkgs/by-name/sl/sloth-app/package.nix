@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sloth-app";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchurl {
     url = "https://github.com/sveinbjornt/Sloth/releases/download/${finalAttrs.version}/sloth-${finalAttrs.version}.zip";
-    hash = "sha256-LGaL7+NqoPqXZdYWq9x+yNEZFlZZmsZw+qcELC4rdjY=";
+    hash = "sha256-K8DweBFAILEQyqri6NO+p5qRam+BHjIk1tl43gcseNs=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeBinaryWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -33,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sveinbjorn.org/sloth";
     license = lib.licenses.bsd3;
     mainProgram = "Sloth";
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      iedame
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -1,4 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   port = 10004;
@@ -6,9 +10,10 @@ let
   httpPort = 10080;
   tcpStreamPort = 10006;
   bufferSize = 742;
-in {
+in
+{
   name = "snapcast";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -16,30 +21,27 @@ in {
     server = {
       services.snapserver = {
         enable = true;
-        port = port;
-        tcp.port = tcpPort;
-        http.port = httpPort;
-        openFirewall = true;
-        buffer = bufferSize;
-        streams = {
-          mpd = {
-            type = "pipe";
-            location = "/run/snapserver/mpd";
-            query.mode = "create";
-          };
-          bluetooth = {
-            type = "pipe";
-            location = "/run/snapserver/bluetooth";
+        settings = {
+          stream = {
+            port = port;
+            source = [
+              "pipe:///run/snapserver/mpd?name=mpd&mode=create"
+              "pipe:///run/snapserver/bluetooth?name=bluetooth"
+              "tcp://127.0.0.1:${toString tcpStreamPort}?name=tcp"
+              "meta:///mpd/bluetooth/tcp?name=meta"
+            ];
+            buffer = bufferSize;
           };
           tcp = {
-            type = "tcp";
-            location = "127.0.0.1:${toString tcpStreamPort}";
+            enabled = true;
+            port = tcpPort;
           };
-          meta = {
-            type = "meta";
-            location = "/mpd/bluetooth/tcp";
+          http = {
+            enabled = true;
+            port = httpPort;
           };
         };
+        openFirewall = true;
       };
       environment.systemPackages = [ pkgs.snapcast ];
     };
@@ -87,4 +89,4 @@ in {
         )
         client.wait_until_succeeds("journalctl -o cat -u snapcast-client | grep -q 'buffer: ${toString bufferSize}'")
   '';
-})
+}

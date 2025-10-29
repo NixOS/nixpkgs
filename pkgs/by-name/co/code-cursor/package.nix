@@ -1,71 +1,104 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
+  callPackage,
+  vscode-generic,
   fetchurl,
   appimageTools,
-  makeWrapper,
-  writeScript,
+  undmg,
+  commandLineArgs ? "",
+  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
+
 let
-  pname = "cursor";
-  version = "0.42.4";
-  appKey = "230313mzl4w4u92";
-  src = fetchurl {
-    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.42.4-build-2410291z3bdg1dy-x86_64.AppImage";
-    hash = "sha256-CD6bQ4T8DhJidiOxNRgRDL4obfEZx7hnO0VotVb6lDc=";
+  inherit (stdenv) hostPlatform;
+  finalCommandLineArgs = "--update=false " + commandLineArgs;
+
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/x64/Cursor-1.7.52-x86_64.AppImage";
+      hash = "sha256-nhDDdXE5/m9uASiQUJ4GHfApkzkf9ju5b8s0h6BhpjQ=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/arm64/Cursor-1.7.52-aarch64.AppImage";
+      hash = "sha256-96zL0pmcrEyDEy8oW2qWk6RM8XGE4Gd2Aa3Hhq0qvk0=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-0//Sv57iEgRm/exnUnKVpdyk6fwxAnx0PDg2mVaB9J8=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-g8Fk9+MDwzLTNitxJMApypfiLWEjze0PR2OIPC774j8=";
+    };
   };
-  appimageContents = appimageTools.extractType2 { inherit version pname src; };
+
+  source = sources.${hostPlatform.system};
 in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+(callPackage vscode-generic rec {
+  inherit useVSCodeRipgrep;
+  commandLineArgs = finalCommandLineArgs;
 
-  src = appimageTools.wrapType2 { inherit version pname src; };
+  version = "1.7.52";
+  pname = "cursor";
 
-  nativeBuildInputs = [ makeWrapper ];
+  # You can find the current VSCode version in the About dialog:
+  # workbench.action.showAboutDialog (Help: About)
+  vscodeVersion = "1.99.3";
 
-  installPhase = ''
-    runHook preInstall
+  executableName = "cursor";
+  longName = "Cursor";
+  shortName = "cursor";
+  libraryName = "cursor";
+  iconName = "cursor";
 
-    mkdir -p $out/
-    cp -r bin $out/bin
+  src =
+    if hostPlatform.isLinux then
+      appimageTools.extract {
+        inherit pname version;
+        src = source;
+      }
+    else
+      source;
 
-    mkdir -p $out/share/cursor
-    cp -a ${appimageContents}/locales $out/share/cursor
-    cp -a ${appimageContents}/resources $out/share/cursor
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-    install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
+  sourceRoot =
+    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
-    substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
+  tests = { };
 
-    wrapProgram $out/bin/cursor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} --no-update"
+  updateScript = ./update.sh;
 
-    runHook postInstall
-  '';
+  # Editing the `cursor` binary within the app bundle causes the bundle's signature
+  # to be invalidated, which prevents launching starting with macOS Ventura, because Cursor is notarized.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl yq coreutils gnused common-updater-scripts
-    set -eu -o pipefail
-    latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
-    version="$(echo "$latestLinux" | yq -r .version)"
-    filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-    url="https://download.todesktop.com/${appKey}/$filename"
-    currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
-
-    if [[ "$version" != "$currentVersion" ]]; then
-      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
-      update-source-version code-cursor "$version" "$hash" "$url" --source-key=src.src
-    fi
-  '';
+  # Cursor has no wrapper script.
+  patchVSCodePath = false;
 
   meta = {
     description = "AI-powered code editor built on vscode";
     homepage = "https://cursor.com";
+    changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ sarahec ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      aspauldingcode
+      prince213
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    nativeBuildInputs =
+      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+    passthru = (oldAttrs.passthru or { }) // {
+      inherit sources;
+    };
+  })

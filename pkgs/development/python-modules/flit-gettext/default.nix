@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
 
   # build-system
   flit-scm,
@@ -15,30 +15,26 @@
   # tests
   build,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "flit-gettext";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "flit-gettext";
     rev = version;
-    hash = "sha256-YsRfpciSrHmivEJKfzdp6UaPx2tSr3VdjU4ZIbYQX6c=";
+    hash = "sha256-rrGRkZ7GeFdDZ7m1oLq/7nEjx6NY2+YWvLrtfRr4+Jw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./msgfmt-path.patch;
+    (replaceVars ./msgfmt-path.patch {
       msgfmt = lib.getExe' gettext "msgfmt";
     })
   ];
-
-  postPatch = ''
-    sed -i "s/--cov//" pyproject.toml
-  '';
 
   nativeBuildInputs = [
     flit-scm
@@ -54,8 +50,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     build
     pytestCheckHook
+    pytest-cov-stub
     wheel
-  ] ++ optional-dependencies.scm;
+  ]
+  ++ optional-dependencies.scm;
 
   disabledTests = [
     # tests for missing msgfmt, but we always provide it

@@ -3,22 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  flit-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tinytag";
-  version = "1.10.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinytag";
     repo = "tinytag";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Kg67EwDIi/Io7KKnNiqPzQKginrfuE6FAeOCjFgEJkY=";
+    tag = version;
+    hash = "sha256-DyjFIaC7FwU5pvRfQgpBCc76dps287rcQ7mxggOZjdw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    flit-core
+  ];
 
   pythonImportsCheck = [ "tinytag" ];
 

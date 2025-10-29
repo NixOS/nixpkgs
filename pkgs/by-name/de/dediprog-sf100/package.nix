@@ -8,8 +8,8 @@
 }:
 
 let
-  dediprogVersion = "1.14.20.x";
-  dediprogHash = "sha256-hQvBZIwaWEC41vj2flaekIUP9Fwtj/JPi3XwRxfUbD0=";
+  dediprogVersion = "1.14.21,x";
+  dediprogHash = "sha256-tz5qLN74IbUcvj2nXzR6Q7Nh9l/LAUy/6h43J+o8dvc=";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dediprog-sf100-linux";
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];
 
+  doInstallCheck = true;
   udevRules = pkgs.writeText "dediprog.rules" ''
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev"
   '';

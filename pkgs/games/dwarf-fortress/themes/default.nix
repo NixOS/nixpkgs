@@ -7,12 +7,11 @@ let
     listToAttrs
     maintainers
     platforms
-    readFile
     ;
 in
 
-listToAttrs (map
-  (v: {
+listToAttrs (
+  map (v: {
     inherit (v) name;
     value = fetchFromGitHub {
       name = "${v.name}-theme-${v.version}";
@@ -22,9 +21,12 @@ listToAttrs (map
       sha256 = v.sha256;
       meta = {
         platforms = platforms.all;
-        maintainers = [ maintainers.matthewbauer maintainers.shazow ];
+        maintainers = [
+          maintainers.matthewbauer
+          maintainers.shazow
+        ];
         license = licenses.unfree;
       };
     };
-  })
-  (importJSON ./themes.json))
+  }) (importJSON ./themes.json)
+)

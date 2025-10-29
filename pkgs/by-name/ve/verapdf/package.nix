@@ -10,7 +10,7 @@
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf";
-  version = "1.26.2";
+  version = "1.28.2";
 
   mvnParameters = "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 
@@ -18,12 +18,13 @@ maven.buildMavenPackage rec {
     owner = "veraPDF";
     repo = "veraPDF-apps";
     rev = "v${version}";
-    hash = "sha256-bWj4dX1qRQ2zzfF9GfskvMnrNU9pKC738Zllx6JsFww=";
+    hash = "sha256-tv5iffIQkyjHyulnmagcJuSGbc4tXRYTwB3hSEGLQrc=";
   };
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-sVuzd4TUmrfvqhtiZL1L4obOF1DihMANbZNIy/LKyfw=";
+  # FIXME: this hash keeps changing over time??
+  mvnHash = "sha256-+4ccnv0S7K/S2T7KryBJHJBEFrMZSFC7cNf3Kg/wN20=";
 
   nativeBuildInputs = [
     makeWrapper

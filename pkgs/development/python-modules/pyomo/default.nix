@@ -1,42 +1,46 @@
 {
   lib,
   buildPythonPackage,
+  cython,
   fetchFromGitHub,
   parameterized,
   ply,
+  pybind11,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.8.0";
+  version = "6.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+r8HyIEFcWB6WHwKbos8IGRAmekRsPDJWbtQ5mVpHrE=";
+    tag = version;
+    hash = "sha256-iH6vxxA/CdPCXqiw3BUmhUwhS2hfwaJy5jIic4id0Jw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    pybind11
+    setuptools
+  ];
 
   dependencies = [ ply ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pyomo" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTestPaths = [
     # Don't test the documentation and the examples
@@ -54,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Optimization Modeling Objects";
     homepage = "http://www.pyomo.org/";
-    changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
+    changelog = "https://github.com/Pyomo/pyomo/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
     mainProgram = "pyomo";

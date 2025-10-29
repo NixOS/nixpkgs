@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "elysium-suite";
     repo = "aeacus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LMsfogcz3CoShQDqyshMshb+iz2r0k5I7NDLXevMakI=";
   };
 
@@ -25,13 +25,13 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability remediation scoring system";
     homepage = "https://github.com/elysium-suite/aeacus";
     changelog = "https://github.com/elysium-suite/aeacus/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aeacus";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

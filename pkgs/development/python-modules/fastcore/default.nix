@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.7.19";
+  version = "1.8.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "fastcore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CJG/cKgqdUrJcYV5pgGjrnoXzRAj3xya7LwvchNGrPU=";
+    tag = version;
+    hash = "sha256-5bgFV7ZGk+s8jjQaE13lWY+fIStin701ZrzyoJ7ziyY=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Fast AI";
     homepage = "https://github.com/fastai/fastcore";
-    changelog = "https://github.com/fastai/fastcore/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastai/fastcore/blob/${src.tag}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

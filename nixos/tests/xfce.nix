@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{
   name = "xfce";
 
   nodes.machine =
@@ -19,21 +19,27 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       services.xserver.desktopManager.xfce.enable = true;
       environment.systemPackages = [ pkgs.xfce.xfce4-whiskermenu-plugin ];
+
+      programs.thunar.plugins = [ pkgs.xfce.thunar-archive-plugin ];
     };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.users.users.alice;
-    bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
-  in ''
+  testScript =
+    { nodes, ... }:
+    let
+      user = nodes.machine.users.users.alice;
+      bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
+    in
+    ''
       with subtest("Wait for login"):
         machine.wait_for_x()
         machine.wait_for_file("${user.home}/.Xauthority")
         machine.succeed("xauth merge ${user.home}/.Xauthority")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-        machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+        # Change back to /dev/snd/timer after systemd-258.1
+        machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if Xfce components actually start"):
         machine.wait_for_window("xfce4-panel")
@@ -67,4 +73,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.sleep(10)
         machine.screenshot("screen")
     '';
-})
+}

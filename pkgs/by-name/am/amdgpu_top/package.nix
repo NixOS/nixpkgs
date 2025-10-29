@@ -16,21 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
-  version = "0.9.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eXUeXBFW2ejkOeMUujMwY0gidzdaX9yWWOfx1ZwA3lk=";
+    repo = "amdgpu_top";
+    tag = "v${version}";
+    hash = "sha256-ZXvTLzEjH+R59GqRzDcdtNI7MD7SpG89Wm32KdgEAgg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libdrm_amdgpu_sys-0.7.5" = "sha256-IkA1kJggkaSWzdDBHpNjU8WZr6wpSQWohERiHWQS2UY=";
-    };
-  };
+  cargoHash = "sha256-L9vQHht7sZCosKTiMS77IG2WOOTmnMbLQqN8SInU6zM=";
 
   buildInputs = [
     libdrm
@@ -45,7 +40,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -D ./assets/${pname}.desktop -t $out/share/applications/
+    install -D ./assets/amdgpu_top.desktop -t $out/share/applications/
+    install -D ./assets/amdgpu_top-tui.desktop -t $out/share/applications/
   '';
 
   postFixup = ''
@@ -59,7 +55,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Umio-Yasuno/amdgpu_top";
     changelog = "https://github.com/Umio-Yasuno/amdgpu_top/releases";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ geri1701 ];
+    maintainers = with lib.maintainers; [
+      geri1701
+      Gliczy
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "amdgpu_top";
   };

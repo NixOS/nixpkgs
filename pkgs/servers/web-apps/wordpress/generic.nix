@@ -1,4 +1,12 @@
-{ lib, version, hash, stdenv, fetchurl, nixosTests, writeScript }:
+{
+  lib,
+  version,
+  hash,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  writeScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
+    description = "Open source software you can use to create a beautiful website, blog, or app";
     license = [ licenses.gpl2Plus ];
     maintainers = [ maintainers.basvandijk ];
     platforms = platforms.all;

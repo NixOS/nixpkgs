@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JustinAzoff";
     repo = "python-cymruwhois";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-d9m668JYI9mxUycoVWyaDCR7SOca+ebymZxWtgSPWNU=";
   };
 
@@ -33,10 +33,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cymruwhois" ];
 
   disabledTests = [
-    # Tests require network access
-    "test_asn"
     # AssertionError
     "test_doctest"
+  ];
+
+  disabledTestPaths = [
+    # £Failed: 'yield' keyword is allowed in fixtures, but not in tests (test_common)
+    "tests/test_common_lookups.py"
   ];
 
   meta = {

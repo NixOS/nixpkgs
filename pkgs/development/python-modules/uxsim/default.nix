@@ -8,6 +8,7 @@
   python,
   dill,
   matplotlib,
+  networkx,
   numpy,
   pandas,
   pillow,
@@ -17,26 +18,24 @@
 }:
 buildPythonPackage rec {
   pname = "uxsim";
-  version = "1.7.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "toruseo";
     repo = "UXsim";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FZ8eGA3sSKaUqAd+jTlIIZDeEoXeqdpsSgJ+ZHuWyJM=";
+    tag = "v${version}";
+    hash = "sha256-GK1tD0STBCR0Z/JHdhrgLun6t2snJqi/oFGUOeiXk6c=";
   };
 
   patches = [ ./add-qt-plugin-path-to-env.patch ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dill
     matplotlib
+    networkx
     numpy
     pandas
     pillow
@@ -56,6 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/toruseo/UXsim/releases/tag/${src.tag}";
     description = "Vehicular traffic flow simulator in road network, written in pure Python";
     homepage = "https://github.com/toruseo/UXsim";
     license = licenses.mit;

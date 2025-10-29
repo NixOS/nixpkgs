@@ -1,65 +1,72 @@
 {
   lib,
   stdenv,
+  bzip2,
   callPackage,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
-  gtk3,
-  libsoup,
-  openssl,
+  nix-update-script,
   pkg-config,
-  webkitgtk_4_0,
+  testers,
+  xz,
+  zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
-  version = "1.7.1-unstable-2024-08-16";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
-    rev = "2b61447dfc167ec11724f99671bf9e2de0bf6768";
-    hash = "sha256-gKG7olZuTCkW+SKI3FVZqgS6Pp5hFemRJshdma8rpyg=";
+    tag = "tauri-cli-v${finalAttrs.version}";
+    hash = "sha256-MOhcTG8r7kDVTg5PY1rmrkd8U94CqT7RdPSfaakqf2M=";
   };
 
-  # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
-  # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
-  sourceRoot = "${src.name}/tooling/cli";
+  cargoHash = "sha256-lWBCMS7xFEqXPpMpBzfZmdwQOq8Yaux83FGFaRyaBNg=";
 
-  cargoHash = "sha256-VXg/dAhwPTSrLwJm8HNzAi/sVF9RqgpHIF3PZe1LjSA=";
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+    pkg-config
+  ];
 
   buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      libsoup
-      webkitgtk_4_0
+    # Required for tauri-macos-sign and RPM support in tauri-bundler
+    lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+      bzip2
+      xz
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        Security
-        SystemConfiguration
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      zstd
+    ];
+
+  cargoBuildFlags = [ "--package tauri-cli" ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   passthru = {
     # See ./doc/hooks/tauri.section.md
-    hook = callPackage ./hook.nix { };
+    hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
 
     tests = {
-      setupHooks = callPackage ./test-app.nix { };
+      hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "tauri-cli-v(.*)"
+      ];
     };
   };
 
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
-    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${version}";
+    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-cli-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -71,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-tauri";
   };
-}
+})

@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, lilypond }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lilypond,
+}:
 
 let
 
-  olpFont = { fontName, rev, sha256, version ? rev, ... }:
+  olpFont =
+    {
+      fontName,
+      rev,
+      sha256,
+      version ? rev,
+      ...
+    }:
     stdenv.mkDerivation {
       inherit version;
       pname = "openlilypond-font-${fontName}";

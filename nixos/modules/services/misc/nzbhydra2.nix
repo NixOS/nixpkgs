@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
-let cfg = config.services.nzbhydra2;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.services.nzbhydra2;
 
-in {
+in
+{
   options = {
     services.nzbhydra2 = {
       enable = lib.mkEnableOption "NZBHydra2, Usenet meta search";
@@ -23,8 +30,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules =
-      [ "d '${cfg.dataDir}' 0700 nzbhydra2 nzbhydra2 - -" ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 nzbhydra2 nzbhydra2 - -" ];
 
     systemd.services.nzbhydra2 = {
       description = "NZBHydra2";
@@ -35,8 +41,7 @@ in {
         Type = "simple";
         User = "nzbhydra2";
         Group = "nzbhydra2";
-        ExecStart =
-          "${cfg.package}/bin/nzbhydra2 --nobrowser --datafolder '${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/nzbhydra2 --nobrowser --datafolder '${cfg.dataDir}'";
         Restart = "on-failure";
         # Hardening
         NoNewPrivileges = true;
@@ -49,7 +54,7 @@ in {
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies ="AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -64,6 +69,6 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.nzbhydra2 = {};
+    users.groups.nzbhydra2 = { };
   };
 }

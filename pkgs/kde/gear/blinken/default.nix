@@ -1,10 +1,14 @@
 {
   mkKdeDerivation,
+  qtmultimedia,
   qtsvg,
 }:
 mkKdeDerivation {
   pname = "blinken";
 
-  extraBuildInputs = [ qtsvg ];
+  extraBuildInputs = [
+    qtmultimedia
+    qtsvg
+  ];
   meta.mainProgram = "blinken";
 }

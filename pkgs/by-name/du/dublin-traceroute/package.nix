@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, jsoncpp, libtins, libpcap, openssl, unstableGitUpdater, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  jsoncpp,
+  libtins,
+  libpcap,
+  openssl,
+  unstableGitUpdater,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   pname = "dublin-traceroute";
@@ -11,9 +23,23 @@ stdenv.mkDerivation {
     hash = "sha256-UJeFPVi3423Jh72fVk8QbLX1tTNAQ504xYs9HwVCkZc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  # gtest requires C++17, while dublin-traceroute requires C++11
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "ENABLE_TESTING()" ""
+  '';
 
-  buildInputs = [ jsoncpp libtins libpcap openssl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    jsoncpp
+    libtins
+    libpcap
+    openssl
+  ];
 
   outputs = [
     "out"

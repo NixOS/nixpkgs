@@ -2,19 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools-scm,
 
   # dependencies
+  black,
   docstring-to-markdown,
   jedi,
   pluggy,
   python-lsp-jsonrpc,
   setuptools,
   ujson,
-  importlib-metadata,
 
   # optional-dependencies
   autopep8,
@@ -29,37 +28,29 @@
   whatthepatch,
   yapf,
 
-  # checks
+  # tests
   flaky,
   matplotlib,
   numpy,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   websockets,
-
-  testers,
-  python-lsp-server,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.12.0";
+  version = "1.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oFqa7DtFpJmDZrw+GJqrFH3QqnMAu9159q3IWT9vRko=";
+    tag = "v${version}";
+    hash = "sha256-wxouTbqkieH3fxnXY0PIKDtDV97AbGWujisS2JmjBkE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace-fail "--cov pylsp --cov test" ""
-  '';
 
   pythonRelaxDeps = [
     "autopep8"
@@ -73,13 +64,14 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    black
     docstring-to-markdown
     jedi
     pluggy
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     all = [
@@ -92,6 +84,7 @@ buildPythonPackage rec {
       pylint
       rope
       toml
+      websockets
       whatthepatch
       yapf
     ];
@@ -115,35 +108,30 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.all;
+  versionCheckProgram = "${placeholder "out"}/bin/pylsp";
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
-    # Don't run lint tests
-    "test_pydocstyle"
-    # https://github.com/python-lsp/python-lsp-server/issues/243
-    # "test_numpy_completions"
-    "test_workspace_loads_pycodestyle_config"
-    "test_autoimport_code_actions_and_completions_for_notebook_document"
     # avoid dependencies on many Qt things just to run one singular test
     "test_pyqt_completion"
-  ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    # Flaky: ValueError: I/O operation on closed file
+    "test_concurrent_ws_requests"
+
+    # AttributeError: 'NoneType' object has no attribute 'plugin_manager'
+    "test_missing_message"
+  ];
 
   pythonImportsCheck = [
     "pylsp"
     "pylsp.python_lsp"
   ];
-
-  passthru = {
-    tests.version = testers.testVersion {
-      package = python-lsp-server;
-      version = "v${version}";
-    };
-  };
 
   meta = {
     description = "Python implementation of the Language Server Protocol";

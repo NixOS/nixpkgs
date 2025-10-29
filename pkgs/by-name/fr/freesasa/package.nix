@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mittinatten";
     repo = "freesasa";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-OH1/GGFtMBnHuoOu3pdR+ohVO1m0I/jmCZbxPQ0C0jo=";
   };

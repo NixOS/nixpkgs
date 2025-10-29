@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nfu1FicWr233r+VHxkQf1vqh2y4DGymJRmik8RJYJkA=";
     fetchSubmodules = true;
   };
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/embotech/ecos-python";
     changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

@@ -1,67 +1,64 @@
 {
-  blas,
-  fetchzip,
-  fetchpatch,
-  gfortran,
-  lapack,
   lib,
+  stdenv,
+  fetchzip,
+  mpi,
+  gfortran,
+  fixDarwinDylibNames,
+  blas,
+  lapack,
+  scalapack,
+  scotch,
   metis,
   parmetis,
-  withParmetis ? false, # default to false due to unfree license
-  scotch,
-  withPtScotch ? mpiSupport,
-  stdenv,
-  fixDarwinDylibNames,
-  mpi,
-  mpiSupport ? false,
   mpiCheckPhaseHook,
-  scalapack,
+  static ? stdenv.hostPlatform.isStatic,
+  mpiSupport ? false,
+  withParmetis ? false, # default to false due to unfree license
+  withPtScotch ? mpiSupport,
 }:
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
 let
+  scotch' = scotch.override { inherit withPtScotch; };
   profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
-  metisFlags =
-    if withParmetis then
-      ''
-        IMETIS="-I${parmetis}/include -I${metis}/include" \
-        LMETIS="-L${parmetis}/lib -lparmetis -L${metis}/lib -lmetis"
-      ''
-    else
-      ''
-        IMETIS=-I${metis}/include \
-        LMETIS="-L${metis}/lib -lmetis"
-      '';
-  scotchFlags =
+  LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
+  LSCOTCH = toString (
     if withPtScotch then
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lptscotch -lptesmumps -lptscotcherr"
-      ''
+      [
+        "-lptscotch"
+        "-lptesmumps"
+        "-lptscotcherr"
+      ]
     else
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lesmumps -lscotch -lscotcherr"
-      '';
-  macroFlags =
-    "-Dmetis -Dpord -Dscotch"
-    + lib.optionalString withParmetis " -Dparmetis"
-    + lib.optionalString withPtScotch " -Dptscotch";
-  # Optimized options
-  # Disable -fopenmp in lines below to benefit from OpenMP
-  optFlags = ''
-    OPTF="-O3 -fallow-argument-mismatch" \
-    OPTL="-O3" \
-    OPTC="-O3"
-  '';
+      [
+        "-lesmumps"
+        "-lscotch"
+        "-lscotcherr"
+      ]
+  );
+  ORDERINGSF = toString (
+    [
+      "-Dmetis"
+      "-Dpord"
+      "-Dscotch"
+    ]
+    ++ lib.optional withParmetis "-Dparmetis"
+    ++ lib.optional withPtScotch "-Dptscotch"
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "mumps";
-  version = "5.7.3";
+  pname = "mumps";
+  version = "5.8.1";
+  # makeFlags contain space and one should use makeFlagsArray+
+  # Setting this magic var is an optional solution
+  __structuredAttrs = true;
+
+  strictDeps = true;
 
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZnIfAuvOBJDYqCtKGlWs0r39nG6X2lAVRuUmeIJenZw=";
+    hash = "sha256-60hNYhbHONv9E9VY8G0goE83q7AwJh1u/Z+QRK8anHQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -76,56 +73,60 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    makeFlagsArray+=(${metisFlags} ${scotchFlags} ORDERINGSF="${macroFlags}" ${optFlags})
-  '';
-
   makeFlags =
     lib.optionals stdenv.hostPlatform.isDarwin [
       "SONAME="
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
+      "ISCOTCH=-I${lib.getDev scotch'}/include"
+      "LMETIS=${LMETIS}"
+      "LSCOTCH=${LSCOTCH}"
+      "ORDERINGSF=${ORDERINGSF}"
+      "OPTF=-O3 -fallow-argument-mismatch"
+      "OPTC=-O3"
+      "OPTL=-O3"
       "SCALAP=-lscalapack"
-      "allshared"
+      "${if static then "all" else "allshared"}"
     ];
 
-  installPhase =
-    ''
-      mkdir $out
-      cp -r include lib $out
-    ''
-    + lib.optionalString (!mpiSupport) ''
-      # Install mumps_seq headers
-      install -Dm 444 -t $out/include/mumps_seq libseq/*.h
+  installPhase = ''
+    mkdir $out
+    cp -r include lib $out
+  ''
+  + lib.optionalString (!mpiSupport) ''
+    # Install mumps_seq headers
+    install -Dm 444 -t $out/include/mumps_seq libseq/*.h
 
-      # Add some compatibility with coin-or-mumps
-      ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
-    '';
+    # Add some compatibility with coin-or-mumps
+    ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
+  '';
 
   nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames ++ lib.optional mpiSupport mpi;
+  ]
+  ++ lib.optional mpiSupport mpi
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
-  buildInputs =
-    lib.optional withParmetis parmetis
-    ++ lib.optional mpiSupport scalapack
-    ++ [
-      blas
-      lapack
-      metis
-      scotch
-    ];
+  buildInputs = [
+    blas
+    lapack
+    metis
+    scotch'
+  ]
+  ++ lib.optional mpiSupport scalapack
+  ++ lib.optional withParmetis parmetis;
 
   doInstallCheck = true;
+
   nativeInstallCheckInputs = lib.optional mpiSupport mpiCheckPhaseHook;
+
   installCheckPhase = ''
     runHook preInstallCheck
+
     ${lib.optionalString stdenv.hostPlatform.isDarwin "export DYLD_LIBRARY_PATH=$out/lib\n"}
     ${lib.optionalString mpiSupport "export MPIRUN='mpirun -n 2'\n"}
     cd examples
-    make all
     $MPIRUN ./ssimpletest <input_simpletest_real
     $MPIRUN ./dsimpletest <input_simpletest_real
     $MPIRUN ./csimpletest <input_simpletest_cmplx
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     $MPIRUN ./csimpletest_save_restore <input_simpletest_cmplx
     $MPIRUN ./zsimpletest_save_restore <input_simpletest_cmplx
     $MPIRUN ./c_example_save_restore
+
     runHook postInstallCheck
   '';
 
@@ -146,14 +148,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "MUltifrontal Massively Parallel sparse direct Solver";
-    homepage = "http://mumps-solver.org/";
+    homepage = "https://mumps-solver.org/";
+    changelog = "https://mumps-solver.org/index.php?page=dwnld#cl";
     license = lib.licenses.cecill-c;
     maintainers = with lib.maintainers; [
       nim65s
       qbisi
     ];
     platforms = lib.platforms.unix;
-    # Dependency of scalapack for mpiSupport is broken on darwin platform
-    broken = mpiSupport && stdenv.hostPlatform.isDarwin;
   };
 })

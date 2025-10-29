@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "7.0.9";
+  version = "7.1.10";
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-lHh02uqHdX2Q9yyaGiHlkdBjlQE1tQyB44d39yDE4ls=";
+    hash = "sha256-qUqUJ7NZyF+/skmdYMeE+u6KoHswcJvQSnRQ8rAKXp8=";
   };
 
   sourceRoot = finalAttrs.src.name;
 
   postPatch = ''
     substituteInPlace unrar/makefile \
-      --replace "CXX=" "#CXX=" \
-      --replace "STRIP=" "#STRIP=" \
-      --replace "AR=" "#AR="
+      --replace-fail "CXX=" "#CXX=" \
+      --replace-fail "STRIP=" "#STRIP=" \
+      --replace-fail "AR=" "#AR="
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # `make {unrar,lib}` call `make clean` implicitly
   # separate build into different dirs to avoid deleting them
@@ -30,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     cp -a unrar libunrar
-    make -C libunrar lib
-    make -C unrar -j1
+    make -C libunrar lib -j$NIX_BUILD_CORES
+    make -C unrar -j$NIX_BUILD_CORES
 
     runHook postBuild
   '';

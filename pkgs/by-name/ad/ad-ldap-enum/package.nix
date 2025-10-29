@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,11 +16,13 @@ stdenvNoCC.mkDerivation {
   };
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      argcomplete
-      ldap3
-      openpyxl
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        argcomplete
+        ldap3
+        openpyxl
+      ]
+    ))
   ];
 
   installPhase = ''
@@ -38,11 +41,11 @@ stdenvNoCC.mkDerivation {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LDAP based Active Directory user and group enumeration tool";
     homepage = "https://github.com/CroweCybersecurity/ad-ldap-enum";
-    license = licenses.mit;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ h7x4 ];
     platforms = python3.meta.platforms;
     mainProgram = "ad-ldap-enum";
   };

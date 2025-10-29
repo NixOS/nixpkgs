@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, flex
-, pkg-config
-, boost
-, icu
-, libstemmer
-, mariadb-connector-c
-, re2
-, nlohmann_json
-, testers
-, manticoresearch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  boost,
+  icu,
+  libstemmer,
+  mariadb-connector-c,
+  re2,
+  nlohmann_json,
+  testers,
+  manticoresearch,
 }:
 
 let
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
   };
 

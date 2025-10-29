@@ -1,4 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, wrapQtAppsHook, qtbase, qtsvg }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+}:
 
 mkDerivation rec {
   pname = "tbe";
@@ -6,8 +15,8 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kaa-ching";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "tbe";
+    tag = "v${version}";
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };
 
@@ -16,10 +25,22 @@ mkDerivation rec {
 
     # fix translations not building: https://gitlab.kitware.com/cmake/cmake/-/issues/21931
     substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/Box2D/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
   strictDeps = true;
 
   installPhase = ''

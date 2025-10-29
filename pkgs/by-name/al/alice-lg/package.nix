@@ -4,7 +4,7 @@
   buildGoModule,
   fetchYarnDeps,
   stdenv,
-  gitUpdater,
+  nix-update-script,
   yarn,
   nodejs,
   nixosTests,
@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "alice-lg";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
-    rev = version;
-    hash = "sha256-BbwTLHDtpa8HCECIiy+UxyQiLf9iAD2GzE0azXk7QGU=";
+    tag = version;
+    hash = "sha256-DlmUurpu/bs/91fLsSQ3xJ8I8NWJweynMgV6Svkf0Uo=";
   };
 
-  vendorHash = "sha256-8N5E1CW5Z7HujwXRsZLv7y4uNOJkjj155kmX9PCjajQ=";
+  vendorHash = "sha256-OkOUgW6BHJKIdY1soMqTXhL6RYy3567iL1/VZasIdvQ=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";
@@ -83,7 +83,7 @@ buildGoModule rec {
 
   passthru = {
     tests = nixosTests.alice-lg;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

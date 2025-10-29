@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "teepark";
     repo = "python-lzf";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-n5E75kRqe0dDbyFicoyLBAVi/SuoUU7qJka3viipQk8=";
   };
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
-    description = "liblzf python bindings";
+    description = "Liblzf python bindings";
     homepage = "https://github.com/teepark/python-lzf";
     license = licenses.mit;
     platforms = platforms.unix;

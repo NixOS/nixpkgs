@@ -1,16 +1,23 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
-, ncurses5
-, ncurses6, gmp, libiconv, numactl, libffi
-, llvmPackages
-, coreutils
-, targetPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gcc,
+  ncurses5,
+  ncurses6,
+  gmp,
+  libiconv,
+  numactl,
+  libffi,
+  coreutils,
+  targetPackages,
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
   # This is "useful" for staying within hydra's output limits for at least the
   # aarch64-linux architecture.
-, minimal ? false
+  minimal ? false,
 }:
 
 # Prebuilt only does native
@@ -36,7 +43,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specfic library,
+  # * To skip file checking for a specific arch specific library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
@@ -50,11 +57,17 @@ let
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
           # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
           # which link it against `libtinfo.so.5` (ncurses 5).
           # Other bindists are linked `libtinfo.so.6` (ncurses 6).
-          { nixPackage = ncurses5; fileToCheckFor = "libtinfo.so.5"; }
+          {
+            nixPackage = ncurses5;
+            fileToCheckFor = "libtinfo.so.5";
+          }
         ];
       };
       x86_64-linux = {
@@ -65,8 +78,14 @@ let
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
-          { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = ncurses6;
+            fileToCheckFor = "libtinfo.so.6";
+          }
         ];
       };
       aarch64-linux = {
@@ -77,9 +96,18 @@ let
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
-          { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
-          { nixPackage = numactl; fileToCheckFor = null; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = ncurses6;
+            fileToCheckFor = "libtinfo.so.6";
+          }
+          {
+            nixPackage = numactl;
+            fileToCheckFor = null;
+          }
         ];
       };
       x86_64-darwin = {
@@ -90,9 +118,18 @@ let
         };
         exePathForLibraryCheck = null; # we don't have a library check for darwin yet
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
-          { nixPackage = ncurses6; fileToCheckFor = null; }
-          { nixPackage = libiconv; fileToCheckFor = null; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = ncurses6;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = libiconv;
+            fileToCheckFor = null;
+          }
         ];
       };
       aarch64-darwin = {
@@ -103,9 +140,18 @@ let
         };
         exePathForLibraryCheck = null; # we don't have a library check for darwin yet
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
-          { nixPackage = ncurses6; fileToCheckFor = null; }
-          { nixPackage = libiconv; fileToCheckFor = null; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = ncurses6;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = libiconv;
+            fileToCheckFor = null;
+          }
         ];
       };
     };
@@ -119,8 +165,14 @@ let
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
-          { nixPackage = gmp; fileToCheckFor = null; }
-          { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
+          {
+            nixPackage = gmp;
+            fileToCheckFor = null;
+          }
+          {
+            nixPackage = ncurses6;
+            fileToCheckFor = "libncursesw.so.6";
+          }
         ];
       };
     };
@@ -128,36 +180,28 @@ let
 
   distSetName = if stdenv.hostPlatform.isMusl then "musl" else "defaultLibc";
 
-  binDistUsed = ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
+  binDistUsed =
+    ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
+      or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
 
-  gmpUsed = (builtins.head (
-    builtins.filter (
-      drv: lib.hasPrefix "gmp" (drv.nixPackage.name or "")
-    ) binDistUsed.archSpecificLibraries
-  )).nixPackage;
+  gmpUsed =
+    (builtins.head (
+      builtins.filter (
+        drv: lib.hasPrefix "gmp" (drv.nixPackage.name or "")
+      ) binDistUsed.archSpecificLibraries
+    )).nixPackage;
 
-  # GHC has other native backends (like PowerPC), but here only the ones
-  # we ship bindists for matter.
-  useLLVM = !(stdenv.targetPlatform.isx86
-    || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin));
+  libPath = lib.makeLibraryPath (
+    # Add arch-specific libraries.
+    map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
+  );
 
-  libPath =
-    lib.makeLibraryPath (
-      # Add arch-specific libraries.
-      map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
-    );
-
-  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
-    + "LD_LIBRARY_PATH";
+  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
   runtimeDeps = [
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
-  ]
-  ++ lib.optionals useLLVM [
-    (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -166,7 +210,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -184,38 +228,38 @@ stdenv.mkDerivation rec {
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
     # so that we know when ghc bindists upgrade that and we need to update the
     # version used in `libPath`.
-    lib.optionalString
-      (binDistUsed.exePathForLibraryCheck != null)
+    lib.optionalString (binDistUsed.exePathForLibraryCheck != null)
       # Note the `*` glob because some GHCs have a suffix when unpacked, e.g.
       # the musl bindist has dir `ghc-VERSION-x86_64-unknown-linux/`.
       # As a result, don't shell-quote this glob when splicing the string.
-      (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
+      (
+        let
+          buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"'';
+        in
         lib.concatStringsSep "\n" [
-          (''
+          ''
             shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
             fi
-          '')
-          (lib.concatMapStringsSep
-            "\n"
-            ({ fileToCheckFor, nixPackage }:
-              lib.optionalString (fileToCheckFor != null) ''
-                echo "Checking bindist for ${fileToCheckFor} to ensure that is still used"
-                if ! readelf -d ${buildExeGlob} | grep "${fileToCheckFor}"; then
-                  echo >&2 "File ${fileToCheckFor} could not be found in ${binDistUsed.exePathForLibraryCheck} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
-                fi
+          ''
+          (lib.concatMapStringsSep "\n" (
+            { fileToCheckFor, nixPackage }:
+            lib.optionalString (fileToCheckFor != null) ''
+              echo "Checking bindist for ${fileToCheckFor} to ensure that is still used"
+              if ! readelf -d ${buildExeGlob} | grep "${fileToCheckFor}"; then
+                echo >&2 "File ${fileToCheckFor} could not be found in ${binDistUsed.exePathForLibraryCheck} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+              fi
 
-                echo "Checking that the nix package ${nixPackage} contains ${fileToCheckFor}"
-                if ! test -e "${lib.getLib nixPackage}/lib/${fileToCheckFor}"; then
-                  echo >&2 "Nix package ${nixPackage} did not contain ${fileToCheckFor} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
-                fi
-              ''
-            )
-            binDistUsed.archSpecificLibraries
-          )
-        ])
+              echo "Checking that the nix package ${nixPackage} contains ${fileToCheckFor}"
+              if ! test -e "${lib.getLib nixPackage}/lib/${fileToCheckFor}"; then
+                echo >&2 "Nix package ${nixPackage} did not contain ${fileToCheckFor} for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+              fi
+            ''
+          ) binDistUsed.archSpecificLibraries)
+        ]
+      )
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -224,7 +268,7 @@ stdenv.mkDerivation rec {
       for exe in $(find . -type f -executable); do
         isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
     ''
 
@@ -244,23 +288,28 @@ stdenv.mkDerivation rec {
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib libffi}/lib' \
                     -e 's@/Library/Developer/.*/usr/include/ffi@${lib.getDev libffi}/include@' \
                     -i {} \;
-    '' +
-    # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
-    # FFI_LIB_DIR is a good indication of places it must be needed.
-    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-      find . -name package.conf.in \
-          -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-    '' +
-    # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      find . -type f -executable -exec patchelf \
-          --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
-    '';
+    ''
+    +
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # FFI_LIB_DIR is a good indication of places it must be needed.
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
+    +
+      # Rename needed libraries and binaries, fix interpreter
+      lib.optionalString stdenv.hostPlatform.isLinux ''
+        find . -type f -executable -exec patchelf \
+            --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
+      '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
-  preConfigure = lib.optionalString
-    stdenv.targetPlatform.isAarch32
-    "LD=ld.gold";
+  preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
 
   # GHC has a patched config.sub and bindists' platforms should always work
   dontUpdateAutotoolsGnuConfigScripts = true;
@@ -275,6 +324,15 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
+
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
     for i in "$out/bin/"*; do
@@ -282,7 +340,8 @@ stdenv.mkDerivation rec {
       isScript "$i" || continue
       sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
-  '' + lib.optionalString stdenv.targetPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.targetPlatform.isDarwin ''
     # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
     # detects `llvm-ar` even though the resulting archives are not supported by ld64.
     # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
@@ -308,61 +367,62 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && !(binDistUsed.isStatic or false))
-    (if stdenv.hostPlatform.isAarch64 then
-      # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
-      # are 2 directories deep from $out/lib, so pooling symlinks there makes
-      # a short rpath.
-      ''
-      (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
-      (cd $out/lib; ln -s ${lib.getLib gmpUsed}/lib/libgmp.so.10)
-      (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
-      for p in $(find "$out/lib" -type f -name "*\.so*"); do
-        (cd $out/lib; ln -s $p)
+  postFixup =
+    lib.optionalString (stdenv.hostPlatform.isLinux && !(binDistUsed.isStatic or false)) (
+      if stdenv.hostPlatform.isAarch64 then
+        # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
+        # are 2 directories deep from $out/lib, so pooling symlinks there makes
+        # a short rpath.
+        ''
+          (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
+          (cd $out/lib; ln -s ${lib.getLib gmpUsed}/lib/libgmp.so.10)
+          (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
+          for p in $(find "$out/lib" -type f -name "*\.so*"); do
+            (cd $out/lib; ln -s $p)
+          done
+
+          for p in $(find "$out/lib" -type f -executable); do
+            if isELF "$p"; then
+              echo "Patchelfing $p"
+              patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
+            fi
+          done
+        ''
+      else
+        ''
+          for p in $(find "$out" -type f -executable); do
+            if isELF "$p"; then
+              echo "Patchelfing $p"
+              patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+            fi
+          done
+        ''
+    )
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # not enough room in the object files for the full path to libiconv :(
+      for exe in $(find "$out" -type f -executable); do
+        isMachO $exe || continue
+        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
 
-      for p in $(find "$out/lib" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
-        fi
+      for file in $(find "$out" -name setup-config); do
+        substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
       done
-      ''
-    else
-      ''
-      for p in $(find "$out" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
-        fi
-      done
-    '') + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # not enough room in the object files for the full path to libiconv :(
-    for exe in $(find "$out" -type f -executable); do
-      isMachO $exe || continue
-      ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
-    done
+    ''
+    # Recache package db which needs to happen for Hadrian bindists
+    # where we modify the package db before installing
+    + ''
+      package_db=("$out"/lib/ghc-*/lib/package.conf.d)
+      "$out/bin/ghc-pkg" --package-db="$package_db" recache
+    '';
 
-    for file in $(find "$out" -name setup-config); do
-      substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
-    done
-  ''
-  # Recache package db which needs to happen for Hadrian bindists
-  # where we modify the package db before installing
-  + ''
-    package_db=("$out"/lib/ghc-*/lib/package.conf.d)
-    "$out/bin/ghc-pkg" --package-db="$package_db" recache
-  '';
-
-  # In nixpkgs, musl based builds currently enable `pie` hardening by default
-  # (see `defaultHardeningFlags` in `make-derivation.nix`).
-  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # GHC cannot currently produce outputs that are ready for `-pie` linking.
   # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
   # See:
   # * https://github.com/NixOS/nixpkgs/issues/129247
   # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "pie" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -383,7 +443,7 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
     enableShared = true;
 
-    inherit llvmPackages;
+    llvmPackages = null;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
@@ -394,7 +454,7 @@ stdenv.mkDerivation rec {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
@@ -408,6 +468,7 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    maintainers = lib.teams.haskell.members;
+    teams = [ lib.teams.haskell ];
+    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 }

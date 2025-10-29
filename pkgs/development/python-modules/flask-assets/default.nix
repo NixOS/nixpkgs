@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miracle2k";
     repo = "flask-assets";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-R6cFTT+r/i5j5/QQ+cCFmeuO7SNTiV1F+e0JTxwIUGY=";
   };
 
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miracle2k/flask-assets";
     description = "Asset management for Flask, to compress and merge CSS and Javascript files";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

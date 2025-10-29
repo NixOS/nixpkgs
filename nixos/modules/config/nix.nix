@@ -6,45 +6,44 @@
    - ./nix-flakes.nix
    - ./nix-remote-build.nix
    - nixos/modules/services/system/nix-daemon.nix
- */
-{ config, lib, pkgs, ... }:
+*/
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
-    concatStringsSep
-    boolToString
-    escape
-    filterAttrs
-    floatToString
-    getVersion
-    hasPrefix
-    isBool
-    isDerivation
-    isFloat
-    isInt
-    isList
-    isString
     literalExpression
     mapAttrsToList
     mkAfter
-    mkDefault
     mkIf
     mkOption
     mkRenamedOptionModuleWith
-    optionalString
     optionals
-    strings
     systems
-    toPretty
     types
-    versionAtLeast
     ;
 
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = versionAtLeast (getVersion nixPackage);
+  defaultSystemFeatures = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+  ]
+  ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
+    # a builder can run code for `gcc.arch` and inferior architectures
+    [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
+    ++ map (x: "gccarch-${x}") (
+      systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
+    )
+  );
 
   legacyConfMappings = {
     useSandbox = "sandbox";
@@ -61,93 +60,78 @@ let
     systemFeatures = "system-features";
   };
 
-  semanticConfType = with types;
+  semanticConfType =
+    with types;
     let
-      confAtom = nullOr
-        (oneOf [
+      confAtom =
+        nullOr (oneOf [
           bool
           int
           float
           str
           path
           package
-        ]) // {
-        description = "Nix config atom (null, bool, int, float, str, path or package)";
-      };
+        ])
+        // {
+          description = "Nix config atom (null, bool, int, float, str, path or package)";
+        };
     in
     attrsOf (either confAtom (listOf confAtom));
 
   nixConf =
-    assert isNixAtLeast "2.2";
-    let
-
-      mkValueString = v:
-        if v == null then ""
-        else if isInt v then toString v
-        else if isBool v then boolToString v
-        else if isFloat v then floatToString v
-        else if isList v then toString v
-        else if isDerivation v then toString v
-        else if builtins.isPath v then toString v
-        else if isString v then v
-        else if strings.isConvertibleWithToString v then toString v
-        else abort "The nix conf value: ${toPretty {} v} can not be encoded";
-
-      mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
-
-      mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
-
-      isExtra = key: hasPrefix "extra-" key;
-
-    in
-    pkgs.writeTextFile {
-      name = "nix.conf";
-      # workaround for https://github.com/NixOS/nix/issues/9487
-      # extra-* settings must come after their non-extra counterpart
-      text = ''
-        # WARNING: this file is generated from the nix.* options in
-        # your NixOS configuration, typically
-        # /etc/nixos/configuration.nix.  Do not edit it!
-        ${mkKeyValuePairs (filterAttrs (key: value: !(isExtra key)) cfg.settings)}
-        ${mkKeyValuePairs (filterAttrs (key: value: isExtra key) cfg.settings)}
-        ${cfg.extraOptions}
-      '';
-      checkPhase = lib.optionalString cfg.checkConfig (
-        if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
-          echo "Ignoring validation for cross-compilation"
-        ''
-        else
-        let
-          showCommand = if isNixAtLeast "2.20pre" then "config show" else "show-config";
-        in
-        ''
-          echo "Validating generated nix.conf"
-          ln -s $out ./nix.conf
-          set -e
-          set +o pipefail
-          NIX_CONF_DIR=$PWD \
-            ${cfg.package}/bin/nix ${showCommand} ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
-              ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
-            |& sed -e 's/^warning:/error:/' \
-            | (! grep '${if cfg.checkAllErrors then "^error:" else "^error: unknown setting"}')
-          set -o pipefail
-        '');
-    };
+    (pkgs.formats.nixConf {
+      inherit (cfg)
+        package
+        checkAllErrors
+        checkConfig
+        extraOptions
+        ;
+      inherit (nixPackage) version;
+    }).generate
+      "nix.conf"
+      cfg.settings;
 
 in
 {
   imports = [
-    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
-    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
-  ] ++
-    mapAttrsToList
-      (oldConf: newConf:
-        mkRenamedOptionModuleWith {
-          sinceRelease = 2205;
-          from = [ "nix" oldConf ];
-          to = [ "nix" "settings" newConf ];
-      })
-      legacyConfMappings;
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2003;
+      from = [
+        "nix"
+        "useChroot"
+      ];
+      to = [
+        "nix"
+        "useSandbox"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2003;
+      from = [
+        "nix"
+        "chrootDirs"
+      ];
+      to = [
+        "nix"
+        "sandboxPaths"
+      ];
+    })
+  ]
+  ++ mapAttrsToList (
+    oldConf: newConf:
+    mkRenamedOptionModuleWith {
+      sinceRelease = 2205;
+      from = [
+        "nix"
+        oldConf
+      ];
+      to = [
+        "nix"
+        "settings"
+        newConf
+      ];
+    }
+  ) legacyConfMappings;
 
   options = {
     nix = {
@@ -246,7 +230,10 @@ in
             extra-sandbox-paths = mkOption {
               type = types.listOf types.str;
               default = [ ];
-              example = [ "/dev" "/proc" ];
+              example = [
+                "/dev"
+                "/proc"
+              ];
               description = ''
                 Directories from the host filesystem to be included
                 in the sandbox.
@@ -302,7 +289,11 @@ in
 
             trusted-users = mkOption {
               type = types.listOf types.str;
-              example = [ "root" "alice" "@wheel" ];
+              example = [
+                "root"
+                "alice"
+                "@wheel"
+              ];
               description = ''
                 A list of names of users that have additional rights when
                 connecting to the Nix daemon, such as the ability to specify
@@ -316,22 +307,26 @@ in
 
             system-features = mkOption {
               type = types.listOf types.str;
-              example = [ "kvm" "big-parallel" "gccarch-skylake" ];
+              # We expose system-featuers here and in config below.
+              # This allows users to access the default value via `options.nix.settings.system-features`
+              default = defaultSystemFeatures;
+              defaultText = literalExpression ''[ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-<arch>" ]'';
               description = ''
                 The set of features supported by the machine. Derivations
                 can express dependencies on system features through the
                 `requiredSystemFeatures` attribute.
-
-                By default, pseudo-features `nixos-test`, `benchmark`,
-                and `big-parallel` used in Nixpkgs are set, `kvm`
-                is also included if it is available.
               '';
             };
 
             allowed-users = mkOption {
               type = types.listOf types.str;
               default = [ "*" ];
-              example = [ "@wheel" "@builders" "alice" "bob" ];
+              example = [
+                "@wheel"
+                "@builders"
+                "alice"
+                "bob"
+              ];
               description = ''
                 A list of names of users (separated by whitespace) that are
                 allowed to connect to the Nix daemon. As with
@@ -350,7 +345,6 @@ in
             use-sandbox = true;
             show-trace = true;
 
-            system-features = [ "big-parallel" "kvm" "recursive-nix" ];
             sandbox-paths = [ "/bin/sh=''${pkgs.busybox-sandbox-shell.out}/bin/busybox" ];
           }
         '';
@@ -377,14 +371,7 @@ in
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
-      system-features = mkDefault (
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
-          # a builder can run code for `gcc.arch` and inferior architectures
-          [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
-        )
-      );
+      system-features = defaultSystemFeatures;
     };
   };
 }

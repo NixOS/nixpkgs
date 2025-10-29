@@ -1,9 +1,10 @@
-{ buildDunePackage
-, httpun-types
-, angstrom
-, bigstringaf
-, faraday
-, alcotest
+{
+  buildDunePackage,
+  httpun-types,
+  angstrom,
+  bigstringaf,
+  faraday,
+  alcotest,
 }:
 
 buildDunePackage {
@@ -11,12 +12,17 @@ buildDunePackage {
 
   inherit (httpun-types) src version;
 
-  propagatedBuildInputs = [ angstrom bigstringaf faraday httpun-types ];
+  propagatedBuildInputs = [
+    angstrom
+    bigstringaf
+    faraday
+    httpun-types
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];
 
   meta = httpun-types.meta // {
-    description = "A high-performance, memory-efficient, and scalable HTTP library for OCaml";
+    description = "High-performance, memory-efficient, and scalable HTTP library for OCaml";
   };
 }

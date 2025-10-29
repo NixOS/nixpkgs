@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "setuptools-gettext";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-05xKWRxmoI8tnRENuiK3Z3WNMyjgXIX5p3vhzSUeytQ=";
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/breezy-team/setuptools-gettext/releases/tag/v${version}";
-    description = "setuptools plugin for building mo files";
+    description = "Setuptools plugin for building mo files";
     homepage = "https://github.com/breezy-team/setuptools-gettext";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tomasajt ];

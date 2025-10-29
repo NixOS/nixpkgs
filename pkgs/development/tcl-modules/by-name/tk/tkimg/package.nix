@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchsvn, tcl, tcllib, tk, xorg, darwin }:
+{
+  lib,
+  fetchsvn,
+  tcl,
+  tcllib,
+  tk,
+  xorg,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tkimg";
@@ -16,9 +23,10 @@ tcl.mkTclDerivation rec {
     "--with-tkinclude=${tk.dev}/include"
   ];
 
-  buildInputs = [ xorg.libX11 tcllib ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-  ]);
+  buildInputs = [
+    xorg.libX11
+    tcllib
+  ];
 
   meta = {
     homepage = "https://sourceforge.net/projects/tkimg/";
@@ -26,5 +34,6 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
 }

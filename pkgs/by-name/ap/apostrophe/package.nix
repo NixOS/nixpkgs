@@ -4,7 +4,7 @@
   gtksourceview5,
   libspelling,
   fetchFromGitHub,
-  python3Packages,
+  python312Packages,
   nodePackages,
   meson,
   ninja,
@@ -16,6 +16,7 @@
   webkitgtk_6_0,
   texliveMedium,
   shared-mime-info,
+  nix-update-script,
 }:
 
 let
@@ -39,23 +40,25 @@ let
     hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in
-python3Packages.buildPythonApplication {
+
+# Requires telnetlib, and possibly others
+# Try to remove in subsequent updates
+python312Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
 
-  postPatch =
-    ''
-      substituteInPlace build-aux/meson_post_install.py \
-        --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  postPatch = ''
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
 
-      patchShebangs --build build-aux/meson_post_install.py
-    ''
-    # Use mathjax from nixpkgs to avoid loading from CDN
-    + ''
-      substituteInPlace apostrophe/preview_converter.py \
-        --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
-    '';
+    patchShebangs --build build-aux/meson_post_install.py
+  ''
+  # Use mathjax from nixpkgs to avoid loading from CDN
+  + ''
+    substituteInPlace apostrophe/preview_converter.py \
+      --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
+  '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
   preConfigure = ''
@@ -79,7 +82,7 @@ python3Packages.buildPythonApplication {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python312Packages; [
     pygobject3
     pypandoc
     chardet
@@ -98,6 +101,7 @@ python3Packages.buildPythonApplication {
 
   passthru = {
     inherit reveal-js;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -107,8 +111,8 @@ python3Packages.buildPythonApplication {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sternenseemann
-      aleksana
     ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "apostrophe";
   };
 }

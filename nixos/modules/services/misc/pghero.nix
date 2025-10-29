@@ -1,4 +1,10 @@
-{ config, pkgs, lib, utils, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 let
   cfg = config.services.pghero;
   settingsFormat = pkgs.formats.yaml { };
@@ -88,22 +94,29 @@ in
       description = "PgHero performance dashboard for PostgreSQL";
       wantedBy = [ "multi-user.target" ];
       requires = [ "pghero.socket" ];
-      after = [ "pghero.socket" "network.target" ];
+      after = [
+        "pghero.socket"
+        "network.target"
+      ];
 
       environment = {
         RAILS_ENV = "production";
         PGHERO_CONFIG_PATH = settingsFile;
-      } // cfg.environment;
+      }
+      // cfg.environment;
 
       serviceConfig = {
         Type = "notify";
         WatchdogSec = "10";
 
-        ExecStart = utils.escapeSystemdExecArgs ([
-          (lib.getExe cfg.package)
-          "--bind-to-activated-sockets"
-          "only"
-        ] ++ cfg.extraArgs);
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+            "--bind-to-activated-sockets"
+            "only"
+          ]
+          ++ cfg.extraArgs
+        );
         Restart = "always";
 
         WorkingDirectory = "${cfg.package}/share/pghero";
@@ -127,7 +140,11 @@ in
         PrivateDevices = true;
         RestrictRealtime = true;
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         DeviceAllow = [ "" ];
         DevicePolicy = "closed";
         CapabilityBoundingSet = [ "" ];

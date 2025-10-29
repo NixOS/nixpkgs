@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-x2XsJ26y9y6IF9aY0fmAcvO4zmwLjvE2Lfvzw+GqchM=";
+    hash = "sha256-G1yqToqYVnV/ag//b4C3jUvh2ayIhV3bEavfhpiF0p0=";
   };
 
   nativeBuildInputs = [
@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      libX11
-      libXext
-    ]
-    ++ lib.optionals isQt5 [ qtx11extras ]
-    ++ lib.optionals (!isQt5) [
-      kwindowsystem
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    libX11
+    libXext
+  ]
+  ++ lib.optionals isQt5 [ qtx11extras ]
+  ++ lib.optionals (!isQt5) [
+    kwindowsystem
+    qtwayland
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/Kvantum";
 

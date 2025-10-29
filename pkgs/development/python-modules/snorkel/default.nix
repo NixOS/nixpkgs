@@ -31,8 +31,8 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "snorkel-team";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "snorkel";
+    tag = "v${version}";
     hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
   };
 
@@ -58,7 +58,8 @@ buildPythonPackage {
     dill
     dask
     spacy-models.en_core_web_sm
-  ] ++ dask.optional-dependencies.distributed;
+  ]
+  ++ dask.optional-dependencies.distributed;
 
   meta = with lib; {
     description = "System for quickly generating training data with weak supervision";

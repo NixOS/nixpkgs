@@ -7,21 +7,21 @@
   django,
   dropbox,
   fetchFromGitHub,
+  fetchpatch,
   google-cloud-storage,
   libcloud,
   moto,
   paramiko,
+  pynacl,
   pytestCheckHook,
   pythonOlder,
   rsa,
   setuptools,
-  pynacl,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.4";
+  version = "1.14.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
+    tag = version;
+    hash = "sha256-br7JGPf5EAAl0Qg7b+XaksxNPCTJsSS8HLgvA0wZmeI=";
   };
 
   patches = [
@@ -62,19 +62,14 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     rsa
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkInputs = [ pynacl ];
 
   pythonImportsCheck = [ "storages" ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
-
-  disabledTests = [
-    # AttributeError: 'str' object has no attribute 'universe_domain'
-    # https://github.com/jschneier/django-storages/issues/1463
-    "test_storage_save_gzip"
-  ];
 
   meta = {
     description = "Collection of custom storage backends for Django";

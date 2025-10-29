@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "replicate";
-  version = "1.0.1";
+  version = "1.1.0b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "replicate";
     repo = "replicate-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q//RV4Y9k2KXXgZGfBF/XObxsBfAHE50oG+r/Vvu9BY=";
+    tag = version;
+    hash = "sha256-wafxaMQhusTr4wYnkrpfXr6FE2rbi6BVq42VSTXdEoc=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Replicate";
     homepage = "https://replicate.com/";
-    changelog = "https://github.com/replicate/replicate-python/releases/tag/${version}";
+    changelog = "https://github.com/replicate/replicate-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
   };

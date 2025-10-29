@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.238.3";
+  version = "0.288.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
-    rev = "v${version}";
-    hash = "sha256-WlHta/wXTULehopXeIUdNAQb12Lf0SJnm1HIVHTDshA=";
+    tag = "v${version}";
+    hash = "sha256-9KApZvjOSwR9wcO7nRmpPf2M5SzmV0Z0bM7O8StqZK0=";
   };
-
-  postPatch = ''
-    substituteInPlace src/services/inference/check_cache.ml --replace 'Core_kernel' 'Core'
-  '';
 
   makeFlags = [ "FLOW_RELEASE=1" ];
 
@@ -24,10 +25,31 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml dune_3 findlib ocamlbuild ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    dune_3
+    findlib
+    ocamlbuild
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ]
-    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]);
+  buildInputs = (
+    with ocamlPackages;
+    [
+      camlp-streams
+      dtoa
+      fileutils
+      lwt_log
+      lwt_ppx
+      lwt
+      ppx_deriving
+      ppx_gen_rec
+      ppx_let
+      sedlex
+      visitors
+      wtf8
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]
+  );
 
   meta = with lib; {
     description = "Static type checker for JavaScript";

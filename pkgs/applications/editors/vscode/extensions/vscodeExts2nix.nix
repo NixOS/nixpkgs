@@ -19,13 +19,11 @@ writeShellScriptBin "vscodeExts2nix" ''
   echo '['
 
   for line in $(${vscode}/bin/code --list-extensions --show-versions \
-    ${
-      lib.optionalString (extensionsToIgnore != [ ]) ''
-        | grep -v -i '^\(${
-          lib.concatMapStringsSep "\\|" (e: "${e.publisher}.${e.name}") extensionsToIgnore
-        }\)'
-      ''
-    }
+    ${lib.optionalString (extensionsToIgnore != [ ]) ''
+      | grep -v -i '^\(${
+        lib.concatMapStringsSep "\\|" (e: "${e.publisher}.${e.name}") extensionsToIgnore
+      }\)'
+    ''}
   ) ; do
     [[ $line =~ ([^.]*)\.([^@]*)@(.*) ]]
     name=''${BASH_REMATCH[2]}

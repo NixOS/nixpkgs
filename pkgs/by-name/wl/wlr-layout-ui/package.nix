@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wlr-layout-ui";
-  version = "1.6.14";
+  version = "1.6.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Qgg4fdxOVkADDOxmQgQFSF/wgrEQihoRNC9oXeQvaoI=";
+    tag = version;
+    hash = "sha256-CghOj5fQnuHd6PMeLOX4NKdVw7+pueZXahzYcAMwNOA=";
   };
 
   nativeBuildInputs = [

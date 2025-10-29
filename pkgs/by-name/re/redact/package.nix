@@ -21,7 +21,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     install -Dm444 ${appimageContents}/redact.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/redact.png -t $out/share/icons/hicolor/512x512/apps/redact.png
     substituteInPlace $out/share/applications/redact.desktop \
@@ -49,7 +49,7 @@ appimageTools.wrapType2 {
       '';
 
   meta = {
-    description = "The only platform that allows you to automatically clean up your old posts from services like Twitter, Reddit, Facebook, Discord, and more, all in one place.";
+    description = "Only platform that allows you to automatically clean up your old posts from services like Twitter, Reddit, Facebook, Discord, and more, all in one place";
     homepage = "https://redact.dev/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ reputable2772 ];

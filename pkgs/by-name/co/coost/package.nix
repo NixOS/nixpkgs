@@ -32,9 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optional withCurl "-DWITH_LIBCURL=ON" ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
+  ]
+  ++ lib.optional withCurl "-DWITH_LIBCURL=ON"
+  ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {

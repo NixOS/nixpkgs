@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, boehmgc
-, glib
-, help2man
-, libgee
-, ncurses
-, perl
-, pkg-config
-, vala
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boehmgc,
+  glib,
+  help2man,
+  libgee,
+  ncurses,
+  perl,
+  pkg-config,
+  vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zile";
-  version = "2.6.2";
+  version = "2.6.4";
 
   src = fetchurl {
-    url = "mirror://gnu/zile/${pname}-${version}.tar.gz";
-    hash = "sha256-d+t9r/PJi9yI2qGsBA3MynK4HcMvwxZuB53Xpj5Cx0E=";
+    url = "mirror://gnu/zile/zile-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1dRLhctJBkPQcH4aIYbzoymYwvbquqlIFHm2XK7uV8A=";
   };
 
   buildInputs = [
@@ -39,15 +40,15 @@ stdenv.mkDerivation rec {
   # fiddle with the terminal.
   doCheck = false;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/zile/";
-    changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${version}";
-    description = "Zile Implements Lua Editors";
+    changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${finalAttrs.version}";
+    description = "Implements Lua Editors";
     longDescription = ''
       GNU Zile is a text editor development kit, so that you can (relatively)
       quickly develop your own ideal text editor without reinventing the wheel
@@ -76,9 +77,9 @@ stdenv.mkDerivation rec {
       Lossy Emacs.  Zile has been written to be as similar as possible to Emacs;
       every Emacs user should feel at home.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
     mainProgram = "zile";
   };
-}
+})

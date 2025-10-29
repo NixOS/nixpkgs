@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "mympd";
 
   nodes.mympd = {
@@ -24,4 +25,4 @@ import ./make-test-python.nix ({pkgs, lib, ... }: {
     # Ensure that the web server is working
     machine.succeed("curl http://localhost:8081 --compressed | grep -o myMPD")
   '';
-})
+}

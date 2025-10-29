@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.3";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
+    tag = version;
+    hash = "sha256-HgPQPyxDvKrmqGiHjiVGxEguYUcaNYwK1gZoMMkQWhM=";
   };
 
   nativeBuildInputs = [

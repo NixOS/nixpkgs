@@ -1,37 +1,31 @@
-{ lib
-, python3
-, fetchPypi
-, fetchFromGitHub
-, fetchpatch
-, git
-, postgresql
-, postgresqlTestHook
-, redis
+{
+  lib,
+  python3,
+  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
+  git,
+  postgresql,
+  postgresqlTestHook,
+  valkey,
+  redisTestHook,
 }:
 
 let
   py = python3.override {
     self = py;
     packageOverrides = final: prev: {
-      # sqlalchemy 1.4.x or 2.x are not supported
-      sqlalchemy = prev.sqlalchemy_1_4.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.24";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
-        };
-        postPatch = ''
-          sed -i '/tag_build = dev/d' setup.cfg
-        '';
-        doCheck = false;
-      });
-      alembic = prev.alembic.overridePythonAttrs (lib.const {
-        doCheck = false;
-      });
-      factory-boy = prev.factory-boy.overridePythonAttrs (lib.const {
-        doCheck = false;
-      });
+      # sqlalchemy 2.0 is not supported
+      sqlalchemy = prev.sqlalchemy_1_4;
+
+      # checkInputs do not work wiht sqlalchemy < 2.0
+      factory-boy = prev.factory-boy.overridePythonAttrs (
+        lib.const {
+          doCheck = false;
+        }
+      );
+
+      # https://github.com/irrdnet/irrd/blob/22fe77e46ef1b4e43e346257795e171e7ee70d44/pyproject.toml#L30
       beautifultable = prev.beautifultable.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.0";
         src = fetchPypi {
@@ -47,110 +41,93 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.4.4";
-  format = "pyproject";
+  version = "4.5.0b1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     rev = "v${version}";
-    hash = "sha256-UIOKXU92JEOeVdpYLNmDBtLn0u3LMdKItcn9bFd9u8g=";
+    hash = "sha256-Hr/PbC4N/yrYeQ7bTfqIchDFmaL3c4afxV1XS7FR1F8=";
   };
-
-  patches = [
-    # starlette 0.37.2 reverted the behaviour change which this adjusted to
-    (fetchpatch {
-      url = "https://github.com/irrdnet/irrd/commit/43e26647e18f8ff3459bbf89ffbff329a0f1eed5.patch";
-      revert = true;
-      hash = "sha256-G216rHfWMZIl9GuXBz6mjHCIm3zrfDDLSmHQK/HkkzQ=";
-    })
-    # Backport build fix for webauthn 2.1
-    (fetchpatch {
-      url = "https://github.com/irrdnet/irrd/commit/20b771e1ee564f38e739fdb0a2a79c10319f638f.patch";
-      hash = "sha256-PtNdhSoFPT1kt71kFsySp/VnUpUdO23Gu9FKknHLph8=";
-      includes = ["irrd/webui/auth/endpoints_mfa.py"];
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail psycopg2-binary psycopg2
+      --replace-fail py-radix py-radix-sr
   '';
+
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   nativeCheckInputs = [
     git
-    redis
+    valkey
+    redisTestHook
     postgresql
     postgresqlTestHook
-  ] ++ (with py.pkgs; [
-    pytest-asyncio
+  ]
+  ++ (with py.pkgs; [
+    pytest-asyncio_0
     pytest-freezegun
     pytestCheckHook
     smtpdfix
     httpx
   ]);
 
-  propagatedBuildInputs = with py.pkgs; [
-    python-gnupg
-    passlib
-    bcrypt
-    ipy
-    ordered-set
-    beautifultable
-    pyyaml
-    datrie
-    setproctitle
-    python-daemon
-    pid
-    py.pkgs.redis
-    hiredis
-    coredis
-    requests
-    pytz
-    ariadne
-    uvicorn
-    starlette
-    psutil
-    asgiref
-    pydantic
-    typing-extensions
-    py-radix-sr
-    psycopg2
-    sqlalchemy
-    alembic
-    ujson
-    wheel
-    websockets
-    limits
-    factory-boy
-    webauthn
-    wtforms
-    imia
-    starlette-wtf
-    zxcvbn
-    pyotp
-    asgi-logger
-    wtforms-bootstrap5
-    email-validator
-    jinja2
-  ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
+  dependencies =
+    with py.pkgs;
+    [
+      python-gnupg
+      passlib
+      bcrypt
+      ipy
+      ordered-set
+      beautifultable
+      pyyaml
+      datrie
+      setproctitle
+      python-daemon
+      pid
+      py.pkgs.redis
+      hiredis
+      coredis
+      requests
+      pytz
+      ariadne
+      uvicorn
+      starlette
+      psutil
+      asgiref
+      pydantic
+      typing-extensions
+      py-radix-sr
+      psycopg2-binary
+      sqlalchemy
+      alembic
+      ujson
+      wheel
+      websockets
+      limits
+      factory-boy
+      webauthn
+      wtforms
+      imia
+      starlette-wtf
+      zxcvbn
+      pyotp
+      asgi-logger
+      wtforms-bootstrap5
+      email-validator
+      jinja2
+      joserfc
+      time-machine
+    ]
+    ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
-    redis-server &
-    REDIS_PID=$!
-
-    while ! redis-cli --scan ; do
-      echo waiting for redis
-      sleep 1
-    done
-
     export SMTPD_HOST=127.0.0.1
-    export IRRD_DATABASE_URL="postgres:///$PGDATABASE"
+    export IRRD_DATABASE_URL="postgresql:///$PGDATABASE"
     export IRRD_REDIS_URL="redis://localhost/1"
   '';
 
@@ -164,17 +141,22 @@ py.pkgs.buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  # skip tests that require internet access
   disabledTests = [
+    # Skip tests that require internet access
     "test_020_dash_o_noop"
     "test_050_non_json_response"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Doesn't work with later pytest releases
+    "irrd/server/whois/tests/test_query_response.py"
+  ];
+
+  meta = {
     changelog = "https://irrd.readthedocs.io/en/v${version}/releases/";
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
-    maintainers = teams.wdz.members;
+    teams = [ lib.teams.wdz ];
   };
 }

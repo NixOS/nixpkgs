@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, exiv2
-, flex
-, libewf
-, libxml2
-, openssl
-, zlib
-, pkg-config
-, python310
-, re2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  exiv2,
+  flex,
+  libewf,
+  libxml2,
+  openssl,
+  zlib,
+  pkg-config,
+  python310,
+  re2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "bulk_extractor";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jj/amXESFBu/ZaiIRlDKmtWTBVQ2TEvOM2jBYP3y1L8=";
     fetchSubmodules = true;
   };

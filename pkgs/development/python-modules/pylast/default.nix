@@ -6,23 +6,20 @@
   hatch-vcs,
   hatchling,
   httpx,
-  importlib-metadata,
+  pytest-random-order,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "5.3.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dgqTNISeyBkZ2m68pqw5rsoyPxLW4wWkv6iqq9bD5Ek=";
+    tag = version;
+    hash = "sha256-mwPiHTLFvaCFPZGqi0+T223Ickbm5JP2MJj4gqaj/qo=";
   };
 
   build-system = [
@@ -30,9 +27,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ httpx ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
+    pytest-random-order
     pytestCheckHook
     flaky
   ];
@@ -42,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
-    changelog = "https://github.com/pylast/pylast/releases/tag/${version}";
+    changelog = "https://github.com/pylast/pylast/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       fab

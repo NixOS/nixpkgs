@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, avahi
-, bluez
-, boost
-, curl
-, eigen
-, faust
-, fftw
-, gettext
-, glib
-, glib-networking
-, glibmm
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, gtk3
-, gtkmm3
-, hicolor-icon-theme
-, intltool
-, ladspaH
-, libjack2
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, pkg-config
-, python3
-, sassc
-, serd
-, sord
-, sratom
-, wafHook
-, wrapGAppsHook3
-, zita-convolver
-, zita-resampler
-, optimizationSupport ? false # Enable support for native CPU extensions
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  avahi,
+  bluez,
+  boost,
+  curl,
+  eigen,
+  faust,
+  fftw,
+  gettext,
+  glib,
+  glib-networking,
+  glibmm,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtkmm3,
+  hicolor-icon-theme,
+  intltool,
+  ladspaH,
+  libjack2,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  pkg-config,
+  python3,
+  sassc,
+  serd,
+  sord,
+  sratom,
+  wafHook,
+  wrapGAppsHook3,
+  zita-convolver,
+  zita-resampler,
+  optimizationSupport ? false, # Enable support for native CPU extensions
 }:
 
 let
@@ -100,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-  ] ++ optional optimizationSupport "--optimization";
+  ]
+  ++ optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
@@ -131,7 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/brummer10/guitarix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astsmtl lord-valen ];
+    maintainers = with maintainers; [
+      lord-valen
+    ];
     platforms = platforms.linux;
   };
 })

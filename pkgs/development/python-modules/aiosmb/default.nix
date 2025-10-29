@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.11";
+  version = "0.4.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bWb1HtI1T3byBmE+rA1j83z9ntRL6figZZTUECRCc9c=";
+    hash = "sha256-ytnzpUnshwKczXgqNPL0vouBMSgY52zONOrwraUVnk8=";
   };
 
   build-system = [ setuptools ];

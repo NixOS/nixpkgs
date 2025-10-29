@@ -3,17 +3,18 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.0.10";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BViobWl+9ypTcQJWtZ9pbeU4cmHcFNZWlsmQUOO64Vc=";
+    tag = version;
+    hash = "sha256-qjnQTkQiufHPEwMH+F+XE+VBc/DSTX6d0vxot35xbUc=";
   };
 
   postPatch = ''
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
@@ -42,5 +43,8 @@ stdenv.mkDerivation rec {
       racci
     ];
     platforms = lib.platforms.linux;
+
+    # Broken due to missing linux/minmax.h
+    broken = kernel.kernelOlder "5.10";
   };
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "cose";
-  version = "1.0.1";
+  version = "1.1.0";
 
   format = "pyproject";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "TimothyClaeys";
     repo = "pycose";
     rev = "v${version}";
-    hash = "sha256-8d6HebWlSKgx7dmOnT7ZZ5mrMfg6mNWhz1hHPv75XF4=";
+    hash = "sha256-HgGGmOvBadLDTAEkUY6aLC7r0aGKGfQv/Zyl8Orh8U0=";
   };
 
   propagatedBuildInputs = [

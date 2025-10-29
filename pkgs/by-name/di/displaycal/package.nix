@@ -1,22 +1,23 @@
-{ lib
-, python3
-, fetchPypi
-, wrapGAppsHook3
-, gtk3
-, librsvg
-, xorg
-, argyllcms
+{
+  lib,
+  python3,
+  fetchPypi,
+  wrapGAppsHook3,
+  gtk3,
+  librsvg,
+  xorg,
+  argyllcms,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.9.14";
+  version = "3.9.17";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
-    hash = "sha256-2I5fiWgS9n7IY/ZayWBvEaP0uNIAXfvkyqQe2vLFPJw=";
+    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +41,8 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-  ] ++ (with xorg; [
+  ]
+  ++ (with xorg; [
     libX11
     libXxf86vm
     libXext

@@ -5,22 +5,24 @@
   copyDesktopItems,
   python3,
   xdg-utils,
-  electron,
+  electron_36,
   makeDesktopItem,
 }:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.10.2";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vzTT8tHpbJSt1PosgKTg3pT4a9UfPabtJppLLD9znhU=";
+    tag = "v${version}";
+    hash = "sha256-u2Asoc5cwVRtD6yz77iJ8hA2IfVSA4iYI8snPCLufnE=";
   };
 
-  npmDepsHash = "sha256-nVQv+GSnfQa8V/RitvV2juokbiRJ/vIMLWcg9QPDbP0=";
+  npmDepsHash = "sha256-sREnthfmE01yzVwqMN6zbhTAquulztriytMSOcj3ZCo=";
+
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -53,9 +55,9 @@ buildNpmPackage rec {
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_36}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/
 
       runHook postInstall
@@ -78,7 +80,7 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A Discord and SpaceBar electron-based client implemented without Discord API";
+    description = "Discord and SpaceBar electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
@@ -86,6 +88,7 @@ buildNpmPackage rec {
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
       huantian
+      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };

@@ -4,6 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
+  pyqtwebengine,
 
   # build-system
   setuptools,
@@ -12,12 +13,14 @@
   aiohttp,
   asyncssh,
   atomicwrites,
+  bcrypt,
   chardet,
   cloudpickle,
   cookiecutter,
   diff-match-patch,
   fzf,
   intervaltree,
+  ipython-pygments-lexers,
   jedi,
   jellyfish,
   keyring,
@@ -25,6 +28,7 @@
   nbconvert,
   numpy,
   numpydoc,
+  packaging,
   pickleshare,
   psutil,
   pygithub,
@@ -32,8 +36,8 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
-  pyqtwebengine,
   python-lsp-black,
+  python-lsp-ruff,
   python-lsp-server,
   pyuca,
   pyzmq,
@@ -55,34 +59,37 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.2";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPUrAYFn3k5NQrsk7B2aPFnkAxKSKC4I97DnFPK1pvM=";
+    hash = "sha256-UgDGJJuwNzB0VfAMgGM/UIhNarQ6da18XKE9JGJXRjY=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [
-    pyqtwebengine.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
-  build-system = [
-    setuptools
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "ipython"
+    "python-lsp-server"
   ];
 
   dependencies = [
     aiohttp
     asyncssh
     atomicwrites
+    bcrypt
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
     fzf
     intervaltree
+    ipython-pygments-lexers
     jedi
     jellyfish
     keyring
@@ -90,6 +97,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    packaging
     pickleshare
     psutil
     pygithub
@@ -99,6 +107,7 @@ buildPythonPackage rec {
     pyopengl
     pyqtwebengine
     python-lsp-black
+    python-lsp-ruff
     python-lsp-server
     pyuca
     pyzmq
@@ -116,7 +125,8 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
-  ] ++ python-lsp-server.optional-dependencies.all;
+  ]
+  ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
@@ -143,9 +153,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

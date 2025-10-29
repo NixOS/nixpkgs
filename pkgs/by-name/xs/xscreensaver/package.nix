@@ -1,47 +1,51 @@
-{ lib
-, stdenv
-, fetchurl
-, coreutils
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, gettext
-, gle
-, gtk3
-, intltool
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXft
-, libXi
-, libXinerama
-, libXrandr
-, libXt
-, libXxf86vm
-, libxml2
-, makeWrapper
-, pam
-, perlPackages
-, xorg
-, pkg-config
-, systemd
-, forceInstallAllHacks ? true
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, nixosTests
-, substituteAll
-, wrapperPrefix ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  gettext,
+  gle,
+  gtk3,
+  intltool,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXft,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXt,
+  libXxf86vm,
+  libxml2,
+  makeWrapper,
+  pam,
+  perlPackages,
+  xorg,
+  pkg-config,
+  systemd,
+  forceInstallAllHacks ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  nixosTests,
+  replaceVars,
+  wrapperPrefix ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.09";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9GZ3Ba24zEP9LzlzqIobVLFvIBkK/pOyHiIfL1cyCwU=";
+    hash = "sha256-T/Z5ghfju7w8cza+7afoPq+/AzAawpsiNtpmoPExdkM=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     intltool
@@ -80,8 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./xscreensaver-wrapper-prefix.patch;
+    (replaceVars ./xscreensaver-wrapper-prefix.patch {
       inherit wrapperPrefix;
     })
   ];
@@ -103,7 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl xorg.appres ]}" \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            coreutils
+            perlPackages.perl
+            xorg.appres
+          ]
+        }" \
         --prefix PERL5LIB ':' $PERL5LIB
     done
   ''
@@ -125,7 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of screensavers";
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      raskin
+    ];
     platforms = lib.platforms.unix;
   };
 })

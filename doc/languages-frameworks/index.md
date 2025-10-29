@@ -53,10 +53,11 @@ Each supported language or software ecosystem has its own package set named `<la
 ```{=include=} sections
 agda.section.md
 android.section.md
+astal.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
+cosmic.section.md
 crystal.section.md
 cuda.section.md
 cuelang.section.md
@@ -65,6 +66,7 @@ dhall.section.md
 dlang.section.md
 dotnet.section.md
 emscripten.section.md
+factor.section.md
 gnome.section.md
 go.section.md
 gradle.section.md
@@ -95,6 +97,7 @@ scheme.section.md
 swift.section.md
 tcl.section.md
 texlive.section.md
-titanium.section.md
+typst.section.md
 vim.section.md
+neovim.section.md
 ```

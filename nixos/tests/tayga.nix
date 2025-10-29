@@ -22,7 +22,7 @@
 #        |         Route:   192.0.2.0/24 via 100.64.0.1
 #        +------
 
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   name = "tayga";
@@ -31,11 +31,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   };
 
   nodes = {
-    # The server is configured with static IPv4 addresses. RFC 6052 Section 3.1
-    # disallows the mapping of non-global IPv4 addresses like RFC 1918 into the
-    # Well-Known Prefix 64:ff9b::/96. TAYGA also does not allow the mapping of
-    # documentation space (RFC 5737). To circumvent this, 100.64.0.2/24 from
-    # RFC 6589 (Carrier Grade NAT) is used here.
+    # The server is configured with static IPv4 addresses. We have to disable the
+    # well-known prefix restrictions (as required by RFC 6052 Section 3.1) because
+    # we're using private space (TAYGA also considers documentation space non-global,
+    # unfortunately).
     # To reach the IPv4 address pool of the NAT64 gateway, there is a static
     # route configured. In normal cases, where the router would also source NAT
     # the pool addresses to one IPv4 addresses, this would not be needed.
@@ -45,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ];
       networking = {
         useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
+        interfaces.eth1 = lib.mkForce { };
       };
       systemd.network = {
         enable = true;
@@ -55,11 +54,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "100.64.0.2/24"
           ];
           routes = [
-            { Destination = "192.0.2.0/24"; Gateway = "100.64.0.1"; }
+            {
+              Destination = "192.0.2.0/24";
+              Gateway = "100.64.0.1";
+            }
           ];
         };
       };
       programs.mtr.enable = true;
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     # The router is configured with static IPv4 addresses towards the server
@@ -84,17 +87,28 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ];
 
       networking = {
+        hostName = "router-systemd";
         useDHCP = false;
         useNetworkd = true;
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
           ipv4 = {
-            addresses = [ { address = "100.64.0.1"; prefixLength = 24; } ];
+            addresses = [
+              {
+                address = "100.64.0.1";
+                prefixLength = 24;
+              }
+            ];
           };
         };
         interfaces.eth2 = lib.mkForce {
           ipv6 = {
-            addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
+            addresses = [
+              {
+                address = "2001:db8::1";
+                prefixLength = 64;
+              }
+            ];
           };
         };
       };
@@ -124,7 +138,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         mappings = {
           "192.0.2.42" = "2001:db8::2";
         };
+        log = [
+          "drop"
+          "reject"
+          "icmp"
+          "self"
+        ];
+        wkpfStrict = false;
       };
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     router_nixos = {
@@ -139,16 +161,27 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ];
 
       networking = {
+        hostName = "router-nixos";
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
           ipv4 = {
-            addresses = [ { address = "100.64.0.1"; prefixLength = 24; } ];
+            addresses = [
+              {
+                address = "100.64.0.1";
+                prefixLength = 24;
+              }
+            ];
           };
         };
         interfaces.eth2 = lib.mkForce {
           ipv6 = {
-            addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
+            addresses = [
+              {
+                address = "2001:db8::1";
+                prefixLength = 64;
+              }
+            ];
           };
         };
       };
@@ -178,7 +211,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         mappings = {
           "192.0.2.42" = "2001:db8::2";
         };
+        log = [
+          "drop"
+          "reject"
+          "icmp"
+          "self"
+        ];
+        wkpfStrict = false;
       };
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     # The client is configured with static IPv6 addresses. It has also a static
@@ -191,7 +232,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       networking = {
         useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
+        interfaces.eth1 = lib.mkForce { };
       };
 
       systemd.network = {
@@ -202,11 +243,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "2001:db8::2/64"
           ];
           routes = [
-            { Destination = "64:ff9b::/96"; Gateway = "2001:db8::1"; }
+            {
+              Destination = "64:ff9b::/96";
+              Gateway = "2001:db8::1";
+            }
           ];
         };
       };
       programs.mtr.enable = true;
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
   };
 
@@ -247,4 +292,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       router.log(router.execute("systemd-analyze security tayga.service")[1])
       router.shutdown()
   '';
-})
+}

@@ -6,7 +6,6 @@
   qtpositioning,
   qtsvg,
   exiv2,
-  kirigami-addons,
 }:
 let
   # URLs snapshotted through
@@ -34,13 +33,16 @@ mkKdeDerivation {
     ln -s ${cities1000} src/cities1000.zip
   '';
 
+  patches = [
+    ./optional-runtime-dependencies.patch
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtmultimedia
     qtpositioning
     qtsvg
     exiv2
-    kirigami-addons
   ];
   meta.mainProgram = "koko";
 }

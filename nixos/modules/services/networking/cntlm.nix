@@ -1,28 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.cntlm;
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "cntlm.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "cntlm.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "lighttpd.conf" ''
-      # Cntlm Authentication Proxy Configuration
-      Username ${cfg.username}
-      Domain ${cfg.domain}
-      Password ${cfg.password}
-      ${lib.optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
-      ${lib.concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
-      ${lib.optionalString (cfg.noproxy != []) "NoProxy ${lib.concatStringsSep ", " cfg.noproxy}"}
+      pkgs.writeText "lighttpd.conf" ''
+        # Cntlm Authentication Proxy Configuration
+        Username ${cfg.username}
+        Domain ${cfg.domain}
+        Password ${cfg.password}
+        ${lib.optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
+        ${lib.concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
+        ${lib.optionalString (cfg.noproxy != [ ]) "NoProxy ${lib.concatStringsSep ", " cfg.noproxy}"}
 
-      ${lib.concatMapStrings (port: ''
-        Listen ${toString port}
-      '') cfg.port}
+        ${lib.concatMapStrings (port: ''
+          Listen ${toString port}
+        '') cfg.port}
 
-      ${cfg.extraConfig}
-    '';
+        ${cfg.extraConfig}
+      '';
 
 in
 
@@ -74,13 +80,16 @@ in
       description = ''
         A list of domains where the proxy is skipped.
       '';
-      default = [];
+      default = [ ];
       type = lib.types.listOf lib.types.str;
-      example = [ "*.example.com" "example.com" ];
+      example = [
+        "*.example.com"
+        "example.com"
+      ];
     };
 
     port = lib.mkOption {
-      default = [3128];
+      default = [ 3128 ];
       type = lib.types.listOf lib.types.port;
       description = "Specifies on which ports the cntlm daemon listens.";
     };
@@ -92,9 +101,9 @@ in
     };
 
     configText = lib.mkOption {
-       type = lib.types.lines;
-       default = "";
-       description = "Verbatim contents of {file}`cntlm.conf`.";
+      type = lib.types.lines;
+      default = "";
+      description = "Verbatim contents of {file}`cntlm.conf`.";
     };
 
   };

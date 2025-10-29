@@ -1,4 +1,20 @@
-{lib, stdenv, fetchurl, dpkg, makeWrapper, gnused, coreutils, psutils, gnugrep, ghostscript, file, a2ps, gawk, which, pkgsi686Linux }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  gnused,
+  coreutils,
+  psutils,
+  gnugrep,
+  ghostscript,
+  file,
+  a2ps,
+  gawk,
+  which,
+  pkgsi686Linux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cups-brother-${model}";
@@ -19,7 +35,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-N1GjQHth5k4qhbfWLInzub9DcNsee4gKc3EW2WIfrko=";
   };
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  nativeBuildInputs = [
+    makeWrapper
+    dpkg
+  ];
 
   preUnpack = ''
     dpkg-deb -x ${lprdeb} $out
@@ -70,13 +89,34 @@ stdenv.mkDerivation rec {
       --replace-fail printcap.local printcap
 
     wrapProgram $dir/lpd/filter${model} \
-      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          ghostscript
+          a2ps
+          file
+          gnused
+          coreutils
+        ]
+      }
 
     wrapProgram $dir/inf/setupPrintcapij \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+        ]
+      }
 
     wrapProgram $dir/lpd/psconvertij2 \
-      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript gnused coreutils gawk which ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          ghostscript
+          gnused
+          coreutils
+          gawk
+          which
+        ]
+      }
 
     patchelf --set-interpreter "$interpreter" "$dir/lpd/br${model}filter"
     patchelf --set-interpreter "$interpreter" "$out/usr/bin/brprintconf_${model}"
@@ -96,15 +136,31 @@ stdenv.mkDerivation rec {
       --replace-fail /usr/share/cups/model/Brother "$out/share/cups/model/Brother"
 
     wrapProgram $out/lib/cups/filter/brother_lpdwrapper_${model} \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils psutils gnused gnugrep ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          psutils
+          gnused
+          gnugrep
+        ]
+      }
   '';
 
   meta = with lib; {
     homepage = "https://www.brother.com/";
     description = "Brother ${model} printer driver";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode fromSource ];
-    license = with licenses; [ unfree gpl2Plus ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    sourceProvenance = with sourceTypes; [
+      binaryNativeCode
+      fromSource
+    ];
+    license = with licenses; [
+      unfree
+      gpl2Plus
+    ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=${model}_all&os=128";
     maintainers = with maintainers; [ luna_1024 ];
   };

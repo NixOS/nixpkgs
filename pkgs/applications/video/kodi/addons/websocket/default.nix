@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, six }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  six,
+}:
 
 buildKodiAddon rec {
   pname = "websocket";
@@ -25,6 +32,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/websocket-client/websocket-client";
     description = "WebSocket client for Python";
     license = licenses.lgpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

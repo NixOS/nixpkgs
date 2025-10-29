@@ -1,6 +1,7 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 }:
 
 buildHomeAssistantComponent rec {
@@ -14,6 +15,10 @@ buildHomeAssistantComponent rec {
     rev = version;
     hash = "sha256-68clZgS7Qo62srcZWD3Un9BnNSwQUBr4Z5oBMTC9m8o=";
   };
+
+  # https://github.com/lichtteil/local_luftdaten/pull/70
+  # Replace undeclared async-timeout dependency with native asyncio.timeout
+  patches = [ ./async-timeout.patch ];
 
   meta = with lib; {
     changelog = "https://github.com/lichtteil/local_luftdaten/releases/tag/${version}";

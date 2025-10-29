@@ -1,24 +1,26 @@
-{ stdenv
-, lib
-, fetchhg
-, cmake
-, pkg-config
-, makeWrapper
-, callPackage
-, soundfont-fluid
-, SDL_compat
-, libGL
-, glew
-, bzip2
-, zlib
-, libjpeg
-, fluidsynth
-, fmodex
-, openssl
-, gtk2
-, python3
-, game-music-emu
-, serverOnly ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  callPackage,
+  soundfont-fluid,
+  SDL_compat,
+  libGL,
+  libopus,
+  glew,
+  bzip2,
+  zlib,
+  libjpeg,
+  fluidsynth,
+  fmodex,
+  openssl,
+  gtk2,
+  python3,
+  game-music-emu,
+  serverOnly ? false,
 }:
 
 let
@@ -28,46 +30,66 @@ let
   clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zandronum${suffix}";
-  version = "3.1.0";
+  version = "3.2.1";
 
-  src = fetchhg {
-    # expired ssl certificate
-    url = "http://hg.osdn.net/view/zandronum/zandronum-stable";
-    rev = "4178904d7698";
-    hash = "sha256-5t36CoRPPjDKQE0DVSv2Qqpqko6JAXBI53tuAYiylHQ=";
+  src = fetchFromGitLab {
+    domain = "foss.heptapod.net";
+    owner = "zandronum";
+    repo = "zandronum-stable";
+    tag = "ZA_${finalAttrs.version}";
+    hash = "sha256-A5sfZMiCypBxAUOsoB8yuinZf7b9D7+HH9rpVs3esgA=";
   };
 
   # zandronum tries to download sqlite now when running cmake, don't let it
-  # it also needs the current mercurial revision info embedded in gitinfo.h
-  # otherwise, the client will fail to connect to servers because the
-  # protocol version doesn't match.
-  patches = [ ./zan_configure_impurity.patch ./dont_update_gitinfo.patch ./add_gitinfo.patch ];
+  patches = [
+    ./zan_configure_impurity.patch
+  ];
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
-  buildInputs = [ openssl bzip2 zlib SDL_compat libjpeg sqlite game-music-emu ]
-    ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
+  buildInputs = [
+    openssl
+    bzip2
+    zlib
+    SDL_compat
+    libjpeg
+    sqlite
+    game-music-emu
+  ]
+  ++ lib.optionals (!serverOnly) [
+    libGL
+    glew
+    fmod
+    fluidsynth
+    libopus
+    gtk2
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+    python3
+  ];
 
   preConfigure = ''
     ln -s ${sqlite}/* sqlite/
-    sed -ie 's| restrict| _restrict|g' dumb/include/dumb.h \
+    sed -i -e 's| restrict| _restrict|g' dumb/include/dumb.h \
                                        dumb/src/it/*.c
-  '' + lib.optionalString (!serverOnly) ''
+  ''
+  + lib.optionalString (!serverOnly) ''
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
       src/sound/music_fluidsynth_mididevice.cpp
   '';
 
-  cmakeFlags =
-    [ "-DFORCE_INTERNAL_GME=OFF" ]
-    ++ (if serverOnly
-    then [ "-DSERVERONLY=ON" ]
-    else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
+  cmakeFlags = [
+    "-DFORCE_INTERNAL_GME=OFF"
+  ]
+  ++ (if serverOnly then [ "-DSERVERONLY=ON" ] else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 
   hardeningDisable = [ "format" ];
 
@@ -93,12 +115,12 @@ stdenv.mkDerivation rec {
     inherit fmod sqlite;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     mainProgram = "zandronum-server";
-    maintainers = with maintainers; [ lassulus ];
-    license = licenses.sleepycat;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lassulus ];
+    license = lib.licenses.sleepycat;
+    platforms = lib.platforms.linux;
   };
-}
+})

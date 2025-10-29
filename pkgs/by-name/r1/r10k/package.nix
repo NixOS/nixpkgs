@@ -10,7 +10,7 @@
   testers,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "r10k";
   gemdir = ./.;
   exes = [ "r10k" ];
@@ -33,14 +33,19 @@ bundlerApp {
       package = r10k;
       version = (import ./gemset.nix).r10k.version;
     };
-    updateScript = bundlerUpdateScript "r10k";
+    updateScript = bundlerUpdateScript pname;
   };
 
   meta = {
     description = "Puppet environment and module deployment";
     homepage = "https://github.com/puppetlabs/r10k";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ zimbatm manveru nicknovitski anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      zimbatm
+      manveru
+      nicknovitski
+      anthonyroussel
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "r10k";
   };

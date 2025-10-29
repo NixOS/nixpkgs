@@ -34,10 +34,9 @@ index 4c1e73dcf0..68502915dc 100644
 +++ b/src/rust/Cargo.toml
 @@ -15,7 +15,7 @@
  env_logger = "0.8.4"
- iconv = "0.1.1"
- palette = "0.6.0"
--rsmpeg = { version = "0.14.1", optional = true, features = [
+ palette = "0.6.1"
+-rsmpeg = { version = "0.14.2", optional = true, features = [
 +rsmpeg = { version = "0.15.1", optional = true, features = [
      "link_system_ffmpeg",
  ] }
- tesseract-sys = { version = "0.5.14", optional = true, default-features = false }
+ tesseract-sys = { version = "0.5.15", optional = true, default-features = false }

@@ -1,58 +1,92 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, jre
-, jre8
-, genericUpdater
-, writeShellScript
-, common-updater-scripts
-, gnused
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  jre,
+  jre8,
+  genericUpdater,
+  writeShellScript,
+  makeWrapper,
+  common-updater-scripts,
+  gnused,
 }:
 
 let
   inherit (lib.versions) major majorMinor splitVersion;
   inherit (lib.strings) concatStringsSep versionAtLeast;
 
-  common = { pname, version, src, description, java ? jre
-           , prog ? null, jar ? null, license ? lib.licenses.mpl20
-           , updateScript ? null }:
-    stdenv.mkDerivation (finalAttrs: let
-      mainProgram = if prog == null then pname else prog;
-      jar' = if jar == null then pname else jar;
-    in {
-      inherit pname version src;
+  common =
+    {
+      pname,
+      version,
+      src,
+      description,
+      java ? jre,
+      prog ? null,
+      jar ? null,
+      license ? lib.licenses.mpl20,
+      updateScript ? null,
+    }:
+    stdenvNoCC.mkDerivation (
+      finalAttrs:
+      let
+        mainProgram = if prog == null then pname else prog;
+        jar' = if jar == null then pname else jar;
+      in
+      {
+        inherit pname version src;
 
-      nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [
+          unzip
+          makeWrapper
+        ];
 
-      buildCommand = ''
-        unzip $src -d $out
-        mkdir -p $out/bin $out/share $out/share/java
-        cp -s "$out"/*.jar "$out/share/java/"  # */
-        rm -rf $out/notices
-        mv $out/doc $out/share
-        cat > $out/bin/${mainProgram} <<EOF
-        #! $shell
-        export JAVA_HOME=${jre}
-        exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
-        EOF
-        chmod a+x $out/bin/${mainProgram}
-      '';
+        sourceRoot = ".";
 
-      passthru = lib.optionalAttrs (updateScript != null) {
-        inherit updateScript;
-      };
+        installPhase = ''
+          runHook preInstall
 
-      meta = with lib; {
-        inherit description license mainProgram;
-        homepage = if versionAtLeast finalAttrs.version "11"
-          then "https://www.saxonica.com/products/latest.xml"
-          else "https://www.saxonica.com/products/archive.xml";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        maintainers = with maintainers; [ rvl ];
-        platforms = platforms.all;
-      };
-    });
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
+
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
+
+          # Other distributions like debian distribute it as saxon*-xslt,
+          # this makes compilling packages that target other distros easier.
+          ln -s $out/bin/${mainProgram} $out/bin/${mainProgram}-xslt
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
+
+        passthru = lib.optionalAttrs (updateScript != null) {
+          inherit updateScript;
+        };
+
+        meta = with lib; {
+          inherit description license mainProgram;
+          homepage =
+            if versionAtLeast finalAttrs.version "11" then
+              "https://www.saxonica.com/products/latest.xml"
+            else
+              "https://www.saxonica.com/products/archive.xml";
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+          maintainers = with maintainers; [ rvl ];
+          platforms = platforms.all;
+        };
+      }
+    );
 
   # Saxon release zipfiles and tags often use dashes instead of dots.
   dashify = version: concatStringsSep "-" (splitVersion version);
@@ -63,31 +97,41 @@ let
   # Older releases were uploaded to SourceForge. They are also
   # available from the Saxon-Archive GitHub repository.
   github = {
-    updateScript = version: genericUpdater {
-      versionLister = writeShellScript "saxon-he-versionLister" ''
-        export PATH="${lib.makeBinPath [ common-updater-scripts gnused ]}:$PATH"
-        major_ver="${major version}"
-        list-git-tags --url="https://github.com/Saxonica/Saxon-HE.git" \
-          | sed -En \
-            -e "s/SaxonHE([0-9]+)-([0-9]+)/\1.\2/" \
-            -e "/^''${major_ver:-[0-9]+}\./p"
+    updateScript =
+      version:
+      genericUpdater {
+        versionLister = writeShellScript "saxon-he-versionLister" ''
+          export PATH="${
+            lib.makeBinPath [
+              common-updater-scripts
+              gnused
+            ]
+          }:$PATH"
+          major_ver="${major version}"
+          list-git-tags --url="https://github.com/Saxonica/Saxon-HE.git" \
+            | sed -En \
+              -e "s/SaxonHE([0-9]+)-([0-9]+)/\1.\2/" \
+              -e "/^''${major_ver:-[0-9]+}\./p"
         '';
       };
 
-    downloadUrl = version: let
-      tag = "SaxonHE${dashify version}";
-      filename = "${major version}/Java/${tag}J.zip";
-    in
+    downloadUrl =
+      version:
+      let
+        tag = "SaxonHE${dashify version}";
+        filename = "${major version}/Java/${tag}J.zip";
+      in
       "https://raw.githubusercontent.com/Saxonica/Saxon-HE/${tag}/${filename}";
   };
 
-in {
+in
+{
   saxon = common rec {
     pname = "saxon";
     version = "6.5.3";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
-      sha256 = "0l5y3y2z4wqgh80f26dwwxwncs8v3nkz3nidv14z024lmk730vs3";
+      hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
     # https://saxon.sourceforge.net/saxon6.5.3/conditions.html
@@ -101,7 +145,7 @@ in {
     jar = "saxon8";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxonb${dashify version}j.zip";
-      sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
+      hash = "sha256-aOk+BB5kAbZElAifVG+AP1bo7Se3patzISA40bzLf5U=";
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
     java = jre8;
@@ -133,11 +177,11 @@ in {
 
   saxon_11-he = common rec {
     pname = "saxon-he";
-    version = "11.6";
+    version = "11.7";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      sha256 = "/AVX5mtZSO6Is19t3+FlEvtIBsnwB3MIWAPCht8Aqnw=";
+      sha256 = "MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
@@ -145,11 +189,11 @@ in {
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.5";
+    version = "12.9";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-NaRnKHkr1M7C/CYtSHd7THm1ze7wPSmB46ZOyzoZ9xY=";
+      hash = "sha256-8olb7zeUESxlChWL4nw5qG6IwXF+u44OiAZ9HwdjXRI=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

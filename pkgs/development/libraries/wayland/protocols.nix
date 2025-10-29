@@ -1,33 +1,51 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, meson, ninja, wayland-scanner
-, python3, wayland
-, gitUpdater, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  python3,
+  wayland,
+  gitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.38";
+  version = "1.45";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform &&
-  # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
-  stdenv.hostPlatform.linker == "bfd" && lib.meta.availableOn stdenv.hostPlatform wayland;
+  doCheck =
+    stdenv.hostPlatform == stdenv.buildPlatform
+    &&
+      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
+      stdenv.hostPlatform.linker == "bfd"
+    && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/xcpLAUVnSsgzmys/kLX4xooGY+hQpp2mwOvfDhYHb4=";
+    hash = "sha256-TSsqnj4JnQF9yBB78cM00nu4fZ5K/xmgyNhW0XzUHvA=";
   };
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/
   '';
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja wayland-scanner ];
-  nativeCheckInputs = [ python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    wayland-scanner
+  ];
+  nativeCheckInputs = [
+    python3
+    wayland
+  ];
   checkInputs = [ wayland ];
+  strictDeps = true;
 
-  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
+  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";
@@ -38,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos ];
+    homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ wineee ];
     pkgConfigModules = [ "wayland-protocols" ];
   };
 

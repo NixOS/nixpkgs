@@ -1,4 +1,11 @@
-{ lib, mkCoqDerivation, coq, coq-elpi, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  coq-elpi,
+  stdlib,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "trakt";
@@ -10,13 +17,30 @@ mkCoqDerivation {
   release."1.2+8.13".sha256 = "sha256-hozms4sPSMr4lFkJ20x+uW9Wqt067bifnPQxdGyKhQQ=";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [ coq.version ] [
-    { cases = [ (range "8.15" "8.17") ]; out = "1.2"; }
-    { cases = [ (isEq "8.13") ]; out = "1.2+8.13"; }
-    { cases = [ (range "8.13" "8.17") ]; out = "1.1"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.version ]
+      [
+        {
+          cases = [ (range "8.15" "8.17") ];
+          out = "1.2";
+        }
+        {
+          cases = [ (isEq "8.13") ];
+          out = "1.2+8.13";
+        }
+        {
+          cases = [ (range "8.13" "8.17") ];
+          out = "1.1";
+        }
+      ]
+      null;
 
-  propagatedBuildInputs = [ coq-elpi ];
+  propagatedBuildInputs = [
+    coq-elpi
+    stdlib
+  ];
 
   meta = with lib; {
     description = "Generic goal preprocessing tool for proof automation tactics in Coq";

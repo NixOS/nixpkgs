@@ -18,7 +18,7 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel release;
+  inherit (lib.importJSON releaseManifestFile) channel tag;
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -39,6 +39,13 @@ let
   };
 
   drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
+
+  toOutputPath =
+    path:
+    let
+      root = ../../../..;
+    in
+    lib.path.removePrefix root path;
 
 in
 writeScript "update-dotnet-vmr.sh" ''
@@ -84,7 +91,7 @@ writeScript "update-dotnet-vmr.sh" ''
 
   (
       curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
-      jq -r "$query" \
+      jq -er "$query" \
   ) | (
       read tagName
       read releaseUrl
@@ -93,16 +100,12 @@ writeScript "update-dotnet-vmr.sh" ''
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
-      echo ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk foo
-
       cd "$tmp"
 
       curl -fsSL "$releaseUrl" -o release.json
-      release=$(jq -r .release release.json)
 
-      if [[ -z $tag && "$release" == "${release}" ]]; then
-          >&2 echo "release is already $release"
+      if [[ -z $tag && "$tagName" == "${tag}" ]]; then
+          >&2 echo "release is already $tagName"
           exit
       fi
 
@@ -112,31 +115,44 @@ writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      curl -fssL "$sigUrl" -o release.sig
+      # recent dotnet 10 releases don't have a signature for the github tarball
+      if [[ ! $sigUrl = */dotnet-source-* ]]; then
+        curl -fssL "$sigUrl" -o release.sig
 
-      (
-          export GNUPGHOME=$PWD/.gnupg
-          trap 'gpgconf --kill all' EXIT
-          gpg --batch --import ${releaseKey}
-          gpg --batch --verify release.sig "$tarball"
-      )
+        (
+            export GNUPGHOME=$PWD/.gnupg
+            mkdir -m 700 -p $GNUPGHOME
+            trap 'gpgconf --kill all' EXIT
+            gpg --no-autostart --batch --import ${releaseKey}
+            gpg --no-autostart --batch --verify release.sig "$tarball"
+        )
+      fi
 
-      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
+      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
           map(select(.PrivateSourceBuiltArtifactsVersion))
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
+          artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
+          eval "$artifactVar"
+
+          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
       fi
+      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
 
-      sdkVersion=$(jq -r .tools.dotnet global.json)
+      sdkVersion=$(jq -er .tools.dotnet global.json)
+
+      # below needs to be run in nixpkgs because toOutputPath uses relative paths
+      cd -
+
+      cp "$tmp"/release.json "${toOutputPath releaseManifestFile}"
 
       jq --null-input \
           --arg _0 "$tarballHash" \
@@ -146,16 +162,20 @@ writeScript "update-dotnet-vmr.sh" ''
               "tarballHash": $_0,
               "artifactsUrl": $_1,
               "artifactsHash": $_2,
-          }' > "${toString releaseInfoFile}"
+          }' > "${toOutputPath releaseInfoFile}"
 
-      cp release.json "${toString releaseManifestFile}"
+      updateSDK() {
+          ${lib.escapeShellArg (toOutputPath ./update.sh)} \
+              -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$1" >&2
+      }
 
-      cd -
+      updateSDK "$sdkVersion" || if [[ $? == 2 ]]; then
+          >&2 echo "WARNING: bootstrap sdk missing, attempting to bootstrap with self"
+          updateSDK "$(jq -er .sdkVersion "$tmp"/release.json)"
+      else
+          exit 1
+      fi
 
-      # needs to be run in nixpkgs
-      ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk "$sdkVersion"
-
-      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
   )
 ''

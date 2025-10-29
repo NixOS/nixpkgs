@@ -3,31 +3,46 @@
   lib,
   fetchurl,
   autoPatchelfHook,
+  erlang,
 }:
 let
-  arch = if stdenv.isAarch64 then "aarch64" else "x86_64";
-  release =
-    if stdenv.isDarwin then "macos-${arch}-apple-darwin" else "linux-${arch}-unknown-linux-gnu";
+  # erlang-language-platform supports multiple OTP versions.
+  # here we search the release names from hashes.json to check support for our OTP.
+  # ELP releases only list the major and minor version so we do a prefix check.
+  arch = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x86_64";
+  platform =
+    if stdenv.hostPlatform.isDarwin then
+      "elp-macos-${arch}-apple-darwin"
+    else
+      "elp-linux-${arch}-unknown-linux-gnu";
+  otp_version = "otp-${lib.versions.major erlang.version}";
+  release_major = "${platform}-${otp_version}";
 
-  hashes = {
-    linux-aarch64-unknown-linux-gnu = "sha256-vWMrq/uFU/uyuDnsxZK0ZyvtraVCZwvGjzO1a5QjR8g=";
-    linux-x86_64-unknown-linux-gnu = "sha256-iE/zH6M51C6sFZrsUMwZTQ0+hzfpRFJtiKh3MS9bDto=";
-    macos-aarch64-apple-darwin = "sha256-55LSChvO0wRHGL0H29MLy/JW8V52GFr3z/qoxdIPun0=";
-    macos-x86_64-apple-darwin = "sha256-l9bzQ5z9hQ/N2dOkAjPAU4OfRbLCUoRt1eQB6EZE0NI=";
-  };
+  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+
+  release_name =
+    let
+      hash_names = builtins.attrNames hashes;
+      found_name = lib.lists.findFirst (name: lib.strings.hasPrefix release_major name) false hash_names;
+    in
+    if found_name != false then
+      found_name
+    else
+      throw "erlang-language-platform does not support OTP major/minor version ${otp_version}";
+
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2024-07-16";
+  version = "2025-07-21";
 
   src = fetchurl {
-    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/elp-${release}-otp-26.2.tar.gz";
-    hash = hashes.${release};
+    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
+    hash = hashes.${release_name};
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [ (lib.getLib stdenv.cc.cc) ];
 
   sourceRoot = ".";
 
@@ -37,8 +52,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "An IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools.";
+    description = "IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools";
     homepage = "https://github.com/WhatsApp/erlang-language-platform/";
     license = with lib.licenses; [
       mit
@@ -51,5 +68,6 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ offsetcyan ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

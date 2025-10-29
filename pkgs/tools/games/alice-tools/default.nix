@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, gitUpdater
-, testers
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, bison
-, flex
-, libiconv
-, libpng
-, libjpeg
-, libwebp
-, zlib
-, withGUI ? true
-, qtbase ? null
-, wrapQtAppsHook ? null
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  testers,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  bison,
+  flex,
+  libiconv,
+  libpng,
+  libjpeg,
+  libwebp,
+  zlib,
+  withGUI ? true,
+  qtbase ? null,
+  wrapQtAppsHook ? null,
 }:
 
 assert withGUI -> qtbase != null && wrapQtAppsHook != null;
@@ -52,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bison
     flex
-  ] ++ lib.optionals withGUI [
+  ]
+  ++ lib.optionals withGUI [
     wrapQtAppsHook
   ];
 
@@ -62,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libwebp
     zlib
-  ] ++ lib.optionals withGUI [
+  ]
+  ++ lib.optionals withGUI [
     qtbase
   ];
 
@@ -73,10 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 src/alice $out/bin/alice
-  '' + lib.optionalString withGUI ''
+  ''
+  + lib.optionalString withGUI ''
     install -Dm755 src/galice $out/bin/galice
     wrapQtApp $out/bin/galice
-  '' + ''
+  ''
+  + ''
 
     runHook postInstall
   '';
@@ -85,7 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
-      command = lib.optionalString withGUI "env QT_QPA_PLATFORM=minimal " + "${lib.getExe finalAttrs.finalPackage} --version";
+      command =
+        lib.optionalString withGUI "env QT_QPA_PLATFORM=minimal "
+        + "${lib.getExe finalAttrs.finalPackage} --version";
     };
   };
 

@@ -1,9 +1,17 @@
-{ lib, options, config, utils, pkgs, ... }:
+{
+  lib,
+  options,
+  config,
+  utils,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   inherit (utils) systemdUtils escapeSystemdPath;
+  inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
     generateUnits
     pathToUnit
@@ -13,8 +21,9 @@ let
     targetToUnit
     timerToUnit
     mountToUnit
-    automountToUnit;
-
+    automountToUnit
+    settingsToSections
+    ;
 
   cfg = config.boot.initrd.systemd;
 
@@ -71,15 +80,18 @@ let
     "timers.target"
     "umount.target"
     "systemd-bsod.service"
-  ] ++ cfg.additionalUpstreamUnits;
+  ]
+  ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
     "sysinit.target.wants"
   ];
 
-  enabledUpstreamUnits = filter (n: ! elem n cfg.suppressedUnits) upstreamUnits;
-  enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedUnits) cfg.units;
-  jobScripts = concatLists (mapAttrsToList (_: unit: unit.jobScripts or []) (filterAttrs (_: v: v.enable) cfg.services));
+  enabledUpstreamUnits = filter (n: !elem n cfg.suppressedUnits) upstreamUnits;
+  enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedUnits) cfg.units;
+  jobScripts = concatLists (
+    mapAttrsToList (_: unit: unit.jobScripts or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
+  );
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -90,39 +102,53 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
-    allowMissing = false;
-  };
 
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
-    pathsToLink = ["/bin" "/sbin"];
+    pathsToLink = [
+      "/bin"
+      "/sbin"
+    ];
 
     # Make sure sbin and bin have the same contents, and add extraBin
     postBuild = ''
       find $out/bin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/sbin/
       find $out/sbin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/bin/
-      ${concatStringsSep "\n" (mapAttrsToList (n: v: ''
-        ln -sf '${v}' $out/bin/'${n}'
-        ln -sf '${v}' $out/sbin/'${n}'
-      '') cfg.extraBin)}
+      ${concatStringsSep "\n" (
+        mapAttrsToList (n: v: ''
+          ln -sf '${v}' $out/bin/'${n}'
+          ln -sf '${v}' $out/sbin/'${n}'
+        '') cfg.extraBin
+      )}
     '';
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
-    inherit (cfg) strip;
 
-    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
+    contents = lib.filter (
+      { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
+    ) cfg.storePaths;
   };
 
-in {
+in
+{
+  imports = [
+    (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "strip" ] ''
+      The option to strip ELF files in initrd has been removed.
+      It only saved ~1MiB of initramfs size, but caused a few issues
+      like unloadable kernel modules.
+    '')
+    (lib.mkRemovedOptionModule [
+      "boot"
+      "initrd"
+      "systemd"
+      "extraConfig"
+    ] "Use boot.initrd.systemd.settings.Manager instead.")
+  ];
+
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
       description = ''
@@ -143,20 +169,47 @@ in {
       '';
     };
 
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
+    settings.Manager = mkOption {
+      default = { };
+      defaultText = lib.literalExpression ''
+        {
+          DefaultEnvironment = "PATH=/bin:/sbin";
+        }
+      '';
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       description = ''
-        Extra config options for systemd. See systemd-system.conf(5) man page
+        Options for the global systemd service manager used in initrd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
 
     managerEnvironment = mkOption {
-      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
-      default = {};
-      example = { SYSTEMD_LOG_LEVEL = "debug"; };
+      type =
+        with types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
+      default = { };
+      defaultText = ''
+        {
+          PATH = "/bin:/sbin";
+        }
+      '';
+      example = {
+        SYSTEMD_LOG_LEVEL = "debug";
+      };
       description = ''
         Environment variables of PID 1. These variables are
         *not* passed to started units.
@@ -170,7 +223,7 @@ in {
           "/etc/machine-id".source = /etc/machine-id;
         }
       '';
-      default = {};
+      default = { };
       type = utils.systemdUtils.types.initrdContents;
     };
 
@@ -179,20 +232,7 @@ in {
         Store paths to copy into the initrd as well.
       '';
       type = utils.systemdUtils.types.initrdStorePath;
-      default = [];
-    };
-
-    strip = mkOption {
-      description = ''
-        Whether to completely strip executables and libraries copied to the initramfs.
-
-        Setting this to false may save on the order of 30MiB on the
-        machine building the system (by avoiding a binutils
-        reference), at the cost of ~1MiB of initramfs size. This puts
-        this option firmly in the territory of micro-optimisation.
-      '';
-      type = types.bool;
-      default = true;
+      default = [ ];
     };
 
     extraBin = mkOption {
@@ -205,7 +245,7 @@ in {
         }
       '';
       type = types.attrsOf types.path;
-      default = {};
+      default = { };
     };
 
     suppressedStorePaths = mkOption {
@@ -214,11 +254,14 @@ in {
         should not be copied.
       '';
       type = types.listOf types.singleLineStr;
-      default = [];
+      default = [ ];
     };
 
     root = lib.mkOption {
-      type = lib.types.enum [ "fstab" "gpt-auto" ];
+      type = lib.types.enum [
+        "fstab"
+        "gpt-auto"
+      ];
       default = "fstab";
       example = "gpt-auto";
       description = ''
@@ -231,20 +274,27 @@ in {
     };
 
     emergencyAccess = mkOption {
-      type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
+      type =
+        with types;
+        oneOf [
+          bool
+          (nullOr (passwdEntry str))
+        ];
       description = ''
         Set to true for unauthenticated emergency access, and false or
         null for no emergency access.
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
+
+        For emergency access after initrd, use `${options.systemd.enableEmergencyMode}` instead.
       '';
       default = false;
     };
 
     initrdBin = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
@@ -253,7 +303,10 @@ in {
     additionalUpstreamUnits = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      example = [ "debug-shell.service" "systemd-quotacheck.service" ];
+      example = [
+        "debug-shell.service"
+        "systemd-quotacheck.service"
+      ];
       description = ''
         Additional units shipped with systemd that shall be enabled.
       '';
@@ -272,57 +325,73 @@ in {
       '';
     };
 
+    shell.enable = lib.mkEnableOption "" // {
+      default = config.environment.shell.enable;
+      internal = true;
+      description = ''
+        Whether to enable a shell in the initrd.
+
+        In contrast to `environment.shell.enable`, this option actually
+        strictly disables all shells in the initrd because they're not copied
+        into it anymore. Paths that use a shell (e.g. via the `script` option),
+        will break if this option is set.
+
+        Only set this option if you're sure that you can recover from potential
+        issues.
+      '';
+    };
+
     units = mkOption {
       description = "Definition of systemd units.";
-      default = {};
+      default = { };
       visible = "shallow";
       type = systemdUtils.types.units;
     };
 
     packages = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = "Packages providing systemd units and hooks.";
     };
 
     targets = mkOption {
-      default = {};
+      default = { };
       visible = "shallow";
       type = systemdUtils.types.initrdTargets;
       description = "Definition of systemd target units.";
     };
 
     services = mkOption {
-      default = {};
+      default = { };
       type = systemdUtils.types.initrdServices;
       visible = "shallow";
       description = "Definition of systemd service units.";
     };
 
     sockets = mkOption {
-      default = {};
+      default = { };
       type = systemdUtils.types.initrdSockets;
       visible = "shallow";
       description = "Definition of systemd socket units.";
     };
 
     timers = mkOption {
-      default = {};
+      default = { };
       type = systemdUtils.types.initrdTimers;
       visible = "shallow";
       description = "Definition of systemd timer units.";
     };
 
     paths = mkOption {
-      default = {};
+      default = { };
       type = systemdUtils.types.initrdPaths;
       visible = "shallow";
       description = "Definition of systemd path units.";
     };
 
     mounts = mkOption {
-      default = [];
+      default = [ ];
       type = systemdUtils.types.initrdMounts;
       visible = "shallow";
       description = ''
@@ -333,7 +402,7 @@ in {
     };
 
     automounts = mkOption {
-      default = [];
+      default = [ ];
       type = systemdUtils.types.automounts;
       visible = "shallow";
       description = ''
@@ -344,7 +413,7 @@ in {
     };
 
     slices = mkOption {
-      default = {};
+      default = { };
       type = systemdUtils.types.slices;
       visible = "shallow";
       description = "Definition of slice configurations.";
@@ -354,30 +423,40 @@ in {
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     assertions = [
       {
-        assertion = cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+        assertion =
+          cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
-    ] ++ map (name: {
-      assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
-      message = ''
-        systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
-          convert it to analogous systemd units in 'boot.initrd.systemd'.
+    ]
+    ++
+      map
+        (name: {
+          assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+          message = ''
+            systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+              convert it to analogous systemd units in 'boot.initrd.systemd'.
 
-            Definitions:
-        ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}") (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations}
-      '';
-    }) [
-      [ "preFailCommands" ]
-      [ "preDeviceCommands" ]
-      [ "preLVMCommands" ]
-      [ "postDeviceCommands" ]
-      [ "postResumeCommands" ]
-      [ "postMountCommands" ]
-      [ "extraUdevRulesCommands" ]
-      [ "extraUtilsCommands" ]
-      [ "extraUtilsCommandsTest" ]
-      [ "network" "postCommands" ]
-    ];
+                Definitions:
+            ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+              (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
+            }
+          '';
+        })
+        [
+          [ "preFailCommands" ]
+          [ "preDeviceCommands" ]
+          [ "preLVMCommands" ]
+          [ "postDeviceCommands" ]
+          [ "postResumeCommands" ]
+          [ "postMountCommands" ]
+          [ "extraUdevRulesCommands" ]
+          [ "extraUtilsCommands" ]
+          [ "extraUtilsCommandsTest" ]
+          [
+            "network"
+            "postCommands"
+          ]
+        ];
 
     system.build = { inherit initialRamdisk; };
 
@@ -385,18 +464,27 @@ in {
       # systemd needs this for some features
       "autofs"
       # systemd-cryptenroll
-    ] ++ lib.optional cfg.package.withEfi "efivarfs";
+    ]
+    ++ lib.optional cfg.package.withEfi "efivarfs";
 
     boot.kernelParams = [
       "root=${config.boot.initrd.systemd.root}"
-    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
-      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
-      # For NixOS activation to succeed, we need to have root writable in initrd.
-      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
+    ]
+    ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+    # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+    # For NixOS activation to succeed, we need to have root writable in initrd.
+    ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
-      # bashInteractive is easier to use and also required by debug-shell.service
-      initrdBin = [pkgs.bashInteractive pkgs.coreutils cfg.package.kmod cfg.package];
+      initrdBin = [
+        pkgs.coreutils
+        cfg.package
+      ]
+      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod
+      ++ lib.optionals cfg.shell.enable [
+        # bashInteractive is easier to use and also required by debug-shell.service
+        pkgs.bashInteractive
+      ];
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -405,40 +493,32 @@ in {
       };
 
       managerEnvironment.PATH = "/bin:/sbin";
+      settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents = {
-        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
-        "/etc/systemd/system.conf".text = ''
-          [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
-          ${cfg.extraConfig}
-          ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
-        '';
-
-        "/lib".source = "${modulesClosure}/lib";
-
-        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+        "/etc/systemd/system.conf".text = settingsToSections cfg.settings;
 
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you
         # to log in with an SSH key if you use ! so we use * instead
-        "/etc/shadow".text = let
-          ea = cfg.emergencyAccess;
-          access = ea != null && !(isBool ea && !ea);
-          passwd = if isString ea then ea else "";
-        in
+        "/etc/shadow".text =
+          let
+            ea = cfg.emergencyAccess;
+            access = ea != null && !(isBool ea && !ea);
+            passwd = if isString ea then ea else "";
+          in
           "root:${if access then passwd else "*"}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
-
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
-        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+        "/usr/bin".source = "${initrdBinEnv}/bin";
+        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
@@ -446,8 +526,19 @@ in {
         # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
         "/etc/hostname".text = config.networking.hostName;
 
-      } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
+      }
+      // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
+      }
+      // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+        "/lib".source = "${config.system.build.modulesClosure}/lib";
+
+        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
       };
 
       storePaths = [
@@ -477,42 +568,62 @@ in {
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
 
-        # required for script services, and some tools like xfs still want the sh symlink
-        "${pkgs.bash}/bin"
+        # Resolving sysroot symlinks without code exec
+        "${config.system.nixos-init.package}/bin/chroot-realpath"
+        # Find the etc paths
+        "${config.system.nixos-init.package}/bin/find-etc"
+      ]
+      ++ lib.optionals config.system.nixos-init.enable [
+        "${config.system.nixos-init.package}/bin/initrd-init"
+      ]
+      ++ lib.optionals cfg.shell.enable [
+        # required for services generated with writeShellScript and friends
+        pkgs.runtimeShell
+        # some tools like xfs still want the sh symlink
+        "${pkgs.bashNonInteractive}/bin"
+      ]
+      ++ jobScripts
+      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
+      ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
-        # so NSS can look up usernames
-        "${pkgs.glibc}/lib/libnss_files.so.2"
-      ] ++ optionals cfg.package.withCryptsetup [
-        # fido2 support
-        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
-        "${pkgs.libfido2}/lib/libfido2.so.1"
-      ] ++ jobScripts
-      ++ map (c: builtins.removeAttrs c ["text"]) (builtins.attrValues cfg.contents);
-
-      targets.initrd.aliases = ["default.target"];
+      targets.initrd.aliases = [ "default.target" ];
       units =
-           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    v)) cfg.paths
+        mapAttrs' (n: v: nameValuePair "${n}.path" (pathToUnit v)) cfg.paths
         // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit v)) cfg.services
-        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   v)) cfg.slices
-        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  v)) cfg.sockets
-        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  v)) cfg.targets
-        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   v)) cfg.timers
-        // listToAttrs (map
-                     (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.mount" (mountToUnit v)) cfg.mounts)
-        // listToAttrs (map
-                     (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
+        // mapAttrs' (n: v: nameValuePair "${n}.slice" (sliceToUnit v)) cfg.slices
+        // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit v)) cfg.sockets
+        // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit v)) cfg.targets
+        // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit v)) cfg.timers
+        // listToAttrs (
+          map (
+            v:
+            let
+              n = escapeSystemdPath v.where;
+            in
+            nameValuePair "${n}.mount" (mountToUnit v)
+          ) cfg.mounts
+        )
+        // listToAttrs (
+          map (
+            v:
+            let
+              n = escapeSystemdPath v.where;
+            in
+            nameValuePair "${n}.automount" (automountToUnit v)
+          ) cfg.automounts
+        );
 
-
-      services.initrd-find-nixos-closure = {
+      services.initrd-find-nixos-closure = lib.mkIf (!config.system.nixos-init.enable) {
         description = "Find NixOS closure";
 
         unitConfig = {
           RequiresMountsFor = "/sysroot/nix/store";
           DefaultDependencies = false;
         };
-        before = [ "shutdown.target" ];
+        before = [
+          "initrd.target"
+          "shutdown.target"
+        ];
         conflicts = [ "shutdown.target" ];
         requiredBy = [ "initrd.target" ];
         serviceConfig = {
@@ -520,45 +631,51 @@ in {
           RemainAfterExit = true;
         };
 
-        script = /* bash */ ''
-          set -uo pipefail
-          export PATH="/bin:${cfg.package.util-linux}/bin"
+        script = # bash
+          ''
+            set -uo pipefail
+            export PATH="/bin:${
+              lib.makeBinPath [
+                cfg.package.util-linux
+                config.system.nixos-init.package
+              ]
+            }"
 
-          # Figure out what closure to boot
-          closure=
-          for o in $(< /proc/cmdline); do
-              case $o in
-                  init=*)
-                      IFS="=" read -r -a initParam <<< "$o"
-                      closure="''${initParam[1]}"
-                      ;;
-              esac
-          done
+            # Figure out what closure to boot
+            closure=
+            for o in $(< /proc/cmdline); do
+                case $o in
+                    init=*)
+                        IFS="=" read -r -a initParam <<< "$o"
+                        closure="''${initParam[1]}"
+                        ;;
+                esac
+            done
 
-          # Sanity check
-          if [ -z "''${closure:-}" ]; then
-            echo 'No init= parameter on the kernel command line' >&2
-            exit 1
-          fi
+            # Sanity check
+            if [ -z "''${closure:-}" ]; then
+              echo 'No init= parameter on the kernel command line' >&2
+              exit 1
+            fi
 
-          # Resolve symlinks in the init parameter. We need this for some boot loaders
-          # (e.g. boot.loader.generationsDir).
-          closure="$(chroot /sysroot ${pkgs.coreutils}/bin/realpath "$closure")"
+            # Resolve symlinks in the init parameter. We need this for some boot loaders
+            # (e.g. boot.loader.generationsDir).
+            closure="$(chroot-realpath /sysroot "$closure")"
 
-          # Assume the directory containing the init script is the closure.
-          closure="$(dirname "$closure")"
+            # Assume the directory containing the init script is the closure.
+            closure="$(dirname "$closure")"
 
-          ln --symbolic "$closure" /nixos-closure
+            ln --symbolic "$closure" /nixos-closure
 
-          # If we are not booting a NixOS closure (e.g. init=/bin/sh),
-          # we don't know what root to prepare so we don't do anything
-          if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
-            echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
-            echo "$closure does not look like a NixOS installation - not activating"
-            exit 0
-          fi
-          echo 'NEW_INIT=' > /etc/switch-root.conf
-        '';
+            # If we are not booting a NixOS closure (e.g. init=/bin/sh),
+            # we don't know what root to prepare so we don't do anything
+            if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
+              echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
+              echo "$closure does not look like a NixOS installation - not activating"
+              exit 0
+            fi
+            echo 'NEW_INIT=' > /etc/switch-root.conf
+          '';
       };
 
       # We need to propagate /run for things like /run/booted-system
@@ -567,7 +684,7 @@ in {
         {
           where = "/sysroot/run";
           what = "/run";
-          options = "bind";
+          options = "rbind";
           unitConfig = {
             # See the comment on the mount unit for /run/etc-metadata
             DefaultDependencies = false;
@@ -577,15 +694,11 @@ in {
         }
       ];
 
-      services.initrd-nixos-activation = {
-        requires = [
-          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-        ];
-        after = [
-          "initrd-fs.target"
-          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-        ];
-        requiredBy = [ "initrd.target" ];
+      services.initrd-nixos-activation = lib.mkIf (!config.system.nixos-init.enable) {
+        after = [ "initrd-switch-root.target" ];
+        requiredBy = [ "initrd-switch-root.service" ];
+        before = [ "initrd-switch-root.service" ];
+        unitConfig.DefaultDependencies = false;
         unitConfig = {
           AssertPathExists = "/etc/initrd-release";
           RequiresMountsFor = [
@@ -595,32 +708,62 @@ in {
         serviceConfig.Type = "oneshot";
         description = "NixOS Activation";
 
-        script = /* bash */ ''
-          set -uo pipefail
-          export PATH="/bin:${cfg.package.util-linux}/bin"
+        script = # bash
+          ''
+            set -uo pipefail
+            export PATH="/bin:${cfg.package.util-linux}/bin"
 
-          closure="$(realpath /nixos-closure)"
+            closure="$(realpath /nixos-closure)"
 
-          # Initialize the system
-          export IN_NIXOS_SYSTEMD_STAGE1=true
-          exec chroot /sysroot "$closure/prepare-root"
-        '';
+            # Initialize the system
+            export IN_NIXOS_SYSTEMD_STAGE1=true
+            exec chroot /sysroot "$closure/prepare-root"
+          '';
       };
 
-      # This will either call systemctl with the new init as the last parameter (which
-      # is the case when not booting a NixOS system) or with an empty string, causing
-      # systemd to bypass its verification code that checks whether the next file is a systemd
-      # and using its compiled-in value
-      services.initrd-switch-root.serviceConfig = {
-        EnvironmentFile = "-/etc/switch-root.conf";
-        ExecStart = [
-          ""
-          ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
-        ];
-      };
+      services.initrd-switch-root =
+        if config.system.nixos-init.enable then
+          {
+            path = [
+              cfg.package
+              cfg.package.util-linux
+              config.system.nixos-init.package
+            ];
+            environment = {
+              FIRMWARE = "${config.hardware.firmware}/lib/firmware";
+              MODPROBE_BINARY = "${pkgs.kmod}/bin/modprobe";
+              NIX_STORE_MOUNT_OPTS = lib.concatStringsSep "," config.boot.nixStoreMountOpts;
+            }
+            // lib.optionalAttrs (config.environment.usrbinenv != null) {
+              ENV_BINARY = config.environment.usrbinenv;
+            }
+            // lib.optionalAttrs (config.environment.binsh != null) {
+              SH_BINARY = config.environment.binsh;
+            };
+            serviceConfig = {
+              ExecStart = [
+                ""
+                "${config.system.nixos-init.package}/bin/initrd-init"
+              ];
+            };
+          }
+        else
+          # This will either call systemctl with the new init as the last parameter (which
+          # is the case when not booting a NixOS system) or with an empty string, causing
+          # systemd to bypass its verification code that checks whether the next file is a systemd
+          # and using its compiled-in value
+          {
+            serviceConfig = {
+              EnvironmentFile = "-/etc/switch-root.conf";
+              ExecStart = [
+                ""
+                ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
+              ];
+            };
+          };
 
       services.panic-on-fail = {
-        wantedBy = ["emergency.target"];
+        wantedBy = [ "emergency.target" ];
         unitConfig = {
           DefaultDependencies = false;
           ConditionKernelCommandLine = [
@@ -628,10 +771,11 @@ in {
             "|stage1panic"
           ];
         };
-        script = ''
-          echo c > /proc/sysrq-trigger
-        '';
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.coreutils}/bin/echo c";
+          StandardOutput = "file:/proc/sysrq-trigger";
+        };
       };
     };
   };

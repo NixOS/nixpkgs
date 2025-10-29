@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,17 +19,23 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/bootstrapper $out/bin/scion-bootstrapper
   '';
 
   meta = with lib; {
-    description = "bootstrapper for SCION network configuration";
+    description = "Bootstrapper for SCION network configuration";
     homepage = "https://github.com/netsec-ethz/bootstrapper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan sarcasticadmin ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      sarcasticadmin
+    ];
     mainProgram = "scion-bootstrapper";
   };
 }

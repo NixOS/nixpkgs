@@ -1,40 +1,91 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkg-config
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
-, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  cmake,
+  pkg-config,
+  boost,
+  icu,
+  libedit,
+  libevent,
+  lz4,
+  ncurses,
+  openssl,
+  protobuf,
+  re2,
+  readline,
+  zlib,
+  zstd,
+  libfido2,
+  numactl,
+  cctools,
+  developer_cmds,
+  libtirpc,
+  rpcsvc-proto,
+  curl,
+  DarwinTools,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.39";
+  version = "8.0.44";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jEpLHUnHFJINJo/jmNeZVZqzxc9ZoDaGGUs3yz020ws=";
+    hash = "sha256-YJUi7R/vzlqziN7CXg0bzhMjgtom4rd7aPB0HApkE1Y=";
   };
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    pkg-config
+    protobuf
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
-  postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/package_name.cmake --replace-fail "COMMAND sw_vers" "COMMAND ${DarwinTools}/bin/sw_vers"
   '';
 
   buildInputs = [
-    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
-    zstd libfido2
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    numactl libtirpc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools CoreServices developer_cmds DarwinTools
+    boost
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    developer_cmds
   ];
 
-  outputs = [ "out" "static" ];
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    "static"
+  ];
 
   cmakeFlags = [
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.

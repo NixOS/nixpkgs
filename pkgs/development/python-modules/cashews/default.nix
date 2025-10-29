@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cashews";
-  version = "7.3.1";
+  version = "7.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Krukov";
     repo = "cashews";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GS6QnWCVUgxj5uiH13jUDvRBadAB0xcZd4pb0+4q6gk=";
+    tag = version;
+    hash = "sha256-L6EpSZ6ssRV9fQLuJ6SxKB8QS9fo4qAQ3YKcc1u7sHY=";
   };
 
   build-system = [ setuptools ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cache tools with async power";
     homepage = "https://github.com/Krukov/cashews/";
-    changelog = "https://github.com/Krukov/cashews/releases/tag/${version}";
+    changelog = "https://github.com/Krukov/cashews/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wdlkmpx";
     repo = "gmrun";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-sp+Atod9ZKVF8sxNWIMrlewqZAGnoLo2mZUNkCtSkec=";
   };
 

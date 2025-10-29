@@ -1,8 +1,17 @@
-{ config, lib, pkgs, extendModules, noUserModules, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  extendModules,
+  noUserModules,
+  ...
+}:
 
 let
   inherit (lib)
     concatStringsSep
+    escapeShellArg
+    hasInfix
     mapAttrs
     mapAttrsToList
     mkOption
@@ -15,10 +24,9 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children =
-    mapAttrs
-      (childName: childConfig: childConfig.configuration.system.build.toplevel)
-      config.specialisation;
+  children = mapAttrs (
+    childName: childConfig: childConfig.configuration.system.build.toplevel
+  ) config.specialisation;
 
 in
 {
@@ -45,44 +53,52 @@ in
         sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
         ```
       '';
-      type = types.attrsOf (types.submodule (
-        local@{ ... }:
-        let
-          extend =
-            if local.config.inheritParentConfig
-            then extendModules
-            else noUserModules.extendModules;
-        in
-        {
-          options.inheritParentConfig = mkOption {
-            type = types.bool;
-            default = true;
-            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
-          };
+      type = types.attrsOf (
+        types.submodule (
+          local@{ ... }:
+          let
+            extend = if local.config.inheritParentConfig then extendModules else noUserModules.extendModules;
+          in
+          {
+            options.inheritParentConfig = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+            };
 
-          options.configuration = mkOption {
-            default = { };
-            description = ''
-              Arbitrary NixOS configuration.
+            options.configuration = mkOption {
+              default = { };
+              description = ''
+                Arbitrary NixOS configuration.
 
-              Anything you can add to a normal NixOS configuration, you can add
-              here, including imports and config values, although nested
-              specialisations will be ignored.
-            '';
-            visible = "shallow";
-            inherit (extend { modules = [ ./no-clone.nix ]; }) type;
-          };
-        }
-      ));
+                Anything you can add to a normal NixOS configuration, you can add
+                here, including imports and config values, although nested
+                specialisations will be ignored.
+              '';
+              visible = "shallow";
+              inherit (extend { modules = [ ./no-clone.nix ]; }) type;
+            };
+          }
+        )
+      );
     };
 
   };
 
   config = {
+    assertions = mapAttrsToList (name: _: {
+      assertion = !hasInfix "/" name;
+      message = ''
+        Specialisation names must not contain forward slashes.
+        Invalid specialisation name: ${name}
+      '';
+    }) config.specialisation;
+
     system.systemBuilderCommands = ''
       mkdir $out/specialisation
-      ${concatStringsSep "\n"
-      (mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children)}
+      ${concatStringsSep "\n" (
+        mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${escapeShellArg name}") children
+      )}
     '';
   };
 

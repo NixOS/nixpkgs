@@ -5,13 +5,23 @@
   ...
 }:
 let
+  inherit (lib)
+    maintainers
+    mapAttrs'
+    mkEnableOption
+    mkOption
+    nameValuePair
+    optionalString
+    types
+    ;
   mkSystemdService =
     name: cfg:
-    lib.nameValuePair "gitwatch-${name}" (
+    nameValuePair "gitwatch-${name}" (
       let
-        getvar = flag: var: lib.optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
+        getvar = flag: var: optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
         branch = getvar "-b" "branch";
         remote = getvar "-r" "remote";
+        message = getvar "-m" "message";
       in
       rec {
         inherit (cfg) enable;
@@ -28,14 +38,14 @@ let
           if [ -n "${cfg.remote}" ] && ! [ -d "${cfg.path}" ]; then
             git clone ${branch} "${cfg.remote}" "${cfg.path}"
           fi
-          gitwatch ${remote} ${branch} ${cfg.path}
+          gitwatch ${remote} ${message} ${branch} ${cfg.path}
         '';
         serviceConfig.User = cfg.user;
       }
     );
 in
 {
-  options.services.gitwatch = lib.mkOption {
+  options.services.gitwatch = mkOption {
     description = ''
       A set of git repositories to watch for. See
       [gitwatch](https://github.com/gitwatch/gitwatch) for more.
@@ -47,6 +57,7 @@ in
         user = "user";
         path = "/home/user/watched-project";
         remote = "git@github.com:me/my-project.git";
+        message = "Auto-commit by gitwatch on %d";
       };
       disabled-repo = {
         enable = false;
@@ -57,25 +68,30 @@ in
       };
     };
     type =
-      with lib.types;
+      with types;
       attrsOf (submodule {
         options = {
-          enable = lib.mkEnableOption "watching for repo";
-          path = lib.mkOption {
+          enable = mkEnableOption "watching for repo";
+          path = mkOption {
             description = "The path to repo in local machine";
             type = str;
           };
-          user = lib.mkOption {
+          user = mkOption {
             description = "The name of services's user";
             type = str;
             default = "root";
           };
-          remote = lib.mkOption {
+          remote = mkOption {
             description = "Optional url of remote repository";
             type = nullOr str;
             default = null;
           };
-          branch = lib.mkOption {
+          message = lib.mkOption {
+            description = "Optional text to use in as commit message; all occurrences of `%d` will be replaced by formatted date/time";
+            type = nullOr str;
+            default = null;
+          };
+          branch = mkOption {
             description = "Optional branch in remote repository";
             type = nullOr str;
             default = null;
@@ -83,5 +99,9 @@ in
         };
       });
   };
-  config.systemd.services = lib.mapAttrs' mkSystemdService config.services.gitwatch;
+  config.systemd.services = mapAttrs' mkSystemdService config.services.gitwatch;
+  meta.maintainers = with maintainers; [
+    shved
+    zareix
+  ];
 }

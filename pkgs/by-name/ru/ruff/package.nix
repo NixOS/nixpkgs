@@ -1,135 +1,102 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  python3Packages,
-  darwin,
+
   rust-jemalloc-sys,
-  ruff-lsp,
-  nix-update-script,
+  buildPackages,
   versionCheckHook,
-  libiconv,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.7.2";
-  pyproject = true;
-
-  outputs = [
-    "bin"
-    "out"
-  ];
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9zbLlQfDeqdUp1AKP/NRMZl9KeTyyTJz7JZVW/GGRM0=";
+    tag = finalAttrs.version;
+    hash = "sha256-bHcmnfbdPzCX/Eqy5o+hVqhggfsPwZeUVjXV9wF6fNE=";
   };
 
-  # Do not rely on path lookup at runtime to find the ruff binary
-  postPatch = ''
-    substituteInPlace python/ruff/__main__.py \
-      --replace-fail \
-        'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
-        'return "${placeholder "bin"}/bin/ruff"'
-  '';
+  cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-zUF2ZBorJzgo8O8ZEnFaitAvWXqNwtHSqx4JE8nByIg=";
-    };
-  };
+  cargoHash = "sha256-lAluzoRONfkyspcMCp7wNei0R3dgpAwwwpRAmbTNl1k=";
 
-  nativeBuildInputs =
-    [ installShellFiles ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-      cargoCheckHook
-    ]);
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs =
-    [
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      libiconv
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
     ''
-      mkdir -p $bin/bin
-      mv $out/bin/ruff $bin/bin/
-      rmdir $out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd ruff \
-        --bash <($bin/bin/ruff generate-shell-completion bash) \
-        --fish <($bin/bin/ruff generate-shell-completion fish) \
-        --zsh <($bin/bin/ruff generate-shell-completion zsh)
-    '';
+        --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
+    ''
+  );
+
+  # Run cargo tests
+  checkType = "debug";
+
+  # tests do not appear to respect linker options on doctests
+  # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
+  # This causes errors like "error: linker `cc` not found" on static builds
+  doCheck = !stdenv.hostPlatform.isStatic;
+
+  # Exclude tests from `ty`-related crates, run everything else.
+  # Ordinarily we would run all the tests, but there is significant overlap with the `ty` package in nixpkgs,
+  # which ruff shares a monorepo with.
+  # As such, we leave running `ty` tests to the `ty` package, and concentrate on everything else.
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude=ty"
+    "--exclude=ty_ide"
+    "--exclude=ty_project"
+    "--exclude=ty_python_semantic"
+    "--exclude=ty_server"
+    "--exclude=ty_static"
+    "--exclude=ty_test"
+    "--exclude=ty_vendored"
+    "--exclude=ty_wasm"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit ruff-lsp;
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
-  # Run cargo tests
-  cargoCheckType = "debug";
-  postInstallCheck = ''
-    cargoCheckHook
-  '';
-
-  # Failing on darwin for an unclear reason.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=add_search_path"
-    "--skip=changed_file"
-    "--skip=changed_versions_file"
-    "--skip=deleted_file"
-    "--skip=directory_deleted"
-    "--skip=directory_moved_to_trash"
-    "--skip=directory_moved_to_workspace"
-    "--skip=directory_renamed"
-    "--skip=hard_links_in_workspace"
-    "--skip=hard_links_to_target_outside_workspace"
-    "--skip=move_file_to_trash"
-    "--skip=move_file_to_workspace"
-    "--skip=new_file"
-    "--skip=new_ignored_file"
-    "--skip=rename_file"
-    "--skip=search_path"
-    "--skip=unix::changed_metadata"
-    "--skip=unix::symlink_inside_workspace"
-    "--skip=unix::symlinked_module_search_path"
-  ];
-
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
-
-  pythonImportsCheck = [ "ruff" ];
-
   meta = {
-    description = "Extremely fast Python linter";
+    description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];
   };
-}
+})

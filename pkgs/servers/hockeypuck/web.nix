@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };
@@ -23,6 +28,6 @@ stdenv.mkDerivation {
     description = "OpenPGP Key Server web resources";
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ ];
   };
 }

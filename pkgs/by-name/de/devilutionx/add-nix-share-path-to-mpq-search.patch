@@ -1,0 +1,12 @@
+diff --git a/Source/init.cpp b/Source/init.cpp
+index 4e6fab1..ecd4ff9 100644
+--- a/Source/init.cpp
++++ b/Source/init.cpp
+@@ -144,6 +144,7 @@ std::vector<std::string> GetMPQSearchPaths()
+ 		paths.emplace_back("/usr/local/share/diasurgical/devilutionx/");
+ 		paths.emplace_back("/usr/share/diasurgical/devilutionx/");
+ 	}
++	paths.emplace_back("@assets@");
+ #elif defined(NXDK)
+ 	paths.emplace_back("D:\\");
+ #elif (defined(_WIN64) || defined(_WIN32)) && !defined(__UWP__) && !defined(NXDK)

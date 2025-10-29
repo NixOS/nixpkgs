@@ -3,29 +3,33 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  isPyPy,
+  mypy,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.3.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "3.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Ousret";
+    owner = "jawah";
     repo = "charset_normalizer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-T9lnlS05Ogb2eLLHYWFnjBtRaB/OBqGWHQ/2WLunrNY=";
+    tag = version;
+    hash = "sha256-ZEHxBErjjvofqe3rkkgiEuEJcoluwo+2nZrLfrsHn5Q=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=charset_normalizer --cov-report=term-missing" ""
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ]
+  ++ lib.optional (!isPyPy) mypy;
+
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString (!isPyPy) "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -39,7 +43,7 @@ buildPythonPackage rec {
     description = "Python module for encoding and language detection";
     mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
-    changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jawah/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

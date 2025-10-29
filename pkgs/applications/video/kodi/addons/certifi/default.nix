@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, cacert }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  cacert,
+}:
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
@@ -35,6 +42,6 @@ buildKodiAddon rec {
     homepage = "https://certifi.io";
     description = "Python package for providing Mozilla's CA Bundle";
     license = licenses.mpl20;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

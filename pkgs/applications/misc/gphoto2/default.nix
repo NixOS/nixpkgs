@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext
-, libexif
-, libgphoto2
-, libjpeg
-, libtool
-, popt
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  libtool,
+  popt,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gphoto2";
-  version = "2.5.28";
+  version = "2.5.32";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
     rev = "v${version}";
-    sha256 = "sha256-t5EnM4WaDbOTPM+rJW+hQxBgNErnnZEN9lZvxTKoDhA=";
+    sha256 = "sha256-9Tn6CBxZpzPnlyiBYdpQGViT3NEcup6AXT7Z0DqI/vA=";
   };
 
   nativeBuildInputs = [

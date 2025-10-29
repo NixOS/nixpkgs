@@ -17,12 +17,11 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-    ];
+  dependencies = [
+  ];
 
   meta = {
-    description = "Some handy archive helpers for Python.";
+    description = "Some handy archive helpers for Python";
     homepage = "https://github.com/domdfcoding/handy-archives";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

@@ -2,6 +2,7 @@
   stdenv,
   fetchzip,
   kernel,
+  kernelModuleMakeFlags,
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
   strictDeps = true;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERS=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=$(out)"
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ftp.hp.com/pub/caps-softpaq/cmit/linuxtools/HP_LinuxTools.html";
     description = "Kernel module for managing BIOS settings and updating BIOS firmware on supported HP computers";
     license = lib.licenses.gpl2Only; # See "License" section in ./non-rpms/hpuefi-mod-*.tgz/README
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ tomodachi94 ];
   };
 })

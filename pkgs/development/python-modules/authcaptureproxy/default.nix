@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gdu0Ror/epu6huTEpBrqHD62O9uaL6273pKnpqPKskc=";
+    tag = "v${version}";
+    hash = "sha256-H5Dl1incS5+lmZaLZXMCOqEIGTcTr4A5J3r3ngpDGtY=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -51,6 +51,8 @@ buildPythonPackage rec {
     # test fails with frequency 1/200
     # https://github.com/alandtse/auth_capture_proxy/issues/25
     "test_return_timer_countdown_refresh_html"
+    # AttributeError: 'NoneType' object has no attribute 'get'
+    "test_replace_empty_action_urls"
   ];
 
   pythonImportsCheck = [ "authcaptureproxy" ];

@@ -7,6 +7,7 @@
   gtk3,
   xorg,
   perl,
+  pkg-config,
   openssl,
   speechd-minimal,
   libxkbcommon,
@@ -34,22 +35,21 @@ let
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "BoilR";
-  version = "1.9.4";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "PhilipK";
     repo = "BoilR";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-bwCTsoZ/9TeO3wyEcOqxKePnj9glsDXWUBCLd3nVT80=";
+    tag = "v.${version}";
+    hash = "sha256-qCY/I3ACrs5mWpgN+xmWi42rF9Mzqxxce2DIA+R1RNs=";
   };
 
-  cargoPatches = [
-    ./0001-update-time.patch
+  cargoHash = "sha256-9B2NcFO/Bj553yaOMi7oBZJTFtCQmBnJkU9nK+vjThU=";
+
+  nativeBuildInputs = [
+    perl
+    pkg-config
   ];
-
-  cargoHash = "sha256-09vPP+kNrmk0nN3Bdn9T7QjvuZvJeqQ56lCQIFb+Zrs=";
-
-  nativeBuildInputs = [ perl ];
 
   buildInputs = rpathLibs;
 

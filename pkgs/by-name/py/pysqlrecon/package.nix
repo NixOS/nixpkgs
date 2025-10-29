@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Tw1sm";
     repo = "PySQLRecon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+pme4uOgsh6iZEL73PaR1Y55r+Z/SPEVD2QWBsnMsNs=";
   };
 
@@ -36,12 +36,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pysqlrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Offensive MSSQL toolkit";
     homepage = "https://github.com/Tw1sm/PySQLRecon";
     changelog = "https://github.com/Tw1sm/PySQLRecon/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pysqlrecon";
   };
 }

@@ -2,13 +2,13 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  certipy,
   cryptography,
   dnspython,
   fetchFromGitHub,
-  gssapi,
   hatchling,
-  ldap3,
-  msldap,
+  minikerberos-bad,
+  msldap-bad,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.0.8";
+  version = "2.1.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,9 +25,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GpBhLFjae/RSB5qllYCaVsCCqVu9wxxqAGywShbW1/s=";
+    tag = "v${version}";
+    hash = "sha256-9yzKYSEmaPMv6AWhgr4UPPEx8s75Pg/hwqJnV29WocM=";
   };
+
+  pythonRelaxDeps = [ "cryptography" ];
+
+  pythonRemoveDeps = [
+    "minikerberos-bad"
+    "msldap-bad"
+  ];
 
   build-system = [ hatchling ];
 
@@ -35,30 +42,33 @@ buildPythonPackage rec {
     asn1crypto
     cryptography
     dnspython
-    gssapi
-    ldap3
-    msldap
-    pyasn1
+    minikerberos-bad
+    msldap-bad
     winacl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    certipy
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bloodyAD" ];
 
   disabledTests = [
     # Tests require network access
+    "test_kerberos_authentications"
     "test_01AuthCreateUser"
     "test_02SearchAndGetChildAndGetWritable"
     "test_03UacOwnerGenericShadowGroupPasswordDCSync"
     "test_04ComputerRbcdGetSetAttribute"
     "test_06AddRemoveGetDnsRecord"
+    "test_certificate_authentications"
   ];
 
   meta = with lib; {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
-    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/v${version}";
+    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -5,28 +5,26 @@
   pythonOlder,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # buildInputs
   bash,
 
   # dependencies
   aiohttp,
-  httpx-sse,
+  async-timeout,
   langchain-core,
   langchain-text-splitters,
   langsmith,
+  numpy,
   pydantic,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-  async-timeout,
-
-  # optional-dependencies
-  numpy,
 
   # tests
+  blockbuster,
   freezegun,
   httpx,
   lark,
@@ -39,46 +37,57 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.7";
+  version = "0.3.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain==${version}";
-    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   buildInputs = [ bash ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
+    "numpy"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
-    httpx-sse
     langchain-core
     langchain-text-splitters
     langsmith
+    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     httpx
     lark
@@ -93,10 +102,13 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    "--only-core"
+  ];
+
+  enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
-    "--only-core"
   ];
 
   disabledTests = [
@@ -116,20 +128,43 @@ buildPythonPackage rec {
     "test_serializable_mapping"
     "test_person"
     "test_aliases_hidden"
+    # AssertionError: (failed string match due to terminal control chars in output)
+    # https://github.com/langchain-ai/langchain/issues/32150
+    "test_filecallback"
+  ];
+
+  disabledTestPaths = [
+    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_conversation.py"
+    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_memory.py"
+    # pydantic.errors.PydanticUserError: `ConversationSummaryBufferMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryBufferMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_summary_buffer_memory.py"
+    "tests/unit_tests/output_parsers/test_fix.py"
+    "tests/unit_tests/chains/test_llm_checker.py"
+    # TypeError: Can't instantiate abstract class RunnableSerializable[RetryOutputParserRetryChainInput, str] without an implementation for abstract method 'invoke'
+    "tests/unit_tests/output_parsers/test_retry.py"
+    # pydantic.errors.PydanticUserError: `LLMSummarizationCheckerChain` is not fully defined; you should define `BaseCache`, then call `LLMSummarizationCheckerChain.model_rebuild()`.
+    "tests/unit_tests/chains/test_llm_summarization_checker.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langchain-server";
   };
 }

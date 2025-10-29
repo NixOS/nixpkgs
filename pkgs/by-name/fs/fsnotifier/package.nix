@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "IntelliJ Platform companion program for watching and reporting file and directory structure modification";
     license = lib.licenses.asl20;
     mainProgram = "fsnotifier";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
- };
+  };
 }

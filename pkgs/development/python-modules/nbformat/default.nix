@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchPypi,
   hatchling,
@@ -44,6 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
     testpath
   ];
+
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

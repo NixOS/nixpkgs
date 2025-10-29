@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rbanffy";
     repo = "pip-chill";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oWq3UWBL5nsCBUkaElashZKvm7pN3StJNubgU++8YFs=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pip_chill" ];
 
   meta = {
-    description = "A more relaxed `pip freeze`";
+    description = "More relaxed `pip freeze`";
     homepage = "https://github.com/rbanffy/pip-chill";
     changelog = "https://github.com/rbanffy/pip-chill/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;

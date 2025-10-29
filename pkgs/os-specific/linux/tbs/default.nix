@@ -13,22 +13,22 @@ let
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "36ce48448be5dd42669a5199f61e85da1a68cf60";
-    hash = "sha256-fbb1ITcWymLoybA7VkfdpJmuRHKCP1s0CqLn0Rl2E2I=";
+    rev = "3f1faba3930568fd2d472a2fe8c57af8d7084672";
+    hash = "sha256-tq92yqJVJgAYy7PTY/nk0Q6sWJ0kdSrw38JEOOhfwGQ=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "0f49c76b80838ded04bd64c56af9e1f9b8ac1965";
-    hash = "sha256-S5g7OTBJjzClLfy6C0PJwUtukrqoCiIjyU26Yy26hDo=";
+    rev = "bc02baf59046b02e3eb71653d8aa8d98e79dc4e1";
+    hash = "sha256-P0ASmWro3j3dk7LZQbUKXcGL+2c9fdjM7RgEfk0iDMs=";
   };
 
 in
 stdenv.mkDerivation {
   pname = "tbs";
-  version = "20241026-${kernel.version}";
+  version = "20250510-${kernel.version}";
 
   srcs = [
     media
@@ -68,7 +68,8 @@ stdenv.mkDerivation {
     patchutils
     kmod
     perlPackages.ProcProcessTable
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
@@ -80,6 +81,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ck3d ];
     priority = -1;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.12";
+    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.15";
   };
 }

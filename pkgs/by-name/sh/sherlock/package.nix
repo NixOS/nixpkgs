@@ -3,7 +3,6 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
-  poetry,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
   };
 
@@ -59,7 +58,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-    poetry
     poetry-core
     jsonschema
     openpyxl
@@ -68,9 +66,8 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "stem" ];
 
-  pytestFlagsArray = [
-    "-m"
-    "'not online'"
+  disabledTestMarks = [
+    "online"
   ];
 
   meta = {

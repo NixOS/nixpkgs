@@ -7,19 +7,20 @@
   isodate,
   pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "27.0.0";
+  version = "29.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_network";
     inherit version;
-    hash = "sha256-XBxh2LsTrUD3iKJv11acHZ1g6y5MsZwqG12cAq6GIxY=";
+    hash = "sha256-V3+8dqGV90S5e6xCdeESeffz5jxlnZh3PztKmm4JQ7k=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    typing-extensions
   ];
 
   # Module has no tests

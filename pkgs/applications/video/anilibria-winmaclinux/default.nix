@@ -1,37 +1,42 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qtbase
-, qtquickcontrols2
-, qtwebsockets
-, qtmultimedia
-, gst_all_1
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qtbase,
+  qtquickcontrols2,
+  qtwebsockets,
+  qtmultimedia,
+  gst_all_1,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 
-, withVLC ? true , libvlc
-, withMPV ? true , mpv-unwrapped
+  withVLC ? true,
+  libvlc,
+  withMPV ? true,
+  mpv-unwrapped,
 }:
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "2.2.20";
+  version = "2.2.31";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    hash = "sha256-Tdrs8WFv3ZoDL3U34l+NQp+oVJ6qxlVFg4YfwBSYlVg=";
+    hash = "sha256-czLEYPz+5vXHisXexzRXLhwN4onka31hn69F4MaSnCs=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -44,13 +49,18 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix GST_PLUGIN_PATH : ${(with gst_all_1; lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-base
-      gst-libav
-      gstreamer
-    ])}"
+    "--prefix GST_PLUGIN_PATH : ${
+      (
+        with gst_all_1;
+        lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+          gst-plugins-bad
+          gst-plugins-good
+          gst-plugins-base
+          gst-libav
+          gstreamer
+        ]
+      )
+    }"
   ];
 
   nativeBuildInputs = [
@@ -65,7 +75,8 @@ mkDerivation rec {
     qtquickcontrols2
     qtwebsockets
     qtmultimedia
-  ] ++ (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-good
     gst-plugins-base
@@ -76,17 +87,21 @@ mkDerivation rec {
   ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem rec {
       name = "AniLibria";
       desktopName = name;
       icon = "anilibria";
       comment = meta.description;
       genericName = "AniLibria desktop client";
-      categories = [ "Qt" "AudioVideo" "Player" ];
+      categories = [
+        "Qt"
+        "AudioVideo"
+        "Player"
+      ];
       keywords = [ "anime" ];
       exec = name;
       terminal = false;
-    }))
+    })
   ];
 
   meta = with lib; {

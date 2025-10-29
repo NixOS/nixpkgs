@@ -1,76 +1,93 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-# Transport
-, curl
-# Libraries
-, boost
-, jsoncpp
-, libbsd
-, pcre
-# GUI/Desktop
-, dbus
-, glibmm
-, gsettings-desktop-schemas
-, hicolor-icon-theme
-, libappindicator-gtk3
-, libnotify
-, libxdg_basedir
-, wxGTK
-# GStreamer
-, glib-networking
-, gst_all_1
-# User-agent info
-, lsb-release
-# rt2rtng
-, python3
-# Testing
-, gtest
-# Fixup
-, wrapGAppsHook3
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  # Transport
+  curl,
+  # Libraries
+  boost,
+  jsoncpp,
+  libbsd,
+  # GUI/Desktop
+  dbus,
+  glibmm,
+  gsettings-desktop-schemas,
+  hicolor-icon-theme,
+  libappindicator-gtk3,
+  libnotify,
+  libxdg_basedir,
+  wxGTK,
+  # GStreamer
+  glib-networking,
+  gst_all_1,
+  # User-agent info
+  lsb-release,
+  # rt2rtng
+  python3,
+  # Testing
+  gtest,
+  # Fixup
+  wrapGAppsHook3,
+  makeWrapper,
 }:
 
 let
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
-    gst-plugins-good gst-plugins-bad gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
-  pythonInputs = with python3.pkgs; [ python lxml ];
+  pythonInputs = with python3.pkgs; [
+    python
+    lxml
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "radiotray-ng";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "ebruck";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
+    repo = "radiotray-ng";
+    tag = "v${version}";
+    hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    makeWrapper
+  ];
 
   buildInputs = [
     curl
-    boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
+    boost
+    jsoncpp
+    libbsd
+    glibmm
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libappindicator-gtk3
+    libnotify
     libxdg_basedir
     lsb-release
     wxGTK
     # for https gstreamer / libsoup
     glib-networking
-  ] ++ gstInputs
-    ++ pythonInputs;
+  ]
+  ++ gstInputs
+  ++ pythonInputs;
 
   patches = [
     ./no-dl-googletest.patch
-    (fetchpatch {
-      name = "gcc13-fixes.patch";
-      url = "https://github.com/ebruck/radiotray-ng/commit/7a99bfa784f77be8f160961d25ab63dc2d5ccde0.patch";
-      hash = "sha256-7x3v0dp9WPgd/vsnxezgXIZGsBrIHkTwIiu+FMlLmyA=";
-    })
+    ./tests-c++17.patch
   ];
 
   postPatch = ''
@@ -101,11 +118,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

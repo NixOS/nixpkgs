@@ -1,32 +1,34 @@
-{ stdenv
-, lib
-, testers
-, wrapGAppsHook3
-, fetchzip
-, sbcl
-, pkg-config
-, libfixposix
-, gobject-introspection
-, gsettings-desktop-schemas
-, glib-networking
-, notify-osd
-, gtk3
-, glib
-, gdk-pixbuf
-, cairo
-, pango
-, webkitgtk_4_0
-, openssl
-, gstreamer
-, gst-libav
-, gst-plugins-base
-, gst-plugins-good
-, gst-plugins-bad
-, gst-plugins-ugly
-, xdg-utils
-, xclip
-, wl-clipboard
-, nix-update-script
+{
+  stdenv,
+  lib,
+  testers,
+  wrapGAppsHook3,
+  fetchzip,
+  sbcl,
+  pkg-config,
+  libfixposix,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  glib-networking,
+  gtk3,
+  glib,
+  gdk-pixbuf,
+  cairo,
+  pango,
+  webkitgtk_4_1,
+  openssl,
+  sqlite,
+  gstreamer,
+  gst-libav,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-plugins-ugly,
+  xdg-utils,
+  xclip,
+  wl-clipboard,
+  nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     sbcl
     # for groveller
-    pkg-config libfixposix
+    pkg-config
+    libfixposix
     # for gappsWrapper
     gobject-introspection
     gsettings-desktop-schemas
     glib-networking
-    notify-osd
     gtk3
     gstreamer
     gst-libav
@@ -67,8 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     pango
     gtk3
-    webkitgtk_4_0
+    webkitgtk_4_1
     openssl
+    sqlite
     libfixposix
   ];
 
@@ -80,11 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # don't refresh from git
-  makeFlags = [ "all" "NYXT_SUBMODULES=false" ];
+  makeFlags = [
+    "all"
+    "NYXT_SUBMODULES=false"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xdg-utils xclip wl-clipboard ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${
+      lib.makeBinPath [
+        xdg-utils
+        xclip
+        wl-clipboard
+      ]
+    }")
   '';
 
   # prevent corrupting core in exe
@@ -93,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nyxt; };
   };
 
   meta = with lib; {
@@ -100,7 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nyxt";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lewo dariof4 ];
+    maintainers = with maintainers; [
+      lewo
+      dariof4
+    ];
     platforms = platforms.all;
   };
 })

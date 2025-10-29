@@ -21,6 +21,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "xmltodict" ];
+
   dependencies = [
     aiohttp
     pycryptodome

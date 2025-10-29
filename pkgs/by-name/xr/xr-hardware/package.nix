@@ -1,7 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitLab
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  nix-update-script,
+  udevCheckHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
@@ -14,6 +16,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-w35/LoozCJz0ytHEHWsEdCaYYwyGU6sE13iMckVdOzY=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontConfigure = true;
   dontBuild = true;

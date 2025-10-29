@@ -1,47 +1,62 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, fetchpatch2
-, aqbanking
-, boost
-, cmake
-, gettext
-, glib
-, glibcLocales
-, gtest
-, guile
-, gwenhywfar
-, icu
-, libdbi
-, libdbiDrivers
-, libofx
-, libxml2
-, libxslt
-, makeWrapper
-, perlPackages
-, pkg-config
-, swig
-, webkitgtk_4_0
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  aqbanking,
+  boost,
+  cmake,
+  gettext,
+  glib,
+  glibcLocales,
+  gobject-introspection,
+  gtest,
+  guile,
+  gwenhywfar,
+  icu,
+  libdbi,
+  libdbiDrivers,
+  libofx,
+  libsecret,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  perlPackages,
+  pkg-config,
+  swig,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
+  python3,
 }:
-
-stdenv.mkDerivation rec {
+let
+  py = python3.withPackages (
+    ps: with ps; [
+      pygobject3.out
+    ]
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.9";
+  version = "5.13";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-W+LlNk/DZGT8Msdo4qtGCmMPdNtq631EJm49q5giL9A=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-CC7swzK3IvIj0/JRJibr5e9j+UqvXECeh1JsZURkrvU=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
+    gobject-introspection
     makeWrapper
     wrapGAppsHook3
     pkg-config
+  ];
+
+  cmakeFlags = [
+    "-DWITH_PYTHON=\"ON\""
+    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
 
   buildInputs = [
@@ -56,10 +71,12 @@ stdenv.mkDerivation rec {
     libdbi
     libdbiDrivers
     libofx
+    libsecret
     libxml2
     libxslt
     swig
-    webkitgtk_4_0
+    webkitgtk_4_1
+    py
   ]
   ++ (with perlPackages; [
     JSONParse
@@ -76,22 +93,26 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # this patch fixes gnucah-cli -Q dump, remove on next release
-    (fetchpatch2 {
-      name = "0005-fix-quote-report.patch";
-      url = "https://github.com/Gnucash/gnucash/commit/711554ecd5505004aee4808519d9d8e4e4ed7c9a.patch?full_index=1";
-      hash = "sha256-uRaUdSJu2LnYVp/3DqrK0rTnCpr7oZRtrgTPbKAHThk=";
-    })
+    # this patch adds in env vars to the Python lib that makes it able to find required resource files
+    ./0005-python-env.patch
   ];
+
+  postPatch = ''
+    substituteInPlace bindings/python/__init__.py \
+      --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
+      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
+  '';
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
   env.GUILE_AUTO_COMPILE = "0";
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-    "-Wno-error=use-after-free"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+      "-Wno-error=use-after-free"
+    ]
+  );
 
   doCheck = true;
   enableParallelChecking = true;
@@ -99,27 +120,30 @@ stdenv.mkDerivation rec {
 
   passthru.docs = stdenv.mkDerivation {
     pname = "gnucash-docs";
-    inherit version;
+    inherit (finalAttrs) version;
 
     src = fetchFromGitHub {
       owner = "Gnucash";
       repo = "gnucash-docs";
-      rev = version;
-      hash = "sha256-uXpIAsucVUaAlqYTKfrfBg04Kb5Mza67l0ZU6fxkSUY=";
+      tag = finalAttrs.version;
+      hash = "sha256-EVK36JzK8BPe6St4FhhZEqdc07oaiePJ/EH2NHm3r1U=";
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ libxml2 libxslt ];
+    buildInputs = [
+      libxml2
+      libxslt
+    ];
   };
 
   preFixup = ''
     gappsWrapperArgs+=(
       # documentation
-      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
+      --prefix XDG_DATA_DIRS : ${finalAttrs.passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
       # gsettings schema location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"}
     )
   '';
 
@@ -127,19 +151,33 @@ stdenv.mkDerivation rec {
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
+  # We could not find the python entrypoint and somehow it is used from PATH,
+  # so force to use the one with all dependencies
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
-    wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
-    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
-      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
+      --prefix PERL5LIB : "${
+        with perlPackages;
+        makeFullPerlPath [
+          JSONParse
+          FinanceQuote
+        ]
+      }"
+
+    chmod +x $out/share/gnucash/python/pycons/*.py
+    patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnucash.org/";
     description = "Free software for double entry accounting";
     longDescription = ''
@@ -162,10 +200,13 @@ stdenv.mkDerivation rec {
       - Scheduled Transactions
       - Financial Calculations
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      nevivurn
+      ryand56
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "gnucash";
   };
-}
+})
 # TODO: investigate Darwin support

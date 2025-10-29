@@ -1,33 +1,36 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
+{ pkgs, runTest, ... }:
 builtins.listToAttrs (
   builtins.map
-    (nginxPackage:
-      {
-        name = pkgs.lib.getName nginxPackage;
-        value = makeTest {
-          name = "nginx-variant-${pkgs.lib.getName nginxPackage}";
+    (packageName: {
+      name = packageName;
+      value = runTest {
+        name = "nginx-variant-${packageName}";
 
-          nodes.machine = { pkgs, ... }: {
+        nodes.machine =
+          { pkgs, ... }:
+          {
             services.nginx = {
               enable = true;
               virtualHosts.localhost.locations."/".return = "200 'foo'";
-              package = nginxPackage;
+              package = pkgs.${packageName};
             };
           };
 
-          testScript = ''
-            machine.wait_for_unit("nginx")
-            machine.wait_for_open_port(80)
-            machine.succeed('test "$(curl -fvvv http://localhost/)" = foo')
-          '';
-        };
-      }
-    )
-    [ pkgs.angie pkgs.angieQuic pkgs.nginxStable pkgs.nginxMainline pkgs.nginxQuic pkgs.nginxShibboleth pkgs.openresty pkgs.tengine ]
+        testScript = ''
+          machine.wait_for_unit("nginx")
+          machine.wait_for_open_port(80)
+          machine.succeed('test "$(curl -fvvv http://localhost/)" = foo')
+        '';
+      };
+    })
+    [
+      "angie"
+      "angieQuic"
+      "nginxStable"
+      "nginxMainline"
+      "nginxQuic"
+      "nginxShibboleth"
+      "openresty"
+      "tengine"
+    ]
 )

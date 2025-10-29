@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Lemmons";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pytest-raises";
+    tag = version;
     hash = "sha256-wmtWPWwe1sFbWSYxs5ZXDUZM1qvjRGMudWdjQeskaz0=";
   };
 

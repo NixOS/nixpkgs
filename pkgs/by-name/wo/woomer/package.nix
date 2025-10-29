@@ -8,25 +8,21 @@
   pkg-config,
   rustPlatform,
   wayland,
+  libgbm,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "woomer";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
+    tag = version;
+    hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libwayshot-0.3.2-dev" = "sha256-QETmdzA7a1XMGdMU7tUNSJzzDw/4nkH9gKZv3pP0Nwc=";
-    };
-  };
+  cargoHash = "sha256-xll/A0synEsXy9kPThA3bR8LRuAOQH0T6CAfIEoYJ0w=";
 
   strictDeps = true;
 
@@ -39,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glfw3
     wayland
+    libgbm
   ];
 
   # `raylib-sys` wants to compile examples that don't exist in its crate
@@ -66,7 +63,13 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "woomer";
-    inherit (wayland.meta) platforms;
+    # Not all platforms supported by Wayland are supported by the libraries
+    # used here
+    #
+    # "unresolved import `nix::sys::memfd`"
+    # https://github.com/waycrate/wayshot/blob/cb6bd68dbbe6ab70a5d8fe3bd04cc154f0631cd8/libwayshot/src/screencopy.rs#L11
+    # https://github.com/nix-rust/nix/blob/0e4353a368abfcedea4ebe4345cf7604bb61d238/src/sys/mod.rs#L40-L44
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     # TODO: Remove after upstream is no longer affected by
     # https://github.com/raylib-rs/raylib-rs/issues/74
     broken = stdenv.hostPlatform.isAarch64;

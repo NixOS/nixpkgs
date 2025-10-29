@@ -21,12 +21,13 @@
   openpyxl,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.3.0";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,14 +35,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cYQDoEX33fjxekTA2COHMvcLxCFCD7g9bp3y9sE4uUU=";
+    tag = "v${version}";
+    hash = "sha256-wQOphwG5/4Bfa+re3S0d7lS4CJlKRjrRqnFZKaTG70M=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=skrf" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -65,6 +61,7 @@ buildPythonPackage rec {
       sphinx
       nbsphinx
       openpyxl
+      nbval
     ];
   };
 
@@ -72,26 +69,27 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    nbval
     matplotlib
     pyvisa
     openpyxl
     networkx
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   # test_calibration.py generates a divide by zero error on darwin
+  # and fails on Linux after updates of dependenceis
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = lib.optional (
-    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
-  ) "skrf/calibration/tests/test_calibration.py";
+  disabledTestPaths = [
+    "skrf/calibration/tests/test_calibration.py"
+  ];
 
   pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
-    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lugarun ];
   };

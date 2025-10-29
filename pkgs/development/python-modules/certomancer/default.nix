@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonAtLeast,
   fetchFromGitHub,
   # build-system
   setuptools,
@@ -30,17 +29,16 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
-  # https://github.com/MatthiasValvekens/certomancer/issues/12
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-c2Fq4YTHQvhxuZrpKQYZvqHIMfubbkeKV4rctELLeJU=";
+    tag = "v${version}";
+    hash = "sha256-2/qTTN/UuSMHjkSsOs/KbfzKLBjJSLHY51XtgQ6x1Wo=";
   };
 
   build-system = [
@@ -73,12 +71,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  disabledTests = [
-    # pyhanko_certvalidator.errors.DisallowedAlgorithmError
-    "test_validate"
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "certomancer" ];
 

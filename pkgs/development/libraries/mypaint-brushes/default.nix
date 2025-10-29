@@ -1,8 +1,10 @@
-{ lib, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mypaint";
-    repo = pname;
+    repo = "mypaint-brushes";
     rev = "v${version}";
     sha256 = "0kcqz13vzpy24dhmrx9hbs6s7hqb8y305vciznm15h277sabpmw9";
   };

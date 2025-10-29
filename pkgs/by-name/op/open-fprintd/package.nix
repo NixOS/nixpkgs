@@ -1,19 +1,32 @@
-{ lib, fetchFromGitHub, python3Packages, gobject-introspection, wrapGAppsNoGuiHook }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
-  version = "0.6";
+  version = "0.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uunicorn";
-    repo = pname;
+    repo = "open-fprintd";
     rev = version;
-    hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
+    hash = "sha256-4TraOKvBc7ddqcY73aCuKgfwx4fNoaPHVG8so8Dc5Bw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsNoGuiHook gobject-introspection ];
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ dbus-python pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-python
+    pygobject3
+  ];
 
   checkInputs = with python3Packages; [ dbus-python ];
 
@@ -40,8 +53,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description =
-      "Fprintd replacement which allows you to have your own backend as a standalone service";
+    description = "Fprintd replacement which allows you to have your own backend as a standalone service";
     homepage = "https://github.com/uunicorn/open-fprintd";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

@@ -2,33 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  scikit-build-core,
   setuptools,
   setuptools-scm,
+  cmake,
+  ninja,
   matchpy,
   numpy,
   astunparse,
   typing-extensions,
-  pytest7CheckHook,
-  pytest-cov,
+  nix-update-script,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.9.0";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-q9lMU/xA+G2x38yZy3DxCpXTEmg1lZhZ8GFIHDIKE24=";
+    repo = "uarray";
+    tag = version;
+    hash = "sha256-Nog7jvRG/EFf3n3W2DWC7UML5NyrlaaS0ECis5rtCSk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    scikit-build-core
     setuptools
     setuptools-scm
+    cmake
+    ninja
   ];
-  build-system = [ setuptools ];
+
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     astunparse
@@ -38,8 +46,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest7CheckHook
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   # Tests must be run from outside the source directory
@@ -47,17 +55,20 @@ buildPythonPackage rec {
     cd $TMP
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "uarray"
   ];
 
   pythonImportsCheck = [ "uarray" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
     license = licenses.bsd0;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.pbsds ];
   };
 }

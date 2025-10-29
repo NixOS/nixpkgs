@@ -1,30 +1,52 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, libxcrypt, pkg-config, swig, perl, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  getopt,
+  lua,
+  boost,
+  libxcrypt,
+  pkg-config,
+  swig,
+  perl,
+  gcc,
+}:
 
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.14";
+    version = "4.17";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-UxbgYspocoy9ul2dhIhvIwqKMeWSG7vJY1df3UkgpHQ=";
+      hash = "sha256-XSfiQGMd7GtewyZ72VK/0D9Z9sYzVBWeO1CQXVk63Zc=";
     };
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkg-config swig perl ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
+    nativeBuildInputs = [
+      pkg-config
+      swig
+      perl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost libxcrypt ];
+    buildInputs = [
+      getopt
+      lua
+      boost
+      libxcrypt
+    ];
 
     postPatch = ''
       substituteInPlace src/makefile \
         --replace "shell pkg-config" "shell $PKG_CONFIG"
       substituteInPlace makefile \
         --replace 'gzip' 'gzip -n'
-    '' + lib.optionalString stdenv.cc.isClang ''
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';
@@ -54,10 +76,9 @@ let
       mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ willibutz ];
+      maintainers = [ ];
     };
   };
 
 in
-  if stdenv.hostPlatform.isDarwin then self
-  else perl.pkgs.toPerlModule self
+if stdenv.hostPlatform.isDarwin then self else perl.pkgs.toPerlModule self

@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, fetchFromGitLab
-, zarith
-, zarith_stubs_js ? null
-, integers_stubs_js
-, integers
-, hex
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  zarith,
+  zarith_stubs_js ? null,
+  integers_stubs_js,
+  integers,
+  hex,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -40,7 +41,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = "	https://nomadic-labs.gitlab.io/cryptography/ocaml-bls12-381/bls12-381/";
+    homepage = "https://nomadic-labs.gitlab.io/cryptography/ocaml-bls12-381/bls12-381/";
     description = "Implementation of BLS12-381 and some cryptographic primitives built on top of it";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];

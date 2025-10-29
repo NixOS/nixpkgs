@@ -1,14 +1,16 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchurl,
 
   # nativeBuildInputs
+  zstd,
   pkg-config,
   jq,
   cargo,
   rustc,
   rustPlatform,
+  luarocks,
 
   # buildInputs
   lua,
@@ -16,75 +18,71 @@
   icu,
   fontconfig,
   libiconv,
-  stylua,
-  typos,
-  darwin,
   # FONTCONFIG_FILE
   makeFontsConf,
-  gentium,
+  gentium-plus,
 
   # passthru.tests
   runCommand,
-  poppler_utils,
+  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.5";
+  version = "0.15.13";
 
-  src = fetchzip {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.zip";
-    sha256 = "sha256-zP+MGCXGEg19U6tMrHIdgAAfKQT21vFtmoEROXgxUB0=";
+  src = fetchurl {
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
+    hash = "sha256-XpfBllGv9xBoe5MpLVNhy0EWUglLzIxiyBHBn3qBRks=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
     dontConfigure = true;
-    hash = "sha256-hmgDG29C5JfQX2acMr8c3lmswa1u5XHauRWFd4QGmOo=";
+    nativeBuildInputs = [ zstd ];
+    hash = "sha256-phRnyaF8KTYlgrgBeVNPxBAokRBUoj9vs7P9y97wbG8=";
   };
 
   nativeBuildInputs = [
+    zstd
     pkg-config
+    fontconfig # fc-match
     jq
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    luarocks
+  ];
+  # luarocks propagates cmake, but it shouldn't be used as a build system.
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    finalAttrs.finalPackage.passthru.luaEnv
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
   ];
 
-  buildInputs =
-    [
-      finalAttrs.finalPackage.passthru.luaEnv
-      harfbuzz
-      icu
-      fontconfig
-      libiconv
-      stylua
-      typos
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
-
-  configureFlags =
-    [
-      # Nix will supply all the Lua dependencies, so stop the build system from
-      # bundling vendored copies of them.
-      "--with-system-lua-sources"
-      "--with-system-luarocks"
-      # The automake check target uses pdfinfo to confirm the output of a test
-      # run, and uses autotools to discover it. This flake build eschews that
-      # test because it is run from the source directory but the binary is
-      # already built with system paths, so it can't be checked under Nix until
-      # after install. After install the Makefile isn't available of course, so
-      # we have our own copy of it with a hard coded path to `pdfinfo`. By
-      # specifying some binary here we skip the configure time test for
-      # `pdfinfo`, by using `false` we make sure that if it is expected during
-      # build time we would fail to build since we only provide it at test time.
-      "PDFINFO=false"
-    ]
-    ++ lib.optionals (!lua.pkgs.isLuaJIT) [
-      "--without-luajit"
-    ];
+  configureFlags = [
+    # Nix will supply all the Lua dependencies, so stop the build system from
+    # bundling vendored copies of them.
+    "--with-system-lua-sources"
+    "--with-system-luarocks"
+    # The automake check target uses pdfinfo to confirm the output of a test
+    # run, and uses autotools to discover it. This flake build eschews that
+    # test because it is run from the source directory but the binary is
+    # already built with system paths, so it can't be checked under Nix until
+    # after install. After install the Makefile isn't available of course, so
+    # we have our own copy of it with a hard coded path to `pdfinfo`. By
+    # specifying some binary here we skip the configure time test for
+    # `pdfinfo`, by using `false` we make sure that if it is expected during
+    # build time we would fail to build since we only provide it at test time.
+    "PDFINFO=false"
+  ]
+  ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+    "--without-luajit"
+  ];
 
   outputs = [
     "out"
@@ -101,55 +99,63 @@ stdenv.mkDerivation (finalAttrs: {
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
-      gentium
+      gentium-plus
     ];
   };
+  strictDeps = true;
+  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 
   passthru = {
-    luaEnv = lua.withPackages (
-      ps:
-      with ps;
-      [
-        cassowary
-        cldr
-        fluent
-        linenoise
-        loadkit
-        lpeg
-        lua-zlib
-        lua_cliargs
-        luaepnf
-        luaexpat
-        luafilesystem
-        luarepl
-        luasec
-        luasocket
-        luautf8
-        penlight
-        vstruct
-        # lua packages needed for testing
-        busted
-        luacheck
-        # packages needed for building api docs
-        ldoc
-        # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
-      ]
-      ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
-        bit32
-      ]
-      ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
-        compat53
-      ]
-    );
+    # Use this passthru variable to add packages to your lua environment. Use
+    # something like this in your development environment:
+    #
+    # myLuaEnv = lua.withPackages (
+    #  ps: lib.attrVals (sile.passthru.luaPackages ++ [
+    #    "lua-cjson"
+    #    "lua-resty-http"
+    #  ]) ps
+    # )
+    luaPackages = [
+      "cassowary"
+      "cldr"
+      "fluent"
+      "linenoise"
+      "loadkit"
+      "lpeg"
+      "lua-zlib"
+      "lua_cliargs"
+      "luaepnf"
+      "luaexpat"
+      "luafilesystem"
+      "luarepl"
+      "luasec"
+      "luasocket"
+      "luautf8"
+      "penlight"
+      "vstruct"
+      # lua packages needed for testing
+      "busted"
+      "luacheck"
+      # packages needed for building api docs
+      "ldoc"
+      # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
+    ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+      "bit32"
+    ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+      "compat53"
+    ];
+    luaEnv = lua.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
 
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler_utils
+            poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;

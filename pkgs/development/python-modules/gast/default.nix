@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "gast";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zrbxW8qWhCY6tObP+/WDReoCnlCpMEzQucX2inpRTL4=";
   };
 
@@ -36,7 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/serge-sans-paille/gast/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      jyp
       cpcloud
     ];
   };

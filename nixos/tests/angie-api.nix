@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({lib, pkgs, ...}:
+{ lib, pkgs, ... }:
 let
   hosts = ''
     192.168.2.101 example.com
@@ -12,97 +12,117 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes = {
-    server = { pkgs, ... }: {
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.101"; prefixLength = 24; }
-          ];
+    server =
+      { pkgs, ... }:
+      {
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              {
+                address = "192.168.2.101";
+                prefixLength = 24;
+              }
+            ];
+          };
+          extraHosts = hosts;
+          firewall.allowedTCPPorts = [ 80 ];
         };
-        extraHosts = hosts;
-        firewall.allowedTCPPorts = [ 80 ];
+
+        services.nginx = {
+          enable = true;
+          package = pkgs.angie;
+
+          upstreams = {
+            "backend-http" = {
+              servers = {
+                "backend.example.com:8080" = {
+                  fail_timeout = "0";
+                };
+              };
+              extraConfig = ''
+                zone upstream 256k;
+              '';
+            };
+            "backend-socket" = {
+              servers = {
+                "unix:/run/example.sock" = {
+                  fail_timeout = "0";
+                };
+              };
+              extraConfig = ''
+                zone upstream 256k;
+              '';
+            };
+          };
+
+          virtualHosts."api.example.com" = {
+            locations."/console/" = {
+              extraConfig = ''
+                api /status/;
+
+                allow 192.168.2.201;
+                deny all;
+              '';
+            };
+          };
+
+          virtualHosts."example.com" = {
+            locations."/test/" = {
+              root = lib.mkForce (
+                pkgs.runCommandLocal "testdir" { } ''
+                  mkdir -p "$out/test"
+                  cat > "$out/test/index.html" <<EOF
+                  <html><body>Hello World!</body></html>
+                  EOF
+                ''
+              );
+              extraConfig = ''
+                status_zone test_zone;
+
+                allow 192.168.2.201;
+                deny all;
+              '';
+            };
+            locations."/test/locked/" = {
+              extraConfig = ''
+                status_zone test_zone;
+
+                deny all;
+              '';
+            };
+            locations."/test/error/" = {
+              extraConfig = ''
+                status_zone test_zone;
+
+                allow all;
+              '';
+            };
+            locations."/upstream-http/" = {
+              proxyPass = "http://backend-http";
+            };
+            locations."/upstream-socket/" = {
+              proxyPass = "http://backend-socket";
+            };
+          };
+        };
       };
 
-      services.nginx = {
-        enable = true;
-        package = pkgs.angie;
-
-        upstreams = {
-          "backend-http" = {
-            servers = { "backend.example.com:8080" = { fail_timeout = "0"; }; };
-            extraConfig = ''
-              zone upstream 256k;
-            '';
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              {
+                address = "192.168.2.201";
+                prefixLength = 24;
+              }
+            ];
           };
-          "backend-socket" = {
-            servers = { "unix:/run/example.sock" = { fail_timeout = "0"; }; };
-            extraConfig = ''
-              zone upstream 256k;
-            '';
-          };
-        };
-
-        virtualHosts."api.example.com" = {
-          locations."/console/" = {
-            extraConfig = ''
-              api /status/;
-
-              allow 192.168.2.201;
-              deny all;
-            '';
-          };
-        };
-
-        virtualHosts."example.com" = {
-          locations."/test/" = {
-            root = lib.mkForce (pkgs.runCommandLocal "testdir" {} ''
-              mkdir -p "$out/test"
-              cat > "$out/test/index.html" <<EOF
-              <html><body>Hello World!</body></html>
-              EOF
-            '');
-            extraConfig = ''
-              status_zone test_zone;
-
-              allow 192.168.2.201;
-              deny all;
-            '';
-          };
-          locations."/test/locked/" = {
-            extraConfig = ''
-              status_zone test_zone;
-
-              deny all;
-            '';
-          };
-          locations."/test/error/" = {
-            extraConfig = ''
-              status_zone test_zone;
-
-              allow all;
-            '';
-          };
-          locations."/upstream-http/" = {
-            proxyPass = "http://backend-http";
-          };
-          locations."/upstream-socket/" = {
-            proxyPass = "http://backend-socket";
-          };
+          extraHosts = hosts;
         };
       };
-    };
-
-    client = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.201"; prefixLength = 24; }
-          ];
-        };
-        extraHosts = hosts;
-      };
-    };
   };
 
   testScript = ''
@@ -145,4 +165,4 @@ in
     server.shutdown()
     client.shutdown()
   '';
-})
+}

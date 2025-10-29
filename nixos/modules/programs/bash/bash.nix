@@ -1,7 +1,12 @@
 # This module defines global configuration for the Bash shell, in
 # particular /etc/bashrc and /etc/profile.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -10,22 +15,19 @@ let
   cfg = config.programs.bash;
 
   bashAliases = builtins.concatStringsSep "\n" (
-    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
-      (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
+    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}") (
+      lib.filterAttrs (k: v: v != null) cfg.shellAliases
+    )
   );
 
 in
 
 {
-  imports = [
-    (lib.mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
-  ];
 
   options = {
 
     programs.bash = {
 
-      /*
       enable = lib.mkOption {
         default = true;
         description = ''
@@ -38,10 +40,9 @@ in
         '';
         type = lib.types.bool;
       };
-      */
 
       shellAliases = lib.mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for bash shell, which overrides {option}`environment.shellAliases`.
           See {option}`environment.shellAliases` for an option format description.
@@ -105,11 +106,25 @@ in
         internal = true;
       };
 
+      logout = lib.mkOption {
+        # Reset the title bar when logging out.  This protects against a remote
+        # NixOS system clobbering your local terminal's title bar when you SSH
+        # into the remote NixOS system and then log out.
+        #
+        # For more details, see: https://superuser.com/a/339946
+        default = ''
+          printf '\e]0;\a'
+        '';
+        description = ''
+          Shell script code called during login bash shell logout.
+        '';
+        type = lib.types.lines;
+      };
     };
 
   };
 
-  config = /* lib.mkIf cfg.enable */ {
+  config = lib.mkIf cfg.enable {
 
     programs.bash = {
 
@@ -141,56 +156,69 @@ in
 
     };
 
-    environment.etc.profile.text =
-      ''
-        # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
-        # This file is read for login shells.
+    environment.etc.profile.text = ''
+      # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
+      # This file is read for login shells.
 
-        # Only execute this file once per shell.
-        if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
-        __ETC_PROFILE_SOURCED=1
+      # Only execute this file once per shell.
+      if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+      __ETC_PROFILE_SOURCED=1
 
-        # Prevent this file from being sourced by interactive non-login child shells.
-        export __ETC_PROFILE_DONE=1
+      # Prevent this file from being sourced by interactive non-login child shells.
+      export __ETC_PROFILE_DONE=1
 
-        ${cfg.shellInit}
-        ${cfg.loginShellInit}
+      ${cfg.shellInit}
+      ${cfg.loginShellInit}
 
-        # Read system-wide modifications.
-        if test -f /etc/profile.local; then
-            . /etc/profile.local
-        fi
+      # Read system-wide modifications.
+      if test -f /etc/profile.local; then
+          . /etc/profile.local
+      fi
 
-        if [ -n "''${BASH_VERSION:-}" ]; then
-            . /etc/bashrc
-        fi
-      '';
+      if [ -n "''${BASH_VERSION:-}" ]; then
+          . /etc/bashrc
+      fi
+    '';
 
-    environment.etc.bashrc.text =
-      ''
-        # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
+    environment.etc.bashrc.text = ''
+      # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
-        # Only execute this file once per shell.
-        if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
-        __ETC_BASHRC_SOURCED=1
+      # Only execute this file once per shell.
+      if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
+      __ETC_BASHRC_SOURCED=1
 
-        # If the profile was not loaded in a parent process, source
-        # it.  But otherwise don't do it because we don't want to
-        # clobber overridden values of $PATH, etc.
-        if [ -z "$__ETC_PROFILE_DONE" ]; then
-            . /etc/profile
-        fi
+      # If the profile was not loaded in a parent process, source
+      # it.  But otherwise don't do it because we don't want to
+      # clobber overridden values of $PATH, etc.
+      if [ -z "$__ETC_PROFILE_DONE" ]; then
+          . /etc/profile
+      fi
 
-        # We are not always an interactive shell.
-        if [ -n "$PS1" ]; then
-            ${cfg.interactiveShellInit}
-        fi
+      # We are not always an interactive shell.
+      if [ -n "$PS1" ]; then
+          ${cfg.interactiveShellInit}
+      fi
 
-        # Read system-wide modifications.
-        if test -f /etc/bashrc.local; then
-            . /etc/bashrc.local
-        fi
-      '';
+      # Read system-wide modifications.
+      if test -f /etc/bashrc.local; then
+          . /etc/bashrc.local
+      fi
+    '';
+
+    environment.etc.bash_logout.text = ''
+      # /etc/bash_logout: DO NOT EDIT -- this file has been generated automatically.
+
+      # Only execute this file once per shell.
+      if [ -n "$__ETC_BASHLOGOUT_SOURCED" ] || [ -n "$NOSYSBASHLOGOUT" ]; then return; fi
+      __ETC_BASHLOGOUT_SOURCED=1
+
+      ${cfg.logout}
+
+      # Read system-wide modifications.
+      if test -f /etc/bash_logout.local; then
+          . /etc/bash_logout.local
+      fi
+    '';
 
     # Configuration for readline in bash. We use "option default"
     # priority to allow user override using both .text and .source.
@@ -203,12 +231,12 @@ in
       "/share/bash-completion"
     ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/bash"
-        "/run/current-system/sw/bin/sh"
-        "${pkgs.bashInteractive}/bin/bash"
-        "${pkgs.bashInteractive}/bin/sh"
-      ];
+    environment.shells = [
+      "/run/current-system/sw/bin/bash"
+      "/run/current-system/sw/bin/sh"
+      "${pkgs.bashInteractive}/bin/bash"
+      "${pkgs.bashInteractive}/bin/sh"
+    ];
 
   };
 

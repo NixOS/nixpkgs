@@ -7,6 +7,8 @@
   gql,
   graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
@@ -26,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.5.3";
+  version = "1.8.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kau350L2WCyuxwsmnD85iWte6LIIqprSVe0yNn+BikE=";
+    tag = version;
+    hash = "sha256-Dt6jN+0Ktv3CO88RmbgKCU8v3Oa10MnKjyJaePxXsaI=";
   };
 
   pythonRelaxDeps = [
@@ -46,12 +48,14 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    defusedxml
-    marshmallow
-    python-box
     cryptography
+    defusedxml
     gql
     graphql-core
+    marshmallow
+    pydantic
+    pydantic-extra-types
+    python-box
     python-dateutil
     requests
     requests-toolbelt
@@ -83,6 +87,13 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    # https://github.com/tenable/pyTenable/issues/953
+    "test_construct_query_str"
+    "test_construct_query_stored_file"
+    "test_iterator_empty_page"
+    "test_iterator_max_page_term"
+    "test_iterator_pagination"
+    "test_iterator_total_term"
   ];
 
   pythonImportsCheck = [ "tenable" ];
@@ -90,7 +101,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

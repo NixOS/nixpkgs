@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   # TODO: understand & possibly fix why tests fail. On github most testfiles
-  # have been comitted with msgs "wip" though.
+  # have been committed with msgs "wip" though.
   doCheck = false;
 
   nativeCheckInputs = [

@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "app-model";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PvQ9l2sCi1NaF/SWApWqt6a5AHI5A+zmJRo8gR3ng6Y=";
+    tag = "v${version}";
+    hash = "sha256-T7aUwdne1rUzhVRotlxDvEBm3mi/frUQziZdLo53Lsg=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to implement generic application schema";
     homepage = "https://github.com/pyapp-kit/app-model";
-    changelog = "https://github.com/pyapp-kit/app-model/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyapp-kit/app-model/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

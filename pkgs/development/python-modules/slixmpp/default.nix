@@ -3,47 +3,69 @@
   buildPythonPackage,
   aiodns,
   aiohttp,
+  cryptography,
+  defusedxml,
+  emoji,
   fetchPypi,
   gnupg,
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  substituteAll,
-  pythonOlder,
+  replaceVars,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dePwrUhVX39ckijnBmwdQ1izPWQLT753PsNLA7f66aM=";
+    hash = "sha256-dGn23K9XQv1i4OZu5EfFM4p0UgwZgqcHhOe3kN7y/dU=";
   };
 
-  propagatedBuildInputs = [
-    aiodns
-    aiohttp
-    pyasn1
-    pyasn1-modules
-  ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
   patches = [
-    (substituteAll {
-      src = ./hardcode-gnupg-path.patch;
+    (replaceVars ./hardcode-gnupg-path.patch {
       inherit gnupg;
     })
   ];
 
+  build-system = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src;
+    hash = "sha256-eKXQeZ2RLHsTZmYszws4fCHgeiSO9wsrRbPkVV1gqZY=";
+  };
+
+  dependencies = [
+    aiodns
+    pyasn1
+    pyasn1-modules
+  ];
+
+  optional-dependencies = {
+    xep-0363 = [ aiohttp ];
+    xep-0444-compliance = [ emoji ];
+    xep-0464 = [ cryptography ];
+    safer-xml-parserig = [ defusedxml ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  preCheck = ''
+    # don't test against pure python version in the source tree
+    rm -rf slixmpp
+  '';
+
   disabledTestPaths = [
+    # Exclude integration tests
+    "itests/"
     # Exclude live tests
     "tests/live_test.py"
-    "tests/test_xep_0454.py"
   ];
 
   pythonImportsCheck = [ "slixmpp" ];

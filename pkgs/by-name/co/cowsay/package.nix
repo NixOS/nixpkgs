@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsay";
-  version = "3.8.3";
+  version = "3.8.4";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cowsay-org";
     repo = "cowsay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bca+/a9jXsNnuBeYEjjtvZ1LsMMraLKiCn04CiS+uXU=";
+    hash = "sha256-m3Rndw0rnTBLhs15KqokzIOWuYl6aoPqEu2MHWpXRCs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program which generates ASCII pictures of a cow with a message";
     homepage = "https://cowsay.diamonds";
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rob
       anthonyroussel
     ];

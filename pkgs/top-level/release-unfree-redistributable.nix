@@ -37,6 +37,8 @@
       cudaSupport = true;
       inHydra = true;
     };
+
+    __allowFileset = false;
   },
   # We only build the full package set on infrequently releasing channels.
   full ? false,
@@ -67,11 +69,7 @@ let
               value.meta.hydraPlatforms
                 or (lib.subtractLists (value.meta.badPlatforms or [ ]) (value.meta.platforms or [ "x86_64-linux" ]))
             )
-          else if
-            value.recurseForDerivations or false
-            || value.recurseForRelease or false
-            || value.__recurseIntoDerivationForReleaseJobs or false
-          then
+          else if value.recurseForDerivations or false || value.recurseForRelease or false then
             # Recurse
             packagesWith attrPath cond value
           else

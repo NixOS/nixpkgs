@@ -1,4 +1,12 @@
-{ lib, stdenv, glibmm, pidgin, pkg-config, modemmanager, fetchFromGitLab } :
+{
+  lib,
+  stdenv,
+  glibmm,
+  pidgin,
+  pkg-config,
+  modemmanager,
+  fetchFromGitLab,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-mm-sms";
@@ -7,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = pname;
+    repo = "purple-mm-sms";
     rev = "v${version}";
     sha256 = "0917gjig35hmi6isqb62vhxd3lkc2nwdn13ym2gvzgcjfgjzjajr";
   };
@@ -18,7 +26,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glibmm pidgin modemmanager ];
+  buildInputs = [
+    glibmm
+    pidgin
+    modemmanager
+  ];
 
   meta = with lib; {
     homepage = "https://source.puri.sm/Librem5/purple-mm-sms";

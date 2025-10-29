@@ -5,23 +5,22 @@
   fetchPypi,
   poetry-core,
   pyscard,
-  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.3";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JhAPIm0SztYhymGYUozhft9nt430KHruEoX+481aqfw=";
+    hash = "sha256-MGHNBec7Og72r8O4A9V8gmqi1qlzLRar1ydzYfWOeWQ=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "cryptography" ];
 
   dependencies = [ cryptography ];
 
@@ -31,7 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  pytestFlags = [
+    "-v"
+    "--no-device"
+  ];
 
   pythonImportsCheck = [ "fido2" ];
 

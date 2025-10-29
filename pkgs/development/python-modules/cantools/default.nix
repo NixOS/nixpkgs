@@ -9,6 +9,7 @@
   fetchPypi,
   matplotlib,
   parameterized,
+  pytest-freezegun,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.8";
+  version = "40.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kzgDr+l96R2ScFOwJ+KhZeTOiRq/jkLWtAmnt9/vqA0=";
+    hash = "sha256-Rn4EzIbgdjBzda6bzYNwcQjpmOPqYBm/lodzWAuaqV8=";
   };
 
   nativeBuildInputs = [
@@ -46,17 +47,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     parameterized
+    pytest-freezegun
     pytestCheckHook
-  ] ++ optional-dependencies.plot;
+  ]
+  ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 
   meta = with lib; {
     description = "Tools to work with CAN bus";
-    mainProgram = "cantools";
     homepage = "https://github.com/cantools/cantools";
     changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gray-heron ];
+    mainProgram = "cantools";
   };
 }

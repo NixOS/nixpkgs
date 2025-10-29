@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   jinja2,
   ply,
-  poetry-core,
   pysmi,
   pysnmp,
   pytestCheckHook,
@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.4";
+  version = "1.6.2";
   pname = "pysmi";
   pyproject = true;
 
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QKxUV2QTaGkCQmWTS8GBeaXKsKTIsrDVZFwidTqLdh0=";
+    tag = "v${version}";
+    hash = "sha256-GyG3J6qntEIszXrm1t623+x1cYbhJLbTEQl6N2h2LA0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     ply

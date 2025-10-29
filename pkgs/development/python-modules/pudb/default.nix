@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  hatchling,
   fetchPypi,
-  setuptools,
   jedi,
   packaging,
   pygments,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2024.1.2";
+  version = "2025.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rcmwAEK6g2cRffCmwNxi+pYJq9IcO/jltz1iCQfFtD4=";
+    hash = "sha256-Wd/8WjVaNM1IzrzjO/ChZ9aOpoEP/EwWHcOKcD1HnYY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     jedi

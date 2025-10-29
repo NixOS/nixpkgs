@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pkg-config,
+  cmake,
   setuptools,
   igraph,
   texttable,
@@ -15,21 +15,19 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.6";
-
-  disabled = pythonOlder "3.8";
+  version = "0.11.9";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = "refs/tags/${version}";
+    tag = version;
     postFetch = ''
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-DXYNFSvmKiulMnWL8w5l9lWGtS9Sff/Hn4x538nrvzo=";
+    hash = "sha256-rmIICiIyEr5JCmkDAzcdisVaaKDraTQEquPHjK4d7oU=";
   };
 
   postPatch = ''
@@ -38,7 +36,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    setuptools
+  ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [ igraph ];
 
@@ -58,7 +61,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     "testAuthorityScore"

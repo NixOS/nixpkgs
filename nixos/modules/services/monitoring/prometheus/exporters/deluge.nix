@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.deluge;
@@ -74,12 +79,16 @@ in
         "DELUGE_HOST=${cfg.delugeHost}"
         "DELUGE_USER=${cfg.delugeUser}"
         "DELUGE_PORT=${toString cfg.delugePort}"
-      ] ++ lib.optionals (cfg.delugePassword != null) [
+      ]
+      ++ lib.optionals (cfg.delugePassword != null) [
         "DELUGE_PASSWORD=${cfg.delugePassword}"
-      ] ++ lib.optionals cfg.exportPerTorrentMetrics [
+      ]
+      ++ lib.optionals cfg.exportPerTorrentMetrics [
         "PER_TORRENT_METRICS=1"
       ];
-      EnvironmentFile = lib.optionalString (cfg.delugePasswordFile != null) "/etc/deluge-exporter/password";
+      EnvironmentFile = lib.optionalString (
+        cfg.delugePasswordFile != null
+      ) "/etc/deluge-exporter/password";
     };
   };
 }

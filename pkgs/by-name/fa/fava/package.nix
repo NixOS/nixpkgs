@@ -1,18 +1,45 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  buildNpmPackage,
+  fetchFromGitHub,
+  stdenv,
 }:
+let
+  src = buildNpmPackage (finalAttrs: {
+    pname = "fava-frontend";
+    version = "1.30.7";
 
-python3Packages.buildPythonApplication rec {
+    src = fetchFromGitHub {
+      owner = "beancount";
+      repo = "fava";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-gO6eJIFp/yWAXFWhUcqkkfk2pA8/vyTxgPRPBmv4a6Q=";
+    };
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    npmDepsHash = "sha256-cXIhEzYFpLOxUEY7lhTWW7R3/ptkx7hB9K92Fd2m1Ng=";
+    makeCacheWritable = true;
+
+    preBuild = ''
+      chmod -R u+w ..
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R .. $out
+      runHook postInstall
+    '';
+  });
+in
+python3Packages.buildPythonApplication {
   pname = "fava";
-  version = "1.28";
+  inherit (src) version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sWHVkR0/0VMGzH5OMxOCK4usf7G0odzMtr82ESRQhrk=";
-  };
+  inherit src;
+
+  patches = [ ./dont-compile-frontend.patch ];
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
@@ -24,11 +51,12 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     babel
     beancount
+    beangulp
+    beanquery
     cheroot
     click
     flask
     flask-babel
-    jaraco-functools
     jinja2
     markdown2
     ply
@@ -39,18 +67,26 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
+  # tests/test_cli.py
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  # flaky, fails only on ci
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_core_watcher.py" ];
+
+  env = {
+    # Disable some tests when building with beancount2
+    SNAPSHOT_IGNORE = lib.versions.major python3Packages.beancount.version == "2";
+  };
+
+  meta = {
     description = "Web interface for beancount";
     mainProgram = "fava";
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bhipple
+      prince213
       sigmanificient
     ];
   };

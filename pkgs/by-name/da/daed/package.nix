@@ -1,56 +1,71 @@
 {
-  pnpm,
+  pnpm_9,
   nodejs,
   stdenv,
   clang,
   buildGoModule,
   fetchFromGitHub,
   lib,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 let
   pname = "daed";
-  version = "0.8.0";
+  version = "1.0.0";
+
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "daed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-h1j91XIumuzuJnMxgkCjhuXYPLXoDuFFsfmDwmzlTEI=";
+    tag = "v${version}";
+    hash = "sha256-WaybToEcFrKOcJ+vfCTc9uyHkTPOrcAEw9lZFEIBPgY=";
     fetchSubmodules = true;
   };
 
   web = stdenv.mkDerivation {
     inherit pname version src;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version src;
-      hash = "sha256-vqkiZzd5WOeJem0zUyMsJd6/aHHAjlsIQMkNf+SUvHY=";
+      fetcherVersion = 1;
+      hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
     buildPhase = ''
       runHook preBuild
+
       pnpm build
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out
-      cp -R dist/* $out/
+
+      cp -R dist $out
+
       runHook postInstall
     '';
   };
 in
+
 buildGoModule rec {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    web
+    ;
+
   sourceRoot = "${src.name}/wing";
 
-  vendorHash = "sha256-TBR3MmpTdwIwyekU+nrHhzsN31E30+Rqd3FoBL3dl4U=";
+  vendorHash = "sha256-+uf8PJQvsJMUyQ6W+nDfdwrxBO2YRUL328ajTJpVDZk=";
+
   proxyVendor = true;
 
   nativeBuildInputs = [ clang ];
@@ -80,6 +95,21 @@ buildGoModule rec {
 
     runHook postBuild
   '';
+
+  postInstall = ''
+    install -Dm444 $src/install/daed.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/daed.service \
+      --replace-fail /usr/bin $out/bin
+  '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "daed.web";
+    })
+    (nix-update-script {
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   meta = {
     description = "Modern dashboard with dae";

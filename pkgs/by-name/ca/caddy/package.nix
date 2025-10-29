@@ -1,45 +1,55 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, caddy
-, testers
-, installShellFiles
-, stdenv
+{
+  lib,
+  buildGo125Module,
+  callPackage,
+  fetchFromGitHub,
+  nixosTests,
+  caddy,
+  testers,
+  installShellFiles,
+  stdenv,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "2.8.4";
+  version = "2.10.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
-    rev = "v${version}";
-    hash = "sha256-O4s7PhSUTXoNEIi+zYASx8AgClMC5rs7se863G6w+l0=";
+    tag = "v${version}";
+    hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGoModule {
+buildGo125Module {
   pname = "caddy";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "caddyserver";
     repo = "caddy";
-    rev = "v${version}";
-    hash = "sha256-CBfyqtWp3gYsYwaIxbfXO3AYaBiM7LutLC7uZgYXfkQ=";
+    tag = "v${version}";
+    hash = "sha256-KvikafRYPFZ0xCXqDdji1rxlkThEDEOHycK8GP5e8vk=";
   };
 
-  vendorHash = "sha256-1Api8bBZJ1/oYk4ZGIiwWCSraLzK9L+hsKXkFtk6iVM=";
-
-  subPackages = [ "cmd/caddy" ];
+  vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
   ];
 
   # matches upstream since v2.8.0
-  tags = [ "nobadger" ];
+  tags = [
+    "nobadger"
+    "nomysql"
+    "nopgx"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
@@ -48,7 +58,8 @@ buildGoModule {
       --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
     substituteInPlace $out/lib/systemd/system/caddy-api.service \
       --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Generating man pages and completions fail on cross-compilation
     # https://github.com/NixOS/nixpkgs/issues/308283
 
@@ -61,19 +72,28 @@ buildGoModule {
       --zsh <($out/bin/caddy completion zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) caddy;
-    version = testers.testVersion {
-      command = "${caddy}/bin/caddy version";
-      package = caddy;
+  passthru = {
+    tests = {
+      inherit (nixosTests) caddy;
+      version = testers.testVersion {
+        command = "${caddy}/bin/caddy version";
+        package = caddy;
+      };
+      acme-integration = nixosTests.acme.caddy;
     };
+    withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "caddy";
-    maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      stepbrobd
+      techknowlogick
+      ryan4yin
+    ];
   };
 }

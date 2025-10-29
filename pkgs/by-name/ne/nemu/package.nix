@@ -1,38 +1,39 @@
-{ busybox
-, cmake
-, coreutils
-, dbus
-, fetchFromGitHub
-, gettext
-, graphviz
-, json_c
-, lib
-, libarchive
-, libusb1
-, libxml2
-, makeWrapper
-, ncurses
-, ninja
-, openssl
-, picocom
-, pkg-config
-, qemu
-, socat
-, sqlite
-, stdenv
-, systemd
-, tigervnc
+{
+  busybox,
+  cmake,
+  coreutils,
+  dbus,
+  fetchFromGitHub,
+  gettext,
+  graphviz,
+  json_c,
+  lib,
+  libarchive,
+  libusb1,
+  libxml2,
+  makeWrapper,
+  ncurses,
+  ninja,
+  openssl,
+  picocom,
+  pkg-config,
+  qemu,
+  socat,
+  sqlite,
+  stdenv,
+  systemd,
+  tigervnc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemu";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "nemuTUI";
     repo = "nemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6WzqBkspKKs1e8kg1i71ntZHa78s5pJ1u02mXvzpiEc=";
+    hash = "sha256-QvyCBHZmahZPIghPX53HcL5HsOVvhsVwdMZosVQ9A5U=";
   };
 
   cmakeFlags = [

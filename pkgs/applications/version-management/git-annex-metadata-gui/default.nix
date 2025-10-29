@@ -1,8 +1,16 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pyqt5, qt5, git-annex-adapter }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pyqt5,
+  qt5,
+  git-annex-adapter,
+}:
 
 buildPythonApplication rec {
   pname = "git-annex-metadata-gui";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alpernebbi";
@@ -21,13 +29,19 @@ buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  propagatedBuildInputs = [ pyqt5 git-annex-adapter ];
+  propagatedBuildInputs = [
+    pyqt5
+    git-annex-adapter
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
     description = "Graphical interface for git-annex metadata commands";
     mainProgram = "git-annex-metadata-gui";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [
+      dotlambda
+      matthiasbeyer
+    ];
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;
   };

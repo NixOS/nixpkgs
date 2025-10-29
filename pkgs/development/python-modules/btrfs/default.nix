@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "btrfs";
-  version = "14.1";
+  version = "15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BPKPwT33i8fQYJkUZbnJ8nQNbmKw0Dq6ekb9mr7awEY=";
+    hash = "sha256-FBmRT/FB3+nhb9BHfZVI1L6nM+zXdYjoy3JVzhetoQs=";
   };
 
   # no tests (in v12)
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      evils
       Luflosi
     ];
   };

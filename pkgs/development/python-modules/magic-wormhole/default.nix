@@ -3,22 +3,25 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  installShellFiles,
 
   # build-system
   setuptools,
+  versioneer,
 
   # dependencies
-  spake2,
-  pynacl,
-  six,
   attrs,
-  twisted,
   autobahn,
   automat,
-  tqdm,
   click,
+  cryptography,
   humanize,
   iterable-io,
+  pynacl,
+  qrcode,
+  spake2,
+  tqdm,
+  twisted,
   txtorcon,
   zipstream-ng,
 
@@ -26,24 +29,27 @@
   noiseprotocol,
 
   # tests
-  nettools,
+  net-tools,
   unixtools,
-  mock,
-  magic-wormhole-transit-relay,
+  hypothesis,
   magic-wormhole-mailbox-server,
+  magic-wormhole-transit-relay,
   pytestCheckHook,
+  pytest-twisted,
+
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.17.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
+    tag = version;
+    hash = "sha256-gsNdV6JvxsdlyPOSn07nTrvU4ju+3si3SQhyN8ZX/ac=";
   };
 
   postPatch =
@@ -55,71 +61,70 @@ buildPythonPackage rec {
     ''
     # fix the location of the ifconfig binary
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
+      sed -i -e "s|'ifconfig'|'${net-tools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   dependencies = [
     attrs
     autobahn
     automat
     click
+    cryptography
     humanize
     iterable-io
     pynacl
-    six
+    qrcode
     spake2
     tqdm
     twisted
     txtorcon
     zipstream-ng
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  ]
+  ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];
   };
 
-  nativeCheckInputs =
-    # For Python 3.12, remove magic-wormhole-mailbox-server and magic-wormhole-transit-relay from test dependencies,
-    # which are not yet supported with this version.
-    lib.optionals
-      (!magic-wormhole-mailbox-server.meta.broken && !magic-wormhole-transit-relay.meta.broken)
-      [
-        magic-wormhole-mailbox-server
-        magic-wormhole-transit-relay
-      ]
-    ++ [
-      mock
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.dilation
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    magic-wormhole-mailbox-server
+    magic-wormhole-transit-relay
+    pytestCheckHook
+    pytest-twisted
+  ]
+  ++ optional-dependencies.dilation
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths =
-    # For Python 3.12, remove the tests depending on magic-wormhole-mailbox-server and magic-wormhole-transit-relay,
-    # which are not yet supported with this version.
-    lib.optionals
-      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay.meta.broken)
-      [
-        "src/wormhole/test/dilate/test_full.py"
-        "src/wormhole/test/test_args.py"
-        "src/wormhole/test/test_cli.py"
-        "src/wormhole/test/test_transit.py"
-        "src/wormhole/test/test_wormhole.py"
-        "src/wormhole/test/test_xfer_util.py"
-      ];
-
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+
+    # https://github.com/magic-wormhole/magic-wormhole/issues/619
+    installShellCompletion --cmd ${meta.mainProgram} \
+      --bash wormhole_complete.bash \
+      --fish wormhole_complete.fish \
+      --zsh wormhole_complete.zsh
+    rm $out/wormhole_complete.*
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
     description = "Securely transfer data between computers";
-    homepage = "https://github.com/magic-wormhole/magic-wormhole";
+    homepage = "https://magic-wormhole.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";

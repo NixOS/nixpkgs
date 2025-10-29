@@ -1,10 +1,15 @@
-{ lib, buildDunePackage, fetchFromGitLab
-, sedlex, uunf, uutf
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  sedlex,
+  uunf,
+  uutf,
 }:
 
 buildDunePackage rec {
   pname = "iri";
-  version = "1.0.0";
+  version = "1.1.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -13,10 +18,14 @@ buildDunePackage rec {
     owner = "zoggy";
     repo = "ocaml-iri";
     rev = version;
-    hash = "sha256-6Q7qPezmdcO6JSevWl55XAxFuIROZNDrMkYw8VRR7qg=";
+    hash = "sha256-fh5+0CWplDdGXCotZL2UzjOGil2LR4NppttaquO/ndE=";
   };
 
-  propagatedBuildInputs = [ sedlex uunf uutf ];
+  propagatedBuildInputs = [
+    sedlex
+    uunf
+    uutf
+  ];
 
   meta = {
     description = "IRI (RFC3987) native OCaml implementation";

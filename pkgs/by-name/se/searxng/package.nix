@@ -2,24 +2,40 @@
   lib,
   python3,
   fetchFromGitHub,
-  nixosTests
+  nixosTests,
+  unstableGitUpdater,
 }:
-
-python3.pkgs.toPythonModule (
-  python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = final: prev: { };
+  };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-10-05";
+    version = "0-unstable-2025-10-23";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "e7a4d7d7c3d688b69737f2b1ecd23571f5e3a0b9";
-      hash = "sha256-JfcB19Tfk5e7DyArzz9TNjidOZjkSxTLEU3ZhE105qs=";
+      rev = "e363db970c77e9cab8f3611bb6b6f8a59646a035";
+      hash = "sha256-phJRQ+euSTEmsn1wS5dgO8UPwAJ8cr8ov3K3fSzWQVA=";
     };
 
-    postPatch = ''
-      sed -i 's/==.*$//' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "flask"
+      "flask-babel"
+      "httpx-socks"
+      "lxml"
+      "setproctitle"
+      "typer-slim"
+      "typing-extensions"
+      "whitenoise"
+    ];
 
     preBuild =
       let
@@ -40,27 +56,33 @@ python3.pkgs.toPythonModule (
         EOF
       '';
 
+    build-system = with python.pkgs; [ setuptools ];
+
     dependencies =
-      with python3.pkgs;
+      with python.pkgs;
       [
         babel
+        brotli
         certifi
-        python-dateutil
+        cryptography
         fasttext-predict
         flask
         flask-babel
-        brotli
-        jinja2
-        lxml
-        pygments
-        pytomlpp
-        pyyaml
-        redis
-        uvloop
-        setproctitle
         httpx
         httpx-socks
+        isodate
+        jinja2
+        lxml
         markdown-it-py
+        msgspec
+        pygments
+        python-dateutil
+        pyyaml
+        setproctitle
+        typer-slim
+        uvloop
+        valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;
@@ -71,16 +93,17 @@ python3.pkgs.toPythonModule (
     postInstall = ''
       # Create a symlink for easier access to static data
       mkdir -p $out/share
-      ln -s ../${python3.sitePackages}/searx/static $out/share/
+      ln -s ../${python.sitePackages}/searx/static $out/share/
 
       # copy config schema for the limiter
-      cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
     '';
 
     passthru = {
       tests = {
         searxng = nixosTests.searx;
       };
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
     meta = with lib; {

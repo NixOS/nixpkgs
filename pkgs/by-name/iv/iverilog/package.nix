@@ -1,33 +1,41 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoconf
-, bison
-, bzip2
-, flex
-, gperf
-, ncurses
-, perl
-, python3
-, readline
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  bison,
+  bzip2,
+  flex,
+  gperf,
+  ncurses,
+  perl,
+  python3,
+  readline,
+  zlib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "iverilog";
+  pname = "iverilog";
   version = "12.0";
 
   src = fetchFromGitHub {
-    owner  = "steveicarus";
-    repo   = pname;
-    rev    = "v${lib.replaceStrings ["."] ["_"] version}";
-    hash   = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
+    owner = "steveicarus";
+    repo = "iverilog";
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };
 
-  nativeBuildInputs = [ autoconf bison flex gperf ];
+  nativeBuildInputs = [
+    autoconf
+    bison
+    flex
+    gperf
+  ];
 
-  CC_FOR_BUILD="${stdenv.cc}/bin/cc";
-  CXX_FOR_BUILD="${stdenv.cc}/bin/c++";
+  CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+  CXX_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/c++";
 
   patches = [
     # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
@@ -38,7 +46,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ bzip2 ncurses readline zlib ];
+  buildInputs = [
+    bzip2
+    ncurses
+    readline
+    zlib
+  ];
 
   preConfigure = "sh autoconf.sh";
 
@@ -58,9 +71,11 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [
     perl
-    (python3.withPackages (pp: with pp; [
-      docopt
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        docopt
+      ]
+    ))
   ];
 
   installCheckPhase = ''
@@ -72,9 +87,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Icarus Verilog compiler";
-    homepage    = "https://steveicarus.github.io/iverilog";
-    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    homepage = "https://steveicarus.github.io/iverilog";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

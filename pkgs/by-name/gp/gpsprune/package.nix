@@ -1,17 +1,29 @@
-{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jre, copyDesktopItems }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jre,
+  copyDesktopItems,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "24.5";
+  version = "25";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    hash = "sha256-qQtMSQbhIgYLJbCip6ioWeVphO1DEYudmXKUer04L4Y=";
+    hash = "sha256-8FGOigjHIvj+CZwq0Lht7UZjtmrE5l2Aqx92gZjau44=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ jre ];
 
   desktopItems = [
@@ -22,7 +34,10 @@ stdenv.mkDerivation rec {
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
-      categories = [ "Education" "Geoscience" ];
+      categories = [
+        "Education"
+        "Geoscience"
+      ];
       mimeTypes = [
         "application/gpx+xml"
         "application/vnd.google-earth.kml+xml"

@@ -1,26 +1,59 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook, pkg-config, pruneLibtoolFiles, flex, bison
-, libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
-, nftablesCompat ? true
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  pruneLibtoolFiles,
+  flex,
+  bison,
+  libmnl,
+  libnetfilter_conntrack,
+  libnfnetlink,
+  libnftnl,
+  libpcap,
+  bash,
+  bashNonInteractive,
+  nftablesCompat ? true,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.10";
+  version = "1.8.11";
   pname = "iptables";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    sha256 = "XMJVwYk1bjF9BwdVzpNx62Oht4PDRJj7jDAmTzzFnJw=";
+    sha256 = "2HMD1V74ySvK1N0/l4sm0nIBNkKwKUJXdfW60QCf57I=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  nativeBuildInputs = [
-    autoreconfHook pkg-config pruneLibtoolFiles flex bison
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
   ];
 
-  buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pruneLibtoolFiles
+    flex
+    bison
+  ];
+
+  buildInputs = [
+    libmnl
+    libnetfilter_conntrack
+    libnfnetlink
+    libnftnl
+    libpcap
+    bash
+  ];
 
   configureFlags = [
     "--enable-bpf-compiler"
@@ -28,7 +61,8 @@ stdenv.mkDerivation rec {
     "--enable-libipq"
     "--enable-nfsynproxy"
     "--enable-shared"
-  ] ++ lib.optional (!nftablesCompat) "--disable-nftables";
+  ]
+  ++ lib.optional (!nftablesCompat) "--disable-nftables";
 
   enableParallelBuilding = true;
 
@@ -42,6 +76,11 @@ stdenv.mkDerivation rec {
     ln -sv xtables-nft-multi $out/bin/ip6tables-save
   '';
 
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
+
   passthru = {
     updateScript = gitUpdater {
       url = "https://git.netfilter.org/iptables";
@@ -53,6 +92,7 @@ stdenv.mkDerivation rec {
     description = "Program to configure the Linux IP packet filtering ruleset";
     homepage = "https://www.netfilter.org/projects/iptables/index.html";
     platforms = platforms.linux;
+    mainProgram = "iptables";
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";

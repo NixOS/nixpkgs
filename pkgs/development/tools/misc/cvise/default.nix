@@ -1,29 +1,32 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, clang-tools
-, cmake
-, colordiff
-, flex
-, libclang
-, llvm
-, unifdef
-, chardet
-, pebble
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  clang-tools,
+  cmake,
+  colordiff,
+  flex,
+  libclang,
+  llvm,
+  unifdef,
+  chardet,
+  pebble,
+  psutil,
+  pytestCheckHook,
+  testers,
+  cvise,
 }:
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.10.0";
+  version = "2.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0gk4O1q90eH1FMhj4ncNVqX/MfVyaU0nckh1xny2wlM=";
+    tag = "v${version}";
+    hash = "sha256-UaWOHjgTiSVvpKKw6VFAeRAYkYp4y0Dnamzr7yhH0vQ=";
   };
 
   patches = [
@@ -76,6 +79,16 @@ buildPythonApplication rec {
     # Needs gcc, fails when run noninteractively (without tty).
     "test_simple_reduction"
   ];
+
+  passthru = {
+    tests = {
+      # basic syntax check
+      help-output = testers.testVersion {
+        package = cvise;
+        command = "cvise --version";
+      };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/marxin/cvise";

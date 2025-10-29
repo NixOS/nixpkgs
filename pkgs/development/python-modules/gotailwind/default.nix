@@ -10,6 +10,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.2.4";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,15 +29,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-gotailwind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g4wYjMJXSm7cjb5Zck1O0A+ETfqMTmiI8In26mcGhNw=";
+    tag = "v${version}";
+    hash = "sha256-kNyqSyJ1ha+BumYX4ruWaN0akEvUEsRxPs7Fj7LDHOw=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}" \
-      --replace-fail "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
   build-system = [ poetry-core ];
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

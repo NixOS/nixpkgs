@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "taskw-ng";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "taskw-ng";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tlidTt0TzWnvfajYiIfvRv7OfakHY6zWAicmAwq/Z8w=";
+    tag = "v${version}";
+    hash = "sha256-KxXLSDvUclQlNbMR+Zzl6tgBrH2QxqjLVoyBK3OiKVU=";
   };
 
   pythonRelaxDeps = [
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     poetry-core
     poetry-dynamic-versioning
   ];
-
 
   propagatedBuildInputs = [
     kitchen

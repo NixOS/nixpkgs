@@ -1,25 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, gnu-efi
-, nixosTests
-, efibootmgr
-, openssl
-, withSbsigntool ? false # currently, cross compiling sbsigntool is broken, so default to false
-, sbsigntool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnu-efi_3,
+  nixosTests,
+  efibootmgr,
+  openssl,
+  withSbsigntool ? false, # currently, cross compiling sbsigntool is broken, so default to false
+  sbsigntool,
+  makeWrapper,
+  installShellFiles,
 }:
 
 let
   archids = {
-    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = {
+      hostarch = "x86_64";
+      efiPlatform = "x64";
+    };
+    i686-linux = rec {
+      hostarch = "ia32";
+      efiPlatform = hostarch;
+    };
+    aarch64-linux = {
+      hostarch = "aarch64";
+      efiPlatform = "aa64";
+    };
   };
 
   inherit
-    (archids.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
-    hostarch efiPlatform;
+    (archids.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
+    )
+    hostarch
+    efiPlatform
+    ;
 in
 
 stdenv.mkDerivation rec {
@@ -31,6 +46,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
@@ -39,25 +59,33 @@ stdenv.mkDerivation rec {
     ./0002-preserve-dates.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gnu-efi ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
+
+  buildInputs = [ gnu-efi_3 ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  makeFlags =
-    [ "prefix="
-      "EFIINC=${gnu-efi}/include/efi"
-      "EFILIB=${gnu-efi}/lib"
-      "GNUEFILIB=${gnu-efi}/lib"
-      "EFICRT0=${gnu-efi}/lib"
-      "HOSTARCH=${hostarch}"
-      "ARCH=${hostarch}"
-    ] ++ lib.optional stdenv.hostPlatform.isAarch64 [
-      # aarch64 is special for GNU-EFI, see BUILDING.txt
-      "GNUEFI_ARM64_TARGET_SUPPORT=y"
-    ];
+  makeFlags = [
+    "prefix="
+    "EFIINC=${gnu-efi_3}/include/efi"
+    "EFILIB=${gnu-efi_3}/lib"
+    "GNUEFILIB=${gnu-efi_3}/lib"
+    "EFICRT0=${gnu-efi_3}/lib"
+    "HOSTARCH=${hostarch}"
+    "ARCH=${hostarch}"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 [
+    # aarch64 is special for GNU-EFI, see BUILDING.txt
+    "GNUEFI_ARM64_TARGET_SUPPORT=y"
+  ];
 
-  buildFlags = [ "gnuefi" "fs_gnuefi" ];
+  buildFlags = [
+    "gnuefi"
+    "fs_gnuefi"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -93,6 +121,7 @@ stdenv.mkDerivation rec {
     # docs
     install -D -m0644 docs/refind/* $out/share/refind/docs/html/
     install -D -m0644 docs/Styles/* $out/share/refind/docs/Styles/
+    installManPage docs/man/*.8
     install -D -m0644 README.txt $out/share/refind/docs/README.txt
     install -D -m0644 NEWS.txt $out/share/refind/docs/NEWS.txt
     install -D -m0644 BUILDING.txt $out/share/refind/docs/BUILDING.txt
@@ -119,13 +148,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/refind-install \
-      --prefix PATH : ${lib.makeBinPath ( [ efibootmgr openssl ] ++ lib.optional withSbsigntool sbsigntool )}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            efibootmgr
+            openssl
+          ]
+          ++ lib.optional withSbsigntool sbsigntool
+        )
+      }
     wrapProgram $out/bin/refind-mvrefind \
       --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
 
   passthru.tests = {
     uefiCdrom = nixosTests.boot.uefiCdrom;
+    inherit (nixosTests) refind;
   };
 
   meta = with lib; {
@@ -146,8 +184,15 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres chewblacka ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      johnrtitor
+      RossComputerGuy
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = licenses.gpl3Plus;
   };
 

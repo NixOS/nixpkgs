@@ -1,23 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.opensnitch;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 
-  predefinedRules = flip mapAttrs cfg.rules (name: cfg: {
-    file = pkgs.writeText "rule" (builtins.toJSON cfg);
-  });
-
-in {
+  predefinedRules = lib.flip lib.mapAttrs cfg.rules (
+    name: cfg: {
+      file = pkgs.writeText "rule" (builtins.toJSON cfg);
+    }
+  );
+in
+{
   options = {
     services.opensnitch = {
-      enable = mkEnableOption "Opensnitch application firewall";
+      enable = lib.mkEnableOption "Opensnitch application firewall";
+      package = lib.mkPackageOption pkgs "opensnitch" { };
 
-      rules = mkOption {
-        default = {};
-        example = literalExpression ''
+      rules = lib.mkOption {
+        default = { };
+        example = lib.literalExpression ''
           {
             "tor" = {
               "name" = "tor";
@@ -42,28 +47,28 @@ in {
           for available options.
         '';
 
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
         };
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = format.type;
 
           options = {
             Server = {
 
-              Address = mkOption {
-                type = types.str;
+              Address = lib.mkOption {
+                type = lib.types.str;
                 description = ''
                   Unix socket path (unix:///tmp/osui.sock, the "unix:///" part is
                   mandatory) or TCP socket (192.168.1.100:50051).
                 '';
               };
 
-              LogFile = mkOption {
-                type = types.path;
+              LogFile = lib.mkOption {
+                type = lib.types.path;
                 description = ''
                   File to write logs to (use /dev/stdout to write logs to standard
                   output).
@@ -72,38 +77,49 @@ in {
 
             };
 
-            DefaultAction = mkOption {
-              type = types.enum [ "allow" "deny" ];
+            DefaultAction = lib.mkOption {
+              type = lib.types.enum [
+                "allow"
+                "deny"
+              ];
               description = ''
                 Default action whether to block or allow application internet
                 access.
               '';
             };
 
-            InterceptUnknown = mkOption {
-              type = types.bool;
+            InterceptUnknown = lib.mkOption {
+              type = lib.types.bool;
               description = ''
                 Whether to intercept spare connections.
               '';
             };
 
-            ProcMonitorMethod = mkOption {
-              type = types.enum [ "ebpf" "proc" "ftrace" "audit" ];
+            ProcMonitorMethod = lib.mkOption {
+              type = lib.types.enum [
+                "ebpf"
+                "proc"
+                "ftrace"
+                "audit"
+              ];
               description = ''
                 Which process monitoring method to use.
               '';
             };
 
-            LogLevel = mkOption {
-              type = types.enum [ 0 1 2 3 4 ];
+            LogLevel = lib.mkOption {
+              type = lib.types.ints.between 0 4;
               description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
               '';
             };
 
-            Firewall = mkOption {
-              type = types.enum [ "iptables" "nftables" ];
+            Firewall = lib.mkOption {
+              type = lib.types.enum [
+                "iptables"
+                "nftables"
+              ];
               description = ''
                 Which firewall backend to use.
               '';
@@ -111,15 +127,15 @@ in {
 
             Stats = {
 
-              MaxEvents = mkOption {
-                type = types.int;
+              MaxEvents = lib.mkOption {
+                type = lib.types.int;
                 description = ''
                   Max events to send to the GUI.
                 '';
               };
 
-              MaxStats = mkOption {
-                type = types.int;
+              MaxStats = lib.mkOption {
+                type = lib.types.int;
                 description = ''
                   Max stats per item to keep in backlog.
                 '';
@@ -127,10 +143,14 @@ in {
 
             };
 
-            Ebpf.ModulesPath = mkOption {
-              type = types.path;
-              default = if cfg.settings.ProcMonitorMethod == "ebpf" then "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd" else null;
-              defaultText = literalExpression ''
+            Ebpf.ModulesPath = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default =
+                if cfg.settings.ProcMonitorMethod == "ebpf" then
+                  "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd"
+                else
+                  null;
+              defaultText = lib.literalExpression ''
                 if cfg.settings.ProcMonitorMethod == "ebpf" then
                   "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
                 else null;
@@ -141,8 +161,17 @@ in {
               '';
             };
 
-            Rules.Path = mkOption {
-              type = types.path;
+            Audit.AudispSocketPath = lib.mkOption {
+              type = lib.types.path;
+              default = "/run/audit/audispd_events";
+              description = ''
+                Configure audit socket path. Used when
+                `settings.ProcMonitorMethod` is set to `audit`.
+              '';
+            };
+
+            Rules.Path = lib.mkOption {
+              type = lib.types.path;
               default = "/var/lib/opensnitch/rules";
               description = ''
                 Path to the directory where firewall rules can be found and will
@@ -160,49 +189,79 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # pkg.opensnitch is referred to elsewhere in the module so we don't need to worry about it being garbage collected
-    services.opensnitch.settings = mapAttrs (_: v: mkDefault v) (builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json")));
+    services.opensnitch.settings = lib.mapAttrs (_: v: lib.mkDefault v) (
+      builtins.fromJSON (
+        builtins.unsafeDiscardStringContext (
+          builtins.readFile "${cfg.package}/etc/opensnitchd/default-config.json"
+        )
+      )
+    );
+
+    security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
+      enable = true;
+      plugins.af_unix.active = true;
+    };
 
     systemd = {
-      packages = [ pkgs.opensnitch ];
+      packages = [ cfg.package ];
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
+        path = lib.optionals (cfg.settings.ProcMonitorMethod == "audit") [ pkgs.audit ];
         serviceConfig = {
-          ExecStart = [
-            ""
-            "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" cfg.settings}"
-          ];
+          ExecStart =
+            let
+              preparedSettings = removeAttrs cfg.settings (
+                lib.optional (cfg.settings.ProcMonitorMethod != "ebpf") "Ebpf"
+              );
+            in
+            [
+              ""
+              "${lib.getExe' cfg.package "opensnitchd"} --config-file ${format.generate "default-config.json" preparedSettings}"
+            ];
         };
-        preStart = mkIf (cfg.rules != {}) (let
-          rules = flip mapAttrsToList predefinedRules (file: content: {
-          inherit (content) file;
-          local = "${cfg.settings.Rules.Path}/${file}.json";
-        });
-        in ''
-          # Remove all firewall rules from rules path (configured with
-          # cfg.settings.Rules.Path) that are symlinks to a store-path, but aren't
-          # declared in `cfg.rules` (i.e. all networks that were "removed" from
-          # `cfg.rules`).
-          find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${optionalString (rules != {}) ''
-            -not \( ${concatMapStringsSep " -o " ({ local, ... }:
-              "-name '${baseNameOf local}*'")
-            rules} \) \
-          ''} -delete
-          ${concatMapStrings ({ file, local }: ''
-            ln -sf '${file}' "${local}"
-          '') rules}
-        '');
+        preStart = lib.mkIf (cfg.rules != { }) (
+          let
+            rules = lib.flip lib.mapAttrsToList predefinedRules (
+              file: content: {
+                inherit (content) file;
+                local = "${cfg.settings.Rules.Path}/${file}.json";
+              }
+            );
+          in
+          ''
+            # Remove all firewall rules from rules path (configured with
+            # cfg.settings.Rules.Path) that are symlinks to a store-path, but aren't
+            # declared in `cfg.rules` (i.e. all networks that were "removed" from
+            # `cfg.rules`).
+            find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${
+              lib.optionalString (rules != { }) ''
+                -not \( ${
+                  lib.concatMapStringsSep " -o " ({ local, ... }: "-name '${baseNameOf local}*'") rules
+                } \) \
+              ''
+            } -delete
+            ${lib.concatMapStrings (
+              { file, local }:
+              ''
+                ln -sf '${file}' "${local}"
+              ''
+            ) rules}
+          ''
+        );
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${pkgs.opensnitch}/etc/opensnitchd/system-fw.json"
+        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
 
   };
 
-  meta.maintainers = with lib.maintainers; [ onny ];
+  meta.maintainers = with lib.maintainers; [
+    onny
+    grimmauld
+  ];
 }
-

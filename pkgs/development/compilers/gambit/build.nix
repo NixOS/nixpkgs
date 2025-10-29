@@ -1,11 +1,21 @@
-{ gccStdenv, lib, pkgs,
-  git, openssl, autoconf, coreutils,
-  src, version, git-version,
-  stampYmd ? 0, stampHms ? 0,
+{
+  gccStdenv,
+  lib,
+  pkgs,
+  git,
+  openssl,
+  autoconf,
+  coreutils,
+  src,
+  version,
+  git-version,
+  stampYmd ? 0,
+  stampHms ? 0,
   gambit-support,
   optimizationSetting ? "-O1",
   gambit-params ? pkgs.gambit-support.stable-params,
-  rev ? git-version }:
+  rev ? git-version,
+}:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
 # clang is 10x (with default settings) to 15% (with -O2) slower than GCC at compiling
@@ -31,11 +41,22 @@ gccStdenv.mkDerivation rec {
   bootstrap = gambit-support.gambit-bootstrap;
 
   passthru = {
-    inherit src version git-version rev stampYmd stampHms optimizationSetting openssl;
+    inherit
+      src
+      version
+      git-version
+      rev
+      stampYmd
+      stampHms
+      optimizationSetting
+      openssl
+      ;
   };
 
-
-  nativeBuildInputs = [ git autoconf ];
+  nativeBuildInputs = [
+    git
+    autoconf
+  ];
 
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
@@ -75,12 +96,13 @@ gccStdenv.mkDerivation rec {
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
     # "--enable-march=native" # Nope, makes it not work on machines older than the builder
-  ] ++ gambit-params.extraOptions
-    # TODO: pick an appropriate architecture to optimize on on x86-64?
-    # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
-    # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
-    # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    ++ lib.optional (!gccStdenv.hostPlatform.isDarwin) "--enable-poll";
+  ]
+  ++ gambit-params.extraOptions
+  # TODO: pick an appropriate architecture to optimize on on x86-64?
+  # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
+  # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
+  # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+  ++ lib.optional (!gccStdenv.hostPlatform.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
@@ -97,8 +119,11 @@ gccStdenv.mkDerivation rec {
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      ${lib.optionalString (gccStdenv.hostPlatform.isDarwin && !gambit-params.stable)
-         ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
+      ${
+        lib.optionalString (
+          gccStdenv.hostPlatform.isDarwin && !gambit-params.stable
+        ) ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''
+      } \
         --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
 
     ./config.status

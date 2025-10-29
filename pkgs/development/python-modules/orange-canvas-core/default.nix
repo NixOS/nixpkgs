@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  trubar,
 
   # dependencies
   anyqt,
@@ -15,9 +16,12 @@
   filelock,
   lockfile,
   numpy,
+  packaging,
   pip,
   qasync,
+  requests,
   requests-cache,
+  truststore,
   typing-extensions,
 
   # tests
@@ -26,34 +30,40 @@
   pytestCheckHook,
 
   stdenv,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.2.2";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-canvas-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Jp3vCQmRdkFADStVkbCFPiCBqpbI0a4JiJ8qs60rpqw=";
+    tag = version;
+    hash = "sha256-cEy9ADU/jZoKmGXVlqwG+qWKZ22STjALgCb1IxAwpO0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    trubar
+  ];
 
   dependencies = [
     anyqt
-    cachecontrol
     commonmark
     dictdiffer
     docutils
     filelock
     lockfile
     numpy
+    packaging
     pip
     qasync
+    requests
     requests-cache
+    truststore
     typing-extensions
   ];
 
@@ -85,14 +95,16 @@ buildPythonPackage rec {
     "test_widgettoolgrid"
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   disabledTestPaths = [ "orangecanvas/canvas/items/tests/test_graphicstextitem.py" ];
 
   meta = {
     description = "Orange framework for building graphical user interfaces for editing workflows";
     homepage = "https://github.com/biolab/orange-canvas-core";
-    changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${version}";
+    changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${src.tag}";
     license = [ lib.licenses.gpl3 ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     # Segmentation fault during tests
     broken = stdenv.hostPlatform.isDarwin;
   };

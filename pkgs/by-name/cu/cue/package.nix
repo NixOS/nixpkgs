@@ -1,24 +1,25 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, installShellFiles
-, testers
-, cue
-, callPackage
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  installShellFiles,
+  testers,
+  callPackage,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cue";
-  version = "0.10.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
-    rev = "v${version}";
-    hash = "sha256-CwPD+JUoKcs0HqWuZYH2c8AdwK6X0SS3aNGpkcPZ4C4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RK06DHCR2ugz6WhythvVfb1WUn7QyHPK8vaUNWVAd+Q=";
   };
 
-  vendorHash = "sha256-sLTpra7JwgF4l1UCrUtzQA4xrP4OqxBcZ1qEssBdFtk=";
+  vendorHash = "sha256-wVeNMw6AZS1wT+KnaZBGOfBxrKzmfQSXeZWcYiLKMQ4=";
 
   subPackages = [ "cmd/*" ];
 
@@ -27,10 +28,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X cuelang.org/go/cmd/cue/cmd.version=v${version}"
+    "-X cuelang.org/go/cmd/cue/cmd.version=v${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cue \
       --bash <($out/bin/cue completion bash) \
       --fish <($out/bin/cue completion fish) \
@@ -42,18 +43,18 @@ buildGoModule rec {
     tests = {
       test-001-all-good = callPackage ./tests/001-all-good.nix { };
       version = testers.testVersion {
-        package = cue;
+        package = finalAttrs.finalPackage;
         command = "cue version";
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
       };
     };
   };
 
-  meta = with lib;  {
+  meta = {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "cue";
   };
-}
+})

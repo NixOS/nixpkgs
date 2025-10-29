@@ -2,20 +2,25 @@
   fetchFromGitHub,
   lib,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "grumphp";
-  version = "2.6.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "phpro";
     repo = "grumphp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W4LNzdgWxXDPL46/C8SX99lpRMp/xL5q5v6vX3H80XU=";
+    hash = "sha256-YEapyEtvI0N9ey9UNbgRd15NyrCqRYJkmD+RuyysIRw=";
   };
 
-  vendorHash = "sha256-hi6selMMu5UDdMHiyhlXPd/B1BdM/ht+3EAM4Oa5LNU=";
+  vendorHash = "sha256-0MH4Q5FY9nu5Jpz/iMIu99P8ptQY07t3qbXMp6J7bt4=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";
@@ -23,6 +28,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phpro/grumphp";
     license = lib.licenses.mit;
     mainProgram = "grumphp";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

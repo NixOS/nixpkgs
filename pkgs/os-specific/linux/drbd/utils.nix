@@ -1,34 +1,36 @@
-{ lib
-, stdenv
-, docbook_xml_dtd_44
-, docbook_xml_dtd_45
-, docbook_xsl
-, asciidoctor
-, fetchurl
-, flex
-, kmod
-, libxslt
-, nixosTests
-, perl
-, perlPackages
-, systemd
-, keyutils
+{
+  lib,
+  stdenv,
+  docbook_xml_dtd_44,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  asciidoctor,
+  fetchurl,
+  flex,
+  kmod,
+  libxslt,
+  nixosTests,
+  perl,
+  perlPackages,
+  systemd,
+  keyutils,
+  udevCheckHook,
 
-# drbd-utils are compiled twice, once with forOCF = true to extract
-# its OCF definitions for use in the ocf-resource-agents derivation,
-# then again with forOCF = false, where the ocf-resource-agents is
-# provided as the OCF_ROOT.
-, forOCF ? false
-, ocf-resource-agents
+  # drbd-utils are compiled twice, once with forOCF = true to extract
+  # its OCF definitions for use in the ocf-resource-agents derivation,
+  # then again with forOCF = false, where the ocf-resource-agents is
+  # provided as the OCF_ROOT.
+  forOCF ? false,
+  ocf-resource-agents,
 }:
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.27.0";
+  version = "9.32.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1qwdrjrgas8z8vc6c85xcrqaczjwyqd61yig01n44wa5z0j3v4aq";
+    hash = "sha256-szOM7jSbXEZZ4p1P73W6tK9Put0+wOZar+cUiUNC6M0=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     asciidoctor
     keyutils
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -55,7 +58,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "SOURCE_DATE_EPOCH=1"
     "WANT_DRBD_REPRODUCIBLE_BUILD=1"
-  ] ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
+  ]
+  ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
 
   installFlags = [
     "prefix="
@@ -119,6 +123,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   passthru.tests.drbd = nixosTests.drbd;
 
   meta = with lib; {
@@ -126,10 +132,14 @@ stdenv.mkDerivation rec {
     description = "Distributed Replicated Block Device, a distributed storage system for Linux (userspace utilities)";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ryantm astro birkb ];
+    maintainers = with maintainers; [
+      ryantm
+      astro
+      birkb
+    ];
     longDescription = ''
-       DRBD is a software-based, shared-nothing, replicated storage solution
-       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
+      DRBD is a software-based, shared-nothing, replicated storage solution
+      mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
   };
 }

@@ -3,31 +3,46 @@
   stdenvNoCC,
   fetchzip,
   writeScript,
+  # Can be overridden to alter the display name in steam
+  # This could be useful if multiple versions should be installed together
+  steamDisplayName ? "GE-Proton",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-18";
+  version = "GE-Proton10-23";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-NoRNM61Y9q8ksOXPeDV/NaIqHblWjXtK3tXcX5UEwkI=";
+    hash = "sha256-cOjrP9Nh4cPcX3uwYF25z2QHnNDNb83FPa4O0zdENeg=";
   };
+
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   outputs = [
     "out"
     "steamcompattool"
   ];
 
-  buildCommand = ''
-    runHook preBuild
+  installPhase = ''
+    runHook preInstall
 
     # Make it impossible to add to an environment. You should use the appropriate NixOS option.
     # Also leave some breadcrumbs in the file.
     echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
 
-    ln -s $src $steamcompattool
+    mkdir $steamcompattool
+    ln -s $src/* $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf
+    cp $src/compatibilitytool.vdf $steamcompattool
 
-    runHook postBuild
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
+      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
   /*
@@ -55,7 +70,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      Gliczy
       NotAShelf
+      Scrumplex
       shawn8901
     ];
     platforms = [ "x86_64-linux" ];

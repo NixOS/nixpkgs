@@ -1,23 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, gmp
-, pkg-config
-, qtbase
-, wrapQtAppsHook
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  gitUpdater,
+  gmp,
+  gtk3,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpsolve";
-  version = "3.2.1";
+  version = "3.2.2";
 
-  src = fetchurl {
-    url = "https://numpi.dm.unipi.it/_media/software/mpsolve/mpsolve-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PRFCiumrLgIPJMq/vNnk2bIuxXLPcK8NRP6Nrh1R544=";
+  src = fetchFromGitHub {
+    owner = "robol";
+    repo = "MPSolve";
+    rev = "de7ebfc7afc4834a0c9f92a04be7abdf5943d446";
+    hash = "sha256-BGXvNxWUbto0yMIpEIxZ9wOYv9w0ev4OgVcniNYIKoU=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
     pkg-config
     wrapQtAppsHook
   ];
@@ -27,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     qtbase
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://numpi.dm.unipi.it/scientific-computing-libraries/mpsolve/";

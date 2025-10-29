@@ -1,11 +1,11 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
   pycparser,
   psutil,
-  dotnet-sdk,
+  dotnet-sdk_6,
   buildDotnetModule,
   clr-loader,
   setuptools,
@@ -13,18 +13,22 @@
 
 let
   pname = "pythonnet";
-  version = "3.0.4";
-  src = fetchPypi {
-    pname = "pythonnet";
-    inherit version;
-    hash = "sha256-yS+8/d0WV19+daZDMCJxZYtgbYVX338BMqwkDgPMOo8=";
+  version = "3.0.5";
+  src = fetchFromGitHub {
+    owner = "pythonnet";
+    repo = "pythonnet";
+    tag = "v${version}";
+    hash = "sha256-3LBrV/cQrXFKMFE1rCalDsPZ3rOY7RczqXoryMoVi14=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
   dotnet-build = buildDotnetModule {
     inherit pname version src;
-    nugetDeps = ./deps.nix;
+    projectFile = "src/runtime/Python.Runtime.csproj";
+    testProjectFile = "src/testing/Python.Test.csproj";
+    nugetDeps = ./deps.json;
+    dotnet-sdk = dotnet-sdk_6;
   };
 in
 buildPythonPackage {
@@ -41,7 +45,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     setuptools
-    dotnet-sdk
+    dotnet-sdk_6
   ];
 
   propagatedBuildInputs = [
@@ -49,9 +53,9 @@ buildPythonPackage {
     clr-loader
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Run tests using .NET Core, Mono is unsupported for now due to find_library problem in clr-loader
-    "--runtime coreclr"
+    "--runtime=coreclr"
   ];
 
   nativeCheckInputs = [
@@ -59,21 +63,13 @@ buildPythonPackage {
     psutil # needed for memory leak tests
   ];
 
-  # Perform dotnet restore based on the nuget-source
-  preConfigure = ''
-    dotnet restore \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "$nugetSource"
-  '';
-
   # Rerun this when updating to refresh Nuget dependencies
   passthru.fetch-deps = dotnet-build.fetch-deps;
 
   meta = with lib; {
     description = ".NET integration for Python";
     homepage = "https://pythonnet.github.io";
-    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/v${version}";
+    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/${src.tag}";
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];

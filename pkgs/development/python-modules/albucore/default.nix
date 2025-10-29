@@ -7,12 +7,13 @@
   pytestCheckHook,
   numpy,
   opencv-python,
+  simsimd,
   stringzilla,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.19";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GwT7Py7pKbpHxx4avj37/hRjSJXdH5uBU11nCITysVw=";
+    tag = version;
+    hash = "sha256-frVMPW3au/6vPRY89GIt7chCPkUMl13DpPqCPqIjz/o=";
   };
 
   pythonRelaxDeps = [ "opencv-python" ];
@@ -31,12 +32,17 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     opencv-python
+    simsimd
     stringzilla
   ];
 
   pythonImportsCheck = [ "albucore" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # albumentations doesn't support newer versions of albucore
+  # and has been archived upstream in favor of relicensed `albumentationsx`
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "High-performance image processing library to optimize and extend Albumentations with specialized functions for image transformations";

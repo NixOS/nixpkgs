@@ -7,8 +7,9 @@
   fetchPypi,
   hacking,
   keystoneauth1,
-  openstackclient,
+  makePythonPath,
   openstackdocstheme,
+  installer,
   osc-lib,
   oslotest,
   oslo-serialization,
@@ -16,6 +17,7 @@
   pbr,
   pygments,
   python-neutronclient,
+  python-openstackclient,
   requests,
   requests-mock,
   setuptools,
@@ -28,13 +30,17 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.8.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wrYhCY3gqcklSK8lapsgFq25Yi3awEGgarW2a7W1kO4=";
+    pname = "python_octaviaclient";
+    inherit version;
+    hash = "sha256-5brfxkpJQousEcXl0YerzYDjrfl0XyWV0RXPTz146Y4=";
   };
+
+  # somehow python-neutronclient cannot be found despite it being supplied
+  pythonRemoveDeps = [ "python-neutronclient" ];
 
   build-system = [
     setuptools
@@ -51,12 +57,17 @@ buildPythonPackage rec {
     cliff
     keystoneauth1
     python-neutronclient
-    openstackclient
+    python-openstackclient
     osc-lib
     oslo-serialization
     oslo-utils
     requests
   ];
+
+  preInstall = ''
+    # TODO: I have really no idea why installer is missing...
+    export PYTHONPATH=$PYTHONPATH:${makePythonPath [ installer ]}
+  '';
 
   nativeCheckInputs = [
     hacking
@@ -73,6 +84,9 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
+    # TODO: no idea why PYTHONPATH is broken here
+    export PYTHONPATH=$PYTHONPATH:${makePythonPath nativeCheckInputs}
+
     stestr run
 
     runHook postCheck
@@ -82,8 +96,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Octavia Command-line Client";
-    homepage = "https://opendev.org/openstack/python-octaviaclient/";
+    homepage = "https://github.com/openstack/python-octaviaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

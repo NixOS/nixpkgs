@@ -4,7 +4,7 @@
   lib,
   makeWrapper,
   autoPatchelfHook,
-  openjdk17,
+  openjdk21,
   pam,
   makeDesktopItem,
   icoutils,
@@ -28,18 +28,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "10.4";
-  versiondate = "20230928";
-
+  version = "11.4.2";
+  versiondate = "20250826";
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-IiAQ9OKmr8ZgqmGftuW0ITdG06fb9Lr30n2H9GArctk=";
+    hash = "sha256-5illpD+kWZfwtN8QpSJFcnsTrOPpvll3zNXR5r5q7jA=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
 
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
   meta = with lib; {
@@ -78,7 +78,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;

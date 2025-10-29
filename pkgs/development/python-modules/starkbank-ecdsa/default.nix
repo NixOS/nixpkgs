@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "starkbank";
     repo = "ecdsa-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
   };
 
@@ -26,9 +26,12 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pytestFlagsArray = [
-    "-v"
+  enabledTestPaths = [
     "*.py"
+  ];
+
+  pytestFlags = [
+    "-v"
   ];
 
   pythonImportsCheck = [ "ellipticcurve" ];

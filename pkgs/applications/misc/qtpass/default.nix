@@ -1,6 +1,18 @@
-{ fetchFromGitHub, lib, stdenv
-, git, gnupg, pass, pwgen, qrencode
-, qtbase, qtsvg, qttools, qmake, wrapQtAppsHook
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  git,
+  gnupg,
+  pass,
+  pwgen,
+  qrencode,
+  qtbase,
+  qtsvg,
+  qttools,
+  qmake,
+  wrapQtAppsHook,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +31,20 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
   '';
 
-  buildInputs = [ git gnupg pass qtbase qtsvg ];
+  buildInputs = [
+    git
+    gnupg
+    pass
+    qtbase
+    qtsvg
+  ];
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+    makeWrapper
+  ];
 
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
@@ -29,8 +52,23 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git gnupg pass pwgen ]}"
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        git
+        gnupg
+        pass
+        pwgen
+      ]
+    }"
   ];
+
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/Applications
+    cp -r main/QtPass.app $out/Applications
+    makeWrapper $out/Applications/QtPass.app/Contents/MacOS/QtPass $out/bin/qtpass
+    runHook postInstall
+  '';
 
   postInstall = ''
     install -D qtpass.desktop -t $out/share/applications

@@ -1,23 +1,23 @@
-{ cmake
-, fetchFromGitHub
-, fetchpatch
-, lib
-, libusb1
-, mkDerivation
-, python3
-, qtbase
-, qttools
-, udev
-, zlib
+{
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  libusb1,
+  mkDerivation,
+  python3,
+  qtbase,
+  qttools,
+  udev,
+  zlib,
 }:
-
 mkDerivation rec {
   pname = "openambit";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "openambitproject";
-    repo = pname;
+    repo = "openambit";
     rev = version;
     sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
   };
@@ -32,14 +32,41 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ libusb1 python3 qtbase udev zlib ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/libambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required (VERSION 3.1.3)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/movescount/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/openambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    libusb1
+    python3
+    qtbase
+    udev
+    zlib
+  ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_UDEVRULESDIR=${placeholder "out"}/lib/udev/rules.d" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/openambit --version
+
+    runHook postInstallCheck
   '';
 
   postInstall = ''

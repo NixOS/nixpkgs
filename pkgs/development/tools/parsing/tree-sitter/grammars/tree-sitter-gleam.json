@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/gleam-lang/tree-sitter-gleam",
-  "rev": "57c9951b290c8084d7c60b0aee7a2b30986ea031",
-  "date": "2024-09-26T08:29:11-05:00",
-  "path": "/nix/store/zgyi05wljzz1c264mx4lf62629lfkq4z-tree-sitter-gleam",
-  "sha256": "1jcamn09jgna2jyhfali3x74dp9bsp8h4ylkq24hhlyfkfsszqw9",
-  "hash": "sha256-ieOvtZvOUwiJwJN6AtHVK91GTh+RKge9FMo+mYCtisk=",
+  "rev": "dae1551a9911b24f41d876c23f2ab05ece0a9d4c",
+  "date": "2025-07-21T17:56:49Z",
+  "path": "/nix/store/v0dwdaqlr17b6jry9ysd15m342ha8hxb-tree-sitter-gleam",
+  "sha256": "0d7z5bk6x0qi3wy4d8174a69wxsc4287c7fcdfabkn8dixpa920q",
+  "hash": "sha256-GIikbo8N2bmUa8wddpAgTHeejCInoEY8HxGDbuYq/zQ=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

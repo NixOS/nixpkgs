@@ -1,8 +1,15 @@
-{ lib, buildPythonApplication, fetchPypi, dnspython, pytestCheckHook }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  dnspython,
+  pytestCheckHook,
+}:
 
 buildPythonApplication rec {
   pname = "nxdomain";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

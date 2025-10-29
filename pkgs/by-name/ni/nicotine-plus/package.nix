@@ -1,45 +1,61 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook4
-, gdk-pixbuf
-, gettext
-, gobject-introspection
-, gtk4
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  gettext,
+  gobject-introspection,
+  gtk4,
+  glib,
+  python3Packages,
+  libadwaita,
 }:
+let
 
-python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.3.5";
-
+  version = "3.3.10";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6tA3d+QX2ArDH4aeWZNKuIXe3Sk32JaFe8d0C8G9Akc=";
+    tag = version;
+    hash = "sha256-ic/+Us56UewMjD8vgmxxCisoId96Qtaq8/Ll+CCFR3Y=";
   };
 
-  nativeBuildInputs = [ gettext wrapGAppsHook4 gobject-introspection ];
-
-  propagatedBuildInputs = [
-    gdk-pixbuf
+  nativeBuildInputs = [
+    gettext
+    wrapGAppsHook4
     gobject-introspection
+    glib
+    gdk-pixbuf
     gtk4
+  ];
+
+  buildInputs = [
+    libadwaita
+  ];
+
+  dependencies = [
     python3Packages.pygobject3
+  ];
+
+  build-system = [
+    python3Packages.setuptools
   ];
 
   postInstall = ''
     ln -s $out/bin/nicotine $out/bin/nicotine-plus
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}"
-    )
-  '';
+  dontWrapGAppsHook = true;
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   doCheck = false;
-
   meta = with lib; {
     description = "Graphical client for the SoulSeek peer-to-peer system";
     longDescription = ''
@@ -49,6 +65,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ klntsky ];
+    maintainers = with maintainers; [
+      klntsky
+      amadaluzia
+    ];
   };
 }

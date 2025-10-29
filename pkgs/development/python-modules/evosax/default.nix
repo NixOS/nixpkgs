@@ -1,62 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
-  chex,
   dotmap,
   flax,
   jax,
-  jaxlib,
   matplotlib,
   numpy,
-  pyyaml,
 
-  # checks
+  # tests
   # brax, (unpackaged)
   # gymnax, (unpackaged)
   pytestCheckHook,
   torch,
   torchvision,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "evosax";
-  version = "0.1.6";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RobertTLange";
     repo = "evosax";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-v8wRiWZlJPF9pIXocQ6/caHl1W4QBNjkmuImJ6MAueo=";
+    tag = "v.${version}";
+    hash = "sha256-ye5IHM8Pn/+BXI9kcB3W281Gna9hXV8DwsaJ9Xu06fU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    chex
     dotmap
     flax
     jax
-    jaxlib
     matplotlib
     numpy
-    pyyaml
   ];
 
   pythonImportsCheck = [ "evosax" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   nativeCheckInputs = [
     # brax
@@ -64,20 +52,35 @@ buildPythonPackage rec {
     pytestCheckHook
     torch
     torchvision
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # Requires unpackaged gymnax
     "test_env_ffw_rollout"
 
+    # TypeError: ShapedArray.__init__() got an unexpected keyword argument 'named_shape'
+    "test_base_api"
+    "test_run"
+    "test_run_scan"
+
     # Tries to download a data set from the internet
+    "test_brax_problem_eval"
+    "test_brax_problem_init"
+    "test_brax_problem_sample"
+    "test_gymnax_problem_eval"
+    "test_gymnax_problem_init"
+    "test_gymnax_problem_sample"
+    "test_torchvision_problem_eval"
+    "test_torchvision_problem_init"
+    "test_torchvision_problem_sample"
     "test_vision_fitness"
   ];
 
   meta = {
     description = "Evolution Strategies in JAX";
     homepage = "https://github.com/RobertTLange/evosax";
-    changelog = "https://github.com/RobertTLange/evosax/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/RobertTLange/evosax/releases/tag/v.${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

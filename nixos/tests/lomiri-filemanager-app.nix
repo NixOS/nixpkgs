@@ -34,14 +34,22 @@
     machine.wait_for_x()
 
     with subtest("lomiri filemanager launches"):
-        machine.execute("lomiri-filemanager-app >&2 &")
+        machine.succeed("lomiri-filemanager-app >&2 &")
+        machine.wait_for_console_text("QFSFileEngine::open: No file name specified")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(5)
         machine.wait_for_text(r"(filemanager.ubports|alice|items|directories|files|folder)")
         machine.screenshot("lomiri-filemanager_open")
 
     machine.succeed("pkill -f lomiri-filemanager-app")
 
     with subtest("lomiri filemanager localisation works"):
-        machine.execute("env LANG=de_DE.UTF-8 lomiri-filemanager-app >&2 &")
+        machine.succeed("env LANG=de_DE.UTF-8 lomiri-filemanager-app >&2 &")
+        machine.wait_for_console_text("QFSFileEngine::open: No file name specified")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(5)
         machine.wait_for_text(r"(Elemente|Verzeichnisse|Dateien|Ordner)")
         machine.screenshot("lomiri-filemanager_localised")
   '';

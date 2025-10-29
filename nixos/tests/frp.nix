@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "frp";
   meta.maintainers = with lib.maintainers; [ zaldnoay ];
   nodes = {
@@ -24,7 +25,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-
     frpc = {
       networking = {
         useNetworkd = true;
@@ -40,16 +40,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         enable = true;
         adminAddr = "admin@example.com";
         virtualHosts."test-appication" =
-        let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-        in
-        {
-          documentRoot = "${testdir}/web";
-          locations."/" = {
-            index = "index.php index.html";
+          let
+            testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+          in
+          {
+            documentRoot = "${testdir}/web";
+            locations."/" = {
+              index = "index.php index.html";
+            };
           };
-        };
-        phpPackage = pkgs.php81;
+        phpPackage = pkgs.php84;
         enablePHP = true;
       };
 
@@ -78,8 +78,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     frps.wait_for_open_port(80)
     frpc.wait_for_unit("frp.service")
     response = frpc.succeed("curl -fvvv -s http://127.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
   '';
-})
+}

@@ -3,28 +3,30 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
-  six,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.48";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.0.52";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    hash = "sha256-1mI6sEd6gN905ka9vJNiEUP1yvEEIGqikpTVPeGgPZA=";
+    hash = "sha256-KM3hkpKcjnMh3oXeHdvnNvE3UUiwLy4X7dhABCsb6FU=";
   };
 
-  propagatedBuildInputs = [
-    six
-    wcwidth
-  ];
+  postPatch = ''
+    # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
+    substituteInPlace src/prompt_toolkit/__init__.py \
+      --replace-fail 'metadata.version("prompt_toolkit")' '"${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ wcwidth ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

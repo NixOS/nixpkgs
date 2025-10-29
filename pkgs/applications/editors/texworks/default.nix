@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, hunspell
-, poppler
-, qt5compat
-, qttools
-, qtwayland
-, withLua ? true, lua
-, withPython ? true, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  hunspell,
+  poppler,
+  qt5compat,
+  qttools,
+  qtwayland,
+  withLua ? true,
+  lua,
+  withPython ? true,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "texworks";
-  version = "0.6.9";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${version}";
-    sha256 = "sha256-G8TVTVQPELyE6H9a6gWSyWHi653TWzUoaRdlfPnngM0=";
+    sha256 = "sha256-tC3ADD35yrmwBJQ8JaXdr8trVf6WLt1r2/euzt0mvN8=";
   };
 
   nativeBuildInputs = [
@@ -34,14 +38,16 @@ stdenv.mkDerivation rec {
     poppler
     qt5compat
     qttools
-  ] ++ lib.optional withLua lua
-    ++ lib.optional withPython python3
-    ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  ]
+  ++ lib.optional withLua lua
+  ++ lib.optional withPython python3
+  ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   cmakeFlags = [
     "-DQT_DEFAULT_MAJOR_VERSION=6"
-  ] ++ lib.optional withLua "-DWITH_LUA=ON"
-    ++ lib.optional withPython "-DWITH_PYTHON=ON";
+  ]
+  ++ lib.optional withLua "-DWITH_LUA=ON"
+  ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
   meta = with lib; {
     changelog = "https://github.com/TeXworks/texworks/blob/${src.rev}/NEWS";

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "restfly";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stevemcgrath";
     repo = "restfly";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Zdn/hUvAZ9TaAWyDpNiEiA9mYDbWmiXBUa+IV/g8n2M=";
+    tag = version;
+    hash = "sha256-hHNsOFu2b4sb9zbdWVTwoU1HShLFqC+Q9/PJcEqu7Hg=";
   };
 
   build-system = [ setuptools ];

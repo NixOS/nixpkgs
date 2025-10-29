@@ -1,6 +1,9 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "user-home-mode";
-  meta = with lib.maintainers; { maintainers = [ fbeffa ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ fbeffa ];
+  };
 
   nodes.machine = {
     users.users.alice = {
@@ -32,4 +35,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed('[ "$(stat -c %a /users)" == "755" ]')
     machine.succeed('[ "$(stat -c %a /users/carol)" == "700" ]')
   '';
-})
+}

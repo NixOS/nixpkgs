@@ -1,8 +1,9 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
 }:
 
 mkDerivation rec {
@@ -11,8 +12,8 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Nitrux";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "cask-server";
+    tag = "v${version}";
     sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 

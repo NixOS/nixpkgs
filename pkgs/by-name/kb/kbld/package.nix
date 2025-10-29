@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "kbld";
-  version = "0.44.1";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kbld";
     rev = "v${version}";
-    hash = "sha256-sEzCA32r3nSY1hT1r4EPPWsF9Kgn0rXnaAKlatFjZIo=";
+    hash = "sha256-3QLvUvm1OBLGS8ucFEDDLVupwof8ToG0RBJpUPtqThE=";
   };
 
   vendorHash = null;
 
   subPackages = [ "cmd/kbld" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-X=carvel.dev/kbld/pkg/kbld/version.Version=${version}"

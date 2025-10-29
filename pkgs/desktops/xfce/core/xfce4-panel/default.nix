@@ -1,38 +1,56 @@
-{ lib
-, mkXfceDerivation
-, exo
-, garcon
-, gobject-introspection
-, gtk3
-, libdbusmenu-gtk3
-, libwnck
-, libxfce4ui
-, libxfce4util
-, tzdata
-, vala
-, xfconf
+{
+  stdenv,
+  lib,
+  mkXfceDerivation,
+  python3,
+  cairo,
+  exo,
+  garcon,
+  gtk-layer-shell,
+  gtk3,
+  libdbusmenu-gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  tzdata,
+  wayland,
+  xfconf,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  vala,
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.18.6";
+  version = "4.20.5";
 
-  sha256 = "sha256-eQLz/LJIx2WkzcSLytRdJdhtGv0woT48mdqG7eHB0U4=";
+  sha256 = "sha256-Jftj+EmmsKfK9jk8rj5uMjpteFUHFgOpoEol8JReDNI=";
 
   nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
-    vala
+    vala # vala bindings require GObject introspection
   ];
 
   buildInputs = [
+    cairo
     exo
     garcon
+    gtk-layer-shell
     libdbusmenu-gtk3
     libxfce4ui
+    libxfce4windowing
     libwnck
-    xfconf
     tzdata
+    wayland
+    xfconf
   ];
 
   propagatedBuildInputs = [
@@ -40,15 +58,15 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  patches = [ ./xfce4-panel-datadir.patch ];
-
   postPatch = ''
+    patchShebangs xdt-gen-visibility
+
     substituteInPlace plugins/clock/clock.c \
        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   meta = with lib; {
     description = "Panel for the Xfce desktop environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

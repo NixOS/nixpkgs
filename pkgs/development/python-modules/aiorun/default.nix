@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2024.5.1";
+  version = "2025.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "aiorun";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7wgsj44sX2Be/QyvG7KgQ/xSgsr+WPh7eeROeICSHGw=";
+    tag = "v${version}";
+    hash = "sha256-YqUlWf79EbC47BETBDjo8hzg5jhL4LiWLKGr1Qy4AbM=";
   };
 
   build-system = [ flit-core ];

@@ -7,7 +7,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -16,14 +15,14 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "playpauseandstop";
     repo = "aiohttp-middlewares";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jUH1XhkytRwR76wUTsGQGu6m8s+SZ/GO114Lz9atwE8=";
   };
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   postPatch = ''
     sed -i "/addopts/d" pyproject.toml
@@ -44,10 +43,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_middlewares" ];
 
+  disabledTests = [
+    # TRests are outdated
+    "test_shield_middleware_funcitonal[DELETE-False]"
+    "test_shield_middleware_funcitonal[GET-False]"
+    "test_shield_middleware_funcitonal[POST-True]"
+    "test_shield_middleware_funcitonal[PUT-False]"
+  ];
+
   meta = with lib; {
     description = "Collection of useful middlewares for aiohttp.web applications";
     homepage = "https://github.com/playpauseandstop/aiohttp-middlewares";
-    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, prometheus-alertmanager
-, runCommand
-, prometheus-xmpp-alerts
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  prometheus-alertmanager,
+  runCommand,
+  prometheus-xmpp-alerts,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.5.8";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iwqcowwJktZQfdxykpsw/MweAPY0KF7ojVwvk1LP8a4=";
+    sha256 = "sha256-kXcadJnPPhMKF/1CHMLdGCqWouAKDBFTdvPpn80yK4A=";
   };
 
   postPatch = ''
@@ -25,7 +26,8 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     prometheus-alertmanager
-  ] ++ (with python3Packages; [
+  ]
+  ++ (with python3Packages; [
     aiohttp
     aiohttp-openmetrics
     beautifulsoup4
@@ -44,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "prometheus_xmpp" ];
 
   passthru.tests = {
-    binaryWorks = runCommand "${pname}-binary-test" {} ''
+    binaryWorks = runCommand "${pname}-binary-test" { } ''
       # Running with --help to avoid it erroring due to a missing config file
       ${prometheus-xmpp-alerts}/bin/prometheus-xmpp-alerts --help | tee $out
       grep "usage: prometheus-xmpp-alerts" $out

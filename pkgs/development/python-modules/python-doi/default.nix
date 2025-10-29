@@ -7,21 +7,21 @@
 
 buildPythonPackage rec {
   pname = "python-doi";
-  version = "0.1.1";
+  version = "0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "papis";
     repo = "python-doi";
     rev = "v${version}";
-    sha256 = "1wa5inh2a0drjswrnhjv6m23mvbfdgqj2jb8fya7q0armzp7l6fr";
+    sha256 = "sha256-c5Wo/bJuHwAG7XOy4Re9joYw14jWZ6QaRB4Wsk8StL0=";
   };
 
   disabled = !isPy3k;
 
   meta = with lib; {
     description = "Python library to work with Document Object Identifiers (doi)";
-    homepage = "https://github.com/alejandrogallo/python-doi";
+    homepage = "https://github.com/papis/python-doi";
     maintainers = with maintainers; [ teto ];
   };
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcpucycles";
-  version = "20240318";
+  version = "20250925";
 
   src = fetchzip {
     url = "https://cpucycles.cr.yp.to/libcpucycles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Fb73EOHGgEehZJwTCtCG12xwyiqtDXFs9eFDsHBQiDo=";
+    hash = "sha256-hYHNTuohYztLJJonm9wAkx/wlINWfgX8eL2m31xBuwM=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -id "$out/lib/libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib"
     install_name_tool -change "libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib" "$out/bin/cpucycles-info"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://cpucycles.cr.yp.to/";

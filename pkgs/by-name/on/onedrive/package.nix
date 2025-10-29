@@ -1,29 +1,36 @@
 {
   lib,
-  autoreconfHook,
-  curl,
+  stdenv,
   fetchFromGitHub,
+
+  # native
+  autoreconfHook,
   installShellFiles,
   ldc,
-  libnotify,
   pkg-config,
+
+  # host
+  coreutils,
+  curl,
+  dbus,
+  libnotify,
   sqlite,
-  stdenv,
   systemd,
   testers,
+
   # Boolean flags
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.2";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-neJi5lIx45GsuwZPzzwwEm1bfrL2DFSysVkxa4fCBww";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IllPh4YJvoAAyXDmSNwWDHN/EUtUuUqS7TOnBpr3Yts=";
   };
 
   outputs = [
@@ -41,9 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    dbus
     libnotify
     sqlite
-  ] ++ lib.optionals withSystemd [ systemd ];
+  ]
+  ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
     (lib.enableFeature true "notifications")
@@ -54,9 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
   postInstall = ''
-    installShellCompletion --bash --name onedrive contrib/completions/complete.bash
-    installShellCompletion --fish --name onedrive contrib/completions/complete.fish
-    installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
+    installShellCompletion --cmd onedrive \
+      --bash contrib/completions/complete.bash \
+      --fish contrib/completions/complete.fish \
+      --zsh contrib/completions/complete.zsh
+
+    substituteInPlace $out/lib/systemd/user/onedrive.service $out/lib/systemd/system/onedrive@.service \
+      --replace-fail "/bin/sh -c 'sleep 15'" "${coreutils}/bin/sleep 15"
   '';
 
   passthru = {
@@ -72,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "onedrive";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       peterhoeg
       bertof
+      guylamar2006
     ];
     platforms = lib.platforms.linux;
   };

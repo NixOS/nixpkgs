@@ -2,24 +2,26 @@ let
   withGold = platform: platform.isElf && !platform.isRiscV && !platform.isLoongArch64;
 in
 
-{ stdenv
-, autoconf269, automake, libtool
-, bison
-, buildPackages
-, fetchFromGitHub
-, fetchurl
-, gettext
-, lib
-, noSysDirs
-, perl
-, zlib
-, CoreServices
+{
+  stdenv,
+  autoconf269,
+  automake,
+  libtool,
+  bison,
+  buildPackages,
+  fetchurl,
+  gettext,
+  lib,
+  noSysDirs,
+  perl,
+  runCommand,
+  zlib,
 
-, enableGold ? withGold stdenv.targetPlatform
-, enableGoldDefault ? false
-, enableShared ? !stdenv.hostPlatform.isStatic
+  enableGold ? withGold stdenv.targetPlatform,
+  enableGoldDefault ? false,
+  enableShared ? !stdenv.hostPlatform.isStatic,
   # WARN: Enabling all targets increases output size to a multiple.
-, withAllTargets ? false
+  withAllTargets ? false,
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -27,15 +29,49 @@ in
 assert enableGold -> withGold stdenv.targetPlatform;
 assert enableGoldDefault -> enableGold;
 
-
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.43.1";
+  version = "2.44";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  # gas is disabled for some targets via noconfigdirs in configure.
+  targetHasGas = !stdenv.targetPlatform.isDarwin;
+
+  # gas isn't multi-target, even with --enable-targets=all, so we do
+  # separate builds of just gas for each target.
+  #
+  # There's no way to do this exhaustively, so feel free to add
+  # additional targets here as required.
+  allGasTargets =
+    allGasTargets'
+    ++ lib.optional (
+      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+    ) targetPlatform.config;
+  allGasTargets' = [
+    "aarch64-unknown-linux-gnu"
+    "alpha-unknown-linux-gnu"
+    "arm-unknown-linux-gnu"
+    "avr-unknown-linux-gnu"
+    "cris-unknown-linux-gnu"
+    "hppa-unknown-linux-gnu"
+    "i686-unknown-linux-gnu"
+    "ia64-unknown-linux-gnu"
+    "m68k-unknown-linux-gnu"
+    "mips-unknown-linux-gnu"
+    "mips64-unknown-linux-gnu"
+    "msp430-unknown-linux-gnu"
+    "powerpc-unknown-linux-gnu"
+    "powerpc64-unknown-linux-gnu"
+    "s390-unknown-linux-gnu"
+    "sparc-unknown-linux-gnu"
+    "vax-unknown-linux-gnu"
+    "x86_64-unknown-linux-gnu"
+    "xscale-unknown-linux-gnu"
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-    hash = "sha256-vsqsXSleA3WHtjpC+tV/49nXuD9HjrJLZ/nuxdDxhy8=";
+    url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
+    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -53,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
 
     # Breaks nm BSD flag detection, heeds an upstream fix:
     #   https://sourceware.org/PR29547
@@ -72,20 +107,33 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
-  ] ++ lib.optionals hostPlatform.isDarwin [
-    # Note: Conditional to avoid Linux rebuilds on staging-next. Remove the conditional with the next update.
+
     # ld64 needs `-undefined dynamic_lookup` to link `libctf-nobfd.dylib`, but the Darwin
     # version detection in `libtool.m4` fails to detect the Darwin version correctly.
     ./0001-libtool.m4-update-macos-version-detection-block.patch
-  ]
-  # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
-  # Patch from arch-community
-  # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
-  ++ lib.optional targetPlatform.isAvr ./avr-size.patch
-  ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
-  ;
 
-  outputs = [ "out" "info" "man" "dev" ]
+    # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
+    # Patch from arch-community
+    # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
+    ./avr-size.patch
+
+    ./windres-locate-gcc.patch
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5244
+    ./CVE-2025-5244.diff
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5245
+    ./CVE-2025-5245.diff
+  ];
+
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "dev"
+  ]
   # Ideally we would like to always install 'lib' into a separate
   # target. Unfortunately cross-compiled binutils installs libraries
   # across both `$lib/lib/` and `$out/$target/lib` with a reference
@@ -104,48 +152,47 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     perl
   ]
-  ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
-  ;
+  ++ lib.optionals buildPlatform.isDarwin [
+    autoconf269
+    automake
+    gettext
+    libtool
+  ];
 
-  buildInputs = [ zlib gettext ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
+  buildInputs = [
+    zlib
+    gettext
+  ];
 
   inherit noSysDirs;
 
-  preConfigure = (lib.optionalString buildPlatform.isDarwin ''
-    for i in */configure.ac; do
-      pushd "$(dirname "$i")"
-      echo "Running autoreconf in $PWD"
-      # autoreconf doesn't work, don't know why
-      # autoreconf ''${autoreconfFlags:---install --force --verbose}
-      autoconf
-      popd
-    done
-  '') + ''
-    # Clear the default library search path.
-    if test "$noSysDirs" = "1"; then
-        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
-    fi
+  preConfigure =
+    (lib.optionalString buildPlatform.isDarwin ''
+      for i in */configure.ac; do
+        pushd "$(dirname "$i")"
+        echo "Running autoreconf in $PWD"
+        # autoreconf doesn't work, don't know why
+        # autoreconf ''${autoreconfFlags:---install --force --verbose}
+        autoconf
+        popd
+      done
+    '')
+    + ''
+      # Clear the default library search path.
+      if test "$noSysDirs" = "1"; then
+          echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+      fi
 
-    # Use symlinks instead of hard links to save space ("strip" in the
-    # fixup phase strips each hard link separately).
-    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
-        sed -i "$i" -e 's|ln |ln -s |'
-    done
+      # Use symlinks instead of hard links to save space ("strip" in the
+      # fixup phase strips each hard link separately).
+      for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
+          sed -i "$i" -e 's|ln |ln -s |'
+      done
 
-    # autoreconfHook is not included for all targets.
-    # Call it here explicitly as well.
-    ${finalAttrs.postAutoreconf}
-  '';
-
-  postAutoreconf = ''
-    # As we regenerated configure build system tries hard to use
-    # texinfo to regenerate manuals. Let's avoid the dependency
-    # on texinfo in bootstrap path and keep manuals unmodified.
-    touch gas/doc/.dirstamp
-    touch gas/doc/asconfig.texi
-    touch gas/doc/as.1
-    touch gas/doc/as.info
-  '';
+      configureScript="$PWD/configure"
+      mkdir $NIX_BUILD_TOP/build
+      cd $NIX_BUILD_TOP/build
+    '';
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
@@ -155,13 +202,21 @@ stdenv.mkDerivation (finalAttrs: {
   # LONG_MIN. The configure test itself succeeds but the compiler issues a
   # warning about -static-libgcc being unused.
   env.NIX_CFLAGS_COMPILE =
-    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD)
-    then "-Wno-string-plus-int -Wno-deprecated-declarations"
-    else "-static-libgcc";
+    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD) then
+      "-Wno-string-plus-int -Wno-deprecated-declarations"
+    else
+      "-static-libgcc";
 
-  hardeningDisable = [ "format" "pie" ];
+  hardeningDisable = [
+    "format"
+    "pie"
+  ];
 
-  configurePlatforms = [ "build" "host" "target" ];
+  configurePlatforms = [
+    "build"
+    "host"
+    "target"
+  ];
 
   configureFlags = [
     "--enable-64-bit-bfd"
@@ -194,28 +249,71 @@ stdenv.mkDerivation (finalAttrs: {
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
   ]
-  ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+  ++ lib.optionals withAllTargets [
+    "--enable-targets=all"
+    # gas will be built separately for each target.
+    "--disable-gas"
+  ]
   ++ lib.optionals enableGold [
     "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
     "--enable-plugins"
-  ] ++ (if enableShared
-      then [ "--enable-shared" "--disable-static" ]
-      else [ "--disable-shared" "--enable-static" ])
-  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+  ]
+  ++ (
+    if enableShared then
+      [
+        "--enable-shared"
+        "--disable-static"
+      ]
+    else
+      [
+        "--disable-shared"
+        "--enable-static"
+      ]
+  )
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    [
       # lld17+ passes `--no-undefined-version` by default and makes this a hard
       # error; libctf.ver version script references symbols that aren't present.
       #
       # This is fixed upstream and can be removed with the future release of 2.43.
       # For now we allow this with `--undefined-version`:
       "LDFLAGS=-Wl,--undefined-version"
-  ])
-  ;
+    ]
+  );
+
+  postConfigure = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      mkdir "$NIX_BUILD_TOP/build-$target"
+      env -C "$NIX_BUILD_TOP/build-$target" \
+        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        --enable-gas --program-prefix "$target-"  --target "$target"
+    done
+  '';
+
+  makeFlags = [
+    # As we regenerated configure build system tries hard to use
+    # texinfo to regenerate manuals. Let's avoid the dependency
+    # on texinfo in bootstrap path and keep manuals unmodified.
+    "MAKEINFO=true"
+  ];
+
+  postBuild = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
+        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        TARGET-gas=as-new all-gas
+    done
+  '';
 
   # Fails
   doCheck = false;
 
   # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
-  stripDebugList = if stdenv.hostPlatform != stdenv.targetPlatform then "bin lib ${stdenv.hostPlatform.config}" else null;
+  stripDebugList =
+    if stdenv.hostPlatform != stdenv.targetPlatform then
+      "bin lib ${stdenv.hostPlatform.config}"
+    else
+      null;
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`
@@ -229,20 +327,38 @@ stdenv.mkDerivation (finalAttrs: {
   #   $out/$host/$target/include/* to $dev/include/*
   # TODO(trofi): fix installation paths upstream so we could remove this
   # code and have "lib" output unconditionally.
-  postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
-  '';
+  postInstall =
+    lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+    ''
+    + lib.optionalString withAllTargets ''
+      for target in ${lib.escapeShellArgs allGasTargets}; do
+        make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
+          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          install-exec-bindir
+      done
+    ''
+    + lib.optionalString (withAllTargets && targetHasGas) ''
+      ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
+    '';
 
   passthru = {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
-    # Having --enable-plugins is not enough, system has to support
-    # dlopen() or equivalent. See config/plugins.m4 and configure.ac
-    # (around PLUGINS) for cases that support or not support plugins.
-    # No platform specific filters yet here.
-    hasPluginAPI = enableGold;
+
+    # The plugin API is not a function of any targets. Expose it separately,
+    # currently only used by LLVM for enabling BFD to do LTO with LLVM bitcode.
+    # (Tar will exit with an error if there are no matches).
+    plugin-api-header = runCommand "libbfd-plugin-api-header" { } ''
+      mkdir -p $out
+      tar --directory=$out \
+      --extract \
+      --file=${finalAttrs.src} \
+      --strip-components=1 \
+        --wildcards '*'/include/plugin-api.h
+    '';
   };
 
   meta = with lib; {
@@ -255,7 +371,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericson2314 lovesegfault ];
+    maintainers = with maintainers; [
+      ericson2314
+      lovesegfault
+    ];
     platforms = platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a

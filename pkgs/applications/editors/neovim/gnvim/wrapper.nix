@@ -1,4 +1,10 @@
-{ lib, stdenv, gnvim-unwrapped, neovim, makeWrapper }:
+{
+  lib,
+  stdenv,
+  gnvim-unwrapped,
+  neovim,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation {
   pname = "gnvim";
@@ -7,7 +13,8 @@ stdenv.mkDerivation {
     makeWrapper '${gnvim-unwrapped}/bin/gnvim' "$out/bin/gnvim" \
       --prefix PATH : "${neovim}/bin" \
       --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share"
     ln -s '${gnvim-unwrapped}/share/icons' "$out/share/icons"
 
@@ -28,4 +35,3 @@ stdenv.mkDerivation {
 
   inherit (gnvim-unwrapped) meta;
 }
-

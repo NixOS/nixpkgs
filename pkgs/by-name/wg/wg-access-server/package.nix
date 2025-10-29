@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, iptables
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  iptables,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -21,9 +22,12 @@ buildGoModule rec {
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-YwFq0KxUctU3ElZBo/b68pyp4lJnFGL9ClKIwUzdngM=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -62,7 +66,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An all-in-one WireGuard VPN solution with a web ui for connecting devices";
+    description = "All-in-one WireGuard VPN solution with a web ui for connecting devices";
     homepage = "https://github.com/freifunkMUC/wg-access-server";
     license = licenses.mit;
     maintainers = with maintainers; [ xanderio ];

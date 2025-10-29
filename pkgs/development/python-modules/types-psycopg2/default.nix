@@ -7,15 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20240819";
+  version = "2.9.21.20251012";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Tta0dGTWN0+mTl47I0zqD3EOchI6RZbWerULdBWoRmY=";
+    pname = "types_psycopg2";
+    inherit version;
+    hash = "sha256-TNr9OJJ9oM/eSYBPOauFr9nG6cSSgA5C8fDBobAxKTU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "psycopg2-stubs" ];
 

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.photoprism;
 
@@ -8,9 +13,8 @@ let
     PHOTOPRISM_IMPORT_PATH = cfg.importPath;
     PHOTOPRISM_HTTP_HOST = cfg.address;
     PHOTOPRISM_HTTP_PORT = toString cfg.port;
-  } // (
-    lib.mapAttrs (_: toString) cfg.settings
-  );
+  }
+  // (lib.mapAttrs (_: toString) cfg.settings);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
@@ -29,10 +33,28 @@ in
     enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.nullOr (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
       default = null;
       description = ''
         Admin password file.
+      '';
+    };
+
+    databasePasswordFile = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
+      default = null;
+      description = ''
+        Database password file.
       '';
     };
 
@@ -104,10 +126,18 @@ in
         StateDirectory = "photoprism";
         WorkingDirectory = "/var/lib/photoprism";
         RuntimeDirectory = "photoprism";
-        ReadWritePaths = [ cfg.originalsPath cfg.importPath cfg.storagePath ];
+        ReadWritePaths = [
+          cfg.originalsPath
+          cfg.importPath
+          cfg.storagePath
+        ];
 
-        LoadCredential = lib.optionalString (cfg.passwordFile != null)
-          "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
+        LoadCredential = [
+          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE=${cfg.passwordFile}")
+          (lib.optionalString (
+            cfg.databasePasswordFile != null
+          ) "PHOTOPRISM_DATABASE_PASSWORD=${cfg.databasePasswordFile}")
+        ];
 
         LockPersonality = true;
         PrivateDevices = true;
@@ -119,34 +149,44 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@setuid @keyring" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@setuid @keyring"
+        ];
         UMask = "0066";
       };
 
       wantedBy = [ "multi-user.target" ];
       environment = env;
 
-      # reminder: easier password configuration will come in https://github.com/photoprism/photoprism/pull/2302
       preStart = ''
         ln -sf ${manage} photoprism-manage
-
         ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
+          export PHOTOPRISM_ADMIN_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE
+        ''}
+        ${lib.optionalString (cfg.databasePasswordFile != null) ''
+          export PHOTOPRISM_DATABASE_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_DATABASE_PASSWORD")
         ''}
         exec ${cfg.package}/bin/photoprism migrations run -f
       '';
 
       script = ''
         ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
+          export PHOTOPRISM_ADMIN_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE
+        ''}
+        ${lib.optionalString (cfg.databasePasswordFile != null) ''
+          export PHOTOPRISM_DATABASE_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_DATABASE_PASSWORD")
         ''}
         exec ${cfg.package}/bin/photoprism start
       '';
     };
   };
 }
-

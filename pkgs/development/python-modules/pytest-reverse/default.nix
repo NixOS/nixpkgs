@@ -5,24 +5,21 @@
   setuptools,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-reverse";
-  version = "1.7.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "pytest-reverse";
-    rev = version;
-    hash = "sha256-r0aSbUgArHQkpaXUvMT6oyOxEliQRtSGuDt4IILzhH4=";
+    tag = version;
+    hash = "sha256-d9wx4N3RnPbOk+dZuJaCdbtXfQQwjGo5MwVNrNVGtlo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
@@ -33,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to reverse test order";
     homepage = "https://github.com/adamchainz/pytest-reverse";
-    changelog = "https://github.com/adamchainz/pytest-reverse/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/pytest-reverse/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

@@ -1,29 +1,28 @@
-{ fetchurl
-, fetchpatch
-, lib
-, config
-, stdenv
-, pkg-config
-, libdaemon
-, dbus
-, libpcap
-, expat
-, gettext
-, glib
-, libiconv
-, libevent
-, nixosTests
-, gtk3Support ? false
-, gtk3
-, qt5
-, qt5Support ? false
-, withLibdnssdCompat ? false
-, python ? null
-, withPython ? false
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  config,
+  stdenv,
+  pkg-config,
+  libdaemon,
+  dbus,
+  libpcap,
+  expat,
+  gettext,
+  glib,
+  autoreconfHook,
+  libiconv,
+  libevent,
+  nixosTests,
+  gtk3Support ? false,
+  gtk3,
+  qt5,
+  qt5Support ? false,
+  withLibdnssdCompat ? false,
+  python ? null,
+  withPython ? false,
 }:
-
-# Added 2024-09-03. Drop this assertion after 24.11 is released.
-assert lib.assertMsg (config.avahi or {} == {}) "config.avahi has been removed; please use an overlay or services.avahi.package to configure the avahi package.";
 
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
@@ -34,7 +33,11 @@ stdenv.mkDerivation rec {
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # CVE-2021-36217 / CVE-2021-3502
@@ -120,7 +123,22 @@ stdenv.mkDerivation rec {
       name = "core-no-longer-supply-bogus-services-to-callbacks.patch";
       url = "https://github.com/avahi/avahi/commit/93b14365c1c1e04efd1a890e8caa01a2a514bfd8.patch";
       sha256 = "sha256-VBm8vsBZkTbbWAK8FI71SL89lZuYd1yFNoB5o+FvlEU=";
-      excludes = [ ".github/workflows/smoke-tests.sh" "fuzz/fuzz-packet.c" ];
+      excludes = [
+        ".github/workflows/smoke-tests.sh"
+        "fuzz/fuzz-packet.c"
+      ];
+    })
+    # https://github.com/avahi/avahi/pull/659 merged Nov 19
+    (fetchpatch {
+      name = "CVE-2024-52616.patch";
+      url = "https://github.com/avahi/avahi/commit/f8710bdc8b29ee1176fe3bfaeabebbda1b7a79f7.patch";
+      hash = "sha256-BUQOQ4evKLBzV5UV8xW8XL38qk1rg6MJ/vcT5NBckfA=";
+    })
+    # https://github.com/avahi/avahi/pull/265 merged Mar 3, 2020
+    (fetchpatch {
+      name = "fix-requires-in-pc-file.patch";
+      url = "https://github.com/avahi/avahi/commit/366e3798bdbd6b7bf24e59379f4a9a51af575ce9.patch";
+      hash = "sha256-9AdhtzrimmcpMmeyiFcjmDfG5nqr/S8cxWTaM1mzCWA=";
     })
   ];
 
@@ -132,6 +150,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
+    autoreconfHook
   ];
 
   buildInputs = [
@@ -141,19 +160,25 @@ stdenv.mkDerivation rec {
     expat
     libiconv
     libevent
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libpcap
-  ] ++ lib.optionals gtk3Support [
+  ]
+  ++ lib.optionals gtk3Support [
     gtk3
-  ] ++ lib.optionals qt5Support [
+  ]
+  ++ lib.optionals qt5Support [
     qt5
   ];
 
-  propagatedBuildInputs = lib.optionals withPython (with python.pkgs; [
-    python
-    pygobject3
-    dbus-python
-  ]);
+  propagatedBuildInputs = lib.optionals withPython (
+    with python.pkgs;
+    [
+      python
+      pygobject3
+      dbus-python
+    ]
+  );
 
   configureFlags = [
     "--disable-gdbm"
@@ -169,9 +194,11 @@ stdenv.mkDerivation rec {
     "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
     # A systemd unit is provided by the avahi-daemon NixOS module
     "--with-systemdsystemunitdir=no"
-  ] ++ lib.optionals withLibdnssdCompat [
+  ]
+  ++ lib.optionals withLibdnssdCompat [
     "--enable-compat-libdns_sd"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # autoipd won't build on darwin
     "--disable-autoipd"
   ];
@@ -205,7 +232,10 @@ stdenv.mkDerivation rec {
     homepage = "http://avahi.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lovek323 globin ];
+    maintainers = with maintainers; [
+      lovek323
+      globin
+    ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

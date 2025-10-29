@@ -20,13 +20,13 @@
 let
   gepetto-viewer = stdenv.mkDerivation (finalAttrs: {
     pname = "gepetto-viewer";
-    version = "5.2.0";
+    version = "6.0.0";
 
     src = fetchFromGitHub {
       owner = "gepetto";
       repo = "gepetto-viewer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-kAQPi7bO48H0CZKz1bxfkvMiNy8RsXvRvpDK0KF7XLM=";
+      hash = "sha256-nbA+JNogtlktkByUD2Urx3kJpe/8jgIjO59XXOAPpNs=";
     };
 
     cmakeFlags = [
@@ -47,17 +47,16 @@ let
       libsForQt5.qtbase
     ];
 
-    nativeBuildInputs =
-      [
-        cmake
-        doxygen
-        libsForQt5.wrapQtAppsHook
-        pkg-config
-        python3Packages.python
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        darwin.autoSignDarwinBinariesHook
-      ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      libsForQt5.wrapQtAppsHook
+      pkg-config
+      python3Packages.python
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      darwin.autoSignDarwinBinariesHook
+    ];
 
     propagatedBuildInputs = [
       jrl-cmakemodules
@@ -93,6 +92,8 @@ let
       plugins:
       runCommand "gepetto-gui"
         {
+          inherit (finalAttrs) version;
+          pname = "gepetto-gui";
           meta = {
             # can't just "inherit (gepetto-viewer) meta;" because:
             # error: derivation '/nix/store/…-gepetto-gui.drv' does not have wanted outputs 'bin'
@@ -114,7 +115,7 @@ let
         '';
 
     meta = {
-      description = "Graphical Interface for Pinocchio and HPP.";
+      description = "Graphical Interface for Pinocchio and HPP";
       homepage = "https://github.com/gepetto/gepetto-viewer";
       license = lib.licenses.lgpl3Only;
       maintainers = [ lib.maintainers.nim65s ];

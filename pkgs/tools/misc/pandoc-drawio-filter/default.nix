@@ -1,11 +1,12 @@
-{ buildPythonApplication
-, drawio-headless
-, fetchFromGitHub
-, lib
-, pandoc
-, pandocfilters
-, runCommand
-, texliveTeTeX
+{
+  buildPythonApplication,
+  drawio-headless,
+  fetchFromGitHub,
+  lib,
+  pandoc,
+  pandocfilters,
+  runCommand,
+  texliveTeTeX,
 }:
 
 let
@@ -19,6 +20,7 @@ let
   };
 
   pandoc-drawio-filter = buildPythonApplication {
+    format = "setuptools";
     pname = "pandoc-drawio-filter";
 
     inherit src version;

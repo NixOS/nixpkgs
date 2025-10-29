@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, curl
-, stdenv
-, testers
-, static-server
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  curl,
+  stdenv,
+  testers,
+  static-server,
+  replaceVars,
 }:
 
 buildGoModule rec {
@@ -23,8 +24,7 @@ buildGoModule rec {
 
   patches = [
     # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];
@@ -33,7 +33,10 @@ buildGoModule rec {
     curl
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # tests sometimes fail with SIGQUIT on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

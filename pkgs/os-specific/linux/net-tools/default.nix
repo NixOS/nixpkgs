@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "net-tools";
@@ -9,10 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-smJDWlJB6Jv6UcPKvVEzdTlS96e3uT8y4Iy52W9YDWk=";
   };
 
-  preBuild =
-    ''
-      cp ${./config.h} config.h
-    '';
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-46836.patch";
+      url = "https://github.com/ecki/net-tools/commit/7a8f42fb20013a1493d8cae1c43436f85e656f2d.patch";
+      hash = "sha256-2R9giETNN3e2t1DPQj0kb4uYCXpkBxnF8grWIBLM7s0=";
+    })
+  ];
+
+  preBuild = ''
+    cp ${./config.h} config.h
+  '';
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

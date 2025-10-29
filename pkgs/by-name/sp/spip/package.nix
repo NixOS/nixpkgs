@@ -1,19 +1,21 @@
 {
- fetchFromGitHub,
- fetchurl,
- lib,
- makeWrapper,
- rPackages,
- rWrapper,
- stdenv
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  makeWrapper,
+  rPackages,
+  rWrapper,
+  stdenv,
 }:
 
 let
-  my-r-packages = rWrapper.override{packages = with rPackages; [
-    foreach
-    doParallel
-    randomForest
-  ];};
+  my-r-packages = rWrapper.override {
+    packages = with rPackages; [
+      foreach
+      doParallel
+      randomForest
+    ];
+  };
   transcriptome-url = "https://kumisystems.dl.sourceforge.net/project/splicing-prediction-pipeline/transcriptome/";
 
   transcriptome19 = fetchurl {
@@ -30,7 +32,7 @@ in
 
 stdenv.mkDerivation {
   pname = "spip";
-  version = "unstable-2023-04-19";
+  version = "0-unstable-2023-04-19";
 
   src = fetchFromGitHub {
     owner = "raphaelleman";
@@ -42,7 +44,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInput = [ my-r-packages ];
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
@@ -54,12 +56,12 @@ stdenv.mkDerivation {
       --add-flags "$out/SPiPv2.1_main.r"
 
     runHook postInstall
-'';
+  '';
 
   meta = with lib; {
-    description = "A random forest model for splice prediction in genomics";
-    license     = licenses.mit;
-    homepage    = "https://github.com/raphaelleman/SPiP";
+    description = "Random forest model for splice prediction in genomics";
+    license = licenses.mit;
+    homepage = "https://github.com/raphaelleman/SPiP";
     maintainers = with maintainers; [ apraga ];
     platforms = platforms.unix;
     mainProgram = "spip";

@@ -1,53 +1,55 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook3
-, glib
-, gtk4
-, libadwaita
-, wayland
-, gocryptfs
-, cryfs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook3,
+  glib,
+  gtk4,
+  libadwaita,
+  wayland,
+  gocryptfs,
+  cryfs,
+  fuse,
+  util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vaults";
-  version = "0.7.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
-    repo = "Vaults";
-    rev = version;
-    hash = "sha256-jA7OeyRqc5DxkS4sMx9cIbVlZwd++aCQi09uBQik1oA=";
+    repo = "vaults";
+    tag = finalAttrs.version;
+    hash = "sha256-B4CNEghMfP+r0poyhE102zC1Yd2U5ocV1MCMEVEMjEY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-l9Zer6d6kgjIUNiQ1VdQQ57caVNWfzCkdsMf79X8Ar4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-my4CxFIEN19juo/ya2vlkejQTaZsyoYLtFTR7iCT9s0=";
   };
+
+  patches = [
+    (replaceVars ./remove_flatpak_dependency.patch {
+      cryfs = lib.getExe' cryfs "cryfs";
+      gocryptfs = lib.getExe' gocryptfs "gocryptfs";
+      fusermount = lib.getExe' fuse "fusermount";
+      umount = lib.getExe' util-linux "umount";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux
-  '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gocryptfs cryfs ]}"
-    )
   '';
 
   nativeBuildInputs = [
@@ -75,10 +77,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK frontend for encrypted vaults supporting gocryptfs and CryFS for encryption";
     homepage = "https://mpobaschnig.github.io/vaults/";
-    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
+    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ benneti ];
+    maintainers = with lib.maintainers; [
+      benneti
+      aleksana
+    ];
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };
-}
+})

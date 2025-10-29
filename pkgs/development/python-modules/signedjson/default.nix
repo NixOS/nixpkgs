@@ -26,16 +26,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs =
-    [
-      canonicaljson
-      unpaddedbase64
-      pynacl
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-      typing-extensions
-    ];
+  propagatedBuildInputs = [
+    canonicaljson
+    unpaddedbase64
+    pynacl
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, qtbase
-, glib
-, perl
-, wrapQtAppsHook
-, gitUpdater
-, version ? "2.0.0"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  glib,
+  perl,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "2.2.1",
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +18,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-build-tools";
     rev = version;
-    hash = {
-      "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-      "2.0.0" = "sha256-ZFvnIumP03Mp+4OHPe1yMVsSYhMmYUY1idJGCAy5IhA=";
-    }."${version}";
+    hash =
+      {
+        "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+        "2.2.1" = "sha256-dewsmkma8QHgb3LzRGvfntI48bOaFFsrEDrOznaC8eg=";
+      }
+      ."${version}";
   };
 
   postPatch = ''
@@ -31,6 +33,10 @@ stdenv.mkDerivation rec {
     # Without this, dependants fail to link.
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
       --replace-fail AppleClang Clang
+  ''
+  + lib.optionalString (lib.versionOlder version "2.2.1") ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -43,7 +49,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     glib
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -66,6 +71,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-transupdate";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -1,13 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.hardware.bluetooth;
   package = cfg.package;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption mkPackageOption
-    mkRenamedOptionModule mkRemovedOptionModule
-    concatStringsSep escapeShellArgs literalExpression
-    optional optionals optionalAttrs recursiveUpdate types;
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRenamedOptionModule
+    mkRemovedOptionModule
+    concatStringsSep
+    optional
+    optionalAttrs
+    recursiveUpdate
+    types
+    ;
 
   cfgFmt = pkgs.formats.ini { };
 
@@ -102,18 +116,15 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ package ]
-      ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
+    environment.systemPackages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
 
-    environment.etc."bluetooth/input.conf".source =
-      cfgFmt.generate "input.conf" cfg.input;
-    environment.etc."bluetooth/network.conf".source =
-      cfgFmt.generate "network.conf" cfg.network;
-    environment.etc."bluetooth/main.conf".source =
-      cfgFmt.generate "main.conf" (recursiveUpdate defaults cfg.settings);
+    environment.etc."bluetooth/input.conf".source = cfgFmt.generate "input.conf" cfg.input;
+    environment.etc."bluetooth/network.conf".source = cfgFmt.generate "network.conf" cfg.network;
+    environment.etc."bluetooth/main.conf".source = cfgFmt.generate "main.conf" (
+      recursiveUpdate defaults cfg.settings
+    );
     services.udev.packages = [ package ];
-    services.dbus.packages = [ package ]
-      ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
+    services.dbus.packages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
     systemd.packages = [ package ];
 
     systemd.services = {
@@ -123,19 +134,46 @@ in
           # will in fact load the configuration file at /etc/bluetooth/main.conf
           # so force it here to avoid any ambiguity and things suddenly breaking
           # if/when the bluez derivation is changed.
-          args = [ "-f" "/etc/bluetooth/main.conf" ]
-            ++ optional hasDisabledPlugins
-            "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+          args = [
+            "-f"
+            "/etc/bluetooth/main.conf"
+          ]
+          ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
         in
         {
           wantedBy = [ "bluetooth.target" ];
           aliases = [ "dbus-org.bluez.service" ];
-          serviceConfig.ExecStart = [
-            ""
-            "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
-          ];
           # restarting can leave people without a mouse/keyboard
-          unitConfig.X-RestartIfChanged = false;
+          restartIfChanged = false;
+          serviceConfig = {
+            ExecStart = [
+              ""
+              "${package}/libexec/bluetooth/bluetoothd ${utils.escapeSystemdExecArgs args}"
+            ];
+            CapabilityBoundingSet = [
+              "CAP_NET_BIND_SERVICE" # sockets and tethering
+            ];
+            ConfigurationDirectoryMode = "0755";
+            NoNewPrivileges = true;
+            RestrictNamespaces = true;
+            ProtectControlGroups = true;
+            MemoryDenyWriteExecute = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = "@system-service";
+            LockPersonality = true;
+            RestrictRealtime = true;
+            ProtectProc = "invisible";
+            PrivateTmp = true;
+
+            PrivateUsers = false;
+
+            # loading hardware modules
+            ProtectKernelModules = false;
+            ProtectKernelTunables = false;
+
+            PrivateNetwork = false; # tethering
+          };
         };
     }
     // (optionalAttrs cfg.hsphfpd.enable {

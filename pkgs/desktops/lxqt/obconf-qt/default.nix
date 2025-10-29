@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libSM
-, libXdmcp
-, libpthreadstubs
-, lxqt-build-tools
-, openbox
-, pcre
-, pkg-config
-, qtbase
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libSM,
+  libXdmcp,
+  libpthreadstubs,
+  lxqt-build-tools,
+  openbox,
+  pcre,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "obconf-qt";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 }

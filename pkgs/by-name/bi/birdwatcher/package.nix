@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "birdwatcher";
-    rev = version;
+    tag = version;
     hash = "sha256-TTU5TYWD/KSh/orDdQnNrQJ/G7z5suBu7psF9V6AAIw=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
       inherit (nixosTests) birdwatcher;
     };
 
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

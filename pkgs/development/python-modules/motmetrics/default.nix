@@ -17,22 +17,25 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+let
+  version = "1.4.0";
+in
+buildPythonPackage {
   pname = "motmetrics";
-  version = "1.4.0-unstable-20240130";
+  version = "${version}-unstable-2025-01-14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-motmetrics";
-    # latest release is not compatible with pandas 2.0
-    rev = "7210fcce0be1b76c96a62f6fe4ddbc90d944eacb";
-    hash = "sha256-7LKLHXWgW4QpivAgzvWl6qEG0auVvpiZ6bfDViCKsFY=";
+    # Latest release is not compatible with pandas 2.0
+    rev = "c199b3e853d589af4b6a7d88f5bcc8b8802fc434";
+    hash = "sha256-DJ82nioW3jdIVo1B623BE8bBhVa1oMzYIkhhit4Z4dg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
     scipy
@@ -44,12 +47,15 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "motmetrics" ];
 
-  meta = with lib; {
-    description = "Bar_chart: Benchmark multiple object trackers (MOT) in Python";
+  meta = {
+    description = "Benchmark multiple object trackers (MOT) in Python";
     homepage = "https://github.com/cheind/py-motmetrics";
-    license = licenses.mit;
+    changelog = "https://github.com/cheind/py-motmetrics/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -5,26 +5,26 @@
   fetchFromGitHub,
   typing-extensions,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "injector";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-injector";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-5O4vJSXfYNTrUzmv5XuT9pSUndNSvTZTxfVwiAd+0ck=";
+    repo = "injector";
+    tag = version;
+    hash = "sha256-FRO/stQDTa4W1f6mLPDCJslYFfIvgS0EgoEhuh0rxwA=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "injector" ];

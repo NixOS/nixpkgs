@@ -4,7 +4,7 @@
   fetchFromGitHub,
   graphql-core,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wyfo";
     repo = "apischema";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YFJbNxCwDrJb603Bf8PDrvhVt4T53PNWOYs716c0f1I=";
   };
 
@@ -37,8 +37,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    pytest8_3CheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apischema" ];
 

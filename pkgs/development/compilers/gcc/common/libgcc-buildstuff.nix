@@ -1,5 +1,6 @@
-{ lib
-, stdenv
+{
+  lib,
+  stdenv,
 }:
 
 # Trick to build a gcc that is capable of emitting shared libraries *without* having the
@@ -15,9 +16,7 @@ let
   # glibc.  At this early pre-glibc stage these files sometimes
   # have different names.
   crtstuff-ofiles =
-    if stdenv.targetPlatform.isPower
-    then "ecrti.o ecrtn.o ncrti.o ncrtn.o"
-    else "crti.o crtn.o";
+    if stdenv.targetPlatform.isPower64 then "ecrti.o ecrtn.o ncrti.o ncrtn.o" else "crti.o crtn.o";
 
   # Normally, `SHLIB_LC` is set to `-lc`, which means that
   # `libgcc_s.so` cannot be built until `libc.so` is available.
@@ -29,7 +28,7 @@ let
   # gcc-built `{e,n}crt{n,i}.o` instead of failing to find the
   # versions which have been repackaged in libc as `crt{n,i}.o`
   #
-  SHLIB_LC = lib.optionalString stdenv.targetPlatform.isPower "-mnewlib";
+  SHLIB_LC = lib.optionalString stdenv.targetPlatform.isPower64 "-mnewlib";
 
 in
 ''
@@ -37,17 +36,25 @@ in
   echo 'SHLIB_LC=${SHLIB_LC}' >> libgcc/Makefile.in
 ''
 
-  # Meanwhile, crt{i,n}.S are not present on certain platforms
-  # (e.g. LoongArch64), resulting in the following error:
-  #
-  # No rule to make target '../../../gcc-xx.x.x/libgcc/config/loongarch/crti.S', needed by 'crti.o'.  Stop.
-  #
-  # For LoongArch64 and S390, a hacky workaround is to simply touch them,
-  # as the platform forces .init_array support.
-  #
-  # https://www.openwall.com/lists/musl/2022/11/09/3
-  #
-  # 'parsed.cpu.family' won't be correct for every platform.
-+ lib.optionalString (stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390 || stdenv.targetPlatform.isAlpha) ''
-  touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
+# Meanwhile, crt{i,n}.S are not present on certain platforms
+# (e.g. LoongArch64), resulting in the following error:
+#
+# No rule to make target '../../../gcc-xx.x.x/libgcc/config/loongarch/crti.S', needed by 'crti.o'.  Stop.
+#
+# For LoongArch64 and S390, a hacky workaround is to simply touch them,
+# as the platform forces .init_array support.
+#
+# https://www.openwall.com/lists/musl/2022/11/09/3
+#
+# 'parsed.cpu.family' won't be correct for every platform.
++ (lib.optionalString
+  (
+    stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390 || stdenv.targetPlatform.isAlpha
+  )
+  ''
+    touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
+  ''
+)
++ lib.optionalString (stdenv.targetPlatform.isPower && !stdenv.targetPlatform.isPower64) ''
+  touch libgcc/config/rs6000/crt{i,n}.S
 ''

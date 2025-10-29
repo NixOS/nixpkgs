@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, qt5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qt5,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frequest";

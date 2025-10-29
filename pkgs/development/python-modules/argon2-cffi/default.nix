@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "argon2-cffi";
-  version = "23.1.0";
+  version = "25.1.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "argon2_cffi";
     inherit version;
-    hash = "sha256-h5w+eaJynOdo67fTbUYJ46eKTKLsOp8SKGygV+PQ2wg=";
+    hash = "sha256-aUrlzIpC9MTivyyg5k5R4joEDGpReoUHRoPTlZ4TRsE=";
   };
 
   nativeBuildInputs = [

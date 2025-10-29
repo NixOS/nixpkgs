@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,6 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://thewalter.net/stef/software/scrounge/scrounge-ntfs-${finalAttrs.version}.tar.gz";
     hash = "sha256-HYrMIMTRPmgAac/vaZ1jaUFchyAl5B0quxgHH0DHJ84=";
   };
+
+  env.NIX_CFLAGS_COMPILE = "-D_FILE_OFFSET_BITS=64";
+
+  postPatch = ''
+    substituteInPlace src/{list,ntfsx,scrounge}.c \
+      --replace-fail "lseek64" "lseek"
+  '';
 
   patches = [
     ./darwin.diff

@@ -1,41 +1,52 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, ninja
-, python3
-, qtbase
-, qt5compat
-, qtdeclarative
-, qtdoc
-, qtquick3d
-, qtquicktimeline
-, qtserialport
-, qtsvg
-, qttools
-, qtwebengine
-, qtwayland
-, qtshadertools
-, wrapQtAppsHook
-, yaml-cpp
-, litehtml
-, libsecret
-, gumbo
-, llvmPackages
-, rustc-demangle
-, elfutils
-, perf
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  qtbase,
+  qt5compat,
+  qtdeclarative,
+  qtdoc,
+  qtquick3d,
+  qtquicktimeline,
+  qtserialport,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwayland,
+  qtshadertools,
+  wrapQtAppsHook,
+  yaml-cpp,
+  litehtml,
+  libsecret,
+  gumbo,
+  llvmPackages,
+  rustc-demangle,
+  elfutils,
+  perf,
+  callPackage,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtcreator";
-  version = "14.0.2";
+  version = "17.0.2";
 
   src = fetchurl {
-    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-stL4eLtpKKjm4w2HYAvdk89ATCYZoVHGS9zcjNB4OJI=";
+    url = "mirror://qt/official_releases/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/qt-creator-opensource-src-${finalAttrs.version}.tar.xz";
+    hash = "sha256-sOEY+fuJvnF2KLP5JRwpX6bfQfqLfYEhbi6tg1XlWhM=";
   };
+
+  patches = [
+    # QmlDesigner: Compile fixes for Qt 6.10 private API changes
+    (fetchpatch {
+      url = "https://github.com/qt-creator/qt-creator/commit/5a4c700ccefc76c7c531c834734e6fefa14b5364.patch";
+      hash = "sha256-BnS0HOqP5b7ZsVtuRpCK+TtoJj0yhodDuVtp+C3btIA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,18 +79,23 @@ stdenv.mkDerivation rec {
     elfutils
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cmakeFlags = [
     # workaround for missing CMAKE_INSTALL_DATAROOTDIR
     # in pkgs/development/tools/build-managers/cmake/setup-hook.sh
-    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
     # qtdeclarative in nixpkgs does not provide qmlsc
     # fix can't find Qt6QmlCompilerPlusPrivate
-    "-DQT_NO_FIND_QMLSC=TRUE"
-    "-DWITH_DOCS=ON"
-    "-DBUILD_DEVELOPER_DOCS=ON"
-    "-DBUILD_QBS=OFF"
-    "-DQTC_CLANG_BUILDMODE_MATCH=ON"
-    "-DCLANGTOOLING_LINK_CLANG_DYLIB=ON"
+    (lib.cmakeBool "QT_NO_FIND_QMLSC" true)
+    (lib.cmakeBool "WITH_DOCS" true)
+    (lib.cmakeBool "BUILD_DEVELOPER_DOCS" true)
+    (lib.cmakeBool "BUILD_QBS" false)
+    (lib.cmakeBool "QTC_CLANG_BUILDMODE_MATCH" true)
+    (lib.cmakeBool "CLANGTOOLING_LINK_CLANG_DYLIB" true)
   ];
 
   qtWrapperArgs = [
@@ -87,11 +103,22 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
-      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
+    # Small hack to set-up right prefix in cmake modules for header files
+    cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX="''${!outputDev}"
+
+    cmake --install . --prefix "''${!outputDev}" --component Devel
   '';
 
-  meta = with lib; {
+  # Remove prefix from the QtC config to make sane output path for 3rd-party plug-ins.
+  postFixup = ''
+    substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
+  '';
+
+  passthru = {
+    withPackages = callPackage ./with-plugins.nix { };
+  };
+
+  meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
       Qt Creator is a cross-platform IDE (integrated development environment)
@@ -99,8 +126,12 @@ stdenv.mkDerivation rec {
       advanced code editor, a visual debugger and a GUI designer.
     '';
     homepage = "https://wiki.qt.io/Qt_Creator";
-    license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
-    maintainers = [ maintainers.rewine ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
+    maintainers = with lib.maintainers; [
+      wineee
+      zatm8
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "qtcreator";
   };
-}
+})

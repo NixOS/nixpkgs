@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "su-exec";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
-    owner  = "ncopa";
-    repo   = "su-exec";
-    rev    = "v${version}";
-    hash = "sha256-eymE9r9Rm/u4El5wXHbkAh7ma5goWV0EdJIhsq+leIs=";
+    owner = "ncopa";
+    repo = "su-exec";
+    rev = "v${version}";
+    hash = "sha256-VUaparvPZhVOtAVPULIDQmpLUypl9aYYZlZrIIxuoTI=";
   };
 
   installPhase = ''
@@ -17,11 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "switch user and group id and exec";
+    description = "Switch user and group id and exec";
     mainProgram = "su-exec";
-    homepage    = "https://github.com/ncopa/su-exec";
-    license     = licenses.mit;
+    homepage = "https://github.com/ncopa/su-exec";
+    license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

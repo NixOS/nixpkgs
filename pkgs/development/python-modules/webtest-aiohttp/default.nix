@@ -5,22 +5,21 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-aiohttp,
+  pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   webtest,
 }:
 
 buildPythonPackage rec {
   pname = "webtest-aiohttp";
   version = "2.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
-    repo = pname;
-    rev = version;
+    repo = "webtest-aiohttp";
+    tag = version;
     hash = "sha256-UuAz/k/Tnumupv3ybFR7PkYHwG3kH7M5oobZykEP+ao=";
   };
 
@@ -32,10 +31,21 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ webtest ];
+  postPatch = ''
+    substituteInPlace test_webtest_aiohttp.py \
+      --replace-fail '(app, loop)' '(app, event_loop)' \
+      --replace-fail 'WebTestApp(app, loop=loop)' 'WebTestApp(app, loop=event_loop)'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
+    webtest
+  ];
 
   nativeCheckInputs = [
-    aiohttp
+    pytest-asyncio_0
     pytest-aiohttp
     pytestCheckHook
   ];

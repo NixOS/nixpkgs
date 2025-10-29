@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -16,40 +17,49 @@
   ffmpeg,
   freetype,
   git,
+  glib,
   glm,
   glslang,
   harfbuzz,
+  kdePackages,
+  libarchive,
   libdrm,
   libGL,
-  libva,
+  libnotify,
   libpulseaudio,
+  librsvg,
+  libva,
   libX11,
   libXrandr,
+  makeDesktopItem,
   nix-update-script,
   nlohmann_json,
   onnxruntime,
+  opencomposite,
   openxr-loader,
+  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   pipewire,
   pkg-config,
   python3,
+  qt6,
   shaderc,
   spdlog,
   systemd,
   udev,
   vulkan-headers,
   vulkan-loader,
-  vulkan-tools,
   x264,
+  xrizer,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.19";
+  version = "25.9";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DYV+JUWjjhLZLq+4Hv7jxOyxDqQut/mU1X0ZFMoNkDI=";
+    hash = "sha256-XP0bpXgtira2QIlS0fNEteNP48WnEjBYFM1Xmt2sm5I=";
   };
 
   monado = applyPatches {
@@ -57,26 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "bcbe19ddd795f182df42051e5495e9727db36c1c";
-      hash = "sha256-sh5slHROcuC3Dgenu1+hm8U5lUOW48JUbiluYvc3NiQ=";
+      rev = "7a4018e2d89151e60e562fac79eba90ca7a328d8";
+      hash = "sha256-DPIvJb23bK7SDjZr9mK0Wt6Zbo3Ari3Ar8TtPe5QgKY=";
     };
 
-    patches = [
-      "${finalAttrs.src}/patches/monado/0001-c-multi-disable-dropping-of-old-frames.patch"
-      "${finalAttrs.src}/patches/monado/0002-ipc-server-Always-listen-to-stdin.patch"
-      "${finalAttrs.src}/patches/monado/0003-c-multi-Don-t-log-frame-time-diff.patch"
-      "${finalAttrs.src}/patches/monado/0005-distortion-images.patch"
-      "${finalAttrs.src}/patches/monado/0008-Use-mipmaps-for-distortion-shader.patch"
-      "${finalAttrs.src}/patches/monado/0009-convert-to-YCbCr-in-monado.patch"
-    ];
+    postPatch = ''
+      ${finalAttrs.src}/patches/apply.sh ${finalAttrs.src}/patches/monado/*
+    '';
   };
 
   strictDeps = true;
 
+  # Let's make sure our monado source revision matches what is used by WiVRn upstream
   postUnpack = ''
-    # Let's make sure our monado source revision matches what is used by WiVRn upstream
     ourMonadoRev="${finalAttrs.monado.src.rev}"
-    theirMonadoRev=$(grep "GIT_TAG" ${finalAttrs.src.name}/CMakeLists.txt | awk '{print $2}')
+    theirMonadoRev=$(cat ${finalAttrs.src.name}/monado-rev)
     if [ ! "$theirMonadoRev" == "$ourMonadoRev" ]; then
       echo "Our Monado source revision doesn't match CMakeLists.txt." >&2
       echo "  theirs: $theirMonadoRev" >&2
@@ -85,13 +90,28 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  patches = [
+    # See https://github.com/WiVRn/WiVRn/pull/557
+    (fetchpatch {
+      name = "wivrn-fix-qt6.10-build.patch";
+      url = "https://github.com/WiVRn/WiVRn/commit/2204fdd39682cfc052556d58fdb9404dd8ecf63f.patch?full_index=1";
+      hash = "sha256-05MLfJNCznBt6eaggUfSk1jaNDB2/eou6CfexUkIHZE=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     git
+    glib
     glslang
+    librsvg
     pkg-config
     python3
-  ] ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
   buildInputs = [
     avahi
@@ -102,48 +122,94 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glm
     harfbuzz
+    kdePackages.kcoreaddons
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kirigami
+    kdePackages.qcoro
+    kdePackages.qqc2-desktop-style
+    libarchive
     libdrm
     libGL
+    libnotify
+    libpulseaudio
+    librsvg
     libva
     libX11
     libXrandr
-    libpulseaudio
     nlohmann_json
-    onnxruntime
     openxr-loader
+    onnxruntime
     pipewire
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
     shaderc
     spdlog
     systemd
     udev
     vulkan-headers
     vulkan-loader
-    vulkan-tools
     x264
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cudatoolkit ];
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cudatoolkit
+  ];
 
   cmakeFlags = [
-    (lib.cmakeBool "WIVRN_USE_VAAPI" true)
-    (lib.cmakeBool "WIVRN_USE_X264" true)
     (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
-    (lib.cmakeBool "WIVRN_USE_SYSTEMD" true)
+    (lib.cmakeBool "WIVRN_USE_VAAPI" true)
+    (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
+    (lib.cmakeBool "WIVRN_USE_X264" true)
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
     (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
+    (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
     (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-    (lib.cmakeBool "WIVRN_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
+    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
+    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+    (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
+    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
+  ];
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp "$out/bin/wivrn-dashboard" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "WiVRn Server";
+      desktopName = "WiVRn Server";
+      genericName = "WiVRn Server";
+      comment = "Play your PC VR games on a standalone headset";
+      icon = "io.github.wivrn.wivrn";
+      exec = "wivrn-dashboard";
+      type = "Application";
+      categories = [ "Network" ];
+    })
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "An OpenXR streaming application to a standalone headset";
-    homepage = "https://github.com/Meumeu/WiVRn/";
-    changelog = "https://github.com/Meumeu/WiVRn/releases/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+  meta = {
+    description = "OpenXR streaming application to a standalone headset";
+    homepage = "https://github.com/WiVRn/WiVRn/";
+    changelog = "https://github.com/WiVRn/WiVRn/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ImSapphire
+      passivelemon
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 })

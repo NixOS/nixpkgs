@@ -8,9 +8,7 @@ TigerBeetle is a distributed financial accounting database designed for mission 
 
 To enable TigerBeetle, add the following to your {file}`configuration.nix`:
 ```nix
-{
-  services.tigerbeetle.enable = true;
-}
+{ services.tigerbeetle.enable = true; }
 ```
 
 When first started, the TigerBeetle service will create its data file at {file}`/var/lib/tigerbeetle` unless the file already exists, in which case it will just use the existing file.

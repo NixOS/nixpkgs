@@ -1,43 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, polkit
-, vala
-, wrapGAppsHook3
-, editorconfig-core-c
-, granite
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libgee
-, libgit2-glib
-, libhandy
-, libpeas
-, libsoup
-, vte
-, ctags
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  vala,
+  wrapGAppsHook3,
+  editorconfig-core-c,
+  granite,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libgee,
+  libgit2-glib,
+  libhandy,
+  libpeas2,
+  libsoup_3,
+  vte,
+  ctags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "7.4.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-KoRpGBYen1eOdMBHOTBMopC+mPMOkD+iYWV3JA21mKc=";
+    hash = "sha256-4IGun7MnrMRmpXD0Kxm/ND4C3pFVhjHqDeP6jUmRg7k=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -49,14 +49,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     editorconfig-core-c
     granite
+    gsettings-desktop-schemas
     gtk3
     gtksourceview4
     gtkspell3
     libgee
     libgit2-glib
     libhandy
-    libpeas
-    libsoup
+    libpeas2
+    libsoup_3
+    vala # for ValaSymbolResolver provided by libvala
     vte
   ];
 
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.code";
   };
 }

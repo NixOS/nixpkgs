@@ -1,18 +1,21 @@
-{ lib
-, fetchzip
-, python3
-, python3Packages
-, makeBinaryWrapper
+{
+  lib,
+  fetchzip,
+  python3,
+  python3Packages,
+  makeBinaryWrapper,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfid";
-  version = "0.2.8";
+  version = "0.2.10";
   format = "other";
 
   src = fetchzip {
-    url = "https://didierstevens.com/files/software/pdfid_v0_2_8.zip";
-    hash = "sha256-ZLyhBMF2KMX0c1oCvuSCjEjHTnm2gFhJtasaTD9Q1BI=";
+    url = "https://didierstevens.com/files/software/pdfid_v${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
+    hash = "sha256-GxQOwIwCVaKEruFO+kxXciOiFcXtBO0vvCwb6683lGU=";
     stripRoot = false;
   };
 
@@ -24,7 +27,8 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
     mkdir -p $out/{bin,share/pdfid}
     cp -a * $out/share/pdfid/
-    makeBinaryWrapper ${lib.getExe python3} $out/bin/${meta.mainProgram} \
+    makeWrapper ${lib.getExe python3} $out/bin/pdfid \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
       --add-flags "$out/share/pdfid/pdfid.py"
     runHook postInstall
   '';

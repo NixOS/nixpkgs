@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "fcitx5-nord";
-  version = "unstable-2021-07-27";
+  version = "0-unstable-2021-07-27";
 
   src = fetchFromGitHub {
     owner = "tonyfettes";

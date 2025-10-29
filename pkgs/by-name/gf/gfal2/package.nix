@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
   # Native build inputs
-, cmake
-, pkg-config
+  cmake,
+  pkg-config,
   # General build inputs
-, glib
-, gtest
-, json_c
-, openldap
+  glib,
+  gtest,
+  json_c,
+  openldap,
   # Plugin build inputs
-, cryptopp
-, davix-copy
-, dcap
-, libssh2
-, libuuid
-, pugixml
-, xrootd
+  cryptopp,
+  davix-copy,
+  dcap,
+  libssh2,
+  libuuid,
+  pugixml,
+  xrootd,
   # For enablePluginStatus.https only
-, gsoap
+  gsoap,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfal2";
-  version = "2.23.0";
+  version = "2.23.2";
 
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LEvmjd3A+7JHfUOAnyRyXMsJd/8JO2rVpcIT7QGSJoo=";
+    hash = "sha256-gyEmz0sNHyxjvJA/3uSzLW42PQ3UVKx6nptNYl/3ExM=";
   };
 
   passthru.enablePluginStatus = {
@@ -49,26 +50,35 @@ stdenv.mkDerivation (finalAttrs: {
     xrootd = true;
   };
 
-  passthru.tests = (
-    # Enable only one plugin in each test case,
-    # to ensure that they gets their dependency when invoked separately.
-    lib.listToAttrs
-      (map
-        (pluginName: lib.nameValuePair
-          "gfal2-${pluginName}"
-          (finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-            passthru = previousAttrs.passthru // {
-              enablePluginStatus = lib.mapAttrs (n: v: n == pluginName) previousAttrs.passthru.enablePluginStatus;
-            };
-          })))
-        (lib.filter (lib.flip lib.getAttr finalAttrs.passthru.enablePluginStatus) (lib.attrNames finalAttrs.passthru.enablePluginStatus))
+  passthru.tests =
+    (
+      # Enable only one plugin in each test case,
+      # to ensure that they gets their dependency when invoked separately.
+      lib.listToAttrs (
+        map
+          (
+            pluginName:
+            lib.nameValuePair "gfal2-${pluginName}" (
+              finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+                passthru = previousAttrs.passthru // {
+                  enablePluginStatus = lib.mapAttrs (n: v: n == pluginName) previousAttrs.passthru.enablePluginStatus;
+                };
+              })
+            )
+          )
+          (
+            lib.filter (lib.flip lib.getAttr finalAttrs.passthru.enablePluginStatus) (
+              lib.attrNames finalAttrs.passthru.enablePluginStatus
+            )
+          )
       )
-  ) // {
-    # Disable all plugins in this test case.
-    gfal2-minimal = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-      passthru.enablePluginStatus = lib.mapAttrs (n: v: false) previousAttrs.passthru.enablePluginStatus;
-    });
-  };
+    )
+    // {
+      # Disable all plugins in this test case.
+      gfal2-minimal = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        passthru.enablePluginStatus = lib.mapAttrs (n: v: false) previousAttrs.passthru.enablePluginStatus;
+      });
+    };
 
   nativeBuildInputs = [
     cmake
@@ -87,22 +97,63 @@ stdenv.mkDerivation (finalAttrs: {
       pugixml # Optional, for MDS Cache.
     ]
     ++ lib.optionals finalAttrs.passthru.enablePluginStatus.dcap [ dcap ]
-    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.http [ cryptopp davix-copy ]
+    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.http [
+      cryptopp
+      davix-copy
+    ]
     ++ lib.optionals finalAttrs.passthru.enablePluginStatus.mock [ libuuid ]
     ++ lib.optionals finalAttrs.passthru.enablePluginStatus.sftp [ libssh2 ]
-    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.xrootd [ xrootd libuuid ]
+    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.xrootd [
+      xrootd
+      libuuid
+    ]
   );
 
-  cmakeFlags = (
-    map
-      (pluginName: "-DPLUGIN_${lib.toUpper pluginName}=${lib.toUpper (lib.boolToString finalAttrs.passthru.enablePluginStatus.${pluginName})}")
-      (lib.attrNames finalAttrs.passthru.enablePluginStatus)
-  )
-  ++ [ "-DSKIP_TESTS=${lib.toUpper (lib.boolToString (!finalAttrs.finalPackage.doCheck))}" ]
-  ++ lib.optionals finalAttrs.finalPackage.doCheck [ "-DGTEST_INCLUDE_DIR=${gtest.dev}/include" ]
-  ++ lib.optionals finalAttrs.passthru.enablePluginStatus.http [ "-DCRYPTOPP_INCLUDE_DIRS=${cryptopp.dev}/include/cryptopp" ]
-  ++ lib.optionals finalAttrs.passthru.enablePluginStatus.xrootd [ "-DXROOTD_INCLUDE_DIR=${xrootd.dev}/include/xrootd" ]
-  ;
+  preConfigure =
+    let
+      cmakeFiles = [
+        "CMakeLists.txt"
+        "src/CMakeLists.txt"
+        "src/core/CMakeLists.txt"
+        "src/core/transfer/CMakeLists.txt"
+        "src/plugins/CMakeLists.txt"
+        "src/plugins/dcap/CMakeLists.txt"
+        "src/plugins/file/CMakeLists.txt"
+        "src/plugins/gridftp/CMakeLists.txt"
+        "src/plugins/http/CMakeLists.txt"
+        "src/plugins/lfc/CMakeLists.txt"
+        "src/plugins/mock/CMakeLists.txt"
+        "src/plugins/rfio/CMakeLists.txt"
+        "src/plugins/sftp/CMakeLists.txt"
+        "src/plugins/srm/CMakeLists.txt"
+        "src/plugins/xrootd/CMakeLists.txt"
+        "src/utils/CMakeLists.txt"
+        "src/version/CMakeLists.txt"
+      ];
+    in
+    ''
+      for f in ${lib.escapeShellArgs cmakeFiles}; do
+        substituteInPlace "$f" \
+          --replace-fail 'cmake_minimum_required (VERSION 2.6)' \
+                         'cmake_minimum_required (VERSION 3.10)'
+      done
+    '';
+
+  cmakeFlags =
+    (map (
+      pluginName:
+      "-DPLUGIN_${lib.toUpper pluginName}=${
+        lib.toUpper (lib.boolToString finalAttrs.passthru.enablePluginStatus.${pluginName})
+      }"
+    ) (lib.attrNames finalAttrs.passthru.enablePluginStatus))
+    ++ [ "-DSKIP_TESTS=${lib.toUpper (lib.boolToString (!finalAttrs.finalPackage.doCheck))}" ]
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [ "-DGTEST_INCLUDE_DIR=${gtest.dev}/include" ]
+    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.http [
+      "-DCRYPTOPP_INCLUDE_DIRS=${cryptopp.dev}/include/cryptopp"
+    ]
+    ++ lib.optionals finalAttrs.passthru.enablePluginStatus.xrootd [
+      "-DXROOTD_INCLUDE_DIR=${xrootd.dev}/include/xrootd"
+    ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 

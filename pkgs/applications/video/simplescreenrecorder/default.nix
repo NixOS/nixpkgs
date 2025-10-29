@@ -1,16 +1,38 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg, libjack2, libX11, libXext, libXinerama, qtx11extras
-, libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  ffmpeg,
+  libjack2,
+  libX11,
+  libXext,
+  libXinerama,
+  qtx11extras,
+  libXfixes,
+  libGLU,
+  libGL,
+  pkg-config,
+  libpulseaudio,
+  libv4l,
+  pipewire,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  cmake,
+  ninja,
+  unstableGitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2024-08-13";
+  version = "0.4.4-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = "4e3ba13dd212fc4213fe0911f371bc7d34033b8d";
-    hash = "sha256-jBZkyrZOrUljWgO8U4SZOTCu3sOm83unQ7vyv+KkAuE=";
+    rev = "232eac75c56821b4baf025b7dfd7ce737e73f420";
+    hash = "sha256-0PLAHfVIFSv196dcQ83CCvYoKkJFcKKnKB8vISoprCk=";
   };
 
   cmakeFlags = [
@@ -27,13 +49,32 @@ mkDerivation rec {
       --replace-fail "libssr-glinject.so" "$out/lib/libssr-glinject.so"
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ninja ];
-  buildInputs = [
-    alsa-lib ffmpeg libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
-    libpulseaudio libv4l qtbase qttools qtx11extras
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    wrapQtAppsHook
   ];
 
-  passthru.updateScript = nix-update-script { };
+  buildInputs = [
+    alsa-lib
+    ffmpeg
+    libjack2
+    libX11
+    libXext
+    libXfixes
+    libXinerama
+    libGLU
+    libGL
+    libpulseaudio
+    libv4l
+    pipewire
+    qtbase
+    qttools
+    qtx11extras
+  ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Screen recorder for Linux";

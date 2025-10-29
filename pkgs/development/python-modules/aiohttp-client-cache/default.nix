@@ -12,24 +12,22 @@
   itsdangerous,
   motor,
   poetry-core,
+  pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   redis,
   url-normalize,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.12.4";
+  version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-5g/oFhNrWx1m87trJyq4HZeFTqHk2bVwhaNgQmln0mU=";
+    hash = "sha256-r1VW9xmBSsoC22OEJxBpzsame+Maa32UN+CmqZgKSU8=";
   };
 
   build-system = [ poetry-core ];
@@ -65,17 +63,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     faker
+    pytest-asyncio
     pytest-aiohttp
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "aiohttp_client_cache" ];
 
   disabledTestPaths = [
     # Tests require running instances of the services
-    "test/integration/test_dynamodb.py"
-    "test/integration/test_redis.py"
-    "test/integration/test_sqlite.py"
+    "test/integration/*"
   ];
 
   meta = with lib; {

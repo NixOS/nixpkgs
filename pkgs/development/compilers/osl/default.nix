@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, clang
-, libclang
-, libxml2
-, zlib
-, openexr
-, openimageio
-, llvm
-, boost
-, flex
-, bison
-, partio
-, pugixml
-, util-linux
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  clang,
+  libclang,
+  libxml2,
+  zlib,
+  openexr,
+  openimageio,
+  llvm,
+  boost,
+  flex,
+  bison,
+  partio,
+  pugixml,
+  robin-map,
+  util-linux,
+  python3,
 }:
 
 let
-
   boost_static = boost.override { enableStatic = true; };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.13.11.0";
+  version = "1.14.7.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "v${version}";
-    hash = "sha256-E/LUTtT0ZU0SBuwtJPA0FznvOuc2a3aJn2/n3ru5l0s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w78x0e9T0lYCAPDPkx6T/4TzAs/mpJ/24uQ+yH5gB5I=";
   };
 
   cmakeFlags = [
@@ -43,12 +44,16 @@ in stdenv.mkDerivation rec {
     "-DLLVM_DIRECTORY=${llvm}"
     "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
     "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
-
-    # Set C++11 to C++14 required for LLVM10+
-    "-DCMAKE_CXX_STANDARD=14"
   ];
 
-  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
+  prePatch = ''
+    substituteInPlace src/cmake/modules/FindLLVM.cmake \
+      --replace-fail "NO_DEFAULT_PATH" ""
+  '';
+
+  preConfigure = ''
+    patchShebangs src/liboslexec/serialize-bc.bash
+  '';
 
   nativeBuildInputs = [
     bison
@@ -66,9 +71,11 @@ in stdenv.mkDerivation rec {
     partio
     pugixml
     python3.pkgs.pybind11
+    robin-map
     util-linux # needed just for hexdump
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libxml2
   ];
 
@@ -77,11 +84,11 @@ in stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
-}
+})

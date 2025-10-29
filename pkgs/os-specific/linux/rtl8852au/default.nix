@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  nukeReferences,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8852au";
@@ -11,8 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-c2dpnZS6a0waL1khB9ZEglTwJIBsyRebTMig1B4A0xU=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
-  hardeningDisable = [ "pic" "format" ];
+  nativeBuildInputs = [
+    bc
+    nukeReferences
+  ]
+  ++ kernel.moduleBuildDependencies;
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
+
+  patches = [
+    # https://github.com/lwfinger/rtl8852au/pull/115
+    ./fix-build-for-kernels-6.13-6.14.patch
+  ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
@@ -27,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
@@ -40,13 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
+  # GCC 14 makes this an error by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-designated-init";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Driver for Realtek 802.11ac, rtl8852au, provides the 8852au mod";
     homepage = "https://github.com/lwfinger/rtl8852au";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    # FIX: error: invalid initializer
+    broken = kernel.kernelOlder "6" && kernel.isHardened;
     maintainers = with maintainers; [ lonyelon ];
   };
 })

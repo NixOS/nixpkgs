@@ -1,9 +1,10 @@
-{ buildDunePackage
-, coin
-, fetchzip
-, lib
-, yuscii
-, uuuu
+{
+  buildDunePackage,
+  coin,
+  fetchzip,
+  lib,
+  yuscii,
+  uuuu,
 }:
 
 buildDunePackage rec {

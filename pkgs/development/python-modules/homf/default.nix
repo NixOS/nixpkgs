@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = "homf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fDH6uJ2d/Jsnuudv+Qlv1tr3slxOJWh7b4smGS32n9A=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   # There are currently no checks which do not require network access, which breaks the check hook somehow?
   # nativeCheckInputs = [ pytestCheckHook ];
-  # pytestFlagsArray = [ "-m 'not network'" ];
+  # disabledTestMarks = [ "network" ];
 
   nativeBuildInputs = [ versionCheckHook ];
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
-    description = "Asset download tool for GitHub Releases, PyPi, etc.";
+    description = "Asset download tool for GitHub Releases, PyPi, etc";
     mainProgram = "homf";
     homepage = "https://github.com/duckinator/homf";
     license = licenses.mit;

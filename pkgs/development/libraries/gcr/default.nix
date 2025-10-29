@@ -1,37 +1,43 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk3
-, pango
-, libsecret
-, openssh
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, gobject-introspection
-, wrapGAppsHook3
-, gi-docgen
-, vala
-, gnome
-, python3
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnupg,
+  p11-kit,
+  glib,
+  libgcrypt,
+  libtasn1,
+  gtk3,
+  pango,
+  libsecret,
+  openssh,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gi-docgen,
+  vala,
+  gnome,
+  python3,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
   version = "3.41.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gcr/${lib.versions.majorMinor version}/gcr-${version}.tar.xz";
     sha256 = "utEPPFU6DhhUZJq1nFskNNoiyhpUrmE48fU5YVZ+Grc=";
   };
 
@@ -57,7 +63,8 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-  ] ++ lib.optionals (systemdSupport) [
+  ]
+  ++ lib.optionals systemdSupport [
     systemd
   ];
 
@@ -76,7 +83,8 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
-  ] ++ lib.optionals (!systemdSupport) [
+  ]
+  ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
   ];
 
@@ -99,14 +107,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gcr";
       freeze = true;
     };
   };
 
   meta = with lib; {
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     description = "GNOME crypto services (daemon and tools)";
     mainProgram = "gcr-viewer";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";

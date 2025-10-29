@@ -1,27 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, pkg-config
-, openssl
-, qtbase
-, qttools
-, sphinx
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  openssl,
+  qtbase,
+  qttools,
+  sphinx,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xca";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "chris2511";
     repo = "xca";
     rev = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-2TqqHTutG+5YU2mJNTS3pvtEqV7qKVB+j/dipdmEkIk=";
+    hash = "sha256-28K6luMuYcDuNKd/aQG9HX9VN5YkKArl/GQn5spQ+Sg=";
   };
 
-  buildInputs = [ openssl qtbase ];
+  buildInputs = [
+    openssl
+    qtbase
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -48,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xca";
     homepage = "https://hohnstaedt.de/xca/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ offline peterhoeg ];
+    maintainers = with maintainers; [
+      offline
+      peterhoeg
+    ];
     inherit (qtbase.meta) platforms;
   };
 })

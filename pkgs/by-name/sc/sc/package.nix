@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Curses-based spreadsheet calculator.";
+    description = "Curses-based spreadsheet calculator";
 
     longDescription = ''
       This is a fork of the old sc-7.16 application with attention paid to

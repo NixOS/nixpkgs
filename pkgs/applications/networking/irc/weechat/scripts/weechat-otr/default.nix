@@ -1,4 +1,13 @@
-{ lib, stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
+{
+  lib,
+  stdenv,
+  replaceVars,
+  buildEnv,
+  fetchgit,
+  fetchFromGitHub,
+  python3Packages,
+  gmp,
+}:
 
 let
   # pure-python-otr (potr) requires an older version of pycrypto, which is
@@ -9,6 +18,7 @@ let
   pycrypto = python3Packages.buildPythonPackage rec {
     pname = "pycrypto";
     version = "2.6.1-13.1";
+    format = "setuptools";
 
     src = fetchgit {
       url = "https://salsa.debian.org/sramacher/python-crypto.git";
@@ -36,24 +46,29 @@ let
   potr = python3Packages.potr.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs = [ pycrypto ];
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "weechat-otr";
   version = "1.9.2";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "weechat-otr";
     owner = "mmb";
     rev = "v${version}";
     sha256 = "1lngv98y6883vk8z2628cl4d5y8jxy39w8245gjdvshl8g18k5s2";
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
-      env = "${buildEnv {
-        name = "weechat-otr-env";
-        paths = [ potr pycrypto ];
-      }}/${python3Packages.python.sitePackages}";
+    (replaceVars ./libpath.patch {
+      env = "${
+        buildEnv {
+          name = "weechat-otr-env";
+          paths = [
+            potr
+            pycrypto
+          ];
+        }
+      }/${python3Packages.python.sitePackages}";
     })
   ];
 

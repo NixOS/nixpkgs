@@ -1,60 +1,56 @@
-{ cmake
-, alsa-lib
-, atk
-, cairo
-, directx-shader-compiler
-, expat
-, fetchFromGitHub
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, harfbuzz
-, lib
-, libGL
-, libX11
-, libxcb
-, libXcursor
-, libXi
-, libxkbcommon
-, libXrandr
-, makeWrapper
-, mold
-, pango
-, pkg-config
-, python3
-, rustPlatform
-, shaderc
-, vulkan-extension-layer
-, vulkan-headers
-, vulkan-loader
-, vulkan-tools
-, vulkan-tools-lunarg
-, vulkan-validation-layers
-, wayland
-, wrapGAppsHook3
-, yq
-, zlib
+{
+  cmake,
+  alsa-lib,
+  atk,
+  cairo,
+  directx-shader-compiler,
+  expat,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  harfbuzz,
+  lib,
+  libGL,
+  libX11,
+  libxcb,
+  libXcursor,
+  libXi,
+  libxkbcommon,
+  libXrandr,
+  makeWrapper,
+  mold,
+  pango,
+  pkg-config,
+  python3,
+  rustPlatform,
+  shaderc,
+  vulkan-extension-layer,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-tools,
+  vulkan-tools-lunarg,
+  vulkan-validation-layers,
+  wayland,
+  wrapGAppsHook3,
+  yq,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperspeedcube";
-  version = "1.0.7";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "HactarCE";
     repo = "Hyperspeedcube";
-    rev = "v${version}";
-    hash = "sha256-ykFf0dfc8j88Y25tx+G9lic09eHDz3WR+h6+owTeWbU=";
+    tag = "v${version}";
+    hash = "sha256-ctBvc2xANM/gGzDDv8ygSO4nTOiG6iKyuSKnz385PIw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-     "key-names-1.5.1" = "sha256-ZO3mlCoUHCaMnxD2vQno6GNx0+JmwZ8OiqpyveiVfvc=";
-    };
-  };
+  cargoHash = "sha256-ebjkEWYeeXHuKQzqbMe8+zVol2vPyLiu7ke5Ng7gbs8=";
 
   nativeBuildInputs = [
     cmake
@@ -115,7 +111,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Hyperspeedcube is a 3D and 4D Rubik's cube simulator";
+    description = "3D and 4D Rubik's cube simulator";
     longDescription = ''
       Hyperspeedcube is a modern, beginner-friendly 3D and 4D Rubik's cube
       simulator with customizable mouse and keyboard controls and advanced

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, inflow, diffutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  inflow,
+  diffutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "inflow";
@@ -28,49 +35,54 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    reflowWithLineLength = runCommand "${pname}-test"
-      {
-        nativeBuildInputs = [ inflow ];
-        buildInputs = [ diffutils ];
-      } ''
-      cat <<EOF > input.txt
-      xxxxx xxx xxx xxxx xxxxxxxxx xx x xxxxxxxxx x xxxx xxxx xxxxxxx xxxxxxxx xxx
-      xxxxxxxxx xxxxxxxx xx xx xxxxx xxxxx xxxx xx x xxxx xx xxxxxxxx xxxxxxxx xxxx
-      xxx xxxx xxxx xxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx xxx xxxxx xx xxxx x xxxx
-      xxxxxxxx xxxx xxxx xx xxxxx xxxx xxxxx xxxx xxxxxxxxx xxx xxxxxxxxxxx xxxxxx
-      xxx xxxxxxxxx xxxx xxxx xx x xx xxxx xxx xxxx xx xxx xxx xxxxxxxxxxx xxxx xxxxx
-      x xxxxx xxxxxxx xxxxxxx xx xx xxxxxx xx xxxxx
-      EOF
+    reflowWithLineLength =
+      runCommand "${pname}-test"
+        {
+          nativeBuildInputs = [ inflow ];
+          buildInputs = [ diffutils ];
+        }
+        ''
+          cat <<EOF > input.txt
+          xxxxx xxx xxx xxxx xxxxxxxxx xx x xxxxxxxxx x xxxx xxxx xxxxxxx xxxxxxxx xxx
+          xxxxxxxxx xxxxxxxx xx xx xxxxx xxxxx xxxx xx x xxxx xx xxxxxxxx xxxxxxxx xxxx
+          xxx xxxx xxxx xxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx xxx xxxxx xx xxxx x xxxx
+          xxxxxxxx xxxx xxxx xx xxxxx xxxx xxxxx xxxx xxxxxxxxx xxx xxxxxxxxxxx xxxxxx
+          xxx xxxxxxxxx xxxx xxxx xx x xx xxxx xxx xxxx xx xxx xxx xxxxxxxxxxx xxxx xxxxx
+          x xxxxx xxxxxxx xxxxxxx xx xx xxxxxx xx xxxxx
+          EOF
 
-      inflow 72 < input.txt > actual.txt
+          inflow 72 < input.txt > actual.txt
 
-      cat <<EOF > expected.txt
-      xxxxx xxx xxx xxxx xxxxxxxxx xx x xxxxxxxxx x xxxx xxxx xxxxxxx
-      xxxxxxxx xxx xxxxxxxxx xxxxxxxx xx xx xxxxx xxxxx xxxx xx x xxxx
-      xx xxxxxxxx xxxxxxxx xxxx xxx xxxx xxxx xxx xxxxxxxxxxxxxxxxxxx
-      xxxxxxxxxxxxx xxx xxxxx xx xxxx x xxxx xxxxxxxx xxxx xxxx xx xxxxx
-      xxxx xxxxx xxxx xxxxxxxxx xxx xxxxxxxxxxx xxxxxx xxx xxxxxxxxx
-      xxxx xxxx xx x xx xxxx xxx xxxx xx xxx xxx xxxxxxxxxxx xxxx xxxxx
-      x xxxxx xxxxxxx xxxxxxx xx xx xxxxxx xx xxxxx
-      EOF
+          cat <<EOF > expected.txt
+          xxxxx xxx xxx xxxx xxxxxxxxx xx x xxxxxxxxx x xxxx xxxx xxxxxxx
+          xxxxxxxx xxx xxxxxxxxx xxxxxxxx xx xx xxxxx xxxxx xxxx xx x xxxx
+          xx xxxxxxxx xxxxxxxx xxxx xxx xxxx xxxx xxx xxxxxxxxxxxxxxxxxxx
+          xxxxxxxxxxxxx xxx xxxxx xx xxxx x xxxx xxxxxxxx xxxx xxxx xx xxxxx
+          xxxx xxxxx xxxx xxxxxxxxx xxx xxxxxxxxxxx xxxxxx xxx xxxxxxxxx
+          xxxx xxxx xx x xx xxxx xxx xxxx xx xxx xxx xxxxxxxxxxx xxxx xxxxx
+          x xxxxx xxxxxxx xxxxxxx xx xx xxxxxx xx xxxxx
+          EOF
 
-      if ! cmp --silent expected.txt actual.txt
-      then
-        echo "Error: actual.txt and expected.txt are different"
-        diff actual.txt expected.txt
-        exit 1
-      fi
+          if ! cmp --silent expected.txt actual.txt
+          then
+            echo "Error: actual.txt and expected.txt are different"
+            diff actual.txt expected.txt
+            exit 1
+          fi
 
-      touch $out
-    '';
+          touch $out
+        '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Variance-optimal paragraph formatter";
     homepage = "https://github.com/stephen-huan/inflow";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     mainProgram = "inflow";
-    maintainers = with maintainers; [ fbrs ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      fbrs
+      stephen-huan
+    ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,7 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, openresolv, coreutils, systemd }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  openresolv,
+  coreutils,
+  systemd,
+}:
 
 let
-  binPath = lib.makeBinPath [ coreutils openresolv systemd ];
+  binPath = lib.makeBinPath [
+    coreutils
+    openresolv
+    systemd
+  ];
 
 in
 stdenv.mkDerivation {
@@ -29,7 +41,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Script to update your /etc/resolv.conf with DNS settings that come from the received push dhcp-options";
     homepage = "https://github.com/masterkorp/openvpn-update-resolv-conf/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.gpl2Only;
     platforms = platforms.unix;
   };

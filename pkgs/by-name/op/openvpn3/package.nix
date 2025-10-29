@@ -22,29 +22,27 @@
   gdbuspp,
   cmake,
   git,
+  nix-update-script,
   enableSystemdResolved ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  # also update openvpn3-core
-  version = "23";
+  version = "25";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5gkutqyUPZDwRPzSFdUXg2G5mtQKbdhZu8xnNAdXoF0=";
+    tag = "v${version}";
+    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
 
   patches = [
-    # Merged in upstream, will land in v24
-    # https://github.com/OpenVPN/openvpn3-linux/commit/75abb7dc9366ba85fb1a144d88f02a1e8a62f538
-    ./0001-build-reduce-hardcode-in-asio_path.patch
-    ./0002-build-allow-installation-directories-customization.patch
+    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
+    ./v25-latest-linux-fix.patch
   ];
 
   postPatch = ''
@@ -94,7 +92,8 @@ stdenv.mkDerivation rec {
     protobuf
     tinyxml-2
     gdbuspp
-  ] ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ]
+  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")
@@ -106,7 +105,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
-    (lib.mesonOption "create_statedir" "disabled")
+    (lib.mesonOption "create_statedir" "false")
     (lib.mesonOption "sharedstatedir" "/etc")
   ];
 
@@ -120,6 +119,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lpthread";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenVPN 3 Linux client";

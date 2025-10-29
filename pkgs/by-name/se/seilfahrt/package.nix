@@ -1,30 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pandoc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pandoc,
 }:
 
 buildGoModule rec {
   pname = "seilfahrt";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Nerdbergev";
     repo = "seilfahrt";
     rev = "v${version}";
-    hash = "sha256-eQcRS3xyqdtjRki+EPnHIaqUJufniFJCh5qU2Za9kyg=";
+    hash = "sha256-pn3EsYPhggViL067nk6UhmIULGsf8IYm/dXSDudiZRA=";
   };
 
-  vendorHash = "sha256-JU77EFk8SWgZkN4DEtkKS2MsBH16my4j9X/NJC/r6mI=";
+  vendorHash = "sha256-CUxUxumji0j9cwrYksJqHq891VlotMrGIrF0vr6wSMs=";
 
   buildInputs = [ pandoc ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create a wiki page from a HedgeDoc";
     homepage = "https://github.com/Nerdbergev/seilfahrt";
     changelog = "https://github.com/Nerdbergev/seilfahrt/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xgwq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xgwq ];
     mainProgram = "seilfahrt";
   };
 }

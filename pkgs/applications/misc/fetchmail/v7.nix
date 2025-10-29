@@ -1,20 +1,38 @@
-{ lib, stdenv, pkgs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  openssl,
+  python3,
+  autoreconfHook,
+  pkg-config,
+  bison,
+  flex,
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fetchmail";
-  version = "unstable-2022-05-26";
+  version = "7.0.0-alpha11";
 
-  src = pkgs.fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "fetchmail";
     repo = "fetchmail";
-    rev = "30b368fb8660d8fec08be1cdf2606c160b4bcb80";
+    tag = finalAttrs.version;
     hash = "sha256-83D2YlFCODK2YD+oLICdim2NtNkkJU67S3YLi8Q6ga8=";
   };
 
-  buildInputs = with pkgs; [ openssl python3 ];
-  nativeBuildInputs = with pkgs; [ autoreconfHook pkg-config bison flex ];
+  buildInputs = [
+    openssl
+    python3
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    bison
+    flex
+  ];
 
-  configureFlags = [ "--with-ssl=${pkgs.openssl.dev}" ];
+  configureFlags = [ "--with-ssl=${openssl.dev}" ];
 
   postInstall = ''
     cp -a contrib/. $out/share/fetchmail-contrib
@@ -34,4 +52,4 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };
-}
+})

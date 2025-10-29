@@ -1,13 +1,15 @@
-{ lib
-, fetchurl
-, python3Packages
-, gnupg
-, pass
+{
+  lib,
+  fetchurl,
+  python3Packages,
+  gnupg,
+  pass,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pass-import";
   version = "3.5";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/roddhjav/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
@@ -56,7 +58,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/roddhjav/pass-import";
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
+    maintainers = with maintainers; [
+      lovek323
+      fpletz
+      tadfisher
+    ];
     platforms = platforms.unix;
   };
 }

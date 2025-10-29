@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "jupyter_server_terminals";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-af7jBscGkbekXgfDxwAfrJSY1uEuIGfzzSsjaPdlYcY=";
     };
 
@@ -38,7 +38,8 @@ let
       pytest-jupyter
       pytest-timeout
       pytestCheckHook
-    ] ++ pytest-jupyter.optional-dependencies.server;
+    ]
+    ++ pytest-jupyter.optional-dependencies.server;
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {

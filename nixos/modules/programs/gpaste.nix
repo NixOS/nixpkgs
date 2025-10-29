@@ -1,11 +1,16 @@
 # GPaste.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
   ###### interface
   options = {
-     programs.gpaste = {
+    programs.gpaste = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -22,7 +27,7 @@
     services.dbus.packages = [ pkgs.gpaste ];
     systemd.packages = [ pkgs.gpaste ];
     # gnome-control-center crashes in Keyboard Shortcuts pane without the GSettings schemas.
-    services.xserver.desktopManager.gnome.sessionPath = [ pkgs.gpaste ];
+    services.desktopManager.gnome.sessionPath = [ pkgs.gpaste ];
     # gpaste-reloaded applet doesn't work without the typelib
     services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
   };

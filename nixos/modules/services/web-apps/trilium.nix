@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.trilium-server;
@@ -25,6 +30,8 @@ in
 
   options.services.trilium-server = with lib; {
     enable = mkEnableOption "trilium-server";
+
+    package = mkPackageOption pkgs "trilium-server" { };
 
     dataDir = mkOption {
       type = types.str;
@@ -75,7 +82,7 @@ in
     };
 
     nginx = mkOption {
-      default = {};
+      default = { };
       description = ''
         Configuration for nginx reverse proxy.
       '';
@@ -101,55 +108,57 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-  {
-    meta.maintainers = with lib.maintainers; [ fliegendewurst ];
+  meta.maintainers = with lib.maintainers; [ fliegendewurst ];
 
-    users.groups.trilium = {};
-    users.users.trilium = {
-      description = "Trilium User";
-      group = "trilium";
-      home = cfg.dataDir;
-      isSystemUser = true;
-    };
-
-    systemd.services.trilium-server = {
-      wantedBy = [ "multi-user.target" ];
-      environment.TRILIUM_DATA_DIR = cfg.dataDir;
-      serviceConfig = {
-        ExecStart = "${pkgs.trilium-server}/bin/trilium-server";
-        User = "trilium";
-        Group = "trilium";
-        PrivateTmp = "true";
-      };
-    };
-
-    systemd.tmpfiles.rules = [
-      "d  ${cfg.dataDir}            0750 trilium trilium - -"
-      "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
-    ];
-
-  }
-
-  (lib.mkIf cfg.nginx.enable {
-    services.nginx = {
-      enable = true;
-      virtualHosts."${cfg.nginx.hostName}" = {
-        locations."/" = {
-          proxyPass = "http://${cfg.host}:${toString cfg.port}/";
-          extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
-          '';
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        users.groups.trilium = { };
+        users.users.trilium = {
+          description = "Trilium User";
+          group = "trilium";
+          home = cfg.dataDir;
+          isSystemUser = true;
         };
-        extraConfig = ''
-          client_max_body_size 0;
-        '';
-      };
-    };
-  })
-  ]);
+
+        systemd.services.trilium-server = {
+          wantedBy = [ "multi-user.target" ];
+          environment.TRILIUM_DATA_DIR = cfg.dataDir;
+          serviceConfig = {
+            ExecStart = lib.getExe cfg.package;
+            User = "trilium";
+            Group = "trilium";
+            PrivateTmp = "true";
+          };
+        };
+
+        systemd.tmpfiles.rules = [
+          "d  ${cfg.dataDir}            0750 trilium trilium - -"
+          "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
+        ];
+
+      }
+
+      (lib.mkIf cfg.nginx.enable {
+        services.nginx = {
+          enable = true;
+          virtualHosts."${cfg.nginx.hostName}" = {
+            locations."/" = {
+              proxyPass = "http://${cfg.host}:${toString cfg.port}/";
+              extraConfig = ''
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+              '';
+            };
+            extraConfig = ''
+              client_max_body_size 0;
+            '';
+          };
+        };
+      })
+    ]
+  );
 }

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libnfc
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libnfc,
+  xz,
 }:
 
 stdenv.mkDerivation {
   pname = "mfoc-hardnested";
-  version = "unstable-2023-03-27";
+  version = "0-unstable-2023-03-27";
 
   src = fetchFromGitHub {
     owner = "nfc-tools";

@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, callPackage
-, swift
-, swiftpm
-, swiftpm2nix
-, Foundation
-, XCTest
-, CryptoKit
-, LocalAuthentication
+{
+  lib,
+  stdenv,
+  callPackage,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  Foundation,
+  XCTest,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -22,11 +21,25 @@ stdenv.mkDerivation {
   # repository is not tagged.
   renderArtifact = sources.swift-docc-render-artifact;
 
-  nativeBuildInputs = [ swift swiftpm ];
-  buildInputs = [ Foundation XCTest ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CryptoKit LocalAuthentication ];
+  nativeBuildInputs = [
+    swift
+    swiftpm
+  ];
+  buildInputs = [
+    Foundation
+    XCTest
+  ];
 
-  configurePhase = generated.configure;
+  configurePhase =
+    generated.configure
+    # Fix the build with modern Clang.
+    #
+    # Based on the upstream fix for Musl:
+    # <https://github.com/apple/swift-nio/commit/fc6e3c0eefb28adf641531180b81aaf41b02ed20>
+    + ''
+      swiftpmMakeMutable swift-nio
+      patch -p1 -d .build/checkouts/swift-nio -i ${./fix-swift-nio.patch}
+    '';
 
   # We only install the docc binary, so don't need the other products.
   # This works around a failure building generate-symbol-graph:
@@ -55,6 +68,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-docc";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

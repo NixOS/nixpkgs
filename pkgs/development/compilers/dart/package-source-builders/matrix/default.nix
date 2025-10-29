@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, writeScript
-, openssl
+{
+  stdenv,
+  lib,
+  writeScript,
+  openssl,
 }:
 
 { version, src, ... }:

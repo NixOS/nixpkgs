@@ -1,14 +1,13 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
-  copyDesktopItems,
+  callPackage,
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
+  fetchpatch2,
   imagemagick,
   lib,
-  runCommand,
   xdg-utils,
   pname ? "nexusmods-app",
 }:
@@ -24,15 +23,17 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.3";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKfv5y6UmO3dmzkXrqZ+VtIbXf0FszRdsa5Rmp95rYg=";
     fetchSubmodules = true;
-    hash = "sha256-6oygXJEiTqb0xe7mKRUsZgghfTqrllCRXJy6IDeqJQI=";
   };
+
+  gameHashes = callPackage ./game-hashes { };
 
   enableParallelBuilding = false;
 
@@ -44,27 +45,49 @@ buildDotnetModule (finalAttrs: {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
-
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+
+  patches = [
+    (fetchpatch2 {
+      name = "Fix-SMAPI-installation.patch";
+      url = "https://github.com/Nexus-Mods/NexusMods.App/pull/4026.patch?full_index=1";
+      hash = "sha256-1LgFTi63fVhGUZXZtS6iD2yqd0RxhdpiXKtWMFNEoD4=";
+    })
+  ];
 
   postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    # Specify a fixed date to improve build reproducibility
+    echo "1970-01-01T00:00:00Z" >buildDate.txt
+    substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
+
+    # Use a pinned version of the game hashes db
+    substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
+
+    # Use a vendored version of the nexus API's games.json data
+    substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+      # Fix expected version number in text fixture
+      # https://github.com/Nexus-Mods/NexusMods.App/issues/4030
+      substituteInPlace tests/NexusMods.Backend.Tests/EventTrackerTests.Test_PrepareRequest.verified.txt \
+        --replace-fail 0.0.1 ${finalAttrs.version}
+    ''}
   '';
 
   makeWrapperArgs = [
@@ -72,11 +95,18 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postInstall = ''
+    ${lib.strings.toShellVars {
+      inherit (finalAttrs.meta) mainProgram;
+      INSTALL_EXEC = "\${INSTALL_EXEC}";
+      INSTALL_TRYEXEC = "\${INSTALL_TRYEXEC}";
+    }}
+
     # Desktop entry
     # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
     install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
     substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
-      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
+      --replace-fail "$INSTALL_EXEC" "$mainProgram" \
+      --replace-fail "$INSTALL_TRYEXEC" "$mainProgram"
 
     # AppStream metadata
     install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
@@ -87,10 +117,10 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -103,17 +133,23 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.3/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
-  doCheck = true;
+  # Avoid running `dotnet test` in the main package:
+  # - The test-suite is slow
+  # - Some tests fail intermittently
+  # - The package is often uncached; especially the unfree variant
+  # - We can enable tests in a `passthru.tests` override
+  doCheck = false;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
+    "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
@@ -123,49 +159,55 @@ buildDotnetModule (finalAttrs: {
     "RequiresNetworking!=True"
   ];
 
-  disabledTests =
-    [
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+  disabledTests = [
+    # Fails attempting to fetch SMAPI version data from github:
+    # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+    "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
+  ]
+  ++ lib.optionals (!_7zz.meta.unfree) [
+    "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+  ];
 
-      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
-      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
-    ]
-    ++ lib.optionals (!_7zz.meta.unfree) [
-      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-    ];
+  doInstallCheck = true;
 
-  passthru = {
-    tests =
-      let
-        runTest =
-          name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
-      in
-      {
-        serve = runTest "serve" ''
-          NexusMods.App
-        '';
-        help = runTest "help" ''
-          NexusMods.App --help
-        '';
-        associate-nxm = runTest "associate-nxm" ''
-          NexusMods.App associate-nxm
-        '';
-        list-tools = runTest "list-tools" ''
-          NexusMods.App list-tools
-        '';
-      };
-    updateScript = ./update.bash;
+  nativeInstallCheckInputs = [
+    desktop-file-utils
+  ];
+
+  # Upstream use ${...} templates in the desktop entry, so assert that we haven't missed any
+  # See https://github.com/NixOS/nixpkgs/issues/421241
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'Checking for issues in $out/share/applications/com.nexusmods.app.desktop'
+    (
+      cd $out/share/applications
+      desktop-file-validate com.nexusmods.app.desktop
+      if grep '\$' com.nexusmods.app.desktop \
+        --with-filename --line-number
+      then
+        echo 'error: unexpected "$"'
+        exit 1
+      fi
+    ) &>/dev/stderr
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests = {
+    # Build the package and run `dotnet test`
+    app = finalAttrs.finalPackage.overrideAttrs {
+      pname = "${finalAttrs.pname}-tested";
+      doCheck = true;
+    };
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

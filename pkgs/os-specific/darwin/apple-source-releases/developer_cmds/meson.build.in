@@ -78,3 +78,15 @@ executable(
     sources : [ 'unifdef/unifdef.c' ],
 )
 install_man('unifdef/unifdef.1')
+
+install_data(
+    'unifdef/unifdefall.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'unifdefall',
+)
+install_symlink(
+    'unifdefall.1',
+    install_dir : get_option('mandir') / 'man1',
+    pointing_to : 'unifdef.1',
+)

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, SDL
-, SDL_net
-, SDL_sound
-, copyDesktopItems
-, graphicsmagick
-, libGL
-, libGLU
-, OpenGL
-, libpng
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  SDL,
+  SDL_net,
+  SDL_sound,
+  copyDesktopItems,
+  graphicsmagick,
+  libGL,
+  libGLU,
+  libpng,
+  binutils,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +33,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     copyDesktopItems
     graphicsmagick
+    SDL # for sdl-config during build time
+  ];
+
+  depsBuildBuild = [
+    binutils # build calls `ar`
   ];
 
   buildInputs = [
@@ -43,12 +51,11 @@ stdenv.mkDerivation rec {
     SDL_net
     SDL_sound
     libpng
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    OpenGL
-  ] else [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-  ]);
+  ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_net}/include/SDL";
@@ -65,13 +72,16 @@ stdenv.mkDerivation rec {
       comment = "x86 dos emulator";
       desktopName = "DOSBox";
       genericName = "DOS emulator";
-      categories = [ "Emulator" "Game" ];
+      categories = [
+        "Emulator"
+        "Game"
+      ];
     })
   ];
 
   postInstall = ''
-     mkdir -p $out/share/icons/hicolor/256x256/apps
-     gm convert src/dosbox.ico $out/share/icons/hicolor/256x256/apps/dosbox.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    gm convert src/dosbox.ico $out/share/icons/hicolor/256x256/apps/dosbox.png
   '';
 
   enableParallelBuilding = true;

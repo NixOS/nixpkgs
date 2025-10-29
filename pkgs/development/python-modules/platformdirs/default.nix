@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.3.6";
+  version = "4.3.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "platformdirs";
     repo = "platformdirs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Zo1fEqiUbrI3pbVp3ndjV8gd+sbcGgUm1PJhQudmiMQ=";
+    tag = version;
+    hash = "sha256-ePaEpsBkTomRX+RJsed8aJtefl5WCW/N9IT8ae4+ln4=";
   };
 
   build-system = [

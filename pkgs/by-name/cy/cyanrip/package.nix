@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, ffmpeg-headless
-, libcdio
-, libcdio-paranoia
-, libmusicbrainz5
-, curl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  ffmpeg-headless,
+  libcdio,
+  libcdio-paranoia,
+  libmusicbrainz,
+  curl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyanrip";
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg-headless
     libcdio
     libcdio-paranoia
-    libmusicbrainz5
+    libmusicbrainz
     curl
   ];
 

@@ -1,8 +1,8 @@
-
 { lib, config, ... }:
 let
   inherit (lib) types;
-in {
+in
+{
   options = {
     fun = lib.mkOption {
       type = types.functionTo (types.listOf types.str);
@@ -10,11 +10,13 @@ in {
 
     result = lib.mkOption {
       type = types.str;
-      default = toString (config.fun {
-        a = "a";
-        b = "b";
-        c = "c";
-      });
+      default = toString (
+        config.fun {
+          a = "a";
+          b = "b";
+          c = "c";
+        }
+      );
     };
   };
 

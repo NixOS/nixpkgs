@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
@@ -10,22 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pymiele";
-  version = "0.1.7";
+  version = "0.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.13";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nlilHcBdWpCIknhE/RRvcmuz1waNdmcPt++Vi3amvHg=";
+    hash = "sha256-C1E5z/h4XCDhUP07EL8s6Xv++M03vx8KZOMjWySyUMw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  dependencies = [ aiohttp ];
 
   # No tests
   doCheck = false;

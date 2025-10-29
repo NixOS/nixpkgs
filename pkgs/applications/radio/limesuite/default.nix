@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, sqlite, wxGTK32, libusb1, soapysdr
-, mesa_glu, libX11, gnuplot, fltk
-, GLUT
-, withGui ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  sqlite,
+  wxGTK32,
+  libusb1,
+  soapysdr,
+  mesa_glu,
+  libX11,
+  gnuplot,
+  fltk,
+  withGui ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +26,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f1cXrkVCIc1MqTvlCUBFqzHLhIVueybVxipNZRlF2gE=";
   };
 
+  patches = [
+    # CMake < 3.5 fix. Remove upon next version bump
+    (fetchpatch {
+      url = "https://github.com/myriadrf/LimeSuite/commit/4e5ad459d50c922267a008e5cecb3efdbff31f09.patch";
+      hash = "sha256-OASki3bISJvV7wjMz0pBT3kO5RvJ5BnymiF6ruHkCJ8=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
-  ] ++ lib.optional (!withGui) "-DENABLE_GUI=OFF";
+  ]
+  ++ lib.optional (!withGui) "-DENABLE_GUI=OFF";
 
   buildInputs = [
     libusb1
@@ -28,14 +47,15 @@ stdenv.mkDerivation rec {
     gnuplot
     libusb1
     soapysdr
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    GLUT
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     fltk
     libX11
     mesa_glu
     wxGTK32
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d ../udev-rules/64-limesuite.rules
@@ -51,4 +71,3 @@ stdenv.mkDerivation rec {
     badPlatforms = lib.optionals withGui platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
   };
 }
-

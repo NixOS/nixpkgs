@@ -1,60 +1,69 @@
-{ lib
-, autoPatchelfHook
-, bash
-, copyDesktopItems
-, coreutils
-, cryptsetup
-, dosfstools
-, e2fsprogs
-, exfat
-, fetchurl
-, gawk
-, gnugrep
-, gnused
-, gtk3
-, hexdump
-, makeDesktopItem
-, makeWrapper
-, ntfs3g
-, parted
-, procps
-, stdenv
-, util-linux
-, which
-, xfsprogs
-, xz
-, defaultGuiType ? ""
-, withCryptsetup ? false
-, withXfs ? false
-, withExt4 ? false
-, withNtfs ? false
-, withGtk3 ? false
-, withQt5 ? false
-, libsForQt5
+{
+  lib,
+  autoPatchelfHook,
+  bash,
+  copyDesktopItems,
+  coreutils,
+  cryptsetup,
+  dosfstools,
+  e2fsprogs,
+  exfat,
+  fetchurl,
+  gawk,
+  gnugrep,
+  gnused,
+  gtk3,
+  hexdump,
+  makeDesktopItem,
+  makeWrapper,
+  ntfs3g,
+  parted,
+  procps,
+  stdenv,
+  util-linux,
+  which,
+  xfsprogs,
+  xz,
+  defaultGuiType ? "",
+  withCryptsetup ? false,
+  withXfs ? false,
+  withExt4 ? false,
+  withNtfs ? false,
+  withGtk3 ? defaultGuiType == "gtk3",
+  withQt5 ? defaultGuiType == "qt5",
+  libsForQt5,
 }:
 
-assert lib.elem defaultGuiType [ "" "gtk3" "qt5" ];
+assert lib.elem defaultGuiType [
+  ""
+  "gtk3"
+  "qt5"
+];
 assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
 let
   inherit (lib) optionals optionalString;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
-  arch = {
-    x86_64-linux = "x86_64";
-    i686-linux = "i386";
-    aarch64-linux = "aarch64";
-    mipsel-linux = "mips64el";
-  }.${stdenv.hostPlatform.system}
-    or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+  arch =
+    {
+      x86_64-linux = "x86_64";
+      i686-linux = "i386";
+      aarch64-linux = "aarch64";
+      mipsel-linux = "mips64el";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ventoy";
-  version = "1.0.99";
+  pname =
+    "ventoy"
+    + optionalString (defaultGuiType == "gtk3") "-gtk3"
+    + optionalString (defaultGuiType == "qt5") "-qt5";
+  version = "1.1.07";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-RnzdGIp/c5vHBq28HWlfYf/e/JWRatsBWUfYCCnwCj0=";
+    hash = "sha256-T/q85GiwPWNXzl9FlOIJcU0VCdBl2hApOAltrWZUw24=";
   };
 
   patches = [
@@ -177,15 +186,16 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + optionalString (!withGtk3 && !withQt5) ''
     rm "$VENTOY_PATH"/VentoyGUI.*
-  '' +
   ''
+  + ''
 
     runHook postInstall
   '';
 
   meta = {
     homepage = "https://www.ventoy.net";
-    description = "New Bootable USB Solution";
+    description =
+      "New Bootable USB Solution" + optionalString (defaultGuiType != "") " with GUI support";
     longDescription = ''
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
@@ -200,10 +210,26 @@ stdenv.mkDerivation (finalAttrs: {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
-    license = lib.licenses.gpl3Plus;
+    knownVulnerabilities = [
+      ''
+        Ventoy uses binary blobs which can't be trusted to be free of malware or compliant to their licenses.
+        https://github.com/NixOS/nixpkgs/issues/404663
+        See the following Issues for context:
+        https://github.com/ventoy/Ventoy/issues/2795
+        https://github.com/ventoy/Ventoy/issues/3224
+      ''
+    ];
+    license = lib.licenses.unfree;
     mainProgram = "ventoy";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+    ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "mipsel-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

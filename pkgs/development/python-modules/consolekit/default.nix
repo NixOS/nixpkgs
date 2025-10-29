@@ -12,12 +12,12 @@
 }:
 buildPythonPackage rec {
   pname = "consolekit";
-  version = "1.7.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TU5sufqJ0znCD/QOidrT7jB1NCXJ1p8Z7FPFNPp97qg=";
+    hash = "sha256-gePFFOq6jQF0QA0gls1+cjdNMRutZfM2Og6/FpP0w3Q=";
   };
 
   build-system = [ flit-core ];
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Additional utilities for click.";
-    homepage = "https://pypi.org/project/consolekit";
+    description = "Additional utilities for click";
+    homepage = "https://github.com/domdfcoding/consolekit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };

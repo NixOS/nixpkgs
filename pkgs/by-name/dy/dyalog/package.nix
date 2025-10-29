@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, config
-, acceptLicense ? config.dyalog.acceptLicense or false
+  config,
+  acceptLicense ? config.dyalog.acceptLicense or false,
 
-, autoPatchelfHook
-, dpkg
-, makeWrapper
-, ncurses5
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  ncurses5,
 
-, dotnet-sdk_8
-, dotnetSupport ? false
+  dotnetCorePackages,
+  dotnetSupport ? false,
 
-, alsa-lib
-, gtk3
-, libdrm
-, libGL
-, mesa
-, nss
-, htmlRendererSupport ? false
+  alsa-lib,
+  gtk3,
+  libdrm,
+  libGL,
+  libgbm,
+  nss,
+  htmlRendererSupport ? false,
 
-, unixODBC
-, sqaplSupport ? false
+  unixODBC,
+  sqaplSupport ? false,
 
-, zeroFootprintRideSupport ? false
+  zeroFootprintRideSupport ? false,
 
-, enableDocs ? false
+  enableDocs ? false,
 }:
 
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnet-sdk_8}";
+  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.sdk_8_0-source}/share/dotnet";
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libdrm
     libGL
-    mesa
+    libgbm
     nss
   ]
   ++ lib.optional sqaplSupport unixODBC;
@@ -154,7 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://dyalog.com/dyalog/dyalog-versions/${lib.replaceStrings [ "." ] [ "" ] finalAttrs.shortVersion}.htm";
+    changelog = "https://dyalog.com/dyalog/dyalog-versions/${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.shortVersion
+    }.htm";
     description = "Dyalog APL interpreter";
     homepage = "https://www.dyalog.com";
     license = {
@@ -163,7 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
       free = false;
     };
     mainProgram = "dyalog";
-    maintainers = with lib.maintainers; [ tomasajt markus1189 ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      markus1189
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

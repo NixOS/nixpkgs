@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-inquirer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vIW/rD22PFND9EPjS0YPbIauKgh9KHh1gXf1L8g/f10=";
+    tag = "v${version}";
+    hash = "sha256-xVHmdJGN5yOxbEkZIiOLqeUwcfdj+o7jTTWBD75szII=";
   };
 
   build-system = [ poetry-core ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
     homepage = "https://github.com/magmax/python-inquirer";
-    changelog = "https://github.com/magmax/python-inquirer/releases/tag/v${version}";
+    changelog = "https://github.com/magmax/python-inquirer/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
   };

@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   cryptography,
@@ -8,22 +7,19 @@
   freezegun,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "3.3.0";
+  version = "3.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-FLGOY7IUdLvRbwSWUYbJl0VzOCJVwiG+2C+CjFAqI6g=";
+    tag = version;
+    hash = "sha256-tkZ0Hltpd5DARxYc05LjDTlB62jsJJJ8v/oUuVPT/uo=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     freezegun
@@ -43,18 +39,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Test requires network access
+    "test_routing_indication_multicast"
     "test_scan_timeout"
+    "test_start_secure_routing_explicit_keyring"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
-    # RuntimeError: Event loop is closed
-    "test_has_group_address_localtime"
-    "test_invalid_authentication"
-    "test_invalid_frames"
-    "test_no_authentication"
-    "test_process_read_localtime"
-    "test_sync_date"
-    "test_sync_datetime"
-    "test_sync_time_local"
   ];
 
   meta = with lib; {
@@ -64,8 +53,8 @@ buildPythonPackage rec {
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
-    changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/XKNX/xknx/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };

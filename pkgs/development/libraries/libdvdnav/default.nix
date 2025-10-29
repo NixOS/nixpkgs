@@ -1,16 +1,22 @@
-{lib, stdenv, fetchurl, pkg-config, libdvdread}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libdvdread,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
   version = "6.1.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdnav/${version}/${pname}-${version}.tar.bz2";
+    url = "http://get.videolan.org/libdvdnav/${version}/libdvdnav-${version}.tar.bz2";
     sha256 = "sha256-wZGnR1lH0yP/doDPksD7G+gjdwGIXzdlbGTQTpjRjUg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libdvdread];
+  buildInputs = [ libdvdread ];
 
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";

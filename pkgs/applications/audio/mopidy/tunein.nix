@@ -1,8 +1,14 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  mopidy,
+}:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "mopidy-tunein";
   version = "1.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -10,7 +16,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
   ];
 

@@ -1,52 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, flac
-, fontconfig
-, freetype
-, fribidi
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, gettext
-, giflib
-, glib
-, imlib2
-, libICE
-, libSM
-, libX11
-, libXcomposite
-, libXdamage
-, libXdmcp
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libogg
-, libpng
-, libpthreadstubs
-, libsndfile
-, libtiff
-, libxcb
-, mkfontdir
-, pcre2
-, perl
-, pkg-config
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  flac,
+  fontconfig,
+  freetype,
+  fribidi,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  gettext,
+  giflib,
+  glib,
+  imlib2,
+  libICE,
+  libSM,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libogg,
+  libpng,
+  libpthreadstubs,
+  libsndfile,
+  libtiff,
+  libxcb,
+  mkfontdir,
+  pcre2,
+  perl,
+  pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.6.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
-    rev = finalAttrs.version;
-    hash = "sha256-gxRKLukwdyCvqQ+gRYb4cv/8B52nRAFwdcps6FcKFXk=";
+    tag = finalAttrs.version;
+    hash = "sha256-CbIQICov0h3lBDT54dEODkINNXou6CUEhRQAPZwfYK0=";
   };
 
   strictDeps = true;
@@ -98,13 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCFGDIR=/etc/icewm"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString gccStdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
   # install legacy themes
   postInstall = ''
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
       $out/share/icewm/themes/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ice-wm.org/";
     description = "Simple, lightweight X window manager";
     longDescription = ''
@@ -120,8 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       optional external background wallpaper manager with transparency support,
       a simple session manager and a system tray.
     '';
-    license = licenses.lgpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

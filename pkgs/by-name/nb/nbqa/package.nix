@@ -1,34 +1,37 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   # optional-dependencies
   ruff,
 
   # tests
+  addBinToPathHook,
   versionCheckHook,
+
+  nix-update-script,
 }:
 
 let
-  nbqa = python3.pkgs.buildPythonApplication rec {
+  nbqa = python3Packages.buildPythonApplication rec {
     pname = "nbqa";
-    version = "1.9.0";
+    version = "1.9.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "nbQA-dev";
       repo = "nbQA";
-      rev = "refs/tags/${version}";
-      hash = "sha256-9s+q2unh+jezU0Er7ZH0tvgntmPFts9OmsgAMeQXRrY=";
+      tag = version;
+      hash = "sha256-qVNJ8f8vUlTCi5DbvG70orcSnulH60UcI5iABtXYUog=";
     };
 
-    build-system = with python3.pkgs; [
+    build-system = with python3Packages; [
       setuptools
     ];
 
     optional-dependencies.toolchain =
-      (with python3.pkgs; [
+      (with python3Packages; [
         black
         blacken-docs
         flake8
@@ -42,25 +45,23 @@ let
         ruff
       ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       autopep8
       ipython
       tokenize-rt
       tomli
     ];
 
+    # Force using the Ruff executable rather than the Python package
     postPatch = ''
-      # Force using the Ruff executable rather than the Python package
-      substituteInPlace nbqa/__main__.py --replace 'if shell:' 'if shell or main_command == "ruff":'
-    '';
-
-    preCheck = ''
-      # Allow the tests to run `nbqa` itself from the path
-      export PATH="$out/bin":"$PATH"
+      substituteInPlace nbqa/__main__.py \
+        --replace-fail \
+          'if shell:' \
+          'if shell or main_command == "ruff":'
     '';
 
     nativeCheckInputs =
-      (with python3.pkgs; [
+      (with python3Packages; [
         autoflake
         distutils
         mdformat
@@ -70,7 +71,11 @@ let
         yapf
       ])
       ++ lib.flatten (lib.attrValues optional-dependencies)
-      ++ [ versionCheckHook ];
+      ++ [
+        addBinToPathHook
+        versionCheckHook
+      ];
+    versionCheckProgramArg = "--version";
 
     disabledTests = [
       # Test data not found
@@ -83,6 +88,9 @@ let
       "test_unable_to_reconstruct_message_pythonpath"
       "test_with_subcommand"
       "test_pylint_works"
+
+      # ruff output has changed and invalidates the snapshot tests (AssertionError)
+      "test_ruff_works"
     ];
 
     disabledTestPaths = [
@@ -98,10 +106,12 @@ let
         nbqa.overridePythonAttrs (
           { dependencies, ... }:
           {
-            dependencies = dependencies ++ selector python3.pkgs;
+            dependencies = dependencies ++ selector python3Packages;
             doCheck = false;
           }
         );
+
+      updateScript = nix-update-script { };
     };
 
     meta = {

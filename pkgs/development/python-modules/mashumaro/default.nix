@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.14";
+  version = "3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0THj22KdMvD5O3dNwXKxs2wRIJziPmojLo4BPa3fZ3Y=";
+    tag = "v${version}";
+    hash = "sha256-SAdhBNQx5zWsXFwWxEAozprb2c7eJRdxZQwZMgBj/iA=";
   };
 
   build-system = [ setuptools ];
@@ -46,14 +46,15 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "mashumaro" ];
 
   meta = with lib; {
     description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
-    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/v${version}";
+    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tjni ];
   };

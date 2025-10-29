@@ -1,21 +1,27 @@
 {
-  buildPythonPackage,
   lib,
-  rustPlatform,
   stdenv,
+  buildPythonPackage,
+  rerun,
+  python,
+
+  # nativeBuildInputs
+  rustPlatform,
+
+  # dependencies
   attrs,
-  darwin,
   numpy,
+  opencv4,
   pillow,
   pyarrow,
-  rerun,
-  torch,
-  typing-extensions,
-  pytestCheckHook,
-  python,
-  libiconv,
   semver,
-  opencv4,
+  typing-extensions,
+
+  # tests
+  datafusion,
+  pytestCheckHook,
+  tomli,
+  torch,
 }:
 
 buildPythonPackage {
@@ -26,8 +32,7 @@ buildPythonPackage {
     src
     version
     cargoDeps
-    cargoPatches
-    patches
+    postPatch
     ;
 
   nativeBuildInputs = [
@@ -36,23 +41,14 @@ buildPythonPackage {
     rerun
   ];
 
-  buildInputs =
-    [
-      libiconv # No-op on Linux, necessary on Darwin.
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     numpy
+    opencv4
     pillow
     pyarrow
-    typing-extensions
     semver
-    opencv4
+    typing-extensions
   ];
 
   buildAndTestSubdir = "rerun_py";
@@ -70,7 +66,9 @@ buildPythonPackage {
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
+    datafusion
     pytestCheckHook
+    tomli
     torch
   ];
 
@@ -80,6 +78,9 @@ buildPythonPackage {
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+
+    # ConnectionError: Connection error: transport error
+    "rerun_py/tests/unit/test_datafusion_tables.py"
   ];
 
   meta = {

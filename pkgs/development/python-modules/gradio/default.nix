@@ -2,24 +2,30 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   writeShellScriptBin,
   gradio,
 
-  # pyproject
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
 
-  # runtime
+  # web assets
+  zip,
+  nodejs,
+  pnpm_9,
+
+  # dependencies
   setuptools,
   aiofiles,
   anyio,
+  brotli,
   diffusers,
   fastapi,
   ffmpy,
   gradio-client,
+  groovy,
   httpx,
   huggingface-hub,
   importlib-resources,
@@ -31,10 +37,12 @@
   packaging,
   pandas,
   pillow,
+  polars,
   pydantic,
   python-multipart,
   pydub,
   pyyaml,
+  safehttpx,
   semantic-version,
   typing-extensions,
   uvicorn,
@@ -45,14 +53,16 @@
   authlib,
   itsdangerous,
 
-  # check
+  # tests
   pytestCheckHook,
   hypothesis,
   altair,
   boto3,
+  docker,
   gradio-pdf,
   ffmpeg,
   ipython,
+  mcp,
   pytest-asyncio,
   respx,
   scikit-image,
@@ -60,39 +70,41 @@
   tqdm,
   transformers,
   vega-datasets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.1.0";
+  version = "5.38.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  # We use the Pypi release, since it provides prebuilt webui assets
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0hU2aObeLfegG7M/AaB0/HcW7IY8QPRy2OQ5Q57x4VM=";
+  src = fetchFromGitHub {
+    owner = "gradio-app";
+    repo = "gradio";
+    tag = "gradio@${version}";
+    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
   };
 
-  # fix packaging.ParserSyntaxError, which can't handle comments
-  postPatch = ''
-    sed -ie "s/ #.*$//g" requirements*.txt
-
-    # they bundle deps?
-    rm -rf venv/
-  '';
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
+  };
 
   pythonRelaxDeps = [
-    "tomlkit"
     "aiofiles"
     "markupsafe"
   ];
 
   pythonRemoveDeps = [
-    # our package is presented as a binary, not a python lib - and
     # this isn't a real runtime dependency
     "ruff"
+  ];
+
+  nativeBuildInputs = [
+    zip
+    nodejs
+    pnpm_9.configHook
   ];
 
   build-system = [
@@ -105,10 +117,12 @@ buildPythonPackage rec {
     setuptools # needed for 'pkg_resources'
     aiofiles
     anyio
+    brotli
     diffusers
     fastapi
     ffmpy
     gradio-client
+    groovy
     httpx
     huggingface-hub
     importlib-resources
@@ -120,10 +134,12 @@ buildPythonPackage rec {
     packaging
     pandas
     pillow
+    polars
     pydantic
     python-multipart
     pydub
     pyyaml
+    safehttpx
     semantic-version
     typing-extensions
     uvicorn
@@ -137,17 +153,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
     altair
     boto3
-    gradio-pdf
+    brotli
+    docker
     ffmpeg
+    gradio-pdf
+    hypothesis
     ipython
+    mcp
     pytest-asyncio
+    pytestCheckHook
     respx
-    scikit-image
     # shap is needed as well, but breaks too often
+    scikit-image
     torch
     tqdm
     transformers
@@ -155,19 +174,30 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.oauth
+  ++ pydantic.optional-dependencies.email;
+
+  preBuild = ''
+    pnpm build
+    pnpm package
+  '';
+
+  postBuild = ''
+    # SyntaxError: 'await' outside function
+    zip -d dist/gradio-*.whl gradio/_frontend_code/lite/examples/transformers_basic/run.py
+  '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
-  preCheck =
-    ''
-      export HOME=$TMPDIR
-      cat ${./conftest-skip-network-errors.py} >> test/conftest.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # OSError: [Errno 24] Too many open files
-      ulimit -n 4096
-    '';
+  preCheck = ''
+    cat ${./conftest-skip-network-errors.py} >> test/conftest.py
+  ''
+  # OSError: [Errno 24] Too many open files
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ulimit -n 4096
+  '';
 
   disabledTests = [
     # Actually broken
@@ -191,16 +221,48 @@ buildPythonPackage rec {
 
     # fails without network
     "test_download_if_url_correct_parse"
+    "test_encode_url_to_base64_doesnt_encode_errors"
 
     # flaky: OSError: Cannot find empty port in range: 7860-7959
     "test_docs_url"
     "test_orjson_serialization"
     "test_dataset_is_updated"
     "test_multimodal_api"
+    "test_examples_keep_all_suffixes"
+    "test_progress_bar"
+    "test_progress_bar_track_tqdm"
+    "test_info_and_warning_alerts"
+    "test_info_isolation[True]"
+    "test_info_isolation[False]"
+    "test_examples_no_cache_optional_inputs"
+    "test_start_server[127.0.0.1]"
+    "test_start_server[[::1]]"
+    "test_single_request"
+    "test_all_status_messages"
+    "test_default_concurrency_limits[not_set-statuses0]"
+    "test_default_concurrency_limits[None-statuses1]"
+    "test_default_concurrency_limits[1-statuses2]"
+    "test_default_concurrency_limits[2-statuses3]"
+    "test_concurrency_limits"
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+
+    # Flaky test (AssertionError when comparing to a fixed array)
+    # https://github.com/gradio-app/gradio/issues/11620
+    "test_auto_datatype"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+    "test_component_example_values"
+    "test_component_functions"
+    "test_public_request_pass"
+
+    # Failed: DID NOT RAISE <class 'ValueError'>
+    # test.conftest.NixNetworkAccessDeniedError
+    "test_private_request_fail"
+    "test_theme_builder_launches"
+
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_async_generators"
@@ -250,24 +312,34 @@ buildPythonPackage rec {
     "test_updates_stored_up_to_capacity"
     "test_varying_output_forms_with_generators"
   ];
+
   disabledTestPaths = [
     # 100% touches network
     "test/test_networking.py"
+    "client/python/test/test_client.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
 
     # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
+
+    # No module named build.__main__; 'build' is a package and cannot be directly executed
+    "test/test_docker/test_reverse_proxy/test_reverse_proxy.py"
+    "test/test_docker/test_reverse_proxy_fastapi_mount/test_reverse_proxy_fastapi_mount.py"
+    "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
-  pytestFlagsArray = [
+
+  disabledTestMarks = [
+    "flaky"
+  ];
+
+  pytestFlags = [
     "-x" # abort on first failure
-    "-m 'not flaky'"
-    #"-W" "ignore" # uncomment for debugging help
+    #"-Wignore" # uncomment for debugging help
   ];
 
   # check the binary works outside the build env
-  doInstallCheck = true;
-  postInstallCheck = ''
+  postCheck = ''
     env --ignore-environment $out/bin/gradio environment >/dev/null
   '';
 
@@ -286,6 +358,13 @@ buildPythonPackage rec {
         doInstallCheck = false;
         doCheck = false;
         preCheck = "";
+        postInstall = ''
+          shopt -s globstar
+          for f in $out/**/*.py; do
+            cp $f "$f"i
+          done
+          shopt -u globstar
+        '';
         pythonImportsCheck = null;
         dontCheckRuntimeDeps = true;
       });

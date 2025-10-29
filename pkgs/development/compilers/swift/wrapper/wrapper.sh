@@ -8,9 +8,11 @@ if (( "${NIX_DEBUG:-0}" >= 7 )); then
     set -x
 fi
 
-cc_wrapper="${NIX_CC:-@default_cc_wrapper@}"
+cc_wrapper="@cc_wrapper@"
 
 source $cc_wrapper/nix-support/utils.bash
+
+source $cc_wrapper/nix-support/darwin-sdk-setup.bash
 
 expandResponseParams "$@"
 
@@ -105,7 +107,7 @@ dontLink=$isFrontend
 
 for p in "${params[@]}"; do
     case "$p" in
-        -enable-cxx-interop | -enable-experimental-cxx-interop)
+        -cxx-interoperability-mode=default | -enable-cxx-interop | -enable-experimental-cxx-interop)
             isCxx=1 ;;
     esac
 done

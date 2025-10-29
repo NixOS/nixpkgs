@@ -7,7 +7,7 @@
   parse-type,
   poetry-core,
   pytest,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonOlder,
   typing-extensions,
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-bdd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
   };
 
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # requires an update for pytest 8.4 compat
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin

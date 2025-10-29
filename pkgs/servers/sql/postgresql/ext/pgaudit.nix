@@ -1,60 +1,70 @@
-{ lib, stdenv, fetchFromGitHub, libkrb5, openssl, postgresql }:
+{
+  fetchFromGitHub,
+  lib,
+  libkrb5,
+  openssl,
+  postgresql,
+  postgresqlBuildExtension,
+}:
 
 let
-  source = {
+  sources = {
+    # v18: No upstream ticket, yet (2025-07-07)
     "17" = {
-      version = "17.0";
-      hash = "sha256-3ksq09wiudQPuBQI3dhEQi8IkXKLVIsPFgBnwLiicro=";
+      version = "17.1";
+      hash = "sha256-9St/ESPiFq2NiPKqbwHLwkIyATKUkOGxFcUrWgT+Iqo=";
     };
     "16" = {
-      version = "16.0";
-      hash = "sha256-8+tGOl1U5y9Zgu+9O5UDDE4bec4B0JC/BQ6GLhHzQzc=";
+      version = "16.1";
+      hash = "sha256-fzoAcXEKmA+xD4HtcHZgcduh1XmSgL8ZS4R72og7RGQ=";
     };
     "15" = {
-      version = "1.7.0";
-      hash = "sha256-8pShPr4HJaJQPjW1iPJIpj3CutTx8Tgr+rOqoXtgCcw=";
+      version = "1.7.1";
+      hash = "sha256-emwoTowT7WKFX0RQDqJXjIblrzqaUIUkzqSqBCHVKQ8=";
     };
     "14" = {
-      version = "1.6.2";
-      hash = "sha256-Bl7Jk2B0deZUDiI391vk4nilwuVGHd1wuaQRSCoA3Mk=";
+      version = "1.6.3";
+      hash = "sha256-KgLidJHjUK9BTp6ffmGUj1chcwIe6IzlcadRpGCfNdM=";
     };
     "13" = {
-      version = "1.5.2";
-      hash = "sha256-fyf2Ym0fAAXjc28iFCGDEftPAyDLXmEgi/0DaTJJiIg=";
+      version = "1.5.3";
+      hash = "sha256-IU4Clec3DkKWT7+kw0VtQNybt94i7M2rSSgJG/XdcRs=";
     };
-    "12" = {
-      version = "1.4.3";
-      hash = "sha256-c8/xUFIHalu2bMCs57DeylK0oW0VnQwmUCpdp+tYqk4=";
+  };
+
+  source =
+    sources.${lib.versions.major postgresql.version} or {
+      version = "";
+      hash = throw "Source for pgaudit is not available for ${postgresql.version}";
     };
-  }.${lib.versions.major postgresql.version} or (throw "Source for pgaudit is not available for ${postgresql.version}");
 in
-stdenv.mkDerivation {
+postgresqlBuildExtension {
   pname = "pgaudit";
   inherit (source) version;
 
   src = fetchFromGitHub {
     owner = "pgaudit";
     repo = "pgaudit";
-    rev = source.version;
-    hash = source.hash;
+    tag = source.version;
+    inherit (source) hash;
   };
 
-  buildInputs = [ libkrb5 openssl postgresql ];
+  buildInputs = [
+    libkrb5
+    openssl
+  ];
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  installPhase = ''
-    install -D -t $out/lib pgaudit${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
+  enableUpdateScript = false;
 
-  meta = with lib; {
+  meta = {
+    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames sources);
     description = "Open Source PostgreSQL Audit Logging";
     homepage = "https://github.com/pgaudit/pgaudit";
     changelog = "https://github.com/pgaudit/pgaudit/releases/tag/${source.version}";
-    maintainers = with maintainers; [ idontgetoutmuch ];
+    maintainers = with lib.maintainers; [ idontgetoutmuch ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

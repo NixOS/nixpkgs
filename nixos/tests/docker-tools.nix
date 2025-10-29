@@ -1,6 +1,6 @@
 # this test creates a simple GNU image with docker tools and sees if it executes
 
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let
   # nixpkgs#214434: dockerTools.buildImage fails to unpack base images
   # containing duplicate layers when those duplicate tarballs
@@ -9,34 +9,40 @@ let
   repeatedLayerTestImage =
     let
       # Rootfs diffs for layers 1 and 2 are identical (and empty)
-      layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
-      layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
-      repeatedRootfsDiffs = pkgs.runCommand "image-with-links.tar" {
-        nativeBuildInputs = [pkgs.jq];
-      } ''
-        mkdir contents
-        tar -xf "${layer2}" -C contents
-        cd contents
-        first_rootfs=$(jq -r '.[0].Layers[0]' manifest.json)
-        second_rootfs=$(jq -r '.[0].Layers[1]' manifest.json)
-        target_rootfs=$(sha256sum "$first_rootfs" | cut -d' ' -f 1).tar
+      layer1 = pkgs.dockerTools.buildImage { name = "empty"; };
+      layer2 = layer1.overrideAttrs (_: {
+        fromImage = layer1;
+      });
+      repeatedRootfsDiffs =
+        pkgs.runCommand "image-with-links.tar"
+          {
+            nativeBuildInputs = [ pkgs.jq ];
+          }
+          ''
+            mkdir contents
+            tar -xf "${layer2}" -C contents
+            cd contents
+            first_rootfs=$(jq -r '.[0].Layers[0]' manifest.json)
+            second_rootfs=$(jq -r '.[0].Layers[1]' manifest.json)
+            target_rootfs=$(sha256sum "$first_rootfs" | cut -d' ' -f 1).tar
 
-        # Replace duplicated rootfs diffs with symlinks to one tarball
-        chmod -R ug+w .
-        mv "$first_rootfs" "$target_rootfs"
-        rm "$second_rootfs"
-        ln -s "../$target_rootfs" "$first_rootfs"
-        ln -s "../$target_rootfs" "$second_rootfs"
+            # Replace duplicated rootfs diffs with symlinks to one tarball
+            chmod -R ug+w .
+            mv "$first_rootfs" "$target_rootfs"
+            rm "$second_rootfs"
+            ln -s "../$target_rootfs" "$first_rootfs"
+            ln -s "../$target_rootfs" "$second_rootfs"
 
-        # Update manifest's layers to use the symlinks' target
-        cat manifest.json | \
-        jq ".[0].Layers[0] = \"$target_rootfs\"" |
-        jq ".[0].Layers[1] = \"$target_rootfs\"" > manifest.json.new
-        mv manifest.json.new manifest.json
+            # Update manifest's layers to use the symlinks' target
+            cat manifest.json | \
+            jq ".[0].Layers[0] = \"$target_rootfs\"" |
+            jq ".[0].Layers[1] = \"$target_rootfs\"" > manifest.json.new
+            mv manifest.json.new manifest.json
 
-        tar --sort=name --hard-dereference -cf $out .
-        '';
-    in pkgs.dockerTools.buildImage {
+            tar --sort=name --hard-dereference -cf $out .
+          '';
+    in
+    pkgs.dockerTools.buildImage {
       fromImage = repeatedRootfsDiffs;
       name = "repeated-layer-test";
       tag = "latest";
@@ -47,44 +53,58 @@ let
       '';
     };
 
-  chownTestImage =
-    pkgs.dockerTools.streamLayeredImage {
-      name = "chown-test";
-      tag = "latest";
-      enableFakechroot = true;
-      fakeRootCommands = ''
-        touch /testfile
-        chown 12345:12345 /testfile
-      '';
-      config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
-    };
+  chownTestImage = pkgs.dockerTools.streamLayeredImage {
+    name = "chown-test";
+    tag = "latest";
+    enableFakechroot = true;
+    fakeRootCommands = ''
+      touch /testfile
+      chown 12345:12345 /testfile
+    '';
+    config.Cmd = [
+      "${pkgs.coreutils}/bin/stat"
+      "-c"
+      "%u:%g"
+      "/testfile"
+    ];
+  };
 
-  nonRootTestImage =
-    pkgs.dockerTools.streamLayeredImage {
-      name = "non-root-test";
-      tag = "latest";
-      uid = 1000;
-      gid = 1000;
-      uname = "user";
-      gname = "user";
-      config = {
-        User = "user";
-        Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "${pkgs.coreutils}/bin/stat" ];
-      };
+  nonRootTestImage = pkgs.dockerTools.streamLayeredImage {
+    name = "non-root-test";
+    tag = "latest";
+    uid = 1000;
+    gid = 1000;
+    uname = "user";
+    gname = "user";
+    config = {
+      User = "user";
+      Cmd = [
+        "${pkgs.coreutils}/bin/stat"
+        "-c"
+        "%u:%g"
+        "${pkgs.coreutils}/bin/stat"
+      ];
     };
-in {
+  };
+in
+{
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 roberth ];
+    maintainers = [
+      lnl7
+      roberth
+    ];
   };
 
   nodes = {
-    docker = { ... }: {
-      virtualisation = {
-        diskSize = 3072;
-        docker.enable = true;
+    docker =
+      { ... }:
+      {
+        virtualisation = {
+          diskSize = 3072;
+          docker.enable = true;
+        };
       };
-    };
   };
 
   testScript = with pkgs.dockerTools; ''
@@ -579,4 +599,4 @@ in {
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
-})
+}

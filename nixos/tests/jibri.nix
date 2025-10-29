@@ -1,10 +1,13 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "jibri";
   meta = with pkgs.lib; {
     maintainers = teams.jitsi.members;
   };
 
-    nodes.machine = { config, pkgs, ... }: {
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
       virtualisation.memorySize = 5120;
 
       services.jitsi-meet = {
@@ -15,7 +18,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.jibri.ignoreCert = true;
       services.jitsi-videobridge.openFirewall = true;
 
-      networking.firewall.allowedTCPPorts = [ 80 443 ];
+      networking.firewall.allowedTCPPorts = [
+        80
+        443
+      ];
 
       services.nginx.virtualHosts.machine = {
         enableACME = true;
@@ -63,4 +69,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "cat /var/log/jitsi/jibri/log.0.txt | grep -q 'Finalize script finished with exit value 0'", timeout=36
     )
   '';
-})
+}

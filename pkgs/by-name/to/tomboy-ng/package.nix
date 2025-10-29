@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomboy-ng";
-  version = "0.40";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "tomboy-notes";
     repo = "tomboy-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QRv0LVZpRxW9c/cCcDsMSAYQ3zuYa39VJbcys5N+1x0=";
+    hash = "sha256-ppvEZeVHJ4DHIdEXfLOWcb4Wbsi6YVKqm6NGQ7lPtdg=";
   };
   kcontrols = fetchFromGitHub {
     owner = "davidbannon";

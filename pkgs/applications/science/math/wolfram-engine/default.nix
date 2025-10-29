@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, autoPatchelfHook
-, requireFile
-, alsa-lib
-, dbus
-, fontconfig
-, freetype
-, gcc
-, glib
-, installShellFiles
-, libssh2
-, ncurses
-, opencv4
-, openssl
-, unixODBC
-, xkeyboard_config
-, xorg
-, zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  requireFile,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  freetype,
+  gcc,
+  glib,
+  installShellFiles,
+  libssh2,
+  ncurses,
+  opencv4,
+  openssl,
+  unixODBC,
+  xkeyboard_config,
+  xorg,
+  zlib,
+  libxml2,
+  libuuid,
+  lang ? "en",
+  libGL,
+  libGLU,
+  wrapQtAppsHook,
 }:
 
 let
@@ -62,7 +63,8 @@ stdenv.mkDerivation rec {
     zlib
     libGL
     libGLU
-  ] ++ (with xorg; [
+  ]
+  ++ (with xorg; [
     libX11
     libXext
     libXtst
@@ -80,9 +82,11 @@ stdenv.mkDerivation rec {
   # some bundled libs are found through LD_LIBRARY_PATH
   autoPatchelfIgnoreMissingDeps = true;
 
-  ldpath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath =
+    lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") (
+      ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
+    );
 
   unpackPhase = ''
     # find offset from file

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, which
-, autoconf
-, automake
-, flex
-, bison
-, glibc
-, perl
-, libkrb5
-, libxslt
-, docbook_xsl
-, file
-, docbook_xml_dtd_43
-, libtool_2
-, withDevdoc ? false
-, doxygen
-, dblatex # Extra developer documentation
-, withNcurses ? false
-, ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
-, withTsm ? false
-, tsm-client # Tivoli Storage Manager Backup Client from IBM
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  which,
+  autoconf,
+  automake,
+  flex,
+  bison,
+  glibc,
+  perl,
+  libkrb5,
+  libxslt,
+  docbook_xsl,
+  file,
+  docbook_xml_dtd_43,
+  libtool_2,
+  withDevdoc ? false,
+  doxygen,
+  dblatex, # Extra developer documentation
+  withNcurses ? false,
+  ncurses, # Extra ncurses utilities. Needed for debugging and monitoring.
+  withTsm ? false,
+  tsm-client, # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
@@ -43,14 +44,27 @@ stdenv.mkDerivation {
     perl
     which
     bison
-  ] ++ optionals withDevdoc [ doxygen dblatex ];
+  ]
+  ++ optionals withDevdoc [
+    doxygen
+    dblatex
+  ];
 
   buildInputs = [ libkrb5 ] ++ optional withNcurses ncurses;
 
-  patches = [ ./bosserver.patch ./cross-build.patch ]
-    ++ optional withTsm ./tsmbac.patch;
+  patches = [
+    ./bosserver.patch
+    ./cross-build.patch
+  ]
+  ++ optional withTsm ./tsmbac.patch;
 
-  outputs = [ "out" "dev" "man" "doc" ] ++ optional withDevdoc "devdoc";
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ]
+  ++ optional withDevdoc "devdoc";
 
   enableParallelBuilding = false;
 
@@ -87,7 +101,8 @@ stdenv.mkDerivation {
       ${optionalString (!withNcurses) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
     )
-  '' + optionalString withTsm ''
+  ''
+  + optionalString withTsm ''
     export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
   '';
 
@@ -97,7 +112,8 @@ stdenv.mkDerivation {
     for d in doc/xml/{AdminGuide,QuickStartUnix,UserGuide}; do
       make -C "''${d}" index.html
     done
-  '' + optionalString withDevdoc ''
+  ''
+  + optionalString withDevdoc ''
     make dox
   '';
 
@@ -111,7 +127,8 @@ stdenv.mkDerivation {
     cp src/tools/dumpscan/{afsdump_dirlist,afsdump_extract,afsdump_scan,dumptool} $out/bin
 
     rm -r $out/lib/openafs
-  '' + optionalString withDevdoc ''
+  ''
+  + optionalString withDevdoc ''
     mkdir -p $devdoc/share/devhelp/openafs/doxygen
     cp -r doc/{pdf,protocol} $devdoc/share/devhelp/openafs
     cp -r doc/doxygen/output/html $devdoc/share/devhelp/openafs/doxygen
@@ -127,11 +144,17 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    outputsToInstall = [ "out" "doc" "man" ];
+    outputsToInstall = [
+      "out"
+      "doc"
+      "man"
+    ];
     description = "Open AFS client";
     homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
+    maintainers = [
+      maintainers.spacefrogg
+    ];
   };
 }

@@ -6,7 +6,7 @@
   cython,
   eventlet,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   geomet,
   gevent,
   gremlinpython,
@@ -26,35 +26,22 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.29.1";
+  version = "3.29.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pnNm5Pd5k4bt+s3GrUUDWRpSdqNSM89GiX8DZKYzW1E=";
+    tag = version;
+    hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
 
   patches = [
-    # https://github.com/datastax/python-driver/pull/1201
-    # Also needed for below patch to apply
-    (fetchpatch2 {
-      name = "remove-mock-dependency.patch";
-      url = "https://github.com/datastax/python-driver/commit/9aca00be33d96559f0eabc1c8a26bb439dcebbd7.patch";
-      hash = "sha256-ZN95V8ebbjahzqBat2oKBJLfu0fqbWMvAu0DzfVGw8I=";
-    })
-    # https://github.com/datastax/python-driver/pull/1215
-    (fetchpatch2 {
-      name = "convert-to-pytest.patch";
-      url = "https://github.com/datastax/python-driver/commit/9952e2ab22c7e034b96cc89330791d73c221546b.patch";
-      hash = "sha256-xa2aV6drBcgkQT05kt44vwupg3oMHLbcbZSQ7EHKnko=";
-    })
-    # https://github.com/datastax/python-driver/pull/1195
-    (fetchpatch2 {
-      name = "remove-assertRaisesRegexp.patch";
-      url = "https://github.com/datastax/python-driver/commit/622523b83971e8a181eb4853b7d877420c0351ef.patch";
-      hash = "sha256-Q8pRhHBLKyenMfrITf8kDv3BbsSCDAmVisTr4jSAIvA=";
+    # https://github.com/datastax/python-driver/pull/1242
+    (fetchpatch {
+      name = "Maintain-compatibility-with-CPython-3.13.patch";
+      url = "https://github.com/datastax/python-driver/commit/b144a84a1f97002c4545b335efaac719519cd9fa.patch";
+      hash = "sha256-60ki6i1SiGxK+J4x/8voS7Hh2x249ykpjU9EMYKD8kc=";
     })
   ];
 
@@ -78,10 +65,15 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
+
+  preBuild = ''
+    export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
+  '';
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
@@ -109,7 +101,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl

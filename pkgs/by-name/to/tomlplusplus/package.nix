@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dbuild_examples=true"
   ];
 

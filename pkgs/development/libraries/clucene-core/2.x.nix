@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, fetchpatch, cmake, boost, zlib}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  boost,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clucene-core";
@@ -11,13 +19,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost zlib ];
+  buildInputs = [
+    boost
+    zlib
+  ];
 
   cmakeFlags = [
     "-DBUILD_CONTRIBS=ON"
     "-DBUILD_CONTRIBS_LIB=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
     "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
     "-D_CL_HAVE_NAMESPACES_EXITCODE__TRYRUN_OUTPUT="
@@ -40,13 +52,20 @@ stdenv.mkDerivation rec {
 
     # required for darwin and linux-musl
     ./pthread-include.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+
+    # cmake 4 support
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-cpp/clucene/files/clucene-2.3.3.4-cmake4.patch?id=e06df280c75b0f0803954338466e5278d777f984";
+      hash = "sha256-e0u6J91bnuy24hIrSl+Ap5Xwds/nzzGiWpzskwaGx9o=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./fix-darwin.patch
 
     # see https://bugs.gentoo.org/869170
     (fetchpatch {
-       url = "https://869170.bugs.gentoo.org/attachment.cgi?id=858825";
-       hash = "sha256-TbAfBKdXh+1HepZc8J6OhK1XGwhwBCMvO8QBDsad998=";
+      url = "https://869170.bugs.gentoo.org/attachment.cgi?id=858825";
+      hash = "sha256-TbAfBKdXh+1HepZc8J6OhK1XGwhwBCMvO8QBDsad998=";
     })
   ];
 
@@ -76,6 +95,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://clucene.sourceforge.net";
     platforms = platforms.unix;
-    license = with licenses; [ asl20 lgpl2 ];
+    license = with licenses; [
+      asl20
+      lgpl2
+    ];
   };
 }

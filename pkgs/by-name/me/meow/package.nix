@@ -1,25 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meow";
-  version = "2.1.3";
+  version = "2.1.5";
 
-  src = fetchFromGitHub {
-    owner = "PixelSergey";
-    repo = "meow";
-    rev = "v${version}";
-    hash = "sha256-PB871c137uxxPaYbV6NB8kECVUrQWTeVz0ciVLHrph4=";
+  src = fetchCrate {
+    inherit version;
+    crateName = "${pname}-cli";
+    sha256 = "sha256-6tf4/KRZj+1zlxnNgz3kw/HYR2QKg0kEwu+TbKah3e8=";
   };
 
-  cargoHash = "sha256-4BoKZUgt4jf8jy2HU3J6RuT0GXNqkJnBUR09wNlNm7E=";
+  cargoHash = "sha256-Z3qAeIAiLJEHsqlDLvQXzX287dZSLhPg2V6clfI0Egs=";
 
   postInstall = ''
-    ln -s $out/bin/meow-cli $out/bin/meow
+    mv $out/bin/meow-cli $out/bin/meow
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Print ASCII cats to your terminal";

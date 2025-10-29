@@ -1,0 +1,15 @@
+diff --git a/tools/install.pl b/tools/install.pl
+index fa99f5beb..b369b3b3e 100755
+--- a/tools/install.pl
++++ b/tools/install.pl
+@@ -242,7 +242,9 @@ sub install_package {
+ 
+     if ($@) {
+         say("$package not installed! Trying to install now using cpanm$cpanopt");
+-        system("cpanm --notest $package $cpanopt");
++        if ( system("cpanm --notest $package $cpanopt") != 0 ) {
++            die "Something went wrong while installing $package - Bailing out.";
++        }
+     } else {
+         say("$package package installed, proceeding...");
+     }

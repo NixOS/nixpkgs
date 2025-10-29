@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, jdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";

@@ -1,21 +1,14 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-}:
-import ./make-test-python.nix ({lib, pkgs, ...}: {
+{ lib, ... }:
+{
   name = "fanout";
-  meta.maintainers = [ lib.maintainers.therishidesai ];
+  meta.maintainers = with lib.maintainers; [ therishidesai ];
 
-  nodes = let
-    cfg = { ... }: {
-      services.fanout = {
-        enable = true;
-        fanoutDevices = 2;
-        bufferSize = 8192;
-      };
+  nodes.machine = {
+    services.fanout = {
+      enable = true;
+      fanoutDevices = 2;
+      bufferSize = 8192;
     };
-  in {
-    machine = cfg;
   };
 
   testScript = ''
@@ -27,4 +20,4 @@ import ./make-test-python.nix ({lib, pkgs, ...}: {
     machine.succeed("test -c /dev/fanout0")
     machine.succeed("test -c /dev/fanout1")
   '';
-})
+}

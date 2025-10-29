@@ -1,44 +1,42 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
-  cargo-tauri,
+  cargo-tauri_1,
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
   pkg-config,
   openssl,
-  dbus,
-  glib,
   glib-networking,
-  libayatana-appindicator,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
+  jq,
+  moreutils,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.2";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-W8WSnfUqWTtyb6x0Kmej5sAxsi1Kh/uDkIx6SZhgSvw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SUbEanFIvjj2wyy/nuq+91F5on7wuLWcpVt1U8XWjRI=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-rg4NdxyJfnEPmFjb2wKJcF7ga7t5WNX/LB0haOvGbXU=";
+  cargoHash = "sha256-NL5vsuSNKduRW2TaXWFA0pjszVa8EYU5cRaTZHCooLU=";
 
   postPatch =
     let
       cinny' =
         assert lib.assertMsg (
-          cinny.version == version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+          cinny.version == finalAttrs.version
+        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
@@ -46,14 +44,9 @@ rustPlatform.buildRustPackage rec {
         };
     in
     ''
-      substituteInPlace tauri.conf.json \
-        --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
-      substituteInPlace tauri.conf.json \
-        --replace '"cd cinny && npm run build"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      ${lib.getExe jq} \
+        'del(.tauri.updater) | .build.distDir = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
+        | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
   postInstall =
@@ -68,28 +61,26 @@ rustPlatform.buildRustPackage rec {
         $out/share/applications/cinny.desktop
     '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+    )
+  '';
+
   nativeBuildInputs = [
-    wrapGAppsHook3
-    pkg-config
-    cargo-tauri.hook
+    cargo-tauri_1.hook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     desktop-file-utils
+    pkg-config
+    wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      glib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.apple_sdk.frameworks.WebKit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    openssl
+    webkitgtk_4_1
+  ];
 
   meta = {
     description = "Yet another matrix client for desktop";
@@ -101,5 +92,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
+    # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
+    # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
+    broken = stdenv.hostPlatform.isLinux;
   };
-}
+})

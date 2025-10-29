@@ -4,7 +4,6 @@
   fetchFromGitHub,
   boxfort,
   meson,
-  libcsptr,
   pkg-config,
   gettext,
   cmake,
@@ -18,7 +17,7 @@
   python3Packages,
   testers,
   criterion,
-  callPackage
+  callPackage,
 }:
 
 let
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-5GH7AYjrnBnqiSmp28BoaM1Xmy8sPs1atfqJkGy3Yf0=";
   };
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     (lib.getDev boxfort)
     dyncall
     gettext
-    libcsptr
     nanomsg
     nanopbMalloc
     libgit2
@@ -95,7 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.version =
     let
-      tester = callPackage ./tests/001-version.nix {};
+      tester = callPackage ./tests/001-version.nix { };
     in
     testers.testVersion {
       package = criterion;

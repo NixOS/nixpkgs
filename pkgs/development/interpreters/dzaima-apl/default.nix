@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jdk
-, makeWrapper
-, buildNativeImage ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  makeWrapper,
+  buildNativeImage ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,11 +33,13 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     ./build
-  '' + lib.optionalString buildNativeImage ''
+  ''
+  + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
       -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
       -jar APL.jar dapl
-  '' + ''
+  ''
+  + ''
     runHook postBuild
   '';
 
@@ -44,15 +47,22 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-  '' + (if buildNativeImage then ''
-    mv dapl $out/bin
-  '' else ''
-    mkdir -p $out/share/${pname}
-    mv APL.jar $out/share/${pname}/
+  ''
+  + (
+    if buildNativeImage then
+      ''
+        mv dapl $out/bin
+      ''
+    else
+      ''
+        mkdir -p $out/share/${pname}
+        mv APL.jar $out/share/${pname}/
 
-    makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
-      --add-flags "-jar $out/share/${pname}/APL.jar"
-  '') + ''
+        makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
+          --add-flags "-jar $out/share/${pname}/APL.jar"
+      ''
+  )
+  + ''
     ln -s $out/bin/dapl $out/bin/apl
 
     runHook postInstall
@@ -60,9 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/APL";
-    description = "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    description =
+      "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     inherit (jdk.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
   };

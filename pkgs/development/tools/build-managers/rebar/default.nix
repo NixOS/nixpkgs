@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, erlang }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  erlang,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rebar";
@@ -36,6 +41,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.beam.members;
+    teams = [ lib.teams.beam ];
   };
 }

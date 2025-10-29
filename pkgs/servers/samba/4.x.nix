@@ -1,93 +1,118 @@
-{ lib, stdenv
-, buildPackages
-, fetchurl
-, fetchpatch
-, wafHook
-, pkg-config
-, bison
-, flex
-, perl
-, libxslt
-, docbook_xsl
-, fixDarwinDylibNames
-, docbook_xml_dtd_45
-, readline
-, popt
-, dbus
-, libbsd
-, libarchive
-, zlib
-, liburing
-, gnutls
-, systemd
-, samba
-, talloc
-, jansson
-, ldb
-, libtasn1
-, tdb
-, tevent
-, libxcrypt
-, libxcrypt-legacy
-, cmocka
-, rpcsvc-proto
-, bash
-, python3Packages
-, nixosTests
-, libiconv
-, testers
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  wafHook,
+  pkg-config,
+  bison,
+  flex,
+  perl,
+  libxslt,
+  docbook_xsl,
+  fixDarwinDylibNames,
+  docbook_xml_dtd_45,
+  readline,
+  popt,
+  dbus,
+  libbsd,
+  libarchive,
+  zlib,
+  liburing,
+  gnutls,
+  systemd,
+  samba,
+  talloc,
+  jansson,
+  ldb,
+  lmdb,
+  libtasn1,
+  tdb,
+  tevent,
+  libxcrypt,
+  cmocka,
+  rpcsvc-proto,
+  bash,
+  python3Packages,
+  nixosTests,
+  libiconv,
+  testers,
+  pkgsCross,
 
-, enableLDAP ? false, openldap
-, enablePrinting ? false, cups
-, enableProfiling ? true
-, enableMDNS ? false, avahi
-, enableDomainController ? false, gpgme, lmdb
-, enableRegedit ? true, ncurses
-, enableCephFS ? false, ceph
-, enableGlusterFS ? false, glusterfs, libuuid
-, enableAcl ? (!stdenv.hostPlatform.isDarwin), acl
-, enableLibunwind ? (!stdenv.hostPlatform.isDarwin), libunwind
-, enablePam ? (!stdenv.hostPlatform.isDarwin), pam
+  enableLDAP ? false,
+  openldap,
+  enablePrinting ? false,
+  cups,
+  enableProfiling ? true,
+  enableMDNS ? false,
+  avahi,
+  enableDomainController ? false,
+  gpgme,
+  enableRegedit ? true,
+  ncurses,
+  enableCephFS ? false,
+  ceph,
+  enableGlusterFS ? false,
+  glusterfs,
+  libuuid,
+  enableAcl ? stdenv.hostPlatform.isLinux,
+  acl,
+  enableLibunwind ? (!stdenv.hostPlatform.isDarwin),
+  libunwind,
+  enablePam ? (!stdenv.hostPlatform.isDarwin),
+  pam,
 }:
 
 let
-  # samba-tool requires libxcrypt-legacy algorithms
-  python = python3Packages.python.override {
-    self = python;
-    libxcrypt = libxcrypt-legacy;
-  };
-  wrapPython = python3Packages.wrapPython.override {
-    inherit python;
-  };
-
   inherit (lib) optional optionals;
+
+  needsAnswers =
+    stdenv.hostPlatform != stdenv.buildPlatform
+    && !(stdenv.hostPlatform.emulatorAvailable buildPackages);
+  answers =
+    {
+      x86_64-freebsd = ./answers-x86_64-freebsd;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.4";
+  version = "4.22.5";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-OpLpfq6zRbazIjL1A+FNNPA6eqZMRR/owlihG72pCOU=";
+    url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2FZqFdPb/At3fR6Puy7umIoCTKnHhtysZd0QNHMHQA0=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     ./4.x-no-persistent-install.patch
-    ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
+    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
     (fetchpatch {
       # workaround for https://github.com/NixOS/nixpkgs/issues/303436
       name = "samba-reproducible-builds.patch";
       url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
       hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
     })
+    (fetchpatch {
+      name = "cross-compile.patch";
+      url = "https://gitlab.com/samba-team/samba/-/merge_requests/3990/diffs.patch?commit_id=52af20db81f24cbfaa6fef8233584fc40fc72d34";
+      hash = "sha256-GMPxM6KMtMPRljhRI+dDD2fOp+y5kpRqbjqkj19Du4Q=";
+    })
   ];
 
   nativeBuildInputs = [
     python3Packages.python
+    python3Packages.wrapPython
     wafHook
     pkg-config
     bison
@@ -100,10 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
     buildPackages.stdenv.cc
-  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
-    ++ optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+  ++ optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -111,32 +138,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
-    wrapPython
-    python
+    python3Packages.python
     readline
     popt
     dbus
     jansson
-    libbsd
     libarchive
     zlib
     gnutls
     libtasn1
+    lmdb
     tdb
     libxcrypt
-  ] ++ optionals stdenv.hostPlatform.isLinux [ liburing systemd ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-    ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
-    ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [ ldb talloc tevent ]
-    ++ optional enablePrinting cups
-    ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
-    ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.hostPlatform.isLinux) (lib.getDev ceph)
-    ++ optionals (enableGlusterFS && stdenv.hostPlatform.isLinux) [ glusterfs libuuid ]
-    ++ optional enableAcl acl
-    ++ optional enableLibunwind libunwind
-    ++ optional enablePam pam;
+  ]
+  ++ optionals (!stdenv.hostPlatform.isBSD) [
+    libbsd
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    liburing
+    systemd
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ optionals enableLDAP [
+    openldap.dev
+    python3Packages.markdown
+  ]
+  ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [
+    ldb
+    talloc
+    tevent
+  ]
+  ++ optional enablePrinting cups
+  ++ optional enableMDNS avahi
+  ++ optionals enableDomainController [
+    gpgme
+    python3Packages.dnspython
+  ]
+  ++ optional enableRegedit ncurses
+  ++ optional (enableCephFS && stdenv.hostPlatform.isLinux) (lib.getDev ceph)
+  ++ optionals (enableGlusterFS && stdenv.hostPlatform.isLinux) [
+    glusterfs
+    libuuid
+  ]
+  ++ optional enableAcl acl
+  ++ optional enableLibunwind libunwind
+  ++ optional enablePam pam;
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -146,12 +192,23 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';
 
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
     export PYTHONHASHSEED=1
+  ''
+  + lib.optionalString needsAnswers ''
+    cp ${answers} answers
+    chmod +w answers
   '';
+
+  env.NIX_LDFLAGS = lib.optionalString (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
@@ -160,23 +217,34 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
+    # otherwise third_party/waf/waflib/Tools/python.py would
+    # get the wrong pythondir from build platform python
+    "--pythondir=${placeholder "out"}/${python3Packages.python.sitePackages}"
     (lib.enableFeature enablePrinting "cups")
-  ] ++ optional (!enableDomainController)
-    "--without-ad-dc"
+  ]
+  ++ optional (!enableDomainController) "--without-ad-dc"
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
-  ] ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [
+  ]
+  ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [
     "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
-  ] ++ optional enableLibunwind "--with-libunwind"
-    ++ optional enableProfiling "--with-profiling-data"
-    ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ optional enableLibunwind "--with-libunwind"
+  ++ optional enableProfiling "--with-profiling-data"
+  ++ optional (!enableAcl) "--without-acl-support"
+  ++ optional (!enablePam) "--without-pam"
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
     "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-  ] ++ optionals stdenv.buildPlatform.is32bit [
+    (
+      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+        "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+      else
+        "--cross-answers=answers"
+    )
+  ]
+  ++ optionals stdenv.buildPlatform.is32bit [
     # By default `waf configure` spawns as many as available CPUs. On
     # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
     # kernel) it can easily exhaust 32-bit address space and hang up:
@@ -192,7 +260,11 @@ stdenv.mkDerivation (finalAttrs: {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  pythonPath = [ python3Packages.dnspython python3Packages.markdown tdb ];
+  pythonPath = [
+    python3Packages.dnspython
+    python3Packages.markdown
+    tdb
+  ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -213,18 +285,21 @@ stdenv.mkDerivation (finalAttrs: {
     read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
     BIN='{}';
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
     ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \$BIN \$BIN
     for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
       new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)
       install_name_tool -change \$old_rpath \$new_rpath \$BIN
     done
-  '' + ''
+  ''
+  + ''
     EOF
     find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
     find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
@@ -235,16 +310,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Samba does its own shebang patching, but uses build Python
     find $out/bin -type f -executable | while read file; do
       isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python}^' "$file"
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python3Packages.python}^' "$file"
     done
   '';
 
-  disallowedReferences =
-    lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
-      [ buildPackages.python3Packages.python ];
+  disallowedReferences = lib.optionals (
+    buildPackages.python3Packages.python != python3Packages.python
+  ) [ buildPackages.python3Packages.python ];
 
   passthru.tests = {
     samba = nixosTests.samba;
+    cross = pkgsCross.aarch64-multiplatform.samba;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
@@ -262,17 +338,12 @@ stdenv.mkDerivation (finalAttrs: {
     broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
     pkgConfigModules = [
-      "dcerpc_samr"
-      "dcerpc"
       "ndr_krb5pac"
       "ndr_nbt"
       "ndr_standard"
       "ndr"
       "netapi"
-      "samba-credentials"
-      "samba-hostconfig"
       "samba-util"
-      "samdb"
       "smbclient"
       "wbclient"
     ];

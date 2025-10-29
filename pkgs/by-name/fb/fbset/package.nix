@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, bison
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  bison,
+  flex,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "framebuffer device maintenance program";
+    description = "Framebuffer device maintenance program";
     # NOTE: the website of the original author disappeared, the only remaining
     # repository is maintained by the debian maintainer of the package at
     # https://github.com/sudipm-mukherjee/fbset

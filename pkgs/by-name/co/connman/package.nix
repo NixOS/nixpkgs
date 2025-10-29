@@ -1,54 +1,57 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, dbus
-, file
-, glib
-, gnutls
-, iptables
-, libmnl
-, libnftnl # for nftables
-, nixosTests
-, openconnect
-, openvpn
-, pkg-config
-, polkit
-, ppp
-, pptp
-, readline
-, vpnc
-, dnsType ? "internal" # or "systemd-resolved"
-, enableBluetooth ? true
-, enableClient ? true
-, enableDatafiles ? true
-, enableDundee ? true
-, enableEthernet ? true
-, enableGadget ? true
-, enableHh2serialGps ? false
-, enableIospm ? false
-, enableL2tp ? false
-, enableLoopback ? true
-, enableNeard ? true
-, enableNetworkManager ? null
-, enableNetworkManagerCompatibility ?
-  if enableNetworkManager == null
-  then false
-  else lib.warn "enableNetworkManager option is deprecated; use enableNetworkManagerCompatibility instead" enableNetworkManager
-, enableOfono ? true
-, enableOpenconnect ? true
-, enableOpenvpn ? true
-, enablePacrunner ? true
-, enablePolkit ? true
-, enablePptp ? true
-, enableStats ? true
-, enableTist ? false
-, enableTools ? true
-, enableVpnc ? true
-, enableWifi ? true
-, enableWireguard ? true
-, enableWispr ? true
-, firewallType ? "iptables" # or "nftables"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  dbus,
+  file,
+  glib,
+  gnutls,
+  iptables,
+  libmnl,
+  libnftnl, # for nftables
+  nixosTests,
+  openconnect,
+  openvpn,
+  pkg-config,
+  polkit,
+  ppp,
+  pptp,
+  readline,
+  vpnc,
+  dnsType ? "internal", # or "systemd-resolved"
+  enableBluetooth ? true,
+  enableClient ? true,
+  enableDatafiles ? true,
+  enableDundee ? true,
+  enableEthernet ? true,
+  enableGadget ? true,
+  enableHh2serialGps ? false,
+  enableIospm ? false,
+  enableL2tp ? false,
+  enableLoopback ? true,
+  enableNeard ? true,
+  enableNetworkManager ? null,
+  enableNetworkManagerCompatibility ?
+    if enableNetworkManager == null then
+      false
+    else
+      lib.warn "enableNetworkManager option is deprecated; use enableNetworkManagerCompatibility instead" enableNetworkManager,
+  enableOfono ? true,
+  enableOpenconnect ? true,
+  enableOpenvpn ? true,
+  enablePacrunner ? true,
+  enablePolkit ? true,
+  enablePptp ? true,
+  enableStats ? true,
+  enableTist ? false,
+  enableTools ? true,
+  enableVpnc ? true,
+  enableWifi ? true,
+  enableWireguard ? true,
+  enableWispr ? true,
+  firewallType ? "iptables", # or "nftables"
 }:
 
 let
@@ -56,10 +59,17 @@ let
     enableFeature
     enableFeatureAs
     optionals
-    withFeatureAs;
+    withFeatureAs
+    ;
 in
-assert lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftables" ];
-assert lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
+assert lib.asserts.assertOneOf "firewallType" firewallType [
+  "iptables"
+  "nftables"
+];
+assert lib.asserts.assertOneOf "dnsType" dnsType [
+  "internal"
+  "systemd-resolved"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "connman";
   version = "1.43";
@@ -69,7 +79,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ElfOvjJ+eQC34rhMD7MwqpCBXkVYmM0vlB9DCO0r47w=";
   };
 
-  patches = optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-32366.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=8d3be0285f1d4667bfe85dba555c663eb3d704b4";
+      hash = "sha256-kPb4pZVWvnvTUcpc4wRc8x/pMUTXGIywj3w8IYKRTBs=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-32743.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=d90b911f6760959bdf1393c39fe8d1118315490f";
+      hash = "sha256-odkjYC/iM6dTIJx2WM/KKotXdTtgv8NMFNJMzx5+YU4=";
+    })
+  ]
+  ++ optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
@@ -92,10 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (firewallType == "iptables") [ iptables ]
   ++ optionals (firewallType == "nftables") [ libnftnl ]
-  ++ optionals (enableOpenconnect) [ openconnect ]
-  ++ optionals (enablePolkit) [ polkit ]
-  ++ optionals (enablePptp) [ pptp ppp ]
-  ;
+  ++ optionals enableOpenconnect [ openconnect ]
+  ++ optionals enablePolkit [ polkit ]
+  ++ optionals enablePptp [
+    pptp
+    ppp
+  ];
 
   postPatch = ''
     sed -i "s@/usr/bin/file@file@g" ./configure
@@ -105,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     # directories flags
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ [
+  ]
+  ++ [
     # production build flags
     (enableFeature false "maintainer-mode")
     (enableFeatureAs true "session-policy-local" "builtin")
@@ -139,11 +164,13 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableL2tp "l2tp")
     (enableFeature enableIospm "iospm")
     (enableFeature enableTist "tist")
-  ] ++ [
+  ]
+  ++ [
     (enableFeatureAs enableOpenconnect "openconnect" "builtin")
     (enableFeatureAs enableOpenvpn "openvpn" "builtin")
     (enableFeatureAs enableVpnc "vpnc" "builtin")
-  ] ++ [
+  ]
+  ++ [
     (withFeatureAs true "dbusconfdir" "${placeholder "out"}/share")
     (withFeatureAs true "dbusdatadir" "${placeholder "out"}/share")
     (withFeatureAs true "tmpfilesdir" "${placeholder "out"}/tmpfiles.d")
@@ -165,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/about/";
     license = lib.licenses.gpl2Only;
     mainProgram = "connmanctl";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

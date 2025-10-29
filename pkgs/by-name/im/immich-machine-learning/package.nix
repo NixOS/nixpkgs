@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,
@@ -17,19 +16,14 @@ python.pkgs.buildPythonApplication rec {
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'fastapi-slim' 'fastapi'
-
-    # AttributeError: module 'cv2' has no attribute 'Mat'
-    substituteInPlace app/test_main.py --replace-fail ": cv2.Mat" ""
-  '';
-
   pythonRelaxDeps = [
+    "numpy"
+    "pillow"
     "pydantic-settings"
   ];
 
   build-system = with python.pkgs; [
-    poetry-core
+    hatchling
     cython
   ];
 
@@ -67,7 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/immich
-    cp log_conf.json $out/share/immich
+    cp immich_ml/log_conf.json $out/share/immich
 
     cp -r ann $out/${python.sitePackages}/
 
@@ -78,7 +72,7 @@ python.pkgs.buildPythonApplication rec {
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
       --set-default IMMICH_HOST "[::]" \
       --set-default IMMICH_PORT 3003 \
-      --add-flags "app.main:app -k app.config.CustomUvicornWorker \
+      --add-flags "immich_ml.main:app -k immich_ml.config.CustomUvicornWorker \
         -w \"\$MACHINE_LEARNING_WORKERS\" \
         -b \"\$IMMICH_HOST:\$IMMICH_PORT\" \
         -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"

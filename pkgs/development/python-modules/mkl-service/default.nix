@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mkl-service";
-  version = "2.4.2";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IntelPython";
     repo = "mkl-service";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o5mjZhqQc7tu44EjrScuGzv6pZNlnZnndMIAhl8pY5o=";
+    tag = "v${version}";
+    hash = "sha256-uP4TzBLhlpT83FIYCjolP3QN5/90YjBOnauy780gUJc=";
   };
 
   build-system = [

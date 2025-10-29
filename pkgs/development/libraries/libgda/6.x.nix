@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, intltool
-, meson
-, ninja
-, itstool
-, libxml2
-, python3
-, gtk3
-, json-glib
-, isocodes
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, sqlite
-, gtk-doc
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient ? null
-, postgresSupport ? false
-, postgresql ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  intltool,
+  meson,
+  ninja,
+  itstool,
+  libxml2,
+  python3,
+  gtk3,
+  json-glib,
+  isocodes,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  sqlite,
+  gtk-doc,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient ? null,
+  postgresSupport ? false,
+  libpq ? null,
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
+assert postgresSupport -> libpq != null;
 
 stdenv.mkDerivation rec {
   pname = "libgda";
   version = "6.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor version}/libgda-${version}.tar.xz";
     sha256 = "0w564z7krgjk19r39mi5qn4kggpdg9ggbyn9pb4aavb61r14npwr";
   };
 
@@ -79,10 +80,12 @@ stdenv.mkDerivation rec {
     openssl
     libgee
     sqlite
-  ] ++ lib.optionals mysqlSupport [
+  ]
+  ++ lib.optionals mysqlSupport [
     libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
+  ]
+  ++ lib.optionals postgresSupport [
+    libpq
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
@@ -95,7 +98,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgda";
       attrPath = "libgda6";
       versionPolicy = "odd-unstable";
     };
@@ -110,7 +113,7 @@ stdenv.mkDerivation rec {
       # CLI tools
       gpl2Plus
     ];
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

@@ -11,44 +11,34 @@
   libXrandr,
   libXxf86vm,
   pkg-config,
-  stdenv,
-  darwin,
 }:
 
 buildGoModule rec {
   pname = "fyne";
-  version = "2.5.2";
+  # This is the current latest version
+  # version "1.26.1" was a typo of "1.7.0" - maybe, don't "upgrade" to it
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
-    repo = "fyne";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XaD7t1hSv5plDa6QHDTyoWgzvSFMRezvHl47YphXoig=";
+    repo = "tools";
+    rev = "v${version}";
+    hash = "sha256-x2OfiFn5VHE3OrlfSMUQY1mckdnCcDpq1vqLmRi6yAg=";
   };
 
-  vendorHash = "sha256-uV+pbGxAV/uuHV0xl2vPZpgGYRj9/E0rhFtLfCV5rnE=";
+  vendorHash = "sha256-J5JxKN0i5nbLTBgwZ5HJPFiqHd7yvP+YkyvPteD2xF0=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libGL
-      libX11
-      libXcursor
-      libXinerama
-      libXi
-      libXrandr
-      libXxf86vm
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Carbon
-        Cocoa
-        Kernel
-        UserNotifications
-      ]
-    ));
+  buildInputs = [
+    libGL
+    libX11
+    libXcursor
+    libXinerama
+    libXi
+    libXrandr
+    libXxf86vm
+  ];
 
   doCheck = false;
 

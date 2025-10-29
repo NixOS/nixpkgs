@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule {
   pname = "certdump";
   version = "0-unstable-2023-12-25";
 
@@ -17,7 +17,7 @@ buildDotnetModule rec {
   };
 
   projectFile = [ "CertDump.sln" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   selfContainedBuild = true;
   executables = [ "CertDump" ];
@@ -35,5 +35,6 @@ buildDotnetModule rec {
     '';
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.baloo ];
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

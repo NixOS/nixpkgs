@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, python3
-, gobject-introspection
-, gsettings-desktop-schemas
-, gettext
-, gtk3
-, glib
-, common-licenses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  python3,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gettext,
+  gtk3,
+  glib,
+  common-licenses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "3.4";
+  version = "3.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
-    rev = version;
-    hash = "sha256-YByzRDL/LuI/VwBHLRZ3+S2VnttYeuMgJpRLPhR/NCA=";
+    tag = version;
+    hash = "sha256-LrArLx0AOEaeAvLBVhV9ho5H+qeiaBfjs8+iV5W9u+w=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
+    (python3.withPackages (
+      p: with p; [
+        pygobject3
+        setproctitle
+        unidecode
+      ]
+    ))
     gsettings-desktop-schemas
     gtk3
     glib
@@ -62,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/bulky";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

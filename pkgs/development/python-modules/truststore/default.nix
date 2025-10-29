@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "truststore";
-  version = "0.9.2";
+  version = "0.10.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "truststore";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BSJneLxwgnD8IJ8IJM43WhmlII5N3qic96SBquMdMnc=";
+    tag = "v${version}";
+    hash = "sha256-EbwD2YyVA9W9cWEjYvypBJxs6Hbkb/tF2qU/sUNCt5g=";
   };
 
   build-system = [ flit-core ];

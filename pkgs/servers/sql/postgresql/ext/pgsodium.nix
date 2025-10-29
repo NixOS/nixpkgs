@@ -1,38 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libsodium
-, postgresql
-, postgresqlTestExtension
+{
+  bash,
+  fetchFromGitHub,
+  lib,
+  libsodium,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgsodium";
   version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "michelp";
     repo = "pgsodium";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y8xL3PxF1GQV1JIgolMI1e8oGcUvWAgrPv84om7wKP8=";
   };
 
   buildInputs = [
+    bash # required for patchShebangs
     libsodium
-    postgresql
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib pgsodium${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension sql/pgsodium-*.sql
-    install -D -t $out/share/postgresql/extension pgsodium.control
-
+  postInstall = ''
     install -D -t $out/share/pgsodium/getkey_scripts getkey_scripts/*
     ln -s $out/share/pgsodium/getkey_scripts/pgsodium_getkey_urandom.sh $out/share/postgresql/extension/pgsodium_getkey
-
-    runHook postInstall
   '';
 
   passthru.tests.extension = postgresqlTestExtension {
@@ -50,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern cryptography for PostgreSQL using libsodium";
     homepage = "https://github.com/michelp/pgsodium";
     changelog = "https://github.com/michelp/pgsodium/releases/tag/v${finalAttrs.version}";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

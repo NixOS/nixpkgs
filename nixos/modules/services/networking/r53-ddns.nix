@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -36,11 +41,16 @@ in
         '';
       };
 
+      ttl = mkOption {
+        type = types.int;
+        description = "The TTL for the generated record";
+      };
+
       environmentFile = mkOption {
         type = types.str;
         description = ''
           File containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-          in the format of an EnvironmentFile as described by systemd.exec(5)
+          in the format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
         '';
       };
 
@@ -61,8 +71,10 @@ in
     systemd.services.r53-ddns = {
       description = "r53-ddns service";
       serviceConfig = {
-        ExecStart = "${pkg}/bin/r53-ddns -zone-id ${cfg.zoneID} -domain ${cfg.domain}"
-          + lib.optionalString (cfg.hostname != null) " -hostname ${cfg.hostname}";
+        ExecStart =
+          "${pkg}/bin/r53-ddns -zone-id ${cfg.zoneID} -domain ${cfg.domain}"
+          + lib.optionalString (cfg.hostname != null) " -hostname ${cfg.hostname}"
+          + lib.optionalString (cfg.ttl != null) " -ttl ${toString cfg.ttl}";
         EnvironmentFile = "${cfg.environmentFile}";
         DynamicUser = true;
       };

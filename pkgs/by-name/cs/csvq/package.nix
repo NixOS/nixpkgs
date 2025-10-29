@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, testers, lib, csvq }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  lib,
+  csvq,
+}:
 
 buildGoModule rec {
   pname = "csvq";
@@ -18,12 +24,12 @@ buildGoModule rec {
     version = "csvq version ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "SQL-like query language for CSV";
     mainProgram = "csvq";
     homepage = "https://mithrandie.github.io/csvq/";
     changelog = "https://github.com/mithrandie/csvq/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomodachi94 ];
   };
 }

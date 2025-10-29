@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.9";
+  version = "1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ab7Ci64eeeUcmY2opa16weuVvsWn5UgvSauE55gVH/w=";
+    tag = version;
+    hash = "sha256-seUhGD0stutZ6jfXDs86V6aiZ5ilUNS6ymBR5E3H9Ug=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Windows thumbcache";
     homepage = "https://github.com/fox-it/dissect.thumbcache";
-    changelog = "https://github.com/fox-it/dissect.thumbcache/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.thumbcache/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

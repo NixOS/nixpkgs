@@ -1,52 +1,62 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, caja
-, gtk3
-, glib
-, libxml2
-, libarchive
-, libsecret
-, poppler
-, mate-desktop
-, itstool
-, hicolor-icon-theme
-, texlive
-, wrapGAppsHook3
-, enableEpub ? true
-, webkitgtk_4_1
-, enableDjvu ? true
-, djvulibre
-, enablePostScript ? true
-, libspectre
-, enableXps ? true
-, libgxps
-, enableImages ? false
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  gtk-doc,
+  gettext,
+  yelp-tools,
+  caja,
+  gtk3,
+  glib,
+  libxml2,
+  libarchive,
+  libsecret,
+  poppler,
+  mate-desktop,
+  itstool,
+  hicolor-icon-theme,
+  texlive,
+  wrapGAppsHook3,
+  enableEpub ? true,
+  webkitgtk_4_1,
+  enableDjvu ? true,
+  djvulibre,
+  enablePostScript ? true,
+  libspectre,
+  enableXps ? true,
+  libgxps,
+  enableImages ? false,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.28.0";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ztRyX26bccTqY2dr/DzDvgnSnboIqnp6uXlk4LQ1UWI=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "atril";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-NnWD3Gcxn8ZZKdHzg6iclLiSwj3sBvF+BwpNtcU+dSY=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+    itstool
     pkg-config
     gettext
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
     caja
     gtk3
     glib
-    itstool
     libarchive
     libsecret
     libxml2
@@ -58,15 +68,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableDjvu [ djvulibre ]
   ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
   ++ lib.optionals enablePostScript [ libspectre ]
-  ++ lib.optionals enableXps [ libgxps ]
-  ;
+  ++ lib.optionals enableXps [ libgxps ];
 
-  configureFlags = [ ]
-    ++ lib.optionals (enableDjvu) [ "--enable-djvu" ]
-    ++ lib.optionals (enableEpub) [ "--enable-epub" ]
-    ++ lib.optionals (enablePostScript) [ "--enable-ps" ]
-    ++ lib.optionals (enableXps) [ "--enable-xps" ]
-    ++ lib.optionals (enableImages) [ "--enable-pixbuf" ];
+  configureFlags =
+    [ ]
+    ++ lib.optionals enableDjvu [ "--enable-djvu" ]
+    ++ lib.optionals enableEpub [ "--enable-epub" ]
+    ++ lib.optionals enablePostScript [ "--enable-ps" ]
+    ++ lib.optionals enableXps [ "--enable-xps" ]
+    ++ lib.optionals enableImages [ "--enable-pixbuf" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -74,13 +84,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = with lib; {
     description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  meson-python,
   packaging,
   cython,
   numpy,
@@ -10,33 +11,38 @@
   h5py,
   nibabel,
   tqdm,
+  trx-python,
 }:
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dipy";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-sfqCK2r9Io1gDDHL9s9R37J0h9KcOQML3B2zJx2+QuA=";
+    repo = "dipy";
+    tag = version;
+    hash = "sha256-vqjd5gd9B630pv6H4MvXnlPwlEhm1o7MbwYD0J7D24o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    meson-python
+    numpy
     packaging
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     h5py
     nibabel
+    packaging
     tqdm
+    trx-python
   ];
 
   # disable tests for now due to:
@@ -53,7 +59,6 @@ buildPythonPackage rec {
     "dipy.reconst"
     "dipy.io"
     "dipy.viz"
-    "dipy.boots"
     "dipy.data"
     "dipy.utils"
     "dipy.segment"
@@ -64,11 +69,11 @@ buildPythonPackage rec {
     "dipy.nn"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dipy.org/";
     description = "Diffusion imaging toolkit for Python";
     changelog = "https://github.com/dipy/dipy/blob/${version}/Changelog";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

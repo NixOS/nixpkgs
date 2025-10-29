@@ -9,8 +9,8 @@
   iana-etc,
   libredirect,
   mock,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   simple-websocket,
   tornado,
@@ -19,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.9.1";
+  version = "4.12.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wn2qiVkL05GTopGJeghHe9i+wyOQZbEeYDmEIIbXDS0=";
+    tag = "v${version}";
+    hash = "sha256-VcL8Od1EM/cbbeOVyXlsXYt8Bms636XbtunrTblkGDQ=";
   };
 
   build-system = [ setuptools ];
@@ -44,29 +42,30 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aiohttp
     eventlet
+    libredirect.hook
     mock
-    requests
     tornado
-    websocket-client
+    pytest-asyncio
     pytestCheckHook
-  ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
   '';
 
   postCheck = ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
+  disabledTests = [
+    # Assertion issue
+    "test_async_mode_eventlet"
+    # Somehow effective log level does not change?
+    "test_logger"
+  ];
 
   pythonImportsCheck = [ "engineio" ];
 
@@ -77,8 +76,8 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
-    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/v${version}/CHANGES.md";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }

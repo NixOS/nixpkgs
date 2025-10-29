@@ -34,9 +34,12 @@ let
         flakeIgnore = [ "E501" ]; # ignores PEP8's line length limit of 79 (black defaults to 88 characters)
       }
       (
-        builtins.replaceStrings [ "@NIX_STORE_VERITY@" ] [
-          partitionTypes.usr-verity
-        ] (builtins.readFile ./assert_uki_repart_match.py)
+        builtins.replaceStrings
+          [ "@NIX_STORE_VERITY@" ]
+          [
+            partitionTypes.usr-verity
+          ]
+          (builtins.readFile ./assert_uki_repart_match.py)
       );
 in
 {
@@ -78,12 +81,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.initrd.systemd.dmVerity.enable = true;
+    boot.initrd = {
+      systemd.dmVerity.enable = true;
+      supportedFilesystems = {
+        ${config.image.repart.partitions.${cfg.partitionIds.store}.repartConfig.Format} =
+          lib.mkDefault true;
+      };
+    };
 
     image.repart.partitions = {
       # dm-verity hash partition
       ${cfg.partitionIds.store-verity}.repartConfig = {
-        Type = partitionTypes.usr-verity;
+        Type = lib.mkDefault partitionTypes.usr-verity;
         Verity = "hash";
         VerityMatchKey = lib.mkDefault verityMatchKey;
         Label = lib.mkDefault "store-verity";
@@ -92,7 +101,7 @@ in
       ${cfg.partitionIds.store} = {
         storePaths = [ config.system.build.toplevel ];
         repartConfig = {
-          Type = partitionTypes.usr;
+          Type = lib.mkDefault partitionTypes.usr;
           Verity = "data";
           Format = lib.mkDefault "erofs";
           VerityMatchKey = lib.mkDefault verityMatchKey;
@@ -131,8 +140,8 @@ in
           pkgs.runCommand ukiFile
             {
               nativeBuildInputs = [
-                pkgs.jq
-                pkgs.systemdUkify
+                pkgs.buildPackages.jq
+                pkgs.buildPackages.systemdUkify
               ];
             }
             ''
@@ -168,9 +177,9 @@ in
               };
 
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
-                pkgs.systemdUkify
+                pkgs.buildPackages.systemdUkify
                 verityHashCheck
-                pkgs.jq
+                pkgs.buildPackages.jq
               ];
 
               preBuild = ''
@@ -185,8 +194,8 @@ in
                   | assert_uki_repart_match.py "${config.system.build.intermediateImage}/repart-output.json"
 
                 # copy the uncompressed intermediate image, so that systemd-repart picks it up
-                cp -v ${config.system.build.intermediateImage}/${config.image.repart.imageFileBasename}.raw .
-                chmod +w ${config.image.repart.imageFileBasename}.raw
+                cp -v ${config.system.build.intermediateImage}/${config.image.baseName}.raw .
+                chmod +w ${config.image.baseName}.raw
               '';
 
               # replace "TBD" with the original roothash values

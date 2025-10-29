@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   mock,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-trio,
   pytestCheckHook,
   pythonOlder,
@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "12.0.0";
+  version = "13.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xIBgP0qikn1HZutB+oJ5P+YKgsv9uNaI4NCMVaU04UU=";
+    hash = "sha256-s5HjxaQ00fURiiVhUAHbyPZpz0EKtn0ExNTgfFVIHDc=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-trio
     pytestCheckHook
     twisted

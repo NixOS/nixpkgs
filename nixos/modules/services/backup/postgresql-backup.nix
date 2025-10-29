@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupService = db: dumpCmd:
+  postgresqlBackupService =
+    db: dumpCmd:
     let
       compressSuffixes = {
         "none" = "";
@@ -23,14 +29,18 @@ let
       prevFile = mkSqlPath ".prev" compressSuffix;
       prevFiles = map (mkSqlPath ".prev") (lib.attrValues compressSuffixes);
       inProgressFile = mkSqlPath ".in-progress" compressSuffix;
-    in {
+    in
+    {
       enable = true;
 
       description = "Backup of ${db} database(s)";
 
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
 
-      path = [ pkgs.coreutils config.services.postgresql.package ];
+      path = [
+        pkgs.coreutils
+        config.services.postgresql.package
+      ];
 
       script = ''
         set -e -o pipefail
@@ -57,12 +67,13 @@ let
       startAt = cfg.startAt;
     };
 
-in {
+in
+{
 
   imports = [
     (lib.mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -81,7 +92,7 @@ in {
       };
 
       backupAll = lib.mkOption {
-        default = cfg.databases == [];
+        default = cfg.databases == [ ];
         defaultText = lib.literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
@@ -94,7 +105,7 @@ in {
       };
 
       databases = lib.mkOption {
-        default = [];
+        default = [ ];
         type = lib.types.listOf lib.types.str;
         description = ''
           List of database names to dump.
@@ -113,15 +124,28 @@ in {
         type = lib.types.separatedString " ";
         default = "-C";
         description = ''
-          Command line options for pg_dump. This options is not used
-          if `config.services.postgresqlBackup.backupAll` is enabled.
-          Note that config.services.postgresqlBackup.backupAll is also active,
-          when no databases where specified.
+          Command line options for pg_dump. This options is not used if
+          `config.services.postgresqlBackup.backupAll` is enabled. Note that
+          config.services.postgresqlBackup.backupAll is also active, when no
+          databases where specified.
+        '';
+      };
+
+      pgdumpAllOptions = lib.mkOption {
+        type = lib.types.separatedString " ";
+        default = "";
+        description = ''
+          Command line options for pg_dumpall. This options is not used if
+          `config.services.postgresqlBackup.backupAll` is disabled.
         '';
       };
 
       compression = lib.mkOption {
-        type = lib.types.enum ["none" "gzip" "zstd"];
+        type = lib.types.enum [
+          "none"
+          "gzip"
+          "zstd"
+        ];
         default = "gzip";
         description = ''
           The type of compression to use on the generated database dump.
@@ -140,40 +164,48 @@ in {
 
   };
 
-  config = lib.mkMerge [
-    {
-      assertions = [
-        {
-          assertion = cfg.backupAll -> cfg.databases == [];
-          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-        }
-        {
-          assertion = cfg.compression == "none" ||
-            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
-            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
-          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
-        }
-      ];
-    }
-    (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [
-        "d '${cfg.location}' 0700 postgres - - -"
-      ];
-    })
-    (lib.mkIf (cfg.enable && cfg.backupAll) {
-      systemd.services.postgresqlBackup =
-        postgresqlBackupService "all" "pg_dumpall";
-    })
-    (lib.mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = lib.listToAttrs (map (db:
-        let
-          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
-        in {
-          name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db cmd;
-        }) cfg.databases);
-    })
-  ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = cfg.backupAll -> cfg.databases == [ ];
+            message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+          }
+          {
+            assertion =
+              cfg.compression == "none"
+              || (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9)
+              || (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+            message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+          }
+        ];
+
+        systemd.tmpfiles.rules = [
+          "d '${cfg.location}' 0700 postgres - - -"
+        ];
+      }
+
+      (lib.mkIf cfg.backupAll {
+        systemd.services.postgresqlBackup = postgresqlBackupService "all" "pg_dumpall ${cfg.pgdumpAllOptions}";
+      })
+
+      (lib.mkIf (!cfg.backupAll) {
+        systemd.services = lib.listToAttrs (
+          map (
+            db:
+            let
+              cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+            in
+            {
+              name = "postgresqlBackup-${db}";
+              value = postgresqlBackupService db cmd;
+            }
+          ) cfg.databases
+        );
+      })
+    ]
+  );
 
   meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }

@@ -1,9 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cctools
-, fixDarwinDylibNames
-, autoSignDarwinBinariesHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cctools,
+  fixDarwinDylibNames,
+  autoSignDarwinBinariesHook,
+  replaceVars,
+  buildPackages,
+  binutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,20 +19,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    fixDarwinDylibNames
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
   dontConfigure = true;
+
+  patches = [
+    (replaceVars ./0001-fix-cross-compilation.patch {
+      emulator = "${stdenv.hostPlatform.emulator buildPackages}";
+    })
+  ];
 
   buildPhase =
     let

@@ -13,7 +13,10 @@
   cairo,
   epoll-shim,
   git,
+  glaze,
   hyprcursor,
+  hyprgraphics,
+  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
@@ -23,11 +26,12 @@
   libinput,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   pango,
   pciutils,
   pkgconf,
   python3,
+  re2,
   systemd,
   tomlplusplus,
   wayland,
@@ -37,13 +41,13 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  legacyRenderer ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
   hidpiXWayland ? false,
   enableNvidiaPatches ? false,
+  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -69,7 +73,9 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  adapters = [
+  # Condition on darwin to avoid breaking eval for darwin in CI,
+  # even though darwin is not supported anyway.
+  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
@@ -79,17 +85,20 @@ assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed."
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
+assert assertMsg (
+  !legacyRenderer
+) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.44.1";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-hnoPoxMFetuoXQuAMgvopl1kCRQ33FYaVVBgV9FIFkM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TPlZf0urtvDH4Cb4By06szJmzR4sBlgQATuGQy8bH6U=";
   };
 
   postPatch = ''
@@ -136,8 +145,10 @@ customStdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
+      glaze
       git
       hyprcursor.dev
+      hyprgraphics
       hyprlang
       hyprutils
       libGL
@@ -145,9 +156,10 @@ customStdenv.mkDerivation (finalAttrs: {
       libinput
       libuuid
       libxkbcommon
-      mesa
+      libgbm
       pango
       pciutils
+      re2
       tomlplusplus
       wayland
       wayland-protocols
@@ -165,15 +177,17 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  mesonBuildType = if debug then "debugoptimized" else "release";
+  mesonBuildType = if debug then "debug" else "release";
 
   dontStrip = debug;
+  strictDeps = true;
 
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {
       "xwayland" = enableXWayland;
-      "legacy_renderer" = legacyRenderer;
       "systemd" = withSystemd;
+      "uwsm" = false;
+      "hyprpm" = false;
     })
     (mapAttrsToList mesonBool {
       # PCH provides no benefits when building with Nix
@@ -188,6 +202,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
+            hyprland-qtutils
             pciutils
             pkgconf
           ]
@@ -204,12 +219,7 @@ customStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-      khaneliman
-      wozeparrot
-    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };

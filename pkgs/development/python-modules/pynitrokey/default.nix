@@ -1,36 +1,31 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   installShellFiles,
   libnitrokey,
-  flit-core,
-  certifi,
+  poetry-core,
   cffi,
   click,
   cryptography,
-  ecdsa,
   fido2,
+  hidapi,
   intelhex,
   nkdfu,
-  python-dateutil,
   pyusb,
   requests,
   tqdm,
   tlv8,
-  typing-extensions,
-  click-aliases,
   semver,
   nethsm,
-  importlib-metadata,
   nitrokey,
   pyscard,
-  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.6.0";
+  version = "0.11.1";
   mainProgram = "nitropy";
 in
 
@@ -40,52 +35,45 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pY6ATORZDPGRnkN6dse1s/DzQRpplDbPAGUHU4E7U9M=";
+    hash = "sha256-TUc8ZDQ0MHyEtrsudqGxTXmwNIio4UcNcjwsOtaK0Ww=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
-    certifi
     cffi
     click
     cryptography
-    ecdsa
     fido2
+    hidapi
     intelhex
     nkdfu
-    python-dateutil
+    nitrokey
     pyusb
     requests
     tqdm
     tlv8
-    typing-extensions
-    click-aliases
     semver
     nethsm
-    importlib-metadata
-    nitrokey
-    pyscard
-    asn1crypto
   ];
 
-  pythonRelaxDeps = true;
+  optional-dependencies = {
+    pcsc = [
+      pyscard
+    ];
+  };
 
-  # pythonRelaxDepsHook runs in postBuild so cannot be used
-  pypaBuildFlags = [ "--skip-dependency-check" ];
+  pythonRelaxDeps = true;
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
   makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
 
-  # no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "pynitrokey" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${mainProgram} \
       --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
       --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
@@ -102,7 +90,6 @@ buildPythonPackage {
     ];
     maintainers = with maintainers; [
       frogamic
-      raitobezarius
     ];
     inherit mainProgram;
   };

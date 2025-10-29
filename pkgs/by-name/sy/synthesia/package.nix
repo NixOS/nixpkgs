@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, stdenvNoCC
-, runtimeShell
-, copyDesktopItems
-, makeDesktopItem
-, wineWowPackages
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
+  runtimeShell,
+  copyDesktopItems,
+  makeDesktopItem,
+  wineWowPackages,
 }:
 
 let
@@ -25,7 +26,10 @@ stdenvNoCC.mkDerivation rec {
       comment = meta.description;
       exec = "synthesia";
       icon = "synthesia";
-      categories = [ "Game" "Audio" ];
+      categories = [
+        "Game"
+        "Audio"
+      ];
       startupWMClass = "synthesia.exe";
     })
   ];
@@ -65,7 +69,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fun way to learn how to play the piano";
+    description = "Fun way to learn how to play the piano";
     homepage = "https://synthesiagame.com/";
     downloadPage = "https://synthesiagame.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

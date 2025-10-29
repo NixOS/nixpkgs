@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pyannote-audio";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-85whRoc3JoDSE4DqivY/3hfvLHcvgsubR/DLCPtLEP0=";
+    tag = version;
+    hash = "sha256-NnwJJasObePBYWBnuVzOLFz2eqOHoOA6W5CzAEpkDV4=";
     fetchSubmodules = true;
   };
 

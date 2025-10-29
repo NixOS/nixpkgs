@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitLab,
@@ -11,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "10.5.0";
+  version = "11.7.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
-    rev = "v${version}";
-    hash = "sha256-dPjT9PRoUzNrY79yejAW/sbkMr0fpLif7IKZIW/K3KI=";
+    tag = "v${version}";
+    hash = "sha256-1YyWGwotk1Zv0zsNDGmWXhIFYEEN5qgYrB0j2QDTZFY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
+  '';
 
   build-system = [ setuptools ];
 
@@ -35,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://libvirt.org/python.html";
-    description = "libvirt Python bindings";
+    description = "Libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];
   };

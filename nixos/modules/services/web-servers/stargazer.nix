@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.stargazer;
@@ -19,18 +24,22 @@ let
 
   '';
   genINI = lib.generators.toINI { };
-  configFile = pkgs.writeText "config.ini" (lib.strings.concatStrings (
-    [ globalSection ] ++ (lib.lists.forEach cfg.routes (section:
-      let
-        name = section.route;
-        params = builtins.removeAttrs section [ "route" ];
-      in
-      genINI
-        {
+  configFile = pkgs.writeText "config.ini" (
+    lib.strings.concatStrings (
+      [ globalSection ]
+      ++ (lib.lists.forEach cfg.routes (
+        section:
+        let
+          name = section.route;
+          params = builtins.removeAttrs section [ "route" ];
+        in
+        genINI {
           "${name}" = params;
-        } + "\n"
-    ))
-  ));
+        }
+        + "\n"
+      ))
+    )
+  );
 in
 {
   options.services.stargazer = {
@@ -65,7 +74,7 @@ in
     };
 
     requestTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 5;
       description = ''
         Number of seconds to wait for the client to send a complete
@@ -74,7 +83,7 @@ in
     };
 
     responseTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 0;
       description = ''
         Number of seconds to wait for the client to send a complete
@@ -151,22 +160,27 @@ in
     };
 
     routes = lib.mkOption {
-      type = lib.types.listOf
-        (lib.types.submodule {
-          freeformType = with lib.types; attrsOf (nullOr
-            (oneOf [
-              bool
-              int
-              float
-              str
-            ]) // {
-            description = "INI atom (null, bool, int, float or string)";
-          });
+      type = lib.types.listOf (
+        lib.types.submodule {
+          freeformType =
+            with lib.types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+              // {
+                description = "INI atom (null, bool, int, float or string)";
+              }
+            );
           options.route = lib.mkOption {
             type = lib.types.str;
             description = "Route section name";
           };
-        });
+        }
+      );
       default = [ ];
       description = ''
         Routes that Stargazer should server.
@@ -256,13 +270,16 @@ in
           "~CAP_SYS_CHROOT"
           "~CAP_SYS_BOOT"
           "~CAP_NET_ADMIN"
-        ] ++ lib.lists.optional (!cfg.allowCgiUser) [
+        ]
+        ++ lib.lists.optional (!cfg.allowCgiUser) [
           "~CAP_SETGID"
           "~CAP_SETUID"
         ];
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete" ]
-          ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
+        SystemCallFilter = [
+          "~@cpu-emulation @debug @keyring @mount @obsolete"
+        ]
+        ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
       };
     };
 

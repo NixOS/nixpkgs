@@ -1,26 +1,28 @@
-{ fetchurl
-, lib
-, stdenv
-, cmake
-, netcdf
-, openjpeg
-, libaec
-, libpng
-, gfortran
-, perl
-, enablePython ? false
-, pythonPackages
-, enablePosixThreads ? false
-, enableOpenMPThreads ? false
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  netcdf,
+  openjpeg,
+  libaec,
+  libpng,
+  gfortran,
+  perl,
+  ctestCheckHook,
+  enablePython ? false,
+  pythonPackages,
+  enablePosixThreads ? false,
+  enableOpenMPThreads ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.36.0";
+  version = "2.44.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    hash = "sha256-2nQUOmSyvuol6ifGOHW8jsKU5p5b0Ih4AgQOsEFR15o=";
+    hash = "sha256-x1+x+Rt2W2uLR3RjKopvvOyWk02wFftjwq0lYK7dRDs=";
   };
 
   postPatch = ''
@@ -38,7 +40,11 @@ stdenv.mkDerivation rec {
       --replace '$'{CMAKE_INSTALL_PREFIX}/'$'{INSTALL_INCLUDE_DIR} '$'{'$'{PROJECT_NAME}_FULL_INSTALL_INCLUDE_DIR}
   '';
 
-  nativeBuildInputs = [ cmake gfortran perl ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    perl
+  ];
 
   buildInputs = [
     netcdf
@@ -60,16 +66,17 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = ''
-    ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "-R"
+    # Only do tests that don't require downloading 120MB of testdata
+    "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)"
+  ];
 
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = [ ];
     platforms = platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6RxYn8/HAvXv1AEgSIEOLiaBkGgTcqQhWK+xbtxgj/o=";
   };
 
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     trio-asyncio
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pytest_aio" ];
 

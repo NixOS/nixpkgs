@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   #
   # interface
@@ -6,7 +11,7 @@
   options = {
     services.gdomap = {
       enable = lib.mkEnableOption "GNUstep Distributed Objects name server";
-   };
+    };
   };
 
   #
@@ -19,8 +24,8 @@
       description = "gdomap server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path  = [ pkgs.gnustep.base ];
-      serviceConfig.ExecStart = "${pkgs.gnustep.base}/bin/gdomap -f";
+      path = [ pkgs.gnustep-base ];
+      serviceConfig.ExecStart = "${pkgs.gnustep-base}/bin/gdomap -f";
     };
   };
 }

@@ -1,22 +1,28 @@
-import ./make-test-python.nix ({ ... } :
+{ ... }:
 
 let
-  node = { pkgs, ... } : {
-    networking = {
-      firewall = {
-        allowedUDPPorts = [ 4791 ]; # open RoCE port
-        allowedTCPPorts = [ 4800 ]; # port for test utils
+  node =
+    { pkgs, ... }:
+    {
+      networking = {
+        firewall = {
+          allowedUDPPorts = [ 4791 ]; # open RoCE port
+          allowedTCPPorts = [ 4800 ]; # port for test utils
+        };
+        rxe = {
+          enable = true;
+          interfaces = [ "eth1" ];
+        };
       };
-      rxe = {
-        enable = true;
-        interfaces = [ "eth1" ];
-      };
+
+      environment.systemPackages = with pkgs; [
+        rdma-core
+        screen
+      ];
     };
 
-    environment.systemPackages = with pkgs; [ rdma-core screen ];
-  };
-
-in {
+in
+{
   name = "rxe";
 
   nodes = {
@@ -42,6 +48,4 @@ in {
     server.succeed("screen -dmS rping rping -s -a server -C 10")
     client.succeed("sleep 2; rping -c -a server -C 10")
   '';
-})
-
-
+}

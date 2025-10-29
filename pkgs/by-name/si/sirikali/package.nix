@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, libpwquality
-, hicolor-icon-theme
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, kdePackages
-, cryfs
-, encfs
-, fscrypt-experimental
-, gocryptfs
-, securefs
-, sshfs
-, libgcrypt
-, libsecret
-, withKWallet ? true
-, withLibsecret ? true
+{
+  lib,
+  stdenv,
+  libpwquality,
+  hicolor-icon-theme,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  kdePackages,
+  cryfs,
+  encfs,
+  fscrypt-experimental,
+  gocryptfs,
+  securefs,
+  sshfs,
+  libgcrypt,
+  libsecret,
+  withKWallet ? true,
+  withLibsecret ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sirikali";
-  version = "1.6.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
     rev = version;
-    hash = "sha256-org8mYKwZDdOvkQyd3eD+GaI0aHshMbe2f9i1bM+lBk=";
+    hash = "sha256-vrhHpQzTwiU0NGcXRBt9mtr5qbwL3LEtZYoYc+IkJHw=";
   };
 
   buildInputs = [
@@ -37,8 +38,7 @@ stdenv.mkDerivation rec {
     libgcrypt
   ]
   ++ lib.optionals withKWallet [ kdePackages.kwallet ]
-  ++ lib.optionals withLibsecret [ libsecret ]
-  ;
+  ++ lib.optionals withLibsecret [ libsecret ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -47,14 +47,16 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.makeBinPath [
-      cryfs
-      encfs
-      fscrypt-experimental
-      gocryptfs
-      securefs
-      sshfs
-    ]}''
+    ''--prefix PATH : ${
+      lib.makeBinPath [
+        cryfs
+        encfs
+        fscrypt-experimental
+        gocryptfs
+        securefs
+        sshfs
+      ]
+    }''
   ];
 
   doCheck = true;

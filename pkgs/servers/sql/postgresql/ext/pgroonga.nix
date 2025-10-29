@@ -1,33 +1,39 @@
-{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga }:
+{
+  fetchFromGitHub,
+  groonga,
+  lib,
+  msgpack-c,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  xxHash,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "3.2.3";
+  version = "4.0.4";
 
-  src = fetchurl {
-    url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-k9+DgiLzU2cA3jvw3pMF7/FmDGxsCYtAOaUtf2LMTnw=";
+  src = fetchFromGitHub {
+    owner = "pgroonga";
+    repo = "pgroonga";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-SXQH+L7FKhu+2+9QyQTNi+3nFYtkE7WXv2A5LdvjG2w=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql msgpack-c groonga ];
+  buildInputs = [
+    msgpack-c
+    groonga
+    xxHash
+  ];
 
   makeFlags = [
+    "HAVE_XXHASH=1"
     "HAVE_MSGPACK=1"
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
 
-  installPhase = ''
-    install -D pgroonga${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga.control -t $out/share/postgresql/extension
-    install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
-
-    install -D pgroonga_database${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga_database.control -t $out/share/postgresql/extension
-    install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
@@ -36,9 +42,9 @@ stdenv.mkDerivation rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
-    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
-    license = licenses.postgresql;
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [ DerTim1 ];
   };
-}
+})

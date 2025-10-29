@@ -1,82 +1,97 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-, lib ? pkgs.lib
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
+{ runTest }:
 
 let
-  inherit (lib.maintainers) elvishjerricco;
-
-  common = {
-    boot.initrd.systemd = {
-      enable = true;
-      network.wait-online.timeout = 10;
-      network.wait-online.anyInterface = true;
-      targets.network-online.requiredBy = [ "initrd.target" ];
-      services.systemd-networkd-wait-online.requiredBy =
-        [ "network-online.target" ];
-      initrdBin = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
-    };
-    testing.initrdBackdoor = true;
-    boot.initrd.network.enable = true;
-  };
-
-  mkFlushTest = flush: script: makeTest {
-    name = "systemd-initrd-network-${lib.optionalString (!flush) "no-"}flush";
-    meta.maintainers = [ elvishjerricco ];
-
-    nodes.machine = {
-      imports = [ common ];
-
-      boot.initrd.network.flushBeforeStage2 = flush;
-      systemd.services.check-flush = {
-        requiredBy = ["multi-user.target"];
-        before = [ "network-pre.target" "multi-user.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        wants = ["network-pre.target"];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig.Type = "oneshot";
-        path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
-        inherit script;
+  common =
+    { pkgs, ... }:
+    {
+      boot.initrd.systemd = {
+        enable = true;
+        network.wait-online.timeout = 10;
+        network.wait-online.anyInterface = true;
+        targets.network-online.requiredBy = [ "initrd.target" ];
+        services.systemd-networkd-wait-online.requiredBy = [ "network-online.target" ];
+        initrdBin = [
+          pkgs.iproute2
+          pkgs.iputils
+          pkgs.gnugrep
+        ];
       };
+      testing.initrdBackdoor = true;
+      boot.initrd.network.enable = true;
     };
 
-    testScript = ''
-      machine.wait_for_unit("network-online.target")
-      machine.succeed(
-          "ip addr | grep 10.0.2.15",
-          "ping -c1 10.0.2.2",
-      )
-      machine.switch_root()
+  mkFlushTest =
+    flush: script:
+    runTest (
+      { lib, ... }:
+      {
+        name = "systemd-initrd-network-${lib.optionalString (!flush) "no-"}flush";
+        meta.maintainers = with lib.maintainers; [ elvishjerricco ];
 
-      machine.wait_for_unit("multi-user.target")
-    '';
-  };
+        nodes.machine =
+          { pkgs, ... }:
+          {
+            imports = [ common ];
 
-in {
-  basic = makeTest {
-    name = "systemd-initrd-network";
-    meta.maintainers = [ elvishjerricco ];
+            boot.initrd.network.flushBeforeStage2 = flush;
+            systemd.services.check-flush = {
+              requiredBy = [ "multi-user.target" ];
+              before = [
+                "network-pre.target"
+                "multi-user.target"
+                "shutdown.target"
+              ];
+              conflicts = [ "shutdown.target" ];
+              wants = [ "network-pre.target" ];
+              unitConfig.DefaultDependencies = false;
+              serviceConfig.Type = "oneshot";
+              path = [
+                pkgs.iproute2
+                pkgs.iputils
+                pkgs.gnugrep
+              ];
+              inherit script;
+            };
+          };
 
-    nodes.machine = common;
+        testScript = ''
+          machine.wait_for_unit("network-online.target")
+          machine.succeed(
+              "ip addr | grep 10.0.2.15",
+              "ping -c1 10.0.2.2",
+          )
+          machine.switch_root()
 
-    testScript = ''
-      machine.wait_for_unit("network-online.target")
-      machine.succeed(
-          "ip addr | grep 10.0.2.15",
-          "ping -c1 10.0.2.2",
-      )
-      machine.switch_root()
+          machine.wait_for_unit("multi-user.target")
+        '';
+      }
+    );
+in
+{
+  basic = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-initrd-network";
+      meta.maintainers = with lib.maintainers; [ elvishjerricco ];
 
-      # Make sure the systemd-network user was set correctly in initrd
-      machine.wait_for_unit("multi-user.target")
-      machine.succeed("[ $(stat -c '%U,%G' /run/systemd/netif/links) = systemd-network,systemd-network ]")
-      machine.succeed("ip addr show >&2")
-      machine.succeed("ip route show >&2")
-    '';
-  };
+      nodes.machine = common;
+
+      testScript = ''
+        machine.wait_for_unit("network-online.target")
+        machine.succeed(
+            "ip addr | grep 10.0.2.15",
+            "ping -c1 10.0.2.2",
+        )
+        machine.switch_root()
+
+        # Make sure the systemd-network user was set correctly in initrd
+        machine.wait_for_unit("multi-user.target")
+        machine.succeed("[ $(stat -c '%U,%G' /run/systemd/netif/links) = systemd-network,systemd-network ]")
+        machine.succeed("ip addr show >&2")
+        machine.succeed("ip route show >&2")
+      '';
+    }
+  );
 
   doFlush = mkFlushTest true ''
     if ip addr | grep 10.0.2.15; then

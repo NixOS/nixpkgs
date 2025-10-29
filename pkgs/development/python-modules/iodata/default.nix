@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "theochem";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "iodata";
+    tag = "v${version}";
     hash = "sha256-ld6V+/8lg4Du6+mHU5XuXXyMpWwyepXurerScg/bf2Q=";
   };
 

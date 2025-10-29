@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
-, python-digitalocean
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
+  python-digitalocean,
+  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -42,7 +43,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_digitalocean" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "NixOps Digitalocean plugin";

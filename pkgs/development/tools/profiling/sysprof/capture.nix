@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, sysprof
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  sysprof,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsysprof-capture";
 
   inherit (sysprof) src version;
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
     "-Dexamples=false"
     "-Dpolkit-agent=disabled" # only useful for sysprof-cli
+    "-Ddebuginfod=disabled"
   ];
 
   meta = sysprof.meta // {

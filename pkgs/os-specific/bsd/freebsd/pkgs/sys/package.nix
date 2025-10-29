@@ -1,13 +1,15 @@
 {
   lib,
   mkDerivation,
+  writeText,
   stdenv,
   buildPackages,
   freebsd-lib,
-  patches,
+  patchesRoot,
   filterSource,
   applyPatches,
   baseConfig ? "GENERIC",
+  extraConfig ? null,
   extraFlags ? { },
   bsdSetupHook,
   mandoc,
@@ -24,6 +26,13 @@
   kldxref,
 }:
 let
+  baseConfigFile =
+    if (extraConfig == null) then
+      null
+    else if (lib.isDerivation extraConfig) || (lib.isPath extraConfig) then
+      extraConfig
+    else
+      writeText "extraConfig" extraConfig;
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;
   filteredSource = filterSource {
     pname = "sys";
@@ -32,7 +41,7 @@ let
   };
   patchedSource = applyPatches {
     src = filteredSource;
-    patches = freebsd-lib.filterPatches patches [
+    patches = freebsd-lib.filterPatches patchesRoot [
       "sys"
       "include"
     ];
@@ -48,20 +57,22 @@ let
       sed -i sys/${hostArchBsd}/conf/${baseConfig} \
         -e 's/WITH_CTF=1/WITH_CTF=0/' \
         -e '/KDTRACE/d'
+    ''
+    + lib.optionalString (baseConfigFile != null) ''
+      cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
     '';
   };
 
   # Kernel modules need this for kern.opts.mk
-  env =
-    {
-      MK_CTF = "no";
+  env = {
+    MK_CTF = "no";
+  }
+  // (lib.flip lib.mapAttrs' extraFlags (
+    name: value: {
+      name = "MK_${lib.toUpper name}";
+      value = lib.boolToYesNo value;
     }
-    // (lib.flip lib.mapAttrs' extraFlags (
-      name: value: {
-        name = "MK_${lib.toUpper name}";
-        value = if value then "yes" else "no";
-      }
-    ));
+  ));
 in
 mkDerivation rec {
   pname = "sys";
@@ -108,11 +119,11 @@ mkDerivation rec {
   inherit env;
   passthru.env = env;
 
-  KODIR = "${builtins.placeholder "out"}/kernel";
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
-  DTBDIR = "${builtins.placeholder "out"}/dbt";
+  KODIR = "${placeholder "out"}/kernel";
+  KMODDIR = "${placeholder "out"}/kernel";
+  DTBDIR = "${placeholder "out"}/dbt";
 
-  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KERN_DEBUGDIR = "${placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 

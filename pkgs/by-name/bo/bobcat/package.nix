@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, icmake
-, yodl
-, libmilter
-, libX11
-, openssl
-, readline
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  icmake,
+  yodl,
+  libmilter,
+  libX11,
+  openssl,
+  readline,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bobcat";
-    rev = version;
+    tag = version;
     hash = "sha256-JLJKaJmztputIon9JkKzpm3Ch60iwm4Imh9p42crYzA=";
   };
 
@@ -56,11 +57,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
 
     ./build install x
 
-    runHook postBuild
+    runHook postInstall
   '';
 
   meta = with lib; {

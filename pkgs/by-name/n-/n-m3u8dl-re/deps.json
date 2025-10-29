@@ -1,0 +1,17 @@
+[
+  {
+    "pname": "NiL.JS",
+    "version": "2.5.1684",
+    "hash": "sha256-lxFTYyuj0SuNzIQGq+rK9s0tAqxqQg8PBj/YdktJunw="
+  },
+  {
+    "pname": "Spectre.Console",
+    "version": "0.49.2-preview.0.50",
+    "hash": "sha256-ivFyHTfQxPf/RIin+aftmd+G4PcrqmJXmdu0u/RU6YA="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+  }
+]

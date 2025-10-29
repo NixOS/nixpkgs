@@ -1,26 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, boehmgc
-, buildPackages
-, coverageAnalysis ? null
-, gawk
-, gmp
-, libffi
-, libtool
-, libunistring
-, makeWrapper
-, pkg-config
-, pkgsBuildBuild
-, readline
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  boehmgc,
+  buildPackages,
+  coverageAnalysis ? null,
+  gawk,
+  gmp,
+  libffi,
+  libtool,
+  libunistring,
+  makeWrapper,
+  pkg-config,
+  pkgsBuildBuild,
+  readline,
 }:
 
 let
   # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null
-            then coverageAnalysis
-            else stdenv.mkDerivation;
+  builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
 in
 builder rec {
   pname = "guile";
@@ -31,14 +30,17 @@ builder rec {
     sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile_2_0;
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_2_0;
 
   nativeBuildInputs = [
     makeWrapper
@@ -77,8 +79,9 @@ builder rec {
     (fetchpatch {
       url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
-    })] ++
-  (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+    })
+  ]
+  ++ (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./filter-mkostemp-darwin.patch
     (fetchpatch {
@@ -91,12 +94,14 @@ builder rec {
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString
-    (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
+  LDFLAGS = lib.optionalString (
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl
+  ) "-lgcc_s";
 
   configureFlags = [
     "--with-libreadline-prefix"
-  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
     # /usr/include/mp.h from OpenSolaris. See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -124,7 +129,7 @@ builder rec {
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
             s|includedir=$out|includedir=$dev|g
             "
-    '';
+  '';
 
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
@@ -143,14 +148,14 @@ builder rec {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
-        GNU Guile is an implementation of the Scheme programming language, with
-        support for many SRFIs, packaged for use in a wide variety of
-        environments.  In addition to implementing the R5RS Scheme standard and
-        a large subset of R6RS, Guile includes a module system, full access to
-        POSIX system calls, networking support, multiple threads, dynamic
-        linking, a foreign function call interface, and powerful string
-        processing.
-      '';
+      GNU Guile is an implementation of the Scheme programming language, with
+      support for many SRFIs, packaged for use in a wide variety of
+      environments.  In addition to implementing the R5RS Scheme standard and
+      a large subset of R6RS, Guile includes a module system, full access to
+      POSIX system calls, networking support, multiple threads, dynamic
+      linking, a foreign function call interface, and powerful string
+      processing.
+    '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ludo ];
     platforms = platforms.all;
@@ -159,8 +164,8 @@ builder rec {
 
 //
 
-(lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
-  # Work around <https://bugs.gnu.org/14201>.
-  SHELL = stdenv.shell;
-  CONFIG_SHELL = stdenv.shell;
-})
+  (lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
+    # Work around <https://bugs.gnu.org/14201>.
+    SHELL = stdenv.shell;
+    CONFIG_SHELL = stdenv.shell;
+  })

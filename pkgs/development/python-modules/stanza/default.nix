@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.9.2";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hrRn6ITsN7kFL1T6VjSXPDytANEeJYKwMaSdCG+YJyM=";
+    repo = "stanza";
+    tag = "v${version}";
+    hash = "sha256-zY2+8QuPJTX/HSkE/gKMCWpSanKpYSGZeeYgb4eFuuw=";
   };
 
   propagatedBuildInputs = [

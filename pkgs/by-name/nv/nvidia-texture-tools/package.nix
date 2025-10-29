@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation {
@@ -19,13 +20,24 @@ stdenv.mkDerivation {
     # Make a recently added pure virtual function just virtual,
     # to keep compatibility.
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
-  '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+
+    # Fix build with CMake 4
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+    substituteInPlace extern/libsquish-1.15/CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # remove x86_64-only libraries
     sed -i '/bc1enc/d' src/nvtt/tests/CMakeLists.txt
     sed -i '/libsquish/d;/CMP_Core/d' extern/CMakeLists.txt
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     cmake

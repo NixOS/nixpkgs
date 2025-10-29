@@ -1,71 +1,72 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, libestr
-, json_c
-, zlib
-, docutils
-, fastJson
-, withKrb5 ? true
-, libkrb5
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, withJemalloc ? true
-, jemalloc
-, withMysql ? true
-, libmysqlclient
-, withPostgres ? true
-, postgresql
-, withDbi ? true
-, libdbi
-, withNetSnmp ? true
-, net-snmp
-, withUuid ? true
-, libuuid
-, withCurl ? true
-, curl
-, withGnutls ? true
-, gnutls
-, withGcrypt ? true
-, libgcrypt
-, withLognorm ? true
-, liblognorm
-, withMaxminddb ? true
-, libmaxminddb
-, withOpenssl ? true
-, openssl
-, withRelp ? true
-, librelp
-, withKsi ? true
-, libksi
-, withLogging ? true
-, liblogging
-, withNet ? true
-, libnet
-, withHadoop ? true
-, hadoop
-, withRdkafka ? true
-, rdkafka
-, withMongo ? true
-, mongoc
-, withCzmq ? true
-, czmq
-, withRabbitmq ? true
-, rabbitmq-c
-, withHiredis ? true
-, hiredis
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  libestr,
+  json_c,
+  zlib,
+  docutils,
+  fastJson,
+  withKrb5 ? true,
+  libkrb5,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withJemalloc ? true,
+  jemalloc,
+  withMysql ? true,
+  libmysqlclient,
+  withPostgres ? true,
+  libpq,
+  withDbi ? true,
+  libdbi,
+  withNetSnmp ? true,
+  net-snmp,
+  withUuid ? true,
+  libuuid,
+  withCurl ? true,
+  curl,
+  withGnutls ? true,
+  gnutls,
+  withGcrypt ? true,
+  libgcrypt,
+  withLognorm ? true,
+  liblognorm,
+  withMaxminddb ? true,
+  libmaxminddb,
+  withOpenssl ? true,
+  openssl,
+  withRelp ? true,
+  librelp,
+  withKsi ? true,
+  libksi,
+  withLogging ? true,
+  liblogging,
+  withNet ? true,
+  libnet,
+  withHadoop ? true,
+  hadoop,
+  withRdkafka ? true,
+  rdkafka,
+  withMongo ? true,
+  mongoc,
+  withCzmq ? true,
+  czmq,
+  withRabbitmq ? true,
+  rabbitmq-c,
+  withHiredis ? true,
+  hiredis,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2408.0";
+  version = "8.2510.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-i7LxX5v5u35jUYLj0+Nwv8OdCL81o2fc6XFOGG94cgY=";
+    hash = "sha256-pwqYNBhoWVOaak0cez9owjiX6AWCm3ZKRekssMyV5mo=";
   };
 
   nativeBuildInputs = [
@@ -79,9 +80,10 @@ stdenv.mkDerivation rec {
     libestr
     json_c
     zlib
-  ] ++ lib.optional withKrb5 libkrb5
+  ]
+  ++ lib.optional withKrb5 libkrb5
   ++ lib.optional withJemalloc jemalloc
-  ++ lib.optional withPostgres postgresql
+  ++ lib.optional withPostgres libpq
   ++ lib.optional withDbi libdbi
   ++ lib.optional withNetSnmp net-snmp
   ++ lib.optional withUuid libuuid

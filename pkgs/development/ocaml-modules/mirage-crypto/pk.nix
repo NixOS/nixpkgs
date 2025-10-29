@@ -1,17 +1,32 @@
-{ buildDunePackage, ohex, ounit2, randomconv, mirage-crypto, mirage-crypto-rng
-, sexplib0, zarith, gmp }:
+{
+  buildDunePackage,
+  ohex,
+  ounit2,
+  randomconv,
+  mirage-crypto,
+  mirage-crypto-rng,
+  zarith,
+  gmp,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-crypto-pk";
 
   inherit (mirage-crypto) version src;
 
   buildInputs = [ gmp ];
-  propagatedBuildInputs = [ mirage-crypto mirage-crypto-rng
-                            zarith sexplib0 ];
+  propagatedBuildInputs = [
+    mirage-crypto
+    mirage-crypto-rng
+    zarith
+  ];
 
   doCheck = true;
-  checkInputs = [ ohex ounit2 randomconv ];
+  checkInputs = [
+    ohex
+    ounit2
+    randomconv
+  ];
 
   meta = mirage-crypto.meta // {
     description = "Simple public-key cryptography for the modern age";

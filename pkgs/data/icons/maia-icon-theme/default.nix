@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, gtk3
-, plasma-framework
-, kwindowsystem
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  gtk3,
+  plasma-framework,
+  kwindowsystem,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation {
@@ -36,6 +38,13 @@ stdenv.mkDerivation {
   dontDropIconThemeCache = true;
 
   dontWrapQtApps = true;
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace {icons,icons-dark}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = ''
     for theme in $out/share/icons/*; do

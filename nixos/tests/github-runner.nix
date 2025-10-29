@@ -1,29 +1,31 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 {
   name = "github-runner";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ veehaitch ];
   };
-  nodes.machine = { pkgs, ... }: {
-    services.github-runners.test = {
-      enable = true;
-      url = "https://github.com/yaxitech";
-      tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
-    };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.github-runners.test = {
+        enable = true;
+        url = "https://github.com/yaxitech";
+        tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
+      };
 
-    services.github-runners.test-disabled = {
-      enable = false;
-      url = "https://github.com/yaxitech";
-      tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
-    };
+      services.github-runners.test-disabled = {
+        enable = false;
+        url = "https://github.com/yaxitech";
+        tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
+      };
 
-    systemd.services.dummy-github-com = {
-      wantedBy = [ "multi-user.target" ];
-      before = [ "github-runner-test.service" ];
-      script = "${pkgs.netcat}/bin/nc -Fl 443 | true && touch /tmp/registration-connect";
+      systemd.services.dummy-github-com = {
+        wantedBy = [ "multi-user.target" ];
+        before = [ "github-runner-test.service" ];
+        script = "${pkgs.netcat}/bin/nc -Fl 443 | true && touch /tmp/registration-connect";
+      };
+      networking.hosts."127.0.0.1" = [ "api.github.com" ];
     };
-    networking.hosts."127.0.0.1" = [ "api.github.com" ];
-  };
 
   testScript = ''
     start_all()
@@ -42,4 +44,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     machine.fail("systemctl list-unit-files | grep test-disabled")
   '';
-})
+}

@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "ubelt";
-  version = "1.3.6";
+  version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ygoJqyTscfuZVDGVbrZobZFvlcuF4HavTU65tmhyU+w=";
+    tag = "v${version}";
+    hash = "sha256-9f22hNi/YrxAVoEOGojdziogUN/YNCrpUuOfib9nqfQ=";
   };
 
   nativeBuildInputs = [

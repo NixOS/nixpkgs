@@ -1,54 +1,64 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, fzf
-, coreutils
-, gawk
-, gnused
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeBinaryWrapper,
+  gh,
+  fzf,
+  coreutils,
+  gawk,
+  gnused,
+  withBat ? false,
+  bat,
+  nix-update-script,
 }:
-let
-  binPath = lib.makeBinPath ([
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "gh-f";
+  version = "1.9.0";
+
+  src = fetchFromGitHub {
+    owner = "gennaro-tedesco";
+    repo = "gh-f";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QWk9bGjfsIFa/0kAmA2QUmk87iyHdlvblYxML5XmbJ8=";
+  };
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  propagatedUserEnvPkgs = [
     gh
     fzf
     coreutils
     gawk
     gnused
   ]
-  ++ lib.optional withBat bat);
-in
-stdenvNoCC.mkDerivation rec {
-  pname = "gh-f";
-  version = "1.1.6";
-
-  src = fetchFromGitHub {
-    owner = "gennaro-tedesco";
-    repo = "gh-f";
-    rev = "v${version}";
-    hash = "sha256-F98CqsSRymL/8s8u7P2Pqt6+ipLoG9Z9Q8bB+IWZTpI=";
-  };
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  ++ lib.optional withBat bat;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 "gh-f" "$out/bin/gh-f"
+
+    runHook postInstall
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/gh-f" --prefix PATH : "${binPath}"
+    wrapProgram "$out/bin/gh-f" \
+      --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedUserEnvPkgs}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/gennaro-tedesco/gh-f";
     description = "GitHub CLI ultimate FZF extension";
-    maintainers = with maintainers; [ loicreynier ];
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     mainProgram = "gh-f";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      loicreynier
+      yiyu
+    ];
   };
-}
+})

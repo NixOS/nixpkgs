@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NpfkhFGxd3VjLjQ8pPpamYgwc5zqWt5CojONe4L1s4s=";
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A python library for volkswagen carnet";
+    description = "Python library for volkswagen carnet";
     homepage = "https://github.com/robinostlund/volkswagencarnet";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

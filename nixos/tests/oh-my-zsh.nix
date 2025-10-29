@@ -1,7 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "oh-my-zsh";
 
-  nodes.machine = { pkgs, ... }:
+  nodes.machine =
+    { pkgs, ... }:
 
     {
       programs.zsh = {
@@ -15,4 +17,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("touch ~/.zshrc")
     machine.succeed("zsh -c 'source /etc/zshrc && echo $ZSH | grep oh-my-zsh-${pkgs.oh-my-zsh.version}'")
   '';
-})
+}

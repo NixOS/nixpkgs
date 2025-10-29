@@ -1,52 +1,57 @@
-{ lib, stdenv
-, buildPackages
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, plymouth
-, pam
-, pkg-config
-, autoconf
-, automake
-, libtool
-, libxcb
-, glib
-, libXdmcp
-, itstool
-, intltool
-, libxklavier
-, libgcrypt
-, audit
-, busybox
-, polkit
-, accountsservice
-, gtk-doc
-, gobject-introspection
-, vala
-, fetchpatch
-, withQt5 ? false
-, qtbase
-, yelp-tools
-, yelp-xsl
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  plymouth,
+  pam,
+  pkg-config,
+  autoreconfHook,
+  gettext,
+  libtool,
+  libxcb,
+  glib,
+  libXdmcp,
+  itstool,
+  intltool,
+  libxklavier,
+  libgcrypt,
+  audit,
+  busybox,
+  polkit,
+  accountsservice,
+  gtk-doc,
+  gobject-introspection,
+  vala,
+  fetchpatch,
+  withQt5 ? false,
+  qtbase,
+  yelp-tools,
+  yelp-xsl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
   version = "1.32.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "canonical";
-    repo = pname;
+    repo = "lightdm";
     rev = version;
     sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
     yelp-tools
     yelp-xsl
     gobject-introspection
@@ -68,7 +73,8 @@ stdenv.mkDerivation rec {
     libxklavier
     pam
     polkit
-  ] ++ lib.optional withQt5 qtbase;
+  ]
+  ++ lib.optional withQt5 qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -80,10 +86,12 @@ stdenv.mkDerivation rec {
     # Hardcode plymouth to fix transitions.
     # For some reason it can't find `plymouth`
     # even when it's in PATH in environment.systemPackages.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
+
+    # glib gettext is deprecated and broken, so use regular gettext instead
+    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
@@ -95,7 +103,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-tests"
     "--disable-dmrc"
-  ] ++ lib.optional withQt5 "--enable-liblightdm-qt5";
+  ]
+  ++ lib.optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -119,12 +128,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) lightdm; };
   };
 
-
   meta = with lib; {
     homepage = "https://github.com/canonical/lightdm";
     description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

@@ -2,16 +2,16 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  poetry-core,
   pythonOlder,
   transformers,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai-like";
-  version = "0.2.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_openai_like";
     inherit version;
-    hash = "sha256-0E7r8TZadpl557DevF3dXLHLx8oXXyeWABvUPLgx7Nw=";
+    hash = "sha256-dwRKXC0eR0NDV1HdnTmiKBvJ3pafm5AZb+Tiufdzo1I=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

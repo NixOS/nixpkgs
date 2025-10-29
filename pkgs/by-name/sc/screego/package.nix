@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   fetchYarnDeps,
   yarnConfigHook,
@@ -10,13 +10,13 @@
 }:
 let
 
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-P8O3E7mNAqUid42XFaJBQm3ApxykYLCuHXDOFHrG9Fs=";
+    hash = "sha256-xWy7aqpUznIYeBPqdpYdRMJxxfiPNa4JmjS3o5i3xxY=";
   };
 
   ui = stdenv.mkDerivation {
@@ -27,7 +27,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      hash = "sha256-yjHxyKEqXMxYsm+KroPB9KulfqYSOU/7ghbKnlSFrd0=";
+      hash = "sha256-JPSbBUny5unUHVkaVGlHyA90IpT9ahcSmt9R1hxERRk=";
     };
 
     nativeBuildInputs = [
@@ -48,12 +48,12 @@ let
 
 in
 
-buildGo123Module rec {
+buildGoModule rec {
   inherit src version;
 
   pname = "screego-server";
 
-  vendorHash = "sha256-190Fp2QtnZis0sophGwhnWhXNWLhODWlnzE3bfScZ+Q=";
+  vendorHash = "sha256-vx7CpHUPQlLEQGxdswQJI1SrfSUwPlpNcb7Cq81ZOBQ=";
 
   ldflags = [
     "-s"

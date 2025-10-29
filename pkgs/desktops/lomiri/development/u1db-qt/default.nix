@@ -10,6 +10,7 @@
   pkg-config,
   qtbase,
   qtdeclarative,
+  qttools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "doc"
     "examples"
   ];
 
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qtdeclarative # qmlplugindump
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -66,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ dbus-test-runner ];
 
   cmakeFlags = [
-    # Needs qdoc, see https://github.com/NixOS/nixpkgs/pull/245379
-    (lib.cmakeBool "BUILD_DOCS" false)
+    (lib.cmakeBool "BUILD_DOCS" true)
   ];
 
   dontWrapQtApps = true;
@@ -101,8 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Qt5 binding and QtQuick2 plugin for U1DB";
     homepage = "https://gitlab.com/ubports/development/core/u1db-qt";
+    changelog = "https://gitlab.com/ubports/development/core/u1db-qt/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "libu1db-qt5" ];
   };

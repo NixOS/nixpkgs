@@ -16,7 +16,7 @@ This section has been moved to [nixos/README.md](https://github.com/NixOS/nixpkg
 
 ## New modules {#reviewing-contributions-new-modules}
 
-This section has been moved to [nixos/README.md](https://github.com/NixOS/nixpkgs/blob/master/nixos/README.md).
+This section has been moved to [nixos/README.md](https://github.com/NixOS/nixpkgs/blob/master/nixos/README.md#new-modules).
 
 ## Individual maintainer list {#reviewing-contributions-individual-maintainer-list}
 

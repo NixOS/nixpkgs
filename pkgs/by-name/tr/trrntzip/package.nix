@@ -7,11 +7,12 @@
 # Besides the new one is on github instead of sourceforge
 # which makes life for us easier
 
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    description = "The goal of the program is to use standard values when creating zips to create identical files over multiple systems";
+    description = "Goal of the program is to use standard values when creating zips to create identical files over multiple systems";
     longDescription = ''
       Torrentzip converts zip archives to a standard format with some
       pre-defined values, sorting the files, and using particular compression
@@ -48,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

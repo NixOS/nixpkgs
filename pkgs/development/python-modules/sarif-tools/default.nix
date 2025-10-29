@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sarif-tools";
-  version = "3.0.2";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sarif-tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VGdl4WBdIiCWPGfFxqcG4XlbLh0uiLQXdrhUa2OxaVY=";
+    tag = "v${version}";
+    hash = "sha256-Dt8VcYIIpujRp2sOlK2JPGzy5cYZDXdXgnvT/+h3DuU=";
   };
 
   disabled = pythonOlder "3.8";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Set of command line tools and Python library for working with SARIF files";
     homepage = "https://github.com/microsoft/sarif-tools";
-    changelog = "https://github.com/microsoft/sarif-tools/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/sarif-tools/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ puzzlewolf ];
     mainProgram = "sarif";

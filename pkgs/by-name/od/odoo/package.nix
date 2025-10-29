@@ -1,19 +1,20 @@
-{ lib
-, fetchgit
-, fetchzip
-, python312
-, rtlcss
-, wkhtmltopdf
-, nixosTests
+{
+  lib,
+  fetchzip,
+  python312,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
   odoo_version = "18.0";
-  odoo_release = "20241010";
+  odoo_release = "20250506";
   python = python312.override {
     self = python;
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
@@ -23,11 +24,17 @@ in python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-TUfLyB0m8XyEiS493Q/ECgSJutAd1rtWX93f3mwfOK0="; # odoo
+    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -90,10 +97,13 @@ in python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 siriobalmelli ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      mkg20001
+      siriobalmelli
+    ];
   };
 }

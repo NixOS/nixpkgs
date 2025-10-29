@@ -1,9 +1,23 @@
-{ buildDunePackage
-, index, ppx_irmin, irmin, optint, fmt, logs, lwt, mtime, cmdliner, checkseum, rusage
-, alcotest, alcotest-lwt, astring, irmin-test
+{
+  buildDunePackage,
+  index,
+  ppx_irmin,
+  irmin,
+  optint,
+  fmt,
+  logs,
+  lwt,
+  mtime,
+  cmdliner,
+  checkseum,
+  rusage,
+  alcotest,
+  alcotest-lwt,
+  astring,
+  irmin-test,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   minimalOCamlVersion = "4.12";
 
   pname = "irmin-pack";
@@ -12,9 +26,25 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ ppx_irmin ];
 
-  propagatedBuildInputs = [ index irmin optint fmt logs lwt mtime cmdliner checkseum rusage ];
+  propagatedBuildInputs = [
+    index
+    irmin
+    optint
+    fmt
+    logs
+    lwt
+    mtime
+    cmdliner
+    checkseum
+    rusage
+  ];
 
-  checkInputs = [ astring alcotest alcotest-lwt irmin-test ];
+  checkInputs = [
+    astring
+    alcotest
+    alcotest-lwt
+    irmin-test
+  ];
 
   doCheck = true;
 

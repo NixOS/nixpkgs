@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
-  version = "v3.005";
+  version = "3.021";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
-    rev = version;
-    hash = "sha256-EHa8DUPFRvdYBdCY41gfjKGtTHwGIXCwD9Qc+Npmt1s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v9wE9caI9HTCfO01Yf+s6KajF7WpnL12nu+IuOV7T+w=";
   };
 
   dontConfigure = true;
@@ -24,17 +24,18 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/truetype
-    cp -R $src/fonts/ttf/*.ttf $out/share/fonts/truetype
+    install -Dm444 -t $out/share/fonts/truetype $src/fonts/ttf/*.ttf
+    install -Dm444 -t $out/share/fonts/opentype $src/fonts/otf/*.otf
+    install -Dm444 -t $out/share/fonts/variable $src/fonts/variable/*.ttf
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Lora is a well-balanced contemporary serif with roots in calligraphy";
+  meta = {
+    description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
     homepage = "https://github.com/cyrealtype/lora";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ofalvai ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ofalvai ];
   };
-}
+})

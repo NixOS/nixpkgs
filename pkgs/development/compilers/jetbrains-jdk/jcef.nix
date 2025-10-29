@@ -1,52 +1,50 @@
-{ fetchFromGitHub
-, fetchurl
-, fetchzip
-, stdenv
-, cmake
-, python3
-, jdk
-, git
-, rsync
-, lib
-, ant
-, ninja
-, strip-nondeterminism
-, stripJavaArchivesHook
+{
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  stdenv,
+  cmake,
+  python3,
+  jdk,
+  git,
+  rsync,
+  lib,
+  ant,
+  ninja,
+  strip-nondeterminism,
+  stripJavaArchivesHook,
 
-, debugBuild ? false
+  debugBuild ? false,
 
-, glib
-, nss
-, nspr
-, atk
-, at-spi2-atk
-, libdrm
-, libGL
-, expat
-, libxcb
-, libxkbcommon
-, libX11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, mesa
-, gtk3
-, pango
-, cairo
-, alsa-lib
-, dbus
-, at-spi2-core
-, cups
-, libxshmfence
-, udev
-, boost
-, thrift
+  glib,
+  nss,
+  nspr,
+  atk,
+  at-spi2-atk,
+  libdrm,
+  libGL,
+  expat,
+  libxcb,
+  libxkbcommon,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libgbm,
+  gtk3,
+  pango,
+  cairo,
+  alsa-lib,
+  dbus,
+  at-spi2-core,
+  cups,
+  libxshmfence,
+  udev,
+  boost,
+  thrift,
 }:
-
-assert !stdenv.hostPlatform.isDarwin;
-# I can't test darwin
 
 let
   rpath = lib.makeLibraryPath [
@@ -66,7 +64,7 @@ let
     libXext
     libXfixes
     libXrandr
-    mesa
+    libgbm
     gtk3
     pango
     cairo
@@ -79,50 +77,88 @@ let
   ];
 
   buildType = if debugBuild then "Debug" else "Release";
-  platform = {
-    "aarch64-linux" = "linuxarm64";
-    "x86_64-linux" = "linux64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  arches = {
-    "linuxarm64" = {
-      depsArch = "arm64";
-      projectArch = "arm64";
-      targetArch = "arm64";
-    };
-    "linux64" = {
-      depsArch = "amd64";
-      projectArch = "x86_64";
-      targetArch = "x86_64";
-    };
-  }.${platform};
+  platform =
+    {
+      "aarch64-linux" = "linuxarm64";
+      "x86_64-linux" = "linux64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arches =
+    {
+      "linuxarm64" = {
+        depsArch = "arm64";
+        projectArch = "arm64";
+        targetArch = "arm64";
+      };
+      "linux64" = {
+        depsArch = "amd64";
+        projectArch = "x86_64";
+        targetArch = "x86_64";
+      };
+    }
+    .${platform};
   inherit (arches) depsArch projectArch targetArch;
+
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
+
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+  });
 
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "34dfd656652c24da31b89c39d0885f284722eeaa";
+  rev = "bb9fb310ed7f3abf858faf248c53bbb707be21f7";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/242
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
   # Run `git rev-list --count HEAD`
-  version = "867";
+  version = "1083";
 
-  nativeBuildInputs = [ cmake python3 jdk git rsync ant ninja strip-nondeterminism stripJavaArchivesHook ];
-  buildInputs = [ boost libX11 libXdamage nss nspr thrift ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    jdk
+    git
+    rsync
+    ant
+    ninja
+    strip-nondeterminism
+    stripJavaArchivesHook
+  ];
+  buildInputs = [
+    boost
+    libX11
+    libXdamage
+    nss
+    nspr
+    thrift20
+  ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-JlTGKqvgdBpBs2xtFMTVJ/ZksT1uME/8a2g7niH2sq8=";
+    hash = "sha256-BHmGEhfkrUWDfrUFR8d5AgIq8qkAr+blX9n7ZVg8mtc=";
   };
   cef-bin =
     let
       # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-      name = "cef_binary_122.1.9+gd14e051+chromium-122.0.6261.94_${platform}_minimal";
-      hash = {
-        "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
-        "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
-      }.${platform};
+      name = "cef_binary_137.0.17+gf354b0e+chromium-137.0.7151.104_${platform}_minimal";
+      hash =
+        {
+          "linuxarm64" = "sha256-QKkJwLtYS3o7lf4T31jIww2LGuAJT3sNTeI3Jq0VEYQ=";
+          "linux64" = "sha256-qE5SOi0/6dPsewyemarTbWG9MbWCQUlng8TgqU+4Tak=";
+        }
+        .${platform};
       urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
     in
     fetchzip {
@@ -163,7 +199,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift}/bin/thrift)|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build
@@ -173,7 +209,10 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  outputs = [ "out" "unpacked" ];
+  outputs = [
+    "out"
+    "unpacked"
+  ];
 
   postBuild = ''
     export JCEF_ROOT_DIR=$(realpath ..)
@@ -187,8 +226,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     export JCEF_ROOT_DIR=$(realpath ..)
-    export THRIFT_DIR="$JCEF_ROOT_DIR"/third_party/thrift
-    export THRIFT_JAR=libthrift-0.19.0.jar
     export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
     export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
@@ -231,7 +268,8 @@ stdenv.mkDerivation rec {
   # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
   + lib.optionalString (platform != "linuxarm64") ''
     extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-  '' + ''
+  ''
+  + ''
 
     cd ../jogl
     cp "$JOGAMP_DIR"/gluegen-rt.jar .
@@ -245,14 +283,10 @@ stdenv.mkDerivation rec {
   # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
   + lib.optionalString (platform != "linuxarm64") ''
     extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-  '' + ''
+  ''
+  + ''
 
     cd ../jcef
-    cp "$THRIFT_DIR"/"$THRIFT_JAR" .
-    cp "$JB_TOOLS_DIR"/common/thrift-module-info.java module-info.java
-    javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
-    jar uf $THRIFT_JAR module-info.class
-    rm module-info.class module-info.java
     cp "$OUT_CLS_DIR"/jcef.jar .
     mkdir lib
     cp -R "$OUT_NATIVE_DIR"/* lib
@@ -273,7 +307,6 @@ stdenv.mkDerivation rec {
     jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
     jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
-    jmod create --module-path . --class-path $THRIFT_JAR $out/jmods/org.apache.thrift.jmod
 
     # stripJavaArchivesHook gets rid of jar file timestamps, but not of jmod file timestamps
     # We have to manually call strip-nondeterminism to do this for jmod files too
@@ -284,5 +317,9 @@ stdenv.mkDerivation rec {
     description = "Jetbrains' fork of JCEF";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/JetBrains/JCEF";
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

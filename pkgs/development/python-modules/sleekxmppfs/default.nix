@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aszymanik";
     repo = "SleekXMPP";
-    rev = "refs/tags/sleek-${version}";
+    tag = "sleek-${version}";
     hash = "sha256-E2S4fMk5dRr8g42iOYmKOknHX7NS6EZ/LAZKc1v3dPg=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A fork of SleekXMPP with TLS cert validation disabled, intended only to be used with the sucks project";
+    description = "Fork of SleekXMPP with TLS cert validation disabled, intended only to be used with the sucks project";
     license = lib.licenses.mit;
     homepage = "https://github.com/aszymanik/SleekXMPP";
     maintainers = with lib.maintainers; [ dotlambda ];

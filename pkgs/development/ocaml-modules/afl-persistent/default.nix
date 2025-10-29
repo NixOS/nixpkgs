@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, opaline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  opaline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "afl-persistent";
@@ -6,15 +13,18 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner  = "stedolan";
-    repo   = "ocaml-${pname}";
-    rev    = "v${version}";
+    owner = "stedolan";
+    repo = "ocaml-${pname}";
+    rev = "v${version}";
     sha256 = "06yyds2vcwlfr2nd3gvyrazlijjcrd1abnvkfpkaadgwdw3qam1i";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
 
   # don't run tests in buildPhase
   # don't overwrite test binary
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/stedolan/ocaml-afl-persistent";
-    description = "persistent-mode afl-fuzz for ocaml";
+    description = "Persistent-mode afl-fuzz for ocaml";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

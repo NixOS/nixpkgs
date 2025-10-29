@@ -1,30 +1,41 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, bison
-, cairo
-, flex
-, libX11
-, libXpm
-, pkg-config
-, tcl
-, tk
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  bison,
+  cairo,
+  flex,
+  libX11,
+  libXpm,
+  pkg-config,
+  tcl,
+  tk,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xschem";
-  version = "3.4.5";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "StefanSchippers";
     repo = "xschem";
     rev = version;
-    hash = "sha256-+ygwHkQOXmkoNgcuofwuaZcpYTAV6sOmvO4xeE+8DXE=";
+    hash = "sha256-ye97VJQ+2F2UbFLmGrZ8xSK9xFeF+Yies6fJKurPOD0=";
   };
 
-  nativeBuildInputs = [ bison flex pkg-config ];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ];
 
-  buildInputs = [ cairo libX11 libXpm tcl tk ];
+  buildInputs = [
+    cairo
+    libX11
+    libXpm
+    tcl
+    tk
+  ];
 
   hardeningDisable = [ "format" ];
 

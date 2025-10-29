@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   jsonschema,
   pytestCheckHook,
   python-dateutil,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "polyswarm-api";
-  version = "3.10.0";
+  version = "3.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,17 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polyswarm";
     repo = "polyswarm-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-3K0FdqsEjt5cTymgxmt0Ohud/+bsILe9bDclZXJqPV8=";
+    tag = version;
+    hash = "sha256-hf3TKUYkCgKqJYAQLMamcwDBl4uJG/8Gtv/DNHePcZI=";
   };
-
-  pythonRelaxDeps = [ "future" ];
-
 
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     jsonschema
     python-dateutil
     requests
@@ -50,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interface with the PolySwarm consumer APIs";
     homepage = "https://github.com/polyswarm/polyswarm-api";
-    changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${version}";
+    changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

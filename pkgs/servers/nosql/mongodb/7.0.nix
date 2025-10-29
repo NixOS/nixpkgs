@@ -3,8 +3,6 @@
   callPackage,
   sasl,
   boost,
-  Security,
-  CoreFoundation,
   cctools,
   avxSupport ? stdenv.hostPlatform.avxSupport,
   nixosTests,
@@ -16,8 +14,6 @@ let
     inherit
       sasl
       boost
-      Security
-      CoreFoundation
       cctools
       stdenv
       ;
@@ -25,8 +21,8 @@ let
 in
 buildMongoDB {
   inherit avxSupport;
-  version = "7.0.14";
-  sha256 = "sha256-3NUv/Rr6V0rH6zHCXJwHZ7ZQOqMJvYGessNVemUF6g0=";
+  version = "7.0.24";
+  sha256 = "sha256-ANPg60OAxwwq1FhRTMOQ0dHBOuKpob1sXnAZMJWhtds=";
   patches = [
     # ModuleNotFoundError: No module named 'mongo_tooling_metrics':
     # NameError: name 'SConsToolingMetrics' is not defined:
@@ -38,7 +34,8 @@ buildMongoDB {
 
     # mongodb-7_0's mozjs uses avx2 instructions
     # https://github.com/GermanAizek/mongodb-without-avx/issues/16
-  ] ++ lib.optionals (!avxSupport) [ ./mozjs-noavx.patch ];
+  ]
+  ++ lib.optionals (!avxSupport) [ ./mozjs-noavx.patch ];
 
   passthru.tests = {
     inherit (nixosTests) mongodb;

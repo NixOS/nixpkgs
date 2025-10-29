@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mscp";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "upa";
     repo = "mscp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-TWwvPLqGLhh/IE+hIz/jwaGLBoASs78Iqai1TxN7Wps=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5lX0b3JfjmQh/HlESRMNxqCe2qFRAEZoazysoy252dY=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/upa/mscp";
     mainProgram = "mscp";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.deshaw.members;
+    teams = [ lib.teams.deshaw ];
     platforms = lib.platforms.unix;
   };
 })

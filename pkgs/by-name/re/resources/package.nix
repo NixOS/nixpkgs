@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, glib
-, gtk4
-, libadwaita
-, dmidecode
-, util-linux
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  autoAddDriverRunpath,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  libadwaita,
+  dmidecode,
+  util-linux,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-RYpPg9dEasHkXF2eHpeCze5j0FC1+9/J0e2lRw8AdKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z4ZVj/nS4n3oqENSK87YJ8sQRnqK7c4tWzKHUD0Qw2s=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "resources-${finalAttrs.version}";
-    hash = "sha256-zliLpmunlxRsWv9N8AswVoRqcNy5PuI5NzNjaXyTiGk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-jHdEiK3nu9mN2A6biHq9Iu4bSniD74hGnKFBTt5xVDM=";
   };
 
   nativeBuildInputs = [
     appstream-glib
+    autoAddDriverRunpath
     desktop-file-utils
     meson
     ninja
@@ -71,12 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/nokyan/resources/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/nokyan/resources/releases/tag/v${finalAttrs.version}";
     description = "Monitor your system resources and processes";
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
     mainProgram = "resources";
-    maintainers = with lib.maintainers; [ lukas-heiligenbrunner ewuuwe ];
+    maintainers = with lib.maintainers; [
+      lukas-heiligenbrunner
+      ewuuwe
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

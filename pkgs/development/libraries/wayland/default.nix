@@ -1,32 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland-scanner
-, withTests ? stdenv.hostPlatform.isLinux
-, libffi
-, epoll-shim
-, withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
-, graphviz-nox
-, doxygen
-, libxslt
-, xmlto
-, python3
-, docbook_xsl
-, docbook_xml_dtd_45
-, docbook_xml_dtd_42
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  withTests ? stdenv.hostPlatform.isLinux,
+  libffi,
+  epoll-shim,
+  withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  graphviz-nox,
+  doxygen,
+  libxslt,
+  xmlto,
+  python3,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  docbook_xml_dtd_42,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-hk+yqDmeLQ7DnVbp2bdTwJN3W+rcYCLOgfRBkpqB5e0=";
+    url =
+      with finalAttrs;
+      "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
   };
 
   patches = [
@@ -35,13 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    # delete line containing os-wrappers-test, disables
-    # the building of os-wrappers-test
-    sed -i '/os-wrappers-test/d' tests/meson.build
   '';
 
-  outputs = [ "out" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
+    "man"
+  ];
   separateDebugInfo = true;
 
   mesonFlags = [
@@ -59,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     wayland-scanner
-  ] ++ lib.optionals withDocumentation [
+  ]
+  ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
     doxygen
     libxslt
@@ -71,9 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libffi
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     epoll-shim
-  ] ++ lib.optionals withDocumentation [
+  ]
+  ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
     docbook_xml_dtd_42
@@ -87,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
-    mainProgram = "wayland-scanner";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
       clients as well as a library implementation of the protocol.
@@ -99,7 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos codyopel qyliss ];
+    # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
+    badPlatforms = lib.platforms.darwin;
+    maintainers = with maintainers; [
+      codyopel
+      qyliss
+    ];
     pkgConfigModules = [
       "wayland-client"
       "wayland-cursor"

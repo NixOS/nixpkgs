@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   makeWrapper,
@@ -18,37 +17,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
-  version = "0.8.1";
+  # Don't forget to change passthru.abiVersion
+  version = "0.8.1-unstable-2025-10-05-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-    rev = "soapy-sdr-${finalAttrs.version}";
-    sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
-  };
 
-  patches = [
-    # Fix for https://github.com/pothosware/SoapySDR/issues/352
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapySDR/commit/10c05b3e52caaa421147d6b4623eccd3fc3be3f4.patch";
-      hash = "sha256-D7so6NSZiU6SXbzns04Q4RjSZW0FJ+MYobvvVpVMjws=";
-    })
-  ];
+    # update to include latest patch for newer cmake support
+    rev = "1667b4e6301d7ad47b340dcdcd6e9969bf57d843";
+    hash = "sha256-UCpYBUb2k1bHy1z2Mvmv+1ZX1BloSsPrTydFV3Ga3Os=";
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      libusb-compat-0_1
-      ncurses
-    ]
-    ++ lib.optionals usePython [
-      python
-      swig
-    ];
+  buildInputs = [
+    libusb-compat-0_1
+    ncurses
+  ]
+  ++ lib.optionals usePython [
+    python
+    swig
+  ];
 
   propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 
@@ -72,14 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    searchPath = "lib/SoapySDR/modules${lib.versions.majorMinor finalAttrs.version}";
+    # SOAPY_SDR_ABI_VERSION defined in include/SoapySDR/Version.h
+    abiVersion = "0.8-3";
+    searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [
+      markuskowa
+      numinit
+    ];
     mainProgram = "SoapySDRUtil";
     pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;

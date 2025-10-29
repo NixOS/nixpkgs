@@ -1,20 +1,22 @@
 {
   lib,
-  clang,
   dbus,
   eudev,
   fetchFromGitHub,
-  libdisplay-info,
+  installShellFiles,
+  libdisplay-info_0_2,
   libglvnd,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
+  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
   pkg-config,
   rustPlatform,
   seatd,
+  stdenv,
   systemd,
   wayland,
   withDbus ? true,
@@ -23,16 +25,21 @@
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "0.1.9";
+  version = "25.08";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RLD89dfjN0RVO86C/Mot0T7aduCygPGaYbog566F0Qo=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postPatch = ''
     patchShebangs resources/niri-session
@@ -40,37 +47,30 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-0.3.0" = "sha256-/3BO66yVoo63+5rwrZzoxhSTncvLyHdvtSaApFj3fBg=";
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
-    };
-  };
+  cargoHash = "sha256-lR0emU2sOnlncN00z6DwDIE2ljI+D2xoKqG3rS45xG0=";
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang
+    installShellFiles
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      libdisplay-info
-      libglvnd # For libEGL
-      libinput
-      libxkbcommon
-      mesa # For libgbm
-      pango
-      seatd
-      wayland # For libwayland-client
-    ]
-    ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
-    ++ lib.optional withScreencastSupport pipewire
-    ++ lib.optional withSystemd systemd # Includes libudev
-    ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
+  buildInputs = [
+    libdisplay-info_0_2
+    libglvnd # For libEGL
+    libinput
+    libxkbcommon
+    libgbm
+    pango
+    seatd
+    wayland # For libwayland-client
+  ]
+  ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
+  ++ lib.optional withScreencastSupport pipewire
+  ++ lib.optional withSystemd systemd # Includes libudev
+  ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
   buildFeatures =
     lib.optional withDbus "dbus"
@@ -79,17 +79,30 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withSystemd "systemd";
   buildNoDefaultFeatures = true;
 
-  postInstall =
-    ''
-      install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
-    ''
-    + lib.optionalString withDbus ''
-      install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
-    ''
-    + lib.optionalString withSystemd ''
-      install -Dm0755 resources/niri-session -t $out/bin
-      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
-    '';
+  postInstall = ''
+    install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
+    mv docs/wiki $doc/share/doc/niri/wiki
+
+    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+  ''
+  + lib.optionalString withDbus ''
+    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+  ''
+  + lib.optionalString (withSystemd || withDinit) ''
+    install -Dm0755 resources/niri-session -t $out/bin
+  ''
+  + lib.optionalString withSystemd ''
+    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+  ''
+  + lib.optionalString withDinit ''
+    install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd $pname \
+      --bash <($out/bin/niri completions bash) \
+      --fish <($out/bin/niri completions fish) \
+      --zsh <($out/bin/niri completions zsh)
+  '';
 
   env = {
     # Force linking with libEGL and libwayland-client
@@ -102,7 +115,17 @@ rustPlatform.buildRustPackage rec {
         "-Wl,--pop-state"
       ]
     );
+
+    # Upstream recommends setting the commit hash manually when in a
+    # build environment where the Git repository is unavailable.
+    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    NIRI_BUILD_COMMIT = "Nixpkgs";
   };
+
+  checkFlags = [ "--skip=::egl" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     providedSessions = [ "niri" ];
@@ -112,10 +135,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${version}";
+    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      iogamaster
       foo-dogsquared
       sodiboo
       getchoo
@@ -123,4 +145,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "niri";
     platforms = lib.platforms.linux;
   };
-}
+})

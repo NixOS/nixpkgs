@@ -3,22 +3,22 @@
   fetchFromGitHub,
   buildGhidraExtension,
 }:
-buildGhidraExtension rec {
+buildGhidraExtension (finalAttrs: {
   pname = "lightkeeper";
-  version = "1.1.1";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "WorksButNotTested";
     repo = "lightkeeper";
-    rev = version;
-    hash = "sha256-Emyo4GBrR725jDxRsStC6/4F9mYnRo3S3QY0GeB/BvI=";
+    rev = finalAttrs.version;
+    hash = "sha256-aGMWg6VQleKH/txlxpSw19QOotWZSqeW5Ve2SpWGhgA=";
   };
   preConfigure = ''
     cd lightkeeper
   '';
   meta = {
-    description = "A port of the Lighthouse plugin to GHIDRA.";
+    description = "Port of the Lighthouse plugin to GHIDRA";
     homepage = "https://github.com/WorksButNotTested/lightkeeper";
     license = lib.licenses.asl20;
   };
-}
+})

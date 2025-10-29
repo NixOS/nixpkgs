@@ -1,4 +1,5 @@
 {
+  config,
   autoPatchelfHook,
   boost,
   bzip2,
@@ -19,19 +20,21 @@
   opencv,
   pkg-config,
   stdenv,
-  tbb,
+  onetbb,
   xorg,
+  cudaPackages,
+  enableCuda ? config.cudaSupport,
 }:
 stdenv.mkDerivation {
   pname = "basalt-monado";
-  version = "0-unstable-2024-06-21";
+  version = "0-unstable-2025-09-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mateosss";
     repo = "basalt";
-    rev = "385c161f35720df3a6c606054565f9d49a1c5787";
-    hash = "sha256-+2/pc2OWDwE04xPcfHL5GGyhQ1ZTN6o7cCNAilDgd2Y=";
+    rev = "5337898271f5c2ce523258e93e80fd870130be31";
+    hash = "sha256-IoXZlXyOc5y9aSHBU3WCNhHi4L9xzHmbv6VMEvX2ZeE=";
     fetchSubmodules = true;
   };
 
@@ -54,9 +57,12 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv
-    tbb
+    opencv.cxxdev
+    onetbb
     xorg.libX11
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
@@ -68,7 +74,7 @@ stdenv.mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A fork of Basalt improved for tracking XR devices with Monado";
+    description = "Fork of Basalt improved for tracking XR devices with Monado";
     homepage = "https://gitlab.freedesktop.org/mateosss/basalt";
     license = lib.licenses.bsd3;
     mainProgram = "basalt_vio";

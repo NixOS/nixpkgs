@@ -1,24 +1,48 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
-
+{ lib, compression, ... }:
 {
-  name = "binary-cache";
+  name = "binary-cache-" + compression;
   meta.maintainers = with lib.maintainers; [ thomasjm ];
 
   nodes.machine =
-    { pkgs, ... }: {
+    { pkgs, ... }:
+    {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      environment.systemPackages = [ pkgs.python3 ];
-      system.extraDependencies = [ pkgs.hello.inputDerivation ];
+      environment.systemPackages = with pkgs; [
+        openssl
+        python3
+      ];
+
+      # We encrypt the binary cache before putting it on the machine so Nix
+      # doesn't bring any references along.
+      environment.etc."binary-cache.tar.gz.encrypted".source =
+        with pkgs;
+        runCommand "binary-cache.tar.gz.encrypted"
+          {
+            allowReferences = [ ];
+            nativeBuildInputs = [ openssl ];
+          }
+          ''
+            tar -czf tmp.tar.gz -C "${
+              mkBinaryCache {
+                rootPaths = [ hello ];
+                inherit compression;
+              }
+            }" .
+            openssl enc -aes-256-cbc -salt -in tmp.tar.gz -out $out -k mysecretpassword
+          '';
+
       nix.extraOptions = ''
         experimental-features = nix-command
       '';
     };
 
   testScript = ''
-    # Build the cache, then remove it from the store
-    cachePath = machine.succeed("nix-build --no-out-link -E 'with import <nixpkgs> {}; mkBinaryCache { rootPaths = [hello]; }'").strip()
-    machine.succeed("cp -r %s/. /tmp/cache" % cachePath)
-    machine.succeed("nix-store --delete " + cachePath)
+    # Decrypt the cache into /tmp/binary-cache.tar.gz
+    machine.succeed("openssl enc -d -aes-256-cbc -in /etc/binary-cache.tar.gz.encrypted -out /tmp/binary-cache.tar.gz -k mysecretpassword")
+
+    # Untar the cache into /tmp/cache
+    machine.succeed("mkdir /tmp/cache")
+    machine.succeed("tar -C /tmp/cache -xf /tmp/binary-cache.tar.gz")
 
     # Sanity test of cache structure
     status, stdout = machine.execute("ls /tmp/cache")
@@ -40,8 +64,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     if not match: raise Exception("Couldn't find hello store path in cache")
     storePath = match[1]
 
-    # Delete the store path
-    machine.succeed("nix-store --delete " + storePath)
+    # Make sure the store path doesn't exist yet
     machine.succeed("[ ! -d %s ] || exit 1" % storePath)
 
     # Should be able to build hello using the cache
@@ -57,4 +80,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     # Store path should exist in the store now
     machine.succeed("[ -d %s ] || exit 1" % storePath)
   '';
-})
+}

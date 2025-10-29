@@ -3,7 +3,7 @@
   breezy,
   build,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   git,
   pep517,
   pytestCheckHook,
@@ -14,21 +14,26 @@
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.49";
-  format = "setuptools";
+  version = "0.51";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZKZARFVCzyJpGWV8e3jQLZwcpbHCXX5m4OH/MlBg9BY=";
+  src = fetchFromGitHub {
+    owner = "mgedmin";
+    repo = "check-manifest";
+    tag = version;
+    hash = "sha256-tT6xQZwqJIsyrO9BjWweIeNgYaopziewerVBk0mFVYg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     build
     pep517
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     git
@@ -46,10 +51,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Check MANIFEST.in in a Python source package for completeness";
-    mainProgram = "check-manifest";
     homepage = "https://github.com/mgedmin/check-manifest";
     changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
+    mainProgram = "check-manifest";
   };
 }

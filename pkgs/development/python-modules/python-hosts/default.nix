@@ -3,22 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.7";
+  version = "1.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    pname = "python_hosts";
-    inherit version;
-    hash = "sha256-TFaZHiL2v/woCWgz3nh/kjUOhbfN1ghnBnJcVcTwSrk=";
+    inherit pname version;
+    hash = "sha256-XiU6aO6EhFVgj1g7TYMdbgg7IvjkU2DFoiwYikrB13A=";
   };
 
   build-system = [ setuptools ];

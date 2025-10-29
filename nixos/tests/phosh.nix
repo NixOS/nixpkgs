@@ -1,44 +1,51 @@
-import ./make-test-python.nix ({ pkgs, ...}: let
+{ pkgs, ... }:
+let
   pin = "1234";
-in {
+in
+{
   name = "phosh";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ zhaofengli ];
   };
 
   nodes = {
-    phone = { config, pkgs, ... }: {
-      users.users.nixos = {
-        isNormalUser = true;
-        password = pin;
-      };
+    phone =
+      { config, pkgs, ... }:
+      {
+        users.users.nixos = {
+          isNormalUser = true;
+          password = pin;
+        };
 
-      services.xserver.desktopManager.phosh = {
-        enable = true;
-        user = "nixos";
-        group = "users";
+        services.xserver.desktopManager.phosh = {
+          enable = true;
+          user = "nixos";
+          group = "users";
 
-        phocConfig = {
-          outputs.Virtual-1 = {
-            scale = 2;
+          phocConfig = {
+            outputs.Virtual-1 = {
+              scale = 2;
+            };
           };
         };
-      };
 
-      environment.systemPackages = [
-        pkgs.phosh-mobile-settings
-      ];
+        environment.systemPackages = [
+          pkgs.phosh-mobile-settings
+        ];
 
-      systemd.services.phosh = {
-        environment = {
-          # Accelerated graphics fail on phoc 0.20 (wlroots 0.15)
-          "WLR_RENDERER" = "pixman";
+        systemd.services.phosh = {
+          environment = {
+            # Accelerated graphics fail on phoc 0.20 (wlroots 0.15)
+            "WLR_RENDERER" = "pixman";
+          };
         };
-      };
 
-      virtualisation.resolution = { x = 720; y = 1440; };
-      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci,xres=720,yres=1440" ];
-    };
+        virtualisation.resolution = {
+          x = 720;
+          y = 1440;
+        };
+        virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci,xres=720,yres=1440" ];
+      };
   };
 
   enableOCR = true;
@@ -76,4 +83,4 @@ in {
        phone.wait_for_text("Tweak advanced mobile settings");
        phone.screenshot("05settings")
   '';
-})
+}

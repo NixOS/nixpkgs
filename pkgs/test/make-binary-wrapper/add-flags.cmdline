@@ -1,4 +1,0 @@
-    --append-flags "-foo -bar" \
-    --add-flags "-x -y -z" \
-    --add-flags -abc \
-    --add-flags "-g *.txt"

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "django-admin-datta";
-  version = "1.0.11";
+  version = "1.0.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jcX0PKyE2gHfaVJhXRvshJuZMfRJTloqIncNBLp3auc=";
+    hash = "sha256-65fUrV4FIbuVvNX93rgOCMjz4CoozMHEEVpzJqtbhKY=";
   };
 
   propagatedBuildInputs = [ django ];

@@ -1,18 +1,21 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "pufferpanel";
   meta.maintainers = [ lib.maintainers.tie ];
 
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.pufferpanel ];
-    services.pufferpanel = {
-      enable = true;
-      extraPackages = [ pkgs.netcat ];
-      environment = {
-        PUFFER_PANEL_REGISTRATIONENABLED = "false";
-        PUFFER_PANEL_SETTINGS_COMPANYNAME = "NixOS";
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.pufferpanel ];
+      services.pufferpanel = {
+        enable = true;
+        extraPackages = [ pkgs.netcat ];
+        environment = {
+          PUFFER_PANEL_REGISTRATIONENABLED = "false";
+          PUFFER_PANEL_SETTINGS_COMPANYNAME = "NixOS";
+        };
       };
     };
-  };
 
   testScript = ''
     import shlex
@@ -71,4 +74,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed(f"{curl} -X POST -H {authHeader} {baseURL}/proxy/daemon/server/{serverID}/start")
     machine.wait_for_open_port(serverPort)
   '';
-})
+}

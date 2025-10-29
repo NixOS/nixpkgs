@@ -1,17 +1,24 @@
-{ ocamlPackages
-, fetchFromGitHub
-, lib
-, zlib
-, pkg-config
-, cacert
-, gmp
-, libev
-, autoconf
-, sqlite
-, stdenv
+{
+  ocamlPackages,
+  fetchFromGitHub,
+  lib,
+  zlib,
+  pkg-config,
+  cacert,
+  gmp,
+  libev,
+  autoconf,
+  sqlite,
+  stdenv,
 }:
 let
-  mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
+  mkCombyPackage =
+    {
+      pname,
+      extraBuildInputs ? [ ],
+      extraNativeInputs ? [ ],
+      preBuild ? "",
+    }:
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
       version = "1.8.1";
@@ -41,7 +48,8 @@ let
         ocamlPackages.ppx_deriving_yojson
         ocamlPackages.ppx_sexp_conv
         ocamlPackages.ppx_sexp_message
-      ] ++ extraBuildInputs;
+      ]
+      ++ extraBuildInputs;
 
       nativeCheckInputs = [ cacert ];
 
@@ -50,11 +58,15 @@ let
         mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
+        broken = true; # Not compatible with ocamlPackages.tar ≥ 3
       };
     };
 
   combyKernel = mkCombyPackage { pname = "comby-kernel"; };
-  combySemantic = mkCombyPackage { pname = "comby-semantic"; extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ]; };
+  combySemantic = mkCombyPackage {
+    pname = "comby-semantic";
+    extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ];
+  };
 in
 mkCombyPackage {
   pname = "comby";
@@ -91,10 +103,13 @@ mkCombyPackage {
     ocamlPackages.dune-configurator
     combyKernel
     combySemantic
-  ] ++ (if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
-    [ ocamlPackages.hack_parallel ]
-  else
-    [ ]);
+  ]
+  ++ (
+    if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
+      [ ocamlPackages.hack_parallel ]
+    else
+      [ ]
+  );
 
   extraNativeInputs = [
     autoconf

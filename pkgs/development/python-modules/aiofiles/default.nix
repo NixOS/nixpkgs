@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = "aiofiles";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uDKDMSNbMIlAaifpEBh1+q2bdZNUia8pPb30IOIgOAE=";
   };
 
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Tinche/aiofiles";
     changelog = "https://github.com/Tinche/aiofiles/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

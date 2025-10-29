@@ -1,10 +1,8 @@
 {
   lib,
-  apple-sdk_11,
   apple-sdk_15,
   bison,
   bluez,
-  fetchFromGitHub,
   flex,
   mkAppleDerivation,
   stdenv,
@@ -28,26 +26,7 @@ let
       unifdef -x 1 -DPRIVATE -o "$out/include/net/droptap.h" '${xnu}/bsd/net/droptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/iptap.h" '${xnu}/bsd/net/iptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/pktap.h" '${xnu}/bsd/net/pktap.h'
-
-      cat <<EOF > "$out/include/net/bpf.h"
-      #pragma once
-      #include_next <net/bpf.h>
-      $(sed -n \
-        -e '/^struct bpf_comp_stats\s*{/,/};/p' \
-        -e '/^struct bpf_hdr_ext\s*{/,/};/p' \
-        -e '/^#define BIOCGBATCHWRITE\s/p' \
-        -e '/^#define BIOCGHDRCOMPSTATS\s/p' \
-        -e '/^#define BIOCGIFATTACHCOUNT\s/p' \
-        -e '/^#define BIOCGWRITEMAX\s/p' \
-        -e '/^#define BIOCSBATCHWRITE\s/p' \
-        -e '/^#define BIOCSEXTHDR\s/p' \
-        -e '/^#define BIOCSHEADDROP\s/p' \
-        -e '/^#define BIOCSPKTHDRV2\s/p' \
-        -e '/^#define BIOCSTRUNCATE\s/p' \
-        -e '/^#define BIOCSWANTPKTAP\s/p' \
-        -e '/^#define BIOCSWRITEMAX\s/p' \
-        '${xnu}/bsd/net/bpf.h')
-      EOF
+      unifdef -x 1 -DPRIVATE -o "$out/include/net/bpf.h" '${xnu}/bsd/net/bpf.h'
 
       cat <<EOF > "$out/include/net/if.h"
       #pragma once
@@ -92,12 +71,15 @@ mkAppleDerivation {
   postPatch = ''
     substituteInPlace libpcap/Makefile.in \
       --replace-fail '@PLATFORM_C_SRC@' '@PLATFORM_C_SRC@ pcap-darwin.c pcap-util.c pcapng.c'
+    substituteInPlace libpcap/pcap/pcap.h \
+      --replace-fail '#if PRIVATE' '#if 1'
   '';
 
   configureFlags = [
     (lib.withFeatureAs true "pcap" (if stdenv.hostPlatform.isLinux then "linux" else "bpf"))
     (lib.enableFeature withRemote "remote")
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.enableFeature false "universal") ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.enableFeature false "universal") ];
 
   preConfigure = ''
     cd libpcap
@@ -108,9 +90,8 @@ mkAppleDerivation {
   nativeBuildInputs = [
     bison
     flex
-  ] ++ lib.optionals withBluez [ bluez.dev ];
-
-  buildInputs = [ apple-sdk_11 ];
+  ]
+  ++ lib.optionals withBluez [ bluez.dev ];
 
   meta = {
     description = "Packet Capture Library (with Apple modifications)";

@@ -4,8 +4,8 @@ let
   sources = (lib.importJSON ./sources.json).hotspot.mac;
   common = opts: callPackage (import ./jdk-darwin-base.nix opts) { };
 
-  # EOL = [ "This JDK version has reached End of Life." ];
 in
+# EOL = [ "This JDK version has reached End of Life." ];
 {
   jdk-8 = common { sourcePerArch = sources.jdk.openjdk8; };
   jre-8 = common { sourcePerArch = sources.jre.openjdk8; };
@@ -21,4 +21,7 @@ in
 
   jdk-23 = common { sourcePerArch = sources.jdk.openjdk23; };
   jre-23 = common { sourcePerArch = sources.jre.openjdk23; };
+
+  jdk-25 = common { sourcePerArch = sources.jdk.openjdk25; };
+  jre-25 = common { sourcePerArch = sources.jre.openjdk25; };
 }

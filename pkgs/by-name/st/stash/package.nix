@@ -1,50 +1,145 @@
 {
+  buildGoModule,
+  fetchFromGitHub,
+  fetchYarnDeps,
   lib,
+  nixosTests,
+  nodejs,
+  stash,
   stdenv,
-  fetchurl,
+  testers,
+  yarnBuildHook,
+  yarnConfigHook,
 }:
 let
-
-  version = "0.25.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux";
-      hash = "sha256-Rb4x6iKx6T9NPuWWDbNaz+35XPzLqZzSm0psv+k2Gw4=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux-arm64v8";
-      hash = "sha256-6qPyIYKFkhmBNO47w9E91FSKlByepBOnl0MNJighGSc=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-macos";
-      hash = "sha256-W8+rgqWUDTOB8ykGO2GL9tKEjaDXdx9LpFg0TAtJsxM=";
-    };
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit version;
+  inherit (lib.importJSON ./version.json)
+    gitHash
+    srcHash
+    vendorHash
+    version
+    yarnHash
+    ;
 
   pname = "stash";
+in
+buildGoModule (
+  finalAttrs:
+  let
+    frontend = stdenv.mkDerivation (final: {
+      pname = "${finalAttrs.pname}-ui";
+      inherit (finalAttrs) version gitHash;
+      src = "${finalAttrs.src}/ui/v2.5";
 
-  src = fetchurl { inherit (sources.${stdenv.system}) url hash; };
+      yarnOfflineCache = fetchYarnDeps {
+        yarnLock = "${final.src}/yarn.lock";
+        hash = finalAttrs.yarnHash;
+      };
 
-  dontUnpack = true;
+      nativeBuildInputs = [
+        yarnConfigHook
+        yarnBuildHook
+        # Needed for executing package.json scripts
+        nodejs
+      ];
 
-  installPhase = ''
-    runHook preInstall
+      postPatch = ''
+        substituteInPlace codegen.ts \
+          --replace-fail "../../graphql/" "${finalAttrs.src}/graphql/"
+      '';
 
-    install -Dm755 $src $out/bin/stash
+      buildPhase = ''
+        runHook preBuild
 
-    runHook postInstall
-  '';
+        export HOME=$(mktemp -d)
+        export VITE_APP_DATE='1970-01-01 00:00:00'
+        export VITE_APP_GITHASH=${finalAttrs.gitHash}
+        export VITE_APP_STASH_VERSION=v${finalAttrs.version}
+        export VITE_APP_NOLEGACY=true
 
-  meta = with lib; {
-    description = "Stash is a self-hosted porn app";
-    homepage = "https://github.com/stashapp/stash";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Golo300 ];
-    platforms = builtins.attrNames sources;
-    mainProgram = "stash";
-  };
-})
+        yarn --offline run gqlgen
+        yarn --offline build
+
+        mv build $out
+
+        runHook postBuild
+      '';
+
+      dontInstall = true;
+      dontFixup = true;
+    });
+  in
+  {
+    inherit
+      pname
+      version
+      gitHash
+      yarnHash
+      vendorHash
+      ;
+
+    src = fetchFromGitHub {
+      owner = "stashapp";
+      repo = "stash";
+      tag = "v${finalAttrs.version}";
+      hash = srcHash;
+    };
+
+    ldflags = [
+      "-s"
+      "-w"
+      "-X 'github.com/stashapp/stash/internal/build.buildstamp=1970-01-01 00:00:00'"
+      "-X 'github.com/stashapp/stash/internal/build.githash=${finalAttrs.gitHash}'"
+      "-X 'github.com/stashapp/stash/internal/build.version=v${finalAttrs.version}'"
+      "-X 'github.com/stashapp/stash/internal/build.officialBuild=false'"
+    ];
+    tags = [
+      "sqlite_stat4"
+      "sqlite_math_functions"
+    ];
+
+    subPackages = [ "cmd/stash" ];
+
+    postPatch = ''
+      cp -a ${frontend} ui/v2.5/build
+    '';
+
+    preBuild = ''
+      # `go mod tidy` requires internet access and does nothing
+      echo "skip_mod_tidy: true" >> gqlgen.yml
+      # remove `-trimpath` fron `GOFLAGS` because `gqlgen` does not work with it
+      GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
+    '';
+
+    strictDeps = true;
+
+    passthru = {
+      inherit frontend;
+      updateScript = ./update.py;
+      tests = {
+        inherit (nixosTests) stash;
+        version = testers.testVersion {
+          package = stash;
+          version = "v${finalAttrs.version} (${finalAttrs.gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
+        };
+      };
+    };
+
+    meta = {
+      mainProgram = "stash";
+      description = "Organizer for your adult videos/images";
+      license = lib.licenses.agpl3Only;
+      homepage = "https://stashapp.cc/";
+      changelog = "https://github.com/stashapp/stash/blob/v${finalAttrs.version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}0.md";
+      maintainers = with lib.maintainers; [
+        Golo300
+        DrakeTDL
+      ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
+  }
+)

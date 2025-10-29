@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
   html5lib,
   pytestCheckHook,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-HeqUf5vn6gq2EPe7xKTja0XWv9/O6imtPTiaiKGVfd8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-cookietests-python3.13.patch";
+      url = "https://github.com/python-mechanize/mechanize/commit/0c1cd4b65697dee4e4192902c9a2965d94700502.patch";
+      hash = "sha256-Xlx8ZwHkFbJqeWs+/fllYZt3CZRu9rD8bMHHPuUlRv4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

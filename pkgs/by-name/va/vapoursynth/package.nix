@@ -12,20 +12,19 @@
   zimg,
   libass,
   python3,
-  libiconv,
   testers,
-  ApplicationServices,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "70";
+  version = "72";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo = "vapoursynth";
     rev = "R${version}";
-    hash = "sha256-jkRjFKHNTekXluSKQ33QqsGRy7LKnkmG97U5WIjI6EM=";
+    hash = "sha256-LRRz4471Rl/HwJ14zAkU/f2Acuofja8c0pGkuWihhsM=";
   };
 
   nativeBuildInputs = [
@@ -33,24 +32,22 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeWrapper
   ];
-  buildInputs =
-    [
-      zimg
-      libass
-      (python3.withPackages (
-        ps: with ps; [
-          sphinx
-          cython
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      ApplicationServices
-    ];
+  buildInputs = [
+    zimg
+    libass
+    (python3.withPackages (
+      ps: with ps; [
+        sphinx
+        cython
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   enableParallelBuilding = true;
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = rec {
     # If vapoursynth is added to the build inputs of mpv and then
@@ -80,7 +77,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Export weak symbol nixPluginDir to permit override of default plugin path
     sed -E -i \
       -e 's/(VS_PATH_PLUGINDIR)/(nixPluginDir ? nixPluginDir : \1)/g' \
@@ -110,11 +107,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "Video processing framework with the future in mind";
     homepage = "http://www.vapoursynth.com/";
     license = licenses.lgpl21;
-    platforms = platforms.x86_64;
+    platforms = platforms.all;
     maintainers = with maintainers; [
       rnhmjoj
       sbruder

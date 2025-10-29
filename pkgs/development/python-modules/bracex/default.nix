@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.5.post1";
+  version = "2.6";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EsUJUkFb+nc9LZzLjnllG4zbHzGkL2CRuAT2uitKZrY=";
+    hash = "sha256-mPE0fNd+Iu6NlnowrU4xCyM/d1Tb8x/z/Ot2FFukfcc=";
   };
 
   nativeBuildInputs = [ hatchling ];

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   ###### interface
 
@@ -14,6 +19,8 @@
         type = lib.types.bool;
         default = false;
       };
+
+      package = lib.mkPackageOption pkgs "iio-sensor-proxy" { };
     };
   };
 
@@ -23,10 +30,10 @@
 
     boot.initrd.availableKernelModules = [ "hid-sensor-hub" ];
 
-    environment.systemPackages = with pkgs; [ iio-sensor-proxy ];
+    environment.systemPackages = [ config.hardware.sensor.iio.package ];
 
-    services.dbus.packages = with pkgs; [ iio-sensor-proxy ];
-    services.udev.packages = with pkgs; [ iio-sensor-proxy ];
-    systemd.packages = with pkgs; [ iio-sensor-proxy ];
+    services.dbus.packages = [ config.hardware.sensor.iio.package ];
+    services.udev.packages = [ config.hardware.sensor.iio.package ];
+    systemd.packages = [ config.hardware.sensor.iio.package ];
   };
 }

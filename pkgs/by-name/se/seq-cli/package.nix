@@ -18,7 +18,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   projectFile = "src/SeqCli/SeqCli.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnetInstallFlags = "-f net8.0";
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -32,7 +32,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   meta = {
-    description = "The Seq command-line client. Administer, log, ingest, search, from any OS";
+    description = "Seq command-line client. Administer, log, ingest, search, from any OS";
     homepage = "https://github.com/datalust/seqcli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hausken ];

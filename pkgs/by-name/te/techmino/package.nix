@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, makeWrapper
-, makeDesktopItem
-, love
-, luajit
-, writeShellScript
-, nix-update
-, libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; }
-, ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; }
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  makeWrapper,
+  makeDesktopItem,
+  love,
+  luajit,
+  writeShellScript,
+  nix-update,
+  libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; },
+  ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; },
 }:
 
 let
   pname = "techmino";
-  description = "A modern Tetris clone with many features";
+  description = "Modern Tetris clone with many features";
 
   desktopItem = makeDesktopItem {
     name = pname;

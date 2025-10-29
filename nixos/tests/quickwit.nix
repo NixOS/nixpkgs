@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   # Define an example Quickwit index schema,
@@ -54,13 +54,14 @@ in
   meta.maintainers = [ pkgs.lib.maintainers.happysalada ];
 
   nodes = {
-    quickwit = { config, pkgs, ... }: {
-      services.quickwit.enable = true;
-    };
+    quickwit =
+      { config, pkgs, ... }:
+      {
+        services.quickwit.enable = true;
+      };
   };
 
-  testScript =
-  ''
+  testScript = ''
     quickwit.wait_for_unit("quickwit")
     quickwit.wait_for_open_port(7280)
     quickwit.wait_for_open_port(7281)
@@ -100,4 +101,4 @@ in
       "systemd-analyze security quickwit.service | grep -v '✓'"
     ))
   '';
-})
+}

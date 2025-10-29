@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchzip
-, cups
-, autoPatchelfHook
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  autoPatchelfHook,
+  python3Packages,
 
-# Sets the default paper format: use "EU" for A4, or "Global" for Letter
-, region ? "EU"
+  # Sets the default paper format: use "EU" for A4, or "Global" for Letter
+  region ? "EU",
 }:
 
 assert region == "Global" || region == "EU";
@@ -16,24 +17,39 @@ let
   kyodialog_version_long = "9.0";
   date = "20221003";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyocera-3500-4500";
   version = "${kyodialog_version_long}-${date}";
 
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchurl {
     # Steps to find the release download URL:
     # 1. Go to https://www.kyoceradocumentsolutions.us/en/support/downloads.html
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
+    #
+    # Where there's no version encoded in the vendor URL, prefer a
+    # web.archive.org URL.  That means that if the vendor updates the package
+    # at this URL, the package won't suddenly stop building.
     urls = [
-      "https://dam.kyoceradocumentsolutions.com/content/dam/gdam_dc/dc_global/executables/driver/product_085/KyoceraLinuxPackages-${date}.tar.gz"
+      "https://web.archive.org/web/20241123173620/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
+      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
     ];
     hash = "sha256-pqBtfKiQo/+cF8fG5vsEQvr8UdxjGsSShXI+6bun03c=";
-    extension = "tar.gz";
-    stripRoot = false;
+    recursiveHash = true;
+    downloadToTemp = true;
     postFetch = ''
+      unpackDir="$TMPDIR/unpack"
+      mkdir "$unpackDir"
+      cd "$unpackDir"
+
+      mv "$downloadedFile" "$TMPDIR/source.tar.gz.gz"
+      gunzip "$TMPDIR/source.tar.gz.gz"
+      unpackFile "$TMPDIR/source.tar.gz"
+      chmod -R +w "$unpackDir"
+      mv "$unpackDir" "$out"
+
       # delete redundant Linux package dirs to reduce size in the Nix store; only keep Debian
       rm -r $out/{CentOS,Fedora,OpenSUSE,Redhat,Ubuntu}
     '';
@@ -41,23 +57,34 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  unpackCmd = let
-    platforms = {
-      x86_64-linux = "amd64";
-      i686-linux = "i386";
-    };
-    platform = platforms.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
-  in ''
-    ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version_long}-0_${platform}.deb" data.tar.gz | tar -xz
-  '';
+  unpackCmd =
+    let
+      platforms = {
+        x86_64-linux = "amd64";
+        i686-linux = "i386";
+      };
+      platform =
+        platforms.${stdenv.hostPlatform.system}
+          or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    in
+    ''
+      ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version_long}-0_${platform}.deb" data.tar.gz | tar -xz
+    '';
 
-  nativeBuildInputs = [ autoPatchelfHook python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    python3Packages.wrapPython
+  ];
 
   buildInputs = [ cups ];
 
   # For lib/cups/filter/kyofilter_pre_H.
   # The source already contains a copy of pypdf3, but we use the Nix package
-  propagatedBuildInputs = with python3Packages; [ reportlab pypdf3 setuptools ];
+  propagatedBuildInputs = with python3Packages; [
+    reportlab
+    pypdf3
+    setuptools
+  ];
 
   installPhase = ''
     # allow cups to find the ppd files
@@ -81,6 +108,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.me-and ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

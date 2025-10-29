@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, evolution-data-server
-, libical
-, libgee
-, libhandy
-, libxml2
-, libsoup
-, elementary-calendar
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  wingpanel,
+  evolution-data-server,
+  libical,
+  libgee,
+  libhandy,
+  libxml2,
+  elementary-calendar,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,14 +25,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-datetime";
     rev = version;
     sha256 = "sha256-iR80pF3KUe0WboFm2/f1ZK9/wER2LfmRBd92e8jGTHs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       elementary_calendar = elementary-calendar;
     })
   ];
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
-    libsoup
     wingpanel
   ];
 
@@ -65,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

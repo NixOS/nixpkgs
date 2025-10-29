@@ -1,41 +1,47 @@
-{ lib
-, stdenv
-, appstream
-, cargo
-, desktop-file-utils
-, fetchFromGitea
-, gitUpdater
-, gtk4
-, libadwaita
-, libepoxy
-, libglvnd
-, meson
-, mpv
-, ninja
-, openssl
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  appstream,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitea,
+  gitUpdater,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libglvnd,
+  meson,
+  mpv,
+  ninja,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "delfin";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
-    hash = "sha256-F4ipIOqMS42nXHRSRpzIlTh61g2xjpog7Zmxn6D29nE=";
+    hash = "sha256-2ussvPXMX4wGE9N+Zh8KYIjbbqEKkPaNymN1Oqj8w8U=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-ciw178jBwz4I6I1x6iI45RJ2ITw0JfukLWNyBmE3FZg=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-zZc2+0oskptpWZE4fyVcR4QHxqzpj71GXMXNXMK4an0=";
   };
+
+  postPatch = ''
+    substituteInPlace delfin/meson.build --replace-fail \
+      "'delfin' / rust_target / meson.project_name()" \
+      "'delfin' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
 
   nativeBuildInputs = [
     appstream
@@ -62,6 +68,9 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "profile" "release")
   ];
 
+  # For https://codeberg.org/avery42/delfin/src/commit/820b466bfd47f71c12e9b2cabb698e8f78942f41/delfin/meson.build#L47-L48
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
@@ -70,7 +79,10 @@ stdenv.mkDerivation rec {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ colinsane avery ];
+    maintainers = with maintainers; [
+      colinsane
+      avery
+    ];
     mainProgram = "delfin";
     platforms = platforms.linux;
   };

@@ -13,9 +13,11 @@
   attrs,
   binaryornot,
   boolean-py,
-  debian,
+  click,
+  python-debian,
   jinja2,
   license-expression,
+  python-magic,
   tomlkit,
 
   # test dependencies
@@ -25,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "4.0.3";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
+    tag = "v${version}";
+    hash = "sha256-vWBM8bvzsMAT8ONmdx3qy00SPySLsBBXPOd3sgQs/ig=";
   };
 
   outputs = [
@@ -54,9 +56,11 @@ buildPythonPackage rec {
     attrs
     binaryornot
     boolean-py
-    debian
+    click
+    python-debian
     jinja2
     license-expression
+    python-magic
     tomlkit
   ];
 

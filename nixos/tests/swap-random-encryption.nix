@@ -1,9 +1,14 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "swap-random-encryption";
 
   nodes.machine =
-    { config, pkgs, lib, ... }:
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     {
       environment.systemPackages = [ pkgs.cryptsetup ];
 
@@ -77,4 +82,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       if not any(key_size_pattern.fullmatch(line) for line in results):
         raise Exception ("swap device encryption does not use the key size specified in the configuration")
   '';
-})
+}

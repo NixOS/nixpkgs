@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
-, pkg-config, gettext, xmlsec, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  gwenhywfar,
+  libtool,
+  libxml2,
+  libxslt,
+  pkg-config,
+  gettext,
+  xmlsec,
+  zlib,
 }:
 
 let
   inherit ((import ./sources.nix).aqbanking) hash releaseId version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "aqbanking";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/aqbanking-${version}.tar.gz";
     inherit hash;
   };
 
@@ -23,14 +35,25 @@ in stdenv.mkDerivation rec {
     }' configure
   '';
 
-  buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
+  buildInputs = [
+    gmp
+    gwenhywfar
+    libtool
+    libxml2
+    libxslt
+    xmlsec
+    zlib
+  ];
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
 
   meta = with lib; {
     description = "Interface to banking tasks, file formats and country information";
     homepage = "https://www.aquamaniac.de/rdm/";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

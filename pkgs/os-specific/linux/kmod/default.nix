@@ -1,16 +1,35 @@
-{ stdenv, lib, fetchzip, fetchpatch, autoconf, automake, docbook_xml_dtd_42
-, docbook_xml_dtd_43, docbook_xsl, gtk-doc, libtool, pkg-config
-, libxslt, xz, zstd, elf-header
-, withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform
-, withStatic ? stdenv.hostPlatform.isStatic
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  autoconf,
+  automake,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  gtk-doc,
+  libtool,
+  pkg-config,
+  libxslt,
+  xz,
+  zstd,
+  elf-header,
+  withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withStatic ? stdenv.hostPlatform.isStatic,
+  gitUpdater,
 }:
 
 let
-  systems = [ "/run/booted-system/kernel-modules" "/run/current-system/kernel-modules" "" ];
+  systems = [
+    "/run/booted-system/kernel-modules"
+    "/run/current-system/kernel-modules"
+    ""
+  ];
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kmod";
   version = "31";
 
@@ -24,17 +43,34 @@ in stdenv.mkDerivation rec {
     hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ]
+  ++ lib.optional withDevdoc "devdoc";
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoconf automake docbook_xsl libtool libxslt pkg-config
+    autoconf
+    automake
+    docbook_xsl
+    libtool
+    libxslt
+    pkg-config
 
     docbook_xml_dtd_42 # for the man pages
-  ] ++ lib.optionals withDevdoc [ docbook_xml_dtd_43 gtk-doc ];
-  buildInputs = [ xz zstd ]
-    # gtk-doc is looked for with pkg-config
-    ++ lib.optionals withDevdoc [ gtk-doc ];
+  ]
+  ++ lib.optionals withDevdoc [
+    docbook_xml_dtd_43
+    gtk-doc
+  ];
+  buildInputs = [
+    xz
+    zstd
+  ]
+  # gtk-doc is looked for with pkg-config
+  ++ lib.optionals withDevdoc [ gtk-doc ];
 
   preConfigure = ''
     ./autogen.sh
@@ -46,7 +82,8 @@ in stdenv.mkDerivation rec {
     "--with-zstd"
     "--with-modulesdirs=${modulesDirs}"
     (lib.enableFeature withDevdoc "gtk-doc")
-  ] ++ lib.optional withStatic "--enable-static";
+  ]
+  ++ lib.optional withStatic "--enable-static";
 
   patches = [
     ./module-dir.patch
@@ -55,7 +92,8 @@ in stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
       hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
     })
-  ] ++ lib.optional withStatic ./enable-static.patch;
+  ]
+  ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do
@@ -83,7 +121,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
-    license = with licenses; [ lgpl21Plus gpl2Plus ]; # GPLv2+ for tools
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ]; # GPLv2+ for tools
     platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];
   };

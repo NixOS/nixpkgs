@@ -2,11 +2,22 @@ let
   modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
 in
 
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 let
   withCodeAsKey = f: { code, ... }@attrs: lib.nameValuePair code (f attrs);
-  mkModelPackage = { name, code, version, url, checksum }:
+  mkModelPackage =
+    {
+      name,
+      code,
+      version,
+      url,
+      checksum,
+    }:
     stdenvNoCC.mkDerivation {
       pname = "translatelocally-model-${code}";
       version = toString version;
@@ -27,15 +38,16 @@ let
       '';
 
       meta = {
-        description = "translateLocally model - ${name}";
+        description = "TranslateLocally model - ${name}";
         homepage = "https://translatelocally.com/";
         # https://github.com/browsermt/students/blob/master/LICENSE.md
         license = lib.licenses.cc-by-sa-40;
       };
     };
-  allModelPkgs =
-    lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
+  allModelPkgs = lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
 
-in allModelPkgs // {
+in
+allModelPkgs
+// {
   passthru.updateScript = ./update.sh;
 }
