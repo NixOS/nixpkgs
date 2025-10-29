@@ -60,6 +60,9 @@ lib.extendMkDerivation {
     # Passed via passthru
     "url"
 
+    # Additional stdenv.mkDerivation arguments from derived fetchers.
+    "derivationArgs"
+
     # Hash attributes will be map to the corresponding outputHash*
     "hash"
     "sha1"
@@ -139,6 +142,11 @@ lib.extendMkDerivation {
 
       # Additional packages needed as part of a fetch
       nativeBuildInputs ? [ ],
+
+      # Additional stdenvNoCC.mkDerivation arguments.
+      # It is typically for derived fetchers to pass down additional arguments,
+      # and the specified arguments have lower precedence than other mkDerivation arguments.
+      derivationArgs ? { },
     }@args:
 
     let
@@ -228,7 +236,8 @@ lib.extendMkDerivation {
           "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
     in
 
-    {
+    derivationArgs
+    // {
       name =
         if pname != null && version != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
