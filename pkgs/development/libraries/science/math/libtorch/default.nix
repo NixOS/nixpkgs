@@ -85,7 +85,7 @@ effectiveStdenv.mkDerivation rec {
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ]; # junjihashimoto
+    maintainers = [ ]; # junjihashimoto
     platforms = [
       #"aarch64-darwin"
       "x86_64-linux"
