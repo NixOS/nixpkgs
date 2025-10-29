@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "stardust-xr-server";
     maintainers = lib.teams.stardust-xr.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "phobetor";
     maintainers = lib.teams.stardust-xr.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
