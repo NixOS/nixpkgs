@@ -12968,8 +12968,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
-
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
     boost = boost179;
   };

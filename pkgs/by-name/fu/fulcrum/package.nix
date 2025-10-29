@@ -3,12 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  qmake,
   python3,
-  qtbase,
   rocksdb_7_10,
   zeromq,
   nix-update-script,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,12 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
+    libsForQt5.qmake
   ];
 
   buildInputs = [
     python3
-    qtbase
+    libsForQt5.qtbase
     rocksdb_7_10
     zeromq
   ];
