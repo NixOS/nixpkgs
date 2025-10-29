@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Zoom / magnifier utility for wayland compositors";
     homepage = "https://github.com/negrel/wooz";
     license = licenses.mit;
