@@ -328,7 +328,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       echo "ERROR: tests.overriding: Encountering failed tests."
       for testName in "''${!testResults[@]}"; do
         if [[ -z "''${testResults[$testName]}" ]]; then
-          echo "- $testName" >&2
+          echo "- $testName"
         fi
       done
       echo "To inspect the expected and actual result, "
