@@ -13180,8 +13180,6 @@ with pkgs;
     pythonSupport = true;
   };
 
-  leela-zero = libsForQt5.callPackage ../games/leela-zero { };
-
   legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
   liquidwar = callPackage ../games/liquidwar {
