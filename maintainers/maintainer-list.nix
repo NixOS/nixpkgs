@@ -23219,6 +23219,13 @@
     githubId = 72168352;
     matrix = "@schrobingus:matrix.org";
   };
+  schromp = {
+    email = "schromp@echsen.club";
+    github = "schromp";
+    githubId = 103186360;
+    matrix = "@schromp:echsen.club";
+    name = "schromp";
+  };
   Schweber = {
     github = "Schweber";
     githubId = 64630479;
