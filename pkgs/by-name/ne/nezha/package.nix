@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.14.3";
+  version = "1.14.9";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -58,7 +58,7 @@ buildGoModule {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-ORPu7mCNqHfuXq/nB3TuNoevbw5ZMvZFetR6NPX/b3U=";
+    hash = "sha256-q4LxqoelZ0Haz8rArINOPvopQQKGnkqIMZ2INo/2C3c=";
   };
 
   proxyVendor = true;
@@ -96,7 +96,7 @@ buildGoModule {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
   '';
 
-  vendorHash = "sha256-e4FlXKE9A7WpZpafSv0Ais97cyta56ElD9pL4eIvnUk=";
+  vendorHash = "sha256-Q+ur9hIG0xVJHdi79K5e4sV8xuR45qp195ptEDbHAvc=";
 
   ldflags = [
     "-s"
