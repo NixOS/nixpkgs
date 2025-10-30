@@ -579,10 +579,16 @@ rec {
     {
       name,
       compressor ? "gz",
+      meta ? { },
       ...
     }@args:
     let
-      stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
+      stream = streamLayeredImage (
+        removeAttrs args [
+          "compressor"
+          "meta"
+        ]
+      );
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
@@ -592,6 +598,7 @@ rec {
         inherit stream;
       };
       nativeBuildInputs = compress.nativeInputs;
+      inherit meta;
     } "${stream} | ${compress.compress} > $out"
   );
 
@@ -641,6 +648,8 @@ rec {
       includeNixDB ? false,
       # Deprecated.
       contents ? null,
+      # Meta options to set on the resulting derivation.
+      meta ? { },
     }:
 
     let
@@ -735,6 +744,7 @@ rec {
                 lib.head (
                   lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath))
                 );
+            inherit meta;
           }
           ''
             ${lib.optionalString (tag == null) ''
@@ -1008,6 +1018,7 @@ rec {
       includeStorePaths ? true,
       includeNixDB ? false,
       passthru ? { },
+      meta ? { },
       # Pipeline used to produce docker layers. If not set, popularity contest
       # algorithm is used. If set, maxLayers is ignored as the author of the
       # pipeline can use one of the available functions (like "limit_layers")
@@ -1233,6 +1244,7 @@ rec {
               isExe = true;
             };
             nativeBuildInputs = [ makeWrapper ];
+            inherit meta;
           }
           ''
             makeWrapper $streamScript $out --add-flags $conf
