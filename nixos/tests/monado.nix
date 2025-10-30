@@ -32,10 +32,6 @@
 
   testScript =
     { nodes, ... }:
-    let
-      userId = toString nodes.machine.users.users.alice.uid;
-      XDG_RUNTIME_DIR = "/run/user/${userId}";
-    in
     ''
       with subtest("Ensure X11 starts"):
         start_all()
