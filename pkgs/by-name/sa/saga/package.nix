@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   fetchurl,
 
   # nativeBuildInputs
@@ -8,6 +9,8 @@
   dos2unix,
   pkg-config,
   wrapGAppsHook3,
+  # cuda-specific
+  cudaPackages,
   # darwin-specific
   desktopToDarwinBundle,
 
@@ -34,6 +37,8 @@
   poppler,
   sqlite,
   unixODBC,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     dos2unix
     pkg-config
     wrapGAppsHook3
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
