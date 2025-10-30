@@ -4,8 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   wget,
+  withNixMount ? true,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
   version = "1.8.2.0";
@@ -40,8 +40,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
 
-    mkdir -p $out/share/distrobox
-    echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
+    ${
+      if withNixMount then
+        ''
+          mkdir -p $out/share/distrobox
+          echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
+        ''
+      else
+        ""
+    }
   '';
 
   meta = with lib; {
