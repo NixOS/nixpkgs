@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "6.1";
+  version = "6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4YdG+GQYaaIPRTKMm1+X3GxxoRlZYDVq72O3X1yNRF8=";
+    hash = "sha256-SnxwN2aEfrD6tYrpudacyAWIy/1uNFcrur1FU+B5/is=";
   };
 
   propagatedBuildInputs = [
