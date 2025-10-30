@@ -111,6 +111,10 @@ stdenv.mkDerivation {
     mainProgram = "llvm-spirv";
     license = lib.licenses.ncsa;
     platforms = lib.platforms.unix;
+    # Issues with endianness handling outside of LE
+    # https://catfox.life/2024/11/29/the-complexities-of-enabling-opencl-support/
+    # https://github.com/KhronosGroup/SPIRV-Tools/pull/5302
+    badPlatforms = lib.platforms.bigEndian;
     maintainers = with lib.maintainers; [ gloaming ];
     broken = !(versions ? ${llvmMajor});
   };
