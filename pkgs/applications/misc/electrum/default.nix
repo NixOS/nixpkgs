@@ -7,6 +7,7 @@
   python3,
   zbar,
   enableQt ? true,
+  enablePythonEcdsa ? false,
   callPackage,
   qtwayland,
 }:
@@ -56,12 +57,16 @@ python3.pkgs.buildPythonApplication rec {
       electrum-ecc
       # plugins
       ledger-bitcoin
+      cbor2
+      pyserial
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
+      # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
       trezor
       bitbox02
-      cbor2
-      pyserial
     ]
     ++ lib.optionals enableQt [
       pyqt6
