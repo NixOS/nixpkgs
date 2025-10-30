@@ -1817,6 +1817,8 @@ let
 
         raven = callPackage ../development/ocaml-modules/raven { };
 
+        raven-nx = callPackage ../development/ocaml-modules/raven/nx.nix { };
+
         raylib = callPackage ../development/ocaml-modules/raylib { };
 
         raygui = callPackage ../development/ocaml-modules/raylib/raygui.nix { };
