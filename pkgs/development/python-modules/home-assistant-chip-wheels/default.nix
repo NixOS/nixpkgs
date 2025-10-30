@@ -44,7 +44,6 @@
   pyfakefs,
   pygments,
   pykwalify,
-  pylint,
   pyperclip,
   pyserial,
   python,
@@ -243,7 +242,6 @@ stdenv.mkDerivation rec {
         pyelftools
         pygments
         pykwalify
-        pylint
         pyperclip
         pyserial
         python-daemon
