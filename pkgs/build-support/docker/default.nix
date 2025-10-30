@@ -575,24 +575,19 @@ rec {
       '';
     };
 
+  # Wrapper around `streamLayeredImage` to build an image from the result.
+  #
+  # To support image stream overrides, use `streamLayeredImage` with
+  # `writeImageStream` instead.
   buildLayeredImage = lib.makeOverridable (
     {
-      name,
       compressor ? "gz",
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor;
       stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
-      compress = compressorForImage compressor name;
-    in
-    runCommand "${baseNameOf name}.tar${compress.ext}" {
-      inherit (stream) imageName;
-      passthru = {
-        inherit (stream) imageTag;
-        inherit stream;
-      };
-      nativeBuildInputs = compress.nativeInputs;
-    } "${stream} | ${compress.compress} > $out"
+    }
   );
 
   # 1. extract the base image
@@ -1412,21 +1407,39 @@ rec {
 
   # Wrapper around `streamNixShellImage` to build an image from the result.
   #
+  # To support image stream overrides, use `streamNixShellImage` with
+  # `writeImageStream` instead.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage =
     {
-      drv,
       compressor ? "gz",
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor;
       stream = streamNixShellImage (removeAttrs args [ "compressor" ]);
-      compress = compressorForImage compressor drv.name;
+    };
+
+  # Writes out an image tarball stream with optional compression.
+  #
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  writeImageStream =
+    {
+      stream,
+      compressor ? "gz",
+    }:
+    let
+      compress = compressorForImage compressor stream.name;
     in
-    runCommand "${drv.name}-env.tar${compress.ext}" {
+    runCommand "${stream.name}.tar${compress.ext}" {
       inherit (stream) imageName;
-      passthru = { inherit (stream) imageTag; };
+      passthru = {
+        inherit stream;
+        inherit (stream) imageTag;
+      };
       nativeBuildInputs = compress.nativeInputs;
     } "${stream} | ${compress.compress} > $out";
+
 }
