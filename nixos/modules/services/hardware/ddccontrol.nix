@@ -10,6 +10,8 @@ let
 in
 
 {
+  meta.maintainers = with lib.maintainers; [ doronbehar ];
+
   ###### interface
 
   options = {
