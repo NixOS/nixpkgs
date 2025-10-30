@@ -162,13 +162,20 @@ lib.fix (self: {
 
       # Substitute dependency references in package.json with Nix store paths
       packageJSON' =
-        package
-        // lib.optionalAttrs (package ? dependencies) {
-          dependencies = mapPackageDependencies package.dependencies;
-        }
-        // lib.optionalAttrs (package ? devDependencies) {
-          devDependencies = mapPackageDependencies package.devDependencies;
-        };
+        removeAttrs
+          (
+            package
+            // lib.optionalAttrs (package ? dependencies) {
+              dependencies = mapPackageDependencies package.dependencies;
+            }
+            // lib.optionalAttrs (package ? devDependencies) {
+              devDependencies = mapPackageDependencies package.devDependencies;
+            }
+          )
+          [
+            "overrides"
+            "resolutions"
+          ];
 
       pname = package.name or "unknown";
 
