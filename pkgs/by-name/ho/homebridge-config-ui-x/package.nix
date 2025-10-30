@@ -7,6 +7,7 @@
   npmHooks,
   python3,
   cacert,
+  versionCheckHook,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -52,6 +53,12 @@ buildNpmPackage (finalAttrs: {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cacert ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";
