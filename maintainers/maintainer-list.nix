@@ -3533,6 +3533,12 @@
     githubId = 10221570;
     name = "Bo Bakker";
   };
+  bobberb = {
+    email = "bobberb@half-done.org";
+    github = "bobberb";
+    githubId = 1891836;
+    name = "bobberb";
+  };
   bobby285271 = {
     name = "Bobby Rong";
     email = "rjl931189261@126.com";
