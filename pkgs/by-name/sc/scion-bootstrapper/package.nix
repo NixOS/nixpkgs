@@ -2,13 +2,14 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 
   # tests
   scion,
   openssl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scion-bootstrapper";
   version = "0.0.8-unstable-2024-11-28";
 
@@ -54,14 +55,17 @@ buildGoModule rec {
     mv $out/bin/bootstrapper $out/bin/scion-bootstrapper
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "Bootstrapper for SCION network configuration";
     homepage = "https://github.com/netsec-ethz/bootstrapper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
     ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "scion-bootstrapper";
   };
-}
+})
