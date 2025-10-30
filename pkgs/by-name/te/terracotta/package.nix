@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   easytier,
@@ -39,6 +40,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    daemon_plist="$out/Library/LaunchAgents/org.nixos.terracotta.daemon.plist"
+    substituteInPlace src/main.rs \
+      --replace-fail '/Library/LaunchAgents/net.burningtnt.terracotta.daemon.plist' "$daemon_plist"
   '';
 
   nativeBuildInputs = [ imagemagick ];
@@ -52,16 +58,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
     TERRACOTTA_VERSION = finalAttrs.version;
   };
 
-  postInstall = ''
-    install -Dm0644 build/linux/terracotta.desktop -t $out/share/applications
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm0644 build/linux/terracotta.desktop -t $out/share/applications
 
-    for n in 16 32 48 64 96 128 256
-    do
-      size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      magick build/linux/icon.png -resize $size $out/share/icons/hicolor/$size/apps/terracotta.png
-    done
-  '';
+      for n in 16 32 48 64 96 128 256
+      do
+        size=$n"x"$n
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        magick build/linux/icon.png -resize $size $out/share/icons/hicolor/$size/apps/terracotta.png
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/{Library/LaunchAgents,Applications}
+
+      cp -r build/macos/terracotta.app $out/Applications/
+      ln -sr $out/bin/terracotta $out/Applications/terracotta.app/Contents/MacOS/terracotta
+
+      cat > "$daemon_plist" <<EOF
+      ${lib.generators.toPlist { escape = true; } {
+        Label = "org.nixos.terracotta.daemon";
+        ProgramArguments = [
+          "@TERRACOTTA_BIN@"
+          "--daemon"
+        ];
+        KeepAlive = true;
+      }}
+      EOF
+      substituteInPlace "$daemon_plist" \
+        --replace-fail '@TERRACOTTA_BIN@' "$out/bin/terracotta"
+    '';
 
   meta = {
     description = "Terracotta provides out-of-the-box multiplayer support for Minecraft";
