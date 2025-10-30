@@ -2984,6 +2984,9 @@
   "org/jetbrains/compose/desktop#desktop-jvm-linux-x64/1.10.0-alpha01": {
    "pom": "sha256-z/keLG8RTFwJQ18qs4xUqSRxNNn5W66oJs/bw//iIeM="
   },
+  "org/jetbrains/compose/desktop#desktop-jvm-linux-arm64/1.10.0-alpha01": {
+   "pom": "sha256-LYKUvZ6EGJuIId5UNmy+JMQen0t2sXwl6I+daQJ6uUE="
+  },
   "org/jetbrains/compose/desktop#desktop-jvm-macos-arm64/1.8.2": {
    "pom": "sha256-S290UtIXCU0UQhfHocanMKEPZ2oLfu/nhdcmMuotNMQ="
   },
@@ -3708,6 +3711,10 @@
   "org/jetbrains/skiko#skiko-awt-runtime-linux-x64/0.9.24": {
    "jar": "sha256-ZkuW2kLSLxpjppvDLkPG0eX+nGL5VES7Xx9TWlwRqAI=",
    "pom": "sha256-k4MjXDsckFvkgEtVEzOCITOQh1nZT+XVzGsBX45c6Po="
+  },
+  "org/jetbrains/skiko#skiko-awt-runtime-linux-arm64/0.9.24": {
+   "jar": "sha256-hlWrRjir6GTuM0NqJWWN5b1mA4VlHHmB6vlxohDEVLg=",
+   "pom": "sha256-ab52bpJggnFqrd+F4hKWCcbM3DQEV38//yvdc6TCjoQ="
   },
   "org/jetbrains/skiko#skiko-awt-runtime-macos-arm64/0.9.4.2": {
    "jar": "sha256-bi6GlwC5lL5fRjFIDmdTNXmXETE0iyrlUjbddNJyIWE=",
