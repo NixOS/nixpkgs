@@ -104,21 +104,22 @@ in
         PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
       };
-      script = ''
-        ${cfg.packages.jdk}/bin/java \
-          -jar ${cfg.packages.jetty}/start.jar \
-            --module=http,ee11-deploy,ee11-jsp \
-            -Djetty.home=${cfg.packages.jetty} \
-            -Djetty.base=${cfg.package} \
-            -Djetty.http.host=${cfg.listenHost} \
-            -Djetty.http.port=${toString cfg.listenPort}
-      '';
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = mkIf (cfg.home == "/var/lib/plantuml") "plantuml";
         StateDirectoryMode = mkIf (cfg.home == "/var/lib/plantuml") "0750";
+
+        ExecStart = ''
+          ${cfg.packages.jdk}/bin/java \
+            -jar ${cfg.packages.jetty}/start.jar \
+              --module=http,ee11-deploy,ee11-jsp \
+              -Djetty.home=${cfg.packages.jetty} \
+              -Djetty.base=${cfg.package} \
+              -Djetty.http.host=${cfg.listenHost} \
+              -Djetty.http.port=${toString cfg.listenPort}
+        '';
 
         # Hardening
         AmbientCapabilities = [ "" ];
