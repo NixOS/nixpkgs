@@ -11306,6 +11306,13 @@
     name = "Ivan Brennan";
     keys = [ { fingerprint = "7311 2700 AB4F 4CDF C68C  F6A5 79C3 C47D C652 EA54"; } ];
   };
+  ivandimitrov8080 = {
+    email = "ivan@idimitrov.dev";
+    github = "ivandimitrov8080";
+    githubId = 80976541;
+    name = "Ivan Dimitrov";
+    keys = [ { fingerprint = "C565 2E79 2A7A 9110 DFA7  F77D 0BDA D4B2 11C4 9294"; } ];
+  };
   ivankovnatsky = {
     github = "ivankovnatsky";
     githubId = 75213;
