@@ -34,11 +34,9 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.2" "go ${finalAttrs.passthru.go.version}"
+    sed -i go.mod -e 's/^go .*/go ${finalAttrs.passthru.go.version}/'
+    sed -i vendor/modules.txt -e 's/## explicit; go .*/## explicit; go ${finalAttrs.passthru.go.version}/'
 
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
   '';
 
   ldflags = [
