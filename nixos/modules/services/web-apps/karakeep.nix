@@ -184,18 +184,20 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       partOf = [ "karakeep.service" ];
-      script = ''
-        export HOME="$CACHE_DIRECTORY"
-        exec ${cfg.browser.exe} \
-          --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
-          --remote-debugging-address=127.0.0.1 \
-          --remote-debugging-port=${toString cfg.browser.port} \
-          --hide-scrollbars \
-          --user-data-dir="$STATE_DIRECTORY"
-      '';
+      environment.HOME = "%C/karakeep";
+
       serviceConfig = {
         Type = "simple";
         Restart = "on-failure";
+
+        ExecStart = ''
+          ${cfg.browser.exe} \
+            --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=${toString cfg.browser.port} \
+            --hide-scrollbars \
+            --user-data-dir="''${STATE_DIRECTORY}"
+        '';
 
         CacheDirectory = "karakeep-browser";
         StateDirectory = "karakeep-browser";
