@@ -1,11 +1,11 @@
 { pkgs, lib, ... }:
 let
   track = pkgs.fetchurl {
-    # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
+    # Sourced from https://freemusicarchive.org/music/Jazz_at_Mladost_Club/Jazz_Night/Blue_bossa/
 
-    name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
-    url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
-    hash = "sha256-91VDWwrcP6Cw4rk72VHvZ8RGfRBrpRE8xo/02dcJhHc=";
+    name = "Blue bossa - Jazz at Miadost Club.mp3";
+    url = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Jazz_at_Mladost_Club/Jazz_Night/Jazz_at_Mladost_Club_-_07_-_Blue_bossa.mp3?download=1&name=Jazz%20at%20Mladost%20Club%20-%20Blue%20bossa.mp3";
+    hash = "sha256-cAG4nBuc97J3ZJc9cm/6vWTgnPL/Hfkar7cA3+89rto=";
     meta.license = lib.licenses.cc-by-sa-40;
   };
 
