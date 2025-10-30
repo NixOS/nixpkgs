@@ -15,6 +15,7 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
+    concatStringsSep
     findFirst
     isDerivation
     length
@@ -197,10 +198,20 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
-    non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
-    broken = remediate_allowlist "Broken" (x: "");
-    unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
+    unfree =
+      remediate_allowlist
+        #
+        "Unfree"
+        "insecure"
+        (remediate_predicate "allowUnfreePredicate");
+    non-source =
+      remediate_allowlist
+        #
+        "NonSource"
+        "non-source"
+        (remediate_predicate "allowNonSourcePredicate");
+    broken = remediate_allowlist "Broken" "broken" (x: "");
+    unsupported = remediate_allowlist "UnsupportedSystem" "unsupported" (x: "");
     blocklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
@@ -240,20 +251,34 @@ let
          then pass `--impure` in order to allow use of environment variables.
     ";
 
-  remediate_allowlist = allow_attr: rebuild_amendment: attrs: ''
-    a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
-       for a single invocation of the nix tools.
+  remediate_allowlist =
+    allow_attr: reason_attr: rebuild_amendment: attrs:
+    let
+      reasons = builtins.concatMap (
+        { kind, message, ... }: optional (kind == reason_attr) message
+      ) attrs.meta.problems or [ ];
+      hasReasons = reasons != [ ];
+    in
+    optionalString hasReasons ''
 
-         $ export ${remediation_env_var allow_attr}=1
-         ${flakeNote}
-    b) For `nixos-rebuild` you can set
-      { nixpkgs.config.allow${allow_attr} = true; }
-    in configuration.nix to override this.
-    ${rebuild_amendment attrs}
-    c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-      { allow${allow_attr} = true; }
-    to ~/.config/nixpkgs/config.nix.
-  '';
+      Known problems:
+
+    ''
+    + concatStringsSep "\n" reasons
+    + optionalString (!hasReasons) ''
+      a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
+         for a single invocation of the nix tools.
+
+           $ export ${remediation_env_var allow_attr}=1
+           ${flakeNote}
+      b) For `nixos-rebuild` you can set
+        { nixpkgs.config.allow${allow_attr} = true; }
+      in configuration.nix to override this.
+      ${rebuild_amendment attrs}
+      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+        { allow${allow_attr} = true; }
+      to ~/.config/nixpkgs/config.nix.
+    '';
 
   remediate_insecure =
     attrs:
@@ -362,6 +387,7 @@ let
         any
         listOf
         bool
+        submodule
         ;
       platforms = listOf (union [
         str
@@ -406,6 +432,11 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+
+      # For actual schema cf.
+      # https://github.com/NixOS/rfcs/blob/master/rfcs/0127-issues-warnings.md#package-problems
+      problems = listOf (attrsOf any);
+
       tests = {
         name = "test";
         verify =
