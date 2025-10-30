@@ -14,15 +14,25 @@ in
 
   options = {
     services.ddccontrol = {
-      enable = lib.mkEnableOption "ddccontrol for controlling displays";
+      enable = lib.mkEnableOption ''
+        ddccontrol for controlling displays.
+
+        This [enables `hardware.i2c`](#opt-hardware.i2c.enable), so note to add
+        yourself to [`hardware.i2c.group`](#opt-hardware.i2c.group).
+      '';
     };
   };
 
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    boot.kernelModules = [
+      "ddcci_backlight"
+    ];
     # Load the i2c-dev module
-    boot.kernelModules = [ "i2c_dev" ];
+    hardware.i2c = {
+      enable = true;
+    };
 
     # Give users access to the "gddccontrol" tool
     environment.systemPackages = [
