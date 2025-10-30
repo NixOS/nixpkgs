@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configurePhase = ''
-    make defconfig
+    make defconfig ARCH=${stdenv.hostPlatform.linuxArch}
     ${configParser}
     cat << EOF | parseconfig
     ${nixConfig}
