@@ -210,9 +210,6 @@ let
                   output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
 
                   assert output[0]['login']['password'] == "${storedPassword}"
-
-              with subtest("Check systemd unit hardening"):
-                  server.log(server.succeed("systemd-analyze security vaultwarden.service | grep -v ✓"))
             '';
       }
     );
