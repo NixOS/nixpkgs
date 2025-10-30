@@ -9,20 +9,11 @@ let
     meta.license = lib.licenses.cc-by-sa-40;
   };
 
-  defaultCfg = rec {
+  defaultMpdCfg = rec {
     user = "mpd";
     group = "mpd";
     dataDir = "/var/lib/mpd";
     musicDirectory = "${dataDir}/music";
-  };
-
-  defaultMpdCfg = {
-    inherit (defaultCfg)
-      dataDir
-      musicDirectory
-      user
-      group
-      ;
     enable = true;
   };
 
