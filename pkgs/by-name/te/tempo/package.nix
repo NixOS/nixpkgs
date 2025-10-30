@@ -39,11 +39,11 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "High volume, minimal dependency trace storage";
     changelog = "https://github.com/grafana/tempo/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kashw2 ];
   };
 })
