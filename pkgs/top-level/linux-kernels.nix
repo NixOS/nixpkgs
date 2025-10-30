@@ -5,9 +5,6 @@
   config,
   buildPackages,
   callPackage,
-  makeOverridable,
-  recurseIntoAttrs,
-  dontRecurseIntoAttrs,
   stdenv,
   stdenvNoCC,
   newScope,
@@ -22,6 +19,7 @@
 with linuxKernel;
 
 let
+  inherit (lib) recurseIntoAttrs dontRecurseIntoAttrs;
   markBroken =
     drv:
     drv.overrideAttrs (
