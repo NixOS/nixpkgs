@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pycync";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kinachi249";
     repo = "pycync";
     tag = "v${version}";
-    hash = "sha256-PDCS+ucfO5RRvTshGGjxir3ez7L405k5tL5svMxZMsg=";
+    hash = "sha256-UjodZbgicTiJV4T5yqWy5J4oAeZGbggVfaPMoDmL74M=";
   };
 
   build-system = [ hatchling ];
