@@ -5272,6 +5272,8 @@ self: super: with self; {
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
+  fastapi-versionizer = callPackage ../development/python-modules/fastapi-versionizer { };
+
   fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastbencode = callPackage ../development/python-modules/fastbencode { };
