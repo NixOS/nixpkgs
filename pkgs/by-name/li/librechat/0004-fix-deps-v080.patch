@@ -1,0 +1,68 @@
+diff --git a/client/package.json b/client/package.json
+index f96aefa2d..ef3050f72 100644
+--- a/client/package.json
++++ b/client/package.json
+@@ -121,7 +121,7 @@
+     "@tanstack/react-query-devtools": "^4.29.0",
+     "@testing-library/dom": "^9.3.0",
+     "@testing-library/jest-dom": "^5.16.5",
+-    "@testing-library/react": "^14.0.0",
++    "@testing-library/react": "^14.3.1",
+     "@testing-library/user-event": "^14.4.3",
+     "@types/jest": "^29.5.14",
+     "@types/js-cookie": "^3.0.6",
+diff --git a/package-lock.json b/package-lock.json
+index 5b484fd55..7cbc13f49 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -20,6 +20,7 @@
+         "@eslint/js": "^9.20.0",
+         "@microsoft/eslint-formatter-sarif": "^3.1.0",
+         "@playwright/test": "^1.50.1",
++        "@testing-library/react": "^14.3.1",
+         "@types/react-virtualized": "^9.22.0",
+         "caniuse-lite": "^1.0.30001741",
+         "cross-env": "^7.0.3",
+@@ -2718,7 +2719,7 @@
+         "@tanstack/react-query-devtools": "^4.29.0",
+         "@testing-library/dom": "^9.3.0",
+         "@testing-library/jest-dom": "^5.16.5",
+-        "@testing-library/react": "^14.0.0",
++        "@testing-library/react": "^14.3.1",
+         "@testing-library/user-event": "^14.4.3",
+         "@types/jest": "^29.5.14",
+         "@types/js-cookie": "^3.0.6",
+@@ -51744,7 +51745,7 @@
+         "@rollup/plugin-replace": "^5.0.5",
+         "@rollup/plugin-terser": "^0.4.4",
+         "@tanstack/react-query": "^4.28.0",
+-        "@testing-library/react": "^14.0.0",
++        "@testing-library/react": "^16.3.0",
+         "@types/react": "^18.2.11",
+         "@types/react-dom": "^18.2.4",
+         "caniuse-lite": "^1.0.30001741",
+diff --git a/package.json b/package.json
+index 693de111d..5e58ab1f0 100644
+--- a/package.json
++++ b/package.json
+@@ -99,6 +99,7 @@
+     "@eslint/js": "^9.20.0",
+     "@microsoft/eslint-formatter-sarif": "^3.1.0",
+     "@playwright/test": "^1.50.1",
++    "@testing-library/react": "^14.3.1",
+     "@types/react-virtualized": "^9.22.0",
+     "caniuse-lite": "^1.0.30001741",
+     "cross-env": "^7.0.3",
+diff --git a/packages/client/package.json b/packages/client/package.json
+index 71aac0c29..ab6fabca1 100644
+--- a/packages/client/package.json
++++ b/packages/client/package.json
+@@ -75,7 +75,7 @@
+     "@rollup/plugin-replace": "^5.0.5",
+     "@rollup/plugin-terser": "^0.4.4",
+     "@tanstack/react-query": "^4.28.0",
+-    "@testing-library/react": "^14.0.0",
++    "@testing-library/react": "^16.3.0",
+     "@types/react": "^18.2.11",
+     "@types/react-dom": "^18.2.4",
+     "caniuse-lite": "^1.0.30001741",
