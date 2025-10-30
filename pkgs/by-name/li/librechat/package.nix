@@ -10,13 +10,13 @@
 
 buildNpmPackage rec {
   pname = "librechat";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${version}";
-    hash = "sha256-bo26EzpRjE2hbbx6oUo0tDsLMdVpWcazCIzA5sm5L34=";
+    hash = "sha256-0HEb8tFpiTjfN+RpwizK5POWsz5cRicSdZwYPmUaLDA=";
   };
 
   patches = [
@@ -35,9 +35,13 @@ buildNpmPackage rec {
     # directory as well. Again, we patch this to be relative to the current working
     # directory instead.
     ./0003-upload-paths.patch
+    # Since 0.7.9, there are two more files that try to write logs to the package
+    # directory. We patch the log directory to target the current working directory
+    # instead for these two as well.
+    ./0004-logs-v079.patch
   ];
 
-  npmDepsHash = "sha256-knmS2I6AiSdV2bSnNBThbVHdkpk6iXiRuk4adciDK1M=";
+  npmDepsHash = "sha256-tOxanPXry52lD39xlT6rqKVF+Pk6m3FpTv/8wctKAWY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +56,15 @@ buildNpmPackage rec {
   makeCacheWritable = true;
 
   npmBuildScript = "frontend";
-  npmPruneFlags = [ "--omit=dev" ];
+  npmPruneFlags = [ "--production" ];
+
+  # For reasons beyond my understanding, the api directory disappears after the build finishes.
+  # Hence, starting LibreChat fails with a "module not found" error due to a broken symlink.
+  # This is a fixup that copies the missing files to the appropriate location.
+  preFixup = ''
+    mkdir -p $out/lib/node_modules/LibreChat/packages/api
+    cp -R packages/api/dist/. $out/lib/node_modules/LibreChat/packages/api
+  '';
 
   passthru = {
     updateScript = nix-update-script {
