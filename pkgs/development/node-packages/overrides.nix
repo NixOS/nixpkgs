@@ -147,6 +147,11 @@ final: prev: {
             url = "https://github.com/svanderburg/node2nix/commit/31c308bba5f39ea0105f66b9f40dbe57fed7a292.patch";
             hash = "sha256-DdNRteonMvyffPh0uo0lUbsohKYnyqv0QcD9vjN6aXE=";
           })
+          # Prefer util-linux over removed utillinux alias - PR svanderburg/node2nix#336
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/ef5dc43e15d13129a9ddf6164c7bc2800a25792e.patch";
+            hash = "sha256-ByIA0oQmEfb4PyVwGEtrR3NzWiy1YCn1FPdSKNDkNCw=";
+          })
         ];
       in
       ''
