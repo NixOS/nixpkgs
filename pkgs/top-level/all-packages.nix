@@ -10337,8 +10337,7 @@ with pkgs;
     util-linux = util-linuxMinimal;
   };
 
-  udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
-  udisks = udisks2;
+  udisks2 = udisks;
 
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
