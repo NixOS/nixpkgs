@@ -80,7 +80,10 @@ in
 runCommand "diff" { } ''
   mkdir -p $out/${evalSystem}
 
-  cp -r ${before} $out/before
-  cp -r ${after} $out/after
+  cp -r --no-preserve=mode ${before} $out/before
+  cp -r --no-preserve=mode ${after} $out/after
+  # JSON files will be processed above explicitly, so avoid copying over
+  # the source files to keep the artifacts smaller.
+  find $out/before $out/after -iname '*.json' -delete
   cp ${diffJson} $out/${evalSystem}/diff.json
 ''
