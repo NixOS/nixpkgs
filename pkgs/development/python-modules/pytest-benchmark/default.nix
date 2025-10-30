@@ -15,18 +15,19 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "pytest-benchmark";
     tag = "v${version}";
-    hash = "sha256-4fD9UfZ6jtY7Gx/PVzd1JNWeQNz+DJ2kQmCku2TgxzI=";
+    hash = "sha256-BM17nrJfoOHkl7hOeY/VdoH5oEQP6EJWeNXa5x8/5UM=";
   };
 
   build-system = [ setuptools ];
@@ -55,12 +56,12 @@ buildPythonPackage rec {
     mercurial
     nbmake
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
-    export HOME=$(mktemp -d)
   '';
 
   disabledTests =
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/ionelmc/pytest-benchmark/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/ionelmc/pytest-benchmark/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
     license = lib.licenses.bsd2;
