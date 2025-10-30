@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
-    "VERBOSE=1"
+    "V=1"
   ]
   ++ lib.optionals isCross [
     "CROSS=${stdenv.cc.targetPrefix}"
