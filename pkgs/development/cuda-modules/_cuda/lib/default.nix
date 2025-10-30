@@ -3,13 +3,6 @@
   lib,
 }:
 {
-  # See ./assertions.nix for documentation.
-  inherit (import ./assertions.nix { inherit _cuda lib; })
-    _evaluateAssertions
-    _mkFailedAssertionsString
-    _mkMissingPackagesAssertions
-    ;
-
   # See ./cuda.nix for documentation.
   inherit (import ./cuda.nix { inherit _cuda lib; })
     _cudaCapabilityIsDefault
@@ -23,8 +16,9 @@
 
   # See ./meta.nix for documentation.
   inherit (import ./meta.nix { inherit _cuda lib; })
+    _hasProblemKind
+    _mkMetaProblems
     _mkMetaBadPlatforms
-    _mkMetaBroken
     ;
 
   # See ./redist.nix for documentation.

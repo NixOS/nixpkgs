@@ -10,6 +10,7 @@
   runCommand,
   writeShellScript,
   config,
+  _cuda, # NOTE: (ab)using cudaPackages' internal lib; unstable interfaces!
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   autoAddDriverRunpath,
@@ -241,24 +242,49 @@ let
     '';
   };
 
-  brokenConditions = attrsets.filterAttrs (_: cond: cond) {
-    "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
-    "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
-    "Unsupported CUDA version" =
-      cudaSupport
-      && !(builtins.elem cudaPackages.cudaMajorVersion [
-        "11"
-        "12"
-      ]);
-    "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
-      MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
+  fakeFinalAttrs = {
+    meta = {
+      inherit problems;
+    };
+    finalPackage.stdenv = stdenv';
+  };
+  problems = _cuda.lib._mkMetaProblems [
+    {
+      message = "CUDA and ROCm are mutually exclusive";
+      assertion = !(cudaSupport && rocmSupport);
+      kind = "unsupported";
+    }
+    {
+      message = "Nixpkgs only supports CUDA on Linux";
+      assertion = cudaSupport -> stdenv.hostPlatform.isLinux;
+      kind = "broken";
+    }
+    {
+      message = "CUDA version unsupported upstream";
+      assertion =
+        cudaSupport
+        -> (builtins.elem cudaPackages.cudaMajorVersion [
+          "11"
+          "12"
+        ]);
+      kind = "unsupported";
+    }
+    {
+      message = "MPI cudatoolkit does not match cudaPackages.cudatoolkit";
+      assertion = MPISupport -> (cudaSupport && (mpi.cudatoolkit == cudaPackages.cudatoolkit));
+      kind = "broken";
+    }
     # This used to be a deep package set comparison between cudaPackages and
     # effectiveMagma.cudaPackages, making torch too strict in cudaPackages.
     # In particular, this triggered warnings from cuda's `aliases.nix`
-    "Magma cudaPackages does not match cudaPackages" =
-      cudaSupport
-      && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
-  };
+    {
+      message = "Magma cudaPackages does not match cudaPackages";
+      assertion =
+        cudaSupport
+        -> (effectiveMagma.cudaPackages.cudaMajorMinorVersion == cudaPackages.cudaMajorMinorVersion);
+      kind = "broken";
+    }
+  ];
 
   unroll-src = writeShellScript "unroll-src" ''
     echo "{
@@ -760,8 +786,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
-    # To help debug when a package is broken due to CUDA support
-    inherit brokenConditions;
     tests = callPackage ../tests { };
   };
 
@@ -777,8 +801,11 @@ buildPythonPackage.override { inherit stdenv; } rec {
       thoughtpolice
       tscholak
     ]; # tscholak esp. for darwin-related builds
+
+    inherit problems;
     platforms =
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
-    broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
+    broken = _cuda.lib._hasProblemKind "broken" fakeFinalAttrs;
+    badPlatforms = _cuda.lib._mkMetaBadPlatforms fakeFinalAttrs;
   };
 }

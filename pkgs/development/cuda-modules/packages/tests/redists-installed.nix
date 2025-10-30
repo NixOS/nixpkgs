@@ -49,7 +49,7 @@ linkedWithoutLicenses.overrideAttrs (
     };
 
     meta = prevAttrs.meta or { } // {
-      broken = _cuda.lib._mkMetaBroken finalAttrs;
+      broken = _cuda.lib._hasProblemKind "broken" finalAttrs;
       license = lib.unique (
         lib.concatMap (drv: lib.toList (drv.meta.license or [ ])) (
           lib.attrValues availableRedistsForPlatform

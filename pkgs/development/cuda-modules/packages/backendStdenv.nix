@@ -24,7 +24,7 @@ let
   inherit (_cuda.lib)
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
-    _mkFailedAssertionsString
+    _mkMetaProblems
     getRedistSystem
     mkVersionedName
     ;
@@ -45,25 +45,11 @@ let
     ;
   inherit (lib.versions) major;
 
-  # NOTE: By virtue of processing a sorted list (allSortedCudaCapabilities), our groups will be sorted.
-
-  architectureSpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
-  ) allSortedCudaCapabilities;
-
-  familySpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
-  ) allSortedCudaCapabilities;
-
-  jetsonCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) allSortedCudaCapabilities;
-
   passthruExtra = {
-    nvccHostCCMatchesStdenvCC = backendStdenv.cc == stdenv.cc;
 
-    # TODO(@connorbaker): Does it make sense to expose the `stdenv` we were called with and the `stdenv` selected
-    # prior to using `stdenvAdapters.useLibsFrom`?
+    # NOTE: All of these attributes are internal details subject to removal!
+
+    supportedByNvcc = maybeBackendStdenv.valid;
 
     # The Nix system of the host platform.
     hostNixSystem = stdenv.hostPlatform.system;
@@ -100,96 +86,19 @@ let
       else
         passthruExtra.defaultCudaCapabilities;
 
-    # Requested architecture-specific CUDA capabilities.
-    requestedArchitectureSpecificCudaCapabilities = intersectLists architectureSpecificCudaCapabilities passthruExtra.cudaCapabilities;
-
-    # Whether the requested CUDA capabilities include architecture-specific CUDA capabilities.
-    hasArchitectureSpecificCudaCapability =
-      passthruExtra.requestedArchitectureSpecificCudaCapabilities != [ ];
-
-    # Requested family-specific CUDA capabilities.
-    requestedFamilySpecificCudaCapabilities = intersectLists familySpecificCudaCapabilities passthruExtra.cudaCapabilities;
-
-    # Whether the requested CUDA capabilities include family-specific CUDA capabilities.
-    hasFamilySpecificCudaCapability = passthruExtra.requestedFamilySpecificCudaCapabilities != [ ];
+    jetsonCudaCapabilities = filter (
+      cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
+    ) allSortedCudaCapabilities;
 
     # Requested Jetson CUDA capabilities.
-    requestedJetsonCudaCapabilities = intersectLists jetsonCudaCapabilities passthruExtra.cudaCapabilities;
+    requestedJetsonCudaCapabilities = intersectLists passthruExtra.jetsonCudaCapabilities passthruExtra.cudaCapabilities;
 
     # Whether the requested CUDA capabilities include Jetson CUDA capabilities.
     hasJetsonCudaCapability = passthruExtra.requestedJetsonCudaCapabilities != [ ];
+
+    # Whether the requested CUDA capabilities include family-specific CUDA capabilities.
+    hasFamilySpecificCudaCapability = passthruExtra.requestedFamilySpecificCudaCapabilities != [ ];
   };
-
-  assertions =
-    let
-      # Jetson devices (pre-Thor) cannot be targeted by the same binaries which target non-Jetson devices. While
-      # NVIDIA provides both `linux-aarch64` and `linux-sbsa` packages, which both target `aarch64`,
-      # they are built with different settings and cannot be mixed.
-      preThorJetsonCudaCapabilities = filter (flip versionOlder "10.1") passthruExtra.requestedJetsonCudaCapabilities;
-      postThorJetsonCudaCapabilities = filter (flip versionAtLeast "10.1") passthruExtra.requestedJetsonCudaCapabilities;
-
-      # Remove all known capabilities from the user's list to find unrecognized capabilities.
-      unrecognizedCudaCapabilities = subtractLists allSortedCudaCapabilities passthruExtra.cudaCapabilities;
-
-      # Capabilities which are too old for this CUDA version.
-      tooOldCudaCapabilities = filter (
-        cap:
-        let
-          # This can be null!
-          maybeMax = cudaCapabilityToInfo.${cap}.maxCudaMajorMinorVersion;
-        in
-        maybeMax != null && lib.versionOlder maybeMax cudaMajorMinorVersion
-      ) passthruExtra.cudaCapabilities;
-
-      # Capabilities which are too new for this CUDA version.
-      tooNewCudaCapabilities = filter (
-        cap: lib.versionOlder cudaMajorMinorVersion cudaCapabilityToInfo.${cap}.minCudaMajorMinorVersion
-      ) passthruExtra.cudaCapabilities;
-    in
-    [
-      {
-        message = "Requested unrecognized CUDA capabilities: ${toJSON unrecognizedCudaCapabilities}";
-        assertion = unrecognizedCudaCapabilities == [ ];
-      }
-      {
-        message = "Requested CUDA capabilities which are too old for CUDA ${cudaMajorMinorVersion}: ${toJSON tooOldCudaCapabilities}";
-        assertion = tooOldCudaCapabilities == [ ];
-      }
-      {
-        message = "Requested CUDA capabilities which are too new for CUDA ${cudaMajorMinorVersion}: ${toJSON tooNewCudaCapabilities}";
-        assertion = tooNewCudaCapabilities == [ ];
-      }
-      {
-        message =
-          "Requested Jetson CUDA capabilities (${toJSON passthruExtra.requestedJetsonCudaCapabilities}) require "
-          + "hostPlatform (${passthruExtra.hostNixSystem}) to be aarch64-linux";
-        assertion = passthruExtra.hasJetsonCudaCapability -> passthruExtra.hostNixSystem == "aarch64-linux";
-      }
-      {
-        message =
-          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) cannot be "
-          + "specified with other capabilities (${toJSON (subtractLists preThorJetsonCudaCapabilities passthruExtra.cudaCapabilities)})";
-        assertion =
-          # If there are preThorJetsonCudaCapabilities, they must be the only requested capabilities.
-          preThorJetsonCudaCapabilities != [ ]
-          -> preThorJetsonCudaCapabilities == passthruExtra.cudaCapabilities;
-      }
-      {
-        message =
-          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) require "
-          + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-aarch64";
-        assertion =
-          preThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-aarch64";
-      }
-      {
-        message =
-          "Requested post-Thor (10.1) Jetson CUDA capabilities (${toJSON postThorJetsonCudaCapabilities}) require "
-          + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-sbsa";
-        assertion = postThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-sbsa";
-      }
-    ];
-
-  failedAssertionsString = _mkFailedAssertionsString assertions;
 
   # TODO(@connorbaker): Seems like `stdenvAdapters.useLibsFrom` breaks clangStdenv's ability to find header files.
   # To reproduce: use `nix shell .#cudaPackages_12_6.backendClangStdenv.cc` since CUDA 12.6 supports at most Clang
@@ -217,7 +126,7 @@ let
   # ```
   # TODO(@connorbaker): Seems like even using unmodified `clangStdenv` causes issues -- saxpy fails to build CMake
   # errors during CUDA compiler identification about invalid redefinitions of things like `realpath`.
-  backendStdenv =
+  maybeBackendStdenv =
     let
       hostCCName =
         if stdenv.cc.isGNU then
@@ -252,20 +161,13 @@ let
             (findFirst (x: x != null) null)
           ];
     in
-    # If the current stdenv's compiler version is compatible, or we're on an unsupported host system, use stdenv
-    # directly.
-    # If we're on an unsupported host system (like darwin), there's not much else we can do, but we should not break
-    # evaluation on unsupported systems.
-    if stdenvIsSupportedVersion || passthruExtra.hostRedistSystem == "unsupported" then
-      stdenv
-    # Otherwise, try to find a compatible stdenv.
-    else
-      assert assertMsg (maybeHostStdenv != null)
-        "backendStdenv: no supported host compiler found (tried ${hostCCName} ${versions.minMajorVersion} to ${versions.maxMajorVersion})";
-      stdenvAdapters.useLibsFrom stdenv maybeHostStdenv;
+    # The actual error messages are generated in cuda_nvcc based on backendStdenv.supportedByNvcc
+    rec {
+      valid =
+        maybeHostStdenv != null
+        && stdenvIsSupportedVersion
+        && passthruExtra.hostRedistSystem != "unsupported";
+      value = if valid then stdenvAdapters.useLibsFrom stdenv maybeHostStdenv else stdenv;
+    };
 in
-# TODO: Consider testing whether we in fact use the newer libstdc++
-# NOTE: The assertion message we get from `extendDerivation` is not at all helpful. Instead, we use assertMsg.
-assert assertMsg (failedAssertionsString == "")
-  "${mkVersionedName "cudaPackages" cudaMajorMinorVersion}.backendStdenv has failed assertions:${failedAssertionsString}";
-extendDerivation true passthruExtra backendStdenv
+extendDerivation true passthruExtra maybeBackendStdenv.value

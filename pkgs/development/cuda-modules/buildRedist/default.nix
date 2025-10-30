@@ -36,7 +36,12 @@ let
     unique
     ;
   inherit (lib.trivial) mapNullable pipe;
-  inherit (_cuda.lib) _mkMetaBadPlatforms _mkMetaBroken _redistSystemIsSupported;
+  inherit (_cuda.lib)
+    _hasProblemKind
+    _mkMetaProblems
+    _mkMetaBadPlatforms
+    _redistSystemIsSupported
+    ;
   inherit (lib)
     licenses
     sourceTypes
@@ -142,10 +147,6 @@ extendMkDerivation {
       # Extra
       passthru ? { },
       meta ? { },
-
-      # Misc
-      brokenAssertions ? [ ],
-      platformAssertions ? [ ],
 
       # Order is important here so we use a list.
       expectedOutputs ? [
@@ -343,14 +344,6 @@ extendMkDerivation {
             # NOTE: `release` may be null, so we must use `lib.defaultTo`
             or (getSupportedReleases (lib.defaultTo { } finalAttrs.passthru.release));
 
-        supportedNixSystems =
-          passthru.supportedNixSystems or (pipe finalAttrs.passthru.supportedReleases [
-            attrNames
-            (concatMap getNixSystems)
-            naturalSort
-            unique
-          ]);
-
         supportedRedistSystems =
           passthru.supportedRedistSystems or (naturalSort (attrNames finalAttrs.passthru.supportedReleases));
 
@@ -367,70 +360,6 @@ extendMkDerivation {
         # Taken and modified from:
         # https://github.com/NixOS/nixpkgs/blob/fe5e11faed6241aacf7220436088789287507494/pkgs/build-support/setup-hooks/multiple-outputs.sh#L45-L62
         inherit outputNameVarFallbacks;
-
-        # brokenAssertions :: [Attrs]
-        # Used by mkMetaBroken to set `meta.broken`.
-        # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
-        # NOTE: Do not use this when a broken assertion means evaluation will fail! For example, if
-        # a package is missing and is required for the build -- that should go in platformAssertions,
-        # because attempts to access attributes on the package will cause evaluation errors.
-        brokenAssertions = [
-          {
-            message = "CUDA support is enabled by config.cudaSupport";
-            assertion = config.cudaSupport;
-          }
-          {
-            message = "lib output precedes static output";
-            assertion =
-              let
-                libIndex = findFirstIndex (x: x == "lib") null finalAttrs.outputs;
-                staticIndex = findFirstIndex (x: x == "static") null finalAttrs.outputs;
-              in
-              libIndex == null || staticIndex == null || libIndex < staticIndex;
-          }
-          {
-            # NOTE: We cannot (easily) check that all expected outputs have a corresponding outputNameVar attribute in
-            # finalAttrs because of the presence of attributes which use the "output" prefix but are not outputNameVars
-            # (e.g., outputChecks and outputName).
-            message = "outputNameVarFallbacks is a super set of expectedOutputs";
-            assertion =
-              subtractLists (map mkOutputNameVar finalAttrs.passthru.expectedOutputs) (
-                attrNames finalAttrs.passthru.outputNameVarFallbacks
-              ) == [ ];
-          }
-          {
-            message = "outputToPatterns is a super set of expectedOutputs";
-            assertion =
-              subtractLists finalAttrs.passthru.expectedOutputs (attrNames finalAttrs.passthru.outputToPatterns)
-              == [ ];
-          }
-          {
-            message = "propagatedBuildOutputs is a subset of outputs";
-            assertion = subtractLists finalAttrs.outputs finalAttrs.propagatedBuildOutputs == [ ];
-          }
-        ]
-        ++ brokenAssertions;
-
-        # platformAssertions :: [Attrs]
-        # Used by mkMetaBadPlatforms to set `meta.badPlatforms`.
-        # Example: Broken on a specific system when some condition is met, like targeting Jetson or
-        # a required package missing.
-        # NOTE: Use this when a failed assertion means evaluation can fail!
-        platformAssertions =
-          let
-            isSupportedRedistSystem = _redistSystemIsSupported hostRedistSystem finalAttrs.passthru.supportedRedistSystems;
-          in
-          [
-            {
-              message = "src is null if and only if hostRedistSystem is unsupported";
-              assertion = (finalAttrs.src == null) == !isSupportedRedistSystem;
-            }
-            {
-              message = "hostRedistSystem (${hostRedistSystem}) is supported (${builtins.toJSON finalAttrs.passthru.supportedRedistSystems})";
-              assertion = isSupportedRedistSystem;
-            }
-          ]
-          ++ platformAssertions;
       };
 
       meta = meta // {
@@ -438,9 +367,6 @@ extendMkDerivation {
           By downloading and using this package you accept the terms and conditions of the associated license(s).
         '';
         sourceProvenance = meta.sourceProvenance or [ sourceTypes.binaryNativeCode ];
-        platforms = finalAttrs.passthru.supportedNixSystems;
-        broken = _mkMetaBroken finalAttrs;
-        badPlatforms = _mkMetaBadPlatforms finalAttrs;
         downloadPage =
           meta.downloadPage
             or "https://developer.download.nvidia.com/compute/${finalAttrs.passthru.redistName}/redist/${finalAttrs.pname}";
@@ -457,6 +383,84 @@ extendMkDerivation {
           else
             [ licenses.nvidiaCuda ];
         teams = meta.teams or [ ] ++ [ teams.cuda ];
+
+        broken = meta.broken or false || _hasProblemKind "broken" finalAttrs;
+        platforms =
+          meta.platforms or (pipe finalAttrs.passthru.supportedReleases [
+            attrNames
+            (concatMap getNixSystems)
+            naturalSort
+            unique
+          ]);
+        badPlatforms = _mkMetaBadPlatforms finalAttrs;
+
+        problems =
+          let
+            isSupportedRedistSystem = _redistSystemIsSupported hostRedistSystem finalAttrs.passthru.supportedRedistSystems;
+          in
+          meta.problems or [ ]
+          ++ _mkMetaProblems [
+            {
+              kind = "unsupported";
+              message = ''
+                CUDA without global `config.cudaSupport` is unsafe and unsupported.
+                Cf. NixOS 25.11 Release Notes.
+
+                a) Use `import <nixpkgs> { config.cudaSupport = true; }`.
+                b) For `nixos-rebuild`, set
+                  { nixpkgs.config.cudaSupport = true; }
+                in `configuration.nix`.
+                c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+                  { cudaSupport = true; }
+                to ~/.config/nixpkgs/config.nix.
+              '';
+              assertion = config.cudaSupport;
+            }
+            {
+              kind = "unsupported";
+              message = "src is null if and only if hostRedistSystem is unsupported";
+              assertion = (finalAttrs.src == null) == !isSupportedRedistSystem;
+            }
+            {
+              kind = "unsupported";
+              message = "hostRedistSystem (${hostRedistSystem}) is supported (${builtins.toJSON finalAttrs.passthru.supportedRedistSystems})";
+              assertion = isSupportedRedistSystem;
+            }
+
+            {
+              kind = "broken";
+              message = "lib output precedes static output";
+              assertion =
+                let
+                  libIndex = findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+                  staticIndex = findFirstIndex (x: x == "static") null finalAttrs.outputs;
+                in
+                libIndex == null || staticIndex == null || libIndex < staticIndex;
+            }
+            {
+              kind = "broken";
+              # NOTE: We cannot (easily) check that all expected outputs have a corresponding outputNameVar attribute in
+              # finalAttrs because of the presence of attributes which use the "output" prefix but are not outputNameVars
+              # (e.g., outputChecks and outputName).
+              message = "outputNameVarFallbacks is a super set of expectedOutputs";
+              assertion =
+                subtractLists (map mkOutputNameVar finalAttrs.passthru.expectedOutputs) (
+                  attrNames finalAttrs.passthru.outputNameVarFallbacks
+                ) == [ ];
+            }
+            {
+              kind = "broken";
+              message = "outputToPatterns is a super set of expectedOutputs";
+              assertion =
+                subtractLists finalAttrs.passthru.expectedOutputs (attrNames finalAttrs.passthru.outputToPatterns)
+                == [ ];
+            }
+            {
+              kind = "broken";
+              message = "propagatedBuildOutputs is a subset of outputs";
+              assertion = subtractLists finalAttrs.outputs finalAttrs.propagatedBuildOutputs == [ ];
+            }
+          ];
       };
     }
     # Setup the outputNameVar variables to gracefully handle missing outputs.

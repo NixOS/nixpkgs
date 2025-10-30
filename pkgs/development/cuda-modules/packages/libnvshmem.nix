@@ -179,7 +179,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Parallel programming interface for NVIDIA GPUs based on OpenSHMEM";
     homepage = "https://github.com/NVIDIA/nvshmem";
-    broken = _cuda.lib._mkMetaBroken finalAttrs;
+    broken = _cuda.lib._hasProblemKind "broken" finalAttrs;
     # NOTE: There are many licenses:
     # https://github.com/NVIDIA/nvshmem/blob/7dd48c9fd7aa2134264400802881269b7822bd2f/License.txt
     license = licenses.nvidiaCudaRedist;
