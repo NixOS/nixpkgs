@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tsidp";
-  version = "0.0.4";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tsidp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u6dQORtB4eNEFLlouuFV5oxedSN1fZ31YkZavfU1F0U=";
+    hash = "sha256-qOZJkCVAgR6xXZryysyFbf/P8zrLhe2iHYWFlIadiBM=";
   };
 
-  vendorHash = "sha256-obtcJTg7V4ij3fGVmZMD7QQwKJX6K5PPslpM1XKCk9Q=";
+  vendorHash = "sha256-iBy+osK+2LdkTzXhrkSaB6nWpUCpr8VkxJTtcfVCFuw=";
 
   meta = {
     homepage = "https://github.com/tailscale/tsidp";
