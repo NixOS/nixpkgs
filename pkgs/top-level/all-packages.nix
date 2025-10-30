@@ -3568,8 +3568,6 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
-  pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend { };
-
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
@@ -4147,8 +4145,6 @@ with pkgs;
   usort = with python3Packages; toPythonApplication usort;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
-
-  vcmi = libsForQt5.callPackage ../games/vcmi { };
 
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
@@ -5027,8 +5023,6 @@ with pkgs;
     indradb-server
     indradb-client
     ;
-
-  instawow = callPackage ../games/instawow/default.nix { };
 
   irony-server = callPackage ../development/tools/irony-server {
     # The repository of irony to use -- must match the version of the employed emacs
@@ -10009,8 +10003,6 @@ with pkgs;
   libkrun-sev = libkrun.override { variant = "sev"; };
   libkrun-tdx = libkrun.override { variant = "tdx"; };
 
-  linthesia = callPackage ../games/linthesia/default.nix { };
-
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
   lklWithFirewall = lkl.override { firewallSupport = true; };
@@ -13045,8 +13037,6 @@ with pkgs;
 
   ### GAMES/DOOM-PORTS
 
-  doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
-
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
   zandronum = callPackage ../games/doom-ports/zandronum { };
@@ -13056,8 +13046,6 @@ with pkgs;
   };
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
-
-  qgo = libsForQt5.callPackage ../games/qgo { };
 
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
@@ -13087,10 +13075,6 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
-  chiaki = libsForQt5.callPackage ../games/chiaki { };
-
-  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
-
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
   };
@@ -13107,11 +13091,9 @@ with pkgs;
     inherit libGL libGLU libglut;
   };
 
-  crawlTiles = callPackage ../games/crawl {
+  crawlTiles = callPackage ../by-name/cr/crawl/package.nix {
     tileMode = true;
   };
-
-  crawl = callPackage ../games/crawl { };
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
@@ -13126,14 +13108,12 @@ with pkgs;
 
   dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 
-  dxx-rebirth = callPackage ../games/dxx-rebirth { };
-
-  inherit (callPackages ../games/dxx-rebirth/assets.nix { })
+  inherit (callPackages ../by-name/dx/dxx-rebirth/assets.nix { })
     descent1-assets
     descent2-assets
     ;
 
-  inherit (callPackages ../games/dxx-rebirth/full.nix { })
+  inherit (callPackages ../by-name/dx/dxx-rebirth/full.nix { })
     d1x-rebirth-full
     d2x-rebirth-full
     ;
@@ -13198,13 +13178,10 @@ with pkgs;
 
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
-  qtads = qt5.callPackage ../games/qtads { };
-
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
-  iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
-  iortcw_sp = callPackage ../games/iortcw/sp.nix { };
+  iortcw_sp = callPackage ../by-name/io/iortcw/sp.nix { };
 
   katagoWithCuda = katago.override {
     backend = "cuda";
@@ -13218,9 +13195,7 @@ with pkgs;
     backend = "tensorrt";
   };
 
-  koboredux = callPackage ../games/koboredux { };
-
-  koboredux-free = callPackage ../games/koboredux {
+  koboredux-free = callPackage ../by-name/ko/koboredux/package.nix {
     useProprietaryAssets = false;
   };
 
@@ -13259,16 +13234,9 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
-  mudlet = libsForQt5.callPackage ../games/mudlet {
-    lua = lua5_1;
-  };
+  blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
-  blightmud = callPackage ../games/blightmud { };
-
-  blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
-
-  npush = callPackage ../games/npush { };
-  run-npush = callPackage ../games/npush/run.nix { };
+  run-npush = callPackage ../by-name/np/npush/run.nix { };
 
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
@@ -13295,8 +13263,6 @@ with pkgs;
   };
   openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix { };
   openttd-nml = callPackage ../games/openttd/nml.nix { };
-
-  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
   openxray = callPackage ../games/openxray {
     # Builds with Clang, but hits an assertion failure unless GCC is used
@@ -13333,20 +13299,13 @@ with pkgs;
     quake3hires
     ;
 
-  quakespasm = callPackage ../games/quakespasm { };
-  vkquake = callPackage ../games/quakespasm/vulkan.nix { };
-
-  rogue = callPackage ../games/rogue {
-    ncurses = ncurses5;
-  };
+  vkquake = callPackage ../by-name/qu/quakespasm/vulkan.nix { };
 
   rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
   };
 
-  scummvm = callPackage ../games/scummvm { };
-
-  inherit (callPackage ../games/scummvm/games.nix { })
+  inherit (callPackage ../by-name/sc/scummvm/games.nix { })
     beneath-a-steel-sky
     broken-sword-25
     drascula-the-vampire-strikes-back
@@ -13359,22 +13318,19 @@ with pkgs;
     isMobile = true;
   };
 
-  shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
-  rkpd2 = callPackage ../games/shattered-pixel-dungeon/rkpd2 { };
-  rat-king-adventure = callPackage ../games/shattered-pixel-dungeon/rat-king-adventure { };
+  rkpd2 = callPackage ../by-name/sh/shattered-pixel-dungeon/rkpd2 { };
+  rat-king-adventure = callPackage ../by-name/sh/shattered-pixel-dungeon/rat-king-adventure { };
   experienced-pixel-dungeon =
-    callPackage ../games/shattered-pixel-dungeon/experienced-pixel-dungeon
+    callPackage ../by-name/sh/shattered-pixel-dungeon/experienced-pixel-dungeon
       { };
-  summoning-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/summoning-pixel-dungeon { };
-  shorter-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/shorter-pixel-dungeon { };
-  tower-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/tower-pixel-dungeon { };
+  summoning-pixel-dungeon =
+    callPackage ../by-name/sh/shattered-pixel-dungeon/summoning-pixel-dungeon
+      { };
+  shorter-pixel-dungeon = callPackage ../by-name/sh/shattered-pixel-dungeon/shorter-pixel-dungeon { };
+  tower-pixel-dungeon = callPackage ../by-name/sh/shattered-pixel-dungeon/tower-pixel-dungeon { };
 
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
-
-  soi = callPackage ../games/soi {
-    lua = lua5_1;
-  };
 
   steam-run = steam.run;
   steam-run-free = steam.run-free;
