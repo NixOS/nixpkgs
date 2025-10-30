@@ -9,11 +9,10 @@ let
     meta.license = lib.licenses.cc-by-sa-40;
   };
 
-  defaultMpdCfg = rec {
+  defaultMpdCfg = {
     user = "mpd";
     group = "mpd";
     dataDir = "/var/lib/mpd";
-    musicDirectory = "${dataDir}/music";
     enable = true;
   };
 
@@ -21,7 +20,7 @@ let
     {
       user,
       group,
-      musicDirectory,
+      dataDir,
     }:
     {
       description = "Sets up the music file(s) for MPD to use.";
@@ -29,7 +28,7 @@ let
       after = [ "mpd.service" ];
       wantedBy = [ "default.target" ];
       script = ''
-        cp ${track} ${musicDirectory}
+        cp ${track} ${dataDir}/music
       '';
       serviceConfig = {
         User = user;
@@ -68,7 +67,7 @@ in
               }
             '';
           };
-          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+          musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
         })
         { networking.firewall.allowedTCPPorts = [ 6600 ]; }
       ];
@@ -86,7 +85,7 @@ in
             '';
           };
 
-          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+          musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
         })
         {
           services.pulseaudio = {
