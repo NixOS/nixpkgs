@@ -3124,6 +3124,8 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
+  jkqtplotter = libsForQt5.callPackage ../development/libraries/jkqtplotter { };
+
   joplin = nodePackages.joplin;
 
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
@@ -12841,6 +12843,11 @@ with pkgs;
   };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
+
+  inherit (callPackage ../applications/misc/xppen { })
+    xppen_3
+    xppen_4
+    ;
 
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
