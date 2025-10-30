@@ -14,7 +14,6 @@
   fetchFromGitHub,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
-  ...
 }:
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
