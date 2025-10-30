@@ -11,8 +11,8 @@ in
   name = "nominatim";
   meta = {
     maintainers = with lib.teams; [
-      geospatial
-      ngi
+      geospatial.members
+      ngi.members
     ];
   };
 
