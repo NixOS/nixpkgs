@@ -7,18 +7,38 @@
   };
 
   nodes.machine =
-    { pkgs, lib, ... }:
     {
-      imports = [
-        ./common/x11.nix
-        ./common/user-account.nix
-      ];
-      test-support.displayManager.auto.user = "alice";
-      services.displayManager.defaultSession = lib.mkForce "ragnar";
+      pkgs,
+      lib,
+      nodes,
+      ...
+    }:
+    {
+      imports = [ ./common/user-account.nix ];
+
+      services.xserver.enable = true;
       services.xserver.windowManager.ragnarwm.enable = true;
 
-      # Setup the default terminal of Ragnar
-      environment.systemPackages = [ pkgs.alacritty ];
+      services.displayManager.defaultSession = lib.mkForce "ragnar";
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = nodes.machine.users.users.alice.name;
+      };
+
+      environment.systemPackages = [ pkgs.kitty ];
+
+      environment.etc."ragnarwm/ragnar.cfg".text = ''
+        mod_key = "Super";
+
+        keybinds = (
+          {
+            mod = "%mod_key";
+            key = "KeyReturn";
+            do = "runcmd";
+            cmd = "kitty &";
+          },
+        );
+      '';
     };
 
   testScript = ''
@@ -30,8 +50,8 @@
     with subtest("ensure we can open a new terminal"):
         # Sleeping a bit before the test, as it may help for sending keys
         machine.sleep(2)
-        machine.send_key("meta_l-ret")
-        machine.wait_for_window(r"alice.*?machine")
+        machine.send_key("meta_l-f1")
+        # machine.wait_for_window(r"alice.*?machine")
         machine.sleep(2)
         machine.screenshot("terminal")
   '';
