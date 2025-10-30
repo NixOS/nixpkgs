@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loksh";
-  version = "7.7";
+  version = "7.8";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-BxQ7SZwRP9PlD2MV7DqG7tQ2lqzlkTwmaKwbgC7NYrc=";
+    hash = "sha256-daodwoq2NoJ343CWjtT6qqBirEIuHBWLQO9MkAN4s/Q=";
   };
 
   outputs = [
