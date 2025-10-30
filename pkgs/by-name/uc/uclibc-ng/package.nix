@@ -51,8 +51,10 @@ let
   + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
   ''
-  + lib.optionalString stdenv.hostPlatform.isAarch32 ''
+  + lib.optionalString stdenv.hostPlatform.isEabi ''
     CONFIG_ARM_EABI y
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch32 ''
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
     ARCH_WANTS_LITTLE_ENDIAN y
