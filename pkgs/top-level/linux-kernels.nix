@@ -5,9 +5,6 @@
   config,
   buildPackages,
   callPackage,
-  makeOverridable,
-  recurseIntoAttrs,
-  dontRecurseIntoAttrs,
   stdenv,
   stdenvNoCC,
   newScope,
@@ -19,9 +16,20 @@
 # - Update packageAliases.linux_latest to the latest version
 # - Update linux_latest_hardened when the patches become available
 
-with linuxKernel;
-
 let
+  inherit (lib) recurseIntoAttrs dontRecurseIntoAttrs;
+  inherit (linuxKernel)
+    kernels
+    kernelPatches
+    manualConfig
+    packages
+    packagesFor
+    packageAliases
+    vanillaPackages
+    rtPackages
+    rpiPackages
+    ;
+
   markBroken =
     drv:
     drv.overrideAttrs (

@@ -1,7 +1,7 @@
 {
   callPackage,
   fetchFromGitHub,
-  recurseIntoAttrs,
+  lib,
 }:
 
 let
@@ -14,7 +14,7 @@ let
   };
 in
 
-recurseIntoAttrs {
+lib.recurseIntoAttrs {
   client = callPackage ./client.nix { inherit src version; };
   server = callPackage ./server.nix { inherit src version; };
 }
