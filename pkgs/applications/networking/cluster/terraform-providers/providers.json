@@ -886,13 +886,13 @@
     "vendorHash": "sha256-I8yMdS+yOk5doWGU9VPdl5ITGNrPhs5tGwluwXSrnI0="
   },
   "metio_migadu": {
-    "hash": "sha256-FDZOBxxoY9fZ9g24onNoFn4e0xtBMYLCoqdYcdhIj4E=",
+    "hash": "sha256-Itfy/EZiBI6j4GU9I3pQGpsMkykN8FVZ4FPhcUre8a0=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
     "owner": "metio",
     "repo": "terraform-provider-migadu",
-    "rev": "2025.10.16",
+    "rev": "2025.10.30",
     "spdx": "0BSD",
-    "vendorHash": "sha256-bxq4AB9qvhZPxtG4lmfVXQL3mil7UaJ46EWU1iD0ymE="
+    "vendorHash": "sha256-LMCFXZYZ9qwuu0/hA8mRNktCwwC4DRaqveW2dAJWQTQ="
   },
   "mongey_kafka": {
     "hash": "sha256-rTa6c7jAMH027V7h/yUGVGz6TS0PDdObilxU0Vpr6FI=",
@@ -1129,13 +1129,13 @@
     "vendorHash": "sha256-M2lJKmIR66lQKFkInjizn68ax2Gq4sim5Y3vZKyDhZ8="
   },
   "rootlyhq_rootly": {
-    "hash": "sha256-4YjmP7DMaqsDADi0+B39Wn0CA2M3MEhV3VKA+M/gHMg=",
+    "hash": "sha256-215PagKhONN483SGvYsLWQfKnSWmUKL1vCM4mr2xuGo=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v4.3.3",
+    "rev": "v4.3.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-auyQLDDQ+tfMQCqICDR5tfvaYrO89Eani7lAsfoPwwU="
+    "vendorHash": "sha256-MNddgnKFdrOCfpj84McqW/8lmU/t36x2Whsl9xkmrhM="
   },
   "rundeck_rundeck": {
     "hash": "sha256-g8unbz8+UGLiAOJju6E2bLkygvZgHkv173PdMDefmrc=",
