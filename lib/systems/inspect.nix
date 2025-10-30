@@ -437,6 +437,21 @@ rec {
     isMacho = {
       kernel.execFormat = execFormats.macho;
     };
+
+    isEabi =
+      with abis;
+      map (a: { abi = a; }) [
+        androideabi
+        eabi
+        eabihf
+        gnueabi
+        gnueabihf
+        musleabi
+        musleabihf
+        uclibceabi
+        uclibceabihf
+      ];
+
   };
 
   # given two patterns, return a pattern which is their logical AND.
