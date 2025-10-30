@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -33,11 +34,11 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [ "-short" ];
 
-  postInstall = ''
-    for shell in bash zsh; do
-      $out/bin/kompose completion $shell > kompose.$shell
-      installShellCompletion kompose.$shell
-    done
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} completion bash) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completion zsh) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} completion fish)
   '';
 
   passthru.tests.version = testers.testVersion {
