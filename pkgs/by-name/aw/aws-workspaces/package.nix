@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
   writeShellApplication,
   buildFHSEnv,
@@ -34,14 +35,12 @@ let
       echo "Release: 22.04"
     '';
   };
-  pname = "aws-workspaces";
-
 in
 buildFHSEnv {
-  inherit pname;
+  pname = "aws-workspaces";
   inherit (workspacesclient) version;
 
-  runScript = "${workspacesclient}/bin/workspacesclient";
+  runScript = lib.getExe workspacesclient;
 
   includeClosures = true;
 
@@ -66,7 +65,7 @@ buildFHSEnv {
 
   # expected executable doesn't match the name of this package
   extraInstallCommands = ''
-    mv $out/bin/${pname} $out/bin/workspacesclient
+    mv $out/bin/aws-workspaces $out/bin/${workspacesclient.meta.mainProgram}
 
     ln -s ${workspacesclient}/share $out/
   '';
