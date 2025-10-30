@@ -159,15 +159,39 @@ let
 
   pkgsForCall = if actuallySplice then splicedPackagesWithXorg else packagesWithXorg;
 
+  callPackageSplice =
+    fn: args:
+    let
+      calls = {
+        buildBuild = splicedPackages.pkgsBuildBuild.callPackage;
+        buildHost = splicedPackages.pkgsBuildHost.callPackage;
+        buildTarget = splicedPackages.pkgsBuildTarget.callPackage;
+        hostHost = splicedPackages.pkgsHostHost.callPackage;
+        hostTarget = splicedPackages.pkgsHostTarget.callPackage;
+        targetTarget = pkgs.pkgsTargetTarget.callPackage or { };
+      };
+    in
+    if actuallySplice then
+      (
+        (callPackage fn args)
+        // {
+          __spliced = { } // (lib.mapAttrs (_: v: v fn args) (lib.filterAttrs (_: v: v != { }) calls));
+        }
+      )
+    else
+      callPackage fn args;
+
+  callPackage = pkgs.newScope { };
+
 in
 
 {
-  inherit splicePackages;
+  inherit callPackageSplice splicePackages;
 
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
-  callPackage = pkgs.newScope { };
+  inherit callPackage;
 
   callPackages = lib.callPackagesWith pkgsForCall;
 
