@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   openssl,
   stdenvNoCC,
@@ -26,7 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  doCheck = !stdenvNoCC.hostPlatform.isDarwin; # https://github.com/george-language/glang/issues/41
+  patches = [
+    # Remove glang > 0.1.2
+    (fetchpatch2 {
+      url = "https://github.com/george-language/glang/commit/62062b11af26c3d54e9a27b392d14ba4a31767b6.patch";
+      hash = "sha256-l6w3vYL/QSrGDGkSGCiGn20HeXGtj+JFFAZA+bHHjM8=";
+    })
+  ];
+
   doInstallCheck = !stdenvNoCC.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
