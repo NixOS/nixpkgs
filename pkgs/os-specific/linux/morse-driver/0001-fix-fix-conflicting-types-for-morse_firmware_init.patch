@@ -1,0 +1,50 @@
+From 66b5afbfe4a940056b18e8f26f2b515c964a2927 Mon Sep 17 00:00:00 2001
+From: Govind Singh <govind.sk85@gmail.com>
+Date: Fri, 31 Oct 2025 10:52:30 +0400
+Subject: [PATCH] fix: fix conflicting types for 'morse_firmware_init'
+
+fix conflicting types for 'morse_firmware_init' due to
+[-Werror=enum-int-mismatch]
+---
+ debug.h    | 2 +-
+ firmware.h | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/debug.h b/debug.h
+index 68914da..4a09522 100644
+--- a/debug.h
++++ b/debug.h
+@@ -154,7 +154,7 @@ extern uint debug_mask;
+  *
+  * @returns	True if output would be generated and false otherwise.
+  */
+-bool morse_log_is_enabled(u32 id, u8 level);
++bool morse_log_is_enabled(enum morse_feature_id id, u8 level);
+ 
+ /**
+  * Set the default logging level for all features.
+diff --git a/firmware.h b/firmware.h
+index 0416c29..7ce47ec 100644
+--- a/firmware.h
++++ b/firmware.h
+@@ -31,6 +31,8 @@
+ #error "Capability subset filled by firmware is to big"
+ #endif
+ 
++enum morse_config_test_mode;
++
+ enum morse_fw_info_tlv_type {
+ 	MORSE_FW_INFO_TLV_BCF_ADDR = 1,
+ 	MORSE_FW_INFO_TLV_COREDUMP_MEM_REGION = 2,
+@@ -139,7 +141,7 @@ struct extended_host_table {
+ 	u8 ext_host_table_data_tlvs[];
+ } __packed;
+ 
+-int morse_firmware_init(struct morse *mors, uint test_mode);
++int morse_firmware_init(struct morse *mors, enum morse_config_test_mode test_mode);
+ 
+ /**
+  * @brief Perform non-destructive-reset of the chip,
+-- 
+2.34.1
+
