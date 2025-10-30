@@ -145,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
       iedame
     ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
