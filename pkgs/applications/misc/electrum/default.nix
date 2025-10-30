@@ -23,12 +23,12 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.6.0";
+  version = "4.6.2";
   format = "setuptools";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-aQqZXyfqFgc1j2r836eaaayOmSzDijHlYXmF+OBw418=";
+    hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
   };
 
   build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
