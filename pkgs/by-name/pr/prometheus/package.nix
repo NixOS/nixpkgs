@@ -1,6 +1,5 @@
 {
   stdenv,
-  buildPackages,
   lib,
   go,
   buildGoModule,
@@ -33,14 +32,17 @@
 }:
 
 let
+  source = import ./source.nix;
+
+  inherit (source) version vendorHash;
+
   pname = "prometheus";
-  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = "sha256-bitRDX1oymFfzvQVYL31BON6UBfQYnqjZefQKc+yXx0=";
+    hash = source.hash;
   };
 
   assets = buildNpmPackage {
@@ -49,7 +51,7 @@ let
 
     src = "${src}/web/ui";
 
-    npmDepsHash = "sha256-Uq7vikiYLqhRQNCpB49aMJgAE/uK4Mst/Iz6W+hdxBw=";
+    npmDepsHash = source.npmDepsHash;
 
     patches = [
       # Disable old React app as it depends on deprecated create-react-apps
@@ -79,15 +81,18 @@ let
   };
 in
 buildGoModule (finalAttrs: {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    vendorHash
+    src
+    ;
 
   outputs = [
     "out"
     "doc"
     "cli"
   ];
-
-  vendorHash = "sha256-V+qLxjqGOaT1veEwtklqcS7iO31ufvDHBA9DbZLzDiE=";
 
   excludedPackages = [
     "documentation/prometheus-mixin"
