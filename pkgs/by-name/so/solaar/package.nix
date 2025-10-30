@@ -8,6 +8,7 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  upower,
   udevCheckHook,
   acl,
 }:
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libappindicator
     librsvg
+    upower
   ];
 
   propagatedBuildInputs = with python3Packages; [
