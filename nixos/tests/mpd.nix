@@ -47,7 +47,10 @@ in
 {
   name = "mpd";
   meta = {
-    maintainers = with lib.maintainers; [ emmanuelrosa ];
+    maintainers = with lib.maintainers; [
+      emmanuelrosa
+      doronbehar
+    ];
   };
 
   nodes = {
