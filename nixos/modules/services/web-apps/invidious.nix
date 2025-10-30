@@ -203,16 +203,15 @@ let
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      script = ''
-        mkdir -p socket
-        exec ${lib.getExe cfg.http3-ytproxy.package};
-      '';
-
       serviceConfig = {
+        ExecStart = lib.getExe cfg.http3-ytproxy.package;
         RestartSec = "2s";
         DynamicUser = true;
         User = lib.mkIf cfg.nginx.enable config.services.nginx.user;
-        RuntimeDirectory = "http3-ytproxy";
+        RuntimeDirectory = [
+          "http3-ytproxy"
+          "http3-ytproxy/socket"
+        ];
         WorkingDirectory = "/run/http3-ytproxy";
       };
     };
@@ -227,14 +226,12 @@ let
   sigHelperConfig = lib.mkIf cfg.sig-helper.enable {
     services.invidious.settings.signature_server = "tcp://${cfg.sig-helper.listenAddress}";
     systemd.services.invidious-sig-helper = {
-      script = ''
-        exec ${lib.getExe cfg.sig-helper.package} --tcp "${cfg.sig-helper.listenAddress}"
-      '';
       wantedBy = [ "multi-user.target" ];
       before = [ "invidious.service" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
+        ExecStart = "${lib.getExe cfg.sig-helper.package} --tcp '${cfg.sig-helper.listenAddress}'";
         User = "invidious-sig-helper";
         DynamicUser = true;
         Restart = "always";
