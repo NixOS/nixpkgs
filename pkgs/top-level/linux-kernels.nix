@@ -17,11 +17,18 @@
 
 # When adding a kernel:
 # - Update packageAliases.linux_latest to the latest version
+# - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
 # - Update linux_latest_hardened when the patches become available
 
 with linuxKernel;
 
 let
+  deblobKernel =
+    kernel:
+    callPackage ../os-specific/linux/kernel/linux-libre.nix {
+      linux = kernel;
+    };
+
   markBroken =
     drv:
     drv.overrideAttrs (
@@ -260,14 +267,15 @@ in
           ];
         };
 
+        linux_libre = deblobKernel packageAliases.linux_default.kernel;
+
+        linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
+
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
         linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
       }
       // lib.optionalAttrs config.allowAliases {
-        linux_libre = throw "linux_libre has been removed due to lack of maintenance";
-        linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
-
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11";
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
@@ -764,10 +772,12 @@ in
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+
+      linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
+
+      linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
     }
     // lib.optionalAttrs config.allowAliases {
-      linux_libre = throw "linux_libre has been removed due to lack of maintenance";
-      linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
       linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
       linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
