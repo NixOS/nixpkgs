@@ -18,6 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-83vicOeL/CufgkOO+oKLbydv0Hu08kMcPxVjrQGzn3c=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
