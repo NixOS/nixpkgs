@@ -1428,7 +1428,7 @@ with pkgs;
 
   vifm-full = vifm.override {
     mediaSupport = true;
-    inherit lib udisks2 python3;
+    inherit lib udisks python3;
   };
 
   xfe = callPackage ../by-name/xf/xfe/package.nix {
@@ -10359,8 +10359,6 @@ with pkgs;
   eudev = callPackage ../by-name/eu/eudev/package.nix {
     util-linux = util-linuxMinimal;
   };
-
-  udisks2 = udisks;
 
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
