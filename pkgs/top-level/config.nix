@@ -235,7 +235,10 @@ let
         `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses.
       '';
       default = [ ];
-      type = types.listOf (types.attrsOf types.anything);
+      # NOTE: The type should be `types.listOf (types.attrsOf types.anything)` -- however, this causes infinite
+      # recursion when `config` is a function because bootstrapping the package set requires evaluating licenses.
+      # For now, we use types.raw, the same type used by `freeformType`.
+      type = types.raw;
       example = literalExpression ''
         with lib.licenses; [
           amd
@@ -250,7 +253,10 @@ let
         applies to all licenses.
       '';
       default = [ ];
-      type = types.listOf (types.attrsOf types.anything);
+      # NOTE: The type should be `types.listOf (types.attrsOf types.anything)` -- however, this causes infinite
+      # recursion when `config` is a function because bootstrapping the package set requires evaluating licenses.
+      # For now, we use types.raw, the same type used by `freeformType`.
+      type = types.raw;
       example = literalExpression ''
         with lib.licenses; [
           agpl3Only
