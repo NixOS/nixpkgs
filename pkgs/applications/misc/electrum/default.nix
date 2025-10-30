@@ -82,7 +82,11 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_qml_types.py"
   ];
 
-  postPatch =
+  postPatch = ''
+    # Upstream tarball omits regenerated protobuf bindings in some releases.
+    protoc --python_out=. electrum/paymentrequest.proto
+  ''
+  + (
     if enableQt then
       ''
         substituteInPlace ./electrum/qrscanner.py \
@@ -91,7 +95,8 @@ python3.pkgs.buildPythonApplication rec {
     else
       ''
         sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-      '';
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
@@ -103,7 +108,15 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/electrum
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  ''
+  + lib.optionalString enableQt ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
+    protobuf
     pytestCheckHook
     pyaes
     pycryptodomex
@@ -113,6 +126,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # avoid homeless-shelter error in tests
   preCheck = ''
+    export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
     export HOME="$(mktemp -d)"
   '';
 
