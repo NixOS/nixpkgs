@@ -134,5 +134,8 @@ in
     # The PulseAudio-based server is configured not to accept external client connections
     # to perform the following test:
     client.fail(f"{mpc} -h serverPulseAudio status")
+    # For inspecting these files
+    serverALSA.copy_from_vm("/run/mpd/mpd.conf", "ALSA")
+    serverPulseAudio.copy_from_vm("/run/mpd/mpd.conf", "PulseAudio")
   '';
 }
