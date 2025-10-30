@@ -54,11 +54,17 @@ let
   + lib.optionalString stdenv.hostPlatform.isEabi ''
     CONFIG_ARM_EABI y
   ''
-  + lib.optionalString stdenv.hostPlatform.isAarch32 ''
+  + lib.optionalString stdenv.hostPlatform.isLittleEndian ''
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
     ARCH_WANTS_LITTLE_ENDIAN y
     ARCH_LITTLE_ENDIAN y
+  ''
+  + lib.optionalString stdenv.hostPlatform.isBigEndian ''
+    ARCH_WANTS_BIG_ENDIAN y
+    ARCH_BIG_ENDIAN y
+    ARCH_WANTS_LITTLE_ENDIAN n
+    ARCH_LITTLE_ENDIAN n
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
