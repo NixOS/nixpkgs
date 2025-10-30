@@ -235,15 +235,12 @@ in
             "pqsk:${cfg.settings.secret_key}"
             "pqpk:${cfg.settings.public_key}"
           ];
+          ExecStartPre = "${getExe pkgs.envsubst} -i '${config}' -o \"$CONFIG\"";
+          ExecStart = "${lib.getExe cfg.package} exchange-config \"$CONFIG\"";
         };
 
         # See <https://www.freedesktop.org/software/systemd/man/systemd.unit.html#Specifiers>
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
-
-        script = ''
-          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
-          rosenpass exchange-config "$CONFIG"
-        '';
       };
   };
 }
