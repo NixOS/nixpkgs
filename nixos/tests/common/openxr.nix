@@ -7,8 +7,8 @@
 
 {
   imports = [
-    ../common/user-account.nix
-    ../common/x11.nix
+    ./user-account.nix
+    ./x11.nix
   ];
   test-support.displayManager.auto.user = "alice";
   systemd.user.targets.xdg-desktop-autostart = {
@@ -32,16 +32,6 @@
       XRT_COMPOSITOR_FORCE_XCB = "1";
       # And run fullscreen so that we can hide the DE
       XRT_COMPOSITOR_XCB_FULLSCREEN = "1";
-    };
-  };
-
-  systemd.user.services.stardust-xr-server = {
-    wantedBy = [ "xdg-desktop-autostart.target" ];
-    requires = [ "monado.service" ];
-    serviceConfig = {
-      Type = "notify";
-      NotifyAccess = "all";
-      ExecStart = "${lib.getExe pkgs.stardust-xr-server} -e ${pkgs.writeShellScript "notifyReady" "systemd-notify --ready"}";
     };
   };
 }
