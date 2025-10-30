@@ -3,6 +3,9 @@ name: Build
 on:
   workflow_call:
     inputs:
+      artifact-prefix:
+        required: true
+        type: string
       baseBranch:
         required: true
         type: string
@@ -100,5 +103,5 @@ jobs:
           contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: nixos-manual-${{ matrix.name }}
+          name: ${{ inputs.artifact-prefix }}nixos-manual-${{ matrix.name }}
           path: nixos-manual

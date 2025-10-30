@@ -68,20 +68,6 @@ jobs:
               '.github/workflows/test.yml',
             ].includes(file))) core.setOutput('pr', true)
 
-  merge-group:
-    if: needs.prepare.outputs.merge-group
-    name: Merge Group
-    needs: [prepare]
-    uses: ./.github/workflows/merge-group.yml
-    # Those are actually only used on the merge_group event, but will throw an error if not set.
-    permissions:
-      statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-    with:
-      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
-      targetSha: ${{ needs.prepare.outputs.targetSha }}
-
   pr:
     if: needs.prepare.outputs.pr
     name: PR
@@ -95,3 +81,20 @@ jobs:
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+    with:
+      artifact-prefix: pr-
+
+  merge-group:
+    if: needs.prepare.outputs.merge-group
+    name: Merge Group
+    needs: [prepare, pr]
+    uses: ./.github/workflows/merge-group.yml
+    # Those are actually only used on the merge_group event, but will throw an error if not set.
+    permissions:
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      artifact-prefix: mg-
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
