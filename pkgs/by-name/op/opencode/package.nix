@@ -22,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.15.14";
+  version = "0.15.29";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K7TmsJm11uDNjN3fUaapM1A01FmHUSfXMiqOzhLzRI8=";
+    hash = "sha256-L3IcADx0fbtnqlf8Ysc1J5DVJp6ZQtN2faBJqAFMD3g=";
   };
 
   tui = buildGoModule {
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-g3+2q7yRaM6BgIs5oIXz/u7B84ZMMjnxXpvFpqDePU4=";
+    vendorHash = "sha256-muwry7B0GlgueV8+9pevAjz3Cg3MX9AMr+rBwUcQ9CM=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -111,10 +111,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHash =
       {
-        x86_64-linux = "sha256-8pJBLNPuF7+wcUCNoI9z68q5Pl6Mvm1ZvIDianLPdHo=";
-        aarch64-linux = "sha256-zODR/4mcE4Hh3I6Yh8ExUi3WdBttrRBf00ItQ4TmVMU=";
-        x86_64-darwin = "sha256-ZJFT0qY82UK9jXVMQweXXjZ4ohZLKVJEf+CjfRkJB9E=";
-        aarch64-darwin = "sha256-0bjdbPXm2TkOEsSyqvPJnFLIzmBJt5SH40hwYutWYBY=";
+        x86_64-linux = "sha256-QX+6uxG1V4QdecJX5vyFlgy5pBPPv8rne7pklSA2k3c=";
+        aarch64-linux = "sha256-S8nuMMgGeGAuCevuLxMK5j9+VFbqWuqf+ZYZSVzAp/k=";
+        x86_64-darwin = "sha256-qwRMCTSj7+0tygwWO4INYdblpGpUZm2RMhnELdd6sw4=";
+        aarch64-darwin = "sha256-vJ1tSW/ozE1Fz16RFcV46DDyyITGeuBhbqNMegIoGAo=";
       }
       .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
@@ -194,6 +194,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AI coding agent built for the terminal";
+    changelog = "https://github.com/sst/opencode/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       OpenCode is a terminal-based agent that can build anything.
       It combines a TypeScript/JavaScript core with a Go-based TUI

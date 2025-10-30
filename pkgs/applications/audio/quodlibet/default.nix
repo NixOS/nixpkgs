@@ -192,7 +192,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      coroa
       pbogdan
     ];
   };
