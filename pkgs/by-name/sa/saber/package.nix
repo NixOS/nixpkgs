@@ -23,13 +23,13 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
-  version = "0.26.10";
+  version = "0.26.12";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-PmkhIyRbRWp+ZujP8R1/h7NpKwYsaKx4JtYIikZjVzc=";
+    hash = "sha256-gM5aaVIBcllj3/X1L577+znOVHn33b/VhAQP+r2FXYg=";
   };
 in
 flutter335.buildFlutterApplication {
