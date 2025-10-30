@@ -3,51 +3,39 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
-  cmake,
-  cpm-cmake,
-  fontconfig,
-  libGL,
-  libxkbcommon,
-  libgbm,
-  openxr-loader,
   pkg-config,
-  xorg,
+  stereokit,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-server";
-  version = "0.44.1";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    tag = version;
-    hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
+    rev = "158e34c01d8300f1c07e66da0a7b00c8bad3378a";
+    hash = "sha256-c/+IwLgD+0v7+ePugQoES2Yob2+EtiD5uZWpQTMZ9SY=";
   };
 
-  cargoHash = "sha256-jCtMCZG3ku30tabTnVdGfgcLl5DoqhkJpLKPPliJgDU=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "smithay-0.3.0" = "sha256-FNsjbcdiI46nNSWMd4smn5Lg53UU4NFmCfV8ZfaJLs0=";
+      "stardust-xr-0.45.0" = "sha256-FdbtBgvknjGW2MnrS2QMwtTSrRjd+KezC3kY5JqRH2s=";
+      "stereokit-macros-0.5.1" = "sha256-QFH+VQkTAEjOswoBxwciQT5NjoQu2lN/J4WA9xXtGwA=";
+    };
+  };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    cmake
     pkg-config
-    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
-    fontconfig
-    libGL
-    libxkbcommon
-    libgbm
-    openxr-loader
-    xorg.libX11
-    xorg.libXfixes
+    stereokit
   ];
-
-  CPM_SOURCE_CACHE = "./build";
-
-  postPatch = ''
-    install -D ${cpm-cmake}/share/cpm/CPM.cmake $(echo $cargoDepsCopy/stereokit-sys-*/StereoKit)/build/cpm/CPM_0.32.2.cmake
-  '';
 
   passthru.updateScript = nix-update-script { };
 
