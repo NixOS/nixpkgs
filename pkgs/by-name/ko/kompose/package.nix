@@ -8,14 +8,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kompose";
   version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kompose";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wS9YoYEsCALIJMxoVTS6EH6NiBfF+qkFIv7JALnVPgs=";
   };
 
@@ -55,4 +55,4 @@ buildGoModule rec {
       vdemeester
     ];
   };
-}
+})
