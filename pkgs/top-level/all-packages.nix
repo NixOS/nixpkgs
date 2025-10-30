@@ -5864,7 +5864,7 @@ with pkgs;
   python27Packages = python27.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
-  python312Packages = recurseIntoAttrs python312.pkgs;
+  python312Packages = python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
   python314Packages = python314.pkgs;
   python315Packages = python315.pkgs;
