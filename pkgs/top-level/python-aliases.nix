@@ -154,6 +154,7 @@ mapAliases {
   face_recognition_models = throw "'face_recognition_models' has been renamed to/replaced by 'face-recognition-models'"; # Converted to throw 2025-10-29
   factory_boy = throw "'factory_boy' has been renamed to/replaced by 'factory-boy'"; # Converted to throw 2025-10-29
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-29
+  fb-re2 = throw "fb-re2 has been removed since it is unmaintained upstream, consider google-re2 instead"; # added 2025-10-18
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = throw "'filebrowser_safe' has been renamed to/replaced by 'filebrowser-safe'"; # Converted to throw 2025-10-29
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
@@ -382,7 +383,6 @@ mapAliases {
   radicale_infcloud = throw "'radicale_infcloud' has been renamed to/replaced by 'radicale-infcloud'"; # Converted to throw 2025-10-29
   radio_beam = throw "'radio_beam' has been renamed to/replaced by 'radio-beam'"; # Converted to throw 2025-10-29
   random-user-agent = throw "random-user-agent has been removed as it was abandoned upstream in 2018; use fake-useragent instead"; # Added 2025-10-17
-  fb-re2 = throw "fb-re2 has been removed since it is unmaintained upstream, consider google-re2 instead"; # added 2025-10-18
   readme_renderer = throw "'readme_renderer' has been renamed to/replaced by 'readme-renderer'"; # Converted to throw 2025-10-29
   recursivePthLoader = throw "'recursivePthLoader' has been renamed to/replaced by 'recursive-pth-loader'"; # Converted to throw 2025-10-29
   repeated_test = throw "'repeated_test' has been renamed to/replaced by 'repeated-test'"; # Converted to throw 2025-10-29
