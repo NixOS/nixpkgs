@@ -2,9 +2,10 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
-(php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject
+(php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject2
   (finalAttrs: {
     pname = "phan";
     version = "5.5.1";
@@ -16,7 +17,11 @@
       hash = "sha256-G17ORkHmu6nkfJ8UrGzcaybPOKPrq1Q+LXVS56aVOZ8=";
     };
 
-    vendorHash = "sha256-Ake5/7IyoweC2ONDuWt9jJSbG0JbnU9lmCRu2p6uUQM=";
+    vendorHash = "sha256-k/ExFSr0veKYURu66HmYaNHPubAAKH5mgIPXzcpMbPc=";
+
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgramArg = "--version";
 
     meta = {
       description = "Static analyzer for PHP";
