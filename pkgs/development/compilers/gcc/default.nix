@@ -19,7 +19,7 @@
   cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
-  enableDefaultPie ? true,
+  enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
   enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   texinfo ? null,
   perl ? null, # optional, for texi2pod (then pod2man)

@@ -1862,6 +1862,10 @@ assertNoAdditions {
       ];
   };
 
+  maple-nvim = super.maple-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.

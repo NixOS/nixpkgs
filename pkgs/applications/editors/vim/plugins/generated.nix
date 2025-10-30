@@ -8055,6 +8055,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  maple-nvim = buildVimPlugin {
+    pname = "maple.nvim";
+    version = "2025-08-02";
+    src = fetchFromGitHub {
+      owner = "forest-nvim";
+      repo = "maple.nvim";
+      rev = "c9525e84852197784de0d0203e73b8cb433297ff";
+      sha256 = "1idid6gv116yd8lrjzkyvhgw4lhd23gpaj326436mqndz7nwbaf9";
+    };
+    meta.homepage = "https://github.com/forest-nvim/maple.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mark-radar-nvim = buildVimPlugin {
     pname = "mark-radar.nvim";
     version = "2024-06-04";

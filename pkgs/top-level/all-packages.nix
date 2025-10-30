@@ -769,8 +769,6 @@ with pkgs;
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
-  mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
-
   nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
     inherit lib writeText;
     inherit (emacs.pkgs) inherit-local;
@@ -1246,8 +1244,6 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
-
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
     inherit (ocamlPackages)
       buildDunePackage
@@ -1535,8 +1531,6 @@ with pkgs;
 
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
-
-  apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
   arpack-mpi = arpack.override { useMpi = true; };
 
@@ -2224,8 +2218,6 @@ with pkgs;
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
   renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
-
-  rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
@@ -3700,8 +3692,6 @@ with pkgs;
 
   packagekit = callPackage ../tools/package-management/packagekit { };
 
-  pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
-
   pakcs = callPackage ../development/compilers/pakcs { };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
@@ -3852,8 +3842,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
-
   qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmarkdowntextedit = libsForQt5.callPackage ../development/libraries/qmarkdowntextedit { };
@@ -3948,8 +3936,6 @@ with pkgs;
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
-
-  selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
 
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
@@ -4099,8 +4085,6 @@ with pkgs;
   trackma-gtk = trackma.override { withGTK = true; };
 
   trackma-qt = trackma.override { withQT = true; };
-
-  tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   trezorctl = with python3Packages; toPythonApplication trezor;
 
@@ -11268,8 +11252,6 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
-
   gpsbabel-gui = gpsbabel.override {
     withGUI = true;
     withDoc = true;
@@ -11540,8 +11522,6 @@ with pkgs;
     k3s_1_34
     ;
   k3s = k3s_1_34;
-
-  kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -12103,8 +12083,6 @@ with pkgs;
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
-  qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
-
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
@@ -12390,8 +12368,6 @@ with pkgs;
     plasmoidSupport = false;
     systemdSupport = true;
   };
-
-  synergy = libsForQt5.callPackage ../applications/misc/synergy { };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
@@ -12954,8 +12930,6 @@ with pkgs;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
 
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
     boost = boost179;
@@ -13952,8 +13926,6 @@ with pkgs;
     };
   };
 
-  yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
-
   yacas-gui = yacas.override {
     enableGui = true;
     enableJupyter = false;
@@ -14041,8 +14013,6 @@ with pkgs;
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
   faust = faust2;
-
-  flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
@@ -14325,8 +14295,6 @@ with pkgs;
 
   qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
-  qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
-
   sail-riscv = callPackage ../applications/virtualization/sail-riscv {
     inherit (ocamlPackages) sail;
   };
@@ -14581,8 +14549,6 @@ with pkgs;
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
-
-  aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 

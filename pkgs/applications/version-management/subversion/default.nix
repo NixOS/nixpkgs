@@ -27,6 +27,7 @@
   perl ? null,
   sasl ? null,
   serf ? null,
+  nixosTests,
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -155,6 +156,8 @@ let
 
         nativeCheckInputs = [ python3 ];
         doCheck = false; # fails 10 out of ~2300 tests
+
+        passthru.tests = { inherit (nixosTests) svnserve; };
 
         meta = with lib; {
           description = "Version control system intended to be a compelling replacement for CVS in the open source community";
