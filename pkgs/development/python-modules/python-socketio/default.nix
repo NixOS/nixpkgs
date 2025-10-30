@@ -21,19 +21,21 @@
   pytest7CheckHook,
   simple-websocket,
   uvicorn,
+  redis,
+  valkey,
 
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.13.0";
+  version = "5.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     tag = "v${version}";
-    hash = "sha256-iOipxGALYOXLvUwn6OSjLCMZoUl7u4S5eCktUgcs/X0=";
+    hash = "sha256-2zts0gkwAoUCC8S1UDg0PlBaFH23jTv04hgGblHSX7c=";
   };
 
   build-system = [ setuptools ];
@@ -56,6 +58,8 @@ buildPythonPackage rec {
     pytest7CheckHook
     uvicorn
     simple-websocket
+    redis
+    valkey
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
