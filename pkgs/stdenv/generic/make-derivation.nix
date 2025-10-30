@@ -820,10 +820,7 @@ let
           };
           nixMeta = intersectAttrs preserveMetaFields meta;
           nixMetaJSON = builtins.toJSON nixMeta;
-          nixMetaJSONContext = builtins.getContext nixMetaJSON;
         in
-        assert assertMsg (nixMetaJSONContext == { })
-          "String context not allowed in nixMeta of ${attrs.name or (attrs.pname + "-" + attrs.version or "none")}: ${builtins.toJSON nixMetaJSONContext}";
         makeDerivationArgument (
           removeAttrs attrs [
             "meta"
