@@ -16,6 +16,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZwV3mh/onlHPHeT6tky2CpawLZxEikY6hq4FVn6i5hI=";
   };
 
+  cmakeFlags = [
+    # It always builds a static binary, so we need PIC to enable linking from dynamic libraries
+    (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
+  ];
+
+  patches = [
+    ./add-cmake-config.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   meta = {

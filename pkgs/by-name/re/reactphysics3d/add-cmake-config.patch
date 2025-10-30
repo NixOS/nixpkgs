@@ -1,0 +1,49 @@
+From 336e220dd0a7ddc555b2892b19b1a78b03fe44a3 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Thu, 30 Oct 2025 07:59:58 -0700
+Subject: [PATCH] Add CMake discovery
+
+Allows for discovery of RP3D using find_package
+---
+ CMakeLists.txt                       | 19 +++++++++++++++++++
+ cmake/ReactPhysics3D-config.cmake.in |  3 +++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 cmake/ReactPhysics3D-config.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4282f709..829f5464 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -351,4 +351,23 @@ if(RP3D_COMPILE_LIBRARY)
+         DESTINATION lib/cmake/ReactPhysics3D
+     )
+ 
++	include(CMakePackageConfigHelpers)
++
++	write_basic_package_version_file(
++		"${CMAKE_CURRENT_BINARY_DIR}/ReactPhysics3DConfigVersion.cmake"
++		VERSION ${PROJECT_VERSION}
++		COMPATIBILITY AnyNewerVersion
++	)
++
++	configure_package_config_file(
++		cmake/ReactPhysics3D-config.cmake.in
++		${CMAKE_CURRENT_BINARY_DIR}/ReactPhysics3D-config.cmake
++		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ReactPhysics3D
++	)
++
++	install(FILES
++		${CMAKE_CURRENT_BINARY_DIR}/ReactPhysics3D-config.cmake
++		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ReactPhysics3D
++	)
++
+ endif()
+diff --git a/cmake/ReactPhysics3D-config.cmake.in b/cmake/ReactPhysics3D-config.cmake.in
+new file mode 100644
+index 00000000..8033e809
+--- /dev/null
++++ b/cmake/ReactPhysics3D-config.cmake.in
+@@ -0,0 +1,3 @@
++@PACKAGE_INIT@
++
++include("${CMAKE_CURRENT_LIST_DIR}/ReactPhysics3DTargets.cmake")
