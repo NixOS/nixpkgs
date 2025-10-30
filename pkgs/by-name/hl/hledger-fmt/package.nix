@@ -9,20 +9,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hledger-fmt";
-  version = "0.3.1";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "mondeja";
     repo = "hledger-fmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5dPKSUJLxQ5WXZefuwr3wLhr3MNzy+dzpJkgKFU0/SE=";
+    hash = "sha256-VyDVdXxTge3ERTrkIIWgR75m7TaEbbPmFDNsoYOi9tM=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  cargoHash = "sha256-yErH9AyfBZF0PByqViVhXHB/FAc0awz4bOyAHtcHe0s=";
+  cargoHash = "sha256-jn4ptV0IVnnXR2oCxxUnGaoWG/LBlRkf25/8Nasm9qI=";
 
   # Tests try to invoke the binary from "target/debug/hledger-fmt"
   # https://github.com/mondeja/hledger-fmt/blob/783abdb32eefb20195c7e9562858552935bb9c8e/src/cli/tests.rs#L5
