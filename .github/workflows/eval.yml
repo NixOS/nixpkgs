@@ -194,6 +194,12 @@ jobs:
             --arg diffDir ./diff \
             --out-link combined
 
+      - name: Upload the maintainer list
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ inputs.artifact-prefix }}maintainers
+          path: combined/maintainers.json
+
       - name: Compare against the target branch
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
