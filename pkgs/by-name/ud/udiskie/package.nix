@@ -9,7 +9,7 @@
   libnotify,
   librsvg,
   python3Packages,
-  udisks2,
+  udisks,
   wrapGAppsHook3,
   testers,
   udiskie,
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
     libnotify
     librsvg # SVG icons
-    udisks2
+    udisks
   ];
 
   dependencies = with python3Packages; [
