@@ -12111,6 +12111,12 @@
     githubId = 547031;
     name = "Johan Herland";
   };
+  jhgalino = {
+    email = "github@jhgalino.com";
+    github = "jhgalino";
+    githubId = 38009312;
+    name = "John Henry Galino";
+  };
   jhh = {
     email = "jeff@j3ff.io";
     github = "jhh";

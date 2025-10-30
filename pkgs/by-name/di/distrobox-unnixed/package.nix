@@ -1,0 +1,57 @@
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  wget,
+}:
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "distrobox";
+  version = "1.8.2.0";
+
+  src = fetchFromGitHub {
+    owner = "89luca89";
+    repo = "distrobox";
+    rev = finalAttrs.version;
+    hash = "sha256-uwJD7HsWoQ/LxYL0mSSxMni676qqEnMHndpL01M5ySE=";
+  };
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  patches = [
+    # https://github.com/89luca89/distrobox/issues/408
+    ./relative-default-icon.patch
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    ./install -P $out
+
+    runHook postInstall
+  '';
+
+  # https://github.com/89luca89/distrobox/issues/407
+  postFixup = ''
+    wrapProgram "$out/bin/distrobox-generate-entry" \
+      --prefix PATH ":" ${lib.makeBinPath [ wget ]}
+  '';
+
+  meta = with lib; {
+    description = "Wrapper around podman or docker to create and start containers";
+    longDescription = ''
+      Use any linux distribution inside your terminal. Enable both backward and
+      forward compatibility with software and freedom to use whatever distribution
+      you’re more comfortable with. This package removes the /nix mount on the original
+      distrobox package.
+    '';
+    homepage = "https://distrobox.it/";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jhgalino ];
+  };
+})
