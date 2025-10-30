@@ -32,6 +32,7 @@ let
       preInstall ? "",
       postInstall ? "",
       path ? lib.getName pluginName,
+      updateStrategy ? "branch", # see https://github.com/Mic92/nix-update#usage for possible values
       ...
     }:
     if lib.hasAttr "dependencies" a then
@@ -39,7 +40,9 @@ let
     else
       addRtp "${rtpPath}/${path}" rtpFilePath a (
         stdenv.mkDerivation (
-          a
+          removeAttrs a [
+            "updateStrategy"
+          ]
           // {
             pname = namePrefix + pluginName;
 
@@ -68,6 +71,13 @@ let
 
               runHook postInstall
             '';
+
+            passthru = {
+              updateScript = pkgs.nix-update-script {
+                extraArgs = [ "--version=${updateStrategy}" ];
+              };
+            }
+            // a.passthru or { };
           }
         )
       );
@@ -128,6 +138,7 @@ in
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
     '';
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/catppuccin/tmux";
       description = "Soothing pastel theme for Tmux";
@@ -228,6 +239,7 @@ in
       rev = "v${version}";
       hash = "sha256-YYbPkGQmukIDD1fcYleioETFai/SOJni+aZ9Jh2+Zc8=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/eraserhd/tmux-ctrlw";
     };
@@ -251,6 +263,7 @@ in
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ethancedwards8 ];
     };
+    updateStrategy = "stable";
   };
 
   dotbar = mkTmuxPlugin rec {
@@ -262,6 +275,7 @@ in
       tag = version;
       hash = "sha256-WaRKepmPqiE+W8Tm0dBc6hGiqqZP122eXjrG0rJnt0w=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/vaaleyard/tmux-dotbar";
       downloadPage = "https://github.com/vaaleyard/tmux-dotbar";
@@ -395,6 +409,7 @@ in
       tag = "v${version}";
       hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/egel/tmux-gruvbox";
       description = "Gruvbox colorscheme for Tmux";
@@ -414,6 +429,7 @@ in
       rev = "v0.5.0";
       hash = "sha256-eqzf3hEaliF1t7zwZlj1YDGvn0jKdbBTgy5PoOPVMEU=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
       downloadPage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
@@ -721,6 +737,7 @@ in
     postInstall = ''
       sed -i -e 's,9 plumb,${pkgs.plan9port}/bin/9 plumb,' $target/scripts/plumb
     '';
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/eraserhd/tmux-plumb";
     };
@@ -875,6 +892,7 @@ in
       rev = "V${version}";
       hash = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
       description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
@@ -980,6 +998,7 @@ in
       rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
       hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
       description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
@@ -1068,6 +1087,7 @@ in
       hash = "sha256-25uG7OI8OHkdZ3GrTxG1ETNeDtW1K+sHu2DfJtVHVbk=";
     };
     rtpFilePath = "main.tmux";
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/erikw/tmux-powerline";
       description = "Empowering your tmux (status bar) experience";
@@ -1228,6 +1248,7 @@ in
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
     '';
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/joshmedeski/t-smart-tmux-session-manager";
     };
@@ -1332,6 +1353,7 @@ in
       rev = "v${version}";
       hash = "sha256-0LIql8as2+OendEHVqR0F3pmQTxC1oqapwhxT+34lJo=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/o0th/tmux-nova";
       description = "Tmux-nova theme";
@@ -1351,6 +1373,7 @@ in
       tag = "v${version}";
       hash = "sha256-daUCkt1Np8ZYvLc3Bx0HvhnI988q7lIayJju/GB6Klw=";
     };
+    updateStrategy = "stable";
     meta = {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";
       description = "Handy plugin to create toggleable popups";
