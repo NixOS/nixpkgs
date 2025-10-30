@@ -236,11 +236,8 @@ in
         glitchtip = commonService // {
           description = "GlitchTip";
 
-          preStart = ''
-            ${lib.getExe pkg} migrate
-          '';
-
           serviceConfig = commonServiceConfig // {
+            ExecStartPre = "${lib.getExe pkg} migrate";
             ExecStart = ''
               ${lib.getExe python.pkgs.gunicorn} \
                 --bind=${cfg.listenAddress}:${toString cfg.port} \

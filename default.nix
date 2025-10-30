@@ -9,7 +9,7 @@ if missingFeatures != [ ] then
     This version of Nixpkgs requires an implementation of Nix with the following features:
     - ${builtins.concatStringsSep "\n- " missingFeatures}
 
-    Your are evaluating with Nix ${builtins.nixVersion or "(too old to know)"}, please upgrade:
+    You are evaluating with Nix ${builtins.nixVersion or "(too old to know)"}, please upgrade:
 
     - If you are running NixOS, `nixos-rebuild' can be used to upgrade your system.
 

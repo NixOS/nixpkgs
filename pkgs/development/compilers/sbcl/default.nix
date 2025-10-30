@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  darwin,
   ecl,
   coreutils,
   fetchurl,
@@ -69,6 +70,7 @@ let
       "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
     else
       "${lib.getExe ecl} --norc";
+  posixUtils = if stdenv.hostPlatform.isDarwin then darwin.shell_cmds else coreutils;
 
 in
 
@@ -152,6 +154,10 @@ stdenv.mkDerivation (self: {
       # Fail intermittently
       "gc.impure.lisp"
       "threads.pure.lisp"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fails in sandbox
+      "sb-posix.impure.lisp"
     ];
 
   patches =
@@ -188,8 +194,8 @@ stdenv.mkDerivation (self: {
         # definitely NOT be patched this way, hence just a single * (and no
         # globstar).
         substituteInPlace ${if self.purgeNixReferences then "tests" else "{tests,src/code}"}/*.{lisp,sh} \
-          --replace-quiet /usr/bin/env "${coreutils}/bin/env" \
-          --replace-quiet /bin/uname "${coreutils}/bin/uname" \
+          --replace-quiet /usr/bin/env "${posixUtils}/bin/env" \
+          --replace-quiet /bin/uname "${posixUtils}/bin/uname" \
           --replace-quiet /bin/sh "${stdenv.shell}"
       )
       # Official source release tarballs will have a version.lispexpr, but if you
@@ -285,6 +291,8 @@ stdenv.mkDerivation (self: {
       }
     ''
   );
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Common Lisp compiler";

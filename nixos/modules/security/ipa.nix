@@ -7,7 +7,6 @@
 with lib;
 let
   cfg = config.security.ipa;
-  pyBool = x: if x then "True" else "False";
 
   ldapConf = pkgs.writeText "ldap.conf" ''
     # Turning this off breaks GSSAPI used with krb5 when rdns = false
@@ -236,50 +235,53 @@ in
 
     services.sssd = {
       enable = true;
-      config = ''
-        [domain/${cfg.domain}]
-        id_provider = ipa
-        auth_provider = ipa
-        access_provider = ipa
-        chpass_provider = ipa
+      settings = {
+        "domain/${cfg.domain}" = {
+          id_provider = "ipa";
+          auth_provider = "ipa";
+          access_provider = "ipa";
+          chpass_provider = "ipa";
 
-        ipa_domain = ${cfg.domain}
-        ipa_server = _srv_, ${cfg.server}
-        ipa_hostname = ${cfg.ipaHostname}
+          ipa_domain = cfg.domain;
+          ipa_server = "_srv_, ${cfg.server}";
+          ipa_hostname = cfg.ipaHostname;
 
-        cache_credentials = ${pyBool cfg.cacheCredentials}
-        krb5_store_password_if_offline = ${pyBool cfg.offlinePasswords}
-        ${optionalString ((toLower cfg.domain) != (toLower cfg.realm)) "krb5_realm = ${cfg.realm}"}
+          cache_credentials = cfg.cacheCredentials;
+          krb5_store_password_if_offline = cfg.offlinePasswords;
+          krb5_realm = lib.mkIf ((toLower cfg.domain) != (toLower cfg.realm)) cfg.realm;
 
-        dyndns_update = ${pyBool cfg.dyndns.enable}
-        dyndns_iface = ${cfg.dyndns.interface}
+          dyndns_update = cfg.dyndns.enable;
+          dyndns_iface = cfg.dyndns.interface;
 
-        ldap_tls_cacert = /etc/ipa/ca.crt
-        ldap_user_extra_attrs = mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock
+          ldap_tls_cacert = "/etc/ipa/ca.crt";
+          ldap_user_extra_attrs = "mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock";
+        };
 
-        [sssd]
-        services = nss, sudo, pam, ssh, ifp
-        domains = ${cfg.domain}
+        sssd = {
+          services = "nss, sudo, pam, ssh, ifp";
+          domains = cfg.domain;
+        };
 
-        [nss]
-        homedir_substring = /home
+        nss.homedir_substring = "/home";
 
-        [pam]
-        pam_pwd_expiration_warning = 3
-        pam_verbosity = 3
+        pam = {
+          pam_pwd_expiration_warning = 3;
+          pam_verbosity = 3;
+        };
 
-        [sudo]
+        sudo = { };
 
-        [autofs]
+        autofs = { };
 
-        [ssh]
+        ssh = { };
 
-        [pac]
+        pac = { };
 
-        [ifp]
-        user_attributes = +mail, +telephoneNumber, +givenname, +sn, +lock
-        allowed_uids = ${concatStringsSep ", " cfg.ifpAllowedUids}
-      '';
+        ifp = {
+          user_attributes = "+mail, +telephoneNumber, +givenname, +sn, +lock";
+          allowed_uids = concatStringsSep ", " cfg.ifpAllowedUids;
+        };
+      };
     };
 
     networking.timeServers = singleton cfg.server;
