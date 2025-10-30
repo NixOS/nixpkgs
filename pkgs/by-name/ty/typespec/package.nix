@@ -6,7 +6,7 @@
   nix-update-script,
   nodejs,
   pnpm,
-  testers,
+  versionCheckHook,
 }:
 
 let
@@ -91,9 +91,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];
