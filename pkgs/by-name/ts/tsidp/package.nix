@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "tsidp";
@@ -15,6 +16,8 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-iBy+osK+2LdkTzXhrkSaB6nWpUCpr8VkxJTtcfVCFuw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/tailscale/tsidp";
