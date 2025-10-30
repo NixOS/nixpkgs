@@ -2,7 +2,8 @@
 
 {
   lib,
-  stdenv,
+  stdenvNoCC,
+  pkgsBuildBuild,
   fetchurl,
   fetchzip,
   fetchFromGitHub,
@@ -18,351 +19,498 @@
 }:
 
 let
-  mkDict =
-    {
-      pname,
-      readmeFile,
-      dictFileName,
-      ...
-    }@args:
-    stdenv.mkDerivation (
+  mkDict = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname,
+        readmeFile,
+        dictFileName,
+        ...
+      }@args:
       {
         inherit pname;
+
+        strictDeps = true;
+        enableParallelBuilding = args.enableParallelBuilding or true;
+
+        installPhase =
+          args.installPhase or ''
+            runHook preInstall
+
+            # hunspell dicts
+            install -dm755 "$out/share/hunspell"
+            install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+            install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+
+            # myspell dicts symlinks
+            install -dm755 "$out/share/myspell/dicts"
+            ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+            ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+
+            # docs
+            install -dm755 "$out/share/doc"
+            install -m644 ${readmeFile} $out/share/doc/${finalAttrs.pname}.txt
+
+            runHook postInstall
+          '';
+      };
+  };
+
+  mkDictFromRla = lib.extendMkDerivation {
+    constructDrv = mkDict;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-rla";
+        version = "2.5";
+
+        readmeFile = "README.txt";
+
+        src = fetchFromGitHub {
+          owner = "sbosio";
+          repo = "rla-es";
+          tag = "v${finalAttrs.version}";
+          hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
+        };
+
+        postPatch = ''
+          patchShebangs --build ortograf/herramientas
+
+          substituteInPlace ortograf/herramientas/make_dict.sh \
+             --replace /dev/stderr stderr.log
+        '';
+
+        depsBuildBuild = [
+          which
+          zip
+          unzip
+        ];
+
+        buildPhase = ''
+          runHook preBuild
+
+          cd ortograf/herramientas
+          ./make_dict.sh -l ${finalAttrs.dictFileName} -2
+
+          unzip ${finalAttrs.dictFileName}.zip \
+            ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+
+          runHook postBuild
+        '';
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription} from rla";
+          homepage = "https://github.com/sbosio/rla-es";
+          license = with lib.licenses; [
+            gpl3
+            lgpl3
+            mpl11
+          ];
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
+      };
+  };
+
+  mkDictFromDSSO = lib.extendMkDerivation {
+    constructDrv = mkDict;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-dsso";
+        version = "2.40";
+
+        # Should really use a string function or something
+        _version = "2-40";
+        _name = "ooo_swedish_dict_${finalAttrs._version}";
+
+        readmeFile = "LICENSE_en_US.txt";
+
+        src = fetchurl {
+          url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${finalAttrs.version}/@@download/file/${finalAttrs._name}.oxt";
+          hash = "sha256-uYKIHMdfXErxGZU1vUc17kdr3Ejt9j4/BftPcVZUp7w=";
+        };
+
+        unpackCmd = ''
+          unzip $curSrc dictionaries/${finalAttrs.dictFileName}.dic dictionaries/${finalAttrs.dictFileName}.aff $readmeFile
+        '';
+        sourceRoot = ".";
+
+        depsBuildBuild = [ unzip ];
+
         installPhase = ''
           runHook preInstall
+
           # hunspell dicts
           install -dm755 "$out/share/hunspell"
-          install -m644 ${dictFileName}.dic "$out/share/hunspell/"
-          install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+          install -m644 dictionaries/${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 dictionaries/${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
           # myspell dicts symlinks
           install -dm755 "$out/share/myspell/dicts"
-          ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-          ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
           # docs
           install -dm755 "$out/share/doc"
-          install -m644 ${readmeFile} $out/share/doc/${pname}.txt
+          install -m644 ${finalAttrs.readmeFile} $out/share/doc/${finalAttrs.pname}.txt
+
           runHook postInstall
         '';
-      }
-      // args
-    );
 
-  mkDictFromRla =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    mkDict rec {
-      inherit dictFileName;
-      version = "2.5";
-      pname = "hunspell-dict-${shortName}-rla";
-      readmeFile = "README.txt";
-      src = fetchFromGitHub {
-        owner = "sbosio";
-        repo = "rla-es";
-        rev = "v${version}";
-        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
+        meta = {
+          longDescription = ''
+            Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+            Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+            LibreOffice då dsso.se inte längre verkar vara med oss.
+          '';
+          description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+          license = lib.licenses.lgpl3;
+          platforms = lib.platforms.all;
+        };
       };
-      meta = with lib; {
-        description = "Hunspell dictionary for ${shortDescription} from rla";
-        homepage = "https://github.com/sbosio/rla-es";
-        license = with licenses; [
-          gpl3
-          lgpl3
-          mpl11
-        ];
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
-      };
-      nativeBuildInputs = [
-        bash
-        coreutils
-        which
-        zip
-        unzip
-      ];
-      postPatch = ''
-        substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash ${bash}/bin/bash \
-           --replace /dev/stderr stderr.log
+  };
 
-        substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash ${bash}/bin/bash \
-      '';
-      buildPhase = ''
-        cd ortograf/herramientas
-        bash -x ./make_dict.sh -l ${dictFileName} -2
-        unzip ${dictFileName}.zip \
-          ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
-      '';
-    };
+  mkDictFromDicollecte = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-  mkDictFromDSSO =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    mkDict rec {
-      inherit dictFileName;
-      version = "2.40";
-      # Should really use a string function or something
-      _version = "2-40";
-      pname = "hunspell-dict-${shortName}-dsso";
-      _name = "ooo_swedish_dict_${_version}";
-      readmeFile = "LICENSE_en_US.txt";
-      src = fetchurl {
-        url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
-        sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
-      };
-      meta = with lib; {
-        longDescription = ''
-          Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
-          Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
-          LibreOffice då dsso.se inte längre verkar vara med oss.
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "longDescription"
+      "isDefault"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        longDescription,
+        isDefault ? false,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-dicollecte";
+        version = "5.3";
+
+        readmeFile = "README_dict_fr.txt";
+
+        src = fetchurl {
+          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${finalAttrs.version}.zip";
+          hash = "sha256-YEZkwHUUC4iQQKQVdeIRVp607s4uwM9nDOufKgkCRzE=";
+        };
+
+        unpackCmd = ''
+          unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff "$readmeFile"
         '';
-        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = licenses.lgpl3;
-        platforms = platforms.all;
+        sourceRoot = ".";
+
+        depsBuildBuild = [ unzip ];
+
+        postInstall = lib.optionalString isDefault ''
+          for ext in aff dic; do
+            ln -sv $out/share/hunspell/${finalAttrs.dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
+            ln -sv $out/share/myspell/dicts/${finalAttrs.dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
+          done
+        '';
+
+        meta = {
+          inherit longDescription;
+          description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
+          homepage = "https://www.dicollecte.org/home.php?prj=fr";
+          license = lib.licenses.mpl20;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-      nativeBuildInputs = [ unzip ];
-      sourceRoot = ".";
-      unpackCmd = ''
-        unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
-      '';
-      installPhase = ''
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 dictionaries/${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 dictionaries/${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-        # docs
-        install -dm755 "$out/share/doc"
-        install -m644 ${readmeFile} $out/share/doc/${pname}.txt
-      '';
-    };
+  };
 
-  mkDictFromDicollecte =
-    {
-      shortName,
-      shortDescription,
-      longDescription,
-      dictFileName,
-      isDefault ? false,
-    }:
-    mkDict rec {
-      inherit dictFileName;
-      version = "5.3";
-      pname = "hunspell-dict-${shortName}-dicollecte";
-      readmeFile = "README_dict_fr.txt";
-      src = fetchurl {
-        url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-        sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
+  mkDictFromWordlist = lib.extendMkDerivation {
+    constructDrv = mkDict;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "srcFileName"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        srcFileName,
+        ...
+      }@args:
+      {
+        inherit srcFileName;
+        pname = "hunspell-dict-${shortName}-wordlist";
+        version = "2018.04.16";
+
+        srcReadmeFile = "README_" + srcFileName + ".txt";
+        readmeFile = "README_" + finalAttrs.dictFileName + ".txt";
+
+        unpackCmd = ''
+          unzip $curSrc ${srcFileName}.dic ${srcFileName}.aff "$srcReadmeFile"
+        '';
+        sourceRoot = ".";
+
+        postUnpack = ''
+          mv ${srcFileName}.dic ${finalAttrs.dictFileName}.dic || true
+          mv ${srcFileName}.aff ${finalAttrs.dictFileName}.aff || true
+          mv "$srcReadmeFile" "${finalAttrs.readmeFile}" || true
+        '';
+
+        depsBuildBuild = [ unzip ];
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription} from Wordlist";
+          homepage = "http://wordlist.aspell.net/";
+          license = lib.licenses.bsd3;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-      meta = with lib; {
-        inherit longDescription;
-        description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "https://www.dicollecte.org/home.php?prj=fr";
-        license = licenses.mpl20;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+  };
+
+  mkDictFromLinguistico = lib.extendMkDerivation {
+    constructDrv = mkDict;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-linguistico";
+        version = "2.4";
+
+        readmeFile = finalAttrs.dictFileName + "_README.txt";
+
+        unpackCmd = ''
+          unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+        '';
+        sourceRoot = ".";
+
+        prePatch = ''
+          # Fix dic file empty lines (FS#22275)
+          sed '/^\/$/d' -i ${finalAttrs.dictFileName}.dic
+        '';
+
+        depsBuildBuild = [ unzip ];
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription}";
+          homepage = "https://sourceforge.net/projects/linguistico/";
+          license = lib.licenses.gpl3;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-      nativeBuildInputs = [ unzip ];
-      sourceRoot = ".";
-      unpackCmd = ''
-        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
-      '';
-      postInstall = lib.optionalString isDefault ''
-        for ext in aff dic; do
-          ln -sv $out/share/hunspell/${dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
-          ln -sv $out/share/myspell/dicts/${dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
-        done
-      '';
-    };
+  };
 
-  mkDictFromWordlist =
-    {
-      shortName,
-      shortDescription,
-      srcFileName,
-      dictFileName,
-      src,
-    }:
-    mkDict rec {
-      inherit src srcFileName dictFileName;
-      version = "2018.04.16";
-      pname = "hunspell-dict-${shortName}-wordlist";
-      srcReadmeFile = "README_" + srcFileName + ".txt";
-      readmeFile = "README_" + dictFileName + ".txt";
-      meta = with lib; {
-        description = "Hunspell dictionary for ${shortDescription} from Wordlist";
-        homepage = "http://wordlist.aspell.net/";
-        license = licenses.bsd3;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+  mkDictFromXuxen = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "longDescription"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        longDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-xuxen";
+        version = "5-2015.11.10";
+
+        strictDeps = true;
+        sourceRoot = ".";
+
+        # Copy files stripping until first dash (path and hash)
+        unpackCmd = "cp $curSrc \${curSrc##*-}";
+
+        installPhase = ''
+          runHook preInstall
+
+          # hunspell dicts
+          install -dm755 "$out/share/hunspell"
+          install -m644 ${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 ${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
+          # myspell dicts symlinks
+          install -dm755 "$out/share/myspell/dicts"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
+          runHook postInstall
+        '';
+
+        meta = {
+          homepage = "https://xuxen.eus/";
+          description = shortDescription;
+          longDescription = longDescription;
+          license = lib.licenses.gpl2;
+          maintainers = with lib.maintainers; [ zalakain ];
+          platforms = lib.platforms.all;
+        };
       };
-      nativeBuildInputs = [ unzip ];
-      sourceRoot = ".";
-      unpackCmd = ''
-        unzip $src ${srcFileName}.dic ${srcFileName}.aff ${srcReadmeFile}
-      '';
-      postUnpack = ''
-        mv ${srcFileName}.dic ${dictFileName}.dic || true
-        mv ${srcFileName}.aff ${dictFileName}.aff || true
-        mv ${srcReadmeFile} ${readmeFile}         || true
-      '';
-    };
+  };
 
-  mkDictFromLinguistico =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-      src,
-    }:
-    mkDict rec {
-      inherit src dictFileName;
-      version = "2.4";
-      pname = "hunspell-dict-${shortName}-linguistico";
-      readmeFile = dictFileName + "_README.txt";
-      meta = with lib; {
-        description = "Hunspell dictionary for ${shortDescription}";
-        homepage = "https://sourceforge.net/projects/linguistico/";
-        license = licenses.gpl3;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
-      };
-      nativeBuildInputs = [ unzip ];
-      sourceRoot = ".";
-      prePatch = ''
-        # Fix dic file empty lines (FS#22275)
-        sed '/^\/$/d' -i ${dictFileName}.dic
-      '';
-      unpackCmd = ''
-        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
-      '';
-    };
+  mkDictFromJ3e = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-  mkDictFromXuxen =
-    {
-      shortName,
-      srcs,
-      shortDescription,
-      longDescription,
-      dictFileName,
-    }:
-    stdenv.mkDerivation {
-      pname = "hunspell-dict-${shortName}-xuxen";
-      version = "5-2015.11.10";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
 
-      inherit srcs;
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-j3e";
+        version = "20161207";
 
-      sourceRoot = ".";
-      # Copy files stripping until first dash (path and hash)
-      unpackCmd = "cp $curSrc \${curSrc##*-}";
-      installPhase = ''
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      '';
+        src = fetchurl {
+          url = "https://j3e.de/ispell/igerman98/dict/igerman98-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-FylvA8X+pi127MUw6+gPatxDAnj1jUctwYQtcWEpYKg=";
+        };
 
-      meta = with lib; {
-        homepage = "https://xuxen.eus/";
-        description = shortDescription;
-        longDescription = longDescription;
-        license = licenses.gpl2;
-        maintainers = with maintainers; [ zalakain ];
-        platforms = platforms.all;
-      };
-    };
+        postPatch = ''
+          patchShebangs --build bin
+        '';
 
-  mkDictFromJ3e =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    stdenv.mkDerivation rec {
-      pname = "hunspell-dict-${shortName}-j3e";
-      version = "20161207";
-
-      src = fetchurl {
-        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
-        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
-      };
-
-      nativeBuildInputs = [
-        ispell
-        perl
-        hunspell
-      ];
-
-      dontBuild = true;
-
-      installPhase = ''
-        patchShebangs bin
-        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      '';
-
-      meta = with lib; {
-        homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
-        description = shortDescription;
-        license = with licenses; [
-          gpl2
-          gpl3
+        strictDeps = true;
+        nativeBuildInputs = [
+          ispell
+          perl
+          hunspell
         ];
-        maintainers = with maintainers; [ timor ];
-        platforms = platforms.all;
-      };
-    };
 
-  mkDictFromLibreOffice =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-      license,
-      readmeFile ? "README_${dictFileName}.txt",
-      sourceRoot ? dictFileName,
-    }:
-    mkDict rec {
-      pname = "hunspell-dict-${shortName}-libreoffice";
-      version = "6.3.0.4";
-      inherit dictFileName readmeFile;
-      src = fetchFromGitHub {
-        owner = "LibreOffice";
-        repo = "dictionaries";
-        rev = "libreoffice-${version}";
-        sha256 = "14z4b0grn7cw8l9s7sl6cgapbpwhn1b3gwc3kn6b0k4zl3dq7y63";
+        buildFlags = [
+          "hunspell/${finalAttrs.dictFileName}.aff"
+          "hunspell/${finalAttrs.dictFileName}.dic"
+        ];
+
+        installPhase = ''
+          runHook preInstall
+
+          # hunspell dicts
+          install -dm755 "$out/share/hunspell"
+          install -m644 hunspell/${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 hunspell/${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
+          # myspell dicts symlinks
+          install -dm755 "$out/share/myspell/dicts"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
+          runHook postInstall
+        '';
+
+        meta = {
+          homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
+          description = shortDescription;
+          license = with lib.licenses; [
+            gpl2
+            gpl3
+          ];
+          maintainers = with lib.maintainers; [ timor ];
+          platforms = lib.platforms.all;
+        };
       };
-      buildPhase = ''
-        cp -a ${sourceRoot}/* .
-      '';
-      meta = with lib; {
-        homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
-        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = license;
-        maintainers = with maintainers; [ vlaci ];
-        platforms = platforms.all;
+  };
+
+  mkDictFromLibreOffice = lib.extendMkDerivation {
+    constructDrv = mkDict;
+
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "license"
+      "sourceRoot"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        dictFileName,
+        license,
+        readmeFile ? "README_${finalAttrs.dictFileName}.txt",
+        sourceRoot ? dictFileName,
+        ...
+      }@args:
+      {
+        inherit readmeFile;
+        pname = "hunspell-dict-${shortName}-libreoffice";
+        version = "6.3.0.4";
+
+        src = fetchFromGitHub {
+          owner = "LibreOffice";
+          repo = "dictionaries";
+          tag = "libreoffice-${finalAttrs.version}";
+          hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
+        };
+
+        buildPhase = ''
+          cp -a ${sourceRoot}/* .
+        '';
+
+        meta = {
+          inherit license;
+          homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
+          description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+          maintainers = with lib.maintainers; [ vlaci ];
+          platforms = lib.platforms.all;
+        };
       };
-    };
+  };
 
 in
 rec {
@@ -375,9 +523,10 @@ rec {
     shortDescription = "English (United States)";
     srcFileName = "en_US";
     dictFileName = "en_US";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip";
-      sha256 = "18hbncvqnckzqarrmnzk58plymjqyi93k4qj98fac5mr71jbmzaf";
+      hash = "sha256-Tv26ZDi5FqYcShKTOVL0WFZPLyrz25qzwn8yizezC6I=";
     };
   };
 
@@ -387,9 +536,10 @@ rec {
     shortDescription = "English (United States) Large";
     srcFileName = "en_US-large";
     dictFileName = "en_US";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2018.04.16.zip";
-      sha256 = "1xm9jgqbivp5cb78ykjxg47vzq1yqj82l7r4q5cjpivrv99s49qc";
+      hash = "sha256-DCeiU9p5xytZwSQfKpDEPuC/D3ldTo/OYuXuuPCTqfY=";
     };
   };
 
@@ -399,9 +549,10 @@ rec {
     shortDescription = "English (Canada)";
     srcFileName = "en_CA";
     dictFileName = "en_CA";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip";
-      sha256 = "06yf3s7y1215jmikbs18cn4j8a13csp4763w3jfgah8zlim6vc47";
+      hash = "sha256-h7BtaqQfQfWcHHyYQ65mIygkiWUo6DVjlSWI4I8ezhs=";
     };
   };
 
@@ -411,9 +562,10 @@ rec {
     shortDescription = "English (Canada) Large";
     srcFileName = "en_CA-large";
     dictFileName = "en_CA";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2018.04.16.zip";
-      sha256 = "1200xxyvv6ni8nk52v3059c367817vnrkm0cdh38rhiigb5flfha";
+      hash = "sha256-CjrqynoxwowGbAzUme0+AR0zWCpgbFGmRdGavX3vAIg=";
     };
   };
 
@@ -423,9 +575,10 @@ rec {
     shortDescription = "English (Australia)";
     srcFileName = "en_AU";
     dictFileName = "en_AU";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip";
-      sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
+      hash = "sha256-xZn31CDdrBJ4W/E+zL8AfQTGo3hMlJxqLaDNQK814M4=";
     };
   };
 
@@ -435,9 +588,10 @@ rec {
     shortDescription = "English (Australia) Large";
     srcFileName = "en_AU-large";
     dictFileName = "en_AU";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2018.04.16.zip";
-      sha256 = "14l1w4dpk0k1js2wwq5ilfil89ni8cigph95n1rh6xi4lzxj7h6g";
+      hash = "sha256-z8Aj+6ckdgNzsCXB+yJD0SZEo6OxYM6FlmGCeRvhgZI=";
     };
   };
 
@@ -447,9 +601,10 @@ rec {
     shortDescription = "English (United Kingdom, 'ise' ending)";
     srcFileName = "en_GB-ise";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2018.04.16.zip";
-      sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
+      hash = "sha256-VLBOSvnSFNbNAfVHe9+lEKfFcN4xMVZ9VVzp7fYPj3o=";
     };
   };
 
@@ -459,9 +614,10 @@ rec {
     shortDescription = "English (United Kingdom, 'ize' ending)";
     srcFileName = "en_GB-ize";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2018.04.16.zip";
-      sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
+      hash = "sha256-+gpSEx7Do7c8wrQWh8JFAmsSnvkKFSc5A4C02rXxvOY=";
     };
   };
 
@@ -471,9 +627,10 @@ rec {
     shortDescription = "English (United Kingdom) Large";
     srcFileName = "en_GB-large";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2018.04.16.zip";
-      sha256 = "1y4d7x5vvi1qh1s3i09m0vvqrpdzzqhsdngr8nsh7hc5bnlm37mi";
+      hash = "sha256-sZ5RqV2FwQO1RfnZpiH+v92M9wY1gTh0gDjEvUs/jfg=";
     };
   };
 
@@ -680,7 +837,7 @@ rec {
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
     src = fetchurl {
       url = "mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip";
-      sha256 = "0m9frz75fx456bczknay5i446gdcp1smm48lc0qfwzhz0j3zcdrd";
+      hash = "sha256-LTf2hwQffu4wYBSRWnW4rD1DSCxe2fnZMoV0V87PLlU=";
     };
   };
 
@@ -708,11 +865,11 @@ rec {
     srcs = [
       (fetchurl {
         url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
-        sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
+        hash = "sha256-ArA689psW3TN7q+5/0VNpeqRppVAuMN+y0KrD6+Rgos=";
       })
       (fetchurl {
         url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
-        sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
+        hash = "sha256-Y5WW7066T8GZgzx5pQE0xK/wcxA3/dKLpbvRk+VIgVM=";
       })
     ];
   };
@@ -750,24 +907,23 @@ rec {
   # ESTONIAN
 
   et_EE = et-ee;
-  et-ee = mkDict rec {
+  et-ee = mkDict (finalAttrs: {
     pname = "hunspell-dict-et-ee";
-    name = pname;
     version = "20030606";
 
     src = fetchzip {
-      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
-      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${finalAttrs.version}.tar.gz";
+      hash = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
     };
 
     dictFileName = "et_EE";
     readmeFile = "README";
 
     preInstall = ''
-      mv latin-1/${dictFileName}.dic ./
-      mv latin-1/${dictFileName}.aff ./
+      mv latin-1/${finalAttrs.dictFileName}.dic ./
+      mv latin-1/${finalAttrs.dictFileName}.aff ./
     '';
-  };
+  });
 
   # GERMAN
 
@@ -795,48 +951,49 @@ rec {
   # UKRAINIAN
 
   uk_UA = uk-ua;
-  uk-ua = mkDict rec {
+  uk-ua = mkDict (finalAttrs: {
     pname = "hunspell-dict-uk-ua";
     version = "6.5.3";
+
     _version = "1727974630";
+    dictFileName = "uk_UA";
+    readmeFile = "README_uk_UA.txt";
 
     src = fetchurl {
-      url = "https://extensions.libreoffice.org/assets/downloads/521/${_version}/dict-uk_UA-${version}.oxt";
+      url = "https://extensions.libreoffice.org/assets/downloads/521/${finalAttrs._version}/dict-uk_UA-${finalAttrs.version}.oxt";
       hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
     };
 
-    dictFileName = "uk_UA";
-    readmeFile = "README_uk_UA.txt";
-    nativeBuildInputs = [ unzip ];
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
-      unzip $src ${dictFileName}/{${dictFileName}.dic,${dictFileName}.aff,${readmeFile}}
+      unzip $curSrc ${finalAttrs.dictFileName}/{${finalAttrs.dictFileName}.dic,${finalAttrs.dictFileName}.aff,${finalAttrs.readmeFile}}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Ukrainian (Ukraine) from LibreOffice";
       homepage = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ dywedir ];
-      platforms = platforms.all;
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [ dywedir ];
+      platforms = lib.platforms.all;
     };
-  };
+  });
 
   # UZBEK
   uz_UZ = uz-uz;
-  uz-uz = mkDict rec {
+  uz-uz = mkDict (finalAttrs: {
     pname = "hunspell-dict-uz-uz";
     version = "0.1.0";
-
-    src = fetchFromGitHub {
-      owner = "uzbek-net";
-      repo = "uz-hunspell";
-      tag = version;
-      hash = "sha256-EUYhnUWUy45AYGH+HoxaFFCBVnotsIm4GlpMBgnHxdo=";
-    };
 
     shortName = "uz-uz";
     dictFileName = "uz_UZ";
     readmeFile = "README.md";
+
+    src = fetchFromGitHub {
+      owner = "uzbek-net";
+      repo = "uz-hunspell";
+      tag = finalAttrs.version;
+      hash = "sha256-EUYhnUWUy45AYGH+HoxaFFCBVnotsIm4GlpMBgnHxdo=";
+    };
 
     meta = {
       description = "Hunspell dictionary for Uzbek";
@@ -846,7 +1003,7 @@ rec {
       ];
       teams = [ lib.teams.uzinfocom ];
     };
-  };
+  });
 
   # RUSSIAN
 
@@ -890,25 +1047,26 @@ rec {
   # DANISH
 
   da_DK = da-dk;
-  da-dk = mkDict rec {
+  da-dk = mkDict (finalAttrs: {
     pname = "hunspell-dict-da-dk";
     version = "2.5.189";
-
-    src = fetchurl {
-      url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${version}.oxt";
-      sha256 = "sha256:0i1cw0nfg24b0sg2yc3q7315ng5vc5245nvh0l1cndkn2c9z4978";
-    };
 
     shortName = "da-dk";
     shortDescription = "Danish (Danmark)";
     dictFileName = "da_DK";
     readmeFile = "README_da_DK.txt";
-    nativeBuildInputs = [ unzip ];
+
+    src = fetchurl {
+      url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${finalAttrs.version}.oxt";
+      hash = "sha256-6CTyExN2NssCBXDbQkRhuzxbwjh4MC+eBouI5yzgLEQ=";
+    };
+
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
-      unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile} -d ${dictFileName}
+      unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Danish (Denmark) from Stavekontrolden";
       homepage = "https://github.com/jeppebundsgaard/stavekontrolden";
       license = with lib.licenses; [
@@ -916,22 +1074,25 @@ rec {
         lgpl21Only
         mpl11
       ];
-      maintainers = with maintainers; [ louisdk1 ];
+      maintainers = with lib.maintainers; [ louisdk1 ];
     };
-  };
+  });
 
   # DUTCH
 
   nl_NL = nl_nl;
-  nl_nl = mkDict rec {
+  nl_nl = mkDict (finalAttrs: {
     pname = "hunspell-dict-nl-nl";
     version = "2.20.19";
+
+    dictFileName = "nl_NL";
+    readmeFile = "README.md";
 
     src = fetchFromGitHub {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
-      rev = version;
-      sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
+      tag = finalAttrs.version;
+      hash = "sha256-/rYufNGkXWH7UQDa8ZI55JtP9LM+0j7Pad8zm2tFqko=";
     };
 
     preInstall = ''
@@ -939,19 +1100,16 @@ rec {
       mv nl.dic nl_NL.dic
     '';
 
-    dictFileName = "nl_NL";
-    readmeFile = "README.md";
-
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with licenses; [
+      license = with lib.licenses; [
         bsd3 # or
         cc-by-30
       ];
-      maintainers = with maintainers; [ artturin ];
+      maintainers = with lib.maintainers; [ artturin ];
     };
-  };
+  });
 
   # HEBREW
 
@@ -970,20 +1128,23 @@ rec {
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
     version = "experimental-2024-04-15";
+
     dictFileName = "th_TH";
     readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
       rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
-      sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
+      hash = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
-    meta = with lib; {
+
+    meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
       homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
-      license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ toastal ]; # looking for a native speaker
-      platforms = platforms.all;
+      license = with lib.licenses; [ gpl3 ];
+      maintainers = with lib.maintainers; [ toastal ]; # looking for a native speaker
+      platforms = lib.platforms.all;
     };
   };
 
@@ -993,9 +1154,11 @@ rec {
   id_id = mkDictFromLibreOffice {
     shortName = "id-id";
     dictFileName = "id_ID";
-    sourceRoot = "id";
-    shortDescription = "Bahasa Indonesia (Indonesia)";
     readmeFile = "README-dict.md";
+    shortDescription = "Bahasa Indonesia (Indonesia)";
+
+    sourceRoot = "id";
+
     license = with lib.licenses; [
       lgpl21Only
       lgpl3Only
@@ -1010,6 +1173,7 @@ rec {
     dictFileName = "hr_HR";
     shortDescription = "Croatian (Croatia)";
     readmeFile = "README_hr_HR.txt";
+
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only
@@ -1023,9 +1187,11 @@ rec {
   nb-no = mkDictFromLibreOffice {
     shortName = "nb-no";
     dictFileName = "nb_NO";
-    sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Bokmål (Norway)";
+
+    sourceRoot = "no";
+
     license = with lib.licenses; [ gpl2Only ];
   };
 
@@ -1033,28 +1199,31 @@ rec {
   nn-no = mkDictFromLibreOffice {
     shortName = "nn-no";
     dictFileName = "nn_NO";
-    sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
+
+    sourceRoot = "no";
+
     license = with lib.licenses; [ gpl2Only ];
   };
 
   # TOKI PONA
 
-  tok = mkDict rec {
+  tok = mkDict (finalAttrs: {
     pname = "hunspell-dict-tok";
     version = "20220829";
+
     dictFileName = "tok";
     readmeFile = "README.en.adoc";
 
     src = fetchzip {
-      url = "https://github.com/somasis/hunspell-tok/releases/download/${version}/hunspell-tok-${version}.tar.gz";
-      sha256 = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
+      url = "https://github.com/somasis/hunspell-tok/releases/download/${finalAttrs.version}/hunspell-tok-${finalAttrs.version}.tar.gz";
+      hash = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
     };
 
     dontBuild = true;
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Toki Pona";
       homepage = "https://github.com/somasis/hunspell-tok";
       license = with lib.licenses; [
@@ -1063,10 +1232,10 @@ rec {
         cc-by-sa-30
         cc-by-sa-40
       ];
-      maintainers = with maintainers; [ somasis ];
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ somasis ];
+      platforms = lib.platforms.all;
     };
-  };
+  });
 
   # POLISH
 
@@ -1076,6 +1245,7 @@ rec {
     dictFileName = "pl_PL";
     shortDescription = "Polish (Poland)";
     readmeFile = "README_en.txt";
+
     # the README doesn't specify versions of licenses :/
     license = with lib.licenses; [
       gpl2Plus
@@ -1094,6 +1264,7 @@ rec {
     dictFileName = "pt_BR";
     shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
+
     license = with lib.licenses; [ lgpl3 ];
   };
 
@@ -1103,6 +1274,7 @@ rec {
     dictFileName = "pt_PT";
     shortDescription = "Portuguese (Portugal)";
     readmeFile = "README_pt_PT.txt";
+
     license = with lib.licenses; [
       gpl2
       lgpl21
@@ -1116,67 +1288,80 @@ rec {
   fa-ir = mkDict {
     pname = "hunspell-dict-fa-ir";
     version = "experimental-2022-09-04";
+
     dictFileName = "fa-IR";
     readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "b00f";
       repo = "lilak";
       rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
       hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
     };
+
     nativeBuildInputs = [ python3 ];
+
     buildPhase = ''
       runHook preBuild
+
       mkdir build
+
       (cd src && python3 lilak.py)
+
       mv build/* ./
+
       # remove timestamp from file
       sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+
       runHook postBuild
     '';
-    meta = with lib; {
+
+    meta = {
       description = "Hunspell dictionary for Persian (Iran)";
       homepage = "https://github.com/b00f/lilak";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ nix-julia ];
-      platforms = platforms.all;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ nix-julia ];
+      platforms = lib.platforms.all;
     };
   };
 
   # ROMANIAN
   ro_RO = ro-ro;
-  ro-ro = mkDict rec {
+  ro-ro = mkDict (finalAttrs: {
     pname = "hunspell-dict-ro-ro";
     version = "3.3.10";
-    shortName = "ro-ro";
+
     dictFileName = "ro_RO";
-    fileName = "${dictFileName}.${version}.zip";
+
     shortDescription = "Romanian (Romania)";
     readmeFile = "README";
 
     src = fetchurl {
-      url = "mirror://sourceforge/rospell/${fileName}";
+      url = "mirror://sourceforge/rospell/${finalAttrs.dictFileName}.${finalAttrs.version}.zip";
       hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
     };
 
-    nativeBuildInputs = [ unzip ];
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
-      unzip $src ${dictFileName}.aff ${dictFileName}.dic ${readmeFile} -d ${dictFileName}
+      unzip $curSrc ${finalAttrs.dictFileName}.aff ${finalAttrs.dictFileName}.dic ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
 
     meta = {
-      description = "Hunspell dictionary for ${shortDescription} from rospell";
+      description = "Hunspell dictionary for ${finalAttrs.shortDescription} from rospell";
       homepage = "https://sourceforge.net/projects/rospell/";
       license = with lib.licenses; [ gpl2Only ];
       maintainers = with lib.maintainers; [ Andy3153 ];
     };
-  };
+  });
 
   # Turkish
   tr_TR = tr-tr;
   tr-tr = mkDict {
     pname = "hunspell-dict-tr-tr";
     version = "1.1.1";
+
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
 
     src = fetchFromGitHub {
       owner = "tdd-ai";
@@ -1185,15 +1370,12 @@ rec {
       hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
     };
 
-    dictFileName = "tr_TR";
-    readmeFile = "README.md";
-
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
       homepage = "https://github.com/tdd-ai/hunspell-tr/";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ samemrecebi ];
-      platforms = platforms.all;
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [ samemrecebi ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -1205,6 +1387,7 @@ rec {
     dictFileName = "el_GR";
     shortDescription = "Greek (Greece)";
     readmeFile = "README_el_GR.txt";
+
     license = with lib.licenses; [
       mpl11
       gpl2
@@ -1214,21 +1397,21 @@ rec {
 
   # KOREAN
   ko_KR = ko-kr;
-  ko-kr = mkDict rec {
+  ko-kr = mkDict (finalAttrs: {
     pname = "hunspell-dict-ko-kr";
     version = "0.7.94";
 
     src = fetchFromGitHub {
       owner = "spellcheck-ko";
       repo = "hunspell-dict-ko";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
     };
 
     dictFileName = "ko_KR";
     readmeFile = "README.md";
 
-    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+    nativeBuildInputs = [ (pkgsBuildBuild.python3.withPackages (ps: [ ps.pyyaml ])) ];
 
     preInstall = ''
       mv ko.aff ko_KR.aff
@@ -1245,5 +1428,5 @@ rec {
       ];
       maintainers = with lib.maintainers; [ honnip ];
     };
-  };
+  });
 }
