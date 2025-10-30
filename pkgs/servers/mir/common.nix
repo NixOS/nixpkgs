@@ -238,7 +238,9 @@ stdenv.mkDerivation (finalAttrs: {
       onny
       OPNA2608
     ];
-    platforms = lib.platforms.linux;
+    # Onle LE has valid graphics buffer formats
+    # https://github.com/canonical/mir/blob/ba8e83f75084379dec8e23131fdf04fa4a4567ac/src/platforms/common/server/shm_buffer.cpp#L61-L65
+    platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.littleEndian;
     pkgConfigModules = [
       "miral"
       "mircommon"
