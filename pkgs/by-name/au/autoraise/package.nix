@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   apple-sdk,
+
+  enableExperimentalFocusFirst ? false,
+  enableOldActivationMethod ? false,
+  enableAlternativeTaskSwitcher ? false,
 }:
 stdenv.mkDerivation rec {
   pname = "autoraise";
@@ -21,7 +25,11 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    $CXX -std=c++03 -fobjc-arc -D"NS_FORMAT_ARGUMENT(A)=" -D"SKYLIGHT_AVAILABLE=1" -o AutoRaise AutoRaise.mm -framework AppKit -framework SkyLight
+    $CXX -std=c++03 -fobjc-arc -D"NS_FORMAT_ARGUMENT(A)=" -D"SKYLIGHT_AVAILABLE=1" \
+      ${lib.optionalString enableExperimentalFocusFirst "-DEXPERIMENTAL_FOCUS_FIRST"} \
+      ${lib.optionalString enableOldActivationMethod "-DOLD_ACTIVATION_METHOD"} \
+      ${lib.optionalString enableAlternativeTaskSwitcher "-DALTERNATIVE_TASK_SWITCHER"} \
+      -o AutoRaise AutoRaise.mm -framework AppKit -framework SkyLight
     bash create-app-bundle.sh
     runHook postBuild
   '';
