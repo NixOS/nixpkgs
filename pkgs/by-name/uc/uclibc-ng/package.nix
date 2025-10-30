@@ -26,16 +26,15 @@ let
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
-            #if test "$OPTION" != n; then
-                echo "parseconfig: setting $NAME=$OPTION"
-                echo "$NAME=$OPTION" >> .config
-            #fi
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
         done
         set +x
     }
   '';
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
+  # 'ftw' needed to build acl, a coreutils dependency
   nixConfig = ''
     RUNTIME_PREFIX "/"
     DEVEL_PREFIX "/"
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-X386r92yygj7KVvkVWHAGIQHED10Rs/SZLm4Iv7T7S0=";
   };
 
-  # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
     make defconfig
     ${configParser}
