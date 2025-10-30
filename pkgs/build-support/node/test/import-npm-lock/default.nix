@@ -1,4 +1,5 @@
 { callPackage }:
 
 {
+  overrides = callPackage ./overrides { };
 }

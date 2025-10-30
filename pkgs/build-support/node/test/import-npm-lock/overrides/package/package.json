@@ -1,0 +1,11 @@
+{
+  "name": "overrides-test",
+  "version": "1.0.0",
+  "dependencies": {
+    "is-number": "^6.0.0",
+    "is-odd": "^3.0.0"
+  },
+  "overrides": {
+    "is-number": "^6.0.0"
+  }
+}

@@ -168,6 +168,12 @@ lib.fix (self: {
         }
         // lib.optionalAttrs (package ? devDependencies) {
           devDependencies = mapPackageDependencies package.devDependencies;
+        }
+        // lib.optionalAttrs (package ? overrides) {
+          overrides = mapPackageDependencies package.overrides;
+        }
+        // lib.optionalAttrs (package ? resolutions) {
+          resolutions = mapPackageDependencies package.resolutions;
         };
 
       pname = package.name or "unknown";
