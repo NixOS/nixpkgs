@@ -376,10 +376,6 @@ extendMkDerivation {
         # because attempts to access attributes on the package will cause evaluation errors.
         brokenAssertions = [
           {
-            message = "CUDA support is enabled by config.cudaSupport";
-            assertion = config.cudaSupport;
-          }
-          {
             message = "lib output precedes static output";
             assertion =
               let
