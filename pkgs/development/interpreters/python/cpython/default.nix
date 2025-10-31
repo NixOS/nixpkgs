@@ -95,6 +95,7 @@
 
   # tests
   testers,
+  runCommand,
 
   # allow pythonMinimal to prevent accidental dependencies it doesn't want
   # Having this as an option is useful to allow overriding, eg. adding things to
@@ -832,9 +833,24 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
 
-    tests = passthru.tests // {
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests =
+      passthru.tests
+      // {
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      }
+      // (
+        let
+          testPython =
+            name: script:
+            runCommand "python-test-${name}" {
+              inherit script;
+            } ''"${lib.getExe finalAttrs.finalPackage}" -c "$script" > "$out"'';
+        in
+        {
+          sax = testPython "sax" "import xml.sax;xml.sax.make_parser()";
+          semaphore = testPython "semaphore" "from _multiprocessing import SemLock";
+        }
+      );
   };
 
   enableParallelBuilding = true;
