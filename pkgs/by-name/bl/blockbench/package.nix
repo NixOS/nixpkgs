@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.12.6";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-iV8qpUsUnL1n6hKADegNTmrW/AUWNiiNLxrTU4WPR30=";
+    hash = "sha256-kUPzAmxTEnUA+2o/IfBLE6hCChQ9YoTUfKKYfPGV0jg=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-ZLFmcK91SrUM+ouBENzc+MdNvQCRDh0ej4tf2TneUtQ=";
+  npmDepsHash = "sha256-Do5IJvd5ZXDgByKK1Elg0W2SZxeDH8OORloDuT9mIN4=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     sed -i "/afterSign/d" package.json
   '';
 
-  npmBuildScript = "bundle";
+  npmBuildScript = "build-electron";
 
   postBuild = ''
     # electronDist needs to be modifiable on Darwin
@@ -54,28 +54,27 @@ buildNpmPackage rec {
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r dist-electron/mac*/Blockbench.app $out/Applications
+    makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -p $out/share/blockbench
+    cp -r dist-electron/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r dist/mac*/Blockbench.app $out/Applications
-      makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
-    ''}
+    for size in 16 32 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      magick icon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
+    done
 
-    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      mkdir -p $out/share/blockbench
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
-
-      for size in 16 32 48 64 128 256 512; do
-        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick icon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
-      done
-
-      makeWrapper ${lib.getExe electron} $out/bin/blockbench \
-          --add-flags $out/share/blockbench/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-          --inherit-argv0
-    ''}
-
+    makeWrapper ${lib.getExe electron} $out/bin/blockbench \
+      --add-flags $out/share/blockbench/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --inherit-argv0
+  ''
+  + ''
     runHook postInstall
   '';
 
