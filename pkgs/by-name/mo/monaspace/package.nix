@@ -1,25 +1,11 @@
 {
   lib,
-  stdenvNoCC,
   fetchzip,
+  stdenvNoCC,
+  symlinkJoin,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "monaspace";
-  version = "1.301";
-
-  src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-static-v${finalAttrs.version}.zip";
-    stripRoot = false;
-    hash = "sha256-H6J4InGyXabZuslywuzNYqw14zymzF90JKxa7CikOIM=";
-  };
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 Static\ Fonts/**/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+let
+  fonts = lib.importTOML ./fonts.toml;
 
   meta = {
     description = "Innovative superfamily of fonts for code";
@@ -47,4 +33,73 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-})
+
+  makeFont =
+    {
+      pname,
+      fontFamily,
+      variant,
+      version,
+      baseUrl,
+      hash,
+      destination,
+      meta,
+    }:
+    stdenvNoCC.mkDerivation {
+      inherit pname version;
+
+      src = fetchzip {
+        url = "${baseUrl}/v${version}/${fontFamily}-${variant}-v${version}.zip";
+        inherit hash;
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out/share/fonts/${destination}"
+        find . -type f \( -name "*.otf" -o -name "*.ttf" -o -name "*.woff" \) -exec install -Dm644 {} $out/share/fonts/${destination} \;
+
+        runHook postInstall
+      '';
+      inherit meta;
+    };
+
+  makePackages =
+    filteredFonts:
+    lib.listToAttrs (
+      map (
+        font:
+        let
+          fontAttrs = rec {
+            inherit (fonts) baseUrl fontFamily version;
+            inherit (font) variant hash destination;
+            inherit meta;
+            pname = fontFamily + "-" + variant;
+          };
+        in
+        {
+          name = fontAttrs.variant;
+          value = makeFont fontAttrs;
+        }
+      ) filteredFonts
+    );
+  allFonts = makePackages fonts.fonts;
+  woffFonts = makePackages (builtins.filter (f: f.destination == "woff") fonts.fonts);
+  nerdFonts = makePackages (builtins.filter (f: f.variant == "nerdfonts") fonts.fonts);
+  defaultFonts = lib.removeAttrs allFonts (
+    builtins.attrNames woffFonts ++ builtins.attrNames nerdFonts
+  );
+in
+symlinkJoin {
+  pname = "monaspace";
+  inherit (fonts) version;
+  paths = builtins.attrValues defaultFonts;
+  passthru = allFonts // {
+    woff = symlinkJoin {
+      pname = "monaspace-webfonts";
+      inherit (fonts) version;
+      paths = builtins.attrValues woffFonts;
+    };
+  };
+  inherit meta;
+}
