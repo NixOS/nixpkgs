@@ -2350,8 +2350,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.28.1";
-          hash = "sha256-JDrJAZB1QvLG/dXHOhg6VM8dgwEc1eV6BycoRfEQmuY=";
+          version = "7.28.3";
+          hash = "sha256-MUoYoElDVMZZHsUZ17fhfwZaHNAJ4j50lTqhhRw8EBI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3641,8 +3641,8 @@ let
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.32.3";
-          hash = "sha256-KUzLrt7y3I6szpWVGk0NtBfXncw6ovNAkm1HyHj+MDk=";
+          version = "1.32.4";
+          hash = "sha256-ySJ6SLm+L2LPGbnus/skbk4WUPJ3VMXpCMEins3F8cc=";
         };
       };
 
