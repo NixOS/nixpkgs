@@ -46,16 +46,20 @@ let
 
   # Temporary way to overrideScope llvmPackages while preserving a .override that composes
   # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/447012 is resolved
+  llvmVersion = "21";
   overrideLlvmPackages =
     self: super: override:
     let
-      base = super.llvmPackages;
+      base = super."llvmPackages_${llvmVersion}";
       overridden = base.overrideScope override;
       newOverride = lib.mirrorFunctionArgs base.override (
         args: (base.override args).overrideScope override
       );
+      newLlvmPackages = overridden // {
+        override = newOverride;
+      };
     in
-    overridden // { override = newOverride; };
+    newLlvmPackages;
 
   commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
@@ -410,77 +414,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     stageFun prevStage {
       name = "bootstrap-stage0";
 
-      overrides = self: super: {
-        # We thread stage0's stdenv through under this name so downstream stages
-        # can use it for wrapping gcc too. This way, downstream stages don't need
-        # to refer to this stage directly, which violates the principle that each
-        # stage should only access the stage that came before it.
-        ccWrapperStdenv = self.stdenv;
-
-        bashNonInteractive = bootstrapTools // {
-          shellPath = "/bin/bash";
-        };
-
-        coreutils = bootstrapTools;
-        cpio = bootstrapTools;
-        file = null;
-        gnugrep = bootstrapTools;
-        pbzx = bootstrapTools;
-
-        jq = bootstrapTools;
-
-        cctools = bootstrapTools // {
-          libtool = bootstrapTools;
-          targetPrefix = "";
-          version = "boot";
-        };
-
-        ld64 = bootstrapTools // {
-          targetPrefix = "";
-          version = "boot";
-        };
-
-        darwin = super.darwin.overrideScope (
-          selfDarwin: superDarwin: {
-            binutils = super.wrapBintoolsWith {
-              name = "bootstrap-stage0-binutils-wrapper";
-
-              nativeTools = false;
-              nativeLibc = false;
-
-              expand-response-params = "";
-              libc = selfDarwin.libSystem;
-
-              inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
-              runtimeShell = self.stdenvNoCC.shell;
-
-              bintools = selfDarwin.binutils-unwrapped;
-            };
-
-            binutils-unwrapped =
-              (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
-                (old: {
-                  version = "boot";
-                  __intentionallyOverridingVersion = true; # to avoid a warning suggesting to provide src
-                  passthru = (old.passthru or { }) // {
-                    isFromBootstrapFiles = true;
-                  };
-                });
-
-            locale = self.stdenv.mkDerivation {
-              name = "bootstrap-stage0-locale";
-              buildCommand = ''
-                mkdir -p $out/share/locale
-              '';
-            };
-
-            sigtool = bootstrapTools;
-          }
-        );
-
-        llvmPackages = (
-          overrideLlvmPackages self super (
+      overrides =
+        self: super:
+        let
+          overriddenLlvmPackages = overrideLlvmPackages self super (
             selfLlvmPackages: _: {
               libclang = self.stdenv.mkDerivation {
                 name = "bootstrap-stage0-clang";
@@ -560,9 +497,80 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 };
               };
             }
-          )
-        );
-      };
+          );
+        in
+        {
+          # We thread stage0's stdenv through under this name so downstream stages
+          # can use it for wrapping gcc too. This way, downstream stages don't need
+          # to refer to this stage directly, which violates the principle that each
+          # stage should only access the stage that came before it.
+          ccWrapperStdenv = self.stdenv;
+
+          bashNonInteractive = bootstrapTools // {
+            shellPath = "/bin/bash";
+          };
+
+          coreutils = bootstrapTools;
+          cpio = bootstrapTools;
+          file = null;
+          gnugrep = bootstrapTools;
+          pbzx = bootstrapTools;
+
+          jq = bootstrapTools;
+
+          cctools = bootstrapTools // {
+            libtool = bootstrapTools;
+            targetPrefix = "";
+            version = "boot";
+          };
+
+          ld64 = bootstrapTools // {
+            targetPrefix = "";
+            version = "boot";
+          };
+
+          darwin = super.darwin.overrideScope (
+            selfDarwin: superDarwin: {
+              binutils = super.wrapBintoolsWith {
+                name = "bootstrap-stage0-binutils-wrapper";
+
+                nativeTools = false;
+                nativeLibc = false;
+
+                expand-response-params = "";
+                libc = selfDarwin.libSystem;
+
+                inherit lib;
+                inherit (self) stdenvNoCC coreutils gnugrep;
+                runtimeShell = self.stdenvNoCC.shell;
+
+                bintools = selfDarwin.binutils-unwrapped;
+              };
+
+              binutils-unwrapped =
+                (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
+                  (old: {
+                    version = "boot";
+                    __intentionallyOverridingVersion = true; # to avoid a warning suggesting to provide src
+                    passthru = (old.passthru or { }) // {
+                      isFromBootstrapFiles = true;
+                    };
+                  });
+
+              locale = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-locale";
+                buildCommand = ''
+                  mkdir -p $out/share/locale
+                '';
+              };
+
+              sigtool = bootstrapTools;
+            }
+          );
+
+          llvmPackages = overriddenLlvmPackages;
+          llvmPackages_21 = overriddenLlvmPackages;
+        };
 
       extraPreHook = ''
         stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
