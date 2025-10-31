@@ -20376,6 +20376,8 @@ self: super: with self; {
 
   xeddsa = toPythonModule (callPackage ../development/python-modules/xeddsa { });
 
+  xeger = callPackage ../development/python-modules/xeger { };
+
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
   xformers = callPackage ../development/python-modules/xformers {
