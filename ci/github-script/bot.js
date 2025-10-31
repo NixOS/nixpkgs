@@ -160,6 +160,29 @@ module.exports = async ({ github, context, core, dry }) => {
     return users[id]
   }
 
+  // Same for teams
+  const teams = {}
+  function getTeam(id) {
+    if (!teams[id]) {
+      teams[id] = github
+        .request({
+          method: 'GET',
+          url: '/organizations/{orgId}/team/{id}',
+          // TODO: Make this work without pull_requests payloads
+          orgId: context.payload.pull_request.base.user.id,
+          id,
+        })
+        .then((resp) => resp.data)
+        .catch((e) => {
+          // Team may have been deleted
+          if (e.status === 404) return null
+          throw e
+        })
+    }
+
+    return teams[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -192,17 +215,49 @@ module.exports = async ({ github, context, core, dry }) => {
     })
 
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
-    // Accounts could be deleted as well, so don't count them.
     const reviews = (
-      await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number,
-      })
-    ).filter(
+      await github.graphql(
+        `query($owner: String!, $repo: String!, $pr: Int!) {
+        repository(owner: $owner, name: $repo) {
+          pullRequest(number: $pr) {
+            # Unlikely that there's ever more than 100 reviews, so let's not bother,
+            # but once https://github.com/actions/github-script/issues/309 is resolved,
+            # it would be easy to enable pagination.
+            reviews(first: 100) {
+              nodes {
+                state
+                user: author {
+                  # Only get users, no bots
+                  ... on User {
+                    login
+                    # Set the id field in the resulting JSON to GraphQL's databaseId
+                    # databaseId in GraphQL-land is the same as id in REST-land
+                    id: databaseId
+                  }
+                }
+                onBehalfOf(first: 100) {
+                  nodes {
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`,
+        {
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pr: pull_number,
+        },
+      )
+    ).repository.pullRequest.reviews.nodes.filter(
       (r) =>
-        r.user &&
-        !r.user.login.endsWith('[bot]') &&
-        r.user.type !== 'Bot' &&
+        // The `... on User` makes it such that .login only exists for users,
+        // but we still need to filter the others out.
+        // Accounts could be deleted as well, so don't count them.
+        r.user?.login &&
+        // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
 
@@ -402,6 +457,16 @@ module.exports = async ({ github, context, core, dry }) => {
           if (e.code !== 'ENOENT') throw e
         }
 
+        let team_maintainers = []
+        try {
+          team_maintainers = Object.keys(
+            JSON.parse(await readFile(`${pull_number}/teams.json`, 'utf-8')),
+          ).map((id) => parseInt(id))
+        } catch (e) {
+          // Older artifacts don't have the teams.json, yet.
+          if (e.code !== 'ENOENT') throw e
+        }
+
         // We set this label earlier already, but the current PR state can be very different
         // after handleReviewers has requested reviews, so update it in this case to prevent
         // this label from flip-flopping.
@@ -414,14 +479,15 @@ module.exports = async ({ github, context, core, dry }) => {
           pull_request,
           reviews,
           // TODO: Use maintainer map instead of the artifact.
-          maintainers: Object.keys(
+          user_maintainers: Object.keys(
             JSON.parse(
               await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
             ),
           ).map((id) => parseInt(id)),
+          team_maintainers,
           owners,
-          getTeamMembers,
           getUser,
+          getTeam,
         })
       }
     }
