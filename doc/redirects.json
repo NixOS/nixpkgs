@@ -247,6 +247,9 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-buildEnv-exceptions": [
+    "index.html#sec-buildEnv-exceptions"
+  ],
   "sec-building-packages-with-llvm": [
     "index.html#sec-building-packages-with-llvm"
   ],
@@ -583,6 +586,12 @@
   ],
   "sec-treefmt-options-reference": [
     "index.html#sec-treefmt-options-reference"
+  ],
+  "ssec-buildEnv-collisions": [
+    "index.html#ssec-buildEnv-collisions"
+  ],
+  "ssec-buildEnv-singleFileOutputs": [
+    "index.html#ssec-buildEnv-singleFileOutputs"
   ],
   "ssec-cosmic-common-issues": [
     "index.html#ssec-cosmic-common-issues"
@@ -1980,6 +1989,12 @@
   ],
   "chap-special": [
     "index.html#chap-special"
+  ],
+  "sec-buildEnv": [
+    "index.html#sec-buildEnv"
+  ],
+  "sec-buildEnv-arguments": [
+    "index.html#sec-buildEnv-arguments"
   ],
   "sec-fakeNss": [
     "index.html#sec-fakeNss"
