@@ -138,13 +138,17 @@ in
       description = "Gollum wiki";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.git ];
+
+      preStart = ''
+        # This is safe to be run on an existing repo
+        git init ${cfg.stateDir}
+      '';
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
-        # This is safe to be run on an existing repo
-        ExecStartPre = "${lib.getExe pkgs.git} init ${cfg.stateDir}";
         ExecStart = ''
           ${cfg.package}/bin/gollum \
             --port ${toString cfg.port} \

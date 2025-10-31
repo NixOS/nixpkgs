@@ -374,22 +374,21 @@ in
         after = [ "network.target" ];
         path = with pkgs; [ iptables ];
 
+        preStart = ''
+          ${optionalString (rules != null) "ln -sf ${rules} rules.yaml"}
+          ${optionalString (settings != null) "ln -sf ${settings} config.yaml"}
+        '';
+
+        script = ''
+          ${config.security.wrapperDir}/OpenGFW \
+            -f ${cfg.logFormat} \
+            -l ${cfg.logLevel} \
+            ${optionalString (cfg.pcapReplay != null) "-p ${cfg.pcapReplay}"} \
+            -c config.yaml \
+            rules.yaml
+        '';
+
         serviceConfig = rec {
-          ExecStartPre =
-            lib.optionals (rules != null) [ "${lib.getExe' pkgs.coreutils "ln"} -sf ${rules} rules.yaml" ]
-            ++ lib.optionals (settings != null) [
-              "${lib.getExe' pkgs.coreutils "ln"} -sf ${settings} config.yaml"
-            ];
-          ExecStart =
-            let
-              args = lib.cli.toCommandLineShellGNU { } {
-                f = cfg.logFormat;
-                l = cfg.logLevel;
-                p = cfg.pcapReplay;
-                c = "config.yaml";
-              };
-            in
-            "${config.security.wrapperDir}/OpenGFW ${args} rules.yaml";
           WorkingDirectory = cfg.dir;
           ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
           Restart = "always";

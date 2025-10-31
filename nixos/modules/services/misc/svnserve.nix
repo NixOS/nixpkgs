@@ -40,8 +40,8 @@ in
     systemd.services.svnserve = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      services.ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.svnBaseDir}";
-      services.ExecStart = "${pkgs.subversion.out}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/run/svnserve.pid";
+      preStart = "mkdir -p ${cfg.svnBaseDir}";
+      script = "${pkgs.subversion.out}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/run/svnserve.pid";
     };
   };
 }

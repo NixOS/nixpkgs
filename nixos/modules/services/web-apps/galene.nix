@@ -133,16 +133,19 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      preStart = ''
+        ${optionalString (cfg.insecure != true && cfg.certFile != null && cfg.keyFile != null) ''
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ''}
+      '';
+
       serviceConfig = mkMerge [
         {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStartPre = lib.mkIf (cfg.insecure != true && cfg.certFile != null && cfg.keyFile != null) [
-            "${lib.getExe' pkgs.coreutils "install"} -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem"
-            "${lib.getExe' pkgs.coreutils "install"} -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem"
-          ];
           ExecStart = ''
             ${cfg.package}/bin/galene \
             ${optionalString (cfg.insecure) "-insecure"} \

@@ -71,12 +71,12 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "elasticsearch.service" ];
       after = [ "elasticsearch.service" ];
+      preStart = ''
+        mkdir -p ${cfg.stateDir}/data
+        mkdir -p ${cfg.stateDir}/logs
+      '';
       serviceConfig = {
         StateDirectory = cfg.stateDir;
-        ExecStartPre = [
-          "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.stateDir}/data"
-          "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.stateDir}/logs"
-        ];
         ExecStart = ''
           ${cfg.package}/bin/journalbeat \
             -c ${journalbeatYml} \
