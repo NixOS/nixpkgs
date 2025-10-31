@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "3.2.1";
+  version = "3.3.2";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-LIWubw+iO17giSvGCl5LzI429725sisp5u4Z4usJOGA=";
+    hash = "sha256-iaddAIsrUH6g4KXuSTIulNVWOfy/IWg0Czs9JgDxXUk=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
