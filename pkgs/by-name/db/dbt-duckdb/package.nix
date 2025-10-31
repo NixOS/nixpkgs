@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/duckdb/dbt-duckdb";
     changelog = "https://github.com/duckdb/dbt-duckdb/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [otheanalyst];
     mainProgram = "dbt-duckdb";
   };
 }
