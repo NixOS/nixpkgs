@@ -13,7 +13,13 @@
   libao,
   speex,
   nix-update-script,
+
+  audaciousSupport ? stdenv.hostPlatform.isLinux,
 }:
+
+assert lib.assertMsg (
+  audaciousSupport -> stdenv.hostPlatform.isLinux
+) "Only Linux supports building the Audacious plugin.";
 
 let
   # https://github.com/vgmstream/vgmstream/blob/1b6a7915bf98ca14a71a0d44bef7a2c6a75c686d/cmake/dependencies/atrac9.cmake
@@ -54,10 +60,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  outputs = [
-    "out"
-    "audacious"
-  ];
+  outputs = [ "out" ] ++ lib.optional audaciousSupport "audacious";
 
   nativeBuildInputs = [
     cmake
@@ -71,8 +74,8 @@ stdenv.mkDerivation rec {
     libvorbis
     libao
     speex
-    audacious-bare
-  ];
+  ]
+  ++ lib.optional audaciousSupport audacious-bare;
 
   preConfigure = ''
     substituteInPlace cmake/dependencies/audacious.cmake \
@@ -89,6 +92,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DATRAC9_PATH=${atrac9-src}"
+    (lib.cmakeBool "BUILD_AUDACIOUS" audaciousSupport)
   ]
   # Only supported on x86_64-linux
   ++ lib.optionals (stdenv.system == "x86_64-linux") [
