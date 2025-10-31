@@ -119,12 +119,6 @@ in
       after = lib.optional cfg.database.createLocally "postgresql.target";
 
       serviceConfig = {
-        ExecStartPre = [
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${manage} tandoor-recipes-manage"
-
-          # Let django migrate the DB as needed
-          "${lib.getExe pkg} migrate"
-        ];
         ExecStart = ''
           ${pkg.python.pkgs.gunicorn}/bin/gunicorn recipes.wsgi
         '';
@@ -177,6 +171,13 @@ in
       };
 
       wantedBy = [ "multi-user.target" ];
+
+      preStart = ''
+        ln -sf ${manage} tandoor-recipes-manage
+
+        # Let django migrate the DB as needed
+        ${pkg}/bin/tandoor-recipes migrate
+      '';
 
       environment = env // {
         PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/tandoor-recipes";

@@ -78,7 +78,7 @@ in
         # with code 143 instead of exiting with code 0.
         serviceConfig.SuccessExitStatus = [ 143 ];
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
+        script = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
       };
     };
 }
