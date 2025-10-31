@@ -6,10 +6,10 @@
 }:
 let
   pname = "saleae-logic-2";
-  version = "2.4.29";
+  version = "2.4.36";
   src = fetchurl {
     url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-eCG2Al6MmWTCiYtaO6qIoNji4QreMryoZRcfKjk5d1c=";
+    hash = "sha256-M6sjmFHonByjh3rHnAMuSpFKkvOsXqd4XevFDxuEOp4=";
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
