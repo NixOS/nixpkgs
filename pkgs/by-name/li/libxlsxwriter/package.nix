@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   minizip,
+  openssl,
   python3,
   zlib,
 }:
@@ -27,11 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     minizip
+    openssl
     zlib
   ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_MINIZIP=ON"
+    "-DUSE_OPENSSL_MD5=ON"
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
