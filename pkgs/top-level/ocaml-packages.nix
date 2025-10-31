@@ -1819,6 +1819,8 @@ let
 
         raven-hugin = callPackage ../development/ocaml-modules/raven/hugin.nix { };
 
+        raven-kaun = callPackage ../development/ocaml-modules/raven/kaun.nix { };
+
         raven-nx = callPackage ../development/ocaml-modules/raven/nx.nix { };
 
         raven-nx-datasets = callPackage ../development/ocaml-modules/raven/nx-datasets.nix { };
