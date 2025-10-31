@@ -13,6 +13,7 @@ let
     literalExpression
     mapAttrsToList
     mkOption
+    mkRenamedOptionModuleWith
     optionals
     types
     ;
@@ -373,6 +374,19 @@ let
 
 in
 {
+
+  imports = [
+    (mkRenamedOptionModuleWith {
+      from = [ "whitelistedLicenses" ];
+      to = [ "allowlistedLicenses" ];
+      sinceRelease = 2511;
+    })
+    (mkRenamedOptionModuleWith {
+      from = [ "blacklistedLicenses" ];
+      to = [ "blocklistedLicenses" ];
+      sinceRelease = 2511;
+    })
+  ];
 
   freeformType =
     let
