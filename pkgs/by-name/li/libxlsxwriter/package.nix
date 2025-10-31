@@ -49,9 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
-  # TEST 428/429 worksheet:worksheet_table15 *** buffer overflow detected ***: terminated
-  hardeningDisable = [ "fortify3" ];
-
   doCheck = true;
 
   nativeCheckInputs = [
