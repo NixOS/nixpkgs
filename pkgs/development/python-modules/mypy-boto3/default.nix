@@ -122,8 +122,8 @@ in
       "sha256-FjGdsXuu/NPABrsl5JK3sPsOHGnAwTvIIv+G3MRxZxg=";
 
   mypy-boto3-appmesh =
-    buildMypyBoto3Package "appmesh" "1.40.0"
-      "sha256-ZMDdjJse4uyAnWIy/cwQQuAemTrUBdm8PYQp0LTuHgE=";
+    buildMypyBoto3Package "appmesh" "1.40.63"
+      "sha256-jGO22gbzqaa9VcBKyyEo8QLVf/Uia6RrQGaHgIApQPQ=";
 
   mypy-boto3-apprunner =
     buildMypyBoto3Package "apprunner" "1.40.54"
