@@ -13963,6 +13963,8 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
+  pyqt-distutils = callPackage ../development/python-modules/pyqt-distutils { };
+
   pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
     inherit (self)
       buildPythonPackage
