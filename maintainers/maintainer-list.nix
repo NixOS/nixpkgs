@@ -19580,6 +19580,12 @@
     github = "OlivierNicole";
     githubId = 14031333;
   };
+  otheanalyst ={
+    name = "oTheAnalyst";
+    email ="unfixable47@proton.me";
+    github ="otheanalyst";
+    githubId = "30744769";
+  };
   ottoblep = {
     name = "Severin Lochschmidt";
     email = "seviron53@gmail.com";
