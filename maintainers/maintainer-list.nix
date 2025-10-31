@@ -18268,6 +18268,12 @@
     githubId = 1771772;
     name = "Alexander Ben Nasrallah";
   };
+  neosloth = {
+    email = "neosloth@sent.com";
+    github = "theneosloth";
+    githubId = 1973649;
+    name = "Stefan Kuznetsov";
+  };
   nequissimus = {
     email = "tim@nequissimus.com";
     github = "NeQuissimus";
