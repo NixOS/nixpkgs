@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  pkg-config,
   minizip,
   python3,
   zlib,
@@ -18,14 +20,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1FUJLsnx0ZNTT66sK7/gbZVo6Se85nbYvtEyoxeOHTI=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
     minizip
     zlib
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "USE_SYSTEM_MINIZIP=1"
+  cmakeFlags = [
+    "-DUSE_SYSTEM_MINIZIP=ON"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
   # TEST 428/429 worksheet:worksheet_table15 *** buffer overflow detected ***: terminated
@@ -36,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     python3.pkgs.pytest
   ];
-
-  checkTarget = "test";
 
   meta = {
     description = "C library for creating Excel XLSX files";
