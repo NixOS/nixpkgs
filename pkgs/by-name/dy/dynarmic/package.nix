@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dynarmic";
-  version = "6.7.0-unstable-2025-03-16";
+  version = "0-unstable-2025-09-06";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
     repo = "dynarmic";
-    rev = "278405bd71999ed3f3c77c5f78344a06fef798b9";
-    hash = "sha256-D7nXn5y0h8FV0V8Tc8uBlRoeEU+gcpt44afujZvG+1A=";
+    rev = "cbca2f5761a838e99ee6a9ffde206f9e076569d0";
+    hash = "sha256-IvA/UP9+3W8meih5cr5a4cLZLa0i6P3xnYDa+bM+2hw=";
   };
 
   patches = [
