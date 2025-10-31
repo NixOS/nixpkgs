@@ -64,8 +64,8 @@ let
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
-  allowlist = config.allowlistedLicenses;
-  blocklist = config.blocklistedLicenses;
+  allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
+  blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
