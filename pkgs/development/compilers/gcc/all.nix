@@ -6,7 +6,6 @@
   callPackage,
   isl_0_20,
   noSysDirs,
-  lowPrio,
   wrapCC,
 }@args:
 
@@ -18,7 +17,7 @@ let
       majorVersion = lib.versions.major majorMinorVersion;
       atLeast = lib.versionAtLeast majorMinorVersion;
       attrName = "gcc${lib.replaceStrings [ "." ] [ "" ] majorMinorVersion}";
-      pkg = lowPrio (
+      pkg = lib.lowPrio (
         wrapCC (
           callPackage ./default.nix {
             inherit noSysDirs;
