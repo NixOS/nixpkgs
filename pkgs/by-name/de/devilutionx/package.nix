@@ -12,7 +12,9 @@
   SDL2_image,
   SDL_audiolib,
   simpleini,
+  flac,
   fmt,
+  libogg,
   libpng,
   libtiff,
   libwebp,
@@ -74,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@assets@" "$out/share/diasurgical/devilutionx/"
   '';
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -83,7 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bzip2
+    flac
     fmt
+    libogg
     libpng
     libtiff
     libwebp
