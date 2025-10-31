@@ -809,8 +809,8 @@ in
       "sha256-mQBymsl2+/hka8QiR+AzxS7gtONHroTgY3qmgt+YKOw=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.40.32"
-      "sha256-udjRe+Pb6Yvbh6OHYs32VCTddkrAo/y1Se32A+FM1/M=";
+    buildMypyBoto3Package "logs" "1.40.64"
+      "sha256-XWGsDqlDWAmh4treGhQDb9t0QF8cAKWRdkJwY62qdOY=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.40.54"
