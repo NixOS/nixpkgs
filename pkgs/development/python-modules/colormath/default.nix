@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Switch to unstable which fixes an deprecation issue with newer numpy
   # versions, should be included in versions > 3.0
   # https://github.com/gtaylor/python-colormath/issues/104
-  version = "3.0.0-unstable-2021-04-17";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
