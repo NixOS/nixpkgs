@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  formats,
   runCommand,
 }:
 let
@@ -74,6 +73,17 @@ in
     ```
   */
   writeJSON = (pkgs.formats.json { }).generate;
+
+  /**
+    Writes the content to a RON file.
+
+    # Example
+
+    ```nix
+    writeRON "data.ron" { hello = "world"; }
+    ```
+  */
+  writeRON = (pkgs.formats.ron { }).generate;
 
   /**
     Writes the content to a TOML file.
