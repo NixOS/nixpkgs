@@ -24409,6 +24409,12 @@
     githubId = 37938646;
     matrix = "@sodiboo:gaysex.cloud";
   };
+  sofiedotcafe = {
+    email = "sofie.halenius@sofie.cafe";
+    github = "sofiedotcafe";
+    githubId = 122896463;
+    name = "Sofie";
+  };
   softinio = {
     email = "code@softinio.com";
     github = "softinio";
