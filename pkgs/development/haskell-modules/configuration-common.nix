@@ -652,6 +652,16 @@ with haskellLib;
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
+  # Pass in `pkgs.nix` for the required tools. This means that overriding
+  # them sort of works, but only if you override all instances.
+  nix-paths = super.nix-paths.override {
+    nix-build = pkgs.nix;
+    nix-env = pkgs.nix;
+    nix-hash = pkgs.nix;
+    nix-instantiate = pkgs.nix;
+    nix-store = pkgs.nix;
+  };
+
   # Fix `mv` not working on directories
   turtle = appendPatches [
     (pkgs.fetchpatch {
