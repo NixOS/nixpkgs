@@ -172,9 +172,12 @@ in
       serviceConfig.Restart = "always";
       serviceConfig.User = "minetest";
       serviceConfig.Group = "minetest";
-      serviceConfig.StateDirectory = "minetest";
-      serviceConfig.WorkingDirectory = "/var/lib/minetest";
-      serviceConfig.ExecStart = "${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}";
+
+      script = ''
+        cd /var/lib/minetest
+
+        exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
+      '';
     };
   };
 }

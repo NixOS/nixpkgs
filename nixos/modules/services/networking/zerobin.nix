@@ -91,14 +91,14 @@ in
       enable = true;
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStartPre = [
-        "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}"
-        "${lib.getExe' pkgs.coreutils "chown"} ${cfg.user} ${cfg.dataDir}"
-      ];
       serviceConfig.ExecStart = "${pkgs.zerobin}/bin/zerobin ${cfg.listenAddress} ${toString cfg.listenPort} false ${cfg.user} ${cfg.group} ${zerobin_config}";
       serviceConfig.PrivateTmp = "yes";
       serviceConfig.User = cfg.user;
       serviceConfig.Group = cfg.group;
+      preStart = ''
+        mkdir -p ${cfg.dataDir}
+        chown ${cfg.user} ${cfg.dataDir}
+      '';
     };
   };
 }

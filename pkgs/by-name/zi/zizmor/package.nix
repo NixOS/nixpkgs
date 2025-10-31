@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
   rustPlatform,
@@ -20,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-4+1EURDrDYG4luaNV9KdRVojXY++H9LNNl2oINfWeLc=";
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles

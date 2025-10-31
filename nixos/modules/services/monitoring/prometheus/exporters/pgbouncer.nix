@@ -139,9 +139,9 @@ in
 
   serviceOpts = {
     after = [ "pgbouncer.service" ];
-    serviceConfig.ExecStart = concatStringsSep " " (
+    script = concatStringsSep " " (
       [
-        "${escapeShellArg (getExe cfg.package)}"
+        "exec -- ${escapeShellArg (getExe cfg.package)}"
         "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
       ]
       ++ optionals (cfg.connectionString != null) [

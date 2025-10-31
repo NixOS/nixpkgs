@@ -210,13 +210,13 @@ in
         description = "Postfix Greylisting Service";
         wantedBy = [ "multi-user.target" ];
         before = [ "postfix.service" ];
+        preStart = ''
+          mkdir -p /var/postgrey
+          chown postgrey:postgrey /var/postgrey
+          chmod 0770 /var/postgrey
+        '';
         serviceConfig = {
           Type = "simple";
-          ExecStartPre = [
-            "${lib.getExe' pkgs.coreutils "mkdir"} -p /var/postgrey"
-            "${lib.getExe' pkgs.coreutils "chown"} postgrey:postgrey /var/postgrey"
-            "${lib.getExe' pkgs.coreutils "chmod"} 0770 /var/postgrey"
-          ];
           ExecStart = ''
             ${pkgs.postgrey}/bin/postgrey \
                       ${bind-flag} \

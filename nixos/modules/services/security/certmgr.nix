@@ -34,6 +34,11 @@ let
         [ spec ]
     ) (lib.attrValues cfg.specs)
   );
+
+  preStart = ''
+    ${lib.concatStringsSep " \\\n" ([ "mkdir -p" ] ++ map lib.escapeShellArg specPaths)}
+    ${cfg.package}/bin/certmgr -f ${certmgrYaml} check
+  '';
 in
 {
   options.services.certmgr = {
@@ -210,14 +215,11 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      inherit preStart;
 
       serviceConfig = {
         Restart = "always";
         RestartSec = "10s";
-        ExecStartPre = [
-          "${lib.getExe' pkgs.coreutils "mkdir"} -p ${lib.escapeShellArgs specPaths}"
-          "${lib.getExe cfg.package} -f ${certmgrYaml} check"
-        ];
         ExecStart = "${cfg.package}/bin/certmgr -f ${certmgrYaml}";
       };
     };

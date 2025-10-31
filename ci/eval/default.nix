@@ -111,6 +111,7 @@ let
           --option allow-import-from-derivation false \
           --query --available \
           --out-path --json \
+          --meta \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -204,6 +205,7 @@ let
         fi
 
         cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
+        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.meta)' > $out/${evalSystem}/meta.json
       '';
 
   diff = callPackage ./diff.nix { };
@@ -231,6 +233,14 @@ let
             rebuilds: (.rebuilds + $item.rebuilds)
           })
         ' > $out/combined-diff.json
+
+        # Combine maintainers from all systems
+        cat ${diffDir}/*/maintainers.json | jq -s '
+          add | group_by(.package) | map({
+            key: .[0].package,
+            value: map(.maintainers) | flatten | unique
+          }) | from_entries
+        ' > $out/maintainers.json
 
         mkdir -p $out/before/stats
         for d in ${diffDir}/before/*; do
