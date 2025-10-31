@@ -5,7 +5,6 @@
   colorama,
   fetchFromGitHub,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   tqdm,
   unicrypto,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "0.1.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aesedb";
@@ -25,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-jT5Aru/BqvJf4HpD418+GrkZ0/g2XcTV3oWSOmo0Sbw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiowinreg
     colorama
     pycryptodomex
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parser for JET databases";
-    mainProgram = "antdsparse";
     homepage = "https://github.com/skelsec/aesedb";
     changelog = "https://github.com/skelsec/aesedb/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "antdsparse";
   };
 }
