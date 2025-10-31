@@ -8,6 +8,7 @@
   openssl,
   python3,
   zlib,
+  testers,
   nix-update-script,
 }:
 
@@ -57,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pytest
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "C library for creating Excel XLSX files";
@@ -66,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "xlsxwriter" ];
   };
 })
