@@ -162,14 +162,12 @@ in
         ]
         ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
         after = [ "network-online.target" ];
-        preStart = lib.mkIf envConfig ''
-          umask 077
-          ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
-        '';
         serviceConfig = {
           EnvironmentFile = cfg.environmentFiles;
+          ExecStartPre = lib.mkIf envConfig "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o \"${finalConfig}\"";
           ExecStart = "${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
           RuntimeDirectory = "bcg";
+          RuntimeDirectoryMode = "0700";
         };
       };
   };
