@@ -18085,6 +18085,8 @@ self: super: with self; {
 
   t61codec = callPackage ../development/python-modules/t61codec { };
 
+  SMART = callPackage ../development/python-modules/SMART { };
+
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
