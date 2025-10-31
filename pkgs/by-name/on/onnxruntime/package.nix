@@ -98,6 +98,7 @@ effectiveStdenv.mkDerivation rec {
       url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
       hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
     })
+    ./0001-use-constexpr-for-constexpr-things.patch
   ]
   ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
