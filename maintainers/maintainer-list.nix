@@ -21157,6 +21157,12 @@
     github = "PhilippWoelfel";
     githubId = 19400064;
   };
+  pxlman = {
+    name = "Ahmed Ashraf";
+    email = "agxgv7573@gmail.com";
+    github = "pxlman";
+    githubId = 71288979;
+  };
   pyle = {
     name = "Adam Pyle";
     email = "adam@pyle.dev";
