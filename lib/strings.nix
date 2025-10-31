@@ -1620,6 +1620,169 @@ rec {
     );
 
   /**
+    Converts a string to snake_case. Handles camelCase, PascalCase,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to snake_case
+
+    # Type
+
+    ```
+    toSnakeCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toSnakeCase` usage example
+
+    ```nix
+    toSnakeCase "hello-world"
+    => "hello_world"
+    toSnakeCase "helloWorld"
+    => "hello_world"
+    toSnakeCase "hello world"
+    => "hello_world"
+    toSnakeCase "HelloWorld"
+    => "hello_world"
+    ```
+
+    :::
+  */
+  toSnakeCase =
+    str:
+    lib.throwIfNot (isString str) "toSnakeCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+      in
+      join "_" (map (addContextFrom str) (map toLower parts))
+    );
+
+  /**
+    Converts a string to PascalCase. Handles camelCase, snake_case,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to PascalCase
+
+    # Type
+
+    ```
+    toPascalCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toPascalCase` usage example
+
+    ```nix
+    toPascalCase "hello-world"
+    => "HelloWorld"
+    toPascalCase "helloWorld"
+    => "HelloWorld"
+    toPascalCase "hello world"
+    => "HelloWorld"
+    toPascalCase "hello_world"
+    => "HelloWorld"
+    ```
+
+    :::
+  */
+  toPascalCase =
+    str:
+    lib.throwIfNot (isString str) "toPascalCase does only accepts string values, but got ${typeOf str}"
+      (
+        let
+          separators = splitStringBy (
+            prev: curr:
+            elem curr [
+              "-"
+              "_"
+              " "
+            ]
+          ) false str;
+
+          parts = lib.flatten (
+            map (splitStringBy (
+              prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+            ) true) separators
+          );
+        in
+        concatStrings (map (addContextFrom str) (map toSentenceCase parts))
+      );
+
+  /**
+    Converts a string to kebab-case. Handles camelCase, snake_case,
+    PascalCase strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to kebab-case
+
+    # Type
+
+    ```
+    toKebabCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toKebabCase` usage example
+
+    ```nix
+    toKebabCase "HelloWorld"
+    => "hello-world"
+    toKebabCase "helloWorld"
+    => "hello-world"
+    toKebabCase "hello world"
+    => "hello-world"
+    toKebabCase "hello_world"
+    => "hello-world"
+    ```
+
+    :::
+  */
+  toKebabCase =
+    str:
+    lib.throwIfNot (isString str) "toKebabCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+      in
+      join "-" (map (addContextFrom str) (map toLower parts))
+    );
+
+  /**
     Appends string context from string like object `src` to `target`.
 
     :::{.warning}
