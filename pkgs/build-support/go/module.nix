@@ -405,10 +405,9 @@ lib.extendMkDerivation {
         overrideModAttrs = lib.toExtension overrideModAttrs;
       };
 
-      meta = {
+      meta = meta // {
         # Add default meta information.
-        platforms = go.meta.platforms or lib.platforms.all;
-      }
-      // meta;
+        platforms = lib.intersectLists meta.platforms or lib.platforms.all go.meta.platforms;
+      };
     };
 }
