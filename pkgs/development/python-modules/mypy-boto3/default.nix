@@ -861,8 +861,8 @@ in
       "sha256-18sD6lfs5Y9BBp3j8c/TVjI/3KZbO6pKuYPYKir1NQY=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.40.56"
-      "sha256-oxrbkvlpIII2Ib8hMF0UnZ6PNFYnDHceA6V9M1thF18=";
+    buildMypyBoto3Package "mediaconvert" "1.40.64"
+      "sha256-TRr19ppRe4jRZNMHPQmXwUXXmtt/vzwLjc5Xq+H/RYw=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.40.57"
