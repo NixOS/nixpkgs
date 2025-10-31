@@ -4,38 +4,39 @@
   cmake,
   fetchFromGitHub,
   opencv4,
+  opentrack,
 }:
 
 stdenv.mkDerivation {
   pname = "opentrack-aruco";
-  version = "unstable-20190303";
+  version = "0-unstable-2022-03-10";
 
   src = fetchFromGitHub {
     owner = "opentrack";
     repo = "aruco";
-    rev = "12dc60efd61149227bd05c805208d9bcce308f6d";
-    sha256 = "0gkrixgfbpg8pls4qqilphbz4935mg5z4p18a0vv6kclmfccw9ad";
+    rev = "e08d336bd2c70859efd19622582817fe8eabe714";
+    hash = "sha256-Wf5y//vxRWIZfOxwgZsPPTsUHliA3cbt2FOjouh4/rQ=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ cmake ];
-
   buildInputs = [ opencv4 ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
 
-  preInstall = ''
-    mkdir -p $out/include/aruco
+  installPhase = ''
+    runHook preInstall
+
+    install -Dt $out/include/aruco ./src/include/aruco/*
+    install -Dt $out/lib ./src/libaruco.a
+
+    runHook postInstall
   '';
 
-  # copy headers required by main package
-  postInstall = ''
-    cp $src/src/*.h $out/include/aruco
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/opentrack/aruco";
     description = "C++ library for detection of AR markers based on OpenCV";
-    license = licenses.isc;
-    maintainers = with maintainers; [ zaninime ];
+    license = lib.licenses.isc;
+    maintainers = opentrack.meta.maintainers;
   };
 }
