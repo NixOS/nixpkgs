@@ -15,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libxlsxwriter";
   version = "1.2.4";
 
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.hasSharedLibraries [
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
