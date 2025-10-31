@@ -219,8 +219,15 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ (lib.optionals (cfg.dbBackend == "postgresql") [ "postgresql.service" ])
+      ++ (lib.optionals (cfg.dbBackend == "mysql") [ "mysql.service" ]);
       wants = [ "network-online.target" ];
+      requires =
+        (lib.optionals (cfg.dbBackend == "postgresql") [ "postgresql.service" ])
+        ++ (lib.optionals (cfg.dbBackend == "mysql") [ "mysql.service" ]);
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
