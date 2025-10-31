@@ -1,10 +1,9 @@
 {
   lib,
-}:
-{
   changedattrs,
   changedpathsjson,
   removedattrs,
+  githubAuthorId,
 }:
 let
   pkgs = import ../../.. {
@@ -54,6 +53,9 @@ let
         # TODO: Refactor this so we can ping entire teams instead of the individual members.
         # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
         maintainers = package.meta.maintainers or [ ];
+        byPackageMaintainer = lib.any (maintainer: maintainer.githubId == githubAuthorId) (
+          package.meta.maintainers or [ ]
+        );
       }
     ))
     # No need to match up packages without maintainers with their files.
@@ -61,6 +63,11 @@ let
     # case for libintl, for example.
     (lib.filter (pkg: pkg.maintainers != [ ]))
   ];
+
+  # Whether all packages directly changed are maintained by the PR's author.
+  # TODO: Make sure this is false when there's an unmaintained package
+  # TODO: Make sure all paths are associated with a package maintained by the author
+  byPackageMaintainer = lib.all (attrs: attrs.byPackageMaintainer) attrsWithMaintainers;
 
   relevantFilenames =
     drv:
@@ -110,4 +117,7 @@ let
     maintainer: packages: map (pkg: pkg.packageName) packages
   ) byMaintainer;
 in
-packagesPerMaintainer
+{
+  users = packagesPerMaintainer;
+  inherit byPackageMaintainer;
+}
