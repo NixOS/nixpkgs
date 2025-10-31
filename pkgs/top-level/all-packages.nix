@@ -13236,8 +13236,6 @@ with pkgs;
 
   papermc = papermcServers.papermc;
 
-  path-of-building = qt6Packages.callPackage ../games/path-of-building { };
-
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
