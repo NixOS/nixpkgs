@@ -7,19 +7,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool-tui";
-  version = "0.5.1";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "grouzen";
     repo = "framework-tool-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R4/VeymmthI96PJt7XsKRYz1Y8QW/lV90HvJgt+e+hI=";
+    hash = "sha256-D9twqVizYqrglVOrwc8KuB5mk4vc/BTMv+HR3rv5yEk=";
   };
 
-  cargoHash = "sha256-tDNYkV5MWb4+co/gwjpAt/M7yJbEWrryieJoBuXmY8M=";
+  cargoHash = "sha256-0/6b0C+uUNz03r5IEBvAGzagSyjzXFVbE74rgfGJoyM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
+
+  # test suite needs a framework laptop
+  doCheck = false;
 
   meta = {
     description = "TUI for controlling and monitoring Framework Computers hardware";
