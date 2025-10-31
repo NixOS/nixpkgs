@@ -92,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Terracotta provides out-of-the-box multiplayer support for Minecraft";
     homepage = "https://github.com/burningtnt/Terracotta";
+    changelog = "https://github.com/burningtnt/Terracotta/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "terracotta";
