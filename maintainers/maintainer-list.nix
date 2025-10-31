@@ -19574,17 +19574,17 @@
     githubId = 25278;
     name = "Otavio Salvador";
   };
+  otheanalyst = {
+    name = "oTheAnalyst";
+    email = "unfixable47@proton.me";
+    github = "oTheAnalyst";
+    githubId = 30744769;
+  };
   otini = {
     name = "Olivier Nicole";
     email = "olivier@chnik.fr";
     github = "OlivierNicole";
     githubId = 14031333;
-  };
-  otheanalyst ={
-    name = "oTheAnalyst";
-    email ="unfixable47@proton.me";
-    github ="otheanalyst";
-    githubId = "30744769";
   };
   ottoblep = {
     name = "Severin Lochschmidt";
