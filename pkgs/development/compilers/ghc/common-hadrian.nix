@@ -863,7 +863,7 @@ stdenv.mkDerivation (
       ghc-settings-edit "$settingsFile" \
         "JavaScript CPP command" "${toolPath "cc" installCC}"
       ghc-settings-edit "$settingsFile" \
-        "JavaScript CPP flags" "-E"
+        "JavaScript CPP flags" "-E -CC -Wno-unicode -nostdinc"
     ''
     + ''
 
