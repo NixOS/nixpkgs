@@ -23,6 +23,7 @@ let
   inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) hasInfix replaceStrings;
   inherit (lib.trivial) flip pipe;
+  inherit (lib.meta) getExe';
 
   removeNulls = filterAttrs (_: v: v != null);
 
@@ -102,16 +103,15 @@ let
       description = "Wireguard dynamic endpoint refresh (${name})";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      path = with pkgs; [
-        iproute2
-        systemd
-      ];
       # networkd doesn't automatically refresh peer endpoints.
       # See: https://github.com/systemd/systemd/issues/9911
-      script = ''
-        touch /etc/systemd/network/40-${name}.netdev
-        networkctl reload
-      '';
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = [
+          "-${lib.getExe' pkgs.coreutils "touch"} /etc/systemd/network/40-${name}.netdev"
+          "${getExe' pkgs.systemd "networkctl"} reload"
+        ];
+      };
     };
 
   # netdev config must be a real file (not a symlink to a store file)
