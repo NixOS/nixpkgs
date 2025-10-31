@@ -3,21 +3,25 @@
   stdenv,
   fetchurl,
   cmake,
+  alsa-lib,
+  fltk,
   pkg-config,
   makeWrapper,
+  libdwarf,
   SDL,
   SDL_mixer,
   SDL_net,
   wxGTK32,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "odamex";
-  version = "0.9.5";
+  version = "11.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
-    sha256 = "sha256-WBqO5fWzemw1kYlY192v0nnZkbIEVuWmjWYMy+1ODPQ=";
+    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.gz";
+    sha256 = "sha256-DEM0JcA4u4s5OqkPNNcLIf2nLV+M/KHCVI/pSFEfYWA=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +31,24 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    alsa-lib
+    fltk
+    libdwarf
     SDL
     SDL_mixer
     SDL_net
     wxGTK32
+    zstd
   ];
+
+  cmakeFlags = [
+    "-DUSE_EXTERNAL_LIBDWARF=ON"
+  ];
+
+  postPatch = ''
+    substituteInPlace libraries/cpptrace-lib.cmake \
+      --replace '"-DCPPTRACE_USE_EXTERNAL_LIBDWARF=''${USE_EXTERNAL_LIBDWARF}"' '"-DCPPTRACE_USE_EXTERNAL_LIBDWARF=''${USE_EXTERNAL_LIBDWARF}" "-DCPPTRACE_FIND_LIBDWARF_WITH_PKGCONFIG=ON"'
+  '';
 
   installPhase = ''
     runHook preInstall
