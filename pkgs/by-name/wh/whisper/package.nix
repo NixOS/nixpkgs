@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # The package comes with prebuilt static
+  # libraries of bzip2, zlib, libdeflate and asmlib.
+  # They are not built with -fPIE and thus linking fails.
+  # As asmlib is not packages in nixpkgs let's disable PIE.
+  env.NIX_LDFLAGS = "-no-pie";
+
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin whisper whisper-index
@@ -48,5 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/refresh-bio/whisper";
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.x86_64;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }
