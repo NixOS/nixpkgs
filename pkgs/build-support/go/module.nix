@@ -397,14 +397,13 @@ lib.extendMkDerivation {
       inherit allowGoReference;
       disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
-      passthru = {
+      passthru = passthru // {
         inherit go;
         # Canonicallize `overrideModAttrs` as an attribute overlay.
         # `passthru.overrideModAttrs` will be overridden
         # when users want to override `goModules`.
         overrideModAttrs = lib.toExtension overrideModAttrs;
-      }
-      // passthru;
+      };
 
       meta = {
         # Add default meta information.
