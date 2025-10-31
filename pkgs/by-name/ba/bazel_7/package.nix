@@ -5,6 +5,7 @@
   fetchurl,
   makeWrapper,
   writeTextFile,
+  writeScript,
   replaceVars,
   writeShellApplication,
   makeBinaryWrapper,
@@ -168,6 +169,22 @@ let
   bazelDeps =
     let
       bazelForDeps = if stdenv.hostPlatform.isDarwin then bazelBootstrap else bazelFhs;
+      serverJavabase =
+        if stdenv.hostPlatform.isDarwin then
+          let
+            hacks = (import ./darwin_hacks/default.nix) {
+              inherit
+                stdenv
+                buildJdk
+                runJdk
+                version
+                writeScript
+                ;
+            };
+          in
+          hacks.jvmIntercept
+        else
+          runJdk;
     in
     stdenv.mkDerivation {
       name = "bazelDeps";
@@ -203,8 +220,8 @@ let
       buildPhase = ''
         runHook preBuild
         export HOME=$(mktemp -d)
-        (cd bazel_src; ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
-        ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} vendor src:bazel_nojdk \
+        (cd bazel_src; ${bazelForDeps}/bin/bazel --server_javabase=${serverJavabase} mod deps --curses=no;
+        ${bazelForDeps}/bin/bazel --server_javabase=${serverJavabase} vendor src:bazel_nojdk \
         --curses=no \
         --vendor_dir ../vendor_dir \
         --verbose_failures \
