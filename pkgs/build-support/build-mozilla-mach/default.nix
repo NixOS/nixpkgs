@@ -163,7 +163,7 @@ in
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,
 
-  # digital rights managemewnt
+  # digital rights management
 
   # This flag controls whether Firefox will show the nagbar, that allows
   # users at runtime the choice to enable Widevine CDM support when a site
