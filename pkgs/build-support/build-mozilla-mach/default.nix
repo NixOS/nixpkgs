@@ -130,7 +130,9 @@ in
   jemallocSupport ? !stdenv.hostPlatform.isMusl,
   jemalloc,
   ltoSupport ? (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform.is64bit
+    && !stdenv.hostPlatform.isRiscV
   ),
   overrideCC,
   buildPackages,
@@ -466,7 +468,7 @@ buildStdenv.mkDerivation {
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
-  # LTO is done using clang and lld on Linux.
+  # LTO is done using clang and lld.
   ++ lib.optionals ltoSupport [
     "--enable-lto=cross,full" # Cross-Language LTO
     "--enable-linker=lld"
