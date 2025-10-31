@@ -1016,6 +1016,87 @@ runTests {
 
   testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
 
+  testToSnakeCase = {
+    expr = strings.toSnakeCase "Hello world";
+    expected = "hello_world";
+  };
+
+  testToSnakeCaseFromSnake = {
+    expr = strings.toSnakeCase "hello_world";
+    expected = "hello_world";
+  };
+
+  testToSnakeCaseFromKebab = {
+    expr = strings.toSnakeCase "hello-world";
+    expected = "hello_world";
+  };
+
+  testToSnakeCaseFromCamel = {
+    expr = strings.toSnakeCase "helloWorld";
+    expected = "hello_world";
+  };
+
+  testToSnakeCaseFromPascal = {
+    expr = strings.toSnakeCase "HelloWorld";
+    expected = "hello_world";
+  };
+
+  testToSnakeCasePath = testingThrow (strings.toSnakeCase ./.);
+
+  testToPascalCase = {
+    expr = strings.toPascalCase "Hello world";
+    expected = "HelloWorld";
+  };
+
+  testToPascalCaseFromSnake = {
+    expr = strings.toPascalCase "hello_world";
+    expected = "HelloWorld";
+  };
+
+  testToPascalCaseFromKebab = {
+    expr = strings.toPascalCase "hello-world";
+    expected = "HelloWorld";
+  };
+
+  testToPascalCaseFromCamel = {
+    expr = strings.toPascalCase "helloWorld";
+    expected = "HelloWorld";
+  };
+
+  testToPascalCaseFromPascal = {
+    expr = strings.toPascalCase "HelloWorld";
+    expected = "HelloWorld";
+  };
+
+  testToPascalCasePath = testingThrow (strings.toPascalCase ./.);
+
+  testToKebabCase = {
+    expr = strings.toKebabCase "Hello world";
+    expected = "hello-world";
+  };
+
+  testToKebabCaseFromSnake = {
+    expr = strings.toKebabCase "hello_world";
+    expected = "hello-world";
+  };
+
+  testToKebabCaseFromKebab = {
+    expr = strings.toKebabCase "hello-world";
+    expected = "hello-world";
+  };
+
+  testToKebabCaseFromCamel = {
+    expr = strings.toKebabCase "helloWorld";
+    expected = "hello-world";
+  };
+
+  testToKebabCaseFromPascal = {
+    expr = strings.toKebabCase "HelloWorld";
+    expected = "hello-world";
+  };
+
+  testToKebabCasePath = testingThrow (strings.toKebabCase ./.);
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
