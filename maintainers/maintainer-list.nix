@@ -12280,6 +12280,13 @@
     githubId = 8900;
     name = "Johan Magnus Jonsson";
   };
+  jmsuen = {
+   name = "Jenmin Suen";
+   email = "jenmin.suen@outlook.com";
+   github = "jmsuen";
+   githubId = 85784679;
+   keys = [{ fingerprint = "557A E33E 80F7 697F 68E0  0C18 A15D 9620 FC95 0747"; }];
+  };
   JManch = {
     email = "jmanch@protonmail.com";
     github = "JManch";
