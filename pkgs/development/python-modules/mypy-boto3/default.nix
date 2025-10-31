@@ -1209,8 +1209,8 @@ in
       "sha256-ckZ45QZgelh3hVVmMrxdFO0I9qRs8f4EmmRizHB8MVk=";
 
   mypy-boto3-schemas =
-    buildMypyBoto3Package "schemas" "1.40.19"
-      "sha256-cNAGZVXZKDxfU1x92cBHYa2MlVFCaFTVENt3pbsYpcY=";
+    buildMypyBoto3Package "schemas" "1.40.63"
+      "sha256-QV0qMR8NdhDx4WR3okTGpYvkosZfD3QslmegvvPyvZQ=";
 
   mypy-boto3-sdb =
     buildMypyBoto3Package "sdb" "1.40.0"
