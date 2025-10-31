@@ -778,6 +778,8 @@ let
 
         happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
+				hardcaml = callPackage ../development/ocaml-modules/hardcaml { };
+
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
         hc = callPackage ../development/ocaml-modules/hc { };
