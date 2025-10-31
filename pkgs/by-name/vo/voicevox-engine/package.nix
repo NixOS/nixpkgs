@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-WoHTv4VjLFJPIi47WETMQM8JmgBctAWlue8yKmi1+6A=";
+    hash = "sha256-ZthTXHXzexbffWoi8AKJrgX9/gd7fmKbYpCwuZZiQWQ=";
   };
 
   patches = [
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     kanalizer
     numpy
     platformdirs
+    psutil
     pydantic
     python-multipart
     pyworld
@@ -50,6 +51,10 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
     "fastapi-slim"
+  ];
+
+  pythonRelaxDeps = [
+    "psutil" # at the time of writing, psutil has not reached version 7.1.1
   ];
 
   preConfigure = ''
@@ -98,7 +103,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
+      hash = "sha256-yj3bwEB1qeoXAf3Dr02FF/HB6g7toAd2VUmR2937yzc=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
