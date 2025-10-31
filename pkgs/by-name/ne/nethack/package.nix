@@ -238,5 +238,6 @@ stdenvUsed.mkDerivation (finalAttrs: {
     platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
     maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "nethack";
+    broken = if qtMode then stdenv.hostPlatform.isDarwin else false;
   };
 })
