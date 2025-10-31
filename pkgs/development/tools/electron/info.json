@@ -3995,8 +3995,8 @@
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-K/3+t+Vh2IZZSx3Ld82m0I8GWAVVKYzAaS1HA6GNleU=",
-                    "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
+                    "hash": "sha256-/gjznJOMyWs7kaUquYf4c1peCi3P6LQXnHUGdLROtz4=",
+                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
                     "tag": "142.0.7444.52",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
