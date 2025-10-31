@@ -40,7 +40,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   # Run the tests of a package built by `uv_build`.
-  passthru.tests.built-by-uv = callPackage ./built-by-uv.nix { inherit (pkgs) uv; };
+  passthru = {
+    tests.built-by-uv = callPackage ./built-by-uv.nix { inherit (pkgs) uv; };
+
+    # updateScript is not needed here, as updating is done on staging
+  };
 
   meta = {
     description = "Minimal build backend for uv";
