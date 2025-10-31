@@ -1200,6 +1200,8 @@ self: super: with self; {
 
   autopxd2 = callPackage ../development/python-modules/autopxd2 { };
 
+  autoray = callPackage ../development/python-modules/autoray { };
+
   autoslot = callPackage ../development/python-modules/autoslot { };
 
   av = callPackage ../development/python-modules/av { };
@@ -3691,6 +3693,8 @@ self: super: with self; {
   };
 
   diagrams = callPackage ../development/python-modules/diagrams { };
+
+  diastatic-malt = callPackage ../development/python-modules/diastatic-malt { };
 
   diceware = callPackage ../development/python-modules/diceware { };
 
@@ -11709,6 +11713,8 @@ self: super: with self; {
   pencompy = callPackage ../development/python-modules/pencompy { };
 
   pendulum = callPackage ../development/python-modules/pendulum { };
+
+  pennylane = callPackage ../development/python-modules/pennylane { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
