@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sendme";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "sendme";
     rev = "v${version}";
-    hash = "sha256-21JNyncChl8rv3IDdvYRF/nvMpAGCBps4xsBP9b/1lA=";
+    hash = "sha256-A1dZH7qeQTsMaJdB4UejpP/HD5tE07gCHFv2Mb1ZXWY=";
   };
 
-  cargoHash = "sha256-1VVpjeGU6/+apTHv7klo7FkAQ3AVjiziQRNI7yFbvh0=";
+  cargoHash = "sha256-Iwm1VGxIBfuT3nXk5Si9gpDFJRjHBOc3nfE8DFvI5YE=";
 
   __darwinAllowLocalNetworking = true;
 
