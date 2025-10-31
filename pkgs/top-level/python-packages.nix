@@ -14989,6 +14989,8 @@ self: super: with self; {
 
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
+  python-jsonpath = callPackage ../development/python-modules/python-jsonpath { };
+
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
