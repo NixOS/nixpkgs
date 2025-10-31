@@ -62,7 +62,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests.uv-python = python3Packages.uv;
 
-    # Updating `uv` needs to be done on staging. Disabling r-ryantm update bot:
+    # Updating `uv` needs to be done on staging until the next staging branch-off.
+    # Disabling r-ryantm update bot:
     # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
