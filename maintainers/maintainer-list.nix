@@ -12340,6 +12340,13 @@
     githubId = 43830312;
     name = "Joël Miramon";
   };
+  jmsuen = {
+    email = "jenmin.suen@outlook.com";
+    github = "jmsuen";
+    githubId = 85784679;
+    name = "Jenmin Suen";
+    keys = [ { fingerprint = "557A E33E 80F7 697F 68E0  0C18 A15D 9620 FC95 0747"; } ];
+  };
   jn-sena = {
     email = "jn-sena@proton.me";
     github = "jn-sena";
