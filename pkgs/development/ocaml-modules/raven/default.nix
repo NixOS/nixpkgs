@@ -2,6 +2,15 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
+  raven-fehu,
+  raven-hugin,
+  raven-kaun,
+  raven-nx,
+  raven-nx-datasets,
+  raven-rune,
+  raven-saga,
+  raven-sowilo,
+  raven-talon,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -19,6 +28,18 @@ buildDunePackage (finalAttrs: {
   postUnpack = ''
     rm -r $sourceRoot/{book,www}
   '';
+
+  propagatedBuildInputs = [
+    raven-fehu
+    raven-hugin
+    raven-kaun
+    raven-nx
+    raven-nx-datasets
+    raven-rune
+    raven-saga
+    raven-sowilo
+    raven-talon
+  ];
 
   meta = {
     description = "Meta package for the Raven ML ecosystem";
