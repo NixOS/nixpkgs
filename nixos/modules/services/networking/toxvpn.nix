@@ -43,19 +43,20 @@ with lib;
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      preStart = ''
+        mkdir -p /run/toxvpn || true
+        chown toxvpn /run/toxvpn
+      '';
+
+      path = [ pkgs.toxvpn ];
+
+      script = ''
+        exec toxvpn -i ${config.services.toxvpn.localip} -l /run/toxvpn/control -u toxvpn -p ${toString config.services.toxvpn.port} ${
+          lib.concatMapStringsSep " " (x: "-a ${x}") config.services.toxvpn.auto_add_peers
+        }
+      '';
+
       serviceConfig = {
-        ExecStart =
-          let
-            args = lib.cli.toCommandLineShellGNU { } {
-              i = config.services.toxvpn.localip;
-              l = "/run/toxvpn/control";
-              u = "toxvpn";
-              p = config.services.toxvpn.port;
-              a = config.services.toxvpn.auto_add_peers;
-            };
-          in
-          "${lib.getExe pkgs.toxvpn} ${args}";
-        RuntimeDirectory = "toxvpn";
         KillMode = "process";
         Restart = "on-success";
         Type = "notify";

@@ -22,7 +22,7 @@ rec {
       splittedPath = lib.splitString "." packagePlatformPath;
 
       # ["python312Packages" "numpy" "aarch64-linux"] -> ["python312Packages" "numpy"]
-      packagePath = lib.sublist 0 (lib.length splittedPath - 1) splittedPath;
+      packagePath = lib.init splittedPath;
 
       # "python312Packages.numpy"
       name = lib.concatStringsSep "." packagePath;

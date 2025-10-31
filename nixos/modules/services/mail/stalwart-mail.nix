@@ -162,16 +162,17 @@ in
           "network.target"
         ];
 
+        preStart =
+          if useLegacyStorage then
+            ''
+              mkdir -p ${cfg.dataDir}/data/blobs
+            ''
+          else
+            ''
+              mkdir -p ${cfg.dataDir}/db
+            '';
+
         serviceConfig = {
-          ExecStartPre =
-            if useLegacyStorage then
-              ''
-                ${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}/data/blobs
-              ''
-            else
-              ''
-                ${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}/db
-              '';
           ExecStart = [
             ""
             "${lib.getExe cfg.package} --config=${configFile}"

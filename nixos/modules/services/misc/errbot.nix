@@ -100,13 +100,13 @@ in
         {
           after = [ "network-online.target" ];
           wantedBy = [ "multi-user.target" ];
+          preStart = ''
+            mkdir -p ${dataDir}
+            chown -R errbot:errbot ${dataDir}
+          '';
           serviceConfig = {
             User = "errbot";
             Restart = "on-failure";
-            ExecStartPre = [
-              "${lib.getExe' pkgs.coreutils "mkdir"} -p ${dataDir}"
-              "${lib.getExe' pkgs.coreutils "chown"} -R errbot:errbot ${dataDir}"
-            ];
             ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
             PermissionsStartOnly = true;
           };

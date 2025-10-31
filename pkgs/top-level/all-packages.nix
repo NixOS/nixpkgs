@@ -12,6 +12,17 @@
   config,
   overlays,
 }:
+let
+  # Add inherited lib functions only here, so they are not exported from pkgs
+  inherit (lib)
+    lowPrio
+    hiPrio
+    recurseIntoAttrs
+    dontRecurseIntoAttrs
+    makeOverridable
+    ;
+in
+
 res: pkgs: super:
 
 with pkgs;
@@ -31,6 +42,12 @@ with pkgs;
   # (earlier stages being the various `super` variables that precede
   # all-packages.nix)
   _type = "pkgs";
+
+  ### Helper functions.
+  inherit lib config overlays;
+
+  # For convenience, allow callers to get the path to Nixpkgs.
+  path = ../..;
 
   # A stdenv capable of building 32-bit binaries.
   # On x86_64-linux, it uses GCC compiled with multilib support; on i686-linux,
@@ -91,35 +108,13 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
-  # For convenience, allow callers to get the path to Nixpkgs.
-  path = ../..;
-
-  ### Helper functions.
-  inherit lib config overlays;
-
-  # do not import 'appendToName' to get consistent package-names with the same
-  # set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
-  inherit (lib) lowPrio hiPrio makeOverridable;
-
-  inherit (lib) recurseIntoAttrs;
-
-  # This is intended to be the reverse of recurseIntoAttrs, as it is
-  # defined now it exists mainly for documentation purposes, but you
-  # can also override this with recurseIntoAttrs to recurseInto all
-  # the Attrs which is useful for testing massive changes. Ideally,
-  # every package subset not marked with recurseIntoAttrs should be
-  # marked with this.
-  inherit (lib) dontRecurseIntoAttrs;
-
-  stringsWithDeps = lib.stringsWithDeps;
-
   ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = lib.recurseIntoAttrs (callPackages ../test { });
+  tests = recurseIntoAttrs (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
@@ -2185,7 +2180,7 @@ with pkgs;
 
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
-  nltk-data = lib.recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
+  nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
   seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
   seabios-csm = seabios.override { ___build-type = "csm"; };
@@ -3637,8 +3632,6 @@ with pkgs;
   ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
 
   sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
-
-  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
 
   openvpn = callPackage ../tools/networking/openvpn { };
 
@@ -5555,7 +5548,7 @@ with pkgs;
   cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
 
   # Below, the classic self-bootstrapping process
-  cbqn-bootstrap = lib.dontRecurseIntoAttrs {
+  cbqn-bootstrap = dontRecurseIntoAttrs {
     # Use clang to compile CBQN if we aren't already.
     # CBQN's upstream primarily targets and tests clang which means using gcc
     # will result in slower binaries and on some platforms failing/broken builds.
@@ -8170,7 +8163,7 @@ with pkgs;
     nvidia-docker
     ;
 
-  nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
+  nvidia-vaapi-driver = hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
   nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
 
@@ -9263,13 +9256,13 @@ with pkgs;
   home-assistant = callPackage ../servers/home-assistant { };
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
-  home-assistant-custom-components = lib.recurseIntoAttrs (
+  home-assistant-custom-components = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit (home-assistant.python.pkgs) callPackage;
       directory = ../servers/home-assistant/custom-components;
     }
   );
-  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs (
+  home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit callPackage;
       directory = ../servers/home-assistant/custom-lovelace-modules;
@@ -10939,7 +10932,7 @@ with pkgs;
   emacsPackagesFor =
     emacs:
     import ./emacs-packages.nix {
-      inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
+      inherit lib;
       emacs' = emacs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
@@ -11003,7 +10996,7 @@ with pkgs;
       python = python3;
     };
   };
-  gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
+  gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
   goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
@@ -11681,7 +11674,7 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magnetophonDSP = lib.recurseIntoAttrs {
+  magnetophonDSP = recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
     ConstantDetuneChorus = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
@@ -11937,7 +11930,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  open-music-kontrollers = lib.recurseIntoAttrs {
+  open-music-kontrollers = recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
     mephisto = callPackage ../applications/audio/open-music-kontrollers/mephisto.nix { };
@@ -12568,7 +12561,7 @@ with pkgs;
   # more usecases when wrapping neovim. The interface is being actively worked on
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
-  wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
+  wrapNeovim = neovim-unwrapped: makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
     lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
   };
@@ -13182,8 +13175,6 @@ with pkgs;
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
-  legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
@@ -13244,8 +13235,6 @@ with pkgs;
   papermcServers = callPackages ../games/papermc { };
 
   papermc = papermcServers.papermc;
-
-  path-of-building = qt6Packages.callPackage ../games/path-of-building { };
 
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 

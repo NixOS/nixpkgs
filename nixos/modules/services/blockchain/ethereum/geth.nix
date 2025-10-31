@@ -206,43 +206,6 @@ in
           after = [ "network.target" ];
 
           serviceConfig = {
-            ExecStart =
-              let
-                args = lib.cli.toCommandLineShellGNU { } {
-                  inherit (cfg)
-                    syncmode
-                    gcmode
-                    port
-                    maxpeers
-                    ;
-                  nousb = true;
-                  ipcdisable = true;
-                  datadir = dataDir;
-                  ${cfg.network} = true;
-
-                  http = cfg.http.enable;
-                  "http.addr" = if cfg.http.enable then cfg.http.address else null;
-                  "http.port" = if cfg.http.enable then cfg.http.port else null;
-                  "http.api" = if cfg.http.apis != null then lib.concatStringsSep "," cfg.http.apis else null;
-
-                  ws = cfg.websocket.enable;
-                  "ws.addr" = if cfg.websocket.enable then cfg.websocket.address else null;
-                  "ws.port" = if cfg.websocket.enable then cfg.websocket.port else null;
-                  "ws.api" = if cfg.websocket.apis != null then lib.concatStringsSep "," cfg.websocket.apis else null;
-
-                  metrics = cfg.metrics.enable;
-                  "metrics.addr" = if cfg.metrics.enable then cfg.metrics.address else null;
-                  "metrics.port" = if cfg.metrics.enable then cfg.metrics.port else null;
-
-                  "authrpc.addr" = cfg.authrpc.address;
-                  "authrpc.port" = cfg.authrpc.port;
-                  "authrpc.vhosts" = lib.concatStringsSep "," cfg.authrpc.vhosts;
-                  "authrpc.jwtsecret" =
-                    if cfg.authrpc.jwtsecret != "" then cfg.authrpc.jwtsecret else "${dataDir}/geth/jwtsecret";
-                };
-              in
-              "${lib.getExe cfg.package} ${args} ${lib.escapeShellArgs cfg.extraArgs}";
-
             DynamicUser = true;
             Restart = "always";
             StateDirectory = stateDir;
@@ -254,6 +217,37 @@ in
             PrivateDevices = "true";
             MemoryDenyWriteExecute = "true";
           };
+
+          script = ''
+            ${cfg.package}/bin/geth \
+              --nousb \
+              --ipcdisable \
+              ${lib.optionalString (cfg.network != null) ''--${cfg.network}''} \
+              --syncmode ${cfg.syncmode} \
+              --gcmode ${cfg.gcmode} \
+              --port ${toString cfg.port} \
+              --maxpeers ${toString cfg.maxpeers} \
+              ${lib.optionalString cfg.http.enable ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}''} \
+              ${
+                lib.optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''
+              } \
+              ${lib.optionalString cfg.websocket.enable ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}''} \
+              ${
+                lib.optionalString (
+                  cfg.websocket.apis != null
+                ) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''
+              } \
+              ${lib.optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
+              --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
+              ${
+                if (cfg.authrpc.jwtsecret != "") then
+                  ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}''
+                else
+                  ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''
+              } \
+              ${lib.escapeShellArgs cfg.extraArgs} \
+              --datadir ${dataDir}
+          '';
         }
       ))
     ) eachGeth;

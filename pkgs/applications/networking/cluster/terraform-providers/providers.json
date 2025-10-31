@@ -741,11 +741,11 @@
     "vendorHash": null
   },
   "integrations_github": {
-    "hash": "sha256-FVDx8KH7foy1rZigDVEWMEalQ9nJnLkRjkJsFi0aEuM=",
+    "hash": "sha256-EjCL6RcTw+2uhfwgyiFRfsXYkkDHZqlSSzEcb4CRvIo=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v6.7.1",
+    "rev": "v6.7.3",
     "spdx": "MIT",
     "vendorHash": null
   },
@@ -1273,22 +1273,22 @@
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-b30SVfem2G3lBX9J5KGyxow0KK7kksOZLZ9135PyYPY=",
+    "hash": "sha256-hqcnyBWB7PWTTRCOczgF6hSBibvlGl+x9EkYn3vi4v8=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.0.1",
+    "rev": "v3.1.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-hkqlstHLHBERVenwyVUew+b26liFQpRh99vIMI0TCBY=",
+    "hash": "sha256-EiaQKO4Pg+89Mc8nwSarKhHBtr+yEKWEyZ4i0LeOfu4=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.23.0",
+    "rev": "v0.24.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-9VyRFLpwF/+5iidLdzilztAdv/YaujUKoRwIyLgiV6o="
+    "vendorHash": "sha256-GhXplzkv0ouWSo4fNs7C0h87sFguhre6ez4d0Pgd/5w="
   },
   "telmate_proxmox": {
     "hash": "sha256-1aKKlOIk1mH4yx66eD635d1IaUWXIiBGHEt4A2F2mGM=",
