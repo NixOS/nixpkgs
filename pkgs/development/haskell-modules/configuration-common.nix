@@ -652,6 +652,31 @@ with haskellLib;
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
+  # Pass in `pkgs.nix` for the required tools. This means that overriding
+  # them sort of works, but only if you override all instances.
+  nix-paths =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      super.nix-paths.override {
+        nix-build = pkgs.nix;
+        nix-env = pkgs.nix;
+        nix-hash = pkgs.nix;
+        nix-instantiate = pkgs.nix;
+        nix-store = pkgs.nix;
+      }
+    else
+      # When cross-compiling, nix-paths won't be able to detect
+      # the path to the (host) tools at build time from PATH,
+      # so we instruct it to check at runtime.
+      enableCabalFlag "allow-relative-paths" (
+        super.nix-paths {
+          nix-build = null;
+          nix-env = null;
+          nix-hash = null;
+          nix-instantiate = null;
+          nix-store = null;
+        }
+      );
+
   # Fix `mv` not working on directories
   turtle = appendPatches [
     (pkgs.fetchpatch {
