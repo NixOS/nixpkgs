@@ -560,7 +560,7 @@ let
         unwrapped = browser;
       };
 
-      disallowedRequisites = [ stdenv.cc ];
+      disallowedReferences = [ stdenv.cc ];
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
