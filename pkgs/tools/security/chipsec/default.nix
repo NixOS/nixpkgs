@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.13.16";
+  version = "1.13.17";
 
   pyproject = true;
   build-system = [ python3.pkgs.setuptools ];
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "chipsec";
     repo = "chipsec";
     tag = version;
-    hash = "sha256-/fx6Mvjsz1EKKtX18GaJwn3QC9nUldPljX0m1Olcl9o=";
+    hash = "sha256-8QiFIk9bq/yX26jw9aOd6wtt+WDUwfLBUVD5hL30RKE=";
   };
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
