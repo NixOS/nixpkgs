@@ -4,8 +4,7 @@
   fetchFromGitHub,
 
   nix-update-script,
-  testers,
-  warp-plus,
+  versionCheckHook,
 }:
 
 # fails with go 1.25, downgrade to 1.24
@@ -45,15 +44,14 @@ buildGo124Module (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-    tests.version = testers.testVersion {
-      package = warp-plus;
-      command = "warp-plus version";
-    };
-  };
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
+    changelog = "https://github.com/bepass-org/warp-plus/releases";
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
     license = lib.licenses.mit;
