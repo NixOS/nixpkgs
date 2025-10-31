@@ -8,6 +8,7 @@
   openssl,
   python3,
   zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     python3.pkgs.pytest
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "C library for creating Excel XLSX files";
