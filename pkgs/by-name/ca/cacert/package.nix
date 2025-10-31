@@ -94,23 +94,29 @@ stdenv.mkDerivation {
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
-  installPhase = ''
-    install -D -t "$out/etc/ssl/certs" ca-bundle.crt
+  installPhase =
+    # on cygwin, globbing returns an invalid path when LANG is unset
+    # > install: cannot stat 'unbundled/NetLock_Arany_=Class_Gold=_F'$'\030''őtan'$'\372''s'$'\355''tv'$'\341''ny:49412ce40010.crt': No such file or directory
+    lib.optionalString stdenv.buildPlatform.isCygwin ''
+      export LANG=C
+    ''
+    + ''
+      install -D -t "$out/etc/ssl/certs" ca-bundle.crt
 
-    # install standard PEM compatible bundle
-    install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
+      # install standard PEM compatible bundle
+      install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
 
-    # install p11-kit specific output to p11kit output
-    install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit
+      # install p11-kit specific output to p11kit output
+      install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit
 
-    # install individual certs in unbundled output
-    install -D -t "$unbundled/etc/ssl/certs" unbundled/*.crt
+      # install individual certs in unbundled output
+      install -D -t "$unbundled/etc/ssl/certs" unbundled/*.crt
 
-    # install hashed certs in hashed output
-    # use cp as install doesn't copy symlinks
-    mkdir -p $hashed/etc/ssl/certs/
-    cp -P hashed/* $hashed/etc/ssl/certs/
-  '';
+      # install hashed certs in hashed output
+      # use cp as install doesn't copy symlinks
+      mkdir -p $hashed/etc/ssl/certs/
+      cp -P hashed/* $hashed/etc/ssl/certs/
+    '';
 
   setupHook = ./setup-hook.sh;
 
