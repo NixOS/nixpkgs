@@ -39,6 +39,10 @@ applyPatches {
       ${if longDescription == null then null else "longDescription"} = longDescription;
       ${if homepage == null then null else "homepage"} = homepage;
       inherit maintainers teams;
+      sourceProvenance = with lib.sourceTypes; [
+        fromSource
+        binaryBytecode # vendored deps, compiled vue templates, etc
+      ];
     };
   };
   prePatch = ''
