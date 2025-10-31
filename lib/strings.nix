@@ -2088,14 +2088,14 @@ rec {
 
     # Inputs
 
-    `feature`
-    : The feature to be set
-
     `type`
     : The type of the feature to be set, as described in
       https://cmake.org/cmake/help/latest/command/set.html
       the possible values (case insensitive) are:
       BOOL FILEPATH PATH STRING INTERNAL LIST
+
+    `feature`
+    : The feature to be set
 
     `value`
     : The desired value
