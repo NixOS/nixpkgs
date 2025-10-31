@@ -1,13 +1,13 @@
+diff --git a/tools/osx/BUILD b/tools/osx/BUILD
+index 5b99589ad4..e22708f1bb 100644
 --- a/tools/osx/BUILD
 +++ b/tools/osx/BUILD
-@@ -28,8 +28,8 @@ exports_files([
+@@ -28,7 +28,7 @@ exports_files([
  
  DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
    /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
--      -framework Foundation -arch arm64 -arch x86_64 -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
-+      -framework Foundation                          -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
--  env -i codesign --identifier $@ --force --sign - $@
-+  /usr/bin/env -i /usr/bin/codesign --identifier $@ --force --sign - $@
+-      -framework Foundation -arch arm64 -arch x86_64 -o $@ $<
++      -framework Foundation                          -o $@ $<
  """
  
  genrule(
