@@ -6506,6 +6506,12 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
+  dingdang66686 = {
+    name = "Straying";
+    email = "strayingfar@outlook.com";
+    github = "dingdang66686";
+    githubId = 42102822;
+  };
   diniamo = {
     name = "diniamo";
     email = "diniamo53@gmail.com";
