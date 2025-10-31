@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0-unstable-2025-10-27";
+  version = "1.0-unstable-2025-10-30";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "1588f0b69b024523b48ad0276d4792b8eafbcc40";
-    hash = "sha256-ytrgqLUrOFfac44KUTnxputPU7OjcpCpHKLNqBnXlOY=";
+    rev = "8a1ef8e30d6c1c2f2b0c9151b74e427dcf112a7a";
+    hash = "sha256-yf5xSXxWeIBDJ1UHJSY2grAQr6by/KU6Lj61nFR9E9Y=";
   };
 
   patches = [ ./fix-build-qt-6.10.patch ];
