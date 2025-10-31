@@ -18,11 +18,12 @@
 
   # tests
   msgpack,
-  pytest7CheckHook,
+  pytestCheckHook,
   simple-websocket,
   uvicorn,
   redis,
   valkey,
+  pytest-asyncio,
 
 }:
 
@@ -55,11 +56,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     msgpack
-    pytest7CheckHook
+    pytestCheckHook
     uvicorn
     simple-websocket
     redis
     valkey
+    pytest-asyncio
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
