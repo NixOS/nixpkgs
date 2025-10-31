@@ -13897,6 +13897,8 @@ with pkgs;
     // (config.caffe or { })
   );
 
+  fetchFromMPM = callPackage ../by-name/ma/matlab-package-manager/fetcher.nix { };
+
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
