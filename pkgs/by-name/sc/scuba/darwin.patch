@@ -1,0 +1,32 @@
+diff --git a/scubainit/src/main.rs b/scubainit/src/main.rs
+index dc71601..cfc9b64 100644
+--- a/scubainit/src/main.rs
++++ b/scubainit/src/main.rs
+@@ -261,7 +261,7 @@ impl UserInfo {
+ 
+ struct Context {
+     user_info: Option<UserInfo>,
+-    umask: Option<u32>,
++    umask: Option<libc::mode_t>,
+     user_hook: Option<String>,
+     root_hook: Option<String>,
+ }
+diff --git a/scubainit/src/util.rs b/scubainit/src/util.rs
+index bea2f88..02b673a 100644
+--- a/scubainit/src/util.rs
++++ b/scubainit/src/util.rs
+@@ -80,12 +80,12 @@ pub fn pop_env_uint(name: &str) -> Result<Option<u32>> {
+ /// # Errors
+ ///
+ /// This function will return an error if the variable is set, but is not a valid integer string.
+-pub fn pop_env_octal(name: &str) -> Result<Option<u32>> {
++pub fn pop_env_octal(name: &str) -> Result<Option<libc::mode_t>> {
+     let value_str = match pop_env_str(name) {
+         None => return Ok(None),
+         Some(s) => s,
+     };
+-    let value = u32::from_str_radix(&value_str, 8)
++    let value = libc::mode_t::from_str_radix(&value_str, 8)
+         .with_context(|| format!("Parsing octal integer variable {name}=\"{value_str}\""))?;
+     Ok(Some(value))
+ }
