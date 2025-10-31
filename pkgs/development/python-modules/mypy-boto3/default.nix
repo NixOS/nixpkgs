@@ -793,8 +793,8 @@ in
       "sha256-d9i0AUux2ChlTnW2UWJ/de9KRYc8HtvLSFENETuy72U=";
 
   mypy-boto3-license-manager-linux-subscriptions =
-    buildMypyBoto3Package "license-manager-linux-subscriptions" "1.40.0"
-      "sha256-pfIQS9as02Gm4mHUc3q3gMKRHz+wT/lRKHWUc2ugt1s=";
+    buildMypyBoto3Package "license-manager-linux-subscriptions" "1.40.63"
+      "sha256-5nHjl/kDJHf0QvaWqQVFSDkYxJpH78sQA+ilMCzu6DQ=";
 
   mypy-boto3-license-manager-user-subscriptions =
     buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.55"
