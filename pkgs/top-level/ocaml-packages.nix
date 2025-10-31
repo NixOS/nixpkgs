@@ -1827,6 +1827,8 @@ let
 
         raven-saga = callPackage ../development/ocaml-modules/raven/saga.nix { };
 
+        raven-talon = callPackage ../development/ocaml-modules/raven/talon.nix { };
+
         raylib = callPackage ../development/ocaml-modules/raylib { };
 
         raygui = callPackage ../development/ocaml-modules/raylib/raygui.nix { };
