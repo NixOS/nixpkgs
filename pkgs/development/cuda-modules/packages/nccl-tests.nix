@@ -18,7 +18,7 @@
   which,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBroken;
+  inherit (_cuda.lib) _hasProblemKind;
   inherit (lib) licenses maintainers teams;
   inherit (lib.attrsets) getBin;
   inherit (lib.lists) optionals;
@@ -107,7 +107,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     license = licenses.bsd3;
-    broken = _mkMetaBroken finalAttrs;
+    broken = _hasProblemKind "broken" finalAttrs;
     maintainers = with maintainers; [ jmillerpdt ];
     teams = [ teams.cuda ];
   };

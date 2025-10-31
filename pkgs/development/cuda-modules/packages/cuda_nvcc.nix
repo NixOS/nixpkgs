@@ -4,6 +4,7 @@
   buildRedist,
   cudaAtLeast,
   cudaOlder,
+  cudaMajorMinorVersion,
   cuda_cccl,
   lib,
   libnvvm,
@@ -174,5 +175,109 @@ buildRedist (finalAttrs: {
     description = "CUDA compiler driver";
     homepage = "https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc";
     mainProgram = "nvcc";
+
+    # TODO: Consider testing whether we in fact use the newer libstdc++
+    problems =
+      let
+        inherit (builtins) filter toJSON;
+        inherit (_cuda.db) allSortedCudaCapabilities cudaCapabilityToInfo;
+        inherit (lib.lists) intersectLists subtractLists;
+        inherit (lib.versions) versionOlder versionAtLeast;
+        inherit (lib) flip;
+
+        # NOTE: By virtue of processing a sorted list (allSortedCudaCapabilities), our groups will be sorted.
+
+        architectureSpecificCudaCapabilities = filter (
+          cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
+        ) allSortedCudaCapabilities;
+
+        jetsonCudaCapabilities = filter (
+          cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
+        ) allSortedCudaCapabilities;
+
+        # Requested Jetson CUDA capabilities.
+        requestedJetsonCudaCapabilities = intersectLists jetsonCudaCapabilities backendStdenv.cudaCapabilities;
+
+        # Whether the requested CUDA capabilities include Jetson CUDA capabilities.
+        hasJetsonCudaCapability = requestedJetsonCudaCapabilities != [ ];
+
+        # Jetson devices (pre-Thor) cannot be targeted by the same binaries which target non-Jetson devices. While
+        # NVIDIA provides both `linux-aarch64` and `linux-sbsa` packages, which both target `aarch64`,
+        # they are built with different settings and cannot be mixed.
+        preThorJetsonCudaCapabilities = filter (flip versionOlder "10.1") requestedJetsonCudaCapabilities;
+        postThorJetsonCudaCapabilities = filter (flip versionAtLeast "10.1") requestedJetsonCudaCapabilities;
+
+        # Remove all known capabilities from the user's list to find unrecognized capabilities.
+        unrecognizedCudaCapabilities = subtractLists allSortedCudaCapabilities backendStdenv.cudaCapabilities;
+
+        # Capabilities which are too old for this CUDA version.
+        tooOldCudaCapabilities = filter (
+          cap:
+          let
+            # This can be null!
+            maybeMax = cudaCapabilityToInfo.${cap}.maxCudaMajorMinorVersion;
+          in
+          maybeMax != null && lib.versionOlder maybeMax cudaMajorMinorVersion
+        ) backendStdenv.cudaCapabilities;
+
+        # Capabilities which are too new for this CUDA version.
+        tooNewCudaCapabilities = filter (
+          cap: lib.versionOlder cudaMajorMinorVersion cudaCapabilityToInfo.${cap}.minCudaMajorMinorVersion
+        ) backendStdenv.cudaCapabilities;
+      in
+      _cuda.lib._mkMetaProblems [
+        {
+          kind = "unsupported";
+          assertion = backendStdenv.supportedByNvcc;
+          message = "Couldn't find a host compiler compatible with NVCC.";
+        }
+        {
+          kind = "broken";
+          message = "Requested unrecognized CUDA capabilities: ${toJSON unrecognizedCudaCapabilities}";
+          assertion = unrecognizedCudaCapabilities == [ ];
+        }
+        {
+          kind = "unsupported";
+          message = "Requested CUDA capabilities which are too old for CUDA ${cudaMajorMinorVersion}: ${toJSON tooOldCudaCapabilities}";
+          assertion = tooOldCudaCapabilities == [ ];
+        }
+        {
+          kind = "unsupported";
+          message = "Requested CUDA capabilities which are too new for CUDA ${cudaMajorMinorVersion}: ${toJSON tooNewCudaCapabilities}";
+          assertion = tooNewCudaCapabilities == [ ];
+        }
+        {
+          kind = "unsupported";
+          message =
+            "Requested Jetson CUDA capabilities (${toJSON requestedJetsonCudaCapabilities}) require "
+            + "hostPlatform (${backendStdenv.hostNixSystem}) to be aarch64-linux";
+          assertion = hasJetsonCudaCapability -> backendStdenv.hostNixSystem == "aarch64-linux";
+        }
+        {
+          kind = "unsupported";
+          message =
+            "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) cannot be "
+            + "specified with other capabilities (${toJSON (subtractLists preThorJetsonCudaCapabilities backendStdenv.cudaCapabilities)})";
+          assertion =
+            # If there are preThorJetsonCudaCapabilities, they must be the only requested capabilities.
+            preThorJetsonCudaCapabilities != [ ]
+            -> preThorJetsonCudaCapabilities == backendStdenv.cudaCapabilities;
+        }
+        {
+          kind = "unsupported";
+          message =
+            "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) require "
+            + "computed NVIDIA hostRedistSystem (${backendStdenv.hostRedistSystem}) to be linux-aarch64";
+          assertion =
+            preThorJetsonCudaCapabilities != [ ] -> backendStdenv.hostRedistSystem == "linux-aarch64";
+        }
+        {
+          kind = "unsupported";
+          message =
+            "Requested post-Thor (10.1) Jetson CUDA capabilities (${toJSON postThorJetsonCudaCapabilities}) require "
+            + "computed NVIDIA hostRedistSystem (${backendStdenv.hostRedistSystem}) to be linux-sbsa";
+          assertion = postThorJetsonCudaCapabilities != [ ] -> backendStdenv.hostRedistSystem == "linux-sbsa";
+        }
+      ];
   };
 })

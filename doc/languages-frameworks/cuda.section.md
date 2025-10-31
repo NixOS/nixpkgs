@@ -286,9 +286,9 @@ Whenever a new version of a redistributable manifest is made available:
 
 Updating package expressions amounts to:
 
-- adding fixes conditioned on newer releases, like added or removed dependencies
-- adding package expressions for new packages
-- updating `passthru.brokenConditions` and `passthru.badPlatformsConditions` with various constraints, (e.g., new releases removing support for various architectures)
+- adding fixes conditioned on newer releases, like added or removed dependencies,
+- adding package expressions for new packages,
+- updating `meta.problems`.
 
 #### Updating supported compilers and GPUs {#cuda-updating-supported-compilers-and-gpus}
 

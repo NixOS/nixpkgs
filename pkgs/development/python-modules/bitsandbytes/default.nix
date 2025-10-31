@@ -16,6 +16,7 @@
   scipy,
   trove-classifiers,
 
+  _cuda, # NOTE: (ab)using cudaPackages' internal lib; unstable interfaces!
   cudaSupport ? torch.cudaSupport,
   cudaPackages ? torch.cudaPackages,
   rocmSupport ? torch.rocmSupport,
@@ -28,10 +29,24 @@ let
   pname = "bitsandbytes";
   version = "0.48.1";
 
-  brokenConditions = lib.attrsets.filterAttrs (_: cond: cond) {
-    "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
-    "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
+  fakeFinalAttrs = {
+    meta = {
+      inherit problems;
+    };
+    finalPackage.stdenv = stdenv;
   };
+  problems = _cuda.lib._mkMetaProblems [
+    {
+      kind = "unsupported";
+      message = "CUDA and ROCm are mutually exclusive";
+      assertion = !(cudaSupport && rocmSupport);
+    }
+    {
+      kind = "unsupported";
+      message = "Nixpkgs only supports CUDA on Linux";
+      assertion = !(cudaSupport && !stdenv.hostPlatform.isLinux);
+    }
+  ];
 
   inherit (cudaPackages) cudaMajorMinorVersion;
   rocmMajorMinorVersion = lib.versions.majorMinor rocmPackages.rocm-core.version;
@@ -187,7 +202,6 @@ buildPythonPackage {
       cudaPackages
       rocmSupport
       rocmPackages
-      brokenConditions # To help debug when a package is broken due to CUDA support
       ;
   };
 
@@ -200,5 +214,12 @@ buildPythonPackage {
       bcdarwin
       jk
     ];
+
+    inherit problems;
+
+    # Internal helper from cudaPackages, expects `finalAttrs`, which are
+    # unsupported by pythonXPackages at the time of writing
+    badPlatforms = _cuda.lib._mkMetaBadPlatforms fakeFinalAttrs;
+    broken = _cuda.lib._hasProblemKind "broken" fakeFinalAttrs;
   };
 }
