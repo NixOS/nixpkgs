@@ -1817,6 +1817,8 @@ let
 
         raven = callPackage ../development/ocaml-modules/raven { };
 
+        raven-fehu = callPackage ../development/ocaml-modules/raven/fehu.nix { };
+
         raven-hugin = callPackage ../development/ocaml-modules/raven/hugin.nix { };
 
         raven-kaun = callPackage ../development/ocaml-modules/raven/kaun.nix { };
