@@ -22,16 +22,23 @@
   pipewire,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      bibtexparser = self.bibtexparser_2;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.1.1";
+  version = "8.2.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-zZYz7hJocjhxFqsPgUj2jjNLOsoyHWLsZUBmCJyc87M=";
+    hash = "sha256-i1qNLV+oKkZlS/v8jfJJc67lJBuW6j2Uz93vb1StD6g=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +63,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python3Packages;
+    with pythonPackages;
     [
       pygobject3
       requests
@@ -74,7 +81,7 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  optional-dependencies = with python3Packages; {
+  optional-dependencies = with pythonPackages; {
     speech-to-text = [
       openai-whisper
       pyaudio

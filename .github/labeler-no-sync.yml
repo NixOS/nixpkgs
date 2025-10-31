@@ -29,5 +29,6 @@
               - .github/actions/*
               - .github/workflows/*
               - ci/**/*.*
+              - maintainers/github-teams.json
 
 # keep-sorted end

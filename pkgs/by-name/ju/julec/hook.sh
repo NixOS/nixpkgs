@@ -28,7 +28,7 @@ julecBuildHook() {
 
   julecSetEnv
   mkdir -p "$JULE_OUT_DIR"
-  julec --opt L2 -p -o "$JULE_OUT_DIR/$JULE_OUT_NAME" "$JULE_SRC_DIR"
+  julec build --opt L2 -p -o "$JULE_OUT_DIR/$JULE_OUT_NAME" "$JULE_SRC_DIR"
 
   runHook postBuild
 

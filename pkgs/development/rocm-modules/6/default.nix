@@ -3,7 +3,6 @@
   config,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   symlinkJoin,
   fetchFromGitHub,
   boost179,
@@ -33,7 +32,7 @@ let
       rocmUpdateScript = self.callPackage ./update.nix { };
 
       ## ROCm ##
-      llvm = recurseIntoAttrs (
+      llvm = lib.recurseIntoAttrs (
         callPackage ./llvm/default.nix {
           # rocm-device-libs is used for .src only
           # otherwise would cause infinite recursion
@@ -134,10 +133,7 @@ let
           ;
       };
 
-      rocblas = self.callPackage ./rocblas {
-        buildTests = true;
-        buildBenchmarks = true;
-      };
+      rocblas = self.callPackage ./rocblas { };
 
       rocsolver = self.callPackage ./rocsolver { };
 

@@ -136,6 +136,8 @@ let
             [ "--config=${config}" ];
           includes = [ "*.md" ];
         };
+
+        programs.zizmor.enable = true;
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {

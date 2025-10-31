@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.39.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "pyOCD";
     tag = "v${version}";
-    hash = "sha256-/jFH6h8RmLupSyzf4mXNzhfbuAAfqkfWFSfQmGMVDRE=";
+    hash = "sha256-rF2sr7aL2kceo1zBwBZcOYpAc0CTohF/1TbGF95iyIk=";
   };
 
   pythonRelaxDeps = [ "capstone" ];

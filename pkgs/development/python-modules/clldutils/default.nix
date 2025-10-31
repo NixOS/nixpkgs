@@ -4,7 +4,7 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
-  bibtexparser_2,
+  bibtexparser,
   git,
   lxml,
   markdown,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     attrs
-    bibtexparser_2
+    bibtexparser
     colorlog
     lxml
     markdown
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = lib.versionOlder bibtexparser.version "2";
     changelog = "https://github.com/clld/clldutils/blob/${src.tag}/CHANGES.md";
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";

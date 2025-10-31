@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-pooldose";
-  version = "0.7.0";
+  version = "0.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmaertin";
     repo = "python-pooldose";
     tag = version;
-    hash = "sha256-tTJNmcBSSmrJgMnKeV5YTrvZWHFnmVKysJrEBXYTpAo=";
+    hash = "sha256-TOwogNRWmdbzEjvjSUYw9+5CXHfF2OXq8Jxaj3KsQ+A=";
   };
 
   build-system = [ setuptools ];

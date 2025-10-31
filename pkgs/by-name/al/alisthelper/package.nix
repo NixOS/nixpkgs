@@ -1,37 +1,34 @@
 {
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter327,
-  libayatana-appindicator,
   copyDesktopItems,
+  libayatana-appindicator,
   makeDesktopItem,
   runCommand,
-  yq,
-  alisthelper,
+  yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
-flutter327.buildFlutterApplication {
-  pname = "alisthelper";
-  version = "0.2.0-unstable-2025-01-04";
-
+let
   src = fetchFromGitHub {
     owner = "Xmarmalade";
     repo = "alisthelper";
-    rev = "181a1207df0c9eb8336097b9a9249342dd9df097";
-    hash = "sha256-6FJd+8eJoRK3cEdkLCgr7q4L6kEeSsMMkiVRx6Pa5jk=";
+    rev = "84a4f025ce184eb9cd910b90397eef8edaa95127";
+    hash = "sha256-Ju7AnUq59sk15YCvXhunr5r2/e2i26lWF3+pVY3oWzo=";
   };
+in
+flutter332.buildFlutterApplication {
+  pname = "alisthelper";
+  version = "0.2.0-unstable-2025-08-05";
+  inherit src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [
-    libayatana-appindicator
-  ];
+  buildInputs = [ libayatana-appindicator ];
 
   preBuild = ''
     packageRun build_runner build
@@ -47,30 +44,35 @@ flutter327.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/alisthelper.png -t $out/share/pixmaps
+    install -D --mode=0644 assets/alisthelper.png -t $out/share/pixmaps
   '';
 
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          buildInputs = [ yq ];
-          inherit (alisthelper) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "alisthelper.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { extraArgs = [ "--version=branch" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "alisthelper.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
     ];
   };
 
   meta = {
-    description = "Designed to simplify the use of the desktop version of alist";
+    description = "Designed to simplify the use of the desktop version of alist/openlist";
     homepage = "https://github.com/Xmarmalade/alisthelper";
     mainProgram = "alisthelper";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

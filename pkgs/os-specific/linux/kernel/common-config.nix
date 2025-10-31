@@ -975,12 +975,6 @@ let
 
       UDMABUF = yes;
 
-      # VirtualBox guest drivers in the kernel conflict with the ones in the
-      # official additions package and prevent the vboxsf module from loading,
-      # so disable them for now.
-      VBOXGUEST = option no;
-      DRM_VBOXVIDEO = option no;
-
       XEN = option yes;
       XEN_DOM0 = option yes;
       PCI_XEN = option yes;
@@ -1003,8 +997,8 @@ let
 
       # Enable CDEV and NOIOMMU support for VFIO, which is useful for
       # passthrough.
-      VFIO_DEVICE_CDEV = yes;
-      VFIO_NOIOMMU = yes;
+      VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
+      VFIO_NOIOMMU = whenAtLeast "6.6" yes;
     };
 
     media = {

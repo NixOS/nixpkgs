@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
     rm -rf thirdparty/gatb-core/gatb-core/thirdparty/{hdf5,boost}
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace thirdparty/gatb-core/gatb-core/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Short read genome assembler";
     mainProgram = "minia";

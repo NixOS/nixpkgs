@@ -21,6 +21,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     sed -i "1i #include <algorithm>" src/Plist.cpp
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

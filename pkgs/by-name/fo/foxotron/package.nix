@@ -18,7 +18,6 @@
   alsa-lib,
   fontconfig,
 }:
-
 stdenv.mkDerivation rec {
   pname = "foxotron";
   version = "2024-09-23";
@@ -43,12 +42,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+      --replace-fail "set(CMAKE_OSX_ARCHITECTURES x86_64)" "" \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace externals/glm/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(VERSION 3.2)" "cmake_policy(VERSION 3.10)"
 
     # Outdated vendored assimp, many warnings with newer compilers, too old for CMake option to control this
     # Note that this -Werror caused issues on darwin, so make sure to re-check builds there before removing this
     substituteInPlace externals/assimp/code/CMakeLists.txt \
-      --replace 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
+      --replace-fail 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
   '';
 
   nativeBuildInputs = [

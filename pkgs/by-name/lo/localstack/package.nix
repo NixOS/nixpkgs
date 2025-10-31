@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "localstack";
-  version = "4.9.1";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation {
   pname = "bicpl";
-  version = "unstable-2024-05-14";
+  version = "0-unstable-2025-10-24";
 
   # master is not actively maintained, using develop and develop-apple branches
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "bicpl";
-    rev = "7e1e791483cf135fe29b8eecd7a360aa892823ae";
-    hash = "sha256-SvbtPUfEYp3IGivG+5yFdJF904miyMk+s15zwW7e7b4=";
+    rev = "dc9828841e38c6b7c523f3ab8a4c23eeb9e4272b";
+    hash = "sha256-wU/Qmtk6rbwxYqealV2On7W0schrYH85oKIUCpT4IXQ=";
   };
 
   nativeBuildInputs = [ cmake ];

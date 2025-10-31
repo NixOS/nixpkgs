@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "onionprobe";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rjExMm1mkoeRiv+aNuC6Ieo0/X5sbsjuSiAHcnQxjFo=";
+    sha256 = "sha256-RcEsiYKeNEQil0qp1WzGU9HiCi8iXnPuGK65lcpHor4=";
   };
 
   build-system = with python3Packages; [

@@ -10,7 +10,7 @@ with lib;
 let
   cfg = config.services.nginx;
   inherit (config.security.acme) certs;
-  vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+  vhostsConfigs = attrValues virtualHosts;
   acmeEnabledVhosts = filter (
     vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null
   ) vhostsConfigs;
@@ -324,7 +324,7 @@ let
     mapAttrsToList (
       vhostName: vhost:
       let
-        onlySSL = vhost.onlySSL || vhost.enableSSL;
+        onlySSL = vhost.onlySSL;
         hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
         # First evaluation of defaultListen based on a set of listen lines.
@@ -1324,18 +1324,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    warnings =
-      let
-        deprecatedSSL =
-          name: config:
-          optional config.enableSSL ''
-            config.services.nginx.virtualHosts.<name>.enableSSL is deprecated,
-            use config.services.nginx.virtualHosts.<name>.onlySSL instead.
-          '';
-
-      in
-      flatten (mapAttrsToList deprecatedSSL virtualHosts);
-
     assertions =
       let
         hostOrAliasIsNull = l: l.root == null || l.alias == null;
@@ -1352,7 +1340,7 @@ in
             with host;
             count id [
               addSSL
-              (onlySSL || enableSSL)
+              onlySSL
               forceSSL
               rejectSSL
             ] <= 1

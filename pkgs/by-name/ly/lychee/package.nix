@@ -1,29 +1,53 @@
 {
   callPackage,
   lib,
-  rustPlatform,
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
   pkg-config,
   openssl,
   testers,
 }:
 
+let
+  canRun = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  lychee = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lychee${stdenv.hostPlatform.extensions.executable}";
+in
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    rev = "lychee-v${version}";
-    hash = "sha256-yHIj45RfQch4y+V4Ht7cDMcg5MECejxsbjuE345I/to=";
+    tag = "lychee-v${version}";
+    leaveDotGit = true;
+    postFetch = ''
+      GIT_DATE=$(git -C $out/.git show -s --format=%cs)
+      substituteInPlace $out/lychee-bin/build.rs \
+        --replace-fail \
+          '("cargo:rustc-env=GIT_DATE={}", git_date())' \
+          '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
+      rm -rf $out/.git
+    '';
+    hash = "sha256-Nt7LsnQkWQS0f2/lS8WNYkI+XbKUSHQ6bNf9FNjfk7A=";
   };
 
-  cargoHash = "sha256-d3umjtXPBJbPRtNCuktYhJUPgKFmB8UEeewWMekDZRE=";
+  cargoHash = "sha256-1sqFjNil6KktpqrsXXgt3xtOz7eFQc2skkFHqmTMDg4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [ openssl ];
+
+  postFixup = lib.optionalString canRun ''
+    ${lychee} --generate man > lychee.1
+    installManPage lychee.1
+  '';
 
   cargoTestFlags = [
     # don't run doctests since they tend to use the network
@@ -31,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     "--bins"
     "--tests"
   ];
+
+  checkType = "debug"; # compilation fails otherwise
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -44,6 +70,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::test_local_file"
     "--skip=client::tests"
     "--skip=collector::tests"
+    "--skip=commands::generate::tests::test_examples_work"
     "--skip=src/lib.rs"
     # Color error for those tests as we are not in a tty
     "--skip=formatters::response::color::tests::test_format_response_with_error_status"

@@ -1,7 +1,7 @@
 {
   lib,
   runCommand,
-  transmission_3_noSystemd,
+  transmission_4,
   rqbit,
   writeShellScript,
   formats,
@@ -97,7 +97,7 @@ runCommand name
     ]
     ++ (
       if (backend == "transmission") then
-        [ transmission_3_noSystemd ]
+        [ transmission_4 ]
       else if (backend == "rqbit") then
         [ rqbit ]
       else
@@ -132,7 +132,6 @@ runCommand name
             --portmap \
             --finish ${transmissionFinishScript} \
             --download-dir "$downloadedDirectory" \
-            --config-dir "$HOME"/.config/transmission \
             "$url"
       ''
     else

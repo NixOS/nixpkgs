@@ -1,35 +1,43 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
   cmake,
   qtbase,
+  qt5compat,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qgit";
-  version = "2.11";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "tibirna";
     repo = "qgit";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-DmwxOy71mIklLQ7V/qMzi8qCMtKa9nWHlkjEr/9HJIU=";
+    rev = "qgit-${finalAttrs.version}";
+    hash = "sha256-hOx6FYccutycp+F3iesj48STFeBM/2r5cw2f5FkBIjY=";
   };
 
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    qtbase
+    qt5compat
+  ];
 
-  meta = with lib; {
-    license = licenses.gpl2Only;
+  meta = {
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/tibirna/qgit";
     description = "Graphical front-end to Git";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       markuskowa
     ];
     inherit (qtbase.meta) platforms;
     mainProgram = "qgit";
   };
-}
+})

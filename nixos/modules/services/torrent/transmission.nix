@@ -19,6 +19,8 @@ let
     optionalString
     optional
     mkDefault
+    mkOptionDefault
+    versionOlder
     escapeShellArgs
     optionalAttrs
     mkMerge
@@ -176,17 +178,12 @@ in
             };
             umask = mkOption {
               type = types.either types.int types.str;
-              default = if cfg.package == pkgs.transmission_3 then 18 else "022";
-              defaultText = literalExpression "if cfg.package == pkgs.transmission_3 then 18 else \"022\"";
+              default = "022";
               description = ''
                 Sets transmission's file mode creation mask.
                 See the {manpage}`umask(2)` manpage for more information.
                 Users who want their saved torrents to be world-writable
                 may want to set this value to 0/`"000"`.
-
-                Keep in mind, that if you are using Transmission 3, this has to
-                be passed as a base 10 integer, whereas Transmission 4 takes
-                an octal number in a string instead.
               '';
             };
             utp-enabled = mkOption {
@@ -222,10 +219,19 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "transmission" {
-        default = "transmission_3";
-        example = "pkgs.transmission_4";
-      };
+      package =
+        mkPackageOption pkgs "transmission" {
+          default = "transmission_4";
+          example = "pkgs.transmission_4";
+        }
+        // {
+          defaultText = ''
+            if lib.versionAtLeast config.system.stateVersion "25.11" then
+              pkgs.transmission_4
+            else
+              «error message»
+          '';
+        };
 
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
@@ -331,6 +337,19 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.transmission.package = mkIf (versionOlder config.system.stateVersion "25.11") (
+      mkOptionDefault (throw ''
+        `services.transmission.package` previously defaulted to
+        `pkgs.transmission_3`, which has been removed in favour
+        of `pkgs.transmission_4`.
+
+        Please set `services.transmission.package` to
+        `pkgs.transmission_4` explicitly. Note that upgrade
+        caused data loss for some users so backup is recommended
+        (see NixOS 24.11 release notes for details)
+      '')
+    );
+
     # Note that using systemd.tmpfiles would not work here
     # because it would fail when creating a directory
     # with a different owner than its parent directory, by saying:

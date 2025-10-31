@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
   autoreconfHook,
-  fetchurl,
   pkg-config,
   gettext,
   glib,
@@ -12,15 +13,18 @@
   gtk-doc,
   libsoup_3,
   tzdata,
+  mate-common,
   mateUpdateScript,
 }:
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "libmateweather";
+    tag = "v${version}";
+    hash = "sha256-W0p4+OMr2sgkQP10DGjZLf2VTSGa2A+5ey+nYBr+HJQ=";
   };
 
   patches = [
@@ -31,12 +35,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoconf-archive
     autoreconfHook # the libsoup patch changes the autoconf file
     pkg-config
     gettext
     glib # glib-compile-schemas
+    gtk3 # gtk-update-icon-cache
     gtk-doc # required for autoconf
     libxml2 # xmllint
+    mate-common # mate-compiler-flags.m4 macros
   ];
 
   buildInputs = [

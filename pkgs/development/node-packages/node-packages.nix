@@ -2543,33 +2543,6 @@ let
         sha512 = "GeWyHz8ao2gBiUW4OJnQDxXQnFgZQwwQk05t/CVVgNBN7/rK8XZ7xY6YhLVv9tH3VppWWmr9DCl3MwemB/i+Og==";
       };
     };
-    "@gitbeaker/core-42.1.0" = {
-      name = "_at_gitbeaker_slash_core";
-      packageName = "@gitbeaker/core";
-      version = "42.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@gitbeaker/core/-/core-42.1.0.tgz";
-        sha512 = "xoP3mUjiGyUdN+utmQ+wDh9r7b4bcf3wa8jxkDTZTiuyd7Tg+354nJhwBNBsq2vFfyQvONOyOT1hsFjTGbTpBA==";
-      };
-    };
-    "@gitbeaker/requester-utils-42.1.0" = {
-      name = "_at_gitbeaker_slash_requester-utils";
-      packageName = "@gitbeaker/requester-utils";
-      version = "42.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@gitbeaker/requester-utils/-/requester-utils-42.1.0.tgz";
-        sha512 = "q5NXy563UUM2AisM/V6Z3A92hIVQNMyx/VBj5Mg7gJkEtIYL+pEyibjIQxcq6nQ3bnj6bkM8NYguCs5tg7GR0Q==";
-      };
-    };
-    "@gitbeaker/rest-42.1.0" = {
-      name = "_at_gitbeaker_slash_rest";
-      packageName = "@gitbeaker/rest";
-      version = "42.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@gitbeaker/rest/-/rest-42.1.0.tgz";
-        sha512 = "7eSXktkUEF2O2A3F1cO/ZJ/3Mco4v59rptghzhrvjZryPcAxlYWxNJbuFtjc5bc0OnJW7i5AYfJSYvZQSh3gYg==";
-      };
-    };
     "@grpc/grpc-js-1.13.0" = {
       name = "_at_grpc_slash_grpc-js";
       packageName = "@grpc/grpc-js";
@@ -28790,15 +28763,6 @@ let
         sha512 = "M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==";
       };
     };
-    "picomatch-browser-2.2.6" = {
-      name = "picomatch-browser";
-      packageName = "picomatch-browser";
-      version = "2.2.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/picomatch-browser/-/picomatch-browser-2.2.6.tgz";
-        sha512 = "0ypsOQt9D4e3hziV8O4elD9uN0z/jtUEfxVRtNaAAtXIyUx9m/SzlO020i8YNL2aL/E6blOvvHQcin6HZlFy/w==";
-      };
-    };
     "pid-port-1.0.2" = {
       name = "pid-port";
       packageName = "pid-port";
@@ -30030,15 +29994,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz";
         sha512 = "Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==";
-      };
-    };
-    "rate-limiter-flexible-4.0.1" = {
-      name = "rate-limiter-flexible";
-      packageName = "rate-limiter-flexible";
-      version = "4.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/rate-limiter-flexible/-/rate-limiter-flexible-4.0.1.tgz";
-        sha512 = "2/dGHpDFpeA0+755oUkW+EKyklqLS9lu0go9pDsbhqQjZcxfRyJ6LA4JI0+HAdZ2bemD/oOjUeZQB2lCZqXQfQ==";
       };
     };
     "raw-body-2.4.1" = {
@@ -34811,15 +34766,6 @@ let
         sha512 = "ulAk51I9UVUyJgxlv9M6lFot2WP3e7t8Kz9+IS6D4rVba1tR9kON+Ey69f+1R4Q8cd45Lod6a4IcJIxnzGc/zA==";
       };
     };
-    "sywac-1.3.0" = {
-      name = "sywac";
-      packageName = "sywac";
-      version = "1.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/sywac/-/sywac-1.3.0.tgz";
-        sha512 = "LDt2stNTp4bVPMgd70Jj9PWrSa4batl+bv+Ea5NLNGT7ufc4oQPtRfQ73wbddNV6RilaPqnEt6y1Wkm5FVTNEg==";
-      };
-    };
     "table-3.8.3" = {
       name = "table";
       packageName = "table";
@@ -38859,15 +38805,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ws/-/ws-8.18.1.tgz";
         sha512 = "RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==";
-      };
-    };
-    "xcase-2.0.1" = {
-      name = "xcase";
-      packageName = "xcase";
-      version = "2.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/xcase/-/xcase-2.0.1.tgz";
-        sha512 = "UmFXIPU+9Eg3E9m/728Bii0lAIuoc+6nbrNUKaRPJOFp91ih44qqGlWtxMB6kXFrRD6po+86ksHM5XHCfk6iPw==";
       };
     };
     "xdg-app-paths-5.1.0" = {
@@ -48846,58 +48783,6 @@ in
     meta = {
       description = "Gatsby command-line interface for creating new sites and running Gatsby commands";
       homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@gitbeaker/cli" = nodeEnv.buildNodePackage {
-    name = "_at_gitbeaker_slash_cli";
-    packageName = "@gitbeaker/cli";
-    version = "42.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@gitbeaker/cli/-/cli-42.1.0.tgz";
-      sha512 = "+xKJs03M3Oh6k6mjTXvmyrNumMrOa8OIeJNxHOh8kJpVvmyFSFHVd6fldQhr3/mXDsKYxhPSh3qEhK8iJYej/w==";
-    };
-    dependencies = [
-      sources."@gitbeaker/core-42.1.0"
-      sources."@gitbeaker/requester-utils-42.1.0"
-      sources."@gitbeaker/rest-42.1.0"
-      sources."ansi-styles-4.3.0"
-      sources."call-bind-apply-helpers-1.0.2"
-      sources."call-bound-1.0.4"
-      sources."chalk-4.1.2"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."dunder-proto-1.0.1"
-      sources."es-define-property-1.0.1"
-      sources."es-errors-1.3.0"
-      sources."es-object-atoms-1.1.1"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.3.0"
-      sources."get-proto-1.0.1"
-      sources."gopd-1.2.0"
-      sources."has-flag-4.0.0"
-      sources."has-symbols-1.1.0"
-      sources."hasown-2.0.2"
-      sources."math-intrinsics-1.1.0"
-      sources."object-inspect-1.13.4"
-      sources."picomatch-browser-2.2.6"
-      sources."qs-6.14.0"
-      sources."rate-limiter-flexible-4.0.1"
-      sources."side-channel-1.1.0"
-      sources."side-channel-list-1.0.0"
-      sources."side-channel-map-1.0.1"
-      sources."side-channel-weakmap-1.0.2"
-      sources."supports-color-7.2.0"
-      sources."sywac-1.3.0"
-      sources."xcase-2.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "CLI implementation of the GitLab API";
-      homepage = "https://github.com/jdalrymple/gitbeaker#readme";
       license = "MIT";
     };
     production = true;

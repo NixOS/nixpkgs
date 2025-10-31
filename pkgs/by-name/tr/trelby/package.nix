@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trelby";
-  version = "2.4.15";
+  version = "2.4.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trelby";
     repo = "trelby";
     tag = version;
-    hash = "sha256-CTasd+YlRHjYUVepZf2RDOuw1p0OdQfJENZamSmXXFw=";
+    hash = "sha256-YblilPQXjlSgkBstewfiuW0DZCnJw4dk6vZfEhdBGbk=";
   };
 
   build-system = [

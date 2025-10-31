@@ -38,6 +38,17 @@ stdenv.mkDerivation rec {
     cppcodec
   ];
 
+  # CMake 3.1 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)" \
+      "cmake_minimum_required(VERSION 3.10  FATAL_ERROR)" \
+    --replace-fail \
+      "cmake_policy(SET CMP0043 OLD)" \
+      "cmake_policy(SET CMP0043 NEW)"
+  '';
+
   meta = with lib; {
     description = "Provides extra functionality for the Nitrokey Pro and Storage";
     mainProgram = "nitrokey-app";

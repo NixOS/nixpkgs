@@ -1,16 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  maison,
+
+  # build-system
   pdm-backend,
+  setuptools,
+
+  # dependencies
+  click,
+  maison,
   pydantic,
+  ruyaml,
+
+  # tests
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  ruyaml,
-  setuptools,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -27,8 +34,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
     pdm-backend
+    setuptools
   ];
 
   dependencies = [
@@ -43,13 +50,21 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
     "-Wignore::ResourceWarning"
+  ];
+
+  disabledTestPaths = [
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "tests/e2e/test_cli.py"
   ];
 
   meta = {

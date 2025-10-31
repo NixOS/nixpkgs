@@ -51,19 +51,17 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = version;
-    hash = "sha256-QcKhMiJNlETlxmRoPwKKGYK7zKbJ0pQpbRZDyJ+yrN0=";
+    hash = "sha256-OjWOWdfAQoCQzc2EH5hBhJ3G/Z62U9oRgv8tp23L/Qw=";
   };
 
   postPatch = ''
-    substituteInPlace datalad/distribution/create_sibling.py \
-      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
     # Remove vendorized versioneer.py
     rm versioneer.py
   '';
@@ -119,9 +117,11 @@ buildPythonPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd datalad \
-         --bash <($out/bin/datalad shell-completion) \
-         --zsh  <($out/bin/datalad shell-completion)
-    wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
+      --bash <($out/bin/datalad shell-completion) \
+      --zsh  <($out/bin/datalad shell-completion)
+    wrapProgram $out/bin/datalad \
+      --prefix PATH : "${git-annex}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   preCheck = ''
@@ -240,6 +240,9 @@ buildPythonPackage rec {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [
+      renesat
+      malik
+    ];
   };
 }

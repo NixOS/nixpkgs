@@ -11,7 +11,7 @@
 
 let
   pname = "everest";
-  version = "5806";
+  version = "5935";
   phome = "$out/lib/Celeste";
 in
 buildDotnetModule {
@@ -20,11 +20,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "EverestAPI";
     repo = "Everest";
-    rev = "e47f67fc8c4b0b60b0a75112c5c90704ed371040";
+    rev = "6a6da718227b357f5b997499e454d5dc5c3e2788";
     fetchSubmodules = true;
     # TODO: use leaveDotGit = true and modify external/MonoMod in postFetch to please SourceLink
     # Microsoft.SourceLink.Common.targets(53,5): warning : Source control information is not available - the generated source link is empty.
-    hash = "sha256-scizz5U9DQaeJsh0dg7Lllycd/D3Ezu8QNYPPZFGJhY=";
+    hash = "sha256-qSDcwqjJeb2pNbyriZ/9Gk72DyR5KdIoncXol7JZvFg=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -44,8 +44,24 @@ buildDotnetModule {
     autoPatchelf lib-ext/piton/piton-linux_x64
   '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_9_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   nugetDeps = ./deps.json;
+
+  # Workaround from https://github.com/NixOS/nixpkgs/issues/454432
+  # Necessitated by https://github.com/MonoMod/MonoMod/pull/246
+  dotnetRestoreFlags = [ "--force-evaluate" ];
 
   # Needed for ILAsm projects: https://github.com/NixOS/nixpkgs/issues/370754#issuecomment-2571475814
   linkNugetPackages = true;

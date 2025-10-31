@@ -15,7 +15,7 @@ inputs@{
   enableSse42 ? stdenv.hostPlatform.sse4_2Support,
 }:
 let
-  inherit (lib.attrsets) getLib;
+  inherit (lib.attrsets) getOutput;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep;
 
@@ -88,8 +88,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # referring to an array!
   env.LDFLAGS = toString (
     optionals enableCuda [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${getOutput "stubs" cuda_cudart}/lib/stubs"
       # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${getLib cuda_nvml_dev}/lib/stubs"
+      "-L${getOutput "stubs" cuda_nvml_dev}/lib/stubs"
     ]
   );
 

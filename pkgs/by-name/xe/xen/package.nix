@@ -225,6 +225,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://xenbits.xen.org/xsa/xsa475-2.patch";
       hash = "sha256-7MKtDAJpihpfcBK+hyBFGCP6gHWs2cdgTks8B439b2s=";
     })
+
+    # XSA 476
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa476-4.20.patch";
+      hash = "sha256-nZUHcMr9RpQqrazG+RtTw+/s1gzqN1D565RuQjuALTQ=";
+    })
   ];
 
   outputs = [

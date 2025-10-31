@@ -27,6 +27,12 @@ stdenv.mkDerivation {
     libsForQt5.qtbase
     libsForQt5.qtx11extras
   ];
+
+  postPatch = ''
+    substituteInPlace qScreenshot/{CMakeLists.txt,cmake/modules/version.cmake} \
+      --replace-fail "cmake_minimum_required( VERSION 3.2.0 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Simple creation and editing of screenshots";
     mainProgram = "qScreenshot";

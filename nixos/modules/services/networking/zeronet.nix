@@ -134,6 +134,6 @@ with lib;
   ];
 
   meta = {
-    inherit (pkgs.zeronet) maintainers;
+    inherit (pkgs.zeronet.meta) maintainers;
   };
 }

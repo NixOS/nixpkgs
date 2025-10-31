@@ -63,6 +63,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ./0000-define-rev.patch
 
     ./remove-cubeb-vendor.patch
+
+    # Based on https://github.com/PCSX2/pcsx2/commit/8dffc857079e942ca77b091486c20c3c6530e4ed which doesn't apply cleanly
+    ./fix-qt-6.10.patch
   ];
 
   cmakeFlags = [

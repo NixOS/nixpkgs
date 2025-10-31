@@ -19,6 +19,5 @@ version=$(echo "$latest" | jq -r .version)
 url=$(echo "$latest" | jq -r .mainDownload)
 
 update-source-version everest $version --rev=$commit
-echo > "$(dirname "$(nix-instantiate --eval --strict -A everest.meta.position | sed -re 's/^"(.*):[0-9]+"$/\1/')")/deps.json"
 "$(nix-build --attr everest.fetch-deps --no-out-link)"
 update-source-version everest-bin $version "" $url

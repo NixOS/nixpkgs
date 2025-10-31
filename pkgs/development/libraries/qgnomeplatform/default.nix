@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     # Backport cursor fix for Qt6 apps
     # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
     ./qt6-cursor-fix.patch
+
+    # fixing build with Qt>=6.10
+    ./qt6_10.patch
   ];
 
   nativeBuildInputs = [

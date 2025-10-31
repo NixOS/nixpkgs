@@ -65,6 +65,9 @@ buildGoModule rec {
     changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
     license = licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [ croissong ];
+    maintainers = with maintainers; [
+      croissong
+      lpostula
+    ];
   };
 }

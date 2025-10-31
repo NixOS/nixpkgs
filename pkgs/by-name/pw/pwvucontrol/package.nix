@@ -43,18 +43,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.4.9";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-fmEXVUz3SerVgWijT/CAoelSUzq861AkBVjP5qwS0ao=";
+    hash = "sha256-21TBVDzjrBzNIPkAURGs2ngI8Vj6o/RL3Ael4wwE2Lk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oQSH4P9WxvkXZ53KM5ZoRAZyQFt60Zz7guBbgT1iiBk=";
+    hash = "sha256-FrPpLbfqM/DtjYu20pwr1AMUHaAuTEt60I3JlFZO4RI=";
   };
 
   postPatch = ''

@@ -154,7 +154,6 @@ let
             jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.x86_64-darwin
             jobs.wireshark.x86_64-darwin
-            jobs.transmission_3-gtk.x86_64-darwin
             jobs.transmission_4-gtk.x86_64-darwin
 
             # Tests
@@ -198,7 +197,6 @@ let
             jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
-            jobs.transmission_3-gtk.aarch64-darwin
             jobs.transmission_4-gtk.aarch64-darwin
 
             # Tests

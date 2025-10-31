@@ -62,6 +62,10 @@ buildPythonPackage rec {
     "test_references_url"
     # Tests are failing
     "TestMdGenerate"
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # Click 8.2 separates stdout and stderr, but upstream is on click 8.1 (https://github.com/pallets/click/pull/2523)
+    "test_nonexistent_output_path"
+    "test_config_parameters_with_nonexistent_output_path"
   ];
 
   pythonImportsCheck = [ "json_schema_for_humans" ];

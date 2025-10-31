@@ -1,31 +1,27 @@
 {
   lib,
-  recurseIntoAttrs,
-
-  cudaPackages,
-
-  cudaPackages_12_6,
-  cudaPackages_12_8,
-  cudaPackages_12_9,
-  cudaPackages_12,
-}@args:
-
+  pkgs,
+}:
 let
-  isTest =
-    name: package:
-    builtins.elem (package.pname or null) [
-      "cuda-library-samples"
-      "saxpy"
-    ];
+  getTests =
+    cps:
+    lib.recurseIntoAttrs {
+      inherit (cps) saxpy;
+      inherit (cps.tests) cuda-library-samples;
+    };
 in
-(lib.trivial.pipe args [
-  (lib.filterAttrs (name: _: lib.hasPrefix "cudaPackages" name))
-  (lib.mapAttrs (
-    _: ps:
-    lib.pipe ps [
-      (lib.filterAttrs isTest)
-      recurseIntoAttrs
-    ]
-  ))
-  recurseIntoAttrs
-])
+lib.recurseIntoAttrs (
+  lib.mapAttrs (_: getTests) {
+    inherit (pkgs)
+      cudaPackages
+
+      cudaPackages_12
+      cudaPackages_12_6
+      cudaPackages_12_8
+      cudaPackages_12_9
+
+      cudaPackages_13
+      cudaPackages_13_0
+      ;
+  }
+)

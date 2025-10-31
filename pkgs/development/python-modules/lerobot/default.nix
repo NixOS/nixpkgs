@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  accelerate,
   av,
   datasets,
   deepdiff,
@@ -26,6 +27,7 @@
   rerun-sdk,
   termcolor,
   torch,
+  torchcodec,
   torchvision,
   wandb,
 
@@ -36,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "lerobot";
-  version = "0.3.3";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${version}";
-    hash = "sha256-JaspLUuSupmk6QD+mUVLuCSczTNjy0w+nsLBcy7tXnE=";
+    hash = "sha256-RVe1X0qBPm+okO3Gi/UdkuvuX0m4RlbhIs+NJLlC9wU=";
   };
 
   # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
@@ -73,7 +75,9 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     av
+    cmake
     datasets
     deepdiff
     diffusers
@@ -91,9 +95,13 @@ buildPythonPackage rec {
     rerun-sdk
     termcolor
     torch
+    torchcodec
     torchvision
     wandb
-  ];
+  ]
+  ++ imageio.optional-dependencies.ffmpeg
+  ++ huggingface-hub.optional-dependencies.hf_transfer
+  ++ huggingface-hub.optional-dependencies.cli;
 
   pythonImportsCheck = [ "lerobot" ];
 
@@ -105,6 +113,7 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
+    "test_fourcc_with_camer"
     "test_read"
     "test_rotation"
 
@@ -134,6 +143,11 @@ buildPythonPackage rec {
     "test_cosine_decay_with_warmup_scheduler"
     "test_diffuser_scheduler"
     "test_vqbet_scheduler"
+
+    # AssertionError: Regex pattern did not match.
+    #  Regex: "Can't instantiate abstract class NonCallableStep with abstract method __call_"
+    #  Input: "Can't instantiate abstract class NonCallableStep without an implementation for abstract method '__call__'"
+    "test_construction_rejects_step_without_call"
   ];
 
   meta = {

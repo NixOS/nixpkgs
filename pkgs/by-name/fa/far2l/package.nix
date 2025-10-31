@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -51,6 +52,14 @@ stdenv.mkDerivation rec {
     rev = "v_${version}";
     sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/elfmz/far2l/commit/97ac0a3a0f29110a330d8f8634775e024561e817.patch?full_index=1";
+      hash = "sha256-LlCKgFPxoRrb2nD+PARsJCpUXqMO0rLyNbuvLh949fU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

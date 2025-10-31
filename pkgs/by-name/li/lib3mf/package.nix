@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
+    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include/lib3mf"
     "-DUSE_INCLUDED_ZLIB=OFF"
     "-DUSE_INCLUDED_LIBZIP=OFF"
     "-DUSE_INCLUDED_GTEST=OFF"
@@ -95,9 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     # functions are no longer in openssl, remove them from test cleanup function
     substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \
-      --replace-warn "RAND_cleanup();" "" \
-      --replace-warn "EVP_cleanup();" "" \
-      --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
+      --replace-fail "RAND_cleanup();" "" \
+      --replace-fail "EVP_cleanup();" "" \
+      --replace-fail "CRYPTO_cleanup_all_ex_data();" ""
+
+    # Fix CMake export
+    # ref https://github.com/3MFConsortium/lib3mf/pull/434
+    substituteInPlace cmake/lib3mfConfig.cmake \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
+
+    # Use absolute CMAKE_INSTALL_INCLUDEDIR
+    substituteInPlace lib3mf.pc.in \
+      --replace-fail "includedir=$""{prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
   doCheck = true;
@@ -109,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with maintainers; [ nim65s ];
     platforms = platforms.all;
   };
 })

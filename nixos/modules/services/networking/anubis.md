@@ -8,6 +8,34 @@ between a reverse proxy and the service to be protected.
 This module is designed to use Unix domain sockets as the socket paths can be automatically configured for multiple
 instances, but TCP sockets are also supported.
 
+Configuring multiple instances may look like the following.
+
+Notes:
+
+- Each instance as its runtime directory set to `anubis/anubis-<instance name>`.
+- When a single instance is declared with unix sockets, the runtime directory `anubis` is allowed for backward
+  compatibility.
+
+```nix
+{
+  services.anubis.instances."instance-1" = {
+    # Runtime directory: "anubis/anubis-instance-1".
+    settings = {
+      BIND = "/run/anubis/anubis-instance-1/anubis.sock";
+      TARGET = "http://localhost:8001";
+    };
+  };
+
+  services.anubis.instances."instance-2" = {
+    # Runtime directory: "anubis/anubis-instance-2".
+    settings = {
+      BIND = "/run/anubis/anubis-instance-2/anubis.sock";
+      TARGET = "http://localhost:8002";
+    };
+  };
+}
+```
+
 A minimal configuration with [nginx](#opt-services.nginx.enable) may look like the following:
 
 ```nix

@@ -229,8 +229,8 @@ stdenv.mkDerivation rec {
   qwindowkit-src = fetchFromGitHub {
     owner = "stdware";
     repo = "qwindowkit";
-    rev = "758b00cb6c2d924be3a1ea137ec366dc33a5132d";
-    hash = "sha256-qpVsF4gUX2noG9nKgjNP7FCEe59okZtDA8R/aZOef7Q=";
+    rev = "0131d673092ab18afd69fac84f4a17ad2ba615f2";
+    hash = "sha256-jajgLOj0h/byt3+fSbCpV3VPUoHxijUsKw/0BOwbXTw=";
     fetchSubmodules = true;
   };
 
@@ -239,6 +239,7 @@ stdenv.mkDerivation rec {
     cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
     substituteInPlace CMakeLists.txt \
       --replace-fail 'add_subdirectory(3rdparty/zxing-cpp EXCLUDE_FROM_ALL)' 'find_package(ZXing)'
+    sed -i -e '/pkg_check_modules/i FIND_PACKAGE(PkgConfig REQUIRED)' src/libclient/CMakeLists.txt
   '';
 
   preConfigure = ''

@@ -1,27 +1,30 @@
 {
   lib,
   stdenv,
-  dpkg,
   autoPatchelfHook,
+  runCommandLocal,
+  curl,
+  coreutils,
+  cacert,
+  # wpsoffice dependencies
   alsa-lib,
-  at-spi2-core,
+  libjpeg,
   libtool,
   libxkbcommon,
+  nss,
   nspr,
   udev,
   gtk3,
   libgbm,
   libusb1,
+  unixODBC,
+  libmysqlclient,
   libsForQt5,
   xorg,
+  # wpsoffice runtime dependencies
   cups,
+  dbus,
   pango,
-  bzip2,
-  libmysqlclient,
-  runCommandLocal,
-  curl,
-  coreutils,
-  cacert,
 }:
 
 let
@@ -32,10 +35,9 @@ let
   fetch =
     {
       url,
-      uri,
       hash,
     }:
-    runCommandLocal "wpsoffice-cn-${version}-src"
+    runCommandLocal "wpsoffice-cn-${version}.deb"
       {
         outputHashAlgo = "sha256";
         outputHash = hash;
@@ -52,7 +54,7 @@ let
         readonly SECURITY_KEY="7f8faaaa468174dc1c9cd62e5f218a5b"
 
         timestamp10=$(date '+%s')
-        md5hash=($(printf '%s' "$SECURITY_KEY${uri}$timestamp10" | md5sum))
+        md5hash=($(printf '%s' "$SECURITY_KEY${lib.removePrefix "https://wps-linux-personal.wpscdn.cn" url}$timestamp10" | md5sum))
 
         curl --retry 3 --retry-delay 3 "${url}?t=$timestamp10&k=$md5hash" > $out
       '';
@@ -68,24 +70,20 @@ in
 stdenv.mkDerivation {
   inherit pname src version;
 
-  unpackCmd = "dpkg -x $src .";
-  sourceRoot = ".";
-
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     alsa-lib
-    at-spi2-core
+    libjpeg
     libtool
     libxkbcommon
+    nss
     nspr
     udev
     gtk3
     libgbm
     libusb1
+    unixODBC
     libsForQt5.qtbase
     xorg.libXdamage
     xorg.libXtst
@@ -98,12 +96,21 @@ stdenv.mkDerivation {
 
   runtimeDependencies = map lib.getLib [
     cups
+    dbus
     pango
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libpeony.so.3"
-  ];
+  unpackPhase = ''
+    # Unpack the .deb file
+    ar x $src
+    tar -xf data.tar.xz
+
+    # Remove unneeded files
+    rm -rf usr/share/{fonts,locale}
+    rm -f usr/bin/misc
+    rm -rf opt/kingsoft/wps-office/{desktops,INSTALL}
+    rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,nss*,dbus-1}.so*
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -127,8 +134,6 @@ stdenv.mkDerivation {
   '';
 
   preFixup = ''
-    # libbz2 dangling symlink
-    ln -sf ${bzip2.out}/lib/libbz2.so $out/opt/kingsoft/wps-office/office6/libbz2.so
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
     # libmysqlclient dependency
@@ -138,19 +143,20 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Office suite, formerly Kingsoft Office";
-    homepage = "https://www.wps.com";
+    homepage = "https://www.wps.cn";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       mlatus
       th0rgal
       wineee
       pokon548
       chillcicada
     ];
+    mainProgram = "wps";
   };
 }

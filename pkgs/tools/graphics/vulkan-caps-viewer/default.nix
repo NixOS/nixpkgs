@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "4.02";
+  version = "4.03";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
-    hash = "sha256-89W/1E9IJaPUzeki0vegXzprGFAFIgb1mRx0OMC4+ec=";
+    hash = "sha256-LaZdQ5w7QYaD3Nxl9ML30kGws8Yyr3c0jzO3ElUvJ/I=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.

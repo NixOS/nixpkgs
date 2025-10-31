@@ -1862,6 +1862,10 @@ assertNoAdditions {
       ];
   };
 
+  maple-nvim = super.maple-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
@@ -3186,6 +3190,7 @@ assertNoAdditions {
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
+      "snacks.explorer.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -4086,8 +4091,9 @@ assertNoAdditions {
 
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
-      # Optional telescope integration
+      # Optional picker integration
       self.telescope-nvim
+      self.fzf-lua
     ];
   };
 

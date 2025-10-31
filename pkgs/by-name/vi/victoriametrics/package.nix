@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.127.0";
+  version = "1.128.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0PikCV0VWSfp2rvwssXwvkRGQzFNd6hidZv3bufUuI=";
+    hash = "sha256-X1TkE0lJNu68iETf8M8U5IZvRadtIPR6LqP61uzhD3Y=";
   };
 
   vendorHash = null;
@@ -52,8 +52,8 @@ buildGoModule (finalAttrs: {
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
 
     # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.1" "go ${finalAttrs.passthru.go.version}"
+    sed -i go.mod -e 's/^go .*/go ${finalAttrs.passthru.go.version}/'
+    sed -i vendor/modules.txt -e 's/## explicit; go .*/## explicit; go ${finalAttrs.passthru.go.version}/'
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \

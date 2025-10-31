@@ -158,12 +158,16 @@ If the team lists no specific membership policy, feel free to merge changes to t
 > [!IMPORTANT]
 > If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
 
-A corresponding GitHub team can be created by any org member.
+#### Synced GitHub teams
+
+As an alternative to tracking team members in `team-list.nix`, a corresponding GitHub team can be created by any org member and its members subsequently managed directly on GitHub.
 When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
 Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
 
 > [!TIP]
 > The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
+
+After the first [weekly team sync](../.github/workflows/team-sync.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
 # Maintainer scripts
 

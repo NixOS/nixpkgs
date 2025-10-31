@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.5.0";
+  version = "11.5.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-QNFNUVuslQ8ezDakqIPLMx6oSqS3K7VKu+Sm99d2d1E=";
+      hash = "sha256-ctwkU8AWCuOKFetgCIPp6npk1ZO8ozfELrRp4PR3Xjs=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-NEy7hssChI3F62XQwHq3ENbTUrhXdtovCYxQQp4NLEU=";
+      hash = "sha256-7wXpMwFGQeLgT7ObrZ5nUd84jzVArAIQ8vgp+fYDgsw=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-ANHz+C5XMNEWy4x1btdg4XnhTOvWBVVoS/XpE5beW0w=";
+      hash = "sha256-YkY6izRicIapNF9yMCL+YHJoxrWDdVwrcpj8N99tQCs=";
     };
   };
 

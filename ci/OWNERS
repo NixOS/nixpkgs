@@ -32,6 +32,8 @@
 /lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
 /lib/path/*                 @infinisil @hsjobeki
 /lib/fileset                @infinisil @hsjobeki
+/maintainers/github-teams.json @infinisil
+/maintainers/computed-team-list.nix @infinisil
 ## Standard environment–related libraries
 /lib/customisation.nix      @alyssais @NixOS/stdenv
 /lib/derivations.nix        @alyssais @NixOS/stdenv
@@ -341,7 +343,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/agda-packages.nix         @NixOS/agda
 /pkgs/development/libraries/agda          @NixOS/agda
 /doc/languages-frameworks/agda.section.md @NixOS/agda
-/nixos/tests/agda.nix                     @NixOS/agda
+/nixos/tests/agda                         @NixOS/agda
 
 # Idris
 /pkgs/development/idris-modules @Infinisil

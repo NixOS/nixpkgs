@@ -31,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.9.4";
+  version = "1.9.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     tag = "v${version}";
-    hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
+    hash = "sha256-xFSnJPKTAPXYa4FuqkFF5gLzGZ9TltNVDhyBnswiut4=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,6 @@ buildPythonPackage rec {
     dbus-python
     dropbox
     fasteners
-    importlib-metadata
     keyring
     keyrings-alt
     packaging

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pololu-tic";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "pololu-tic-software";
     tag = finalAttrs.version;
-    hash = "sha256-C/v5oaC5zZwm+j9CbFaDW+ebzHxPVb8kZLg9c0HyPbc=";
+    hash = "sha256-NqYaWWBEcq0nw4pHKpZWwbkTwnlVLB1VsC/M9zjxkHg=";
   };
 
   outputs = [

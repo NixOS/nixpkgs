@@ -426,7 +426,7 @@ let
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
-        if any (x: x == flag) list then (list ++ impliesFlags) else list;
+        if builtins.elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [

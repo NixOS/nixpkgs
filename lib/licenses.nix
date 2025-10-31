@@ -620,11 +620,6 @@ lib.mapAttrs mkLicense (
       fullName = "Unspecified free software license";
     };
 
-    freeimage = {
-      spdxId = "FreeImage";
-      fullName = "FreeImage Public License v1.0";
-    };
-
     fsl11Mit = {
       fullName = "Functional Source License, Version 1.1, MIT Future License";
       spdxId = "FSL-1.1-MIT";

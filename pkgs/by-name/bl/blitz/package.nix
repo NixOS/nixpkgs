@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # CMake 4 is no longer retro compatible with versions < 3.5
+  # cmake_minimum_required was already to an upper version, but not cmake_policy
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_policy(VERSION 3.1)" \
+      ""
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

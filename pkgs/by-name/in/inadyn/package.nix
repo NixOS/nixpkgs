@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inadyn";
-  version = "2.12.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "inadyn";
     rev = "v${version}";
-    sha256 = "sha256-aQHJtnMDaHF1XY9lwQVR6f78Zk2UI7OC3Oxt1r1KMak=";
+    sha256 = "sha256-R+DlhRZOwL/hBZAu4L7w7DAoHy1/1m8wsidSxByO74E=";
   };
 
   nativeBuildInputs = [

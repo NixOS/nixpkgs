@@ -22,7 +22,7 @@
   zlib,
   which,
   sysctl,
-  buildLlvmTools,
+  buildLlvmPackages,
   updateAutotoolsGnuConfigScriptsHook,
   enableManpages ? false,
   enableSharedLibraries ? !stdenv.hostPlatform.isStatic,
@@ -468,7 +468,7 @@ stdenv.mkDerivation (
           (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
           (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
           (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
-          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
         ];
       in
       flagsForLlvmConfig

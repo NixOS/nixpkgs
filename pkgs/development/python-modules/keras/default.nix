@@ -36,15 +36,25 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.11.3";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-J/NPLR9ShKhvHDU0/NpUNp95RViS2KygqvnuDHdwiP0=";
+    hash = "sha256-xuCxeQD8NAn7zlqCG+GyFjL6NlnIkGie+4GxzLGsyUg=";
   };
+
+  # Use a raw string to prevent LaTeX codes from being interpreted as escape sequences.
+  # SyntaxError: invalid escape sequence '\h
+  # Fix submitted upstream: https://github.com/keras-team/keras/pull/21790
+  postPatch = ''
+    substituteInPlace keras/src/quantizers/gptq_test.py \
+      --replace-fail \
+        'CALIBRATION_TEXT = """' \
+        'CALIBRATION_TEXT = r"""'
+  '';
 
   build-system = [
     setuptools
@@ -87,6 +97,25 @@ buildPythonPackage rec {
     "test_fit_with_data_adapter_grain_dataloader"
     "test_fit_with_data_adapter_grain_datast"
     "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_image_dataset_from_directory_binary_grain"
+    "test_image_dataset_from_directory_color_modes_grain"
+    "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
+    "test_image_dataset_from_directory_follow_links_grain"
+    "test_image_dataset_from_directory_manual_labels_grain"
+    "test_image_dataset_from_directory_multiclass_grain"
+    "test_image_dataset_from_directory_no_labels_grain"
+    "test_image_dataset_from_directory_not_batched_grain"
+    "test_image_dataset_from_directory_pad_to_aspect_ratio_grain"
+    "test_image_dataset_from_directory_shuffle_grain"
+    "test_image_dataset_from_directory_validation_split_grain"
+    "test_sample_count_grain"
+    "test_text_dataset_from_directory_binary_grain"
+    "test_text_dataset_from_directory_follow_links_grain"
+    "test_text_dataset_from_directory_manual_labels_grain"
+    "test_text_dataset_from_directory_multiclass_grain"
+    "test_text_dataset_from_directory_not_batched_grain"
+    "test_text_dataset_from_directory_standalone_grain"
+    "test_text_dataset_from_directory_validation_split_grain"
 
     # Tries to install the package in the sandbox
     "test_keras_imports"
@@ -179,6 +208,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Require unpackaged `grain`
+    "keras/src/layers/preprocessing/data_layer_test.py"
+    "keras/src/layers/preprocessing/image_preprocessing/resizing_test.py"
+    "keras/src/layers/preprocessing/rescaling_test.py"
     "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
 
     # These tests succeed when run individually, but crash within the full test suite:

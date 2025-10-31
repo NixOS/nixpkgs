@@ -22,10 +22,6 @@ home-assistant.python.pkgs.buildPythonPackage (
     pname = "${owner}/${domain}";
     inherit version format;
 
-    buildPhase = ''
-      true
-    '';
-
     installPhase = ''
       runHook preInstall
 

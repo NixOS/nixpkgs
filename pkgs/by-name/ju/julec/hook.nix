@@ -1,6 +1,5 @@
 {
   julec,
-  clang,
   makeSetupHook,
 }:
 

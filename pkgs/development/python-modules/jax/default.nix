@@ -6,6 +6,7 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -50,6 +51,14 @@ buildPythonPackage rec {
     tag = "jax-v${version}";
     hash = "sha256-Ilcp4WW65SyqrqDGBRdnB25m7OCbrsfdtxWvl0uTjNw=";
   };
+
+  patches = [
+    # https://github.com/jax-ml/jax/pull/32840
+    (fetchpatch2 {
+      url = "https://github.com/Prince213/jax/commit/af5c211d49f3b99447db2252d2cc2b8e0fb54d1c.patch?full_index=1";
+      hash = "sha256-ijEd+MDe91qyYfE+aMzR5rNmTeGadin6Io8PIfJWc3o=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

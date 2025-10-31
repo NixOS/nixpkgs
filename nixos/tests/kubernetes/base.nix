@@ -18,9 +18,7 @@ let
     }:
     let
       masterName = head (
-        filter (machineName: any (role: role == "master") machines.${machineName}.roles) (
-          attrNames machines
-        )
+        filter (machineName: lib.elem "master" machines.${machineName}.roles) (attrNames machines)
       );
       master = machines.${masterName};
       extraHosts = ''

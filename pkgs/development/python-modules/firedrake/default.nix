@@ -23,6 +23,7 @@
   libsupermesh,
   loopy,
   petsc4py,
+  petsctools,
   numpy,
   packaging,
   pkgconfig,
@@ -35,6 +36,7 @@
   scipy,
   sympy,
   islpy,
+  vtk,
   matplotlib,
   immutabledict,
 
@@ -59,36 +61,31 @@ let
 in
 buildPythonPackage rec {
   pname = "firedrake";
-  version = "2025.4.2";
+  version = "2025.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
     tag = version;
-    hash = "sha256-bAGmXoHPAdMYJMMQYVq98LYro1Vd+o9pfvXC3BsQUf0=";
+    hash = "sha256-paZNs6T9v7TNSdc8YJTjNcQvGrPg/Sy9K27/aUxNu5w=";
   };
 
-  postPatch =
-    # relax build-dependency petsc4py
-    ''
-      substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.4" "petsc4py"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["ldd"]' \
-        'program = ["${lib.getExe' pax-utils "lddtree"}"]'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["otool"' \
-        'program = ["${lib.getExe' stdenv.cc.bintools.bintools "otool"}"'
-    '';
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/firedrakeproject/firedrake/pull/4632/commits/717ae8a62e19e0cc91419c12ca14170d252b2bb9.patch?full_index=1";
+      hash = "sha256-XHIcXmfh/brlQkrM4FTRvTrOovLvBN5mBrqZpZewTnc=";
+    })
+  ];
+
+  # relax build-dependency petsc4py
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      "petsc4py==3.24.0" "petsc4py"
+  '';
 
   pythonRelaxDeps = [
     "decorator"
-    "slepc4py"
   ];
 
   build-system = [
@@ -117,6 +114,7 @@ buildPythonPackage rec {
     libsupermesh
     loopy
     petsc4py
+    petsctools
     numpy
     packaging
     pkgconfig
@@ -128,6 +126,7 @@ buildPythonPackage rec {
     rtree
     scipy
     sympy
+    vtk
     # required by script spydump
     matplotlib
     # required by pyop2
@@ -155,20 +154,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  # These scripts are used by official sdist/editable_wheel only
-  postInstall = ''
-    rm $out/bin/firedrake-{check,status,run-split-tests}
-  '';
-
-  preCheck = ''
-    rm -rf firedrake pyop2 tinyasm tsfc
-  '';
-
   # run official smoke tests
   checkPhase = ''
     runHook preCheck
 
-    make check
+    $out/bin/firedrake-check
 
     runHook postCheck
   '';

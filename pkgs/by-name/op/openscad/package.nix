@@ -84,6 +84,15 @@ stdenv.mkDerivation rec {
         sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
       '';
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ref. https://github.com/openscad/openscad/pull/4013 merged upstream
+    (fetchpatch {
+      name = "mem_fun-to-mem_fn.patch";
+      url = "https://github.com/openscad/openscad/commit/c9a1abbedfbf6dda9a23d3ad5844d11e5278a928.patch";
+      hash = "sha256-Man9ledRREb7U+2UOQ0VkpiwbYQjyVOY21YaRFObZc8=";
+    })
+
   ];
 
   postPatch = ''
@@ -92,6 +101,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/openscad.cc \
       --replace-fail 'boost::join' 'boost::algorithm::join'
+  ''
+  # ref. https://github.com/openscad/openscad/pull/4253 merged upstream but does not apply
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/FreetypeRenderer.h \
+      --replace-fail ": public std::unary_function<const GlyphData *, void>" ""
   '';
 
   nativeBuildInputs = [

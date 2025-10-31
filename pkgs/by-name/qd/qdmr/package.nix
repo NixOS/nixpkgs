@@ -77,7 +77,10 @@ stdenv.mkDerivation rec {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0x4A6F ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      juliabru
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -100,8 +100,10 @@ stdenv.mkDerivation (
             linux = "true";
             freebsd = "true";
             netbsd = "false";
+            windows = "false";
           }
-          .${stdenv.hostPlatform.parsed.kernel.name} or (throw "Unknown value for ipc_rmid_deferred_release")
+          .${stdenv.hostPlatform.parsed.kernel.name}
+            or (throw "Unknown value for ipc_rmid_deferred_release on ${stdenv.hostPlatform.parsed.kernel.name}")
         }
       ''}"
     ];

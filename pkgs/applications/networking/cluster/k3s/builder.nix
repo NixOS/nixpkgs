@@ -68,7 +68,7 @@ lib:
   socat,
   sqlite,
   stdenv,
-  su,
+  shadow,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -373,7 +373,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
-    su
+    shadow # kubelet wants 'getsubids' when using user namespaces
   ];
 
   k3sKillallDeps = [

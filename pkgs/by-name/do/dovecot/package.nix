@@ -155,9 +155,9 @@ stdenv.mkDerivation rec {
     "--with-textcat"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "i_cv_epoll_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
-    "i_cv_posix_fallocate_works=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
-    "i_cv_inotify_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
+    "i_cv_epoll_works=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
+    "i_cv_posix_fallocate_works=${lib.boolToYesNo stdenv.hostPlatform.isDarwin}"
+    "i_cv_inotify_works=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
     "i_cv_signed_size_t=no"
     "i_cv_signed_time_t=yes"
     "i_cv_c99_vsnprintf=yes"

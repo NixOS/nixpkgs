@@ -28,7 +28,6 @@
   multipath-tools,
   nixosTests,
   buildFHSEnv,
-  recurseIntoAttrs,
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
@@ -224,7 +223,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;
-    lvm2 = recurseIntoAttrs nixosTests.lvm2;
+    lvm2 = lib.recurseIntoAttrs nixosTests.lvm2;
 
     # https://github.com/NixOS/nixpkgs/issues/369732
     lvm2-fhs-env = buildFHSEnv {

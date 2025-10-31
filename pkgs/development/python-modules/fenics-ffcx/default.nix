@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -16,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fenics-ffcx";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "ffcx";
     tag = "v${version}";
-    hash = "sha256-eAV//RLbrxyhqgbZ2DiR7qML7xfgPn0/Seh+2no0x8w=";
+    hash = "sha256-i8fawnXWxIHfOvb0nK4/bzhrzfRJJACMCkFZKtdUwkU=";
   };
 
   pythonRelaxDeps = [
@@ -52,8 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
     addBinToPathHook
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unused-command-line-argument";
 
   meta = {
     homepage = "https://fenicsproject.org";

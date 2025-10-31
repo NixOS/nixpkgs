@@ -241,7 +241,7 @@ in
         PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
         PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
         PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-        PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
+        PRUNE_BIND_MOUNTS="${lib.boolToYesNo cfg.pruneBindMounts}"
       '';
 
       systemPackages = [ cfg.package ];
@@ -267,7 +267,7 @@ in
         ''
           exec ${cfg.package}/bin/updatedb \
             --output ${toString cfg.output} ${lib.concatStringsSep " " args} \
-            --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+            --prune-bind-mounts ${lib.boolToYesNo cfg.pruneBindMounts} \
             ${lib.concatStringsSep " " cfg.extraFlags}
         '';
       serviceConfig = {

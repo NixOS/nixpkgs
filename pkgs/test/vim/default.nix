@@ -1,8 +1,8 @@
 {
+  lib,
   vimUtils,
   vim-full,
   vimPlugins,
-  pkgs,
 }:
 let
   inherit (vimUtils) buildVimPlugin;
@@ -10,7 +10,7 @@ let
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
 in
-pkgs.recurseIntoAttrs {
+lib.recurseIntoAttrs {
   vim_empty_config = vimUtils.vimrcFile {
     beforePlugins = "";
     customRC = "";

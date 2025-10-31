@@ -93,6 +93,9 @@ insert_final_newline = unset
 [*.jule]
 indent_style = tab
 
+[jule.mod]
+insert_final_newline = unset
+
 # Keep this hint at the bottom:
 # Please don't add entries for subfolders here.
 # Create <subfolder>/.editorconfig instead.

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   ninja,
   qtbase,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "11.0.0";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-/t+8YsqeX0tlxwQDDNTalttCDIgGhpLbzYe3UqY04xM=";
+    hash = "sha256-wxjUL5mGXAMNVGP+dAh1NrE9tw71cJW9zmLsaCVphTo=";
   };
 
   nativeBuildInputs = [
@@ -48,10 +49,19 @@ stdenv.mkDerivation rec {
     kdePackages.kconfig
     kdePackages.kstatusnotifieritem
     kdePackages.knotifications
+    kdePackages.kguiaddons
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_QT6" true)
+  ];
+
+  patches = [
+    # https://github.com/hluk/CopyQ/pull/3268
+    (fetchpatch2 {
+      url = "https://github.com/hluk/CopyQ/commit/103903593c37c9db5406d276e0097fbf18d2a8c4.patch?full_index=1";
+      hash = "sha256-zywE6ntMw+WvTyilXwvd4lfQRAAB9R/AGpwtwwPFZZE=";
+    })
   ];
 
   meta = {

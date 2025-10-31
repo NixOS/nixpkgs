@@ -12,6 +12,28 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
+  unixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  unixSocketAddrs =
+    settings:
+    lib.filter (x: x != "") [
+      (unixAddr settings.BIND_NETWORK settings.BIND)
+      (unixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    ];
+
+  runtimeDirectoryPrefix = name: "/run/anubis/${instanceName name}/";
+  instanceUsesUnixSockets = instance: lib.length (unixSocketAddrs instance.settings) > 0;
+  instanceUsesDedicatedRuntimeDirectory =
+    name: instance:
+    lib.any (lib.hasPrefix (runtimeDirectoryPrefix name)) (unixSocketAddrs instance.settings);
+  useDedicatedRuntimeDirectory =
+    # Set when:
+    # - Multiple instances are configured to use unix sockets.
+    # - At least one instance uses the new runtime directory prefix: /run/anubis/anubis-<instance name>.
+    lib.count instanceUsesUnixSockets (lib.attrValues enabledInstances) > 1
+    || lib.any (attrs: instanceUsesDedicatedRuntimeDirectory attrs.name attrs.value) (
+      lib.attrsToList enabledInstances
+    );
+
   commonSubmodule =
     isDefault:
     let
@@ -185,6 +207,7 @@ let
         default = "/run/anubis/${instanceName name}.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
+          Use the prefix ${runtimeDirectoryPrefix "<instance name>"} when configuring multiple instances.
 
           Defaults to Unix domain sockets. To use TCP sockets, set this to a TCP address and `BIND_NETWORK` to `"tcp"`.
         '';
@@ -196,6 +219,7 @@ let
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
+          Use the prefix ${runtimeDirectoryPrefix "<instance name>"} when configuring multiple instances.
 
           The metrics server is enabled by default and may be disabled. However, due to implementation details, this is
           only possible by setting a command line flag. See {option}`services.anubis.defaultOptions.extraFlags` for an
@@ -245,6 +269,25 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
+    warnings = [
+      "RuntimeDirectory is going to be migrated from `anubis` to `anubis/anubis-<instance name>`, update BIND and METRICS_BIND to ${runtimeDirectoryPrefix "<instance name>"} if using unix sockets"
+    ];
+
+    assertions =
+      let
+        validInstanceUnixSocketAddrs =
+          { name, value }:
+          lib.all (lib.hasPrefix (runtimeDirectoryPrefix name)) (unixSocketAddrs value.settings);
+      in
+      [
+        {
+          assertion =
+            !useDedicatedRuntimeDirectory
+            || lib.all validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances);
+          message = "use the prefix ${runtimeDirectoryPrefix "<instance name>"} in BIND and METRICS_BIND when configuring multiple instances";
+        }
+      ];
+
     users.users = lib.mkIf (cfg.defaultOptions.user == "anubis") {
       anubis = {
         isSystemUser = true;
@@ -288,19 +331,14 @@ in
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
           RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
+            if useDedicatedRuntimeDirectory then
+              "anubis/${instanceName name}"
+            else if instanceUsesUnixSockets instance then
+              # `dedicatedRuntimeDirectory = false`: /run/anubis may still be used.
+              # Warning: `anubis` will be deprecated eventually.
               "anubis"
             else
               null;
-
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;

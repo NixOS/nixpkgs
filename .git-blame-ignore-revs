@@ -193,6 +193,10 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchgit, fetchurl, fetchzip:
+# format after refactoring with lib.extendMkDerivation (#455994)
+aeddd850c6d3485fc1af2edfb111e58141d18dc1
+
 # fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
 34a5b1eb23129f8fb62c677e3760903f6d43228f
 
@@ -300,3 +304,6 @@ f7611cad5154a9096faa26d156a4079577bfae17
 90e7159c559021ac4f4cc1222000f08a91feff69 # !autorebase nix-shell --run treefmt
 c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
 91a8fee3aaf79348aa2dc1552a29fc1b786c5133 # !autorebase nix-shell --run treefmt
+
+# aliases: keep-sorted
+48ce0739044bd6eba83c3a43bd4ad1046399cdad # !autorebase nix-shell --run treefmt

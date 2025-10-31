@@ -48,12 +48,22 @@ stdenv.mkDerivation rec {
 
   cargoRoot = "libs/librepcb/rust-core";
 
+  postPatch = ''
+    substituteInPlace libs/muparser/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libs/type_safe{/,/external/debug_assert/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libs/googletest{/,/googlemock/,/googletest/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Free EDA software to develop printed circuit boards";
     homepage = "https://librepcb.org/";
     maintainers = with maintainers; [
       luz
       thoughtpolice
+      iedame
     ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -17,16 +17,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "15.0.0";
+  version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    hash = "sha256-pYQw4LuKBZdLTc/aBpruwrd9U9s++yXbSXfq2JZ/jyI=";
+    hash = "sha256-0gjwYMUlXYnmIWQS1SVzF1yQw1lpveRLw5qp049lc3I=";
   };
 
-  cargoHash = "sha256-vh5adpwdZHjEXLyiMKvL3LHNPZaiB4TWuypTXsieyek=";
+  cargoHash = "sha256-ry3pLuYNwX776Dpj9IE2+uc7eEa5+sQvdNNeG1eJecs=";
 
   nativeBuildInputs = [
     installShellFiles
