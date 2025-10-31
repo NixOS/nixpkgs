@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyspelling";
-  version = "2.11";
+  version = "2.12";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lMxu+pecJneWAa1mb42Yat9S0kezEzN61nqscWN0nQ4=";
+    hash = "sha256-ezl5EeRrf6fBBWsoZ8AugVR/yNALvNhEZWVd8j5J26o=";
   };
 
   build-system = [

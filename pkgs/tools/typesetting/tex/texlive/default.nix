@@ -42,7 +42,6 @@
   makeFontsConf,
   useFixedHashes ? true,
   extraMirrors ? [ ],
-  recurseIntoAttrs,
   nixfmt,
   luajit,
 }:
@@ -543,7 +542,7 @@ let
     license = licenses.scheme-infraonly;
   };
 
-  combined = recurseIntoAttrs (
+  combined = lib.recurseIntoAttrs (
     lib.genAttrs
       [
         "scheme-basic"

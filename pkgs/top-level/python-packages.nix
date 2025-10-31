@@ -20058,7 +20058,7 @@ self: super: with self; {
     wasmer-compiler-singlepass
     ;
 
-  wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
+  wasmerPackages = lib.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
 
