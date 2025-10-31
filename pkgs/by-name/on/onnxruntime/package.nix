@@ -106,6 +106,8 @@ effectiveStdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/pull/15661
     # https://github.com/microsoft/onnxruntime/pull/20509
     ./cpuinfo-logging.patch
+    # Fixes build against OpenVINO. Remove when no longer applies as it'll be fixed upstream
+    ./0001-use-constexpr-for-constexpr-things.patch
   ]
   ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.

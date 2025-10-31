@@ -57,6 +57,14 @@ python.pkgs.buildPythonApplication rec {
   # inside the nix build sandbox.
   doCheck = stdenv.buildPlatform.system != "aarch64-linux";
 
+  disabledTests = [
+    # These tests fail with OpenVINO-enabled onnxruntime
+    # (https://github.com/immich-app/immich/issues/23456)
+    "test_recognition"
+    "test_recognition_adds_batch_axis_for_ort"
+    "test_recognition_does_not_add_batch_axis_if_exists"
+  ];
+
   nativeCheckInputs = with python.pkgs; [
     httpx
     pytest-asyncio
