@@ -1,0 +1,40 @@
+diff --git a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+index 2753f3a8..91f26b74 100644
+--- a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
++++ b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+@@ -217,7 +217,7 @@ namespace Microsoft.VisualStudio.Services.Agent
+ 
+                 case WellKnownDirectory.Externals:
+                     path = Path.Combine(
+-                        GetDirectory(WellKnownDirectory.Root),
++                        new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName,
+                         Constants.Path.ExternalsDirectory);
+                     break;
+ 
+@@ -234,7 +234,8 @@ namespace Microsoft.VisualStudio.Services.Agent
+                     break;
+ 
+                 case WellKnownDirectory.Root:
+-                    path = new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
++                    path = Environment.GetEnvironmentVariable("AGENT_ROOT")
++                                 ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
+                     break;
+ 
+                 case WellKnownDirectory.ServerOM:
+
+@@ -332,14 +332,9 @@ namespace Microsoft.VisualStudio.Services.Agent
+ 
+         private string GetDiagOrDefault(string diagFolder)
+         {
+-            if (!string.IsNullOrEmpty(diagFolder))
+-            {
+-                return diagFolder;
+-            }
+-
+             return Path.Combine(
+-                new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Parent.FullName,
+-                Constants.Path.DiagDirectory);
++                GetDirectory(WellKnownDirectory.Diag);
+         }
+ 
+         public string GetConfigFile(WellKnownConfigFile configFile)
