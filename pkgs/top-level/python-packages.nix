@@ -5279,6 +5279,8 @@ self: super: with self; {
 
   fitfile = callPackage ../development/python-modules/fitfile { };
 
+  fitparse = callPackage ../development/python-modules/fitparse { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
