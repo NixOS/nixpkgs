@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_MINIZIP=ON"
     "-DUSE_OPENSSL_MD5=ON"
     "-DUSE_DTOA_LIBRARY=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
