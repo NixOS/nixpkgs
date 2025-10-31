@@ -5,6 +5,9 @@
   bash,
   gnutar,
   writeText,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 let
   stripScheme = builtins.replaceStrings [ "https://" "http://" ] [ "" "" ];
@@ -59,13 +62,13 @@ in
 stdenv.mkDerivation {
   builder = ./fetchdocker-builder.sh;
   buildInputs = [ coreutils ];
-  preferLocalBuild = true;
 
   inherit
     name
     imageName
     repository
     tag
+    preferLocalBuild
     ;
   inherit
     bash

@@ -2,7 +2,15 @@
   lib,
   stdenv,
   curl,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
+
+let
+  preferLocalBuildDefault = preferLocalBuild;
+in
+
 lib.fetchers.withNormalizedHash
   {
     hashTypes = [
@@ -21,7 +29,7 @@ lib.fetchers.withNormalizedHash
       meta ? { },
       port ? "8080",
       postFetch ? "",
-      preferLocalBuild ? true,
+      preferLocalBuild ? preferLocalBuildDefault,
     }:
     stdenv.mkDerivation {
       name = ipfs;

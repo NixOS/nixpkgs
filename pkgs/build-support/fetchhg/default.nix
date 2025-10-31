@@ -2,7 +2,13 @@
   lib,
   stdenvNoCC,
   mercurial,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
+let
+  preferLocalBuildDefault = preferLocalBuild;
+in
 
 lib.extendMkDerivation {
   constructDrv = stdenvNoCC.mkDerivation;
@@ -16,7 +22,7 @@ lib.extendMkDerivation {
       sha256 ? null,
       hash ? null,
       fetchSubrepos ? false,
-      preferLocalBuild ? true,
+      preferLocalBuild ? preferLocalBuildDefault,
     }:
     # TODO: statically check if mercurial has https support if the url starts with https.
     {

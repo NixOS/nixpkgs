@@ -7,6 +7,9 @@
   lib,
   replaceVars,
   writeClosure,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 let
@@ -104,10 +107,10 @@ lib.makeOverridable (
           postBuild
           nativeBuildInputs
           buildInputs
+          preferLocalBuild
           ;
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
-        preferLocalBuild = true;
         allowSubstitutes = false;
         # XXX: The size is somewhat arbitrary
         passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
