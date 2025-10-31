@@ -5,22 +5,22 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "nsf-ordlista";
-  version = "unstable-2023-08-20";
+  version = "2025";
   src = fetchzip {
-    url = "http://www2.scrabbleforbundet.no/wp-content/uploads/2023/08/nsf2023.zip";
-    hash = "sha256-bcVqZ2yPHurl6sRNgeLNAyyR8WR9ewmtn85Xuw/rZ3s=";
+    url = "https://www2.scrabbleforbundet.no/wp-content/uploads/2025/09/nsf2025.zip";
+    hash = "sha256-dqfHjD7F/lVR/n7NSzzYlLz3suE96JsUCPlpf/kCUew=";
   };
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 nsf2023.txt $out/share/wordlists/nsf.txt
+    install -Dm444 nsf2025.txt $out/share/wordlists/nsf.txt
     runHook postInstall
   '';
 
   meta = {
     description = "Wordlist from the Norwegian Scrabble Federation";
     homepage = "https://www2.scrabbleforbundet.no/";
-    downloadPage = "https://www2.scrabbleforbundet.no/?p=4881#more-4881";
+    downloadPage = "https://www2.scrabbleforbundet.no/?p=5127";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ h7x4 ];
     platforms = lib.platforms.all;
