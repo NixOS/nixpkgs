@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-vWPT3FBSZlgA1z1zH1o1Kpd9JOmt2Ykfh3JMtMLWTjI=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v3.2.1/collectives-3.2.1.tar.gz",
-    "version": "3.2.1",
+    "hash": "sha256-IWTEFinyReBTlVApObpjaBRYVCn/PbIFoHbG5s2vuMo=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v3.2.3/collectives-3.2.3.tar.gz",
+    "version": "3.2.3",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "whiteboard": {
-    "hash": "sha256-2CSc9gRXAHaKiq4KfVl+44eWhtBFgjHYbMeTwE18xuA=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.3.0/whiteboard-v1.3.0.tar.gz",
-    "version": "1.3.0",
+    "hash": "sha256-i8qk1RZrLbF0Mex4lgVZp092ZrsUvosYeiLcJ4WMosQ=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.4.0/whiteboard-v1.4.0.tar.gz",
+    "version": "1.4.0",
     "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
     "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [
