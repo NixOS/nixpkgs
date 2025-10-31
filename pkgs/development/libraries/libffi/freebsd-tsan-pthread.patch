@@ -1,0 +1,24 @@
+From e52a0790a9b80492cba2907c27d0a9e4248b6608 Mon Sep 17 00:00:00 2001
+From: Jon Hermansen <jon@jh86.org>
+Date: Tue, 28 Oct 2025 18:02:39 -0400
+Subject: [PATCH] fix tsan tests on FreeBSD by linking to pthread
+
+---
+ testsuite/lib/libffi.exp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/testsuite/lib/libffi.exp b/testsuite/lib/libffi.exp
+index 81eff7752..308db6f8d 100644
+--- a/testsuite/lib/libffi.exp
++++ b/testsuite/lib/libffi.exp
+@@ -407,6 +407,10 @@ proc libffi_target_compile { source dest type options } {
+             lappend options "libs= -lpthread"
+         }
+ 
++        if { [string match "*-*-freebsd*" $target_triplet] } {
++            lappend options "libs= -lpthread"
++        }
++
+         lappend options "libs= -lffi"
+ 
+         if { [string match "aarch64*-*-linux*" $target_triplet] } {
