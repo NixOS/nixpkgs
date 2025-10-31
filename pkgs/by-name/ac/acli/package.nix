@@ -12,7 +12,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "acli";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
@@ -48,19 +48,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://acli.atlassian.com/linux/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_linux_amd64.tar.gz";
-        hash = "sha256-5jnzsRX4sPfemdMhW+uBDSv1QjLF/hjA8Jrel16bRZM=";
+        hash = "sha256-STqZ5+wcKcRwce0Kqmh4a9RQKaSW+az3uEiK03OGPgs=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://acli.atlassian.com/linux/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_linux_arm64.tar.gz";
-        hash = "sha256-biIDWOd94HHZ/+zqw/J3vuWXdBXYuNvgLkftNHB9S8g=";
+        hash = "sha256-uawp7EhBaO8pHAuzoH4Wkf8mOUl4j3PhqWypsIIyitA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://acli.atlassian.com/darwin/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_darwin_arm64.tar.gz";
-        hash = "sha256-DVKCO057OObTSDF3c76svFKfebkbLDCKKFsRpIj2AEk=";
+        hash = "sha256-eoT5f9qDyY7AXzEjygG/gtyqzxdTlQ3gyFA0KxK8Iv0=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://acli.atlassian.com/darwin/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_darwin_amd64.tar.gz";
-        hash = "sha256-LsVUPKZzpvsMuD8D8wN6+1KocJ8Ujx0UMv9D+tQ/WuI=";
+        hash = "sha256-mjSF0wfKtVu6wuqUgJmAUN8dnwGkHU6IzdxRFZvl4Oc=";
       };
     };
     updateScript = lib.getExe (writeShellApplication {
