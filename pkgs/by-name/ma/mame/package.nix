@@ -24,13 +24,12 @@
   portmidi,
   pugixml,
   python3,
-  qtbase,
+  libsForQt5,
   rapidjson,
   sqlite,
   utf8proc,
   versionCheckHook,
   which,
-  wrapQtAppsHook,
   writeScript,
   zlib,
 }:
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_ttf
     sqlite
-    qtbase
+    libsForQt5.qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -108,7 +107,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   patches = [
