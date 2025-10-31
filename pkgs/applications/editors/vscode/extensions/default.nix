@@ -2594,6 +2594,8 @@ let
         };
       };
 
+      jjk.jjk = callPackage ./jjk.jjk { };
+
       jroesch.lean = buildVscodeMarketplaceExtension rec {
         mktplcRef = {
           name = "lean";
