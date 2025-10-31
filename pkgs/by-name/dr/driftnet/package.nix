@@ -6,7 +6,7 @@
   fetchFromGitHub,
   giflib,
   glib,
-  gtk2-x11,
+  gtk3,
   libjpeg,
   libpcap,
   libpng,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "driftnet";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
     tag = "v${version}";
-    hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
+    hash = "sha256-f7EPC/n3CyxVOXC6j43Nnwkgu/aDVst8lQpzfgegDsI=";
   };
 
   enableParallelBuilding = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cairo
     giflib
     glib
-    gtk2-x11
+    gtk3
     libjpeg
     libpcap
     libpng
