@@ -75,6 +75,7 @@ assert lib.assertMsg (
     version = "${version}${suffix}";
     cargoDeps = docCargoDeps;
   },
+  perl-bindings,
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -381,7 +382,7 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    inherit aws-sdk-cpp boehmgc;
+    inherit aws-sdk-cpp boehmgc perl-bindings;
     tests = {
       misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
       installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
