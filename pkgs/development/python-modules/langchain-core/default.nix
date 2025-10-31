@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   jsonpatch,
@@ -36,19 +36,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.72";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    hash = "sha256-/V2xwpVIR7AWkN85D51LYokMrTrnJlIkGr0q1ztVh8A=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "packaging"
