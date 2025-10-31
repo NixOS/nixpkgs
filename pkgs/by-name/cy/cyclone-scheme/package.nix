@@ -25,7 +25,11 @@ let
 
     buildInputs = [ libck ];
 
-    makeFlags = [ "PREFIX=${placeholder "out"}" ];
+    makeFlags = [
+      "PREFIX=${placeholder "out"}"
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
+    ];
   };
 in
 stdenv.mkDerivation {
@@ -45,7 +49,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libck ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "AR:=$(AR)"
+    "RANLIB:=$(RANLIB)"
+  ];
 
   meta = {
     homepage = "https://justinethier.github.io/cyclone/";
