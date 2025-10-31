@@ -48,7 +48,6 @@ in
 
   # build time
   autoconf,
-  cargo,
   dump_syms,
   makeWrapper,
   mimalloc,
@@ -207,13 +206,25 @@ let
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
       lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
         llvmPackages = pkgs.llvmPackages_20;
+
+        pkgsBuildBuild = pkgsBuildBuild // {
+          llvmPackages = pkgsBuildBuild.llvmPackages_20;
+        };
+        pkgsBuildTarget = pkgs.pkgsBuildTarget // {
+          llvmPackages = pkgs.pkgsBuildTarget.llvmPackages_20;
+        };
+        pkgsBuildHost = pkgs.pkgsBuildHost // {
+          llvmPackages = pkgs.pkgsBuildHost.llvmPackages_20;
+        };
+        pkgsHostTarget = pkgs.pkgsHostTarget // {
+          llvmPackages = pkgs.pkgsHostTarget.llvmPackages_20;
+        };
       }
     )).packages.stable;
 
   toRustC = pkgs: (rustPackages pkgs).rustc;
 
-  rustc = toRustC pkgs;
-  inherit (rustPackages pkgs) rustPlatform;
+  inherit (rustPackages pkgs) cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
