@@ -25985,6 +25985,8 @@ with self;
       hash = "sha256-eynEWt0Z09UIS3Ufe6iajkBHmkRs4hz9nMdB5VgzKgA=";
     };
     propagatedBuildInputs = [ IOSocketSSL ];
+    # TODO: fix PATH needed for dependencies
+    doCheck = !stdenv.buildPlatform.isCygwin;
     meta = {
       description = "SSL support for Net::SMTP";
       license = with lib.licenses; [
