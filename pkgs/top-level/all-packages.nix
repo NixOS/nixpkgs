@@ -13259,8 +13259,6 @@ with pkgs;
     quake3hires
     ;
 
-  vkquake = callPackage ../by-name/qu/quakespasm/vulkan.nix { };
-
   rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
   };
