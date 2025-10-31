@@ -51,7 +51,7 @@ in
     systemd.services.pommed = {
       description = "Pommed Apple Hotkeys Daemon";
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${lib.getExe pkgs.pommed_light} -f";
+      script = "${pkgs.pommed_light}/bin/pommed -f";
     };
   };
 }

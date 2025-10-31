@@ -88,11 +88,14 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      preStart = ''
+        # There should be only one autofs service managed by systemd, so this should be safe.
+        rm -f /tmp/autofs-running
+      '';
+
       serviceConfig = {
         Type = "forking";
         PIDFile = "/run/autofs.pid";
-        # There should be only one autofs service managed by systemd, so this should be safe.
-        ExecStartPre = "${lib.getExe' pkgs.coreutils "rm"} -f /tmp/autofs-running";
         ExecStart = "${pkgs.autofs5}/bin/automount ${lib.optionalString cfg.debug "-d"} -p /run/autofs.pid -t ${builtins.toString cfg.timeout} ${autoMaster}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
