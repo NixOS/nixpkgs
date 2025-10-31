@@ -144,9 +144,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
     vulkan-loader
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_14 ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
