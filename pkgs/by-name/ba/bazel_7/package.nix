@@ -46,7 +46,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.6.0",
+  version ? "7.7.1",
 }:
 
 let
@@ -54,7 +54,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
+    hash = "sha256-YYGzVwwvZX2YmxFB+wwaCOtfCBBspXfcfcUufQI4N5o=";
   };
 
   defaultShellUtils =
@@ -111,23 +111,23 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-94KFvsS7fInXFTQZPzMq6DxnHQrRktljwACyAz8adSw=";
+          hash = "sha256-Rym9S7ZEPXeUDYDtWQPDIvJU9Q1SWqBrfcGI/9Hc6Xg=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
+          hash = "sha256-8cFuQA/cSRzMBH5WicXoXkXSrO+s4QhdFgWq86UFQ4M=";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
+          hash = "sha256-hYKupe4tjQRIu9oQ/XA0c02xohy+TqNRoQASuWmqXTE=";
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
-          hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
+          hash = "sha256-/ooe6QZOlK+uB1wN1O+0U9ucE3O53xL+y/+EedQI6wg=";
         };
 
     nativeBuildInputs = defaultShellUtils;
@@ -246,14 +246,14 @@ let
       outputHashMode = "recursive";
       outputHash =
         if stdenv.hostPlatform.system == "x86_64-linux" then
-          "sha256-yKy6IBIkjvN413kFMgkWCH3jAgF5AdpxrVnQyhgfWPA="
+          "sha256-/1Q437I+Yx/qdTyTFk++GXY0MGE+7nJ0rZkZlMGNo0k="
         else if stdenv.hostPlatform.system == "aarch64-linux" then
-          "sha256-NW/JMVC7k2jBW+d8syMl9L5tDB7SQENJtlMFjAKascI="
+          "sha256-UuQ3GEMby3marlHLxBbvXxU6H2rOyxMCv7OaKwQvz5A="
         else if stdenv.hostPlatform.system == "aarch64-darwin" then
-          "sha256-QVk0Qr86U350oLJ5P50SE6CUYqn5XEqgGCXVf+89wVY="
+          "sha256-WhX7Gdf23bIiudj1/atF5fhePLLAaoJdgFrsGkpYXC0="
         else
           # x86_64-darwin
-          "sha256-VDrqS9YByYxboF6AcjAR0BRZa5ioGgX1pjx09zPfWTE=";
+          "sha256-sF/uPsKOeeEiCpoPfLjCXYoVEscTbZRepUdnWabFt8w=";
       outputHashAlgo = "sha256";
 
     };
@@ -388,12 +388,6 @@ stdenv.mkDerivation rec {
     # override this path to a builtin one
     (replaceVars ./bazel_rc.patch {
       bazelSystemBazelRCPath = bazelRC;
-    })
-
-    # Fix build with gcc 15 by adding missing headers
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel/commit/1d206cac050b6c7d9ce65403e6a9909a49bfe4bc.patch";
-      hash = "sha256-Tg5o1Va7dd5hvXbWhZiog+VtuiqngqbbYOkCafVudDs=";
     })
   ]
   # See enableNixHacks argument above.
@@ -598,6 +592,9 @@ stdenv.mkDerivation rec {
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
+    # need extra env var to workaround
+    # https://github.com/bazelbuild/bazel/issues/27401
+    export BAZEL_DEV_VERSION_OVERRIDE="${version}- (@non-git)"
 
     echo "Stage 1 - Running bazel bootstrap script"
     ${bash}/bin/bash ./bazel_src/compile.sh
