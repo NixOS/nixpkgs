@@ -36,8 +36,8 @@ in
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
 
+      script = lib.getExe cfg.package;
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
         Type = "simple";
         Restart = "on-failure";
         RestartSec = 1;

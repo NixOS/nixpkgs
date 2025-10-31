@@ -383,44 +383,37 @@ in
         cloudlog-upload-lotw = {
           description = "Upload QSOs to LoTW if certs have been provided";
           enable = cfg.upload-lotw.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/lotw/lotw_upload";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/lotw/lotw_upload";
         };
         cloudlog-update-lotw-users = {
           description = "Update LOTW Users Database";
           enable = cfg.update-lotw-users.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/lotw/load_users";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/lotw/load_users";
         };
         cloudlog-update-dok = {
           description = "Update DOK File for autocomplete";
           enable = cfg.update-dok.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_dok";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_dok";
         };
         cloudlog-update-clublog-scp = {
           description = "Update Clublog SCP Database File";
           enable = cfg.update-clublog-scp.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_clublog_scp";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_clublog_scp";
         };
         cloudlog-update-wwff = {
           description = "Update WWFF File for autocomplete";
           enable = cfg.update-wwff.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_wwff";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_wwff";
         };
         cloudlog-upload-qrz = {
           description = "Upload QSOs to QRZ Logbook";
           enable = cfg.upload-qrz.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/qrz/upload";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/qrz/upload";
         };
         cloudlog-update-sota = {
           description = "Update SOTA File for autocomplete";
           enable = cfg.update-sota.enable;
-          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_sota";
-          serviceConfig.Type = "oneshot";
+          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_sota";
         };
       };
       timers = {

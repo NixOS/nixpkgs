@@ -18,6 +18,14 @@ let
   cfg = config.services.miniflux;
 
   boolToInt = b: if b then 1 else 0;
+
+  pgbin = "${config.services.postgresql.package}/bin";
+  # The hstore extension is no longer needed as of v2.2.14
+  # and would prevent Miniflux from starting.
+  preStart = pkgs.writeScript "miniflux-pre-start" ''
+    #!${pkgs.runtimeShell}
+    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
+  '';
 in
 
 {
@@ -133,9 +141,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
-        # The hstore extension is no longer needed as of v2.2.14
-        # and would prevent Miniflux from starting.
-        ExecStart = ''${config.services.postgresql.package}/bin/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"'';
+        ExecStart = preStart;
       };
     };
 

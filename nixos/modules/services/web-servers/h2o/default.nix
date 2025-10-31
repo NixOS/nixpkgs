@@ -443,7 +443,6 @@ in
       ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.all;
 
       serviceConfig = {
-        ExecStartPre = "${h2oExe} --mode 'test'";
         ExecStart = "${h2oExe} --mode 'master'";
         ExecReload = [
           "${h2oExe} --mode 'test'"
@@ -484,6 +483,8 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilitiesBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
+
+      preStart = "${h2oExe} --mode 'test'";
     };
 
     # This service waits for all certificates to be available before reloading
