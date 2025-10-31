@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cpockrandt/genmap";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
