@@ -26,6 +26,8 @@
   quickTest ? false,
   # Don't try to eval packages marked as broken.
   includeBroken ? false,
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
 }:
 
 let
@@ -75,6 +77,7 @@ let
             "$src/ci/eval/attrpaths.nix" \
             -A paths \
             -I "$src" \
+            --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --option eval-system "${evalSystem}" > $out/paths.json
@@ -120,6 +123,7 @@ let
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk" \
