@@ -12,16 +12,20 @@
   pkgsCross,
   gitUpdater,
   enableDecLocator ? true,
+  gnused,
+  gawk,
+  glibc,
+  bashNonInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
   version = "403";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+      "ftp://ftp.invisible-island.net/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-EzGw31kZyyQ//jJtxv8QopHmg6Ji9wzflkpmS+czrYM=";
   };
@@ -48,6 +52,8 @@ stdenv.mkDerivation rec {
     freetype
     xorg.libXft
     xorg.luit
+    # for the sake of `patchShebangs`
+    bashNonInteractive
   ];
 
   configureFlags = [
@@ -87,7 +93,18 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for bin in $out/bin/*; do
-      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+      wrapProgramArgs=(--set XAPPLRESDIR $out/lib/X11/app-defaults/)
+      if [[ $bin =~ (u|koi8r)xterm ]]; then
+        wrapProgramArgs+=(--prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            gnused
+            gawk
+            glibc
+            bashNonInteractive
+          ]
+        })
+      fi
+      wrapProgram $bin "''${wrapProgramArgs[@]}"
     done
 
     install -D -t $out/share/applications xterm.desktop
@@ -115,7 +132,7 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ nequissimus ];
     platforms = with lib.platforms; linux ++ darwin;
-    changelog = "https://invisible-island.net/xterm/xterm.log.html";
+    changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
     mainProgram = "xterm";
   };
-}
+})
