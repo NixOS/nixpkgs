@@ -6,7 +6,9 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   python3,
+  openssl,
 }:
 
 let
@@ -19,17 +21,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.16.1";
-  modelVersion = "0.16.0";
+  version = "0.16.2";
+  modelVersion = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_core";
     tag = finalAttrs.version;
-    hash = "sha256-LCczOvU4NzHXoHp3QN5TzJkr1oSJP+V8JYQHLH0ObWQ=";
+    hash = "sha256-aRy9x6IzFDwL4HjhCW705LpkZ13/SJ25h45XbbXciy0=";
   };
 
-  cargoHash = "sha256-VQSIR120aDxZAlELXP/pJp2P+29aJ/EFjmqn4Unax58=";
+  cargoHash = "sha256-8udiXUZGn3ZT7RvmZd/F5tLsCKi5QLPG3pzv7LFyLvQ=";
 
   postPatch = ''
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
@@ -46,7 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # setting this to anything disables trying to download onnxruntime
   env.ORT_LIB_LOCATION = "dummy";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [ openssl ];
 
   doCheck = false;
 
@@ -60,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
       tag = finalAttrs.modelVersion;
-      hash = "sha256-c8tTiNsXkSnEFYUtL+Q3ApZRasJVSKSBjsdsJ8wpJ+A=";
+      hash = "sha256-OY+xuvNjgmH/bxhL61XJZ3JVOxyec6kifkoGD4eN7HA=";
     };
 
     nativeBuildInputs = [ python3 ];
