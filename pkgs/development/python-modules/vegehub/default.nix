@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "vegehub";
-  version = "0.1.25";
+  version = "0.1.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thulrus";
     repo = "VegeHubPyPiLib";
     tag = "V${version}";
-    hash = "sha256-jdD+vYcnrwPVJhVBVvB7ULcD1KrOudUC2K/agxHLnwY=";
+    hash = "sha256-OrHUT1WchsaoPNFBZn74jpihd8I/R1RB0+KZRKg9Zrs=";
   };
 
   postPatch = ''

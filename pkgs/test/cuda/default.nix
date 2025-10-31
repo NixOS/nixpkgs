@@ -1,17 +1,16 @@
 {
   lib,
   pkgs,
-  recurseIntoAttrs,
 }:
 let
   getTests =
     cps:
-    recurseIntoAttrs {
+    lib.recurseIntoAttrs {
       inherit (cps) saxpy;
       inherit (cps.tests) cuda-library-samples;
     };
 in
-recurseIntoAttrs (
+lib.recurseIntoAttrs (
   lib.mapAttrs (_: getTests) {
     inherit (pkgs)
       cudaPackages

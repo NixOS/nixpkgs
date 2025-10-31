@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mymake";
-  version = "2.3.6";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "fstromback";
     repo = "mymake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UQjvxdOvD9O6TrzBFJwh3CistDGZM9HZbcwVPx1n4+A=";
+    hash = "sha256-FVY6Ep6619W3fMDRYdU/FdnltNUahkY33aVhz8kXEGU=";
   };
 
   buildPhase = ''
