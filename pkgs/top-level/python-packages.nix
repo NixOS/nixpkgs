@@ -4930,6 +4930,8 @@ self: super: with self; {
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
+  exchange-calendars = callPackage ../development/python-modules/exchange-calendars { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   exdown = callPackage ../development/python-modules/exdown { };
@@ -11975,6 +11977,8 @@ self: super: with self; {
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
+
+  pyluach = callPackage ../development/python-modules/pyluach { };
 
   plac = callPackage ../development/python-modules/plac { };
 
