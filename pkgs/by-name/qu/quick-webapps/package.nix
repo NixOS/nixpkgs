@@ -65,7 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/cosmic-utils/web-apps";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    maintainers = with lib.maintainers; [
+      pluiedev
+      HeitorAugustoLN
+    ];
     mainProgram = "dev.heppen.webapps";
   };
 })
