@@ -14152,6 +14152,7 @@ with pkgs;
     configuration:
     let
       c = import (path + "/nixos/lib/eval-config.nix") {
+        inherit lib;
         modules = [
           (
             { lib, ... }:
