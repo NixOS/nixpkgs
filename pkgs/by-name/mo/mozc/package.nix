@@ -46,7 +46,7 @@ buildBazelPackage rec {
   bazel = bazel_7;
 
   fetchAttrs = {
-    hash = "sha256-c+v2vWvTmwJ7MFh3VJlUh+iSINjsX66W9K0UBX5K/1s=";
+    hash = "sha256-hKVBuLBTOE7lROqNGFPVjAftJ05+AH/F+jGBpzuOOtk=";
 
     preInstall = ''
       # Remove zip code data. It will be replaced with jp-zip-codes from nixpkgs
