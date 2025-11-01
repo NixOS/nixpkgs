@@ -333,6 +333,17 @@ let
         Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
       '';
     };
+
+    allowSrcEvalForDrvMeta = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enables evaluation of drv.src or drv.srcs, in order to generate parts of drv.meta. Most of the nixpkgs derivations have a drv.src or drv.srcs which properly evaluate, but there are some corner cases.
+
+        Background: Commonly PURL identifiers are based on the source of software. For example software distributed through github.com can get identified via pkg:github/org/repo.
+        This feature flag should get activated, once an SBOM tool is in use and where drv.meta.identifiers.purl(s) should inherit the informations from drv.src(s).meta.identifiers.purl(s).
+      '';
+    };
   };
 
 in
