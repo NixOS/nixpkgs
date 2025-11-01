@@ -4,6 +4,9 @@ on:
   merge_group:
   workflow_call:
     inputs:
+      artifact-prefix:
+        required: true
+        type: string
       mergedSha:
         required: true
         type: string
@@ -54,7 +57,9 @@ jobs:
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
+      artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
       systems: ${{ needs.prepare.outputs.systems }}
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.

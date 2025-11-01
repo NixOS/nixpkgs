@@ -1,30 +1,30 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
 
   nix-update-script,
-  testers,
-  warp-plus,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+# fails with go 1.25, downgrade to 1.24
+# error tls.ConnectionState: struct field count mismatch: 17 vs 16
+buildGo124Module (finalAttrs: {
   pname = "warp-plus";
-  version = "1.2.6-unstable-2025-08-13";
+  version = "1.2.6-unstable-2025-10-28";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
-    rev = "08d43e9e4c079534e47ba19fb2965c968c9621b2";
-    hash = "sha256-MHz8b1whSzUJO0YogxMPuXMaQRfR+xxSYhFxq412EmE=";
+    rev = "3653f7519d2a08a36222accff6899522bb8b03d0";
+    hash = "sha256-T0YTxQ7iciv5i7lw+bU00B6iYquzBwzYkAlOGZiKeWc=";
   };
 
   vendorHash = "sha256-GmxiQk50iQoH2J/qUVvl9RBz6aIQp8RURqTzrl6NdCY=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   patches = [
@@ -44,19 +44,18 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-    tests.version = testers.testVersion {
-      package = warp-plus;
-      command = "warp-plus version";
-    };
-  };
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
+    changelog = "https://github.com/bepass-org/warp-plus/releases";
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "warp-plus";
   };
-}
+})
