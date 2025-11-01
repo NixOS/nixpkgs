@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacman";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
@@ -101,10 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "/bin/true" "${coreutils}/bin/true"
       substituteInPlace scripts/repo-add.sh.in \
         --replace-fail bsdtar "${libarchive}/bin/bsdtar"
-
-      # Fix https://gitlab.archlinux.org/pacman/pacman/-/issues/171
-      substituteInPlace scripts/libmakepkg/source/git.sh.in \
-        --replace-warn "---mirror" "--mirror"
     '';
 
   mesonFlags = [
