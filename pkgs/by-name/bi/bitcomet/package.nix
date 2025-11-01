@@ -7,16 +7,15 @@
   desktop-file-utils,
   dpkg,
   # webkitgtk_4_0,
-  runScript ? "BitComet",
+  writeShellScript,
+  nix-update,
 }:
 
 let
   pname = "bitcomet";
-  version = "2.15.0";
+  version = "2.17.0";
 
   meta = {
-    # webkitgtk_4_0 was removed
-    broken = true;
     homepage = "https://www.bitcomet.com";
     description = "BitTorrent download client";
     mainProgram = "BitComet";
@@ -46,8 +45,8 @@ let
       fetchurl {
         url = "https://download.bitcomet.com/linux/${arch}/BitComet-${version}-${arch}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-YmcHcrqw4Ue8uyQqYcLWTYS5WYQro3kk7VLY8pfIsRQ=";
-          aarch64-linux = "sha256-Bfg20aKU90Ap8scn4eHtf451uxPfWcnQCrh5gWRQmsU=";
+          x86_64-linux = "sha256-pkCqX+TP05LU2yNZLeMYl3h/xSWJ43tqZbt/dO1G4i8=";
+          aarch64-linux = "sha256-Li5dfdiwxUtjHTU0lyMmw/IZcwOuXKFrkBgn3WuZ2zE=";
         };
       };
 
@@ -71,14 +70,11 @@ let
   };
 in
 buildFHSEnv {
-  inherit
-    pname
-    version
-    runScript
-    meta
-    ;
+  inherit pname version;
 
   executableName = "BitComet";
+
+  runScript = "BitComet";
 
   targetPkgs =
     pkgs:
@@ -95,4 +91,39 @@ buildFHSEnv {
     ln -s ${bitcomet}/share/applications $out/share/applications
     ln -s ${bitcomet}/share/icons $out/share/icons
   '';
+
+  passthru = {
+    inherit bitcomet;
+    updateScript = writeShellScript "update-bitcomet" ''
+      latestVersion=$(curl --fail --silent https://www.cometbbs.com/t/linux%E5%86%85%E6%B5%8B%E7%89%88/88604 | grep -oP 'BitComet-\K[0-9]+\.[0-9]+\.[0-9]+(?=-x86_64\.deb)' | head -n1)
+      ${lib.getExe nix-update} pkgsCross.gnu64.bitcomet.bitcomet --version $latestVersion
+      ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.bitcomet.bitcomet --version skip
+    '';
+    bitcometd = buildFHSEnv {
+      pname = "bitcometd";
+      inherit version;
+
+      executableName = "bitcometd";
+
+      runScript = "bitcometd";
+
+      targetPkgs =
+        pkgs:
+        [
+          bitcomet
+        ]
+        ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs;
+
+      multiPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+
+      meta = meta // {
+        mainProgram = "bitcometd";
+      };
+    };
+  };
+
+  meta = meta // {
+    # webkitgtk_4_0 was removed
+    broken = true;
+  };
 }
