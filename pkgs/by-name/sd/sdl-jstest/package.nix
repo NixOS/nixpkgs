@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "sdl-jstest";
-  version = "2018-06-15";
+  version = "0.2.2-unstable-2025-03-27";
 
   src = fetchFromGitHub {
     owner = "Grumbel";
     repo = "sdl-jstest";
-    rev = "aafbdb1ed3e687583037ba55ae88b1210d6ce98b";
-    hash = "sha256-Mw+ENOVZ0O8WercdDNLAAkNMPZ2NyxSa+nMtgNmXjFw=";
+    rev = "917d27b3b45a335137bd2c8597f8bcf2bac8a569";
+    hash = "sha256-lUHI72fcIEllbcieUrp9A/iKSjUHqmKOUXbzdXCV5jE=";
     fetchSubmodules = true;
   };
 

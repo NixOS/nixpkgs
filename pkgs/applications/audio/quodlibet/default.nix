@@ -34,7 +34,7 @@
   withGstPlugins ? withGstreamerBackend,
   withGstreamerBackend ? true,
   gst_all_1,
-  withXineBackend ? true,
+  withXineBackend ? !withGstreamerBackend,
   xine-lib,
 
   # tests

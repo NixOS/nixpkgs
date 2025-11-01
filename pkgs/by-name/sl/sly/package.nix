@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter335,
   runCommand,
   yq,
   sly,
@@ -9,7 +9,7 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "sly";
   version = "1.0.0";
 
