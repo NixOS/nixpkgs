@@ -60,8 +60,10 @@ jobs:
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-administration: read
           permission-contents: write
           permission-issues: write
+          permission-members: read
           permission-pull-requests: write
 
       - name: Log current API rate limits
