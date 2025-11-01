@@ -1,0 +1,24 @@
+From 6cdc70e9ebf01170a91fb825f878458c37591588 Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Wed, 15 Oct 2025 19:31:57 -0400
+Subject: [PATCH 2/2] cmake 4 fix for dconv
+
+---
+ src/external_libs.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/external_libs.cmake b/src/external_libs.cmake
+index 95f03beb..600053e8 100644
+--- a/src/external_libs.cmake
++++ b/src/external_libs.cmake
+@@ -23,6 +23,7 @@ add_third_party(
+                 <SOURCE_DIR>/double-conversion/string-to-double.cc
+   COMMAND ${SED_REPL} "/std::use_facet</d" <SOURCE_DIR>/double-conversion/string-to-double.cc
+   COMMAND ${SED_REPL} "s/cType.tolower/std::tolower/g" <SOURCE_DIR>/double-conversion/string-to-double.cc
++  CMAKE_PASS_FLAGS "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+   LIB libdouble-conversion.a
+ )
+ 
+-- 
+2.50.1
+

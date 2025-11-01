@@ -1,0 +1,130 @@
+From df35394c47f1f9a6be9cf38a5d51af3ad8b5f74b Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Thu, 16 Oct 2025 09:16:57 -0400
+Subject: [PATCH 1/2] Patch cmake files to not download
+
+---
+ src/external_libs.cmake | 30 +++++++++++++-----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
+
+diff --git a/src/external_libs.cmake b/src/external_libs.cmake
+index 62e6e879..95f03beb 100644
+--- a/src/external_libs.cmake
++++ b/src/external_libs.cmake
+@@ -1,7 +1,6 @@
+ add_third_party(
+   lua
+-  GIT_REPOSITORY https://github.com/dragonflydb/lua
+-  GIT_TAG Dragonfly-5.4.6a
++  DOWNLOAD_COMMAND true
+   CONFIGURE_COMMAND echo
+   BUILD_IN_SOURCE 1
+   BUILD_COMMAND ${DFLY_TOOLS_MAKE} all
+@@ -19,7 +18,7 @@ endif()
+ 
+ add_third_party(
+   dconv
+-  URL https://github.com/google/double-conversion/archive/refs/tags/v3.3.0.tar.gz
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND ${SED_REPL} "/static const std::ctype/d"
+                 <SOURCE_DIR>/double-conversion/string-to-double.cc
+   COMMAND ${SED_REPL} "/std::use_facet</d" <SOURCE_DIR>/double-conversion/string-to-double.cc
+@@ -29,7 +28,7 @@ add_third_party(
+ 
+ add_third_party(
+   reflex
+-  URL https://github.com/Genivia/RE-flex/archive/refs/tags/v5.2.2.tar.gz
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND autoreconf -fi
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --disable-avx2 --prefix=${THIRD_PARTY_LIB_DIR}/reflex
+           CXX=${CMAKE_CXX_COMPILER} CC=${CMAKE_C_COMPILER}
+@@ -41,16 +40,14 @@ set(REFLEX "${THIRD_PARTY_LIB_DIR}/reflex/bin/reflex")
+ 
+ add_third_party(
+   jsoncons
+-  GIT_REPOSITORY https://github.com/dragonflydb/jsoncons
+-  GIT_TAG Dragonfly.178
+-  GIT_SHALLOW 1
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DJSONCONS_BUILD_TESTS=OFF -DJSONCONS_HAS_POLYMORPHIC_ALLOCATOR=ON"
+   LIB "none"
+ )
+ 
+ add_third_party(
+   lz4
+-  URL https://github.com/lz4/lz4/archive/refs/tags/v1.10.0.tar.gz
++  DOWNLOAD_COMMAND true
+ 
+   BUILD_IN_SOURCE 1
+   CONFIGURE_COMMAND echo skip
+@@ -65,7 +62,7 @@ set(MIMALLOC_C_FLAGS "-O3 -g -DMI_STAT=1 -DNDEBUG")
+ file(MAKE_DIRECTORY ${MIMALLOC_INCLUDE_DIR})
+ 
+ ExternalProject_Add(mimalloc2_project
+-  URL https://github.com/microsoft/mimalloc/archive/refs/tags/v2.2.4.tar.gz
++  DOWNLOAD_COMMAND true
+   DOWNLOAD_DIR ${THIRD_PARTY_DIR}/mimalloc2
+   SOURCE_DIR ${THIRD_PARTY_DIR}/mimalloc2
+   # INSTALL_DIR ${MIMALLOC_ROOT_DIR}
+@@ -118,21 +115,21 @@ set_target_properties(TRDP::mimalloc2 PROPERTIES IMPORTED_LOCATION ${MIMALLOC_RO
+ 
+ add_third_party(
+   croncpp
+-  URL https://github.com/mariusbancila/croncpp/archive/refs/tags/v2023.03.30.tar.gz
++  DOWNLOAD_COMMAND true
+   LIB "none"
+ )
+ 
+ if (WITH_SEARCH)
+   add_third_party(
+     uni-algo
+-    URL https://github.com/uni-algo/uni-algo/archive/refs/tags/v1.0.0.tar.gz
++    DOWNLOAD_COMMAND true
+ 
+     CMAKE_PASS_FLAGS "-DCMAKE_CXX_STANDARD:STRING=17"
+   )
+ 
+   add_third_party(
+     hnswlib
+-    URL https://github.com/nmslib/hnswlib/archive/refs/tags/v0.7.0.tar.gz
++    DOWNLOAD_COMMAND true
+ 
+     BUILD_COMMAND echo SKIP
+     INSTALL_COMMAND cp -R <SOURCE_DIR>/hnswlib ${THIRD_PARTY_LIB_DIR}/hnswlib/include/
+@@ -142,21 +139,20 @@ endif()
+ 
+ add_third_party(
+   fast_float
+-  URL https://github.com/fastfloat/fast_float/archive/refs/tags/v5.2.0.tar.gz
++  DOWNLOAD_COMMAND true
+   LIB "none"
+ )
+ 
+ add_third_party(
+   flatbuffers
+-  URL https://github.com/google/flatbuffers/archive/refs/tags/v23.5.26.tar.gz
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DFLATBUFFERS_BUILD_TESTS=OFF -DFLATBUFFERS_LIBCXX_WITH_CLANG=OFF
+                     -DFLATBUFFERS_BUILD_FLATC=OFF"
+ )
+ 
+ add_third_party(
+   hdr_histogram
+-  GIT_REPOSITORY https://github.com/HdrHistogram/HdrHistogram_c/
+-  GIT_TAG 652d51bcc36744fd1a6debfeb1a8a5f58b14022c
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DHDR_LOG_REQUIRED=OFF -DHDR_HISTOGRAM_BUILD_PROGRAMS=OFF
+                     -DHDR_HISTOGRAM_INSTALL_SHARED=OFF"
+   LIB libhdr_histogram_static.a
+@@ -165,7 +161,7 @@ add_third_party(
+ if(USE_SIMSIMD)
+   add_third_party(
+     simsimd
+-    URL https://github.com/ashvardanian/SimSIMD/archive/refs/tags/v6.4.9.tar.gz
++    DOWNLOAD_COMMAND true
+     BUILD_COMMAND echo SKIP
+     INSTALL_COMMAND cp -R <SOURCE_DIR>/include ${THIRD_PARTY_LIB_DIR}/simsimd/
+     LIB "none"
+-- 
+2.50.1
+
