@@ -73,6 +73,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+
+    # Prevent applet from autostarting in COSMIC, which has its own built-in network applet
+    substituteInPlace nm-applet.desktop.in \
+      --replace-fail "NotShowIn=KDE;GNOME;" "NotShowIn=KDE;GNOME;COSMIC;"
   '';
 
   passthru = {

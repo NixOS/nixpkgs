@@ -187,9 +187,7 @@
             };
 
             package = lib.mkPackageOption pkgs "github-runner" { } // {
-              apply =
-                # Support old github-runner versions which don't have the `nodeRuntimes` arg yet.
-                pkg: pkg.override (old: lib.optionalAttrs (old ? nodeRuntimes) { inherit (config) nodeRuntimes; });
+              apply = pkg: pkg.override { inherit (config) nodeRuntimes; };
             };
 
             ephemeral = lib.mkOption {

@@ -111,15 +111,6 @@ final: prev: {
     '';
   };
 
-  keyoxide = prev.keyoxide.override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      pixman
-      cairo
-      pango
-    ];
-  };
-
   makam = prev.makam.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''

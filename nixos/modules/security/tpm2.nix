@@ -39,7 +39,7 @@ let
           ima_log_file = cfg.fapi.imaLogFile;
         }
         // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
-          ek_cert_less = if cfg.fapi.ekCertLess then "yes" else "no";
+          ek_cert_less = lib.boolToYesNo cfg.fapi.ekCertLess;
         }
         // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
       )
@@ -380,7 +380,7 @@ in
       {
         environment.etc."tpm2-tss/fapi-config.json".source = fapiConfig;
         systemd.tmpfiles.rules = [
-          "d ${cfg.fapi.logDir} 2750 tss ${cfg.tssGroup} -"
+          "d ${cfg.fapi.logDir} 2750 ${cfg.tssUser} ${cfg.tssGroup} -"
           "d ${cfg.fapi.systemDir} 2750 root ${cfg.tssGroup} -"
         ];
       }
@@ -388,5 +388,8 @@ in
   );
 
   meta.doc = ./tpm2.md;
-  meta.maintainers = with lib.maintainers; [ lschuermann ];
+  meta.maintainers = with lib.maintainers; [
+    lschuermann
+    scottstephens
+  ];
 }

@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "020d1l1aqb82g36l8lyfn2j8c660mm6sh1nl4haiykwgdl9xnxfa";
   };
 
+  patches = [
+    # Patches from https://github.com/keystone-engine/keystone/pull/593
+    ./gcc15.patch
+    ./cmake-3.10.patch
+  ];
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_INSTALL_LIBDIR=lib"

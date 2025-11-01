@@ -27,6 +27,12 @@
           notifications.smtp.transport.password = "/etc/shadow";
         };
       };
+
+      # licensed under  CC0 1.0: https://github.com/NixOS/nixpkgs/issues/450972#issuecomment-3393545531
+      environment.etc.photos.source = pkgs.fetchzip {
+        url = "https://github.com/user-attachments/files/22865871/IMGP5923.zip";
+        hash = "sha256-ux0IG1qCB1s8GKsZp9R0rvwEZxeXm5FnuS9kYstKVmo=";
+      };
     };
 
   testScript = ''
@@ -56,6 +62,13 @@
     machine.succeed(f"immich login http://localhost:2283/api {key}")
     res = machine.succeed("immich server-info")
     print(res)
+
+    with subtest("Test thumbnail generation from PEF format"):
+      res = machine.succeed("immich upload --json-output /etc/photos/IMGP5923.PEF | tail -n +4")
+      asset_id = json.loads(res)["newAssets"][0]["id"]
+      machine.wait_until_succeeds(f"""
+        curl -fI -X GET -H 'Cookie: immich_access_token={token}' http://localhost:2283/api/assets/{asset_id}/thumbnail
+      """)
 
     machine.succeed("""
       curl -f -X PUT -H 'Cookie: immich_access_token=%s' --json '{ "command": "start" }' http://localhost:2283/api/jobs/backupDatabase

@@ -6,20 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sunsetr";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "psi4j";
     repo = "sunsetr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DbTEHJjYcxzr+ELlN4qgcQpZS/r5P2rcPPnPT8Qkbok=";
+    hash = "sha256-ds5z/Um7NaewS4f5n2xVpr+EFile6Nz6P6sVW+XcnRo=";
   };
 
-  cargoHash = "sha256-jRDa7wSJLXP+jv0lbCiVzgAhdh9eJfq314Gpw0npRos=";
-
-  checkFlags = [
-    "--skip=config::tests::test_geo_toml_exists_before_config_creation"
-  ];
+  cargoHash = "sha256-fbSN52WOIxxISaP90UQ6YGSqPqFqEcUSH88xDkvLGlM=";
 
   passthru.updateScript = nix-update-script { };
 

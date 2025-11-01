@@ -19,7 +19,7 @@ prefetch() {
   echo
 }
 
-for system in "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"; do
+for system in "x86_64-linux" "aarch64-linux" "aarch64-darwin"; do
   echo "${system} = {" >>$outfile
   for python_version in "310" "311" "312" "313"; do
     prefetch "$python_version" "$system"

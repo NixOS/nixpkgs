@@ -15,14 +15,14 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.51";
-      hash = "sha256-7fIOQ7VctDhueoOnZA8/7Dc7gxAl+vKgO/X5Oa4Z8kE=";
+      version = "6.12.56";
+      hash = "sha256-+uMzNrX97n16vuMJU2J4l9gNwge46LQDVrPxSftpvyA=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.16.11";
-      hash = "sha256-EZjH22q8JvlbFpab4rdrA24kf+r9heneiwy5YM4WfYk=";
+      version = "6.17.6";
+      hash = "sha256-SGaM42dN+pl0GAQRDmCR6QB0ET1loqfFwC7kUxTXEjw=";
     };
   };
 
@@ -47,32 +47,52 @@ let
           inherit hash;
         };
 
-        structuredExtraConfig = with lib.kernel; {
-          # CPUFreq governor Performance
-          CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
-          CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
+        structuredExtraConfig =
+          with lib.kernel;
+          {
+            # CPUFreq governor Performance
+            CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
+            CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
 
-          # Full preemption
-          PREEMPT = lib.mkOverride 60 yes;
-          PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
+            # Preemption
+            PREEMPT = lib.mkOverride 60 yes;
+            PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
 
-          # Google's BBRv3 TCP congestion Control
-          TCP_CONG_BBR = yes;
-          DEFAULT_BBR = yes;
+            # Google's BBRv3 TCP congestion Control
+            TCP_CONG_BBR = yes;
+            DEFAULT_BBR = yes;
 
-          # Preemptive Full Tickless Kernel at 250Hz
-          HZ = freeform "250";
-          HZ_250 = yes;
-          HZ_1000 = no;
+            # Preemptive tickless idle kernel
+            HZ = freeform "250";
+            HZ_250 = yes;
+            NO_HZ = no;
+            NO_HZ_FULL = lib.mkOverride 60 no;
+            NO_HZ_IDLE = yes;
 
-          # RCU_BOOST and RCU_EXP_KTHREAD
-          RCU_EXPERT = yes;
-          RCU_FANOUT = freeform "64";
-          RCU_FANOUT_LEAF = freeform "16";
-          RCU_BOOST = yes;
-          RCU_BOOST_DELAY = freeform "0";
-          RCU_EXP_KTHREAD = yes;
-        };
+            # CPU idle governors favored
+            CPU_IDLE_GOV_HALTPOLL = yes; # Already enabled
+            CPU_IDLE_GOV_LADDER = yes;
+            CPU_IDLE_GOV_TEO = yes;
+
+            # RCU_BOOST and RCU_EXP_KTHREAD
+            RCU_EXPERT = yes;
+            RCU_FANOUT = freeform "64";
+            RCU_FANOUT_LEAF = freeform "16";
+            RCU_BOOST = yes;
+            RCU_BOOST_DELAY = freeform "0";
+            RCU_EXP_KTHREAD = yes;
+            RCU_NOCB_CPU = yes;
+            RCU_DOUBLE_CHECK_CB_TIME = yes;
+
+            # x86 features
+            X86_FRED = yes;
+            X86_POSTED_MSI = yes;
+          }
+          // lib.optionalAttrs (lib.versionAtLeast (lib.versions.majorMinor version) "6.13") {
+            # Lazy preemption
+            PREEMPT = lib.mkOverride 70 no;
+            PREEMPT_LAZY = yes;
+          };
 
         extraPassthru.updateScript = {
           command = [

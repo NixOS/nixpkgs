@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.1.4";
+  version = "7.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
-    hash = "sha256-u9hdwxAJIuTQ3zKstbwn88u1opzWXc8otJKbtIl4Li4=";
+    hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
   };
 
   build-system = [ poetry-core ];
@@ -66,6 +66,8 @@ buildPythonPackage rec {
     # requires network access
     "rdflib/__init__.py::rdflib"
     "test/jsonld/test_onedotone.py::test_suite"
+    # https://github.com/RDFLib/rdflib/issues/3274
+    "test/test_sparql/test_translate_algebra.py::test_roundtrip"
   ];
 
   disabledTests = [

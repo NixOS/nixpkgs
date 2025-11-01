@@ -1,6 +1,6 @@
 {
   lib,
-  binutils,
+  binutils-unwrapped,
   bundlerApp,
   bundlerUpdateScript,
   makeWrapper,
@@ -14,7 +14,9 @@ bundlerApp {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/one_gadget --prefix PATH : ${binutils}/bin
+    wrapProgram $out/bin/one_gadget --prefix PATH : ${
+      binutils-unwrapped.override { withAllTargets = true; }
+    }/bin
   '';
 
   passthru.updateScript = bundlerUpdateScript "one_gadget";

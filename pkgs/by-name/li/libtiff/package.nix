@@ -32,7 +32,6 @@
   graphicsmagick,
   gdal,
   openimageio,
-  freeimage,
   testers,
 }:
 
@@ -113,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
         graphicsmagick
         gdal
         openimageio
-        freeimage
         ;
 
       inherit (python3Packages) pillow imread;

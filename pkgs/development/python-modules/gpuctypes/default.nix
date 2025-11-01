@@ -103,7 +103,7 @@ buildPythonPackage rec {
   };
 
   preCheck = lib.optionalString (cudaSupport && !testCudaRuntime) ''
-    addToSearchPath LD_LIBRARY_PATH ${lib.getLib cudaPackages.cuda_cudart}/lib/stubs
+    addToSearchPath LD_LIBRARY_PATH ${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs
   '';
 
   # If neither rocmSupport or cudaSupport is enabled, no tests are selected

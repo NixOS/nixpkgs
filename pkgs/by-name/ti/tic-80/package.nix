@@ -7,6 +7,7 @@
   rake,
   curl,
   fetchFromGitHub,
+  kubazip,
   libGL,
   libGLU,
   libX11,
@@ -20,7 +21,7 @@
 }:
 let
   # git rev-list HEAD --count
-  revision = "3016";
+  revision = "3042";
   year = "2025";
 in
 
@@ -28,18 +29,18 @@ stdenv.mkDerivation {
   pname = "tic-80";
   # use an untagged version until upstream tags a new version. We want
   # 'PREFER_SYSTEM_LIBRARIES', and without it tic-80 won't build
-  version = "1.1-unstable-2025-05-26";
+  version = "1.1-unstable-2025-10-21";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "663d43924abf6fd7620de6bf25c009ce5b30ab83";
-    hash = "sha256-UjBnXxYZ5gfk58sI1qek5fkKpJ7LzOVmrxdjVgONcXc=";
+    rev = "a2c875f7275541e7724199ce8e504fb578b819a6";
     # TIC-80 vendors its dependencies as submodules. For the following dependencies,
     # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
-    # ones as a fill-in: kubazip, wasm, squirrel, pocketpy, argparse, naett,
+    # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
     # sdlgpu, mruby.
     fetchSubmodules = true;
+    hash = "sha256-S/v1WHrvVndW4qHFWRJc3dcQkjw5vCU1/mN0PW9Wfkc=";
   };
 
   # TIC-80 tries to determine the revision part of the version using its Git history.
@@ -90,6 +91,7 @@ stdenv.mkDerivation {
     rake
   ];
   buildInputs = [
+    kubazip
     libGL
     libGLU
     libX11
@@ -99,7 +101,7 @@ stdenv.mkDerivation {
     SDL2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
@@ -117,9 +119,9 @@ stdenv.mkDerivation {
       channel sound and etc.
     '';
     homepage = "https://github.com/nesbox/TIC-80";
-    license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "tic80";
-    maintainers = with maintainers; [ blinry ];
+    maintainers = with lib.maintainers; [ blinry ];
   };
 }

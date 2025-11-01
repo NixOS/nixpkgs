@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stevenblack-blocklist";
-  version = "3.16.23";
+  version = "3.16.26";
 
   src = fetchFromGitHub {
     owner = "StevenBlack";
     repo = "hosts";
     tag = finalAttrs.version;
-    hash = "sha256-xwfozRzPrq8PybpRYVkQ/RXF4AbroLk3FMA32XCnFrk=";
+    hash = "sha256-KQx4CWPfKBJwuBONYSE7AIKa7UBXBvtNVcrOmkPrjkY=";
   };
 
   outputs = [

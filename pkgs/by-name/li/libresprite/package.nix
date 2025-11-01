@@ -7,7 +7,6 @@
   pkg-config,
   ninja,
   gtest,
-
   curl,
   freetype,
   giflib,
@@ -38,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-jXjrA859hR46Cp5qi6Z1C+hLWCUR7yGlASOGlTveeW8=";
   };
-
+  patches = [
+    # From https://github.com/LibreSprite/LibreSprite/pull/565
+    ./cmake4.diff
+  ];
   nativeBuildInputs = [
     cmake
     pkg-config

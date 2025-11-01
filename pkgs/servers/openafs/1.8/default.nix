@@ -154,7 +154,6 @@ stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [
-      maintainers.maggesi
       maintainers.spacefrogg
     ];
   };

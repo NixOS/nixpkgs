@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "openjk";
-  version = "0-unstable-2024-04-07";
+  version = "0-unstable-2025-10-09";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "2815211a87ccb8de1b0ee090d429a63f47e0ac7a";
-    hash = "sha256-F3JF6jFgyMinIZ7dZAJ0ugGrJFianh2b6dX5A4iEnns=";
+    rev = "d1cb662f07dfa4c1999edfb5c1a86fd1c6285372";
+    hash = "sha256-XTGe/V4FnQSQA9fY6MmpECs1f2PPk+yTZkAL93UoH/I=";
   };
 
   dontAddPrefix = true;

@@ -7,6 +7,7 @@
   pandas,
   pyarrow,
   geoarrow-pyarrow,
+  geoarrow-types,
   setuptools-scm,
 }:
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   dependencies = [
     geoarrow-pyarrow
+    geoarrow-types
     pandas
     pyarrow
   ];
@@ -49,5 +51,9 @@ buildPythonPackage rec {
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];
+    # its removal upstream is in question
+    # https://github.com/geoarrow/geoarrow-python/issues/75
+    # please unbreak it if the author decides to release a new version
+    broken = true;
   };
 }

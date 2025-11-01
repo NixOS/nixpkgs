@@ -28,7 +28,6 @@
   luajit_openresty,
   msgpuck,
   openssl,
-  opentracing-cpp,
   pam,
   psol,
   which,
@@ -385,14 +384,14 @@ let
 
     lua = rec {
       name = "lua";
-      version = "0.10.26";
+      version = "0.10.28";
 
       src = fetchFromGitHub {
         name = "lua";
         owner = "openresty";
         repo = "lua-nginx-module";
         rev = "v${version}";
-        hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
+        hash = "sha256-GT1PpJWpEu5EciK4n9ZDz1gIU/ZdC/SAsIdu0niQy8o=";
       };
 
       inputs = [ luajit_openresty ];
@@ -556,30 +555,6 @@ let
         homepage = "https://nginx.org/en/docs/njs/";
         license = with licenses; [ bsd2 ];
         maintainers = with maintainers; [ jvanbruegge ];
-      };
-    };
-
-    opentracing = {
-      name = "opentracing";
-      src =
-        let
-          src' = fetchFromGitHub {
-            name = "opentracing";
-            owner = "opentracing-contrib";
-            repo = "nginx-opentracing";
-            rev = "v0.10.0";
-            sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
-          };
-        in
-        "${src'}/opentracing";
-
-      inputs = [ opentracing-cpp ];
-
-      meta = with lib; {
-        description = "Enable requests served by nginx for distributed tracing via The OpenTracing Project";
-        homepage = "https://github.com/opentracing-contrib/nginx-opentracing";
-        license = with licenses; [ asl20 ];
-        maintainers = [ ];
       };
     };
 
@@ -1115,4 +1090,5 @@ self
   modsecurity-nginx = self.modsecurity;
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
+  opentracing = throw "opentracing-cpp was removed because opentracing as been archived upstream"; # Added 2025-10-19
 }

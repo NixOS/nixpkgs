@@ -5,16 +5,23 @@
 }:
 buildGoModule rec {
   pname = "pmtiles";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
     tag = "v${version}";
-    hash = "sha256-Ti6ljJeC6hqA5edzyUqOShBIbdmrsz4TDnQ44TMJQ8Q=";
+    hash = "sha256-JGsbgBB2T+4SWKQmiSmuMqQ8gw0qhM5c5eFDF/+sndA=";
   };
 
-  vendorHash = "sha256-kfEzpaFMf0W8Ygtl40LBy3AZQSL+9Uo+n2x9OTOavqk=";
+  vendorHash = "sha256-6zsX7rU+D+RUHwXfFZzLQftQ6nSYJhvKIDdsO2vow4A=";
+
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   ldflags = [
     "-s"

@@ -99,13 +99,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "fix-build-poppler-25.06.0.patch";
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/97bd8f29a61e691ceea98ca2444b974cf4256ae0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/40f5b15b7e29908b79c54e81db6f340936102e08.patch";
       hash = "sha256-bYRd/KUh/7qFb7x0EuUgQYA9P8abcTf5XS67gzaAiXA=";
     })
     (fetchpatch {
       name = "fix-build-poppler-25.07.0.patch";
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/ce52c5f96106ae5747171663a46831f21aa52d95.patch";
-      hash = "sha256-3Yj+neSRSSQPeeZkHJ0P6v3Sis/lg9xiygktI6Z+zDY=";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/8ae83ca81bbaebcc0ff0abe82300d56d2c94e6f9.patch";
+      hash = "sha256-s7UMnv1pAiQA/HL5CEdBwCn4v/tsphc0MSnBJAoqolY=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.09.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/f48b429827dca510b41a5671d467e574ef348625.patch";
+      hash = "sha256-9CfmkTGMVHjZiiE3zvi4YOrytcir8a7O2z3PrhjcohI=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.10.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/4dba481fe898c6317696d50b109f5aed8f269c19.patch";
+      hash = "sha256-FFCkMU+Ec2qobG4ru89NPcM9Gxw8ZyFV+6jpW8ZwgE4=";
     })
   ];
 

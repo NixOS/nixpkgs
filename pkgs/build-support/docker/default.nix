@@ -579,10 +579,16 @@ rec {
     {
       name,
       compressor ? "gz",
+      meta ? { },
       ...
     }@args:
     let
-      stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
+      stream = streamLayeredImage (
+        removeAttrs args [
+          "compressor"
+          "meta"
+        ]
+      );
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
@@ -592,6 +598,7 @@ rec {
         inherit stream;
       };
       nativeBuildInputs = compress.nativeInputs;
+      inherit meta;
     } "${stream} | ${compress.compress} > $out"
   );
 
@@ -641,6 +648,8 @@ rec {
       includeNixDB ? false,
       # Deprecated.
       contents ? null,
+      # Meta options to set on the resulting derivation.
+      meta ? { },
     }:
 
     let
@@ -735,6 +744,7 @@ rec {
                 lib.head (
                   lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath))
                 );
+            inherit meta;
           }
           ''
             ${lib.optionalString (tag == null) ''
@@ -1008,6 +1018,7 @@ rec {
       includeStorePaths ? true,
       includeNixDB ? false,
       passthru ? { },
+      meta ? { },
       # Pipeline used to produce docker layers. If not set, popularity contest
       # algorithm is used. If set, maxLayers is ignored as the author of the
       # pipeline can use one of the available functions (like "limit_layers")
@@ -1233,6 +1244,7 @@ rec {
               isExe = true;
             };
             nativeBuildInputs = [ makeWrapper ];
+            inherit meta;
           }
           ''
             makeWrapper $streamScript $out --add-flags $conf
@@ -1241,7 +1253,8 @@ rec {
     result
   );
 
-  # This function streams a docker image that behaves like a nix-shell for a derivation
+  # This function streams a docker image that behaves like a nix-shell for a derivation.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
@@ -1251,6 +1264,9 @@ rec {
       tag ? null,
       uid ? 1000,
       gid ? 1000,
+      # Default to `/build` instead of a non-existent `/homeless-shelter` for backwards compatibility.
+      #
+      # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
       shell ? bashInteractive + "/bin/bash",
       command ? null,
@@ -1357,10 +1373,14 @@ rec {
         binSh
         usrBinEnv
         (fakeNss.override {
-          # Allows programs to look up the build user's home directory
+          # Allows programs to look up the build user's home directory.
+          #
           # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/linux-derivation-builder.cc#L409-L416
-          # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
-          # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
+          #
+          # This slightly differs, however, since we use the passed-in `homeDirectory` instead of `sandboxBuildDir`.
+          # We're doing this because it is arguably a bug in Nix that `sandboxBuildDir` is used here.
+          #
+          # https://github.com/NixOS/nix/issues/6379
           extraPasswdLines = [
             "nixbld:x:${toString uid}:${toString gid}:Build user:${homeDirectory}:/noshell"
           ];
@@ -1373,12 +1393,11 @@ rec {
       fakeRootCommands = ''
         # Effectively a single-user installation of Nix, giving the user full
         # control over the Nix store. Needed for building the derivation this
-        # shell is for, but also in case one wants to use Nix inside the
-        # image
+        # shell is for, but also in case one wants to use Nix inside the image.
         mkdir -p ./nix/{store,var/nix} ./etc/nix
         chown -R ${toString uid}:${toString gid} ./nix ./etc/nix
 
-        # Gives the user control over the build directory
+        # Gives the user control over the build directory.
         mkdir -p .${sandboxBuildDir}
         chown -R ${toString uid}:${toString gid} .${sandboxBuildDir}
       '';
@@ -1403,7 +1422,8 @@ rec {
       config.Env = lib.mapAttrsToList (name: value: "${name}=${value}") envVars;
     };
 
-  # Wrapper around streamNixShellImage to build an image from the result
+  # Wrapper around `streamNixShellImage` to build an image from the result.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage =

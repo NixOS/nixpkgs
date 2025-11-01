@@ -32,6 +32,8 @@ buildPythonPackage rec {
     mercurial
   ];
 
+  pythonRelaxDeps = [ "dulwich" ];
+
   pythonImportsCheck = [ "hggit" ];
 
   meta = with lib; {

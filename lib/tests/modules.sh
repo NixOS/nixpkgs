@@ -806,6 +806,25 @@ checkConfigError 'A definition for option .* is not of type .signed integer.*' c
 checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
 checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
 
+# v2 merge check coherence
+# Tests checkV2MergeCoherence call in modules.nix (mergeDefinitions for lazyAttrsOf)
+checkConfigError 'ad-hoc.*override.*incompatible' config.adhocFail.foo ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in modules.nix (mergeDefinitions for lazyAttrsOf)
+checkConfigError 'ad-hoc.*override.*incompatible' config.adhocOuterFail.bar ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in types.nix (either t1)
+checkConfigError 'ad-hoc.*override.*incompatible' config.eitherLeftFail ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in types.nix (either t2)
+checkConfigError 'ad-hoc.*override.*incompatible' config.eitherRightFail ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in types.nix (coercedTo coercedType)
+checkConfigError 'ad-hoc.*override.*incompatible' config.coercedFromFail.bar ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in types.nix (coercedTo finalType)
+checkConfigError 'ad-hoc.*override.*incompatible' config.coercedToFail.foo ./v2-check-coherence.nix
+# Tests checkV2MergeCoherence call in types.nix (addCheck elemType)
+checkConfigError 'ad-hoc.*override.*incompatible' config.addCheckNested.foo ./v2-check-coherence.nix
+checkConfigError 'Please use.*lib.types.addCheck.*instead' config.adhocFail.foo ./v2-check-coherence.nix
+checkConfigError 'A definition for option .* is not of type .*' config.addCheckFail.bar.baz ./v2-check-coherence.nix
+checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
+
 
 cat <<EOF
 ====== module tests ======

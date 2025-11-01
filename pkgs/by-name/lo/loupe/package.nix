@@ -15,6 +15,7 @@
   libadwaita,
   libgweather,
   libseccomp,
+  libglycin,
   glycin-loaders,
   gnome,
   common-updater-scripts,
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Dirty approach to add patches after cargoSetupPostUnpackHook
     # We should eventually use a cargo vendor patch hook instead
     pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+      patch -p3 < ${libglycin.passthru.glycinPathsPatch}
     popd
   '';
 

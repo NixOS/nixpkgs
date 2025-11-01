@@ -83,7 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace-fail /usr/ $out/
+      --replace-fail "/usr/" "$out/"
+
+    # Substitute date and time CMake macros. It avoids to the client being banned on some Teeworlds servers.
+    substituteInPlace src/engine/client/client.cpp \
+      --replace-fail "__DATE__" "\"$(date +'%b %e %Y')\"" \
+      --replace-fail "__TIME__" "\"$(date +'%H:%M:%S')\""
   '';
 
   cmakeFlags = [
@@ -98,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.5.2/CMakeLists.txt#L3171
+  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.6.0/CMakeLists.txt#L3179
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

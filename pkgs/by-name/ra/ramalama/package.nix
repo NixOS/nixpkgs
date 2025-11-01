@@ -1,12 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   go-md2man,
 
-  # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
-  # https://github.com/NixOS/nixpkgs/pull/434130
-  llama-cpp,
+  llama-cpp-vulkan,
   podman,
   withPodman ? true,
 
@@ -14,31 +12,37 @@
   ramalama,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.3";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-PnuAPQ9RF7IRnmHtUrwDRXIKEzZBDEU2mWfG5FyfY0c=";
+    hash = "sha256-S4TZN+vExZ/5KJOgkhwlX0p+xPDI6tjmS2WDWgXzDOI=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     argcomplete
     pyyaml
+    jsonschema
+    jinja2
   ];
 
   nativeBuildInputs = [
     go-md2man
   ];
+
+  postPatch = ''
+    substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+  '';
 
   preBuild = ''
     make docs
@@ -49,11 +53,11 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath (
           [
-            llama-cpp
+            llama-cpp-vulkan
             podman
           ]
           ++ (
-            with python3.pkgs;
+            with python3Packages;
             [
               huggingface-hub
             ]
@@ -68,13 +72,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+    python3Packages.pytestCheckHook
+    podman
   ];
 
-  # Enable when https://github.com/containers/ramalama/pull/1891 is released
-  disabledTests = [
-    "test_ollama_model_pull"
-  ];
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   passthru = {
     tests = {

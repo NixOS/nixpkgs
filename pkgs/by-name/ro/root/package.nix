@@ -135,6 +135,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-D7LZWJnGF9DtKcM8EF3KILU81cqTcZolW+HMe3fmXTw=";
       revert = true;
     })
+    # Will also be integrated to ROOT 6.38.00
+    ./Build-rootcint-and-genreflex-as-separate-targets.patch
   ];
 
   preConfigure = ''

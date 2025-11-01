@@ -3,7 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
-  buildLlvmTools,
+  buildLlvmPackages,
   monorepoSrc ? null,
   src ? null,
   runCommand,
@@ -59,12 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
   ++ devExtraCmakeFlags;
-
-  # TODO: Remove on `staging`.
-  postPatch = "";
 
   # Musl's default stack size is too small for lld to be able to link Firefox.
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";

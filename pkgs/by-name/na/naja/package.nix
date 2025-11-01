@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "naja";
-  version = "0.2.2";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "najaeda";
     repo = "naja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cm9MwN60R/K2bL4FWpvusFmb2ENYEYg8NcMVgmeTj0c=";
+    hash = "sha256-NqxgFAD/JHh1rgtuv/NTda5oEx79NgdafL3fDLJO2kU=";
     fetchSubmodules = true;
   };
 
@@ -39,11 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/CMakeLists.txt \
       --replace-fail 'DESTINATION cmake' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}/cmake'
 
-    # Fix install location for bne library & headers
-    # Remove when https://github.com/najaeda/naja/pull/278 merged & in release
-    substituteInPlace src/bne/CMakeLists.txt \
-      --replace-fail 'LIBRARY DESTINATION lib' 'LIBRARY DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-      --replace-fail 'PUBLIC_HEADER DESTINATION include' 'PUBLIC_HEADER DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}'
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.21)" \
+      "cmake_minimum_required(VERSION 4.0)"
   ''
   # disable building tests for cross build
   + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -56,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     patchShebangs --build test/test_utils/diff_files.py
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-character-conversion"
+    ]
+  );
 
   strictDeps = true;
 

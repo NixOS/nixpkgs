@@ -85,6 +85,9 @@ in
 {
 
   options.testing = {
+    backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
+      default = true;
+    };
 
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
@@ -107,12 +110,14 @@ in
       }
     ];
 
-    systemd.services.backdoor = lib.mkMerge [
-      backdoorService
-      {
-        wantedBy = [ "multi-user.target" ];
-      }
-    ];
+    systemd.services.backdoor = lib.mkIf cfg.backdoor (
+      lib.mkMerge [
+        backdoorService
+        {
+          wantedBy = [ "multi-user.target" ];
+        }
+      ]
+    );
 
     boot.initrd.systemd = lib.mkMerge [
       {

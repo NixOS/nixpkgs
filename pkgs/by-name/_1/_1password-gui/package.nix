@@ -33,9 +33,9 @@ let
     maintainers = with lib.maintainers; [
       khaneliman
       timstott
-      savannidgerinel
       sebtm
       bdd
+      iedame
     ];
     platforms = [
       "x86_64-linux"

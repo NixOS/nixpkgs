@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   cmake,
   pkg-config,
   ninja,
@@ -27,6 +28,7 @@
   rustc-demangle,
   elfutils,
   perf,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://qt/official_releases/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/qt-creator-opensource-src-${finalAttrs.version}.tar.xz";
     hash = "sha256-sOEY+fuJvnF2KLP5JRwpX6bfQfqLfYEhbi6tg1XlWhM=";
   };
+
+  patches = [
+    # QmlDesigner: Compile fixes for Qt 6.10 private API changes
+    (fetchpatch {
+      url = "https://github.com/qt-creator/qt-creator/commit/5a4c700ccefc76c7c531c834734e6fefa14b5364.patch";
+      hash = "sha256-BnS0HOqP5b7ZsVtuRpCK+TtoJj0yhodDuVtp+C3btIA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -103,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
   '';
+
+  passthru = {
+    withPackages = callPackage ./with-plugins.nix { };
+  };
 
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";

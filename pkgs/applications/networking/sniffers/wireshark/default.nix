@@ -25,6 +25,7 @@
   libpcap,
   libsmi,
   libssh,
+  libxml2,
   lua5_4,
   lz4,
   makeWrapper,
@@ -56,7 +57,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.9";
+  version = "4.6.0";
 
   outputs = [
     "out"
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-0+uPXSNabsYNGn+4753WNoUBe9lJ2EH3i3J36lqI4Ak=";
+    hash = "sha256-XkHcVN3xCYwnS69nJ4/AT76Iaggt1GXA6JWi+IG15IM=";
   };
 
   patches = [
@@ -111,6 +112,7 @@ stdenv.mkDerivation rec {
     libpcap
     libsmi
     libssh
+    libxml2
     lua5_4
     lz4
     minizip

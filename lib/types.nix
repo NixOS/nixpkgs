@@ -106,6 +106,29 @@ let
     in
     if invalidDefs != [ ] then { message = "Definition values: ${showDefs invalidDefs}"; } else null;
 
+  # Check that a type with v2 merge has a coherent check attribute.
+  # Throws an error if the type uses an ad-hoc `type // { check }` override.
+  # Returns the last argument like `seq`, allowing usage: checkV2MergeCoherence loc type expr
+  checkV2MergeCoherence =
+    loc: type: result:
+    if type.check.isV2MergeCoherent or false then
+      result
+    else
+      throw ''
+        The option `${showOption loc}' has a type `${type.description}' that uses
+        an ad-hoc `type // { check = ...; }' override, which is incompatible with
+        the v2 merge mechanism.
+
+        Please use `lib.types.addCheck` instead of `type // { check }' to add
+        custom validation. For example:
+
+          lib.types.addCheck baseType (value: /* your check */)
+
+        instead of:
+
+          baseType // { check = value: /* your check */; }
+      '';
+
   outer_types = rec {
     isType = type: x: (x._type or "") == type;
 
@@ -559,11 +582,7 @@ let
         sep:
         mkOptionType rec {
           name = "separatedString";
-          description =
-            if sep == "" then
-              "Concatenated string" # for types.string.
-            else
-              "strings concatenated with ${builtins.toJSON sep}";
+          description = "strings concatenated with ${builtins.toJSON sep}";
           descriptionClass = "noun";
           check = isString;
           merge = loc: defs: concatStringsSep sep (getValues defs);
@@ -577,19 +596,6 @@ let
       lines = separatedString "\n";
       commas = separatedString ",";
       envVar = separatedString ":";
-
-      # Deprecated; should not be used because it quietly concatenates
-      # strings, which is usually not what you want.
-      # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
-      string =
-        lib.warn
-          "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
-          (
-            separatedString ""
-            // {
-              name = "string";
-            }
-          );
 
       passwdEntry =
         entryType:
@@ -711,7 +717,10 @@ let
             optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
           }";
           descriptionClass = "composite";
-          check = isList;
+          check = {
+            __functor = _self: isList;
+            isV2MergeCoherent = true;
+          };
           merge = {
             __functor =
               self: loc: defs:
@@ -824,7 +833,10 @@ let
             (if lazy then "lazy attribute set" else "attribute set")
             + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
           descriptionClass = "composite";
-          check = isAttrs;
+          check = {
+            __functor = _self: isAttrs;
+            isV2MergeCoherent = true;
+          };
           merge = {
             __functor =
               self: loc: defs:
@@ -1236,7 +1248,10 @@ let
 
           name = "submodule";
 
-          check = x: isAttrs x || isFunction x || path.check x;
+          check = {
+            __functor = _self: x: isAttrs x || isFunction x || path.check x;
+            isV2MergeCoherent = true;
+          };
         in
         mkOptionType {
           inherit name;
@@ -1420,7 +1435,10 @@ let
                 ) t2
               }";
           descriptionClass = "conjunction";
-          check = x: t1.check x || t2.check x;
+          check = {
+            __functor = _self: x: t1.check x || t2.check x;
+            isV2MergeCoherent = true;
+          };
           merge = {
             __functor =
               self: loc: defs:
@@ -1430,7 +1448,7 @@ let
               let
                 t1CheckedAndMerged =
                   if t1.merge ? v2 then
-                    t1.merge.v2 { inherit loc defs; }
+                    checkV2MergeCoherence loc t1 (t1.merge.v2 { inherit loc defs; })
                   else
                     {
                       value = t1.merge loc defs;
@@ -1439,7 +1457,7 @@ let
                     };
                 t2CheckedAndMerged =
                   if t2.merge ? v2 then
-                    t2.merge.v2 { inherit loc defs; }
+                    checkV2MergeCoherence loc t2 (t2.merge.v2 { inherit loc defs; })
                   else
                     {
                       value = t2.merge loc defs;
@@ -1464,7 +1482,7 @@ let
                         One or more definitions did not pass the type-check of the 'either' type.
                         ${headError.message}
                         If `either`, `oneOf` or similar is used in freeformType, ensure that it is preceded by an 'attrsOf' such as: `freeformType = types.attrsOf (types.either t1 t2)`.
-                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.06.
+                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.05.
                       '' (mergeOneOption loc defs);
                     };
               in
@@ -1509,7 +1527,10 @@ let
           description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
             optionDescriptionPhrase (class: class == "noun") coercedType
           } convertible to it";
-          check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
+          check = {
+            __functor = _self: x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
+            isV2MergeCoherent = true;
+          };
           merge = {
             __functor =
               self: loc: defs:
@@ -1524,10 +1545,16 @@ let
                     // {
                       value =
                         let
-                          merged = coercedType.merge.v2 {
-                            inherit loc;
-                            defs = [ def ];
-                          };
+                          merged =
+                            if coercedType.merge ? v2 then
+                              checkV2MergeCoherence loc coercedType (
+                                coercedType.merge.v2 {
+                                  inherit loc;
+                                  defs = [ def ];
+                                }
+                              )
+                            else
+                              null;
                         in
                         if coercedType.merge ? v2 then
                           if merged.headError == null then coerceFunc def.value else def.value
@@ -1540,10 +1567,12 @@ let
                 );
               in
               if finalType.merge ? v2 then
-                finalType.merge.v2 {
-                  inherit loc;
-                  defs = finalDefs;
-                }
+                checkV2MergeCoherence loc finalType (
+                  finalType.merge.v2 {
+                    inherit loc;
+                    defs = finalDefs;
+                  }
+                )
               else
                 {
                   value = finalType.merge loc finalDefs;
@@ -1576,7 +1605,10 @@ let
         if elemType.merge ? v2 then
           elemType
           // {
-            check = x: elemType.check x && check x;
+            check = {
+              __functor = _self: x: elemType.check x && check x;
+              isV2MergeCoherent = true;
+            };
             merge = {
               __functor =
                 self: loc: defs:
@@ -1584,7 +1616,7 @@ let
               v2 =
                 { loc, defs }:
                 let
-                  orig = elemType.merge.v2 { inherit loc defs; };
+                  orig = checkV2MergeCoherence loc elemType (elemType.merge.v2 { inherit loc defs; });
                   headError' = if orig.headError != null then orig.headError else checkDefsForError check loc defs;
                 in
                 orig

@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "0.209.1";
+  version = "0.209.6";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-cIUc7+mQy9Q+monXOXO6tBmwwAjF+HLgbfo3VnJT9Dk=";
+    hash = "sha256-WTfLnd2w9maCrCVHkJUZrry4LloiimNWZxRYVgHRyT8=";
   };
 
-  vendorHash = "sha256-Is6hv2nkTQhugSj+CqcTiwAPvIBtNNAvWZLLWm0jU/8=";
+  vendorHash = "sha256-SVdoeioBtUa+V2n717ckYCQBFmYSXdi7ryRVfb9xKnY=";
 
   commonMeta = with lib; {
     license = licenses.mit;
@@ -52,7 +52,7 @@ buildGo125Module rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-0pjYFgF4PqWibIQvklZx116V+uDg+MIC7hmQxlCKSvc=";
+    hash = "sha256-MiIRAceqdBAtrpityS9oPTbztffDpGcO0QclpFNYJLs=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,6 @@ buildGo125Module rec {
 
   ldflags = [
     "-X github.com/evcc-io/evcc/util.Version=${version}"
-    "-X github.com/evcc-io/evcc/util.Commit=${src.tag}"
     "-s"
     "-w"
   ];

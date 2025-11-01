@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mountain-duck";
-  version = "5.0.2.28022";
+  version = "5.0.4.28064";
 
   src = fetchurl {
     url = "https://dist.mountainduck.io/Mountain%20Duck-${finalAttrs.version}.zip";
-    sha256 = "sha256-QismxRiDN6AfzaR8/WZq4O9Wj7knMXhGtIWjkhg/rAQ=";
+    sha256 = "sha256-f69DBNj15dxkNxmFtoxA3d/bSpagpOX7l84fE4a/VWw=";
   };
   dontUnpack = true;
 

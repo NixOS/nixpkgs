@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qttools ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/molequeue/MoleQueueConfig.cmake \

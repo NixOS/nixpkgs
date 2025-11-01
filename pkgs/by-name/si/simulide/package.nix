@@ -172,6 +172,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       carloscraveiro
       tomasajt
+      iedame
     ];
     platforms = [
       "x86_64-linux"

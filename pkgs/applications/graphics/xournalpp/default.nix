@@ -84,7 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://xournalpp.github.io/";
     changelog = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [
+      sikmir
+      iedame
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "xournalpp";
   };

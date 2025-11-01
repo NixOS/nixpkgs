@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   lib,
   newScope,
   Agda,
@@ -44,13 +45,14 @@ let
 
       functional-linear-algebra = callPackage ../development/libraries/agda/functional-linear-algebra { };
 
-      generic = callPackage ../development/libraries/agda/generic { };
-
       agdarsec = callPackage ../development/libraries/agda/agdarsec { };
 
       _1lab = callPackage ../development/libraries/agda/1lab { };
 
       generics = callPackage ../development/libraries/agda/generics { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      generic = throw "agdaPackages.generic has been removed because it is unmaintained upstream and has been marked as broken since 2021. Consider using agdaPackages.generics instead."; # Added 2025-10-11
     };
 in
 mkAgdaPackages Agda

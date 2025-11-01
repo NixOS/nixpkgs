@@ -282,7 +282,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = if (stdenv.hostPlatform.isDarwin) then "no" else "yes";
+  env.USE_SONAME = lib.boolToYesNo (!stdenv.hostPlatform.isDarwin);
 
   passthru = {
     tests = {

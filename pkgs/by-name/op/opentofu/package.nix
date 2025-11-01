@@ -86,7 +86,7 @@ let
 
         resource "random_id" "test" {}
       '';
-      opentofu = (pluggable package).withPlugins (p: [ p.random ]);
+      opentofu = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
         # make it fail outside of sandbox
         export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0

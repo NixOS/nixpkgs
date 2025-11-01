@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Download tool for the SiFli family of chips";
     homepage = "https://github.com/OpenSiFli/sftool-gui";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eihqnh ];
+    maintainers = [ ];
     mainProgram = "sftool";
   };
 })

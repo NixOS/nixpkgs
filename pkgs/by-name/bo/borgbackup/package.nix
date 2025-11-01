@@ -4,7 +4,6 @@
   acl,
   e2fsprogs,
   fetchFromGitHub,
-  fetchpatch,
   libb2,
   lz4,
   openssh,
@@ -21,23 +20,15 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = version;
-    hash = "sha256-1RRizsHY6q1ruofTkRZ4sSN4k6Hoo+sG85w2zz+7yL8=";
+    hash = "sha256-KoOulgOkMgnkN3I0Gw9z0YKZvqvPJ0A9sIAxRLOlchU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "allow-msgpack-1.1.1.patch";
-      url = "https://github.com/borgbackup/borg/commit/f6724bfef2515ed5bf66c9a0434655c60a82aae2.patch";
-      hash = "sha256-UfLaAFKEAHvbIR5WDYJY7bz3aiffdwAXJKfzZZU+NT8=";
-    })
-  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits

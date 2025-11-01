@@ -53,252 +53,273 @@ let
 
 in
 
-{
-  # URL to fetch.
-  url ? "",
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-  # Alternatively, a list of URLs specifying alternative download
-  # locations.  They are tried in order.
-  urls ? [ ],
+  excludeDrvArgNames = [
+    # Passed via passthru
+    "url"
 
-  # Additional curl options needed for the download to succeed.
-  # Warning: Each space (no matter the escaping) will start a new argument.
-  # If you wish to pass arguments with spaces, use `curlOptsList`
-  curlOpts ? "",
+    # Hash attributes will be map to the corresponding outputHash*
+    "hash"
+    "sha1"
+    "sha256"
+    "sha512"
+  ];
 
-  # Additional curl options needed for the download to succeed.
-  curlOptsList ? [ ],
+  extendDrvArgs =
+    finalAttrs:
+    {
+      # URL to fetch.
+      url ? "",
 
-  # Name of the file.  If empty, use the basename of `url' (or of the
-  # first element of `urls').
-  name ? "",
+      # Alternatively, a list of URLs specifying alternative download
+      # locations.  They are tried in order.
+      urls ? [ ],
 
-  # for versioned downloads optionally take pname + version.
-  pname ? "",
-  version ? "",
+      # Additional curl options needed for the download to succeed.
+      # Warning: Each space (no matter the escaping) will start a new argument.
+      # If you wish to pass arguments with spaces, use `curlOptsList`
+      curlOpts ? "",
 
-  # SRI hash.
-  hash ? "",
+      # Additional curl options needed for the download to succeed.
+      curlOptsList ? [ ],
 
-  # Legacy ways of specifying the hash.
-  outputHash ? "",
-  outputHashAlgo ? "",
-  sha1 ? "",
-  sha256 ? "",
-  sha512 ? "",
+      # Name of the file when pname + version is unspecified.
+      # Default to the basename of `url' (or of the first element of `urls').
+      name ? null,
 
-  recursiveHash ? false,
+      # for versioned downloads optionally take pname + version.
+      pname ? null,
+      version ? null,
 
-  # Shell code to build a netrc file for BASIC auth
-  netrcPhase ? null,
+      # SRI hash.
+      hash ? "",
 
-  # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
-  # needed for netrcPhase
-  netrcImpureEnvVars ? [ ],
+      # Legacy ways of specifying the hash.
+      outputHash ? "",
+      outputHashAlgo ? "",
+      sha1 ? "",
+      sha256 ? "",
+      sha512 ? "",
 
-  # Shell code executed after the file has been fetched
-  # successfully. This can do things like check or transform the file.
-  postFetch ? "",
+      recursiveHash ? false,
 
-  # Whether to download to a temporary path rather than $out. Useful
-  # in conjunction with postFetch. The location of the temporary file
-  # is communicated to postFetch via $downloadedFile.
-  downloadToTemp ? false,
+      # Shell code to build a netrc file for BASIC auth
+      netrcPhase ? null,
 
-  # If true, set executable bit on downloaded file
-  executable ? false,
+      # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+      # needed for netrcPhase
+      netrcImpureEnvVars ? [ ],
 
-  # If set, don't download the file, but write a list of all possible
-  # URLs (resulting from resolving mirror:// URLs) to $out.
-  showURLs ? false,
+      # Shell code executed after the file has been fetched
+      # successfully. This can do things like check or transform the file.
+      postFetch ? "",
 
-  # Meta information, if any.
-  meta ? { },
+      # Whether to download to a temporary path rather than $out. Useful
+      # in conjunction with postFetch. The location of the temporary file
+      # is communicated to postFetch via $downloadedFile.
+      downloadToTemp ? false,
 
-  # Passthru information, if any.
-  passthru ? { },
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that by default
-  preferLocalBuild ? true,
+      # If true, set executable bit on downloaded file
+      executable ? false,
 
-  # Additional packages needed as part of a fetch
-  nativeBuildInputs ? [ ],
-}@args:
+      # If set, don't download the file, but write a list of all possible
+      # URLs (resulting from resolving mirror:// URLs) to $out.
+      showURLs ? false,
 
-let
-  preRewriteUrls =
-    if urls != [ ] && url == "" then
-      (
-        if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
-      )
-    else if urls == [ ] && url != "" then
-      (
-        if lib.isString url then
-          [ url ]
-        else
-          throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
-      )
-    else
-      throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
+      # Meta information, if any.
+      meta ? { },
 
-  urls_ =
+      # Passthru information, if any.
+      passthru ? { },
+      # Doing the download on a remote machine just duplicates network
+      # traffic, so don't do that by default
+      preferLocalBuild ? true,
+
+      # Additional packages needed as part of a fetch
+      nativeBuildInputs ? [ ],
+    }@args:
+
     let
-      u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
-    in
-    if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
-
-  hash_ =
-    if
-      with lib.lists;
-      length (
-        filter (s: s != "") [
-          hash
-          outputHash
-          sha1
-          sha256
-          sha512
-        ]
-      ) > 1
-    then
-      throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
-    else
-
-    if hash != "" then
-      {
-        outputHashAlgo = null;
-        outputHash = hash;
-      }
-    else if outputHash != "" then
-      if outputHashAlgo != "" then
-        { inherit outputHashAlgo outputHash; }
-      else
-        throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
-    else if sha512 != "" then
-      {
-        outputHashAlgo = "sha512";
-        outputHash = sha512;
-      }
-    else if sha256 != "" then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = sha256;
-      }
-    else if sha1 != "" then
-      {
-        outputHashAlgo = "sha1";
-        outputHash = sha1;
-      }
-    else if cacert != null then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = "";
-      }
-    else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
-
-  resolvedUrl =
-    let
-      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
-      mirrorName = lib.head mirrorSplit;
-      mirrorList =
-        if lib.hasAttr mirrorName mirrors then
-          mirrors."${mirrorName}"
+      preRewriteUrls =
+        if urls != [ ] && url == "" then
+          (
+            if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
+          )
+        else if urls == [ ] && url != "" then
+          (
+            if lib.isString url then
+              [ url ]
+            else
+              throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
+          )
         else
-          throw "unknown mirror:// site ${mirrorName}";
-    in
-    if mirrorSplit == null || mirrorName == null then
-      url
-    else
-      "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
-in
+          throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
 
-assert
-  (lib.isList curlOpts)
-  -> lib.warn ''
-    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${
-      lib.generators.toPretty { multiline = false; } curlOpts
-    }), which is not supported anymore.
-    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
-    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
+      urls_ =
+        let
+          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+        in
+        if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
-stdenvNoCC.mkDerivation (
-  (
-    if (pname != "" && version != "") then
-      { inherit pname version; }
-    else
-      {
-        name =
-          if showURLs then
-            "urls"
-          else if name != "" then
-            name
+      hash_ =
+        if
+          with lib.lists;
+          length (
+            filter (s: s != "") [
+              hash
+              outputHash
+              sha1
+              sha256
+              sha512
+            ]
+          ) > 1
+        then
+          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
+        else
+
+        if hash != "" then
+          {
+            outputHashAlgo = null;
+            outputHash = hash;
+          }
+        else if outputHash != "" then
+          if outputHashAlgo != "" then
+            { inherit outputHashAlgo outputHash; }
           else
-            baseNameOf (toString (builtins.head urls_));
-      }
-  )
-  // {
-    builder = ./builder.sh;
+            throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
+        else if sha512 != "" then
+          {
+            outputHashAlgo = "sha512";
+            outputHash = sha512;
+          }
+        else if sha256 != "" then
+          {
+            outputHashAlgo = "sha256";
+            outputHash = sha256;
+          }
+        else if sha1 != "" then
+          {
+            outputHashAlgo = "sha1";
+            outputHash = sha1;
+          }
+        else if cacert != null then
+          {
+            outputHashAlgo = "sha256";
+            outputHash = "";
+          }
+        else
+          throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
-    nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
+      resolvedUrl =
+        let
+          mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+          mirrorName = lib.head mirrorSplit;
+          mirrorList =
+            if lib.hasAttr mirrorName mirrors then
+              mirrors."${mirrorName}"
+            else
+              throw "unknown mirror:// site ${mirrorName}";
+        in
+        if mirrorSplit == null || mirrorName == null then
+          url
+        else
+          "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
+    in
 
-    urls = urls_;
+    {
+      name =
+        if pname != null && version != null then
+          "${finalAttrs.pname}-${finalAttrs.version}"
+        else if showURLs then
+          "urls"
+        else if name != null then
+          name
+        else
+          baseNameOf (toString (lib.head urls_));
 
-    # If set, prefer the content-addressable mirrors
-    # (http://tarballs.nixos.org) over the original URLs.
-    preferHashedMirrors = false;
+      builder = ./builder.sh;
 
-    # New-style output content requirements.
-    inherit (hash_) outputHashAlgo outputHash;
+      nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
-    # Disable TLS verification only when we know the hash and no credentials are
-    # needed to access the resource
-    SSL_CERT_FILE =
-      if
-        (
-          hash_.outputHash == ""
-          || hash_.outputHash == lib.fakeSha256
-          || hash_.outputHash == lib.fakeSha512
-          || hash_.outputHash == lib.fakeHash
-          || netrcPhase != null
-        )
-      then
-        "${cacert}/etc/ssl/certs/ca-bundle.crt"
-      else
-        "/no-cert-file.crt";
+      urls = urls_;
 
-    outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
+      # If set, prefer the content-addressable mirrors
+      # (http://tarballs.nixos.org) over the original URLs.
+      preferHashedMirrors = false;
 
-    inherit curlOpts;
-    curlOptsList = lib.escapeShellArgs curlOptsList;
-    inherit
-      showURLs
-      mirrorsFile
-      postFetch
-      downloadToTemp
-      executable
-      ;
+      # New-style output content requirements.
+      inherit (hash_) outputHashAlgo outputHash;
 
-    impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+      # Disable TLS verification only when we know the hash and no credentials are
+      # needed to access the resource
+      SSL_CERT_FILE =
+        if
+          (
+            hash_.outputHash == ""
+            || hash_.outputHash == lib.fakeSha256
+            || hash_.outputHash == lib.fakeSha512
+            || hash_.outputHash == lib.fakeHash
+            || netrcPhase != null
+          )
+        then
+          "${cacert}/etc/ssl/certs/ca-bundle.crt"
+        else
+          "/no-cert-file.crt";
 
-    nixpkgsVersion = lib.trivial.release;
+      outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-    inherit preferLocalBuild;
-
-    postHook =
-      if netrcPhase == null then
-        null
-      else
+      curlOpts = lib.warnIf (lib.isList curlOpts) (
+        let
+          url = toString (builtins.head urls_);
+          curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
+          curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
+          curlOptsListElementsRepresentation =
+            lib.concatMapStringsSep " " lib.strings.escapeNixString
+              curlOpts;
+        in
         ''
-          ${netrcPhase}
-          curlOpts="$curlOpts --netrc-file $PWD/netrc"
-        '';
+          fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
+          - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+            curlOpts = ${curlOptsAsStringRepresentation};
+          - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+            curlOptsList = [ ${curlOptsListElementsRepresentation} ];
+        ''
+      ) curlOpts;
 
-    inherit meta;
-    passthru = {
-      inherit url resolvedUrl;
-    }
-    // passthru;
-  }
-)
+      curlOptsList = lib.escapeShellArgs curlOptsList;
+
+      inherit
+        showURLs
+        mirrorsFile
+        postFetch
+        downloadToTemp
+        executable
+        ;
+
+      impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+
+      nixpkgsVersion = lib.trivial.release;
+
+      inherit preferLocalBuild;
+
+      postHook =
+        if netrcPhase == null then
+          null
+        else
+          ''
+            ${netrcPhase}
+            curlOpts="$curlOpts --netrc-file $PWD/netrc"
+          '';
+
+      inherit meta;
+      passthru = {
+        inherit url resolvedUrl;
+      }
+      // passthru;
+    };
+
+  # No ellipsis
+  inheritFunctionArgs = false;
+}

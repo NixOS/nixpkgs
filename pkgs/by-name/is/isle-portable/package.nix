@@ -29,13 +29,13 @@
 stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   name = "isle-portable";
-  version = "0-unstable-2025-09-24";
+  version = "0-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "isledecomp";
     repo = "isle-portable";
-    rev = "d890e3db58a898dbcea9ae801f5346308b4b62ea";
-    hash = "sha256-LRpyO7XoIJuMf6KzCNWBRkRxxUu5+kru0ufYLl0zDcM=";
+    rev = "b06f05ccf908e208bf8d139ac8adee0e6905803d";
+    hash = "sha256-VOfUK2kiTEQdkhO2cVyec3nJ5V3dbqFG0HPr6dOTVMs=";
     fetchSubmodules = true;
   };
 

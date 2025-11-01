@@ -10,6 +10,7 @@
   ninja,
   vala,
   gala,
+  glib,
   gtk3,
   libgee,
   granite,
@@ -54,11 +55,15 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     gala
     granite
-    gtk3
     json-glib
     libgee
     mutter
     wayland
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
   ];
 
   preFixup = ''

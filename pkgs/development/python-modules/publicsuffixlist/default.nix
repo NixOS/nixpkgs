@@ -4,21 +4,18 @@
   fetchPypi,
   pandoc,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "publicsuffixlist";
-  version = "1.0.2.20251009";
+  version = "1.0.2.20251031";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tCiozQ9Gi79f2flWNwuTBKDO7n/eqC/8RwHwUJ8bpBM=";
+    hash = "sha256-pMZj8al1ps6NMzOcBJK5eO3ckNnYX0dFYKQ/3stVmmQ=";
   };
 
   build-system = [ setuptools ];

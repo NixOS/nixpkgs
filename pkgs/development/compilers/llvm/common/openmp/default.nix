@@ -9,7 +9,6 @@
   cmake,
   ninja,
   llvm,
-  targetLlvm,
   lit,
   clang-unwrapped,
   perl,
@@ -46,9 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  # TODO: Remove on `staging`.
-  patchFlags = null;
-
   patches =
     lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
     ++ [
@@ -57,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3.pythonOnBuildForHost
+    python3
     perl
     ninja
     pkg-config
@@ -65,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    llvm
   ]
   ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3

@@ -83,19 +83,17 @@ let
       '';
 
       copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-        empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
           '') cfg.extraFiles
         )}
 
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
           '') cfg.extraEntries
         )}
       '';

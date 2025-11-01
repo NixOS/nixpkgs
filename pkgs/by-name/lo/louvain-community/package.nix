@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Louvain Community Detection Library";
     homepage = "https://github.com/meelgroup/louvain-community";

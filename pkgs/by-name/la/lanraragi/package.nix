@@ -11,22 +11,33 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.41";
+  version = "0.9.50";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     tag = "v.${version}";
-    hash = "sha256-HF2g8rrcV6f6ZTKmveS/yjil/mBxpvRUFyauv5f+qQ8=";
+    hash = "sha256-WwAY74sFPFJNfrTcGfXEZE8svuOxoCXR70SFyHb2Y40=";
   };
 
   patches = [
+    # https://github.com/Difegue/LANraragi/pull/1340
+    # Note: the PR was reverted upstream because it broke on windows
+    ./bail-if-cpanm-fails.patch
+
+    # Skip running `npm ci` and unnecessary build-time checks
     ./install.patch
+
+    # Don't assume that the cwd is $out/share/lanraragi
+    # Put logs and temp files into the cwd by default, instead of into $out/share/lanraragi
     ./fix-paths.patch
-    ./expose-password-hashing.patch # Used by the NixOS module
+
+    # Expose the password hashing logic that can be used by the NixOS module
+    # to set the admin password
+    ./expose-password-hashing.patch
   ];
 
-  npmDepsHash = "sha256-RAjZGuK0C6R22fVFq82GPQoD1HpRs3MYMluUAV5ZEc8=";
+  npmDepsHash = "sha256-+vS/uoEmJJM3G9jwdwQTlhV0VkjAhhVd60x+PcYyWSw=";
 
   nativeBuildInputs = [
     perl
@@ -36,25 +47,27 @@ buildNpmPackage rec {
 
   buildInputs =
     with perl.pkgs;
+    # deps listed in `tools/cpanfile`:
     [
       perl
-      ImageMagick
       locallib
       Redis
       Encode
       ArchiveLibarchiveExtract
       ArchiveLibarchivePeek
+      ArchiveZip
+      # Digest::SHA (part of perl)
       ListMoreUtils
-      NetDNSNative
       SortNaturally
       AuthenPassphrase
       FileReadBackwards
+      # URI::Escape (part of URI)
       URI
-      LogfileRotate
+      # IPC::Cmd (part of perl)
+      # Compress::Zlib (part of perl)
       Mojolicious
       MojoliciousPluginTemplateToolkit
       MojoliciousPluginRenderFile
-      MojoliciousPluginStatus
       IOSocketSocks
       IOSocketSSL
       CpanelJSONXS
@@ -62,26 +75,35 @@ buildNpmPackage rec {
       MinionBackendRedis
       ProcSimple
       ParallelLoops
+      MCE # (has MCE::Loop)
+      MCEShared
       SysCpuAffinity
       FileChangeNotify
       ModulePluggable
       TimeLocal
       YAMLPP
       StringSimilarity
-      CHI
-      CacheFastMmap
+      # Locale::Maketext (part of perl)
       LocaleMaketextLexicon
+      CHI
+      # CHI::Driver::FastMmap (part of CHI)
+      CacheFastMmap
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
+    # deps listed in `tools/install.pm`:
+    ++ [
+      ImageMagick
+      NetDNSNative
+      MojoliciousPluginStatus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      LinuxInotify2
+    ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Check if every perl dependency was installed
-    cpanm --installdeps ./tools --notest
-
     perl ./tools/install.pl install-full
-    rm -r node_modules public/js/vendor/*.map public/css/vendor/*.map
+    rm public/js/vendor/*.map public/css/vendor/*.map
 
     runHook postBuild
   '';
@@ -89,6 +111,8 @@ buildNpmPackage rec {
   doCheck = true;
 
   nativeCheckInputs = with perl.pkgs; [
+    # App::Prove (part of perl)
+    # Test::Harness (part of perl)
     TestMockObject
     TestTrap
     TestDeep
@@ -108,7 +132,7 @@ buildNpmPackage rec {
 
     mkdir -p $out/share/lanraragi
     chmod +x script/launcher.pl
-    cp -r lib public script templates package.json lrr.conf $out/share/lanraragi
+    cp -r lib public script locales templates package.json lrr.conf $out/share/lanraragi
 
     makeWrapper $out/share/lanraragi/script/launcher.pl $out/bin/lanraragi \
       --prefix PERL5LIB : $PERL5LIB \

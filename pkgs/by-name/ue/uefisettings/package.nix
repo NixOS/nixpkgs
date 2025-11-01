@@ -1,24 +1,24 @@
 {
   fetchFromGitHub,
   lib,
+  nix-update-script,
   rustPlatform,
-  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
-  name = "uefisettings";
-  version = "0-unstable-2024-11-28";
+  pname = "uefisettings";
+  version = "0-unstable-2025-07-29";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "f4d12fbdb32d1bc355dd37d5077add0a0a049be4";
-    hash = "sha256-f6CTmnY/BzIP/nfHa3Q4HWd1Ee+b7C767FB/8A4DUUM=";
+    rev = "149bc92970949d44be641ae1e3e942220d7390e7";
+    hash = "sha256-n6RWqNKkfighoGpQkCWB7TEQ0lLo6cwGUBLN7lv3TrA=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
-  cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";
+  cargoHash = "sha256-CQn5esC31hCwEqZYX8OKeyJrwIKuo7x3aAZExBEcdB4=";
 
   checkFlags = [
     # Expects filesystem access to /proc and rootfs

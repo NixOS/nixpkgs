@@ -1353,6 +1353,7 @@ in
         netmask = mkCommaSepListParam [ ] "Address or CIDR subnets";
         server = mkCommaSepListParam [ ] "Address or CIDR subnets";
         subnet = mkCommaSepListParam [ ] "Address or CIDR subnets";
+        p_cscf = mkCommaSepListParam [ ] "Address or CIDR subnets";
         split_include = mkCommaSepListParam [ ] "Address or CIDR subnets";
         split_exclude = mkCommaSepListParam [ ] "Address or CIDR subnets";
       }

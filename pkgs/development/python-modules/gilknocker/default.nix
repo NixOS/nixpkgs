@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "gilknocker";
-  version = "0.4.1.post6";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "gilknocker";
     tag = "v${version}";
-    hash = "sha256-jJOI7hlm6kcqfBbM56y5mKD+lJe0g+qAQpDF7ePM+GM=";
+    hash = "sha256-RFLThZRxAXqF/Yzjpmafn2dVavOGJrM9U258FfLej/I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-cUv0CT8d6Nxjzh/S/hY9jcpeFX/5KvBxSkqOkt4htyU=";
+    hash = "sha256-C3rxqmZMSc6SC8bU5VB61x8Xk/crD3o7Nr1xvzv7uqI=";
   };
 
   nativeBuildInputs =

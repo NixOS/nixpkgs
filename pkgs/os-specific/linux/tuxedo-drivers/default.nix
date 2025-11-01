@@ -8,24 +8,28 @@
   pahole,
   gitUpdater,
   udevCheckHook,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.15.4";
+  version = "4.16.0";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WJeju+czbCw03ALW7yzGAFENCEAvDdKqHvedchd7NVY=";
+    hash = "sha256-NjKhr8wsnoKSFx5kEXVaQ2SQzAX8XG8ENpYKOSMB2yc=";
   };
 
-  patches = [ ./no-cp-etc-usr.patch ];
+  patches = [ ./no-cp-usr.patch ];
 
   postInstall = ''
     echo "Running postInstallhook"
+    substituteInPlace usr/lib/udev/rules.d/* \
+      --replace-quiet "/bin/bash" "${lib.getExe bash}" \
+      --replace-quiet "/bin/sh" "${lib.getExe bash}"
     install -Dm 0644 -t $out/etc/udev/rules.d usr/lib/udev/rules.d/*
   '';
 
@@ -67,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       keksgesicht
       xaverdh
       XBagon
+      wetisobe
     ];
     platforms = lib.platforms.linux;
   };

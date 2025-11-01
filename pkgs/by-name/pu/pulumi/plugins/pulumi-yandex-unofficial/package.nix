@@ -25,7 +25,6 @@ mkPulumiPackage rec {
     maintainers = with maintainers; [
       tie
       veehaitch
-      trundle
     ];
     mainProgram = cmdRes;
   };

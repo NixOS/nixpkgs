@@ -24,6 +24,8 @@ let
   overridableKernel = lib.makeOverridable (
     # The kernel source tarball.
     {
+      pname ? "linux",
+
       src,
 
       # The kernel version.
@@ -65,7 +67,7 @@ let
       # optionally be compressed with gzip or bzip2.
       kernelPatches ? [ ],
       ignoreConfigErrors ?
-        !lib.elem stdenv.hostPlatform.linux-kernel.name [
+        !lib.elem stdenv.hostPlatform.linux-kernel.name or "" [
           "aarch64-multiplatform"
           "pc"
         ],
@@ -78,7 +80,7 @@ let
       isHardened ? false,
 
       # easy overrides to stdenv.hostPlatform.linux-kernel members
-      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules,
+      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true,
       preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false,
       kernelArch ? stdenv.hostPlatform.linuxArch,
       kernelTests ? { },
@@ -96,25 +98,6 @@ let
     # files.
 
     let
-      # Dirty hack to make sure that `version` & `src` have
-      # `<nixpkgs/pkgs/os-specific/linux/kernel/linux-x.y.nix>` as position
-      # when using `builtins.unsafeGetAttrPos`.
-      #
-      # This is to make sure that ofborg actually detects changes in the kernel derivation
-      # and pings all maintainers.
-      #
-      # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
-      basicArgs = removeAttrs args (
-        lib.filter (
-          x:
-          !(builtins.elem x [
-            "version"
-            "pname"
-            "src"
-          ])
-        ) (lib.attrNames args)
-      );
-
       # Combine the `features' attribute sets of all the kernel patches.
       kernelFeatures = lib.foldr (x: y: (x.features or { }) // y) (
         {
@@ -205,10 +188,9 @@ let
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-        platformName = stdenv.hostPlatform.linux-kernel.name;
         # e.g. "defconfig"
         kernelBaseConfig =
-          if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+          if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
 
         makeFlags = import ./common-flags.nix {
           inherit
@@ -299,26 +281,25 @@ let
         };
       }; # end of configfile derivation
 
-      kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (
-        basicArgs
-        // {
-          inherit
-            kernelPatches
-            randstructSeed
-            extraMakeFlags
-            extraMeta
-            configfile
-            modDirVersion
-            ;
-          pos = builtins.unsafeGetAttrPos "version" args;
+      kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) {
+        inherit
+          pname
+          version
+          src
+          kernelPatches
+          randstructSeed
+          extraMakeFlags
+          extraMeta
+          configfile
+          modDirVersion
+          ;
 
-          config = {
-            CONFIG_MODULES = "y";
-            CONFIG_FW_LOADER = "y";
-            CONFIG_RUST = if withRust then "y" else "n";
-          };
-        }
-      );
+        config = {
+          CONFIG_MODULES = "y";
+          CONFIG_FW_LOADER = "y";
+          CONFIG_RUST = if withRust then "y" else "n";
+        };
+      };
 
     in
     kernel.overrideAttrs (
@@ -327,7 +308,6 @@ let
         passthru =
           previousAttrs.passthru or { }
           // extraPassthru
-          // basicArgs
           // {
             features = kernelFeatures;
             inherit

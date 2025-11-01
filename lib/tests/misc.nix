@@ -3106,6 +3106,86 @@ runTests {
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
+  };
+
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
     name = "..foo";
     expected = "foo";
@@ -4659,6 +4739,84 @@ runTests {
   testFilesystemResolveDefaultNixNonExistentDir = {
     expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
+  # Tests for cross index utilities
+
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
+      pkgsBuildBuild = "dummy-build-build";
+      pkgsBuildHost = "dummy-build-host";
+      pkgsBuildTarget = "dummy-build-target";
+      pkgsHostHost = "dummy-host-host";
+      pkgsHostTarget = "dummy-host-target";
+      pkgsTargetTarget = "dummy-target-target";
+    };
+    expected = {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+  };
+
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+    expected = {
+      selfBuildBuild = "dummy-build-build";
+      selfBuildHost = "dummy-build-host";
+      selfBuildTarget = "dummy-build-target";
+      selfHostHost = "dummy-host-host";
+      selfHostTarget = "dummy-host-target";
+      selfTargetTarget = "dummy-target-target";
+    };
+  };
+
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
+      buildBuild = 1;
+      buildHost = 2;
+      buildTarget = 3;
+      hostHost = 4;
+      hostTarget = 5;
+      targetTarget = 6;
+    };
+    expected = {
+      buildBuild = 10;
+      buildHost = 20;
+      buildTarget = 30;
+      hostHost = 40;
+      hostTarget = 50;
+      targetTarget = 60;
+    };
+  };
+
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
+      buildBuild = "bb";
+      buildHost = "bh";
+      buildTarget = "bt";
+      hostHost = "hh";
+      hostTarget = "ht";
+      targetTarget = "tt";
+    };
+    expected = {
+      buildBuild = "prefix-bb";
+      buildHost = "prefix-bh";
+      buildTarget = "prefix-bt";
+      hostHost = "prefix-hh";
+      hostTarget = "prefix-ht";
+      targetTarget = "prefix-tt";
+    };
   };
 
 }

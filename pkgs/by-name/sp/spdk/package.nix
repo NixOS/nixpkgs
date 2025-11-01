@@ -10,6 +10,10 @@
   libaio,
   libbsd,
   libuuid,
+  nasm,
+  autoconf,
+  automake,
+  libtool,
   numactl,
   openssl,
   pkg-config,
@@ -76,10 +80,20 @@ stdenv.mkDerivation rec {
     ncurses
     zlib
     zstd
+    nasm
+    autoconf
+    automake
+    libtool
   ];
 
   propagatedBuildInputs = [
     python3.pkgs.configshell-fb
+  ];
+
+  patches = [
+    # Otherwise the DPDK version is not detected correctly
+    # Fix already upstream: https://github.com/spdk/spdk/commit/c3618c42ac3f6fdfcc9c04e29953fd6cf4f71c11
+    ./patches/configure.patch
   ];
 
   postPatch = ''
@@ -88,12 +102,24 @@ stdenv.mkDerivation rec {
     substituteInPlace python/Makefile \
       --replace-fail "setup_cmd = pip install --prefix=\$(CONFIG_PREFIX)" \
                      "setup_cmd = python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
+
+    # The nasm detection in the vendored version of isa-l_crypto is broken
+    # Upstream fix: https://github.com/intel/isa-l_crypto/commit/0850c01cc03e45f77d5883372dd6be983ba163ce
+    substituteInPlace isa-l-crypto/configure.ac \
+      --replace-fail "AC_LANG_CONFTEST([AC_LANG_SOURCE([[vpcompressb zmm0, k1, zmm1;]])])" \
+                     "AC_LANG_CONFTEST([AC_LANG_SOURCE([[vpcompressb zmm0 {k1}, zmm1;]])])"
   '';
 
   enableParallelBuilding = true;
 
+  # Required for the vendored isa-l version to find nasm
+  preConfigure = ''
+    export AS=nasm
+  '';
+
   configureFlags = [
     "--with-dpdk=${dpdk'}"
+    "--with-crypto"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
 
@@ -105,6 +131,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     unset patchelf
+
+    # Clean up rpaths to remove /build references to the vendored isa-l and isa-l_crypto libs
+    for f in $(find $out/lib $out/bin -executable -type f 2>/dev/null); do
+      if patchelf --print-rpath "$f" 2>/dev/null | grep /build; then
+        echo "Stripping rpath of $f"
+        newrp=$(patchelf --print-rpath "$f" | sed -r "s|/build[^:]*:||g")
+        patchelf --set-rpath "$newrp" "$f"
+      fi
+    done
 
     # SPDK scripts assume that they can read the includes also relative to the scripts.
     # Therefore we are not copying them into $out/share.

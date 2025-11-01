@@ -199,16 +199,3 @@ index 6e33142..6185f45 100644
  #ifdef AMIGA
  # include "os_amiga.h"
  #endif
-diff --git a/src/vimtutor b/src/vimtutor
-index 3b154f2..e89f260 100755
---- a/src/vimtutor
-+++ b/src/vimtutor
-@@ -16,7 +16,7 @@ seq="vim vim81 vim80 vim8 vim74 vim73 vim72 vim71 vim70 vim7 vim6 vi"
- if test "$1" = "-g"; then
-     # Try to use the GUI version of Vim if possible, it will fall back
-     # on Vim if Gvim is not installed.
--    seq="gvim gvim81 gvim80 gvim8 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
-+    seq="mvim gvim gvim81 gvim80 gvim8 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
-     shift
- fi
- 

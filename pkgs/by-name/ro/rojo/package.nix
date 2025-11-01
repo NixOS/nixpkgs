@@ -10,17 +10,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";
-  version = "7.5.1";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-awMio62guyP5qZH4i5hwXV5re6o45HDwqIJb3Dd71Is=";
+    hash = "sha256-4i0Oo4M7SP09E+D81Lf7coaEQWgM03PbQ0lB6PwTjr0=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-iWRjXC+JaBA/z2eOHiiqFFtS2gug5/hkIpYrPdHyux0=";
+  cargoHash = "sha256-UkK/QQI98bIty8lT3UrekeAISEAwo/QD8AScRUkIvgE=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

@@ -37,6 +37,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cd sources/pyside2
+    for i in {.,doc}/CMakeLists.txt; do
+      substituteInPlace $i --replace-fail \
+        "cmake_minimum_required(VERSION 3.1)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace $i --replace-fail \
+        "cmake_policy(VERSION 3.1)" \
+        "cmake_policy(VERSION 3.10)"
+    done
   '';
 
   cmakeFlags = [

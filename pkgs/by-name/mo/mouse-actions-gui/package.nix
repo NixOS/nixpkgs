@@ -16,7 +16,6 @@
   udevCheckHook,
   gtk3,
   libsoup_2_4,
-  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     # Tauri deps
     gtk3
     libsoup_2_4
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {
@@ -69,6 +68,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     changelog = "https://github.com/jersou/mouse-actions/blob/${src.rev}/CHANGELOG.md";
     description = "Mouse event based command executor, a mix between Easystroke and Comiz edge commands";
     homepage = "https://github.com/jersou/mouse-actions";

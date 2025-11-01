@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-caffeine";
-  version = "0-unstable-2025-09-29";
+  version = "0-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "tropicbliss";
     repo = "cosmic-ext-applet-caffeine";
-    rev = "a43db670e03894ff402fa19eec3d60f7c7bf663c";
-    hash = "sha256-0hIc62FdjIGU028z8/WCx2q317e+PCA25CSibBVi/p0=";
+    rev = "5eeb6e505eba172fbfee6b9551df8f8a3702213e";
+    hash = "sha256-sTvP62oQknRzuc3qQqUAK70uS2MqXl8lAF27V0To8NM=";
   };
 
-  cargoHash = "sha256-nl/giMIQ5xNSOgjv67OMWkfuAVtdIcqZDbXC1mYwXBM=";
+  cargoHash = "sha256-89/0XEdQ7MCycAkHhTkA5FCj/eKVLgWDhljKB/Lo4+4=";
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Caffeine Applet for the COSMIC desktop";
     homepage = "https://github.com/tropicbliss/cosmic-ext-applet-caffeine";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Only;
     mainProgram = "cosmic-ext-applet-caffeine";
     maintainers = [ lib.maintainers.HeitorAugustoLN ];
     platforms = lib.platforms.linux;

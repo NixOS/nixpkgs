@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -26,7 +27,7 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
@@ -71,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
+      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
+    })
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -98,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls_2
+    mbedtls
     miniupnpc
     minizip-ng
     openal

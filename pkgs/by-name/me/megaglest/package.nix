@@ -144,6 +144,11 @@ stdenv.mkDerivation {
     "-DBUILD_MEGAGLEST_MODEL_VIEWER=On"
   ];
 
+  postPatch = ''
+    substituteInPlace {data/glest_game,.}/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED( VERSION 2.8.2 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i \

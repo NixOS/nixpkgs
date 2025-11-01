@@ -9,24 +9,23 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nelm";
-  version = "1.13.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "nelm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uDCumcUNIMcvqYrV6iDMs4PSxuLodGzR/JyllwT6xn0=";
+    hash = "sha256-PDWx/J6OmF5/daZr5c66CD3uMjS8GL3U1dRwMlXjS5Y=";
   };
 
-  vendorHash = "sha256-XzDIufMdDIaDfXrDutUak5/0nUo11RkD63c+Fpk76Xw=";
+  vendorHash = "sha256-+57gKrXOzlKH5VRdZyKxOyg90aSKowPO9JPHVN92/GA=";
 
   subPackages = [ "cmd/nelm" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/nelm/internal/common.Brand=Nelm"
-    "-X github.com/werf/nelm/internal/common.Version=${finalAttrs.version}"
+    "-X github.com/werf/nelm/pkg/common.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

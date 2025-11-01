@@ -11,12 +11,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.09.1";
+  version = "25.10.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-MwDDnfp21MoQ9hh0+cjUo+sc+u69rx1K9ATbBB6RX78=";
+    hash = "sha256-5OWfWey6pFn+XUv9cvGoXD6ExKKFHL7PMTqqce7C7Q8=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {

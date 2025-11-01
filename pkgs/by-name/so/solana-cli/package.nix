@@ -36,8 +36,8 @@
   ],
 }:
 let
-  version = "2.3.8";
-  hash = "sha256-CqkedeQk66VXG6lQAIVGd7ci0KPltf2Qq69iErBAQGo=";
+  version = "2.3.13";
+  hash = "sha256-RSucqvbshaaby4fALhAQJtZztwsRdA+X7yRnoBxQvsg=";
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  cargoHash = "sha256-J7gyR7K1hauV+VrzoNzRrooLuSkjk8U6A3aFn9O2yFY=";
+  cargoHash = "sha256-yTS++bUu+4wmbXXZkU4eDq4sGNzls1euptJoY6OYZOM=";
 
   strictDeps = true;
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;

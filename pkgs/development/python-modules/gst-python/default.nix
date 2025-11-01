@@ -6,6 +6,9 @@
   fetchpatch,
   meson,
   ninja,
+  # TODO: We can get rid of this once `buildPythonPackage` accepts `finalAttrs`.
+  # See: https://github.com/NixOS/nixpkgs/pull/271387
+  gst-python,
 
   pkg-config,
   python,
@@ -42,13 +45,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # The analytics tests often timeout under load on Darwin (e.g. on Hydra), so remove them
-    substituteInPlace testsuite/meson.build --replace-fail \
-      "['Test analytics', 'test_analytics.py', ['gst-plugins-bad/gst-libs/gst/analytics', 'gst-plugins-base/gst-libs/gst/video']]," \
-      ""
-  '';
-
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
@@ -80,11 +76,24 @@ buildPythonPackage rec {
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
     "-Dpython-exe=${python.pythonOnBuildForHost.interpreter}"
+    # This is needed to prevent the project from looking for `gst-rtsp-server`
+    # from `checkInputs`.
+    #
+    # TODO: This should probably be moved at least partially into the Meson hook.
+    #
+    # NB: We need to use `doInstallCheck` here because `buildPythonPackage`
+    # renames `doCheck` to `doInstallCheck`.
+    (lib.mesonEnable "tests" gst-python.doInstallCheck)
   ];
 
-  # TODO: Meson setup hook does not like buildPythonPackage
-  # https://github.com/NixOS/nixpkgs/issues/47390
-  installCheckPhase = "meson test --print-errorlogs";
+  # Tests are very flaky on Darwin.
+  # See: https://github.com/NixOS/nixpkgs/issues/454955
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
+  # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
+  # See: https://github.com/NixOS/nixpkgs/issues/47390
+  installCheckPhase = "mesonCheckPhase";
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"

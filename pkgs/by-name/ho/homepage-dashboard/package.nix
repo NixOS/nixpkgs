@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ug7cT/HMiOQF6CX6EEFlvgttXFZdRctSTqPAAkun2KU=";
+    hash = "sha256-pbfelNsLHViqw4ef50pSoKbZ70VH6idG+cmH0URNxko=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     fetcherVersion = 1;
-    hash = "sha256-IYmAl4eHR0jVpQJfxQRlOBTIbrrjS+dnJpUsl8ee6y4=";
+    hash = "sha256-pwh0GzziXgDJOYyUK+u6jXgD1uVUzf/Mpx2thaiXLKM=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
       --add-flags "$out/share/homepage/server.js" \
-      --set PATH "${lib.makeBinPath [ unixtools.ping ]}"
+      --prefix PATH : "${lib.makeBinPath [ unixtools.ping ]}"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 

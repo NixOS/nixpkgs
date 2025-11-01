@@ -12,6 +12,7 @@
   brotli,
   tailwindcss_3,
   esbuild,
+  buildPackages,
 }:
 
 let
@@ -158,8 +159,10 @@ beamPackages.mixRelease rec {
     cp --no-preserve=mode -r ${assets} assets
     cp -r ${tracker} tracker
 
+    # Fix cross-compilation with buildPackages
+    # since tailwindcss_3 is not available for RiscV
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    config :tailwind, path: "${lib.getExe buildPackages.tailwindcss_3}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';

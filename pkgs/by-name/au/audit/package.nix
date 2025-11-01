@@ -16,7 +16,9 @@
   gnugrep,
   coreutils,
 
-  enablePython ? !stdenv.hostPlatform.isStatic,
+  enablePython ?
+    !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
 
   # passthru
   nix-update-script,

@@ -6,6 +6,7 @@
   libgcrypt,
   zlib,
   bzip2,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     # rmdir will notify us if anything new is installed to the directories.
     rmdir "$out"/{var{/{lib,log}{/munge,},},etc/munge}
   '';
+
+  passthru.tests.nixos = nixosTests.munge;
 
   meta = with lib; {
     description = ''

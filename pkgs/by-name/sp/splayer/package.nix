@@ -12,14 +12,14 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "splayer";
-  version = "3.0.0-beta.2";
+  version = "3.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${final.version}";
     fetchSubmodules = false;
-    hash = "sha256-q4jMwIILuz9Uci/1m429Y5tHE2rkfxctu9QCA8jrJkk=";
+    hash = "sha256-bfxIIp8Ma52SEhlQirxnqKwG2ivpEOlCZGoQ2rQldYQ=";
   };
 
   pnpm = pnpm_10;
@@ -27,7 +27,7 @@ stdenv.mkDerivation (final: {
   pnpmDeps = final.pnpm.fetchDeps {
     inherit (final) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-lA08+i+SpMB95MAi/N5mxbcBed0FRchroT5e2nwnXuA=";
+    hash = "sha256-tHz4RtXnoFbSXqV84e6FxHLRHeDyR5sCmVPL0vRNIY8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (final: {
 
     npm exec electron-builder -- \
         --dir \
-        --config electron-builder.yml \
+        --config electron-builder.config.ts \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 

@@ -13,7 +13,7 @@
 
   openssl,
   libsoup_2_4,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   gst_all_1,
 }:
 
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
     libsoup_2_4
-    webkitgtk_4_0
+    # webkitgtk_4_0
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
@@ -66,6 +66,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Ultimate Chess Toolkit";
     homepage = "https://github.com/franciscoBSalgueiro/en-croissant/";
     license = lib.licenses.gpl3Only;

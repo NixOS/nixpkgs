@@ -9,11 +9,11 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1760013766-g2b1690";
+  version = "0.0.1761583653-gd8c2df";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
-    hash = "sha256-b3mq95ZFrXpqDSUbBRRbvwem16qSuhfEFhi7zNc13ZY=";
+    hash = "sha256-Q6iBVtSIXoy6r+9/s3GefLq5c9SFRSQoBxUjBlg/wh8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildNpmPackage (finalAttrs: {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-uGjKSa11JGd8/EtJ+3jtCIwVJY6kfYy9cL0CFiwzVkY=";
+  npmDepsHash = "sha256-n8dRIJPTFFhS3aQQKKRdqYcEeHxfpU9XGbeV+2XAVeY=";
 
   propagatedBuildInputs = [
     ripgrep

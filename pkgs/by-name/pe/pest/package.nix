@@ -16,7 +16,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-rOJ6PFp4Xfe89usoH455EAT30d2Tu3zd3+C/6K/kGBw=";
+  vendorHash = "sha256-4CpyerXmfXbwsNsK16V+GY3Rzo4BfavGpOVITD14p8w=";
 
   meta = {
     changelog = "https://github.com/pestphp/pest/releases/tag/v${finalAttrs.version}";

@@ -12,7 +12,7 @@
   release_version,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   fixDarwinDylibNames,
   enableManpages ? false,
   enableClangToolsExtra ? true,
@@ -95,15 +95,16 @@ stdenv.mkDerivation (
       (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
       (lib.cmakeBool "CLANGD_BUILD_XPC" false)
       (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
+      (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/clang-tblgen")
+      (lib.cmakeFeature "CLANG_TIDY_CONFUSABLE_CHARS_GEN" "${buildLlvmPackages.tblgen}/bin/clang-tidy-confusable-chars-gen")
     ]
+    ++ lib.optional (lib.versionAtLeast release_version "20") (
+      lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm"
+    )
     ++ lib.optionals (lib.versionAtLeast release_version "21") [
       (lib.cmakeFeature "CLANG_RESOURCE_DIR" "${placeholder "lib"}/lib/clang/${lib.versions.major release_version}")
-    ]
-    # TODO: Clean up on `staging`.
-    ++ [
-      (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
     ]
     ++ lib.optionals enableManpages [
       (lib.cmakeBool "CLANG_INCLUDE_DOCS" true)
@@ -112,20 +113,10 @@ stdenv.mkDerivation (
       (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
       (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
     ]
-    # TODO: Clean up on `staging`.
-    ++ [
-      # Added in LLVM15:
-      # `clang-tidy-confusable-chars-gen`: https://github.com/llvm/llvm-project/commit/c3574ef739fbfcc59d405985a3a4fa6f4619ecdb
-      # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
-      (lib.cmakeFeature "CLANG_TIDY_CONFUSABLE_CHARS_GEN" "${buildLlvmTools.tblgen}/bin/clang-tidy-confusable-chars-gen")
-    ]
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # clang-pseudo removed in LLVM20: https://github.com/llvm/llvm-project/commit/ed8f78827895050442f544edef2933a60d4a7935
-      (lib.cmakeFeature "CLANG_PSEUDO_GEN" "${buildLlvmTools.tblgen}/bin/clang-pseudo-gen")
+      (lib.cmakeFeature "CLANG_PSEUDO_GEN" "${buildLlvmPackages.tblgen}/bin/clang-pseudo-gen")
     ]
-    ++ lib.optional (lib.versionAtLeast release_version "20") (
-      lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm"
-    )
     ++ devExtraCmakeFlags;
 
     postPatch = ''
@@ -173,20 +164,13 @@ stdenv.mkDerivation (
       patchShebangs $python/bin
 
       mkdir -p $dev/bin
-    ''
-    # TODO(@LunNova): Clean up this rebuild avoidance in staging
-    + lib.optionalString enableClangToolsExtra (
-      if lib.versionOlder release_version "20" then
-        ''
-          cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
-        ''
-      else
-        ''
-          cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen} $dev/bin
-        ''
-    )
-    + lib.optionalString (!enableClangToolsExtra) ''
       cp bin/clang-tblgen $dev/bin
+    ''
+    + lib.optionalString enableClangToolsExtra ''
+      cp bin/clang-tidy-confusable-chars-gen $dev/bin
+    ''
+    + lib.optionalString (enableClangToolsExtra && lib.versionOlder release_version "20") ''
+      cp bin/clang-pseudo-gen $dev/bin
     '';
 
     env =

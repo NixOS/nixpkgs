@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "yamlfmt";
-  version = "0.17.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WSw4WhWNyvkCwRCQYFAKhtkvOSSCrSlX3+i6cMHRtOQ=";
+    hash = "sha256-KMIkll7seKslvb4ErelpKxWg/T2P9FLYKfTyAEWlbWk=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > "$out/.git_head"

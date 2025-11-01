@@ -25,11 +25,36 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "10.0p2";
+    version = "10.1p1";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-ufx6K4JXlGem8vQ+SoHI4d/aYU3bT5slWq/XAgu/B1g=";
+    };
+
+    extraPatches = [
+      # Use ssh-keysign from PATH
+      # ssh-keysign is used for host-based authentication, and is designed to be used
+      # as SUID-root program. OpenSSH defaults to referencing it from libexec, which
+      # cannot be made SUID in Nix.
+      ./ssh-keysign-8.5.patch
+    ];
+    extraMeta = {
+      maintainers = with lib.maintainers; [
+        philiptaron
+        numinit
+      ];
+      teams = [ lib.teams.helsinki-systems ];
+    };
+  };
+
+  openssh_10_2 = common rec {
+    pname = "openssh";
+    version = "10.2p1";
+
+    src = fetchurl {
+      url = urlFor version;
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
     };
 
     extraPatches = [
@@ -50,12 +75,12 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "10.1p1";
+    version = "10.2p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-ufx6K4JXlGem8vQ+SoHI4d/aYU3bT5slWq/XAgu/B1g=";
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
     };
 
     extraPatches =
@@ -93,12 +118,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "10.1p1";
+    version = "10.2p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-ufx6K4JXlGem8vQ+SoHI4d/aYU3bT5slWq/XAgu/B1g=";
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
     };
 
     extraPatches = [

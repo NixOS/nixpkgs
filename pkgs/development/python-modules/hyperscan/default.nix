@@ -23,21 +23,21 @@ let
 in
 buildPythonPackage rec {
   pname = "hyperscan";
-  version = "0.7.25";
+  version = "0.7.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
     tag = "v${version}";
-    hash = "sha256-YFT/SPAI/H6D7paWL/9rMyvY1s7ffE9bDHcQ9TbbA6w=";
+    hash = "sha256-U7MGa3xzNzx0TCeSaO1yaDEgOSFwoSm02yqskmOIMiM=";
   };
 
   env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     pathspec
     ninja
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
     changelog = "https://github.com/darvid/python-hyperscan/blob/${src.tag}/CHANGELOG.md";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

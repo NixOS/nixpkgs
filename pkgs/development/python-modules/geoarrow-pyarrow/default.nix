@@ -9,6 +9,7 @@
   pyarrow-hotfix,
   numpy,
   pandas,
+  geoarrow-types,
   geopandas,
   pyogrio,
   pyproj,
@@ -16,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-pyarrow";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     repo = "geoarrow-python";
     owner = "geoarrow";
     tag = "geoarrow-pyarrow-${version}";
-    hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
+    hash = "sha256-tgeWrVpGIyRqRGk1y9OdS/eYMJjt80sXHt6VCx8RWys=";
   };
 
   sourceRoot = "${src.name}/geoarrow-pyarrow";
@@ -57,6 +58,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    geoarrow-types
     numpy
     pandas
     geopandas

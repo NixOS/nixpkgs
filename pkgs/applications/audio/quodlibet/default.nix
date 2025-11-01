@@ -34,7 +34,7 @@
   withGstPlugins ? withGstreamerBackend,
   withGstreamerBackend ? true,
   gst_all_1,
-  withXineBackend ? true,
+  withXineBackend ? !withGstreamerBackend,
   xine-lib,
 
   # tests
@@ -192,7 +192,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      coroa
       pbogdan
     ];
   };

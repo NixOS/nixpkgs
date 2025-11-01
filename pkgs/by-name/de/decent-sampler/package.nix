@@ -15,7 +15,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.13.10";
+  version = "1.13.12";
   rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
 
   icon = fetchurl {
@@ -28,8 +28,8 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ACdV5vrbMrsBIUbidqizaIk/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
-      hash = "sha256-2LyBldjsD05bMyK/aI+Ivk3f3cErRiM7GJlwOGqT9VQ=";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AHLHYaQpGY3OwhYqQEd06Po/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
+      hash = "sha256-sLaQd1AATr1mY3qhylQMkOfIIygKNwvf7K4mVqkbe8U=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];

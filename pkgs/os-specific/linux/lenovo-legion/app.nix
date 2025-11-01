@@ -4,12 +4,14 @@
   xorg,
   wrapQtAppsHook,
   python3,
+  nix-update-script,
+  qtbase,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.21-unstable-2025-07-11";
-  format = "setuptools";
+  version = "0.0.20-unstable-2025-07-11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
@@ -20,10 +22,14 @@ python3.pkgs.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/python/legion_linux";
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+    wrapQtAppsHook
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pyqt6
+    qtbase
     argcomplete
     pillow
     pyyaml
@@ -52,11 +58,13 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Utility to control Lenovo Legion laptop";
     homepage = "https://github.com/johnfanv2/LenovoLegionLinux";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       ulrikstrid
       logger

@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EkKqDkVK0QpGC/1F5DDHzlD05/JVnMZ6rSLuT2OPoHo=";
+    hash = "sha256-JcKLtREGSNA0IOGM5kqFjAya155KeYV/nqynG4dVv4w=";
   };
 
   patches = [ ./darwin.patch ];
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ek/TbQJfrYXmpAmYeL8uSehsKxh1oDil7ebW4oFr7Cs=";
+      hash = "sha256-DmOxQ+E7bHF5St70YqPbIzMoADS8dtp2nDXvrhcAVw4=";
     };
     updateScript = ./update.sh;
   };

@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "bootspec";
     rev = "v${version}";
-    hash = "sha256-WDEaTxj5iT8tvasd6gnMhRgNoEdDi9Wi4ke8sVtNpt8=";
+    hash = "sha256-FeNBn/HeOanvFSCH9gNBCwlSJx1EhhEdrgX2rbXdZgI=";
   };
 
-  cargoHash = "sha256-ZJKoL1vYfAG1rpCcE1jRm7Yj2dhooJ6iQ91c6EGF83E=";
+  cargoHash = "sha256-vJVOseAvIGNxos180Z5OHgo3u/2iyeOgOetXTJxyZx0=";
 
   passthru.updateScript = nix-update-script { };
 

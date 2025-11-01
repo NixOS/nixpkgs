@@ -320,6 +320,7 @@ let
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
+      NET_CLS_ACT = yes;
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
@@ -487,7 +488,15 @@ let
 
     video =
       let
-        whenHasDevicePrivate = lib.mkIf (!stdenv.hostPlatform.isx86_32);
+        whenHasDevicePrivate = lib.mkIf (
+          with stdenv.hostPlatform;
+          isLoongArch64
+          || isPower64
+          || isS390x
+          || isx86_64
+          || (lib.versionAtLeast version "5.7" && isAarch64)
+          || (lib.versionAtLeast version "6.11" && isRiscV64)
+        );
       in
       {
         # compile in DRM so simpledrm can load before initrd if necessary
@@ -521,9 +530,9 @@ let
         DRM_DP_AUX_CHARDEV = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CHARDEV = whenAtLeast "6.10" yes;
         # amdgpu display core (DC) support
-        DRM_AMD_DC_DCN1_0 = whenOlder "5.6" yes;
-        DRM_AMD_DC_DCN2_0 = whenOlder "5.6" yes;
-        DRM_AMD_DC_DCN2_1 = whenOlder "5.6" yes;
+        DRM_AMD_DC_DCN1_0 = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "5.6" yes);
+        DRM_AMD_DC_DCN2_0 = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "5.6" yes);
+        DRM_AMD_DC_DCN2_1 = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "5.6" yes);
         DRM_AMD_DC_DCN3_0 = lib.mkIf (with stdenv.hostPlatform; isx86) (whenBetween "5.9" "5.11" yes);
         DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
           whenBetween "5.11" "6.4" yes
@@ -550,7 +559,7 @@ let
         DRM_AMD_ISP = whenAtLeast "6.11" yes;
 
         # Enable new firmware (and by extension NVK) for compatible hardware on Nouveau
-        DRM_NOUVEAU_GSP_DEFAULT = whenAtLeast "6.8" yes;
+        DRM_NOUVEAU_GSP_DEFAULT = whenBetween "6.8" "6.18" yes;
 
         # Enable Nouveau shared virtual memory (used by OpenCL)
         DEVICE_PRIVATE = whenHasDevicePrivate yes;
@@ -568,6 +577,11 @@ let
         # Intel GVT-g graphics virtualization supports 64-bit only
         DRM_I915_GVT = yes;
         DRM_I915_GVT_KVMGT = module;
+        # Enable Hyper-V guest stuff
+        HYPERV = lib.mkMerge [
+          (whenOlder "6.18" module)
+          (whenAtLeast "6.18" yes)
+        ];
         # Enable Hyper-V Synthetic DRM Driver
         DRM_HYPERV = whenAtLeast "5.14" module;
         # And disable the legacy framebuffer driver when we have the new one
@@ -683,8 +697,8 @@ let
       EXT2_FS_POSIX_ACL = yes;
       EXT2_FS_SECURITY = yes;
 
-      EXT3_FS_POSIX_ACL = yes;
-      EXT3_FS_SECURITY = yes;
+      EXT3_FS_POSIX_ACL = option yes;
+      EXT3_FS_SECURITY = option yes;
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY = yes;
@@ -709,8 +723,8 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      BCACHEFS_QUOTA = whenBetween "6.7" "6.18" (option yes);
-      BCACHEFS_POSIX_ACL = whenBetween "6.7" "6.18" (option yes);
+      # Provided by external module
+      BCACHEFS_FS = whenBetween "6.7" "6.18" no;
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
@@ -801,7 +815,10 @@ let
 
       SECURITY_DMESG_RESTRICT = yes;
 
-      RANDOM_TRUST_CPU = whenOlder "6.2" yes; # allow RDRAND to seed the RNG
+      RANDOM_TRUST_CPU = lib.mkIf (
+        with stdenv.hostPlatform;
+        isPower64 || isS390 || isx86 || (lib.versionAtLeast version "5.6" && isAarch64)
+      ) (whenOlder "6.2" yes); # allow RDRAND to seed the RNG
       RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
 
       MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
@@ -958,12 +975,6 @@ let
 
       UDMABUF = yes;
 
-      # VirtualBox guest drivers in the kernel conflict with the ones in the
-      # official additions package and prevent the vboxsf module from loading,
-      # so disable them for now.
-      VBOXGUEST = option no;
-      DRM_VBOXVIDEO = option no;
-
       XEN = option yes;
       XEN_DOM0 = option yes;
       PCI_XEN = option yes;
@@ -983,6 +994,11 @@ let
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
+
+      # Enable CDEV and NOIOMMU support for VFIO, which is useful for
+      # passthrough.
+      VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
+      VFIO_NOIOMMU = whenAtLeast "6.6" yes;
     };
 
     media = {
@@ -1020,7 +1036,7 @@ let
       ZRAM_DEF_COMP_ZSTD = whenAtLeast "5.11" yes;
       ZSWAP = option yes;
       ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (lib.mkOptionDefault yes);
-      ZPOOL = yes;
+      ZPOOL = whenOlder "6.18" yes;
       ZSMALLOC = option yes;
     };
 
@@ -1075,7 +1091,11 @@ let
       {
         # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
-        KERNEL_XZ = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
+
+        KERNEL_XZ = lib.mkIf (
+          with stdenv.hostPlatform; (isAarch32 || isMips || isPower || isS390 || isx86) && !useZstd
+        ) yes;
+
         KERNEL_ZSTD = lib.mkIf (
           with stdenv.hostPlatform;
           (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64))
@@ -1085,6 +1105,8 @@ let
         HID_BATTERY_STRENGTH = yes;
         # enabled by default in x86_64 but not arm64, so we do that here
         HIDRAW = yes;
+        # 6.18-rc1 fails to link otherwise, at least on aarch64
+        HID_HAPTIC = whenAtLeast "6.18" yes;
 
         # Enable loading HID fixups as eBPF from userspace
         HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
@@ -1243,7 +1265,15 @@ let
         NVME_TARGET_AUTH = whenAtLeast "6.0" yes;
         NVME_TARGET_TCP_TLS = whenAtLeast "6.7" yes;
 
-        PCI_P2PDMA = lib.mkIf (stdenv.hostPlatform.is64bit) yes;
+        PCI_P2PDMA = lib.mkIf (
+          with stdenv.hostPlatform;
+          isLoongArch64
+          || isPower64
+          || isS390x
+          || isx86_64
+          || (lib.versionAtLeast version "5.7" && isAarch64)
+          || (lib.versionAtLeast version "6.11" && isRiscV64)
+        ) yes;
 
         PSI = yes;
 
@@ -1310,12 +1340,21 @@ let
 
         # Enable AMD's ROCm GPU compute stack
         HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
+        ZONE_DEVICE = lib.mkIf (
+          with stdenv.hostPlatform;
+          isLoongArch64
+          || isPower64
+          || isS390x
+          || isx86_64
+          || (lib.versionAtLeast version "5.7" && isAarch64)
+          || (lib.versionAtLeast version "6.11" && isRiscV64)
+        ) yes;
+
         # required for P2P DMABUF
         DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
         # required for P2P transfers between accelerators
         HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
 
-        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit yes;
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
@@ -1392,7 +1431,15 @@ let
             MEMORY_HOTPLUG = yes;
             MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
             MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
-            MEMORY_HOTREMOVE = yes;
+            MEMORY_HOTREMOVE = lib.mkIf (
+              with stdenv.hostPlatform;
+              isLoongArch64
+              || isPower
+              || isS390
+              || isx86
+              || (lib.versionAtLeast version "5.7" && isAarch64)
+              || (lib.versionAtLeast version "6.11" && isRiscV)
+            ) yes;
             HOTPLUG_CPU = yes;
             MIGRATION = yes;
             SPARSEMEM = yes;
@@ -1411,6 +1458,7 @@ let
             CROS_EC_I2C = module;
             CROS_EC_SPI = module;
             CROS_KBD_LED_BACKLIGHT = module;
+            MFD_CROS_EC = whenOlder "5.10" module;
             TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
           }
       //

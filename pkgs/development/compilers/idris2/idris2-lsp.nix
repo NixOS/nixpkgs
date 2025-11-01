@@ -6,17 +6,18 @@
 }:
 
 let
-  globalLibraries =
+  globalLibrariesPath =
     let
       idrName = "idris2-${idris2Packages.idris2.version}";
-      libSuffix = "lib/${idrName}";
     in
-    [
-      "\\$HOME/.nix-profile/lib/${idrName}"
-      "/run/current-system/sw/lib/${idrName}"
-      "${idris2Packages.idris2}/${idrName}"
-    ];
-  globalLibrariesPath = builtins.concatStringsSep ":" globalLibraries;
+    lib.makeSearchPath idrName (
+      [
+        "\\$HOME/.nix-profile/lib/"
+        "/run/current-system/sw/lib/"
+        "${idris2Packages.idris2}"
+      ]
+      ++ idris2Packages.idris2.prelude
+    );
 
   inherit (idris2Packages) idris2Api;
   lspLib = idris2Packages.buildIdris {

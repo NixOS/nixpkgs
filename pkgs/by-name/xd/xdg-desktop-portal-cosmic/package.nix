@@ -10,24 +10,23 @@
   pipewire,
   gst_all_1,
   cosmic-wallpapers,
-  coreutils,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0-beta.4";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-EkhOa1Tircgyta98Zf4ZaV/tR4zZh4/bU35xjn3xU8c=";
+    hash = "sha256-Ea6V4lob7vKo+cf1GcNlzKqqSjO1bEqzvbRnYKLyshA=";
   };
 
-  cargoHash = "sha256-uJKwwESkzqweM4JunnMIsDE8xhCyjFFZs1GiJAwnbG8=";
+  cargoHash = "sha256-V1tFOZa2f+Z0MMuIoHlbB7BrXfsUhmuhoqOu9fjteEA=";
 
   separateDebugInfo = true;
 
@@ -59,10 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # [2]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/data/v1/all#L3
     substituteInPlace src/screenshot.rs src/widget/screenshot.rs \
       --replace-fail '/usr/share/backgrounds/pop/kate-hazen-COSMIC-desktop-wallpaper.png' '${cosmic-wallpapers}/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg'
-
-    # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
-    substituteInPlace data/org.freedesktop.impl.portal.desktop.cosmic.service \
-      --replace-fail 'Exec=/bin/false' 'Exec=${lib.getExe' coreutils "true"}'
   '';
 
   dontCargoInstall = true;

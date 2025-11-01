@@ -42,8 +42,12 @@ let
     );
 in
 rec {
-  auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };
+  auditbeat7 = beat "auditbeat" {
+    pos = __curPos;
+    meta.description = "Lightweight shipper for audit data";
+  };
   filebeat7 = beat "filebeat" {
+    pos = __curPos;
     meta.description = "Lightweight shipper for logfiles";
     buildInputs = [ systemd ];
     tags = [ "withjournald" ];
@@ -51,8 +55,12 @@ rec {
       patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
     '';
   };
-  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
+  heartbeat7 = beat "heartbeat" {
+    pos = __curPos;
+    meta.description = "Lightweight shipper for uptime monitoring";
+  };
   metricbeat7 = beat "metricbeat" {
+    pos = __curPos;
     meta.description = "Lightweight shipper for metrics";
     passthru.tests = lib.optionalAttrs config.allowUnfree (
       assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
@@ -63,6 +71,7 @@ rec {
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];
+    pos = __curPos;
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
       Packetbeat is an open source network packet analyzer that ships the

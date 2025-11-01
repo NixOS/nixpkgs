@@ -228,6 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "system_dbus_proxy" (lib.getExe xdg-dbus-proxy))
     (lib.mesonOption "system_fusermount" "/run/wrappers/bin/fusermount3")
     (lib.mesonOption "system_install_dir" "/var/lib/flatpak")
+    (lib.mesonOption "sysconfdir" "/etc")
   ];
 
   nativeCheckInputs = [

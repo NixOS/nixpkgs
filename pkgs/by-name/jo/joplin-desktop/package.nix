@@ -19,6 +19,7 @@
   callPackage,
   runCommand,
   libGL,
+  clang_20,
 }:
 
 let
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     buildPackages.cctools
+    clang_20 # clang_21 breaks keytar, sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems

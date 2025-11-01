@@ -395,6 +395,17 @@ in
     ];
   };
 
+  ubootNanoPiR5S = buildUBoot {
+    defconfig = "nanopi-r5s-rk3568_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = rkbin.BL31_RK3568;
+    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
+    ];
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];

@@ -17,9 +17,19 @@ python3Packages.buildPythonApplication {
     sha256 = "0r2d1drg2zvwmn3zg0qb32i9mh03r5di9q1yszx23r32rsax9mxh";
   };
 
+  # SafeConfigParser was deprecated in Python 3.12: https://github.com/infertux/zeyple/issues/76
+  postPatch = ''
+    substituteInPlace zeyple/zeyple.py \
+      --replace-fail 'from configparser import SafeConfigParser' 'from configparser import ConfigParser as SafeConfigParser'
+  '';
+
   propagatedBuildInputs = [ python3Packages.gpgme ];
   installPhase = ''
-    install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
+    runHook preInstall
+
+    install -Dm755 zeyple/zeyple.py $out/bin/zeyple
+
+    runHook postInstall
   '';
 
   meta = with lib; {

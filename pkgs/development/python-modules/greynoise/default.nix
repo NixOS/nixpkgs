@@ -17,6 +17,9 @@
   pytestCheckHook,
   mock,
   pythonOlder,
+  # The REPL depends on click-repl, which is incompatible with our version of
+  # click.
+  withRepl ? false,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +36,16 @@ buildPythonPackage rec {
     hash = "sha256-wJDO666HC3EohfR+LbG5F0Cp/eL7q4kXniWhJfc7C3s=";
   };
 
+  patches = lib.optionals (!withRepl) [
+    ./remove-repl.patch
+  ];
+
   build-system = [
     hatchling
+  ];
+
+  pythonRelaxDeps = [
+    "click"
   ];
 
   dependencies = [
@@ -43,12 +54,14 @@ buildPythonPackage rec {
     cachetools
     colorama
     click-default-group
-    click-repl
     dict2xml
     jinja2
     more-itertools
     requests
     six
+  ]
+  ++ lib.optionals withRepl [
+    click-repl
   ];
 
   nativeCheckInputs = [

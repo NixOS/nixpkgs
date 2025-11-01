@@ -23,7 +23,7 @@ in
 
       services.n8n = {
         enable = true;
-        webhookUrl = webhookUrl;
+        environment.WEBHOOK_URL = webhookUrl;
       };
     };
 
@@ -32,5 +32,7 @@ in
     machine.wait_for_console_text("Editor is now accessible via")
     machine.succeed("curl --fail -vvv http://localhost:${toString port}/")
     machine.succeed("grep -qF ${webhookUrl} /etc/systemd/system/n8n.service")
+    machine.succeed("grep -qF 'HOME=/var/lib/n8n' /etc/systemd/system/n8n.service")
+    machine.fail("grep -qF 'GENERIC_TIMEZONE=' /etc/systemd/system/n8n.service")
   '';
 }

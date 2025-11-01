@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   asciidoctor,
   autoreconfHook,
   pkg-config,
@@ -42,6 +43,12 @@ stdenv.mkDerivation rec {
 
     # https://github.com/dns-stats/compactor/pull/91
     ./patches/update-golden-cbor2diag-output.patch
+
+    # https://github.com/dns-stats/compactor/commit/f7deaf89f55a12c586b6662a3a7d04b10a4c7bcb
+    (fetchpatch {
+      url = "https://github.com/dns-stats/compactor/commit/f7deaf89f55a12c586b6662a3a7d04b10a4c7bcb.patch";
+      hash = "sha256-eEaVS5rfrLkRGc668PwVfb/xw3n1SoCm30xEf1NjbeY=";
+    })
   ];
 
   nativeBuildInputs = [

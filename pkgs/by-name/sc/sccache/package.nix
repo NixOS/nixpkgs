@@ -8,17 +8,17 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  version = "0.10.0";
+  version = "0.12.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VEDMeRFQKNPS3V6/DhMWxHR7YWsCzAXTzp0lO+COl08=";
+    sha256 = "sha256-QNLcA31SJf7XmxYvzDC5LCKVu5ZWiw7U249KjUAGIZw=";
   };
 
-  cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
+  cargoHash = "sha256-tJGGS6Zpsz9nye2VKdZRuFeeqJ71MsXn3C9ytqeEW5I=";
 
   buildFeatures = lib.optionals distributed [
     "dist-client"

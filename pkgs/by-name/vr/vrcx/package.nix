@@ -11,56 +11,38 @@
   stdenv,
 }:
 let
-  pname = "vrcx";
-  version = "2025.09.10";
-  dotnet = dotnetCorePackages.dotnet_9;
   electron = electron_37;
+  dotnet = dotnetCorePackages.dotnet_9;
+in
+buildNpmPackage (finalAttrs: {
+  pname = "vrcx";
+  version = "2025.10.11";
 
   src = fetchFromGitHub {
-    owner = "vrcx-team";
     repo = "VRCX";
-    rev = "b233bbc299fca9a956db387b83d90a4dbba61175";
-    hash = "sha256-7axYnsImG+VllQE1rhr8NmuMCm5t3bgNYGIIn9j2wMk=";
+    owner = "vrcx-team";
+    rev = "cb6bc979d9371b89b289b6cb0bb8b6f60b350bc7";
+    hash = "sha256-0LnFXSLyby5b2gSIse7Qld4cQlwNAFHSuGGqk6B9TZY=";
   };
 
-  backend = buildDotnetModule {
-    inherit version src;
-    pname = "${pname}-backend";
-
-    dotnet-sdk = dotnet.sdk;
-    dotnet-runtime = dotnet.runtime;
-    projectFile = "Dotnet/VRCX-Electron.csproj";
-
-    nugetDeps = ./deps.json;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/build/Electron
-      cp -r build/Electron/* $out/build/Electron/
-
-      runHook postInstall
-    '';
-  };
-in
-buildNpmPackage {
-  inherit pname version src;
-
-  npmDepsHash = "sha256-VFYWXPhZrg3q2PW4kWfVr5/DY8W6Uf1mvnwfB4mVBrs=";
-  npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
+  npmFlags = [ "--ignore-scripts" ];
+  npmDepsHash = "sha256-giWeXrsiFaZOh5zs7L4L0w3wcnD/F3TyrMM/POfOTvE=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
+  preBuild = ''
+    # Build fails at executing dart from sass-embedded
+    rm -r node_modules/sass-embedded*
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    # need to run vue-demi postinstall for pinia
-    node ./node_modules/vue-demi/scripts/postinstall.js
-    env PLATFORM=linux npm exec webpack -- --config webpack.config.js --mode production
+    env PLATFORM=linux npm exec vite build src
     node ./src-electron/patch-package-version.js
     npm exec electron-builder -- --dir \
       -c.electronDist=${electron.dist} \
@@ -76,7 +58,7 @@ buildNpmPackage {
     mkdir -p "$out/share/vrcx"
     cp -r build/*-unpacked/resources "$out/share/vrcx/"
     mkdir -p "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
-    cp -r ${backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
+    cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
       --add-flags "--ozone-platform-hint=auto"              \
@@ -85,7 +67,7 @@ buildNpmPackage {
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
       --prefix PATH : ${lib.makeBinPath [ dotnet.runtime ]}
 
-    install -Dm644 VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
+    install -Dm644 images/VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
 
     runHook postInstall
   '';
@@ -107,7 +89,25 @@ buildNpmPackage {
   ];
 
   passthru = {
-    inherit backend;
+    backend = buildDotnetModule {
+      pname = "${finalAttrs.pname}-backend";
+      inherit (finalAttrs) version src;
+
+      dotnet-sdk = dotnet.sdk;
+      dotnet-runtime = dotnet.runtime;
+      projectFile = "Dotnet/VRCX-Electron.csproj";
+
+      nugetDeps = ./deps.json;
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/build/Electron
+        cp -r build/Electron/* $out/build/Electron/
+
+        runHook postInstall
+      '';
+    };
   };
 
   meta = {
@@ -126,4 +126,4 @@ buildNpmPackage {
     platforms = lib.platforms.linux;
     broken = !stdenv.hostPlatform.isx86_64;
   };
-}
+})
