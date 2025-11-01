@@ -131,6 +131,9 @@ tests/sources.sh
 # Run the lib.filesystem tests
 tests/filesystem.sh
 
+# Run the lib.warnings tests
+tests/warnings.sh
+
 # Run the lib.path property tests
 path/tests/prop.sh
 

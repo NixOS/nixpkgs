@@ -212,43 +212,4 @@ in
     :::
   */
   optionalDrvAttr = cond: value: if cond then value else null;
-
-  /**
-    Wrap a derivation such that instantiating it produces a warning.
-
-    All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
-    and `.type` which are used by `nix search`, and `.outputName` which avoids
-    double warnings with `nix-instantiate` and `nix-build`.
-
-    # Inputs
-
-    `msg`
-    : The warning message to emit (via `lib.warn`).
-
-    `drv`
-    : The derivation to wrap.
-
-    # Examples
-    :::{.example}
-    ## `lib.derivations.warnOnInstantiate` usage example
-
-    ```nix
-    {
-      myPackage = warnOnInstantiate "myPackage has been renamed to my-package" my-package;
-    }
-    ```
-
-    :::
-  */
-  warnOnInstantiate =
-    msg: drv:
-    let
-      drvToWrap = removeAttrs drv [
-        "meta"
-        "name"
-        "type"
-        "outputName"
-      ];
-    in
-    drv // mapAttrs (_: lib.warn msg) drvToWrap;
 }

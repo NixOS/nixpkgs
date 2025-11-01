@@ -63,6 +63,9 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
     echo "Running lib/tests/network.sh"
     TEST_LIB=$PWD/lib bash lib/tests/network.sh
 
+    echo "Running lib/tests/warnings.sh"
+    TEST_LIB=$PWD/lib bash lib/tests/warnings.sh
+
     echo "Running lib/fileset/tests.sh"
     TEST_LIB=$PWD/lib bash lib/fileset/tests.sh
 
