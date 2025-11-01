@@ -3347,6 +3347,10 @@ self: super: with self; {
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
+  darker = callPackage ../development/python-modules/darker { };
+
+  darkgraylib = callPackage ../development/python-modules/darkgraylib { };
+
   dartsim = toPythonModule (
     pkgs.dartsim.override {
       pythonSupport = true;
