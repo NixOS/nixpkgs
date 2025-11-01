@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "web-apps";
-    rev = "2.0.1";
+    tag = version;
     hash = "sha256-vWEa6mSK8lhqHRU/Zgi2HUGIs37G7E28AEEWj7TSaPc=";
   };
 
