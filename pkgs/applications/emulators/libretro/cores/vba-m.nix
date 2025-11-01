@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "vbam";
-  version = "0-unstable-2025-10-17";
+  version = "0-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "vbam-libretro";
-    rev = "badf47c0e050983e44ac1217033283ca78313298";
-    hash = "sha256-PwqwG+YMgdWNMoWx0mdUIBebQBMgaFd8BiI27xSUhps=";
+    rev = "8f1f36016e0ae83680392644f6b2d8a9025835b9";
+    hash = "sha256-Hr6EqCtqsaav0fINkWH6MzllbJq0pbw/encYhvRe9Ac=";
   };
 
   makefile = "Makefile";
