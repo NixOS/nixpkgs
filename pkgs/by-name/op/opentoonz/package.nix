@@ -2,6 +2,7 @@
   boost,
   cmake,
   fetchFromGitHub,
+  fetchpatch2,
   libglut,
   freetype,
   glew,
@@ -24,13 +25,13 @@
 }:
 let
   libtiff-ver = "4.0.3"; # The version in thirdparty/tiff-*
-  opentoonz-ver = "1.7.1";
+  opentoonz-ver = "1.7.1.1";
 
   src = fetchFromGitHub {
     owner = "opentoonz";
     repo = "opentoonz";
     rev = "v${opentoonz-ver}";
-    hash = "sha256-5iXOvh4QTv+G0fjEHU62u7QCee+jbvKhK0+fQXbdJis=";
+    hash = "sha256-tyRZoOBW2wJgNc0+J/LeQgOJUtQATkyA6KWLKkztujU=";
   };
 
   opentoonz-opencv = opencv.override {
@@ -125,6 +126,17 @@ stdenv.mkDerivation {
   ];
 
   postUnpack = "sourceRoot=$sourceRoot/toonz";
+
+  patches = [
+    # CMake compatibility hotfix.
+    # Please remove after opentoonz-ver > 1.7.1.1
+    (fetchpatch2 {
+      url = "https://github.com/opentoonz/opentoonz/compare/v1.7.1.1...b56fc841ed94e46fdc5a478e5c135d5404800c9d.patch?full_index=1";
+      hash = "sha256-Wwp6gBYxEZ8t2c0v1b0iVkY8kuyRPCv/KYEVcd9CQwM=";
+      includes = [ "sources/CMakeLists.txt" ];
+      stripLen = 1;
+    })
+  ];
 
   cmakeDir = "../sources";
   cmakeFlags = [
