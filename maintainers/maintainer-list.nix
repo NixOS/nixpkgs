@@ -27939,6 +27939,11 @@
       }
     ];
   };
+  wilaz = {
+    name = "Wilaz";
+    github = "Wilaz";
+    githubId = 98198668;
+  };
   wildsebastian = {
     name = "Sebastian Wild";
     email = "sebastian@wild-siena.com";
