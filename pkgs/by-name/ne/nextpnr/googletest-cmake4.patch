@@ -1,0 +1,13 @@
+diff --git a/3rdparty/googletest/googletest/CMakeLists.txt b/3rdparty/googletest/googletest/CMakeLists.txt
+index 621d0f04..1d836279 100644
+--- a/3rdparty/googletest/googletest/CMakeLists.txt
++++ b/3rdparty/googletest/googletest/CMakeLists.txt
+@@ -45,7 +45,7 @@ endif()
+ # ${gtest_BINARY_DIR}.
+ # Language "C" is required for find_package(Threads).
+ project(gtest CXX C)
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()

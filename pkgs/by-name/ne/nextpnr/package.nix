@@ -86,6 +86,12 @@ stdenv.mkDerivation rec {
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON");
 
+  patches = [
+    # remove once upstream releases the googletest update
+    # https://github.com/YosysHQ/nextpnr/commit/64db93e319e4fb4dcdd9b669151765e488dcf473
+    ./googletest-cmake4.patch
+  ];
+
   postPatch = ''
     # Don't use #embed macro for chipdb binary embeddings - otherwise getting spurious type narrowing errors.
     # Maybe related to: https://github.com/llvm/llvm-project/issues/119256
