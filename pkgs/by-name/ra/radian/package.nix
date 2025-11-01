@@ -2,27 +2,23 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   R,
   rPackages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "radian";
-  version = "0.6.13";
+  version = "0.6.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "radian";
     tag = "v${version}";
-    hash = "sha256-gz2VczAgVbvISzvY/v0GvZ/Erv6ipZwPU61r6OJ+3Fo=";
+    hash = "sha256-9dpLQ3QRppvwOw4THASfF8kCkIVZmWLALLRwy1LRPiE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-  '';
 
   build-system = with python3Packages; [
     setuptools
@@ -53,23 +49,25 @@ python3Packages.buildPythonApplication rec {
       ptyprocess
       jedi
     ])
-    ++ [ git ];
+    ++ [
+      gitMinimal
+      writableTmpDirAsHomeHook
+    ];
 
   makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${R}/lib/R/lib
   '';
 
   pythonImportsCheck = [ "radian" ];
 
-  meta = with lib; {
+  meta = {
     description = "21 century R console";
     mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
     changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

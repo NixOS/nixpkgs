@@ -19,6 +19,17 @@
   nix,
 }:
 
+{
+  # The number of attributes per chunk, see ./README.md for more info.
+  chunkSize ? 5000,
+  # Whether to just evaluate a single chunk for quick testing
+  quickTest ? false,
+  # Don't try to eval packages marked as broken.
+  includeBroken ? false,
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
+}:
+
 let
   nixpkgs =
     with lib.fileset;
@@ -66,6 +77,7 @@ let
             "$src/ci/eval/attrpaths.nix" \
             -A paths \
             -I "$src" \
+            --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --option eval-system "${evalSystem}" > $out/paths.json
@@ -79,13 +91,6 @@ let
       evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-
-      # Don't try to eval packages marked as broken.
-      includeBroken ? false,
-      # Whether to just evaluate a single chunk for quick testing
-      quickTest ? false,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -118,6 +123,7 @@ let
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk" \
@@ -259,16 +265,13 @@ let
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
     }:
     symlinkJoin {
       name = "nixpkgs-eval-baseline";
       paths = map (
         evalSystem:
         singleSystem {
-          inherit quickTest evalSystem chunkSize;
+          inherit evalSystem;
         }
       ) evalSystems;
     };
@@ -277,9 +280,6 @@ let
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
       baseline,
       # Which maintainer should be considered the author?
       # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
@@ -300,7 +300,7 @@ let
             inherit evalSystem;
             beforeDir = baseline;
             afterDir = singleSystem {
-              inherit quickTest evalSystem chunkSize;
+              inherit evalSystem;
             };
           }
         ) evalSystems;

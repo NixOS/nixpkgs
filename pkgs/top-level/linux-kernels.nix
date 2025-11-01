@@ -566,6 +566,8 @@ in
 
         mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
+        mdio-netlink = callPackage ../os-specific/linux/mdio-netlink { };
+
         mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
         mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
