@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitiles,
   pkg-config,
+  makeBinaryWrapper,
   libuuid,
   openssl,
   libyaml,
@@ -22,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8a49xD+EYXDouFuBmLyAtPxThYET6DtKImBPzXVhpxE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
+
   buildInputs = [
     libuuid
     libyaml
@@ -58,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/vboot
     cp -r tests/devkeys* $out/share/vboot/
+  ''
+  + lib.optionalString withFlashrom ''
+    wrapProgram $out/bin/crossystem \
+      --prefix PATH : ${lib.makeBinPath [ finalAttrs.passthru.flashromChromeos ]}
   '';
 
   passthru = {
