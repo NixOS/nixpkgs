@@ -3138,6 +3138,8 @@ with pkgs;
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
+  jupyterLib = callPackage ../applications/editors/jupyter/kernel.nix { };
+
   wrapKakoune =
     kakoune: attrs:
     callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
