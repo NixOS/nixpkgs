@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vboot_reference";
-  version = "135.16209";
+  version = "143.16463";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     rev = "refs/heads/release-R${finalAttrs.passthru.versionFormatted}.B";
-    hash = "sha256-frg7NkK173wAHJRedtbJI5jI8Kee/VkByh5DCUzD9OA=";
+    hash = "sha256-8a49xD+EYXDouFuBmLyAtPxThYET6DtKImBPzXVhpxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
