@@ -826,7 +826,10 @@ let
       geos
       netcdf
     ];
-    tok = [ pkgs.cargo ];
+    tok = with pkgs; [
+      cargo
+      rustc
+    ];
     rshift = with pkgs; [
       cargo
       rustc
@@ -1887,6 +1890,10 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
+    });
+
+    tok = old.tok.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     trigger = old.trigger.overrideAttrs (attrs: {
