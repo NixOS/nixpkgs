@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "nsapi";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "aquatix";
     repo = "ns-api";
     tag = "v${version}";
-    sha256 = "sha256-H8qxqzcGZ52W/HbTuKdnfnaYdZFaxzuUhrniS1zsL2w=";
+    sha256 = "sha256-Buhc0643WeX/4ZU/RkzNWiFjfEAJUtNL6uJ98unTnCg=";
   };
 
   build-system = [ setuptools ];
