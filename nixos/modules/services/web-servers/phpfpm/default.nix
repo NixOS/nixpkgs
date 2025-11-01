@@ -29,6 +29,7 @@ let
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
 
       [${pool}]
+      env[CREDENTIALS_DIRECTORY] = $CREDENTIALS_DIRECTORY
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
       ${optionalString (poolOpts.extraConfig != null) poolOpts.extraConfig}
@@ -287,6 +288,23 @@ in
           let
             cfgFile = fpmCfgFile pool poolOpts;
             iniFile = phpIni poolOpts;
+            wrapper = pkgs.writeShellApplication {
+              name = "phpfpm-exec-start-pre";
+              runtimeInputs = with pkgs; [
+                mount
+              ];
+              text = ''
+                # remount CREDENTIALS_DIRECTORY so that inside the service
+                # mount namespace the pool user/group are perceived as root
+                # within this mount, thus allowing phpfpm workers to access
+                # the credentials
+                if [ -v CREDENTIALS_DIRECTORY ]; then
+                  mount -o "remount,X-mount.idmap=u:$(id -u):$(id -u "${poolOpts.user}"):1 g:$(id -g):$(id -g "${poolOpts.group}"):1" "$CREDENTIALS_DIRECTORY"
+                fi
+
+                exec ${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}
+              '';
+            };
           in
           {
             Slice = "system-phpfpm.slice";
@@ -297,7 +315,7 @@ in
             # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
             RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
             Type = "notify";
-            ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+            ExecStart = lib.getExe wrapper;
             ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
             RuntimeDirectory = "phpfpm";
             RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
