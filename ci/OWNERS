@@ -58,7 +58,8 @@
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
 /pkgs/stdenv                                     @philiptaron @NixOS/stdenv
 /pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @adisbladis @NixOS/stdenv
+/pkgs/stdenv/generic/meta-types.nix              @adisbladis @NixOS/stdenv
 /pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314

@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=ON"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.10)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     mkdir -p $out/lib/pkgconfig
     substituteAll ${./blosc_filter.pc.in} $out/lib/pkgconfig/blosc_filter.pc
