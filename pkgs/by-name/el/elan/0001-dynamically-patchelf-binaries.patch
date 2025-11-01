@@ -1,8 +1,8 @@
 diff --git a/src/elan-dist/src/component/package.rs b/src/elan-dist/src/component/package.rs
-index c51e76d..ae8159e 100644
+index 89ff5ce..91784b3 100644
 --- a/src/elan-dist/src/component/package.rs
 +++ b/src/elan-dist/src/component/package.rs
-@@ -56,6 +56,52 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
+@@ -51,6 +51,51 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
          entry
              .unpack(&full_path)
              .chain_err(|| ErrorKind::ExtractingPackage)?;
@@ -13,45 +13,44 @@ index c51e76d..ae8159e 100644
 +}
 +
 +fn nix_patch_if_needed(dest_path: &Path) -> Result<()> {
++    use std::os::unix::fs::PermissionsExt;
++
 +    let is_bin = matches!(dest_path.parent(), Some(p) if p.ends_with("bin"));
-+    if !is_bin { return Ok(()) }
++    if !is_bin {
++        return Ok(());
++    }
 +    let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
 +        .arg("--set-interpreter")
 +        .arg("@dynamicLinker@")
 +        .arg(dest_path)
 +        .output();
 +
-+    if dest_path.file_name() == Some(::std::ffi::OsStr::new("leanc")) {
-+        use std::os::unix::fs::PermissionsExt;
-+        let new_path = dest_path.with_extension("orig");
-+        ::std::fs::rename(dest_path, &new_path)?;
-+        ::std::fs::write(dest_path, r#"#! @shell@
-+dir="$(dirname "${BASH_SOURCE[0]}")"
-+# use bundled libraries, but not bundled compiler that doesn't know about NIX_LDFLAGS
-+LEAN_CC="${LEAN_CC:-@cc@}" exec -a "$0" "$dir/leanc.orig" "$@" -L"$dir/../lib"
-+"#)?;
-+        ::std::fs::set_permissions(dest_path, ::std::fs::Permissions::from_mode(0o755))?;
-+    } else if dest_path.file_name() == Some(::std::ffi::OsStr::new("lake")) {
-+        // since Lean 4.16.0, `lake` calls `LEAN_CC` directly instead of through `leanc`
-+        use std::os::unix::fs::PermissionsExt;
-+        ::std::fs::write(dest_path.with_file_name("cc"), r#"#! @shell@
-+dir="$(dirname "${BASH_SOURCE[0]}")"
-+# use bundled libraries, but not bundled compiler that doesn't know about NIX_LDFLAGS
-+exec "@cc@" "$@" -L"$dir/../lib"
-+"#)?;
-+        ::std::fs::set_permissions(dest_path.with_file_name("cc"), ::std::fs::Permissions::from_mode(0o755))?;
-+
-+        let new_path = dest_path.with_extension("orig");
-+        ::std::fs::rename(dest_path, &new_path)?;
-+        ::std::fs::write(dest_path, r#"#! @shell@
-+dir="$(dirname "${BASH_SOURCE[0]}")"
-+# use custom `cc`
-+LEAN_CC="${LEAN_CC:-"$dir/cc"}" exec -a "$0" "$dir/lake.orig" "$@"
-+"#)?;
++    if dest_path.file_name() == Some(::std::ffi::OsStr::new("ld.lld")) {
++        // https://github.com/NixOS/nixpkgs/blob/0ea2f6d48ce952cc86f7104f8a51ad61fa9b6aad/pkgs/development/tools/rust/rustup/0001-dynamically-patchelf-binaries.patch#L17
++        // ld.lld must keep the same binary name, or else it won't work.
++        // It also has a relative runpath, so it can't be in a subdirectory.
++        let unwrapped_dir = dest_path.parent().unwrap().with_file_name("bin-unwrapped");
++        let unwrapped_path = unwrapped_dir.join("ld.lld");
++        ::std::fs::create_dir_all(unwrapped_dir)?;
++        ::std::fs::rename(dest_path, &unwrapped_path)?;
++        let mut ld_wrapper_path = std::env::current_exe()?
++            .parent()
++            .ok_or("failed to get parent directory")?
++            .with_file_name("nix-support");
++        ld_wrapper_path.push("ld-wrapper.sh");
++        let wrapped_script = format!(
++            r#"#!/usr/bin/env bash
++set -eu -o pipefail +o posix
++shopt -s nullglob
++export PROG="$(dirname "$0")-unwrapped/ld.lld"
++"{}" $@"#,
++            ld_wrapper_path.to_string_lossy(),
++        );
++        ::std::fs::write(dest_path, wrapped_script)?;
 +        ::std::fs::set_permissions(dest_path, ::std::fs::Permissions::from_mode(0o755))?;
 +    } else if dest_path.file_name() == Some(::std::ffi::OsStr::new("llvm-ar")) {
 +        ::std::fs::remove_file(dest_path)?;
 +        ::std::os::unix::fs::symlink("@ar@", dest_path)?;
      }
-
+ 
      Ok(())
