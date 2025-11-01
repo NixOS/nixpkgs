@@ -351,6 +351,8 @@ let
 
         darwinArch = parse.darwinArch final.parsed.cpu;
 
+        IEEE_format = parse.IEEE_format final.parsed.cpu;
+
         darwinPlatform =
           if final.isMacOS then
             "macos"
