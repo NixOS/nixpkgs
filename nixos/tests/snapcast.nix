@@ -23,7 +23,6 @@ in
         enable = true;
         settings = {
           stream = {
-            port = port;
             source = [
               "pipe:///run/snapserver/mpd?name=mpd&mode=create"
               "pipe:///run/snapserver/bluetooth?name=bluetooth"
@@ -32,7 +31,11 @@ in
             ];
             buffer = bufferSize;
           };
-          tcp = {
+          tcp-streaming = {
+            enabled = true;
+            port = port;
+          };
+          tcp-control = {
             enabled = true;
             port = tcpPort;
           };
