@@ -230,8 +230,9 @@ let
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
       nixosTests = {
+        agda = packagePlatforms pkgs.nixosTests.agda;
+
         inherit (packagePlatforms pkgs.nixosTests)
-          agda
           kmonad
           xmonad
           xmonad-xdg-autostart
