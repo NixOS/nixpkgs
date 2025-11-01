@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -15,6 +16,7 @@ let
     ;
 
   settingsFormat = pkgs.formats.yaml { };
+  configPath = "${cfg.configDir}/config.json";
 in
 {
   options.services.nemorosa = {
@@ -113,64 +115,59 @@ in
     };
   };
 
-  config =
-    let
-      configFile = settingsFormat.generate "config.yaml" cfg.settings;
-    in
-    lib.mkIf (cfg.enable) {
-      systemd = {
-        tmpfiles.settings."10-nemorosa" = {
-          ${cfg.configDir}.d = {
-            inherit (cfg) group user;
-            mode = "700";
-          };
-        };
-
-        services.nemorosa = {
-          description = "nemorosa";
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-          wantedBy = [ "multi-user.target" ];
-          restartTriggers = configFile;
-
-          serviceConfig = {
-            ExecStart = ''
-              ${lib.getExe cfg.package} --server --config ${configFile}
-            '';
-            # DynamicUser so settings like ProtectSystem=strict are used
-            DynamicUser = true;
-            User = cfg.user;
-            Group = cfg.group;
-
-            # Only allow binding to the specified port.
-            SocketBindDeny = "any";
-            StateDirectory = "nemorosa";
-            SocketBindAllow = cfg.settings.port;
-            ReadWritePaths = [ cfg.settings.linking.link_dirs ];
-          };
-
-          unitConfig = {
-            RequiresMountsFor = cfg.settings.linking.link_dirs;
-          };
+  config = lib.mkIf (cfg.enable) {
+    systemd = {
+      tmpfiles.settings."10-nemorosa" = {
+        ${cfg.configDir}.d = {
+          inherit (cfg) group user;
+          mode = "700";
         };
       };
 
-      # nemorosa can also be used interactively
-      environment.systemPackages = [ cfg.package ];
+      services.nemorosa = {
+        description = "nemorosa";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        preStart = utils.genJqSecretsReplacementSnippet cfg.settings configPath;
 
-      users = {
-        users = lib.mkIf (cfg.user == "nemorosa") {
-          nemorosa = {
-            group = cfg.group;
-            description = "nemorosa user";
-            isSystemUser = true;
-            home = cfg.configDir;
-          };
-        };
+        serviceConfig = {
+          ExecStart = ''
+            ${lib.getExe cfg.package} --server --config ${configPath}
+          '';
+          # DynamicUser so settings like ProtectSystem=strict are used
+          DynamicUser = true;
+          User = cfg.user;
+          Group = cfg.group;
 
-        groups = lib.mkIf (cfg.group == "nemorosa") {
-          nemorosa = { };
+          # Only allow binding to the specified port.
+          SocketBindDeny = "any";
+          SocketBindAllow = cfg.settings.port;
+
+          ReadWritePaths = lib.flatten [
+            cfg.settings.linking.link_dirs
+            cfg.configDir
+          ];
         };
       };
     };
+
+    users = {
+      users = lib.mkIf (cfg.user == "nemorosa") {
+        nemorosa = {
+          group = cfg.group;
+          description = "nemorosa user";
+          isSystemUser = true;
+          home = cfg.configDir;
+        };
+      };
+
+      groups = lib.mkIf (cfg.group == "nemorosa") {
+        nemorosa = { };
+      };
+    };
+
+    # nemorosa can also be used interactively
+    environment.systemPackages = [ cfg.package ];
+  };
 }
