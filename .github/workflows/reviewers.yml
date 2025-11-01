@@ -102,7 +102,7 @@ jobs:
             const run_id = (await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: context.eventName === 'pull_request' ? 'test.yml' : 'pr.yml',
+              workflow_id: context.eventName === 'pull_request' ? 'test.yml' : 'pull-request-target.yml',
               event: context.eventName,
               head_sha: context.payload.pull_request.head.sha
             })).data.workflow_runs[0].id

@@ -63,7 +63,7 @@ jobs:
               '.github/workflows/eval.yml',
               '.github/workflows/labels.yml',
               '.github/workflows/lint.yml',
-              '.github/workflows/pr.yml',
+              '.github/workflows/pull-request-target.yml',
               '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
             ].includes(file))) core.setOutput('pr', true)
@@ -87,7 +87,7 @@ jobs:
     if: needs.prepare.outputs.pr
     name: PR
     needs: [prepare]
-    uses: ./.github/workflows/pr.yml
+    uses: ./.github/workflows/pull-request-target.yml
     # Those are actually only used on the pull_request_target event, but will throw an error if not set.
     permissions:
       issues: write
