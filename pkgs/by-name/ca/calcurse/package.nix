@@ -7,15 +7,16 @@
   python3,
   python3Packages,
   makeWrapper,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
-  version = "4.8.1";
+  version = "4.8.2";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
-    hash = "sha256-2GuzcBT9abjYPMuQSsl5xrjd9Z7j28gPWidFJeTVgwo=";
+    hash = "sha256-qjakNHUuTG34bOG7eyI+BBr8m9zgVqvTwuZTidQS6HI=";
   };
 
   buildInputs = [
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     python3
     python3Packages.wrapPython
   ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   postInstall = ''
     patchShebangs .
