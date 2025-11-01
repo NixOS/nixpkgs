@@ -12,6 +12,7 @@
   testers,
   skopeo,
   buildGo124Module,
+  makeWrapper,
 }:
 
 let
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -188,7 +191,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/go
     cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
     mkdir -p $out/bin
-    ln -s $out/share/go/bin/* $out/bin
+    makeWrapper $out/share/go/bin/go $out/bin/go --set-default CC ${targetPackages.stdenv.cc}/bin/cc
+    ln -s $out/share/go/bin/gofmt $out/bin/gofmt
     runHook postInstall
   '';
 
