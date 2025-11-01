@@ -8,15 +8,15 @@
   autoSignDarwinBinariesHook,
   glibcLocales,
 }:
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "ilspycmd";
-  version = "9.0-preview3";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
-    rev = "v${version}";
-    hash = "sha256-7cPXFaEKr76GtqcNsKx7tstRUeTpSTF8ggxbyEnQa9M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YkZEStCI6Omu8HgClm5qHnXxm5pKJVILtbydY8vAFic=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,9 @@ buildDotnetModule (finalAttrs: rec {
       fromSource
       binaryBytecode
     ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      tbaldwin
+    ];
   };
 })
