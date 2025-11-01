@@ -53,5 +53,11 @@ git -C "$tmp/nixpkgs.git" config remote.fork.promisor true
 git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch"
 headRef=$(git -C "$tmp/nixpkgs.git" rev-parse refs/remotes/fork/"$prBranch")
 
+git -C "$tmp/nixpkgs.git" diff --name-only --merge-base "$baseBranch" "$headRef" > "$tmp/touched-files"
+
+# Get the owners file from the base, because we don't want to allow PRs to
+# remove code owners to avoid pinging them
+git -C "$tmp/nixpkgs.git" show "$baseBranch":"$ownersFile" > "$tmp"/codeowners
+
 log "Requesting reviews from code owners"
-"$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef"
+"$SCRIPT_DIR"/get-code-owners.sh "$tmp/touched-files" "$tmp"/codeowners
