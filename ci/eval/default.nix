@@ -19,6 +19,15 @@
   nix,
 }:
 
+{
+  # The number of attributes per chunk, see ./README.md for more info.
+  chunkSize ? 5000,
+  # Whether to just evaluate a single chunk for quick testing
+  quickTest ? false,
+  # Don't try to eval packages marked as broken.
+  includeBroken ? false,
+}:
+
 let
   nixpkgs =
     with lib.fileset;
@@ -79,13 +88,6 @@ let
       evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-
-      # Don't try to eval packages marked as broken.
-      includeBroken ? false,
-      # Whether to just evaluate a single chunk for quick testing
-      quickTest ? false,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -111,6 +113,7 @@ let
           --option allow-import-from-derivation false \
           --query --available \
           --out-path --json \
+          --meta \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -204,6 +207,7 @@ let
         fi
 
         cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
+        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.meta)' > $out/${evalSystem}/meta.json
       '';
 
   diff = callPackage ./diff.nix { };
@@ -232,6 +236,14 @@ let
           })
         ' > $out/combined-diff.json
 
+        # Combine maintainers from all systems
+        cat ${diffDir}/*/maintainers.json | jq -s '
+          add | group_by(.package) | map({
+            key: .[0].package,
+            value: map(.maintainers) | flatten | unique
+          }) | from_entries
+        ' > $out/maintainers.json
+
         mkdir -p $out/before/stats
         for d in ${diffDir}/before/*; do
           cp -r "$d"/stats-by-chunk $out/before/stats/$(basename "$d")
@@ -249,16 +261,13 @@ let
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
     }:
     symlinkJoin {
       name = "nixpkgs-eval-baseline";
       paths = map (
         evalSystem:
         singleSystem {
-          inherit quickTest evalSystem chunkSize;
+          inherit evalSystem;
         }
       ) evalSystems;
     };
@@ -267,9 +276,6 @@ let
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
       baseline,
       # Which maintainer should be considered the author?
       # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
@@ -290,7 +296,7 @@ let
             inherit evalSystem;
             beforeDir = baseline;
             afterDir = singleSystem {
-              inherit quickTest evalSystem chunkSize;
+              inherit evalSystem;
             };
           }
         ) evalSystems;
