@@ -20,14 +20,38 @@ in
   options.services.oink = {
     enable = lib.mkEnableOption "Oink, a dynamic DNS client for Porkbun";
     package = lib.mkPackageOption pkgs "oink" { };
+    apiKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/keys/oink-api-key";
+      description = "Path to a file containing the API key to use when modifying DNS records.";
+    };
+    secretApiKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/keys/oink-secret-api-key";
+      description = "Path to a file containing the secret API key to use when modifying DNS records.";
+    };
     settings = {
       apiKey = lib.mkOption {
         type = lib.types.str;
-        description = "API key to use when modifying DNS records.";
+        default = "";
+        example = "1234567890";
+        description = ''
+          API key to use when modifying DNS records.
+
+          This option is deprecated. Use {option}`apiKeyFile` instead.
+        '';
       };
       secretApiKey = lib.mkOption {
         type = lib.types.str;
-        description = "Secret API key to use when modifying DNS records.";
+        default = "";
+        example = "1234567890";
+        description = ''
+          Secret API key to use when modifying DNS records.
+
+          This option is deprecated. Use {option}`secretApiKeyFile` instead.
+        '';
       };
       interval = lib.mkOption {
         # https://github.com/rlado/oink/blob/v1.1.1/src/main.go#L364
@@ -80,11 +104,26 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.settings.apiKey != "" || cfg.apiKeyFile != null;
+        message = "services.oink: either apiKey or apiKeyFile must be set";
+      }
+      {
+        assertion = cfg.settings.secretApiKey != "" || cfg.secretApiKeyFile != null;
+        message = "services.oink: either secretApiKey or secretApiKeyFile must be set";
+      }
+    ];
     systemd.services.oink = {
       description = "Dynamic DNS client for Porkbun";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${cfg.package}/bin/oink -c ${oinkConfig}";
+      script =
+        lib.optionalString (cfg.apiKeyFile != null) "OINK_OVERRIDE_APIKEY=$(cat ${cfg.apiKeyFile}) "
+        + lib.optionalString (
+          cfg.secretApiKeyFile != null
+        ) "OINK_OVERRIDE_SECRETAPIKEY=$(cat ${cfg.secretApiKeyFile}) "
+        + "${cfg.package}/bin/oink -c ${oinkConfig}";
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = "10";
