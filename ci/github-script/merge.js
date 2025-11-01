@@ -6,13 +6,21 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
   const pull_number = pull_request.number
 
   if (!committers) {
-    committers = github
-      .paginate(github.rest.teams.listMembersInOrg, {
-        org: context.repo.owner,
-        team_slug: 'nixpkgs-committers',
-        per_page: 100,
-      })
-      .then((members) => new Set(members.map(({ id }) => id)))
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no committers. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      committers = new Set()
+    } else {
+      committers = github
+        .paginate(github.rest.teams.listMembersInOrg, {
+          org: context.repo.owner,
+          team_slug: 'nixpkgs-committers',
+          per_page: 100,
+        })
+        .then((members) => new Set(members.map(({ id }) => id)))
+    }
   }
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
