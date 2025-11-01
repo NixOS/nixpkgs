@@ -7,7 +7,7 @@
   libX11,
   glew,
   python3,
-  glm,
+  glm_1_0_1,
   meshoptimizer,
   SDL2,
   ninja,
@@ -42,7 +42,7 @@ let
     buildInputs = [
       sfml
       libX11
-      glm
+      glm_1_0_1
       SDL2
     ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     glew
     libX11
     python3
-    glm
+    glm_1_0_1
     SDL2
     ninja
   ];
