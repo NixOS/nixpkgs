@@ -48,7 +48,6 @@ in
 
   # build time
   autoconf,
-  cargo,
   dump_syms,
   makeWrapper,
   mimalloc,
@@ -126,7 +125,9 @@ in
   jemallocSupport ? !stdenv.hostPlatform.isMusl,
   jemalloc,
   ltoSupport ? (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform.is64bit
+    && !stdenv.hostPlatform.isRiscV
   ),
   overrideCC,
   buildPackages,
@@ -159,7 +160,7 @@ in
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,
 
-  # digital rights managemewnt
+  # digital rights management
 
   # This flag controls whether Firefox will show the nagbar, that allows
   # users at runtime the choice to enable Widevine CDM support when a site
@@ -207,13 +208,25 @@ let
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
       lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
         llvmPackages = pkgs.llvmPackages_20;
+
+        pkgsBuildBuild = pkgsBuildBuild // {
+          llvmPackages = pkgsBuildBuild.llvmPackages_20;
+        };
+        pkgsBuildTarget = pkgs.pkgsBuildTarget // {
+          llvmPackages = pkgs.pkgsBuildTarget.llvmPackages_20;
+        };
+        pkgsBuildHost = pkgs.pkgsBuildHost // {
+          llvmPackages = pkgs.pkgsBuildHost.llvmPackages_20;
+        };
+        pkgsHostTarget = pkgs.pkgsHostTarget // {
+          llvmPackages = pkgs.pkgsHostTarget.llvmPackages_20;
+        };
       }
     )).packages.stable;
 
   toRustC = pkgs: (rustPackages pkgs).rustc;
 
-  rustc = toRustC pkgs;
-  inherit (rustPackages pkgs) rustPlatform;
+  inherit (rustPackages pkgs) cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
@@ -490,7 +503,7 @@ buildStdenv.mkDerivation {
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
-  # LTO is done using clang and lld on Linux.
+  # LTO is done using clang and lld.
   ++ lib.optionals ltoSupport [
     "--enable-lto=cross,full" # Cross-Language LTO
     "--enable-linker=lld"
