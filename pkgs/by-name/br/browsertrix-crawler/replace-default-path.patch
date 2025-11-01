@@ -1,0 +1,31 @@
+index 07aba7c..5cfd3ef 100755
+--- a/src/create-login-profile.ts
++++ b/src/create-login-profile.ts
+@@ -60,9 +60,9 @@ function initArgs() {
+
+       filename: {
+         describe:
+-          "The filename for the profile tarball, stored within /crawls/profiles if absolute path not provided",
++          "The filename for the profile tarball, stored within ./profiles if absolute path not provided",
+         type: "string",
+-        default: "/crawls/profiles/profile.tar.gz",
++        default: "./profiles/profile.tar.gz",
+       },
+
+       debugScreenshot: {
+@@ -337,13 +337,13 @@ async function createProfile(
+   logger.info("Creating profile");
+
+   if (params.filename && !params.filename.startsWith("/")) {
+-    params.filename = path.resolve("/crawls/profiles/", params.filename);
++    params.filename = path.resolve(path.join(process.cwd(), "profiles"), params.filename);
+     logger.info(
+       `Absolute path for filename not provided, saving to ${params.filename}`,
+     );
+   }
+
+-  const profileFilename = params.filename || "/crawls/profiles/profile.tar.gz";
++  const profileFilename = params.filename || "./profiles/profile.tar.gz";
+
+   const outputDir = path.dirname(profileFilename);
+   if (outputDir && !fs.existsSync(outputDir)) {
