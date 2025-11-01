@@ -5,22 +5,33 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lzham";
-  version = "1.0";
+  version = "1.1-unstable-2023-05-14";
 
   src = fetchFromGitHub {
     owner = "richgel999";
-    repo = "lzham_codec";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}_release";
-    sha256 = "14c1zvzmp1ylp4pgayfdfk1kqjb23xj4f7ll1ra7b18wjxc9ja1v";
+    repo = "lzham_codec_devel";
+    rev = "d09fc6676a0313c3814457fbc76351a68f653092";
+    sha256 = "sha256-zKzz4gEB2dkIIAuDhKGWeV1hn8tCMVILsiQ/gu6aAEE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON"
+  ];
+
   installPhase = ''
+    cmake --install . --prefix=$out
+
     mkdir -p $out/bin
-    cp ../bin_linux/lzhamtest $out/bin
+    cp lzhamtest/lzhamtest $out/bin/
+  '';
+
+  postPatch = ''
+    substituteInPlace {./,lzhamcomp/,lzhamdecomp/,lzhamdll/,lzhamtest/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = with lib; {
