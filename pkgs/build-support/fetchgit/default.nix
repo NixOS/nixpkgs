@@ -6,9 +6,13 @@
   git,
   git-lfs,
   cacert,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 let
+  preferLocalBuildDefault = preferLocalBuild;
   urlToName =
     {
       url,
@@ -68,7 +72,7 @@ lib.makeOverridable (
           # Shell code executed after the file has been fetched
           # successfully. This can do things like check or transform the file.
           postFetch ? "",
-          preferLocalBuild ? true,
+          preferLocalBuild ? preferLocalBuildDefault,
           fetchLFS ? false,
           # Shell code to build a netrc file for BASIC auth
           netrcPhase ? null,

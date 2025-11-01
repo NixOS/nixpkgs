@@ -7,6 +7,9 @@
   nix,
   xz,
   zstd,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 # This function is for creating a flat-file binary cache, i.e. the kind created by
@@ -34,7 +37,7 @@ stdenv.mkDerivation {
 
   exportReferencesGraph.closure = rootPaths;
 
-  preferLocalBuild = true;
+  inherit preferLocalBuild;
 
   nativeBuildInputs = [
     coreutils
