@@ -3235,6 +3235,8 @@ self: super: with self; {
 
   curlify = callPackage ../development/python-modules/curlify { };
 
+  cursedspace = callPackage ../development/python-modules/cursedspace { };
+
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
@@ -15352,6 +15354,8 @@ self: super: with self; {
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
+
+  pytodotxt = callPackage ../development/python-modules/pytodotxt { };
 
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
