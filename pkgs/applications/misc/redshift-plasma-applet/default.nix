@@ -46,6 +46,9 @@ stdenv.mkDerivation {
     substituteInPlace package/contents/ui/config/ConfigAdvanced.qml \
       --replace "'redshift -V'" \
                 "'${redshift}/bin/redshift -V'"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
