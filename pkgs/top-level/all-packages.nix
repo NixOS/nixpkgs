@@ -1237,6 +1237,18 @@ with pkgs;
 
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
+  git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
+
+  git-credential-gmail = callPackage ../by-name/gi/git-credential-email/git-credential-gmail { };
+
+  git-credential-outlook = callPackage ../by-name/gi/git-credential-email/git-credential-outlook { };
+
+  git-credential-yahoo = callPackage ../by-name/gi/git-credential-email/git-credential-yahoo { };
+
+  git-msgraph = callPackage ../by-name/gi/git-credential-email/git-msgraph { };
+
+  git-protonmail = callPackage ../by-name/gi/git-credential-email/git-protonmail { };
+
   gitRepo = git-repo;
 
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
