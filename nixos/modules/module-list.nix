@@ -992,6 +992,7 @@
   ./services/monitoring/gitwatch.nix
   ./services/monitoring/glances.nix
   ./services/monitoring/glpi-agent.nix
+  ./services/monitoring/go-csp-collector.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-image-renderer.nix
   ./services/monitoring/grafana-reporter.nix
