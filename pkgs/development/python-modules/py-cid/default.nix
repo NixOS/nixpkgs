@@ -1,48 +1,47 @@
 {
   lib,
+  base58,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  base58,
+  hypothesis,
+  morphys,
   py-multibase,
   py-multicodec,
-  morphys,
-  py-multihash,
-  hypothesis,
+  pymultihash,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-cid";
-  version = "0.3.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "py-cid";
-    rev = "v${version}";
-    hash = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
+    tag = "v${version}";
+    hash = "sha256-HvZqITvaYYnswSXb2I5xfp77ndZAwQQxGNsf/BgR+Sk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "base58>=1.0.2,<2.0" "base58>=1.0.2" \
-      --replace "py-multihash>=0.2.0,<1.0.0" "py-multihash>=0.2.0" \
-      --replace "'pytest-runner'," ""
-  '';
+  pythonRelaxDeps = [ "base58" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     base58
+    morphys
     py-multibase
     py-multicodec
-    morphys
-    py-multihash
+    pymultihash
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     hypothesis
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "cid" ];
@@ -50,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Self-describing content-addressed identifiers for distributed systems implementation in Python";
     homepage = "https://github.com/ipld/py-cid";
+    changelog = "https://github.com/ipld/py-cid/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];
   };
