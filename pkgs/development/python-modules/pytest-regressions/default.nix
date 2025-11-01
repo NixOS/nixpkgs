@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   matplotlib,
   numpy,
   pandas,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.8.1";
+  version = "2.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ESSS";
     repo = "pytest-regressions";
     tag = "v${version}";
-    hash = "sha256-8FbPWKYHy/0ITrCx9044iYOR7B9g8tgEdV+QfUg4esk=";
+    hash = "sha256-YAnDRPfwR4tCGppzLt6QrJ1lQyO7JUOImn7YoJH2ir8=";
   };
 
   build-system = [ setuptools-scm ];
