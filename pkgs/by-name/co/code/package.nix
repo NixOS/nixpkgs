@@ -3,6 +3,7 @@
   fetchFromGitHub,
   gitMinimal,
   lib,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -12,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code";
-  version = "0.2.188";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "just-every";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xUhgA4poybzFehVgVWHKx1ejhncvYAnug2oxLwGNrk0=";
+    hash = "sha256-BbXXRpsK2uGlfACEhCuYnTnin4mYQpEf4HR7wOggqnM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/code-rs";
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"/bin/bash"' '"${lib.getExe bash}"'
   '';
 
-  cargoHash = "sha256-wQHcwfBJE/qGXHgLDQ1NfBpgFdmQhuHCvfAG8KV+MHM=";
+  cargoHash = "sha256-zmt5lW0laBOw++2/dvRL1MVYVwQ12SbjyMW2g2KdQ7s=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     pkg-config
@@ -69,6 +70,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/code $out/bin/coder
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, effective, mind-blowing, coding CLI";
