@@ -1,0 +1,26 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index b4333d7..a983b54 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -22,10 +22,10 @@ license = { text = "MIT" }
+ dynamic = ["version"]
+ dependencies = [
+   "xdg",
+-  "argcomplete==3.5.1",
++  "argcomplete",
+   "requests (>=2.32.4)",
+   "borb (==2.1.25)",
+-  "python-dateutil==2.6.1",
++  "python-dateutil",
+   "pytz",
+   "urllib3>=2.5.0",
+   "poetry-dynamic-versioning (>=1.8.1,<2.0.0)",
+@@ -33,7 +33,7 @@ dependencies = [
+   "toml (>=0.10.2,<0.11.0)",
+   "curlify (>=2.2.1,<3.0.0)",
+   "setuptools",
+-  "cryptography (>=44.0.2,<45.0.0)",
++  "cryptography",
+ ]
+ 
+ [tool.poetry]
