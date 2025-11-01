@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
-    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
+    description = "C/C++ header file that converts Intel SSE intrinsics to Arm/Aarch64 NEON intrinsics";
+    homepage = "https://github.com/DLTcollab/sse2neon";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.gador ];
