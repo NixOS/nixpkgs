@@ -1,3 +1,5 @@
+const { classify } = require('../supportedBranches.js')
+
 // Caching the list of committers saves API requests when running the bot on the schedule and
 // processing many PRs at once.
 let committers
@@ -40,16 +42,14 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
   const checklist = {
-    'PR targets one of the allowed branches: master, staging, staging-next.': [
-      'master',
-      'staging',
-      'staging-next',
-    ].includes(pull_request.base.ref),
+    'PR targets development branch.': classify(
+      pull_request.base.ref,
+    ).type.includes('development'),
     'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
     'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
+      ['nixpkgs-ci[bot]', 'r-ryantm'].includes(pull_request.user.login) ||
       (await committers).has(pull_request.user.id),
     'PR has maintainers eligible for merge.': eligible.size > 0,
   }
