@@ -95,6 +95,8 @@ in
       type = lib.types.bool;
       description = "Whether to load vboxsf";
     };
+
+    useMainlineKernelModules = lib.mkEnableOption "use the kernel modules available in mainline Linux";
   };
 
   ###### implementation
@@ -111,7 +113,7 @@ in
 
         environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
-        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = [ ] ++ lib.mkIf (!cfg.useMainlineKernelModules) kernel.virtualboxGuestAdditions;
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
