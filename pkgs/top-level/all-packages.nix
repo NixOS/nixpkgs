@@ -4164,6 +4164,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  wasmtime_29 = pkgs.wasmtime.override { majorVersion = "29"; };
+
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
