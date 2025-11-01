@@ -106,10 +106,6 @@ let
         description = "Number of ElGamal/AES tags to send.";
         default = 40;
       };
-      destination = mkOption {
-        type = types.str;
-        description = "Remote endpoint, I2P hostname or b32.i2p address.";
-      };
       keys = mkOption {
         type = types.str;
         default = name + "-keys.dat";
@@ -228,7 +224,7 @@ let
         let
           outTunOpts = [
             (sec tun.name)
-            "type = client"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "destination" tun.destination)
           ]
@@ -250,14 +246,20 @@ let
         let
           inTunOpts = [
             (sec tun.name)
-            "type = server"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "host" tun.address)
           ]
-          ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
           ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
           ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
-          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
+          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList))
+          ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+          ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+          ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+          ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+          ++ (optionals (tun ? crypto.tagsToSend) (
+            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend
+          ));
         in
         lib.concatStringsSep "\n" inTunOpts;
 
@@ -395,7 +397,8 @@ in
 
       floodfill = mkEnableOption "floodfill" // {
         description = ''
-          If the router is declared to be unreachable and needs introduction nodes.
+          Makes your router a floodfill, that means what other routers will
+          publish and get LeaseSets and RouterInfos on your router.
         '';
       };
 
@@ -685,6 +688,18 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "client"
+                    "udpclient"
+                  ];
+                  default = "client";
+                  description = "Tunnel type.";
+                };
+                destination = mkOption {
+                  type = types.str;
+                  description = "Remote endpoint, I2P hostname or b32.i2p address.";
+                };
                 destinationPort = mkOption {
                   type = with types; nullOr port;
                   default = null;
@@ -710,6 +725,16 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "server"
+                    "http"
+                    "irc"
+                    "udpserver"
+                  ];
+                  default = "server";
+                  description = "Tunnel type.";
+                };
                 inPort = mkOption {
                   type = types.port;
                   default = 0;
