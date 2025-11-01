@@ -2,8 +2,15 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  symlinkJoin,
+  extraPlugins ? [ ],
 }:
-
+let
+  pluginsRef = symlinkJoin {
+    name = "docker-plugins";
+    paths = extraPlugins;
+  };
+in
 buildGoModule rec {
   pname = "docker-compose";
   version = "2.39.4";
@@ -18,6 +25,11 @@ buildGoModule rec {
   postPatch = ''
     # entirely separate package that breaks the build
     rm -rf pkg/e2e/
+  '';
+
+  preBuild = lib.optionalString (extraPlugins != [ ]) ''
+    substituteInPlace vendor/github.com/docker/cli/cli-plugins/manager/manager_unix.go \
+      --replace-fail /usr/libexec/docker/cli-plugins "${pluginsRef}/libexec/docker/cli-plugins"
   '';
 
   vendorHash = "sha256-Uqzul9BiXHAJ1BxlOtRS68Tg71SDva6kg3tv7c6ar2E=";
