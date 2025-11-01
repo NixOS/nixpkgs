@@ -505,8 +505,8 @@ fetchurl {
 
   downloadToTemp = true;
   postFetch = ''
-    ${lib.getExe hello} >> $downloadedFile
-    mv $downloadedFile $out
+    hello >> "$downloadedFile"
+    mv "$downloadedFile" "$out"
   '';
 
   hash = "sha256-ceooQQYmDx5+0nfg40uU3NNI2yKrixP7HZ/xLZUNv+w=";
