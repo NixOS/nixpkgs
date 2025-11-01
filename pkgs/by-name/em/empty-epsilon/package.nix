@@ -14,7 +14,7 @@
 }:
 
 let
-  version = {
+  versions = {
     seriousproton = "2024.12.08";
     emptyepsilon = "2024.12.08";
     basis-universal = "1.15_final";
@@ -23,18 +23,18 @@ let
   basis-universal = fetchFromGitHub {
     owner = "BinomialLLC";
     repo = "basis_universal";
-    tag = version.basis-universal;
+    tag = versions.basis-universal;
     hash = "sha256-pKvfVvdbPIdzdSOklicThS7xwt4i3/21bE6wg9f8kHY=";
   };
 
   serious-proton = stdenv.mkDerivation {
     pname = "serious-proton";
-    version = version.seriousproton;
+    version = versions.seriousproton;
 
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
-      tag = "EE-${version.seriousproton}";
+      tag = "EE-${versions.seriousproton}";
       hash = "sha256-k1YCB7EJIL+kdlHEU4cJjmLZZAZyxIPU0XlSn2t4C90=";
     };
 
@@ -64,12 +64,12 @@ in
 
 stdenv.mkDerivation {
   pname = "empty-epsilon";
-  version = version.emptyepsilon;
+  version = versions.emptyepsilon;
 
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
-    tag = "EE-${version.emptyepsilon}";
+    tag = "EE-${versions.emptyepsilon}";
     hash = "sha256-JsHFwbt4VGsgaZz9uxEmwzZGfkYTNsIZTKkpvCCmI48=";
   };
 
@@ -87,10 +87,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeFeature "SERIOUS_PROTON_DIR" "${serious-proton.src}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION" "${version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MAJOR" "${lib.versions.major version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MINOR" "${lib.versions.minor version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_PATCH" "${lib.versions.patch version.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION" "${versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MAJOR" "${lib.versions.major versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MINOR" "${lib.versions.minor versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_PATCH" "${lib.versions.patch versions.emptyepsilon}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BASIS" "${basis-universal}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MESHOPTIMIZER" "${meshoptimizer.src}")
     (lib.cmakeFeature "CMAKE_AR" "${stdenv.cc.cc}/bin/gcc-ar")
