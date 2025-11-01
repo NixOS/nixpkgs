@@ -13,13 +13,13 @@
 }:
 buildPythonPackage rec {
   pname = "gfal2-python";
-  version = "1.13.0";
+  version = "1.13.1";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
     rev = "v${version}";
-    hash = "sha256-TF8EwT1UEtB9lhfq8Jkn9rrSkSxMSLzuAywfB23K1kE=";
+    hash = "sha256-OUpsnKSsFOhiSg0npJW/9Htl4XNt/6zEPuB9nd6b43w=";
   };
   nativeBuildInputs = [
     cmake
