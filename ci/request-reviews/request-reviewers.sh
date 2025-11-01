@@ -68,7 +68,7 @@ for user in "${!users[@]}"; do
     fi
 done
 
-if [[ "${#users[@]}" -gt 10 ]]; then
+if [[ "${#users[@]}" -gt 15 ]]; then
     log "Too many reviewers (${!users[*]}), skipping review requests"
     exit 0
 fi
