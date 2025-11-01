@@ -1,0 +1,35 @@
+From 2b019a92faf0a35bb953dc3dcb1c2e48a05a55b3 Mon Sep 17 00:00:00 2001
+From: David Wronek <david.wronek@mainlining.org>
+Date: Thu, 9 Oct 2025 09:44:39 +0200
+Subject: [PATCH] Fix darwin build
+
+---
+ zlib-1.2.11/zutil.h | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/zlib-1.2.11/zutil.h b/zlib-1.2.11/zutil.h
+index b079ea6..4e94f2f 100644
+--- a/zlib-1.2.11/zutil.h
++++ b/zlib-1.2.11/zutil.h
+@@ -130,17 +130,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+ #  endif
+ #endif
+ 
+-#if defined(MACOS) || defined(TARGET_OS_MAC)
++#if defined(MACOS)
+ #  define OS_CODE  7
+-#  ifndef Z_SOLO
+-#    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
+-#      include <unix.h> /* for fdopen */
+-#    else
+-#      ifndef fdopen
+-#        define fdopen(fd,mode) NULL /* No fdopen() */
+-#      endif
+-#    endif
+-#  endif
+ #endif
+ 
+ #ifdef __acorn
+-- 
+2.51.0
+
