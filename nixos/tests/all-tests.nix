@@ -743,11 +743,11 @@ in
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   incron = runTest ./incron.nix;
   incus = import ./incus {
-    inherit runTest;
+    inherit runTestOn;
     package = pkgs.incus;
   };
   incus-lts = import ./incus {
-    inherit runTest;
+    inherit runTestOn;
     package = pkgs.incus-lts;
   };
   influxdb = runTest ./influxdb.nix;
