@@ -65,8 +65,8 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
+    name = "exact-audio-copy";
+    exec = "exact-audio-copy";
     comment = "Audio Grabber for CDs";
     desktopName = "Exact Audio Copy";
     categories = [
@@ -77,7 +77,7 @@ let
   };
 in
 symlinkJoin {
-  name = "${pname}-${version}";
+  name = "exact-audio-copy-${version}";
 
   paths = [
     wrapper

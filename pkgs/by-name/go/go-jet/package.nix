@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "2.14.0";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "go-jet";
     repo = "jet";
     rev = "v${version}";
     sha256 = "sha256-6cFkLnZGSAlwvsewxXaKeNoeDaILqLo02vkzqjruhxU=";
