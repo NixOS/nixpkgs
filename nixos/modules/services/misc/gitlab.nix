@@ -1530,7 +1530,9 @@ in
               | from_entries
             }' >'${cfg.statePath}/config/database.yml'
 
-            ${utils.genJqSecretsReplacementSnippet gitlabConfig "${cfg.statePath}/config/gitlab.yml"}
+            ${(utils.genJqSecretsReplacementSnippet { } gitlabConfig "${cfg.statePath}/config/gitlab.yml")
+              .script
+            }
 
             rm -f '${cfg.statePath}/config/secrets.yml'
 
@@ -1799,7 +1801,10 @@ in
           set -o errexit -o pipefail -o nounset
           shopt -s dotglob nullglob inherit_errexit
 
-          ${utils.genJqSecretsReplacementSnippet cfg.workhorse.config "${cfg.statePath}/config/gitlab-workhorse.json"}
+          ${(utils.genJqSecretsReplacementSnippet { } cfg.workhorse.config
+            "${cfg.statePath}/config/gitlab-workhorse.json"
+          ).script
+          }
 
           json2toml "${cfg.statePath}/config/gitlab-workhorse.json" "${cfg.statePath}/config/gitlab-workhorse.toml"
           rm "${cfg.statePath}/config/gitlab-workhorse.json"
