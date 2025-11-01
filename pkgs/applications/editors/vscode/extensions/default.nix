@@ -3927,6 +3927,22 @@ let
 
       robocorp.robotframework-lsp = callPackage ./robocorp.robotframework-lsp { };
 
+      rokoroku.vscode-theme-darcula = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-theme-darcula";
+          publisher = "rokoroku";
+          version = "1.2.3";
+          hash = "sha256-tlI+3DyDPo9tTOVTrEHoOtVTnEYSjgu9wojTXmEvv4E=";
+        };
+        meta = {
+          description = "Theme extension for VS Code based on Darcula theme from Jetbrains IDEs";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=rokoroku.vscode-theme-darcula";
+          homepage = "https://github.com/rokoroku/vscode-theme-darcula";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.colm ];
+        };
+      };
+
       roman.ayu-next = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ayu-next";
