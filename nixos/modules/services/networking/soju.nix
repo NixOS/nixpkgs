@@ -150,6 +150,7 @@ in
         DynamicUser = true;
         Restart = "always";
         ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
         WorkingDirectory = stateDir;
