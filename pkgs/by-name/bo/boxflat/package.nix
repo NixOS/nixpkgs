@@ -49,7 +49,8 @@ python3Packages.buildPythonPackage rec {
     substituteInPlace requirements.txt \
         --replace-fail "psutil==6.1.0" "psutil" \
         --replace-fail "evdev==1.7.1" "evdev" \
-        --replace-fail "pycairo==1.27.0" "pycairo"
+        --replace-fail "pycairo==1.27.0" "pycairo" \
+        --replace-fail "PyYAML==6.0.2" "PyYAML"
   '';
 
   preBuild = ''
