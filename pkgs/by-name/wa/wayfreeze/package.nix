@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2025-07-08";
+  version = "0.1.0-unstable-2025-07-08";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
