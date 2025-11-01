@@ -69,6 +69,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/jboynyc/textnets/issues/66
+    "test_textnet_save_and_load"
+  ];
+
   pythonImportsCheck = [ "textnets" ];
 
   # Enable the package to find the cythonized .so files during testing. See #255262
