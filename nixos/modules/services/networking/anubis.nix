@@ -25,14 +25,14 @@ let
   instanceUsesDedicatedRuntimeDirectory =
     name: instance:
     lib.any (lib.hasPrefix (runtimeDirectoryPrefix name)) (unixSocketAddrs instance.settings);
-  useDedicatedRuntimeDirectory =
+  useLegacyRuntimeDirectory =
     # Set when:
-    # - Multiple instances are configured to use unix sockets.
-    # - At least one instance uses the new runtime directory prefix: /run/anubis/anubis-<instance name>.
-    lib.count instanceUsesUnixSockets (lib.attrValues enabledInstances) > 1
-    || lib.any (attrs: instanceUsesDedicatedRuntimeDirectory attrs.name attrs.value) (
+    # - Only one instance is configured with unix sockets.
+    # - No instance uses the new runtime directory prefix: /run/anubis/anubis-<name>.
+    lib.count instanceUsesUnixSockets (lib.attrValues enabledInstances) == 1
+    && !(lib.any (attrs: instanceUsesDedicatedRuntimeDirectory attrs.name attrs.value) (
       lib.attrsToList enabledInstances
-    );
+    ));
 
   commonSubmodule =
     isDefault:
@@ -207,7 +207,7 @@ let
         default = "/run/anubis/${instanceName name}.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
-          Use the prefix ${runtimeDirectoryPrefix "<instance name>"} when configuring multiple instances.
+          Use the prefix "${runtimeDirectoryPrefix "<name>"}". The prefix "/run/anubis" is deprecated.
 
           Defaults to Unix domain sockets. To use TCP sockets, set this to a TCP address and `BIND_NETWORK` to `"tcp"`.
         '';
@@ -219,7 +219,7 @@ let
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
-          Use the prefix ${runtimeDirectoryPrefix "<instance name>"} when configuring multiple instances.
+          Use the prefix "${runtimeDirectoryPrefix "<name>"}". The prefix "/run/anubis" is deprecated.
 
           The metrics server is enabled by default and may be disabled. However, due to implementation details, this is
           only possible by setting a command line flag. See {option}`services.anubis.defaultOptions.extraFlags` for an
@@ -269,9 +269,7 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
-    warnings = [
-      "RuntimeDirectory is going to be migrated from `anubis` to `anubis/anubis-<instance name>`, update BIND and METRICS_BIND to ${runtimeDirectoryPrefix "<instance name>"} if using unix sockets"
-    ];
+    warnings = lib.optional useLegacyRuntimeDirectory ''Anubis service: runtime directory is going to be migrated from "anubis" to "anubis/anubis-<name>". Update services.anubis.instances.<name>.BIND to "${runtimeDirectoryPrefix "<name>"}anubis.sock" and services.anubis.instances.<name>.METRICS_BIND to "${runtimeDirectoryPrefix "<name>"}anubis-metrics.sock". Note: if <name> is "", use the prefix "/run/anubis/anubis".'';
 
     assertions =
       let
@@ -282,9 +280,9 @@ in
       [
         {
           assertion =
-            !useDedicatedRuntimeDirectory
+            useLegacyRuntimeDirectory
             || lib.all validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances);
-          message = "use the prefix ${runtimeDirectoryPrefix "<instance name>"} in BIND and METRICS_BIND when configuring multiple instances";
+          message = ''use the prefix "${runtimeDirectoryPrefix "<name>"}" in services.anubis.instances.<name>.BIND and services.anubis.instances.<name>.METRICS_BIND'';
         }
       ];
 
@@ -331,12 +329,11 @@ in
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
           RuntimeDirectory =
-            if useDedicatedRuntimeDirectory then
-              "anubis/${instanceName name}"
-            else if instanceUsesUnixSockets instance then
-              # `dedicatedRuntimeDirectory = false`: /run/anubis may still be used.
+            if useLegacyRuntimeDirectory && instanceUsesUnixSockets instance then
               # Warning: `anubis` will be deprecated eventually.
               "anubis"
+            else if instanceUsesUnixSockets instance then
+              "anubis/${instanceName name}"
             else
               null;
           # hardening
