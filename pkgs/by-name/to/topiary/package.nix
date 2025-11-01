@@ -10,19 +10,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
     tag = "v${version}";
-    hash = "sha256-CyqZhkzAOqC3xWhwUzCpkDO0UFsO0S4/3sV7zIILiVg=";
+    hash = "sha256-49LTUtgroD0wCwJYYb/IN1lsWbAtdfKjGNMuUa2+vhI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
+  cargoHash = "sha256-I3hsaA4N2x00J5+U0z2B1gi1N7QVf7Vnab2scjDpWoo=";
 
-  cargoHash = "sha256-akAjn9a7dMwjPSNveDY2KJ62evjHCAWpRR3A7Ghkb5A=";
 
   # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
   depsExtraArgs.postBuild = ''
