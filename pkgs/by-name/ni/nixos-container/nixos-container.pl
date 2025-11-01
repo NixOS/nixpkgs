@@ -43,6 +43,7 @@ Usage: nixos-container list
          [--port <port>]
          [--host-address <string>]
          [--local-address <string>]
+         [--use-host-network]
        nixos-container destroy <container-name>
        nixos-container restart <container-name>
        nixos-container start <container-name>
@@ -74,6 +75,7 @@ my $signal;
 my $configFile;
 my $hostAddress;
 my $localAddress;
+my $useHostNetwork = 0;
 my $flake;
 my $flakeAttr = "container";
 
@@ -106,6 +108,7 @@ GetOptions(
     "config-file=s" => \$configFile,
     "host-address=s" => \$hostAddress,
     "local-address=s" => \$localAddress,
+    "use-host-network" => \$useHostNetwork,
     "flake=s" => \$flake,
     # Nix passthru options.
     "log-format=s" => \&copyNixFlags1,
@@ -125,6 +128,10 @@ push @nixFlags, @nixFlags2;
 
 if (defined $hostAddress and !defined $localAddress or defined $localAddress and !defined $hostAddress) {
     die "With --host-address set, --local-address is required as well!";
+}
+
+if ($useHostNetwork && (defined $hostAddress || defined $localAddress)) {
+    die "--use-host-network cannot be used with --host-address or --local-address!";
 }
 
 my $action = $ARGV[0] or die "$0: no action specified\n";
@@ -231,36 +238,44 @@ if ($action eq "create") {
     # be restricted too.
     die "$0: container name ‘$containerName’ is too long\n" if length $containerName > 11;
 
-    # Get an unused IP address.
-    my %usedIPs;
-    foreach my $confFile2 (glob "$configurationDirectory/*.conf") {
-        # Filter libpod configuration files
-        # From 22.05 and onwards this is not an issue any more as directories dont clash
-        if($confFile2 eq "/etc/containers/libpod.conf" || $confFile2 eq "/etc/containers/containers.conf" || $confFile2 eq "/etc/containers/registries.conf") {
-            next
-        }
-        my $s = read_file($confFile2) or die;
-        $usedIPs{$1} = 1 if $s =~ /^HOST_ADDRESS=([0-9\.]+)$/m;
-        $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
-    }
-
-    unless (defined $hostAddress) {
-        my $ipPrefix;
-        for (my $nr = 1; $nr < 255; $nr++) {
-            $ipPrefix = "10.233.$nr";
-            $hostAddress = "$ipPrefix.1";
-            $localAddress = "$ipPrefix.2";
-            last unless $usedIPs{$hostAddress} || $usedIPs{$localAddress};
-            $ipPrefix = undef;
-        }
-
-        die "$0: out of IP addresses\n" unless defined $ipPrefix;
-    }
-
     my @conf;
-    push @conf, "PRIVATE_NETWORK=1\n";
-    push @conf, "HOST_ADDRESS=$hostAddress\n";
-    push @conf, "LOCAL_ADDRESS=$localAddress\n";
+
+    if ($useHostNetwork) {
+        push @conf, "PRIVATE_NETWORK=0\n";
+        print STDERR "using host network\n";
+    } else {
+        # Get an unused IP address.
+        my %usedIPs;
+        foreach my $confFile2 (glob "$configurationDirectory/*.conf") {
+            # Filter libpod configuration files
+            # From 22.05 and onwards this is not an issue any more as directories dont clash
+            if($confFile2 eq "/etc/containers/libpod.conf" || $confFile2 eq "/etc/containers/containers.conf" || $confFile2 eq "/etc/containers/registries.conf") {
+                next
+            }
+            my $s = read_file($confFile2) or die;
+            $usedIPs{$1} = 1 if $s =~ /^HOST_ADDRESS=([0-9\.]+)$/m;
+            $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
+        }
+
+        unless (defined $hostAddress) {
+            my $ipPrefix;
+            for (my $nr = 1; $nr < 255; $nr++) {
+                $ipPrefix = "10.233.$nr";
+                $hostAddress = "$ipPrefix.1";
+                $localAddress = "$ipPrefix.2";
+                last unless $usedIPs{$hostAddress} || $usedIPs{$localAddress};
+                $ipPrefix = undef;
+            }
+
+            die "$0: out of IP addresses\n" unless defined $ipPrefix;
+        }
+
+        push @conf, "PRIVATE_NETWORK=1\n";
+        push @conf, "HOST_ADDRESS=$hostAddress\n";
+        push @conf, "LOCAL_ADDRESS=$localAddress\n";
+        print STDERR "host IP is $hostAddress, container IP is $localAddress\n";
+    }
+
     push @conf, "HOST_BRIDGE=$bridge\n";
     push @conf, "HOST_PORT=$port\n";
     push @conf, "AUTO_START=$autoStart\n";
@@ -268,8 +283,6 @@ if ($action eq "create") {
     write_file($confFile, \@conf);
 
     close($lock);
-
-    print STDERR "host IP is $hostAddress, container IP is $localAddress\n";
 
     # The per-container directory is restricted to prevent users on
     # the host from messing with guest users who happen to have the
@@ -517,6 +530,9 @@ elsif ($action eq "run") {
 
 elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
+    if ($s =~ /^PRIVATE_NETWORK=0$/m) {
+        die "$0: container uses host network, no separate IP address\n";
+    }
     $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m
         or $s =~ /^LOCAL_ADDRESS6=([0-9a-f:]+)(\/[0-9]+)?$/m
         or die "$0: cannot get IP address\n";
