@@ -5,17 +5,20 @@
   django,
   pytestCheckHook,
   pytest-django,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonfield";
   version = "3.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-ylOHG8MwiuT0zdw7T5ntXG/Gq7GDL7+0mbxtpWbHDko=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
