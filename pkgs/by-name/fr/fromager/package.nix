@@ -2,18 +2,19 @@
   lib,
   python3,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fromager";
-  version = "0.59.0";
+  version = "0.68.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = version;
-    hash = "sha256-aKoZKpzgJ3e5JRYSSeLmLlji1Fj8omxvwGZfNXDOhLs=";
+    hash = "sha256-7NM8hRsMnnHWxzjwNv/cLIm9iOUsUEzoCwPuFUN8+hk=";
   };
 
   build-system = with python3.pkgs; [
@@ -39,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     stevedore
     tomlkit
     tqdm
-    virtualenv
+    uv
     wheel
   ];
 
@@ -47,10 +48,23 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     twine
+    uv
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
     "fromager"
+  ];
+
+  disabledTestPaths = [
+    # Depends on wheel.cli module that is private since wheel 0.46.0
+    "tests/test_wheels.py"
+  ];
+
+  disabledTests = [
+    # Accessing pypi.org (not allowed in sandbox)
+    "test_get_build_backend_dependencies"
+    "test_get_build_sdist_dependencies"
   ];
 
   meta = {
