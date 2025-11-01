@@ -91,8 +91,8 @@ in
         Sets which portal backend should be used to provide the implementation
         for the requested interface. For details check {manpage}`portals.conf(5)`.
 
-        Configs will be linked to `/etc/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
-        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.common`
+        Configs will be linked to {file}`/etc/xdg/xdg-desktop-portal/` with the name {file}`$desktop-portals.conf`
+        for {file}`xdg.portal.config.$desktop` and {file}`portals.conf` for {file}`xdg.portal.config.common`
         as an exception.
       '';
     };
@@ -103,7 +103,7 @@ in
       example = lib.literalExpression "[ pkgs.gnome-session ]";
       description = ''
         List of packages that provide XDG desktop portal configuration, usually in
-        the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
+        the form of {file}`share/xdg-desktop-portal/$desktop-portals.conf`.
 
         Note that configs in `xdg.portal.config` will be preferred if set.
       '';
