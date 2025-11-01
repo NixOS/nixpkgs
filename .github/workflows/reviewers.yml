@@ -63,28 +63,6 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
-      - name: Log current API rate limits (app-token)
-        if: ${{ steps.app-token.outputs.token }}
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq
-
-      - name: Requesting code owner reviews
-        if: steps.app-token.outputs.token
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          # Don't do anything on draft PRs
-          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
-        run: result/bin/request-code-owner-reviews.sh "$REPOSITORY" "$NUMBER" ci/OWNERS
-
-      - name: Log current API rate limits (app-token)
-        if: ${{ steps.app-token.outputs.token }}
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq
-
       - name: Log current API rate limits (github.token)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -149,7 +127,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - name: Requesting maintainer reviews
+      - name: Requesting reviews
         if: ${{ steps.app-token.outputs.token }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -164,6 +142,7 @@ jobs:
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id" --jq .login; done \
+            | cat comparison/owners.txt - \
             | GH_TOKEN="$APP_GH_TOKEN" result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
 
       - name: Log current API rate limits (app-token)
