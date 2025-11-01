@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "17.3.0";
+  version = "18.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-9w+0SWQ2Bo+B73hgKaGzafYa4vkyfusvpQM126We4hQ=";
+    hash = "sha256-fzBB3G/1pA33Vo0j6ODMRTGOC75hH8U6cjR5kpnHJu8=";
   };
 
   build-system = [
