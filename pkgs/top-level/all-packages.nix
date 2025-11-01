@@ -1076,12 +1076,6 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
-  mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
-
-  networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
-    systemd = pkgs.systemd;
-  };
-
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
@@ -1212,8 +1206,6 @@ with pkgs;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
-  gita = python3Packages.callPackage ../applications/version-management/gita { };
-
   github-cli = gh;
 
   git-annex-metadata-gui =
@@ -1231,10 +1223,6 @@ with pkgs;
       ;
   };
 
-  git-annex-remote-googledrive =
-    python3Packages.callPackage ../applications/version-management/git-annex-remote-googledrive
-      { };
-
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
   gitRepo = git-repo;
@@ -1248,13 +1236,7 @@ with pkgs;
       ;
   };
 
-  pass-git-helper =
-    python3Packages.callPackage ../applications/version-management/pass-git-helper
-      { };
-
   qgit = qt6Packages.callPackage ../applications/version-management/qgit { };
-
-  silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
 
   svn-all-fast-export =
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
@@ -1316,8 +1298,6 @@ with pkgs;
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
-
-  fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
 
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
@@ -1539,8 +1519,6 @@ with pkgs;
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
-
-  aws-mfa = python3Packages.callPackage ../tools/admin/aws-mfa { };
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
