@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ]
-  ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
+  ++ builtins.concatLists (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
