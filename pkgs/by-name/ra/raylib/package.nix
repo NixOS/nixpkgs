@@ -20,10 +20,9 @@
 let
   inherit (lib) optional;
 
-  pname = "raylib";
 in
 
-lib.checkListOfEnum "${pname}: platform"
+lib.checkListOfEnum "raylib: platform"
   [
     "Desktop"
     "Web"
@@ -36,7 +35,7 @@ lib.checkListOfEnum "${pname}: platform"
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
 
-      inherit pname;
+      pname = "raylib";
       version = "5.5";
 
       src = fetchFromGitHub {
