@@ -1,0 +1,51 @@
+diff --git a/Lib/venv/__init__.py b/Lib/venv/__init__.py
+index dc9c5991df7..a1e8cb07a91 100644
+--- a/Lib/venv/__init__.py
++++ b/Lib/venv/__init__.py
+@@ -497,6 +497,7 @@ def replace_variables(self, text, context):
+             '__VENV_PROMPT__': context.prompt,
+             '__VENV_BIN_NAME__': context.bin_name,
+             '__VENV_PYTHON__': context.env_exe,
++            '__HOME_DIR__': context.python_dir,
+         }
+ 
+         def quote_ps1(s):
+diff --git a/Lib/venv/scripts/common/activate b/Lib/venv/scripts/common/activate
+index 70673a265d4..398848f6f89 100644
+--- a/Lib/venv/scripts/common/activate
++++ b/Lib/venv/scripts/common/activate
+@@ -51,7 +51,7 @@ case "$(uname)" in
+ esac
+ 
+ _OLD_VIRTUAL_PATH="$PATH"
+-PATH="$VIRTUAL_ENV/"__VENV_BIN_NAME__":$PATH"
++PATH="$VIRTUAL_ENV/"__VENV_BIN_NAME__:"__HOME_DIR__":"$PATH"
+ export PATH
+ 
+ VIRTUAL_ENV_PROMPT=__VENV_PROMPT__
+diff --git a/Lib/venv/scripts/common/activate.fish b/Lib/venv/scripts/common/activate.fish
+index 284a7469c99..9d821d83554 100644
+--- a/Lib/venv/scripts/common/activate.fish
++++ b/Lib/venv/scripts/common/activate.fish
+@@ -36,7 +36,7 @@ deactivate nondestructive
+ set -gx VIRTUAL_ENV __VENV_DIR__
+ 
+ set -gx _OLD_VIRTUAL_PATH $PATH
+-set -gx PATH "$VIRTUAL_ENV/"__VENV_BIN_NAME__ $PATH
++set -gx PATH "$VIRTUAL_ENV/"__VENV_BIN_NAME__ "__HOME_DIR__" $PATH
+ set -gx VIRTUAL_ENV_PROMPT __VENV_PROMPT__
+ 
+ # Unset PYTHONHOME if set.
+diff --git a/Lib/venv/scripts/posix/activate.csh b/Lib/venv/scripts/posix/activate.csh
+index 2a3fa835476..717c1eeb6b3 100644
+--- a/Lib/venv/scripts/posix/activate.csh
++++ b/Lib/venv/scripts/posix/activate.csh
+@@ -12,7 +12,7 @@ deactivate nondestructive
+ setenv VIRTUAL_ENV __VENV_DIR__
+ 
+ set _OLD_VIRTUAL_PATH="$PATH"
+-setenv PATH "$VIRTUAL_ENV/"__VENV_BIN_NAME__":$PATH"
++setenv PATH "$VIRTUAL_ENV/"__VENV_BIN_NAME__:"__HOME_DIR__":"$PATH"
+ setenv VIRTUAL_ENV_PROMPT __VENV_PROMPT__
+ 
+ 
