@@ -100,10 +100,10 @@ jobs:
       systems: ${{ needs.prepare.outputs.systems }}
       testVersions: ${{ contains(fromJSON(needs.prepare.outputs.touched), 'pinned') && !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development') }}
 
-  labels:
-    name: Labels
+  bot:
+    name: Bot
     needs: [prepare, eval]
-    uses: ./.github/workflows/labels.yml
+    uses: ./.github/workflows/bot.yml
     permissions:
       issues: write
       pull-requests: write
