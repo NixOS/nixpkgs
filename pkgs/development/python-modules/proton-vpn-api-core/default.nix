@@ -14,20 +14,21 @@
   sentry-sdk,
   pyxdg,
   distro,
+  fido2,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.42.5";
+  version = "0.48.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
-    rev = "v${version}";
-    hash = "sha256-sSLBo2nTn7rvtSZqCWZLwca5DRIgqSkImRM6U6/xJ70=";
+    tag = "v${version}";
+    hash = "sha256-RxPLCA7yXMI3chqeKrgKLXc4KaiPNOlPE0pjSjjanyM=";
   };
 
   build-system = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     distro
+    fido2
     jinja2
     pynacl
     proton-core
