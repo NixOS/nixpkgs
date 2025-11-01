@@ -50,6 +50,7 @@ mapAliases {
   "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@uppy/companion" = pkgs.uppy-companion; # Added 2025-11-01
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
@@ -283,6 +284,7 @@ mapAliases {
   inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
   unified-language-server = throw "unified-language-server was removed as it is a library that should be imported within a Javascript project, not an end-user tool"; # added 2025-10-02
+  inherit (pkgs) uppy-companion; # Added 2025-11-01
   inherit (pkgs) vim-language-server; # added 2024-06-25
   vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
