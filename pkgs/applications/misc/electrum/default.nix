@@ -24,14 +24,24 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
   version = "4.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
     hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
   };
 
-  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    protobuf
+    python3.pkgs.pythonRelaxDepsHook
+  ]
+  ++ lib.optionals enableQt [
+    wrapQtAppsHook
+  ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   dependencies =
@@ -72,6 +82,15 @@ python3.pkgs.buildPythonApplication rec {
       pyqt6
       qdarkstyle
     ];
+
+  pythonRelaxDeps = [
+    "attrs"
+    "dnspython"
+  ];
+
+  pythonRemoveDeps = [
+    "protobuf"
+  ];
 
   checkInputs =
     with python3.pkgs;
