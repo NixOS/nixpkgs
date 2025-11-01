@@ -28,9 +28,10 @@ function runChecklist({
       'staging-next',
     ].includes(pull_request.base.ref),
     'PR touches only packages in `pkgs/by-name/`.': allByName,
-    'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
-      committers.has(pull_request.user.id),
+    'PR is at least one of:': {
+      'Authored by a committer.': committers.has(pull_request.user.id),
+      'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
+    },
   }
 
   if (user) {
@@ -48,7 +49,9 @@ function runChecklist({
     checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
   }
 
-  const result = Object.values(checklist).every(Boolean)
+  const result = Object.values(checklist).every((v) =>
+    typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
+  )
 
   log('checklist', JSON.stringify(checklist))
   log('eligible', JSON.stringify(Array.from(eligible)))
@@ -255,8 +258,16 @@ async function handleMerge({
       `@${comment.user.login} wants to merge this PR.`,
       '',
       'Requirements to merge this PR with `@NixOS/nixpkgs-merge-bot merge`:',
-      ...Object.entries(checklist).map(
-        ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
+      ...Object.entries(checklist).flatMap(([msg, res]) =>
+        typeof res === 'boolean'
+          ? `- :${res ? 'white_check_mark' : 'x'}: ${msg}`
+          : [
+              `- :${Object.values(res).some(Boolean) ? 'white_check_mark' : 'x'}: ${msg}`,
+              ...Object.entries(res).map(
+                ([msg, res]) =>
+                  `  - ${res ? ':white_check_mark:' : ':white_large_square:'} ${msg}`,
+              ),
+            ],
       ),
       '',
     ]
