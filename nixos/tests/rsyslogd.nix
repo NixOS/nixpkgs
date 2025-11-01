@@ -16,7 +16,7 @@ with pkgs.lib;
       { config, pkgs, ... }:
       {
         services.rsyslogd.enable = true;
-        services.journald.forwardToSyslog = false;
+        services.journald.settings.Journal.ForwardToSyslog = false;
       };
 
     # ensure rsyslogd isn't receiving messages from journald if explicitly disabled
