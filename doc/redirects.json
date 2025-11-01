@@ -389,6 +389,24 @@
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
   ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
+  ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
   ],
