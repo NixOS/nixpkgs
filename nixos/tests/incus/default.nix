@@ -1,11 +1,11 @@
 {
   package,
-  runTest,
+  runTestOn,
 }:
 let
   incusRunTest =
     config:
-    runTest {
+    runTestOn [ "x86_64-linux" "aarch64-linux" ] {
       imports = [
         ./incus-tests-module.nix
         ./incus-tests.nix
@@ -18,6 +18,8 @@ let
     };
 in
 {
+  # this is the main test which will test as much as possible
+  # run this for testing incus upgrades, also available in incus package tests
   all = incusRunTest {
     name = "all";
     appArmor = true;
@@ -43,6 +45,7 @@ in
     };
   };
 
+  # used in lxc tests to verify container functionality
   container = incusRunTest {
     name = "container";
 
@@ -63,7 +66,7 @@ in
     network.ovs = true;
   };
 
-  ui = runTest {
+  ui = runTestOn [ "x86_64-linux" "aarch64-linux" ] {
     imports = [ ./ui.nix ];
 
     _module.args = { inherit package; };

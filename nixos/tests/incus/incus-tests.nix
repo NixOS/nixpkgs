@@ -5,14 +5,26 @@
   ...
 }:
 
-# TODO aarch64 vm filter
 let
   cfg = config.tests.incus;
 
-  instanceScript = lib.foldlAttrs (
-    acc: name: instance:
-    acc + instance.testScript
-  ) "" cfg.instances;
+  vmsEnabled = lib.elem pkgs.stdenv.system [ "x86_64-linux" ];
+
+  instanceScript = lib.pipe cfg.instances [
+    (lib.filterAttrs (
+      name: instance:
+      let
+        keep = instance.type != "virtual-machine" || vmsEnabled;
+      in
+      lib.warnIf (!keep) ''
+        Skipping virtual-machine ${name} as VMs are disabled on ${pkgs.stdenv.system}
+      '' keep
+    ))
+    (lib.foldlAttrs (
+      acc: name: instance:
+      acc + instance.testScript
+    ) "")
+  ];
 in
 {
   name = "${cfg.package.name}-${cfg.name}";
@@ -20,9 +32,6 @@ in
   meta = {
     maintainers = lib.teams.lxc.members;
   };
-
-  # sshBackdoor.enable = true;
-  # enableDebugHook = true;
 
   nodes.server = {
     virtualisation = {
