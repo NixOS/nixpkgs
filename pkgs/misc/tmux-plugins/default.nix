@@ -708,13 +708,13 @@ in
 
   rose-pine = mkTmuxPlugin {
     pluginName = "rose-pine";
-    version = "unstable-2024-01-08";
+    version = "0-unstable-2025-08-26";
     rtpFilePath = "rose-pine.tmux";
     src = fetchFromGitHub {
       owner = "rose-pine";
       repo = "tmux";
-      rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
-      hash = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
+      rev = "009800e5c892c0e75de648881f8ba09a90c145b0";
+      hash = "sha256-OJMBCZwqrEu2DTlojqQ3pIp2sfjIzT9ORw0ajVgZ8vo=";
     };
     meta = {
       homepage = "https://github.com/rose-pine/tmux";
