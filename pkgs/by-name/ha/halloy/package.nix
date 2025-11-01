@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2025.10";
+  version = "2025.11";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-kWIzog56lx28v7CoyEwqwthzBnl7kbnr8QwyHQTbyCY=";
+    hash = "sha256-5cYTHb3KK5EiPv5P8GZOoQwSSIe0FO+qBnpvLZtuByI=";
   };
 
   cargoHash = "sha256-gGVclMEcvgdl3ZTiEdhW48xhC9/eONeHp0KX1lHKKxU=";

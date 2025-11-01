@@ -1,9 +1,9 @@
 {
   vimUtils,
-  ethersync,
+  teamtype,
 }:
 vimUtils.buildVimPlugin rec {
-  inherit (ethersync)
+  inherit (teamtype)
     pname
     version
     src

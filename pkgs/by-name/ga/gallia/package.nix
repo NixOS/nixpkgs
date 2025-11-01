@@ -8,17 +8,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "2.0.0a4";
+  version = "2.0.0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     tag = "v${version}";
-    hash = "sha256-by2zlfVN/FUNU9d5nn4JZ8xzto3k60DITPYhYqwm3Ms=";
+    hash = "sha256-CZsVd9ob4FHC9KeepK7OHWatVTJUiJEjqtaylhD+yS0=";
   };
 
-  build-system = with python3.pkgs; [ hatchling ];
+  pythonRelaxDeps = [ "pydantic" ];
+
+  build-system = with python3.pkgs; [ uv-build ];
 
   dependencies = with python3.pkgs; [
     aiosqlite
@@ -49,8 +51,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
-    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
       rumpelsepp

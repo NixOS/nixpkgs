@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ m4 ];
 
   enableParallelBuilding = true;
+  # tests are flaky / timing sensitive on FreeBSD
+  enableParallelChecking = !stdenv.hostPlatform.isFreeBSD;
 
   # Normal check and install check largely execute the same test suite
   doCheck = false;

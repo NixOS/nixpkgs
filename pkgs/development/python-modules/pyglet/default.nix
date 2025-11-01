@@ -2,9 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  unzip,
-  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
   libGL,
   libGLU,
   xorg,
@@ -22,15 +21,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.10";
-  format = "setuptools";
+  version = "2.1.9";
   pname = "pyglet";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JCvrGzvWfFvr3+W6EexWtpathrUMbn8qMX+NeDJWuck=";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "pyglet";
+    repo = "pyglet";
+    tag = "v${version}";
+    hash = "sha256-hdLqtSvtsj6dcpTxFAs2UO27gkUAlsdjsi624ucpGU8=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -77,6 +76,10 @@ buildPythonPackage rec {
                   path = '${xorg.libXi}/lib/libXi${ext}'
               elif name == 'Xinerama':
                   path = '${xorg.libXinerama}/lib/libXinerama${ext}'
+              elif name == 'Xrandr':
+                  path = '${lib.getLib xorg.libXrandr}/lib/libXrandr${ext}'
+              elif name == 'Xrender':
+                  path = '${lib.getLib xorg.libXrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':
                   path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
               elif name == 'harfbuzz':
@@ -115,7 +118,7 @@ buildPythonPackage rec {
       EOF
     '';
 
-  nativeBuildInputs = [ unzip ];
+  build-system = [ flit-core ];
 
   # needs GL set up which isn't really possible in a build environment even in headless mode.
   # tests do run and pass in nix-shell, however.
@@ -140,6 +143,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "http://www.pyglet.org/";
+    changelog = "https://github.com/pyglet/pyglet/blob/${src.tag}/RELEASE_NOTES";
     description = "Cross-platform windowing and multimedia library";
     license = lib.licenses.bsd3;
     # The patch needs adjusting for other platforms.

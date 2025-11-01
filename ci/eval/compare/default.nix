@@ -48,7 +48,6 @@ in
 {
   combinedDir,
   touchedFilesJson,
-  githubAuthorId,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -155,22 +154,19 @@ let
                 # Only set this label when no other label with indication for staging has been set.
                 # This avoids confusion whether to target staging or batch this with kernel updates.
                 lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
-            # Set the "11.by: package-maintainer" label to whether all packages directly
-            # changed are maintained by the PR's author.
-            "11.by: package-maintainer" =
-              maintainers ? ${githubAuthorId}
-              && lib.all (lib.flip lib.elem maintainers.${githubAuthorId}) (
-                lib.flatten (lib.attrValues maintainers)
-              );
           };
       }
     );
 
-  maintainers = callPackage ./maintainers.nix { } {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
-    changedpathsjson = touchedFilesJson;
-    removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
-  };
+  inherit
+    (callPackage ./maintainers.nix { } {
+      changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
+      changedpathsjson = touchedFilesJson;
+      removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
+    })
+    maintainers
+    packages
+    ;
 in
 runCommand "compare"
   {
@@ -180,7 +176,11 @@ runCommand "compare"
       cmp-stats
     ];
     maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
+    packages = builtins.toJSON packages;
+    passAsFile = [
+      "maintainers"
+      "packages"
+    ];
   }
   ''
     mkdir $out
@@ -223,4 +223,5 @@ runCommand "compare"
     fi
 
     cp "$maintainersPath" "$out/maintainers.json"
+    cp "$packagesPath" "$out/packages.json"
   ''

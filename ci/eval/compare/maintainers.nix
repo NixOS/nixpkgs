@@ -105,9 +105,9 @@ let
   ) attrsWithModifiedFiles;
 
   byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
-
-  packagesPerMaintainer = lib.mapAttrs (
-    maintainer: packages: map (pkg: pkg.packageName) packages
-  ) byMaintainer;
 in
-packagesPerMaintainer
+{
+  maintainers = lib.mapAttrs (_: lib.catAttrs "packageName") byMaintainer;
+
+  packages = lib.catAttrs "packageName" listToPing;
+}

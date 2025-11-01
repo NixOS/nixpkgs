@@ -72,6 +72,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "cffi"
     "pyopenssl"
   ];
 
