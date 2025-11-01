@@ -1,0 +1,135 @@
+From 3176f832a2c77dfb702e600bbc534f959692bff9 Mon Sep 17 00:00:00 2001
+From: Eblo <7004497+Eblo@users.noreply.github.com>
+Date: Thu, 30 Oct 2025 18:10:01 -0400
+Subject: [PATCH] Fix UB in Item_DropCollectible hook usage
+
+---
+ mm/src/code/z_en_item00.c | 101 +++++++++++++++++++-------------------
+ 1 file changed, 50 insertions(+), 51 deletions(-)
+
+diff --git a/mm/src/code/z_en_item00.c b/mm/src/code/z_en_item00.c
+index 12233a36f4..014427ac99 100644
+--- a/mm/src/code/z_en_item00.c
++++ b/mm/src/code/z_en_item00.c
+@@ -918,9 +918,6 @@ s16 func_800A7650(s16 dropId) {
+ }
+ 
+ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
+-    if (!(GameInteractor_Should(VB_ENEMY_DROP_COLLECTIBLE, true, *spawnPos))) {
+-        return;
+-    }
+ 
+     s32 pad;
+     Actor* spawnedActor = NULL;
+@@ -932,61 +929,63 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
+     s32 paramFF = params & 0xFF;
+     s32 i;
+ 
+-    params &= 0x7FFF;
+-    newParamFF = params & 0xFF;
+-
+-    if (paramFF == ITEM00_3_HEARTS) {
+-        for (i = 0; i < 3; i++) {
+-            spawnedActor = Item_DropCollectible(play, spawnPos, param7F00 | ITEM00_RECOVERY_HEART | param8000);
+-        }
+-    } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
+-        param7F00 >>= 8;
+-        if (!Flags_GetCollectible(play, param7F00)) {
+-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0,
+-                        param7F00);
+-        }
+-    } else if (((paramFF == ITEM00_FLEXIBLE) || (newParamFF == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
++    if ((GameInteractor_Should(VB_ENEMY_DROP_COLLECTIBLE, true, *spawnPos))) {
++        params &= 0x7FFF;
+         newParamFF = params & 0xFF;
+-        if (newParamFF == ITEM00_FLEXIBLE) {
+-            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
+-                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
+-            if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
+-                SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
++
++        if (paramFF == ITEM00_3_HEARTS) {
++            for (i = 0; i < 3; i++) {
++                spawnedActor = Item_DropCollectible(play, spawnPos, param7F00 | ITEM00_RECOVERY_HEART | param8000);
+             }
+-        } else {
+-            spawnedActor = Actor_Spawn(
+-                &play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
+-                STRAY_FAIRY_PARAMS((param7F00 >> 8) & 0x7F, STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_COLLECTIBLE));
+-            if (param20000 == 0) {
++        } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
++            param7F00 >>= 8;
++            if (!Flags_GetCollectible(play, param7F00)) {
++                Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0,
++                            param7F00);
++            }
++        } else if (((paramFF == ITEM00_FLEXIBLE) || (newParamFF == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
++            newParamFF = params & 0xFF;
++            if (newParamFF == ITEM00_FLEXIBLE) {
++                spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
++                                        spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
+                 if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
+                     SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                 }
+-            }
+-        }
+-    } else {
+-        if (param8000 == 0) {
+-            params = func_800A7650(newParamFF);
+-        }
+-        if ((s32)params != ITEM00_NO_DROP) {
+-            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0,
+-                                       0, 0, (s32)params | param8000 | param7F00);
+-            if ((spawnedActor != NULL) && (param8000 == 0)) {
+-                if (param10000 == 0) {
+-                    spawnedActor->velocity.y = 8.0f;
+-                } else {
+-                    spawnedActor->velocity.y = -2.0f;
++            } else {
++                spawnedActor = Actor_Spawn(
++                    &play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
++                    STRAY_FAIRY_PARAMS((param7F00 >> 8) & 0x7F, STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_COLLECTIBLE));
++                if (param20000 == 0) {
++                    if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
++                        SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
++                    }
+                 }
+-                spawnedActor->speed = 2.0f;
+-                spawnedActor->gravity = -0.9f;
+-                spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
+-                Actor_SetScale(spawnedActor, 0.0f);
+-                ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
+-                ((EnItem00*)spawnedActor)->unk152 = 0xDC;
+-                if ((spawnedActor->params != ITEM00_SMALL_KEY) && (spawnedActor->params != ITEM00_HEART_PIECE) &&
+-                    (spawnedActor->params != ITEM00_HEART_CONTAINER)) {
+-                    spawnedActor->room = -1;
++            }
++        } else {
++            if (param8000 == 0) {
++                params = func_800A7650(newParamFF);
++            }
++            if ((s32)params != ITEM00_NO_DROP) {
++                spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0,
++                                        0, 0, (s32)params | param8000 | param7F00);
++                if ((spawnedActor != NULL) && (param8000 == 0)) {
++                    if (param10000 == 0) {
++                        spawnedActor->velocity.y = 8.0f;
++                    } else {
++                        spawnedActor->velocity.y = -2.0f;
++                    }
++                    spawnedActor->speed = 2.0f;
++                    spawnedActor->gravity = -0.9f;
++                    spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
++                    Actor_SetScale(spawnedActor, 0.0f);
++                    ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
++                    ((EnItem00*)spawnedActor)->unk152 = 0xDC;
++                    if ((spawnedActor->params != ITEM00_SMALL_KEY) && (spawnedActor->params != ITEM00_HEART_PIECE) &&
++                        (spawnedActor->params != ITEM00_HEART_CONTAINER)) {
++                        spawnedActor->room = -1;
++                    }
++                    spawnedActor->flags |= 0x0010;
+                 }
+-                spawnedActor->flags |= 0x0010;
+             }
+         }
+     }
