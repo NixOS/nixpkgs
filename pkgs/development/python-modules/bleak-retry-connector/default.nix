@@ -9,6 +9,8 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +27,16 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    bleak
-    bluetooth-adapters
-    dbus-fast
-  ];
+  dependencies =
+    lib.optionals (pythonOlder "3.14") [
+      bleak
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && pythonOlder "3.14") [
+      bluetooth-adapters
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus-fast
+    ];
 
   nativeCheckInputs = [
     pytest-asyncio
