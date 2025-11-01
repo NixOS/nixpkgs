@@ -46,7 +46,9 @@ To ensure security and a focused utility, the bot adheres to specific limitation
 - The PR only touches packages located under `pkgs/by-name/*`.
 - The PR is either:
   - approved by a [committer][@NixOS/nixpkgs-committers].
+  - approved by a [trusted maintainer][@NixOS/nixpkgs-trusted-maintainers].
   - authored by a [committer][@NixOS/nixpkgs-committers].
+  - authored by a [trusted maintainer][@NixOS/nixpkgs-trusted-maintainers].
   - backported via label.
   - created by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
@@ -101,6 +103,7 @@ This script can also be run locally to print basic test cases.
 
 [@NixOS/nixpkgs-maintainers]: https://github.com/orgs/NixOS/teams/nixpkgs-maintainers
 [@NixOS/nixpkgs-committers]: https://github.com/orgs/NixOS/teams/nixpkgs-committers
+[@NixOS/nixpkgs-trusted-maintainers]: https://github.com/orgs/NixOS/teams/nixpkgs-trusted-maintainers
 [@NixOS/nixpkgs-ci]: https://github.com/orgs/NixOS/teams/nixpkgs-ci
 [@NixOS/nixpkgs-core]: https://github.com/orgs/NixOS/teams/nixpkgs-core
 [RFC 172]: https://github.com/NixOS/rfcs/pull/172
