@@ -8,6 +8,7 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  upower,
   udevCheckHook,
   acl,
 }:
@@ -17,14 +18,14 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.14";
+  version = "1.1.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = version;
-    hash = "sha256-cAM4h0OOXxItSf0Gb9PfHn385FXMKwvIUuYTrjgABwA=";
+    hash = "sha256-PhZoDRsckJXk2t2qR8O3ZGGeMUhmliqSpibfQDO7BeA=";
   };
 
   outputs = [
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libappindicator
     librsvg
+    upower
   ];
 
   propagatedBuildInputs = with python3Packages; [
