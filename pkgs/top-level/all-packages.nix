@@ -13644,6 +13644,7 @@ with pkgs;
   gromacsDouble = lowPrio (
     gromacs.override {
       singlePrec = false;
+      enableCuda = false; # CUDA is only implemented for single precision
       fftw = fftw;
     }
   );
@@ -13651,6 +13652,7 @@ with pkgs;
   gromacsDoubleMpi = lowPrio (
     gromacs.override {
       singlePrec = false;
+      enableCuda = false; # CUDA is only implemented for single precision
       enableMpi = true;
       fftw = fftw;
     }
