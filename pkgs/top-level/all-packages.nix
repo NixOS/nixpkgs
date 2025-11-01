@@ -10937,6 +10937,10 @@ with pkgs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
 
+  # emacsPackages is exposed on search.nixos.org.
+  # Also see pkgs/top-level/packages-config.nix
+  emacsPackages = dontRecurseIntoAttrs emacs.pkgs;
+
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak = espeak-ng;
