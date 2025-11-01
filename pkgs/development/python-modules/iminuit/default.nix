@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/iminuit";
+    changelog = "https://github.com/scikit-hep/iminuit/releases/tag/v{version}";
     description = "Python interface for the Minuit2 C++ library";
     license = with licenses; [
       mit
