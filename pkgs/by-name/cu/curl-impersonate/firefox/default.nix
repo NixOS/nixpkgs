@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     # (can't just patchShebangs or substituteInPlace since makefile unpacks it)
     ./curl-impersonate-0.6.1-fix-command-paths.patch
 
+    # Patch brotli to allow building with CMake 4
+    ./curl-impersonate-0.6.1-apply-brotli-cmake.patch
+
     # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
     (fetchpatch {
       name = "curl-impersonate-patch-cve-2023-38545.patch";
@@ -53,7 +56,13 @@ stdenv.mkDerivation rec {
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor
   # warnings on `boringssl`.
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    BROTLI_CMAKE_PATCH = fetchpatch {
+      url = "https://github.com/google/brotli/commit/81dc1c86c3cf5adc387941b5a47b5a937659c9e8.patch";
+      hash = "sha256-T1SVRlpDO/i828unNB9Ss4jJKenvxh6rJ4UR9brL1M0=";
+    };
+  };
 
   strictDeps = true;
 
