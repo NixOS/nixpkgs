@@ -180,6 +180,7 @@ async function handleMerge({
       log('Auto Merge failed', e.response.errors[0].message)
     }
 
+    // TODO: Observe whether the below is true and whether manual enqueue is actually needed.
     // Auto-merge doesn't work if the target branch has already run all CI, in which
     // case the PR must be enqueued explicitly.
     // We now have merge queues enabled on all development branches, thus don't need a
