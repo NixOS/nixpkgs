@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools-gettext";
-  version = "0.1.14";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     tag = "v${version}";
-    hash = "sha256-05xKWRxmoI8tnRENuiK3Z3WNMyjgXIX5p3vhzSUeytQ=";
+    hash = "sha256-N59Hx6CyOzAin8KcMTAD++HFLDdJnJbql/U3fO2F3DU=";
   };
 
   build-system = [ setuptools ];
