@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "dl-librescore";
-  version = "0.35.29";
+  version = "0.35.34";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     rev = "v${version}";
-    hash = "sha256-DwDlGTFdqAAsEWrhnieuaeYQ0N8COB/7b49xPJackJQ=";
+    hash = "sha256-IuHX4wFhilSK09WWNopHtkAfd9Mm2oo5M2m4KcRkCBE=";
   };
 
-  npmDepsHash = "sha256-5Uc83VdqMwQaTSmzwpBh7x4IKoVPd9MYDXkDvR1fz6Q=";
+  npmDepsHash = "sha256-X9OzFeWQLCqYzhBjLxS1ZYXame/pt4JyQBMHncCov+g=";
 
   # see https://github.com/LibreScore/dl-librescore/pull/32
   # TODO can be removed with next update
