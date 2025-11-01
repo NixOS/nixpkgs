@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "flake8-deprecated";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "flake8_deprecated";
     inherit version;
-    hash = "sha256-7pbKAB0coFYfqORvI+LSRgsYqGaWNzyrZE4QKuD/KqI=";
+    hash = "sha256-hM22P3NbqXbUGyY+rGy+5lv6shH4dIcl1OndlQF90ac=";
   };
 
   build-system = [ hatchling ];
