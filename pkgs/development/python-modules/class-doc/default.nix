@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "class-doc";
-  version = "0.2.6";
+  version = "1.25";
   format = "pyproject";
 
   src = fetchFromGitHub {
