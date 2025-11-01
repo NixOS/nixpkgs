@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -81,6 +80,8 @@ buildPythonPackage rec {
     "tests/unittest/test_smoke.py::test_async"
     # Runs out of memory while testing
     "tests/unittest/test_websockets.py"
+    # Timing sensitive, doesn't play well with the sandbox
+    "tests/unittest/conftest.py"
   ];
 
   disabledTests = [
