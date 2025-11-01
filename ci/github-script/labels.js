@@ -199,12 +199,24 @@ module.exports = async ({ github, context, core, dry }) => {
       (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
+          workflow_id: 'pull-request-target.yml',
+          event: 'pull_request_target',
+          exclude_pull_requests: true,
+          head_sha: pull_request.head.sha,
+        })
+      ).data.workflow_runs[0] ??
+      // TODO: Remove this after 2026-02-01, at which point all pr.yml artifacts will have expired.
+      (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          // In older PRs, we need pr.yml instead of pull-request-target.yml.
           workflow_id: 'pr.yml',
           event: 'pull_request_target',
           exclude_pull_requests: true,
           head_sha: pull_request.head.sha,
         })
-      ).data.workflow_runs[0] ?? {}
+      ).data.workflow_runs[0] ??
+      {}
 
     // Newer PRs might not have run Eval to completion, yet.
     // Older PRs might not have an eval.yml workflow, yet.
