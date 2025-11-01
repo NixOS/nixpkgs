@@ -18,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  postPatch = lib.optionals (lib.versionAtLeast qtlocation.version "6.10") ''
+    # fix build with Qt 6.10
+    # included in https://github.com/maplibre/maplibre-native-qt/pull/216
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(Qt''${QT_VERSION_MAJOR} COMPONENTS Location REQUIRED)' \
+                     'find_package(Qt''${QT_VERSION_MAJOR} COMPONENTS Location LocationPrivate REQUIRED)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
