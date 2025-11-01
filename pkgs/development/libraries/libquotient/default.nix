@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   olm,
   openssl,
@@ -12,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.9.1";
+  version = "0.9.5";
 
   outputs = [
     "out"
@@ -22,9 +23,20 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
-    rev = version;
-    hash = "sha256-R9ms3sYGdHaYKUMnZyBjw5KCik05k93vlvXMRtAXh5Y=";
+    tag = version;
+    hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
   };
+
+  patches = [
+    # Fix use of libquotient by library consumers like NeoChat;
+    # without this (upstreamed) patch, consumers will fail to
+    # build when trying to link to Qt6::CorePrivate.
+    # Remove when bumping package version.
+    (fetchpatch {
+      url = "https://github.com/quotient-im/libQuotient/commit/6d5a80ddaab5803c318240c7978a16fbdc36bb34.patch";
+      hash = "sha256-JMdcywGgZ0Gev/Nce4oPiMJQxTBJYPoq+WoT3WLWWNQ=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -34,10 +46,6 @@ stdenv.mkDerivation rec {
     olm
     openssl
     qtmultimedia
-  ];
-
-  cmakeFlags = [
-    "-DQuotient_ENABLE_E2EE=ON"
   ];
 
   # https://github.com/quotient-im/libQuotient/issues/551
