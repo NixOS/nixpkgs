@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -27,6 +27,7 @@
   apple-sdk_14,
   fontconfig,
   freetype,
+  gnutar,
   gst_all_1,
   harfbuzz,
   libGL,
@@ -52,7 +53,7 @@ let
     ]
   );
   runtimePaths = lib.makeLibraryPath (
-    lib.optionals (stdenv.hostPlatform.isLinux) [
+    lib.optionals clangStdenv.hostPlatform.isLinux [
       xorg.libXcursor
       xorg.libXrandr
       xorg.libXi
@@ -64,7 +65,7 @@ let
   );
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   pname = "servo";
   version = "0.0.1-unstable-2025-10-29";
 
@@ -137,19 +138,20 @@ rustPlatform.buildRustPackage {
     libGL
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     wayland
     xorg.libX11
     xorg.libxcb
     udev
     vulkan-loader
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     apple-sdk_14
+    gnutar
   ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
-  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+  buildFeatures = lib.optionals clangStdenv.hostPlatform.isAarch64 [
     "servo_allocator/use-system-allocator"
   ];
 
@@ -159,10 +161,11 @@ rustPlatform.buildRustPackage {
       #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
       "-Wno-error=format-security"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+      "-I${lib.getInclude clangStdenv.cc.libcxx}/include/c++/v1"
     ]
   );
+  env.NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isDarwin "-L${lib.getLib clangStdenv.cc.libcxx}/lib";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
@@ -173,6 +176,11 @@ rustPlatform.buildRustPackage {
     wrapProgram $out/bin/servo \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
+
+  cargoTestFlags = lib.optionals clangStdenv.hostPlatform.isDarwin [
+    "--config"
+    ''profile.production.lto="off"''
+  ];
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
