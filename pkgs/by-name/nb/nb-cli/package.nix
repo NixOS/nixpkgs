@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
-    hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
+    hash = "sha256-vZxBjavim4xNp24s7hNsoZK7xoeRJST7NvSRbRTYSz8=";
   };
 
   pythonRelaxDeps = [
