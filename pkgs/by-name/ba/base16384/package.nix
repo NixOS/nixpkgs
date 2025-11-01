@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "fumiama";
     repo = "base16384";
     rev = "v${version}";
-    hash = "sha256-Xkub0sWT+1oJlznDnnV1mDgQNiMQj8gsWemrCOAYYgE=";
+    hash = "sha256-qaDnv+KpXMYdx6eqH7pU0pEjSpU5xg9I7afxpoO3iGs=";
   };
 
   nativeBuildInputs = [ cmake ];
