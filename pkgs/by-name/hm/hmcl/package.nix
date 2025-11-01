@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.6.18";
+  version = "3.6.20";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
-    url = "https://github.com/HMCL-dev/HMCL/releases/download/release-${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-x8UcHdBYXdnTabJh2hxsknYipYNBJW2vKxJKHhryMLQ=";
+    url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
+    hash = "sha256-aRhmIhyFAeWnmtYdh6+gUBm94DifhnqoQlMU1Yiq51k=";
   };
 
   icon = fetchurl {
@@ -106,11 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
           alsa-lib
         ]
       );
+      hmclJdk' = hmclJdk.override {
+        enableJavaFX = true; # Necessary for hardware acceleration.
+      };
     in
     ''
       runHook preFixup
 
-      makeBinaryWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
+      makeBinaryWrapper ${hmclJdk'}/bin/java $out/bin/hmcl \
         --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
         --set LD_LIBRARY_PATH ${libpath} \
         --prefix PATH : "${lib.makeBinPath minecraftJdks}"\
