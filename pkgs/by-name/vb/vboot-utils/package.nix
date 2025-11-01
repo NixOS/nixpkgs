@@ -7,6 +7,9 @@
   openssl,
   libyaml,
   xz,
+  flashrom,
+
+  withFlashrom ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     openssl
     xz
-  ];
+  ]
+  ++ lib.optional withFlashrom finalAttrs.passthru.flashromChromeos;
 
   enableParallelBuilding = true;
 
@@ -42,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "DESTDIR=$(out)"
     "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
-    "USE_FLASHROM=0"
+    "USE_FLASHROM=${if withFlashrom then "1" else "0"}"
     # Upstream has weird opinions about DESTDIR
     # https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R135-16209.B/Makefile#51
     "UB_DIR=${placeholder "out"}/bin"
@@ -58,6 +62,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion finalAttrs.version);
+    flashromChromeos = flashrom.overrideAttrs (_prev: {
+      src = fetchFromGitiles {
+        url = "https://chromium.googlesource.com/chromiumos/third_party/flashrom";
+        rev = "refs/heads/release-R${finalAttrs.passthru.versionFormatted}.B-master";
+        hash = "sha256-zOoWpuS/vDLvnRPdA9FNGhNbcwh3PMQwbdfqsyqj858=";
+      };
+
+      # requires git
+      mesonFlags = _prev.mesonFlags ++ [ (lib.mesonEnable "documentation" false) ];
+
+      # requires specific hardware
+      doCheck = false;
+    });
   };
 
   meta = {
