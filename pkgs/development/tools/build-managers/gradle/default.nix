@@ -142,8 +142,11 @@ let
       callPackage,
       makeWrapper,
       unzip,
+      coreutils,
+      findutils,
       ncurses5,
       ncurses6,
+      gnused,
       udev,
       testers,
       runCommand,
@@ -203,12 +206,36 @@ let
 
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
-          makeWrapper ${java}/bin/java $out/bin/gradle \
-            --set JAVA_HOME ${java} \
-            ${jnaFlag} \
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
 
           echo "${toolchainPaths}" > $out/lib/gradle/gradle.properties
+
+          # Just use the existing gradle wrapper (usually called `gradlew`).
+          mkdir -p $out/bin
+          cp bin/gradle $out/bin
+          patchShebangs --host $out/bin/gradle
+
+          # Use the path where we installed Gradle, and delete
+          # the default memory setting to preserve compatibility with prior nixpkgs versions
+          # that did not explicitly set the memory (especially to something so low).
+          substituteInPlace $out/bin/gradle \
+            --replace-fail '$APP_HOME/lib' '$APP_HOME/lib/gradle/lib' \
+            --replace-fail '"-Xmx64m" "-Xms64m"' ""
+
+          # Ensure that JAVA_HOME is set so the installed Gradle wrapper picks it up.
+          # The wrapper also needs coreutils, xargs, and sed.
+          wrapProgram $out/bin/gradle \
+            --set JAVA_HOME ${java} \
+            --suffix PATH : ${
+              lib.makeBinPath [
+                coreutils
+                findutils
+                gnused
+              ]
+            } \
+            ${jnaFlag}
+
+          # Support gradlew as an alias.
+          ln -s $out/bin/gradle $out/bin/gradlew
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;
