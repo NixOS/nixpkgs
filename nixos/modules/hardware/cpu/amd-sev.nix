@@ -27,7 +27,6 @@ let
     };
   };
 in
-with lib;
 {
   options.hardware.cpu.amd.sev = optionsFor "SEV" "sev";
 

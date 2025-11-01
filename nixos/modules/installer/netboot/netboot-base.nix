@@ -1,8 +1,6 @@
 # This module contains the basic configuration for building netboot
 # images
 
-{ lib, ... }:
-
 {
   imports = [
     ./netboot.nix

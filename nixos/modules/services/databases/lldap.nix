@@ -6,17 +6,19 @@
 }:
 
 let
+  inherit (lib) types;
+
   cfg = config.services.lldap;
   format = pkgs.formats.toml { };
 in
 {
-  options.services.lldap = with lib; {
-    enable = mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
+  options.services.lldap = {
+    enable = lib.mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
 
-    package = mkPackageOption pkgs "lldap" { };
+    package = lib.mkPackageOption pkgs "lldap" { };
 
-    environment = mkOption {
-      type = with types; attrsOf str;
+    environment = lib.mkOption {
+      type = types.attrsOf types.str;
       default = { };
       example = {
         LLDAP_JWT_SECRET_FILE = "/run/lldap/jwt_secret";
@@ -28,7 +30,7 @@ in
       '';
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       type = types.nullOr types.path;
       default = null;
       description = ''
@@ -36,7 +38,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Free-form settings written directly to the `lldap_config.toml` file.
         Refer to <https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml> for supported values.
@@ -47,62 +49,62 @@ in
       type = types.submodule {
         freeformType = format.type;
         options = {
-          ldap_host = mkOption {
+          ldap_host = lib.mkOption {
             type = types.str;
             description = "The host address that the LDAP server will be bound to.";
             default = "::";
           };
 
-          ldap_port = mkOption {
+          ldap_port = lib.mkOption {
             type = types.port;
             description = "The port on which to have the LDAP server.";
             default = 3890;
           };
 
-          http_host = mkOption {
+          http_host = lib.mkOption {
             type = types.str;
             description = "The host address that the HTTP server will be bound to.";
             default = "::";
           };
 
-          http_port = mkOption {
+          http_port = lib.mkOption {
             type = types.port;
             description = "The port on which to have the HTTP server, for user login and administration.";
             default = 17170;
           };
 
-          http_url = mkOption {
+          http_url = lib.mkOption {
             type = types.str;
             description = "The public URL of the server, for password reset links.";
             default = "http://localhost";
           };
 
-          ldap_base_dn = mkOption {
+          ldap_base_dn = lib.mkOption {
             type = types.str;
             description = "Base DN for LDAP.";
             example = "dc=example,dc=com";
           };
 
-          ldap_user_dn = mkOption {
+          ldap_user_dn = lib.mkOption {
             type = types.str;
             description = "Admin username";
             default = "admin";
           };
 
-          ldap_user_email = mkOption {
+          ldap_user_email = lib.mkOption {
             type = types.str;
             description = "Admin email.";
             default = "admin@example.com";
           };
 
-          database_url = mkOption {
+          database_url = lib.mkOption {
             type = types.str;
             description = "Database URL.";
             default = "sqlite://./users.db?mode=rwc";
             example = "postgres://postgres-user:password@postgres-server/my-database";
           };
 
-          ldap_user_pass = mkOption {
+          ldap_user_pass = lib.mkOption {
             type = types.nullOr types.str;
             default = null;
             description = ''
@@ -112,7 +114,7 @@ in
             '';
           };
 
-          ldap_user_pass_file = mkOption {
+          ldap_user_pass_file = lib.mkOption {
             type = types.nullOr types.str;
             default = null;
             description = ''
@@ -125,7 +127,7 @@ in
             '';
           };
 
-          force_ldap_user_pass_reset = mkOption {
+          force_ldap_user_pass_reset = lib.mkOption {
             type = types.oneOf [
               types.bool
               (types.enum [ "always" ])
@@ -144,7 +146,7 @@ in
             '';
           };
 
-          jwt_secret_file = mkOption {
+          jwt_secret_file = lib.mkOption {
             type = types.nullOr types.str;
             default = null;
             description = ''
@@ -158,7 +160,7 @@ in
       apply = lib.filterAttrsRecursive (_: v: v != null);
     };
 
-    silenceForceUserPassResetWarning = mkOption {
+    silenceForceUserPassResetWarning = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
