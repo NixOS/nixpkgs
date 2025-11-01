@@ -6,12 +6,10 @@
 
   just,
   pkg-config,
-  makeBinaryWrapper,
   libcosmicAppHook,
 
   libxkbcommon,
   openssl,
-  wayland,
 
   nix-update-script,
 }:
