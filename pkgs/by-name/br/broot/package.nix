@@ -10,6 +10,7 @@
   zlib,
   buildPackages,
   versionCheckHook,
+  nix-update-script,
   withClipboard ? true,
   withTrash ? !stdenv.hostPlatform.isDarwin,
 }:
@@ -80,6 +81,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
