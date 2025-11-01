@@ -2,17 +2,35 @@
   lib,
   stdenv,
   fetchurl,
-  nix-update-script,
 }:
-
+let
+  version = "2.0.88";
+  platformMap = {
+    aarch64-linux = {
+      url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz-arm64.efi";
+      hash = "sha256-AeW92FU65XVJKGPi+A/iz7Jvtb7wKIO3xG3Cx7v4kRg=";
+    };
+    x86_64-linux = {
+      url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz.efi";
+      hash = "sha256-ipbZJ0mPCuwzb/TDtXXUBTuWOcSsKGAJ1GEGIgB2G7E=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netboot.xyz-efi";
-  version = "2.0.88";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${finalAttrs.version}/netboot.xyz.efi";
-    hash = "sha256-ipbZJ0mPCuwzb/TDtXXUBTuWOcSsKGAJ1GEGIgB2G7E=";
-  };
+  src =
+    assert lib.asserts.assertMsg (
+      platformMap ? ${stdenv.hostPlatform.system}
+    ) "Unsupported system: ${stdenv.hostPlatform.system}";
+    fetchurl {
+      inherit (platformMap.${stdenv.hostPlatform.system}) url hash;
+      meta = {
+        inherit version;
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      };
+    };
 
   dontUnpack = true;
 
@@ -20,12 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://netboot.xyz/";
     description = "Tool to boot OS installers and utilities over the network, to be run from a bootloader";
     license = lib.licenses.asl20;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    platforms = builtins.attrNames platformMap;
     maintainers = with lib.maintainers; [ pinpox ];
   };
 })
