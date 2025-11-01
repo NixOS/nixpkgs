@@ -31,8 +31,6 @@ prRepo=$(jq -r .head.repo.full_name <<< "$prInfo")
 log "PR repo: $prRepo"
 prBranch=$(jq -r .head.ref <<< "$prInfo")
 log "PR branch: $prBranch"
-prAuthor=$(jq -r .user.login <<< "$prInfo")
-log "PR author: $prAuthor"
 
 extraArgs=()
 if pwdRepo=$(git rev-parse --show-toplevel 2>/dev/null); then
@@ -56,5 +54,4 @@ git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch"
 headRef=$(git -C "$tmp/nixpkgs.git" rev-parse refs/remotes/fork/"$prBranch")
 
 log "Requesting reviews from code owners"
-"$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef" | \
-    "$SCRIPT_DIR"/request-reviewers.sh "$baseRepo" "$prNumber" "$prAuthor"
+"$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef"
