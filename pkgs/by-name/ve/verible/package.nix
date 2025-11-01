@@ -54,15 +54,17 @@ buildBazelPackage {
     "file://${registry}"
   ];
 
+  USE_BAZEL_VERSION = bazel_7.version;
+
   fetchAttrs = {
     preInstall = ''
       rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
     '';
     hash =
       {
-        aarch64-linux = "sha256-KsXrwRIiCft/WaT0uj28gOj5ahhTKxcaiosbY7Mo3JY=";
-        x86_64-linux = "sha256-X7/W2iOTXruRO2wx9J5tGYvy2IuZ6mXiRAmUI5Eq9Vc=";
-        aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
+        aarch64-linux = "sha256-gO1VBsgzDlGPPrEPM0ATJj6kpvCngwhANWbjTNMrRJQ=";
+        x86_64-linux = "sha256-BW0oechYY3v+dZgST1i0U65D1vcpIcBEEH86tp/nljI=";
+        aarch64-darwin = lib.fakeHash; # "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
