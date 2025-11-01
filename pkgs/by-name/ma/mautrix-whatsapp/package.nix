@@ -3,13 +3,6 @@
   nix-update-script,
   buildGoModule,
   fetchFromGitHub,
-  olm,
-  # This option enables the use of an experimental pure-Go implementation of
-  # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
-  # is not recommended by the mautrix developers, but they are interested in
-  # people trying it out in non-production-critical environments and reporting
-  # any issues they run into.
-  withGoolm ? false,
 }:
 
 buildGoModule rec {
@@ -24,8 +17,7 @@ buildGoModule rec {
     hash = "sha256-jJIVlK4vTJpwjugKNtWZhO31t7YX+q3W+ZmU1w/itvM=";
   };
 
-  buildInputs = lib.optional (!withGoolm) olm;
-  tags = lib.optional withGoolm "goolm";
+  tags = "goolm";
 
   vendorHash = "sha256-LvGapdyGYXNUsC0qniwdoA3pUrOivfFq+nEilw5xFNM=";
 
