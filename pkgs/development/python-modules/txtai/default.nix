@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -229,6 +230,14 @@ buildPythonPackage {
   pname = "txtai";
   inherit version src;
   pyproject = true;
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-10854.patch";
+      url = "https://github.com/neuml/txtai/commit/303a2576155d3adffdc52b939b2bb05125ca479a.patch";
+      hash = "sha256-O1ra8esOAYQk5YT1Sr5qhxgF5YB0tBIRKxAZ9MgjQxI=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
