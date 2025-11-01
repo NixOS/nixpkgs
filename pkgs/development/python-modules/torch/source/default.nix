@@ -763,6 +763,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      LunNova # esp. for ROCm
       teh
       thoughtpolice
       tscholak
