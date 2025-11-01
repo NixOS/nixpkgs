@@ -1,0 +1,121 @@
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/CMakeLists.txt
+index 8af209dcb4..ae02d04742 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/CMakeLists.txt
+@@ -150,7 +150,7 @@ target_link_libraries(
+         distributed
+         fabric
+         lite_fabric
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+         TT::Metalium::Logging
+ )
+ 
+@@ -236,7 +236,6 @@ if(TT_INSTALL)
+             reflect
+             enchantum
+             TracyClient
+-            tt-logger
+         EXPORT Metalium
+         FILE_SET
+         api
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/distributed/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/distributed/CMakeLists.txt
+index 80164e1460..d4d327c612 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/distributed/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/distributed/CMakeLists.txt
+@@ -91,7 +91,7 @@ target_link_libraries(
+         Metalium::Metal::Impl
+         Metalium::Metal::LLRT
+         TT::Metalium::HostDevCommon
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+ )
+ add_dependencies(distributed metalium_GeneratedHeaders)
+ 
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/fabric/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/fabric/CMakeLists.txt
+index 564c6bc2c8..f8dfa9ee33 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/fabric/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/fabric/CMakeLists.txt
+@@ -97,7 +97,7 @@ target_link_libraries(
+         yaml-cpp::yaml-cpp
+         Metalium::Metal::Impl
+         TT::Metalium::HostDevCommon
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+         protobuf::libprotobuf
+ )
+ 
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/impl/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/impl/CMakeLists.txt
+index cd5083783c..e5e6c7263a 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/impl/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/impl/CMakeLists.txt
+@@ -109,7 +109,7 @@ target_link_libraries(
+         common
+         Tracy::TracyClient
+     PRIVATE
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+         range-v3::range-v3
+         TT::Metalium::Common
+         TT::Metalium::HostDevCommon
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/lite_fabric/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/lite_fabric/CMakeLists.txt
+index a46cb62baf..e4f7e1d062 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/lite_fabric/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/lite_fabric/CMakeLists.txt
+@@ -44,7 +44,7 @@ target_link_libraries(
+         fmt::fmt-header-only
+         Metalium::Metal::Impl
+         TT::Metalium::HostDevCommon
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+ )
+ 
+ target_precompile_headers(lite_fabric REUSE_FROM TT::CommonPCH)
+diff --git a/third_party/tt-metal/src/tt-metal/tt_metal/tools/lightmetal_runner/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/tt_metal/tools/lightmetal_runner/CMakeLists.txt
+index 840448bda4..bfb6b8bc55 100644
+--- a/third_party/tt-metal/src/tt-metal/tt_metal/tools/lightmetal_runner/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/tt_metal/tools/lightmetal_runner/CMakeLists.txt
+@@ -4,7 +4,7 @@ target_link_libraries(
+     PRIVATE
+         Metalium::Metal
+         TT::STL
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+ )
+ target_include_directories(
+     lightmetal_runner
+diff --git a/third_party/tt-metal/src/tt-metal/ttnn/CMakeLists.txt b/third_party/tt-metal/src/tt-metal/ttnn/CMakeLists.txt
+index c87bd44b4b..aa65fd3d62 100644
+--- a/third_party/tt-metal/src/tt-metal/ttnn/CMakeLists.txt
++++ b/third_party/tt-metal/src/tt-metal/ttnn/CMakeLists.txt
+@@ -111,7 +111,7 @@ target_link_libraries(
+         TT::Metalium
+     PRIVATE
+         xtensor
+-        FlatBuffers::FlatBuffers
++        flatbuffers
+         Boost::algorithm
+ )
+
+diff --git a/third_party/tt-metal/src/tt-metal/cmake/tracy.cmake b/third_party/tt-metal/src/tt-metal/cmake/tracy.cmake
+index d44cb086f5..0f00cc6a8f 100644
+--- a/third_party/tt-metal/src/tt-metal/cmake/tracy.cmake
++++ b/third_party/tt-metal/src/tt-metal/cmake/tracy.cmake
+@@ -60,7 +60,7 @@ ExternalProject_Add(
+     INSTALL_COMMAND
+         cp ${TRACY_HOME}/csvexport/build/unix/csvexport-release .
+     BUILD_COMMAND
+-        cd ${TRACY_HOME}/csvexport/build/unix && CXX=g++ TRACY_NO_LTO=1 make -f
++        cd ${TRACY_HOME}/csvexport/build/unix && CFLAGS=-lcapstone TRACY_NO_LTO=1 make -f
+         ${TRACY_HOME}/csvexport/build/unix/Makefile
+ )
+ ExternalProject_Add(
+@@ -78,7 +78,7 @@ ExternalProject_Add(
+     INSTALL_COMMAND
+         cp ${TRACY_HOME}/capture/build/unix/capture-release .
+     BUILD_COMMAND
+-        cd ${TRACY_HOME}/capture/build/unix && CXX=g++ TRACY_NO_LTO=1 make -f ${TRACY_HOME}/capture/build/unix/Makefile
++        cd ${TRACY_HOME}/capture/build/unix && TRACY_NO_LTO=1 make -f ${TRACY_HOME}/capture/build/unix/Makefile
+ )
+ add_custom_target(
+     tracy_tools
