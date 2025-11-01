@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -35,7 +34,10 @@ buildPythonPackage rec {
     hash = "sha256-JXfqZTf26kl2P0OMAw/aTdjQaGtdyTpNnhRPlwMiZNw=";
   };
 
-  patches = [ ./use-system-libs.patch ];
+  patches = [
+    ./use-system-libs.patch
+  ];
+
   buildInputs = [ curl-impersonate-chrome ];
 
   build-system = [
@@ -76,13 +78,6 @@ buildPythonPackage rec {
     "tests/unittest"
   ];
 
-  disabledTestPaths = [
-    # test accesses network
-    "tests/unittest/test_smoke.py::test_async"
-    # Runs out of memory while testing
-    "tests/unittest/test_websockets.py"
-  ];
-
   disabledTests = [
     # FIXME ImpersonateError: Impersonating chrome136 is not supported
     "test_impersonate_without_version"
@@ -91,8 +86,14 @@ buildPythonPackage rec {
     "test_update_params"
     # tests access network
     "test_add_handle"
+    "test_async"
     "test_socket_action"
     "test_without_impersonate"
+    # Hangs the build (possibly forever)
+    # https://github.com/lexiforest/curl_cffi/issues/657
+    "test_websocket"
+    # Runs out of memory
+    "test_receive_large_messages_run_forever"
   ];
 
   __darwinAllowLocalNetworking = true;
