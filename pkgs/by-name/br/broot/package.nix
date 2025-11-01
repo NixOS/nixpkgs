@@ -33,12 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    zlib
-  ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 
@@ -86,12 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ dywedir ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ dywedir ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "broot";
   };
 })
