@@ -1464,6 +1464,7 @@ let
         zlib.dev
         libjpeg.dev
         bzip2.dev
+        libwebp
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
