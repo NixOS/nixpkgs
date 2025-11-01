@@ -24,7 +24,7 @@ let
 
     ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
 
-    ${optionalString ((builtins.length cfg.log) > 0) ''
+    ${optionalString (cfg.log != [ ]) ''
       log ${concatStringsSep " " cfg.log}
     ''}
 

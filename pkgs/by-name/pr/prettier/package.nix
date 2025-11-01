@@ -66,7 +66,7 @@ let
 
       recAttrByPath =
         addresses: default: attrs:
-        if builtins.length addresses == 0 then
+        if addresses == [ ] then
           default
         else
           let
@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
       --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
   ''
-  + lib.optionalString (builtins.length plugins > 0) ''
+  + lib.optionalString (plugins != [ ]) ''
     wrapProgram $out/bin/prettier --add-flags "${
       builtins.concatStringsSep " " (lib.map (plugin: "--plugin=${nodeEntryPointOf plugin}") plugins)
     }";

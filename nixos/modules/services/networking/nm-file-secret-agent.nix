@@ -8,7 +8,7 @@ let
   cfg = config.networking.networkmanager;
   toml = pkgs.formats.toml { };
 
-  enabled = (lib.length cfg.ensureProfiles.secrets.entries) > 0;
+  enabled = cfg.ensureProfiles.secrets.entries != [ ];
 
   nmFileSecretAgentConfig = {
     entry = builtins.map (

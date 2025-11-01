@@ -122,7 +122,7 @@ let
     ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
     ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
 
-  requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
+  requiresRuntimeSystemdCredentials = runtimeSystemdCredentials != [ ];
 
   occ = pkgs.writeShellApplication {
     name = "nextcloud-occ";

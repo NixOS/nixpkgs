@@ -47,7 +47,7 @@ in
     };
   };
 
-  config = mkIf (builtins.length scripts != 0) {
+  config = mkIf (scripts != [ ]) {
 
     boot.loader.grub.extraEntries = toString (map grubEntry scripts);
 

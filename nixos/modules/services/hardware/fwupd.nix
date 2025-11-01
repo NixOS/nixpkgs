@@ -19,7 +19,7 @@ let
         {
           fwupd = cfg.daemonSettings;
         }
-        // lib.optionalAttrs (lib.length (lib.attrNames cfg.uefiCapsuleSettings) != 0) {
+        // lib.optionalAttrs (cfg.uefiCapsuleSettings != { }) {
           uefi_capsule = cfg.uefiCapsuleSettings;
         }
       );
