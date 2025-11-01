@@ -4,21 +4,23 @@
   fetchFromGitLab,
   cmake,
   ffmpeg-headless,
+  kdsingleapplication,
+  libass,
   kdePackages,
   pkg-config,
   qt6,
   yt-dlp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "haruna";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
-    rev = "v${version}";
-    hash = "sha256-7983qZ7c3i8Ilyvu36t02zeIcVO96PXGNLH3wq6JsvI=";
+    rev = "v${finalAttrs.finalPackage.version}";
+    hash = "sha256-pAFO6zclJNmHD91ady0vlnBg6ebSWMzJq7TZN/uBGnM=";
     domain = "invent.kde.org";
   };
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     yt-dlp
 
     ffmpeg-headless
+    kdsingleapplication
+    libass
     kdePackages.kconfig
     kdePackages.kcoreaddons
     kdePackages.kdeclarative
@@ -55,6 +59,8 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
+  env.LANG = "C.UTF-8";
+
   meta = {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
@@ -73,4 +79,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "haruna";
   };
-}
+})
