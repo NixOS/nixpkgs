@@ -28,6 +28,7 @@
   zlib,
   zziplib,
   testers,
+  asio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.10.1";
+  version = "1.11";
 
   src = fetchurl {
     url =
       let
-        date = "20250302";
+        date = "20250829";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    hash = "sha256-Jn8357JYR6cWISDxzYutLTWBDMTv0h923cSFf+RU8V8=";
+    hash = "sha256-58RHA0qjXdhcpoNt2DZwNMT0USqg0U6XgdcDOUYJiAY=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     speex
     zlib
     zziplib
+    asio
   ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
