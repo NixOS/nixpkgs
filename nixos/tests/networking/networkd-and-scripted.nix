@@ -1449,8 +1449,8 @@ let
   };
 
 in
-lib.mapAttrs (lib.const (
-  attrs:
+lib.mapAttrs (
+  _: attrs:
   makeTest (
     attrs
     // {
@@ -1458,4 +1458,4 @@ lib.mapAttrs (lib.const (
       meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     }
   )
-)) testCases
+) testCases

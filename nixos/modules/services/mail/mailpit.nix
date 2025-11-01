@@ -10,7 +10,6 @@ let
   inherit (lib)
     cli
     concatStringsSep
-    const
     filterAttrs
     getExe
     mapAttrs'
@@ -22,7 +21,7 @@ let
 
   isNonNull = v: v != null;
   genCliFlags =
-    settings: concatStringsSep " " (cli.toCommandLineGNU { } (filterAttrs (const isNonNull) settings));
+    settings: concatStringsSep " " (cli.toCommandLineGNU { } (filterAttrs (_: isNonNull) settings));
 in
 {
   options.services.mailpit.instances = mkOption {

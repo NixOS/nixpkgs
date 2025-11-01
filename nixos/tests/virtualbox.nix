@@ -47,7 +47,7 @@ let
           --config-file="${pkgs.dbus}/share/dbus-1/system.conf"
 
         ${guestAdditions}/bin/VBoxService
-        ${(attrs.vmScript or (const "")) pkgs}
+        ${(attrs.vmScript or (_: "")) pkgs}
 
         i=0
         while [ ! -e /mnt-root/shutdown ]; do
@@ -90,7 +90,7 @@ let
       boot.initrd.extraUtilsCommands = ''
         copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
         copy_bin_and_libs "${pkgs.util-linux}/bin/unshare"
-        ${(attrs.extraUtilsCommands or (const "")) pkgs}
+        ${(attrs.extraUtilsCommands or (_: "")) pkgs}
       '';
 
       boot.initrd.postMountCommands = ''

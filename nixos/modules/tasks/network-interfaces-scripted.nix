@@ -537,7 +537,7 @@ let
                 ip link add name "${n}" type bond \
                 ${
                   let
-                    opts = (mapAttrs (const toString) (bondDeprecation.filterDeprecated v)) // v.driverOptions;
+                    opts = (mapAttrs (_: toString) (bondDeprecation.filterDeprecated v)) // v.driverOptions;
                   in
                   concatStringsSep "\n" (mapAttrsToList (set: val: "  ${set} ${val} \\") opts)
                 }

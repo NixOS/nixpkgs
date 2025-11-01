@@ -11,7 +11,6 @@ let
     recurseIntoAttrs
     filterAttrs
     mapAttrs
-    const
     ;
   genTests =
     {
@@ -19,7 +18,7 @@ let
       filter ? (_: _: true),
     }:
     recurseIntoAttrs (
-      mapAttrs (const makeTestFor) (filterAttrs filter pkgs.postgresqlVersions)
+      mapAttrs (_: makeTestFor) (filterAttrs filter pkgs.postgresqlVersions)
       // {
         passthru.override = makeTestFor;
       }

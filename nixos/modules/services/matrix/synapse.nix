@@ -1071,15 +1071,18 @@ in
                 url_preview_url_blacklist = mkOption {
                   # FIXME revert to just `listOf (attrsOf str)` after some time(tm).
                   type = types.listOf (
-                    types.coercedTo types.str (const (throw ''
-                      Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
-                      to a list of strings has never worked. Due to a bug, this was the type accepted
-                      by the module, but in practice it broke on runtime and as a result, no URL
-                      preview worked anywhere if this was set.
+                    types.coercedTo types.str (
+                      _:
+                      throw ''
+                        Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
+                        to a list of strings has never worked. Due to a bug, this was the type accepted
+                        by the module, but in practice it broke on runtime and as a result, no URL
+                        preview worked anywhere if this was set.
 
-                      See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
-                      on how to configure it properly.
-                    '')) (types.attrsOf types.str)
+                        See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                        on how to configure it properly.
+                      ''
+                    ) (types.attrsOf types.str)
                   );
                   default = [ ];
                   example = literalExpression ''
@@ -1417,7 +1420,7 @@ in
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
 
-    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
+    services.matrix-synapse.log = mapAttrsRecursive (_: mkDefault) defaultCommonLogConfig;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
