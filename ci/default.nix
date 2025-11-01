@@ -72,6 +72,11 @@ let
           package = pkgs.nixfmt;
         };
 
+        programs.typos = {
+          enable = true;
+          configFile = "ci/typos.toml";
+        };
+
         programs.yamlfmt = {
           enable = true;
           settings.formatter = {
