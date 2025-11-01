@@ -567,6 +567,7 @@ mapAliases {
   flut-renamer = throw "flut-renamer is unmaintained and has been removed"; # Added 2025-08-26
   flutter324 = throw "flutter324 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-10-28
   flutter326 = throw "flutter326 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-06-08
+  flutter327 = throw "flutter327 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-10-28
   fmsynth = throw "'fmsynth' has been removed as it was broken and unmaintained both upstream and in nixpkgs."; # Added 2025-09-01
   follow = warnAlias "follow has been renamed to folo" folo; # Added 2025-05-18
   forceSystem = warnAlias "forceSystem is deprecated in favour of explicitly importing Nixpkgs" (
