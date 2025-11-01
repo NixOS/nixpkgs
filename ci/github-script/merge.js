@@ -45,13 +45,14 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
       'staging',
       'staging-next',
     ].includes(pull_request.base.ref),
-    'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
+    'PR touches only packages in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
     'PR authored by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
       (await committers).has(pull_request.user.id),
-    'PR has maintainers eligible for merge.': eligible.size > 0,
+    [`PR has ${eligible.size} maintainer(s) eligible to merge changes to all touched packages.`]:
+      eligible.size > 0,
   }
 
   return {
@@ -200,7 +201,7 @@ async function handleMerge({
       })
     }
 
-    async function isMaintainer(username) {
+    async function isNixpkgsMaintainer(username) {
       try {
         return (
           (
@@ -217,19 +218,20 @@ async function handleMerge({
       }
     }
 
-    const canUseMergeBot = await isMaintainer(comment.user.login)
+    const isMaintainer = await isNixpkgsMaintainer(comment.user.login)
     const isEligible = eligible.has(comment.user.id)
-    const canMerge = result && canUseMergeBot && isEligible
+    const canMerge = result && isMaintainer && isEligible
 
     const body = [
       `<!-- comment: ${comment.node_id} -->`,
+      `@${comment.user.login} wants to merge this PR.`,
       '',
-      'Requirements to merge this PR:',
+      'Requirements to merge this PR with `@NixOS/nixpkgs-merge-bot merge`:',
       ...Object.entries(checklist).map(
         ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
       ),
-      `- :${canUseMergeBot ? 'white_check_mark' : 'x'}: ${comment.user.login} can use the merge bot.`,
-      `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to the touched packages.`,
+      `- :${isMaintainer ? 'white_check_mark' : 'x'}: ${comment.user.login} is a member of the [nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) team.`,
+      `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to all touched packages.`,
       '',
     ]
 
