@@ -8,6 +8,7 @@ set -o pipefail
 shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
+export NIX_REMOTE=daemon
 
 showSyntax() {
     exec man nixos-rebuild
