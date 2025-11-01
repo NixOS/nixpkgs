@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-otp";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     tag = "v${version}";
-    hash = "sha256-//i2KSsrkofcNE2JUlIG9zPCe/cIzBo/zmueC4I5g7I=";
+    hash = "sha256-sYwt41YWQQN6nKXGmrrZ75t/i1XNVjIgRKVElVaCGRc=";
   };
 
   build-system = [ hatchling ];
