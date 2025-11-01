@@ -316,6 +316,8 @@ with haskellLib;
     # Ironically, we still need to build the doctest suite.
     # vector-0.13.2.0 has a doctest < 0.24 constraint
     jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -742,6 +744,22 @@ with haskellLib;
           '';
         }) super.algebraic-graphs
       );
+
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken =
+      with pkgs.stdenv.hostPlatform;
+      !(
+        isx86
+        || (isPower64 && isAbiElfv2)
+        || isAarch64
+        # https://gitlab.haskell.org/ghc/ghc/-/commit/1c479c01d909c5a234cc17b0b308a400c2e0a6f6
+        || (lib.versionAtLeast self.ghc.version "9.12.1" && isRiscV64)
+        # https://gitlab.haskell.org/ghc/ghc/-/commit/652cba7ee71d2ebd0af912fcc218bc0f27237738
+        || (lib.versionAtLeast self.ghc.version "9.14.1" && isLoongArch64)
+      );
+  }) super.inspection-testing;
 
   # Too strict bounds on hspec
   # https://github.com/illia-shkroba/pfile/issues/2
@@ -2797,8 +2815,23 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
+    doJailbreak
+
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = lib.pipe super.cborg [
     (appendPatches [
