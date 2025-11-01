@@ -20,8 +20,8 @@ let
   };
 
   # if all keys are the default value
-  needsKeygen = lib.all lib.id (
-    lib.flip lib.mapAttrsToList cfg.dnssec.keys (n: v: v == lib.getAttr n defaultFiles)
+  needsKeygen = lib.all (n: cfg.dnssec.keys.${n} == defaultFiles.${n}) (
+    builtins.attrNames defaultFiles
   );
 
   mkDefaultAttrs = lib.mapAttrs (_n: v: lib.mkDefault v);
