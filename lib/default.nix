@@ -84,6 +84,7 @@ let
 
       # misc
       asserts = callLibs ./asserts.nix;
+      warnings = callLibs ./warnings.nix;
       debug = callLibs ./debug.nix;
       misc = callLibs ./deprecated/misc.nix;
 
@@ -401,7 +402,7 @@ let
         renameCrossIndexTo
         mapCrossIndex
         ;
-      inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+      inherit (self.derivations) lazyDerivation optionalDrvAttr;
       inherit (self.generators) mkLuaInline;
       inherit (self.meta)
         addMetaAttrs
@@ -515,6 +516,10 @@ let
       inherit (self.asserts)
         assertMsg
         assertOneOf
+        ;
+      inherit (self.warnings)
+        warnOnInstantiate
+        warnAlias
         ;
       inherit (self.debug)
         traceIf
