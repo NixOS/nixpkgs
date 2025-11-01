@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  swt,
   fetchurl,
   jre,
   wrapGAppsHook3,
@@ -16,7 +17,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-NBXEY5f2kVPoZit7Gy4rM61bwQSdXovg0gURukhxJJ4=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    swt
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    swt
+  ];
+
+  runtimeDeps = [
+    swt
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -33,6 +45,11 @@ stdenv.mkDerivation rec {
     install -d $out/{share/{biglybt,applications,icons/hicolor/scalable/apps},bin}
 
     cp -r ./* $out/share/biglybt/
+
+    ln -s ${swt}/lib/* $out/share/biglybt/
+    rm -rf $out/share/biglybt/swt/*.jar $out/share/biglybt/swt/J17/*.jar
+    ln -s ${swt}/jars/swt.jar $out/share/biglybt/swt/swt-$(uname -m).jar
+    ln -s ${swt}/jars/swt.jar $out/share/biglybt/swt/J17/swt-$(uname -m).jar
 
     ln -s $out/share/biglybt/biglybt.desktop $out/share/applications/
 
