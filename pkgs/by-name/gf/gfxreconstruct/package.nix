@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "1.0.4";
+  version = "unstable-2025-10-09";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    tag = "v${version}";
-    hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
+    rev = "6cf50dc987abd4777904b52edcc7d3d93bdfa265";
+    hash = "sha256-Vi5dQXrm/zkUP6Y460KlXqqAtZ43Vtp4yOde4ZfYnO4=";
     fetchSubmodules = true;
   };
 
@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
       --prefix VK_ADD_LAYER_PATH : "$out/share/vulkan/explicit_layer.d"
     wrapProgram $out/bin/gfxrecon-replay \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+
+    # Remove unrelated files that got installed
+    rm -r $out/lib/{cmake,pkgconfig}
   '';
 
   meta = {
