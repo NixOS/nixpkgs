@@ -26,6 +26,8 @@
   quickTest ? false,
   # Don't try to eval packages marked as broken.
   includeBroken ? false,
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
 }:
 
 let
@@ -75,6 +77,7 @@ let
             "$src/ci/eval/attrpaths.nix" \
             -A paths \
             -I "$src" \
+            --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --option eval-system "${evalSystem}" > $out/paths.json
@@ -120,6 +123,7 @@ let
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk" \
@@ -277,9 +281,6 @@ let
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       baseline,
-      # Which maintainer should be considered the author?
-      # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
-      githubAuthorId ? "nixpkgs-ci",
       # What files have been touched? Defaults to none; use the expression below to calculate it.
       # ```
       # git diff --name-only --merge-base master HEAD \
@@ -303,7 +304,7 @@ let
       };
       comparisonReport = compare {
         combinedDir = combine { diffDir = diffs; };
-        inherit touchedFilesJson githubAuthorId;
+        inherit touchedFilesJson;
       };
     in
     comparisonReport;

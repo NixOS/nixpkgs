@@ -16,6 +16,7 @@
   opensc,
   openssh,
   openssl,
+  nix-update-script,
   nss,
   p11-kit,
   patchelf,
@@ -45,13 +46,13 @@ let
 in
 chosenStdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-pkcs11";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-pkcs11";
     tag = finalAttrs.version;
-    hash = "sha256-W74ckrpK7ypny1L3Gn7nNbOVh8zbHavIk/TX3b8XbI8=";
+    hash = "sha256-o0a5MiFqLH7SuHG/BEtPVGOaDoV+kCu2l1MCHt5rWFc=";
   };
 
   # Disable Java‐based tests because of missing dependencies
@@ -242,6 +243,7 @@ chosenStdenv.mkDerivation (finalAttrs: {
         fapi-abrmd
         ;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {

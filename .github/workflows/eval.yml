@@ -202,7 +202,6 @@ jobs:
 
       - name: Compare against the target branch
         env:
-          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
           TARGET_SHA: ${{ inputs.mergedSha }}
         run: |
           git -C nixpkgs/trusted diff --name-only "$TARGET_SHA" \
@@ -212,7 +211,6 @@ jobs:
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
             --arg combinedDir ./combined \
             --arg touchedFilesJson ./touched-files.json \
-            --argstr githubAuthorId "$AUTHOR_ID" \
             --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
