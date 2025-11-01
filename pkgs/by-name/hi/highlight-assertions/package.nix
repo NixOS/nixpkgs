@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "highlight-assertions";
     homepage = "https://github.com/thehamsta/highlight-assertions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

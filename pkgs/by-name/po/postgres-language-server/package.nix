@@ -54,7 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://pg-language-server.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       myypo
     ];
     mainProgram = "postgres-language-server";

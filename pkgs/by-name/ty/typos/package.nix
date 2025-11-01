@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       mgttlinger
     ];
   };

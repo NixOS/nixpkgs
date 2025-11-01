@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       builditluc
-      figsoda
     ];
     mainProgram = "hoard";
   };

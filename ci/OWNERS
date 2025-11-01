@@ -215,10 +215,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
-/pkgs/build-support/rust @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt
+/pkgs/build-support/rust @zowoq @winterqt
 /pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
-/doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
+/doc/languages-frameworks/rust.section.md @zowoq @winterqt
 
 # Tcl
 /pkgs/development/interpreters/tcl  @fgaz
@@ -447,8 +447,8 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
 
 # Zig
-/pkgs/development/compilers/zig @figsoda @RossComputerGuy
-/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
+/pkgs/development/compilers/zig @RossComputerGuy
+/doc/hooks/zig.section.md       @RossComputerGuy
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq

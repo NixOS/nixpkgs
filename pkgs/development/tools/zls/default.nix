@@ -18,7 +18,6 @@ let
       homepage = "https://github.com/zigtools/zls";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        figsoda
         moni
         _0x5a4
         jmbaur

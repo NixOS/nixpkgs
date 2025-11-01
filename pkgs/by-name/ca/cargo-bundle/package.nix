@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -26,7 +26,7 @@ buildGoModule {
     description = "Displays your webcam on the terminal";
     homepage = "https://github.com/muesli/asciicam";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "asciicam";
   };
 }

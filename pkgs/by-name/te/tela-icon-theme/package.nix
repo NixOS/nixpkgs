@@ -56,6 +56,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
     platforms = subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

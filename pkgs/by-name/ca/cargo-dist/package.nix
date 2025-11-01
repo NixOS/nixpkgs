@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
       mistydemeo
     ];

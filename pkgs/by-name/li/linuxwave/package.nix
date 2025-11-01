@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate music from the entropy of Linux";
     changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     inherit (zig.meta) platforms;
     mainProgram = "linuxwave";
   };

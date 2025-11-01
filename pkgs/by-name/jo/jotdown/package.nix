@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

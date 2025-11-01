@@ -982,7 +982,6 @@ with lib.maintainers;
 
   zig = {
     members = [
-      figsoda
       RossComputerGuy
     ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
