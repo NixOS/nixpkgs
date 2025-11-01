@@ -4,6 +4,9 @@
   src,
   meta,
 
+  lib,
+  stdenv,
+
   pnpm-hash,
   vendor-hash,
 
@@ -23,6 +26,7 @@
   libsoup,
   openssl,
   webkitgtk_4_1,
+  curl,
 }:
 
 rustPlatform.buildRustPackage {
@@ -48,7 +52,8 @@ rustPlatform.buildRustPackage {
     # We disable the option to try to use the bleeding-edge version of mihomo
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # See service.nix for reasons
     substituteInPlace src-tauri/src/core/service_ipc.rs \
       --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
@@ -68,7 +73,8 @@ rustPlatform.buildRustPackage {
       --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
       --replace-fail '"kwriteconfig5"' '"${libsForQt5.kconfig}/bin/kwriteconfig5"' \
       --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
-
+  ''
+  + ''
     # this file tries to override the linker used when compiling for certain platforms
     rm .cargo/config.toml
 
@@ -98,15 +104,20 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
-    libayatana-appindicator
     libsoup
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libayatana-appindicator
     webkitgtk_4_1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
   ];
 
   # make sure the .desktop file name does not contain whitespace,
   # so that the service can register it as an auto-start item
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/share/applications/Clash\ Verge.desktop $out/share/applications/clash-verge.desktop
   '';
 }
