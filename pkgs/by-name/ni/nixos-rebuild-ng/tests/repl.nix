@@ -1,11 +1,11 @@
 {
   lib,
+  stdenv,
   expect,
   nix,
   nixos-rebuild-ng,
   path,
   runCommand,
-  stdenv,
   writeText,
 }:
 let
