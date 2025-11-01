@@ -180,6 +180,8 @@ self: super: with self; {
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
+  aio-ownet = callPackage ../development/python-modules/aio-ownet { };
+
   aio-pika = callPackage ../development/python-modules/aio-pika { };
 
   aioacaia = callPackage ../development/python-modules/aioacaia { };
