@@ -577,6 +577,20 @@ builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  taffybar = lib.pipe super.taffybar [
+    (addTestToolDepends [
+      pkgs.xorg.xorgserver
+      pkgs.xorg.xprop
+      pkgs.xorg.xrandr
+      pkgs.xdummy
+      pkgs.xterm
+      (pkgs.python3.withPackages (ps: [ ps.python-dbusmock ]))
+      pkgs.upower
+      pkgs.dbus
+    ])
+    (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+  ];
+
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
 
