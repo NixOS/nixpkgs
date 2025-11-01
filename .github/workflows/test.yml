@@ -66,6 +66,9 @@ jobs:
               '.github/workflows/pull-request-target.yml',
               '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/bot.js',
+              'ci/github-script/merge.js',
+              'ci/github-script/withRateLimit.js',
             ].includes(file))) core.setOutput('pr', true)
 
   merge-group:
