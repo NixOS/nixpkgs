@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.20";
+  version = "2025.21";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p2Wk1JgXoQPq8TrOaLv6igWPZtkXgKXEdKTiiQUklLU=";
+    hash = "sha256-BObV2Yj84i2AE9L929yRjz68nxzGKDNUcFLySjVpc1U=";
     fetchSubmodules = true;
   };
 
@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CONFIGURATION_TYPES" "RelWithDebInfo")
     # Handled by separateDebugInfo so we don't need special installation handling
     (lib.cmakeBool "SLANG_ENABLE_SPLIT_DEBUG_INFO" false)
+    (lib.cmakeFeature "SLANG_VERSION_NUMERIC" finalAttrs.version)
     (lib.cmakeFeature "SLANG_VERSION_FULL" "v${finalAttrs.version}-nixpkgs")
     (lib.cmakeBool "SLANG_USE_SYSTEM_MINIZ" true)
     (lib.cmakeBool "SLANG_USE_SYSTEM_LZ4" true)
