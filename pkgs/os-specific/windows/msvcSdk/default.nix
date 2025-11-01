@@ -1,71 +1,54 @@
 {
   lib,
-  config,
   stdenvNoCC,
   xwin,
   testers,
   llvmPackages,
+  callPackage,
 }:
 let
   version = (builtins.fromJSON (builtins.readFile ./manifest.json)).info.buildVersion;
 
   hashes = (builtins.fromJSON (builtins.readFile ./hashes.json));
 
-  host = stdenvNoCC.hostPlatform;
-  arch =
-    if host.isx86_64 then
-      "x86_64"
-    else if host.isAarch64 then
-      "aarch64"
-    else if host.isx86_32 then
-      "x86"
-    else if host.isAarch32 then
-      "aarch"
-    else
-      throw "Unsupported system";
+  fetchWinSdk = callPackage ./fetchWinSdk.nix { };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit version;
-  pname = "msvc-sdk";
-  dontUnpack = true;
+  pname = "win-sdk";
+
+  src = fetchWinSdk {
+    manifest = ./manifest.json;
+    hash = hashes.${finalAttrs.src.arch};
+  };
 
   strictDeps = true;
-  nativeBuildInputs = [ xwin ];
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash =
-    if !config.microsoftVisualStudioLicenseAccepted then
-      throw ''
-        Microsoft Software License Terms are not accepted with config.microsoftVisualStudioLicenseAccepted.
-        Please read https://visualstudio.microsoft.com/license-terms/mt644918/ and if you agree, change your
-        config to indicate so.
-      ''
-    else
-      hashes.${arch};
+  nativeBuildInputs = [
+    xwin
+  ];
 
   __structuredAttrs = true;
   xwinArgs = [
     "--accept-license"
-    "--cache-dir=xwin-out"
+    "--cache-dir=."
     "--manifest=${./manifest.json}"
-    "--arch=${arch}"
+    "--arch=${finalAttrs.src.arch}"
     "splat"
     "--preserve-ms-arch-notation"
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  installPhase = ''
+    runHook preInstall
 
     xwin "''${xwinArgs[@]}"
-    mkdir "$out"
-    mv xwin-out/splat/* "$out"
 
-    runHook postBuild
+    mkdir -p "$out"
+    cp -r splat/* "$out"
+
+    runHook postInstall
   '';
 
   dontFixup = true;
-  dontInstall = true;
 
   passthru = {
     updateScript = ./update.nu;
