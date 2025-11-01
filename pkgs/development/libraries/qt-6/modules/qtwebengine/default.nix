@@ -115,13 +115,11 @@ qtModule {
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
 
-    # Revert "Create EGLImage with eglCreateDRMImageMESA() for exporting dma_buf"
-    # Mesa 25.2 dropped eglCreateDRMImageMESA, so this no longer works.
-    # There are better ways to do this, but this is the easy fix for now.
+    # Fix GPU rendering with Mesa 25.2
+    # https://bugreports.qt.io/browse/QTBUG-139424
     (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ddcd30454aa6338d898c9d20c8feb48f36632e16.diff";
-      revert = true;
-      hash = "sha256-ht7C3GIEaPtmMGLzQKOtMqE9sLKdqqYCgi/W6b430YU=";
+      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/3cc88e0f85113e38ccb1bfdadb7d150c2389b1bc.diff";
+      hash = "sha256-5tKZ6b93VP4mKVc7jctrbW5Ktl+4Mjxw6bK1ajY62zQ=";
     })
   ];
 

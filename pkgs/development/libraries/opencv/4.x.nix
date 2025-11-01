@@ -298,6 +298,7 @@ effectiveStdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -320,11 +321,6 @@ effectiveStdenv.mkDerivation {
       ${installExtraFiles face}
       ${installExtraFiles wechat_qrcode}
     '');
-
-  postConfigure = ''
-    [ -e modules/core/version_string.inc ]
-    echo '"(build info elided)"' > modules/core/version_string.inc
-  '';
 
   buildInputs = [
     boost

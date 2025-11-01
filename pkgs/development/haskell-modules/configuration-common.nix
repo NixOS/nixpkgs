@@ -659,6 +659,14 @@ self: super:
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
+  # https://github.com/Philonous/xml-picklers/issues/5
+  xml-picklers = appendPatch (pkgs.fetchpatch {
+    name = "xml-picklers-fix-prop-xp-attribute.patch";
+    url = "https://github.com/Philonous/xml-picklers/commit/887e5416b5e61c589cadf775d82013eb87751ea2.patch";
+    sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
+  }) super.xml-picklers;
+
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
 

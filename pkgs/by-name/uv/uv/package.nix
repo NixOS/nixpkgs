@@ -27,7 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-949PYCKaZqaXFb2GFjTgpZr/b3R61Tf4lHSgGiZv0kA=";
   };
 
-  cargoHash = "sha256-ybhEzHlTuXoSV/3d1soA8Y7EpiphBEBXSlf2gWyiKnw=";
+  cargoPatches = [
+    ./CVE-2025-62518.patch
+  ];
+
+  cargoHash = "sha256-NxhOjfdfRPVAxpvK29NwFuKkXQkHOSNN0bVFOSSKQxs=";
 
   buildInputs = [
     rust-jemalloc-sys
