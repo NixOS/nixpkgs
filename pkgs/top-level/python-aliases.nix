@@ -320,6 +320,7 @@ mapAliases {
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
+  pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
