@@ -213,12 +213,7 @@ let
         echo 'export CXX=clang++' >> $out/nix-support/setup-hook
       '';
   # Removes patches which either aren't desired, or don't apply against ROCm LLVM
-  removeInapplicablePatches =
-    x:
-    (
-      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x))
-      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (baseNameOf x))
-    );
+  removeInapplicablePatches = x: (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x));
   tablegenUsage = x: !(lib.strings.hasInfix "llvm-tblgen" x);
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -386,11 +381,6 @@ overrideLlvmPackagesRocm (s: {
               sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
               url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
               relative = "clang";
-            })
-            # FIXME: Temporarily kept for rebuild avoidance
-            # Should be dropped in followup and we no longer need to filter out the original application
-            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${s.final.libllvm.lib}/lib";
             })
           ];
           hardeningDisable = [ "all" ];
