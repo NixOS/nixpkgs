@@ -2508,8 +2508,6 @@ with pkgs;
     singleBinary = false;
   };
 
-  create-cycle-app = nodePackages.create-cycle-app;
-
   cron = isc-cron;
 
   # Top-level fix-point used in `cudaPackages`' internals
