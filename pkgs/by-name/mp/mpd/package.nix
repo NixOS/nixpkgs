@@ -234,7 +234,13 @@ stdenv.mkDerivation (finalAttrs: {
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
           --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
-      '';
+      ''
+    +
+      lib.optionalString
+        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "13.3")
+        ''
+          sed -i "/subdir('time')/d" test/meson.build
+        '';
 
   # Otherwise, the meson log says:
   #
