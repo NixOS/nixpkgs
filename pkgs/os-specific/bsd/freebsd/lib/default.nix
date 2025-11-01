@@ -81,7 +81,7 @@
         else if (builtins.isPath patches) then
           (if (isDir patches) then (lib.filesystem.listFilesRecursive patches) else [ patches ])
         else if (builtins.isList patches) then
-          (lib.flatten (map consolidatePatches patches))
+          (lib.concatMap consolidatePatches patches)
         else
           throw "Bad patches - must be path or derivation or list thereof";
       consolidated = consolidatePatches patches;

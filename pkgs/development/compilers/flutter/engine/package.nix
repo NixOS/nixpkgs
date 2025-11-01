@@ -52,7 +52,7 @@ let
   expandSingleDep =
     dep: lib.optionals (lib.isDerivation dep) ([ dep ] ++ map (output: dep.${output}) dep.outputs);
 
-  expandDeps = deps: lib.flatten (map expandSingleDep deps);
+  expandDeps = deps: lib.concatMap expandSingleDep deps;
 
   constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 

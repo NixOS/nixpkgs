@@ -158,8 +158,7 @@ let
   # transitive closure of plugin dependencies (plugin needs to be a derivation)
   transitiveClosure =
     plugin:
-    [ plugin ]
-    ++ (lib.unique (builtins.concatLists (map transitiveClosure plugin.dependencies or [ ])));
+    [ plugin ] ++ (lib.unique (builtins.concatMap transitiveClosure (plugin.dependencies or [ ])));
 
   findDependenciesRecursively = plugins: lib.concatMap transitiveClosure plugins;
 
@@ -202,7 +201,7 @@ let
           startWithDeps = findDependenciesRecursively start;
           allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
           allPython3Dependencies =
-            ps: lib.flatten (map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
+            ps: lib.concatMap (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins;
           python3Env = python3.withPackages allPython3Dependencies;
 
           packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;

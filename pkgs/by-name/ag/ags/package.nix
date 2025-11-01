@@ -62,7 +62,7 @@ buildGoModule rec {
       depsOf = pkg: [ (pkg.dev or pkg) ] ++ (map depsOf (pkg.propagatedBuildInputs or [ ]));
       girDirs = symlinkJoin {
         name = "gir-dirs";
-        paths = lib.flatten (map depsOf buildInputs);
+        paths = lib.concatMap depsOf buildInputs;
       };
     in
     ''
