@@ -17265,6 +17265,8 @@ self: super: with self; {
 
   solaredge-local = callPackage ../development/python-modules/solaredge-local { };
 
+  solaredge-web = callPackage ../development/python-modules/solaredge-web { };
+
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solax = callPackage ../development/python-modules/solax { };
