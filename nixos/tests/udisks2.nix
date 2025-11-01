@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
 
@@ -12,9 +12,7 @@ in
 
 {
   name = "udisks2";
-  meta = {
-    maintainers = [ ];
-  };
+  meta.maintainers = [ lib.maintainers.h7x4 ];
 
   nodes = {
     machine = {
