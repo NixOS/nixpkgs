@@ -9,32 +9,25 @@ log() {
 }
 
 if (( "$#" < 4 )); then
-    log "Usage: $0 GIT_REPO OWNERS_FILE BASE_REF HEAD_REF"
+    log "Usage: $0 TOUCHED_FILES_FILE OWNERS_FILE"
     exit 1
 fi
 
-gitRepo=$1
+touchedFilesFile=$1
 ownersFile=$2
-baseRef=$3
-headRef=$4
 
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' exit
 
-git -C "$gitRepo" diff --name-only --merge-base "$baseRef" "$headRef" > "$tmp/touched-files"
-readarray -t touchedFiles < "$tmp/touched-files"
+readarray -t touchedFiles < "$touchedFilesFile"
 log "This PR touches ${#touchedFiles[@]} files"
-
-# Get the owners file from the base, because we don't want to allow PRs to
-# remove code owners to avoid pinging them
-git -C "$gitRepo" show "$baseRef":"$ownersFile" > "$tmp"/codeowners
 
 # Associative array with the user as the key for easy de-duplication
 # Make sure to always lowercase keys to avoid duplicates with different casings
 declare -A users=()
 
 for file in "${touchedFiles[@]}"; do
-    result=$(codeowners --file "$tmp"/codeowners "$file")
+    result=$(codeowners --file "$ownersFile" "$file")
 
     # Remove the file prefix and trim the surrounding spaces
     read -r owners <<< "${result#"$file"}"
