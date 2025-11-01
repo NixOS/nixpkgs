@@ -6,14 +6,12 @@
   fetchpatch,
   pkg-config,
   cmake,
-
   # dependencies
   glib,
   libxfixes,
   libXinerama,
   catch2,
   gperf,
-
   # lib.optional features without extra dependencies
   mpdSupport ? true,
   ibmSupport ? true, # IBM/Lenovo notebooks
@@ -24,7 +22,6 @@
   buildPackages,
   pandoc,
   python3,
-
   ncursesSupport ? true,
   ncurses ? null,
   x11Support ? true,
@@ -40,31 +37,27 @@
   doubleBufferSupport ? x11Support,
   imlib2Support ? x11Support,
   imlib2 ? null,
-
   luaSupport ? true,
   lua ? null,
   luaImlib2Support ? luaSupport && imlib2Support,
   luaCairoSupport ? luaSupport && (x11Support || waylandSupport),
   cairo ? null,
   toluapp ? null,
-
   wirelessSupport ? true,
   wirelesstools ? null,
   nvidiaSupport ? false,
   libXNVCtrl ? null,
   pulseSupport ? config.pulseaudio or false,
   libpulseaudio ? null,
-
   curlSupport ? true,
   curl ? null,
   rssSupport ? curlSupport,
   journalSupport ? true,
   systemd ? null,
   libxml2 ? null,
-
   extrasSupport ? true,
-
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -135,7 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     xorg.libXft
+    xorg.libXfixes
     xorg.libSM
+    expat
   ]
   ++ lib.optionals waylandSupport [
     pango
