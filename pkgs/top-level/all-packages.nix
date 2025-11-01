@@ -10807,6 +10807,44 @@ with pkgs;
 
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
+  copyparty-min = copyparty.override {
+    withHashedPasswords = false;
+    withCertgen = false;
+    withThumbnails = false;
+    withFastThumbnails = false;
+    withMediaProcessing = false;
+    withBasicAudioMetadata = false;
+    withZeroMQ = false;
+    withFTP = false;
+    withFTPS = false;
+    withTFTP = false;
+    withSMB = false;
+    withMagic = false;
+    nameSuffix = "-min";
+    longDescription = "Min version, minimal dependencies and fewest features";
+  };
+  copyparty-most = copyparty.override {
+    withHashedPasswords = true;
+    withCertgen = true;
+    withThumbnails = true;
+    withFastThumbnails = true;
+    withMediaProcessing = true;
+    withBasicAudioMetadata = true;
+    withZeroMQ = true;
+    withFTP = true;
+    withFTPS = true;
+    withTFTP = true;
+    withSMB = false;
+    withMagic = true;
+    nameSuffix = "-most";
+    longDescription = "Almost-full version, all dependencies and features except those marked buggy";
+  };
+  copyparty-full-buggy = copyparty-most.override {
+    withSMB = true;
+    nameSuffix = "-full-buggy";
+    longDescription = ''Full buggy version; All dependencies and features enabled, including SMB support which upstream describes as "dangerous and buggy"'';
+  };
+
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
   codeblocksFull = codeblocks.override { contribPlugins = true; };
