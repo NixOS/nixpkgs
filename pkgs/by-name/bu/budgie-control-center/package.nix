@@ -61,7 +61,7 @@
   shared-mime-info,
   testers,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   webp-pixbuf-loader,
   wrapGAppsHook3,
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    udisks2
+    udisks
     upower
   ];
 
