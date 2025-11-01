@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "google-api-python-client";
     tag = "v${version}";
-    hash = "sha256-y6MfDwA1CKsKmXH9NIqFtKIz8vk5XC6d91scrTI4xdY=";
+    hash = "sha256-uItN7P6tZTxEHfma+S0p4grRRnAaIhuTezvJzWjvkfE=";
   };
 
   build-system = [ setuptools ];
