@@ -11550,6 +11550,8 @@ self: super: with self; {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  partftpy-copyparty = callPackage ../development/python-modules/partftpy-copyparty { };
+
   partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
