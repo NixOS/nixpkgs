@@ -6,7 +6,7 @@
 let
   inherit (builtins) head length typeOf;
   inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
+  inherit (lib.trivial) flip oldestSupportedReleaseIsAtLeast mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -1873,8 +1873,8 @@ rec {
 
   /**
     Get a package output.
-    If no output is found, fallback to `.out` and then to the default.
-    The function is idempotent: `getOutput "b" (getOutput "a" p) == getOutput "a" p`.
+    If the package is an output (`outputSpecified` is `true`) or the output is not found, return the package.
+    The function is idempotent: `getOutput "a" (getOutput "a" p) == getOutput "a" p`.
 
     # Inputs
 
@@ -1889,7 +1889,7 @@ rec {
     # Type
 
     ```
-    getOutput :: String -> :: Derivation -> Derivation
+    getOutput :: String -> Derivation -> Derivation
     ```
 
     # Examples
@@ -1903,13 +1903,11 @@ rec {
 
     :::
   */
-  getOutput =
-    output: pkg:
-    if !pkg ? outputSpecified || !pkg.outputSpecified then pkg.${output} or pkg.out or pkg else pkg;
+  getOutput = output: pkg: if pkg.outputSpecified or false then pkg else pkg.${output} or pkg;
 
   /**
-    Get the first of the `outputs` provided by the package, or the default.
-    This function is aligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    Get the first of the `outputs` provided by the package, or if the package is an output (`outputSpecified` is
+    `true`) or the output is not found, return the package.
     Like `getOutput`, the function is idempotent.
 
     # Inputs
@@ -1939,17 +1937,11 @@ rec {
 
     :::
   */
-  getFirstOutput =
-    candidates: pkg:
-    let
-      outputs = builtins.filter (name: hasAttr name pkg) candidates;
-      output = builtins.head outputs;
-    in
-    if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${output};
+  getFirstOutput = flip (foldl' (flip getOutput));
 
   /**
     Get a package's `bin` output.
-    If the output does not exist, fallback to `.out` and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or the output is not found, return the package.
 
     # Inputs
 
@@ -1978,7 +1970,7 @@ rec {
 
   /**
     Get a package's `lib` output.
-    If the output does not exist, fallback to `.out` and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or the output is not found, return the package.
 
     # Inputs
 
@@ -2007,7 +1999,8 @@ rec {
 
   /**
     Get a package's `static` output.
-    If the output does not exist, fallback to `.lib`, then to `.out`, and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or neither the `static` nor `lib` outputs are found,
+    return the package.
 
     # Inputs
 
@@ -2035,12 +2028,11 @@ rec {
   getStatic = getFirstOutput [
     "static"
     "lib"
-    "out"
   ];
 
   /**
     Get a package's `dev` output.
-    If the output does not exist, fallback to `.out` and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or the output is not found, return the package.
 
     # Inputs
 
@@ -2069,7 +2061,8 @@ rec {
 
   /**
     Get a package's `include` output.
-    If the output does not exist, fallback to `.dev`, then to `.out`, and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or neither the `include` nor `dev` outputs are found,
+    return the package.
 
     # Inputs
 
@@ -2097,12 +2090,11 @@ rec {
   getInclude = getFirstOutput [
     "include"
     "dev"
-    "out"
   ];
 
   /**
     Get a package's `man` output.
-    If the output does not exist, fallback to `.out` and then to the default.
+    If the package is an output (`outputSpecified` is `true`) or the output is not found, return the package.
 
     # Inputs
 
