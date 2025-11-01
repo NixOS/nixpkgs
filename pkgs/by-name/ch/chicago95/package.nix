@@ -38,6 +38,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Windows 95 theme for GTK";
     homepage = "https://github.com/grassmunk/Chicago95";
     changelog = "https://github.com/grassmunk/Chicago95/releases/tag/v${finalAttrs.version}";

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     homepage = "https://github.com/brummer10/MelMatchEQ.lv2";
     description = "Profiling EQ using a 26 step Mel Frequency Band";
     maintainers = with maintainers; [ magnetophon ];

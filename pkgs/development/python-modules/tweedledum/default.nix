@@ -39,6 +39,8 @@ buildPythonPackage rec {
   enabledTestPaths = [ "python/test" ];
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
     license = licenses.mit;

@@ -58,6 +58,8 @@ buildGoModule rec {
   '';
 
   meta = {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Media manager and transcoding server";
     homepage = "https://gitlab.com/olaris/olaris-server";
     changelog = "https://gitlab.com/olaris/olaris-server/-/releases/v${version}";

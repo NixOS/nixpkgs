@@ -28,7 +28,8 @@ kernel.stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    broken = !kernel.withRust;
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Basic template for an out-of-tree Linux kernel module written in Rust";
     homepage = "https://github.com/Rust-for-Linux/rust-out-of-tree-module";
     license = lib.licenses.gpl2Only;

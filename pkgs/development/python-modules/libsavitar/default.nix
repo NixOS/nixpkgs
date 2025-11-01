@@ -31,6 +31,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.4.0";
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "C++ implementation of 3mf loading with SIP python bindings";
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
