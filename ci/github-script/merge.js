@@ -48,9 +48,10 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     'PR touches only packages in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
-    'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
-      (await committers).has(pull_request.user.id),
+    'PR is at least one of:': {
+      'Authored by committer.': (await committers).has(pull_request.user.id),
+      'Authored by r-ryantm.': pull_request.user.login === 'r-ryantm',
+    },
     [`PR has ${eligible.size} maintainer(s) eligible to merge changes to all touched packages.`]:
       eligible.size > 0,
   }
@@ -58,7 +59,9 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
   return {
     checklist,
     eligible,
-    result: Object.values(checklist).every(Boolean),
+    result: Object.values(checklist).every((v) =>
+      typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
+    ),
   }
 }
 
@@ -228,8 +231,16 @@ async function handleMerge({
       `@${comment.user.login} wants to merge this PR.`,
       '',
       'Requirements to merge this PR with `@NixOS/nixpkgs-merge-bot merge`:',
-      ...Object.entries(checklist).map(
-        ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
+      ...Object.entries(checklist).flatMap(([msg, res]) =>
+        typeof res === 'boolean'
+          ? `- :${res ? 'white_check_mark' : 'x'}: ${msg}`
+          : [
+              `- :${Object.values(res).some(Boolean) ? 'white_check_mark' : 'x'}: ${msg}`,
+              ...Object.entries(res).map(
+                ([msg, res]) =>
+                  `  - ${res ? ':white_check_mark:' : ':white_large_square:'} ${msg}`,
+              ),
+            ],
       ),
       `- :${isMaintainer ? 'white_check_mark' : 'x'}: ${comment.user.login} is a member of the [nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) team.`,
       `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to all touched packages.`,
