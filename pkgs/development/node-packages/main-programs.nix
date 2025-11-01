@@ -10,7 +10,6 @@
   "@angular/cli" = "ng";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
-  "@uppy/companion" = "companion";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
