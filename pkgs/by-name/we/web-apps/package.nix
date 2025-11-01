@@ -26,7 +26,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoLock = {
-    lockFile = "${src}/Cargo.lock";
+    lockFile = ./Cargo.lock;
+  };
+
+  cargoLock = {
     outputHashes = {
       "accesskit-0.16.0" = "sha256-uoLcd116WXQTu1ZTfJDEl9+3UPpGBN/QuJpkkGyRADQ=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
