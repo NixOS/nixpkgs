@@ -577,6 +577,26 @@ builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  taffybar = lib.pipe super.taffybar [
+    (overrideCabal (drv: {
+      testDepends =
+        drv.testDepends or [ ]
+        ++ map lib.getBin [
+          pkgs.xorg.xorgserver
+          pkgs.xorg.xprop
+          pkgs.xorg.xrandr
+          pkgs.xdummy
+          pkgs.xterm
+          pkgs.dbus
+        ];
+      testFlags = drv.testFlags or [ ] ++ [
+        # TODO(@rvl): figure out why this doesn't work in Nixpkgs
+        "--skip=/python-dbusmock System services/"
+      ];
+    }))
+    (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+  ];
+
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
 
