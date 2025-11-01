@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flatpak/libportal";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
-    platforms = lib.platforms.unix;
+    # libportal needs memfd_create which is available on some unixes but not darwin
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
   };
 }
