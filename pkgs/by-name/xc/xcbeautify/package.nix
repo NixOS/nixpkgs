@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xcbeautify";
-  version = "2.27.0";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/cpisciotta/xcbeautify/releases/download/${version}/xcbeautify-${version}-${stdenv.hostPlatform.darwinArch}-apple-macosx.zip";
     hash = lib.getAttr stdenv.hostPlatform.darwinArch {
-      arm64 = "sha256-8HEge1LvnEZQbliEDO+FP485V/OddBBESfCXnI/v2dE=";
-      x86_64 = "sha256-s1YyXEUJ7I0UhNEPSGregTFHpDKlFQ6ezvUXFk/0J6Q=";
+      arm64 = "sha256-f4gTUcvZGm9tUbIeDwImmMkG6Tynmfz2xi3NyncFpqo=";
+      x86_64 = "sha256-nK4zHtkr0xoWNrARnuXvDP5CMtd2TphhMtWsxWef1E8=";
     };
   };
 
