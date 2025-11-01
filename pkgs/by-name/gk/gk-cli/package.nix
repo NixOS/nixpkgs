@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  coreutils,
   installShellFiles,
   makeWrapper,
   gitMinimal,
