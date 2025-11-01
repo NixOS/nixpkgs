@@ -98,8 +98,8 @@ def get_date_lists(
             date_too_complex_list.append(f"{lineno:>5} {line}")
         elif "= with " in line:
             date_too_complex_list.append(f"{lineno:>5} {line}")
-        elif "lib.warnOnInstantiate" in line or "warning" in line:
-            if 'lib.warnOnInstantiate "' in line:
+        elif "warnAlias" in line or "warning" in line:
+            if 'warnAlias "' in line:
                 date_older_warning_list.append(line)
             else:
                 date_too_complex_list.append(f"{lineno:>5} {line}")
@@ -140,7 +140,7 @@ def convert(lines: list[str], convert_to: str) -> list[tuple[str, str]]:
                 before_equal, after_equal = (
                     x.strip() for x in line.split("=", maxsplit=2)
                 )
-                if after_equal.startswith("lib.warnOnInstantiate"):
+                if after_equal.startswith("warnAlias"):
                     after_equal = after_equal.split("\"", maxsplit=3)[2].strip()
             except ValueError as err:
                 print(err, line, "\n")
@@ -162,7 +162,7 @@ def convert(lines: list[str], convert_to: str) -> list[tuple[str, str]]:
             converted_lines[line] = converted
         elif convert_to == "warnings":
             converted = (
-                f"{indent}{alias} = lib.warnOnInstantiate \"'{alias_unquoted}' has been"
+                f"{indent}{alias} = warnAlias \"'{alias_unquoted}' has been"
                 f" renamed to/replaced by '{replacement}'\" {replacement};"
                 f" # Converted to warning {datetime.today().strftime('%Y-%m-%d')}"
             )

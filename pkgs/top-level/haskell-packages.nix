@@ -149,7 +149,7 @@ in
             pkgs.lib.attrNames compiler
           );
         in
-        pkgs.recurseIntoAttrs (
+        pkgs.lib.recurseIntoAttrs (
           pkgs.lib.genAttrs nativeBignumGhcNames (
             name: compiler.${name}.override { enableNativeBignum = true; }
           )

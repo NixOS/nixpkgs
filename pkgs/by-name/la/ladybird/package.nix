@@ -9,7 +9,7 @@
   cmake,
   ninja,
   pkg-config,
-  curl,
+  curlFull, # Websocket support
   libavif,
   angle, # libEGL
   libjxl,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    curl
+    curlFull
     fast-float
     ffmpeg
     fontconfig

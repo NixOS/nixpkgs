@@ -64,7 +64,7 @@
 
 let
   pname = "ray";
-  version = "2.50.1";
+  version = "2.51.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -84,22 +84,22 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-3qnMYOkt0IlokVZ1bm2ZyZ/j5JE0GA9xVDay41K134Y=";
-          cp311 = "sha256-hfR2u05mfarWUxjymjWxPW+qjgUwB5xmfVSMAMLZJeg=";
-          cp312 = "sha256-dciE4x1NwMOE1KS2jpYRF1tqy6hiI1K8q7cxkMufjD8=";
-          cp313 = "sha256-elJVS9VfKmGIr1b/5ce9l35A65e3tigtgnqNOnPweJo=";
+          cp310 = "sha256-Ag3Ynx7RHTOM75BhdGsatc8mNpDBkiQi4zPsdC8Cvpc=";
+          cp311 = "sha256-EYXBn2iHyik5DC+EQTD3LDOX1XNZRxX5paZN7PuyGUI=";
+          cp312 = "sha256-cLfLCsRVoZbIIRMkQAzy93c60NXwWF0htiVZ6aADOAk=";
+          cp313 = "sha256-yCsJhLPRDYhNI69cpK3oqjdoyVfMtDJwSvjpIOXN4y0=";
         };
         aarch64-linux = {
-          cp310 = "sha256-sGGBb4rtS8oLgRdNv/5xfGn7e8og79j3VWDTpvjMsoA=";
-          cp311 = "sha256-duHqpifhm3Bvoh5InLppLHFD19NYQzc7pxlB3vB6tYs=";
-          cp312 = "sha256-qEJP06Sh7zFKhfgMNh8i6b2UnHpj4jjPQXLcGVWxLHw=";
-          cp313 = "sha256-QMtWy4Kid51bJna3vNkR0PCnjSI0oVq7T5gkFbZRz8o=";
+          cp310 = "sha256-48d59JxV5tth4iylLuET+Apo5APafNbaDoSAyuZi9QM=";
+          cp311 = "sha256-2Z31lVJ3rK4YasnGzux39Lp2Lw8hNaP3AVd3cYeu7T0=";
+          cp312 = "sha256-BHFnYv5SJOp9Dp25w5ZhBLGyrsyr/MhQhRAtdPAzShE=";
+          cp313 = "sha256-PfIB7kmN8ZCAN6N5VK33C77Id6gdPWD/Lcj0LIlh530=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-DuYbabBqy3dU9s0IcWCEzklfu9ljrrcs+00UUl0OCWk=";
-          cp311 = "sha256-uzP9gWhP6tSqtwa9iLCqJ7lGhJBr+1EeWcxXVohaP28=";
-          cp312 = "sha256-cj5WyBk/it3j7BiBerQ3rRzJ1Oct8SY+hWl74oLPxSY=";
-          cp313 = "sha256-JUolfcK6Q0mkeErx8gTE2BaZCOp3mi5dTehzEatfUl8=";
+          cp310 = "sha256-olwAGedusCeQeyi4y77LYteoYX55/0dcHWURYq/a/O0=";
+          cp311 = "sha256-eTY8nQJzJVEw81ncGJuhpye7mCiudzUxQ35WryCsaxw=";
+          cp312 = "sha256-BfktgeYrADF5pXwrMo3alloboyXdtSJWZVmapLUew6U=";
+          cp313 = "sha256-cRGOKyOm0t8hQoauqDEXU80+y6CNPApjGl8gsc8lJg0=";
         };
       };
     in
@@ -207,6 +207,10 @@ buildPythonPackage rec {
       pyarrow
       requests
       tensorboardx
+
+      # `import ray.tune` fails without pydantic
+      # Reported upstream: https://github.com/ray-project/ray/issues/58280
+      pydantic
     ];
   });
 

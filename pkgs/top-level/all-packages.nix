@@ -12,6 +12,17 @@
   config,
   overlays,
 }:
+let
+  # Add inherited lib functions only here, so they are not exported from pkgs
+  inherit (lib)
+    lowPrio
+    hiPrio
+    recurseIntoAttrs
+    dontRecurseIntoAttrs
+    makeOverridable
+    ;
+in
+
 res: pkgs: super:
 
 with pkgs;
@@ -31,6 +42,12 @@ with pkgs;
   # (earlier stages being the various `super` variables that precede
   # all-packages.nix)
   _type = "pkgs";
+
+  ### Helper functions.
+  inherit lib config overlays;
+
+  # For convenience, allow callers to get the path to Nixpkgs.
+  path = ../..;
 
   # A stdenv capable of building 32-bit binaries.
   # On x86_64-linux, it uses GCC compiled with multilib support; on i686-linux,
@@ -91,35 +108,13 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
-  # For convenience, allow callers to get the path to Nixpkgs.
-  path = ../..;
-
-  ### Helper functions.
-  inherit lib config overlays;
-
-  # do not import 'appendToName' to get consistent package-names with the same
-  # set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
-  inherit (lib) lowPrio hiPrio makeOverridable;
-
-  inherit (lib) recurseIntoAttrs;
-
-  # This is intended to be the reverse of recurseIntoAttrs, as it is
-  # defined now it exists mainly for documentation purposes, but you
-  # can also override this with recurseIntoAttrs to recurseInto all
-  # the Attrs which is useful for testing massive changes. Ideally,
-  # every package subset not marked with recurseIntoAttrs should be
-  # marked with this.
-  inherit (lib) dontRecurseIntoAttrs;
-
-  stringsWithDeps = lib.stringsWithDeps;
-
   ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = lib.recurseIntoAttrs (callPackages ../test { });
+  tests = recurseIntoAttrs (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
@@ -769,8 +764,6 @@ with pkgs;
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
-  mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
-
   nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
     inherit lib writeText;
     inherit (emacs.pkgs) inherit-local;
@@ -1246,8 +1239,6 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
-
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
     inherit (ocamlPackages)
       buildDunePackage
@@ -1535,8 +1526,6 @@ with pkgs;
 
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
-
-  apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
   arpack-mpi = arpack.override { useMpi = true; };
 
@@ -2191,7 +2180,7 @@ with pkgs;
 
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
-  nltk-data = lib.recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
+  nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
   seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
   seabios-csm = seabios.override { ___build-type = "csm"; };
@@ -2224,8 +2213,6 @@ with pkgs;
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
   renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
-
-  rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
@@ -2306,10 +2293,6 @@ with pkgs;
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   };
-
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
-
-  asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
   b2sum = callPackage ../tools/security/b2sum {
     inherit (llvmPackages) openmp;
@@ -3131,6 +3114,8 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
+  jkqtplotter = libsForQt5.callPackage ../development/libraries/jkqtplotter { };
+
   joplin = nodePackages.joplin;
 
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
@@ -3648,8 +3633,6 @@ with pkgs;
 
   sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
 
-  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
-
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
@@ -3702,8 +3685,6 @@ with pkgs;
   p7zip-rar = p7zip.override { enableUnfree = true; };
 
   packagekit = callPackage ../tools/package-management/packagekit { };
-
-  pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
@@ -3855,8 +3836,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
-
   qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmarkdowntextedit = libsForQt5.callPackage ../development/libraries/qmarkdowntextedit { };
@@ -3951,8 +3930,6 @@ with pkgs;
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
-
-  selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
 
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
@@ -4102,8 +4079,6 @@ with pkgs;
   trackma-gtk = trackma.override { withGTK = true; };
 
   trackma-qt = trackma.override { withQT = true; };
-
-  tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   trezorctl = with python3Packages; toPythonApplication trezor;
 
@@ -4485,6 +4460,7 @@ with pkgs;
     crystal_1_15
     crystal_1_16
     crystal_1_17
+    crystal_1_18
     crystal
     ;
 
@@ -4523,7 +4499,6 @@ with pkgs;
   flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
   flutter327 = flutterPackages.v3_27;
-  flutter324 = flutterPackages.v3_24;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -5573,7 +5548,7 @@ with pkgs;
   cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
 
   # Below, the classic self-bootstrapping process
-  cbqn-bootstrap = lib.dontRecurseIntoAttrs {
+  cbqn-bootstrap = dontRecurseIntoAttrs {
     # Use clang to compile CBQN if we aren't already.
     # CBQN's upstream primarily targets and tests clang which means using gcc
     # will result in slower binaries and on some platforms failing/broken builds.
@@ -8185,7 +8160,7 @@ with pkgs;
     nvidia-docker
     ;
 
-  nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
+  nvidia-vaapi-driver = hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
   nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
 
@@ -9278,13 +9253,13 @@ with pkgs;
   home-assistant = callPackage ../servers/home-assistant { };
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
-  home-assistant-custom-components = lib.recurseIntoAttrs (
+  home-assistant-custom-components = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit (home-assistant.python.pkgs) callPackage;
       directory = ../servers/home-assistant/custom-components;
     }
   );
-  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs (
+  home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit callPackage;
       directory = ../servers/home-assistant/custom-lovelace-modules;
@@ -10954,7 +10929,7 @@ with pkgs;
   emacsPackagesFor =
     emacs:
     import ./emacs-packages.nix {
-      inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
+      inherit lib;
       emacs' = emacs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
@@ -11018,7 +10993,7 @@ with pkgs;
       python = python3;
     };
   };
-  gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
+  gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
   goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
@@ -11267,8 +11242,6 @@ with pkgs;
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
-
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpsbabel-gui = gpsbabel.override {
     withGUI = true;
@@ -11541,8 +11514,6 @@ with pkgs;
     ;
   k3s = k3s_1_34;
 
-  kapow = libsForQt5.callPackage ../applications/misc/kapow { };
-
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
@@ -11700,7 +11671,7 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magnetophonDSP = lib.recurseIntoAttrs {
+  magnetophonDSP = recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
     ConstantDetuneChorus = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
@@ -11956,7 +11927,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  open-music-kontrollers = lib.recurseIntoAttrs {
+  open-music-kontrollers = recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
     mephisto = callPackage ../applications/audio/open-music-kontrollers/mephisto.nix { };
@@ -12104,8 +12075,6 @@ with pkgs;
 
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
-
-  qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
@@ -12393,8 +12362,6 @@ with pkgs;
     systemdSupport = true;
   };
 
-  synergy = libsForQt5.callPackage ../applications/misc/synergy { };
-
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
@@ -12487,15 +12454,6 @@ with pkgs;
   };
 
   trustedqsl = tqsl; # Alias added 2019-02-10
-
-  libtransmission_3 = transmission_3.override {
-    installLib = true;
-    enableDaemon = false;
-    enableCli = false;
-  };
-  transmission_3-gtk = transmission_3.override { enableGTK3 = true; };
-  transmission_3-qt = transmission_3.override { enableQt = true; };
-  transmission_3_noSystemd = transmission_3.override { enableSystemd = false; };
 
   transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
     fmt = fmt_9;
@@ -12600,7 +12558,7 @@ with pkgs;
   # more usecases when wrapping neovim. The interface is being actively worked on
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
-  wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
+  wrapNeovim = neovim-unwrapped: makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
     lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
   };
@@ -12868,6 +12826,11 @@ with pkgs;
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
+  inherit (callPackage ../applications/misc/xppen { })
+    xppen_3
+    xppen_4
+    ;
+
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
@@ -12956,8 +12919,6 @@ with pkgs;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
 
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
     boost = boost179;
@@ -13211,8 +13172,6 @@ with pkgs;
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
-  legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
@@ -13273,8 +13232,6 @@ with pkgs;
   papermcServers = callPackages ../games/papermc { };
 
   papermc = papermcServers.papermc;
-
-  path-of-building = qt6Packages.callPackage ../games/path-of-building { };
 
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
@@ -13954,8 +13911,6 @@ with pkgs;
     };
   };
 
-  yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
-
   yacas-gui = yacas.override {
     enableGui = true;
     enableJupyter = false;
@@ -14043,8 +13998,6 @@ with pkgs;
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
   faust = faust2;
-
-  flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
@@ -14327,8 +14280,6 @@ with pkgs;
 
   qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
-  qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
-
   sail-riscv = callPackage ../applications/virtualization/sail-riscv {
     inherit (ocamlPackages) sail;
   };
@@ -14584,8 +14535,6 @@ with pkgs;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
-  aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
-
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
@@ -14614,10 +14563,6 @@ with pkgs;
 
   clash-verge-rev = callPackage ../by-name/cl/clash-verge-rev/package.nix {
     libsoup = libsoup_3;
-  };
-
-  rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
-    flutter = flutter324;
   };
 
   davis = callPackage ../by-name/da/davis/package.nix {

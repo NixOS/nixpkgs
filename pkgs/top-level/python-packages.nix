@@ -9786,6 +9786,8 @@ self: super: with self; {
 
   mpris-server = callPackage ../development/python-modules/mpris-server { };
 
+  mprisify = callPackage ../development/python-modules/mprisify { };
+
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
 
   mpyq = callPackage ../development/python-modules/mpyq { };
@@ -11026,6 +11028,31 @@ self: super: with self; {
     pkgs.opencv4.override {
       enablePython = true;
       pythonPackages = self;
+    }
+  );
+
+  opencv4Full = toPythonModule (
+    pkgs.opencv4.override rec {
+      enablePython = true;
+      pythonPackages = self;
+      enableCuda = pkgs.config.cudaSupport;
+      enableCublas = enableCuda;
+      enableCudnn = enableCuda;
+      enableCufft = enableCuda;
+      enableLto = !stdenv.hostPlatform.isLinux; # https://github.com/NixOS/nixpkgs/issues/343123
+      enableUnfree = false; # prevents cache
+      enableIpp = true;
+      enableGtk2 = true;
+      enableGtk3 = true;
+      enableVtk = true;
+      enableFfmpeg = true;
+      enableGStreamer = true;
+      enableTesseract = true;
+      enableTbb = true;
+      enableOvis = true;
+      enableGPhoto2 = true;
+      enableDC1394 = true;
+      enableDocs = true;
     }
   );
 
@@ -14962,6 +14989,8 @@ self: super: with self; {
 
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
+  python-jsonpath = callPackage ../development/python-modules/python-jsonpath { };
+
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
@@ -18660,6 +18689,8 @@ self: super: with self; {
 
   torchbench = callPackage ../development/python-modules/torchbench { };
 
+  torchcodec = callPackage ../development/python-modules/torchcodec { };
+
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
@@ -18818,6 +18849,8 @@ self: super: with self; {
   tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
 
   tree-sitter-yaml = callPackage ../development/python-modules/tree-sitter-yaml { };
+
+  tree-sitter-zeek = callPackage ../development/python-modules/tree-sitter-zeek { };
 
   treelib = callPackage ../development/python-modules/treelib { };
 
@@ -20022,7 +20055,7 @@ self: super: with self; {
     wasmer-compiler-singlepass
     ;
 
-  wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
+  wasmerPackages = lib.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
 
@@ -20344,6 +20377,8 @@ self: super: with self; {
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
 
   xeddsa = toPythonModule (callPackage ../development/python-modules/xeddsa { });
+
+  xeger = callPackage ../development/python-modules/xeger { };
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 

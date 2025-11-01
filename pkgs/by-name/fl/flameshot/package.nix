@@ -18,13 +18,13 @@ assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flameshot";
-  version = "13.2.0";
+  version = "13.3.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oQMM2BUY6gpBjSRboR1YMZLIi6p0EmrHps7Y6YI7ytU=";
+    hash = "sha256-RyoLniRmJRinLUwgmaA4RprYAVHnoPxCP9LyhHfUPe0=";
   };
 
   cmakeFlags = [

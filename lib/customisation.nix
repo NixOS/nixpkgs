@@ -864,4 +864,139 @@ rec {
         transformDrv
         ;
     };
+
+  /**
+    Removes a prefix from the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to remove from cross index attribute names
+
+    `crossIndex`
+    : A cross index with prefixed names
+
+    # Type
+
+    ```
+    renameCrossIndexFrom :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameCrossIndexFrom` usage example
+
+    ```nix
+    renameCrossIndexFrom "pkgs" { pkgsBuildBuild = ...; pkgsBuildHost = ...; ... }
+    => { buildBuild = ...; buildHost = ...; ... }
+    ```
+    :::
+  */
+  renameCrossIndexFrom = prefix: x: {
+    buildBuild = x."${prefix}BuildBuild";
+    buildHost = x."${prefix}BuildHost";
+    buildTarget = x."${prefix}BuildTarget";
+    hostHost = x."${prefix}HostHost";
+    hostTarget = x."${prefix}HostTarget";
+    targetTarget = x."${prefix}TargetTarget";
+  };
+
+  /**
+    Adds a prefix to the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to add to cross index attribute names
+
+    `crossIndex`
+    : A cross index to be prefixed
+
+    # Type
+
+    ```
+    renameCrossIndexTo :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameCrossIndexTo` usage example
+
+    ```nix
+    renameCrossIndexTo "self" { buildBuild = ...; buildHost = ...; ... }
+    => { selfBuildBuild = ...; selfBuildHost = ...; ... }
+    ```
+    :::
+  */
+  renameCrossIndexTo = prefix: x: {
+    "${prefix}BuildBuild" = x.buildBuild;
+    "${prefix}BuildHost" = x.buildHost;
+    "${prefix}BuildTarget" = x.buildTarget;
+    "${prefix}HostHost" = x.hostHost;
+    "${prefix}HostTarget" = x.hostTarget;
+    "${prefix}TargetTarget" = x.targetTarget;
+  };
+
+  /**
+    Takes a function and applies it pointwise to each field of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `f`
+    : Function to apply to each cross index value
+
+    `crossIndex`
+    : A cross index to transform
+
+    # Type
+
+    ```
+    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.mapCrossIndex` usage example
+
+    ```nix
+    mapCrossIndex (x: x * 10) { buildBuild = 1; buildHost = 2; ... }
+    => { buildBuild = 10; buildHost = 20; ... }
+    ```
+
+    ```nix
+    # Extract a package from package sets
+    mapCrossIndex (pkgs: pkgs.hello) crossIndexedPackageSets
+    ```
+    :::
+  */
+  mapCrossIndex =
+    f:
+    {
+      buildBuild,
+      buildHost,
+      buildTarget,
+      hostHost,
+      hostTarget,
+      targetTarget,
+    }:
+    {
+      buildBuild = f buildBuild;
+      buildHost = f buildHost;
+      buildTarget = f buildTarget;
+      hostHost = f hostHost;
+      hostTarget = f hostTarget;
+      targetTarget = f targetTarget;
+    };
 }

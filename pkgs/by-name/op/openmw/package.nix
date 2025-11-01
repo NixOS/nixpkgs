@@ -35,7 +35,7 @@ assert lib.assertOneOf "GLPreference" GLPreference [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmw";
-  version = "0.49.0";
+  version = "0.50.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -82,14 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMW";
     repo = "openmw";
     tag = "openmw-${finalAttrs.version}";
-    hash = "sha256-Eyjn3jPpo0d7XENg0Ea/3MN60lZBSUAMkz1UtTiIP80=";
+    hash = "sha256-mPwNyKKqPSZJtcIyx3IhLe3iHOpx6p4+l1wJZqyDMqg=";
   };
-
-  patches = [
-    # https://gitlab.com/OpenMW/openmw/-/merge_requests/4941
-    # FIXME: Remove after next release
-    ./0001-Do-not-implicitly-convert-QByteArray-to-const-char.patch
-  ];
 
   postPatch = ''
     sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12

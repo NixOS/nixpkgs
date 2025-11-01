@@ -96,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
     license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ jfroche ];
+    maintainers = with lib.maintainers; [
+      jfroche
+      panicgh
+    ];
     platforms = lib.platforms.linux;
     # https://github.com/protocolbuffers/protobuf/issues/14492
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);

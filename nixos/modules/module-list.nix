@@ -277,6 +277,7 @@
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nix-required-mounts.nix
+  ./programs/nixbit.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
   ./programs/noisetorch.nix
@@ -361,6 +362,7 @@
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/xppen.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
   ./programs/yazi.nix

@@ -19,6 +19,7 @@
   # dependencies
   beartype,
   crcmod,
+  cryptography,
   dill,
   fastavro,
   fasteners,
@@ -63,14 +64,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.68.0";
+  version = "2.69.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-ENtvgu9qT1OPsDqFJQzKgIATE7F+S5I+AfoBT2iEL8M=";
+    hash = "sha256-7trrdGQ9jkzG+5/PyBMvHXjR0B4HjOxBhUuxXEcKkLg=";
   };
 
   sourceRoot = "${src.name}/sdks/python";
@@ -123,6 +124,7 @@ buildPythonPackage rec {
   dependencies = [
     beartype
     crcmod
+    cryptography
     dill
     fastavro
     fasteners
@@ -254,9 +256,14 @@ buildPythonPackage rec {
     "test_reshuffle_custom_window_preserves_metadata_1"
     "test_reshuffle_default_window_preserves_metadata_1"
 
-    # AttributeError: 'MaybeReshuffle' object has no attribute 'side_inputs'
-    # https://github.com/apache/beam/issues/33854
+    # Dill version 0.3.1.1 is required when using pickle_library=dill.
+    # Other versions of dill are untested with Apache Beam.
+    "LocalCombineFnLifecycleTest_0_dill"
+    "LocalCombineFnLifecycleTest_2_dill"
     "test_runner_overrides_default_pickler"
+
+    # Require internet access
+    "test_local_jar_fallback_to_google_maven_mirror"
 
     # AssertionError: Lists differ
     "test_default_resources"
