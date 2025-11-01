@@ -61,7 +61,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.24";
+  version = "3.2.26";
 
   outputs = [
     "lib"
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-LUkj9Rrf+zOW0IdV7aGccb/5bKh3TWf1IGtQkCDHd4k=";
+    hash = "sha256-edcub/zeho4mB3tItp+PSD5l+H6jUPm3seiBP6ppT0k=";
   };
 
   postPatch =
