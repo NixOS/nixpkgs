@@ -10,7 +10,7 @@
 }:
 
 buildGoModule rec {
-  pname = "kraftkit";
+  pname = "kraft";
   version = "0.11.6";
 
   src = fetchFromGitHub {
