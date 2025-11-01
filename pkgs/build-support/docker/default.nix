@@ -113,7 +113,7 @@ let
   compressorForImage =
     compressor: imageName:
     compressors.${compressor}
-      or (throw "in docker image ${imageName}: compressor must be one of: [${toString builtins.attrNames compressors}]");
+      or (throw "in docker image ${imageName}: compressor must be one of: [${toString (builtins.attrNames compressors)}]");
 
 in
 rec {
