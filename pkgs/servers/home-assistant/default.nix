@@ -259,26 +259,6 @@ let
         doCheck = false;
       });
 
-      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
-        version = "21.5";
-
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
-        };
-      });
-
-      pytraccar = super.pytraccar.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.1";
-
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -330,7 +310,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.10.4";
+  hassVersion = "2025.11.0b1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -351,13 +331,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-CaS/37Pastpoeb6fXLiChVcQXNqVJMaXV04HGnNFlL0=";
+    hash = "sha256-yL9tvCh7OWIz8zRUcyncmI3umxWxixTDK0SjBF4VFxM=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ue1Aat8aSEXHUSIl2ji1cQaZEnVRgY7+PBHB9mQBJ6I=";
+    hash = "sha256-4ngO/HvSNnky9TZTuaY0oAgO7ZadPsNk6FLpwjx2/Qs=";
   };
 
   build-system = with python.pkgs; [
