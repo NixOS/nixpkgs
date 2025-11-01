@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "vboot_reference";
+  pname = "vboot-utils";
   version = "143.16463";
 
   src = fetchFromGitiles {
