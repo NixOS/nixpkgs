@@ -2,7 +2,13 @@
 // processing many PRs at once.
 let committers
 
-async function runChecklist({ github, context, pull_request, maintainers }) {
+async function runChecklist({
+  github,
+  context,
+  pull_request,
+  events,
+  maintainers,
+}) {
   const pull_number = pull_request.number
 
   if (!committers) {
@@ -39,6 +45,19 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
         .map((pkg) => new Set(maintainers[pkg]))
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
+  const approvals = events.filter(
+    ({ event, state, commit_id }) =>
+      event === 'reviewed' &&
+      state === 'approved' &&
+      commit_id === pull_request.head.sha,
+  )
+
+  const committerApprovals = (
+    await Promise.all(
+      approvals.map(async ({ user }) => (await committers).has(user.id)),
+    )
+  ).filter(Boolean)
+
   const checklist = {
     'PR targets one of the allowed branches: master, staging, staging-next.': [
       'master',
@@ -48,16 +67,20 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
-    'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
-      (await committers).has(pull_request.user.id),
     'PR has maintainers eligible for merge.': eligible.size > 0,
+    'PR is at least one of:': {
+      'Approved by committer.': committerApprovals.length > 0,
+      'Authored by committer.': (await committers).has(pull_request.user.id),
+      'Authored by r-ryantm.': pull_request.user.login === 'r-ryantm',
+    },
   }
 
   return {
     checklist,
     eligible,
-    result: Object.values(checklist).every(Boolean),
+    result: Object.values(checklist).every((v) =>
+      typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
+    ),
   }
 }
 
@@ -102,6 +125,7 @@ async function handleMerge({
     github,
     context,
     pull_request,
+    events,
     maintainers,
   })
   log('checklist', JSON.stringify(checklist))
@@ -225,8 +249,16 @@ async function handleMerge({
       `<!-- comment: ${comment.node_id} -->`,
       '',
       'Requirements to merge this PR:',
-      ...Object.entries(checklist).map(
-        ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
+      ...Object.entries(checklist).flatMap(([msg, res]) =>
+        typeof res === 'boolean'
+          ? `- :${res ? 'white_check_mark' : 'x'}: ${msg}`
+          : [
+              `- :${Object.values(res).some(Boolean) ? 'white_check_mark' : 'x'}: ${msg}`,
+              ...Object.entries(res).map(
+                ([msg, res]) =>
+                  `  - ${res ? ':white_check_mark:' : ':white_large_square:'} ${msg}`,
+              ),
+            ],
       ),
       `- :${canUseMergeBot ? 'white_check_mark' : 'x'}: ${comment.user.login} can use the merge bot.`,
       `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to the touched packages.`,
