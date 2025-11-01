@@ -1,0 +1,50 @@
+(NB: we omit the new test, in order to avoid rerunning autoconf.)
+
+From 914972e80dbf82aac9ffe3ff1f67f1028e1a788b Mon Sep 17 00:00:00 2001
+From: Hannes Braun <hannes@hannesbraun.net>
+Date: Wed, 24 Sep 2025 21:20:49 +0200
+Subject: [PATCH] tail: fix tailing larger number of lines in regular files
+
+* src/tail.c (file_lines): Seek to the previous block instead of the
+beginning (or a little before) of the block that was just scanned.
+Otherwise, the same block is read and scanned (at least partially)
+again. This bug was introduced by commit v9.7-219-g976f8abc1.
+* tests/tail/basic-seek.sh: Add a new test.
+* tests/local.mk: Reference the new test.
+* NEWS: mention the bug fix.
+---
+ NEWS                     |  4 ++++
+ src/tail.c               |  2 +-
+ tests/local.mk           |  1 +
+ tests/tail/basic-seek.sh | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100755 tests/tail/basic-seek.sh
+
+diff --git a/NEWS b/NEWS
+index 7a1a73113e839f010aa6c734e6f07da68827b953..dc1d26879327761d35499815776477771758edd4 100644
+--- a/NEWS
++++ b/NEWS
+@@ -7,6 +7,10 @@ GNU coreutils NEWS                                    -*- outline -*-
+   `basenc --base58` would not operate correctly with input > 15561475 bytes.
+   [bug introduced with --base58 in coreutils-9.8]
+ 
++  'tail' outputs the correct number of lines again for non-small -n values.
++  Previously it may have output too few lines.
++  [bug introduced in coreutils-9.8]
++
+ 
+ * Noteworthy changes in release 9.8 (2025-09-22) [stable]
+ 
+diff --git a/src/tail.c b/src/tail.c
+index b8bef1d91cdb6cde2b666b6c1575376e075eaeb8..c7779c77dfe4cf5a672a265b6e796c7153590170 100644
+--- a/src/tail.c
++++ b/src/tail.c
+@@ -596,7 +596,7 @@ file_lines (char const *prettyname, int fd, struct stat const *sb,
+           goto free_buffer;
+         }
+ 
+-      pos = xlseek (fd, -bufsize, SEEK_CUR, prettyname);
++      pos = xlseek (fd, -(bufsize + bytes_read), SEEK_CUR, prettyname);
+       bytes_read = read (fd, buffer, bufsize);
+       if (bytes_read < 0)
+         {
