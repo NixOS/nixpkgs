@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.4.8";
+  version = "1.4.8-unstable-2025-10-29";
   pyproject = false;
   withDistOutput = false;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-local-agent";
-    rev = version;
-    hash = "sha256-AHY2b0JaYaLhgnNkTsm9ERkw0s0NWnpbPAPgw+r2Gz4=";
+    rev = "0f7a7fa240f3d539896bbf7cdc3539f4daa3e1de";
+    hash = "sha256-rk3wi6q0UDuwh5yhLBqdLYsJxVqhlI+Yc7HZsiAU1Y8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-zzUZsF0R0QGhxe4To6xSHYUVJTIDddf+UdTJg7E9Ef8=";
+    hash = "sha256-jjSkPgGp3Yvypnlrt9pV1F/K3o2doNteQs1rwr5fhnM=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   cargoBuildType = "release";
   nativeBuildInputs = [
     cargo
+    python.pkgs.pip
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
   ];
@@ -45,13 +46,16 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    cargoBuildHook
+    ${python.interpreter} scripts/build_wheel.py
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
-
-    # manually install the python binding
-    mkdir -p $out/${python.sitePackages}/proton/vpn/
-    cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python.sitePackages}/proton/vpn/local_agent.so
-
+    ${python.interpreter} -m pip install --no-deps --prefix=$out ./target/*.whl
     runHook postInstall
   '';
 
