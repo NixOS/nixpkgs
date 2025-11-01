@@ -85,16 +85,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.2";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7a8nbKZ6cK6SoAGwORc6+D+jJxQOut7y5KzHfBbqDE=";
+    hash = "sha256-tZKq8ypDU1MkWORHFQhieDSUOqOzBcfqIQ40amyc1ls=";
   };
 
-  cargoHash = "sha256-RjoO5eiAXYhC8Tg5UNqCpBsFVN1I+0UhchslAmhm0Qo=";
+  cargoHash = "sha256-x+LhpwDytwH/NzKWqAuRRbX77OZ2JGaYSaQxqinf81Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -136,6 +136,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jemalloc_conf"
   ]
   ++ lib.optional enableLiburing "io_uring";
+
+  # Tuwunel runs the full server as part of `cargo test`.  The problem is that the full
+  # server tries to read `/etc/resolv.conf` and hard crashes when the file isn't present
+  # in the build environment.
+  #
+  # This isn't the first time the tests failed in the nix sandbox and upstream doesn't
+  # run these checks either:
+  # https://github.com/matrix-construct/tuwunel/blob/f660e00bb554798b0545c8f1b47932652f015648/nix/pkgs/main/default.nix#L206
+  #
+  # So, let's not fight the current here.  We have nixosTests to ensure the built binary
+  # runs and that's good enough.
+  doCheck = false;
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
