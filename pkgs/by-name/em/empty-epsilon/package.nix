@@ -14,6 +14,21 @@
 }:
 
 let
+  glm' = glm.overrideAttrs (
+    oldAttrs:
+    let
+      version = "1.0.1";
+    in
+    {
+      inherit version;
+
+      src = oldAttrs.src.override {
+        rev = version;
+        sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
+      };
+    }
+  );
+
   versions = {
     seriousproton = "2024.12.08";
     emptyepsilon = "2024.12.08";
@@ -42,7 +57,7 @@ let
     buildInputs = [
       sfml
       libX11
-      glm
+      glm'
       SDL2
     ];
 
@@ -80,7 +95,7 @@ stdenv.mkDerivation {
     glew
     libX11
     python3
-    glm
+    glm'
     SDL2
     ninja
   ];
