@@ -191,10 +191,6 @@ final: prev: {
     '';
   };
 
-  uppy-companion = prev."@uppy/companion".override {
-    name = "uppy-companion";
-  };
-
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
