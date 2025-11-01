@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZwV3mh/onlHPHeT6tky2CpawLZxEikY6hq4FVn6i5hI=";
   };
 
+  patches = [
+    ./add-cmake-config.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
