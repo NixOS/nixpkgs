@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = " Web applications at your fingertips.";
     homepage = "https://github.com/cosmic-utils/web-apps";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ berrij ];
   };
 }
