@@ -45,7 +45,7 @@ jobs:
       - id: prepare
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          retries: 3
+          retries: 10
           # The default for this includes code 422, which happens regularly for us when comparing commits:
           #   422 - Server Error: Sorry, this diff is taking too long to generate.
           # Listing all other values from here to effectively remove 422:
