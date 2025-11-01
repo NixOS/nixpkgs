@@ -18892,6 +18892,8 @@ self: super: with self; {
 
   triton-cuda = self.triton.override { cudaSupport = true; };
 
+  triton-kernels = callPackage ../development/python-modules/triton-kernels { };
+
   triton-no-cuda = self.triton.override { cudaSupport = false; };
 
   tritonclient = callPackage ../development/python-modules/tritonclient { };
