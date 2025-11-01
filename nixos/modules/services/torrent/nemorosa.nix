@@ -33,7 +33,6 @@ in
     group = mkOption {
       type = types.str;
       default = "nemorosa";
-      example = "torrents";
       description = "Group to run nemorosa as.";
     };
 
