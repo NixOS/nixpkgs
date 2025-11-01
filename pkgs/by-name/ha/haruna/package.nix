@@ -5,6 +5,7 @@
   cmake,
   ffmpeg-headless,
   kdePackages,
+  kdsingleapplication,
   pkg-config,
   qt6,
   yt-dlp,
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-7983qZ7c3i8Ilyvu36t02zeIcVO96PXGNLH3wq6JsvI=";
+    hash = "sha256-pAFO6zclJNmHD91ady0vlnBg6ebSWMzJq7TZN/uBGnM=";
     domain = "invent.kde.org";
   };
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     kdePackages.kxmlgui
     kdePackages.kdoctools
     kdePackages.mpvqt
+    kdsingleapplication
     qt6.qtbase
   ];
 
