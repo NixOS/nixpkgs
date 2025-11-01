@@ -8,14 +8,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol-db";
   version = "20250814";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-DYDO7JZzriLdVKeqOaaEonHcdRaOD3SsvJPhScvSkVE=";
   };
 
@@ -30,11 +30,14 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor database for DDCcontrol";
     homepage = "https://github.com/ddccontrol/ddccontrol-db";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ lib.maintainers.pakhfn ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pakhfn
+      doronbehar
+    ];
   };
-}
+})
