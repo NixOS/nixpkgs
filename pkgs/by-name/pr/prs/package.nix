@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prs";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W5wNmZWjSsM6Xe50fCpa/aGsJ8PDyh2INs1Oj86et04=";
+    hash = "sha256-RWquV2apUazgGiwzTc0cMzKNItJOBZDSRMp13k+mhS0=";
   };
 
-  cargoHash = "sha256-IRWOY+FudPH2AEUTplwUWKK431x+CRkVF3VXxVWFKeI=";
+  cargoHash = "sha256-v5jZJQHXxMENJ5EbZjoI4sZ0EpCfVZOkOX442S1TReU=";
 
   nativeBuildInputs = [
     gpgme

@@ -1617,7 +1617,7 @@ let
         };
       };
 
-      ethersync.ethersync = callPackage ./ethersync.ethersync { };
+      teamtype.teamtype = callPackage ./teamtype.teamtype { };
 
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
@@ -1725,8 +1725,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.28.3";
-          hash = "sha256-rRJrzCle1/epqJL+gaUb3QZwrmdaLvagUwxRx1Aq1ZY=";
+          version = "0.29.0";
+          hash = "sha256-eAfWsIVAqRRfBNDZZq4SilqR48daY5IezjGULaU8AzU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "qlipper";
-  version = "5.1.2-unstable-2025-07-04";
+  version = "5.1.2-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "pvanek";
     repo = "qlipper";
-    rev = "d3e605fb9d44c523a95e3aac53c7d179a560c85f";
-    hash = "sha256-9V9s0oxWKqd9MHKlkZF3SetrAjHX4cAenAg7as4TLn0=";
+    rev = "4e9fcfe6684c465944baa153aeb7603ec27728b1";
+    hash = "sha256-7qaLY3F67uBtX1wI667MaqtrKLDfeG9jKwlC1pUOteQ=";
   };
 
   nativeBuildInputs = [

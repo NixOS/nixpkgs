@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.12.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kakulukia";
     repo = "pypugjs";
     tag = "v${version}";
-    hash = "sha256-JHZzyEilCjpZFIrl5kk1oJ4C/vgQTfVoRRGBK+DuHAE=";
+    hash = "sha256-aHTWRlRrUh4LCsNUcszce4g8C4O0A/aPZKTz6Zl0UYg=";
   };
 
   build-system = [

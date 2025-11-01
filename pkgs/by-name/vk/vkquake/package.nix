@@ -1,6 +1,7 @@
 {
   SDL2,
   fetchFromGitHub,
+  fetchpatch2,
   flac,
   glslang,
   gzip,
@@ -20,6 +21,7 @@
   vulkan-loader,
   copyDesktopItems,
   makeDesktopItem,
+  spirv-tools,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
@@ -35,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     glslang
+    spirv-tools
     meson
     ninja
     pkg-config
@@ -55,6 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     vulkan-headers
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/Novum/vkQuake/pull/809
+      url = "https://github.com/Novum/vkQuake/commit/85ddf2386f15944c26317a763d4044077fc8731f.patch?full_index=1";
+      hash = "sha256-t+atA+ilCwGwLpql5BZO2OF4Xh1KdzRFjOpglTIA/KY=";
+    })
   ];
 
   mesonFlags = [ "-Ddo_userdirs=enabled" ];
