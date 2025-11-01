@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "drum-machine";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
     tag = "v${version}";
-    hash = "sha256-5NzbjPzmrsF/xKLBwQ4MDPxz6OjBHioO7vcLMzMhidA=";
+    hash = "sha256-F3h3BxLNkJq0jpfNOGcTbckpc8CksyA3Bc8GNKviB+I=";
   };
 
   strictDeps = true;
@@ -45,6 +45,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     mido
+    numpy
     pygame
     pygobject3
   ];
