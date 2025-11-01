@@ -33,13 +33,16 @@ let
         [
           mpv.luaEnv
         ]
-        ++ lib.optionals youtubeSupport [
-          yt-dlp
-        ]
         ++ lib.optionals mpv.vapoursynthSupport [
           mpv.vapoursynth.python3
         ]
       );
+
+      # With some tools, we want to prioritize tools that are in PATH. For example, users may want
+      # to quickly expose a newer version of yt-dlp through the nix shell because it needs to be
+      # kept up-to-date for it to work.
+      fallbackBinPath = lib.makeBinPath (lib.optionals youtubeSupport [ yt-dlp ]);
+
       # All arguments besides the input and output binaries (${mpv}/bin/mpv and
       # $out/bin/mpv). These are used by the darwin specific makeWrapper call
       # used to wrap $out/Applications/mpv.app/Contents/MacOS/mpv as well.
@@ -67,6 +70,12 @@ let
           "PATH"
           ":"
           binPath
+        ]
+        ++ lib.optionals (fallbackBinPath != "") [
+          "--suffix"
+          "PATH"
+          ":"
+          fallbackBinPath
         ]
         ++ (lib.lists.flatten (
           map
