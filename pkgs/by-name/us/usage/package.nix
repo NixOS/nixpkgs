@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.2.2";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hnq3ViMrNIo9m/1mePjEzMv87U24wY50UiYxnpJqHR8=";
+    hash = "sha256-QKGyswc3tWcZIsGZhh0qyULnWNvLcveqx9e4qpwaC9Y=";
   };
 
-  cargoHash = "sha256-Zj8Z88gYx+i0VN14HbO1LSlWjZX1EvrtyKvAwpnFMgs=";
+  cargoHash = "sha256-5HhNUvE387TgaZDvqWWPkRfeJwaGN2L3bftgBHL3fUI=";
 
   postPatch = ''
     substituteInPlace ./examples/mounted.sh \
@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  checkFlags = [
+    # tries to build usage-cli itself
+    "--skip=test_bash_completion_integration"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
