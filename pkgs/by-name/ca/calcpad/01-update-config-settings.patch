@@ -1,0 +1,67 @@
+diff --git a/Calcpad.Cli/Program.cs b/Calcpad.Cli/Program.cs
+--- a/Calcpad.Cli/Program.cs
++++ b/Calcpad.Cli/Program.cs
+@@ -179,10 +179,33 @@ namespace Calcpad.Cli
+                             }
+                             else
+                             {
+-                                var settingsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+-                                                   $"{_dirSeparator}.config{_dirSeparator}calcpad{_dirSeparator}Settings.xml";
+-                                File.SetUnixFileMode(settingsPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+-                                Execute("/bin/bash", $"-c \"nano {settingsPath}\"");
++                                // Get XDG config home or fallback to ~/.config
++                                string configHome = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
++                                if (string.IsNullOrEmpty(configHome))
++                                    configHome = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config");
++
++                                var settingsDir = Path.Combine(configHome, "calcpad");
++                                var settingsPath = Path.Combine(settingsDir, "Settings.xml");
++
++                                if (!Directory.Exists(settingsDir))
++                                    Directory.CreateDirectory(settingsDir);
++
++                                string defaultSettingsPath = AppPath + "Settings.xml";
++
++                                if (!File.Exists(settingsPath))
++                                {
++                                    try
++                                    {
++                                        File.Copy(defaultSettingsPath, settingsPath);
++                                        File.SetUnixFileMode(settingsPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
++                                    }
++                                    catch (Exception ex)
++                                    {
++                                        Console.Error.WriteLine($"Failed to copy default settings: {ex.Message}");
++                                    }
++                                }
++
++                                Execute("nano", settingsPath);
+                                 Console.Write(Messages.Press_Any_Key_When_Ready);
+                                 Console.ReadKey();
+                                 settings = GetSettings();
+@@ -220,11 +243,21 @@ namespace Calcpad.Cli
+                 Settings settings = new(); 
+                 settings.Math.Decimals = 6;
+                 XmlSerializer writer = new(settings.GetType());
+-                var path = OperatingSystem.IsWindows() ?
+-                    AppPath:
+-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $"{_dirSeparator}.config{_dirSeparator}calcpad{_dirSeparator}";
+ 
+-                var fileName = path + "Settings.xml";
++                string path;
++                if (OperatingSystem.IsWindows())
++                {
++                    path = AppPath;
++                }
++                else
++                {
++                    string configHome = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
++                    if (string.IsNullOrEmpty(configHome))
++                        configHome = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config");
++                    path = Path.Combine(configHome, "calcpad");
++                }
++
++                var fileName = Path.Combine(path, "Settings.xml");
+                 FileStream fileStream = null;
+                 try
+                 {
