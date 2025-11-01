@@ -9,13 +9,13 @@
   xz,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vboot_reference";
   version = "135.16209";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
-    rev = "bf4b21294a1c2c6b94f400819d3fce4a905b3afe"; # refs/heads/release-R135-16209.B
+    rev = "refs/heads/release-R${finalAttrs.passthru.versionFormatted}.B";
     hash = "sha256-frg7NkK173wAHJRedtbJI5jI8Kee/VkByh5DCUzD9OA=";
   };
 
@@ -56,10 +56,14 @@ stdenv.mkDerivation {
     cp -r tests/devkeys* $out/share/vboot/
   '';
 
+  passthru = {
+    versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion finalAttrs.version);
+  };
+
   meta = {
     description = "Chrome OS partitioning and kernel signing tools";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})
