@@ -3,8 +3,97 @@ module.exports = async ({ github, context, core, dry }) => {
   const { DefaultArtifactClient } = require('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
   const withRateLimit = require('./withRateLimit.js')
+  const { classify } = require('../supportedBranches.js')
 
   const artifactClient = new DefaultArtifactClient()
+
+  async function downloadMaintainerMap(branch) {
+    let run
+
+    const commits = (
+      await github.rest.repos.listCommits({
+        ...context.repo,
+        sha: branch,
+        // We look at 10 commits to find a maintainer map, but this is an arbitrary number. The
+        // head commit might not have a map, if the queue was bypassed to merge it. This happens
+        // frequently on staging-esque branches. The branch with the highest chance of getting
+        // 10 consecutive bypassing commits is the stable staging-next branch. Luckily, this
+        // also means that the number of PRs open towards that branch is very low, so falling
+        // back to slightly imprecise maintainer data from master only has a marginal effect.
+        per_page: 10,
+      })
+    ).data
+
+    for (const commit of commits) {
+      const run = (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          workflow_id: 'merge-group.yml',
+          status: 'success',
+          exclude_pull_requests: true,
+          per_page: 1,
+          head_sha: commit.sha,
+        })
+      ).data.workflow_runs[0]
+      if (!run) continue
+
+      const artifact = (
+        await github.rest.actions.listWorkflowRunArtifacts({
+          ...context.repo,
+          run_id: run.id,
+          name: 'maintainers',
+        })
+      ).data.artifacts[0]
+      if (!artifact) continue
+
+      await artifactClient.downloadArtifact(artifact.id, {
+        findBy: {
+          repositoryName: context.repo.repo,
+          repositoryOwner: context.repo.owner,
+          token: core.getInput('github-token'),
+        },
+        path: path.resolve(path.join('branches', branch)),
+        expectedHash: artifact.digest,
+      })
+
+      return JSON.parse(
+        await readFile(
+          path.resolve(path.join('branches', branch, 'maintainers.json')),
+          'utf-8',
+        ),
+      )
+    }
+
+    // We get here when none of the 10 commits we looked at contained a maintainer map.
+    // For the master branch, we don't have any fallback options, so we error out.
+    // For other branches, we select a suitable fallback below.
+    if (branch === 'master') throw new Error('No maintainer map found.')
+
+    const { stable, version } = classify(branch)
+
+    const release = `release-${version}`
+    if (stable && branch !== release) {
+      // Only fallback to the release branch from *other* stable branches.
+      // Explicitly avoids infinite recursion.
+      return await getMaintainerMap(release)
+    } else {
+      // Falling back to master as last resort.
+      // This can either be the case for unstable staging-esque or wip branches,
+      // or for the primary stable branch (release-XX.YY).
+      return await getMaintainerMap('master')
+    }
+  }
+
+  // Simple cache for maintainer maps to avoid downloading the same artifacts
+  // over and over again. Ultimately returns a promise, so the result must be
+  // awaited for.
+  const maintainerMaps = {}
+  function getMaintainerMap(branch) {
+    if (!maintainerMaps[branch]) {
+      maintainerMaps[branch] = downloadMaintainerMap(branch)
+    }
+    return maintainerMaps[branch]
+  }
 
   async function handlePullRequest({ item, stats }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
@@ -110,12 +199,24 @@ module.exports = async ({ github, context, core, dry }) => {
       (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
+          workflow_id: 'pull-request-target.yml',
+          event: 'pull_request_target',
+          exclude_pull_requests: true,
+          head_sha: pull_request.head.sha,
+        })
+      ).data.workflow_runs[0] ??
+      // TODO: Remove this after 2026-02-01, at which point all pr.yml artifacts will have expired.
+      (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          // In older PRs, we need pr.yml instead of pull-request-target.yml.
           workflow_id: 'pr.yml',
           event: 'pull_request_target',
           exclude_pull_requests: true,
           head_sha: pull_request.head.sha,
         })
-      ).data.workflow_runs[0] ?? {}
+      ).data.workflow_runs[0] ??
+      {}
 
     // Newer PRs might not have run Eval to completion, yet.
     // Older PRs might not have an eval.yml workflow, yet.
@@ -177,21 +278,44 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const maintainers = new Set(
-        Object.keys(
-          JSON.parse(
-            await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
-          ),
-        ).map((m) => Number.parseInt(m, 10)),
-      )
-
       const evalLabels = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
       ).labels
 
+      // TODO: Get "changed packages" information from list of changed by-name files
+      // in addition to just the Eval results, to make this work for these packages
+      // when Eval results have expired as well.
+      let packages
+      try {
+        packages = JSON.parse(
+          await readFile(`${pull_number}/packages.json`, 'utf-8'),
+        )
+      } catch (e) {
+        if (e.code !== 'ENOENT') throw e
+        // TODO: Remove this fallback code once all old artifacts without packages.json
+        // have expired. This should be the case in ~ February 2026.
+        packages = Array.from(
+          new Set(
+            Object.values(
+              JSON.parse(
+                await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+              ),
+            ).flat(1),
+          ),
+        )
+      }
+
+      const maintainers = await getMaintainerMap(pull_request.base.ref)
+
       Object.assign(prLabels, evalLabels, {
-        '12.approved-by: package-maintainer':
-          maintainers.intersection(approvals).size > 0,
+        '11.by: package-maintainer':
+          packages.length &&
+          packages.every((pkg) =>
+            maintainers[pkg]?.includes(pull_request.user.id),
+          ),
+        '12.approved-by: package-maintainer': packages.some((pkg) =>
+          maintainers[pkg]?.some((m) => approvals.has(m)),
+        ),
       })
     }
 
