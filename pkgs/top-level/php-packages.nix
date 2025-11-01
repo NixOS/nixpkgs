@@ -447,25 +447,16 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--enable-dom"
               ];
-              patches =
-                lib.optionals (lib.versionAtLeast php.version "8.4") [
-                  # Fix build of ext-dom.
-                  # https://github.com/php/php-src/pull/20023 (will be part of 8.4.14)
-                  (fetchpatch {
-                    url = "https://github.com/php/php-src/commit/4fe040290da2822c70d3b60d30a2c1256264735d.patch";
-                    hash = "sha256-hCs59X5gCApXMjU9dKEtgdTJBHYq3BcKr9tlQjRCTIA=";
-                  })
-                ]
-                ++ lib.optionals (lib.versionOlder php.version "8.3") [
-                  # Fix gh10234 test with libxml 2.15.0
-                  (fetchpatch {
-                    url = "https://github.com/php/php-src/commit/d6e70e705323a50b616ffee9402245ab97de3e4e.patch";
-                    hash = "sha256-Axu09l3uQ83qe30aDsR+Bt29cJiF4mLknwDyQf94vic=";
-                    includes = [
-                      "ext/dom/tests/gh10234.phpt"
-                    ];
-                  })
-                ];
+              patches = lib.optionals (lib.versionOlder php.version "8.3") [
+                # Fix gh10234 test with libxml 2.15.0
+                (fetchpatch {
+                  url = "https://github.com/php/php-src/commit/d6e70e705323a50b616ffee9402245ab97de3e4e.patch";
+                  hash = "sha256-Axu09l3uQ83qe30aDsR+Bt29cJiF4mLknwDyQf94vic=";
+                  includes = [
+                    "ext/dom/tests/gh10234.phpt"
+                  ];
+                })
+              ];
             }
             {
               name = "enchant";
