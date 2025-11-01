@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get the code owners of the files changed by a PR, returning one username per line
+# Get the code owners of the files changed by a PR, returning one username or team per line
 
 set -euo pipefail
 
@@ -16,15 +16,8 @@ fi
 touchedFilesFile=$1
 ownersFile=$2
 
-tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"' exit
-
 readarray -t touchedFiles < "$touchedFilesFile"
 log "This PR touches ${#touchedFiles[@]} files"
-
-# Associative array with the user as the key for easy de-duplication
-# Make sure to always lowercase keys to avoid duplicates with different casings
-declare -A users=()
 
 for file in "${touchedFiles[@]}"; do
     result=$(codeowners --file "$ownersFile" "$file")
@@ -52,39 +45,7 @@ for file in "${touchedFiles[@]}"; do
         # The first regex match is everything after the @
         entry=${BASH_REMATCH[1]}
 
-        if [[ "$entry" =~ (.*)/(.*) ]]; then
-            # Teams look like $org/$team
-            org=${BASH_REMATCH[1]}
-            team=${BASH_REMATCH[2]}
-
-            # Instead of requesting a review from the team itself,
-            # we request reviews from the individual users.
-            # This is because once somebody from a team reviewed the PR,
-            # the API doesn't expose that the team was already requested for a review,
-            # so we wouldn't be able to avoid rerequesting reviews
-            # without saving some some extra state somewhere
-
-            # We could also consider implementing a more advanced heuristic
-            # in the future that e.g. only pings one team member,
-            # but escalates to somebody else if that member doesn't respond in time.
-            gh api \
-                --cache=1h \
-                -H "Accept: application/vnd.github+json" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                "/orgs/$org/teams/$team/members" \
-                --jq '.[].login' > "$tmp/team-members"
-            readarray -t members < "$tmp/team-members"
-            log "Team $entry has these members: ${members[*]}"
-
-            for user in "${members[@]}"; do
-                users[${user,,}]=
-            done
-        else
-            # Everything else is a user
-            users[${entry,,}]=
-        fi
+        echo "$entry"
     done
 
 done
-
-printf "%s\n" "${!users[@]}"

@@ -63,26 +63,12 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
-      - name: Log current API rate limits (app-token)
-        if: ${{ steps.app-token.outputs.token }}
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq
-
       - name: Determining code owner reviews
-        if: steps.app-token.outputs.token
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
         run: |
           result/bin/request-code-owner-reviews.sh "$REPOSITORY" "$NUMBER" ci/OWNERS > owners.txt
-
-      - name: Log current API rate limits (app-token)
-        if: ${{ steps.app-token.outputs.token }}
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq
 
       - name: Log current API rate limits (github.token)
         env:
