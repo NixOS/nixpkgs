@@ -27,14 +27,16 @@ function runChecklist({
       'staging',
       'staging-next',
     ].includes(pull_request.base.ref),
-    'PR touches only files in `pkgs/by-name/`.': allByName,
+    'PR touches only packages in `pkgs/by-name/`.': allByName,
     'PR authored by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
       committers.has(pull_request.user.id),
   }
 
   if (user) {
-    checklist[`${user.login} can use the merge bot.`] = userIsMaintainer
+    checklist[
+      `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers).`
+    ] = userIsMaintainer
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since
       // we can't reliably relate changed files to packages outside by-name.
@@ -249,8 +251,9 @@ async function handleMerge({
 
     const body = [
       `<!-- comment: ${comment.node_id} -->`,
+      `@${comment.user.login} wants to merge this PR.`,
       '',
-      'Requirements to merge this PR:',
+      'Requirements to merge this PR with `@NixOS/nixpkgs-merge-bot merge`:',
       ...Object.entries(checklist).map(
         ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
       ),

@@ -43,7 +43,7 @@ These issues effectively list PRs the merge bot has interacted with.
 To ensure security and a focused utility, the bot adheres to specific limitations:
 
 - The PR targets `master`, `staging`, or `staging-next`.
-- The PR only touches files located under `pkgs/by-name/*`.
+- The PR only touches packages located under `pkgs/by-name/*`.
 - The PR is authored by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/) or a [committer][@NixOS/nixpkgs-committers].
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
