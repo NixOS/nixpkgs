@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.3.0-unstable-2025-08-28";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "pc2";
