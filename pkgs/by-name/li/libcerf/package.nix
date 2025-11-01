@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libcerf";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchurl {
     url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${version}/libcerf-v${version}.tar.gz";
-    sha256 = "sha256-6o0RDXPsJKZDBCyjlARhzLsbZUHiExDstwq05NwUSu8=";
+    sha256 = "sha256-6ikQCFRI4mm18PD6vlH/2EasaIgZBL6ZZp2U3AzAl2U=";
   };
 
   nativeBuildInputs = [
