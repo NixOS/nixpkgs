@@ -63,13 +63,6 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
-      - name: Determining code owner reviews
-        env:
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          result/bin/request-code-owner-reviews.sh "$REPOSITORY" "$NUMBER" ci/OWNERS > owners.txt
-
       - name: Log current API rate limits (github.token)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -149,7 +142,7 @@ jobs:
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | cat owners.txt - \
+            | cat comparison/owners.txt - \
             | GH_TOKEN="$APP_GH_TOKEN" result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
 
       - name: Log current API rate limits (app-token)
