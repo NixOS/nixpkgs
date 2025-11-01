@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       type = "Application";
       name = "conduktor";
       desktopName = "Conduktor";
-      genericName = finalAttrs.meta.description;
+      genericName = "Apache Kafka Desktop Client";
       exec = "conduktor";
       icon = fetchurl {
         url = "https://github.com/conduktor/builds/raw/v${finalAttrs.version}/.github/resources/Conduktor.png";

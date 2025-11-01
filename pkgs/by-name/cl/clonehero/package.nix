@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItem = makeDesktopItem {
     name = "clonehero";
     desktopName = "Clone Hero";
-    comment = finalAttrs.meta.description;
+    comment = "Clone of Guitar Hero and Rockband-style games";
     icon = "clonehero";
     exec = "clonehero";
     categories = [ "Game" ];

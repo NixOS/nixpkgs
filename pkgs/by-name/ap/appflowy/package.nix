@@ -95,7 +95,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (makeDesktopItem {
       name = "appflowy";
       desktopName = "AppFlowy";
-      comment = finalAttrs.meta.description;
+      comment = "Open-source alternative to Notion";
       exec = "appflowy %U";
       icon = "appflowy";
       categories = [ "Office" ];

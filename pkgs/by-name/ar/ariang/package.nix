@@ -52,8 +52,8 @@ buildNpmPackage rec {
     (makeDesktopItem {
       name = pname;
       desktopName = "AriaNg";
-      genericName = meta.description;
-      comment = meta.description;
+      genericName = "Modern web frontend making aria2 easier to use";
+      comment = "Modern web frontend making aria2 easier to use";
       exec = pname;
       icon = pname;
       terminal = false;

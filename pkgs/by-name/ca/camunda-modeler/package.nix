@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation rec {
         "camunda"
       ];
       genericName = "Process Modeling Tool";
-      comment = meta.description;
+      comment = "Integrated modeling solution for BPMN, DMN and Forms based on bpmn.io";
       mimeTypes = [
         "application/bpmn"
         "application/cmmn"

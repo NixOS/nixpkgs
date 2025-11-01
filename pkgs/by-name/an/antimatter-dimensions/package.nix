@@ -17,7 +17,7 @@ let
   # when this file will be available in upstream repository.
   dummyElectronApp = ./app.js;
 in
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "antimatter-dimensions";
   version = "0-unstable-2025-09-17";
   src = fetchFromGitHub {
@@ -62,7 +62,7 @@ buildNpmPackage rec {
       exec = "antimatter-dimensions";
       icon = "antimatter-dimensions";
       desktopName = electronAppName;
-      comment = meta.description;
+      comment = "Idle incremental game with multiple prestige layers";
       categories = [ "Game" ];
       terminal = false;
     })

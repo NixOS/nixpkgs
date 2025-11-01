@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
       exec = "anvil";
       icon = "anvil";
       desktopName = "Anvil";
-      comment = finalAttrs.meta.description;
+      comment = "Graphical, multi-pane tiling editor inspired by Acme";
       categories = [
         "Utility"
         "TextEditor"
