@@ -1529,6 +1529,7 @@ in
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
+  thumbor = runTest ./thumbor.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;
