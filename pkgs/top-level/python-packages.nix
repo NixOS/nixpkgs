@@ -17836,6 +17836,8 @@ self: super: with self; {
 
   stp = toPythonModule (pkgs.stp.override { python3 = self.python; });
 
+  stqdm = callPackage ../development/python-modules/stqdm { };
+
   stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
@@ -17861,6 +17863,8 @@ self: super: with self; {
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
   streamlit = callPackage ../development/python-modules/streamlit { };
+
+  streamlit-jupyter = callPackage ../development/python-modules/streamlit-jupyter { };
 
   streamz = callPackage ../development/python-modules/streamz { };
 
