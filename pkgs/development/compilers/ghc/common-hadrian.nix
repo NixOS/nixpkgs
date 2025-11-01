@@ -636,7 +636,7 @@ stdenv.mkDerivation (
       "--with-ffi-includes=${targetLibs.libffi.dev}/include"
       "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
     ]
-    ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+    ++ lib.optionals (!enableNativeBignum) [
       "--with-gmp-includes=${targetLibs.gmp.dev}/include"
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
