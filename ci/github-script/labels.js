@@ -299,10 +299,10 @@ module.exports = async ({ github, context, core, dry }) => {
         '11.by: package-maintainer':
           packages.length &&
           packages.every((pkg) =>
-            maintainers[pkg].includes(pull_request.user.id),
+            maintainers[pkg]?.includes(pull_request.user.id),
           ),
         '12.approved-by: package-maintainer': packages.some((pkg) =>
-          maintainers[pkg].some((m) => approvals.has(m)),
+          maintainers[pkg]?.some((m) => approvals.has(m)),
         ),
       })
     }
