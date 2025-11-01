@@ -1403,6 +1403,8 @@ let
         TASK_XACCT = yes;
         TASK_IO_ACCOUNTING = yes;
 
+        LEGACY_TIOCSTI = whenAtLeast "6.2" no;
+
         # Fresh toolchains frequently break -Werror build for minor issues.
         WERROR = whenAtLeast "5.15" no;
 
