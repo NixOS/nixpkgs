@@ -13,6 +13,7 @@ let
     opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
 
   sslPolicies = lib.mapAttrsToList (name: conf: ''
+    dbms.ssl.policy.${name}.enabled=${lib.boolToString conf.enable}
     dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
     dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
     ${lib.optionalString (conf.ciphers != null) ''
@@ -467,6 +468,14 @@ in
             }:
             {
               options = {
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Setting this to `true` enables this policy.
+                  '';
+                };
+
                 allowKeyGeneration = lib.mkOption {
                   type = lib.types.bool;
                   default = false;
