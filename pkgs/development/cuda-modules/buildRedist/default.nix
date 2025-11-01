@@ -279,8 +279,6 @@ extendMkDerivation {
       ]
       ++ nativeBuildInputs;
 
-      propagatedBuildInputs = [ setupCudaHook ] ++ propagatedBuildInputs;
-
       buildInputs = [
         # autoPatchelfHook will search for a libstdc++ and we're giving it
         # one that is compatible with the rest of nixpkgs, even when

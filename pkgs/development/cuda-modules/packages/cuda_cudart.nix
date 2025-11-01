@@ -32,12 +32,15 @@ buildRedist (finalAttrs: {
   # NOTE: `cuda_compat` can be disabled by setting the package to `null`. This is useful in cases where
   # the host OS has a recent enough CUDA driver that the compatibility library isn't needed.
   propagatedBuildInputs =
-    # Add the dependency on NVCC's include directory.
-    # - crt/host_config.h
+    # TODO(@SomeoneSerge): Consider propagating `crt/host_config.h`, but only
+    # once we managed to split out `cuda_nvcc`'s headers into a separate output
+    #
     # TODO(@connorbaker): Check that the dependency offset for this is correct.
-    [ (lib.getOutput "include" cuda_nvcc) ]
+    #
+    # [ (lib.getInclude cuda_nvcc) ]
+
     # TODO(@connorbaker): From CUDA 13.0, crt/host_config.h is in cuda_crt
-    ++ lib.optionals (cudaAtLeast "13.0") [ (lib.getOutput "include" cuda_crt) ]
+    lib.optionals (cudaAtLeast "13.0") [ (lib.getOutput "include" cuda_crt) ]
     # Add the dependency on CCCL's include directory.
     # - nv/target
     # TODO(@connorbaker): Check that the dependency offset for this is correct.
@@ -85,6 +88,9 @@ buildRedist (finalAttrs: {
     fi
     popd >/dev/null
   '';
+
+  # "Never again", cf. https://github.com/NixOS/nixpkgs/pull/457424
+  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   meta.description = "CUDA Runtime";
 })
