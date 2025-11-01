@@ -12,24 +12,20 @@
   logging-journald,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   raven,
   rich,
   setproctitle,
-  typing-extensions,
   uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "17.9.4";
+  version = "17.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oSwMhomcPIN2JYterJuBUcmJtUx3rayADH1ugah+pI8=";
+    hash = "sha256-qZcoKRXbBbRY2cTY2bTFTk+IpqJ5Pe+szfA76G7kJ+Q=";
   };
 
   build-system = [ poetry-core ];
@@ -37,7 +33,6 @@ buildPythonPackage rec {
   dependencies = [
     colorlog
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [

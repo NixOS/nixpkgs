@@ -14100,7 +14100,7 @@
   };
   KunyaKud = {
     name = "KunyaKud";
-    email = "KunyaKud@proton.me";
+    email = "wafuu@posteo.net";
     github = "KunyaKud";
     githubId = 238898928;
   };
@@ -24205,6 +24205,11 @@
     githubId = 26260032;
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
+  };
+  skwig = {
+    name = "skwig";
+    github = "skwig";
+    githubId = 16136203;
   };
   skyesoss = {
     name = "Skye Soss";

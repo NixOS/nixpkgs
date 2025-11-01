@@ -516,11 +516,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-sWSz/ixfrJOf5hS5PV70jXfsAD+nhL3PS8wLLGnndQI=",
+    "hash": "sha256-kFjvjaUDmiK3IfO/hioTTTkUetij4CSYJ359bxmpG40=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.50.0",
+    "rev": "v4.51.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -705,11 +705,11 @@
     "vendorHash": "sha256-jwDezL9gI6A9pCdD1CUgEOJT8dqVuPX/sFjTO4Jiqs4="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-X/pEv7osVytLe16B/ERbp8izuPLtMb/TeMiQVI0jZWc=",
+    "hash": "sha256-k0XUu+QyxTLGp+r+gBbHx1+wqVCC5Xy2D4fMqWTCMOo=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.79.2",
+    "rev": "v1.80.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -741,11 +741,11 @@
     "vendorHash": null
   },
   "integrations_github": {
-    "hash": "sha256-EjCL6RcTw+2uhfwgyiFRfsXYkkDHZqlSSzEcb4CRvIo=",
+    "hash": "sha256-W7VO2HVP9XMEs0KBTBsyhkLfuTaqrxLSyR54SGTemG0=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v6.7.3",
+    "rev": "v6.7.4",
     "spdx": "MIT",
     "vendorHash": null
   },
@@ -1192,13 +1192,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-J0hz5qtT3bBKqoZ9SkZn0oxix1fIQRmwv7feME7CljM=",
+    "hash": "sha256-qGqoljx5G7fmqrnhfVll+hX1afR3+3blcY1Hob5ujYY=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v6.8.0",
+    "rev": "v7.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TQXj2Em665zhCqXiT2BG1xxvVCo0/G2SaQKUbqGwcQM="
+    "vendorHash": "sha256-K70gvX9XcMoDCNQk9k7dtBBQxYSiS3TkqGBxMK3pOK0="
   },
   "siderolabs_talos": {
     "hash": "sha256-PPD4blyXt4/IalzwEn4+lvuD1Qx7VuUD/CUJILDRI5k=",
