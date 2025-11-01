@@ -35,10 +35,20 @@
 
 ## configurability of the wrapper itself
 
-browser:
+browser_:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
+  browser =
+    # Wrapper breaks codesigning on macOS; though plugins that may require
+    # original mozilla signature (like 1Password) won't work with signatures
+    # stripped, at least the wrapped browser will launch.
+    if isDarwin then
+      browser_.overrideAttrs (oldAttrs: {
+        dontFixup = false;
+      })
+    else
+      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
