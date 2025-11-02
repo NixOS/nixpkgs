@@ -1195,6 +1195,13 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
+ - gpu-vulkan
+ - gpu-vulkan-khr-surface
+ - gpu-vulkan-khr-surface-glfw
+ - gpu-vulkan-khr-swapchain
+ - gpu-vulkan-middle-khr-surface
+ - gpu-vulkan-middle-khr-surface-glfw
+ - gpu-vulkan-middle-khr-swapchain
  - GPX
  - grab-form
  - graflog
@@ -1599,6 +1606,7 @@ dont-distribute-packages:
  - hoppy-runtime
  - hoppy-std
  - horde-ad
+ - hotel-california
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -1640,6 +1648,9 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
+ - hs-opentelemetry-instrumentation-cloudflare
+ - hs-opentelemetry-instrumentation-http-client
+ - hs-opentelemetry-instrumentation-yesod
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
@@ -3458,6 +3469,7 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
+ - temporal-sdk
  - ten-lens
  - ten-unordered-containers
  - terminal-text
