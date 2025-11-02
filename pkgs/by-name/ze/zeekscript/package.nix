@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.3.2-unstable-2025-09-29";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
