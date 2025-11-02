@@ -9,6 +9,7 @@
   # dependencies
   asyncstdlib-fw,
   betterproto-fw,
+  googleapis-common-protos,
   grpcio,
   grpclib,
   httpx-sse,
@@ -21,6 +22,7 @@
   pydantic,
   python-dateutil,
   rich,
+  toml,
   typing-extensions,
 
   # optional dependencies
@@ -36,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "fireworks-ai";
-  version = "0.17.16";
+  version = "0.19.20";
   pyproject = true;
 
   # no source available
   src = fetchPypi {
     pname = "fireworks_ai";
     inherit version;
-    hash = "sha256-WblcAaYjnzwPS4n5rixNHbHLNGTE3bTPXvQ9lYZ1f9A=";
+    hash = "sha256-zK8lO+vFnMEPPl79QGfqPdemZT7kQdCqAPiCrcXdqYQ=";
   };
 
   build-system = [
@@ -51,12 +53,14 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "attrs"
     "protobuf"
   ];
 
   dependencies = [
     asyncstdlib-fw
     betterproto-fw
+    googleapis-common-protos
     grpcio
     grpclib
     httpx
@@ -70,6 +74,7 @@ buildPythonPackage rec {
     pydantic
     python-dateutil
     rich
+    toml
     typing-extensions
   ];
 
