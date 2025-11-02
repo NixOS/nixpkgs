@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     libnotify
     libwnck
+    libxml2
     gtk-layer-shell
     gtk3
     mate-desktop
