@@ -55,6 +55,6 @@ python3Packages.buildPythonApplication {
     changelog = "https://github.com/kriptolix/Poliedros/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "poliedros";
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 }
