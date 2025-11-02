@@ -477,6 +477,10 @@ let
         zlib.dev
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
+    datefixR = with pkgs; [
+      cargo
+      rustc
+    ];
     devEMF = with pkgs; [ xorg.libXft.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
@@ -1870,6 +1874,10 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
+    });
+
+    datefixR = old.datefixR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     PICS = old.PICS.overrideAttrs (attrs: {
