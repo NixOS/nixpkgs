@@ -7,6 +7,10 @@ function runChecklist({
   user,
   userIsMaintainer,
 }) {
+  const allByName = files.every(({ filename }) =>
+    filename.startsWith('pkgs/by-name/'),
+  )
+
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
     .map(({ filename }) => filename.split('/')[3])
@@ -23,9 +27,7 @@ function runChecklist({
       'staging',
       'staging-next',
     ].includes(pull_request.base.ref),
-    'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
-      filename.startsWith('pkgs/by-name/'),
-    ),
+    'PR touches only files in `pkgs/by-name/`.': allByName,
     'PR authored by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
       committers.has(pull_request.user.id),
@@ -33,9 +35,12 @@ function runChecklist({
 
   if (user) {
     checklist[`${user.login} can use the merge bot.`] = userIsMaintainer
-    checklist[
-      `${user.login} is eligible to merge changes to the touched packages.`
-    ] = eligible.has(user.id)
+    if (allByName) {
+      // We can only determine the below, if all packages are in by-name, since
+      // we can't reliably relate changed files to packages outside by-name.
+      checklist[`${user.login} is a maintainer of all touched packages.`] =
+        eligible.has(user.id)
+    }
   } else {
     // This is only used when no user is passed, i.e. for labeling.
     checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
