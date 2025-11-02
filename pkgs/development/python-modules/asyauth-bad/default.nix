@@ -4,7 +4,7 @@
   asysocks,
   buildPythonPackage,
   fetchFromGitHub,
-  minikerberos-bad,
+  kerbad,
   setuptools,
   unicrypto,
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     asn1crypto
     asysocks
-    minikerberos-bad
+    kerbad
     unicrypto
   ];
 

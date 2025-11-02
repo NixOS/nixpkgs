@@ -7,7 +7,7 @@
   dnspython,
   fetchFromGitHub,
   hatchling,
-  minikerberos-bad,
+  kerbad,
   msldap-bad,
   pyasn1,
   pytestCheckHook,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "cryptography" ];
 
   pythonRemoveDeps = [
-    "minikerberos-bad"
+    "kerbad"
     "msldap-bad"
   ];
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     asn1crypto
     cryptography
     dnspython
-    minikerberos-bad
+    kerbad
     msldap-bad
     winacl
   ];

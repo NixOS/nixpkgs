@@ -5,7 +5,7 @@
   asysocks,
   buildPythonPackage,
   fetchFromGitHub,
-  minikerberos-bad,
+  kerbad,
   prompt-toolkit,
   setuptools,
   tabulate,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     asyauth-bad
     asn1crypto
     asysocks
-    minikerberos-bad
+    kerbad
     prompt-toolkit
     tabulate
     tqdm

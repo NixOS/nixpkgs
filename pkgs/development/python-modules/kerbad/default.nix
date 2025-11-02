@@ -15,13 +15,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "minikerberos-bad";
+  pname = "kerbad";
   version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
-    repo = "minikerberos-bAD";
+    repo = "kerbad";
     tag = version;
     hash = "sha256-pnIn7UOpnCke6voFvOwcONXDd9i/di1lE/57vkg0/0w=";
   };
@@ -45,8 +45,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Kerberos manipulation library in pure Python";
-    homepage = "https://github.com/CravateRouge/minikerberos-bAD";
-    changelog = "https://github.com/CravateRouge/minikerberos-bAD/releases/tag/${src.tag}";
+    homepage = "https://github.com/CravateRouge/kerbad";
+    changelog = "https://github.com/CravateRouge/kerbad/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -7870,6 +7870,8 @@ self: super: with self; {
 
   keras = callPackage ../development/python-modules/keras { };
 
+  kerbad = callPackage ../development/python-modules/kerbad { };
+
   kerberos = callPackage ../development/python-modules/kerberos { };
 
   kernels = callPackage ../development/python-modules/kernels { };
@@ -9450,8 +9452,6 @@ self: super: with self; {
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
-
-  minikerberos-bad = callPackage ../development/python-modules/minikerberos-bad { };
 
   minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
