@@ -96,6 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
                       --replace "which %s" "${which}/bin/which %s"
   '';
 
+  # The build system uses -Werror extensively. Fails the build on
+  # minor deprecations of dependencies.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   cmakeFlags = [
     "-DWZ_DISTRIBUTOR=NixOS"
     # The cmake builder automatically sets CMAKE_INSTALL_BINDIR to an absolute
