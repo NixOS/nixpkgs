@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
+    # https://bugs.kde.org/show_bug.cgi?id=511548
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=186435";
+      hash = "sha256-Ifsg3Hr78umZR5nwy9DOY8bB59wp8EtV+fYm+h8sk9k=";
+    })
+
     # Fix build on armv7l.
     # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
