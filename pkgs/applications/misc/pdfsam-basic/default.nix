@@ -4,7 +4,7 @@
   makeDesktopItem,
   fetchurl,
   temurin-jre-bin-21,
-  javaPackages,
+  openjfx25,
   wrapGAppsHook3,
   dpkg,
   xorg,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
          --set PDFSAM_JAVA_PATH ${temurin-jre-bin-21} \
          --prefix LD_LIBRARY_PATH : ${
            lib.makeLibraryPath [
-             javaPackages.openjfx23 # PDFSam Basic requires JDK 21 and JavaFX 23 https://github.com/torakiki/pdfsam/issues/785#issuecomment-3446564717
+             openjfx25 # PDFSam Basic requires JDK 21 and JavaFX 23 https://github.com/torakiki/pdfsam/issues/785#issuecomment-3446564717
              xorg.libXxf86vm
              xorg.libXtst
              gtk3
