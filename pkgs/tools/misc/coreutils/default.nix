@@ -25,7 +25,7 @@
   withOpenssl ? !minimal,
   openssl,
   withPrefix ? false,
-  singleBinary ? "symlinks", # you can also pass "shebangs" or false
+  singleBinary ? (if stdenv.hostPlatform.isDarwin then false else "symlinks"), # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -34,6 +34,7 @@
 
 assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
+assert stdenv.hostPlatform.isDarwin -> singleBinary == false; # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=79714
 
 let
   inherit (lib)
