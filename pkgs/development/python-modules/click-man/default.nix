@@ -16,7 +16,7 @@
   sure,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-man";
   version = "0.4.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-man";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tHoswLw1/8gI3VlTpLOChc3BAKgoMfYVpdjOY9LaNWc=";
   };
 
@@ -49,10 +49,14 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/click-contrib/click-man/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Automate generation of man pages for python click applications";
     homepage = "https://github.com/click-contrib/click-man";
     license = lib.licenses.mit;
     mainProgram = "click-man";
-    teams = with lib.teams; [ deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})
