@@ -4,13 +4,13 @@
   maven,
   fetchFromGitHub,
   replaceVars,
-  openjdk23,
+  jdk25,
   libarchive,
   makeWrapper,
 }:
 let
   # Wants at least Java 22
-  jdk = openjdk23;
+  jdk = jdk25;
   version = "5.9.6";
 in
 maven.buildMavenPackage {
