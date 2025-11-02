@@ -259,6 +259,7 @@ mapAliases {
   mkdocs-macros = mkdocs-macros-plugin; # added 2025-09-02
   mkdocs-minify = throw "'mkdocs-minify' has been renamed to/replaced by 'mkdocs-minify-plugin'"; # Converted to throw 2025-10-29
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
+  msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29

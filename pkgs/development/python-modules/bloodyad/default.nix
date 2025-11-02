@@ -8,7 +8,7 @@
   fetchFromGitHub,
   hatchling,
   kerbad,
-  msldap-bad,
+  badldap,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     "kerbad"
-    "msldap-bad"
+    "badldap"
   ];
 
   build-system = [ hatchling ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     cryptography
     dnspython
     kerbad
-    msldap-bad
+    badldap
     winacl
   ];
 

@@ -1694,6 +1694,8 @@ self: super: with self; {
 
   badauth = callPackage ../development/python-modules/badauth { };
 
+  badldap = callPackage ../development/python-modules/badldap { };
+
   badsecrets = callPackage ../development/python-modules/badsecrets { };
 
   bagit = callPackage ../development/python-modules/bagit { };
@@ -9844,8 +9846,6 @@ self: super: with self; {
   msgspec = callPackage ../development/python-modules/msgspec { };
 
   msldap = callPackage ../development/python-modules/msldap { };
-
-  msldap-bad = callPackage ../development/python-modules/msldap-bad { };
 
   mslex = callPackage ../development/python-modules/mslex { };
 
