@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -44,6 +45,27 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-J/NPLR9ShKhvHDU0/NpUNp95RViS2KygqvnuDHdwiP0=";
   };
+
+  # The two following patches mitigate CVE breaches.
+  # The patches are part of the keras 3.12.0 release.
+  # We choose to backport the relevant commits instead of updating keras to 3.12.0 as this latest
+  # release includes breaking changes.
+  patches = [
+    # Fixes CVE-2025-12058
+    # https://github.com/advisories/GHSA-mq84-hjqx-cwf2
+    (fetchpatch2 {
+      name = "patch-CVE-2025-12058";
+      url = "https://github.com/keras-team/keras/commit/61ac8c1e51862c471dee7b49029c356f55531487.patch";
+      hash = "sha256-tvWYde3AERV1w3gvQ70NNLo0xNxgyZFzf5LF48Axymg=";
+    })
+    # Fixes CVE-2025-12060
+    # https://github.com/advisories/GHSA-28jp-44vh-q42h
+    (fetchpatch2 {
+      name = "patch-CVE-2025-12060";
+      url = "https://github.com/keras-team/keras/commit/47fcb397ee4caffd5a75efd1fa3067559594e951.patch";
+      hash = "sha256-tiBRXGp+PHiY0VXCdcpmpq4PHORvREVpr/QfQcwqJdk=";
+    })
+  ];
 
   build-system = [
     setuptools
