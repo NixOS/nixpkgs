@@ -17,6 +17,7 @@
   perl,
   pkg-config,
   python3Packages,
+  removeReferencesTo,
   re2,
   zlib,
   protobuf,
@@ -44,6 +45,7 @@ let
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  inherit (cudaPackages) cuda_nvcc;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
@@ -121,6 +123,7 @@ effectiveStdenv.mkDerivation rec {
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
     cudaPackages.cudnn-frontend
+    removeReferencesTo
   ]
   ++ lib.optionals isCudaJetson [
     cudaPackages.autoAddCudaCompatRunpath
@@ -317,6 +320,12 @@ effectiveStdenv.mkDerivation rec {
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
       ../include/onnxruntime/core/session/onnxruntime_*.h
   '';
+
+  # See comments in `cudaPackages.nccl`
+  postFixup = lib.optionalString cudaSupport ''
+    remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
+  '';
+  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module
