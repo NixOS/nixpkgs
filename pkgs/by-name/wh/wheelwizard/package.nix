@@ -7,8 +7,10 @@
   makeDesktopItem,
   makeWrapper,
   avalonia,
-  #Runtime dependencies
+  # Runtime dependencies
   libglvnd,
+  # passthru
+  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "wheelwizard";
@@ -69,6 +71,8 @@ buildDotnetModule rec {
     desktopName = "Wheel Wizard";
     categories = [ "Game" ];
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "WheelWizard, Retro Rewind Launcher";
