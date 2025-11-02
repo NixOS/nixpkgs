@@ -1,27 +1,32 @@
-// Caching the list of committers saves API requests when running the bot on the schedule and
+// Caching the list of team members saves API requests when running the bot on the schedule and
 // processing many PRs at once.
-let committers
+const members = {}
 
 async function runChecklist({ github, context, pull_request, maintainers }) {
   const pull_number = pull_request.number
 
-  if (!committers) {
+  function getTeamMembers(team_slug) {
     if (context.eventName === 'pull_request') {
       // We have no chance of getting a token in the pull_request context with the right
       // permissions to access the members endpoint below. Thus, we're pretending to have
-      // no committers. This is OK; because this is only for the Test workflow, not for
+      // no members. This is OK; because this is only for the Test workflow, not for
       // real use.
-      committers = new Set()
-    } else {
-      committers = github
+      return new Set()
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github
         .paginate(github.rest.teams.listMembersInOrg, {
           org: context.repo.owner,
-          team_slug: 'nixpkgs-committers',
+          team_slug,
           per_page: 100,
         })
         .then((members) => new Set(members.map(({ id }) => id)))
     }
+
+    return members[team_slug]
   }
+  committers = await getTeamMembers('nixpkgs-committers')
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
     ...context.repo,
@@ -50,7 +55,7 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     ),
     'PR authored by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
-      (await committers).has(pull_request.user.id),
+      committers.has(pull_request.user.id),
     'PR has maintainers eligible for merge.': eligible.size > 0,
   }
 
