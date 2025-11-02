@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -36,6 +37,10 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/ipython/traitlets/issues/902
     "test_complete_custom_completers"
+  ] ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/ipython/traitlets/issues/925
+    "test_complete_simple_app"
+    "test_complete_subcommands_subapp1"
   ];
 
   disabledTestPaths = [
