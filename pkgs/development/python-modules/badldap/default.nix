@@ -1,13 +1,17 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   asn1crypto,
   asysocks,
   badauth,
-  buildPythonPackage,
-  fetchFromGitHub,
   kerbad,
   prompt-toolkit,
-  setuptools,
   tabulate,
   tqdm,
   unicrypto,
