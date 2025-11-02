@@ -87,7 +87,8 @@ let
       };
     };
 
-  gen =
+  # Creates a Gradle without calling the package.
+  mkGradle' =
     {
       version,
       hash,
@@ -275,7 +276,7 @@ let
       };
       passthru.jdk = defaultJava;
       passthru.wrapped = callPackage wrapGradle {
-        gradle-unwrapped = gen' genArgs;
+        gradle-unwrapped = mkGradle genArgs;
       };
       passthru.updateScript =
         if enableUpdateScript then
@@ -324,26 +325,31 @@ let
     });
 
   # Calls the generated Gradle package with default arguments.
-  gen' = args: callPackage (gen args) { };
+  mkGradle = args: callPackage (mkGradle' args) { };
 in
 rec {
+  # Keep these exposed (but not at toplevel) so users can call
+  # `gradle-packages.mkGradle` as we do below,
+  # and still have wrapGradle available if necessary.
+  inherit mkGradle wrapGradle;
+
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
-  gradle_9 = gen' {
+  gradle_9 = mkGradle {
     version = "9.1.0";
     hash = "sha256-oX3dhaJran9d23H/iwX8UQTAICxuZHgkKXkMkzaGyAY=";
     defaultJava = jdk21;
   };
-  gradle_8 = gen' {
+  gradle_8 = mkGradle {
     version = "8.14.3";
     hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
     defaultJava = jdk21;
     # Only enable this on *one* version to avoid duplicate PRs.
     enableUpdateScript = true;
   };
-  gradle_7 = gen' {
+  gradle_7 = mkGradle {
     version = "7.6.6";
     hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
     defaultJava = jdk17;
