@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hGjLOyduTc+yOQhO5gDKNfY0fDvbUfvF0FrdjrDheyw=";
   };
 
+  patches = [
+    ./darwin-system-libunwind.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
