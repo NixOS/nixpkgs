@@ -6,6 +6,7 @@
   pkg-config,
   fftwFloat,
   libsamplerate,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +46,10 @@ stdenv.mkDerivation rec {
       --replace '=''${prefix}//' '=/' \
       --replace '=''${exec_prefix}//' '=/'
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/jketterl/csdr";
