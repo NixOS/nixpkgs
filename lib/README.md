@@ -23,10 +23,12 @@ Most files in this directory are definitions of sub-libraries, but there are a f
 - [`tests`](tests): Tests, see [Running tests](#running-tests)
   - [`release.nix`](tests/release.nix): A derivation aggregating all tests
   - [`misc.nix`](tests/misc.nix): Evaluation unit tests for most sub-libraries
+  - [`python`](tests/python): Tests that depend on a Python interpreter
   - `*.sh`: Bash scripts that run tests for specific sub-libraries
   - All other files in this directory exist to support the tests
 - [`systems`](systems): The `lib.systems` sub-library, structured into a directory instead of a file due to its complexity
 - [`path`](path): The `lib.path` sub-library, which includes tests as well as a document describing the design goals of `lib.path`
+- [`byte-to-hex-table`](byte-to-hex-table): Helper files for the implementation of `lib.strings.escapePythonBytes`
 - All other files in this directory are sub-libraries
 
 ### Module system

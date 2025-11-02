@@ -344,6 +344,7 @@ let
         escapeRegex
         escapeURL
         escapeXML
+        escapePythonBytes
         lowerChars
         upperChars
         toLower
