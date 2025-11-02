@@ -2765,6 +2765,8 @@ self: super: with self; {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+  click-man = callPackage ../development/python-modules/click-man { };
+
   click-odoo = callPackage ../development/python-modules/click-odoo { };
 
   click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
