@@ -5,7 +5,7 @@
   fetchFromGitHub,
   setuptools,
   addBinToPathHook,
-  curl-impersonate-chrome,
+  curl-impersonate,
   cffi,
   certifi,
   charset-normalizer,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   };
 
   patches = [ ./use-system-libs.patch ];
-  buildInputs = [ curl-impersonate-chrome ];
+  buildInputs = [ curl-impersonate ];
 
   build-system = [
     cffi
