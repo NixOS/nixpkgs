@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   boost,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
-  version = "1.39";
+  version = "1.40";
 
   outputs = [
     "out"
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lballabio";
     repo = "QuantLib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UrFamEIeFTR0finNGESlDYbvrmD8jtv73tDUJ17P7WA=";
+    hash = "sha256-cyri+kCwIFO/ccnqWhO8qOXNPIV0g6iiNvBYtN667pA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cp ./quantlib-config $out/bin/
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Free/open-source library for quantitative finance";
