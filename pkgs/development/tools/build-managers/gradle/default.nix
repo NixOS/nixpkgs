@@ -16,79 +16,76 @@ let
       symlinkJoin,
       concatTextFile,
       makeSetupHook,
-
+      gradle-unwrapped,
       runCommand,
-    }:
-    this-gradle-unwrapped:
-    lib.makeOverridable (
-      args:
-      let
-        gradle = this-gradle-unwrapped.override args;
-      in
-      symlinkJoin {
-        pname = "gradle";
-        inherit (gradle) version;
+      ...
+    }@args:
+    let
+      gradle = gradle-unwrapped.override args;
+    in
+    symlinkJoin {
+      pname = "gradle";
+      inherit (gradle) version;
 
-        paths = [
-          (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
-            name = "setup-hook.sh";
-            files = [
-              (mitm-cache.setupHook)
-              (replaceVars ./setup-hook.sh {
-                # jdk used for keytool
-                inherit (gradle) jdk;
-                init_script = "${./init-build.gradle}";
-              })
-            ];
-          }))
-          gradle
-          mitm-cache
-        ];
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (replaceVars ./setup-hook.sh {
+              # jdk used for keytool
+              inherit (gradle) jdk;
+              init_script = "${./init-build.gradle}";
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
 
-        passthru = {
-          fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
-          inherit (gradle) jdk;
-          unwrapped = gradle;
-          tests = {
-            toolchains =
-              let
-                javaVersion = lib.getVersion jdk11;
-                javaMajorVersion = lib.versions.major javaVersion;
-              in
-              runCommand "detects-toolchains-from-nix-env"
-                {
-                  # Use JDKs that are not the default for any of the gradle versions
-                  nativeBuildInputs = [
-                    (gradle.override {
-                      javaToolchains = [
-                        jdk11
-                      ];
-                    })
-                  ];
-                  src = ./tests/toolchains;
-                }
-                ''
-                  cp -a $src/* .
-                  substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
-                  env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
-                  gradle run --no-daemon --quiet --console plain > $out
-                  actual="$(<$out)"
-                  if [[ "${javaVersion}" != "$actual"* ]]; then
-                    echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
-                    exit 1
-                  fi
-                '';
-          }
-          // gradle.tests;
-        };
+      passthru = {
+        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+        inherit (gradle) jdk;
+        unwrapped = gradle;
+        tests = {
+          toolchains =
+            let
+              javaVersion = lib.getVersion jdk11;
+              javaMajorVersion = lib.versions.major javaVersion;
+            in
+            runCommand "detects-toolchains-from-nix-env"
+              {
+                # Use JDKs that are not the default for any of the gradle versions
+                nativeBuildInputs = [
+                  (gradle.override {
+                    javaToolchains = [
+                      jdk11
+                    ];
+                  })
+                ];
+                src = ./tests/toolchains;
+              }
+              ''
+                cp -a $src/* .
+                substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
+                env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+                gradle run --no-daemon --quiet --console plain > $out
+                actual="$(<$out)"
+                if [[ "${javaVersion}" != "$actual"* ]]; then
+                  echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
+                  exit 1
+                fi
+              '';
+        }
+        // gradle.tests;
+      };
 
-        meta = gradle.meta // {
-          # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
-          # and passthru
-          priority = (gradle.meta.priority or lib.meta.defaultPriority) + 1;
-        };
-      }
-    ) { };
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or lib.meta.defaultPriority) + 1;
+      };
+    };
 
   gen =
     {
@@ -146,8 +143,10 @@ let
       # Additional JDK/JREs to be registered as toolchains.
       # See https://docs.gradle.org/current/userguide/toolchains.html
       javaToolchains ? [ ],
-    }:
 
+      # Ignored arguments from calling .override on the wrapper.
+      ...
+    }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "gradle";
       inherit version;
@@ -275,7 +274,9 @@ let
         };
       };
       passthru.jdk = defaultJava;
-      passthru.wrapped = callPackage wrapGradle { } (gen' genArgs);
+      passthru.wrapped = callPackage wrapGradle {
+        gradle-unwrapped = gen' genArgs;
+      };
       passthru.updateScript =
         if enableUpdateScript then
           nix-update-script {
