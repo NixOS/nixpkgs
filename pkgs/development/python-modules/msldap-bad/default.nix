@@ -1,7 +1,7 @@
 {
   lib,
   asn1crypto,
-  asyauth-bad,
+  badauth,
   asysocks,
   buildPythonPackage,
   fetchFromGitHub,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    asyauth-bad
+    badauth
     asn1crypto
     asysocks
     kerbad
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "LDAP library for auditing MS AD";
     homepage = "https://github.com/CravateRouge/msldap-bAD";
-    changelog = "https://github.com/CravateRouge/asyauth-bAD/releases/tag/${src.tag}";
+    changelog = "https://github.com/CravateRouge/msldap-bAD/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -10,13 +10,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "asyauth-bad";
+  pname = "badauth";
   version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
-    repo = "asyauth-bAD";
+    repo = "badauth";
     tag = version;
     hash = "sha256-NX6bvOxA4Y5KRPCIsI+o0cB4dFOXlV89iH7YqNDdaXE=";
   };
@@ -33,12 +33,12 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "asyauth" ];
+  pythonImportsCheck = [ "badauth" ];
 
   meta = {
     description = "Unified authentication library";
-    homepage = "https://github.com/CravateRouge/asyauth-bAD";
-    changelog = "https://github.com/CravateRouge/asyauth-bAD/releases/tag/${src.tag}";
+    homepage = "https://github.com/CravateRouge/badauth";
+    changelog = "https://github.com/CravateRouge/badauth/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
