@@ -141,7 +141,7 @@ in
 
           # Only allow binding to the specified port.
           SocketBindDeny = "any";
-          SocketBindAllow = cfg.settings.port;
+          SocketBindAllow = cfg.settings.server.port;
 
           ReadWritePaths = lib.flatten [
             cfg.settings.linking.link_dirs

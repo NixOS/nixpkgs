@@ -8,37 +8,36 @@
     ];
   };
 
-  nodes = {
-    declarative = {
-      services.qbittorrent = {
-        enable = true;
-        serverConfig.Preferences.WebUI = {
-          Username = "user";
-          # password: "adminadmin" as ByteArray
-          Password_PBKDF2 = "@ByteArray(6DIf26VOpTCYbgNiO6DAFQ==:e6241eaAWGzRotQZvVA5/up9fj5wwSAThLgXI2lVMsYTu1StUgX9MgmElU3Sa/M8fs+zqwZv9URiUOObjqJGNw==)";
-        };
+  nodes.machine = {
+    services.qbittorrent = {
+      enable = true;
+      # nemorosa expects the client to have > 0 torrents
+      extraArgs = [
+        "magnet:?xt=urn:btih:d4487f489d4ee786f99bcdeeb8d3f226694ea27f&dn=archlinux-2025.11.01-x86_64.iso"
+      ];
+      serverConfig.Preferences.WebUI = {
+        Username = "user";
+        # password: "adminadmin" as ByteArray
+        Password_PBKDF2 = "@ByteArray(6DIf26VOpTCYbgNiO6DAFQ==:e6241eaAWGzRotQZvVA5/up9fj5wwSAThLgXI2lVMsYTu1StUgX9MgmElU3Sa/M8fs+zqwZv9URiUOObjqJGNw==)";
       };
+    };
 
-      services.nemorosa = {
-        enable = true;
-        settings = {
-          downloader.client = ''
-            qbittorrent+http://user:adminadmin@localhost:8080/
-          '';
-        };
+    services.nemorosa = {
+      enable = true;
+      settings = {
+        downloader.client = "qbittorrent+http://user:adminadmin@localhost:8080/";
+        server.port = 8266;
       };
     };
   };
 
   testScript = # python
     ''
-      declarative.start(allow_reboot=True)
-
-      declarative.wait_for_unit("qbittorrent.service")
-      declarative.wait_for_open_port(8080)
-
-      declarative.wait_for_unit("nemorosa.service")
-      declarative.wait_for_open_port(8256)
-      #with subtest("systemd service starts"):
+      machine.start()
+      # Nemorosa initialization expects an available API connection. So the
+      # service will not start successfully. Do some basic checks on the
+      # console as an alternative.
+      machine.wait_for_console_text("Starting Nemorosa web server on localhost:8266")
+      machine.wait_for_console_text("Rebuilt cache with 1 torrents from new client")
     '';
 }
