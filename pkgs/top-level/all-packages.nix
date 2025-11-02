@@ -13261,6 +13261,9 @@ with pkgs;
       { };
   shorter-pixel-dungeon = callPackage ../by-name/sh/shattered-pixel-dungeon/shorter-pixel-dungeon { };
   tower-pixel-dungeon = callPackage ../by-name/sh/shattered-pixel-dungeon/tower-pixel-dungeon { };
+  re-arranged-pixel-dungeon =
+    callPackage ../by-name/sh/shattered-pixel-dungeon/re-arranged-pixel-dungeon
+      { };
 
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
