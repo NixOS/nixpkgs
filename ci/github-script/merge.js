@@ -1,3 +1,5 @@
+const { classify } = require('../supportedBranches.js')
+
 function runChecklist({
   committers,
   files,
@@ -22,14 +24,14 @@ function runChecklist({
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
   const checklist = {
-    'PR targets one of the allowed branches: master, staging, staging-next.': [
-      'master',
-      'staging',
-      'staging-next',
-    ].includes(pull_request.base.ref),
+    'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
+      classify(pull_request.base.ref).type.includes('development'),
     'PR touches only packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
       'Authored by a committer.': committers.has(pull_request.user.id),
+      'Backported via label.':
+        pull_request.user.login === 'nixpkgs-ci[bot]' &&
+        pull_request.head.ref.startsWith('backport-'),
       'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
     },
   }
