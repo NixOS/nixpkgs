@@ -285,6 +285,7 @@ mapAliases {
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
+  paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29
