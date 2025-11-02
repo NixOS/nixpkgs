@@ -118,6 +118,7 @@ stdenv.mkDerivation rec {
       version 2.
     '';
     homepage = "https://www.mpich.org";
+    changelog = "https://github.com/pmodels/mpich/releases/tag/v${version}";
     license = {
       url = "https://github.com/pmodels/mpich/blob/15f59ab2b740539472dfd130f7fe01b61c28bba4/COPYRIGHT";
       fullName = "MPICH license (permissive)";
