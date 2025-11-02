@@ -9,16 +9,16 @@
   unicrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "badauth";
-  version = "0.0.20";
+  version = "0.1.4-unstable-2025-10-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "badauth";
-    tag = version;
-    hash = "sha256-NX6bvOxA4Y5KRPCIsI+o0cB4dFOXlV89iH7YqNDdaXE=";
+    rev = "86d6091470c98e1a5f6dc4b8749053189372bb53"; # no tag available
+    hash = "sha256-p7V5WkQ48b1IqCPwmJfbCiyqekfp9zW41J81JHyZNUQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +38,6 @@ buildPythonPackage rec {
   meta = {
     description = "Unified authentication library";
     homepage = "https://github.com/CravateRouge/badauth";
-    changelog = "https://github.com/CravateRouge/badauth/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
