@@ -99,6 +99,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyannote/pyannote-audio";
     changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 }
