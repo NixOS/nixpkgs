@@ -391,6 +391,7 @@ let
   };
 
   packagesWithRDepends = {
+    bayesdfa = [ self.rstantools ];
     spectralGraphTopology = [ self.CVXR ];
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
