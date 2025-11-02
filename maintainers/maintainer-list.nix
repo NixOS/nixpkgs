@@ -29129,6 +29129,12 @@
       { fingerprint = "E22F 760E E074 E57A 21CB  1733 8DD2 9BB5 2C25 EA09"; }
     ];
   };
+  zirancumin = {
+    email = "sdfox05@gmail.com";
+    name = "Zi Ran";
+    github = "zirancumin";
+    githubId = 204525452;
+  };
   Zirconium419122 = {
     name = "Rasmus Liaskar";
     github = "Zirconium419122";
