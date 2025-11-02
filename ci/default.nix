@@ -122,6 +122,14 @@ let
             "-disable-charset"
           ];
           includes = [ "*" ];
+          excludes = [
+            # These are binary files. Without this next exclude pattern, they
+            # would mistakenly be interpreted as text files, and
+            # editorconfig-checker would complain that it can’t detect the
+            # character encoding for some of them and that most of them don’t
+            # end with a newline.
+            "lib/byte-to-hex-table/??"
+          ];
           priority = 1;
         };
 

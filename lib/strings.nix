@@ -1485,6 +1485,73 @@ rec {
       [ "\"" "'" "<" ">" "&" ]
       [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
+  /**
+    Quotes a string `s` so that it can be embedded in a Python script as a [bytes
+    literal](https://docs.python.org/3/reference/lexical_analysis.html#bytes-literals).
+
+    This function allows you to turn a Nix string value into a Python bytes value rather than a
+    Python string value. This is because the Nix expression language and the Python programming
+    language use the term “string” to refer to different things. In the Nix expression language,
+    [strings are sequences of
+    bytes](https://nix.dev/manual/nix/latest/language/types.html#type-string). In the Python
+    programming language, [strings are sequences of Unicode code
+    points](https://docs.python.org/3/reference/datamodel.html#immutable-sequences).
+
+    When using this function, you may want to convert the resulting Python bytes object into a
+    different type of Python object. For example, if you know that `s` contains a path, then it’s
+    probably a good idea to convert it into a
+    [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) object like this:
+
+    ```nix
+    pkgs.writers.writePython3 "escapePythonBytes-to-pathlib.Path-example" { } ''
+      import os
+      import pathlib
+
+      hello_out_path = pathlib.Path(os.fsdecode(${pkgs.lib.strings.escapePythonBytes "${pkgs.hello}"}))  # noqa: E501
+
+      print(f"Contents of {hello_out_path}:")
+      for subpath in hello_out_path.iterdir():
+          print(f"\t{subpath}")
+    ''
+    ```
+
+    # Type
+
+    ```
+    escapePythonBytes :: string -> string
+    ```
+
+    # Inputs
+
+    `s`
+    : The Nix string to convert.
+
+    # Returns
+
+    A Nix string value that contains an ASCII-encoded Python bytes literal.
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapePythonBytes` usage example
+
+    ```nix
+    escapePythonBytes "Hello, world!"
+    => "b'\\x48\\x65\\x6C\\x6C\\x6F\\x2C\\x20\\x77\\x6F\\x72\\x6C\\x64\\x21'"
+    ```
+
+    :::
+  */
+  escapePythonBytes =
+    s:
+    let
+      byteToHexTable = import ./byte-to-hex-table lib;
+      byteToEscapedHex = byte: "\\x${builtins.getAttr byte byteToHexTable}";
+
+      argumentWithoutContext = unsafeDiscardStringContext s;
+      returnValueWithoutContext = "b'${stringAsChars byteToEscapedHex argumentWithoutContext}'";
+    in
+    addContextFrom s returnValueWithoutContext;
+
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
