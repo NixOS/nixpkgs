@@ -1,4 +1,12 @@
-function runChecklist({ committers, files, pull_request, log, maintainers }) {
+function runChecklist({
+  committers,
+  files,
+  pull_request,
+  log,
+  maintainers,
+  user,
+  userIsMaintainer,
+}) {
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
     .map(({ filename }) => filename.split('/')[3])
@@ -21,7 +29,16 @@ function runChecklist({ committers, files, pull_request, log, maintainers }) {
     'PR authored by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
       committers.has(pull_request.user.id),
-    'PR has maintainers eligible for merge.': eligible.size > 0,
+  }
+
+  if (user) {
+    checklist[`${user.login} can use the merge bot.`] = userIsMaintainer
+    checklist[
+      `${user.login} is eligible to merge changes to the touched packages.`
+    ] = eligible.has(user.id)
+  } else {
+    // This is only used when no user is passed, i.e. for labeling.
+    checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
   }
 
   const result = Object.values(checklist).every(Boolean)
@@ -32,7 +49,6 @@ function runChecklist({ committers, files, pull_request, log, maintainers }) {
 
   return {
     checklist,
-    eligible,
     result,
   }
 }
@@ -105,14 +121,6 @@ async function handleMerge({
     ...context.repo,
     pull_number,
     per_page: 100,
-  })
-
-  const { checklist, eligible, result } = runChecklist({
-    committers,
-    files,
-    pull_request,
-    log,
-    maintainers,
   })
 
   // Only look through comments *after* the latest (force) push.
@@ -224,9 +232,15 @@ async function handleMerge({
       }
     }
 
-    const canUseMergeBot = await isMaintainer(comment.user.login)
-    const isEligible = eligible.has(comment.user.id)
-    const canMerge = result && canUseMergeBot && isEligible
+    const { result, checklist } = runChecklist({
+      committers,
+      files,
+      pull_request,
+      log,
+      maintainers,
+      user: comment.user,
+      userIsMaintainer: await isMaintainer(comment.user.login),
+    })
 
     const body = [
       `<!-- comment: ${comment.node_id} -->`,
@@ -235,12 +249,10 @@ async function handleMerge({
       ...Object.entries(checklist).map(
         ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
       ),
-      `- :${canUseMergeBot ? 'white_check_mark' : 'x'}: ${comment.user.login} can use the merge bot.`,
-      `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to the touched packages.`,
       '',
     ]
 
-    if (canMerge) {
+    if (result) {
       await react('ROCKET')
       try {
         body.push(`:heavy_check_mark: ${await merge()} (#306934)`)
@@ -264,8 +276,16 @@ async function handleMerge({
       })
     }
 
-    if (canMerge) break
+    if (result) break
   }
+
+  const { result } = runChecklist({
+    committers,
+    files,
+    pull_request,
+    log,
+    maintainers,
+  })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
   // This is used to set the respective label in bot.js.
