@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
+  pythonAtLeast,
   setuptools,
 
   # passthru tests
@@ -16,7 +16,8 @@ buildPythonPackage rec {
   version = "0.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  # https://github.com/uqfoundation/dill/issues/586
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
