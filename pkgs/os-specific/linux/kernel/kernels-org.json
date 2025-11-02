@@ -20,18 +20,18 @@
         "lts": true
     },
     "6.6": {
-        "version": "6.6.115",
-        "hash": "sha256:0iwhzlrqcw9hzr21gn0pmsjix0d022a7g38vszx4jsqgimgc160a",
+        "version": "6.6.116",
+        "hash": "sha256:07d5629579apc1d8yb0ki226iyb5n3lwp1yw0p189qlvq919g9d9",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.56",
-        "hash": "sha256:15pclwn3nbwccdfwcqd3lkmdxwpjkmadhj63acqbzxsjycm2nhsm",
+        "version": "6.12.57",
+        "hash": "sha256:06jlsawz1wgk13gyxphkglb8a4iiwg0vg5hrfc7bj1s6gk1s2p0n",
         "lts": true
     },
     "6.17": {
-        "version": "6.17.6",
-        "hash": "sha256:17662dpl1rd24n20ihb1fsf66c8n3r6x1a24c6sanj1ld5mvrkwf",
+        "version": "6.17.7",
+        "hash": "sha256:03lxl2p8hvi4hdzbf72v3xh8yigr58826dmy6rqxbq9r8h6ymwnx",
         "lts": false
     }
 }
