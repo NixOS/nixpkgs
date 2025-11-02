@@ -230,6 +230,7 @@ runCommand "compare"
     echo "This PR touches ''${#touchedFiles[@]} files"
 
     # TODO: Move ci/OWNERS to Nix and produce owners.json instead of owners.txt.
+    touch "$out/owners.txt"
     for file in "''${touchedFiles[@]}"; do
         result=$(codeowners --file "${ownersFile}" "$file")
 
