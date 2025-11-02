@@ -9279,12 +9279,6 @@
     githubId = 14135816;
     name = "Geraldo Nascimento";
   };
-  greed = {
-    email = "greedoftheendless@gmail.com";
-    github = "greedoftheendless";
-    githubId = 126356018;
-    name = "Abhijit";
-  };
   gerg-l = {
     email = "gregleyda@proton.me";
     github = "Gerg-L";
@@ -9687,6 +9681,12 @@
     github = "GreatNateDev";
     githubId = 99703235;
     name = "Nate";
+  };
+  greed = {
+    email = "greedoftheendless@gmail.com";
+    github = "greedoftheendless";
+    githubId = 126356018;
+    name = "Abhijit";
   };
   greg = {
     email = "greg.hellings@gmail.com";
