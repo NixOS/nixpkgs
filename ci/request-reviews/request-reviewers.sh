@@ -33,9 +33,41 @@ prAuthor=$3
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' exit
 
+# Associative array with the user as the key for easy de-duplication
+# Make sure to always lowercase keys to avoid duplicates with different casings
 declare -A users=()
 while read -r handle && [[ -n "$handle" ]]; do
-    users[${handle,,}]=
+    if [[ "$handle" =~ (.*)/(.*) ]]; then
+        # Teams look like $org/$team
+        org=${BASH_REMATCH[1]}
+        team=${BASH_REMATCH[2]}
+
+        # Instead of requesting a review from the team itself,
+        # we request reviews from the individual users.
+        # This is because once somebody from a team reviewed the PR,
+        # the API doesn't expose that the team was already requested for a review,
+        # so we wouldn't be able to avoid rerequesting reviews
+        # without saving some some extra state somewhere
+
+        # We could also consider implementing a more advanced heuristic
+        # in the future that e.g. only pings one team member,
+        # but escalates to somebody else if that member doesn't respond in time.
+        gh api \
+            --cache=1h \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/$org/teams/$team/members" \
+            --jq '.[].login' > "$tmp/team-members"
+        readarray -t members < "$tmp/team-members"
+        log "Team $handle has these members: ${members[*]}"
+
+        for user in "${members[@]}"; do
+            users[${user,,}]=
+        done
+    else
+        # Everything else is a user
+        users[${handle,,}]=
+    fi
 done
 
 # Cannot request a review from the author
@@ -68,7 +100,7 @@ for user in "${!users[@]}"; do
     fi
 done
 
-if [[ "${#users[@]}" -gt 10 ]]; then
+if [[ "${#users[@]}" -gt 15 ]]; then
     log "Too many reviewers (${!users[*]}), skipping review requests"
     exit 0
 fi

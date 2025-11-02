@@ -1,34 +1,33 @@
 {
   lib,
+  callPackage,
   stdenvNoCC,
+  fetchurl,
   fetchzip,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
+  inherit (stdenvNoCC.hostPlatform) isDarwin system;
+
+  sources = import ./sources.nix { inherit fetchurl fetchzip; };
+in
+callPackage (if isDarwin then ./darwin.nix else ./linux.nix) {
   pname = "fastmail-desktop";
-  version = "1.0.0";
+  inherit (sources.${system} or (throw "Unsupported system: ${system}")) version src;
 
-  src = fetchzip {
-    url = "https://dl.fastmailcdn.com/desktop/production/mac/arm64/Fastmail-${finalAttrs.version}-arm64-mac.zip";
-    hash = "sha256-wIWU0F08wEQeLjbZz2LqahfyeOfowC+dDQkeMZI6gbk=";
-    stripRoot = false;
-  };
-
-  installPhase = ''
-    mkdir -p $out/Applications
-    cp -R Fastmail.app $out/Applications/
-  '';
-
-  dontBuild = true;
-
-  # Fastmail is notarized
-  dontFixup = true;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Dedicated desktop app for Fastmail";
     homepage = "https://www.fastmail.com/blog/desktop-app/";
     license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = [ lib.maintainers.Enzime ];
-    platforms = [ "aarch64-darwin" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [
+      lib.maintainers.Enzime
+      lib.maintainers.nekowinston
+    ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-linux"
+    ];
   };
-})
+}

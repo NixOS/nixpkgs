@@ -3,20 +3,15 @@
   stdenvNoCC,
   makeWrapper,
   coreutils,
-  codeowners,
   jq,
-  curl,
   github-cli,
-  gitMinimal,
 }:
 stdenvNoCC.mkDerivation {
   name = "request-reviews";
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
-      ./get-code-owners.sh
       ./request-reviewers.sh
-      ./request-code-owner-reviews.sh
     ];
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -29,11 +24,8 @@ stdenvNoCC.mkDerivation {
         --set PATH ${
           lib.makeBinPath [
             coreutils
-            codeowners
             jq
-            curl
             github-cli
-            gitMinimal
           ]
         }
     done
