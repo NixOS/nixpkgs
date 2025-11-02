@@ -175,7 +175,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/snowflakedb/snowflake-cli/blob/main/RELEASE-NOTES.md";
+    changelog = "https://github.com/snowflakedb/snowflake-cli/blob/${src.tag}/RELEASE-NOTES.md";
     homepage = "https://docs.snowflake.com/en/developer-guide/snowflake-cli-v2/index";
     description = "Command-line tool explicitly designed for developer-centric workloads in addition to SQL operations";
     license = lib.licenses.asl20;
