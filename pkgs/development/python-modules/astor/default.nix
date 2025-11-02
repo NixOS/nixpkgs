@@ -19,6 +19,11 @@ buildPythonPackage {
     hash = "sha256-VF+harl/q2yRU2yqN1Txud3YBNSeedQNw2SZNYQFsno=";
   };
 
+  patches = [
+    # https://github.com/berkerpeksag/astor/pull/233
+    ./python314-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
