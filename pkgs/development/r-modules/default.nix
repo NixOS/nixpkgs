@@ -1126,6 +1126,7 @@ let
       fftw.dev
       pkg-config
     ];
+    GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [
