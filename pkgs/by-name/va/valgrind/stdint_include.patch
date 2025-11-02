@@ -1,0 +1,12 @@
+diff --git a/none/tests/linux/getdents_filter.c b/none/tests/linux/getdents_filter.c
+index 361659f51..98519a31d 100644
+--- a/none/tests/linux/getdents_filter.c
++++ b/none/tests/linux/getdents_filter.c
+@@ -3,6 +3,7 @@
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <unistd.h>
+ #include <dirent.h>
+ #include <errno.h>

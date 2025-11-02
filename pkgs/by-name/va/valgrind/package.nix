@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-Ifsg3Hr78umZR5nwy9DOY8bB59wp8EtV+fYm+h8sk9k=";
     })
 
+    # above patch is missing an stdint include on non-musl
+    ./stdint_include.patch
+
     # Fix build on armv7l.
     # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
