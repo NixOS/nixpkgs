@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
-    rev = "fio-${finalAttrs.version}";
-    sha256 = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
+    tag = "fio-${finalAttrs.version}";
+    hash = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
   };
 
   patches = [
@@ -44,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   # We use $CC instead.
   configurePlatforms = [ ];
 
-  configureFlags = lib.optional withLibnbd "--enable-libnbd";
+  configureFlags = [
+    "--disable-native"
+  ]
+  ++ lib.optional withLibnbd "--enable-libnbd";
 
   dontAddStaticConfigureFlags = true;
 
@@ -59,10 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
-      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
-    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+    substituteInPlace tools/plot/fio2gnuplot \
+      --replace-fail /usr/share/fio $out/share/fio
   '';
 
   pythonPath = [ python3.pkgs.six ];
