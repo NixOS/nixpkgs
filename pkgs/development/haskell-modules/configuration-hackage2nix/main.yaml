@@ -40,6 +40,9 @@ default-package-overrides:
   - liquidhaskell-boot == 0.9.10.*
   # Needs to match microlens == 0.4.* in Stackage LTS 24
   - microlens-pro < 0.2.0.4
+  # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
+  # this no longer works with later versions.
+  - pandoc-crossref == 0.3.21
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes

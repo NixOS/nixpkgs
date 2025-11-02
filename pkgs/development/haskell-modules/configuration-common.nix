@@ -812,6 +812,8 @@ with haskellLib;
   }) super.xml-picklers;
 
   pandoc-crossref = lib.pipe super.pandoc-crossref [
+    # https://github.com/lierdakil/pandoc-crossref/issues/492
+    doJailbreak
     # We are still using pandoc == 3.7.*
     (appendPatch (
       lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
