@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   torch,
   torchvision,
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   version = "0.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
@@ -43,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fickling" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python pickling decompiler and static analyzer";
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }
