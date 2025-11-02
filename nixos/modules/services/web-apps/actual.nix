@@ -32,16 +32,6 @@ in
       description = "Whether to open the firewall for the specified port.";
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = ''
-        Environment file for specifying additional settings such as secrets.
-
-        See <https://actualbudget.org/docs/config/oauth-auth#environment-variables>.
-      '';
-    };
-
     settings = mkOption {
       default = { };
       description = "Server settings, refer to [the documentation](https://actualbudget.org/docs/config/) for available options.";
@@ -86,7 +76,6 @@ in
         Group = "actual";
         StateDirectory = "actual";
         WorkingDirectory = dataDir;
-        EnvironmentFile = cfg.environmentFile;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
