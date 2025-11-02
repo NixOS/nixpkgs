@@ -15,20 +15,21 @@
   tabulate,
   tqdm,
   unicrypto,
+  unidns,
   wcwidth,
   winacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "badldap";
-  version = "0.5.10";
+  version = "0.7.1-unstable-2025-10-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "badldap";
-    tag = version;
-    hash = "sha256-CnHXEE1tdIXv+Qb3pS+cNxVtcTOVaq6mrQxu3wr1Xxo=";
+    rev = "65af61fd7daf7dc7bef9c6248553398e6f604d43"; # no tag available
+    hash = "sha256-14mV+EBrpoR9suPmOYdt2ro1Gcrpj3tuVx/meaVKC2c=";
   };
 
   build-system = [ setuptools ];
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     tabulate
     tqdm
     unicrypto
+    unidns
     wcwidth
     winacl
   ];
