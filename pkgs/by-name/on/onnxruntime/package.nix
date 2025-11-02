@@ -244,14 +244,22 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
-  ] ++ lib.optionals openvinoSupport [
+  ]
+  ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
-    (lib.cmakeFeature "onnxruntime_USE_OPENVINO_AUTO" (if effectiveStdenv.hostPlatform.system == "x86_64-linux" then "NPU,GPU,CPU" else "GPU"))
+    (lib.cmakeFeature "onnxruntime_USE_OPENVINO_AUTO" (
+      if effectiveStdenv.hostPlatform.system == "x86_64-linux" then "NPU,GPU,CPU" else "GPU"
+    ))
     (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" true)
-    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
-    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (
+      effectiveStdenv.hostPlatform.system == "x86_64-linux"
+    ))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (
+      effectiveStdenv.hostPlatform.system == "x86_64-linux"
+    ))
     (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
-  ] ++ lib.optionals pythonSupport [
+  ]
+  ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
@@ -274,25 +282,24 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
   ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = "-Wno-error";
-    }
-    // lib.optionalAttrs rocmSupport {
-      MIOPEN_PATH = rocmPackages.miopen;
-      # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
-      # fatal error: 'rocrand/rocrand.h' file not found
-      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
-        rocmPackages.hipblas
-        rocmPackages.hipcub
-        rocmPackages.hiprand
-        rocmPackages.hipsparse
-        rocmPackages.rocblas
-        rocmPackages.rocprim
-        rocmPackages.rocrand
-        rocmPackages.rocthrust
-      ];
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+  }
+  // lib.optionalAttrs rocmSupport {
+    MIOPEN_PATH = rocmPackages.miopen;
+    # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
+    # fatal error: 'rocrand/rocrand.h' file not found
+    HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+      rocmPackages.hipblas
+      rocmPackages.hipcub
+      rocmPackages.hiprand
+      rocmPackages.hipsparse
+      rocmPackages.rocblas
+      rocmPackages.rocprim
+      rocmPackages.rocrand
+      rocmPackages.rocthrust
+    ];
+  };
 
   doCheck =
     !(
