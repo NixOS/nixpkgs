@@ -25,30 +25,42 @@ let
       "postgresql"
     else
       "pg";
+    capitalize = s: lib.toUpper (builtins.substring 0 1 s) + builtins.substring 1 (lib.stringLength s) s;
+
 in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.10.3";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-o55S9Fr1gnyuXFAVgugrnFyJIv7nKMZ3Lc4+m/aVrII=";
+    hash = "sha256-tiASBFdisBq032Qclh2ZGTo3F6v6Wc0kqW+BJW+VjPc=";
   };
 
-  npmDepsHash = "sha256-0vqH3nAB4HqfwS7Oy/qewzLyx48vS+rKiAwwbTkSOOc=";
+  npmDepsHash = "sha256-SiXkP0g8ygv4I825eCTNHOwfVQOdtBnyUJdRr4Ae9Dg=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
+  # set the build to OSS
+  env = {
+    BUILD = "oss";
+  };
+
   prePatch = ''
     cat > server/db/index.ts << EOF
     export * from "./${db false}";
     EOF
+
+    # OSS-iffy
+    echo "export const build = \"$BUILD\" as any;" > server/build.ts
+    cp tsconfig.oss.json tsconfig.json
+    rm -rf server/private
   '';
 
   # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
@@ -65,11 +77,15 @@ buildNpmPackage (finalAttrs: {
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
 
-  preBuild = "npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema.ts --name migration --out init";
+  preBuild = "npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema/ --out init";
 
-  npmBuildScript = "build:${db false}";
+  npmBuildScript = "next:build";
 
-  postBuild = "npm run build:cli";
+  postBuild = ''
+    npm run build:cli
+    node esbuild.mjs -e server/index.ts -o dist/server.mjs -b $BUILD
+    node esbuild.mjs -e server/setup/migrations${capitalize (db false)}.ts -o dist/migrations.mjs
+  '';
 
   preInstall = "mkdir -p $out/{bin,share/pangolin}";
 
@@ -128,7 +144,7 @@ buildNpmPackage (finalAttrs: {
            )
            # Also deploy a small config (if none exists) and run the
            # database migrations before running the server.
-         } && test -f config/config.yml || { install -Dm600 ${defaultConfig} config/config.yml && { test -z $EDITOR && { echo \"Please edit $(pwd)/config/config.yml\" and run the server again. && exit 255; } || $EDITOR config/config.yml; }; } && command ${placeholder "out"}/bin/migrate-pangolin-database'";
+         } && test -f config/config.yml || { install -Dm600 ${defaultConfig} config/config.yml && { test -z $EDITOR && { echo \"Please edit $(pwd)/config/config.yml\" and run the server again. && exit 255; } || $EDITOR config/config.yml; }; }'";
     in
     lib.concatMapStrings
       (
@@ -141,10 +157,6 @@ buildNpmPackage (finalAttrs: {
         {
           mjs = "cli";
           command = "pangctl";
-        }
-        {
-          mjs = "migrations";
-          command = "migrate-pangolin-database";
         }
         {
           mjs = "server";
