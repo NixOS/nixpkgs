@@ -12665,6 +12665,8 @@ self: super: with self; {
 
   pyannote-pipeline = callPackage ../development/python-modules/pyannote-pipeline { };
 
+  pyannoteai-sdk = callPackage ../development/python-modules/pyannoteai-sdk { };
+
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
