@@ -39,6 +39,52 @@ let
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
+
+  inherit (lib)
+    findFirst
+    isString
+    optional
+    optionals
+    ;
+
+  cmakeFlags' = optionals (stdenv.hostPlatform != stdenv.targetPlatform) (
+    [
+      "-DCMAKE_SYSTEM_NAME=${
+        findFirst isString "Generic" (
+          # uname -s is CYGWIN_NT[...] on cygwin, but cmake expects CYGWIN
+          optional (stdenv.targetPlatform.isCygwin) "CYGWIN"
+          ++ optional (!stdenv.targetPlatform.isRedox) stdenv.targetPlatform.uname.system
+        )
+      }"
+    ]
+    ++ optionals (stdenv.targetPlatform.uname.processor != null) [
+      "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.targetPlatform.uname.processor}"
+    ]
+    ++ optionals (stdenv.targetPlatform.uname.release != null) [
+      "-DCMAKE_SYSTEM_VERSION=${stdenv.targetPlatform.uname.release}"
+    ]
+    ++ optionals (stdenv.targetPlatform.isDarwin) [
+      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.targetPlatform.darwinArch}"
+    ]
+    ++ optionals (stdenv.hostPlatform.uname.system != null) [
+      "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+    ]
+    ++ optionals (stdenv.hostPlatform.uname.processor != null) [
+      "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+    ]
+    ++ optionals (stdenv.hostPlatform.uname.release != null) [
+      "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+    ]
+    ++ optionals (stdenv.hostPlatform.canExecute stdenv.targetPlatform) [
+      "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+    ]
+    ++ optionals (stdenv.targetPlatform.isNone) [
+      "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
+    ]
+    ++ optionals stdenv.targetPlatform.isStatic [
+      "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
+    ]
+  );
 in
 # Accepts only "ncurses" and "qt5" as possible uiToolkits
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [ ];
@@ -186,6 +232,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = false; # fails
+
+  env = {
+    crossCmakeFlags = lib.escapeShellArgs cmakeFlags';
+  };
 
   passthru.updateScript = gitUpdater {
     url = "https://gitlab.kitware.com/cmake/cmake.git";

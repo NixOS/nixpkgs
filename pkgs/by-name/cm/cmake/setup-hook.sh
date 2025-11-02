@@ -100,6 +100,7 @@ cmakeConfigurePhase() {
 
     local flagsArray=()
     concatTo flagsArray cmakeFlags cmakeFlagsArray
+    flagsArray+=(@crossCmakeFlags@)
 
     echoCmd 'cmake flags' "${flagsArray[@]}"
 

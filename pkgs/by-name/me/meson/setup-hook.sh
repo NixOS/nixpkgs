@@ -31,6 +31,10 @@ mesonConfigurePhase() {
         flagsArray+=("-Db_lundef=false")
     fi
 
+    if [[ "@crossFile@" ]]; then
+        flagsArray+=("--cross-file=@crossFile@")
+    fi
+
     concatTo flagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
