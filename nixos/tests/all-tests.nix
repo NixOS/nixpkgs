@@ -1436,6 +1436,7 @@ in
   # FIXME: Test has been failing since 2025-07-06:
   # https://github.com/NixOS/nixpkgs/issues/447674
   # syncthing-many-devices = runTest ./syncthing/many-devices.nix;
+  syncthing-multi = runTest ./syncthing-multi.nix;
   syncthing-no-settings = runTest ./syncthing/no-settings.nix;
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
