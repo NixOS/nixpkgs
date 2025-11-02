@@ -54,6 +54,12 @@ let
       hash = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_minimum_required (VERSION 3.0)" \
+        "cmake_minimum_required (VERSION 3.10)"
+    '';
+
     nativeBuildInputs = [
       cmake
       pkg-config
