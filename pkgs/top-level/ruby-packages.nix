@@ -4445,10 +4445,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "002dkzdc1xqhvz5sdnj4vb0apczhs07mnpgq4kkd5dd1ka2pp6af";
+      sha256 = "103h6wjpcqp3i034hi44za2v365yz7qk9s5df8lmasq43nqvkbmp";
       type = "gem";
     };
-    version = "4.1.1";
+    version = "4.2.1";
   };
   singleton = {
     groups = [ "default" ];
