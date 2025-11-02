@@ -4,7 +4,6 @@
   buildGoModule,
   xorg,
   stdenv,
-  apple-sdk_14,
 }:
 buildGoModule rec {
   pname = "1fps";
@@ -25,8 +24,7 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXtst
     xorg.libXi
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+  ];
 
   meta = {
     description = "Encrypted Screen Sharing";

@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [
     "format"
-    "pie"
   ]
   ++ lib.optionals enableStatic [ "fortify" ];
 

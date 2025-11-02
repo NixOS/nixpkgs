@@ -19,7 +19,6 @@
   enableZstd ? true,
   zstd,
   nixosTests,
-  fakeroot,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,9 +56,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
   ++ lib.optional enableXXHash xxHash;
-
-  # fakeroot doesn't work well on darwin anymore, apparently
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
 
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")

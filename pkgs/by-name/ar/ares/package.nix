@@ -1,7 +1,7 @@
 {
   lib,
   alsa-lib,
-  apple-sdk_14,
+  apple-sdk,
   cmake,
   fetchFromGitHub,
   gtk3,
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
     moltenvk
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -73,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./darwin-build-fixes.patch {
-      sdkVersion = apple-sdk_14.version;
+      sdkVersion = apple-sdk.version;
     })
   ];
 

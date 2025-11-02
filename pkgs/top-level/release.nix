@@ -395,9 +395,6 @@ let
           "aarch64-linux"
         ];
 
-        # Fails CI in its current state
-        ocamlPackages = { };
-
         pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;

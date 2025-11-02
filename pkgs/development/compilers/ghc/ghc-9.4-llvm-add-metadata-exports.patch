@@ -1,0 +1,31 @@
+From 701154fdbceff2edb121768eb660713a98580af8 Mon Sep 17 00:00:00 2001
+From: Ben Gamari <ben@smart-cactus.org>
+Date: Tue, 22 Aug 2023 12:23:26 -0400
+Subject: [PATCH] llvmGen: Add export list to GHC.Llvm.MetaData
+
+(cherry picked from commit fcfc1777c22ad47613256c3c5e7304cfd29bc761)
+---
+ compiler/GHC/Llvm/MetaData.hs | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/compiler/GHC/Llvm/MetaData.hs b/compiler/GHC/Llvm/MetaData.hs
+index f46ae0a101..3526c11bc3 100644
+--- a/compiler/GHC/Llvm/MetaData.hs
++++ b/compiler/GHC/Llvm/MetaData.hs
+@@ -1,6 +1,12 @@
+ {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+ 
+-module GHC.Llvm.MetaData where
++module GHC.Llvm.MetaData
++  ( MetaId(..)
++  , ppr
++  , MetaExpr(..)
++  , MetaAnnot(..)
++  , MetaDecl(..)
++  ) where
+ 
+ import GHC.Prelude
+ 
+-- 
+2.50.1
+

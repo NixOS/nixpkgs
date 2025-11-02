@@ -21,7 +21,6 @@
   channels,
   click,
   colorcet,
-  coverage,
   firefox,
   geckodriver,
   isort,
@@ -81,7 +80,6 @@ buildPythonPackage rec {
     channels
     click
     colorcet
-    coverage
     firefox
     geckodriver
     isort

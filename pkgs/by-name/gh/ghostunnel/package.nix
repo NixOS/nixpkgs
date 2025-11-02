@@ -5,8 +5,6 @@
   lib,
   nixosTests,
   ghostunnel,
-  apple-sdk_12,
-  darwinMinVersionHook,
   writeScript,
   runtimeShell,
 }:
@@ -25,11 +23,6 @@ buildGoModule rec {
   vendorHash = "sha256-vP8OtjpYNMm1KkNfD3pmNrHh3HRy1GkzUbfLKWKhHbo=";
 
   deleteVendor = true;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
-  ];
 
   # These tests don't exist for Linux, and on Darwin they attempt to use the macOS Keychain
   # which doesn't work from a nix build. Presumably other platform implementations of the

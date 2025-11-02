@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
-  hardeningEnable = [ "pie" ];
 
   patches = [
     ./postfix-script-shell.patch

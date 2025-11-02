@@ -15,8 +15,6 @@ stdenv.mkDerivation {
     sha256 = "1sj7a77isc2jmh7gw2naw9l9366kjx6jb909h7spj7daxdwvji8f";
   };
 
-  hardeningEnable = [ "pie" ];
-
   preConfigure = ''
     makeFlags=( "PREFIX=$out" )
   '';

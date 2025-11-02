@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   dependencies = [
     anyascii
+    legacy-cgi
     google-cloud-storage
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ];
 
   nativeCheckInputs = [
     flaky

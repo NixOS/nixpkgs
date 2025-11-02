@@ -52,8 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
-
   outputs = [
     "out"
     "dev"

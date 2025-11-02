@@ -88,6 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    # Backport of MR 5531 to fix sincos detection with clang
+    # Adds proper headers and -D_GNU_SOURCE to function checks
+    # MR 5531 was only merged into GTK 4, never backported to gtk-3-24
+    # See: https://github.com/NixOS/nixpkgs/pull/449689
+    # Upstream: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5531
+    ./patches/3.0-mr5531-backport.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin

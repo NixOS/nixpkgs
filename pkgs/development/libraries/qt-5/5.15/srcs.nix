@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "5.15.17";
+  version = "5.15.18";
 
   mk = name: args: {
     inherit version;

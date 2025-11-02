@@ -114,7 +114,8 @@ rec {
 
     Note that jailbreaking at this time, doesn't lift bounds on
     conditional branches.
-    https://github.com/peti/jailbreak-cabal/issues/7 has further details.
+    https://github.com/peti/jailbreak-cabal/issues/7 (krank:ignore-line)
+    has further details.
   */
   doJailbreak = overrideCabal (drv: {
     jailbreak = true;

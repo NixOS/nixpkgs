@@ -58,7 +58,7 @@
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  ffmpeg_7,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -365,7 +365,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg_7
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils

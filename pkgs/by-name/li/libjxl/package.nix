@@ -5,6 +5,7 @@
   fetchpatch,
   brotli,
   cmake,
+  ctestCheckHook,
   giflib,
   gperftools,
   gtest,
@@ -97,6 +98,10 @@ stdenv.mkDerivation rec {
     libhwy
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   cmakeFlags = [
     # For C dependencies like brotli, which are dynamically linked,
     # we want to use the system libraries, so that we don't have to care about
@@ -175,6 +180,30 @@ stdenv.mkDerivation rec {
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
   doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://github.com/libjxl/libjxl/issues/3629
+    "DecodeTest.ProgressionTestLosslessAlpha"
+    "DecodeTest.FlushTestLosslessProgressiveAlpha"
+    "EncodeTest.FrameSettingsTest"
+    "JxlTest.RoundtripAlphaResampling"
+    "JxlTest.RoundtripAlphaResamplingOnlyAlpha"
+    "JxlTest.RoundtripAlpha16"
+    "JxlTest.RoundtripProgressive"
+    "JxlTest.RoundtripProgressiveLevel2Slow"
+    "ModularTest.RoundtripLossyDeltaPalette"
+    "ModularTest.RoundtripLossy"
+    "ModularTest.RoundtripLossy16"
+    "PassesTest.ProgressiveDownsample2DegradesCorrectlyGrayscale"
+    "PassesTest.ProgressiveDownsample2DegradesCorrectly"
+  ];
+
+  ctestFlags = lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://github.com/libjxl/libjxl/issues/3629
+    # These didn't seem to be accepted via disabledTests
+    "--exclude-regex"
+    ".*bitSqueeze.*"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

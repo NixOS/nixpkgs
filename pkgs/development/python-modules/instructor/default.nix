@@ -33,19 +33,23 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.10.0";
+  version = "1.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    tag = version;
+    tag = "v${version}";
     hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "jiter"
+    "openai"
+    "rich"
+  ];
 
   dependencies = [
     aiohttp

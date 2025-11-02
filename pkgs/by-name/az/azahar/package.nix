@@ -42,8 +42,6 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  darwinMinVersionHook,
-  apple-sdk_12,
   fetchpatch2,
 }:
 let
@@ -129,10 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
-
-    # error: 'lowPowerModeEnabled' is unavailable: not available on macOS
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
   ];
 
   postPatch = ''

@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/att/ast";
     license = lib.licenses.cpl10;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    mainProgram = "ksh";
     platforms = lib.platforms.all;
   };
 

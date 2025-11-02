@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
     libcap
   ];
 
-  hardeningEnable = [ "pie" ];
-
   postInstall = ''
     rm -rf $out/share/doc
   '';

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -25,19 +25,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-xai";
-  version = "0.2.5";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-xai==${version}";
-    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
+    hash = "sha256-engdUNTT3KsAGrJ93PiFQoI6jbBFPAqavDsrD073484=";
   };
 
   sourceRoot = "${src.name}/libs/partners/xai";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

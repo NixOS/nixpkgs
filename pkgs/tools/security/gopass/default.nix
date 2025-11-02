@@ -10,7 +10,6 @@
   xclip,
   wl-clipboard,
   passAlias ? false,
-  apple-sdk_14,
   nix-update-script,
   versionCheckHook,
 }:
@@ -34,11 +33,6 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # For ScreenCaptureKit.h, see https://github.com/NixOS/nixpkgs/pull/358760#discussion_r1858327365
-    apple-sdk_14
   ];
 
   src = fetchFromGitHub {

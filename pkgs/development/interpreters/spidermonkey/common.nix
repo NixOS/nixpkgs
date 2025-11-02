@@ -68,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
         hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
       })
-      # SDK 15.5 is not available in nixpkgs yet
-      ./140-relax-apple-sdk.patch
     ];
 
   nativeBuildInputs = [

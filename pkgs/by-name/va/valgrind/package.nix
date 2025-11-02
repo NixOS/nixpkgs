@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.25.1";
+  version = "3.26.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-Yd640HJ7RcJo79wbO2yeZ5zZfL9e5LKNHerXyLeica8=";
+    hash = "sha256-jVTHFwKRBvFkSq2vgCq5aS5T2T3QFcvRnnQZDrpha9c=";
   };
 
   patches = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [
-    "pie"
     "stackprotector"
   ];
 
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ lib.maintainers.eelco ];
     platforms =

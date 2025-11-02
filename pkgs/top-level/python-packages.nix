@@ -1682,6 +1682,14 @@ self: super: with self; {
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
 
+  backports-zstd =
+    if pythonAtLeast "3.14" then
+      null
+    else
+      callPackage ../development/python-modules/backports-zstd {
+        inherit (pkgs) zstd;
+      };
+
   backrefs = callPackage ../development/python-modules/backrefs { };
 
   backtesting = callPackage ../development/python-modules/backtesting { };
@@ -5165,8 +5173,6 @@ self: super: with self; {
 
   favicon = callPackage ../development/python-modules/favicon { };
 
-  fb-re2 = callPackage ../development/python-modules/fb-re2 { };
-
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feather-format = callPackage ../development/python-modules/feather-format { };
@@ -8179,7 +8185,8 @@ self: super: with self; {
 
   legacy-api-wrap = callPackage ../development/python-modules/legacy-api-wrap { };
 
-  legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
+  legacy-cgi =
+    if pythonOlder "3.13" then null else callPackage ../development/python-modules/legacy-cgi { };
 
   leidenalg = callPackage ../development/python-modules/leidenalg { igraph-c = pkgs.igraph; };
 

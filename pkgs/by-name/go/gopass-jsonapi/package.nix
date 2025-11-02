@@ -8,7 +8,6 @@
   jq,
   gnupg,
   gopass,
-  apple-sdk_14,
 }:
 
 let
@@ -43,11 +42,6 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # For ScreenCaptureKit.h, see https://github.com/NixOS/nixpkgs/pull/358760#discussion_r1858327365
-    apple-sdk_14
   ];
 
   ldflags = [

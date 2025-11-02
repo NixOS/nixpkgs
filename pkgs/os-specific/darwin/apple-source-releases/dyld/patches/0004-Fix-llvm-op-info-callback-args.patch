@@ -1,7 +1,7 @@
 diff --git a/other-tools/dyld_info.cpp b/other-tools/dyld_info.cpp
 index 2de4978ba5..2ce27257d9 100644
---- a/other-tools/dyld_info.cpp
-+++ b/other-tools/dyld_info.cpp
+--- a/other-tools/SymbolicatedImage.cpp
++++ b/other-tools/SymbolicatedImage.cpp
 @@ -991,7 +991,7 @@
      return ((SymbolicatedImage*)di)->lookupSymbol(referencePC, referenceValue, *referenceType, *referenceName);
  }

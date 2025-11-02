@@ -196,15 +196,6 @@ let
               # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
             ]
-            # TODO: drop the isClang condition
-            ++ ops (lib.versionOlder ver.majMin "3.4" && stdenv.cc.isClang) [
-              (fetchpatch {
-                name = "ruby-3.3-fix-llvm-21.patch";
-                url = "https://github.com/ruby/ruby/commit/5a8d7642168f4ea0d9331fded3033c225bbc36c5.patch";
-                excludes = [ "version.h" ];
-                hash = "sha256-dV98gXXTSKM2ZezTvhVXNaKaXJxiWKEeUbqqL360cWw=";
-              })
-            ]
             ++ ops (lib.versionAtLeast ver.majMin "3.4" && lib.versionOlder ver.majMin "3.5") [
               (fetchpatch {
                 name = "ruby-3.4-fix-gcc-15-llvm-21-1.patch";
@@ -421,8 +412,8 @@ in
   mkRuby = generic;
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "9" "";
-    hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
+    version = rubyVersion "3" "3" "10" "";
+    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 

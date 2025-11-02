@@ -150,7 +150,6 @@ let
       pkg-config
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
-    hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {

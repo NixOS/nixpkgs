@@ -42,7 +42,6 @@
   removeReferencesTo,
 
   # Build inputs
-  apple-sdk_13,
   openssl,
   numactl,
   llvmPackages,
@@ -582,9 +581,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-  ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [

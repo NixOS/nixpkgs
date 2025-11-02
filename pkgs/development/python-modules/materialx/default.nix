@@ -11,7 +11,6 @@
   openimageio,
   imath,
   python,
-  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +35,6 @@ buildPythonPackage rec {
     openimageio
     imath
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libX11
     libXt
@@ -46,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
     (lib.cmakeBool "MATERIALX_BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
