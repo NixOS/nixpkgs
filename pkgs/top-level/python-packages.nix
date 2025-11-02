@@ -1218,6 +1218,8 @@ self: super: with self; {
 
   autocommand = callPackage ../development/python-modules/autocommand { };
 
+  autodoc-pydantic = callPackage ../development/python-modules/autodoc-pydantic { };
+
   autodocsumm = callPackage ../development/python-modules/autodocsumm { };
 
   autofaiss = callPackage ../development/python-modules/autofaiss { };
