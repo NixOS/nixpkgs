@@ -1637,6 +1637,15 @@ with haskellLib;
     unmarkBroken
   ];
 
+  # Unreleased patch fixing compilation with text >= 2.1.2
+  dom-parser = appendPatches [
+    (pkgs.fetchpatch {
+      name = "dom-parser-text-2.1.2.patch";
+      url = "https://github.com/typeable/dom-parser/commit/b8d9af75595072026a1706e94750dba55e65326b.patch";
+      hash = "sha256-c7ea0YCtXhv4u+pTuxcWoISa+yV2oEtxS/RmC6Bbx1M=";
+    })
+  ] super.dom-parser;
+
   # Requires jsaddle-webkit2gtk to build outside of pkgsCross.ghcjs
   # which requires a version of libsoup that's marked as insecure
   reflex-dom = dontDistribute super.reflex-dom;
