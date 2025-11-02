@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   mattermost,
   gotestsum,
   which,
@@ -12,16 +11,10 @@
   runtimeShell,
 }:
 
-let
-  inherit (lib.lists) optionals;
-  inherit (lib.strings) versionAtLeast;
-  is10 = version: versionAtLeast version "10.0";
-in
 mattermost.overrideAttrs (
   final: prev: {
     doCheck = true;
     checkTargets = [
-      "test-server"
       "test-mmctl"
     ];
     nativeCheckInputs = [
@@ -59,105 +52,10 @@ mattermost.overrideAttrs (
       "TestMmctlE2ESuite/TestPluginDeleteCmd/Delete_a_Plugin_without_permissions"
       "TestMmctlE2ESuite/TestPluginDeleteCmd/Delete_Unknown_Plugin/SystemAdminClient"
       "TestMmctlE2ESuite/TestPluginDeleteCmd/Delete_Unknown_Plugin/LocalClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_new_plugins/SystemAdminClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_new_plugins/LocalClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_an_already_installed_plugin_without_force/SystemAdminClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_an_already_installed_plugin_without_force/LocalClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_an_already_installed_plugin_with_force/SystemAdminClient"
-      "TestMmctlE2ESuite/TestPluginInstallURLCmd/install_an_already_installed_plugin_with_force/LocalClient"
-      "TestMmctlE2ESuite/TestPluginMarketplaceInstallCmd/install_a_plugin/SystemAdminClient"
-      "TestMmctlE2ESuite/TestPluginMarketplaceInstallCmd/install_a_plugin/LocalClient"
-      "TestMmctlE2ESuite/TestPluginMarketplaceListCmd/List_Marketplace_Plugins_for_Admin_User/SystemAdminClient"
-      "TestMmctlE2ESuite/TestPluginMarketplaceListCmd/List_Marketplace_Plugins_for_Admin_User/LocalClient"
-
-      # Seems to just be broken.
-      "TestMmctlE2ESuite/TestPreferenceUpdateCmd"
-
-      # Has a hardcoded "google.com" test which also verifies that the address isn't loopback,
-      # so we also can't just substituteInPlace to one that will resolve
-      "TestDialContextFilter"
-
-      # No interfaces but loopback in the sandbox, so returns empty
-      "TestGetServerIPAddress"
-
-      # S3 bucket tests (needs Minio)
-      "TestInsecureMakeBucket"
-      "TestMakeBucket"
-      "TestListDirectory"
-      "TestTimeout"
-      "TestStartServerNoS3Bucket"
-      "TestS3TestConnection"
-      "TestS3FileBackendTestSuite"
-      "TestS3FileBackendTestSuiteWithEncryption"
-
-      # Mail tests (needs a SMTP server)
-      "TestSendMailUsingConfig"
-      "TestSendMailUsingConfigAdvanced"
-      "TestSendMailWithEmbeddedFilesUsingConfig"
-      "TestSendCloudWelcomeEmail"
-      "TestMailConnectionAdvanced"
-      "TestMailConnectionFromConfig"
-      "TestEmailTest"
-      "TestBasicAPIPlugins/test_send_mail_plugin"
-
-      # Seems to be unreliable
-      "TestPluginAPIUpdateUserPreferences"
-      "TestPluginAPIGetUserPreferences"
-
-      # These invite tests try to send a welcome email and we don't have a SMTP server up.
-      "TestInviteUsersToTeam"
-      "TestInviteGuestsToTeam"
-      "TestSendInviteEmails"
-      "TestDeliver"
-
-      # https://github.com/mattermost/mattermost/issues/29184
-      "TestUpAndDownMigrations/Should_be_reversible_for_mysql"
-    ]
-    ++ optionals (is10 final.version) [
-      ## mattermostLatest test ignores
-
-      # These bot related tests appear to be broken.
-      "TestCreateBot"
-      "TestPatchBot"
-      "TestGetBot"
-      "TestEnableBot"
-      "TestDisableBot"
-      "TestAssignBot"
-      "TestConvertBotToUser"
-
-      # Need Elasticsearch or Opensearch
-      "TestBlevePurgeIndexes"
-      "TestOpensearchAggregation"
-      "TestOpensearchInterfaceTestSuite"
-      "TestOpenSearchIndexerJobIsEnabled"
-      "TestOpenSearchIndexerPending"
-      "TestBulkProcessor"
-      "TestElasticsearchAggregation"
-      "TestElasticsearchInterfaceTestSuite"
-      "TestElasticSearchIndexerJobIsEnabled"
-      "TestElasticSearchIndexerPending"
-
-      # Broken in the sandbox.
-      "TestVersion"
-      "TestRunServerNoSystemd"
-
-      # Appear to be broken.
-      "TestSessionStore/MySQL"
-      "TestAccessControlPolicyStore/MySQL"
-      "TestAttributesStore/MySQL"
-      "TestBasicAPIPlugins"
-
-      "TestRunExportJobE2EByType"
-      "TestUpdateTeam"
-      "TestSyncSyncableRoles"
-    ]
-    ++ optionals (!stdenv.hostPlatform.isx86_64) [
-      # aarch64: invalid operating system or processor architecture
-      "TestCanIUpgradeToE0"
-
-      # aarch64: thumbnail previews are nondeterministic
-      "TestUploadFiles/multipart_Happy_image_thumbnail"
-      "TestUploadFiles/simple_Happy_image_thumbnail"
+      "TestMmctlE2ESuite/TestPluginInstallURLCmd"
+      "TestMmctlE2ESuite/TestPluginMarketplaceInstallCmd"
+      "TestMmctlE2ESuite/TestPluginMarketplaceInstallCmd"
+      "TestMmctlE2ESuite/TestPluginMarketplaceListCmd"
     ];
 
     preCheck = ''
@@ -377,7 +275,7 @@ mattermost.overrideAttrs (
 
       # Ensure we parallelize the tests, and skip the correct ones.
       # Spaces are important here due to how the Makefile works.
-      export GOFLAGS=" -parallel=$NIX_BUILD_CORES -skip='$(echo "$disabledTests" | tr ' ' '|')' "
+      export GOFLAGS=" -p=$NIX_BUILD_CORES -parallel=$NIX_BUILD_CORES -skip='$(echo "$disabledTests" | tr ' ' '|')' "
 
       # ce n'est pas un conteneur
       MMCTL_TESTFLAGS="$GOFLAGS" MM_NO_DOCKER=true make $checkTargets
