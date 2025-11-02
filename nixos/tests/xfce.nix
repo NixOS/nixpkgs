@@ -21,6 +21,7 @@
       environment.systemPackages = [ pkgs.xfce.xfce4-whiskermenu-plugin ];
 
       programs.thunar.plugins = [ pkgs.xfce.thunar-archive-plugin ];
+      programs.ydotool.enable = true;
     };
 
   enableOCR = true;
@@ -44,8 +45,9 @@
       with subtest("Check if Xfce components actually start"):
         machine.wait_for_window("xfce4-panel")
         machine.wait_for_window("Desktop")
-        for i in ["xfwm4", "xfsettingsd", "xfdesktop", "xfce4-screensaver", "xfce4-notifyd", "xfconfd"]:
-          machine.wait_until_succeeds(f"pgrep -f {i}")
+        for i in ["xfwm4", "xfsettingsd", "xfdesktop", "xfce4-notifyd", "xfconfd"]:
+          machine.wait_until_succeeds(f"pgrep {i}")
+        machine.wait_until_succeeds("pgrep -xf xfce4-screensaver")
 
       with subtest("Open whiskermenu"):
         machine.succeed("su - ${user.name} -c 'DISPLAY=:0 ${bus} xfconf-query -c xfce4-panel -p /plugins/plugin-1 -t string -s whiskermenu -n >&2 &'")
@@ -62,6 +64,17 @@
       with subtest("Open Xfce terminal"):
         machine.succeed("su - ${user.name} -c 'DISPLAY=:0 xfce4-terminal >&2 &'")
         machine.wait_for_window("Terminal")
+
+      with subtest("Lock the screen"):
+        machine.succeed("su - ${user.name} -c '${bus} xflock4 >&2 &'")
+        machine.wait_until_succeeds("su - ${user.name} -c '${bus} xfce4-screensaver-command -q' | grep 'The screensaver is active'")
+        machine.sleep(5)
+        machine.succeed("ydotool click 0xC0")
+        machine.wait_for_text("${user.description}|Unlock")
+        machine.screenshot("screensaver")
+        machine.send_chars("${user.password}\n", delay=0.2)
+        machine.wait_until_succeeds("su - ${user.name} -c '${bus} xfce4-screensaver-command -q' | grep 'The screensaver is inactive'")
+        machine.sleep(2)
 
       with subtest("Open Thunar"):
         machine.succeed("su - ${user.name} -c 'DISPLAY=:0 thunar >&2 &'")
