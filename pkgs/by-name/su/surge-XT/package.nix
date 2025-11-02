@@ -15,14 +15,14 @@
   libXrandr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surge-XT";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
-    tag = "release_xt_${version}";
+    tag = "release_xt_${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-4b0H3ZioiXFc4KCeQReobwQZJBl6Ep2/8JlRIwvq/hQ=";
   };
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
       mrtnvgr
     ];
   };
-}
+})
