@@ -1,12 +1,13 @@
-{ stdenv
-  , lib
-  , fetchFromGitHub
-  , pkg-config
-  , libX11
-  , cairo
-  , lv2
-  , ncurses
-  , fluidsynth
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  cairo,
+  lv2,
+  ncurses,
+  fluidsynth,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cp -r ${xputtysrc}/* ./libxputty/
     chmod -R u+w .
-    ls -lR .    
+    ls -lR .
 
     # see Fluida/Makefile: this wants to install in ~/.lv2
     # so we need to set the HOME variable to a writable location:
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fluidsynth as LV2 plugin";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ 
+    maintainers = with lib.maintainers; [
       joostn
     ];
     platforms = [ "x86_64-linux" ];
