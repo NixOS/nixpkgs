@@ -6,11 +6,9 @@
   # build-system
   pdm-backend,
 
-  # local dependencies
-  black,
-  mypy,
-
   # dependencies
+  asyncstdlib-fw,
+  betterproto-fw,
   grpcio,
   grpclib,
   httpx-sse,
@@ -36,57 +34,6 @@
   tqdm,
 }:
 
-let
-  asyncstdlib-fw = buildPythonPackage rec {
-    pname = "asyncstdlib_fw";
-    version = "3.13.2";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-Ua0JTCBMWTbDBA84wy/W1UmzkcmA8h8foJW2X7aAah8=";
-    };
-
-    build-system = [
-      pdm-backend
-    ];
-
-    dependencies = [
-      black
-      mypy
-    ];
-
-    pythonImportsCheck = [
-      "asyncstdlib"
-    ];
-  };
-
-  betterproto-fw = buildPythonPackage rec {
-    pname = "betterproto_fw";
-    version = "2.0.3";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit version pname;
-      hash = "sha256-ut5GchUiTygHhC2hj+gSWKCoVnZrrV8KIKFHTFzba5M=";
-    };
-
-    build-system = [
-      pdm-backend
-    ];
-
-    dependencies = [
-      grpclib
-      python-dateutil
-      typing-extensions
-    ];
-
-    pythonImportsCheck = [
-      "betterproto"
-    ];
-
-  };
-in
 buildPythonPackage rec {
   pname = "fireworks-ai";
   version = "0.17.16";
