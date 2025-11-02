@@ -23,16 +23,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rusty-path-of-building";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     rev = "v${version}";
-    hash = "sha256-U2OWNV8bUNXo8/Sro+gV/o3O/D1lMWVlbX3tCONmGOk=";
+    hash = "sha256-J/tTifOcbY1mfcNbQFN4Vdyl78O7vTVbfew3fcnVyTA=";
   };
 
-  cargoHash = "sha256-xB7nhCqUalGE0M762Zw7vVFKzz/TgnMU77xbEHorJ2U=";
+  cargoHash = "sha256-Oekl6SDIvgFIzPnve7nuib3fEjPGC46F/TNULmgOpew=";
 
   nativeBuildInputs = [
     pkg-config
