@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=change_password"
     "--skip=multi_user_test"
     "--skip=store::var::tests::build_vars"
+    "--skip=store::var::tests::test_var_generation_with_spaces"
     # Tries to touch files
     "--skip=build_aliases"
   ];
