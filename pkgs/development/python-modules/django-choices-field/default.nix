@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-choices-field";
-  version = "2.3.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bellini666";
     repo = "django-choices-field";
     rev = "v${version}";
-    hash = "sha256-2oLMUM/aE4aY0eEU+CLIjTNQJAMUt/GK5Fw26QN7t34=";
+    hash = "sha256-BMixvSq8ulYSMkjhRpnTFaJXbQDr6+BUxZx+iCcXJ0g=";
   };
 
   build-system = [ poetry-core ];
