@@ -1,26 +1,28 @@
 {
   lib,
-  asn1crypto,
   buildPythonPackage,
-  certipy,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  asn1crypto,
   cryptography,
   dnspython,
-  fetchFromGitHub,
-  hatchling,
   kerbad,
   badldap,
-  pyasn1,
-  pytestCheckHook,
-  pythonOlder,
   winacl,
+
+  # test
+  certipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bloodyad";
   version = "2.1.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
@@ -65,11 +67,11 @@ buildPythonPackage rec {
     "test_certificate_authentications"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
     changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
