@@ -8378,6 +8378,8 @@ self: super: with self; {
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
+  lazy-model = callPackage ../development/python-modules/lazy-model { };
+
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
   lb-matching-tools = callPackage ../development/python-modules/lb-matching-tools { };
