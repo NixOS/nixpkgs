@@ -10951,7 +10951,6 @@ with pkgs;
         ];
       };
 
-  fetchmail = callPackage ../applications/misc/fetchmail { };
   fetchmail_7 = callPackage ../applications/misc/fetchmail/v7.nix { };
 
   firewalld-gui = firewalld.override { withGui = true; };
