@@ -394,6 +394,7 @@ let
     spectralGraphTopology = [ self.CVXR ];
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
+    pliman = [ self.EBImage ];
     rmsb = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
@@ -1049,6 +1050,10 @@ let
     clustermq = [ pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
+    pliman = with pkgs; [
+      fftw.dev
+      libpng.dev
+    ];
     rcontroll = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [
       xz.dev
