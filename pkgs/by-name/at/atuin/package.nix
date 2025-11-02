@@ -21,6 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-67ffivZVCly1GWA3fJ9mT8nGv2EGd6eCthbaIu/IW3M=";
 
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.90"' 'rust-version = "1.89"'
+  '';
+
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
