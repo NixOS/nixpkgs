@@ -2,6 +2,7 @@ const { classify } = require('../supportedBranches.js')
 
 function runChecklist({
   committers,
+  events,
   files,
   pull_request,
   log,
@@ -23,11 +24,25 @@ function runChecklist({
         .map((pkg) => new Set(maintainers[pkg]))
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
+  const approvals = new Set(
+    events
+      .filter(
+        ({ event, state, commit_id }) =>
+          event === 'reviewed' &&
+          state === 'approved' &&
+          // Only approvals for the current head SHA count, otherwise authors could push
+          // bad code between the approval and the merge.
+          commit_id === pull_request.head.sha,
+      )
+      .map(({ user }) => user.id),
+  )
+
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
+      'Approved by a committer.': committers.intersection(approvals).size > 0,
       'Authored by a committer.': committers.has(pull_request.user.id),
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
@@ -136,14 +151,13 @@ async function handleMerge({
   })
 
   // Only look through comments *after* the latest (force) push.
-  const latestChange = events.findLast(({ event }) =>
-    ['committed', 'head_ref_force_pushed'].includes(event),
-  ) ?? { sha: pull_request.head.sha }
-  const latestSha = latestChange.sha ?? latestChange.commit_id
-  log('latest sha', latestSha)
-  const latestIndex = events.indexOf(latestChange)
+  const lastPush = events.findLastIndex(
+    ({ event, sha, commit_id }) =>
+      ['committed', 'head_ref_force_pushed'].includes(event) &&
+      (sha ?? commit_id) === pull_request.head.sha,
+  )
 
-  const comments = events.slice(latestIndex + 1).filter(
+  const comments = events.slice(lastPush + 1).filter(
     ({ event, body, node_id }) =>
       ['commented', 'reviewed'].includes(event) &&
       hasMergeCommand(body) &&
@@ -178,7 +192,7 @@ async function handleMerge({
           })
           { clientMutationId }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return 'Enabled Auto Merge'
     } catch (e) {
@@ -202,7 +216,7 @@ async function handleMerge({
             mergeQueueEntry { mergeQueue { url } }
           }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
     } catch (e) {
@@ -247,6 +261,7 @@ async function handleMerge({
 
     const { result, checklist } = runChecklist({
       committers,
+      events,
       files,
       pull_request,
       log,
@@ -303,6 +318,7 @@ async function handleMerge({
 
   const { result } = runChecklist({
     committers,
+    events,
     files,
     pull_request,
     log,
