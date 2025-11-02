@@ -14,6 +14,7 @@
   sox,
   wsjtx,
   codecserver,
+  versionCheckHook,
 }:
 
 let
@@ -73,6 +74,10 @@ let
       soapysdr-with-plugins
     ];
 
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgram = "${placeholder "out"}/bin/rtl_connector";
+    doInstallCheck = true;
+
     meta = {
       homepage = "https://github.com/jketterl/owrx_connector";
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
@@ -118,6 +123,9 @@ python3Packages.buildPythonApplication rec {
     "owrx"
     "test"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     inherit js8py owrx_connector;
