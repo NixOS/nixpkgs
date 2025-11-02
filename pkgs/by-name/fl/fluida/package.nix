@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ 
       joostn
     ];
-    platforms = lib.platforms.x86_64-linux;
+    platforms = [ "x86_64-linux" ];
     homepage = "https://github.com/brummer10/Fluida.lv2";
   };
 }
