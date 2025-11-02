@@ -1,39 +1,4 @@
-// Caching the list of team members saves API requests when running the bot on the schedule and
-// processing many PRs at once.
-const members = {}
-
-async function runChecklist({ github, context, pull_request, maintainers }) {
-  const pull_number = pull_request.number
-
-  function getTeamMembers(team_slug) {
-    if (context.eventName === 'pull_request') {
-      // We have no chance of getting a token in the pull_request context with the right
-      // permissions to access the members endpoint below. Thus, we're pretending to have
-      // no members. This is OK; because this is only for the Test workflow, not for
-      // real use.
-      return new Set()
-    }
-
-    if (!members[team_slug]) {
-      members[team_slug] = github
-        .paginate(github.rest.teams.listMembersInOrg, {
-          org: context.repo.owner,
-          team_slug,
-          per_page: 100,
-        })
-        .then((members) => new Set(members.map(({ id }) => id)))
-    }
-
-    return members[team_slug]
-  }
-  committers = await getTeamMembers('nixpkgs-committers')
-
-  const files = await github.paginate(github.rest.pulls.listFiles, {
-    ...context.repo,
-    pull_number,
-    per_page: 100,
-  })
-
+function runChecklist({ committers, files, pull_request, log, maintainers }) {
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
     .map(({ filename }) => filename.split('/')[3])
@@ -59,10 +24,16 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     'PR has maintainers eligible for merge.': eligible.size > 0,
   }
 
+  const result = Object.values(checklist).every(Boolean)
+
+  log('checklist', JSON.stringify(checklist))
+  log('eligible', JSON.stringify(Array.from(eligible)))
+  log('result', result)
+
   return {
     checklist,
     eligible,
-    result: Object.values(checklist).every(Boolean),
+    result,
   }
 }
 
@@ -91,6 +62,10 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
+// Caching the list of team members saves API requests when running the bot on the schedule and
+// processing many PRs at once.
+const members = {}
+
 async function handleMerge({
   github,
   context,
@@ -103,15 +78,42 @@ async function handleMerge({
 }) {
   const pull_number = pull_request.number
 
-  const { checklist, eligible, result } = await runChecklist({
-    github,
-    context,
+  function getTeamMembers(team_slug) {
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no members. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      return new Set()
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github
+        .paginate(github.rest.teams.listMembersInOrg, {
+          org: context.repo.owner,
+          team_slug,
+          per_page: 100,
+        })
+        .then((members) => new Set(members.map(({ id }) => id)))
+    }
+
+    return members[team_slug]
+  }
+  const committers = await getTeamMembers('nixpkgs-committers')
+
+  const files = await github.paginate(github.rest.pulls.listFiles, {
+    ...context.repo,
+    pull_number,
+    per_page: 100,
+  })
+
+  const { checklist, eligible, result } = runChecklist({
+    committers,
+    files,
     pull_request,
+    log,
     maintainers,
   })
-  log('checklist', JSON.stringify(checklist))
-  log('eligible', JSON.stringify(Array.from(eligible)))
-  log('result', result)
 
   // Only look through comments *after* the latest (force) push.
   const latestChange = events.findLast(({ event }) =>
