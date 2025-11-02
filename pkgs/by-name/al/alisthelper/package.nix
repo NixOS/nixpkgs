@@ -21,7 +21,7 @@ let
 in
 flutter332.buildFlutterApplication {
   pname = "alisthelper";
-  version = "0.2.0-unstable-2025-08-05";
+  version = "beta-unstable-2025-08-05";
   inherit src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
