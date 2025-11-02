@@ -17,6 +17,7 @@
   libutp,
   libdeflate,
   utf8cpp,
+  fast-float,
   fmt,
   libpsl,
   miniupnpc,
@@ -109,12 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
     pushd third-party
     for f in *; do
-        if [[ ! $f =~ googletest|wildmat|fast_float|wide-integer|jsonsl ]]; then
+        if [[ ! $f =~ googletest|wildmat|wide-integer|jsonsl ]]; then
             rm -r "$f"
         fi
     done
     popd
     rm \
+      cmake/FindFastFloat.cmake \
       cmake/FindFmt.cmake \
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
@@ -137,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     dht
+    fast-float
     fmt
     libb64
     libdeflate
