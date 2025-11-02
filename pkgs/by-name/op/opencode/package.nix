@@ -1,200 +1,90 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
-  buildGoModule,
-  bun,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  models-dev,
-  nix-update-script,
+  fetchurl,
+  autoPatchelfHook,
+  common-updater-scripts,
+  curl,
+  installShellFiles,
+  jq,
+  unzip,
   testers,
-  writableTmpDirAsHomeHook,
+  writeShellScript,
 }:
-
-let
-  bun-target = {
-    "aarch64-darwin" = "bun-darwin-arm64";
-    "aarch64-linux" = "bun-linux-arm64";
-    "x86_64-darwin" = "bun-darwin-x64";
-    "x86_64-linux" = "bun-linux-x64";
-  };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.15.29";
-  src = fetchFromGitHub {
-    owner = "sst";
-    repo = "opencode";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-L3IcADx0fbtnqlf8Ysc1J5DVJp6ZQtN2faBJqAFMD3g=";
-  };
+  version = "1.0.10";
 
-  tui = buildGoModule {
-    pname = "opencode-tui";
-    inherit (finalAttrs) version src;
+  src =
+    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+  sourceRoot = ".";
 
-    modRoot = "packages/tui";
-
-    vendorHash = "sha256-muwry7B0GlgueV8+9pevAjz3Cg3MX9AMr+rBwUcQ9CM=";
-
-    subPackages = [ "cmd/opencode" ];
-
-    env.CGO_ENABLED = 0;
-
-    ldflags = [
-      "-s"
-      "-X=main.Version=${finalAttrs.version}"
-    ];
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm755 $GOPATH/bin/opencode $out/bin/tui
-
-      runHook postInstall
-    '';
-  };
-
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "opencode-node_modules";
-    inherit (finalAttrs) version src;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-      # NOTE: Disabling post-install scripts with `--ignore-scripts` to avoid
-      # shebang issues
-      # NOTE: `--linker=hoisted` temporarily disables Bun's isolated installs,
-      # which became the default in Bun 1.3.0.
-      # See: https://bun.com/blog/bun-v1.3#isolated-installs-are-now-the-default-for-workspaces
-      # This workaround is required because the 'yargs' dependency is currently
-      # missing when building opencode. Remove this flag once upstream is
-      # compatible with Bun 1.3.0.
-      bun install \
-        --filter=opencode \
-        --force \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --linker=hoisted \
-        --no-progress \
-        --production
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
-
-      runHook postInstall
-    '';
-
-    # Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash =
-      {
-        x86_64-linux = "sha256-QX+6uxG1V4QdecJX5vyFlgy5pBPPv8rne7pklSA2k3c=";
-        aarch64-linux = "sha256-S8nuMMgGeGAuCevuLxMK5j9+VFbqWuqf+ZYZSVzAp/k=";
-        x86_64-darwin = "sha256-qwRMCTSj7+0tygwWO4INYdblpGpUZm2RMhnELdd6sw4=";
-        aarch64-darwin = "sha256-vJ1tSW/ozE1Fz16RFcV46DDyyITGeuBhbqNMegIoGAo=";
-      }
-      .${stdenv.hostPlatform.system};
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
-
+  strictDeps = true;
   nativeBuildInputs = [
-    bun
-    makeBinaryWrapper
-    models-dev
-  ];
+    unzip
+    installShellFiles
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  patches = [
-    # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `_api.json` from the file bundled with `bun build`.
-    ./local-models-dev.patch
-  ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.node_modules}/node_modules .
-
-    runHook postConfigure
-  '';
-
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-
-  buildPhase = ''
-    runHook preBuild
-
-    bun build \
-      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
-      --define OPENCODE_VERSION="'${finalAttrs.version}'" \
-      --compile \
-      --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
-      --outfile=opencode \
-      ./packages/opencode/src/index.ts \
-
-    runHook postBuild
-  '';
-
-  dontStrip = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 opencode $out/bin/opencode
+    install -Dm 755 ./opencode $out/bin/opencode
 
     runHook postInstall
   '';
 
-  # Execution of commands using bash-tool fail on linux with
-  # Error [ERR_DLOPEN_FAILED]: libstdc++.so.6: cannot open shared object file: No such
-  # file or directory
-  # Thus, we add libstdc++.so.6 manually to LD_LIBRARY_PATH
-  postFixup = ''
-    wrapProgram $out/bin/opencode \
-      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
-  '';
-
   passthru = {
+    sources = {
+      "aarch64-darwin" = fetchurl {
+        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-darwin-arm64.zip";
+        hash = "sha256-D34OcJgIXVkqDOf5Vyce30v5/avDKKYbOAcMWD8HmXM=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-linux-arm64.zip";
+        hash = "sha256-v3j0oL2WL4DezOxdEKgOq4f8BkdR01zlYHUzbUUjgtE=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-darwin-x64.zip";
+        hash = "sha256-+kycX2mbCy7p6VOKO9HequCoJi/5nT8Pf09obZEuj1E=";
+      };
+      "x86_64-linux" = fetchurl {
+        url = "https://github.com/sst/opencode/releases/download/v${finalAttrs.version}/opencode-linux-x64.zip";
+        hash = "sha256-MO8IeCnrTUyNroY7T7XY4WCXP8wgI3r4PxhfGwprh9I=";
+      };
+    };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "HOME=$(mktemp -d) opencode --version";
       inherit (finalAttrs) version;
     };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "tui"
-        "--subpackage"
-        "node_modules"
-      ];
-    };
+    updateScript = writeShellScript "update-opencode" ''
+      set -o errexit
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
+      NEW_VERSION=$(curl --silent https://api.github.com/repos/sst/opencode/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+          echo "No update available."
+          exit 0
+      fi
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+        update-source-version "opencode" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
   };
 
   meta = {
     description = "AI coding agent built for the terminal";
-    changelog = "https://github.com/sst/opencode/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/sst/opencode/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       OpenCode is a terminal-based agent that can build anything.
       It combines a TypeScript/JavaScript core with a Go-based TUI
@@ -202,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
     maintainers = with lib.maintainers; [
       zestsystem
       delafthi
