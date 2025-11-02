@@ -225,7 +225,7 @@ let
     if lib.isDerivation v then
       lib.warnOnInstantiate msg v
     else if lib.isAttrs v then
-      lib.mapAttrs (lib.warn msg) v
+      lib.mapAttrs (_: lib.warn msg) v
     else if lib.isFunction v then
       arg: lib.warn msg (v arg)
     else if lib.isList v then
@@ -536,7 +536,7 @@ mapAliases {
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   erlang-ls = throw "'erlang-ls' has been removed as it has been archived upstream. Consider using 'erlang-language-platform' instead"; # Added 2025-10-02
-  ethersync = teamtype; # Added 2025-10-31
+  ethersync = warnAlias "'ethersync' has been renamed to 'teamtype'" teamtype; # Added 2025-10-31
   eww-wayland = throw "'eww-wayland' has been renamed to/replaced by 'eww'"; # Converted to throw 2025-10-27
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27

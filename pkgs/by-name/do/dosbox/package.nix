@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     copyDesktopItems
     graphicsmagick
-    SDL # for sdl-config during build time
+    SDL
   ];
 
   depsBuildBuild = [

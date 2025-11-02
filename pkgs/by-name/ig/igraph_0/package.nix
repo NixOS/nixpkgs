@@ -10,6 +10,7 @@
   fop,
   glpk,
   gmp,
+  hal-hardware-analyzer,
   lapack,
   libxml2,
   libxslt,
@@ -25,13 +26,13 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "1.0.0";
+  version = "0.10.17";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
     tag = finalAttrs.version;
-    hash = "sha256-SwcihzISSmeVhpMrysOhWrUzVVuB4ZBVEjC0vHJwrdw=";
+    hash = "sha256-NzLn2GXpMgwE8fY1vp5SU0Y7EfyVpQfphGdqU6sQGW4=";
   };
 
   postPatch = ''
@@ -100,19 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
-  passthru.tests = {
-    python = python3.pkgs.igraph;
-  };
-
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      MostAwesomeDude
-      dotlambda
-    ];
+    inherit (hal-hardware-analyzer.meta) maintainers;
   };
 })
