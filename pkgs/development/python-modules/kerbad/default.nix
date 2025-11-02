@@ -1,14 +1,18 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   asn1crypto,
   asysocks,
-  buildPythonPackage,
   cryptography,
-  fetchFromGitHub,
-  fetchPypi,
+  dnspython,
+  minikerberos,
   oscrypto,
-  pythonOlder,
-  setuptools,
   six,
   tqdm,
   unicrypto,
@@ -30,8 +34,10 @@ buildPythonPackage rec {
 
   dependencies = [
     asn1crypto
-    cryptography
     asysocks
+    cryptography
+    dnspython
+    minikerberos
     oscrypto
     six
     tqdm
