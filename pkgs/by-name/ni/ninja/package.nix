@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isCygwin {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isCygwin "-D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE";
+  };
+
   nativeBuildInputs = [
     python3
     re2c
@@ -62,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
       hash = "sha256-zlMs9LDJ2thtiSUjbsONyqoyYxrB/Ilt2Ljr0nCU6nQ=";
     })
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   postPatch = ''
     # write rebuild args to file after bootstrap

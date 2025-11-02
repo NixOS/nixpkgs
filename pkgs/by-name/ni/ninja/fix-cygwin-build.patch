@@ -1,0 +1,12 @@
+diff --git a/src/util.cc b/src/util.cc
+index aeb1ce4..876cc3d 100644
+--- a/src/util.cc
++++ b/src/util.cc
+@@ -17,6 +17,7 @@
+ #ifdef __CYGWIN__
+ #include <windows.h>
+ #include <io.h>
++#include <sched.h>
+ #elif defined( _WIN32)
+ #include <windows.h>
+ #include <io.h>
