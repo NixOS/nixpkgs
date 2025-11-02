@@ -59,7 +59,7 @@ while read -r handle && [[ -n "$handle" ]]; do
             "/orgs/$org/teams/$team/members" \
             --jq '.[].login' > "$tmp/team-members"
         readarray -t members < "$tmp/team-members"
-        log "Team $entry has these members: ${members[*]}"
+        log "Team $handle has these members: ${members[*]}"
 
         for user in "${members[@]}"; do
             users[${user,,}]=
