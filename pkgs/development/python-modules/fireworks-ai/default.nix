@@ -115,15 +115,11 @@ buildPythonPackage rec {
     httpx
     httpx
     httpx-sse
-    httpx-sse
-    httpx-ws
     httpx-ws
     mmh3
     openai
     pillow
-    pillow
     protobuf
-    pydantic
     pydantic
     python-dateutil
     rich
