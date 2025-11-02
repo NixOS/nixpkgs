@@ -50,6 +50,7 @@ self: super: {
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+  Win32 = null;
 
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
@@ -135,38 +136,11 @@ self: super: {
 
   haddock-library = doJailbreak super.haddock-library;
   path = self.path_0_9_5;
-  inherit
-    (
-      let
-        hls_overlay = lself: lsuper: {
-          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
-          Cabal = lself.Cabal_3_10_3_0;
-          extensions = dontCheck (doJailbreak (lself.extensions_0_1_0_1));
-        };
-      in
-      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        apply-refact = addBuildDepend self.data-default-class super.apply-refact;
-        floskell = doJailbreak super.floskell;
-        fourmolu = doJailbreak (dontCheck self.fourmolu_0_14_0_0); # ansi-terminal, Diff
-        haskell-language-server = addBuildDepends [
-          self.retrie
-          self.floskell
-        ] super.haskell-language-server;
-        hlint = self.hlint_3_6_1;
-        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        retrie = doJailbreak (unmarkBroken super.retrie);
-        stylish-haskell = self.stylish-haskell_0_14_5_0;
-      }
-    )
-    apply-refact
-    floskell
-    fourmolu
-    haskell-language-server
-    hlint
-    ormolu
-    retrie
-    stylish-haskell
-    ;
+
+  haskell-language-server =
+    lib.throwIf config.allowAliases
+      "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
+      (markBroken super.haskell-language-server);
 
   # directory-ospath-streaming requires the ospath API in core packages
   # filepath, directory and unix.

@@ -68,7 +68,6 @@ let
     ghc984
     ghc9102
     ghc9103
-    # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
 
@@ -231,8 +230,9 @@ let
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
       nixosTests = {
+        agda = packagePlatforms pkgs.nixosTests.agda;
+
         inherit (packagePlatforms pkgs.nixosTests)
-          agda
           kmonad
           xmonad
           xmonad-xdg-autostart
@@ -539,7 +539,6 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9121
         compilerNames.ghc9122
       ] released;
       Cabal_3_12_1_0 = released;

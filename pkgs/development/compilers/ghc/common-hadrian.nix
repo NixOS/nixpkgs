@@ -55,7 +55,8 @@
   gmp,
 
   # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform,
+  enableRelocatedStaticLibs ?
+    stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isWindows,
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
@@ -332,6 +333,8 @@ let
     # documentation) makes the GHC RTS able to load static libraries, which may
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+    #
+    # Note `-fexternal-dynamic-refs` causes `undefined reference` errors when building GHC cross compiler for windows
     lib.optionals enableRelocatedStaticLibs [
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
