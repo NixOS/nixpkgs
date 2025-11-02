@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc13Stdenv,
   fetchFromGitHub,
   xorg,
   xorgproto,
@@ -8,7 +9,12 @@
   lv2,
   pkg-config,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let
+  # see: https://github.com/brummer10/GxMatchEQ.lv2/issues/8
+  # Use gcc13 on Linux, but default stdenv (clang) elsewhere
+  buildStdenv = if stdenv.hostPlatform.isLinux then gcc13Stdenv else stdenv;
+in
+buildStdenv.mkDerivation (finalAttrs: {
   pname = "GxMatchEQ.lv2";
   version = "0.1";
 
