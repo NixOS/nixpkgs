@@ -19672,6 +19672,8 @@ self: super: with self; {
 
   unidiff = callPackage ../development/python-modules/unidiff { };
 
+  unidns = callPackage ../development/python-modules/unidns { };
+
   unifi-ap = callPackage ../development/python-modules/unifi-ap { };
 
   unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
