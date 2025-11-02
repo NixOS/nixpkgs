@@ -425,5 +425,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
+    # Patch is not compatible with the current version of Virtualbox
+    broken = enableKvm;
   };
 })
