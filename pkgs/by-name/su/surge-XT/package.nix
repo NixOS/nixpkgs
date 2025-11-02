@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
   # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
   postPatch = ''
     export XDG_DOCUMENTS_DIR=$(mktemp -d)
+    
+    # Update required for cmake 4:
+    substituteInPlace libs/libsamplerate/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = with lib; {
