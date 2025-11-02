@@ -47,14 +47,14 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "5.0.0";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-1TMzG4q7eE65Uqeihf3EycdxTQ8f8x8EfNwZx4a5AhE=";
+    hash = "sha256-fw7KGijIgIXXFbtNpq1QBrxUP4F6ivLQXQn94YZnQL4=";
   };
 
   build-system = [
