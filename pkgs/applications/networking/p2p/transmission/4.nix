@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   python3,
@@ -13,6 +12,8 @@
   systemd,
   zlib,
   pcre,
+  rapidjson,
+  small,
   libb64,
   libutp,
   libdeflate,
@@ -63,29 +64,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.6";
+  version = "4.1.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    hash = "sha256-KBXvBFgrJ3njIoXrxHbHHLsiocwfd7Eba/GNI8uZA38=";
+    hash = "sha256-eGBlXgNQ/6Xt//9KPCNCKAL1jnk/2uRb4nM01Ha68dE=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8.patch?full_index=1";
-      hash = "sha256-Ge0+AXf/ilfMieGBAdvvImY7JOb0gGIdeKprC37AROs=";
-      excludes = [
-        # The submodule that we don't use (we use our miniupnp)
-        "third-party/miniupnp"
-        # Hunk fails for this one, but we don't care because we don't rely upon
-        # xcode definitions even for the Darwin build.
-        "Transmission.xcodeproj/project.pbxproj"
-      ];
-    })
-  ];
 
   outputs = [
     "out"
@@ -118,9 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm \
       cmake/FindFastFloat.cmake \
       cmake/FindFmt.cmake \
+      cmake/FindRapidJSON.cmake \
+      cmake/FindSmall.cmake \
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
-    substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
 
     # Use gettext even on Darwin
     substituteInPlace libtransmission/utils.h \
@@ -150,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
     miniupnpc
     openssl
     pcre
+    rapidjson
+    small
     utf8cpp
     zlib
   ]
@@ -196,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       include if exists <local/bin.transmission-daemon>
     }
     EOF
-    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
+    install -Dm0444 -t $out/share/icons ../icons/hicolor_apps_scalable_transmission.svg
   '';
 
   passthru.tests = {
