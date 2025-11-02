@@ -136,14 +136,13 @@ async function handleMerge({
   })
 
   // Only look through comments *after* the latest (force) push.
-  const latestChange = events.findLast(({ event }) =>
-    ['committed', 'head_ref_force_pushed'].includes(event),
-  ) ?? { sha: pull_request.head.sha }
-  const latestSha = latestChange.sha ?? latestChange.commit_id
-  log('latest sha', latestSha)
-  const latestIndex = events.indexOf(latestChange)
+  const lastPush = events.findLastIndex(
+    ({ event, sha, commit_id }) =>
+      ['committed', 'head_ref_force_pushed'].includes(event) &&
+      (sha ?? commit_id) === pull_request.head.sha,
+  )
 
-  const comments = events.slice(latestIndex + 1).filter(
+  const comments = events.slice(lastPush + 1).filter(
     ({ event, body, node_id }) =>
       ['commented', 'reviewed'].includes(event) &&
       hasMergeCommand(body) &&
@@ -178,7 +177,7 @@ async function handleMerge({
           })
           { clientMutationId }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return 'Enabled Auto Merge'
     } catch (e) {
@@ -202,7 +201,7 @@ async function handleMerge({
             mergeQueueEntry { mergeQueue { url } }
           }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
     } catch (e) {
