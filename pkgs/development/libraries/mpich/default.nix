@@ -22,6 +22,9 @@
   # PMIX support is likely incompatible with process managers (`--with-pm`)
   # https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
   pmixSupport ? false,
+  # Enable Fortran support (disabled when cross compiling)
+  fortranSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
+  targetPackages,
 }:
 
 let
@@ -63,18 +66,21 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals pmixSupport [
     "--with-pmix"
+  ]
+  ++ lib.optionals (!fortranSupport) [
+    "--disable-fortran"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    gfortran
     python3
     autoconf
     automake
-  ];
-  buildInputs = [
     perl
+  ]
+  ++ lib.optional fortranSupport gfortran;
+  buildInputs = [
     openssh
     hwloc
   ]
@@ -86,14 +92,23 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # Ensure the default compilers are the ones mpich was built with
-    sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' $out/bin/mpicc
-    sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
-    sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
+    sed -i 's:^CC=.*:CC=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' $out/bin/mpicc
+    sed -i 's:^CXX=.*:CXX=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' $out/bin/mpicxx
+  ''
+  + lib.optionalString fortranSupport ''
+    sed -i 's:^FC=.*:FC=${targetPackages.gfortran or gfortran}/bin/${
+      targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+    }gfortran:' $out/bin/mpifort
   '';
 
   meta = {
-    # As far as we know, --with-pmix silently disables all of `--with-pm`
-    broken = pmixSupport && withPm != [ ];
+    broken =
+      # As far as we know, --with-pmix silently disables all of `--with-pm`.
+      (pmixSupport && withPm != [ ])
+      ||
+        # When cross compiling fortan type sizes have to be set manually:
+        # https://github.com/pmodels/mpich/issues/5380#issuecomment-866483882
+        (fortranSupport && stdenv.hostPlatform != stdenv.buildPlatform);
 
     description = "Implementation of the Message Passing Interface (MPI) standard";
 
