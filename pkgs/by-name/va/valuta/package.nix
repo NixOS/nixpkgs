@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "valuta";
-  version = "1.3.2";
+  version = "1.4.2";
 
   pyproject = false;
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ideveCore";
     repo = "Valuta";
     rev = "v${version}";
-    hash = "sha256-g2x+pqs7dXdTMSxzSU5TeQtE+Q+tdQ93xaMtUVEE5/U=";
+    hash = "sha256-1vcjmSXEKy6XTEPV5jiz+ZxzFFUhVnmLK6MDjqoWTHs=";
   };
 
   nativeBuildInputs = [
