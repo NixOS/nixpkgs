@@ -1419,6 +1419,12 @@ let
         # Enable generic kernel watch queues
         # See https://docs.kernel.org/core-api/watch_queue.html
         WATCH_QUEUE = whenAtLeast "5.8" yes;
+
+        # Enable additional led triggers
+        LEDS_TRIGGER_CPU = yes;
+        LEDS_TRIGGER_PANIC = yes;
+        LEDS_TRIGGER_DISK = yes;
+        LEDS_TRIGGER_MTD = yes;
       }
       //
         lib.optionalAttrs
