@@ -105,7 +105,6 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_nvcc
   ];
 
-
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}
     pushd temp/tbbbind_${tbbbind_version}
