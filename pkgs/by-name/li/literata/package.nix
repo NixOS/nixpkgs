@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A serif typeface designed for ebooks and optimized for reading";
+    description = "Serif typeface designed for ebooks and optimized for reading";
     homepage = "https://github.com/googlefonts/literata";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ xavwe ];
