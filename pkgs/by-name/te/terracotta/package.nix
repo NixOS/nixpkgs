@@ -6,6 +6,7 @@
   easytier,
   replaceVars,
   imagemagick,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -88,6 +89,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       substituteInPlace "$daemon_plist" \
         --replace-fail '@TERRACOTTA_BIN@' "$out/bin/terracotta"
     '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "Terracotta provides out-of-the-box multiplayer support for Minecraft";
