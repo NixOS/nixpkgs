@@ -9,7 +9,7 @@
 
 let
   jre = jre_headless;
-  version = "7.16.0";
+  version = "7.17.0";
   mainProgram = "openapi-generator-cli";
   this = maven.buildMavenPackage {
     inherit version;
@@ -20,10 +20,10 @@ let
       owner = "OpenAPITools";
       repo = "openapi-generator";
       tag = "v${version}";
-      hash = "sha256-CoztWf2H2rXcx4d8Av8cBXzMqIZsrSCgx21i3+o2ufo=";
+      hash = "sha256-9jO+u08wrxW0RcXTGDh8mpPp9Eu2PwRifKNsso6s3QM=";
     };
 
-    mvnHash = "sha256-5Kzv9h3X5s/1D0Gd1XQRvNGVAyf44QcriJFvS07wdZo=";
+    mvnHash = "sha256-PiLpJponpJUXakdno+KGxzDvZG6jYRPp3t5q/G5JX+M=";
     mvnParameters = "-Duser.home=$TMPDIR";
     doCheck = false;
 
