@@ -4,12 +4,12 @@
   buildPackages,
   fetchzip,
   makeWrapper,
-  openjdk23,
+  jdk25,
   wrapGAppsHook3,
   jvmFlags ? [ ],
 }:
 let
-  jdk = openjdk23.override {
+  jdk = jdk25.override {
     enableJavaFX = true;
   };
 in
