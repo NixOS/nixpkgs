@@ -1,31 +1,36 @@
 {
   lib,
-  asteroid-filterbanks,
   buildPythonPackage,
-  einops,
   fetchFromGitHub,
+
+  # build-system
+  pyscaffold,
+  setuptools,
+
+  # dependencies
+  asteroid-filterbanks,
+  einops,
   huggingface-hub,
-  hydra-core,
   numpy,
   omegaconf,
   pyannote-core,
   pyannote-database,
   pyannote-metrics,
   pyannote-pipeline,
-  pyscaffold,
-  pythonOlder,
   pytorch-lightning,
   pytorch-metric-learning,
   rich,
   semver,
-  setuptools,
   soundfile,
   speechbrain,
   tensorboardx,
-  torch-audiomentations,
   torch,
+  torch-audiomentations,
   torchaudio,
   torchmetrics,
+
+  # optional-dependencies
+  hydra-core,
   typer,
 }:
 
@@ -34,22 +39,13 @@ buildPythonPackage rec {
   version = "3.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
     tag = version;
-    hash = "sha256-NnwJJasObePBYWBnuVzOLFz2eqOHoOA6W5CzAEpkDV4=";
     fetchSubmodules = true;
+    hash = "sha256-NnwJJasObePBYWBnuVzOLFz2eqOHoOA6W5CzAEpkDV4=";
   };
-
-  pythonRelaxDeps = [ "torchaudio" ];
-
-  build-system = [
-    pyscaffold
-    setuptools
-  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -58,15 +54,25 @@ buildPythonPackage rec {
       --replace-fail "lightning" "pytorch-lightning"
   '';
 
+  build-system = [
+    pyscaffold
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "torchaudio"
+  ];
   dependencies = [
     asteroid-filterbanks
     einops
     huggingface-hub
+    numpy
     omegaconf
     pyannote-core
     pyannote-database
     pyannote-metrics
     pyannote-pipeline
+    pytorch-lightning
     pytorch-metric-learning
     rich
     semver
@@ -77,8 +83,6 @@ buildPythonPackage rec {
     torch-audiomentations
     torchaudio
     torchmetrics
-    numpy
-    pytorch-lightning
   ];
 
   optional-dependencies = {
@@ -90,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.audio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";
     homepage = "https://github.com/pyannote/pyannote-audio";
-    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
