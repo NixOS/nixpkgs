@@ -54,6 +54,7 @@ let
       cups-filters
       pkgs.ghostscript
     ]
+    ++ lib.optional cfg.browsed.enable cfg.browsed.package
     ++ cfg.drivers;
     pathsToLink = [
       "/lib"
