@@ -943,6 +943,10 @@ let
     ];
     vdiffr = [ pkgs.libpng.dev ];
     V8 = [ pkgs.nodejs.libv8 ];
+    xactonomial = with pkgs; [
+      cargo
+      rustc
+    ];
     XBRL = with pkgs; [
       zlib
       libxml2.dev
@@ -2130,6 +2134,10 @@ let
     });
 
     SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    xactonomial = old.xactonomial.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
