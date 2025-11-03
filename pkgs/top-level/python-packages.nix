@@ -8377,6 +8377,8 @@ self: super: with self; {
     }
   );
 
+  librehardwaremonitor-api = callPackage ../development/python-modules/librehardwaremonitor-api { };
+
   librepo = lib.pipe pkgs.librepo [
     toPythonModule
     (
