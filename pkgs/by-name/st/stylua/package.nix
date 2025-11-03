@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  testers,
   # lua54 implies lua52/lua53
   features ? [
     "lua54"
@@ -29,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   buildFeatures = features;
+
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Opinionated Lua code formatter";
