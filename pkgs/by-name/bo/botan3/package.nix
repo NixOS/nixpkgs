@@ -1,18 +1,19 @@
 {
   lib,
   stdenv,
-  buildPackages,
+  libcxxStdenv,
   fetchurl,
   pkgsStatic,
+  runCommandLocal,
+  binutils,
   python3,
   docutils,
   bzip2,
   zlib,
   jitterentropy,
-  darwin,
   esdm,
   tpm2-tss,
-  static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
+  static ? stdenv.hostPlatform.isStatic,
   windows,
 
   # build ESDM RNG plugin
@@ -20,7 +21,7 @@
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   withTpm2 ? false,
   policy ? null,
-}:
+}@args:
 
 assert lib.assertOneOf "policy" policy [
   # no explicit policy is given. The defaults by the library are used
@@ -32,11 +33,25 @@ assert lib.assertOneOf "policy" policy [
   # only allow "modern" algorithms
   "modern"
 ];
-
 let
-  stdenv' = if static then buildPackages.libcxxStdenv else stdenv;
+  stdenv = if static then libcxxStdenv else args.stdenv;
+
+  # (based on same workaround from capnproto package)
+  #
+  # HACK: work around https://github.com/NixOS/nixpkgs/issues/177129
+  # Though this is an issue between Clang and GCC,
+  # so it may not get fixed anytime soon...
+  empty-libgcc_eh =
+    runCommandLocal "empty-libgcc_eh"
+      {
+        nativeBuildInputs = [ binutils ];
+      }
+      ''
+        mkdir -p "$out"/lib
+        ${stdenv.cc.targetPrefix}ar r "$out"/lib/libgcc_eh.a
+      '';
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.9.0";
   pname = "botan";
 
@@ -81,6 +96,8 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
     windows.pthreads
   ];
+
+  propagatedBuildInputs = lib.optional static empty-libgcc_eh;
 
   buildTargets = [
     "cli"
