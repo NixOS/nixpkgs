@@ -21,6 +21,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-laYq6NNGsJ2YGhg6i0iFCVk+qyRqYdZPSSWzVHailcc=";
 
+  # No more package-lock.json in upstream src
+  postPatch = ''
+    cp ./npm-shrinkwrap.json ./package-lock.json
+  '';
+
   nativeBuildInputs = [
     python3
   ]

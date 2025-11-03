@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   stdenv,
   cmake,
   pkg-config,
@@ -40,6 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7pDQnlElnBkW+Nr6R+NaylZbsGH8dB31nd7jxYD66yQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix for building with Qt >= 6.10 -- remove when updating past 1.9.9
+    (fetchpatch {
+      url = "https://github.com/streetpea/chiaki-ng/commit/fe5bfd87998c7ca67ade76436e31ab9924000c8b.patch";
+      hash = "sha256-7Eo5tcmhgbQszBrgtTGrnH34GewJXXAYSKqvqGN/viI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

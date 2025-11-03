@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "fbneo";
-  version = "0-unstable-2025-09-30";
+  version = "0-unstable-2025-11-02";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "fbneo";
-    rev = "9726100ba22a558290860a2648e1e6a8b8719478";
-    hash = "sha256-mhXuHPwXtvuA8ltaLF3uOsBwLE0evJ2RiCrNX5hnRXM=";
+    rev = "442a0e901c3d7d60c94f21caf46c0535233086f6";
+    hash = "sha256-ewwF7btf5EEBmGzAVuH4LavrDpmVzEBD/BE1/T/p6bM=";
   };
 
   makefile = "Makefile";

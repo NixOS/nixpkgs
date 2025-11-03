@@ -127,34 +127,7 @@ with haskellLib;
           # to bogus references to some dependencies.
           overrideCabal (
             old:
-            {
-              # Ignore unix bound intended to prevent an unix bug on 32bit systems.
-              # We apply a patch for this issue to the GHC core packages directly.
-              # See unix-fix-ctimeval-size-32-bit.patch in ../compilers/ghc/common-*.nix
-              patches =
-                old.patches or [ ]
-                ++
-                  lib.optionals
-                    (
-                      scope.unix == null
-                      && lib.elem self.ghc.version [
-                        "9.6.1"
-                        "9.6.2"
-                        "9.6.3"
-                        "9.6.4"
-                        "9.6.5"
-                        "9.6.6"
-                        "9.8.1"
-                        "9.8.2"
-                        "9.8.3"
-                        "9.10.1"
-                      ]
-                    )
-                    [
-                      ./patches/cabal-install-3.16-lift-unix-bound.patch
-                    ];
-            }
-            // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -232,13 +205,8 @@ with haskellLib;
           Cabal = lself.Cabal_3_14_2_0;
           # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
           cabal-install-parsers = doJailbreak lsuper.cabal-install-parsers;
-          # hls 2.11 needs older cabal-add than in stackage. Also copying over test fix override from configuration-nix.nix
-          cabal-add = overrideCabal (drv: {
-            # tests depend on executable
-            preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
-          }) lself.cabal-add_0_1;
           # Need a newer version of extensions to be compatible with the newer Cabal
-          extensions = doJailbreak lself.extensions_0_1_0_3;
+          extensions = doJailbreak lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
           # because some packages, like ormolu, need a newer Cabal version.
           # ghc-paths is special because it depends on Cabal for building
@@ -257,7 +225,6 @@ with haskellLib;
           # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
-            doJailbreak
             (
               if versionOlder self.ghc.version "9.10" || versionOlder "9.11" self.ghc.version then
                 addBuildDepends [
@@ -276,15 +243,15 @@ with haskellLib;
     fourmolu
     ormolu
     haskell-language-server
+    hls-plugin-api
+    ghcide
+    lsp-types
     ;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
-
-  hls-plugin-api = doJailbreak super.hls-plugin-api; # HLS 2.11: Too strict bound on Diff 1.0.
-  ghcide = doJailbreak super.ghcide; # HLS 2.11: Too strict bound on Diff 1.0.
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
@@ -529,19 +496,14 @@ with haskellLib;
 
   # Fixes compilation for basement on i686
   # https://github.com/haskell-foundation/foundation/pull/573
-  # Don't apply patch for GHC == 9.2.* on 64bit where it breaks compilation:
-  # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
-  basement = appendPatches (lib.optionals
-    (pkgs.stdenv.hostPlatform.is32bit || lib.versions.majorMinor self.ghc.version != "9.2")
-    [
-      (fetchpatch {
-        name = "basement-i686-ghc-9.4.patch";
-        url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
-        sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
-        stripLen = 1;
-      })
-    ]
-  ) super.basement;
+  basement = appendPatches [
+    (fetchpatch {
+      name = "basement-i686-ghc-9.4.patch";
+      url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
+      sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
+      stripLen = 1;
+    })
+  ] super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
@@ -618,14 +580,6 @@ with haskellLib;
     '';
   } super.containers-unicode-symbols;
 
-  # 2025-09-03: support text 2.1.1
-  hs-opentelemetry-api = appendPatch (pkgs.fetchpatch2 {
-    name = "fix-building-with-the-latest-text-and-persistent-releases.patch";
-    url = "https://github.com/iand675/hs-opentelemetry/commit/ee8a6dad7db306eb67748ddcd77df4974ad8259e.patch";
-    hash = "sha256-CdDrEdm5rCKydTxk42dcURZWcVukgHG+7kfOLiNxhoI=";
-    relative = "api";
-  }) super.hs-opentelemetry-api;
-
   # Test file not included on hackage
   numerals-base = dontCheck (doJailbreak super.numerals-base);
 
@@ -647,7 +601,7 @@ with haskellLib;
           name = "git-annex-${super.git-annex.version}-src";
           url = "git://git-annex.branchable.com/";
           rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "sha256-s3EleptCwmVxHjAcPDe40Ch+fULFqf+6H1pLjXNFZ1Y=";
+          sha256 = "sha256-HkUrc9T8qpGsONIuM7ciKbx4vuJTOLFNxneIPte0wv4=";
           # delete android and Android directories which cause issues on
           # darwin (case insensitive directory). Since we don't need them
           # during the build process, we can delete it to prevent a hash
@@ -697,6 +651,31 @@ with haskellLib;
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
+
+  # Pass in `pkgs.nix` for the required tools. This means that overriding
+  # them sort of works, but only if you override all instances.
+  nix-paths =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      super.nix-paths.override {
+        nix-build = pkgs.nix;
+        nix-env = pkgs.nix;
+        nix-hash = pkgs.nix;
+        nix-instantiate = pkgs.nix;
+        nix-store = pkgs.nix;
+      }
+    else
+      # When cross-compiling, nix-paths won't be able to detect
+      # the path to the (host) tools at build time from PATH,
+      # so we instruct it to check at runtime.
+      enableCabalFlag "allow-relative-paths" (
+        super.nix-paths {
+          nix-build = null;
+          nix-env = null;
+          nix-hash = null;
+          nix-instantiate = null;
+          nix-store = null;
+        }
+      );
 
   # Fix `mv` not working on directories
   turtle = appendPatches [
@@ -832,12 +811,9 @@ with haskellLib;
     sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
   }) super.xml-picklers;
 
-  # 2025-08-03: Too strict bounds on open-browser, data-default and containers
-  # https://github.com/lierdakil/pandoc-crossref/issues/478 krank:ignore-line
   pandoc-crossref = lib.pipe super.pandoc-crossref [
-    (warnAfterVersion "0.3.21")
+    # https://github.com/lierdakil/pandoc-crossref/issues/492
     doJailbreak
-
     # We are still using pandoc == 3.7.*
     (appendPatch (
       lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
@@ -851,6 +827,16 @@ with haskellLib;
         }
     ))
   ];
+
+  pandoc = appendPatches [
+    # Adjust text fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
+    (pkgs.fetchpatch {
+      name = "pandoc-djot-0.1.2.3.patch";
+      url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
+      hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
+      includes = [ "test/djot-reader.native" ];
+    })
+  ] super.pandoc;
 
   # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
   # https://github.com/jaspervdj/patat/issues/194
@@ -1191,7 +1177,6 @@ with haskellLib;
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
   # This package can't be built on non-Windows systems.
-  Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.hostPlatform.isCygwin; }) super.Win32;
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
 
@@ -1601,10 +1586,6 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  hledger_1_50_1 = super.hledger_1_50_1.override {
-    hledger-lib = self.hledger-lib_1_50_1;
-  };
-
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -1657,6 +1638,15 @@ with haskellLib;
     dontCheck
     unmarkBroken
   ];
+
+  # Unreleased patch fixing compilation with text >= 2.1.2
+  dom-parser = appendPatches [
+    (pkgs.fetchpatch {
+      name = "dom-parser-text-2.1.2.patch";
+      url = "https://github.com/typeable/dom-parser/commit/b8d9af75595072026a1706e94750dba55e65326b.patch";
+      hash = "sha256-c7ea0YCtXhv4u+pTuxcWoISa+yV2oEtxS/RmC6Bbx1M=";
+    })
+  ] super.dom-parser;
 
   # Requires jsaddle-webkit2gtk to build outside of pkgsCross.ghcjs
   # which requires a version of libsoup that's marked as insecure
@@ -1765,7 +1755,7 @@ with haskellLib;
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_4_0 = doDistribute (dontCheck super.haskeline_0_8_4_0);
+  haskeline_0_8_4_1 = doDistribute (dontCheck super.haskeline_0_8_4_1);
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -2413,8 +2403,6 @@ with haskellLib;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
-  # Build-type is simple, but ships a broken Setup.hs
-  digits = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.lhs"; }) super.digits;
 
   cabal-fmt = doJailbreak (
     super.cabal-fmt.override {
@@ -2804,22 +2792,26 @@ with haskellLib;
         (addBuildDepends [
           self.cache
           self.extra
+          self.focus
           self.fuzzyset_0_2_4
+          self.http-client
           self.jose-jwt
           self.neat-interpolation
           self.prometheus-client
+          self.some
+          self.stm-hamt
           self.timeit
         ])
         # 2022-12-02: Too strict bounds.
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "13.0.7";
+          version = "14.0";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-5bWemChm2MpogtGuiBuuep4lhRBhnKOOeBqm+Sqcgl4=";
+            hash = "sha256-GokYeVDuVdIbowU6xE3l8iaGbH4jnpqQFy/E+sb/Unw=";
           };
         })
       ];
@@ -2967,22 +2959,6 @@ with haskellLib;
 
   proto3-wire = appendPatches [
     (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/109
-      name = "bump-outdated-bounds.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/b32f3db6f8d36ea0708fb2f371f62d439ea45b42.patch";
-      hash = "sha256-EGFyk3XawU0+zk299WGwFKB2uW9eJrCDM6NgfIKWgRY=";
-    })
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/110
-      name = "support-GHC-9.10.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/6fdf0eb93b2028ade0e3e011ce8429c94546839e.patch";
-      hash = "sha256-jK0ztjuhM7qRH5T7xo75aX7wqmZFymOgWDx6UrlcqWQ=";
-      includes = [
-        "*.cabal"
-        "*.hs"
-      ];
-    })
-    (fetchpatch {
       # https://github.com/awakesecurity/proto3-wire/pull/108
       name = "add-reverse-encoders-for-packed-repeated-fields.patch";
       url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
@@ -3094,12 +3070,6 @@ with haskellLib;
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
-
-  # 2025-09-03: allow QuickCheck 2.15, containers 0.7, filepath 1.5, witch 1.3
-  hevm = lib.pipe super.hevm [
-    (warnAfterVersion "0.55.1")
-    doJailbreak
-  ];
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);

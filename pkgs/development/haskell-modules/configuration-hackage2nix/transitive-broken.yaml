@@ -294,7 +294,6 @@ dont-distribute-packages:
  - bits-extra
  - bittorrent
  - bla
- - blacktip
  - blakesum-demo
  - Blammo
  - Blammo-wai
@@ -607,6 +606,7 @@ dont-distribute-packages:
  - cprng-aes
  - cprng-aes-effect
  - cql-io-tinylog
+ - cql_4_1_0_0
  - cqrs-example
  - cqrs-memory
  - cqrs-postgresql
@@ -770,7 +770,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_2_1
+ - dl-fedora_2_1_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -786,7 +786,6 @@ dont-distribute-packages:
  - DocTest
  - dojang
  - DOM
- - dom-parser
  - domaindriven
  - dormouse-client
  - dovetail
@@ -1196,6 +1195,13 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
+ - gpu-vulkan
+ - gpu-vulkan-khr-surface
+ - gpu-vulkan-khr-surface-glfw
+ - gpu-vulkan-khr-swapchain
+ - gpu-vulkan-middle-khr-surface
+ - gpu-vulkan-middle-khr-surface-glfw
+ - gpu-vulkan-middle-khr-swapchain
  - GPX
  - grab-form
  - graflog
@@ -1250,7 +1256,6 @@ dont-distribute-packages:
  - gtfs
  - gtfs-realtime
  - gtk-serialized-event
- - gtk-sni-tray
  - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
  - gtk2hs-cast-gtk
@@ -1292,7 +1297,6 @@ dont-distribute-packages:
  - hake
  - hakyll-elm
  - hakyll-ogmarkup
- - hakyll-shortcut-links
  - halberd
  - halide-arrayfire
  - halide-JuicyPixels
@@ -1332,7 +1336,6 @@ dont-distribute-packages:
  - HarmTrace
  - haroonga-httpd
  - has-th
- - hasbolt
  - hascat
  - hascat-lib
  - hascat-setup
@@ -1352,7 +1355,6 @@ dont-distribute-packages:
  - haskell-admin-managed-functions
  - haskell-aliyun
  - haskell-bitmex-client
- - haskell-debug-adapter
  - haskell-debugger
  - haskell-docs
  - haskell-eigen-util
@@ -1604,6 +1606,7 @@ dont-distribute-packages:
  - hoppy-runtime
  - hoppy-std
  - horde-ad
+ - hotel-california
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -1645,6 +1648,9 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
+ - hs-opentelemetry-instrumentation-cloudflare
+ - hs-opentelemetry-instrumentation-http-client
+ - hs-opentelemetry-instrumentation-yesod
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
@@ -1685,6 +1691,9 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
+ - hsqml-datamodel-vinyl
+ - hsqml-demo-morris
+ - hsqml-morris
  - hsreadability
  - hssourceinfo
  - hssqlppp-th
@@ -1771,6 +1780,7 @@ dont-distribute-packages:
  - hylotab
  - hyloutils
  - hyperbole
+ - hyperbole_0_5_0
  - hyperpublic
  - ide-backend
  - ide-backend-server
@@ -1810,7 +1820,6 @@ dont-distribute-packages:
  - indentation-trifecta
  - indexation
  - IndexedList
- - indieweb-algorithms
  - indigo
  - inferno-core
  - inferno-lsp
@@ -2068,7 +2077,6 @@ dont-distribute-packages:
  - librato
  - libxml-enumerator
  - lifted-base-tf
- - lifted-stm
  - lightning-haskell
  - lightstep-haskell
  - lighttpd-conf
@@ -2281,7 +2289,6 @@ dont-distribute-packages:
  - mole
  - monad-connect
  - monad-exception
- - monad-finally
  - monad-http
  - monad-state
  - monad-stlike-stm
@@ -2483,7 +2490,6 @@ dont-distribute-packages:
  - nyan-interpolation-simple
  - nymphaea
  - nyx-game
- - oalg-abg
  - oath
  - oauth2-jwt-bearer
  - obdd
@@ -2759,6 +2765,7 @@ dont-distribute-packages:
  - prometheus-proc
  - propane
  - proplang
+ - PropRatt
  - prosidyc
  - proto-lens-descriptors
  - protobuf-native
@@ -2908,10 +2915,6 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
- - registry
- - registry-aeson
- - registry-hedgehog
- - registry-hedgehog-aeson
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3269,9 +3272,7 @@ dont-distribute-packages:
  - snaplet-stripe
  - snaplet-tasks
  - snaplet-wordpress
- - snappy-framing
  - snappy-iteratee
- - snappy-lazy
  - sndfile-enumerators
  - sneakyterm
  - sneathlane-haste
@@ -3430,7 +3431,6 @@ dont-distribute-packages:
  - systemstats
  - t3-client
  - ta
- - taffybar
  - tag-stream
  - tagged-list
  - tagged-th
@@ -3469,10 +3469,9 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
+ - temporal-sdk
  - ten-lens
  - ten-unordered-containers
- - tensorflow-records
- - tensorflow-records-conduit
  - terminal-text
  - terrahs
  - test-sandbox-compose
@@ -3597,7 +3596,6 @@ dont-distribute-packages:
  - type-sub-th
  - TypeClass
  - typed-encoding-encoding
- - typed-protocols-doc
  - typed-streams
  - typedflow
  - TypeIlluminator
@@ -3669,7 +3667,6 @@ dont-distribute-packages:
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
  - uu-options
- - uuagc
  - uuid-crypto
  - uvector-algorithms
  - v4l2

@@ -3,6 +3,7 @@
   jdk11,
   jdk17,
   jdk21,
+  nix-update-script,
 }:
 
 let
@@ -15,11 +16,6 @@ let
       symlinkJoin,
       concatTextFile,
       makeSetupHook,
-      nix-update-script,
-
-      # This is the "current" version of gradle in nixpkgs.
-      # Used to define the update script.
-      gradle-unwrapped,
 
       runCommand,
     }:
@@ -84,17 +80,6 @@ let
                 '';
           }
           // gradle.tests;
-        }
-        // lib.optionalAttrs (this-gradle-unwrapped == gradle-unwrapped) {
-          updateScript = nix-update-script {
-            extraArgs = [
-              "--url=https://github.com/gradle/gradle"
-              # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-              # release version omits the `.0`, so we’ll wanto to only capture
-              # the version up but not including the the trailing `.0`.
-              "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
-            ];
-          };
         };
 
         meta = gradle.meta // {
@@ -133,6 +118,10 @@ let
       # Extra attributes to be merged into the resulting derivation's
       # meta attribute.
       meta ? { },
+
+      # Put the update script in passthru. Should only be on a single attrpath
+      # so that nixpkgs-update doesn't create duplicate PRs.
+      enableUpdateScript ? false,
     }@genArgs:
 
     {
@@ -287,6 +276,19 @@ let
       };
       passthru.jdk = defaultJava;
       passthru.wrapped = callPackage wrapGradle { } (gen' genArgs);
+      passthru.updateScript =
+        if enableUpdateScript then
+          nix-update-script {
+            extraArgs = [
+              "--url=https://github.com/gradle/gradle"
+              # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
+              # release version omits the `.0`, so we’ll wanto to only capture
+              # the version up but not including the the trailing `.0`.
+              "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
+            ];
+          }
+        else
+          null;
 
       meta =
         with lib;
@@ -337,6 +339,8 @@ rec {
     version = "8.14.3";
     hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
     defaultJava = jdk21;
+    # Only enable this on *one* version to avoid duplicate PRs.
+    enableUpdateScript = true;
   };
   gradle_7 = gen' {
     version = "7.6.6";

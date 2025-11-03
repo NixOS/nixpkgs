@@ -96,14 +96,14 @@ in
   libraryFrameworkDepends ? [ ],
   executableFrameworkDepends ? [ ],
   homepage ? "https://hackage.haskell.org/package/${pname}",
-  platforms ? with lib.platforms; all, # GHC can cross-compile
+  platforms ? lib.platforms.all, # GHC can cross-compile
   badPlatforms ? lib.platforms.none,
   hydraPlatforms ? null,
   hyperlinkSource ? true,
   isExecutable ? false,
   isLibrary ? !isExecutable,
   jailbreak ? false,
-  license,
+  license ? null,
   enableParallelBuilding ? true,
   maintainers ? null,
   teams ? null,
@@ -1036,10 +1036,11 @@ lib.fix (
       };
 
       meta = {
-        inherit homepage license platforms;
+        inherit homepage platforms;
       }
       // optionalAttrs (args ? broken) { inherit broken; }
       // optionalAttrs (args ? description) { inherit description; }
+      // optionalAttrs (args ? license) { inherit license; }
       // optionalAttrs (args ? maintainers) { inherit maintainers; }
       // optionalAttrs (args ? teams) { inherit teams; }
       // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
