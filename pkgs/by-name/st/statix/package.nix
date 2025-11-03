@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     mainProgram = "statix";
     maintainers = with maintainers; [
-      figsoda
       nerdypepper
     ];
   };

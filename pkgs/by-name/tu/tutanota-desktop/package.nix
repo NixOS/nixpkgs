@@ -47,7 +47,7 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       s0ssh
     ];
     mainProgram = "tutanota-desktop";

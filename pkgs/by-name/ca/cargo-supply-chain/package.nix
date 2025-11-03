@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
       zlib
     ]; # any of three
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

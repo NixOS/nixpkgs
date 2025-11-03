@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       akshgpt7
-      figsoda
     ];
     mainProgram = "jql";
   };

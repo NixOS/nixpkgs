@@ -38,7 +38,7 @@ let
         mit # or
         asl20
       ];
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = [ ];
       broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
   };

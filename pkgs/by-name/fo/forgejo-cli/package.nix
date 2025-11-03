@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       isabelroses
     ];
     mainProgram = "fj";

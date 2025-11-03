@@ -2,7 +2,6 @@
 {
   name = "sx";
   meta.maintainers = with lib.maintainers; [
-    figsoda
     thiagokokada
   ];
 

@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       misilelab
     ];
     mainProgram = "static-web-server";

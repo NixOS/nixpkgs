@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/v0ldek/rsonpath";
     changelog = "https://github.com/v0ldek/rsonpath/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rq";
   };
 }

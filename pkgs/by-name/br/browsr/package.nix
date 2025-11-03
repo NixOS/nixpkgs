@@ -97,6 +97,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

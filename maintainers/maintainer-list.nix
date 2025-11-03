@@ -2633,13 +2633,6 @@
     github = "aware70";
     githubId = 7832566;
   };
-  awwpotato = {
-    email = "awwpotato@voidq.com";
-    matrix = "@awwpotato:envs.net";
-    github = "awwpotato";
-    githubId = 153149335;
-    name = "awwpotato";
-  };
   axertheaxe = {
     email = "axertheaxe@proton.me";
     github = "AxerTheAxe";
@@ -5561,6 +5554,13 @@
     githubId = 102048662;
     name = "Dalton Luce";
   };
+  da157 = {
+    email = "da157@voidq.com";
+    matrix = "@awwpotato:envs.net";
+    github = "0xda157";
+    githubId = 153149335;
+    name = "0xda157";
+  };
   dabao1955 = {
     email = "dabao1955@163.com";
     github = "dabao1955";
@@ -8475,13 +8475,6 @@
     github = "figboy9";
     githubId = 52276064;
     name = "figboy9";
-  };
-  figsoda = {
-    email = "figsoda@pm.me";
-    matrix = "@figsoda:matrix.org";
-    github = "figsoda";
-    githubId = 40620903;
-    name = "figsoda";
   };
   fionera = {
     email = "nix@fionera.de";
