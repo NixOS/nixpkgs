@@ -1641,8 +1641,8 @@ let
         mktplcRef = {
           name = "vscode-open-in-github";
           publisher = "fabiospampinato";
-          version = "2.3.1";
-          hash = "sha256-wqY8AArlTpQzoZ9OfV9MzlHIr9M/Ac4QUZL99n327EI=";
+          version = "2.4.0";
+          hash = "sha256-7jHU8sW6nBVumry3DjgM+CNOvm/oZCGBMzrat4lRAtg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fabiospampinato.vscode-open-in-github/changelog";
