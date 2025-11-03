@@ -12,7 +12,7 @@
   libgtop,
   libcanberra-gtk3,
   inkscape,
-  udisks2,
+  udisks,
   mate-desktop,
   mate-panel,
   hicolor-icon-theme,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libgtop
     libcanberra-gtk3
     libxml2
-    udisks2
+    udisks
     mate-desktop
     mate-panel
     hicolor-icon-theme
