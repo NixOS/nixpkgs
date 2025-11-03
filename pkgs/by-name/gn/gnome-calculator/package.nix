@@ -2,6 +2,7 @@
   stdenv,
   lib,
   appstream,
+  blueprint-compiler,
   meson,
   ninja,
   vala,
@@ -26,15 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "48.1";
+  version = "49.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/gnome-calculator-${version}.tar.xz";
-    hash = "sha256-vEvUGpuhkPRcvuDYxnUs3F0osM7xxr0MAeLa4fPBkWI=";
+    hash = "sha256-7L4g5jBXX7i8I3kNNfOGrBd5ADxA3FyHfTzS2g/HRT8=";
   };
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     meson
     ninja
     pkg-config

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -45,6 +46,21 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "IBaoqNKpWcB6RnrJaCxu1gW6iIP7dgQQ1otoq4ON+fI=";
   };
+
+  patches = [
+    # Add support for girepository 2.0
+    # https://gitlab.gnome.org/GNOME/rhythmbox/-/issues/2113
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/rhythmbox/-/commit/0cc5960f8ae516967515554eaa89faa9796701c5.patch";
+      hash = "sha256-IAOaQBDCyRkzzrxwdYQKm8Si8sn5yeBFWqKbe5mUU6k=";
+    })
+  ];
+
+  postPatch = ''
+    # We backported girepository-2.0 support to libpeas 1.36
+    substituteInPlace meson.build \
+      --replace-fail "and libpeas.version() > '1.36'" ""
+  '';
 
   nativeBuildInputs = [
     pkg-config
