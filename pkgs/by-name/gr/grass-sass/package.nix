@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       replaceStrings [ "." ] [ "" ] version
     }";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "grass";
   };
 }

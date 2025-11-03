@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/CertainLach/jrsonnet";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       lach
     ];
   };

@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      figsoda
       gerschtli
       jb55
       killercup

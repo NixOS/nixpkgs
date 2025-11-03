@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/juftin/textual-universal-directorytree";
     changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

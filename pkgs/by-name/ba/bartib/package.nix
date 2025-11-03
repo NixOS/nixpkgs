@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple timetracker for the command line";
     homepage = "https://github.com/nikolassv/bartib";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "bartib";
   };
 }
