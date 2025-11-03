@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd pizauth \
       --bash share/bash/completion.bash \
       --fish share/fish/pizauth.fish
+
+    installManPage pizauth.1 pizauth.conf.5
   '';
 
   passthru.updateScript = nix-update-script { };
