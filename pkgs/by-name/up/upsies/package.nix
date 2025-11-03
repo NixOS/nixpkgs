@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   fetchpatch,
   ffmpeg-headless,
@@ -72,10 +73,32 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ runtimeDeps;
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail during object comparisons on Darwin
+    "test_group"
+    "test_has_commentary"
+    "test_special_case"
+    "test_set_release_info"
+    "test_Query_from_release"
+    # Depend on directory format
+    "test_home_directory_property"
+    # Depends on specific cocdecs not available on Darwin
+    "test_generate_episode_queries"
+    # Assert false == true
+    "test_is_mixed_scene_release"
+    # Fails due to expecting a non-darwin path format
+    "test_search"
+  ];
+
   disabledTestPaths = [
     # DNS resolution errors in the sandbox on some of the tests
     "tests/utils_test/http_test/http_test.py"
     "tests/utils_test/http_test/http_tls_test.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail due to the different set of codecs on Darwin
+    "tests/utils_test/predbs_test/predbs_integration_test.py"
+    "tests/utils_test/release_info_test.py"
   ];
 
   preCheck = ''
@@ -89,6 +112,8 @@ python3Packages.buildPythonApplication rec {
     ":"
     (lib.makeBinPath runtimeDeps)
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
