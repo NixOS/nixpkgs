@@ -859,6 +859,10 @@ let
       cargo
       rustc
     ];
+    SQLFormatteR = with pkgs; [
+      cargo
+      rustc
+    ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -1976,6 +1980,10 @@ let
     });
 
     socratadata = old.socratadata.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    SQLFormatteR = old.SQLFormatteR.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
