@@ -1816,6 +1816,8 @@ self: super: with self; {
 
   beanhub-inbox = callPackage ../development/python-modules/beanhub-inbox { };
 
+  beanie = callPackage ../development/python-modules/beanie { };
+
   beanquery = callPackage ../development/python-modules/beanquery { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
