@@ -21107,6 +21107,12 @@
     githubId = 37715;
     name = "Brian McKenna";
   };
+  puiyq = {
+    name = "Pui Yong Qing";
+    email = "puiyongqing@gmail.com";
+    github = "puiyq";
+    githubId = 96353706;
+  };
   pulsation = {
     name = "Philippe Sam-Long";
     github = "pulsation";
