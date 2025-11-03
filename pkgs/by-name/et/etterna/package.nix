@@ -110,5 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alikindsys ];
     mainProgram = "etterna";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })
