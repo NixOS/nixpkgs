@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Enables SSO and Federation web applications written with any programming language or framework";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })
