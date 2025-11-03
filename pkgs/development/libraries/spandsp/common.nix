@@ -21,6 +21,7 @@
 {
   version,
   src,
+  patches ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/freeswitch/spandsp/commit/1f810894804d3fa61ab3fc2f3feb0599145a3436.patch";
       hash = "sha256-Cf8aaoriAvchh5cMb75yP2gsZbZaOLha/j5mq3xlkVA=";
     })
-  ];
+
+    # https://github.com/freeswitch/spandsp/pull/110
+    ./Check-for-feenableexcept-explicitly.patch
+
+    # https://github.com/freeswitch/spandsp/pull/111
+    ./Fix-tests-pcap_parse-build-on-musl.patch
+  ]
+  ++ patches;
 
   postPatch = ''
     patchShebangs autogen.sh
