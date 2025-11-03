@@ -8,19 +8,19 @@
 
 let
   pname = "psysh";
-  version = "0.12.7";
+  version = "0.12.14";
 
   src = fetchFromGitHub {
     owner = "bobthecow";
     repo = "psysh";
     tag = "v${version}";
-    hash = "sha256-dgMUz7lB1XoJ08UvF9XMZGVXYcFK9sNnSb+pcwfeoqQ=";
+    hash = "sha256-llQdcL950wQRdRGYh2WVUyhn2ODRubYN30ZIQxmlifk=";
   };
 
   composerLock = fetchurl {
     name = "composer.lock";
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/composer-v${version}.lock";
-    hash = "sha256-JYJksHKyKKhU248hLPaNXFCh3X+5QiT8iNKzeGc1ZPw=";
+    hash = "sha256-RNoR/bNj9688D8tRNA4yPi/RRSYoGrDoWY84yU8bbto=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
@@ -40,12 +40,12 @@ php.buildComposerProject2 (finalAttrs: {
 
     preBuild = ''
       composer config platform.php 7.4
-      composer require --no-update symfony/polyfill-iconv:1.31 symfony/polyfill-mbstring:1.31
+      composer require --no-update symfony/polyfill-iconv:1.33 symfony/polyfill-mbstring:1.33
       composer require --no-update --dev roave/security-advisories:dev-latest
       composer update --lock --no-install
     '';
 
-    vendorHash = "sha256-8l5bQ+VnLOtPUspMN1f+iXo7LldPTuYqyrAeW2aVoH8=";
+    vendorHash = "sha256-fHI6o/kAKIkaX7O482eyKB13EfvHr1gwTPvT1XgFs1w=";
   };
 
   doInstallCheck = true;
@@ -58,7 +58,5 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    # `composerVendor` doesn't build
-    broken = true;
   };
 })
