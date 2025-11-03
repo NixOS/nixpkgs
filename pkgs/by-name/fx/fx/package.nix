@@ -4,6 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -29,6 +31,15 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/fx --comp fish) \
       --zsh <($out/bin/fx --comp zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     changelog = "https://github.com/antonmedv/fx/releases/tag/${finalAttrs.src.tag}";
