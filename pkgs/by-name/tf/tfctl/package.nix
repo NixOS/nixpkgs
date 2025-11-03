@@ -24,7 +24,6 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ kubectl ];
 
   patchPhase = ''
     substituteInPlace tfctl/break_glass.go \
