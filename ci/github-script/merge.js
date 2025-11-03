@@ -10,13 +10,15 @@ function runChecklist({
   user,
   userIsMaintainer,
 }) {
-  const allByName = files.every(({ filename }) =>
-    filename.startsWith('pkgs/by-name/'),
+  const allByName = files.every(
+    ({ filename }) =>
+      filename.startsWith('pkgs/by-name/') && filename.split('/').length > 4,
   )
 
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
     .map(({ filename }) => filename.split('/')[3])
+    .filter(Boolean)
 
   const eligible = !packages.length
     ? new Set()
@@ -34,20 +36,22 @@ function runChecklist({
           // bad code between the approval and the merge.
           commit_id === pull_request.head.sha,
       )
-      .map(({ user }) => user.id),
+      .map(({ user }) => user?.id)
+      // Some users have been deleted, so filter these out.
+      .filter(Boolean),
   )
 
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
-    'PR touches only packages in `pkgs/by-name/`.': allByName,
+    'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
       'Approved by a committer.': committers.intersection(approvals).size > 0,
-      'Authored by a committer.': committers.has(pull_request.user.id),
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a committer.': committers.has(pull_request.user.id),
+      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
     },
   }
 
@@ -158,12 +162,14 @@ async function handleMerge({
   )
 
   const comments = events.slice(lastPush + 1).filter(
-    ({ event, body, node_id }) =>
+    ({ event, body, user, node_id }) =>
       ['commented', 'reviewed'].includes(event) &&
       hasMergeCommand(body) &&
+      // Ignore comments where the user has been deleted already.
+      user &&
       // Ignore comments which had already been responded to by the bot.
       !events.some(
-        ({ event, user, body }) =>
+        ({ event, body }) =>
           ['commented'].includes(event) &&
           // We're only testing this hidden reference, but not the author of the comment.
           // We'll just assume that nobody creates comments with this marker on purpose.
