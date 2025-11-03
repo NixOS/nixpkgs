@@ -473,6 +473,10 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+    ciflyr = with pkgs; [
+      cargo
+      rustc
+    ];
     interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
@@ -1909,6 +1913,10 @@ let
       postPatch = ''
         patchShebangs configure
       '';
+    });
+
+    ciflyr = old.ciflyr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     clarabel = old.clarabel.overrideAttrs (attrs: {
