@@ -19,6 +19,7 @@
   libbsd,
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
+  cmocka,
 }:
 let
   glibc' =
@@ -108,6 +109,11 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd
   '';
 
+  doCheck = true;
+  nativeCheckInputs = [
+    cmocka
+  ];
+
   postInstall = ''
     # Move the su binary into the su package
     mkdir -p $su/bin
@@ -129,6 +135,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/nologin";
+    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
   };
 }
