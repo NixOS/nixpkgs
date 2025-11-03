@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+      mdaniels5757
       thoughtpolice
     ];
     mainProgram = "hyperfine";
