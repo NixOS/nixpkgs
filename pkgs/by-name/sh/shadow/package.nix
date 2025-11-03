@@ -68,9 +68,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTcb tcb;
 
   patches = [
+    # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
+    # Avoid a chown during install to fix installation with tcb enabled
+    # Would have to be done as part of the NixOS modules,
+    # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
   ];
 
