@@ -15,7 +15,7 @@ let
       builtins.toJSON {
         name = "nix/plugin";
         description = "Nix Composer plugin";
-        license = "MIT";
+        license = lib.licenses.mit;
         require = {
           "${pluginName}" = "${pluginVersion}";
         };
