@@ -230,7 +230,7 @@ lib.extendMkDerivation {
 
     {
       name =
-        if pname != null && version != null then
+        if finalAttrs.pname or null != null && finalAttrs.version or null != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
         else if showURLs then
           "urls"
