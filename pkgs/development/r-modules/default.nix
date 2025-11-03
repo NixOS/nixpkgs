@@ -855,6 +855,10 @@ let
       cargo
       rustc
     ];
+    socratadata = with pkgs; [
+      cargo
+      rustc
+    ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -1968,6 +1972,10 @@ let
     });
 
     rbm25 = old.rbm25.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    socratadata = old.socratadata.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
