@@ -27,6 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4b0H3ZioiXFc4KCeQReobwQZJBl6Ep2/8JlRIwvq/hQ=";
   };
 
+  postPatch = ''
+    # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
+    export XDG_DOCUMENTS_DIR=$(mktemp -d)
+
+    # Required for CMake 4
+    # NOTE: libsamplerate is no longer used in Surge-XT, remove on package update
+    substituteInPlace libs/libsamplerate/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1..3.18)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -50,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSURGE_BUILD_LV2=TRUE"
   ];
 
-  CXXFLAGS = [
-    # GCC 13: error: 'uint32_t' has not been declared
-    "-include cstdint"
-  ];
-
   # JUCE dlopen's these at runtime, crashes without them
   NIX_LDFLAGS = (
     toString [
@@ -65,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-lXrandr"
     ]
   );
-
-  # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
-  postPatch = ''
-    export XDG_DOCUMENTS_DIR=$(mktemp -d)
-  '';
 
   meta = {
     description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
