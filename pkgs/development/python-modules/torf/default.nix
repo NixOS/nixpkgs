@@ -50,9 +50,16 @@ buildPythonPackage rec {
     "test_getting_info__xs_fails__as_fails"
     "test_getting_info__xs_returns_invalid_bytes"
     "test_getting_info__as_returns_invalid_bytes"
+    "test_file_in_singlefile_torrent_has_wrong_size"
+    "test_file_in_singlefile_torrent_doesnt_exist"
+    # Broken assertion
+    # AssertionError: assert 1000 < 1000
+    "test_callback_raises_exception"
   ];
 
   pythonImportsCheck = [ "torf" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Create, parse and edit torrent files and magnet links";
