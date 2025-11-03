@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsign2";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-SmrTMMHnB5r0K6zL9B2qJwyywFxUTidQDejnFsOTT4E=";
+    hash = "sha256-cjucecEg5ERPsiaDuGESf2u9RTYHpQmHwWPnx1ask0I=";
   };
 
-  cargoHash = "sha256-eWPZROftFA0pTgFDl4AuUP5yO863ar+HAcjCRk5c+cA=";
+  cargoHash = "sha256-pVEv7FST/jm4YNoU8T48/an2MsqboHXc+PMPYf13pKQ=";
 
   meta = with lib; {
     description = "Command-line tool to sign files and verify signatures";
