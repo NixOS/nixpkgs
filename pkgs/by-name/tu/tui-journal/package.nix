@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
     changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
     license = licenses.mit;
-    maintainers = [ ];
     mainProgram = "tjournal";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 }
