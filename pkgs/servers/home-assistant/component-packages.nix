@@ -3282,7 +3282,8 @@
       ];
     "libre_hardware_monitor" =
       ps: with ps; [
-      ]; # missing inputs: librehardwaremonitor-api
+        librehardwaremonitor-api
+      ];
     "lidarr" =
       ps: with ps; [
         aiopyarr
@@ -7450,6 +7451,7 @@
     "lg_netcast"
     "lg_soundbar"
     "lg_thinq"
+    "libre_hardware_monitor"
     "lidarr"
     "life360"
     "lifx"
