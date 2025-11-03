@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/adaszko/complgen";
     changelog = "https://github.com/adaszko/complgen/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

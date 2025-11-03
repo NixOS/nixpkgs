@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/twitchax/rtz";
     changelog = "https://github.com/twitchax/rtz/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rtz";
   };
 }

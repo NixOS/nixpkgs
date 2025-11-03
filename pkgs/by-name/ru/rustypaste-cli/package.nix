@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/rustypaste-cli";
     changelog = "https://github.com/orhun/rustypaste-cli/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rpaste";
   };
 }

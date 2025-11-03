@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/milo123459/glitter";
     changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "glitter";
   };
 }

@@ -46,7 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/Byron/dua-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
-      figsoda
       killercup
       defelo
     ];

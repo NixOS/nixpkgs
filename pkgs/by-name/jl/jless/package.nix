@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       jfchevrette
     ];
   };

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/bahdotsh/wrkflw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       FKouhai
       tebriel
     ];

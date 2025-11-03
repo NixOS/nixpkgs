@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-motd/rust-motd";
     changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rust-motd";
   };
 }

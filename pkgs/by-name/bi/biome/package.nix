@@ -63,7 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/biomejs/biome/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       isabelroses
       wrbbz
     ];

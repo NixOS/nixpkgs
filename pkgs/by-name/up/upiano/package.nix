@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Piano in your terminal";
     homepage = "https://github.com/eliasdorneles/upiano";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "upiano";
   };
 }

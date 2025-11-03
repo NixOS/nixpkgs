@@ -59,7 +59,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "btm";
     maintainers = with lib.maintainers; [
       berbiche
-      figsoda
       gepbird
     ];
   };
