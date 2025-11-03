@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   systemd,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +34,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   stripAllList = [ "bin" ];
+
+  passthru.tests = {
+    inherit (nixosTests) nix-store-veritysetup;
+  };
 
   meta = with lib; {
     description = "Systemd unit generator for a verity protected Nix Store";
