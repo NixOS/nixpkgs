@@ -937,6 +937,10 @@ let
     ];
     units = [ pkgs.udunits ];
     unigd = [ pkgs.pkg-config ];
+    unsum = with pkgs; [
+      cargo
+      rustc
+    ];
     vdiffr = [ pkgs.libpng.dev ];
     V8 = [ pkgs.nodejs.libv8 ];
     XBRL = with pkgs; [
@@ -2016,6 +2020,10 @@ let
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
       ];
+    });
+
+    unsum = old.unsum.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     vapour = old.vapour.overrideAttrs (attrs: {
