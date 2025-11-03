@@ -27,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish share/fish/pizauth.fish
 
     installManPage pizauth.1 pizauth.conf.5
+
+    substituteInPlace lib/systemd/user/pizauth.service \
+      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
+    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
   '';
 
   passthru.updateScript = nix-update-script { };
