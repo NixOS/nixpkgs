@@ -25747,12 +25747,6 @@
     githubId = 102452;
     name = "Niclas Thall";
   };
-  thammers = {
-    email = "jawr@gmx.de";
-    github = "tobias-hammerschmidt";
-    githubId = 2543259;
-    name = "Tobias Hammerschmidt";
-  };
   thanegill = {
     email = "me@thanegill.com";
     github = "thanegill";
