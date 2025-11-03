@@ -45,10 +45,12 @@ let
     (lib.getDev cuda_cccl) # <thrust/*>
     (lib.getDev libcublas) # cublas_v2.h
     (lib.getLib libcublas)
+    (lib.getInclude libcublas) # cublasLt.h
     libcurand
     libcusolver # cusolverDn.h
     (lib.getDev libcusparse) # cusparse.h
     (lib.getLib libcusparse) # cusparse.h
+    (lib.getInclude libcusparse) # cusparse.h
     (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
   ];
 
