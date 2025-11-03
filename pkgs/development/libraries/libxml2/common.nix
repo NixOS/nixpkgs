@@ -49,7 +49,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
-  patches = [ ] ++ extraPatches;
+  patches = [ ] ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch ++ extraPatches;
 
   strictDeps = true;
 
