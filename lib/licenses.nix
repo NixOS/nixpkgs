@@ -988,6 +988,11 @@ lib.mapAttrs mkLicense (
       fullName = "CMU License";
     };
 
+    mit-enna = {
+      spdxId = "MIT-enna";
+      fullName = "enna License";
+    };
+
     mit-feh = {
       spdxId = "MIT-feh";
       fullName = "feh License";
