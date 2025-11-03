@@ -609,6 +609,7 @@ let
       cargo
       rustc
     ];
+    libdeflate = [ pkgs.cmake ];
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
@@ -2125,6 +2126,10 @@ let
 
     HilbertVisGUI = old.HilbertVisGUI.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
+    });
+
+    libdeflate = old.libdeflate.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     MANOR = old.MANOR.overrideAttrs (attrs: {
