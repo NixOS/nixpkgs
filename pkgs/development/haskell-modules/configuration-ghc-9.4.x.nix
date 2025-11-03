@@ -138,7 +138,7 @@ self: super: {
   path = self.path_0_9_5;
 
   haskell-language-server =
-    lib.throwIf config.allowAliases
+    lib.throwIf pkgs.config.allowAliases
       "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
       (markBroken super.haskell-language-server);
 
