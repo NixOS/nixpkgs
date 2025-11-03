@@ -13,8 +13,8 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
+  xorg,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rusty-path-of-building";
   version = "0.2.7";
@@ -66,6 +66,9 @@ rustPlatform.buildRustPackage rec {
           libxkbcommon
           vulkan-loader
           wayland
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
         ]
       }
 
