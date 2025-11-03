@@ -314,6 +314,10 @@ assertNoAdditions {
     };
   });
 
+  blink-cmp-env = super.blink-cmp-env.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-yanky = super.blink-cmp-yanky.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };

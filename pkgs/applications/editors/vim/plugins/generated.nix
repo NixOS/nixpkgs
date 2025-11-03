@@ -1609,6 +1609,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-env = buildVimPlugin {
+    pname = "blink-cmp-env";
+    version = "2025-09-13";
+    src = fetchFromGitHub {
+      owner = "bydlw98";
+      repo = "blink-cmp-env";
+      rev = "99af62c1f9aa46005e8f50ad4ccee581946546ca";
+      sha256 = "1wad8v0av1lfcfm8i07351n3zq41xil1fhfm8yj6kg96bk7cwk0c";
+    };
+    meta.homepage = "https://github.com/bydlw98/blink-cmp-env/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-git = buildVimPlugin {
     pname = "blink-cmp-git";
     version = "2025-10-09";
