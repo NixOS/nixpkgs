@@ -7,6 +7,7 @@
   chunkSize,
   myChunk,
   includeBroken,
+  includeInsecure,
   systems,
   extraNixpkgsConfigJson,
 }:
@@ -17,7 +18,7 @@ let
 
   unfiltered = import ./outpaths.nix {
     inherit path;
-    inherit includeBroken systems;
+    inherit includeBroken includeInsecure systems;
     extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
   };
 

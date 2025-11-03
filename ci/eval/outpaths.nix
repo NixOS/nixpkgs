@@ -4,6 +4,7 @@
 
 {
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
+  includeInsecure ? true, # set this to false to exclude packages marked as insecure from the output
   path ? ./../..,
 
   # used by ./attrpaths.nix
@@ -29,7 +30,7 @@ let
             allowAliases = false;
             allowBroken = includeBroken;
             allowUnfree = true;
-            allowInsecurePredicate = x: true;
+            allowInsecurePredicate = x: includeInsecure;
             allowVariants = !attrNamesOnly;
             checkMeta = true;
 

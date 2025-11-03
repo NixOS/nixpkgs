@@ -26,6 +26,8 @@
   quickTest ? false,
   # Don't try to eval packages marked as broken.
   includeBroken ? false,
+  # Don't try to eval packages marked as insecure.
+  includeInsecure ? true,
   # Customize the config used to evaluate nixpkgs
   extraNixpkgsConfig ? { },
 }:
@@ -123,6 +125,7 @@ let
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --arg includeInsecure ${lib.boolToString includeInsecure} \
           --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
