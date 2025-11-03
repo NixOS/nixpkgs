@@ -5268,6 +5268,7 @@ with pkgs;
   inherit (ocamlPackages)
     ocamlformat # latest version
     ocamlformat_0_27_0
+    ocamlformat_0_28_1
     ;
 
   inherit (ocamlPackages) odig;

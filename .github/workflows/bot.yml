@@ -7,7 +7,7 @@ name: Bot
 
 on:
   schedule:
-    - cron: '07,17,27,37,47,57 * * * *'
+    - cron: '05,15,25,35,45,55 * * * *'
   workflow_call:
     inputs:
       headBranch:
