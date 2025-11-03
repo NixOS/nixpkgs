@@ -36,6 +36,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/antonmedv/fx";
     license = lib.licenses.mit;
     mainProgram = "fx";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 })
