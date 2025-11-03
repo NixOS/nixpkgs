@@ -966,8 +966,6 @@ with pkgs;
 
   ### TOOLS
 
-  _3llo = callPackage ../tools/misc/3llo { };
-
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
   acquire = with python3Packages; toPythonApplication acquire;
