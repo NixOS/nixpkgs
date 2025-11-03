@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  gitUpdater,
   cmake,
   pkg-config,
   alsa-lib,
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
-    tag = "release_xt_${finalAttrs.version}";
+    tag = "${finalAttrs.finalPackage.passthru.rev-prefix}${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-4b0H3ZioiXFc4KCeQReobwQZJBl6Ep2/8JlRIwvq/hQ=";
   };
@@ -85,6 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
       "-lXrandr"
     ]
   );
+
+  passthru = {
+    rev-prefix = "release_xt_";
+    updateScript = gitUpdater {
+      inherit (finalAttrs.finalPackage.passthru) rev-prefix;
+    };
+  };
 
   meta = {
     description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
