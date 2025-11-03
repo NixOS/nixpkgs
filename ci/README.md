@@ -43,7 +43,7 @@ These issues effectively list PRs the merge bot has interacted with.
 To ensure security and a focused utility, the bot adheres to specific limitations:
 
 - The PR targets one of the [development branches](#branch-classification).
-- The PR only touches packages located under `pkgs/by-name/*`.
+- The PR only touches files of packages located under `pkgs/by-name/*`.
 - The PR is either:
   - approved by a [committer][@NixOS/nixpkgs-committers].
   - authored by a [committer][@NixOS/nixpkgs-committers].
