@@ -1,0 +1,14 @@
+--- a/m4/boost.m4
++++ b/m4/boost.m4
+@@ -203,6 +203,11 @@
+       fi
+     done
+     done
++
++if test "x$boost" != x && test x"$boost_cv_inc_path" = xno ; then
++  boost_cv_inc_path="$boost/include"
++fi
++
+ AC_LANG_POP([C++])dnl
+     ])
+     case $boost_cv_inc_path in #(

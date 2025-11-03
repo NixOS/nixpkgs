@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchurl,
   autoreconfHook,
   pkg-config,
   boost,
@@ -13,15 +13,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
-  version = "3.0.1";
+  version = "3.3.1";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    rev = version;
-    sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
+  src = fetchurl {
+    url = "https://shibboleth.net/downloads/c++-opensaml/${finalAttrs.version}/opensaml-${finalAttrs.version}.tar.gz";
+    hash = "sha256-nQcW1S1PFOU7GxneSZOH4iNe+BFej+yhuhKk4v1Q0EY=";
   };
+
+  patches = [ ./fix-boost-detection.patch ]; # Fix Boost include path detection
 
   buildInputs = [
     boost
@@ -37,18 +38,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  preConfigure = ''
+    export boost="${boost}"
+  '';
+
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    homepage = "https://shibboleth.net/products/opensaml-cpp.html";
+  meta = {
+    homepage = "https://shibboleth.atlassian.net/wiki/spaces/SP3/pages/2067398807/OpenSAML-C";
     description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
     mainProgram = "samlsign";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
