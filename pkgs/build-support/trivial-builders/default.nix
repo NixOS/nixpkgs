@@ -128,6 +128,7 @@ rec {
           inherit
             text
             executable
+            destination
             checkPhase
             allowSubstitutes
             preferLocalBuild
@@ -148,7 +149,7 @@ rec {
         ]
       )
       ''
-        target=$out${lib.escapeShellArg destination}
+        target=$out$destination
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
