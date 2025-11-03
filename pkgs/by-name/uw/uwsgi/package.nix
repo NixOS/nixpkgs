@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
   # the hack works in coordination with ./additional-php-ldflags.patch
-  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (lib.elem "php" needed) (
+  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (lib.any (x: x.name == "php") needed) (
     lib.concatStringsSep "," [
       "-Wl"
       "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString (lib.elem "php" needed) ''
+  postFixup = lib.optionalString (lib.any (x: x.name == "php") needed) ''
     wrapProgram $out/bin/uwsgi --set PHP_INI_SCAN_DIR ${php-embed}/lib
   '';
 
