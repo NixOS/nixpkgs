@@ -5,6 +5,7 @@
   pkg-config,
   libgit2,
   zlib,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,6 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     zlib
   ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Your journal app if you live in a terminal";
