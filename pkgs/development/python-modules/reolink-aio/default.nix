@@ -6,23 +6,20 @@
   fetchFromGitHub,
   orjson,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.16.2";
+  version = "0.16.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "reolink_aio";
     tag = version;
-    hash = "sha256-Vkjt+/dG9m3sf9sQM++I+IgWdsBe338VjqoVr2pD3C0=";
+    hash = "sha256-lfkQtVnaEge6Upvd73fqBtXf5NQIq7vhTP4IOwWjNBw=";
   };
 
   build-system = [ setuptools ];
