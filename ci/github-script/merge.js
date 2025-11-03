@@ -10,13 +10,15 @@ function runChecklist({
   user,
   userIsMaintainer,
 }) {
-  const allByName = files.every(({ filename }) =>
-    filename.startsWith('pkgs/by-name/'),
+  const allByName = files.every(
+    ({ filename }) =>
+      filename.startsWith('pkgs/by-name/') && filename.split('/').length > 4,
   )
 
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
     .map(({ filename }) => filename.split('/')[3])
+    .filter(Boolean)
 
   const eligible = !packages.length
     ? new Set()
@@ -40,14 +42,14 @@ function runChecklist({
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
-    'PR touches only packages in `pkgs/by-name/`.': allByName,
+    'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
       'Approved by a committer.': committers.intersection(approvals).size > 0,
-      'Authored by a committer.': committers.has(pull_request.user.id),
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a committer.': committers.has(pull_request.user.id),
+      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
     },
   }
 
