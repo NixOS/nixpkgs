@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "robin-map";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Tessil";
     repo = "robin-map";
     tag = "v${version}";
-    hash = "sha256-Hkgxiq2i0TuqMK/bI5OMOn3LkmSE40NimDjK1FBZpsA=";
+    hash = "sha256-jCkwwpAQj+mlZ81g+3H4w1Ofw4O6NZqDwVeGO5e+J7Q=";
   };
 
   nativeBuildInputs = [
