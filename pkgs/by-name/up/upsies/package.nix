@@ -115,11 +115,11 @@ python3Packages.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
     homepage = "https://upsies.readthedocs.io/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "upsies";
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }
