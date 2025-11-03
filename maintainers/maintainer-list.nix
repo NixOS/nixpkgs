@@ -580,6 +580,11 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adamecooper = {
+    github = "adamecooper";
+    githubId = 155130052;
+    name = "Adam Cooper";
+  };
   adamjhf = {
     github = "adamjhf";
     githubId = 50264672;
