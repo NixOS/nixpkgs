@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-multipath=${toString numMultipath}"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
-    "--localstatedir=/run/frr"
+    "--localstatedir=/var"
     "--sbindir=${placeholder "out"}/libexec/frr"
     "--sysconfdir=/etc/frr"
     "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
