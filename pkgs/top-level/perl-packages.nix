@@ -33324,6 +33324,7 @@ with self;
       gotofile
     ];
     meta = {
+      changelog = "https://github.com/Test-More/Test2-Harness/blob/v${version}/Changes";
       description = "New and improved test harness with better Test2 integration";
       license = with lib.licenses; [
         artistic1
