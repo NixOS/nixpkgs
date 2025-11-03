@@ -34,7 +34,9 @@ function runChecklist({
           // bad code between the approval and the merge.
           commit_id === pull_request.head.sha,
       )
-      .map(({ user }) => user.id),
+      .map(({ user }) => user?.id)
+      // Some users have been deleted, so filter these out.
+      .filter(Boolean),
   )
 
   const checklist = {
@@ -158,12 +160,14 @@ async function handleMerge({
   )
 
   const comments = events.slice(lastPush + 1).filter(
-    ({ event, body, node_id }) =>
+    ({ event, body, user, node_id }) =>
       ['commented', 'reviewed'].includes(event) &&
       hasMergeCommand(body) &&
+      // Ignore comments where the user has been deleted already.
+      user &&
       // Ignore comments which had already been responded to by the bot.
       !events.some(
-        ({ event, user, body }) =>
+        ({ event, body }) =>
           ['commented'].includes(event) &&
           // We're only testing this hidden reference, but not the author of the comment.
           // We'll just assume that nobody creates comments with this marker on purpose.
