@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gumpu";
     repo = "ROBODoc";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Docs/makefile.am \
-      --replace 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
+      --replace-fail 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gumpu/ROBODoc";
     description = "Documentation Extraction Tool";
     longDescription = ''
@@ -56,8 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
       Shell Scripts, Assembler, COBOL, Occam, Postscript, Forth, Tcl/Tk, C++,
       Java -- basically any program in which you can use remarks/comments.
     '';
-    license = with licenses; gpl3Plus;
-    maintainers = [ ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ iedame ];
+    platforms = lib.platforms.all;
+    mainProgram = "robodoc";
   };
 })
