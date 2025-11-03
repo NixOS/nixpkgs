@@ -425,6 +425,10 @@ let
       cmake
       which
     ];
+    astgrepr = with pkgs; [
+      cargo
+      rustc
+    ];
     audio = [ pkgs.portaudio ];
     BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
@@ -1824,6 +1828,10 @@ let
     });
 
     arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    astgrepr = old.astgrepr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
