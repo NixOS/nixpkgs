@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   # lua54 implies lua52/lua53
   features ? [
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
