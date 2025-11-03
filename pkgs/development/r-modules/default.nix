@@ -523,6 +523,10 @@ let
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
+    gadjid = with pkgs; [
+      cargo
+      rustc
+    ];
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools =
@@ -1944,6 +1948,10 @@ let
         substituteInPlace "src/segment.c" \
         --replace-fail "Calloc" "R_Calloc"
       '';
+    });
+
+    gadjid = old.gadjid.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     genoCN = old.genoCN.overrideAttrs (attrs: {
