@@ -2,14 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  filelock,
+
+  # build-system
   poetry-core,
+
+  # optional dependencies
+  filelock,
   psycopg,
   psycopg-pool,
+  redis,
+
+  # test
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
-  redis,
   redisTestHook,
 }:
 
@@ -56,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
     changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }
