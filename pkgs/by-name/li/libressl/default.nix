@@ -139,8 +139,8 @@ in
   };
 
   libressl_4_1 = generic {
-    version = "4.1.1";
-    hash = "sha256-x/96fWddX1dzCUDlzP8dvi3NW3QFtTl+D3/9ZqXtVnk=";
+    version = "4.1.2";
+    hash = "sha256-+6Ti+ip/UjBt96OJlwoQ6YuX6w7bKZqf252/SZmcYeE=";
     # Fixes build on loongarch64
     # https://github.com/libressl/portable/pull/1184
     postPatch = ''
@@ -158,8 +158,8 @@ in
   };
 
   libressl_4_2 = generic {
-    version = "4.2.0";
-    hash = "sha256-D326RNfLjfjVPyz78ZVSVLwSjgCJWV8aui+s+u6ECLI=";
+    version = "4.2.1";
+    hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
       common-cmake-install-full-dirs-patch
     ];
