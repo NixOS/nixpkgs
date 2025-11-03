@@ -23,7 +23,7 @@
 }:
 
 let
-  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs.override { isFuse3 = true; } else fuse3;
 in
 stdenv.mkDerivation rec {
   pname = "sshfs-fuse";
