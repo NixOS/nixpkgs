@@ -9864,6 +9864,52 @@ self: super: with self; {
 
   mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
 
+  mopidy = callPackage ../development/python-modules/mopidy { };
+
+  mopidy-bandcamp = callPackage ../development/python-modules/mopidy-bandcamp { };
+
+  mopidy-iris = callPackage ../development/python-modules/mopidy-iris { };
+
+  mopidy-jellyfin = callPackage ../development/python-modules/mopidy-jellyfin { };
+
+  mopidy-listenbrainz = callPackage ../development/python-modules/mopidy-listenbrainz { };
+
+  mopidy-local = callPackage ../development/python-modules/mopidy-local { };
+
+  mopidy-moped = callPackage ../development/python-modules/mopidy-moped { };
+
+  mopidy-mopify = callPackage ../development/python-modules/mopidy-mopify { };
+
+  mopidy-mpd = callPackage ../development/python-modules/mopidy-mpd { };
+
+  mopidy-mpris = callPackage ../development/python-modules/mopidy-mpris { };
+
+  mopidy-muse = callPackage ../development/python-modules/mopidy-muse { };
+
+  mopidy-musicbox-webclient = callPackage ../development/python-modules/mopidy-musicbox-webclient { };
+
+  mopidy-notify = callPackage ../development/python-modules/mopidy-notify { };
+
+  mopidy-podcast = callPackage ../development/python-modules/mopidy-podcast { };
+
+  mopidy-scrobbler = callPackage ../development/python-modules/mopidy-scrobbler { };
+
+  mopidy-somafm = callPackage ../development/python-modules/mopidy-somafm { };
+
+  mopidy-soundcloud = callPackage ../development/python-modules/mopidy-soundcloud { };
+
+  mopidy-spotify = callPackage ../development/python-modules/mopidy-spotify { };
+
+  mopidy-subidy = callPackage ../development/python-modules/mopidy-subidy { };
+
+  mopidy-tidal = callPackage ../development/python-modules/mopidy-tidal { };
+
+  mopidy-tunein = callPackage ../development/python-modules/mopidy-tunein { };
+
+  mopidy-youtube = callPackage ../development/python-modules/mopidy-youtube { };
+
+  mopidy-ytmusic = callPackage ../development/python-modules/mopidy-ytmusic { };
+
   mopidyapi = callPackage ../development/python-modules/mopidyapi { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
