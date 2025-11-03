@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildPackages,
+  libcxxStdenv,
   fetchurl,
   pkgsStatic,
   python3,
@@ -9,7 +9,6 @@
   bzip2,
   zlib,
   jitterentropy,
-  darwin,
   esdm,
   tpm2-tss,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
@@ -20,7 +19,7 @@
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   withTpm2 ? false,
   policy ? null,
-}:
+}@args:
 
 assert lib.assertOneOf "policy" policy [
   # no explicit policy is given. The defaults by the library are used
@@ -32,11 +31,10 @@ assert lib.assertOneOf "policy" policy [
   # only allow "modern" algorithms
   "modern"
 ];
-
 let
-  stdenv' = if static then buildPackages.libcxxStdenv else stdenv;
+  stdenv = if static then libcxxStdenv else args.stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.9.0";
   pname = "botan";
 
