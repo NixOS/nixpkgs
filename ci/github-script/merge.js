@@ -45,11 +45,11 @@ function runChecklist({
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
       'Approved by a committer.': committers.intersection(approvals).size > 0,
-      'Authored by a committer.': committers.has(pull_request.user.id),
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a committer.': committers.has(pull_request.user.id),
+      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
     },
   }
 
