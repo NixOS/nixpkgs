@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "samlsign";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })
