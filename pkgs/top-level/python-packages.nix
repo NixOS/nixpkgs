@@ -13624,6 +13624,8 @@ self: super: with self; {
 
   pymongo = callPackage ../development/python-modules/pymongo { };
 
+  pymongo-auth-aws = callPackage ../development/python-modules/pymongo-auth-aws { };
+
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
 
   pymonoprice = callPackage ../development/python-modules/pymonoprice { };
