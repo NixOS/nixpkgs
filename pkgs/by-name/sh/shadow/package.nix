@@ -77,6 +77,9 @@ stdenv.mkDerivation rec {
     # Would have to be done as part of the NixOS modules,
     # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
+    # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
+    # Can be removed after the next release
+    ./disable-xaprintf-test.patch
   ];
 
   postPatch = ''
