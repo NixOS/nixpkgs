@@ -92,12 +92,14 @@ let
       firefox-beta-unwrapped = linux;
       firefox-devedition = linux;
       firefox-devedition-unwrapped = linux;
+      freecad = linux;
       gimp = linux;
       gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;
       kdePackages.kdenlive = linux;
+      krita = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -146,6 +148,7 @@ let
         triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
+        opencv4Full = linux;
         opensfm = linux;
         pycuda = linux;
         pymc = linux;
