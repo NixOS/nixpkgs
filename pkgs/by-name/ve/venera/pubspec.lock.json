@@ -592,11 +592,12 @@
     "flutter_to_debian": {
       "dependency": "direct dev",
       "description": {
-        "name": "flutter_to_debian",
-        "sha256": "d23534407334b331ce20fbaa8395b9ecc255d0c047136b8998715f36933ee696",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "HEAD",
+        "resolved-ref": "3777c91b6b1cc0b7c03357c67ca216d4313c3db5",
+        "url": "https://github.com/venera-app/flutter_to_debian.git"
       },
-      "source": "hosted",
+      "source": "git",
       "version": "2.0.2"
     },
     "flutter_web_plugins": {
@@ -1400,15 +1401,15 @@
       "dependency": "direct main",
       "description": {
         "name": "zip_flutter",
-        "sha256": "c4d5a34c5803def866bc550926bb16fe89717c9b7304695d5b2ede30964eb8a8",
+        "sha256": "baecf8deb6bf53a50e5ab513707ab56cc0c25f5b43333aa56ef562e8e7057357",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.0.12"
+      "version": "0.0.13"
     }
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.5"
+    "flutter": ">=3.35.7"
   }
 }
