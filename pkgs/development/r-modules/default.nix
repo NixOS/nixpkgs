@@ -617,6 +617,7 @@ let
     KSgeneral = with pkgs; [ pkg-config ];
     kza = [ pkgs.fftw.dev ];
     leidenAlg = [ pkgs.gmp.dev ];
+    libimath = [ pkgs.cmake ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
     heck = with pkgs; [
@@ -2085,6 +2086,10 @@ let
 
     Cyclops = old.Cyclops.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
+    });
+
+    libimath = old.libimath.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     RcppParallel = old.RcppParallel.overrideAttrs (attrs: {
