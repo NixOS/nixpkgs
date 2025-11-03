@@ -12,6 +12,7 @@
   libtiff,
   openjpeg,
   gifsicle,
+  gettext,
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +26,14 @@ stdenv.mkDerivation {
     hash = "sha256-W/MQZ1WqoVMzyEd60rbvA8yieesDc/xfKqbYGZumi2U=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
+
   buildInputs = [
     freetype
     giflib
