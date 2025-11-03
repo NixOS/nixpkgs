@@ -697,6 +697,10 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
+    rbm25 = with pkgs; [
+      cargo
+      rustc
+    ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl ];
@@ -1961,6 +1965,10 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
+    });
+
+    rbm25 = old.rbm25.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     tok = old.tok.overrideAttrs (attrs: {
