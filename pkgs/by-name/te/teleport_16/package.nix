@@ -6,10 +6,10 @@
   extPatches ? [ ],
 }:
 buildTeleport {
-  version = "16.5.15";
-  hash = "sha256-DqNG6gl+KdjSbkE9Bwum8az8cLCSOmZwo9xpuWafHCA=";
-  vendorHash = "sha256-sZvRKLF2iZ3UpgGNUPuWMT7VTpnDa2uU0d1XjDKSmdo=";
-  pnpmHash = "sha256-8xnH9PkKz77whtq/LVYUjyG1Z1reRtW03Gv8sZ/1vww=";
+  version = "16.5.16";
+  hash = "sha256-b1jUr36KNgiZnA3QBo2blKxjK3Sy6S6Lrc/bzWsX20Q=";
+  vendorHash = "sha256-mcDybNt7Mr0HJW272Ulj1oWlfsH2kEp7rNyeonoIjf8=";
+  pnpmHash = "sha256-+vZXacdGkLvjYN1s0Z+/JiVjxiaOGJ3326PvWtFaFaI=";
   cargoHash = "sha256-04zykCcVTptEPGy35MIWG+tROKFzEepLBmn04mSbt7I=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
