@@ -1371,6 +1371,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y="
   },
+  "topicusonderwijs_octodns": {
+    "hash": "sha256-ji1XD2CoLpTf4slPJcADwpceWmr3a8l9v7043gKOl/s=",
+    "homepage": "https://registry.terraform.io/providers/topicusonderwijs/octodns",
+    "owner": "topicusonderwijs",
+    "repo": "terraform-provider-octodns",
+    "rev": "v1.1.2",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-Mn2K1xt2oB4F+3IuraKngB+3egGrxvzhthy1oLxGyCs="
+  },
   "trozz_pocketid": {
     "hash": "sha256-rUCjvJKLZE+cSsHZdntBF9WpZDtIkVkukmLGEvGVC8s=",
     "homepage": "https://registry.terraform.io/providers/Trozz/pocketid",
