@@ -2,13 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   flatbencode,
+
+  # test
   pytest-cov-stub,
   pytest-httpserver,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -48,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create, parse and edit torrent files and magnet links";
     homepage = "https://github.com/rndusr/torf";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }
