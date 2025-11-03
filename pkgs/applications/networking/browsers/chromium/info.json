@@ -825,8 +825,8 @@
         "hash": "sha256-sm5GWbkm3ua7EkCWTuY4TG6EXKe3asXTrH1APnNARJQ="
       },
       "ungoogled-patches": {
-        "rev": "142.0.7444.59-1",
-        "hash": "sha256-WlrUSUcV1kN2xWbOJO+VshELAgGhXInIDvZswrWYfsQ="
+        "rev": "142.0.7444.59-2",
+        "hash": "sha256-Cjcy6ohVNt2eAD+m4ZTbeoHH9i4znkdgN0ZaysU8Whk="
       },
       "npmHash": "sha256-i1eQ4YlrWSgY522OlFtGDDPmxE2zd1hDM03AzR8RafE="
     },
