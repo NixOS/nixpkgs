@@ -7,6 +7,7 @@ function runChecklist({
   pull_request,
   log,
   maintainers,
+  trusted_maintainers,
   user,
   userIsMaintainer,
 }) {
@@ -37,13 +38,20 @@ function runChecklist({
       .map(({ user }) => user.id),
   )
 
+  const trusted_eligible = trusted_maintainers.intersection(eligible)
+
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
       'Approved by a committer.': committers.intersection(approvals).size > 0,
+      'Approved by a trusted maintainer.':
+        trusted_eligible.intersection(approvals).size > 0,
       'Authored by a committer.': committers.has(pull_request.user.id),
+      'Authored by trusted maintainer.': trusted_eligible.has(
+        pull_request.user.id,
+      ),
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
@@ -143,6 +151,7 @@ async function handleMerge({
     return members[team_slug]
   }
   const committers = await getTeamMembers('nixpkgs-committers')
+  const trusted_maintainers = await getTeamMembers('nixpkgs-trusted-maintainers')
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
     ...context.repo,
@@ -266,6 +275,7 @@ async function handleMerge({
       pull_request,
       log,
       maintainers,
+      trusted_maintainers,
       user: comment.user,
       userIsMaintainer: await isMaintainer(comment.user.login),
     })
@@ -323,6 +333,7 @@ async function handleMerge({
     pull_request,
     log,
     maintainers,
+    trusted_maintainers,
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
