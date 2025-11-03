@@ -276,7 +276,7 @@ in
         description = "Redsocks";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${lib.getExe pkgs.redsocks} -c ${configfile}";
+        script = "${pkgs.redsocks}/bin/redsocks -c ${configfile}";
       };
 
       networking.firewall.extraCommands = iptables;

@@ -128,7 +128,7 @@ let
     }
   );
 in
-pkgs.recurseIntoAttrs rec {
+pkgs.lib.recurseIntoAttrs rec {
 
   inherit nmt;
 

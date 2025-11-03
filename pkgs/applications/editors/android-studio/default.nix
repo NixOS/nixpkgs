@@ -24,8 +24,8 @@ let
     sha256Hash = "sha256-l+bJ0AWIrJ3qNcKJWiE+onrl6ZpLb6YWFXE3HtIejUs=";
   };
   latestVersion = {
-    version = "2025.2.2.1"; # "Android Studio Otter 2 Feature Drop | 2025.2.2 Canary 1"
-    sha256Hash = "sha256-sSp9IpGpo7pE0x7C5wSmZiGKt2uLoUlNVh7NHF4j/N4=";
+    version = "2025.2.2.3"; # "Android Studio Otter 2 Feature Drop | 2025.2.2 Canary 3"
+    sha256Hash = "sha256-lhqGfHUSUJw4IQryJprqvJuGMUVHHem3xf7CeeZ7kCo=";
   };
 in
 {

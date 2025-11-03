@@ -80,13 +80,13 @@ in
     systemd.services.pdnsd = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      preStart = ''
+        mkdir -p "${cfg.cacheDir}"
+        touch "${cfg.cacheDir}/pdnsd.cache"
+        chown -R ${pdnsdUser}:${pdnsdGroup} "${cfg.cacheDir}"
+      '';
       description = "pdnsd";
       serviceConfig = {
-        ExecStartPre = [
-          "${lib.getExe' pkgs.coreutils "mkdir"} -p '${cfg.cacheDir}'"
-          "${lib.getExe' pkgs.coreutils "touch"} '${cfg.cacheDir}/pdnsd.cache'"
-          "${lib.getExe' pkgs.coreutils "chown"} -R ${pdnsdUser}:${pdnsdGroup} '${cfg.cacheDir}'"
-        ];
         ExecStart = "${pdnsd}/bin/pdnsd -c ${pdnsdConf}";
       };
     };

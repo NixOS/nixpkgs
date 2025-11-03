@@ -53,7 +53,6 @@
   ncurses,
   nixosTests,
   pkg-config,
-  recurseIntoAttrs,
   sigtool,
   sqlite,
   replaceVars,
@@ -496,7 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withNativeCompilation;
     inherit withTreeSitter;
     inherit withXwidgets;
-    pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
+    pkgs = lib.recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = {
       inherit (nixosTests) emacs-daemon;
       withPackages = callPackage ./build-support/wrapper-test.nix {

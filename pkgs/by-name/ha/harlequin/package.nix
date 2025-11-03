@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
-    hash = "sha256-jg29EEwPVTy1n6PYAxNqbyCsmmAxzRWD3vLCvvMd+6E=";
+    hash = "sha256-W/Za/k/XusZmPLiX4ER9XaQWG4jdkrIh7JualHeeqZM=";
   };
 
   pythonRelaxDeps = [

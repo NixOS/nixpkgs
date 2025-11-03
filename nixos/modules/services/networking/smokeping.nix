@@ -337,12 +337,12 @@ in
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
-        ExecStartPre = [
-          "${cfg.package}/bin/smokeping --check --config=${configPath}"
-          "${cfg.package}/bin/smokeping --static --config=${configPath}"
-        ];
         ExecStart = "${cfg.package}/bin/smokeping --config=/etc/smokeping.conf --nodaemon";
       };
+      preStart = ''
+        ${cfg.package}/bin/smokeping --check --config=${configPath}
+        ${cfg.package}/bin/smokeping --static --config=${configPath}
+      '';
     };
 
     systemd.tmpfiles.rules = [

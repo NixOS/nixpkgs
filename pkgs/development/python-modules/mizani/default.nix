@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "mizani";
     tag = "v${version}";
-    hash = "sha256-g7eGajqFLgFWxNKefuYVWF439zVohU8W1j3w91nblEY=";
+    hash = "sha256-LUustvdD+8J6xu4HrvdFlVHlPGnt+h/0ZvGH7ZiVBUY=";
   };
 
   build-system = [ setuptools-scm ];

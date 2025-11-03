@@ -60,6 +60,12 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
+  preConfigure = ''
+    substituteInPlace "CMakeLists.txt" \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12.2)' \
+                     'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
   ) "-I${libtirpc.dev}/include/tirpc";

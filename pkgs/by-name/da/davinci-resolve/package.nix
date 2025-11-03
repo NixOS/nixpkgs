@@ -5,13 +5,12 @@
   curl,
   runCommandLocal,
   unzip,
-  appimage-run,
+  appimageTools,
   addDriverRunpath,
   dbus,
   libGLU,
   xorg,
   buildFHSEnv,
-  buildFHSEnvChroot,
   bash,
   writeText,
   ocl-icd,
@@ -38,7 +37,7 @@ let
       version = "20.2.2";
 
       nativeBuildInputs = [
-        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
+        appimageTools.appimage-exec
         addDriverRunpath
         copyDesktopItems
         unzip
@@ -148,7 +147,7 @@ let
 
           mkdir -p $out
           test -e ${lib.escapeShellArg appimageName}
-          appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
+          appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
           mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
           runHook postInstall

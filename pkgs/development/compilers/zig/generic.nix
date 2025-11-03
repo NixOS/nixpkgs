@@ -145,9 +145,5 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
-    # Zig 0.15.1 fails some tests on x86_64-darwin thus we mark it broken
-    # see https://github.com/ziglang/zig/issues/24974
-    broken =
-      stdenv.hostPlatform.system == "x86_64-darwin" && lib.versionAtLeast finalAttrs.version "0.15";
   };
 })

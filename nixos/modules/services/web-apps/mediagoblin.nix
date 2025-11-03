@@ -310,6 +310,19 @@ in
       in
       {
         mediagoblin-celeryd = lib.recursiveUpdate serviceDefaults {
+          # we cannot change DEFAULT.data_dir inside mediagoblin.ini because of an annoying bug
+          # https://todo.sr.ht/~mediagoblin/mediagoblin/57
+          preStart = ''
+            cp --remove-destination ${
+              pkgs.writeText "mediagoblin.ini" (
+                lib.generators.toINI { } (lib.filterAttrsRecursive (n: v: n != "plugins") cfg.settings)
+                + "\n"
+                + lib.generators.toINI { mkKeyValue = mkSubSectionKeyValue 2; } {
+                  inherit (cfg.settings.mediagoblin) plugins;
+                }
+              )
+            } /var/lib/mediagoblin/mediagoblin.ini
+          '';
           serviceConfig = {
             Environment = [
               "CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery"
@@ -318,19 +331,6 @@ in
               "MEDIAGOBLIN_CONFIG=/var/lib/mediagoblin/mediagoblin.ini"
               "PASTE_CONFIG=${pasteConfig}"
             ];
-            # we cannot change DEFAULT.data_dir inside mediagoblin.ini because of an annoying bug
-            # https://todo.sr.ht/~mediagoblin/mediagoblin/57
-            ExecStartPre = ''
-              ${lib.getExe' pkgs.coreutils "cp"} --remove-destination ${
-                pkgs.writeText "mediagoblin.ini" (
-                  lib.generators.toINI { } (lib.filterAttrsRecursive (n: v: n != "plugins") cfg.settings)
-                  + "\n"
-                  + lib.generators.toINI { mkKeyValue = mkSubSectionKeyValue 2; } {
-                    inherit (cfg.settings.mediagoblin) plugins;
-                  }
-                )
-              } /var/lib/mediagoblin/mediagoblin.ini
-            '';
             ExecStart = "${lib.getExe' finalPackage "celery"} worker --loglevel=INFO";
           };
           unitConfig.Description = "MediaGoblin Celery";
@@ -345,15 +345,15 @@ in
             "mediagoblin-celeryd.service"
             "postgresql.target"
           ];
+          preStart = ''
+            cp --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini
+            ${lib.getExe' finalPackage "gmg"} dbupdate
+          '';
           serviceConfig = {
             Environment = [
               "CELERY_ALWAYS_EAGER=false"
               "GI_TYPELIB_PATH=${GI_TYPELIB_PATH}"
               "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
-            ];
-            ExecStartPre = [
-              "${lib.getExe' pkgs.coreutils "cp"} --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini"
-              "${lib.getExe' finalPackage "gmg"} dbupdate"
             ];
             ExecStart = "${lib.getExe' finalPackage "paster"} serve /var/lib/mediagoblin/paste.ini";
           };

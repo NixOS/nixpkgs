@@ -55,8 +55,10 @@ in
         "network-link-dummy0.service"
         "network-addresses-dummy0.service"
       ];
+      preStart = ''
+        /run/current-system/sw/bin/rm -fv /run/hologram.sock
+      '';
       serviceConfig = {
-        ExecStartPre = "/run/current-system/sw/bin/rm -fv /run/hologram.sock";
         ExecStart = "${pkgs.hologram}/bin/hologram-agent -debug -conf ${cfgFile} -port ${cfg.httpPort}";
       };
     };

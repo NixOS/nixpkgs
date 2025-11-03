@@ -3190,6 +3190,7 @@ assertNoAdditions {
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
+      "snacks.explorer.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -4090,8 +4091,9 @@ assertNoAdditions {
 
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
-      # Optional telescope integration
+      # Optional picker integration
       self.telescope-nvim
+      self.fzf-lua
     ];
   };
 

@@ -1,5 +1,4 @@
 {
-  lowPrio,
   pkgs,
   targetPackages,
   lib,
@@ -190,14 +189,14 @@ makeScopeWithSplicing' {
 
       clang-unwrapped = self.libclang;
 
-      llvm-manpages = lowPrio (
+      llvm-manpages = lib.lowPrio (
         self.libllvm.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot
         }
       );
 
-      clang-manpages = lowPrio (
+      clang-manpages = lib.lowPrio (
         self.libclang.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot
@@ -261,7 +260,7 @@ makeScopeWithSplicing' {
 
       lldb = callPackage ./lldb { };
 
-      lldb-manpages = lowPrio (
+      lldb-manpages = lib.lowPrio (
         self.lldb.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot

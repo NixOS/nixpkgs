@@ -19,17 +19,16 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-session-settings";
-  # Allow disabling x11 session
-  # nixpkgs-update: no auto update
-  version = "8.0.1-unstable-2025-09-15";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = "e708fd49356f145acd926d30683012d9488f0f9d";
-    hash = "sha256-wb9UUrEtwtmqtfNS2YPli99ZeY17UdJFQijTKs8mHn4=";
+    tag = finalAttrs.version;
+    hash = "sha256-mdfmCzR9ikXDlDc7FeOITsdbPbz+G66jUrl1BobY+g8=";
   };
 
   /*
@@ -91,4 +90,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     teams = [ teams.pantheon ];
   };
-}
+})

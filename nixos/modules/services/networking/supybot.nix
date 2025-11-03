@@ -104,12 +104,14 @@ in
       documentation = [ "https://limnoria.readthedocs.io/" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      preStart = ''
+        # This needs to be created afresh every time
+        rm -f '${cfg.stateDir}/supybot.cfg.bak'
+      '';
 
       startLimitIntervalSec = 5 * 60; # 5 min
       startLimitBurst = 1;
       serviceConfig = {
-        # This needs to be created afresh every time
-        ExecStartPre = "${lib.getExe' pkgs.coreutils "rm"} -f '${cfg.stateDir}/supybot.cfg.bak'";
         ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
         PIDFile = "/run/supybot.pid";
         User = "supybot";

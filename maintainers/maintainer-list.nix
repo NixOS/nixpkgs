@@ -6277,6 +6277,12 @@
     githubId = 19733;
     name = "Moritz Heidkamp";
   };
+  DerHalbGrieche = {
+    email = "vasilis12.manetas@gmail.com";
+    github = "DerHalbGrieche";
+    githubId = 77843198;
+    name = "Vasilis Manetas";
+  };
   DerickEddington = {
     email = "derick.eddington@pm.me";
     github = "DerickEddington";
@@ -7997,7 +8003,7 @@
   };
   euxane = {
     name = "euxane";
-    email = "r9uhdi.nixpkgs@euxane.net";
+    email = "r9uhdi.nixpkgs@euxane.eu";
     github = "pacien";
     githubId = 1449319;
   };
@@ -14106,7 +14112,7 @@
   };
   KunyaKud = {
     name = "KunyaKud";
-    email = "KunyaKud@proton.me";
+    email = "wafuu@posteo.net";
     github = "KunyaKud";
     githubId = 238898928;
   };
@@ -24211,6 +24217,11 @@
     githubId = 26260032;
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
+  };
+  skwig = {
+    name = "skwig";
+    github = "skwig";
+    githubId = 16136203;
   };
   skyesoss = {
     name = "Skye Soss";

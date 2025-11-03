@@ -143,7 +143,8 @@ in
       description = "xinetd server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${lib.getExe pkgs.xinetd} -syslog daemon -dontfork -stayalive -f ${configFile}";
+      path = [ pkgs.xinetd ];
+      script = "exec xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
     };
   };
 }

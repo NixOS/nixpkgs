@@ -1,16 +1,30 @@
-{ pkgs, callPackage }:
-
-with pkgs;
-
+{ pkgs }:
+let
+  inherit (pkgs) callPackages callPackage stdenv;
+  inherit (pkgs.lib)
+    recurseIntoAttrs
+    attrNames
+    pipe
+    hasPrefix
+    hasSuffix
+    filter
+    genAttrs
+    optionals
+    filterAttrs
+    meta
+    concatMapAttrs
+    optionalAttrs
+    ;
+  inherit (pkgs.lib.strings) toJSON;
+in
 {
   cc-wrapper =
-    with builtins;
     let
       pkgNames = (attrNames pkgs);
       llvmTests =
         let
-          pkgSets = lib.pipe pkgNames [
-            (filter (lib.hasPrefix "llvmPackages"))
+          pkgSets = pipe pkgNames [
+            (filter (hasPrefix "llvmPackages"))
             # Are aliases.
             (filter (n: n != "llvmPackages_latest"))
             (filter (n: n != "llvmPackages_9"))
@@ -23,7 +37,7 @@ with pkgs;
             (filter (n: n != "llvmPackages_16"))
             (filter (n: n != "llvmPackages_17"))
           ];
-          tests = lib.genAttrs pkgSets (
+          tests = genAttrs pkgSets (
             name:
             recurseIntoAttrs {
               clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -34,10 +48,10 @@ with pkgs;
         tests;
       gccTests =
         let
-          pkgSets = lib.pipe (attrNames pkgs) (
+          pkgSets = pipe (attrNames pkgs) (
             [
-              (filter (lib.hasPrefix "gcc"))
-              (filter (lib.hasSuffix "Stdenv"))
+              (filter (hasPrefix "gcc"))
+              (filter (hasSuffix "Stdenv"))
               (filter (n: n != "gccCrossLibcStdenv"))
               (filter (n: n != "gcc49Stdenv"))
               (filter (n: n != "gcc6Stdenv"))
@@ -49,7 +63,7 @@ with pkgs;
               (filter (n: n != "gcc12Stdenv"))
             ]
             ++
-              lib.optionals
+              optionals
                 (
                   !(
                     (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64)
@@ -57,11 +71,11 @@ with pkgs;
                   )
                 )
                 [
-                  (filter (n: !lib.hasSuffix "MultiStdenv" n))
+                  (filter (n: !hasSuffix "MultiStdenv" n))
                 ]
           );
         in
-        lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
+        genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
     in
     recurseIntoAttrs {
       default = callPackage ./cc-wrapper { };
@@ -70,9 +84,8 @@ with pkgs;
         name = "cc-wrapper-supported";
         builtGCC =
           let
-            inherit (lib) filterAttrs;
-            sets = lib.pipe gccTests [
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
+            sets = pipe gccTests [
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.stdenv.cc))
               # Broken
               (filterAttrs (n: _: n != "gccMultiStdenv"))
             ];
@@ -81,10 +94,9 @@ with pkgs;
 
         builtLLVM =
           let
-            inherit (lib) filterAttrs;
-            sets = lib.pipe llvmTests [
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
+            sets = pipe llvmTests [
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
             ];
           in
           toJSON sets;
@@ -105,12 +117,12 @@ with pkgs;
   hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix { });
   hardeningFlags-gcc = recurseIntoAttrs (
     callPackage ./cc-wrapper/hardening.nix {
-      stdenv = gccStdenv;
+      stdenv = pkgs.gccStdenv;
     }
   );
   hardeningFlags-clang = recurseIntoAttrs (
     callPackage ./cc-wrapper/hardening.nix {
-      stdenv = llvmPackages.stdenv;
+      stdenv = pkgs.llvmPackages.stdenv;
     }
   );
 
@@ -122,8 +134,8 @@ with pkgs;
 
   hooks = recurseIntoAttrs (callPackage ./hooks { });
 
-  cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
-  cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+  cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.gccMultiStdenv; };
+  cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.clangMultiStdenv; };
 
   compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
@@ -131,7 +143,7 @@ with pkgs;
   fetchtorrent = recurseIntoAttrs (callPackages ../build-support/fetchtorrent/tests.nix { });
   fetchpatch = recurseIntoAttrs (callPackages ../build-support/fetchpatch/tests.nix { });
   fetchpatch2 = recurseIntoAttrs (
-    callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; }
+    callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = pkgs.fetchpatch2; }
   );
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
@@ -199,7 +211,7 @@ with pkgs;
       # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
       # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
       sanitizers =
-        pkgs.lib.optionals (!(pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
+        optionals (!(pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
           [
             "undefined"
             "address"
@@ -215,12 +227,12 @@ with pkgs;
 
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
-    lib.concatMapAttrs (
+    concatMapAttrs (
       name: value:
-      lib.optionalAttrs (value ? passthru.tests) {
+      optionalAttrs (value ? passthru.tests) {
         ${name} = value.passthru.tests;
       }
-    ) arrayUtilities
+    ) pkgs.arrayUtilities
   );
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };

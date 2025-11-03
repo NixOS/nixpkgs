@@ -298,8 +298,10 @@ in
         Type = "oneshot";
         Group = "nginx";
         UMask = "026";
-        ExecStart = "${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r";
       };
+      script = ''
+        ${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r
+      '';
     };
 
     systemd.timers."render-bluemap-maps" = lib.mkIf cfg.enableRender {

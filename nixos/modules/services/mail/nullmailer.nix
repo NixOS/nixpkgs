@@ -245,13 +245,13 @@
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
+        preStart = ''
+          rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
+        '';
+
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          ExecStartPre = [
-            "${lib.getExe' pkgs.coreutils "rm"} -f /var/spool/nullmailer/trigger"
-            "${lib.getExe' pkgs.coreutils "mkfifo"} -m 660 /var/spool/nullmailer/trigger"
-          ];
           ExecStart = "${pkgs.nullmailer}/bin/nullmailer-send";
           Restart = "always";
         };

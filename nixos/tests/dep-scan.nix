@@ -31,16 +31,16 @@
     # the program will try to download them at runtime.
     # https://github.com/owasp-dep-scan/dep-scan/issues/443
     environment.etc."vdb/data.index.vdb6".source = pkgs.fetchurl {
-      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/72377024f9742c6e700a113fc7059b18f738081c/app-2y/data.index.vdb6";
-      hash = "sha256-/9RIL6KVwmUmcKteOhWlnzjtZzGUbmRzua5o4Z8Mu9I=";
+      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.index.vdb6";
+      hash = "sha256-UyE0xiLT0T4ygBdEvDi4VQW/vxwalN6YV9EJ9RoLYy4=";
     };
     environment.etc."vdb/data.vdb6".source = pkgs.fetchurl {
-      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/72377024f9742c6e700a113fc7059b18f738081c/app-2y/data.vdb6";
-      hash = "sha256-6gCftnjal9ZMXV+25fVANdJRuI/CN083OOnc8yA5TTw=";
+      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.vdb6";
+      hash = "sha256-k5QIowFD8H/hwaRz1p8RXlFEIrKjnFUtxtZTfD67B+U=";
     };
     environment.etc."vdb/vdb.meta".source = pkgs.fetchurl {
-      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/72377024f9742c6e700a113fc7059b18f738081c/app-2y/vdb.meta";
-      hash = "sha256-i0oI3ODrmm8PF9UGJ9gy9QzQ0SKjLo9DdqYX/kqoHak=";
+      url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/vdb.meta";
+      hash = "sha256-eQB0dHlNw31sKsRcVUByhIfuIN35+m3VAcBHIfusNPY=";
     };
     environment.variables = {
       VDB_HOME = "/tmp/vdb";

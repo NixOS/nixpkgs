@@ -307,8 +307,11 @@ in
           ]
           ++ lib.optionals (cfg.environmentFile != null) [ "peering-manager-config.service" ];
 
+          preStart = ''
+            ${pkg}/bin/peering-manager remove_stale_contenttypes --no-input
+          '';
+
           serviceConfig = {
-            ExecStartPre = "${pkg}/bin/peering-manager remove_stale_contenttypes --no-input";
             ExecStart = ''
               ${pkg.python.pkgs.gunicorn}/bin/gunicorn peering_manager.wsgi \
                 --bind ${cfg.listenAddress}:${toString cfg.port} \

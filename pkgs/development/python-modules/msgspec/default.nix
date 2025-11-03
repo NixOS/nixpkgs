@@ -3,7 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  attrs,
+  coverage,
+  furo,
+  ipython,
+  msgpack,
+  mypy,
+  pre-commit,
+  pyright,
+  pytest,
+  pyyaml,
   setuptools,
+  sphinx,
+  sphinx-copybutton,
+  sphinx-design,
+  tomli,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +40,36 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  optional-dependencies = {
+    dev = [
+      coverage
+      mypy
+      pre-commit
+      pyright
+    ]
+    ++ optional-dependencies.doc
+    ++ optional-dependencies.test;
+    doc = [
+      furo
+      ipython
+      sphinx
+      sphinx-copybutton
+      sphinx-design
+    ];
+    test = [
+      attrs
+      msgpack
+      pytest
+    ]
+    ++ optional-dependencies.yaml
+    ++ optional-dependencies.toml;
+    toml = [
+      tomli-w
+    ]
+    ++ lib.optional (pythonOlder 3.11) tomli;
+    yaml = [ pyyaml ];
+  };
 
   # Requires libasan to be accessible
   doCheck = false;

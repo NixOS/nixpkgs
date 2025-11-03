@@ -173,7 +173,6 @@ in
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
           MemoryAccounting = true;
-          CPUAccounting = true;
 
           ExecStart = "${pkgs.prefect}/bin/prefect server start --host ${cfg.host} --port ${toString cfg.port}";
           Restart = "always";
@@ -216,7 +215,6 @@ in
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
           MemoryAccounting = true;
-          CPUAccounting = true;
           ExecStart = ''
             ${pkgs.prefect}/bin/prefect worker start \
               --pool ${poolName} \

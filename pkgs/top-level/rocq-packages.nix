@@ -5,7 +5,6 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   ocamlPackages_4_14,
   fetchpatch,
   makeWrapper,
@@ -93,6 +92,6 @@ rec {
   rocqPackages_9_0 = mkRocqPackages rocq-core_9_0;
   rocqPackages_9_1 = mkRocqPackages rocq-core_9_1;
 
-  rocqPackages = recurseIntoAttrs rocqPackages_9_0;
+  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_0;
   rocq-core = rocqPackages.rocq-core;
 }

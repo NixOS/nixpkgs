@@ -342,7 +342,6 @@ in
         User = if (cfg.user == null) then "cyrus" else cfg.user;
         Group = if (cfg.group == null) then "cyrus" else cfg.group;
         Type = "simple";
-        ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p '${cfg.imapdSettings.configdirectory}/socket' '${cfg.tmpDBDir}' /run/cyrus/proc /run/cyrus/lock";
         ExecStart = "${cyrus-imapdPkg}/libexec/master -l $LISTENQUEUE -C /etc/imapd.conf -M /etc/cyrus.conf -p /run/cyrus/master.pid -D";
         Restart = "on-failure";
         RestartSec = "1s";
@@ -368,6 +367,9 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
       };
+      preStart = ''
+        mkdir -p '${cfg.imapdSettings.configdirectory}/socket' '${cfg.tmpDBDir}' /run/cyrus/proc /run/cyrus/lock
+      '';
     };
     environment.systemPackages = [ cyrus-imapdPkg ];
   };

@@ -1617,7 +1617,7 @@ let
         };
       };
 
-      ethersync.ethersync = callPackage ./ethersync.ethersync { };
+      teamtype.teamtype = callPackage ./teamtype.teamtype { };
 
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
@@ -1725,8 +1725,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.28.3";
-          hash = "sha256-rRJrzCle1/epqJL+gaUb3QZwrmdaLvagUwxRx1Aq1ZY=";
+          version = "0.29.0";
+          hash = "sha256-eAfWsIVAqRRfBNDZZq4SilqR48daY5IezjGULaU8AzU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2350,8 +2350,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.28.1";
-          hash = "sha256-JDrJAZB1QvLG/dXHOhg6VM8dgwEc1eV6BycoRfEQmuY=";
+          version = "7.28.3";
+          hash = "sha256-MUoYoElDVMZZHsUZ17fhfwZaHNAJ4j50lTqhhRw8EBI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2476,8 +2476,8 @@ let
         mktplcRef = {
           publisher = "jeff-hykin";
           name = "better-nix-syntax";
-          version = "2.2.3";
-          hash = "sha256-KhmkCMBWagi0JjZvupgaU7LA6hsGRE6SiHqdJlXyyX8=";
+          version = "2.3.0";
+          hash = "sha256-Zb4RFs2qkSMeQKkNXk4brrZBDiRK4e08taOOgdRWQEk=";
         };
         meta = {
           description = "Visual Studio Code extension providing Nix Syntax highlighting";
@@ -3641,8 +3641,8 @@ let
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.32.3";
-          hash = "sha256-KUzLrt7y3I6szpWVGk0NtBfXncw6ovNAkm1HyHj+MDk=";
+          version = "1.32.4";
+          hash = "sha256-ySJ6SLm+L2LPGbnus/skbk4WUPJ3VMXpCMEins3F8cc=";
         };
       };
 
@@ -4735,8 +4735,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.19.0";
-          hash = "sha256-jRwZD4TwLMdwBdV59HonMkF2ds4heXHPtpw1sxq1RsA=";
+          version = "0.20.0";
+          hash = "sha256-1o7v9lncnmYWr9FPEjQmamfNW/Lui9A0V+l7bCjn/hw=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";

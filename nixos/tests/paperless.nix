@@ -116,9 +116,9 @@
           assert "1 timers listed." in timers, "incorrect number of timers"
 
           # Double check that our attrset option override works as expected
-          cmdline = node.succeed("systemctl cat paperless-exporter | grep ExecStart | grep 'paperless-manage' | cut -f 2 -d=")
+          cmdline = node.succeed("grep 'paperless-manage' $(systemctl cat paperless-exporter | grep ExecStart | cut -f 2 -d=)")
           print(f"Exporter command line {cmdline!r}")
-          assert cmdline.strip().endswith("paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail"), "Unexpected exporter command line"
+          assert cmdline.strip() == "paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail", "Unexpected exporter command line"
 
     test_paperless(simple)
     simple.send_monitor_command("quit")

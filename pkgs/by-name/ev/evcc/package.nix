@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "0.209.4";
+  version = "0.209.6";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-MfTVLhU4AHvaQcJgdB7fQpY4C+wA0/VpeQ19gKnFTpI=";
+    hash = "sha256-WTfLnd2w9maCrCVHkJUZrry4LloiimNWZxRYVgHRyT8=";
   };
 
   vendorHash = "sha256-SVdoeioBtUa+V2n717ckYCQBFmYSXdi7ryRVfb9xKnY=";

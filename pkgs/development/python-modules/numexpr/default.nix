@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.11.0";
+  version = "2.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dbLAGk7aLnw1e8Z6P1w912UGwVtf1NxChF7y4YIYG60=";
+    hash = "sha256-S+ALEIbHt6XDLjFVgSK3uAJD/gmFebFwln2oPzFStIs=";
   };
 
   build-system = [

@@ -12,6 +12,17 @@
   config,
   overlays,
 }:
+let
+  # Add inherited lib functions only here, so they are not exported from pkgs
+  inherit (lib)
+    lowPrio
+    hiPrio
+    recurseIntoAttrs
+    dontRecurseIntoAttrs
+    makeOverridable
+    ;
+in
+
 res: pkgs: super:
 
 with pkgs;
@@ -31,6 +42,12 @@ with pkgs;
   # (earlier stages being the various `super` variables that precede
   # all-packages.nix)
   _type = "pkgs";
+
+  ### Helper functions.
+  inherit lib config overlays;
+
+  # For convenience, allow callers to get the path to Nixpkgs.
+  path = ../..;
 
   # A stdenv capable of building 32-bit binaries.
   # On x86_64-linux, it uses GCC compiled with multilib support; on i686-linux,
@@ -91,35 +108,13 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
-  # For convenience, allow callers to get the path to Nixpkgs.
-  path = ../..;
-
-  ### Helper functions.
-  inherit lib config overlays;
-
-  # do not import 'appendToName' to get consistent package-names with the same
-  # set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
-  inherit (lib) lowPrio hiPrio makeOverridable;
-
-  inherit (lib) recurseIntoAttrs;
-
-  # This is intended to be the reverse of recurseIntoAttrs, as it is
-  # defined now it exists mainly for documentation purposes, but you
-  # can also override this with recurseIntoAttrs to recurseInto all
-  # the Attrs which is useful for testing massive changes. Ideally,
-  # every package subset not marked with recurseIntoAttrs should be
-  # marked with this.
-  inherit (lib) dontRecurseIntoAttrs;
-
-  stringsWithDeps = lib.stringsWithDeps;
-
   ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = lib.recurseIntoAttrs (callPackages ../test { });
+  tests = recurseIntoAttrs (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
@@ -1313,10 +1308,6 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
-  dosbox = callPackage ../applications/emulators/dosbox {
-    SDL = if stdenv.hostPlatform.isDarwin then SDL else SDL_compat;
-  };
-
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
@@ -2185,7 +2176,7 @@ with pkgs;
 
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
-  nltk-data = lib.recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
+  nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
   seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
   seabios-csm = seabios.override { ___build-type = "csm"; };
@@ -3638,8 +3629,6 @@ with pkgs;
 
   sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
 
-  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
-
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
@@ -4071,11 +4060,7 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
-  tmuxPlugins = recurseIntoAttrs (
-    callPackage ../misc/tmux-plugins {
-      pkgs = pkgs.__splicedPackages;
-    }
-  );
+  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
   tpm2-totp-with-plymouth = tpm2-totp.override {
     withPlymouth = true;
@@ -4289,9 +4274,7 @@ with pkgs;
   yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
   yarn-berry_3 = yarn-berry.override { berryVersion = 3; };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea {
-    pkgs = pkgs.__splicedPackages;
-  };
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { };
 
   inherit (yarn2nix-moretea)
     yarn2nix
@@ -4505,7 +4488,6 @@ with pkgs;
   flutter335 = flutterPackages.v3_35;
   flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
-  flutter327 = flutterPackages.v3_27;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -4993,7 +4975,6 @@ with pkgs;
   idrisPackages = recurseIntoAttrs (
     callPackage ../development/idris-modules {
       idris-no-deps = haskellPackages.idris;
-      pkgs = pkgs.__splicedPackages;
     }
   );
 
@@ -5555,7 +5536,7 @@ with pkgs;
   cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
 
   # Below, the classic self-bootstrapping process
-  cbqn-bootstrap = lib.dontRecurseIntoAttrs {
+  cbqn-bootstrap = dontRecurseIntoAttrs {
     # Use clang to compile CBQN if we aren't already.
     # CBQN's upstream primarily targets and tests clang which means using gcc
     # will result in slower binaries and on some platforms failing/broken builds.
@@ -5984,11 +5965,13 @@ with pkgs;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
 
   inherit (callPackages ../applications/networking/cluster/spark { })
+    spark_4_0
     spark_3_5
     spark_3_4
     ;
   spark3 = spark_3_5;
-  spark = spark3;
+  spark4 = spark_4_0;
+  spark = spark_4_0;
 
   inherit
     ({
@@ -6296,7 +6279,7 @@ with pkgs;
       null;
   bintoolsNoLibc = wrapBintoolsWith {
     bintools = bintools-unwrapped;
-    libc = targetPackages.preLibcHeaders;
+    libc = targetPackages.preLibcHeaders or preLibcHeaders;
   };
   bintools = wrapBintoolsWith {
     bintools = bintools-unwrapped;
@@ -8170,7 +8153,7 @@ with pkgs;
     nvidia-docker
     ;
 
-  nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
+  nvidia-vaapi-driver = hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
   nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
 
@@ -8841,8 +8824,6 @@ with pkgs;
   );
   agda = agdaPackages.agda;
 
-  ### DEVELOPMENT / LIBRARIES / BASH
-
   ### DEVELOPMENT / LIBRARIES / JAVA
 
   saxonb = saxonb_8_8;
@@ -9263,13 +9244,13 @@ with pkgs;
   home-assistant = callPackage ../servers/home-assistant { };
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
-  home-assistant-custom-components = lib.recurseIntoAttrs (
+  home-assistant-custom-components = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit (home-assistant.python.pkgs) callPackage;
       directory = ../servers/home-assistant/custom-components;
     }
   );
-  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs (
+  home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.packagesFromDirectoryRecursive {
       inherit callPackage;
       directory = ../servers/home-assistant/custom-lovelace-modules;
@@ -9842,8 +9823,6 @@ with pkgs;
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
 
   zabbix = zabbix60;
-
-  ### SERVERS / GEOSPATIAL
 
   ### OS-SPECIFIC
 
@@ -10939,10 +10918,14 @@ with pkgs;
   emacsPackagesFor =
     emacs:
     import ./emacs-packages.nix {
-      inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
+      inherit lib;
       emacs' = emacs;
       pkgs' = pkgs; # default pkgs used for bootstrapping the emacs package set
     };
+
+  # emacsPackages is exposed on search.nixos.org.
+  # Also see pkgs/top-level/packages-config.nix
+  emacsPackages = dontRecurseIntoAttrs emacs.pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -10967,9 +10950,6 @@ with pkgs;
           evolution-ews
         ];
       };
-
-  fetchmail = callPackage ../applications/misc/fetchmail { };
-  fetchmail_7 = callPackage ../applications/misc/fetchmail/v7.nix { };
 
   firewalld-gui = firewalld.override { withGui = true; };
 
@@ -11003,7 +10983,7 @@ with pkgs;
       python = python3;
     };
   };
-  gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
+  gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
   goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
@@ -11681,7 +11661,7 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magnetophonDSP = lib.recurseIntoAttrs {
+  magnetophonDSP = recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
     ConstantDetuneChorus = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
@@ -11937,7 +11917,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  open-music-kontrollers = lib.recurseIntoAttrs {
+  open-music-kontrollers = recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
     mephisto = callPackage ../applications/audio/open-music-kontrollers/mephisto.nix { };
@@ -12568,7 +12548,7 @@ with pkgs;
   # more usecases when wrapping neovim. The interface is being actively worked on
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
-  wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
+  wrapNeovim = neovim-unwrapped: makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
     lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
   };
@@ -13006,18 +12986,6 @@ with pkgs;
 
   vanillara = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillara"; };
 
-  ### GAMES/DOOM-PORTS
-
-  enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
-
-  zandronum = callPackage ../games/doom-ports/zandronum { };
-
-  zandronum-server = zandronum.override {
-    serverOnly = true;
-  };
-
-  fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
-
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
@@ -13182,8 +13150,6 @@ with pkgs;
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
-  legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
@@ -13245,8 +13211,6 @@ with pkgs;
 
   papermc = papermcServers.papermc;
 
-  path-of-building = qt6Packages.callPackage ../games/path-of-building { };
-
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
@@ -13269,8 +13233,6 @@ with pkgs;
     quake3demo-hires
     quake3hires
     ;
-
-  vkquake = callPackage ../by-name/qu/quakespasm/vulkan.nix { };
 
   rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
@@ -13528,10 +13490,6 @@ with pkgs;
     libxc = pkgs.libxc_7;
   };
 
-  ### SCIENCE/GEOMETRY
-
-  ### SCIENCE/BENCHMARK
-
   ### SCIENCE/BIOLOGY
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
@@ -13657,6 +13615,7 @@ with pkgs;
   gromacsDouble = lowPrio (
     gromacs.override {
       singlePrec = false;
+      enableCuda = false; # CUDA is only implemented for single precision
       fftw = fftw;
     }
   );
@@ -13664,6 +13623,7 @@ with pkgs;
   gromacsDoubleMpi = lowPrio (
     gromacs.override {
       singlePrec = false;
+      enableCuda = false; # CUDA is only implemented for single precision
       enableMpi = true;
       fftw = fftw;
     }
@@ -13678,8 +13638,6 @@ with pkgs;
     }
   );
 
-  ### SCIENCE/MEDICINE
-
   ### SCIENCE/PHYSICS
 
   mcfm = callPackage ../applications/science/physics/MCFM {
@@ -13691,8 +13649,6 @@ with pkgs;
   };
 
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
-
-  ### SCIENCE/PROGRAMMING
 
   ### SCIENCE/LOGIC
 
@@ -13831,8 +13787,6 @@ with pkgs;
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
-
-  ### SCIENCE / ENGINEERING
 
   ### SCIENCE / ELECTRONICS
 

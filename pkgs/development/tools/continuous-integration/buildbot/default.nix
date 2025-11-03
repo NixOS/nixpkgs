@@ -2,7 +2,6 @@
   lib,
   newScope,
   python3,
-  recurseIntoAttrs,
 }:
 # Take packages from self first, then python.pkgs (and secondarily pkgs)
 lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
@@ -14,7 +13,7 @@ lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
 
   buildbot = self.callPackage ./master.nix { };
 
-  buildbot-plugins = recurseIntoAttrs (self.callPackage ./plugins.nix { });
+  buildbot-plugins = lib.recurseIntoAttrs (self.callPackage ./plugins.nix { });
 
   buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
 

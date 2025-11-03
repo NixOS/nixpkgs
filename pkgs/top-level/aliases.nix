@@ -225,7 +225,7 @@ let
     if lib.isDerivation v then
       lib.warnOnInstantiate msg v
     else if lib.isAttrs v then
-      lib.mapAttrs (lib.warn msg) v
+      lib.mapAttrs (_: lib.warn msg) v
     else if lib.isFunction v then
       arg: lib.warn msg (v arg)
     else if lib.isList v then
@@ -246,14 +246,15 @@ mapAliases {
   llvmPackages_latest = llvmPackages_21;
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
   # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
-  clang18Stdenv = lowPrio llvmPackages_18.stdenv;
-  clang19Stdenv = lowPrio llvmPackages_19.stdenv;
+  clang18Stdenv = lib.lowPrio llvmPackages_18.stdenv;
+  clang19Stdenv = lib.lowPrio llvmPackages_19.stdenv;
 
   # Various to preserve
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
   elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve, reason: common typo
   fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
+  uclibc = uclibc-ng; # preserve, because uclibc-ng can't be used in config string
   wlroots = wlroots_0_19; # preserve, reason: wlroots is unstable, we must keep depending on 'wlroots_0_*', convert to package after a stable(1.x) release
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
 
@@ -277,6 +278,7 @@ mapAliases {
   akkoma-frontends.akkoma-fe = throw "'akkoma-frontends.akkoma-fe' has been renamed to/replaced by 'akkoma-fe'"; # Converted to throw 2025-10-27
   amazon-qldb-shell = throw "'amazon-qldb-shell' has been removed due to being unmaintained upstream"; # Added 2025-07-30
   amdvlk = throw "'amdvlk' has been removed since it was deprecated by AMD. Its replacement, RADV, is enabled by default."; # Added 2025-09-20
+  ams-lv2 = throw "'ams-lv2' has been removed due to being archived upstream."; # Added 2025-10-26
   android-udev-rules = throw "'android-udev-rules' has been removed due to being superseded by built-in systemd uaccess rules."; # Added 2025-10-21
   androidndkPkgs_21 = throw "androidndkPkgs_21 has been removed, as it is EOL"; # Added 2025-08-09
   androidndkPkgs_23 = throw "androidndkPkgs_23 has been removed, as it is EOL"; # Added 2025-08-09
@@ -305,6 +307,7 @@ mapAliases {
   aseprite-unfree = throw "'aseprite-unfree' has been renamed to/replaced by 'aseprite'"; # Converted to throw 2025-10-27
   asitop = throw "'asitop' has been renamed to/replaced by 'macpm'"; # Converted to throw 2025-10-27
   asterisk_18 = throw "asterisk_18: Asterisk 18 is end of life and has been removed"; # Added 2025-10-19
+  atlassian-cli = appfire-cli; # Added 2025-09-29
   ats = throw "'ats' has been removed as it is unmaintained for 10 years and broken"; # Added 2025-05-17
   AusweisApp2 = throw "'AusweisApp2' has been renamed to/replaced by 'ausweisapp'"; # Converted to throw 2025-10-27
   autoconf213 = throw "'autoconf213' has been removed in favor of 'autoconf'"; # Added 2025-07-21
@@ -497,6 +500,7 @@ mapAliases {
   docker_27 = throw "'docker_27' has been removed because it has been unmaintained since May 2025. Use docker_28 or newer instead."; # Added 2025-06-15
   dockerfile-language-server-nodejs = warnAlias "'dockerfile-language-server-nodejs' has been renamed to 'dockerfile-language-server'" dockerfile-language-server; # Added 2025-09-12
   dolphin-emu-beta = throw "'dolphin-emu-beta' has been renamed to/replaced by 'dolphin-emu'"; # Converted to throw 2025-10-27
+  dontRecurseIntoAttrs = warnAlias "dontRecurseIntoAttrs has been removed from pkgs, use `lib.dontRecurseIntoAttrs` instead" lib.dontRecurseIntoAttrs; # Added 2025-10-30
   dotnetenv = throw "'dotnetenv' has been removed because it was unmaintained in Nixpkgs"; # Added 2025-07-11
   dotty = throw "'dotty' has been renamed to/replaced by 'scala_3'"; # Converted to throw 2025-10-27
   dovecot_fts_xapian = throw "'dovecot_fts_xapian' has been removed because it was unmaintained in Nixpkgs. Consider using dovecot-fts-flatcurve instead"; # Added 2025-08-16
@@ -519,7 +523,6 @@ mapAliases {
   elm-github-install = throw "'elm-github-install' has been removed as it is abandoned upstream and only supports Elm 0.18.0"; # Added 2025-08-25
   emacsMacport = throw "'emacsMacport' has been renamed to/replaced by 'emacs-macport'"; # Converted to throw 2025-10-27
   emacsNativeComp = throw "'emacsNativeComp' has been renamed to/replaced by 'emacs'"; # Converted to throw 2025-10-27
-  emacsPackages = throw "'emacsPackages' has been renamed to/replaced by 'emacs.pkgs'"; # Converted to throw 2025-10-27
   embree2 = throw "embree2 has been removed, as it is unmaintained upstream and depended on tbb_2020"; # Added 2025-09-14
   EmptyEpsilon = throw "'EmptyEpsilon' has been renamed to/replaced by 'empty-epsilon'"; # Converted to throw 2025-10-27
   emulationstation = throw "emulationstation was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
@@ -529,6 +532,7 @@ mapAliases {
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   erlang-ls = throw "'erlang-ls' has been removed as it has been archived upstream. Consider using 'erlang-language-platform' instead"; # Added 2025-10-02
+  ethersync = warnAlias "'ethersync' has been renamed to 'teamtype'" teamtype; # Added 2025-10-31
   eww-wayland = throw "'eww-wayland' has been renamed to/replaced by 'eww'"; # Converted to throw 2025-10-27
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
@@ -565,6 +569,7 @@ mapAliases {
   flut-renamer = throw "flut-renamer is unmaintained and has been removed"; # Added 2025-08-26
   flutter324 = throw "flutter324 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-10-28
   flutter326 = throw "flutter326 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-06-08
+  flutter327 = throw "flutter327 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-10-28
   fmsynth = throw "'fmsynth' has been removed as it was broken and unmaintained both upstream and in nixpkgs."; # Added 2025-09-01
   follow = warnAlias "follow has been renamed to folo" folo; # Added 2025-05-18
   forceSystem = warnAlias "forceSystem is deprecated in favour of explicitly importing Nixpkgs" (
@@ -687,6 +692,7 @@ mapAliases {
   hibernate = throw "hibernate has been removed due to lack of maintenance"; # Added 2025-09-10
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # added 2025-08-20
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
+  hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
   hobbes = throw "hobbes has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-20
   hostPlatform = warnAlias "'hostPlatform' has been renamed to/replaced by 'stdenv.hostPlatform'" stdenv.hostPlatform; # Converted to warning 2025-10-28
   hpmyroom = throw "hpmyroom has been removed because it has been marked as broken since May 2024."; # Added 2025-10-11
@@ -925,6 +931,7 @@ mapAliases {
   llvmPackages_16 = throw "llvmPackages_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   llvmPackages_17 = throw "llvmPackages_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   loco-cli = throw "'loco-cli' has been renamed to/replaced by 'loco'"; # Converted to throw 2025-10-27
+  lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
   lxd = throw "
@@ -968,6 +975,7 @@ mapAliases {
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailnag = throw "mailnag has been removed because it has been marked as broken since 2022."; # Added 2025-10-12
   mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
+  makeOverridable = warnAlias "'makeOverridable' has been removed from pkgs, use `lib.makeOverridable` instead" lib.makeOverridable; # Added 2025-10-30
   manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
   mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
   marwaita-manjaro = throw "'marwaita-manjaro' has been renamed to/replaced by 'marwaita-teal'"; # Converted to throw 2025-10-27
@@ -1156,6 +1164,7 @@ mapAliases {
   paperless-ng = throw "'paperless-ng' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2025-10-27
   parcellite = throw "'parcellite' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
   patchelfStable = throw "'patchelfStable' has been renamed to/replaced by 'patchelf'"; # Converted to throw 2025-10-27
+  path-of-building = lib.warnOnInstantiate "'path-of-building' has been replaced by 'rusty-path-of-building'" rusty-path-of-building; # Added 2025-10-30
   paup = throw "'paup' has been renamed to/replaced by 'paup-cli'"; # Converted to throw 2025-10-27
   pcp = throw "'pcp' has been removed because the upstream repo was archived and it hasn't been updated since 2021"; # Added 2025-09-23
   pcre16 = throw "'pcre16' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2025-05-29
@@ -1290,6 +1299,7 @@ mapAliases {
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
+  recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
   redocly-cli = throw "'redocly-cli' has been renamed to/replaced by 'redocly'"; # Converted to throw 2025-10-27
@@ -1406,6 +1416,7 @@ mapAliases {
   StormLib = throw "'StormLib' has been renamed to/replaced by 'stormlib'"; # Converted to throw 2025-10-27
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Converted to throw 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
+  stringsWithDeps = warnAlias "'stringsWithDeps' has been removed from pkgs, use `lib.stringsWithDeps` instead" lib.stringsWithDeps; # Added 2025-10-30
   subberthehut = throw "'subberthehut' has been removed as it was unmaintained upstream"; # Added 2025-05-17
   sublime-music = throw "`sublime-music` has been removed because upstream has announced it is no longer maintained. Upstream suggests using `supersonic` instead."; # Added 2025-09-20
   substituteAll = throw "`substituteAll` has been removed. Use `replaceVars` instead."; # Added 2025-05-23
@@ -1513,7 +1524,6 @@ mapAliases {
   uade123 = throw "'uade123' has been renamed to/replaced by 'uade'"; # Converted to throw 2025-10-27
   uae = throw "'uae' has been removed due to lack of upstream maintenance. Consider using 'fsuae' instead."; # Added 2025-06-11
   ubuntu_font_family = throw "'ubuntu_font_family' has been renamed to/replaced by 'ubuntu-classic'"; # Converted to throw 2025-10-27
-  uclibc = throw "'uclibc' has been renamed to/replaced by 'uclibc-ng'"; # Converted to throw 2025-10-27
   unicap = throw "'unicap' has been removed because it is unmaintained"; # Added 2025-05-17
   unifi-poller = throw "'unifi-poller' has been renamed to/replaced by 'unpoller'"; # Converted to throw 2025-10-27
   unzoo = throw "'unzoo' has been removed since it is unmaintained upstream and doesn't compile with newer versions of GCC anymore"; # Removed 2025-05-24
@@ -1525,6 +1535,7 @@ mapAliases {
   vamp.vampSDK = throw "'vamp.vampSDK' has been renamed to/replaced by 'vamp-plugin-sdk'"; # Converted to throw 2025-10-27
   vaultwarden-vault = throw "'vaultwarden-vault' has been renamed to/replaced by 'vaultwarden.webvault'"; # Converted to throw 2025-10-27
   vbetool = throw "'vbetool' has been removed as it is broken and not maintained upstream."; # Added 2025-06-11
+  vboot_reference = vboot-utils; # Added 2025-11-01
   vc_0_7 = throw "'vc_0_7' has been removed as it was broken, unused in nixpkgs and unmaintained"; # Added 2025-10-20
   vdirsyncerStable = throw "'vdirsyncerStable' has been renamed to/replaced by 'vdirsyncer'"; # Converted to throw 2025-10-27
   ventoy-bin = throw "'ventoy-bin' has been renamed to/replaced by 'ventoy'"; # Converted to throw 2025-10-27

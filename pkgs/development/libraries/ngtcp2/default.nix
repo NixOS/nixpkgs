@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
     # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
-    (lib.cmakeBool "ENABLE_LIB_ONLY" stdenv.hostPlatform.isStatic)
+    # Also, the examples depend on Linux-specific APIs, so we avoid them on FreeBSD too.
+    (lib.cmakeBool "ENABLE_LIB_ONLY" (stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isFreeBSD))
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
   ];

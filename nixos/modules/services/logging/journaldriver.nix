@@ -91,12 +91,12 @@ in
   config = mkIf cfg.enable {
     systemd.services.journaldriver = {
       description = "Stackdriver Logging journal forwarder";
+      script = "${pkgs.journaldriver}/bin/journaldriver";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.journaldriver;
         Restart = "always";
         DynamicUser = true;
 

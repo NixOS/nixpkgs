@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "usacloud";
-  version = "1.18.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
     tag = "v${version}";
-    hash = "sha256-zYp5CRRjH4YjB6g9NZgC83F0xiz3Ntrpyql9d2/6K6U=";
+    hash = "sha256-Yci2mka92covvddDehT5PkEdmaUnS2rhPn7FT3oCvks=";
   };
 
-  vendorHash = "sha256-AxdazqJ1t1+azKJu1/scRmMxTqdILgWADbomlUKq2TE=";
+  vendorHash = "sha256-sSM7ZdGknhVvccKJtkwPmzwXEPRzUmxGlGojasqpul8=";
 
   ldflags = [
     "-s"

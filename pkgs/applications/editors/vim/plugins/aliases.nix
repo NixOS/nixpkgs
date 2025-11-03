@@ -73,6 +73,7 @@ mapAliases (
     easymotion = vim-easymotion;
     echodoc = echodoc-vim;
     eighties = vim-eighties;
+    ethersync = lib.warnOnInstantiate "'ethersync' has been renamed to 'teamtype'" teamtype; # Added 2025-10-31
     extradite = vim-extradite;
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
     fugitive = vim-fugitive;

@@ -7,6 +7,8 @@ in
   directory = ./ext;
 })
 // {
+  inherit (super) callPackage;
+
   timescaledb-apache = super.callPackage ./ext/timescaledb.nix { enableUnfree = false; };
 }
 // lib.optionalAttrs (!self.perlSupport) {

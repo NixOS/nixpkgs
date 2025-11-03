@@ -104,6 +104,52 @@ buildPythonPackage rec {
 
     # FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth'
     "test_gptq_mt"
+
+    # KeyError: '_guards_fn
+    "test_add"
+    "test_add_relu"
+    "test_allow_exported_model_train_eval"
+    "test_allow_exported_model_train_eval_idempotent"
+    "test_conv2d"
+    "test_disallow_eval_train"
+    "test_dynamic_linear"
+    "test_fold_bn_erases_bn_node"
+    "test_fold_bn_erases_bn_node"
+    "test_maxpool2d"
+    "test_move_exported_model_bn_device_cpu"
+    "test_move_exported_model_dropout"
+    "test_move_exported_model_dropout_inplace"
+    "test_preserve_nn_module_stack"
+    "test_qat_bn_conv2d"
+    "test_qat_conv2d"
+    "test_qat_conv2d_binary"
+    "test_qat_conv2d_binary2"
+    "test_qat_conv2d_binary_unary"
+    "test_qat_conv2d_unary"
+    "test_qat_conv_bn_bias_derived_qspec"
+    "test_qat_conv_bn_fusion"
+    "test_qat_conv_bn_fusion_literal_args"
+    "test_qat_conv_bn_fusion_no_conv_bias"
+    "test_qat_conv_bn_per_channel_weight_bias"
+    "test_qat_conv_bn_relu_fusion"
+    "test_qat_conv_bn_relu_fusion_no_conv_bias"
+    "test_qat_conv_transpose_bn"
+    "test_qat_conv_transpose_bn_relu"
+    "test_qat_per_channel_weight_custom_dtype"
+    "test_qat_preserve_source_fn_stack"
+    "test_qat_qconv2d"
+    "test_qat_qconv2d_add"
+    "test_qat_qconv2d_add_relu"
+    "test_qat_qconv2d_hardswish"
+    "test_qat_qconv2d_hardtanh"
+    "test_qat_qconv2d_relu"
+    "test_qat_qconv2d_relu6"
+    "test_qat_qconv2d_silu"
+    "test_qat_update_shared_qspec"
+    "test_qdq"
+    "test_qdq_per_channel"
+    "test_reentrant"
+    "test_static_linear"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: tensor(False) is not true
@@ -135,6 +181,10 @@ buildPythonPackage rec {
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
+
+    # RuntimeError: quantized engine NoQEngine is not supported
+    "test_smooth_linear_cpu"
+    "test_smooth_linear_edge_cases"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt

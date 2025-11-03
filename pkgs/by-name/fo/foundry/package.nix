@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SrkFfc9+cb3nDqEOj3gRkQq9aKOSfk3s7a3EGka5ACw=";
+    hash = "sha256-u+JCurH1gx4onC5Poxxd9+gVrUyyebcd6xnXY4Le6Rs=";
   };
 
-  cargoHash = "sha256-PoPfuMNeK6ArZddBd0lsR2r8UrvRieqkxYZ8jCCxw5o=";
+  cargoHash = "sha256-JLuCZckiNv0t+kPuDk6TWmPIXKOvqf3HR/oFrQ5fKKQ=";
 
   nativeBuildInputs = [
     pkg-config

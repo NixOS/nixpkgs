@@ -108,7 +108,9 @@ in
     systemd.services.drone = {
       description = "Ostinato agent-controller";
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkg}/bin/drone ${toString cfg.port} ${configFile}";
+      script = ''
+        ${pkg}/bin/drone ${toString cfg.port} ${configFile}
+      '';
     };
 
   };

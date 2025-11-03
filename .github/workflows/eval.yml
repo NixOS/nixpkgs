@@ -3,6 +3,9 @@ name: Eval
 on:
   workflow_call:
     inputs:
+      artifact-prefix:
+        required: true
+        type: string
       mergedSha:
         required: true
         type: string
@@ -110,7 +113,7 @@ jobs:
           MATRIX_SYSTEM: ${{ matrix.system }}
           MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
         run: |
-          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned  -A eval.singleSystem \
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
             --argstr nixPath "$MATRIX_VERSION" \
@@ -119,19 +122,29 @@ jobs:
           # Note: Keep the same further down in sync!
 
       - name: Evaluate the ${{ matrix.system }} output paths at the target commit
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-        # This is very quick, because it pulls the eval results from Cachix.
         run: |
-          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
+          TARGET_DRV=$(nix-instantiate nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
-            --argstr nixPath "nixVersions.latest" \
-            --out-link target
+            --argstr nixPath "nixVersions.latest")
+
+          # Try to fetch this from Cachix a few times, for up to 30 seconds. This avoids running Eval
+          # twice in the Merge Queue, when a later item finishes Eval at the merge commit earlier.
+          for _i in {1..6}; do
+            # Using --max-jobs 0 will cause nix-build to fail if this can't be substituted from cachix.
+            if nix-build "$TARGET_DRV" --max-jobs 0; then
+              break
+            fi
+            sleep 5
+          done
+
+          # Either fetches from Cachix or runs Eval itself. The fallback is required
+          # for pull requests into wip-branches without merge queue.
+          nix-build "$TARGET_DRV" --out-link target
 
       - name: Compare outpaths against the target branch
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
@@ -142,16 +155,15 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        if: inputs.targetSha
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
+          name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
 
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: inputs.targetSha && !cancelled() && !failure()
+    if: ${{ !cancelled() && !failure() }}
     permissions:
       statuses: write
     timeout-minutes: 5
@@ -169,7 +181,7 @@ jobs:
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
-          pattern: diff-*
+          pattern: ${{ inputs.artifact-prefix }}diff-*
           path: diff
           merge-multiple: true
 
@@ -182,9 +194,14 @@ jobs:
             --arg diffDir ./diff \
             --out-link combined
 
+      - name: Upload the maintainer list
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ inputs.artifact-prefix }}maintainers
+          path: combined/maintainers.json
+
       - name: Compare against the target branch
         env:
-          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
           TARGET_SHA: ${{ inputs.mergedSha }}
         run: |
           git -C nixpkgs/trusted diff --name-only "$TARGET_SHA" \
@@ -194,7 +211,6 @@ jobs:
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
             --arg combinedDir ./combined \
             --arg touchedFilesJson ./touched-files.json \
-            --argstr githubAuthorId "$AUTHOR_ID" \
             --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
@@ -202,7 +218,7 @@ jobs:
       - name: Upload the comparison results
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: comparison
+          name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
 
       - name: Add eval summary to commit statuses
@@ -250,6 +266,7 @@ jobs:
       - name: Add version comparison table to job summary
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
+          ARTIFACT_PREFIX: ${{ inputs.artifact-prefix }}
           SYSTEMS: ${{ inputs.systems }}
           VERSIONS: ${{ needs.versions.outputs.versions }}
         with:
@@ -257,6 +274,7 @@ jobs:
             const { readFileSync } = require('node:fs')
             const path = require('node:path')
 
+            const prefix = process.env.ARTIFACT_PREFIX
             const systems = JSON.parse(process.env.SYSTEMS)
             const versions = JSON.parse(process.env.VERSIONS)
 
@@ -272,7 +290,7 @@ jobs:
                   [{ data: version }].concat(
                     systems.map((system) => {
                       try {
-                        const artifact = path.join('versions', `${version}-diff-${system}`)
+                        const artifact = path.join('versions', `${prefix}${version}-diff-${system}`)
                         const time = Math.round(
                           parseFloat(
                             readFileSync(

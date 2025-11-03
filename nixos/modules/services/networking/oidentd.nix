@@ -32,7 +32,7 @@ with lib;
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Type = "forking";
-      serviceConfig.ExecStart = "${lib.getExe pkgs.oidentd} -u oidentd -g nogroup";
+      script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
     };
 
     users.users.oidentd = {

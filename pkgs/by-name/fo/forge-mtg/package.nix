@@ -7,6 +7,7 @@
   makeWrapper,
   openjdk,
   libGL,
+  alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -106,7 +107,12 @@ maven.buildMavenPackage {
       chmod 555 $out/share/forge/$commandToInstall.sh
       PREFIX_CMD=""
       if [ "$commandToInstall" = "forge-adventure" ]; then
-        PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}"
+        PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            libGL
+            alsa-lib
+          ]
+        }"
       fi
 
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \

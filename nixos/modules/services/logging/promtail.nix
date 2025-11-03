@@ -66,11 +66,14 @@ in
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
+      preStart = ''
+        ${lib.getExe pkgs.promtail} -config.file=${configFile} -check-syntax
+      '';
+
       serviceConfig = {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
-        ExecStartPre = "${lib.getExe pkgs.promtail} -config.file=${configFile} -check-syntax";
         ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${configFile} ${escapeShellArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";

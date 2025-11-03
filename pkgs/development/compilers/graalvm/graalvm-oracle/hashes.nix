@@ -6,20 +6,20 @@
 {
   "25" = {
     "aarch64-linux" = {
-      hash = "sha256-pGirVIPXTz0p39qpybKbKSYaOp5JeG0hxKnACwbBVuo=";
-      url = "https://download.oracle.com/graalvm/25/latest/graalvm-jdk-25_linux-aarch64_bin.tar.gz";
+      hash = "sha256-7dd1ZcdlcKbfXzjlPVRSQQLywbHPdO69n1Hn/Bn2Z80=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.1_linux-aarch64_bin.tar.gz";
     };
     "x86_64-linux" = {
-      hash = "sha256-BNuoXdzg33UtbWngR2Z2/a0JmLfaXToPmq0f5uP/ocU=";
-      url = "https://download.oracle.com/graalvm/25/latest/graalvm-jdk-25_linux-x64_bin.tar.gz";
+      hash = "sha256-1KsCuhAp5jnwM3T9+RwkLh0NSQeYgOGvGTLqe3xDGDc=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.1_linux-x64_bin.tar.gz";
     };
     "x86_64-darwin" = {
-      hash = "sha256-+Z4+6kgIoLc7VZ4oxGRs8JHfEtakwGX+80ZkqxcpkTc=";
-      url = "https://download.oracle.com/graalvm/25/latest/graalvm-jdk-25_macos-x64_bin.tar.gz";
+      hash = "sha256-p2LKHZoWPjJ5C5KG869MFjaXKf8nmZ2NurYNe+Fs/y8=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.1_macos-x64_bin.tar.gz";
     };
     "aarch64-darwin" = {
-      hash = "sha256-bnfxewEInf2wxUzOiqk2hH4qAZ4BEEGIE7SbO9l03JA=";
-      url = "https://download.oracle.com/graalvm/25/latest/graalvm-jdk-25_macos-aarch64_bin.tar.gz";
+      hash = "sha256-Gd/UmtES5ubCve3FB8aFm/ISlPpMFk8b5nDUacZbeZM=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.1_macos-aarch64_bin.tar.gz";
     };
   };
   "17" = {

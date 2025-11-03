@@ -152,7 +152,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${ircdService}/bin/control start";
+      script = "${ircdService}/bin/control start";
     };
   };
 }

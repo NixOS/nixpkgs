@@ -200,7 +200,6 @@ in
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = "${lib.getExe cfg.phpPackage} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction";
             Type = "oneshot";
             RemainAfterExit = true;
             User = "part-db";
@@ -208,6 +207,10 @@ in
           restartTriggers = [
             cfg.package
           ];
+          script = ''
+            set -euo pipefail
+            ${lib.getExe cfg.phpPackage} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction
+          '';
         };
 
         phpfpm-part-db = {
