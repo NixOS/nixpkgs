@@ -117,27 +117,6 @@ let
   };
 in
 {
-  libressl_4_0 = generic {
-    version = "4.0.1";
-    hash = "sha256-IClLh3eMJidIk4Y5Q8hjWJebSZ03tJl31r+Gj3tZfL0=";
-    # Fixes build on loongarch64
-    # https://github.com/libressl/portable/pull/1146
-    patches = [
-      (fetchpatch {
-        name = "0100-ALT-basic-loongarch64-support.patch";
-        url = "https://git.altlinux.org/gears/L/LibreSSL.git?p=LibreSSL.git;a=blob_plain;f=patches/0100-ALT-basic-loongarch64-support.patch;hb=70ddea860b8b62531bd3968bf4d7a5c4b7086776";
-        stripLen = 2;
-        extraPrefix = "";
-        postFetch = ''
-          substituteInPlace "$out" \
-            --replace-fail "a//dev/null" "/dev/null"
-        '';
-        hash = "sha256-dEdtmHHiR7twAqgebXv1Owle/KYCak71NhDCp0PdseU=";
-      })
-      common-cmake-install-full-dirs-patch
-    ];
-  };
-
   libressl_4_1 = generic {
     version = "4.1.2";
     hash = "sha256-+6Ti+ip/UjBt96OJlwoQ6YuX6w7bKZqf252/SZmcYeE=";
