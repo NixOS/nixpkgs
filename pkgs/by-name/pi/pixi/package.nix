@@ -23,7 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-HkaDc7RauVhuuu4R88xlgiAM9pv6RPgyvaVoPO0PHqA=";
   };
 
-  cargoHash = "sha256-0X+3/fQLgUSSnDVAociKqk4rJfKHJtKdXIIaSUzI18g=";
+  cargoHash = "sha256-wnaedeKkzbF6OtawQA4DdJTFbAZqNSxFJnFoJc7MyFY=";
+
+  cargoPatches = [
+    # bump openssl per RUSTSEC-2025-0022 and astral-tokio-tar per RUSTSEC-2025-0110
+    ./bump_openssl_and_astral-tokio-tar.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
