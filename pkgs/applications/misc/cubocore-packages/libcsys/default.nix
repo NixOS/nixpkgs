@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  udisks2,
+  udisks,
   qt6,
   cmake,
   ninja,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    udisks2
+    udisks
   ];
 
   dontWrapQtApps = true;
