@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage rec {
       $releaseDir/build/hyperfine-*/out/hyperfine.{bash,fish} \
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line benchmarking tool";
