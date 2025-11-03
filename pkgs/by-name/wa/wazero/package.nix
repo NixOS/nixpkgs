@@ -46,7 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/tetratelabs/wazero";
     changelog = "https://github.com/tetratelabs/wazero/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "wazero";
   };
 }

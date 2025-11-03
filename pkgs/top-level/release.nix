@@ -361,7 +361,6 @@ let
           packages =
             genAttrs
               [
-                "ghc94"
                 "ghc96"
                 "ghc98"
                 "ghc910"

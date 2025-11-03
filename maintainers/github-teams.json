@@ -134,7 +134,6 @@
       "a-kenji": 65275785,
       "ahoneybun": 4884946,
       "drakon64": 6444703,
-      "griffi-gh": 45996170,
       "michaelBelsanti": 62124625,
       "thefossguy": 44400303
     },
@@ -668,7 +667,7 @@
     "name": "neovim"
   },
   "nix-formatting": {
-    "description": "Team to maintain the official Nix formatter and apply it to Nixpkgs",
+    "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
     "maintainers": {
       "infinisil": 20525370,
@@ -876,7 +875,6 @@
     "id": 7304571,
     "maintainers": {
       "Mic92": 96200,
-      "figsoda": 40620903,
       "winterqt": 78392041,
       "zowoq": 59103226
     },

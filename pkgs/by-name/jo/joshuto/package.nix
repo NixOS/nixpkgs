@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      figsoda
       totoroot
       xrelkd
     ];

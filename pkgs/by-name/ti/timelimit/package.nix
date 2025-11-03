@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://devel.ringlet.net/sysutils/timelimit/";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "timelimit";
   };
 }
