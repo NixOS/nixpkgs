@@ -10,8 +10,8 @@
   glib,
   gsettings-desktop-schemas,
   mate,
-  xdg-desktop-portal,
   xapp,
+  xdg-desktop-portal,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas # org.gnome.system.location
     mate.mate-desktop # org.mate.background
+    xapp # org.x.apps.portal
     xdg-desktop-portal
   ];
 

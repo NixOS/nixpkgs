@@ -18,6 +18,45 @@ The goal is to eventually have all GitHub specific code in `ci/github-script` an
 A lot of code has already been migrated, but some Bash code still remains.
 New CI features need to be introduced in JavaScript, not Bash.
 
+## Nixpkgs merge bot
+
+The Nixpkgs merge bot empowers package maintainers by enabling them to merge PRs related to their own packages.
+It serves as a bridge for maintainers to quickly respond to user feedback, facilitating a more self-reliant approach.
+Especially when considering there are roughly 20 maintainers for every committer, this bot is a game-changer.
+
+Following [RFC 172] the merge bot was originally implemented as a [python webapp](https://github.com/NixOS/nixpkgs-merge-bot), which has now been integrated into [`ci/github-script/bot.js`](./github-script/bot.js) and [`ci/github-script/merge.js`](./github-script/merge.js).
+
+### Using the merge bot
+
+To merge a PR, maintainers can simply comment:
+```gfm
+@NixOS/nixpkgs-merge-bot merge
+```
+
+The next time the bot runs it will verify the below constraints, then (if satisfied) merge the PR.
+
+The merge bot will reference [#306934](https://github.com/NixOS/nixpkgs/issues/306934) on PRs it merges successfully, [#305350](https://github.com/NixOS/nixpkgs/issues/305350) for unsuccessful attempts, or [#371492](https://github.com/NixOS/nixpkgs/issues/371492) if an error occurs.
+These issues effectively list PRs the merge bot has interacted with.
+
+### Merge bot constraints
+
+To ensure security and a focused utility, the bot adheres to specific limitations:
+
+- The PR targets one of the [development branches](#branch-classification).
+- The PR only touches packages located under `pkgs/by-name/*`.
+- The PR is either:
+  - approved by a [committer][@NixOS/nixpkgs-committers].
+  - authored by a [committer][@NixOS/nixpkgs-committers].
+  - backported via label.
+  - created by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
+- The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
+- The user attempting to merge is a maintainer of all packages touched by the PR.
+
+### Approving merge bot changes
+
+Changes to the bot can usually be approved by the [@NixOS/nixpkgs-ci] team, as with other CI changes.
+However, additional acknowledgement from the [@NixOS/nixpkgs-core] team is required for changes to what the merge bot will merge, who is eligible to use the merge bot, or similar changes in scope.
+
 ## `ci/nixpkgs-vet.sh BASE_BRANCH [REPOSITORY]`
 
 Runs the [`nixpkgs-vet` tool](https://github.com/NixOS/nixpkgs-vet) on the HEAD commit, closely matching what CI does.
@@ -58,3 +97,10 @@ Some branches also have a version component, which is either `unstable` or `YY.M
 `ci/supportedBranches.js` is a script imported by CI to classify the base and head branches of a Pull Request.
 This classification will then be used to skip certain jobs.
 This script can also be run locally to print basic test cases.
+
+
+[@NixOS/nixpkgs-maintainers]: https://github.com/orgs/NixOS/teams/nixpkgs-maintainers
+[@NixOS/nixpkgs-committers]: https://github.com/orgs/NixOS/teams/nixpkgs-committers
+[@NixOS/nixpkgs-ci]: https://github.com/orgs/NixOS/teams/nixpkgs-ci
+[@NixOS/nixpkgs-core]: https://github.com/orgs/NixOS/teams/nixpkgs-core
+[RFC 172]: https://github.com/NixOS/rfcs/pull/172

@@ -7,6 +7,7 @@
   python3,
   stdenvNoCC,
   makeWrapper,
+  codeowners,
 }:
 let
   python = python3.withPackages (ps: [
@@ -48,6 +49,7 @@ in
 {
   combinedDir,
   touchedFilesJson,
+  ownersFile ? ../../OWNERS,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -174,6 +176,7 @@ runCommand "compare"
     nativeBuildInputs = map lib.getBin [
       jq
       cmp-stats
+      codeowners
     ];
     maintainers = builtins.toJSON maintainers;
     packages = builtins.toJSON packages;
@@ -221,6 +224,43 @@ runCommand "compare"
         echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
       } >> $out/step-summary.md
     fi
+
+    jq -r '.[]' "${touchedFilesJson}" > ./touched-files
+    readarray -t touchedFiles < ./touched-files
+    echo "This PR touches ''${#touchedFiles[@]} files"
+
+    # TODO: Move ci/OWNERS to Nix and produce owners.json instead of owners.txt.
+    touch "$out/owners.txt"
+    for file in "''${touchedFiles[@]}"; do
+        result=$(codeowners --file "${ownersFile}" "$file")
+
+        # Remove the file prefix and trim the surrounding spaces
+        read -r owners <<< "''${result#"$file"}"
+        if [[ "$owners" == "(unowned)" ]]; then
+            echo "File $file is unowned"
+            continue
+        fi
+        echo "File $file is owned by $owners"
+
+        # Split up multiple owners, separated by arbitrary amounts of spaces
+        IFS=" " read -r -a entries <<< "$owners"
+
+        for entry in "''${entries[@]}"; do
+            # GitHub technically also supports Emails as code owners,
+            # but we can't easily support that, so let's not
+            if [[ ! "$entry" =~ @(.*) ]]; then
+                echo -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m"
+                # Don't fail, because the PR for which this script runs can't fix it,
+                # it has to be fixed in the base branch
+                continue
+            fi
+            # The first regex match is everything after the @
+            entry=''${BASH_REMATCH[1]}
+
+            echo "$entry" >> "$out/owners.txt"
+        done
+
+    done
 
     cp "$maintainersPath" "$out/maintainers.json"
     cp "$packagesPath" "$out/packages.json"

@@ -1,33 +1,18 @@
-// Caching the list of committers saves API requests when running the bot on the schedule and
-// processing many PRs at once.
-let committers
+const { classify } = require('../supportedBranches.js')
 
-async function runChecklist({ github, context, pull_request, maintainers }) {
-  const pull_number = pull_request.number
-
-  if (!committers) {
-    if (context.eventName === 'pull_request') {
-      // We have no chance of getting a token in the pull_request context with the right
-      // permissions to access the members endpoint below. Thus, we're pretending to have
-      // no committers. This is OK; because this is only for the Test workflow, not for
-      // real use.
-      committers = new Set()
-    } else {
-      committers = github
-        .paginate(github.rest.teams.listMembersInOrg, {
-          org: context.repo.owner,
-          team_slug: 'nixpkgs-committers',
-          per_page: 100,
-        })
-        .then((members) => new Set(members.map(({ id }) => id)))
-    }
-  }
-
-  const files = await github.paginate(github.rest.pulls.listFiles, {
-    ...context.repo,
-    pull_number,
-    per_page: 100,
-  })
+function runChecklist({
+  committers,
+  events,
+  files,
+  pull_request,
+  log,
+  maintainers,
+  user,
+  userIsMaintainer,
+}) {
+  const allByName = files.every(({ filename }) =>
+    filename.startsWith('pkgs/by-name/'),
+  )
 
   const packages = files
     .filter(({ filename }) => filename.startsWith('pkgs/by-name/'))
@@ -39,25 +24,59 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
         .map((pkg) => new Set(maintainers[pkg]))
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
+  const approvals = new Set(
+    events
+      .filter(
+        ({ event, state, commit_id }) =>
+          event === 'reviewed' &&
+          state === 'approved' &&
+          // Only approvals for the current head SHA count, otherwise authors could push
+          // bad code between the approval and the merge.
+          commit_id === pull_request.head.sha,
+      )
+      .map(({ user }) => user.id),
+  )
+
   const checklist = {
-    'PR targets one of the allowed branches: master, staging, staging-next.': [
-      'master',
-      'staging',
-      'staging-next',
-    ].includes(pull_request.base.ref),
-    'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
-      filename.startsWith('pkgs/by-name/'),
-    ),
-    'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
-      (await committers).has(pull_request.user.id),
-    'PR has maintainers eligible for merge.': eligible.size > 0,
+    'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
+      classify(pull_request.base.ref).type.includes('development'),
+    'PR touches only packages in `pkgs/by-name/`.': allByName,
+    'PR is at least one of:': {
+      'Approved by a committer.': committers.intersection(approvals).size > 0,
+      'Authored by a committer.': committers.has(pull_request.user.id),
+      'Backported via label.':
+        pull_request.user.login === 'nixpkgs-ci[bot]' &&
+        pull_request.head.ref.startsWith('backport-'),
+      'Created by r-ryantm.': pull_request.user.login === 'r-ryantm',
+    },
   }
+
+  if (user) {
+    checklist[
+      `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers).`
+    ] = userIsMaintainer
+    if (allByName) {
+      // We can only determine the below, if all packages are in by-name, since
+      // we can't reliably relate changed files to packages outside by-name.
+      checklist[`${user.login} is a maintainer of all touched packages.`] =
+        eligible.has(user.id)
+    }
+  } else {
+    // This is only used when no user is passed, i.e. for labeling.
+    checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
+  }
+
+  const result = Object.values(checklist).every((v) =>
+    typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
+  )
+
+  log('checklist', JSON.stringify(checklist))
+  log('eligible', JSON.stringify(Array.from(eligible)))
+  log('result', result)
 
   return {
     checklist,
-    eligible,
-    result: Object.values(checklist).every(Boolean),
+    result,
   }
 }
 
@@ -86,6 +105,10 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
+// Caching the list of team members saves API requests when running the bot on the schedule and
+// processing many PRs at once.
+const members = {}
+
 async function handleMerge({
   github,
   context,
@@ -98,25 +121,43 @@ async function handleMerge({
 }) {
   const pull_number = pull_request.number
 
-  const { checklist, eligible, result } = await runChecklist({
-    github,
-    context,
-    pull_request,
-    maintainers,
+  function getTeamMembers(team_slug) {
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no members. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      return new Set()
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github
+        .paginate(github.rest.teams.listMembersInOrg, {
+          org: context.repo.owner,
+          team_slug,
+          per_page: 100,
+        })
+        .then((members) => new Set(members.map(({ id }) => id)))
+    }
+
+    return members[team_slug]
+  }
+  const committers = await getTeamMembers('nixpkgs-committers')
+
+  const files = await github.paginate(github.rest.pulls.listFiles, {
+    ...context.repo,
+    pull_number,
+    per_page: 100,
   })
-  log('checklist', JSON.stringify(checklist))
-  log('eligible', JSON.stringify(Array.from(eligible)))
-  log('result', result)
 
   // Only look through comments *after* the latest (force) push.
-  const latestChange = events.findLast(({ event }) =>
-    ['committed', 'head_ref_force_pushed'].includes(event),
-  ) ?? { sha: pull_request.head.sha }
-  const latestSha = latestChange.sha ?? latestChange.commit_id
-  log('latest sha', latestSha)
-  const latestIndex = events.indexOf(latestChange)
+  const lastPush = events.findLastIndex(
+    ({ event, sha, commit_id }) =>
+      ['committed', 'head_ref_force_pushed'].includes(event) &&
+      (sha ?? commit_id) === pull_request.head.sha,
+  )
 
-  const comments = events.slice(latestIndex + 1).filter(
+  const comments = events.slice(lastPush + 1).filter(
     ({ event, body, node_id }) =>
       ['commented', 'reviewed'].includes(event) &&
       hasMergeCommand(body) &&
@@ -151,13 +192,14 @@ async function handleMerge({
           })
           { clientMutationId }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return 'Enabled Auto Merge'
     } catch (e) {
       log('Auto Merge failed', e.response.errors[0].message)
     }
 
+    // TODO: Observe whether the below is true and whether manual enqueue is actually needed.
     // Auto-merge doesn't work if the target branch has already run all CI, in which
     // case the PR must be enqueued explicitly.
     // We now have merge queues enabled on all development branches, thus don't need a
@@ -174,7 +216,7 @@ async function handleMerge({
             mergeQueueEntry { mergeQueue { url } }
           }
         }`,
-        { node_id: pull_request.node_id, sha: latestSha },
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
       return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
     } catch (e) {
@@ -217,23 +259,37 @@ async function handleMerge({
       }
     }
 
-    const canUseMergeBot = await isMaintainer(comment.user.login)
-    const isEligible = eligible.has(comment.user.id)
-    const canMerge = result && canUseMergeBot && isEligible
+    const { result, checklist } = runChecklist({
+      committers,
+      events,
+      files,
+      pull_request,
+      log,
+      maintainers,
+      user: comment.user,
+      userIsMaintainer: await isMaintainer(comment.user.login),
+    })
 
     const body = [
       `<!-- comment: ${comment.node_id} -->`,
+      `@${comment.user.login} wants to merge this PR.`,
       '',
-      'Requirements to merge this PR:',
-      ...Object.entries(checklist).map(
-        ([msg, res]) => `- :${res ? 'white_check_mark' : 'x'}: ${msg}`,
+      'Requirements to merge this PR with `@NixOS/nixpkgs-merge-bot merge`:',
+      ...Object.entries(checklist).flatMap(([msg, res]) =>
+        typeof res === 'boolean'
+          ? `- :${res ? 'white_check_mark' : 'x'}: ${msg}`
+          : [
+              `- :${Object.values(res).some(Boolean) ? 'white_check_mark' : 'x'}: ${msg}`,
+              ...Object.entries(res).map(
+                ([msg, res]) =>
+                  `  - ${res ? ':white_check_mark:' : ':white_large_square:'} ${msg}`,
+              ),
+            ],
       ),
-      `- :${canUseMergeBot ? 'white_check_mark' : 'x'}: ${comment.user.login} can use the merge bot.`,
-      `- :${isEligible ? 'white_check_mark' : 'x'}: ${comment.user.login} is eligible to merge changes to the touched packages.`,
       '',
     ]
 
-    if (canMerge) {
+    if (result) {
       await react('ROCKET')
       try {
         body.push(`:heavy_check_mark: ${await merge()} (#306934)`)
@@ -257,8 +313,17 @@ async function handleMerge({
       })
     }
 
-    if (canMerge) break
+    if (result) break
   }
+
+  const { result } = runChecklist({
+    committers,
+    events,
+    files,
+    pull_request,
+    log,
+    maintainers,
+  })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
   // This is used to set the respective label in bot.js.
