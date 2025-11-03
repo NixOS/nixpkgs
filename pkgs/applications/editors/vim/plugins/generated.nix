@@ -1674,6 +1674,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-tmux = buildVimPlugin {
+    pname = "blink-cmp-tmux";
+    version = "2025-05-23";
+    src = fetchFromGitHub {
+      owner = "mgalliou";
+      repo = "blink-cmp-tmux";
+      rev = "4586c705b6f80b536c34a61ed0d3cd4d7f08322d";
+      sha256 = "1d7kvpzjmasfk8lszwhpay46w1b11sas9s8542gdwqiv0l32dp7p";
+    };
+    meta.homepage = "https://github.com/mgalliou/blink-cmp-tmux/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-words = buildVimPlugin {
     pname = "blink-cmp-words";
     version = "2025-08-06";
