@@ -73,14 +73,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-DqLB1JnQ96cxVEzcXra1hFVfrN7eXTlTwPtlPClnaBA=";
+    hash = "sha256-Vd/w11P4NVrx2xki+VYlXQaM8F+vpdokke8ZAHg6h0Q=";
   };
 
   postPatch = ''
