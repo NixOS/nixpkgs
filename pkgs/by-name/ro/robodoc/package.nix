@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
 }:
 
@@ -15,6 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "troff_generator-fix";
+      url = "https://github.com/gumpu/ROBODoc/commit/0f8b35c42523810415bec70bb2200d2ecb41c82f.patch?index=full";
+      hash = "sha256-Pbuc1gHrOeHbR4QT/dZ8wP+vqYQlilayjCGKOJP5wvk=";
+    })
+  ];
 
   postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Docs/makefile.am \
