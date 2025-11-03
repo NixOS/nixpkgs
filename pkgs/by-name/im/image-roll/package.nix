@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

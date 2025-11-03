@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       dywedir
-      figsoda
       SuperSandro2000
     ];
     mainProgram = "hexyl";

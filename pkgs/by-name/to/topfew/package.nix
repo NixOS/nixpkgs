@@ -35,7 +35,7 @@ buildGoModule rec {
     description = "Finds the fields (or combinations of fields) which appear most often in a stream of records";
     homepage = "https://github.com/timbray/topfew";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "tf";
   };
 }

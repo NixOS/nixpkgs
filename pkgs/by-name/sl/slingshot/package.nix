@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/caio-ishikawa/slingshot";
     changelog = "https://github.com/caio-ishikawa/slingshot/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "slingshot";
   };
 }
