@@ -4,11 +4,33 @@
   name = "jellyfin";
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
-  nodes.machine = {
-    services.jellyfin.enable = true;
-    environment.systemPackages = with pkgs; [ ffmpeg ];
-    # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
-    virtualisation.diskSize = 3 * 1024;
+  nodes = {
+    machine = {
+      services.jellyfin.enable = true;
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
+      virtualisation.diskSize = 3 * 1024;
+    };
+
+    machineWithTranscoding = {
+      services.jellyfin = {
+        enable = true;
+        hardwareAcceleration = {
+          enable = true;
+          type = "vaapi";
+          devices = [ "/dev/dri/renderD128" ];
+        };
+        transcoding = {
+          enableToneMapping = false;
+          threadCount = 4;
+          enableHardwareEncoding = true;
+          hardwareDecodingCodecs = [ "h264" "hevc" ];
+          hardwareEncodingCodecs = [ "h264" "hevc" ];
+        };
+      };
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      virtualisation.diskSize = 3 * 1024;
+    };
   };
 
   # Documentation of the Jellyfin API: https://api.jellyfin.org/
@@ -34,6 +56,21 @@
       machine.succeed("curl --fail http://localhost:8096/")
 
       machine.wait_until_succeeds("curl --fail http://localhost:8096/health | grep Healthy")
+
+      # Test hardware acceleration configuration
+      with subtest("Hardware acceleration configuration"):
+          machineWithTranscoding.wait_for_unit("jellyfin.service")
+          machineWithTranscoding.wait_for_open_port(8096)
+          machineWithTranscoding.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
+
+          # Check configuration files are generated
+          machineWithTranscoding.succeed("test -f /etc/jellyfin/encoding.xml")
+          machineWithTranscoding.succeed("grep '<HardwareAccelerationType>vaapi</HardwareAccelerationType>' /etc/jellyfin/encoding.xml")
+          machineWithTranscoding.succeed("grep '<EncodingThreadCount>4</EncodingThreadCount>' /etc/jellyfin/encoding.xml")
+          machineWithTranscoding.succeed("grep '<EnableTonemapping>false</EnableTonemapping>' /etc/jellyfin/encoding.xml")
+
+          # Check device access
+          machineWithTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
 
       auth_header = 'MediaBrowser Client="NixOS Integration Tests", DeviceId="1337", Device="Apple II", Version="20.09"'
 
