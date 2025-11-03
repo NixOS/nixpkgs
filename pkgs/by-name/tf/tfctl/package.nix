@@ -7,7 +7,7 @@
   kubectl,
 }:
 buildGoModule (finalAttrs: {
-  name = "tfctl";
+  pname = "tfctl";
   version = "0.15.1";
   src = fetchFromGitHub {
     owner = "flux-iac";
