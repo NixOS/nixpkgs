@@ -220,6 +220,7 @@ in
         haskell-language-server = addBuildDepends [
           self.retrie
           self.floskell
+          self.markdown-unlit
         ] super.haskell-language-server;
         hlint = self.hlint_3_8;
         ormolu = self.ormolu_0_7_4_0;
