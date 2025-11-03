@@ -1674,6 +1674,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-yanky = buildVimPlugin {
+    pname = "blink-cmp-yanky";
+    version = "2025-06-24";
+    src = fetchFromGitHub {
+      owner = "marcoSven";
+      repo = "blink-cmp-yanky";
+      rev = "473b987c2a7d80cca116f6faf087dba4dbfbb3c5";
+      sha256 = "1m0bkvp0bccavw46b6ycmhmx5bn7nx3w4z27linhlqd5gmlr1j0d";
+    };
+    meta.homepage = "https://github.com/marcoSven/blink-cmp-yanky/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
     version = "2025-05-28";
