@@ -10,14 +10,14 @@
   ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stylua";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = "stylua";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iyZ30Gc32TQsQyMLwArfIRtM0NkbXkqmca46nI0526M=";
   };
 
@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
-    changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/johnnymorganz/stylua/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.LunNova ];
     mainProgram = "stylua";
   };
-}
+})
