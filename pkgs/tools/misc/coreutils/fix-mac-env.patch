@@ -1,0 +1,105 @@
+From 8b111d02740bd45b847f5385988f94334bc7bc17 Mon Sep 17 00:00:00 2001
+From: Grisha Levit <grishalevit@gmail.com>
+Date: Tue, 29 Jul 2025 17:36:30 -0400
+Subject: [PATCH 1/2] build: fix macOS build without libintl
+
+A more precise fix than commit v9.7-322-gc2e1816a5
+
+* configure.ac (USE_NLS): new AM_CONDITIONAL.
+* src/local.mk: add @INTL_MACOSX_LIBS@ to <prog>_LDADD that need it.
+---
+ configure.ac |  2 +-
+ src/local.mk | 10 ++++++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index fd0b11a69..5e99ef386 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -886,13 +886,13 @@ AC_SUBST([EXTRA_MANS])          AM_SUBST_NOTMAKE([EXTRA_MANS])
+ AC_SUBST([built_programs], [$optional_bin_progs])
+ 
+ AM_CONDITIONAL([CROSS_COMPILING], [test "$cross_compiling" = yes])
+-
+ ############################################################################
+ 
+ # As long as "grep 'PRI[diouxX]' po/*.pot" reports matches in
+ # translatable strings, we must use need-formatstring-macros here.
+ AM_GNU_GETTEXT([external], [need-formatstring-macros])
+ AM_GNU_GETTEXT_VERSION([0.19.2])
++AM_CONDITIONAL([USE_NLS], [test "$USE_NLS" = yes])
+ 
+ # For a test of uniq: it uses the $LOCALE_FR envvar.
+ gt_LOCALE_FR
+diff --git a/src/local.mk b/src/local.mk
+index a55c9f990..14f4d0c13 100644
+--- a/src/local.mk
++++ b/src/local.mk
+@@ -337,6 +337,16 @@ src_sort_LDADD += $(LIBPMULTITHREAD)
+ # for pthread_sigmask
+ src_sort_LDADD += $(PTHREAD_SIGMASK_LIB)
+ 
++if !USE_NLS
++# for CFPreferencesCopyAppValue
++src_date_LDADD += $(INTL_MACOSX_LIBS)
++src_du_LDADD += $(INTL_MACOSX_LIBS)
++src_ls_LDADD += $(INTL_MACOSX_LIBS)
++src_pr_LDADD += $(INTL_MACOSX_LIBS)
++src_stat_LDADD += $(INTL_MACOSX_LIBS)
++src_uptime_LDADD += $(INTL_MACOSX_LIBS)
++endif
++
+ # Get the release year from lib/version-etc.c.
+ RELEASE_YEAR = \
+   `sed -n '/.*COPYRIGHT_YEAR = \([0-9][0-9][0-9][0-9]\) };/s//\1/p' \
+-- 
+2.51.0
+
+
+From cf08d2d3b1a663c390a544b0b16e0555ff784430 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Sat, 1 Nov 2025 14:30:12 +0000
+Subject: [PATCH 2/2] build: reduce explicit dependencies on macOS
+ CoreFoundation
+
+* src/local.mk: Revert v9.7-322-gc2e1816a5, instead relying
+on the more focused v9.8-79-g532cd66af.  When built with
+--disable-nls on macOS this will result in only some commands
+being linked with INTL_MACOSX_LIBS, thus resulting in env(1)
+at least not setting a __CF_USER_TEXT_ENCODING envirnoment variable.
+---
+ NEWS         | 4 ++++
+ src/local.mk | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/NEWS b/NEWS
+index 53e5b387c..2802c0c7b 100644
+--- a/NEWS
++++ b/NEWS
+@@ -22,6 +22,10 @@ GNU coreutils NEWS                                    -*- outline -*-
+   regressed due to the avoidance of copy offload, seen with OpenZFS at least.
+   [bug introduced in coreutils-9.8]
+ 
++  `env` on macOS, for now only when built with --disable-nls,
++  will no longer always set a __CF_USER_TEXT_ENCODING environment variable.
++  [bug introduced in coreutils-9.8]
++
+   'numfmt' no longer reads out-of-bounds memory with trailing blanks in input.
+   [bug introduced with numfmt in coreutils-8.21]
+ 
+diff --git a/src/local.mk b/src/local.mk
+index 14f4d0c13..a8ad6b43f 100644
+--- a/src/local.mk
++++ b/src/local.mk
+@@ -100,7 +100,7 @@ remove_ldadd =
+ # replacement functions defined in libcoreutils.a.
+ # Similarly for $(MBRTOWC_LIB).
+ LDADD = src/libver.a lib/libcoreutils.a $(LIBINTL) $(MBRTOWC_LIB) \
+-  $(INTL_MACOSX_LIBS) lib/libcoreutils.a
++  lib/libcoreutils.a
+ 
+ # First, list all programs, to make listing per-program libraries easier.
+ # See [ below.
+-- 
+2.51.0
+
