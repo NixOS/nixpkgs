@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -40,6 +41,15 @@ buildPythonPackage rec {
     # Functional tests require network access
     "fritzconnection/tests/test_functional.py"
   ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails on macOS due race condition
+    # https://github.com/kbr/fritzconnection/issues/251
+    "test_terminate_thread_on_failed_reconnection"
+    "test_restart_failed_monitor"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python module to communicate with the AVM Fritz!Box";
