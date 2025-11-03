@@ -72,8 +72,8 @@ let
 
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  meta = {
+    maintainers = [ ] ++ lib.teams.pantheon.members;
   };
 
   # Note: the order in which lightdm greeter modules are imported
