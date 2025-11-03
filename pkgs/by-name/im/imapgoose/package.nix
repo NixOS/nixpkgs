@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "imapgoose";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "ImapGoose";
     tag = "v${version}";
-    hash = "sha256-YuOjURWxkIhR4OYLzu7dWwATo1XzHOkujDQ1VAXnTiI=";
+    hash = "sha256-G4VhaLLZA8BlxJgbil/fG2b8ZLIX0z027A8jZhSk45c=";
   };
 
   vendorHash = "sha256-B+9p+WuQvARtL60CpATaKsd2Q5GFJNHPogrvlUYqdjs=";
