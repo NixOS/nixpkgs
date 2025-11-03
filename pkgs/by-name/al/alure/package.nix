@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/kcat/alure";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })
