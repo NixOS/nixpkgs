@@ -322,7 +322,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
       Object.assign(prLabels, evalLabels, {
         '11.by: package-maintainer':
-          packages.length &&
+          Boolean(packages.length) &&
           packages.every((pkg) =>
             maintainers[pkg]?.includes(pull_request.user.id),
           ),
