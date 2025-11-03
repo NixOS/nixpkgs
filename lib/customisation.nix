@@ -726,7 +726,7 @@ rec {
         pkgsTargetTarget = otherSplices.selfTargetTarget;
       };
       spliced = extra spliced0 // spliced0 // keep self;
-      self = f spliced0 // {
+      scopeHelpers = {
         newScope = scope: newScope (spliced // scope);
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
@@ -739,8 +739,9 @@ rec {
           });
         packages = f;
       };
+      self = f self // scopeHelpers;
     in
-    self;
+    spliced // scopeHelpers;
 
   /**
     Define a `mkDerivation`-like function based on another `mkDerivation`-like function.
