@@ -105,15 +105,6 @@ let
       # network
       network = callLibs ./network;
 
-      # TODO: For consistency, all builtins should also be available from a sub-library;
-      # these are the only ones that are currently not
-      inherit (builtins)
-        addErrorContext
-        isPath
-        trace
-        typeOf
-        unsafeGetAttrPos
-        ;
       inherit (self.trivial)
         id
         const
@@ -334,6 +325,7 @@ let
         escape
         escapeShellArg
         escapeShellArgs
+        isPath
         isStorePath
         isStringLike
         isValidPosixName
@@ -350,6 +342,7 @@ let
         toUpper
         toCamelCase
         toSentenceCase
+        typeOf
         addContextFrom
         splitString
         splitStringBy
@@ -517,6 +510,7 @@ let
         assertOneOf
         ;
       inherit (self.debug)
+        trace
         traceIf
         traceVal
         traceValFn
@@ -527,6 +521,8 @@ let
         traceValSeqN
         traceValSeqNFn
         traceFnSeqN
+        addErrorContext
+        unsafeGetAttrPos
         runTests
         testAllTrue
         ;
