@@ -1,0 +1,13 @@
+diff --git a/ui/gtk3/Makefile.am b/ui/gtk3/Makefile.am
+index 3ada6501..2066a8f5 100644
+--- a/ui/gtk3/Makefile.am
++++ b/ui/gtk3/Makefile.am
+@@ -304,6 +304,8 @@ panelbinding.o: $(srcdir)/panelbinding.c
+ 	$(AM_V_CC_no)$(COMPILE) -c -o $@ $<
+ 	$(NULL)
+ 
++.NOTPARALLEL:
++
+ MAINTAINERCLEANFILES += extension.c panelbinding.c
+ 
+ man_seven_DATA = ibus-emoji.7

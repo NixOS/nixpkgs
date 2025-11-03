@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       PYTHON = null;
     })
     ./build-without-dbus-launch.patch
+    # https://github.com/NixOS/nixpkgs/issues/230290
+    ./vala-parallelism.patch
   ];
 
   outputs = [
