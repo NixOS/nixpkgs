@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/ProtonMail/WebClients/blob/proton-pass@${finalAttrs.version}/applications/pass-desktop/CHANGELOG.md";
     description = "Desktop application for Proton Pass";
     homepage = "https://proton.me/pass";
     license = lib.licenses.gpl3Plus;
