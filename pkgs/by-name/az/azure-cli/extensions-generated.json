@@ -685,6 +685,13 @@
     "hash": "sha256-i6RQpaPar6i5trbp7oIk9Gj9lyMy6QUADyrMf/AM2bs=",
     "description": "Microsoft Azure Command-Line Tools Microsoft Fabric Extension"
   },
+  "migrate": {
+    "pname": "migrate",
+    "version": "2.0.1b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/migrate-2.0.1b1-py3-none-any.whl",
+    "hash": "sha256-vRMg/oeqSFXwZaB6J6RO51U6kjWdE4O7EWc/i4LxOmU=",
+    "description": "Support for Azure Migrate preview"
+  },
   "mixed-reality": {
     "pname": "mixed-reality",
     "version": "1.0.0b1",
