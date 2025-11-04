@@ -1489,13 +1489,13 @@
     "vendorHash": "sha256-OoIlSsR8vbS15TfZvPP+RBDjPvD7Jzr2CpgMk76s6R8="
   },
   "wgebis_mailgun": {
-    "hash": "sha256-fuJnzloJa0S1r3/22Wecbq1oF8oRQP2nrrmwCONHITA=",
+    "hash": "sha256-/AYzQgMWo2cPjEMlrOSZLn4IVq4At09KFXkIpc7L5p0=",
     "homepage": "https://registry.terraform.io/providers/wgebis/mailgun",
     "owner": "wgebis",
     "repo": "terraform-provider-mailgun",
-    "rev": "v0.7.7",
+    "rev": "v0.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Y6zsbhLNehO3i/BRjKggVhcM15Qesbd6HbARFH/arM8="
+    "vendorHash": "sha256-Z4DfoG4ApXbPNXZs9YvBWQj1bH7moLNI6P+nKDHt/Jc="
   },
   "yandex-cloud_yandex": {
     "hash": "sha256-jzACS+vNAiUp7GJt3jO8lTbQZpSj5vUhB1aD0iRi6Gk=",
