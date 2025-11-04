@@ -296,6 +296,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
   inherit (pkgs) web-ext; # added 2023-08-20
+  webpack = throw "'webpack' has been removed because it is a library that should be imported within a Javascript project, not an end-user tool."; # Added 2025-11-04
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
   webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
