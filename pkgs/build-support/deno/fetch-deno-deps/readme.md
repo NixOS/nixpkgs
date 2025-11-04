@@ -8,6 +8,13 @@ Audience:
 
 - `fetch-deno-deps` maintainers
 
+Related files:
+
+- `./import-from-lock-feature.md`: information about the import-from-lock feature
+- `./missing-deno-features.md`: information about the
+
+## Intro
+
 Deno's dependency cache API is very complex and obscure. It requires a lot of
 research and some reverse engineering to figure it all out.
 
@@ -712,9 +719,9 @@ To do this, we need to decouple the fetching step from all the other
 language-specific logic, so that a change to any format the package manager
 uses, does not require a change to the hash of the FOD.
 
-#### Import from derivation (IFD) and "import from lock file" feature
+#### IFD-free build
 
-##### What is IFD?
+##### What is IFD (Import from derivation)?
 
 <https://nix.dev/manual/nix/2.23/language/import-from-derivation>
 
@@ -733,82 +740,9 @@ aiming for an IFD-free build.
 The derivation containing the fetched files, then is an input to the derivation
 building the package.
 
-##### What is "import from lock file"?
-
-By default, to fetch anything from the internet in Nixpkgs, you need a fixed
-output derivation, which requires an `outputHash` to verify, that the output did
-not change compared to last time.
-
-For a build helper this means, when we want to download the dependencies of a
-package, we need to provide at least one hash.
-
-This is a nuisance, since we need to manually change the hash each time the
-dependencies change. For a package maintained in Nixpkgs it does not occur that
-often, however if the build-helper is used when developing a package, it does.
-
-Since there are usually integrity hashes for packages in lock files, we could
-theoretically just use those, and circumvent having to specify a hash in Nix.
-
-To do that, we need to parse the lock file in Nix. Mind that this step implies
-IFD, if the lock-file is not part of the same repo, but is for example fetched
-from a remote repo with `fetchGit`.
-
-With the parsed lock-file, we then create separate FODs one per `(url, hash)`
-pair. Also, we need to collect all those FODs and associate them with enough
-meta information to enable us to transform them into a file structure, that the
-language's package manager will understand.
-
-All the logic to parse the lock-file and fetch the files, **has to be written in
-Nix**.
-
-Creating many FODs can have serious performance implications, since each FOD
-means a new build container and build environment etc. So the disk IO can become
-a bottleneck if this goes into the thousands.
-
-##### "Packaging in nixpkgs" vs "packaging while developing"
-
-There are two different user scenarios to consider:
-
-1. Package maintainers in Nixpkgs, that want to package some remote source code
-   using the build-helper.
-
-   Since they can't use IFD, they can't just fetch the source code in a build
-   and then import that lock file in Nix.
-
-   This usually means, they provide the hash manually.
-
-   Sometimes the remote source code does not have a lock-file. Then they have to
-   generate and vendor the lock file in the Nixpkgs repo.
-
-2. Developers, writing their own language package, that want to package their
-   local code with Nix using the build-helper.
-
-   Developers usually don't care about IFD, but they do care about the nuisance
-   of having to manually change the hash every time they import a new package
-   while developing.
-
-##### Summary
-
-So to summarize:
-
-To provide the package maintainers with the functionality they require, we have
-to write the entire logic to parse the lock file and fetch the files, in a way
-that it can be executed inside a derivation, because of the IFD constraint. So
-it can't be written using the Nix language.
-
-And to provide the developers with the functionality they would like, we have to
-write the logic in the Nix language.
-
-So we end up with two implementations, doing basically the same thing but
-slightly different.
-
 ### Abstract approach
 
-As explained in
-["import from lock file" feature](#import-from-lock-file-feature), that feature
-is not implemented.
-
-So according to our constraints, we end up with this architecture:
+According to our constraints, we end up with this architecture:
 
 ![architecture diagram](./builder-architecture.drawio.svg)
 
@@ -843,6 +777,8 @@ introduce our own format, which we have full control over. I called it
 The file structure transformation step happens during the package build to avoid
 having to cache the same files twice, once from step 2 and once from step 3.
 This is important to reduce load on the nixpkgs cache servers.
+
+However, we also provide a way to build a derivation containing just step 3.
 
 ### Concrete implementation
 
@@ -920,7 +856,3 @@ For the `npm:` packages, a TypeScript file is used.
 
 The `npm:` packages are downloaded as `.tgz` files and have to be extracted in
 this step.
-
-## "import from lock file" feature **Not implemented**
-
-It's currently not feasible to have an "import from lock file" functionality.
