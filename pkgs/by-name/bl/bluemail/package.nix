@@ -20,7 +20,7 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bluemail";
   version = "1.140.93";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       icon = "bluemail";
       exec = "bluemail";
       desktopName = "BlueMail";
-      comment = meta.description;
+      comment = "Cross platform email and calendar app, with AI features and a modern design";
       genericName = "Email Reader";
       mimeTypes = [
         "x-scheme-handler/me.blueone.linux"

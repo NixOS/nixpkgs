@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage rec {
       exec = meta.mainProgram;
       icon = "bite";
       desktopName = "BiTE";
-      comment = meta.description;
+      comment = "Disassembler focused on comprehensive rust support";
       categories = [
         "Development"
         "Utility"

@@ -65,7 +65,7 @@ buildDotnetModule rec {
     (makeDesktopItem {
       name = "Celeste64";
       exec = "Celeste64";
-      comment = meta.description;
+      comment = "Celeste 64: Fragments of the Mountain";
       desktopName = "Celeste64";
       genericName = "Celeste64";
       icon = "Celeste64";

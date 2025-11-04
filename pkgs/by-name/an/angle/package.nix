@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     includedir=''${prefix}/include
 
     Name: angle
-    Description: ${finalAttrs.meta.description}
+    Description: Conformant OpenGL ES implementation for Windows, Mac, Linux, iOS and Android
 
     URL: ${finalAttrs.meta.homepage}
     Version: ${lib.versions.major finalAttrs.version}
