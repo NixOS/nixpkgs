@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     $out/bin/cargo-hack hack --version | grep -F 'cargo-hack ${finalAttrs.version}'
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cargo subcommand to provide various options useful for testing and continuous integration";
