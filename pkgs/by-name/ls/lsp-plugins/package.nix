@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
-  version = "1.2.24";
+  version = "1.2.25";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rDKf3PqRa+lLZcHGQNRXBGkcnhkMNdE9Jok4n3/btGM=";
+    hash = "sha256-qCm3DfRF7LR6wk5TtC/r1GIA2ZI7YrrZTKNHjLDjJnM=";
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself
@@ -93,49 +93,70 @@ stdenv.mkDerivation (finalAttrs: {
       Contains the following plugins (https://lsp-plug.in/?page=plugins)
 
       Equalizers:
-      - Fliter
+      - Filter
       - Graphic Equalizer
       - Parametric Equalizer
+
       Dynamic Processing:
+      - Beat Breather
+      - Clipper
       - Compressor
-      - Dynamic Processor
+      - Dynamics Processor
       - Expander
       - Gate
       - Limiter
+
       Multiband Dynamic Processing:
       - GOTT Compressor
+      - Multiband Clipper
       - Multiband Compressor
       - Multiband Dynamics Processor
       - Multiband Expander
       - Multiband Gate
       - Multiband Limiter
-      Convolution / Reverb processing:
+
+      Convolution / Reverb Processing:
       - Impulse Responses
       - Impulse Reverb
       - Room Builder
+
       Delay Effects:
       - Artistic Delay
       - Compensation Delay
       - Slap-back Delay
+
+      Modulation Effects:
+      - Chorus
+      - Flanger
+      - Phaser
+
       Analyzers:
       - Oscilloscope
       - Phase Detector
       - Spectrum Analyzer
+
       Multiband Processing:
       - Crossover
+
       Samplers:
       - Multisampler
       - Sampler
+
       Generators / Oscillators:
       - Noise Generator
       - Oscillator
-      Utilitary Plugins:
+
+      Utility Plugins:
       - A/B Test Plugin
-      - Flanger
+      - Automatic Gain Control
       - Latency Meter
       - Loudness Compensator
       - Mixer
       - Profiler
+      - Referencer
+      - Return
+      - Ring Modulated Sidechain
+      - Send
       - Surge Filter
       - Trigger
     '';
