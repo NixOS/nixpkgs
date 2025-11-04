@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
+  setuptools,
 
   # runtime dependencies
   certifi,
@@ -51,6 +52,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = [ xattr ];
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   # Tests require pandas 1.3.5, which requires too much compilation effort (in Nix).
   doCheck = false;
