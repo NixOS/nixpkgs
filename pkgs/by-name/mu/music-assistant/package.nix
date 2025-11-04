@@ -193,7 +193,10 @@ python.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [
+      hexa
+      emilylange
+    ];
     mainProgram = "mass";
   };
 }
