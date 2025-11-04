@@ -15,7 +15,7 @@
   lib ? pkgs.lib,
 }:
 let
-  allBytesExceptNullPath = ./all-bytes-except-null.bin;
+  allBytesExceptNullPath = ../../byte-to-hex-table/all-bytes-except-null.bin;
   allBytesExceptNullData = lib.strings.readFile allBytesExceptNullPath;
   emptyFilePath = ./empty-file.bin;
   emptyFileData = lib.strings.readFile emptyFilePath;

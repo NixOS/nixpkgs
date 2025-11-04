@@ -1544,7 +1544,7 @@ rec {
   escapePythonBytes =
     s:
     let
-      byteToHexTable = import ./byte-to-hex-table lib;
+      byteToHexTable = import ./byte-to-hex-table;
       byteToEscapedHex = byte: "\\x${builtins.getAttr byte byteToHexTable}";
 
       argumentWithoutContext = unsafeDiscardStringContext s;
