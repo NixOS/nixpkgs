@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpanel";
-  version = "1.10.2";
+  version = "1.10.3";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor finalAttrs.version}/libpanel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zBLo4Q8eSXe9Eq0/+u3NUqwXY0i0r2/l2mhrljJb/gE=";
+    hash = "sha256-QqAbr4uURA8ZTqg0KyRL1pkt+wJMoxYMlHf/SY7DorY=";
   };
 
   strictDeps = true;
