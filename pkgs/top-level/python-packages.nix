@@ -6710,6 +6710,8 @@ self: super: with self; {
 
   histoprint = callPackage ../development/python-modules/histoprint { };
 
+  hive-metastore-client = callPackage ../development/python-modules/hive-metastore-client { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hjson = callPackage ../development/python-modules/hjson { };
