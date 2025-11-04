@@ -137,6 +137,7 @@ export async function fetchAllNpm(
 
   for (const registryJson of Object.values(registryJsons)) {
     resultUnresolved.push(Promise.resolve([registryJson.packageFile]));
+    // the other files are written in fetchDefault, but we need to write the registryJsons, too
     await writeRegistryJson(outPathPrefix, registryJson);
   }
 

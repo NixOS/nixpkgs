@@ -20,7 +20,7 @@ export function assertEq(a: any, b: any, msg?: string) {
   throwNow();
 }
 
-Deno.test("parsePackageSpecifier", () => {
+Deno.test("test parsePackageSpecifier", () => {
   type TestCase = {
     input: string;
     expectedOutput: PackageSpecifier;
