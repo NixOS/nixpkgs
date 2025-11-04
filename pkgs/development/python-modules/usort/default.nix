@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "usort";
-  version = "1.0.8";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "facebook";
     repo = "usort";
     tag = "v${version}";
-    hash = "sha256-iezq2K+Rw0djyOoFm7tguw/vkkDSyrPZIfZPmaZvFpM=";
+    hash = "sha256-QnhpnuEt6j/QPmX29A0523QDh4o2QfaCoDI0YJpTc8Y=";
   };
 
   nativeBuildInputs = [
