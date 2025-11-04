@@ -104,7 +104,15 @@ effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches = lib.optionals cudaSupport [
+  patches = [
+    # Handle missing default logger when cpuinfo initialization fails in the build sandbox
+    # TODO: Remove on next release
+    # https://github.com/microsoft/onnxruntime/issues/10038
+    # https://github.com/microsoft/onnxruntime/pull/15661
+    # https://github.com/microsoft/onnxruntime/pull/20509
+    ./cpuinfo-logging.patch
+  ]
+  ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
