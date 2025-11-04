@@ -136,7 +136,6 @@
 , "vega-lite"
 , "vercel"
 , "wavedrom-cli"
-, "webpack"
 , "wring"
 , "@yaegassy/coc-nginx"
 ]
