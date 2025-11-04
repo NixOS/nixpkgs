@@ -166,7 +166,7 @@ rec {
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
-  manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
+  manual-nixos = (import ../nixos/release.nix { }).manualHTML.${system} or null;
   manual-nixpkgs = (import ../doc { inherit pkgs; });
   manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {

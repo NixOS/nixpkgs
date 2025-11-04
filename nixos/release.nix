@@ -1,8 +1,6 @@
-with import ../lib;
-
 {
   nixpkgs ? {
-    outPath = cleanSource ./..;
+    outPath = (import ../lib).cleanSource ./..;
     revCount = 708350;
     shortRev = "gfedcba";
   },
@@ -24,9 +22,20 @@ with import ../lib;
   attrNamesOnly ? false,
 }:
 
-with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 
 let
+  inherit (import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; })
+     fileContents
+     hydraJob
+     foldAttrs
+     recursiveUpdate
+     head
+     mkDefault
+     forAllSystems
+     forMatchingSystems
+     singleton
+     release
+     ;
 
   version = fileContents ../.version;
   versionSuffix =
@@ -93,12 +102,9 @@ let
   makeIso =
     {
       module,
-      type,
       system,
       ...
     }:
-
-    with import ./.. { inherit system; };
 
     hydraJob (
       (import lib/eval-config.nix {
@@ -109,8 +115,6 @@ let
 
   makeSdImage =
     { module, system, ... }:
-
-    with import ./.. { inherit system; };
 
     hydraJob (
       (import lib/eval-config.nix {
@@ -129,7 +133,6 @@ let
     with import ./.. { inherit system; };
 
     let
-
       config =
         (import lib/eval-config.nix {
           inherit system;
@@ -137,7 +140,6 @@ let
         }).config;
 
       tarball = config.system.build.tarball;
-
     in
     tarball
     // {
@@ -196,7 +198,7 @@ let
     };
 
 in
-rec {
+{
 
   channel = import lib/make-channel.nix {
     inherit
@@ -208,8 +210,7 @@ rec {
   };
 
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
-  manual = manualHTML; # TODO(@oxij): remove eventually
-  manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+  manualEpub = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub);
   nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (
     config: config.system.build.manual.nixos-configuration-reference-manpage
   );
@@ -298,8 +299,6 @@ rec {
   # KVM image for proxmox in VMA format
   proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (
     system:
-    with import ./.. { inherit system; };
-
     hydraJob (
       (import lib/eval-config.nix {
         inherit system;
@@ -313,8 +312,6 @@ rec {
   # LXC tarball for proxmox
   proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (
     system:
-    with import ./.. { inherit system; };
-
     hydraJob (
       (import lib/eval-config.nix {
         inherit system;
@@ -328,9 +325,6 @@ rec {
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
     system:
-
-    with import ./.. { inherit system; };
-
     hydraJob (
       (import lib/eval-config.nix {
         inherit system;
@@ -345,9 +339,6 @@ rec {
   );
   amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
     system:
-
-    with import ./.. { inherit system; };
-
     hydraJob (
       (import lib/eval-config.nix {
         inherit system;
@@ -370,8 +361,6 @@ rec {
       ]
       (
         system:
-        with import ./.. { inherit system; };
-
         hydraJob (
           (import lib/eval-config.nix {
             inherit system;
@@ -393,9 +382,6 @@ rec {
       ]
       (
         system:
-
-        with import ./.. { inherit system; };
-
         hydraJob (
           (import lib/eval-config.nix {
             inherit system;
@@ -417,9 +403,6 @@ rec {
       ]
       (
         system:
-
-        with import ./.. { inherit system; };
-
         hydraJob (
           (import lib/eval-config.nix {
             inherit system;
@@ -441,9 +424,6 @@ rec {
       ]
       (
         system:
-
-        with import ./.. { inherit system; };
-
         hydraJob (
           (import lib/eval-config.nix {
             inherit system;
@@ -468,7 +448,7 @@ rec {
             {
               fileSystems."/".device = mkDefault "/dev/sda1";
               boot.loader.grub.device = mkDefault "/dev/sda";
-              system.stateVersion = mkDefault lib.trivial.release;
+              system.stateVersion = mkDefault release;
             }
           );
         }).config.system.build.toplevel;
