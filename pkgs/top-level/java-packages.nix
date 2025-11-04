@@ -47,6 +47,7 @@ in
       corretto11 = callPackage ../development/compilers/corretto/11.nix { };
       corretto17 = callPackage ../development/compilers/corretto/17.nix { };
       corretto21 = callPackage ../development/compilers/corretto/21.nix { };
+      corretto25 = callPackage ../development/compilers/corretto/25.nix { };
 
       openjdk8 = mkOpenjdk "8";
       openjdk11 = mkOpenjdk "11";
