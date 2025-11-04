@@ -1,6 +1,12 @@
 # fetch-deno-deps
 
-This goal of this file is to make the code of `fetch-deno-deps` maintainable.
+Goals:
+
+- make the code of `fetch-deno-deps` maintainable, using good documentation
+
+Audience:
+
+- `fetch-deno-deps` maintainers
 
 Deno's dependency cache API is very complex and obscure. It requires a lot of
 research and some reverse engineering to figure it all out.
@@ -8,22 +14,22 @@ research and some reverse engineering to figure it all out.
 Also Nixpkgs imposes some complicated constraints on the design of our code,
 which are not trivially understood, nor well documented at the time of writing.
 
-So to understand why the code is the way it is, a maintainer should read this whole file first,
-and use it as a reference later.
+**So to understand why the code is the way it is, a maintainer should read this
+whole file first, and use it as a reference later.**
 
 ## Deno's dependency cache formats
 
-This section documents what formats the Deno CLI uses for its dependency
-cache at the time of writing.
+This section documents what formats the Deno CLI uses for its dependency cache
+at the time of writing.
 
-It's assumed that the reader knows:
+Required knowledge:
 
 - what Deno is
 - how Deno's packaging works, roughly
 - what Nix and Nixpkgs is
 - what the purpose of a language build helper in Nixpkgs is
-- what Fixed Output Derivations (FODs) are,
-  and why they are a necessity for language build helpers
+- what Fixed Output Derivations (FODs) are, and why they are a necessity for
+  language build helpers
 
 Since many of the formats are considered an implementation detail by the Deno
 maintainers, they are subject to change and compatibility to the Deno CLI can
@@ -116,14 +122,15 @@ The packages listed in `remote` are called
 A JSR package is fetched from the [JavaScript registry](https://jsr.io/).
 
 The basic structure of their API is outlined
-[here](https://jsr.io/docs/api#jsr-registry-api).
-Multiple steps are necessary, to fetch a package from the JSR.
+[here](https://jsr.io/docs/api#jsr-registry-api). Multiple steps are necessary,
+to fetch a package from the JSR.
 
 1. Fetch the `meta.json` file and look at available versions of a package.
 2. Pick a version in the `meta.json` file.
 3. Fetch the `<version>_meta.json` file for the picked version.
-4. Analyze the module graph in the `<version>_meta.json` file to get the file paths of the imported files.
-3. Fetch the imported files individually.
+4. Analyze the module graph in the `<version>_meta.json` file to get the file
+   paths of the imported files.
+5. Fetch the imported files individually.
 
 #### `meta.json`
 
@@ -144,8 +151,8 @@ Multiple steps are necessary, to fetch a package from the JSR.
 }
 ```
 
-**Implementation Notes**: These files are mutable and change as new versions appear.
-Therefore, we should not add them to the output of an FOD.
+**Implementation Notes**: These files are mutable and change as new versions
+appear. Therefore, we should not add them to the output of an FOD.
 
 The Deno CLI requires these files, however, so we need to construct them from
 the information we get from the lock file.
@@ -287,7 +294,8 @@ but the module graph can also look like this:
 
 </details>
 
-**Implementation Notes**: These files are immutable. JSR promises they will never change.
+**Implementation Notes**: These files are immutable. JSR promises they will
+never change.
 
 The integrity hashes for JSR packages in the lock-file, are sha256 hashes over
 the contents of the `<version>_meta.json` files.
@@ -331,9 +339,9 @@ Deno supports JavaScript CDNs like:
 - `esm.sh`
 - `unpkg.com`
 
-**Implementation Notes**: For HTTPS Packages, generally,
-the lock file already lists the resolved URLs for
-us in `.remote` and associates them with the hashes of the files.
+**Implementation Notes**: For HTTPS Packages, generally, the lock file already
+lists the resolved URLs for us in `.remote` and associates them with the hashes
+of the files.
 
 There are some caveats to this, though.
 
@@ -376,8 +384,8 @@ DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:p
 Both the JSR and HTTPS packages end up in the vendor directory, if the
 `--vendor` flag is used or the `"vendor": true` option is set in `deno.json`.
 
-**Implementation Notes**: This build helper uses the vendor directory,
-since it provides a much better interface compared to not using it.
+**Implementation Notes**: This build helper uses the vendor directory, since it
+provides a much better interface compared to not using it.
 
 #### File renaming scheme
 
@@ -475,13 +483,13 @@ using the hash given in the lock file, we can fetch it in a FOD.
 - `$DENO_DIR/npm/registry.npmjs.org/<name>/<version>`
 - `$DENO_DIR/npm/registry.npmjs.org/@<scope>/<name>/<version>`
 
-**Implementation Notes**: We need to extract the tarballs to the correct target location,
-so Deno can find the files.
+**Implementation Notes**: We need to extract the tarballs to the correct target
+location, so Deno can find the files.
 
 #### `registry.json`
 
-The NPM registry provides a `registry.json` file,
-somewhat similar to the `meta.json` file used in the JSR.
+The NPM registry provides a `registry.json` file, somewhat similar to the
+`meta.json` file used in the JSR.
 
 Deno uses a subset of NPM's `registry.json` file.
 
@@ -532,8 +540,8 @@ Deno's subset of the `registry.json` file
 - `$DENO_DIR/npm/registry.npmjs.org/@<scope>/<name>/registry.json`
 
 **Implementation Notes**: Those files are mutable. They have a `.version` field,
-which holds the currently available versions of a package.
-So instead of fetching that file, we have to construct it from the available information.
+which holds the currently available versions of a package. So instead of
+fetching that file, we have to construct it from the available information.
 
 Like with the `meta.json` file, we have to make sure, that for each version a
 package occurs in the lock-file, there is an entry in `.versions`.
@@ -650,15 +658,16 @@ It's assumed that the reader knows:
 
 - what Nix and Nixpkgs is
 - what the purpose of a language build helper in Nixpkgs is
-- what Fixed Output Derivations (FODs) are,
-  and why they are a necessity for language build helpers
+- what Fixed Output Derivations (FODs) are, and why they are a necessity for
+  language build helpers
 
 ### Design constraints
 
-Due to the build helper existing in the context of Nixpkgs,
-there are a couple of constraints to keep in mind, which are explained in detail below.
+Due to the build helper existing in the context of Nixpkgs, there are a couple
+of constraints to keep in mind, which are explained in detail below.
 
 We need:
+
 - a **custom fetcher**; we can't use the language's package manager CLI
 - to **decouple fetching logic** from the language's package manager formats
   (like lock-file or dependency cache folder)
@@ -666,39 +675,42 @@ We need:
 
 #### Custom fetcher
 
-A naive implementation of a language build helper could use the
-CLI of the language package manager and wrap the installation step in a FOD,
-so files can be downloaded, and wrap the build step in a derivation. Done.
+A naive implementation of a language build helper could use the CLI of the
+language package manager and wrap the installation step in a FOD, so files can
+be downloaded, and wrap the build step in a derivation. Done.
 
 However, this approach has caused great problems for Nixpkgs in the past and is
 now to be avoided.
 
-The reason is that the package manager CLI version will change,
-as it is updated in Nixpkgs and with such a change,
-the FOD that was produced by the build helper can change.
+The reason is that the package manager CLI version will change, as it is updated
+in Nixpkgs and with such a change, the FOD that was produced by the build helper
+can change.
 
-This can become a huge problem for Nixpkgs, since FODs use hashes over the output
-to find cached results in the Nix store. The hash of a FOD won't change until done manually,
-which means, as long as that step is not performed, the cached, outdated version from the Nix store will
-be used. A rebuild of the FOD however would now produce a new version with a different hash.
+This can become a huge problem for Nixpkgs, since FODs use hashes over the
+output to find cached results in the Nix store. The hash of a FOD won't change
+until done manually, which means, as long as that step is not performed, the
+cached, outdated version from the Nix store will be used. A rebuild of the FOD
+however would now produce a new version with a different hash.
 
-Because the nix cache will hold those FODs potentially for years, there can be a huge
-delay until a breaking change in the package manager CLI is recognized, which will make
-debugging very difficult.
+Because the nix cache will hold those FODs potentially for years, there can be a
+huge delay until a breaking change in the package manager CLI is recognized,
+which will make debugging very difficult.
 
-So, generally speaking, Nixpkgs wants language build helpers to use custom fetchers,
-instead of just invoking the language-specific package manager CLI to fetch the packages.
+So, generally speaking, Nixpkgs wants language build helpers to use custom
+fetchers, instead of just invoking the language-specific package manager CLI to
+fetch the packages.
 
 #### Decouple fetching logic
 
 Since FODs generally require manually inserting a hash, it can be a cumbersome
 process if done many times.
 
-So custom fetchers should try to require changing hashes of FODs as few times as possible.
+So custom fetchers should try to require changing hashes of FODs as few times as
+possible.
 
-To do this, we need to decouple the fetching step from all the other language-specific
-logic, so that a change to any format the package manager uses, does not require
-a change to the hash of the FOD.
+To do this, we need to decouple the fetching step from all the other
+language-specific logic, so that a change to any format the package manager
+uses, does not require a change to the hash of the FOD.
 
 #### Import from derivation (IFD) and "import from lock file" feature
 
@@ -708,12 +720,12 @@ a change to the hash of the FOD.
 
 In short, IFD forbids us to **read** a file from a derivation in Nix code.
 
-IFD is forbidden in Nixpkgs due to performance implications.
-This means a build helper has to provide an IFD-free build.
+IFD is forbidden in Nixpkgs due to performance implications. This means a build
+helper has to provide an IFD-free build.
 
 So the entire logic to parse the lock file, fetch all dependencies, transform
-them into the right format, and finally build the package,
-has to be run inside one or multiple derivations.
+them into the right format, and finally build the package, has to be run inside
+one or multiple derivations.
 
 Or put another way, that **logic cannot be written in the Nix language**, when
 aiming for an IFD-free build.
@@ -723,34 +735,35 @@ building the package.
 
 ##### What is "import from lock file"?
 
-By default, to fetch anything from the internet in Nixpkgs, you need a fixed output derivation, which
-requires an `outputHash` to verify, that the output did not change compared to last time.
+By default, to fetch anything from the internet in Nixpkgs, you need a fixed
+output derivation, which requires an `outputHash` to verify, that the output did
+not change compared to last time.
 
 For a build helper this means, when we want to download the dependencies of a
 package, we need to provide at least one hash.
 
-This is a nuisance, since we need to manually change the hash each time the dependencies change.
-For a package maintained in Nixpkgs it does not occur that often, however if the build-helper is used
-when developing a package, it does.
+This is a nuisance, since we need to manually change the hash each time the
+dependencies change. For a package maintained in Nixpkgs it does not occur that
+often, however if the build-helper is used when developing a package, it does.
 
-Since there are usually integrity hashes for packages in lock files,
-we could theoretically just use those, and circumvent having to specify a hash
-in Nix.
+Since there are usually integrity hashes for packages in lock files, we could
+theoretically just use those, and circumvent having to specify a hash in Nix.
 
-To do that, we need to parse the lock file in Nix. Mind that this step
-implies IFD, if the lock-file is not part of the same repo, but is for example
-fetched from a remote repo with `fetchGit`.
+To do that, we need to parse the lock file in Nix. Mind that this step implies
+IFD, if the lock-file is not part of the same repo, but is for example fetched
+from a remote repo with `fetchGit`.
 
-With the parsed lock-file, we then create separate FODs
-one per `(url, hash)` pair. Also, we need to collect all those FODs and
-associate them with enough meta information to enable us to transform them
-into a file structure, that the language's package manager will understand.
+With the parsed lock-file, we then create separate FODs one per `(url, hash)`
+pair. Also, we need to collect all those FODs and associate them with enough
+meta information to enable us to transform them into a file structure, that the
+language's package manager will understand.
 
-All the logic to parse the lock-file and fetch the files, **has to be written in Nix**.
+All the logic to parse the lock-file and fetch the files, **has to be written in
+Nix**.
 
 Creating many FODs can have serious performance implications, since each FOD
-means a new build container and build environment etc. So the disk IO can
-become a bottleneck if this goes into the thousands.
+means a new build container and build environment etc. So the disk IO can become
+a bottleneck if this goes into the thousands.
 
 ##### "Packaging in nixpkgs" vs "packaging while developing"
 
@@ -764,8 +777,8 @@ There are two different user scenarios to consider:
 
    This usually means, they provide the hash manually.
 
-   Sometimes the remote source code does not have a lock-file.
-   Then they have to generate and vendor the lock file in the Nixpkgs repo.
+   Sometimes the remote source code does not have a lock-file. Then they have to
+   generate and vendor the lock file in the Nixpkgs repo.
 
 2. Developers, writing their own language package, that want to package their
    local code with Nix using the build-helper.
@@ -778,21 +791,22 @@ There are two different user scenarios to consider:
 
 So to summarize:
 
-To provide the package maintainers with the functionality they require,
-we have to write the entire logic to parse the lock file and fetch the files,
-in a way that it can be executed inside a derivation, because of the IFD constraint.
-So it can't be written using the Nix language.
+To provide the package maintainers with the functionality they require, we have
+to write the entire logic to parse the lock file and fetch the files, in a way
+that it can be executed inside a derivation, because of the IFD constraint. So
+it can't be written using the Nix language.
 
-And to provide the developers with the functionality they would like,
-we have to write the logic in the Nix language.
+And to provide the developers with the functionality they would like, we have to
+write the logic in the Nix language.
 
-So we end up with two implementations, doing basically the same thing
-but slightly different.
+So we end up with two implementations, doing basically the same thing but
+slightly different.
 
 ### Abstract approach
 
-As explained in ["import from lock file" feature](#import-from-lock-file-feature),
-that feature is not implemented.
+As explained in
+["import from lock file" feature](#import-from-lock-file-feature), that feature
+is not implemented.
 
 So according to our constraints, we end up with this architecture:
 
@@ -800,48 +814,54 @@ So according to our constraints, we end up with this architecture:
 
 As a horizontal line, we see a divide between eval time and build time.
 
-It's important to differentiate here, because everything in eval time,
-is written in Nix and everything in build time is executed in a build container,
+It's important to differentiate here, because everything in eval time, is
+written in Nix and everything in build time is executed in a build container,
 using some language different from Nix.
 
-Also, whenever we would have data flow from build time to eval time, we would do an IFD.
+Also, whenever we would have data flow from build time to eval time, we would do
+an IFD.
 
 The separation of the 3 concerns:
+
 1. lock-file transformer
 2. fetcher
 3. file structure transformer
 
 stems from the first two constraints above:
+
 - [Custom Fetcher](#custom-fetcher)
 - [Decouple fetching logic](#decouple-fetching-logic)
 
 Since we want to break FODs as few times as possible, we need to separate the
-fetching step from
-the lock file parsing step and the file structure transformation step.
+fetching step from the lock file parsing step and the file structure
+transformation step.
 
-To properly decouple the fetching step from `deno.lock`'s format,
-we need to introduce our own format, which we have full control over.
-I called it `Common Lock Format`.
+To properly decouple the fetching step from `deno.lock`'s format, we need to
+introduce our own format, which we have full control over. I called it
+`Common Lock Format`.
 
-The file structure transformation step happens during the package build
-to avoid having to cache the same files twice, once from step 2 and once from
-step 3. This is important to reduce load on the nixpkgs cache servers.
+The file structure transformation step happens during the package build to avoid
+having to cache the same files twice, once from step 2 and once from step 3.
+This is important to reduce load on the nixpkgs cache servers.
 
 ### Concrete implementation
 
 Each of the 3 steps:
+
 1. lock-file transformer
 2. fetcher
 3. file structure transformer
 
 uses their own scripts and has their own tests.
 
-The tests also act as specifications for the steps.
-You can for example look at the `Common Lock Format` in the test cases.
+The tests also act as specifications for the steps. You can for example look at
+the `Common Lock Format` in the test cases.
 
-Read more about the tests in `/pkgs/test/build-deno-package/integration-tests/readme.md`
+Read more about the tests in
+`/pkgs/test/build-deno-package/integration-tests/readme.md`
 
 In Deno, we have 3 kinds of dependencies:
+
 - `jsr:`
 - `npm:`
 - `https:`
@@ -850,12 +870,13 @@ and each kind requires special handling in each of the steps.
 
 Because of this, the scripts have separate logic for each kind.
 
-Most of the logic is written in TypeScript using Deno, except for the file structure transformer
-for the `vendor/` directory, which is written in Rust to use a specific library
-provided by Deno upstream.
+Most of the logic is written in TypeScript using Deno, except for the file
+structure transformer for the `vendor/` directory, which is written in Rust to
+use a specific library provided by Deno upstream.
 
-Mind that the TypeScript code **can't import external dependencies**, since we can't
-package those with Nix until this build helper exists (chicken-egg-problem).
+Mind that the TypeScript code **can't import external dependencies**, since we
+can't package those with Nix until this build helper exists
+(chicken-egg-problem).
 
 #### Lock-file transformer
 
@@ -864,8 +885,8 @@ The lock-file transformer needs to transform the `deno.lock` into the
 
 The logic is written in a single TypeScript file.
 
-It creates 3 `Common Lock` files, one per dependency kind, so they don't have
-to be separated again in the fetching step.
+It creates 3 `Common Lock` files, one per dependency kind, so they don't have to
+be separated again in the fetching step.
 
 #### Fetcher
 
@@ -879,8 +900,8 @@ dependencies and adds `outPaths` to the 3 `Common Lock` files.
 However, it does not write 3 three files to disk just like that, but combines
 `jsr:` and `https:` into `vendor.json` (see next step).
 
-It does not structure the downloaded files whatsoever. Each file is written to the same folder
-to a unique path, using sha256 over the download URL.
+It does not structure the downloaded files whatsoever. Each file is written to
+the same folder to a unique path, using sha256 over the download URL.
 
 The extended `Common Lock` files are also written to the same folder.
 
@@ -888,7 +909,8 @@ The extended `Common Lock` files are also written to the same folder.
 
 The file structure transformer has to split a little differently.
 
-1. It has to put the packages from the `jsr:` and `https:` packages in the `vendor/` directory.
+1. It has to put the packages from the `jsr:` and `https:` packages in the
+   `vendor/` directory.
 1. And it has to put the `npm:` packages into the `$DENO_DIR`.
 
 For the `vendor/` directory, A thin Rust script is used, to utilise a library
@@ -896,7 +918,8 @@ exposed by Deno upstream.
 
 For the `npm:` packages, a TypeScript file is used.
 
-The `npm:` packages are downloaded as `.tgz` files and have to be extracted in this step.
+The `npm:` packages are downloaded as `.tgz` files and have to be extracted in
+this step.
 
 ## "import from lock file" feature **Not implemented**
 
