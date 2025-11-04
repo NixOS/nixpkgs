@@ -433,6 +433,10 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 
+# Deno
+/pkgs/build-support/deno      @aMOPel
+/pkgs/test/build-deno-package @aMOPel
+
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid

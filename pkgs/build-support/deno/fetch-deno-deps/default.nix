@@ -29,6 +29,10 @@ let
       nativeBuildInputs = [
         fetch-deno-deps-scripts
       ];
+
+      meta = {
+        maintainers = [ lib.maintainers.aMOPel ];
+      };
     };
 
   singleFodFetcher =
@@ -63,6 +67,10 @@ let
       outputHashMode = "recursive";
       outputHash = hash;
       outputHashAlgo = "sha256";
+
+      meta = {
+        maintainers = [ lib.maintainers.aMOPel ];
+      };
     };
 
   # this derivation only meant to be used, if the dependency dir is needed outside of buildDenoPackage
@@ -98,6 +106,10 @@ let
         file-structure-transformer-npm --in-path "${fetched}/$npmJsonName" --cache-path $DENO_DIR
         file-structure-transformer-vendor --cache-path $DENO_DIR --vendor-path $vendorDir --url-file-map "${fetched}/$vendorJsonName"
       '';
+
+      meta = {
+        maintainers = [ lib.maintainers.aMOPel ];
+      };
     };
 
 in
