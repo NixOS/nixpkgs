@@ -6,6 +6,7 @@
   fetchFromGitHub,
   cmake,
   sip4,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,22 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
+
+    substituteInPlace pugixml/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
 
-  propagatedBuildInputs = [ sip4 ];
+  propagatedBuildInputs = [
+    sip4
+    distutils
+  ];
+
+  strictDeps = true;
 
   disabled = pythonOlder "3.4.0";
 
