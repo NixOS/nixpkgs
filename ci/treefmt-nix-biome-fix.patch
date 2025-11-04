@@ -1,0 +1,15 @@
+diff --git a/programs/biome.nix b/programs/biome.nix
+index 287aabd..e261ef9 100644
+--- a/programs/biome.nix
++++ b/programs/biome.nix
+@@ -14,8 +14,8 @@ let
+   biomeVersion = if builtins.match "^1\\." pkgs.biome.version != null then "1.9.4" else "2.1.2";
+   schemaUrl = "https://biomejs.dev/schemas/${biomeVersion}/schema.json";
+   schemaSha256s = {
+-    "1.9.4" = "sha256:0yzw4vymwpa7akyq45v7kkb9gp0szs6zfm525zx2vh1d80568dlz";
+-    "2.1.2" = "sha256:07qlk53lja9rsa46b8nv3hqgdzc9mif5r1nwh7i8mrxcqmfp99s2";
++    "1.9.4" = "sha256:0xia00hbazxnddinwx5bcfy3mrm8q31qgx78jcrj9q34nhn18jaa";
++    "2.1.2" = "sha256:1d909q6abxc3kcaqx4b9ibkfgzpwds5l8cylans8gpz0kvl3b1lz";
+   };
+   schemaSha256 = schemaSha256s.${biomeVersion};
+ 

@@ -30,7 +30,14 @@ let
         inherit (pinned.treefmt-nix) url;
         sha256 = pinned.treefmt-nix.hash;
       };
-      treefmtEval = (import treefmtNixSrc).evalModule pkgs {
+      # Will be upstreamed shortly
+      # error: hash mismatch in file downloaded from 'https://biomejs.dev/schemas/2.1.2/schema.json':
+      patchedTreefmtNixSrc = pkgs.applyPatches {
+        src = treefmtNixSrc;
+        name = "unbreak-ci-20251104";
+        patches = [ ./treefmt-nix-biome-fix.patch ];
+      };
+      treefmtEval = (import patchedTreefmtNixSrc).evalModule pkgs {
         # Important: The auto-rebase script uses `git filter-branch --tree-filter`,
         # which creates trees within the Git repository under `.git-rewrite/t`,
         # notably without having a `.git` themselves.
