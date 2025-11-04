@@ -6,7 +6,8 @@ type FetcherFixture = {
   inNpmJsonContent: string;
   inHttpsJsonContent: string;
   inServerFS: VirtualFS;
-  outVendoredJsonContent: string;
+  outJsrJsonContent: string;
+  outHttpsJsonContent: string;
   outNpmJsonContent: string;
   outFetchedFilesFS: VirtualFS;
   outStdout?: string;
@@ -73,8 +74,9 @@ function checkOutFetchedFilesFs(f: FetcherFixture) {
     );
   }
   const fetchedFilesFsExpected = [
+    ...getOutPaths(f.outJsrJsonContent),
+    ...getOutPaths(f.outHttpsJsonContent),
     ...getOutPaths(f.outNpmJsonContent),
-    ...getOutPaths(f.outVendoredJsonContent),
   ].sort();
   const fetchedFilesFsFromFixture = Object.keys(f.outFetchedFilesFS).sort();
   assertEq(
@@ -96,7 +98,8 @@ function replacePlaceholder(
     inJsrJsonContent: doReplace(f.inJsrJsonContent),
     inNpmJsonContent: doReplace(f.inNpmJsonContent),
     inHttpsJsonContent: doReplace(f.inHttpsJsonContent),
-    outVendoredJsonContent: doReplace(f.outVendoredJsonContent),
+    outJsrJsonContent: doReplace(f.outJsrJsonContent),
+    outHttpsJsonContent: doReplace(f.outHttpsJsonContent),
     outNpmJsonContent: doReplace(f.outNpmJsonContent),
     outStdout: doReplace(f.outStdout || ""),
     outStderr: doReplace(f.outStderr || ""),
@@ -116,8 +119,6 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     "in-path-npm": "./npm.json",
     "in-path-https": "./https.json",
     "in-jsr-registry-url": actualDomain,
-    "out-path-vendored": "./vendor.json",
-    "out-path-npm": "./npm.json",
     "out-path-prefix": "./out",
   };
 
@@ -127,7 +128,8 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     inJsrJsonContent,
     inNpmJsonContent,
     inHttpsJsonContent,
-    outVendoredJsonContent,
+    outJsrJsonContent,
+    outHttpsJsonContent,
     outNpmJsonContent,
     outStdout,
     outStderr,
@@ -137,34 +139,30 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     inputs: {
       args: [
         bin,
-        "--in-path-jsr",
-        vars["in-path-jsr"],
-        "--in-path-npm",
-        vars["in-path-npm"],
-        "--in-path-https",
-        vars["in-path-https"],
-        "--in-jsr-registry-url",
-        vars["in-jsr-registry-url"],
-        "--out-path-vendored",
-        vars["out-path-vendored"],
-        "--out-path-npm",
-        vars["out-path-npm"],
+        "--common-lock-jsr-path",
+        vars["common-lock-jsr-path"],
+        "--common-lock-https-path",
+        vars["common-lock-https-path"],
+        "--common-lock-npm-path",
+        vars["common-lock-npm-path"],
+        "--jsr-registry-url",
+        vars["jsr-registry-url"],
         "--out-path-prefix",
         vars["out-path-prefix"],
       ],
       files: [
         {
-          path: vars["in-path-jsr"],
+          path: vars["common-lock-jsr-path"],
           isReal: false,
           content: inJsrJsonContent,
         },
         {
-          path: vars["in-path-npm"],
+          path: vars["common-lock-npm-path"],
           isReal: false,
           content: inNpmJsonContent,
         },
         {
-          path: vars["in-path-https"],
+          path: vars["common-lock-https-path"],
           isReal: false,
           content: inHttpsJsonContent,
         },
@@ -179,15 +177,20 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
       files: {
         expected: [
           {
-            path: `${vars["out-path-prefix"]}/${vars["out-path-npm"]}`,
+            path: `${vars["out-path-prefix"]}/jsr.json}`,
+            isReal: false,
+            content: JSON.stringify(JSON.parse(outJsrJsonContent), null, 2),
+          },
+          {
+            path: `${vars["out-path-prefix"]}/npm.json}`,
             isReal: false,
             content: JSON.stringify(JSON.parse(outNpmJsonContent), null, 2),
           },
           {
-            path: `${vars["out-path-prefix"]}/${vars["out-path-vendored"]}`,
+            path: `${vars["out-path-prefix"]}/https.json}`,
             isReal: false,
             content: JSON.stringify(
-              JSON.parse(outVendoredJsonContent),
+              JSON.parse(outHttpsJsonContent),
               null,
               2,
             ),
@@ -216,7 +219,8 @@ const lockfileTransformerTests: Array<Test> = [
       inNpmJsonContent: `[]`,
       inHttpsJsonContent: `[]`,
       inServerFS: {},
-      outVendoredJsonContent: `[]`,
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `[]`,
       outFetchedFilesFS: {},
     }),
@@ -238,7 +242,8 @@ const lockfileTransformerTests: Array<Test> = [
 }
 ]`,
       inServerFS: { "file1": "file1_content" },
-      outVendoredJsonContent: `
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `
 [
   {
     "url": "${PLACEHOLDER}/file1",
@@ -277,7 +282,8 @@ const lockfileTransformerTests: Array<Test> = [
 }
 ]`,
       inServerFS: { "file2": "file2_content" },
-      outVendoredJsonContent: `
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `
 [
   {
     "url": "original_url",
@@ -340,7 +346,8 @@ const lockfileTransformerTests: Array<Test> = [
       ]`,
       inHttpsJsonContent: `[]`,
       inServerFS: { "file1": "file1_content", "file2": "file2_content" },
-      outVendoredJsonContent: `[]`,
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `
 [
   {
@@ -494,7 +501,8 @@ const lockfileTransformerTests: Array<Test> = [
       ]`,
       inHttpsJsonContent: `[]`,
       inServerFS: { "file1": "file1_content", "file2": "file2_content" },
-      outVendoredJsonContent: `[]`,
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `
 [
   {
@@ -630,7 +638,7 @@ const lockfileTransformerTests: Array<Test> = [
 }`,
         "@scope/package/version1/file2": "file2_content",
       },
-      outVendoredJsonContent: `
+      outJsrJsonContent: `
 [
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
@@ -689,6 +697,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `[]`,
       outFetchedFilesFS: {
         "ZS2orl8MomYoRTcvFcGUK8cR3iQqWPpFbe3X2n5JIJQ=": "file2_content",
@@ -780,7 +789,7 @@ const lockfileTransformerTests: Array<Test> = [
         "@scope/package/version1/file1": "file1_content",
         "@scope/package/version2/file2": "file2_content",
       },
-      outVendoredJsonContent: `
+      outJsrJsonContent: `
 [
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
@@ -888,6 +897,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `[]`,
       outFetchedFilesFS: {
         "KQ5N5yM__YJBNzLFQdW_5QAD0gjbxac+y2HoBs6o0Ng=": `{
@@ -1002,7 +1012,7 @@ const lockfileTransformerTests: Array<Test> = [
         "@scope/package/version1/dir1/file1_1": "file1_1_content",
         "@scope/package/version1/dir1/dir2/file2_1": "file2_1_content",
       },
-      outVendoredJsonContent: `[
+      outJsrJsonContent: `[
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
     "hash": "hash1",
@@ -1155,6 +1165,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
+      outHttpsJsonContent: `[]`,
       outNpmJsonContent: `[]`,
       outFetchedFilesFS: {
         "e0_ikqYUmXwwhLQX9Knb8udGb06OtTa2aj70CfVldR0=": `file1_content`,
