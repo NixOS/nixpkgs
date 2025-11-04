@@ -400,6 +400,7 @@ let
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
     disbayes = [ self.rstantools ];
+    survextrap = [ self.rstantools ];
     tipsae = [ self.rstantools ];
     TriDimRegression = [ self.rstantools ];
     bbmix = [ self.rstantools ];
