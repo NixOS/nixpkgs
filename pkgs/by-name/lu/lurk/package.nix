@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jakwai01/lurk";
     license = lib.licenses.agpl3Only;
     mainProgram = "lurk";
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      gepbird
     ];
     platforms = [
       "i686-linux"
