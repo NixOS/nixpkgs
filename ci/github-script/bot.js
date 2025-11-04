@@ -5,6 +5,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const withRateLimit = require('./withRateLimit.js')
   const { classify } = require('../supportedBranches.js')
   const { handleMerge } = require('./merge.js')
+  const { handleReviewers } = require('./reviewers.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -372,6 +373,30 @@ module.exports = async ({ github, context, core, dry }) => {
           maintainers[pkg]?.some((m) => approvals.has(m)),
         ),
       })
+
+      if (!pull_request.draft) {
+        await handleReviewers({
+          github,
+          context,
+          core,
+          log,
+          dry,
+          pull_request,
+          reviews,
+          // TODO: Use maintainer map instead of the artifact.
+          maintainers: Object.keys(
+            JSON.parse(
+              await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+            ),
+          ).map((id) => parseInt(id)),
+          // TODO: Create owner map similar to maintainer map.
+          owners: (await readFile(`${pull_number}/owners.txt`, 'utf-8')).split(
+            '\n',
+          ),
+          getTeamMembers,
+          getUser,
+        })
+      }
     }
 
     return prLabels
@@ -520,7 +545,7 @@ module.exports = async ({ github, context, core, dry }) => {
       const hasChanges = Object.keys(after).some(
         (name) => (before[name] ?? false) !== after[name],
       )
-      if (log('Has changes', hasChanges, !hasChanges)) return
+      if (log('Has label changes', hasChanges, !hasChanges)) return
 
       // Skipping labeling on a pull_request event, because we have no privileges.
       const labels = Object.entries(after)
