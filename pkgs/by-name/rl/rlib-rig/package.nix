@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,12 +17,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-OXg9Xyv0L4KVQw5Gr6WRHeh4K6ozmj2//FPXVYaMhgU=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
 
   doCheck = false;
 
