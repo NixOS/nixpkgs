@@ -813,9 +813,9 @@
   },
   "palo-alto-networks": {
     "pname": "palo-alto-networks",
-    "version": "1.1.2b2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/palo_alto_networks-1.1.2b2-py3-none-any.whl",
-    "hash": "sha256-xOjYa4QakDrL4Xud0OHvJuY7Df2l2B1mnqw8aMlqiAg=",
+    "version": "1.1.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/palo_alto_networks-1.1.2-py3-none-any.whl",
+    "hash": "sha256-ZxLr6FrIbm4SroHRSxSgG5R4boKdlJ1EQ1rC3ralq70=",
     "description": "Microsoft Azure Command-Line Tools PaloAltoNetworks Extension"
   },
   "peering": {
