@@ -1,14 +1,14 @@
 {
   "x86_64-linux": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202510142329--distro-linux-x64-tar-gz/202510142329-distro-linux-x64.tar.gz",
-    "hash": "sha256-Pi96jAd2qZNCk/LSv9f5n08VzOS3WwaW+eI+8PIwM9I="
+    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205--distro-linux-x64-tar-gz/202511032205-distro-linux-x64.tar.gz",
+    "hash": "sha256-Xm7uRogux3bQMsWjdaamrHELnxNltRmjPLM8Mgt5+5Y="
   },
   "x86_64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202510142329-Kiro-dmg-darwin-x64.dmg",
-    "hash": "sha256-wjUyT9KF3Tg5M6Ad01sxhZlin1WySF0Tci1dAPlvh04="
+    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205-Kiro-dmg-darwin-x64.dmg",
+    "hash": "sha256-oJ5Xr/wJQIX3R5cLnBCv1kpULLy3ljW53LGqw4zYY5c="
   },
   "aarch64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202510142329-Kiro-dmg-darwin-arm64.dmg",
-    "hash": "sha256-Bsul3QLJ9qbDPBnhUu7Stk4wz1yJkYk9eMrtUyQ4rbU="
+    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205-Kiro-dmg-darwin-arm64.dmg",
+    "hash": "sha256-dtc/Wfs8GzVPHny58MDRFSr9gG0hwdZC5qz5uIJh6N4="
   }
 }
