@@ -587,7 +587,7 @@ module.exports = async ({ github, context, core, dry }) => {
         state: 'open',
         sort: 'created',
         direction: 'asc',
-        per_page: 100,
+        per_page: 50,
         after: cursor,
       })
 
