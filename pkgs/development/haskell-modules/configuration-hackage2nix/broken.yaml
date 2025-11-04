@@ -1508,6 +1508,7 @@ broken-packages:
   - dtw # failure in job https://hydra.nixos.org/build/233198932 at 2023-09-02
   - dual # failure in job https://hydra.nixos.org/build/252724683 at 2024-03-16
   - dualizer # failure in job https://hydra.nixos.org/build/233237592 at 2023-09-02
+  - duckdb-ffi # failure in job https://hydra.nixos.org/build/311300709, https://github.com/Tritlo/duckdb-haskell/issues/2
   - duckling # failure in job https://hydra.nixos.org/build/233247880 at 2023-09-02
   - duet # failure in job https://hydra.nixos.org/build/233219004 at 2023-09-02
   - dump-core # failure in job https://hydra.nixos.org/build/233244428 at 2023-09-02
