@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2025-07-08";
+  version = "0.1.0-unstable-2025-10-27";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
     repo = "wayfreeze";
-    rev = "dc41ae1662c4c760f3deba9f826ba605e99971cc";
-    hash = "sha256-dDncKClSsRfkQ27x67U2Mpdcc+nx28bNZughJKar+RU=";
+    rev = "074d7dcc615d80e0c9e245e67fac5f90156f5791";
+    hash = "sha256-fbH/jEoW8QdPgo06QJHbYeovqDi4Ku2hVDfDUp/5GU4=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
