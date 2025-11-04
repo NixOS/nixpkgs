@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  version = "40.1";
+  version = "40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
-    hash = "sha256-BaBvsGbpgC9fJKtnsNL3FFGGY2O6Pjn593X9SadYe78=";
+    hash = "sha256-siERvAaVa+81mqzx1u3h5So1sADIgROTZjL4rGztzmc=";
   };
 
   patches = [
