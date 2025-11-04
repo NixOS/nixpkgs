@@ -8,22 +8,32 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.34.0";
+  version = "0.42.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-HPPDsvWEFfh/GNMUPiVjQr28YBBs2DACBGM3cxo5Nx4=";
+    hash = "sha256-jNQnqiIZHSAzL/6m7AGxGuhFvlOZZLATbm5MX9aReaw=";
   };
 
+  patches = [
+    ./notebook_test.patch
+    ./shebang.patch
+  ];
+
   buildAndTestSubdir = "pyrefly";
-  cargoHash = "sha256-46kcoBG/PWwf8VdlvLNzEhfYRTmmKi/uTjwFkl7Wozg=";
+  cargoHash = "sha256-nOVMsnaKYAHDVt/JjMsGpj+ZKWBebbMV0iTf3pdYAPA=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  # redirect tests writing to /tmp
+  preCheck = ''
+    export TMPDIR=$(mktemp -d)
+  '';
 
   # requires unstable rust features
   env.RUSTC_BOOTSTRAP = 1;
