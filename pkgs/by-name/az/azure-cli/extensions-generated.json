@@ -120,9 +120,9 @@
   },
   "authV2": {
     "pname": "authV2",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/authV2-1.0.0-py3-none-any.whl",
-    "hash": "sha256-wY5B27CGJZK6rL3sPeLvRuZyMS8J+ttHCHI+OZp1NIM=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/authV2-1.0.1-py3-none-any.whl",
+    "hash": "sha256-D5/Yy/ybgTFA6DtTVJeRLmBf97YzB3j0Y/TVAUs/toc=",
     "description": "Microsoft Azure Command-Line Tools Authv2 Extension"
   },
   "automanage": {
