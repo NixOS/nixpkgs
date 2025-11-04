@@ -189,7 +189,7 @@
       ];
 
       services.udev.extraRules = ''
-        KERNEL=="nvidia", RUN+="${pkgs.systemd}/bin/systemctl restart nvidia-container-toolkit-cdi-generator.service'"
+        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} restart nvidia-container-toolkit-cdi-generator.service'"
       '';
 
       virtualisation = {
