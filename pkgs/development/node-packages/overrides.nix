@@ -202,22 +202,6 @@ final: prev: {
     ];
   };
 
-  vega-lite = prev.vega-lite.override {
-    postInstall = ''
-      cd node_modules
-      for dep in ${final.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
-        if [[ ! -d ''${dep##*/} ]]; then
-          ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/''${dep##*/}"
-        fi
-      done
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/vega-lite.nix {
-        inherit (final) vega-lite;
-      };
-    };
-  };
-
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [
       pkgs.pkg-config

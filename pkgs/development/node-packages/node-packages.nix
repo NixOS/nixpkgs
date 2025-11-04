@@ -20472,15 +20472,6 @@ let
         sha512 = "Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==";
       };
     };
-    "json-stringify-pretty-compact-4.0.0" = {
-      name = "json-stringify-pretty-compact";
-      packageName = "json-stringify-pretty-compact";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/json-stringify-pretty-compact/-/json-stringify-pretty-compact-4.0.0.tgz";
-        sha512 = "3CNZ2DnrpByG9Nqj6Xo8vqbjT4F6N+tb4Gb28ESAZjYZ5yqvmc56J+/kuIwkaAMOyblTQhUW7PxMkUb8Q36N3Q==";
-      };
-    };
     "json-stringify-safe-5.0.1" = {
       name = "json-stringify-safe";
       packageName = "json-stringify-safe";
@@ -35817,15 +35808,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vega-event-selector/-/vega-event-selector-3.0.1.tgz";
         sha512 = "K5zd7s5tjr1LiOOkjGpcVls8GsH/f2CWCrWcpKy74gTCp+llCdwz0Enqo013ZlGaRNjfgD/o1caJRt3GSaec4A==";
-      };
-    };
-    "vega-expression-5.1.2" = {
-      name = "vega-expression";
-      packageName = "vega-expression";
-      version = "5.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vega-expression/-/vega-expression-5.1.2.tgz";
-        sha512 = "fFeDTh4UtOxlZWL54jf1ZqJHinyerWq/ROiqrQxqLkNJRJ86RmxYTgXwt65UoZ/l4VUv9eAd2qoJeDEf610Umw==";
       };
     };
     "vega-expression-5.2.0" = {
@@ -54236,143 +54218,6 @@ in
     meta = {
       description = "Command line utilities for server-side Vega";
       homepage = "https://github.com/vega/vega#readme";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  vega-lite = nodeEnv.buildNodePackage {
-    name = "vega-lite";
-    packageName = "vega-lite";
-    version = "5.23.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vega-lite/-/vega-lite-5.23.0.tgz";
-      sha512 = "l4J6+AWE3DIjvovEoHl2LdtCUkfm4zs8Xxx7INwZEAv+XVb6kR6vIN1gt3t2gN2gs/y4DYTs/RPoTeYAuEg6mA==";
-    };
-    dependencies = [
-      sources."@types/estree-1.0.6"
-      sources."@types/geojson-7946.0.4"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-7.2.0"
-      sources."d3-array-3.2.4"
-      sources."d3-color-3.1.0"
-      sources."d3-delaunay-6.0.4"
-      sources."d3-dispatch-3.0.1"
-      sources."d3-dsv-3.0.1"
-      sources."d3-force-3.0.0"
-      sources."d3-format-3.1.0"
-      sources."d3-geo-3.1.1"
-      sources."d3-geo-projection-4.0.0"
-      sources."d3-hierarchy-3.1.2"
-      sources."d3-interpolate-3.0.1"
-      sources."d3-path-3.1.0"
-      sources."d3-quadtree-3.0.1"
-      sources."d3-scale-4.0.2"
-      sources."d3-scale-chromatic-3.1.0"
-      sources."d3-shape-3.2.0"
-      sources."d3-time-3.1.0"
-      sources."d3-time-format-4.1.0"
-      sources."d3-timer-3.0.1"
-      sources."delaunator-5.0.1"
-      sources."emoji-regex-8.0.0"
-      sources."encoding-0.1.13"
-      sources."escalade-3.2.0"
-      sources."get-caller-file-2.0.5"
-      sources."iconv-lite-0.6.3"
-      sources."internmap-2.0.3"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."json-stringify-pretty-compact-4.0.0"
-      sources."node-fetch-2.7.0"
-      sources."require-directory-2.1.1"
-      sources."robust-predicates-3.0.2"
-      sources."rw-1.3.3"
-      sources."safer-buffer-2.1.2"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      (
-        sources."topojson-client-3.1.0"
-        // {
-          dependencies = [
-            sources."commander-2.20.3"
-          ];
-        }
-      )
-      sources."tr46-0.0.3"
-      sources."tslib-2.8.1"
-      (
-        sources."vega-5.32.0"
-        // {
-          dependencies = [
-            sources."vega-expression-5.2.0"
-          ];
-        }
-      )
-      sources."vega-canvas-1.2.7"
-      sources."vega-crossfilter-4.1.3"
-      sources."vega-dataflow-5.7.7"
-      sources."vega-encode-4.10.2"
-      sources."vega-event-selector-3.0.1"
-      sources."vega-expression-5.1.2"
-      sources."vega-force-4.2.2"
-      sources."vega-format-1.1.3"
-      (
-        sources."vega-functions-5.17.0"
-        // {
-          dependencies = [
-            sources."vega-expression-5.2.0"
-          ];
-        }
-      )
-      sources."vega-geo-4.4.3"
-      sources."vega-hierarchy-4.1.3"
-      sources."vega-label-1.3.1"
-      sources."vega-loader-4.5.3"
-      sources."vega-parser-6.5.0"
-      sources."vega-projection-1.6.2"
-      sources."vega-regression-1.3.1"
-      sources."vega-runtime-6.2.1"
-      sources."vega-scale-7.4.2"
-      sources."vega-scenegraph-4.13.1"
-      (
-        sources."vega-selections-5.6.0"
-        // {
-          dependencies = [
-            sources."vega-expression-5.2.0"
-          ];
-        }
-      )
-      sources."vega-statistics-1.9.0"
-      sources."vega-time-2.1.3"
-      sources."vega-transforms-4.12.1"
-      (
-        sources."vega-typings-1.5.0"
-        // {
-          dependencies = [
-            sources."vega-expression-5.2.0"
-          ];
-        }
-      )
-      sources."vega-util-1.17.3"
-      sources."vega-view-5.15.0"
-      sources."vega-view-transforms-4.6.1"
-      sources."vega-voronoi-4.2.4"
-      sources."vega-wordcloud-4.1.6"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-      sources."wrap-ansi-7.0.0"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Vega-Lite is a concise high-level language for interactive visualization";
-      homepage = "https://vega.github.io/vega-lite/";
       license = "BSD-3-Clause";
     };
     production = true;
