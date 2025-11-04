@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
-    rev = "v${version}";
-    sha256 = "sha256-kVkw+/Z3+ZM1wXV/OmfaVPoUKc6MRuz8GRwpvOscuEM=";
+    tag = "v${version}";
+    hash = "sha256-kVkw+/Z3+ZM1wXV/OmfaVPoUKc6MRuz8GRwpvOscuEM=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
+    changelog = "https://github.com/fwup-home/fwup/blob/${src.tag}/CHANGELOG.md";
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
     license = lib.licenses.asl20;
