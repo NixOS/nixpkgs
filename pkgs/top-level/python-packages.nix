@@ -14882,6 +14882,8 @@ self: super: with self; {
 
   rapidgzip = callPackage ../development/python-modules/rapidgzip { inherit (pkgs) nasm; };
 
+  rapidocr = callPackage ../development/python-modules/rapidocr { };
+
   rapidocr-onnxruntime = callPackage ../development/python-modules/rapidocr-onnxruntime { };
 
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
