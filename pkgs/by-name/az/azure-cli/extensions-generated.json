@@ -975,7 +975,7 @@
   "stack-hci-vm": {
     "pname": "stack-hci-vm",
     "version": "1.10.4",
-    "url": "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-1.10.4-py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stack_hci_vm-1.10.4-py3-none-any.whl",
     "hash": "sha256-MjcpQ7a+5Rw6Z7MAVzoa/qT6HSX6uaV+kWoiMBhK/JM=",
     "description": "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension"
   },
