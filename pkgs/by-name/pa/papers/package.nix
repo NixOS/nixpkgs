@@ -33,6 +33,9 @@
   exempi,
   cargo,
   rustPlatform,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -132,6 +135,36 @@ stdenv.mkDerivation (finalAttrs: {
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  passthru = {
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "papers";
+        };
+
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version papers --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/papers";
