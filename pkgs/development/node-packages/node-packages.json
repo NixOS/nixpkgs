@@ -62,7 +62,6 @@
 , "node2nix"
 , "np"
 , "nrm"
-, "parsoid"
 , "peerflix"
 , "peerflix-server"
 , "poor-mans-t-sql-formatter-cli"
