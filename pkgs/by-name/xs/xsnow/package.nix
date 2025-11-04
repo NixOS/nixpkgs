@@ -47,10 +47,7 @@ stdenv.mkDerivation rec {
     changelog = "https://ratrabbit.nl/ratrabbit/xsnow/changelog/index.html";
     downloadPage = "https://ratrabbit.nl/ratrabbit/xsnow/downloads/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      robberer
-      griffi-gh
-    ];
+    maintainers = with maintainers; [ griffi-gh ];
     platforms = platforms.unix;
   };
 }

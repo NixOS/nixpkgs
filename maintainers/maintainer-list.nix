@@ -22251,12 +22251,6 @@
     githubId = 580474;
     name = "Carsten Rohrbach";
   };
-  robberer = {
-    email = "robberer@freakmail.de";
-    github = "robberer";
-    githubId = 6204883;
-    name = "Longrin Wischnewski";
-  };
   robbiebuxton = {
     email = "robbiesbuxton@gmail.com";
     github = "robbiebuxton";

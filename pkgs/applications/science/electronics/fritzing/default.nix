@@ -137,7 +137,6 @@ stdenv.mkDerivation {
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [
-      robberer
       muscaln
       iedame
     ];

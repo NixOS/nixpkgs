@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      robberer
       qknight
       globin
     ];
