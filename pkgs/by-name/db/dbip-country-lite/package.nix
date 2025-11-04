@@ -29,7 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Free IP to Country Lite database by DB-IP";
     homepage = "https://db-ip.com/db/download/ip-to-country-lite";
     license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      Guanran928
+    ];
     platforms = lib.platforms.all;
   };
 })
