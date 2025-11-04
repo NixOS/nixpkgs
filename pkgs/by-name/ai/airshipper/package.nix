@@ -112,8 +112,11 @@ rustPlatform.buildRustPackage {
       ];
     in
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-      wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
+      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
+      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
+      wrapProgram "$out/bin/airshipper" \
+        --set VELOREN_PATCHER "${patch}" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
   doCheck = false;
