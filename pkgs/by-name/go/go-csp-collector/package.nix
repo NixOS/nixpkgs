@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.16-unstable-2025-10-10";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
