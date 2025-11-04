@@ -80,6 +80,7 @@ function runChecklist({
 
   return {
     checklist,
+    eligible,
     result,
   }
 }
@@ -119,6 +120,7 @@ async function handleMerge({
   events,
   maintainers,
   getTeamMembers,
+  getUser,
 }) {
   const pull_number = pull_request.number
 
@@ -240,7 +242,7 @@ async function handleMerge({
       }
     }
 
-    const { result, checklist } = runChecklist({
+    const { result, eligible, checklist } = runChecklist({
       committers,
       events,
       files,
@@ -269,6 +271,18 @@ async function handleMerge({
       ),
       '',
     ]
+
+    if (eligible.size > 0 && !eligible.has(comment.user.id)) {
+      const users = await Promise.all(
+        Array.from(eligible, async (id) => (await getUser(id)).login),
+      )
+      body.push(
+        '> [!TIP]',
+        '> Maintainers eligible to merge are:',
+        ...users.map((login) => `> - ${login}`),
+        '',
+      )
+    }
 
     if (result) {
       await react('ROCKET')

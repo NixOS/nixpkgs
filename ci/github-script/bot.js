@@ -119,6 +119,24 @@ module.exports = async ({ github, context, core, dry }) => {
     return members[team_slug]
   }
 
+  // Caching users saves API requests when running the bot on the schedule and processing
+  // many PRs at once. It also helps to encapsulate the special logic we need, because
+  // actions/github doesn't support that endpoint fully, yet.
+  const users = {}
+  function getUser(id) {
+    if (!users[id]) {
+      users[id] = github
+        .request({
+          method: 'GET',
+          url: '/user/{id}',
+          id,
+        })
+        .then((resp) => resp.data)
+    }
+
+    return users[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -145,6 +163,7 @@ module.exports = async ({ github, context, core, dry }) => {
       events,
       maintainers,
       getTeamMembers,
+      getUser,
     })
 
     // When the same change has already been merged to the target branch, a PR will still be
