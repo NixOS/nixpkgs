@@ -5144,15 +5144,6 @@ let
         sha512 = "IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==";
       };
     };
-    "ansi-colors-4.1.3" = {
-      name = "ansi-colors";
-      packageName = "ansi-colors";
-      version = "4.1.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ansi-colors/-/ansi-colors-4.1.3.tgz";
-        sha512 = "/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==";
-      };
-    };
     "ansi-escapes-1.4.0" = {
       name = "ansi-escapes";
       packageName = "ansi-escapes";
@@ -6807,15 +6798,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/browser-resolve/-/browser-resolve-2.0.0.tgz";
         sha512 = "7sWsQlYL2rGLy2IWm8WL8DCTJvYLc/qlOnsakDac87SOoCd16WLsaAMdCiAqsTNHIe+SXfaqyxyo6THoWqs8WQ==";
-      };
-    };
-    "browser-stdout-1.3.1" = {
-      name = "browser-stdout";
-      packageName = "browser-stdout";
-      version = "1.3.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/browser-stdout/-/browser-stdout-1.3.1.tgz";
-        sha512 = "qhAVI1+Av2X7qelOfAIYwXONood6XlZE/fXaBSmW/T5SzLAmCgzi+eiWE7fUvbHaeNBQH13UftjpXxsfLkMpgw==";
       };
     };
     "browser-sync-client-3.0.3" = {
@@ -10167,15 +10149,6 @@ let
         sha512 = "z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==";
       };
     };
-    "decamelize-4.0.0" = {
-      name = "decamelize";
-      packageName = "decamelize";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/decamelize/-/decamelize-4.0.0.tgz";
-        sha512 = "9iE1PgSik9HeIIw2JO94IidnE3eBoQrFJ3w7sFuzSX4DpmZ3v5sZpUiV5Swcf6mQEF+Y0ru8Neo+p+nyh2J+hQ==";
-      };
-    };
     "decamelize-5.0.1" = {
       name = "decamelize";
       packageName = "decamelize";
@@ -13342,15 +13315,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/flagged-respawn/-/flagged-respawn-2.0.0.tgz";
         sha512 = "Gq/a6YCi8zexmGHMuJwahTGzXlAZAOsbCVKduWXC6TlLCjjFRlExMJc4GC2NYPYZ0r/brw9P7CpRgQmlPVeOoA==";
-      };
-    };
-    "flat-5.0.2" = {
-      name = "flat";
-      packageName = "flat";
-      version = "5.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/flat/-/flat-5.0.2.tgz";
-        sha512 = "b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==";
       };
     };
     "flat-cache-1.3.4" = {
@@ -27728,15 +27692,6 @@ let
         sha512 = "v67WcEouB5GxbTWL/4NeToqcZiAWEq90N888fczVArY8A79J0L4FD7vj5hm3eUMua5EpoQ59wa/oovY6TLvRUA==";
       };
     };
-    "serialize-javascript-6.0.2" = {
-      name = "serialize-javascript";
-      packageName = "serialize-javascript";
-      version = "6.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-6.0.2.tgz";
-        sha512 = "Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==";
-      };
-    };
     "serve-favicon-2.5.0" = {
       name = "serve-favicon";
       packageName = "serve-favicon";
@@ -33675,15 +33630,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz";
         sha512 = "tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==";
-      };
-    };
-    "yargs-unparser-2.0.0" = {
-      name = "yargs-unparser";
-      packageName = "yargs-unparser";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/yargs-unparser/-/yargs-unparser-2.0.0.tgz";
-        sha512 = "7pRTIA9Qc1caZ0bZ6RYRGbHJthJWuakf+WmHK0rVeLkNrrGhfoabBNdue6kdINI6r4if7ocq9aD/n7xwKOdzOA==";
       };
     };
     "yauzl-2.10.0" = {
@@ -44185,168 +44131,6 @@ in
       description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source ";
       homepage = "https://github.com/mathjax/MathJax#readme";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  mocha = nodeEnv.buildNodePackage {
-    name = "mocha";
-    packageName = "mocha";
-    version = "11.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/mocha/-/mocha-11.1.0.tgz";
-      sha512 = "8uJR5RTC2NgpY3GrYcgpZrsEd9zKbPDpob1RezyR2upGHRQtHWofmzTMzTMSV6dru3tj5Ukt0+Vnq1qhFEEwAg==";
-    };
-    dependencies = [
-      sources."@isaacs/cliui-8.0.2"
-      sources."ansi-colors-4.1.3"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-6.2.1"
-      sources."anymatch-3.1.3"
-      sources."argparse-2.0.1"
-      sources."balanced-match-1.0.2"
-      sources."binary-extensions-2.3.0"
-      sources."brace-expansion-2.0.1"
-      sources."braces-3.0.3"
-      sources."browser-stdout-1.3.1"
-      sources."camelcase-6.3.0"
-      (
-        sources."chalk-4.1.2"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."supports-color-7.2.0"
-          ];
-        }
-      )
-      sources."chokidar-3.6.0"
-      (
-        sources."cliui-8.0.1"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-            sources."wrap-ansi-7.0.0"
-          ];
-        }
-      )
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."cross-spawn-7.0.6"
-      sources."debug-4.4.0"
-      sources."decamelize-4.0.0"
-      sources."diff-5.2.0"
-      sources."eastasianwidth-0.2.0"
-      sources."emoji-regex-9.2.2"
-      sources."escalade-3.2.0"
-      sources."escape-string-regexp-4.0.0"
-      sources."fill-range-7.1.1"
-      sources."find-up-5.0.0"
-      sources."flat-5.0.2"
-      sources."foreground-child-3.3.1"
-      sources."get-caller-file-2.0.5"
-      (
-        sources."glob-10.4.5"
-        // {
-          dependencies = [
-            sources."minimatch-9.0.5"
-          ];
-        }
-      )
-      sources."glob-parent-5.1.2"
-      sources."has-flag-4.0.0"
-      sources."he-1.2.0"
-      sources."is-binary-path-2.1.0"
-      sources."is-extglob-2.1.1"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."is-plain-obj-2.1.0"
-      sources."is-unicode-supported-0.1.0"
-      sources."isexe-2.0.0"
-      sources."jackspeak-3.4.3"
-      sources."js-yaml-4.1.0"
-      sources."locate-path-6.0.0"
-      sources."log-symbols-4.1.0"
-      sources."lru-cache-10.4.3"
-      sources."minimatch-5.1.6"
-      sources."minipass-7.1.2"
-      sources."ms-2.1.3"
-      sources."normalize-path-3.0.0"
-      sources."p-limit-3.1.0"
-      sources."p-locate-5.0.0"
-      sources."package-json-from-dist-1.0.1"
-      sources."path-exists-4.0.0"
-      sources."path-key-3.1.1"
-      sources."path-scurry-1.11.1"
-      sources."picomatch-2.3.1"
-      sources."randombytes-2.1.0"
-      sources."readdirp-3.6.0"
-      sources."require-directory-2.1.1"
-      sources."safe-buffer-5.2.1"
-      sources."serialize-javascript-6.0.2"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-5.1.2"
-      (
-        sources."string-width-cjs-4.2.3"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      (
-        sources."strip-ansi-7.1.0"
-        // {
-          dependencies = [
-            sources."ansi-regex-6.1.0"
-          ];
-        }
-      )
-      sources."strip-ansi-cjs-6.0.1"
-      sources."strip-json-comments-3.1.1"
-      sources."supports-color-8.1.1"
-      sources."to-regex-range-5.0.1"
-      sources."which-2.0.2"
-      sources."workerpool-6.5.1"
-      sources."wrap-ansi-8.1.0"
-      (
-        sources."wrap-ansi-cjs-7.0.0"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      sources."y18n-5.0.8"
-      (
-        sources."yargs-17.7.2"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      sources."yargs-parser-21.1.1"
-      sources."yargs-unparser-2.0.0"
-      sources."yocto-queue-0.1.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "simple, flexible, fun test framework";
-      homepage = "https://mochajs.org/";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
