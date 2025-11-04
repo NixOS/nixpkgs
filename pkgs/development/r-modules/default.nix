@@ -1187,6 +1187,7 @@ let
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
+    SynExtend = [ pkgs.zlib.dev ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
