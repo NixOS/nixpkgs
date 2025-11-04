@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.38";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
+    hash = "sha256-gl52Tk/y5jBK24FM2ilwdLIi1UoE7b2OvHz1j8OvhX0=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
