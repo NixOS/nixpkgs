@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hurl";
   version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = "hurl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dmPXI2RHEi/wcdVVwBRtBgNXyBXFnm44236pqYjxgBs=";
   };
 
@@ -55,11 +55,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
-    changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Orange-OpenSource/hurl/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       eonpatapon
     ];
     license = lib.licenses.asl20;
     mainProgram = "hurl";
   };
-}
+})
