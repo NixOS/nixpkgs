@@ -8,7 +8,6 @@
 , "@tailwindcss/forms"
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
-, "@uppy/companion"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
