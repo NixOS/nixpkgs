@@ -2,6 +2,7 @@
   mkDerivation,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   qtbase,
   qttools,
@@ -19,6 +20,13 @@ mkDerivation rec {
     rev = version;
     sha256 = "sha256-oE0cdOwufc7CHEFr3YU8stjg1hBGs4bemhXpNTCTpDQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/caneda/0.4.0-2/debian/patches/fix_cmake_minimum_version.patch";
+      hash = "sha256-MRkCA0GWcI6yEo4Ej+F67k0iNG1JHeLNhH0Rbz1QWoA=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
