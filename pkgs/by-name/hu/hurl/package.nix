@@ -8,6 +8,7 @@
   openssl,
   curl,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd hurlfmt \
       --zsh completions/_hurlfmt
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
