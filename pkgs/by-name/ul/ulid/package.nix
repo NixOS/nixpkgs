@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/oklog/ulid";
     changelog = "https://github.com/oklog/ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "ulid";
   };
 })
