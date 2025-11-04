@@ -96,6 +96,29 @@ module.exports = async ({ github, context, core, dry }) => {
     return maintainerMaps[branch]
   }
 
+  // Caching the list of team members saves API requests when running the bot on the schedule and
+  // processing many PRs at once.
+  const members = {}
+  function getTeamMembers(team_slug) {
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no members. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      return []
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
+        org: context.repo.owner,
+        team_slug,
+        per_page: 100,
+      })
+    }
+
+    return members[team_slug]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -121,6 +144,7 @@ module.exports = async ({ github, context, core, dry }) => {
       pull_request,
       events,
       maintainers,
+      getTeamMembers,
     })
 
     // When the same change has already been merged to the target branch, a PR will still be

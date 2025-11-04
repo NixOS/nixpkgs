@@ -109,10 +109,6 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
-// Caching the list of team members saves API requests when running the bot on the schedule and
-// processing many PRs at once.
-const members = {}
-
 async function handleMerge({
   github,
   context,
@@ -122,31 +118,13 @@ async function handleMerge({
   pull_request,
   events,
   maintainers,
+  getTeamMembers,
 }) {
   const pull_number = pull_request.number
 
-  function getTeamMembers(team_slug) {
-    if (context.eventName === 'pull_request') {
-      // We have no chance of getting a token in the pull_request context with the right
-      // permissions to access the members endpoint below. Thus, we're pretending to have
-      // no members. This is OK; because this is only for the Test workflow, not for
-      // real use.
-      return new Set()
-    }
-
-    if (!members[team_slug]) {
-      members[team_slug] = github
-        .paginate(github.rest.teams.listMembersInOrg, {
-          org: context.repo.owner,
-          team_slug,
-          per_page: 100,
-        })
-        .then((members) => new Set(members.map(({ id }) => id)))
-    }
-
-    return members[team_slug]
-  }
-  const committers = await getTeamMembers('nixpkgs-committers')
+  const committers = new Set(
+    (await getTeamMembers('nixpkgs-committers')).map(({ id }) => id),
+  )
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
     ...context.repo,
