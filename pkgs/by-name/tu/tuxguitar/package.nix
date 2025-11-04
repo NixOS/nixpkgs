@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ ardumont ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "tuxguitar";
   };
 })
