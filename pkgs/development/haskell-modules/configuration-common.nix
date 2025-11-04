@@ -2979,9 +2979,19 @@ with haskellLib;
 
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
+  # Hackage release trails a good deal behind master
   proto3-suite = lib.pipe super.proto3-suite [
-    dontCheck # Hackage release trails a good deal behind master
+    dontCheck
     doJailbreak
+    (overrideSrc {
+      version = "0.9.0-unstable-2025-04-10";
+      src = pkgs.fetchFromGitHub {
+        owner = "awakesecurity";
+        repo = "proto3-suite";
+        rev = "24bb3f9c6c83b4ecc31783fa5a8fa4406e6ef0d8";
+        hash = "sha256-009UNd1rEg/wDCCxReQWhPwHaONwlB6l6qoIPR0mVBU=";
+      };
+    })
   ];
 
   # Tests require docker
