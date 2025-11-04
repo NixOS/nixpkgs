@@ -338,7 +338,7 @@
   "deploy-to-azure": {
     "pname": "deploy-to-azure",
     "version": "0.2.0",
-    "url": "https://github.com/Azure/deploy-to-azure-cli-extension/releases/download/20200318.1/deploy_to_azure-0.2.0-py2.py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/deploy_to_azure-0.2.0-py2.py3-none-any.whl",
     "hash": "sha256-+SUIDuerw673M9TGMTFwve2qlWmvG5VCc4O8PFnkzrg=",
     "description": "Deploy to Azure using Github Actions"
   },
