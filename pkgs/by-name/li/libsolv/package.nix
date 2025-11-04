@@ -18,6 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
+  __structuredAttrs = true;
   version = "0.7.35";
   pname = "libsolv";
 
