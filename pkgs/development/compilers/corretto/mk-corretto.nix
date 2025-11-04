@@ -6,6 +6,7 @@
   stdenv,
   gradle,
   extraConfig ? [ ],
+  extraNativeBuildInputs ? [ ],
   rsync,
   runCommand,
   testers,
@@ -29,11 +30,14 @@ jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
 
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-      jdk
-      gradle
-      rsync
-    ];
+    nativeBuildInputs =
+      oldAttrs.nativeBuildInputs
+      ++ [
+        jdk
+        gradle
+        rsync
+      ]
+      ++ extraNativeBuildInputs;
 
     dontConfigure = true;
 
@@ -41,7 +45,8 @@ jdk.overrideAttrs (
       let
         extra_config = builtins.concatStringsSep " " extraConfig;
       in
-      ''
+      (oldAttrs.postPatch or "")
+      + ''
         # The rpm/deb task definitions require a Gradle plugin which we don't
         # have and so the build fails. We'll simply remove them here because
         # they are not needed anyways.
