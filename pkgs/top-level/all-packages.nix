@@ -2393,8 +2393,6 @@ with pkgs;
 
   unify = with python3Packages; toPythonApplication unify;
 
-  inherit (nodePackages) uppy-companion;
-
   usb-modeswitch-data = callPackage ../by-name/us/usb-modeswitch/data.nix { };
 
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
@@ -2501,8 +2499,6 @@ with pkgs;
     withPrefix = true;
     singleBinary = false;
   };
-
-  create-cycle-app = nodePackages.create-cycle-app;
 
   cron = isc-cron;
 

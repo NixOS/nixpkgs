@@ -223,6 +223,17 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+# types.fileset
+checkConfigOutput '^0$' config.filesetCardinal.ok1 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok2 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok3 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok4 ./fileset.nix
+checkConfigOutput '^0$' config.filesetCardinal.ok5 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err1 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err2 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err3 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err4 ./fileset.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix

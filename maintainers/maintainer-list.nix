@@ -14586,6 +14586,12 @@
     githubId = 737767;
     name = "Thomas Gerbet";
   };
+  letgamer = {
+    github = "Letgamer";
+    githubId = 62446107;
+    matrix = "@letgamer:tchncs.de";
+    name = "Alex Stephan";
+  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lucabrunox";
@@ -25889,10 +25895,10 @@
   };
   theobori = {
     name = "Théo Bori";
-    email = "theo1.bori@epitech.eu";
+    email = "theobori@disroot.org";
     github = "theobori";
     githubId = 71843723;
-    keys = [ { fingerprint = "EEFB CC3A C529 CFD1 943D  A75C BDD5 7BE9 9D55 5965"; } ];
+    keys = [ { fingerprint = "0636 56A5 6E31 5FFD BE46  8522 6D22 B068 2CCF 9294"; } ];
   };
   theonlymrcat = {
     name = "Max Guppy";

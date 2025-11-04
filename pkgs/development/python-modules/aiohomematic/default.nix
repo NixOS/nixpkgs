@@ -16,20 +16,15 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2025.10.5";
+  version = "2025.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-DgLeshxPo2ZwQXe8pSg81kFLviEWKakOY8DtdQH/H58=";
+    hash = "sha256-bqhuh+9rcqKreZCc3WJPFR1i3Y8mjtLER/bLlbMp6xc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 
@@ -49,11 +44,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiohomematic" ];
-
-  disabledTests = [
-    # AssertionError: assert 548 == 555
-    "test_central_full"
-  ];
 
   meta = {
     description = "Module to interact with HomeMatic devices";
