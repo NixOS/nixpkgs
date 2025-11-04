@@ -1316,6 +1316,7 @@ mapAliases {
   rigsofrods = throw "'rigsofrods' has been renamed to/replaced by 'rigsofrods-bin'"; # Converted to throw 2025-10-27
   river = throw "'river' has been renamed to/replaced by 'river-classic'"; # Added 2025-08-30
   rke2_1_29 = throw "'rke2_1_29' has been removed from nixpkgs as it has reached end of life"; # Added 2025-05-05
+  rke2_1_31 = throw "'rke2_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-11-04
   rl_json = throw "'rl_json' has been renamed to/replaced by 'tclPackages.rl_json'"; # Converted to throw 2025-10-27
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27
   rockcraft = throw "rockcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # added 2025-09-18
