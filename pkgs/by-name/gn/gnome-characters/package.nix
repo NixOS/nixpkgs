@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "49.0";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/gnome-characters-${version}.tar.xz";
-    hash = "sha256-G25UioLiaqTsmv5AnWmiVwk2LAN/pcUzGG1qHbKa9uM=";
+    hash = "sha256-eVwP5DTmAtx4M5H7WDDbx9jh6gXKdyEPsUDi9vQKFFw=";
   };
 
   nativeBuildInputs = [
