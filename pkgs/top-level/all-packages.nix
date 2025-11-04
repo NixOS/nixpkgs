@@ -6498,10 +6498,10 @@ with pkgs;
   dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
-    qt5 = null;
+    qt6 = null;
   };
 
-  doxygen_gui = lowPrio (doxygen.override { inherit qt5; });
+  doxygen_gui = lowPrio (doxygen.override { inherit qt6; });
 
   drake = callPackage ../development/tools/build-managers/drake { };
 
