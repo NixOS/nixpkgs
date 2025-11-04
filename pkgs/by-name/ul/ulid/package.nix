@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ulid";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "oklog";
     repo = "ulid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kPNLaZMGwGc7ngPCivf/n4Bis219yOkGAaa6mt7+yTY=";
   };
 
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "Universally Unique Lexicographically Sortable Identifier (ULID) in Go";
     homepage = "https://github.com/oklog/ulid";
-    changelog = "https://github.com/oklog/ulid/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/oklog/ulid/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "ulid";
   };
-}
+})
