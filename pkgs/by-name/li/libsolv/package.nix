@@ -29,22 +29,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-DHECjda7s12hSysbaXK2+wM/nXpAOpTn+eSf9XGC3z0=";
   };
 
-  cmakeFlags = [
-    "-DENABLE_COMPLEX_DEPS=true"
-    (lib.cmakeBool "ENABLE_CONDA" withConda)
-    "-DENABLE_LZMA_COMPRESSION=true"
-    "-DENABLE_BZIP2_COMPRESSION=true"
-    "-DENABLE_ZSTD_COMPRESSION=true"
-    "-DENABLE_ZCHUNK_COMPRESSION=true"
-    "-DWITH_SYSTEM_ZCHUNK=true"
-  ]
-  ++ lib.optionals withRpm [
-    "-DENABLE_COMPS=true"
-    "-DENABLE_PUBKEY=true"
-    "-DENABLE_RPMDB=true"
-    "-DENABLE_RPMDB_BYRPMHEADER=true"
-    "-DENABLE_RPMMD=true"
-  ];
+  cmakeEntries = {
+    ENABLE_COMPLEX_DEPS = true;
+    ENABLE_CONDA = withConda;
+    ENABLE_LZMA_COMPRESSION = true;
+    ENABLE_BZIP2_COMPRESSION = true;
+    ENABLE_ZSTD_COMPRESSION = true;
+    ENABLE_ZCHUNK_COMPRESSION = true;
+    WITH_SYSTEM_ZCHUNK = true;
+  }
+  // lib.optionalAttrs withRpm {
+    ENABLE_COMPS = true;
+    ENABLE_PUBKEY = true;
+    ENABLE_RPMDB = true;
+    ENABLE_RPMDB_BYRPMHEADER = true;
+    ENABLE_RPMMD = true;
+  };
+
+  # Backward compatibility for those expecting `libsolv.cmakeFlags` to exist.
+  # TODO(@ShamrockLee): Remove after ZHF.
+  cmakeFlags = [ ];
 
   nativeBuildInputs = [
     cmake
