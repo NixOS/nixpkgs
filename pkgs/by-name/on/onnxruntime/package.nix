@@ -80,6 +80,10 @@ let
   };
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
+  # aarch64 builders lack /sys/devices/system/cpu, triggering
+  # https://github.com/microsoft/onnxruntime/issues/10038
+  # See https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
+  enableCpuInfo = !(effectiveStdenv.hostPlatform.isLinux && effectiveStdenv.hostPlatform.isAarch64);
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
@@ -132,7 +136,7 @@ effectiveStdenv.mkDerivation rec {
     microsoft-gsl
     zlib
   ]
-  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
+  ++ lib.optionals (enableCpuInfo && lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
     cpuinfo
   ]
   ++ lib.optionals pythonSupport (
@@ -205,6 +209,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
+    (lib.cmakeBool "onnxruntime_ENABLE_CPUINFO" enableCpuInfo)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
