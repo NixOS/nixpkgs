@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.54.3";
+  version = "3.54.5";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-qNoJE0oPfVZJHPJBIUXjWqdOkddg6PM3CWoc2guSuuc=";
+    hash = "sha256-tmVvY0j1JFYGzxXqSMOEx/BRVsderSBsGyRsgKIvtYU=";
   };
 
   depsBuildBuild = [ pkg-config ];
