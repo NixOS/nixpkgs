@@ -9,20 +9,20 @@ import type {
 } from "../types.d.ts";
 
 type LockfileTransformerConfig = {
-  inPath: PathString;
-  outPathJsr: PathString;
-  outPathNpm: PathString;
-  outPathHttps: PathString;
+  denoLockPath: PathString;
+  commonLockJsrPath: PathString;
+  commonLockNpmPath: PathString;
+  commonLockHttpsPath: PathString;
   lockfile: DenoLock;
 };
 
 type Config = LockfileTransformerConfig;
 function getConfig(): Config {
   const flagsParsed = {
-    "in-path": "",
-    "out-path-jsr": "",
-    "out-path-npm": "",
-    "out-path-https": "",
+    "deno-lock-path": "",
+    "common-lock-jsr-path": "",
+    "common-lock-npm-path": "",
+    "common-lock-https-path": "",
   };
   const flags = Object.keys(flagsParsed).map((v) => "--" + v);
   Deno.args.forEach((arg, index) => {
@@ -41,13 +41,13 @@ function getConfig(): Config {
   return {
     lockfile: JSON.parse(
       new TextDecoder("utf-8").decode(
-        Deno.readFileSync(flagsParsed["in-path"]),
+        Deno.readFileSync(flagsParsed["deno-lock-path"]),
       ),
     ),
-    outPathJsr: flagsParsed["out-path-jsr"],
-    outPathNpm: flagsParsed["out-path-npm"],
-    outPathHttps: flagsParsed["out-path-https"],
-    inPath: flagsParsed["in-path"],
+    commonLockJsrPath:   flagsParsed["common-lock-jsr-path"],
+    commonLockNpmPath:   flagsParsed["common-lock-npm-path"],
+    commonLockHttpsPath: flagsParsed["common-lock-https-path"],
+    denoLockPath: flagsParsed["deno-lock-path"],
   };
 }
 
@@ -237,9 +237,9 @@ async function main() {
   checkVersion(config.lockfile);
   const transformedLocks = transformAll(config.lockfile);
   await writeAll(
-    config.outPathJsr,
-    config.outPathNpm,
-    config.outPathHttps,
+    config.commonLockJsrPath,
+    config.commonLockNpmPath,
+    config.commonLockHttpsPath,
     transformedLocks,
   );
 }

@@ -21,10 +21,10 @@ let
       buildPhase = ''
         mkdir -p $out
         lockfile-transformer \
-          --in-path ${denoLock} \
-          --out-path-jsr $out/jsr.json \
-          --out-path-npm $out/npm.json \
-          --out-path-https $out/https.json;
+          --deno-lock-path ${denoLock} \
+          --common-lock-jsr-path $out/jsr.json \
+          --common-lock-npm-path $out/npm.json \
+          --common-lock-https-path $out/https.json;
       '';
       nativeBuildInputs = [
         fetch-deno-deps-scripts
@@ -38,8 +38,6 @@ let
   singleFodFetcher =
     {
       transformedDenoLock,
-      vendorJsonName,
-      npmJsonName,
       denoLock,
       hash,
       name,
@@ -50,12 +48,10 @@ let
       unpackPhase = "true";
       buildPhase = ''
         single-fod-fetcher \
-          --in-path-jsr ${transformedDenoLock}/jsr.json \
-          --in-path-npm ${transformedDenoLock}/npm.json \
-          --in-path-https ${transformedDenoLock}/https.json \
+          --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
+          --common-lock-npm-path ${transformedDenoLock}/npm.json \
+          --common-lock-https-path ${transformedDenoLock}/https.json \
           --out-path-prefix $out \
-          --out-path-vendored ${vendorJsonName} \
-          --out-path-npm ${npmJsonName};
         cp ${denoLock} $out/deno.lock
       '';
       nativeBuildInputs = [
@@ -78,8 +74,6 @@ let
     {
       fetched,
       name,
-      vendorJsonName,
-      npmJsonName,
       denoDir,
       vendorDir,
     }:
@@ -88,11 +82,6 @@ let
 
       src = null;
       unpackPhase = "true";
-
-      inherit
-        npmJsonName
-        vendorJsonName
-        ;
 
       nativeBuildInputs = [
         fetch-deno-deps-scripts
@@ -103,8 +92,8 @@ let
         export DENO_DIR="$out/${denoDir}";
         mkdir -p $DENO_DIR
         mkdir -p $vendorDir
-        file-structure-transformer-npm --in-path "${fetched}/$npmJsonName" --cache-path $DENO_DIR
-        file-structure-transformer-vendor --cache-path $DENO_DIR --vendor-path $vendorDir --url-file-map "${fetched}/$vendorJsonName"
+        file-structure-transformer-npm --deno-dir-path $DENO_DIR --common-lock-npm-path "${fetched}/npm.json"
+        file-structure-transformer-vendor --deno-dir-path $DENO_DIR --vendor-dir-path $vendorDir --common-lock-jsr-path "${fetched}/jsr.json" --common-lock-https-path "${fetched}/https.json"
       '';
 
       meta = {
@@ -119,8 +108,6 @@ in
       denoLock,
       name ? "deno-deps",
       hash ? lib.fakeHash,
-      vendorJsonName ? "vendor.json",
-      npmJsonName ? "npm.json",
       denoDir ? ".deno",
       vendorDir ? "vendor",
     }:
@@ -132,8 +119,6 @@ in
           denoLock
           transformedDenoLock
           hash
-          vendorJsonName
-          npmJsonName
           name
           ;
       };
@@ -142,8 +127,6 @@ in
         inherit
           fetched
           name
-          vendorJsonName
-          npmJsonName
           denoDir
           vendorDir
           ;

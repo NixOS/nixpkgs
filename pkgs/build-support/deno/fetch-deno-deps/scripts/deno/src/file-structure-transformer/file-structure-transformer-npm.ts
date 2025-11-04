@@ -1,19 +1,23 @@
 import { addPrefix, getBasePath, getScopedName } from "../utils.ts";
-import type { PathString, PackageSpecifier, CommonLockFormatOut } from "../types.d.ts";
+import type {
+  CommonLockFormatOut,
+  PackageSpecifier,
+  PathString,
+} from "../types.d.ts";
 
 type FileTransformerNpmConfig = {
-  inPath: PathString;
+  commonLockNpmPath: PathString;
   inBasePath: PathString;
-  cachePath: PathString;
-  commonLockfile: CommonLockFormatOut;
+  denoDirPath: PathString;
+  commonLockNpm: CommonLockFormatOut;
   rootPath: PathString;
 };
 
 type Config = FileTransformerNpmConfig;
 function getConfig(): Config {
   const flagsParsed = {
-    "in-path": "",
-    "cache-path": "",
+    "common-lock-npm-path": "",
+    "deno-dir-path": "",
   };
   const flags = Object.keys(flagsParsed).map((v) => "--" + v);
   Deno.args.forEach((arg, index) => {
@@ -30,15 +34,13 @@ function getConfig(): Config {
   });
 
   return {
-    commonLockfile: JSON.parse(
-      new TextDecoder("utf-8").decode(
-        Deno.readFileSync(flagsParsed["in-path"]),
-      ),
+    commonLockNpm: JSON.parse(
+      Deno.readTextFileSync(flagsParsed["common-lock-npm-path"]),
     ),
-    cachePath: flagsParsed["cache-path"],
-    inPath: flagsParsed["in-path"],
-    inBasePath: getBasePath(flagsParsed["in-path"]),
-    rootPath: `${flagsParsed["cache-path"]}/npm/registry.npmjs.org`,
+    denoDirPath: flagsParsed["deno-dir-path"],
+    commonLockNpmPath: flagsParsed["common-lock-npm-path"],
+    inBasePath: getBasePath(flagsParsed["common-lock-npm-path"]),
+    rootPath: `${flagsParsed["deno-dir-path"]}/npm/registry.npmjs.org`,
   };
 }
 
@@ -46,7 +48,9 @@ function makePackagePath(
   root: PathString,
   packageSpecifier: PackageSpecifier,
 ): PathString {
-  return `${root}/${getScopedName(packageSpecifier)}/${packageSpecifier.version}`;
+  return `${root}/${
+    getScopedName(packageSpecifier)
+  }/${packageSpecifier.version}`;
 }
 
 function makeRegistryJsonPath(
@@ -70,10 +74,12 @@ async function unpackPackage(
 }
 
 async function transformFilesNpm(config: Config) {
-  for await (const packageFile of config.commonLockfile) {
+  for await (const packageFile of config.commonLockNpm) {
     const packageSpecifier = packageFile?.meta?.packageSpecifier;
     if (!packageSpecifier) {
-      throw `packageSpecifier required but not found in ${JSON.stringify(packageFile)}`;
+      throw `packageSpecifier required but not found in ${
+        JSON.stringify(packageFile)
+      }`;
     }
 
     const inPath = addPrefix(packageFile.outPath, config.inBasePath);
