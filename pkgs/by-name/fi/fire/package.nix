@@ -78,6 +78,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fire";
+  # 1.5.0b is considered a beta release of 1.5.0, but gitUpdater identifies 1.5.0b as the newer version
+  # Sanity checked manually. Drop this once running the updateScript doesn't produce a downgrade.
+  # nixpkgs-update: no auto update
   version = "1.5.0";
 
   src = fetchFromGitHub {
