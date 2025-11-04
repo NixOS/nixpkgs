@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
     set -eu -o pipefail
 
     gh_metadata="$(curl -LsS https://api.github.com/repos/flux-iac/tofu-controller/tags)"
-    version="$(echo "$gh_metadata" | jq -r '.[] | .name' | sort --version-sort | tail -1)"
+    version="$(echo "$gh_metadata" | jq -r '.[] | select(.name | test("rc") | not) | .name' | sort --version-sort | tail -1)"
     commit_hash="$(echo "$gh_metadata" | jq -r --arg ver "$version" '.[] | select(.name == $ver).commit.sha')"
 
     filename="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" tfctl).file" | tr -d '"')"
