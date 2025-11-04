@@ -665,6 +665,11 @@ lib.mapAttrs mkLicense (
       url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
     };
 
+    gnuplot = {
+      spdxId = "gnuplot";
+      fullName = "gnuplot License";
+    };
+
     gpl1Only = {
       spdxId = "GPL-1.0-only";
       fullName = "GNU General Public License v1.0 only";

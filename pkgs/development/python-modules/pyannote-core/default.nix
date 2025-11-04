@@ -2,57 +2,53 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
   numpy,
   pandas,
-  pytestCheckHook,
-  scipy,
-  setuptools,
   sortedcontainers,
-  typing-extensions,
-  versioneer,
+
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyannote-core";
-  version = "5.0.1";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-core";
     tag = version;
-    hash = "sha256-28LVgI5bDFv71co/JsSrPrAcdugXiMRe6T1Jp0CO0XY=";
+    hash = "sha256-r5NkOAzrQGcb6LPi4/DA0uT9R0ELiYuwQkbT1l6R8Mw=";
   };
 
-  postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
-  '';
-
   build-system = [
-    setuptools
-    versioneer
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
-    sortedcontainers
     numpy
-    scipy
-    typing-extensions
+    pandas
+    sortedcontainers
   ];
 
   nativeCheckInputs = [
-    pandas
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pyannote.core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced data structures for handling temporal segments with attached labels";
     homepage = "https://github.com/pyannote/pyannote-core";
     changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
