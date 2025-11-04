@@ -72,12 +72,32 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
-    version = "580.95.05";
-    sha256_64bit = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
-    sha256_aarch64 = "sha256-zLRCbpiik2fGDa+d80wqV3ZV1U1b4lRjzNQJsLLlICk=";
-    openSha256 = "sha256-RFwDGQOi9jVngVONCOB5m/IYKZIeGEle7h0+0yGnBEI=";
-    settingsSha256 = "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14=";
-    persistencedSha256 = "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg=";
+    version = if stdenv.hostPlatform.system == "aarch64-linux" then "580.95.05" else "580.105.08";
+    sha256_64bit =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc="
+      else
+        "sha256-2cboGIZy8+t03QTPpp3VhHn6HQFiyMKMjRdiV2MpNHU=";
+    sha256_aarch64 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-zLRCbpiik2fGDa+d80wqV3ZV1U1b4lRjzNQJsLLlICk="
+      else
+        null;
+    openSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-RFwDGQOi9jVngVONCOB5m/IYKZIeGEle7h0+0yGnBEI="
+      else
+        "sha256-FGmMt3ShQrw4q6wsk8DSvm96ie5yELoDFYinSlGZcwQ=";
+    settingsSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14="
+      else
+        "sha256-YvzWO1U3am4Nt5cQ+b5IJ23yeWx5ud1HCu1U0KoojLY=";
+    persistencedSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg="
+      else
+        "sha256-qh8pKGxUjEimCgwH7q91IV7wdPyV5v5dc5/K/IcbruI=";
   };
 
   latest = selectHighestVersion production (generic {
