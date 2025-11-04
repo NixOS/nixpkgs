@@ -1,5 +1,0 @@
-# Git should never try to do any kind of line ending conversion on the 01–FF
-# files that are in this directory. The 0A file should always contain only the
-# byte 0A (which is LF is ASCII). It should never contain the bytes 0D 0A
-# (which is CR LF in ASCII).
-?? -text
