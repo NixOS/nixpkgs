@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Universally Unique Lexicographically Sortable Identifier (ULID) in Go";
     homepage = "https://github.com/oklog/ulid";
-    changelog = "https://github.com/oklog/ulid/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/oklog/ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "ulid";
