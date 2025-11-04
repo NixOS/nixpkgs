@@ -51,7 +51,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (config.hardware.facter.reportPath != null) {
 
     # KVM support
     boot.kernelModules =
