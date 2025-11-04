@@ -41,7 +41,7 @@ mkDerivation rec {
     mainProgram = "caneda";
     homepage = "http://caneda.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ magicquark ];
     platforms = with lib.platforms; linux;
   };
 }
