@@ -90,32 +90,3 @@ mentioned above remain.
 the required type files will only become known in the fetch step.
 
 The other problems mentioned above remain.
-
-## "import from lock file" feature
-
-**Feasibility**: low
-
-**Problems**: There are several technical problems, that make it currently
-impractical to build the dependencies without a hash provided in Nix:
-
-1. **Nixpkgs requirements**: The necessity in Nixpkgs to split the "fetch FOD"
-   from the "file transformation step", makes it impossible, since we need to
-   record the response headers in a separate FOD and then transform the files in
-   the another derivation using that information. Since there is no information
-   in the lock file about the headers, we have to copy the headers information
-   to `$out` of the FOD, which changes the hash, so we can't use the hashes from
-   the lock file for all the fetches where we need to record the headers.
-1. **Performance**: JSR's API architecture requires us to create a FOD per file
-   of a dependency (not per package, like NPM). This provides great granular
-   caching, but terrible performance when fetching, since the disc IO quickly
-   gets out of hand, with big JSR packages with hundreds of files. I actually
-   tested this, and a fetch with many jsr dependencies could really take a few
-   minutes, compared to the seconds it takes now.
-1. **Nix compatability**: Type file imports (which are not supported anyway, due
-   to their complexity) cannot work with this feature, since there are no hashes
-   for them in the lock-file, and some type files may only become known in the
-   fetch step.
-1. **Feasibility**: This feature would require a complete reimplementation of
-   all the fetching logic in Nix, which is a lot of effort, due to its
-   complexity. And the maintenance effort would double, which is not desirable,
-   since Deno's dependency cache API is still unstable.
