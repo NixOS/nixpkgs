@@ -25844,12 +25844,6 @@
     github = "thegu5";
     githubId = 58223632;
   };
-  thehans255 = {
-    name = "Hans Jorgensen";
-    email = "foss-contact@thehans255.com";
-    github = "thehans255";
-    githubId = 15896573;
-  };
   thekostins = {
     name = "Konstantin";
     email = "anisimovkosta19@gmail.com";
