@@ -4,6 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,12 +32,21 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/fx --comp zsh)
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   meta = {
     changelog = "https://github.com/antonmedv/fx/releases/tag/${finalAttrs.src.tag}";
     description = "Terminal JSON viewer";
     homepage = "https://github.com/antonmedv/fx";
     license = lib.licenses.mit;
     mainProgram = "fx";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 })
