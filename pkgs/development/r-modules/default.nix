@@ -769,6 +769,10 @@ let
     Rssa = [ pkgs.fftw.dev ];
     rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
+    tomledit = with pkgs; [
+      cargo
+      rustc
+    ];
     xslt = [ pkgs.pkg-config ];
     RVowpalWabbit = with pkgs; [
       zlib.dev
@@ -1818,6 +1822,10 @@ let
     });
 
     rshift = old.rshift.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    tomledit = old.tomledit.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
