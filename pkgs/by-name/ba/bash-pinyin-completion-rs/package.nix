@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bash-pinyin-completion-rs";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "bash-pinyin-completion-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VXIIG+ZGb4fS3LSIkGW744ui4AKTdQCjrNlObH/YZVY=";
+    hash = "sha256-XmxJYzDnA/7v/U3fFzNd2BQu43q6zYGSk/tJ0I6aKBo=";
   };
 
   strictDeps = true;

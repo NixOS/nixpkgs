@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       donovanglover
-      thehans255
       iedame
     ];
     mainProgram = "ringracers";
