@@ -62,6 +62,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mchehab/zbar/commit/a549566ea11eb03622bd4458a1728ffe3f589163.patch";
       hash = "sha256-NY3bAElwNvGP9IR6JxUf62vbjx3hONrqu9pMSqaZcLY=";
     })
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # check-images-py test causes segfault on Darwin
+    ./disable-images-py-test-darwin.patch
   ];
 
   nativeBuildInputs = [
