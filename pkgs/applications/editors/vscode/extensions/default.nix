@@ -4217,8 +4217,8 @@ let
         mktplcRef = {
           name = "signageos-vscode-sops";
           publisher = "signageos";
-          version = "0.9.2";
-          hash = "sha256-qlFD8sMvdKpLkXiYT9UybgCvxUJrbXpAcnmPxk91Tbs=";
+          version = "0.9.3";
+          hash = "sha256-fOSLlszr6yLkRC9gy+MCnL+Y/1TXrmVWAWavpvXHj4U=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/signageos.signageos-vscode-sops/changelog";

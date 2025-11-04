@@ -15,23 +15,23 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Archi";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src =
     {
       "x86_64-linux" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Linux64-${version}.tgz";
-        hash = "sha256-zPgsRfbhN22Sph/5AvP7y2uHdgy1cZRcsm+O1dVLNHc=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Linux64-${finalAttrs.version}.tgz";
+        hash = "sha256-MIUlWt3GP/1oQAeq4W2xnhG63a2zhGldgyoyZ9lNOiI=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-${version}.dmg";
-        hash = "sha256-NZWMQzLsPcJ7cZoYFUxXxLIu7yCIHE5pw9+UqjtG7Cc=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Mac-${finalAttrs.version}.dmg";
+        hash = "sha256-wIlhJ6XmhL5rMb5zwHJYwamCwV13PK53wi9uEXIga5I=";
       };
       "aarch64-darwin" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
-        hash = "sha256-a80QyJT+mizT4bxhJ/1rXnQGbq0Zxwmqb74n2QH4H3I=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Mac-Silicon-${finalAttrs.version}.dmg";
+        hash = "sha256-2/w4+aKfjfTGLjjl/nOouFtnv7/kjmfezkrmSa4ablc=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       desktopName = "Archi";
       exec = "Archi";
       type = "Application";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "archi";
       categories = [
         "Development"
@@ -107,20 +107,20 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) archi; };
 
-  meta = with lib; {
+  meta = {
     description = "ArchiMate modelling toolkit";
     longDescription = ''
       Archi is an open source modelling toolkit to create ArchiMate
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       earldouglas
       paumr
     ];
     mainProgram = "Archi";
   };
-}
+})
