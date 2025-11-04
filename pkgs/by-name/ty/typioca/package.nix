@@ -6,14 +6,14 @@
   typioca,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "typioca";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
-    rev = version;
+    tag = "${finalAttrs.version}";
     hash = "sha256-fViYwewzhJUJjMupCYk1UsnnPAhByYZqYkuKD6MJNnE=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/bloznelis/typioca/cmd.Version=${version}"
+    "-X=github.com/bloznelis/typioca/cmd.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -31,12 +31,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cozy typing speed tester in terminal";
     homepage = "https://github.com/bloznelis/typioca";
-    changelog = "https://github.com/bloznelis/typioca/releases/tag/${src.rev}";
-    license = licenses.mit;
+    changelog = "https://github.com/bloznelis/typioca/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "typioca";
   };
-}
+})
