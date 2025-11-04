@@ -862,9 +862,9 @@
   },
   "quantum": {
     "pname": "quantum",
-    "version": "1.0.0b9",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quantum-1.0.0b9-py3-none-any.whl",
-    "hash": "sha256-DYnSYOsA+nZJ9V2JIqIHB/697a9ATJLBneyrPsHGoVY=",
+    "version": "1.0.0b10",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quantum-1.0.0b10-py3-none-any.whl",
+    "hash": "sha256-ihvof5C7EOMq65Ljbv2ax9Lri67AY0kSBb687dUGAv0=",
     "description": "Microsoft Azure Command-Line Tools Quantum Extension"
   },
   "qumulo": {
