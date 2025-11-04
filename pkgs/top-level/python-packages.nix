@@ -8000,6 +8000,10 @@ self: super: with self; {
 
   lammps = callPackage ../development/python-modules/lammps { inherit (pkgs) lammps; };
 
+  lance-namespace-urllib3-client =
+    callPackage ../development/python-modules/lance-namespace-urllib3-client
+      { };
+
   lancedb = callPackage ../development/python-modules/lancedb { inherit (pkgs) protobuf; };
 
   langchain = callPackage ../development/python-modules/langchain { };
