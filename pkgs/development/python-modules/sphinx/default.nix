@@ -37,6 +37,7 @@
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
+  writableTmpDirAsHomeHook,
 
   # reverse dependencies to test
   breathe,
@@ -97,11 +98,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # requires network access
@@ -124,8 +122,6 @@ buildPythonPackage rec {
     "test_document_toc_only"
     # Assertion error
     "test_gettext_literalblock_additional"
-    # requires cython_0, but fails miserably on 3.11
-    "test_cython"
     # Could not fetch remote image: http://localhost:7777/sphinx.png
     "test_copy_images"
     # ModuleNotFoundError: No module named 'fish_licence.halibut'
@@ -138,9 +134,10 @@ buildPythonPackage rec {
     "test_load_mappings_cache_update"
     "test_load_mappings_cache_revert_update"
   ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/sphinx-doc/sphinx/issues/12430
-    "test_autodoc_type_aliases"
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_autodoc_special_members"
+    "test_is_invalid_builtin_class"
+    "test_autosummary_generate_content_for_module_imported_members"
   ]
   ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
