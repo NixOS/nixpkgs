@@ -1302,10 +1302,6 @@ with pkgs;
     else
       throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
 
-  cdemu-client = callPackage ../applications/emulators/cdemu/client.nix { };
-
-  cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
-
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
@@ -1313,19 +1309,13 @@ with pkgs;
 
   fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
 
-  gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
-
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
     protobuf = protobuf_21;
   };
 
-  image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
-
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
-
-  libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
