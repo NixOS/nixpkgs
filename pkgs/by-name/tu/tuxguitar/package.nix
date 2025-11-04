@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/helge17/tuxguitar";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ ardumont ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tuxguitar";
