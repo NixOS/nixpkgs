@@ -192,7 +192,7 @@ mapAliases {
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
   react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
-  inherit (pkgs) react-static; # added 2023-08-21
+  react-static = throw "'react-static has been removed because of a lack of upstream maintainance"; # Converted to throw 2025-11-04
   react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
