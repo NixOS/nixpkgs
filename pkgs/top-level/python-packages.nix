@@ -12745,7 +12745,7 @@ self: super: with self; {
 
   pyatome = callPackage ../development/python-modules/pyatome { };
 
-  pyatspi = callPackage ../development/python-modules/pyatspi { };
+  pyatspi = callPackage ../development/python-modules/pyatspi { inherit (pkgs.buildPackages) meson; };
 
   pyatv = callPackage ../development/python-modules/pyatv { };
 
