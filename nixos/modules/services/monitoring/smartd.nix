@@ -198,124 +198,171 @@ in
       }
     ];
 
-    systemd.services.smartd = {
-      description = "S.M.A.R.T. Daemon";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "notify";
-        ExecStart =
-          let
-            host = config.networking.fqdnOrHostName;
+    systemd.services.smartd =
+      let
+        nm = cfg.notifications.mail;
+        ns = cfg.notifications.systembus-notify;
+        nw = cfg.notifications.wall;
+        nx = cfg.notifications.x11;
+      in
+      {
+        description = "S.M.A.R.T. Daemon";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "notify";
+          ExecStart =
+            let
+              host = config.networking.fqdnOrHostName;
 
-            nm = cfg.notifications.mail;
-            ns = cfg.notifications.systembus-notify;
-            nw = cfg.notifications.wall;
-            nx = cfg.notifications.x11;
+              smartdNotify = pkgs.writeShellApplication {
+                name = "smartd-notify.sh";
+                runtimeInputs =
+                  with pkgs;
+                  [
+                    coreutils
+                  ]
+                  ++ lib.optionals nm.enable [ smartmontools ]
+                  ++ lib.optionals ns.enable [ config.systemd.package ]
+                  ++ lib.optionals nw.enable [ util-linux ]
+                  ++ lib.optionals nx.enable [
+                    gawk
+                    getent
+                    xmessage
+                    config.systemd.package
+                  ];
 
-            smartdNotify = pkgs.writeShellApplication {
-              name = "smartd-notify.sh";
-              runtimeInputs =
-                with pkgs;
-                [
-                  coreutils
-                ]
-                ++ lib.optionals nm.enable [ smartmontools ]
-                ++ lib.optionals ns.enable [ config.systemd.package ]
-                ++ lib.optionals nw.enable [ util-linux ]
-                ++ lib.optionals nx.enable [
-                  gawk
-                  getent
-                  xmessage
-                  config.systemd.package
-                ];
+                text = ''
+                  ${lib.optionalString nm.enable ''
+                    {
+                    cat << EOF
+                    From: smartd on ${host} <${nm.sender}>
+                    To: ${nm.recipient}
+                    Subject: $SMARTD_SUBJECT
 
-              text = ''
-                ${lib.optionalString nm.enable ''
-                  {
-                  cat << EOF
-                  From: smartd on ${host} <${nm.sender}>
-                  To: ${nm.recipient}
-                  Subject: $SMARTD_SUBJECT
+                    $SMARTD_FULLMESSAGE
+                    EOF
 
-                  $SMARTD_FULLMESSAGE
-                  EOF
-
-                  smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
-                  } | ${nm.mailer} -i "${nm.recipient}"
-                ''}
-                ${lib.optionalString ns.enable ''
-                  busctl --system emit / net.nuetzlich.SystemNotifications Notify ss \
-                    "Problem detected with disk: $SMARTD_DEVICESTRING" \
-                    "Warning message from smartd is: $SMARTD_MESSAGE"
-                ''}
-                ${lib.optionalString nw.enable ''
-                  {
-                  cat << EOF
-                  Problem detected with disk: $SMARTD_DEVICESTRING
-                  Warning message from smartd is:
-
-                  $SMARTD_MESSAGE
-                  EOF
-                  } | wall 2>/dev/null
-                ''}
-                ${lib.optionalString nx.enable ''
-                  popup() {
-                    printf '%s\n' \
+                    smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
+                    } | ${nm.mailer} -i "${nm.recipient}"
+                  ''}
+                  ${lib.optionalString ns.enable ''
+                    busctl --system emit / net.nuetzlich.SystemNotifications Notify ss \
                       "Problem detected with disk: $SMARTD_DEVICESTRING" \
-                      "Warning message from smartd is:" \
-                      "" \
-                      "$SMARTD_FULLMESSAGE" \
-                      | xmessage -file - >/dev/null 2>&1 &
-                  }
+                      "Warning message from smartd is: $SMARTD_MESSAGE"
+                  ''}
+                  ${lib.optionalString nw.enable ''
+                    {
+                    cat << EOF
+                    Problem detected with disk: $SMARTD_DEVICESTRING
+                    Warning message from smartd is:
 
-                  # See: https://wiki.archlinux.org/title/Desktop_notifications#Send_notifications_to_all_graphical_users
-                  found_session=""
-                  for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
-                    session_type=$(loginctl show-session "$session" -p Type --value)
-                    if [ "$session_type" != "x11" ]; then
-                      continue
-                    fi
-                    session_display=$(loginctl show-session "$session" -p Display --value)
-                    session_user=$(loginctl show-session "$session" -p Name --value)
-                    session_home=$(getent passwd "$session_user" | cut -d: -f6)
-                    if [ -z "$session_display" ] || [ ! -r "$session_home/.Xauthority" ]; then
-                      continue
-                    fi
-                    found_session=1
-                    (
-                      # shellcheck disable=SC2030,SC2031
-                      export DISPLAY="$session_display"
-                      export XAUTHORITY="$session_home/.Xauthority"
+                    $SMARTD_MESSAGE
+                    EOF
+                    } | wall 2>/dev/null
+                  ''}
+                  ${lib.optionalString nx.enable ''
+                    popup() {
+                      printf '%s\n' \
+                        "Problem detected with disk: $SMARTD_DEVICESTRING" \
+                        "Warning message from smartd is:" \
+                        "" \
+                        "$SMARTD_FULLMESSAGE" \
+                        | xmessage -file - >/dev/null 2>&1 &
+                    }
+
+                    # See: https://wiki.archlinux.org/title/Desktop_notifications#Send_notifications_to_all_graphical_users
+                    found_session=""
+                    for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
+                      session_type=$(loginctl show-session "$session" -p Type --value)
+                      if [ "$session_type" != "x11" ]; then
+                        continue
+                      fi
+                      session_display=$(loginctl show-session "$session" -p Display --value)
+                      session_user=$(loginctl show-session "$session" -p Name --value)
+                      session_home=$(getent passwd "$session_user" | cut -d: -f6)
+                      if [ -z "$session_display" ] || [ ! -r "$session_home/.Xauthority" ]; then
+                        continue
+                      fi
+                      found_session=1
+                      (
+                        # shellcheck disable=SC2030,SC2031
+                        export DISPLAY="$session_display"
+                        export XAUTHORITY="$session_home/.Xauthority"
+                        popup
+                      )
+                    done
+
+                    if [ -z "$found_session" ]; then
+                      # shellcheck disable=SC2031
+                      export DISPLAY=${nx.display}
                       popup
-                    )
-                  done
+                    fi
+                  ''}
+                '';
+              };
 
-                  if [ -z "$found_session" ]; then
-                    # shellcheck disable=SC2031
-                    export DISPLAY=${nx.display}
-                    popup
-                  fi
-                ''}
+              notifyOpts = lib.optionalString (nm.enable || ns.enable || nw.enable || nx.enable) (
+                "-m <nomailer> -M exec ${lib.getExe smartdNotify} "
+                + lib.optionalString cfg.notifications.test "-M test "
+              );
+
+              smartdConf = pkgs.writeText "smartd.conf" ''
+                # Autogenerated smartd startup config file
+                DEFAULT ${notifyOpts}${cfg.defaults.monitored}
+
+                ${lib.concatMapStringsSep "\n" (d: "${d.device} ${d.options}") cfg.devices}
+
+                ${lib.optionalString cfg.autodetect "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
               '';
-            };
+            in
+            "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
 
-            notifyOpts = lib.optionalString (nm.enable || ns.enable || nw.enable || nx.enable) (
-              "-m <nomailer> -M exec ${lib.getExe smartdNotify} "
-              + lib.optionalString cfg.notifications.test "-M test "
-            );
+          StateDirectory = "smartd";
 
-            smartdConf = pkgs.writeText "smartd.conf" ''
-              # Autogenerated smartd startup config file
-              DEFAULT ${notifyOpts}${cfg.defaults.monitored}
+          PrivateDevices = false;
+          DevicePolicy = lib.mkIf (!cfg.autodetect) "closed";
+          DeviceAllow = lib.mkIf (!cfg.autodetect) (lib.catAttrs "device" cfg.devices);
 
-              ${lib.concatMapStringsSep "\n" (d: "${d.device} ${d.options}") cfg.devices}
-
-              ${lib.optionalString cfg.autodetect "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
-            '';
-          in
-          "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
+          CapabilityBoundingSet = [
+            # Needed to open device nodes regardless of their permissions
+            "CAP_DAC_OVERRIDE"
+            "CAP_DAC_READ_SEARCH"
+            # Needed for NVMe admin commands
+            "CAP_SYS_ADMIN"
+            # Needed for ATA passthrough
+            "CAP_SYS_RAWIO"
+          ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateMounts = true;
+          # X11 notifications might need to read /tmp/.X11-unix
+          PrivateTmp = !nx.enable;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          # X11 notifications might need to read someone's ~/.Xauthority
+          ProtectHome = !nx.enable;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" ];
+          UMask = "0077";
+        };
       };
-    };
 
     services.systembus-notify.enable = lib.mkDefault cfg.notifications.systembus-notify.enable;
   };

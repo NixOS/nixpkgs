@@ -91,6 +91,11 @@ in
             ${pkgs.coreutils}/bin/cat > /tmp/smartd-mail.out
           '';
         };
+
+        systemd.services.smartd.serviceConfig = {
+          PrivateTmp = lib.mkForce false;
+          ReadWritePaths = [ "/tmp" ];
+        };
       };
 
       testScript = ''
