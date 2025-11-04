@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       xrelkd
+      defelo
     ];
     mainProgram = "cargo-expand";
   };
