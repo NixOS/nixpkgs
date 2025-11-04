@@ -1,13 +1,9 @@
 diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
-index 513b9733d..0c1c8007f 100644
+index ad2e65cf7..61fb78db8 100644
 --- a/daemon/gdm-local-display-factory.c
 +++ b/daemon/gdm-local-display-factory.c
-@@ -269,10 +269,10 @@ struct GdmDisplayServerConfiguration {
-         const char *session_type;
- } display_server_configuration[] = {
- #ifdef ENABLE_WAYLAND_SUPPORT
--        { "wayland", GDM_KEY_WAYLAND_ENABLE, "/usr/bin/Xwayland", "wayland" },
-+        { "wayland", GDM_KEY_WAYLAND_ENABLE, "@xwayland@/bin/Xwayland", "wayland" },
+@@ -272,7 +272,7 @@ struct GdmDisplayServerConfiguration {
+         { "wayland", GDM_KEY_WAYLAND_ENABLE, NULL, "wayland" },
  #endif
  #ifdef ENABLE_X11_SUPPORT
 -        { "xorg", GDM_KEY_XORG_ENABLE, "/usr/bin/Xorg", "x11" },
@@ -16,7 +12,7 @@ index 513b9733d..0c1c8007f 100644
          { NULL, NULL, NULL },
  };
 diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
-index 9568e963f..b1bc8800a 100644
+index 457dcf88d..a71b89ba8 100644
 --- a/daemon/gdm-manager.c
 +++ b/daemon/gdm-manager.c
 @@ -154,7 +154,7 @@ plymouth_is_running (void)

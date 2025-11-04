@@ -27,7 +27,6 @@
   plymouth,
   coreutils,
   xorgserver,
-  xwayland,
   dbus,
   nixos-icons,
   runCommand,
@@ -112,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
         coreutils
         plymouth
         xorgserver
-        xwayland
         dbus
         ;
     })
