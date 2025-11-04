@@ -17,6 +17,7 @@
 }:
 
 let
+  # Currently, dxpy only works with urllib3-2.1.0
   urllib3_210 = urllib3.overrideAttrs (
     { pname, ... }:
     rec {
