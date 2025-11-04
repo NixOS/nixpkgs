@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.12.0";
+  version = "65.13.0";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-LM9XU8oMzg2WlYnwPmmZY+8gzZWT1br2ciZ7gCTbH7I=";
+    hash = "sha256-Rg6hUTWTFIk1VdUuVqTLLbqTDaPE40tU3HOBkL0VyGo=";
   };
 
   nativeBuildInputs = [ gettext ];
