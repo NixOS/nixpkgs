@@ -57,7 +57,16 @@ typescript 5.8.3
 
 ### `deno.lock`
 
-`deno.lock` version 5
+[The `deno.lock` file is seen by the deno maintainers as a security feature](
+https://docs.deno.com/runtime/fundamentals/modules/#integrity-checking-and-lock-files),
+and is mainly used for its the integrity hashes.
+It is not used as the source of truth for reproducibility.
+
+Instead, [deno uses the `./vendor` directory as the source of truth for reproducibility](
+https://docs.deno.com/runtime/fundamentals/modules/#minimum-supply-chain-baseline-(recommended)).
+
+Thankfully, it's still possible to use the `deno.lock` as source of truth for reproducibility.
+However, we can't use it for externally fetched type files (see [below](#type-files)).
 
 **Format**:
 
