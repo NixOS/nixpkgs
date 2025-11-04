@@ -7,14 +7,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caneda";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Caneda";
     repo = "Caneda";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-oE0cdOwufc7CHEFr3YU8stjg1hBGs4bemhXpNTCTpDQ=";
   };
 
@@ -39,10 +39,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source EDA software focused on easy of use and portability";
+    changelog = "https://github.com/Caneda/Caneda/releases/tag/${finalAttrs.version}";
     mainProgram = "caneda";
     homepage = "http://caneda.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ magicquark ];
     platforms = with lib.platforms; linux;
   };
-}
+})
