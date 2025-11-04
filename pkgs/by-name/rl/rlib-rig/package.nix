@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rig";
+  pname = "rlib-rig";
   version = "0.7.1";
 
   src = fetchFromGitHub {
