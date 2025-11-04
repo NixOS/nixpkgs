@@ -26,8 +26,13 @@ buildGoModule rec {
 
   checkPhase = ''
     runHook preCheck
-    gotestsum -- $(go list ./... | grep -vE "e2e-tests|/buildkit$|/scout$") -timeout 30s -skip "TestCollectDiagnostics"
-    go test $(go list ./... | grep e2e-tests) -timeout 120s -skip "TestPublishDiagnostics|TestHover"
+
+    # disable some tests because of sandbox
+    excludedPackages="e2e-tests|/buildkit$|/scout$"
+    packages=$(go list ./... | grep -vE "$excludedPackages")
+    gotestsum -- $packages -timeout 30s -skip "TestCollectDiagnostics|TestCompletion_ImageTags|TestInlayHint"
+    go test ./e2e-tests/... -timeout 120s -skip "TestPublishDiagnostics|TestHover"
+
     runHook postCheck
   '';
 
