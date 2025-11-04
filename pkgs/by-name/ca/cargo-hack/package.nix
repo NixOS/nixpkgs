@@ -18,6 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # some necessary files are absent in the crate version
   doCheck = false;
 
+  # versionCheckHook doesn't support multiple arguments yet
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/cargo-hack hack --version | grep -F 'cargo-hack ${finalAttrs.version}'
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "Cargo subcommand to provide various options useful for testing and continuous integration";
     mainProgram = "cargo-hack";
