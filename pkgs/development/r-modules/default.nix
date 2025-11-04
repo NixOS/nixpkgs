@@ -1053,6 +1053,7 @@ let
       zlib.dev
       ncurses.dev
     ];
+    lnmixsurv = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
