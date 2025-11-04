@@ -101,6 +101,7 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _coerceResult
     _singleton
     _coerceMany
     _toSourceFilter
@@ -1005,4 +1006,49 @@ in
         {
           submodules = recurseSubmodules;
         };
+
+  /**
+    The empty fileset. It can be useful as a default value or as starting accumulator for a folding operation.
+
+    # Type
+
+    ```
+    empty :: FileSet
+    ```
+  */
+  empty = _emptyWithoutBase;
+
+  /**
+    Tests whether a given value is a fileset, or can be used in place of a fileset.
+
+    # Inputs
+
+    `value`
+
+    : The value to test
+
+    # Type
+
+    ```
+    isFileset :: Any -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fileset.isFileset` usage example
+
+    ```nix
+    isFileset ./.
+    => true
+
+    isFileset (unions [  ])
+    => true
+
+    isFileset 1
+    => false
+    ```
+
+    :::
+  */
+  isFileset = x: (_coerceResult "" x).success;
 }

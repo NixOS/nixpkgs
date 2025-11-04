@@ -7,14 +7,16 @@
   openssl,
   withLsp ? true,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taplo";
   version = "0.10.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "taplo-cli";
     hash = "sha256-iKc4Nu7AZE1LSuqXffi3XERbOqZMOkI3PV+6HaJzh4c=";
   };
@@ -26,9 +28,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   buildFeatures = lib.optional withLsp "lsp";
 
@@ -47,11 +47,17 @@ rustPlatform.buildRustPackage rec {
           --zsh <($out/bin/taplo completions zsh)
       '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "taplo";
   };
-}
+})
