@@ -168,14 +168,15 @@ async function handleMerge({
       // Ignore comments where the user has been deleted already.
       user &&
       // Ignore comments which had already been responded to by the bot.
-      !events.some(
-        ({ event, body }) =>
-          ['commented'].includes(event) &&
-          // We're only testing this hidden reference, but not the author of the comment.
-          // We'll just assume that nobody creates comments with this marker on purpose.
-          // Additionally checking the author is quite annoying for local debugging.
-          body.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
-      ),
+      (dry ||
+        !events.some(
+          ({ event, body }) =>
+            ['commented'].includes(event) &&
+            // We're only testing this hidden reference, but not the author of the comment.
+            // We'll just assume that nobody creates comments with this marker on purpose.
+            // Additionally checking the author is quite annoying for local debugging.
+            body.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
+        )),
   )
 
   async function merge() {
