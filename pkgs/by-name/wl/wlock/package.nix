@@ -9,16 +9,16 @@
   libxkbcommon,
   wayland-scanner,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlock";
-  version = "0-unstable-2024-09-13";
+  version = "1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "sewn";
     repo = "wlock";
-    rev = "be975445fa0da7252f8e13b610c518dd472652d0";
-    hash = "sha256-Xt7Q51RhFG+UXYukxfORIhc4Df86nxtpDhAhaSmI38A=";
+    tag = finalAttrs.version;
+    hash = "sha256-vbGrePrZN+IWwzwoNUzMHmb6k9nQbRLVZmbWIAsYneY=";
   };
 
   postPatch = ''
@@ -52,4 +52,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ fliegendewurst ];
     mainProgram = "wlock";
   };
-}
+})
