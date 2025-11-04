@@ -23,12 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     lvm2
   ];
-  makeFlags = kernelModuleMakeFlags ++ [
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
-
-  # GCC 14 makes this an error by default, remove when fixed upstream
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  makeFlags =
+    kernelModuleMakeFlags
+    ++ [
+      "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    ]
+    # Use wrapped gcc compiler since the unwrapped one fails to find the
+    # headers.
+    ++ lib.optionals stdenv.cc.isGNU [
+      "CC=${stdenv.cc.targetPrefix}cc"
+    ];
 
   outputs = [
     "out"
