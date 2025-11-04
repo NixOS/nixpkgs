@@ -43,7 +43,7 @@ async function fetchVersionMetaJson(
 
 function makeMetaJsonContent(packageSpecifier: PackageSpecifier): MetaJson {
   if (!packageSpecifier.scope) {
-    throw `jsr package has no scope ${JSON.stringify(packageSpecifier)}`;
+    throw `scope in jsr package required but not found in ${JSON.stringify(packageSpecifier)}`;
   }
 
   return {
@@ -77,6 +77,7 @@ async function getFilesAndHashesUsingModuleGraph(
     }`;
   }
 
+  // see `readme.md`
   const importers = Object.keys(moduleGraph);
   const exported = Object.values(exports).map((v) => v.replace(/^\.\//, "/"));
   const imported: Array<string> = [];
@@ -288,6 +289,7 @@ export async function fetchAllJsr(
 
   for (const metaJson of Object.values(metaJsons)) {
     resultUnresolved.push(Promise.resolve([metaJson.packageFile]));
+    // the other files are written in fetchDefault, but we need to write the registryJsons, too
     await writeMetaJson(outPathPrefix, metaJson);
   }
 

@@ -52,6 +52,7 @@ function getConfig(): Config {
 }
 
 export function parsePackageSpecifier(fullString: string): PackageSpecifier {
+  // see `lockfile-transformer.test.ts` for the spec
   const matches = fullString.match(
     /^(([^:]+):)?(@([^\/]+)\/)?([^@]+)@([^_]+)(_.*)?$/,
   );
@@ -137,6 +138,7 @@ function getRegistry(url: UrlString): string {
 
 function transformHttpsPackageFile(p: PackageFileIn): PackageFileIn {
   const transformers: Record<string, (p: PackageFileIn) => PackageFileIn> = {
+    // special case for esm.sh, see readme.md
     "esm.sh": function (p: PackageFileIn): PackageFileIn {
       const result = structuredClone(p);
       const url = new URL(result.url);
