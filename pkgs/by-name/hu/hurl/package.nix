@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       eonpatapon
+      defelo
     ];
     license = lib.licenses.asl20;
     mainProgram = "hurl";
