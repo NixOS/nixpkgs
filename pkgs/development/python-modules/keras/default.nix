@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -35,15 +36,36 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.9.2";
+  version = "3.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-mxQHqApyxO57zo/lK8p9xWEdEgkXF89yX/+pPBUlbwE=";
+    hash = "sha256-J/NPLR9ShKhvHDU0/NpUNp95RViS2KygqvnuDHdwiP0=";
   };
+
+  # The two following patches mitigate CVE breaches.
+  # The patches are part of the keras 3.12.0 release.
+  # We choose to backport the relevant commits instead of updating keras to 3.12.0 as this latest
+  # release includes breaking changes.
+  patches = [
+    # Fixes CVE-2025-12058
+    # https://github.com/advisories/GHSA-mq84-hjqx-cwf2
+    (fetchpatch2 {
+      name = "patch-CVE-2025-12058";
+      url = "https://github.com/keras-team/keras/commit/61ac8c1e51862c471dee7b49029c356f55531487.patch";
+      hash = "sha256-tvWYde3AERV1w3gvQ70NNLo0xNxgyZFzf5LF48Axymg=";
+    })
+    # Fixes CVE-2025-12060
+    # https://github.com/advisories/GHSA-28jp-44vh-q42h
+    (fetchpatch2 {
+      name = "patch-CVE-2025-12060";
+      url = "https://github.com/keras-team/keras/commit/47fcb397ee4caffd5a75efd1fa3067559594e951.patch";
+      hash = "sha256-tiBRXGp+PHiY0VXCdcpmpq4PHORvREVpr/QfQcwqJdk=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -82,9 +104,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # NameError: name 'MockRemat' is not defined
-    # https://github.com/keras-team/keras/issues/21126
-    "test_functional_model_with_remat"
+    # Require unpackaged `grain`
+    "test_fit_with_data_adapter_grain_dataloader"
+    "test_fit_with_data_adapter_grain_datast"
+    "test_fit_with_data_adapter_grain_datast_with_len"
 
     # Tries to install the package in the sandbox
     "test_keras_imports"
@@ -94,6 +117,9 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Require unpackaged `grain`
+    "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
+
     # These tests succeed when run individually, but crash within the full test suite:
     # ImportError: /nix/store/4bw0x7j3wfbh6i8x3plmzknrdwdzwfla-abseil-cpp-20240722.1/lib/libabsl_cord_internal.so.2407.0.0:
     # undefined symbol: _ZN4absl12lts_2024072216strings_internal13StringifySink6AppendESt17basic_string_viewIcSt11char_traitsIcEE
