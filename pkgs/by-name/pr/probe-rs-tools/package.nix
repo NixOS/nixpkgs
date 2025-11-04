@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${version}";
-    hash = "sha256-/gP9abygktYSzg/054o1PEcQywiPFTtKNdUdI3hCYyc=";
+    hash = "sha256-3tVCsMXrNTFhTQit4PNTXtHOXq8GSEWdLBJ9iqtgWyQ=";
   };
 
-  cargoHash = "sha256-txHl0+HDCVdmbZppGsFqPjsEbPBCJVEB3XZWZJBBoOk=";
+  cargoHash = "sha256-CL+aTPllQqa22ENU2FWhBMSe0Mf1MAfemytIiqf0bHk=";
 
   buildAndTestSubdir = pname;
 
