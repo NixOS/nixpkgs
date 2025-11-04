@@ -8,6 +8,9 @@
   pkg-config,
   libsecret,
   rsync,
+  xcbuild,
+  buildPackages,
+  clang_20,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "laurent22";
     repo = "joplin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nWQa+/UJIjCsK0a5IimqcBnD2hrjUHTVdrzb5QKBevw=";
+    postFetch = ''
+      # there's a file with a weird name that causes a hash mismatch on darwin
+      rm $out/packages/app-cli/tests/support/photo*
+    '';
+    hash = "sha256-p9MY7E0qa7LcXBpGs/DmX2A2jXQoOPYiRo/nEzkkQd0=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -36,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libsecret
     rsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    buildPackages.cctools
+    clang_20 # clang_21 breaks keytar, sqlite
   ];
 
   buildInputs = [
