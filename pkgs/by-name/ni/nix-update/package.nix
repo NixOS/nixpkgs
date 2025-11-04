@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      mdaniels5757
       mic92
     ];
     mainProgram = "nix-update";
