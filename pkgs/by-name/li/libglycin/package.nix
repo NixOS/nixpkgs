@@ -27,14 +27,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-HLvdDQ1rXm2JTUwot07qOIzNaK/sK6zLswips8oIp9c=";
+    hash = "sha256-KPhyL7uP621pxxDGlzbF9WG7A0AcyaS95VstfN/FoQ8=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-IaiQ1OdmlBcIYyruG6p/rrOxq7x8csF/W3ONerh2lAA=";
+    hash = "sha256-bYUA8WrCWGTs5P1zT7zMSESkHhsyfBBRUvM2D63OBbA=";
   };
 
   buildInputs = [
