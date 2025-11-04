@@ -7,7 +7,6 @@
   yarnBuildHook,
   nodejs,
   npmHooks,
-  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-diagnostic";
@@ -37,8 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     unlink $out/lib/node_modules/coc-diagnostic/node_modules/.bin/node-which
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Diagnostic-languageserver extension for coc.nvim";

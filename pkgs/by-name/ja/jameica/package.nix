@@ -15,10 +15,6 @@
 }:
 
 let
-  _version = "2.10.5";
-  _build = "488";
-  version = "${_version}-${_build}";
-
   swtSystem =
     if stdenv.hostPlatform.system == "i686-linux" then
       "linux"
@@ -45,13 +41,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jameica";
-  inherit version;
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    rev = "V_${builtins.replaceStrings [ "." ] [ "_" ] _version}_BUILD_${_build}";
-    hash = "sha256-xzSyq5Cse/TCzyb/eQNZyQS/I3mcPsvzWk3VjZg95gE=";
+    # Releases currently happen on branches named like the version number. Rev of the "2.12.0" branch.
+    rev = "b74b160643b18171d2d185b80b60e82a02a75898";
+    hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
   };
 
   nativeBuildInputs = [
@@ -88,7 +85,7 @@ stdenv.mkDerivation rec {
     # copy platform-specific SWT
     cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
 
-    install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
+    install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
@@ -97,8 +94,8 @@ stdenv.mkDerivation rec {
 
     # Create .app bundle for macOS
     mkdir -p $out/Applications
-    chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
-    cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
+    chmod +x releases/${version}/tmp/jameica.app/jameica*.sh
+    cp -r releases/${version}/tmp/jameica.app $out/Applications/Jameica.app
   ''
   + ''
 
