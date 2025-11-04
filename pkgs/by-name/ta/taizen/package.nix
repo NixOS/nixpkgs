@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Curses-based mediawiki browser";
     homepage = "https://github.com/oppiliappan/taizen";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     license = lib.licenses.mit;
     mainProgram = "taizen";
   };
