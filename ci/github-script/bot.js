@@ -375,7 +375,10 @@ module.exports = async ({ github, context, core, dry }) => {
       })
 
       if (!pull_request.draft) {
-        await handleReviewers({
+        // We set this label earlier already, but the current PR state can be very different
+        // after handleReviewers has requested reviews, so update it in this case to prevent
+        // this label from flip-flopping.
+        prLabels['9.needs: reviewer'] = await handleReviewers({
           github,
           context,
           core,

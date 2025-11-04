@@ -68,7 +68,8 @@ async function handleReviewers({
     log(
       `Too many reviewers (${reviewers.join(', ')}), skipping review requests.`,
     )
-    return
+    // false indicates, that we do have reviewers and don't need the "needs: reviewers" label.
+    return false
   }
 
   const requested_reviewers = new Set(
@@ -113,6 +114,13 @@ async function handleReviewers({
       reviewers,
     })
   }
+
+  // Return a boolean on whether the "needs: reviewers" label should be set.
+  return (
+    new_reviewers.size === 0 &&
+    existing_reviewers.size === 0 &&
+    requested_reviewers.size === 0
+  )
 }
 
 module.exports = {
