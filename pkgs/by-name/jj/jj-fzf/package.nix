@@ -1,18 +1,4 @@
-{
-  lib,
-  bashInteractive,
-  coreutils,
-  fetchFromGitHub,
-  fzf,
-  gawk,
-  gnused,
-  jujutsu,
-  makeWrapper,
-  pandoc,
-  python3,
-  stdenv,
-  util-linux,
-}:
+{ lib, bashInteractive, coreutils, fetchFromGitHub, fzf, gawk, gnused, jujutsu, makeWrapper, pandoc, python3, stdenv, util-linux, installShellFiles, }
 
 stdenv.mkDerivation rec {
   pname = "jj-fzf";
@@ -28,6 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     pandoc
+    python3
+    util-linux
+    installShellFiles
   ];
 
   buildInputs = [
@@ -37,8 +26,6 @@ stdenv.mkDerivation rec {
     gawk
     gnused
     jujutsu
-    python3
-    util-linux
   ];
 
   postPatch = ''
@@ -52,25 +39,10 @@ stdenv.mkDerivation rec {
 
     # Fix Makefile to use absolute path for env
     substituteInPlace Makefile.mk \
-      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
-  '';
+      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"\n  '';
 
   buildPhase = ''
     runHook preBuild
-
-    # Ensure all build tools are in PATH
-    export PATH=${
-      lib.makeBinPath [
-        bashInteractive
-        coreutils
-        fzf
-        gawk
-        gnused
-        jujutsu
-        python3
-        util-linux
-      ]
-    }:$PATH
 
     # Generate the manual page
     make doc/jj-fzf.1
@@ -84,34 +56,23 @@ stdenv.mkDerivation rec {
     # Install main script
     install -D jj-fzf $out/bin/jj-fzf
 
-    # Install required dependencies
-    install -D preflight.sh $out/bin/preflight.sh
-    install -D version.sh $out/bin/version.sh
-
-    # Install lib directory and its contents
-    mkdir -p $out/bin/lib
-    cp -r lib/* $out/bin/lib/
+    # Install helper scripts and libraries to libexec
+    install -D -t $out/libexec/jj-fzf preflight.sh version.sh
+    cp -r lib $out/libexec/jj-fzf/;
 
     # Install documentation
-    mkdir -p $out/share/man/man1
-    install -D doc/jj-fzf.1 $out/share/man/man1/jj-fzf.1
-
-    # Wrap with dependencies
-    wrapProgram $out/bin/jj-fzf \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          bashInteractive
-          coreutils
-          fzf
-          gawk
-          gnused
-          jujutsu
-          python3
-          util-linux
-        ]
-      }
+    installManPage doc/jj-fzf.1
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # The main script needs to be able to find the helper scripts in libexec
+    substituteInPlace $out/bin/jj-fzf \
+      --replace-fail 'readonly SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"' "readonly SCRIPT_DIR=\"$out/libexec/jj-fzf\""
+
+    wrapProgram $out/bin/jj-fzf \
+      --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
   meta = with lib; {
