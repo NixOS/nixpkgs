@@ -19554,6 +19554,12 @@
     githubId = 52569953;
     name = "Oskar Manhart";
   };
+  oskarwires = {
+    email = "me@usbcable.io";
+    github = "oskarwires";
+    githubId = 115482671;
+    name = "Oskar";
+  };
   osnyx = {
     email = "os@flyingcircus.io";
     github = "osnyx";
