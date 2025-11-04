@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,6 +27,8 @@ buildGoModule (finalAttrs: {
     # skip flaky test
     "-skip=TestMonotonicSafe"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Universally Unique Lexicographically Sortable Identifier (ULID) in Go";
