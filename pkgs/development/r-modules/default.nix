@@ -1032,6 +1032,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    abn = [ pkgs.jags ];
     adbcpostgresql = with pkgs; [
       readline.dev
       zlib.dev
