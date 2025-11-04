@@ -29,7 +29,7 @@
 
 buildPythonPackage {
   pname = "dbt-common";
-  version = "1.28.0-unstable-2025-08-14";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
