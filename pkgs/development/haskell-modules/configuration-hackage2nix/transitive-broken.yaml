@@ -810,6 +810,7 @@ dont-distribute-packages:
  - dsmc-tools
  - DSTM
  - dtd
+ - duckdb-simple
  - Dust
  - Dust-crypto
  - Dust-tools
