@@ -98,6 +98,7 @@ in
   # Darwin
   apple-sdk_14,
   apple-sdk_15,
+  apple-sdk_26,
   cups,
   rsync, # used when preparing .app directory
 
@@ -330,7 +331,7 @@ buildStdenv.mkDerivation {
     ++
       lib.optionals
         (
-          lib.versionAtLeast version "141.0.2"
+          (lib.versionAtLeast version "141.0.2" && lib.versionOlder version "145.0")
           || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
         )
         [
@@ -466,6 +467,7 @@ buildStdenv.mkDerivation {
       (
         stdenv.hostPlatform.isDarwin
         && lib.versionAtLeast version "143"
+        && lib.versionOlder version "145"
         && lib.versionOlder apple-sdk_15.version "15.4"
       )
       ''
@@ -556,7 +558,14 @@ buildStdenv.mkDerivation {
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
+    (
+      if lib.versionAtLeast version "145" then
+        apple-sdk_26
+      else if lib.versionAtLeast version "138" then
+        apple-sdk_15
+      else
+        apple-sdk_14
+    )
     cups
   ]
   ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
