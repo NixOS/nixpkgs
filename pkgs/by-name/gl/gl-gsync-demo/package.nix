@@ -4,10 +4,14 @@
   libX11,
   libglut,
   glew,
-  libXNVCtrl,
   libXext,
+  linuxPackages,
   lib,
 }:
+
+let
+  inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
+in
 
 stdenv.mkDerivation {
   pname = "gl-gsync-demo";
@@ -17,7 +21,7 @@ stdenv.mkDerivation {
     owner = "dahenry";
     repo = "gl-gsync-demo";
     rev = "4fd963a8ad880dc2d846394c8c80b2091a119591";
-    sha256 = "1innsmpsd9n9ih80v16rhj2ijrl28jd7x6a4jmxdirba7mjibm8d";
+    hash = "sha256-DdUVZT1q5dh6lUSZfppEgmYZhYTZhA0QjMmmpm/V1sY=";
   };
 
   buildInputs = [
@@ -36,10 +40,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = with licenses; mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atemu ];
+  meta = {
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atemu ];
     description = "Very basic OpenGL demo for testing NVIDIA's G-SYNC technology on Linux";
     mainProgram = "gl-gsync-demo";
     longDescription = ''

@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "sx";
     maintainers = with lib.maintainers; [
       thiagokokada
+      liberodark
     ];
     platforms = lib.platforms.linux;
   };

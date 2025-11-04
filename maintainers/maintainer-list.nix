@@ -12915,6 +12915,12 @@
     github = "jthulhu";
     githubId = 23179762;
   };
+  jtliang24 = {
+    name = "Jiatao Liang";
+    email = "jtliang24@gmail.com";
+    github = "jtliang24";
+    githubId = 170479425;
+  };
   jtobin = {
     email = "jared@jtobin.io";
     github = "jtobin";
@@ -25843,12 +25849,6 @@
     name = "Gus";
     github = "thegu5";
     githubId = 58223632;
-  };
-  thehans255 = {
-    name = "Hans Jorgensen";
-    email = "foss-contact@thehans255.com";
-    github = "thehans255";
-    githubId = 15896573;
   };
   thekostins = {
     name = "Konstantin";
