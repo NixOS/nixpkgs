@@ -1565,6 +1565,7 @@ let
     "gWidgets2tcltk"
     "HiveR"
     "ic50"
+    "iClick"
     "iDynoR"
     "iplots"
     "likeLTD"
