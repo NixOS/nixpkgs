@@ -485,7 +485,7 @@
   "fzf": {
     "pname": "fzf",
     "version": "1.0.2",
-    "url": "https://pahealyfzf.blob.core.windows.net/fzf/fzf-1.0.2-py2.py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fzf-1.0.2-py2.py3-none-any.whl",
     "hash": "sha256-hKvu0DtLv6e4wL4I2TZv8wQOIWDfT1pTnw4cngocNZw=",
     "description": "Microsoft Azure Command-Line Tools fzf Extension"
   },
