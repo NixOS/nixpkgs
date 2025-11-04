@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://getdp.info/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.linux;
   };
 }
