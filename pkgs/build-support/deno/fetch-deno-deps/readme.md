@@ -358,7 +358,7 @@ if there is not already another `?target=` query parameter in the URL.
 However, when passing a URL, to the Deno API to construct a vendor directory
 (see [below](#vendor-directory)), we have to use the original, unchanged URL.
 
-#### Private HTTPS repositories
+#### Private HTTPS repositories **Not implemented**
 
 Deno supports
 [private HTTPS repositories](https://docs.deno.com/runtime/fundamentals/modules/#private-repositories)
@@ -370,11 +370,6 @@ It looks like this:
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:password@deno.land
 ```
-
-**Not implemented**: This would require us to somehow pass down the
-`(credential, domain)` pairs from the nix build to the fetcher script
-and then provide all `fetch` calls to the respective
-domain with the respective auth headers.
 
 ### Vendor directory
 
@@ -549,7 +544,7 @@ can put empty values for some and omit the field altogether for others.
 Finally, we need to make sure, we put the file at the correct target location,
 so Deno can find it.
 
-#### `node_modules/` lifecycle scripts
+#### `node_modules/` lifecycle scripts **Not implemented**
 
 The `deno.json` option
 [`nodeModulesDir`](https://docs.deno.com/runtime/fundamentals/node/#node_modules)
@@ -566,16 +561,7 @@ dependencies.
 Deno constructs its own version of a `node_modules` directory, to be compatible
 with the NPM lifecycle scripts.
 
-**Not implemented**: This would require us constructing the `node_modules`
-directory, possibly with a rust library used by Deno:
-
-- <https://docs.rs/deno_npm_cache/0.28.0/deno_npm_cache/>
-- <https://docs.rs/deno_npm/0.35.0/deno_npm/>
-
-And then creating a FOD and executing the lifecycle script in there, which will
-require a hash in Nix.
-
-#### Custom NPM registries and `.npmrc`
+#### Custom NPM registries and `.npmrc` **Not implemented**
 
 NPM supports a configuration file called
 [`.npmrc`](https://docs.npmjs.com/CLI/v8/configuring-npm/npmrc).
@@ -588,12 +574,7 @@ that URL with an auth token.
 //mycustomregistry.example.org/:_authToken=MYTOKEN
 ```
 
-**Not implemented**: This would require us parsing the `.npmrc` file. Then we
-need to extract the `(@scope, domain)` pairs. Also, we need to adapt the
-construction of NPM URLs for the relevant scopes. And then provide all fetch
-calls to the respective domain with the respective auth headers.
-
-### Type files
+### Type files **Not implemented**
 
 Deno supports various methods to add second-class dependencies on type files.
 
@@ -615,14 +596,14 @@ import system.
 
 - <https://github.com/denoland/deno/issues/30406>
 
-**Not implemented**: As you will see, fetching all those type files is generally very complicated.
+As you will see, fetching all those type files is generally very complicated.
 
 To keep things simple, we add the `--no-check` flag to our `deno compile`
 command, which will skip fetching and evaluation of the type files entirely.
 
 This means, this build helper does not generally support type checks.
 
-#### Inline type imports
+#### Inline type imports **Not implemented**
 
 With these two Deno features, users can specify type imports inside code
 comments:
@@ -637,37 +618,14 @@ There are exceptions:
 - NPM type packages are added to the lock-file, like regular NPM packages
 - HTTPS URLs are added to `.redirects`, if they are redirected
 
-**Not implemented**: To find the imports, we would need to parse, or at least grep all the source
-code, and possibly all the source code of dependencies and fetch the type
-dependencies.
-
-Also type files can generally import other type files, so we would need to
-recursively parse and fetch imports in the type files to construct a complete
-dependency graph. This gets very complicated, since the same type files can also
-be imported multiple times in the dependency graph, by different other files. So
-we would also need some deduplication, which is not trivial, since we want to
-run our fetch calls asynchronously for performance reasons.
-
-Also, at this point grepping with regex is not good enough any longer, since
-there will be false positives and false negatives, if we don't properly parse
-the TypeScript files.
-
-Looking at the Nix side, to not create another FOD, we would need a derivation,
-that does the code analysis and extracts URLs, which are then passed to the
-fetcher.
-
-#### Type import in `deno.json`
+#### Type import in `deno.json` **Not implemented**
 
 With this Deno feature, users can specify type imports inside `deno.json`, but
 not in the dependency section.
 
 - [deno.json's compilerOption.types](https://docs.deno.com/runtime/reference/ts_config_migration/#supplying-%22types%22-in-deno.json)
 
-**Not implemented**: In this case, we don't need to parse the entire source code, but just the
-`deno.json`, which is much easier. However all the other problems mentioned
-above remain.
-
-#### Response headers
+#### Response headers **Not implemented**
 
 Deno generally supports fetching types for HTTPS dependencies via a
 [`X-Typescript-Types: <url>` response header](https://docs.deno.com/runtime/fundamentals/typescript/#providing-types-for-http-modules).
@@ -682,11 +640,6 @@ entrypoint-`.d.ts` file.
 
 The `<url>` can be a relative path, which then has to be resolved respective to
 the URL, the fetch call was made to.
-
-**Not implemented**: This method is slightly different from the methods above, since the required
-type files will only become known in the fetch step.
-
-The other problems mentioned above remain.
 
 ## Architecture
 
@@ -945,32 +898,6 @@ For the `npm:` packages, a TypeScript file is used.
 
 The `npm:` packages are downloaded as `.tgz` files and have to be extracted in this step.
 
-## "import from lock file" feature
+## "import from lock file" feature **Not implemented**
 
-**Not implemented**: It's currently not feasible to have an "import from lock file" functionality.
-
-There are several technical problems, that make it currently impractical to
-build the dependencies without a hash provided in Nix:
-
-1. **Nixpkgs requirements**: The necessity in Nixpkgs to split the "fetch FOD" from
-   the "file transformation step", makes it impossible, since we need to record
-   the response headers in a separate FOD and then transform the files in the
-   another derivation using that information. Since there is no information in
-   the lock file about the headers, we have to copy the headers information to
-   `$out` of the FOD, which changes the hash, so we can't use the hashes from
-   the lock file for all the fetches where we need to record the headers.
-1. **Performance**: JSR's API architecture requires us to create a FOD per file of a
-   dependency (not per package, like NPM). This provides great granular caching,
-   but terrible performance when fetching, since the disc IO quickly gets out of
-   hand, with big JSR packages with hundreds of files. I actually tested this,
-   and a fetch with many jsr dependencies could really take a few minutes,
-   compared to the seconds it takes now.
-1. **Nix compatability**: Type file imports (which are not supported anyway, due to
-   their complexity) cannot work with this feature, since there are no hashes
-   for them in the lock-file, and some type files may only become known in the
-   fetch step.
-1. **Feasibility**: This feature would require a complete reimplementation of all
-   the fetching logic in Nix, which is a lot of effort, due to its complexity.
-   And the maintenance effort would double, which is not desirable, since Deno's
-   dependency cache API is still unstable.
-
+It's currently not feasible to have an "import from lock file" functionality.
