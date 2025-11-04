@@ -124,7 +124,9 @@ in
         haskell-language-server = addBuildDepends [
           self.retrie
           self.floskell
+          self.markdown-unlit
         ] super.haskell-language-server;
+        hls-plugin-api = super.hls-plugin-api;
         hlint = self.hlint_3_8;
         ormolu = self.ormolu_0_7_4_0;
         retrie = doJailbreak (unmarkBroken super.retrie);
@@ -135,6 +137,7 @@ in
     floskell
     fourmolu
     haskell-language-server
+    hls-plugin-api
     hlint
     ormolu
     retrie

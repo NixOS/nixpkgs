@@ -7970,6 +7970,8 @@ self: super: with self; {
 
   kserve = callPackage ../development/python-modules/kserve { };
 
+  kserve-storage = callPackage ../development/python-modules/kserve-storage { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   kubernetes-asyncio = callPackage ../development/python-modules/kubernetes-asyncio { };
@@ -12673,6 +12675,8 @@ self: super: with self; {
   pyannote-metrics = callPackage ../development/python-modules/pyannote-metrics { };
 
   pyannote-pipeline = callPackage ../development/python-modules/pyannote-pipeline { };
+
+  pyannoteai-sdk = callPackage ../development/python-modules/pyannoteai-sdk { };
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
 
@@ -20053,7 +20057,10 @@ self: super: with self; {
 
   warlock = callPackage ../development/python-modules/warlock { };
 
-  warp-lang = callPackage ../development/python-modules/warp-lang { };
+  warp-lang = callPackage ../development/python-modules/warp-lang {
+    stdenv = if stdenv.hostPlatform.isDarwin then pkgs.llvmPackages_19.stdenv else pkgs.stdenv;
+    llvmPackages = pkgs.llvmPackages_19;
+  };
 
   warrant = callPackage ../development/python-modules/warrant { };
 
