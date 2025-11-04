@@ -132,14 +132,14 @@ function _fixtureFrom(
     inputs: {
       args: [
         bin,
-        "--in-path",
-        vars["in-path"],
-        "--cache-path",
-        vars["cache-path"],
+        "--common-lock-npm-path",
+        vars["common-lock-npm-path"],
+        "--deno-dir-path",
+        vars["deno-dir-path"],
       ],
       files: [
         {
-          path: vars["in-path"],
+          path: vars["common-lock-npm-path"],
           isReal: false,
           content: f.inNpmJsonContent,
         },
@@ -154,7 +154,7 @@ function _fixtureFrom(
       files: {
         expected: [
           ...Object.entries(f.outTransformedFilesFS).map(([path, content]) => ({
-            path: `${vars["cache-path"]}/${path}`,
+            path: `${vars["deno-dir-path"]}/${path}`,
             isReal: false,
             content,
           })),
