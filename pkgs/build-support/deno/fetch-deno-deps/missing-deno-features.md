@@ -1,4 +1,4 @@
-# fetch-deno-deps missing features
+# fetch-deno-deps missing deno features
 
 Goals:
 
