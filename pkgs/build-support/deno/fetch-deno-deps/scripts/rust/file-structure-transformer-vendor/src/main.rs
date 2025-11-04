@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     fs::{self, File},
-    path::PathBuf,
+    path::{Path, PathBuf},
     rc::Rc,
 };
 
@@ -14,7 +14,7 @@ use url::Url;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
-struct UrlFile {
+struct CommonLockFormatOut {
     url: String,
     out_path: PathBuf,
     headers: Option<HashMap<String, String>>,
@@ -27,40 +27,77 @@ struct UrlFile {
 #[command(version, about)]
 struct Args {
     #[arg(short, long)]
-    url_file_map: PathBuf,
+    common_lock_jsr_path: PathBuf,
     #[arg(short, long)]
-    cache_path: PathBuf,
+    common_lock_https_path: PathBuf,
     #[arg(short, long)]
-    vendor_path: PathBuf,
+    deno_dir_path: PathBuf,
+    #[arg(short, long)]
+    vendor_dir_path: PathBuf,
+    #[arg(short, long)]
+    jsr_registry_url: String,
+}
+
+fn add_common_lock_to_cache(
+    common_lock: Vec<CommonLockFormatOut>,
+    base_path: &Path,
+    cache: &LocalHttpCache<RealSys>,
+) -> Result<(), anyhow::Error> {
+    for package_file in common_lock {
+        let content = fs::read(base_path.join(&package_file.out_path))
+            .with_context(|| format!("failed to read file {}", package_file.out_path.display()))?;
+        let url = Url::parse(&package_file.url)
+            .with_context(|| format!("failed to parse URL {}", package_file.url))?;
+
+        cache
+            .set(&url, package_file.headers.unwrap_or_default(), &content)
+            .with_context(|| format!("failed to set URL {} in local cache", package_file.url))?;
+    }
+    Ok(())
+}
+
+fn read_common_lock(
+    common_lock_path: &PathBuf,
+) -> Result<Vec<CommonLockFormatOut>, anyhow::Error> {
+    let mut common_lock_jsr_file =
+        File::open(common_lock_path).context("failed to open URL file map")?;
+    let common_lock: Vec<CommonLockFormatOut> =
+        serde_json::from_reader(&mut common_lock_jsr_file).context("failed to parse URL map")?;
+    Ok(common_lock)
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let mut url_file = File::open(args.url_file_map.clone()).context("failed to open URL file map")?;
-    let files: Vec<UrlFile> =
-        serde_json::from_reader(&mut url_file).context("failed to parse URL map")?;
-
     let sys = RealSys;
-    let global_cache = Rc::new(GlobalHttpCache::new(sys, args.cache_path));
+    let global_cache = Rc::new(GlobalHttpCache::new(sys, args.deno_dir_path));
+    let jsr_registry_url = if args.jsr_registry_url.is_empty() {
+        "https://jsr.io/"
+    } else {
+        &args.jsr_registry_url
+    };
     let cache = LocalHttpCache::new(
-        args.vendor_path,
+        args.vendor_dir_path,
         global_cache.clone(),
         GlobalToLocalCopy::Allow,
-        Url::parse("https://jsr.io/").unwrap(),
+        Url::parse(jsr_registry_url).unwrap(),
     );
 
-    let base_path = args.url_file_map.parent().context("oh no").unwrap();
-    for file in files {
-        let content = fs::read(base_path.join(&file.out_path))
-            .with_context(|| format!("failed to read file {}", file.out_path.display()))?;
-        let url =
-            Url::parse(&file.url).with_context(|| format!("failed to parse URL {}", file.url))?;
+    let common_lock_jsr: Vec<CommonLockFormatOut> = read_common_lock(&args.common_lock_jsr_path)?;
+    let base_path = args
+        .common_lock_jsr_path
+        .parent()
+        .context("failed to get base path for common_lock_jsr_path")
+        .unwrap();
+    add_common_lock_to_cache(common_lock_jsr, base_path, &cache)?;
 
-        cache
-            .set(&url, file.headers.unwrap_or_default(), &content)
-            .with_context(|| format!("failed to set URL {} in local cache", file.url))?;
-    }
+    let common_lock_https: Vec<CommonLockFormatOut> = read_common_lock(&args.common_lock_https_path)?;
+    let base_path = args
+        .common_lock_https_path
+        .parent()
+        .context("failed to get base path for common_lock_https_path")
+        .unwrap();
+    add_common_lock_to_cache(common_lock_https, base_path, &cache)?;
 
     Ok(())
 }

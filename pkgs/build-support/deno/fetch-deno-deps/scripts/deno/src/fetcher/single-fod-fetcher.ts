@@ -14,26 +14,22 @@ import type {
 
 type SingleFodFetcherConfig = {
   outPathPrefix: PathString;
-  inPathJsr: PathString;
-  inPathNpm: PathString;
-  inPathHttps: PathString;
-  inJsrRegistryUrl: string;
-  outPathVendored: PathString;
-  outPathNpm: PathString;
-  commonLockfileJsr: CommonLockFormatIn;
-  commonLockfileNpm: CommonLockFormatIn;
-  commonLockfileHttps: CommonLockFormatIn;
+  commonLockJsrPath: PathString;
+  commonLockNpmPath: PathString;
+  commonLockHttpsPath: PathString;
+  jsrRegistryUrl: string;
+  commonLockJsr: CommonLockFormatIn;
+  commonLockNpm: CommonLockFormatIn;
+  commonLockHttps: CommonLockFormatIn;
 };
 
 type Config = SingleFodFetcherConfig;
 function getConfig(): Config {
   const flagsParsed = {
-    "in-path-jsr": "",
-    "in-path-npm": "",
-    "in-path-https": "",
-    "in-jsr-registry-url": "https://jsr.io",
-    "out-path-vendored": "",
-    "out-path-npm": "",
+    "common-lock-jsr-path": "",
+    "common-lock-npm-path": "",
+    "common-lock-https-path": "",
+    "jsr-registry-url": "https://jsr.io",
     "out-path-prefix": "",
   };
   const flags = Object.keys(flagsParsed).map((v) => "--" + v);
@@ -50,48 +46,44 @@ function getConfig(): Config {
     }
   });
 
-  const dec = new TextDecoder();
   return {
-    commonLockfileJsr: JSON.parse(
-      dec.decode(Deno.readFileSync(flagsParsed["in-path-jsr"])),
+    commonLockJsr: JSON.parse(
+      Deno.readTextFileSync(flagsParsed["common-lock-jsr-path"]),
     ),
-    commonLockfileNpm: JSON.parse(
-      dec.decode(Deno.readFileSync(flagsParsed["in-path-npm"])),
+    commonLockNpm: JSON.parse(
+      Deno.readTextFileSync(flagsParsed["common-lock-npm-path"]),
     ),
-    commonLockfileHttps: JSON.parse(
-      dec.decode(Deno.readFileSync(flagsParsed["in-path-https"])),
+    commonLockHttps: JSON.parse(
+      Deno.readTextFileSync(flagsParsed["common-lock-https-path"]),
     ),
-    outPathVendored: flagsParsed["out-path-vendored"],
-    outPathNpm: flagsParsed["out-path-npm"],
-    inPathJsr: flagsParsed["in-path-jsr"],
-    inPathNpm: flagsParsed["in-path-npm"],
-    inPathHttps: flagsParsed["in-path-https"],
-    inJsrRegistryUrl: flagsParsed["in-jsr-registry-url"],
+    commonLockJsrPath: flagsParsed["common-lock-jsr-path"],
+    commonLockNpmPath: flagsParsed["common-lock-npm-path"],
+    commonLockHttpsPath: flagsParsed["common-lock-https-path"],
+    jsrRegistryUrl: flagsParsed["jsr-registry-url"],
     outPathPrefix: flagsParsed["out-path-prefix"] || "",
   };
 }
 
-type Lockfiles = { vendor: CommonLockFormatIn; npm: CommonLockFormatOut };
+type Lockfiles = {
+  jsr: CommonLockFormatIn;
+  https: CommonLockFormatIn;
+  npm: CommonLockFormatOut;
+};
 async function fetchAll(config: Config): Promise<Lockfiles> {
-  const lockfilesByRegistry = {
+  const lockfilesByRegistry: Lockfiles = {
     jsr: await fetchAllJsr(
       config.outPathPrefix,
-      config.commonLockfileJsr,
-      config.inJsrRegistryUrl,
+      config.commonLockJsr,
+      config.jsrRegistryUrl,
     ),
     https: await fetchAllHttps(
       config.outPathPrefix,
-      config.commonLockfileHttps,
+      config.commonLockHttps,
     ),
-    npm: await fetchAllNpm(config.outPathPrefix, config.commonLockfileNpm),
+    npm: await fetchAllNpm(config.outPathPrefix, config.commonLockNpm),
   };
 
-  const lockfilesByCache = {
-    vendor: lockfilesByRegistry.jsr.concat(lockfilesByRegistry.https),
-    npm: lockfilesByRegistry.npm,
-  };
-
-  return lockfilesByCache;
+  return lockfilesByRegistry;
 }
 
 async function fetchAndWrite(config: Config) {
@@ -99,12 +91,17 @@ async function fetchAndWrite(config: Config) {
   const lockfiles = await fetchAll(config);
   const promises = [
     Deno.writeTextFile(
-      addPrefix(config.outPathVendored, config.outPathPrefix),
-      JSON.stringify(lockfiles.vendor, null, 2),
+      addPrefix(config.commonLockJsrPath, config.outPathPrefix),
+      JSON.stringify(lockfiles.jsr, null, 2),
       { create: true },
     ),
     Deno.writeTextFile(
-      addPrefix(config.outPathNpm, config.outPathPrefix),
+      addPrefix(config.commonLockHttpsPath, config.outPathPrefix),
+      JSON.stringify(lockfiles.https, null, 2),
+      { create: true },
+    ),
+    Deno.writeTextFile(
+      addPrefix(config.commonLockNpmPath, config.outPathPrefix),
       JSON.stringify(lockfiles.npm, null, 2),
       { create: true },
     ),
