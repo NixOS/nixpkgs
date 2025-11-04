@@ -1507,6 +1507,7 @@ let
     ChemmineOB = with pkgs; [
       eigen
       openbabel
+      zlib.dev
     ];
     DGP4LCF = [
       pkgs.lapack
