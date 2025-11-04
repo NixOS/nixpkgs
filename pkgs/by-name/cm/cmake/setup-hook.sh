@@ -52,6 +52,14 @@ canonicalizeCMakeEntryAttrs() {
             continue
         fi
         typeOrig="$(jq ".cmakeEntries.$key|type" "$NIX_ATTRS_JSON_FILE")"
+        if [[ "$typeOrig" == "null" ]]; then
+            {
+                echo 'ERROR: canonicalizeCMakeEntryAttrs: `cmakeEntries.'"$key"'` has `null` value.'
+                echo '  `null` values in structured sub-attributes are not ignored but translated to empty strings.'
+                echo '  To exclude a cmakeEntries attribute, simply remove it from `cmakeEntries`'
+            } >&2
+            return 1
+        fi
         if [[ "$typeOrig" == "boolean" ]]; then
             cmakeEntries[$key]="$(canonicalizeCMakeBool "${cmakeEntries[$key]}")"
         fi
