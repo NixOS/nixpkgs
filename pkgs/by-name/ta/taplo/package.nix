@@ -9,12 +9,12 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taplo";
   version = "0.10.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "taplo-cli";
     hash = "sha256-iKc4Nu7AZE1LSuqXffi3XERbOqZMOkI3PV+6HaJzh4c=";
   };
@@ -26,9 +26,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   buildFeatures = lib.optional withLsp "lsp";
 
@@ -54,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "taplo";
   };
-}
+})
