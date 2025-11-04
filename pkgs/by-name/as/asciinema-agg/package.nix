@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   strictDeps = true;
 
   cargoHash = "sha256-VpbjvrMhzS1zrcMNWBjTLda6o3ea2cwpnEDUouwyp8w=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
