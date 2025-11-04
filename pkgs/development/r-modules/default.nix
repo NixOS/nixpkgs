@@ -611,6 +611,11 @@ let
       geos
       gdal
     ];
+    otelsdk = with pkgs; [
+      cmake
+      which
+      curl.dev
+    ];
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [
@@ -1151,6 +1156,10 @@ let
     mwaved = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
+    otelsdk = with pkgs; [
+      protobuf
+      zlib.dev
+    ];
     pdftools = [ pkgs.pkg-config ];
     qckitfastq = [ pkgs.zlib.dev ];
     raer = with pkgs; [
@@ -2005,6 +2014,10 @@ let
 
     luajr = old.luajr.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
+      postPatch = "patchShebangs configure";
+    });
+
+    otelsdk = old.otelsdk.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
