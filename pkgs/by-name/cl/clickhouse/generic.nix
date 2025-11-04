@@ -186,8 +186,6 @@ llvmStdenv.mkDerivation (finalAttrs: {
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      orivej
-      mbalatsko
       thevar1able
     ];
 
