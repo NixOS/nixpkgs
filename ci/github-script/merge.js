@@ -184,32 +184,9 @@ async function handleMerge({
       return 'Merge completed (dry)'
     }
 
-    // Using GraphQL's enablePullRequestAutoMerge mutation instead of the REST
-    // /merge endpoint, because the latter doesn't work with Merge Queues.
-    // This mutation works both with and without Merge Queues.
-    // It doesn't work when there are no required status checks for the target branch.
-    // All development branches have these enabled, so this is a non-issue.
-    try {
-      await github.graphql(
-        `mutation($node_id: ID!, $sha: GitObjectID) {
-          enablePullRequestAutoMerge(input: {
-            expectedHeadOid: $sha,
-            pullRequestId: $node_id
-          })
-          { clientMutationId }
-        }`,
-        { node_id: pull_request.node_id, sha: pull_request.head.sha },
-      )
-      return 'Enabled Auto Merge'
-    } catch (e) {
-      log('Auto Merge failed', e.response.errors[0].message)
-    }
-
-    // TODO: Observe whether the below is true and whether manual enqueue is actually needed.
-    // Auto-merge doesn't work if the target branch has already run all CI, in which
-    // case the PR must be enqueued explicitly.
-    // We now have merge queues enabled on all development branches, thus don't need a
-    // fallback after this.
+    // Using GraphQL mutations instead of the REST /merge endpoint, because the latter
+    // doesn't work with Merge Queues. We now have merge queues enabled on all development
+    // branches, so we don't need a fallback for regular merges.
     try {
       const resp = await github.graphql(
         `mutation($node_id: ID!, $sha: GitObjectID) {
@@ -227,6 +204,25 @@ async function handleMerge({
       return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
     } catch (e) {
       log('Enqueing failed', e.response.errors[0].message)
+    }
+
+    // If required status checks are not satisfied, yet, the above will fail. In this case
+    // we can enable auto-merge. We could also only use auto-merge, but this often gets
+    // stuck for no apparent reason.
+    try {
+      await github.graphql(
+        `mutation($node_id: ID!, $sha: GitObjectID) {
+          enablePullRequestAutoMerge(input: {
+            expectedHeadOid: $sha,
+            pullRequestId: $node_id
+          })
+          { clientMutationId }
+        }`,
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
+      )
+      return 'Enabled Auto Merge'
+    } catch (e) {
+      log('Auto Merge failed', e.response.errors[0].message)
       throw new Error(e.response.errors[0].message)
     }
   }
