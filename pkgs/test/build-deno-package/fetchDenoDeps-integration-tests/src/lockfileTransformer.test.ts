@@ -2,63 +2,63 @@ import { runTests } from "./utils.ts";
 import { Fixture, Test, Vars } from "./types.d.ts";
 
 type LockfileTransformerFixture = {
-  inLockJsonContent: string;
-  outJsrJsonContent: string;
-  outNpmJsonContent: string;
-  outHttpsJsonContent: string;
+  denoLockContent: string;
+  commonLockJsrContent: string;
+  commonLockNpmContent: string;
+  commonLockHttpsContent: string;
   outStdout?: string;
   outStderr?: string;
 };
 
 function fixtureFrom(f: LockfileTransformerFixture): Fixture {
-  const bin = Deno.args[0]
+  const bin = Deno.args[0];
   if (!bin) {
-    throw new Error("test expects cli args[0]: binary to execute")
+    throw new Error("test expects cli args[0]: binary to execute");
   }
 
   const vars: Vars = {
-    "in-path": "./first-deno.lock",
-    "out-path-jsr": "./jsr.json",
-    "out-path-npm": "./npm.json",
-    "out-path-https": "./https.json",
+    "deno-lock-path": "./first-deno.lock",
+    "common-lock-jsr-path": "./jsr.json",
+    "common-lock-npm-path": "./npm.json",
+    "common-lock-https-path": "./https.json",
   };
 
   return {
     inputs: {
       args: [
         bin,
-        "--in-path",
-        vars["in-path"],
-        "--out-path-jsr",
-        vars["out-path-jsr"],
-        "--out-path-npm",
-        vars["out-path-npm"],
-        "--out-path-https",
-        vars["out-path-https"],
+        "--deno-lock-path",
+        vars["deno-lock-path"],
+        "--common-lock-jsr-path",
+        vars["common-lock-jsr-path"],
+        "--common-lock-npm-path",
+        vars["common-lock-npm-path"],
+        "--common-lock-https-path",
+        vars["common-lock-https-path"],
       ],
       files: [{
-        path: vars["in-path"],
+        path: vars["deno-lock-path"],
         isReal: false,
-        content: f.inLockJsonContent,
+        content: f.denoLockContent,
       }],
     },
     outputs: {
       files: {
         expected: [
           {
-            path: vars["out-path-npm"],
+            path: vars["common-lock-jsr-path"],
             isReal: false,
-            content: JSON.stringify(JSON.parse(f.outNpmJsonContent), null, 2),
+            content: JSON.stringify(JSON.parse(f.commonLockJsrContent), null, 2),
           },
           {
-            path: vars["out-path-https"],
+            path: vars["common-lock-npm-path"],
             isReal: false,
-            content: JSON.stringify(JSON.parse(f.outHttpsJsonContent), null, 2),
+            content: JSON.stringify(JSON.parse(f.commonLockNpmContent), null, 2),
           },
           {
-            path: vars["out-path-jsr"],
+            path: vars["common-lock-https-path"],
             isReal: false,
-            content: JSON.stringify(JSON.parse(f.outJsrJsonContent), null, 2),
+            content: JSON.stringify(JSON.parse(f.commonLockHttpsContent), null, 2),
           },
         ],
       },
@@ -76,39 +76,39 @@ const lockfileTransformerTests: Array<Test> = [
   {
     name: "empty-lock",
     fixture: fixtureFrom({
-      inLockJsonContent: `
+      denoLockContent: `
 {
   "version": "5"
 }`,
-      outJsrJsonContent: `[]`,
-      outNpmJsonContent: `[]`,
-      outHttpsJsonContent: `[]`,
+      commonLockJsrContent: `[]`,
+      commonLockNpmContent: `[]`,
+      commonLockHttpsContent: `[]`,
     }),
   },
   {
     name: "unused-keys",
     fixture: fixtureFrom({
-      inLockJsonContent: `
+      denoLockContent: `
 {
   "version": "5",
   "other-keys-are-unused": "doesn't matter",
   "also-unused": "doesn't matter"
 }`,
-      outJsrJsonContent: `[]`,
-      outNpmJsonContent: `[]`,
-      outHttpsJsonContent: `[]`,
+      commonLockJsrContent: `[]`,
+      commonLockNpmContent: `[]`,
+      commonLockHttpsContent: `[]`,
     }),
   },
   {
     name: "check-lock-version",
     fixture: fixtureFrom({
-      inLockJsonContent: `
+      denoLockContent: `
 {
   "version": "unknown"
 }`,
-      outJsrJsonContent: `[]`,
-      outNpmJsonContent: `[]`,
-      outHttpsJsonContent: `[]`,
+      commonLockJsrContent: `[]`,
+      commonLockNpmContent: `[]`,
+      commonLockHttpsContent: `[]`,
       outStderr: `
       WARNING: using deno.lock with a version unknown by nixpkgs buildDenoPackage: "unknown"
 
@@ -122,7 +122,7 @@ const lockfileTransformerTests: Array<Test> = [
   {
     name: "just-jsr",
     fixture: fixtureFrom({
-      inLockJsonContent: `
+      denoLockContent: `
 {
   "version": "5",
   "jsr": {
@@ -131,7 +131,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 }`,
-      outJsrJsonContent: `
+      commonLockJsrContent: `
 [
   {
     "url": "https://jsr.io/@scope/package/version1_meta.json",
@@ -150,15 +150,15 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
-      outNpmJsonContent: `[]`,
-      outHttpsJsonContent: `[]`,
+      commonLockNpmContent: `[]`,
+      commonLockHttpsContent: `[]`,
     }),
   },
 
   {
     name: "just-https",
     fixture: fixtureFrom({
-      inLockJsonContent: `
+      denoLockContent: `
 {
   "version": "5",
   "remote": {
@@ -167,9 +167,9 @@ const lockfileTransformerTests: Array<Test> = [
     "https://esm.sh/package@version": "hash3"
   }
 }`,
-      outJsrJsonContent: `[]`,
-      outNpmJsonContent: `[]`,
-      outHttpsJsonContent: `
+      commonLockJsrContent: `[]`,
+      commonLockNpmContent: `[]`,
+      commonLockHttpsContent: `
 [
   {
     "url": "https://url1.com/path",
@@ -203,7 +203,7 @@ const lockfileTransformerTests: Array<Test> = [
   {
     name: "just-npm",
     fixture: fixtureFrom({
-      inLockJsonContent: `{
+      denoLockContent: `{
   "version": "5",
   "npm": {
     "@scope/package@version1": {
@@ -214,8 +214,8 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 }`,
-      outJsrJsonContent: `[]`,
-      outNpmJsonContent: `
+      commonLockJsrContent: `[]`,
+      commonLockNpmContent: `
 [
   {
     "url": "https://registry.npmjs.org/@scope/package/-/package-version1.tgz",
@@ -250,13 +250,13 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
-      outHttpsJsonContent: ` []`,
+      commonLockHttpsContent: ` []`,
     }),
   },
   {
     name: "jsr+npm+https",
     fixture: fixtureFrom({
-      inLockJsonContent: `{
+      denoLockContent: `{
   "version": "5",
   "jsr": {
     "@scope/package@version1": {
@@ -277,7 +277,7 @@ const lockfileTransformerTests: Array<Test> = [
     "https://esm.sh/package@version": "hash3"
   }
 }`,
-      outJsrJsonContent: `[
+      commonLockJsrContent: `[
   {
     "url": "https://jsr.io/@scope/package/version1_meta.json",
     "hash": "hash1",
@@ -295,7 +295,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
-      outNpmJsonContent: `[
+      commonLockNpmContent: `[
   {
     "url": "https://registry.npmjs.org/@scope/package/-/package-version1.tgz",
     "hash": "hash1",
@@ -329,7 +329,7 @@ const lockfileTransformerTests: Array<Test> = [
     }
   }
 ]`,
-      outHttpsJsonContent: `
+      commonLockHttpsContent: `
 [
   {
     "url": "https://url1.com/path",
