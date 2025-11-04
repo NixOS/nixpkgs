@@ -1,0 +1,17 @@
+    Fix gradle error
+    
+    https://docs.gradle.org/9.1.0/userguide/validation_problems.html#private_method_must_not_be_annotated
+
+diff --git a/build.gradle b/build.gradle
+index c6d537e..9029aae 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -69,7 +69,7 @@ public abstract class InstallPath extends DefaultTask {
+      * Install Task Action that copies the script and jar files
+      */
+     @TaskAction
+-    private void install() {
++    public void install() {
+         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+             final String install_path = (path != null && !path.isEmpty()) ? path : "C:\\Program Files\\fastddsgen\\";
+ 
