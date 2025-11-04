@@ -3,8 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  buildPackages,
   cmake,
   pkg-config,
+  versionCheckHook,
   libpng,
   libtiff,
   zlib,
@@ -90,6 +92,36 @@ stdenv.mkDerivation (finalAttrs: {
           -E '.*jpylyser' --exclude-from-file ${./exclude-tests}
     runHook postCheck
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = lib.optional (
+    lib.match "[0-9]+\\.[0-9]+\\.[0-9]+" finalAttrs.version != null
+  ) versionCheckHook;
+
+  print-openjpeg-version = buildPackages.callPackage (
+    {
+      writeShellApplication,
+      gnugrep,
+    }:
+    writeShellApplication {
+      name = "print-openjpeg-version";
+      text = ''
+        cmakeListsTxt=$1
+        majorVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_MAJOR )[0-9]+(?=[)])' "$cmakeListsTxt")
+        minorVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_MINOR )[0-9]+(?=[)])' "$cmakeListsTxt")
+        patchVersion=$(grep -oP '(?<=set[(]OPENJPEG_VERSION_BUILD )[0-9]+(?=[)])' "$cmakeListsTxt")
+        echo "$majorVersion.$minorVersion.$patchVersion"
+      '';
+      runtimeInputs = [
+        gnugrep
+      ];
+    }
+  ) { };
+
+  versionCheckProgram = lib.getExe finalAttrs.print-openjpeg-version;
+
+  versionCheckProgramArg = "/build/${finalAttrs.src.name}/CMakeLists.txt";
 
   passthru = {
     incDir = "openjpeg-${lib.versions.majorMinor finalAttrs.version}";
