@@ -421,9 +421,9 @@
   },
   "elastic": {
     "pname": "elastic",
-    "version": "1.0.0b4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic-1.0.0b4-py3-none-any.whl",
-    "hash": "sha256-+zjE4PUe1FvB7z1i4FFP3EyWBDco/dZe9DbBDMogijY=",
+    "version": "1.0.0b5",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic-1.0.0b5-py3-none-any.whl",
+    "hash": "sha256-P8N5gq5tmaw3IVJc3616x9gfGKC1F8hzu/Whck4v4XU=",
     "description": "Microsoft Azure Command-Line Tools MicrosoftElastic Extension"
   },
   "elastic-san": {
