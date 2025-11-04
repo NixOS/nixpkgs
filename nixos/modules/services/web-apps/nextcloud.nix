@@ -1235,6 +1235,8 @@ in
               path = [ occ ];
               restartTriggers = [ overrideConfig ];
               script = ''
+                export OCC_BIN="${lib.getExe occ}"
+
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                     echo "dbpassFile ${c.dbpassFile} is empty!"
@@ -1275,13 +1277,13 @@ in
                   ${occInstallCmd}
                 fi
 
-                ${lib.getExe occ} upgrade
+                $OCC_BIN upgrade
 
-                ${lib.getExe occ} config:system:delete trusted_domains
+                $OCC_BIN config:system:delete trusted_domains
 
                 ${lib.optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                   # Try to enable apps
-                  ${lib.getExe occ} app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
+                  $OCC_BIN app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
                 ''}
 
                 ${occSetTrustedDomainsCmd}
