@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spot-automata";
-  version = "2.14.1";
+  version = "2.14.2";
 
   src = fetchurl {
     url = "https://www.lrde.epita.fr/dload/spot/spot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Jd+KavTkuzrmdRWsmOPTfEMDpoLjOqpm5y10s5RZpTA=";
+    hash = "sha256-pRQqqbE7NiPNnB8JtIVUL4zeo+Ci/GEW7qNusPwZrxk=";
   };
 
   buildInputs = [ python3 ];
