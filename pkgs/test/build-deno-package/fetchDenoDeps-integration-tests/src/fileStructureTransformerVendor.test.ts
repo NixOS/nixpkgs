@@ -17,7 +17,8 @@ import {
 } from "./types.d.ts";
 
 type FileStructureTransformerFixture = {
-  inVendorJsonContent: string;
+  inJsrJsonContent: string;
+  inHttpsJsonContent: string;
   inFetchedFilesFS: VirtualFS;
   outTransformedFilesFS: VirtualFS;
   outStdout?: string;
@@ -31,7 +32,8 @@ function checkFilesFs(f: FileStructureTransformerFixture) {
     );
   }
   const inFilesExpected = [
-    ...getOutPaths(f.inVendorJsonContent),
+    ...getOutPaths(f.inJsrJsonContent),
+    ...getOutPaths(f.inHttpsJsonContent),
   ].sort();
 
   const inFilesActual = [
@@ -41,7 +43,7 @@ function checkFilesFs(f: FileStructureTransformerFixture) {
   assertEq(
     inFilesExpected,
     inFilesActual,
-    "outPaths in npm.json don't match files in inFetchedFilesFS",
+    "outPaths in jsr.json or https.json don't match files in inFetchedFilesFS",
   );
 
   const inFilesExtractedActual = [
@@ -77,9 +79,10 @@ function fixtureFrom(
   }
 
   const vars: Vars = {
-    "url-file-map": pathToAbs("./vendor.json"),
-    "cache-path": pathToAbs("./deno-cache"),
-    "vendor-path": pathToAbs("./vendor"),
+    "common-lock-jsr-path": pathToAbs("./jsr.json"),
+    "common-lock-https-path": pathToAbs("./https.json"),
+    "deno-dir-path": pathToAbs("./deno-cache"),
+    "vendor-dir-path": pathToAbs("./vendor"),
   };
 
   // checkFilesFs(f);
@@ -88,18 +91,25 @@ function fixtureFrom(
     inputs: {
       args: [
         bin,
-        "--url-file-map",
-        vars["url-file-map"],
-        "--cache-path",
-        vars["cache-path"],
-        "--vendor-path",
-        vars["vendor-path"],
+        "common-lock-jsr-path",
+        vars["common-lock-jsr-path"],
+        "common-lock-https-path",
+        vars["common-lock-https-path"],
+        "--deno-dir-path",
+        vars["deno-dir-path"],
+        "--vendor-dir-path",
+        vars["vendor-dir-path"],
       ],
       files: [
         {
-          path: vars["url-file-map"],
+          path: vars["common-lock-jsr-path"],
           isReal: false,
-          content: f.inVendorJsonContent,
+          content: f.inJsrJsonContent,
+        },
+        {
+          path: vars["common-lock-https-path"],
+          isReal: false,
+          content: f.inHttpsJsonContent,
         },
         ...Object.entries(f.inFetchedFilesFS).map(([path, content]) => ({
           path,
@@ -112,7 +122,7 @@ function fixtureFrom(
       files: {
         expected: [
           ...Object.entries(f.outTransformedFilesFS).map(([path, content]) => ({
-            path: `${vars["vendor-path"]}/${path}`,
+            path: `${vars["vendor-dir-path"]}/${path}`,
             isReal: false,
             content,
           })),
@@ -133,7 +143,7 @@ const lockfileTransformerTests: Array<Test> = [
     name: "jsr_2_files_1_package",
     fixture: fixtureFrom(
       {
-        inVendorJsonContent: `[
+        inJsrJsonContent: `[
   {
     "url": "https://jsr.io/@scope1/package1/version1/src/file1",
     "hash": "hash1",
@@ -169,6 +179,7 @@ const lockfileTransformerTests: Array<Test> = [
     "outPath": "file2"
   }
 ]`,
+        inHttpsJsonContent: `[]`,
         inFetchedFilesFS: {
           "src/file1": "file1_content",
           "file2": "file2_content",
@@ -191,7 +202,7 @@ const lockfileTransformerTests: Array<Test> = [
     name: "jsr_2_files_2_packages",
     fixture: fixtureFrom(
       {
-        inVendorJsonContent: `[
+        inJsrJsonContent: `[
   {
     "url": "https://jsr.io/@scope1/package1/version1/file1",
     "outPath": "file1"
@@ -201,6 +212,7 @@ const lockfileTransformerTests: Array<Test> = [
     "outPath": "file2"
   }
 ]`,
+        inHttpsJsonContent: `[]`,
         inFetchedFilesFS: {
           "file1": "file1_content",
           "file2": "file2_content",
@@ -222,14 +234,16 @@ const lockfileTransformerTests: Array<Test> = [
     name: "jsr_and_https",
     fixture: fixtureFrom(
       {
-        inVendorJsonContent: `[
-  {
-    "url": "https://esm.sh/@scope1/package1/version1/file1",
-    "outPath": "file1"
-  },
+        inJsrJsonContent: `[
   {
     "url": "https://jsr.io/@scope2/package2/version1/file2",
     "outPath": "file2"
+  }
+]`,
+        inHttpsJsonContent: `[
+  {
+    "url": "https://esm.sh/@scope1/package1/version1/file1",
+    "outPath": "file1"
   }
 ]`,
         inFetchedFilesFS: {
