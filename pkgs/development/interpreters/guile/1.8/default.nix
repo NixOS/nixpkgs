@@ -35,5 +35,5 @@ buildGuile {
         -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
   '';
 
-  meta.maintainers = with lib.maintainers; [ ludo ];
+  meta.maintainers = with lib.maintainers; [ RossSmyth ];
 }

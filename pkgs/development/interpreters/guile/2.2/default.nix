@@ -29,5 +29,5 @@ buildGuile {
         -e "s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;"
   '';
 
-  meta.maintainers = with lib.maintainers; [ ludo ];
+  meta.maintainers = with lib.maintainers; [ RossSmyth ];
 }
