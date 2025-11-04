@@ -9,22 +9,19 @@
   cryptography,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
     tag = "v${version}";
-    hash = "sha256-h6MGYzDNzEss5FIf+2J5oROQw/7OVLpkXuheYKd4BrQ=";
+    hash = "sha256-7Diq7xT8tPO4fXp7qsFXWtWExqm2vctoOtPvlCuWOKg=";
   };
 
   build-system = [ setuptools ];
