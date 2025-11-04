@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
 }
