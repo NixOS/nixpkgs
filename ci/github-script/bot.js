@@ -496,7 +496,11 @@ module.exports = async ({ github, context, core, dry }) => {
     }
   }
 
-  await withRateLimit({ github, core }, async (stats) => {
+  // Controls level of parallelism. Applies to both the number of concurrent requests
+  // as well as the number of concurrent workers going through the list of PRs.
+  const maxConcurrent = 20
+
+  await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
@@ -625,11 +629,23 @@ module.exports = async ({ github, context, core, dry }) => {
             arr.findIndex((firstItem) => firstItem.number === thisItem.number),
         )
 
-      ;(await Promise.allSettled(items.map((item) => handle({ item, stats }))))
-        .filter(({ status }) => status === 'rejected')
-        .map(({ reason }) =>
-          core.setFailed(`${reason.message}\n${reason.cause.stack}`),
-        )
+      // Instead of handling all items in parallel we set up some workers to handle the queue
+      // with more controlled parallelism. This avoids problems with `pull_request` fetched at
+      // the beginning getting out of date towards the end, because it took the whole job 20
+      // minutes or more to go through 100's of PRs.
+      await Promise.all(
+        Array.from({ length: maxConcurrent }, async () => {
+          while (true) {
+            const item = items.pop()
+            if (!item) break
+            try {
+              await handle({ item, stats })
+            } catch (e) {
+              core.setFailed(`${e.message}\n${e.cause.stack}`)
+            }
+          }
+        }),
+      )
     }
   })
 }
