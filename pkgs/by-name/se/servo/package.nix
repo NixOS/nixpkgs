@@ -167,6 +167,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   );
   env.NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isDarwin "-L${lib.getLib clangStdenv.cc.libcxx}/lib";
 
+  makeFlags = lib.optionals clangStdenv.hostPlatform.isDarwin [
+    # use unwrapped compiler
+    "CC=${lib.getExe clangStdenv.cc.cc}"
+  ];
+
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
   postFixup = ''
