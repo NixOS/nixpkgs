@@ -188,18 +188,21 @@ let
             map (
               archive:
               (fetchurl {
+                pname = packageInfo.name;
+                version = packageInfo.revision;
                 inherit (archive) url sha1;
                 inherit meta;
                 passthru = {
                   info = packageInfo;
                 };
               }).overrideAttrs
-                (prev: {
-                  # fetchurl won't generate the correct filename if we specify pname and version,
-                  # and we still want the version attribute to show up in search, so specify these in an override
-                  pname = packageInfo.name;
-                  version = packageInfo.revision;
-                })
+                (
+                  finalAttrs: previousAttrs: {
+                    # fetchurl prioritize `pname` and `version` over the specified `name`,
+                    # so specify custom `name` in an override.
+                    name = baseNameOf (lib.head (finalAttrs.urls));
+                  }
+                )
             ) validArchives
           )
         )
