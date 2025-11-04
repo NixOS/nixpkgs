@@ -1,16 +1,13 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  qtbase,
-  qttools,
-  qtsvg,
-  qwt6_1,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "caneda";
   version = "0.4.0";
 
@@ -28,12 +25,16 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.qt5.wrapQtAppsHook
+  ];
+
   buildInputs = [
-    qtbase
-    qttools
-    qtsvg
-    qwt6_1
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtsvg
+    libsForQt5.qwt6_1
   ];
 
   meta = {
