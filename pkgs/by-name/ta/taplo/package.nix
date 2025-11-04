@@ -7,6 +7,7 @@
   openssl,
   withLsp ? true,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,6 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           --fish <($out/bin/taplo completions fish) \
           --zsh <($out/bin/taplo completions zsh)
       '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "TOML toolkit written in Rust";
