@@ -8,7 +8,7 @@ import {
 import {
   Fixture,
   NestedVirtualFS,
-  PreFn,
+  SetupFn,
   Test,
   Vars,
   VirtualFile,
@@ -52,7 +52,7 @@ async function toArchive(
   assertEq(code, 0, "archiving failed");
 }
 
-function createArchives(f: FileStructureTransformerFixture): PreFn {
+function createArchives(f: FileStructureTransformerFixture): SetupFn {
   return async () => {
     await Promise.all(
       Object.entries(f.inFetchedFilesFS).map(([path, archiveFS]) =>
@@ -64,10 +64,10 @@ function createArchives(f: FileStructureTransformerFixture): PreFn {
 
 function fixtureFrom(
   f: FileStructureTransformerFixture,
-): { fixture: Fixture; preFn: PreFn } {
+): { fixture: Fixture; setupFn: SetupFn } {
   return {
     fixture: _fixtureFrom(f),
-    preFn: createArchives(f),
+    setupFn: createArchives(f),
   };
 }
 

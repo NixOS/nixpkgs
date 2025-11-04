@@ -9,7 +9,7 @@ import {
 import {
   Fixture,
   NestedVirtualFS,
-  PreFn,
+  SetupFn,
   Test,
   Vars,
   VirtualFile,

@@ -1,5 +1,5 @@
 import { argsToCommand, assertEq, dec, runTests } from "./utils.ts";
-import { Fixture, PreFn, Test, Vars, VirtualFS } from "./types.d.ts";
+import { Fixture, SetupFn, Test, Vars, VirtualFS } from "./types.d.ts";
 
 type FetcherFixture = {
   inJsrJsonContent: string;
@@ -21,7 +21,7 @@ type ServerConfig = {
 
 function startMockServer(
   serverConfig: ServerConfig,
-): PreFn {
+): SetupFn {
   return async () => {
     await Deno.mkdir(serverConfig.root, { recursive: true });
     const command = argsToCommand([
@@ -36,8 +36,8 @@ function startMockServer(
     console.log("starting server");
     const p = command.spawn();
     p.stdin.close();
-    const cleanupFn = async () => {
-      console.log("cleanup server");
+    const teardownFn = async () => {
+      console.log("teardown server");
       p.kill();
 
       const { code, stdout, stderr } = await p.output();
@@ -45,9 +45,9 @@ function startMockServer(
       console.log(dec.decode(stderr));
       // assertEq(code, 0);
 
-      console.log("cleanup server done");
+      console.log("teardown server done");
     };
-    return cleanupFn;
+    return teardownFn;
   };
 }
 
@@ -59,7 +59,7 @@ const serverConfig = {
 
 const PLACEHOLDER = "$DOMAIN$";
 
-function fixtureFrom(f: FetcherFixture): { fixture: Fixture; preFn: PreFn } {
+function fixtureFrom(f: FetcherFixture): { fixture: Fixture; preFn: SetupFn } {
   return {
     fixture: _fixtureFrom(f, serverConfig),
     preFn: startMockServer(serverConfig),

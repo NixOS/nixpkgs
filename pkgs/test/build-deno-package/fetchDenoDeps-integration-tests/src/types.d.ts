@@ -26,11 +26,12 @@ export type Fixture = {
     };
   };
 };
-export type PreFn = () => Promise<(() => Promise<void>) | void>;
+export type TeardownFn = () => Promise<void>;
+export type SetupFn = () => Promise<TeardownFn | void>;
 export type Test = {
   name: string;
   fixture: Fixture;
-  preFn?: PreFn;
+  setupFn?: SetupFn;
 };
 export type VirtualFS = Record<string, string>;
 export type NestedVirtualFS = Record<string, VirtualFS>;

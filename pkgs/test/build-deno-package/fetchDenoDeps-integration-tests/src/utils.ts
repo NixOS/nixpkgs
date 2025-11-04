@@ -1,4 +1,4 @@
-import { Args, Fixture, Test, VirtualFile } from "./types.d.ts";
+import { Args, Fixture, SetupFn, TeardownFn, Test, VirtualFile } from "./types.d.ts";
 
 export const globalPathPrefix = "./testFolder";
 
@@ -137,7 +137,7 @@ export function assertEq(a: any, b: any, msg?: string) {
 
 async function runTest(
   f: Fixture,
-  preFn?: () => Promise<(() => Promise<void>) | void>,
+  setupFn?: SetupFn,
 ) {
   try {
     await Deno.remove("testFolder", { recursive: true });
@@ -145,9 +145,9 @@ async function runTest(
   }
   await Deno.mkdir("testFolder", { recursive: true });
   Deno.chdir("testFolder");
-  let cleanupFn: (() => Promise<void>) | void = async () => {};
-  if (preFn !== undefined) {
-    cleanupFn = await preFn();
+  let teardownFn: TeardownFn | void = async () => {};
+  if (setupFn !== undefined) {
+    teardownFn = await setupFn();
   }
 
   try {
@@ -192,8 +192,8 @@ async function runTest(
       await fancyDiff(actual, expected);
     }));
   } finally {
-    if (cleanupFn) {
-      await cleanupFn();
+    if (teardownFn) {
+      await teardownFn();
     }
     Deno.chdir("..");
   }
@@ -205,7 +205,7 @@ export function runTests(
   tests.forEach((test) => {
     Deno.test({
       name: test.name,
-      fn: async () => await runTest(test.fixture, test.preFn),
+      fn: async () => await runTest(test.fixture, test.setupFn),
     });
   });
 }
