@@ -37077,23 +37077,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-wxml = nodeEnv.buildNodePackage {
-    name = "coc-wxml";
-    packageName = "coc-wxml";
-    version = "1.0.9";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-wxml/-/coc-wxml-1.0.9.tgz";
-      sha512 = "ExbBjO4/7sbwHVawtK/sDzFwmUTwW9rHgm51sJxqQim+Zjn3vw1x0pNObonVb+r/kX9peLCyE6/nmT2ybfeBPg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "wxml language server extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-yaml = nodeEnv.buildNodePackage {
     name = "coc-yaml";
     packageName = "coc-yaml";
