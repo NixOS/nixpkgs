@@ -12,6 +12,7 @@
   scipy,
   torch,
   torchaudio,
+  torchcodec,
   tqdm,
 
   # tests
@@ -39,6 +40,7 @@ buildPythonPackage {
     scipy
     torch
     torchaudio
+    torchcodec
     tqdm
   ];
 
