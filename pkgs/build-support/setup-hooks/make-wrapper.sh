@@ -115,7 +115,7 @@ makeShellWrapper() {
 
     mkdir -p "$(dirname "$wrapper")"
 
-    echo "#! @shell@ -e" > "$wrapper"
+    echo "#!@shell@ -e" > "$wrapper"
 
     params=("$@")
     for ((n = 2; n < ${#params[*]}; n += 1)); do
