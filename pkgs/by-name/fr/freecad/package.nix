@@ -33,21 +33,22 @@
   orocos-kdl,
 }:
 let
-  pythonDeps = with python3Packages; [
+  pythonCoreDeps = with python3Packages; [
     boost
     gitpython # for addon manager
-    ifcopenshell
-    matplotlib
-    opencamlib
-    pivy
-    ply # for openSCAD file support
-    pybind11
-    pycollada
-    pyside6
+    ifcopenshell # BIM
+    matplotlib # detected by cmake, used for BIM
+    netgen-mesher # netgen FEM plugin for meshing
+    opencamlib # CAM
+    pivy # coin bindings
+    ply # openSCAD file format support
+    pybind11 # qt bindings
+    pycollada # collada file format support (BIM)
+    pyside6 # qt bindings
     python
-    pyyaml # (at least for) PyrateWorkbench
-    scipy
-    shiboken6
+    pyyaml # PyrateWorkbench, CAM
+    scipy # BIM
+    shiboken6 # qt bindings
     vtk
   ];
 
@@ -104,7 +105,7 @@ freecad-utils.makeCustomizable (
       qt6.qtwayland
       qt6.qtwebengine
     ]
-    ++ pythonDeps;
+    ++ pythonCoreDeps;
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -162,7 +163,7 @@ freecad-utils.makeCustomizable (
     qtWrapperArgs = [
       "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
       "--prefix PATH : ${lib.makeBinPath externalTools}"
-      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonCoreDeps}"
     ];
 
     postFixup = ''
