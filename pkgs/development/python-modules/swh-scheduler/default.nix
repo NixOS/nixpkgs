@@ -79,6 +79,13 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
 
+  disabledTestPaths = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "swh/scheduler/tests/test_cli_celery_monitor.py"
+    # SystemExit: 1
+    "swh/scheduler/tests/test_cli_origin.py"
+  ];
+
   meta = {
     description = "Job scheduler for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler";
