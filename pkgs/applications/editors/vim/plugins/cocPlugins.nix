@@ -23,6 +23,7 @@
   coc-prettier,
   coc-pyright,
   coc-r-lsp,
+  coc-rust-analyzer,
   coc-sh,
   coc-spell-checker,
   coc-toml,
@@ -142,6 +143,11 @@ final: prev: {
   coc-r-lsp = buildVimPlugin {
     inherit (coc-r-lsp) pname version meta;
     src = "${coc-r-lsp}/lib/node_modules/coc-r-lsp";
+  };
+
+  coc-rust-analyzer = buildVimPlugin {
+    inherit (coc-rust-analyzer) pname version meta;
+    src = "${coc-rust-analyzer}/lib/node_modules/coc-rust-analyzer";
   };
 
   coc-sh = buildVimPlugin {

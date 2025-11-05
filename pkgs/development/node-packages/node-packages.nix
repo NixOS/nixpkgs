@@ -37659,24 +37659,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-rust-analyzer = nodeEnv.buildNodePackage {
-    name = "coc-rust-analyzer";
-    packageName = "coc-rust-analyzer";
-    version = "0.81.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-rust-analyzer/-/coc-rust-analyzer-0.81.0.tgz";
-      sha512 = "skbRCe1Yjoa3r/a0dHviJxGMS8s+PFzl7lmimCUxxT3kKxairDeetNfRBw+wsDJmKBzXGhy1KH+6Cmt3WJYz5w==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "rust-analyzer for Vim/Neovim, works as an extension with coc.nvim";
-      homepage = "https://github.com/fannheyward/coc-rust-analyzer#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-smartf = nodeEnv.buildNodePackage {
     name = "coc-smartf";
     packageName = "coc-smartf";
