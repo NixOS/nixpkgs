@@ -48,7 +48,8 @@ let
         programs.actionlint.enable = true;
 
         programs.biome = {
-          enable = true;
+          # FIXME: Disabled temporarily due to https://github.com/numtide/treefmt-nix/pull/430
+          enable = false;
           settings.formatter = {
             useEditorconfig = true;
           };
@@ -58,10 +59,10 @@ let
           };
           settings.json.formatter.enabled = false;
         };
-        settings.formatter.biome.excludes = [
-          "*.min.js"
-          "pkgs/*"
-        ];
+        # settings.formatter.biome.excludes = [
+        #   "*.min.js"
+        #   "pkgs/*"
+        # ];
 
         programs.keep-sorted.enable = true;
 
