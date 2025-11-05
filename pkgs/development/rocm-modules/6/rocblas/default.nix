@@ -26,8 +26,8 @@
   pkg-config,
   removeReferencesTo,
   buildTensile ? true,
-  buildTests ? false,
-  buildBenchmarks ? false,
+  buildTests ? true,
+  buildBenchmarks ? true,
   tensileSepArch ? true,
   tensileLazyLib ? true,
   withHipBlasLt ? true,
@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-FCzo/BOk4xLEFkdOdqcCXh4a9t3/OIIBEy8oz6oOMWg=";
   };
+
+  outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
 
   nativeBuildInputs = [
     cmake
@@ -78,10 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.msgpack
     python3Packages.zstandard
   ]
-  ++ lib.optionals buildTests [
-    gtest
-  ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
     gfortran
     rocm-smi
   ]
@@ -155,14 +155,26 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       remove-references-to -t ${tensile} \
         "$out/lib/librocblas.so."*
+    ''
+    + lib.optionalString buildBenchmarks ''
+      moveToOutput "bin/*-tune" "$benchmark"
+      moveToOutput "bin/*-bench" "$benchmark"
+      moveToOutput "bin/*example*" "$benchmark"
+      cp "$out/bin/"*.{yaml,txt} "$benchmark/bin"
+    ''
+    + lib.optionalString buildTests ''
+      moveToOutput "bin/*test*" "$test"
+      cp "$out/bin/"*.{yaml,txt} "$test/bin"
+    ''
+    + ''
+      if [ -d $out/bin ]; then
+        rm $out/bin/*.{yaml,txt} || true
+        rmdir $out/bin
+      fi
     '';
 
   passthru = {
     amdgpu_targets = gpuTargets';
-    tests.rocblas-tests = finalAttrs.finalPackage.override {
-      buildBenchmarks = true;
-      buildTests = true;
-    };
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
       inherit (finalAttrs.src) owner;
