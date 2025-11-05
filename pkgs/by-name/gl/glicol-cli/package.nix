@@ -36,5 +36,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "glicol-cli";
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
