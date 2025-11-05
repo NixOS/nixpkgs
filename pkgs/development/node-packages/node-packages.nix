@@ -37668,24 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-jest = nodeEnv.buildNodePackage {
-    name = "coc-jest";
-    packageName = "coc-jest";
-    version = "1.1.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-jest/-/coc-jest-1.1.5.tgz";
-      sha512 = "H6j4hqmsF2b4hSfGQqaXeCahs3LnyYQc6vbtrSkuMQRdosh0gcZQx186kbxph8/5Mecw22Y9BGcsEaF2/RLEbw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "jest extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-jest#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-json = nodeEnv.buildNodePackage {
     name = "coc-json";
     packageName = "coc-json";

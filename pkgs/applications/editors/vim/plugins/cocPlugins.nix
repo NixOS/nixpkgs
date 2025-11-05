@@ -15,6 +15,7 @@
   coc-highlight,
   coc-html,
   coc-java,
+  coc-jest,
   coc-pyright,
   coc-sh,
   coc-spell-checker,
@@ -94,6 +95,11 @@ final: prev: {
   coc-java = buildVimPlugin {
     inherit (coc-java) pname version meta;
     src = "${coc-java}/lib/node_modules/coc-java";
+  };
+
+  coc-jest = buildVimPlugin {
+    inherit (coc-jest) pname version meta;
+    src = "${coc-jest}/lib/node_modules/coc-jest";
   };
 
   coc-pyright = buildVimPlugin {
