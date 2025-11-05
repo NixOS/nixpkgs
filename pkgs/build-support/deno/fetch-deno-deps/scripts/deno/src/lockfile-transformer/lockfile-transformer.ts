@@ -1,10 +1,12 @@
-import { getScopedName } from "../utils.ts";
+import { getScopedName, parseArgs } from "../utils.ts";
 import type {
   CommonLockFormatIn,
   DenoLock,
   PackageFileIn,
   PackageSpecifier,
+  ParsedArgs,
   PathString,
+  UnparsedArgs,
   UrlString,
 } from "../types.d.ts";
 
@@ -18,36 +20,44 @@ type LockfileTransformerConfig = {
 
 type Config = LockfileTransformerConfig;
 function getConfig(): Config {
-  const flagsParsed = {
-    "deno-lock-path": "",
-    "common-lock-jsr-path": "",
-    "common-lock-npm-path": "",
-    "common-lock-https-path": "",
+  type ArgNames = {
+    denoLockPath: null;
+    commonLockJsrPath: null;
+    commonLockHttpsPath: null;
+    commonLockNpmPath: null;
   };
-  const flags = Object.keys(flagsParsed).map((v) => "--" + v);
-  Deno.args.forEach((arg, index) => {
-    if (flags.includes(arg) && Deno.args.length > index + 1) {
-      flagsParsed[arg.replace(/^--/g, "") as keyof typeof flagsParsed] =
-        Deno.args[index + 1];
-    }
-  });
 
-  Object.entries(flagsParsed).forEach(([key, value]) => {
-    if (value === "") {
-      throw `--${key} flag not set but required`;
-    }
-  });
+  const unparsedArgs: UnparsedArgs<ArgNames> = {
+    denoLockPath: {
+      flag: "--deno-lock-path",
+      defaultValue: "",
+    },
+    commonLockJsrPath: {
+      flag: "--common-lock-jsr-path",
+      defaultValue: "",
+    },
+    commonLockHttpsPath: {
+      flag: "--common-lock-https-path",
+      defaultValue: "",
+    },
+    commonLockNpmPath: {
+      flag: "--common-lock-npm-path",
+      defaultValue: "",
+    },
+  };
+
+  const parsedArgs: ParsedArgs<ArgNames> = parseArgs(unparsedArgs, Deno.args);
 
   return {
     lockfile: JSON.parse(
       new TextDecoder("utf-8").decode(
-        Deno.readFileSync(flagsParsed["deno-lock-path"]),
+        Deno.readFileSync(parsedArgs.denoLockPath.value),
       ),
     ),
-    commonLockJsrPath:   flagsParsed["common-lock-jsr-path"],
-    commonLockNpmPath:   flagsParsed["common-lock-npm-path"],
-    commonLockHttpsPath: flagsParsed["common-lock-https-path"],
-    denoLockPath: flagsParsed["deno-lock-path"],
+    commonLockJsrPath: parsedArgs.commonLockJsrPath.value,
+    commonLockNpmPath: parsedArgs.commonLockNpmPath.value,
+    commonLockHttpsPath: parsedArgs.commonLockHttpsPath.value,
+    denoLockPath: parsedArgs.denoLockPath.value,
   };
 }
 
