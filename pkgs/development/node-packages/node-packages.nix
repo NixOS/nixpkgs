@@ -37659,24 +37659,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-snippets = nodeEnv.buildNodePackage {
-    name = "coc-snippets";
-    packageName = "coc-snippets";
-    version = "3.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-snippets/-/coc-snippets-3.4.0.tgz";
-      sha512 = "p7nxP/ii+iRADnvFEuHz4iDhuspg3W08hj4J0IFz/OYrzJwEON3c+5i0DJEXyr8qrt0c2Vd+3rekRE8J2AhwGQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Snippets extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-snippets#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-solargraph = nodeEnv.buildNodePackage {
     name = "coc-solargraph";
     packageName = "coc-solargraph";
