@@ -117,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/google/or-tools/commit/b5a2f8ac40dd4bfa4359c35570733171454ec72b.patch";
       hash = "sha256-h96zJkqTtwfBd+m7Lm9r/ks/n8uvY4iSPgxMZe8vtXI=";
     })
+    # Fix tests on aarch64-linux
+    # https://github.com/google/or-tools/issues/4746
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/8442c7b1c219b0c8d58ee96d266d81b7c3a19ad2.patch";
+      hash = "sha256-HrV9wU3PFMdb3feGt8i5UJNgHuitMRBF9cNrH5RRENQ=";
+    })
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -213,9 +219,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.virtualenv
   ];
 
-  # some tests fail on aarch64-linux and hang on darwin
-  # https://github.com/google/or-tools/issues/4746
-  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
+  # some tests hang on darwin
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
