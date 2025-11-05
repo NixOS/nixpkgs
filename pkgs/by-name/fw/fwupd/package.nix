@@ -3,6 +3,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -134,7 +135,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.16";
+  version = "2.0.17";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -152,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-fsjW3Idaqg4pNGaRP0bm2R94FcW2MVfPQwPFWrN+Qy8=";
+    hash = "sha256-PhG30TKwOqOCMI3e1D9cbNN6hKiVVyrzi9vG+CG5bY0=";
   };
 
   patches = [
@@ -173,6 +174,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./0004-Get-the-efi-app-from-fwupd-efi.patch
+
+    # TODO: drop after 2.0.17
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/7ded10f22875da9b0f5f21cb41f8663049da6311.patch";
+      hash = "sha256-rEoSwcTmxJGX2ZdWAjDvsvgnP2qZp3ErnJVCIQlplhQ=";
+    })
   ];
 
   postPatch = ''
@@ -360,9 +367,11 @@ stdenv.mkDerivation (finalAttrs: {
       "fwupd/remotes.d/vendor-directory.conf"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
     ];
