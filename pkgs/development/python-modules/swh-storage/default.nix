@@ -90,6 +90,9 @@ buildPythonPackage rec {
     "swh/storage/tests/test_cli_cassandra.py"
     # Failing tests
     "swh/storage/tests/test_cli_object_references.py"
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "swh/storage/tests/masking/test_cli.py"
+    "swh/storage/tests/blocking/test_cli.py"
   ];
 
   meta = {
