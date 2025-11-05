@@ -78,7 +78,6 @@ let
     pkgs.runCommand "malloc-provider-${cfg.provider}"
       rec {
         preferLocalBuild = true;
-        allowSubstitutes = false;
         origLibPath = providerConf.libPath;
         libName = baseNameOf origLibPath;
       }

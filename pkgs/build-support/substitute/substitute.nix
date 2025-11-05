@@ -49,7 +49,6 @@ optionalDeprecationWarning stdenvNoCC.mkDerivation (
     builder = ./substitute.sh;
     inherit (args) src;
     preferLocalBuild = true;
-    allowSubstitutes = false;
   }
   // args
   // lib.optionalAttrs (args ? substitutions) {

@@ -13,7 +13,6 @@ let
       {
         # trivial derivation
         preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         mkdir -p "$out/share/"{xsessions,wayland-sessions}

@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
         inherit (finalAttrs) src;
         preferLocalBuild = true;
-        allowSubstitutes = false;
         installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
       })
     ];

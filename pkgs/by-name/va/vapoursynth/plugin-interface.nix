@@ -40,7 +40,6 @@ let
       {
         executable = true;
         preferLocalBuild = true;
-        allowSubstitutes = false;
         src = ''
           char const nixPluginDir[] = "${pluginsEnv}/lib/vapoursynth";
         '';

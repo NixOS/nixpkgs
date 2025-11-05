@@ -11,7 +11,6 @@ stdenvNoCC.mkDerivation {
   inherit msp430GccSupport;
 
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   buildCommand = ''
     mkdir $out

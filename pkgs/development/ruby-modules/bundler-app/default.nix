@@ -30,7 +30,7 @@
   lockfile ? null,
   gemset ? null,
   preferLocalBuild ? false,
-  allowSubstitutes ? false,
+  allowSubstitutes ? true,
   installManpages ? true,
   meta ? { },
   nativeBuildInputs ? [ ],

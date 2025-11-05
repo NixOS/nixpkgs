@@ -23,7 +23,6 @@ stdenv.mkDerivation {
 
   # trivial derivation
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   passthru.tests.test = nixosTests.terminal-emulators.termonad;
 
