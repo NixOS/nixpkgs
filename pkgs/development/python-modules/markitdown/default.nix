@@ -68,6 +68,8 @@ buildPythonPackage rec {
     youtube-transcript-api
   ];
 
+  pythonRelaxDeps = [ "magika" ];
+
   pythonImportsCheck = [ "markitdown" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -86,6 +88,6 @@ buildPythonPackage rec {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sarahec];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }
