@@ -390,6 +390,14 @@ buildStdenv.mkDerivation {
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
+  # Workaround for a bug in llvm21 aarch implementation. See:
+  # https://github.com/llvm/llvm-project/pull/129889#issuecomment-3486541843
+  # https://github.com/NixOS/nixpkgs/issues/453372#issuecomment-3494078544
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
+  CPPFLAGS = lib.optionalString (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  ) "-mllvm -aarch64-enable-copy-propagation=false";
+
   preConfigure = ''
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
