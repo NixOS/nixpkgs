@@ -873,7 +873,10 @@ let
       cargo
       rustc
     ];
-    awdb = [ pkgs.cargo ];
+    awdb = with pkgs; [
+      cargo
+      rustc
+    ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [
