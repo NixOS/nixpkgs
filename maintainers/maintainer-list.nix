@@ -18523,6 +18523,12 @@
     githubId = 6391776;
     name = "Nikita Voloboev";
   };
+  nikitawootten = {
+    email = "nixpkgs@nikita.computer";
+    github = "nikitawootten";
+    githubId = 8916363;
+    name = "Nikita Wootten";
+  };
   niklashh = {
     email = "niklas.2.halonen@aalto.fi";
     github = "xhalo32";
