@@ -23,7 +23,6 @@
 , "clipboard-cli"
 , "coc-go"
 , "coc-ltex"
-, "coc-solargraph"
 , "coc-stylelint"
 , "coc-sumneko-lua"
 , "coc-sqlfluff"

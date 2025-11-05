@@ -37659,23 +37659,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-solargraph = nodeEnv.buildNodePackage {
-    name = "coc-solargraph";
-    packageName = "coc-solargraph";
-    version = "1.2.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-solargraph/-/coc-solargraph-1.2.4.tgz";
-      sha512 = "Z00v8HmgQyJgv/FKo7FkqWWTPNHeiOgEDqsI4RT9457rEQ8ZF/wLeq38DRihTfIra93GZ3EprVKYCOels6JHgQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Ruby languageserver extension for coc.nvim, using solargraph";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-stylelint = nodeEnv.buildNodePackage {
     name = "coc-stylelint";
     packageName = "coc-stylelint";

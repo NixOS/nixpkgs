@@ -27,6 +27,7 @@
   coc-sh,
   coc-smartf,
   coc-snippets,
+  coc-solargraph,
   coc-spell-checker,
   coc-toml,
 }:
@@ -166,6 +167,11 @@ final: prev: {
   coc-snippets = buildVimPlugin {
     inherit (coc-snippets) pname version meta;
     src = "${coc-snippets}/lib/node_modules/coc-snippets";
+  };
+
+  coc-solargraph = buildVimPlugin {
+    inherit (coc-solargraph) pname version meta;
+    src = "${coc-solargraph}/lib/node_modules/coc-solargraph";
   };
 
   coc-spell-checker = buildVimPlugin {
