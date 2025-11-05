@@ -709,15 +709,6 @@
       },
       "source": "hosted",
       "version": "2.2.2"
-    },
-    "conventional_commit": {
-      "dependency": "direct main",
-      "description": {
-        "path": "../conventional_commit",
-        "relative": true
-      },
-      "source": "path",
-      "version": "0.6.1"
     }
   },
   "sdks": {

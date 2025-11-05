@@ -28,6 +28,6 @@ buildGoModule rec {
     description = "Scriptable interpreter written in golang";
     homepage = "https://github.com/mattn/anko";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

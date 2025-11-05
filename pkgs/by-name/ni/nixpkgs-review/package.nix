@@ -86,7 +86,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
     maintainers = with lib.maintainers; [
-      figsoda
+      mdaniels5757
       mic92
     ];
   };

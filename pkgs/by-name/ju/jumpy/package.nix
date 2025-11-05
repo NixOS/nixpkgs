@@ -92,6 +92,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Assets
       cc-by-nc-40
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 })

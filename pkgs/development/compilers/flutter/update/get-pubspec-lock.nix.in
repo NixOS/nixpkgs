@@ -1,7 +1,7 @@
-{ flutterPackages
-, stdenv
-, cacert
-,
+{
+  flutterPackages,
+  stdenv,
+  cacert,
 }:
 let
   flutterCompactVersion = "@flutter_compact_version@";

@@ -50,6 +50,7 @@ mapAliases {
   "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@uppy/companion" = pkgs.uppy-companion; # Added 2025-11-01
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
@@ -93,6 +94,7 @@ mapAliases {
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
+  create-cycle-app = throw "create-cycle-app has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
   inherit (pkgs) cspell;
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
@@ -282,6 +284,7 @@ mapAliases {
   inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
   unified-language-server = throw "unified-language-server was removed as it is a library that should be imported within a Javascript project, not an end-user tool"; # added 2025-10-02
+  inherit (pkgs) uppy-companion; # Added 2025-11-01
   inherit (pkgs) vim-language-server; # added 2024-06-25
   vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
@@ -293,6 +296,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
   inherit (pkgs) web-ext; # added 2023-08-20
+  webpack = throw "'webpack' has been removed because it is a library that should be imported within a Javascript project, not an end-user tool."; # Added 2025-11-04
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
   webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12

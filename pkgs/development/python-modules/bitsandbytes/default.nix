@@ -26,7 +26,7 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.48.1";
+  version = "0.48.2";
 
   brokenConditions = lib.attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
@@ -45,10 +45,12 @@ let
     (lib.getDev cuda_cccl) # <thrust/*>
     (lib.getDev libcublas) # cublas_v2.h
     (lib.getLib libcublas)
+    (lib.getInclude libcublas) # cublasLt.h
     libcurand
     libcusolver # cusolverDn.h
     (lib.getDev libcusparse) # cusparse.h
     (lib.getLib libcusparse) # cusparse.h
+    (lib.getInclude libcusparse) # cusparse.h
     (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
   ];
 
@@ -78,7 +80,7 @@ buildPythonPackage {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-OkhWv5Mb/cnWJteCXvDEkWQvK+QK26YQex39yWIezrQ=";
+    hash = "sha256-gtNOMxLeYTCZK5MVdpjOFOw6rxvqS+XJmY1Meiuz0Rw=";
   };
 
   patches = [

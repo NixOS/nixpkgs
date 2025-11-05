@@ -5,21 +5,21 @@
   lib,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "devbox";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "jetify-com";
-    repo = pname;
-    rev = version;
+    repo = "devbox";
+    tag = finalAttrs.version;
     hash = "sha256-+OsFKBtc4UkkI37YJM9uKIJZC1+KkuDJJKjipRzyF7k=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X go.jetify.com/devbox/internal/build.Version=${version}"
+    "-X go.jetify.com/devbox/internal/build.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/devbox" ];
@@ -38,14 +38,14 @@ buildGoModule rec {
       --zsh <($out/bin/devbox completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Instant, easy, predictable shells and containers";
     homepage = "https://www.jetify.com/devbox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       urandom
       lagoja
       madeddie
     ];
   };
-}
+})

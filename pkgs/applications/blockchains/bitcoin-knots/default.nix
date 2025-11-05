@@ -10,6 +10,7 @@
   wrapQtAppsHook ? null,
   boost,
   libevent,
+  libsodium,
   zeromq,
   zlib,
   db48,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libevent
+    libsodium
     zeromq
     zlib
   ]

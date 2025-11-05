@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
   blosc2,
@@ -33,6 +34,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
   };
+
+  patches = [
+    # should be included in next release
+    (fetchpatch {
+      name = "numexpr-2.13.0-compat.patch";
+      url = "https://github.com/PyTables/PyTables/commit/41270019ce1ffd97ce8f23b21d635e00e12b0ccb.patch";
+      hash = "sha256-CaDBYKiABVtlM5e9ChCsf8dWOwEnMPOIXQ100JTnlnE=";
+    })
+  ];
 
   build-system = [
     blosc2

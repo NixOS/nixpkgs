@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinygltf";
-  version = "2.9.6";
+  version = "2.9.7";
 
   src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3dBxfdXeTbzeQAXaBXFaflLgXYeuOfESdq6V3+0iCXY=";
+    hash = "sha256-tG9hrR2rsfgS8zCBNdcplig2vyiIcNspSVKop03Zx9A=";
   };
 
   nativeBuildInputs = [

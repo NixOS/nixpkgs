@@ -15,7 +15,9 @@
   pyre-extensions,
   pyro-ppl,
   scipy,
+  threadpoolctl,
   torch,
+  typing-extensions,
 
   # optional-dependencies
   pymoo,
@@ -27,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pytorch";
+    owner = "meta-pytorch";
     repo = "botorch";
     tag = "v${version}";
-    hash = "sha256-6hAsKIlwycZtLZn1vkcu4fR85uACA4FSkT5e/wos17A=";
+    hash = "sha256-XpcmWJcKaIxrM79MgjG7IF/DphTH402iltlh8ISeZ64=";
   };
 
   build-system = [
@@ -49,7 +51,9 @@ buildPythonPackage rec {
     pyre-extensions
     pyro-ppl
     scipy
+    threadpoolctl
     torch
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -60,6 +64,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Requires unpackaged pfns
+    "test_community/models/test_prior_fitted_network.py"
   ];
 
   disabledTests = [
@@ -93,7 +102,7 @@ buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    changelog = "https://github.com/pytorch/botorch/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/meta-pytorch/botorch/blob/${src.tag}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = lib.licenses.mit;

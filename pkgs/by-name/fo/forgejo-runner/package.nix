@@ -92,6 +92,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    # Cannot process container options: '--pid=host --device=/dev/sda': 'unknown server OS: darwin'
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";

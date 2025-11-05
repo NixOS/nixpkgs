@@ -120,6 +120,11 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests create files with append-only flags that cause cleanup issues on macOS
+    "test_extract_restores_append_flag"
+    "test_file_status_excluded"
   ];
 
   preCheck = ''

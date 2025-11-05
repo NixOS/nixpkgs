@@ -13,26 +13,20 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
+  xorg,
 }:
-
-let
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-Launcher/9ee18657fa6597c42811152604da4e6b73fac342/PathOfBuilding.ico";
-    hash = "sha256-9EW4ld+xg7GLfd4dEY/xUCBMnKb3uu7LBq2Of3Gq1Y8=";
-  };
-in
 rustPlatform.buildRustPackage rec {
   pname = "rusty-path-of-building";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     rev = "v${version}";
-    hash = "sha256-U2OWNV8bUNXo8/Sro+gV/o3O/D1lMWVlbX3tCONmGOk=";
+    hash = "sha256-J/tTifOcbY1mfcNbQFN4Vdyl78O7vTVbfew3fcnVyTA=";
   };
 
-  cargoHash = "sha256-xB7nhCqUalGE0M762Zw7vVFKzz/TgnMU77xbEHorJ2U=";
+  cargoHash = "sha256-Oekl6SDIvgFIzPnve7nuib3fEjPGC46F/TNULmgOpew=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,13 +56,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    icotool -x ${icon}
-
-    for size in 16 32 48 256; do
-      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      install -Dm 644 *PathOfBuilding*"$size"x"$size"*.png \
-        $out/share/icons/hicolor/"$size"x"$size"/apps/pathofbuilding.png
-    done
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/256x256/apps/path-of-building.png
   '';
 
   postFixup = ''
@@ -78,6 +66,9 @@ rustPlatform.buildRustPackage rec {
           libxkbcommon
           vulkan-loader
           wayland
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
         ]
       }
 
@@ -88,13 +79,13 @@ rustPlatform.buildRustPackage rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "rusty-path-of-building";
+      name = "rusty-path-of-building-1";
       desktopName = "Path of Building";
       comment = "Offline build planner for Path of Exile";
       exec = "rusty-path-of-building poe1";
       terminal = false;
       type = "Application";
-      icon = "pathofbuilding";
+      icon = "path-of-building";
       categories = [ "Game" ];
       keywords = [
         "poe"
@@ -111,7 +102,7 @@ rustPlatform.buildRustPackage rec {
       exec = "rusty-path-of-building poe2";
       terminal = false;
       type = "Application";
-      icon = "pathofbuilding";
+      icon = "path-of-building";
       categories = [ "Game" ];
       keywords = [
         "poe"
