@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Fast text scanner/regex extractor and realtime summarizer";
     homepage = "https://rare.zdyn.net";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     changelog = "https://github.com/zix99/rare/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rare";
