@@ -4,7 +4,7 @@
   callPackage,
   vscode-generic,
   fetchurl,
-  appimageTools,
+  dpkg,
   undmg,
   commandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
@@ -16,30 +16,30 @@ let
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/x64/Cursor-1.7.52-x86_64.AppImage";
-      hash = "sha256-nhDDdXE5/m9uASiQUJ4GHfApkzkf9ju5b8s0h6BhpjQ=";
+      url = "https://downloads.cursor.com/production/25412918da7e74b2686b25d62da1f01cfcd27683/linux/x64/deb/amd64/deb/cursor_2.0.64_amd64.deb";
+      hash = "sha256-TEVIxHLQR5sLicVyJAW76JXu4Qtq++xVC90OVTJ0fY0=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/linux/arm64/Cursor-1.7.52-aarch64.AppImage";
-      hash = "sha256-96zL0pmcrEyDEy8oW2qWk6RM8XGE4Gd2Aa3Hhq0qvk0=";
+      url = "https://downloads.cursor.com/production/25412918da7e74b2686b25d62da1f01cfcd27683/linux/arm64/deb/arm64/deb/cursor_2.0.64_arm64.deb";
+      hash = "sha256-eJ5PLs5DO+l+B5EW4/ZbjubX4SgZb+aJ1+Ie7R3ZEe0=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-0//Sv57iEgRm/exnUnKVpdyk6fwxAnx0PDg2mVaB9J8=";
+      url = "https://downloads.cursor.com/production/25412918da7e74b2686b25d62da1f01cfcd27683/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-lY5BJeauw5VtWuaAu8C9C2inmKFvv/OnCxOicE2Zs48=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/9675251a06b1314d50ff34b0cbe5109b78f848cd/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-g8Fk9+MDwzLTNitxJMApypfiLWEjze0PR2OIPC774j8=";
+      url = "https://downloads.cursor.com/production/25412918da7e74b2686b25d62da1f01cfcd27683/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-IIJbuRdxTG7kSspspWk8GH9KZsKPyLJahz0iqSvP1B0=";
     };
   };
 
   source = sources.${hostPlatform.system};
 in
-(callPackage vscode-generic rec {
+(callPackage vscode-generic {
   inherit useVSCodeRipgrep;
   commandLineArgs = finalCommandLineArgs;
 
-  version = "1.7.52";
+  version = "2.0.64";
   pname = "cursor";
 
   # You can find the current VSCode version in the About dialog:
@@ -52,17 +52,9 @@ in
   libraryName = "cursor";
   iconName = "cursor";
 
-  src =
-    if hostPlatform.isLinux then
-      appimageTools.extract {
-        inherit pname version;
-        src = source;
-      }
-    else
-      source;
+  src = source;
 
-  sourceRoot =
-    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
+  sourceRoot = if hostPlatform.isLinux then "usr/share/cursor" else "Cursor.app";
 
   tests = { };
 
@@ -84,6 +76,7 @@ in
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
+      daniel-fahey
       prince213
     ];
     platforms = [
@@ -96,7 +89,19 @@ in
 }).overrideAttrs
   (oldAttrs: {
     nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+      (oldAttrs.nativeBuildInputs or [ ])
+      ++ lib.optionals hostPlatform.isLinux [ dpkg ]
+      ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+    unpackPhase =
+      if hostPlatform.isLinux then
+        ''
+          runHook preUnpack
+          dpkg --fsys-tarfile $src | tar --extract
+          runHook postUnpack
+        ''
+      else
+        oldAttrs.unpackPhase or null;
 
     passthru = (oldAttrs.passthru or { }) // {
       inherit sources;

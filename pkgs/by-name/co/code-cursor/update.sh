@@ -22,7 +22,12 @@ for platform in ${!platforms[@]}; do
       >&2 echo "Multiple versions found: $first_version ($first_platform) and $version ($platform)"
       exit 1
     fi
-    url=$(echo $result | jq -r '.downloadUrl')
+    # Use debUrl for Linux platforms, downloadUrl for Darwin
+    if [[ "$platform" == *"linux"* ]]; then
+      url=$(echo $result | jq -r '.debUrl')
+    else
+      url=$(echo $result | jq -r '.downloadUrl')
+    fi
     # Exits with code 22 if not downloadable
     curl --output /dev/null --silent --head --fail "$url"
     updates+=( [$platform]="$result" )
@@ -32,7 +37,12 @@ done
 for platform in ${!updates[@]}; do
   result=${updates[$platform]}
   version=$(echo $result | jq -r '.version')
-  url=$(echo $result | jq -r '.downloadUrl')
+  # Use debUrl for Linux platforms, downloadUrl for Darwin
+  if [[ "$platform" == *"linux"* ]]; then
+    url=$(echo $result | jq -r '.debUrl')
+  else
+    url=$(echo $result | jq -r '.downloadUrl')
+  fi
   source=$(nix-prefetch-url "$url" --name "cursor-$version")
   hash=$(nix-hash --to-sri --type sha256 "$source")
   update-source-version code-cursor $version $hash "$url" --system=$platform --ignore-same-version --source-key="sources.$platform"
