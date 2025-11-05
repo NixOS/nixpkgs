@@ -113,11 +113,11 @@ in
           pluginsToCheck =
             map (grammar: grammarToPlugin grammar)
               # true is here because there is `recurseForDerivations = true`
-              (lib.remove true (lib.attrValues tree-sitter-grammars));
+              (lib.filter lib.isDerivation (lib.attrValues tree-sitter-grammars));
         in
         runCommand "nvim-treesitter-test-queries-are-present-for-custom-grammars" { CI = true; } ''
           function check_grammar {
-            EXPECTED_FILES="$2/parser/$1.so `ls $2/queries/$1/*.scm`"
+            EXPECTED_FILES="$2/parser/$1.so `find -L "$2/queries/$1" -name '*.scm'`"
 
             echo
             echo expected files for $1:
@@ -125,7 +125,7 @@ in
 
             # the derivation has only symlinks, and `find` doesn't count them as files
             # so we cannot use `-type f`
-            for file in `find $2 -not -type d`; do
+            for file in `find -L $2 -not -type d`; do
               echo checking $file
               # see https://stackoverflow.com/a/8063284
               if ! echo "$EXPECTED_FILES" | grep -wqF "$file"; then
@@ -141,9 +141,7 @@ in
 
       no-queries-for-official-grammars =
         let
-          pluginsToCheck =
-            # true is here because there is `recurseForDerivations = true`
-            (lib.remove true (lib.attrValues vimPlugins.nvim-treesitter-parsers));
+          pluginsToCheck = lib.filter lib.isDerivation (lib.attrValues vimPlugins.nvim-treesitter-parsers);
         in
         runCommand "nvim-treesitter-test-no-queries-for-official-grammars" { CI = true; } ''
           touch $out
