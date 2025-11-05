@@ -72,36 +72,41 @@ function fixtureFrom(
     return `${Deno.cwd()}/${globalPathPrefix}/${path}`;
   }
 
-  const vars: Vars = {
-    "common-lock-jsr-path": pathToAbs("./jsr.json"),
-    "common-lock-https-path": pathToAbs("./https.json"),
-    "deno-dir-path": pathToAbs("./deno-cache"),
-    "vendor-dir-path": pathToAbs("./vendor"),
+  type VarNames = {
+    commonLockJsrPath: null;
+    commonLockHttpsPath: null;
+    denoDirPath: null;
+    vendorDirPath: null;
+  }
+  const vars: Vars<VarNames> = {
+    commonLockJsrPath: {value:pathToAbs("./jsr.json"),flag:"--common-lock-jsr-path"},
+    commonLockHttpsPath: {value:pathToAbs("./https.json"),flag:"--common-lock-https-path"},
+    denoDirPath: {value:pathToAbs("./deno-cache"),flag:"--deno-dir-path"},
+    vendorDirPath: {value:pathToAbs("./vendor"),flag:"--vendor-dir-path"},
   };
-
   // checkFilesFs(f);
 
   return {
     inputs: {
       args: [
         bin,
-        "--common-lock-jsr-path",
-        vars["common-lock-jsr-path"],
-        "--common-lock-https-path",
-        vars["common-lock-https-path"],
-        "--deno-dir-path",
-        vars["deno-dir-path"],
-        "--vendor-dir-path",
-        vars["vendor-dir-path"],
+        vars.commonLockJsrPath.flag,
+        vars.commonLockJsrPath.value,
+        vars.commonLockHttpsPath.flag,
+        vars.commonLockHttpsPath.value,
+        vars.denoDirPath.flag,
+        vars.denoDirPath.value,
+        vars.vendorDirPath.flag,
+        vars.vendorDirPath.value,
       ],
       files: [
         {
-          path: vars["common-lock-jsr-path"],
+          path: vars.commonLockJsrPath.value,
           isReal: false,
           content: f.inJsrJsonContent,
         },
         {
-          path: vars["common-lock-https-path"],
+          path: vars.commonLockHttpsPath.value,
           isReal: false,
           content: f.inHttpsJsonContent,
         },
@@ -116,7 +121,7 @@ function fixtureFrom(
       files: {
         expected: [
           ...Object.entries(f.outTransformedFilesFS).map(([path, content]) => ({
-            path: `${vars["vendor-dir-path"]}/${path}`,
+            path: `${vars.vendorDirPath.value}/${path}`,
             isReal: false,
             content,
           })),

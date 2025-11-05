@@ -16,28 +16,34 @@ function fixtureFrom(f: LockfileTransformerFixture): Fixture {
     throw new Error("test expects cli args[0]: binary to execute");
   }
 
-  const vars: Vars = {
-    "deno-lock-path": "./first-deno.lock",
-    "common-lock-jsr-path": "./jsr.json",
-    "common-lock-npm-path": "./npm.json",
-    "common-lock-https-path": "./https.json",
+  type VarNames = {
+    commonLockJsrPath: null;
+    commonLockHttpsPath: null;
+    commonLockNpmPath: null;
+    denoLockPath: null;
+  }
+  const vars: Vars<VarNames> = {
+    commonLockJsrPath: {value:"./jsr.json",flag:"--common-lock-jsr-path"},
+    commonLockHttpsPath: {value:"./https.json",flag:"--common-lock-https-path"},
+    commonLockNpmPath: {value:"./npm.json",flag:"--common-lock-npm-path"},
+    denoLockPath: {value:"./first-deno.lock",flag:"--deno-lock-path"},
   };
 
   return {
     inputs: {
       args: [
         bin,
-        "--deno-lock-path",
-        vars["deno-lock-path"],
-        "--common-lock-jsr-path",
-        vars["common-lock-jsr-path"],
-        "--common-lock-npm-path",
-        vars["common-lock-npm-path"],
-        "--common-lock-https-path",
-        vars["common-lock-https-path"],
+        vars.commonLockJsrPath.flag,
+        vars.commonLockJsrPath.value,
+        vars.commonLockHttpsPath.flag,
+        vars.commonLockHttpsPath.value,
+        vars.commonLockNpmPath.flag,
+        vars.commonLockNpmPath.value,
+        vars.denoLockPath.flag,
+        vars.denoLockPath.value,
       ],
       files: [{
-        path: vars["deno-lock-path"],
+        path: vars.denoLockPath.value,
         isReal: false,
         content: f.denoLockContent,
       }],
@@ -46,17 +52,17 @@ function fixtureFrom(f: LockfileTransformerFixture): Fixture {
       files: {
         expected: [
           {
-            path: vars["common-lock-jsr-path"],
+            path: vars.commonLockJsrPath.value,
             isReal: false,
             content: JSON.stringify(JSON.parse(f.commonLockJsrContent), null, 2),
           },
           {
-            path: vars["common-lock-npm-path"],
+            path: vars.commonLockNpmPath.value,
             isReal: false,
             content: JSON.stringify(JSON.parse(f.commonLockNpmContent), null, 2),
           },
           {
-            path: vars["common-lock-https-path"],
+            path: vars.commonLockHttpsPath.value,
             isReal: false,
             content: JSON.stringify(JSON.parse(f.commonLockHttpsContent), null, 2),
           },
