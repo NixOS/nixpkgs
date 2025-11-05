@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lwc";
   version = "unstable-2022-07-26";
 
@@ -19,15 +19,14 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${src.rev}"
+    "-X=main.version=${finalAttrs.src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Live-updating version of the UNIX wc command";
     homepage = "https://github.com/timdp/lwc";
-    license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
+    license = lib.licenses.mit;
     mainProgram = "lwc";
   };
-}
+})
