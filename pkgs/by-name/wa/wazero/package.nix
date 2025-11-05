@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Zero dependency WebAssembly runtime for Go developers";
     homepage = "https://github.com/tetratelabs/wazero";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     changelog = "https://github.com/tetratelabs/wazero/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "wazero";
