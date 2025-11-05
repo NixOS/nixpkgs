@@ -50,7 +50,7 @@
     { ... }:
     ''
       machine.wait_for_unit("nginx.service")
-      machine.wait_for_unit("phpfpm-foobar.service")
+      machine.wait_for_unit("phpfpm-foobar.socket")
 
       # Check so we get an evaluated PHP back
       response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
