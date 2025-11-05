@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "48.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnote/${lib.versions.major version}/gnote-${version}.tar.xz";
     hash = "sha256-PIFooZ3mWJ+56O4RmkRUISOUHB6XSK79NooCjmclx4E=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnote";
     };
   };
 

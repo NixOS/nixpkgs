@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      desktopName = pname;
+      name = "ClassiCube";
+      desktopName = "ClassiCube";
       genericName = "Sandbox Block Game";
       exec = "ClassiCube";
       icon = "CCicon";
