@@ -10,19 +10,12 @@
   pkgsBuildTarget,
   targetPackages,
   # for testing
-  testers,
-  runCommand,
-  bintools,
-  skopeo,
-  clickhouse-backup,
   buildGo125Module,
+  callPackage,
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo125Module; };
-  clickhouse-backupTest = clickhouse-backup.override { buildGoModule = buildGo125Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -200,31 +193,10 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap skopeoTest;
-    tests = {
-      skopeo = testers.testVersion { package = skopeoTest; };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "go version";
-        version = "go${finalAttrs.version}";
-      };
-      # Picked clickhouse-backup as a package that sets CGO_ENABLED=0
-      # Running and outputting the right version proves a working ELF interpreter was picked
-      clickhouse-backup = testers.testVersion { package = clickhouse-backupTest; };
-      clickhouse-backup-is-pie = runCommand "has-pie" { meta.broken = stdenv.hostPlatform.isStatic; } ''
-        ${lib.optionalString (!isCross) ''
-          if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe clickhouse-backup} | grep -Fq "GCC: (GNU)"; then
-            echo "${lib.getExe clickhouse-backup} has a GCC .comment, but it should have used the internal go linker"
-            exit 1
-          fi
-        ''}
-        if ${lib.getExe' bintools "readelf"} -h ${lib.getExe clickhouse-backup} | grep -q "Type:.*DYN"; then
-          touch $out
-        else
-          echo "ERROR: clickhouse-backup is NOT PIE"
-          exit 1
-        fi
-      '';
+    inherit goBootstrap;
+    tests = callPackage ./tests.nix {
+      go = finalAttrs.finalPackage;
+      buildGoModule = buildGo125Module;
     };
   };
 
