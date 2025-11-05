@@ -90,7 +90,6 @@
 , "json-refs"
 , "json-server"
 , "jsonlint"
-, "jsonplaceholder"
 , "katex"
 , "lcov-result-merger"
 , "live-server"
