@@ -1,18 +1,42 @@
 {
+  python3Packages,
+  cmake,
+  pkg-config,
+  intltool,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
   lib,
   fetchurl,
-  pname,
-  version,
-  hash,
 }:
+python3Packages.buildPythonApplication rec {
 
-{
-  inherit pname version;
+  pname = "cdemu-client";
+  version = "3.2.5";
+
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
-    inherit hash;
+    url = "mirror://sourceforge/cdemu/cdemu-client-${version}.tar.xz";
+    hash = "sha256-py2F61v8vO0BCM18GCflAiD48deZjbMM6wqoCDZsOd8=";
   };
-  meta = with lib; {
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    intltool
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
+  dependencies = with python3Packages; [
+    dbus-python
+    pygobject3
+  ];
+
+  pyproject = false;
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  meta = {
     description = "Suite of tools for emulating optical drives and discs";
     longDescription = ''
       CDEmu consists of:
@@ -26,8 +50,8 @@
       Optical media emulated by CDemu can be mounted within Linux. Automounting is also allowed.
     '';
     homepage = "https://cdemu.sourceforge.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
 }
