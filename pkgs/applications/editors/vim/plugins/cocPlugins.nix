@@ -38,6 +38,7 @@
   coc-vimlsp,
   coc-vimtex,
   coc-wxml,
+  coc-yaml,
 }:
 final: prev: {
   coc-basedpyright = buildVimPlugin {
@@ -232,5 +233,10 @@ final: prev: {
   coc-wxml = buildVimPlugin {
     inherit (coc-wxml) pname version meta;
     src = "${coc-wxml}/lib/node_modules/coc-wxml";
+  };
+
+  coc-yaml = buildVimPlugin {
+    inherit (coc-yaml) pname version meta;
+    src = "${coc-yaml}/lib/node_modules/coc-yaml";
   };
 }

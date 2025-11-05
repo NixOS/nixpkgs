@@ -115,6 +115,7 @@ mapAliases {
   inherit (pkgs) coc-vimlsp; # Added 2025-11-05
   inherit (pkgs) coc-vimtex; # Added 2025-11-05
   inherit (pkgs) coc-wxml; # Added 2025-11-05
+  inherit (pkgs) coc-yaml; # Added 2025-11-05
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05

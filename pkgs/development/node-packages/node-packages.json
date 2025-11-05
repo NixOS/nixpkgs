@@ -25,7 +25,6 @@
 , "coc-ltex"
 , "coc-tsserver"
 , "coc-ultisnips"
-, "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
 , "conventional-changelog-cli"

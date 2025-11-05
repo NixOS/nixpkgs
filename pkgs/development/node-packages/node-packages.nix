@@ -24326,15 +24326,6 @@ let
         sha512 = "s/46sYeylUfHNjI+sA/78FAHlmIuKqI9wNnzEOGehAlUUYeObv5C2mOinXBjyUyWmJ2SfcS2/ydApH4hTF4WXQ==";
       };
     };
-    "prettier-2.0.5" = {
-      name = "prettier";
-      packageName = "prettier";
-      version = "2.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/prettier/-/prettier-2.0.5.tgz";
-        sha512 = "7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==";
-      };
-    };
     "prettier-2.8.8" = {
       name = "prettier";
       packageName = "prettier";
@@ -37071,27 +37062,6 @@ in
     meta = {
       description = "ultisnips source for coc.nvim";
       homepage = "https://github.com/neoclide/coc-sources#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-yaml = nodeEnv.buildNodePackage {
-    name = "coc-yaml";
-    packageName = "coc-yaml";
-    version = "1.9.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-yaml/-/coc-yaml-1.9.1.tgz";
-      sha512 = "PKDIWjnTF1193m0a5srO8oOLrOv9nKwaqka+a+sdzDjlyPoFipEADFUQVdoHwe1GYlfYe7tmfWOUCbR6ddRLrw==";
-    };
-    dependencies = [
-      sources."prettier-2.0.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "yaml extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-yaml#readme";
       license = "MIT";
     };
     production = true;

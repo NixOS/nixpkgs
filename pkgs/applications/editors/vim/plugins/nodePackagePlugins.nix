@@ -10,7 +10,6 @@ let
     "coc-ltex"
     "coc-tsserver"
     "coc-ultisnips"
-    "coc-yaml"
     "coc-yank"
     "coc-nginx"
   ];
