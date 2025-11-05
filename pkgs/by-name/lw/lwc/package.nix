@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Live-updating version of the UNIX wc command";
     homepage = "https://github.com/timdp/lwc";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     license = lib.licenses.mit;
     mainProgram = "lwc";
   };
