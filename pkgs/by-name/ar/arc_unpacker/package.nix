@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    ./fix-test-float-variance.patch
     (fetchpatch {
       name = "failing_tests.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/failing_tests.patch?h=arc_unpacker-git&id=bda1ad9f69e6802e703b2e6913d71a36d76cfef9";
@@ -88,8 +89,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # A few tests fail on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  doCheck = true;
 
   meta = with lib; {
     description = "Tool to extract files from visual novel archives";
@@ -98,8 +98,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;
     mainProgram = "arc_unpacker";
-
-    # unit test failures
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }
