@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.7";
+  version = "2.53.8";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QmYcxzsnbRDQdqkLh82OLWrLF6v3qzf1aOIcnz0kwEk=";
+    hash = "sha256-ynsu9jLGFtjlzmHZtOdLEH5G6eXFAhZs9UayYrmKqp0=";
   };
 
   strictDeps = true;
