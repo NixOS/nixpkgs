@@ -241,8 +241,11 @@ const fetcherTests: Array<Test> = [
       inHttpsJsonContent: `[
 {
   "url": "${PLACEHOLDER}/file1",
-  "hash": "hash1",
-  "hashAlgo": "sha256",
+  "hash": {
+    "string": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e",
+    "algorithm": "sha256",
+    "encoding": "hex"
+  },
   "meta": {
     "registry": "${PLACEHOLDER}"
   }
@@ -254,8 +257,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "${PLACEHOLDER}/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "${PLACEHOLDER}"
     },
@@ -280,8 +286,11 @@ const fetcherTests: Array<Test> = [
       inHttpsJsonContent: `[
 {
   "url": "${PLACEHOLDER}/file2",
-  "hash": "hash2",
-  "hashAlgo": "sha256",
+  "hash": {
+    "string": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722",
+    "algorithm": "sha256",
+    "encoding": "hex"
+  },
   "meta": {
     "registry": "${PLACEHOLDER}",
     "original_url": "original_url"
@@ -294,8 +303,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "original_url",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "${PLACEHOLDER}",
       "original_url": "original_url"
@@ -320,8 +332,11 @@ const fetcherTests: Array<Test> = [
       inNpmJsonContent: `[
   {
     "url": "${PLACEHOLDER}/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "JkkFrF7y7ChySIW5kkn6Jo7pa2V7Scn1SXka3ml2TipegmR8WCZ2MNvqfglYBa9O4KLpaLVjKXDds6NPgfdAkA==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -336,8 +351,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "9mKBVgc2lyyiv340Ivq962tLb3ikY/gzIfmRhVnmK8yXxAMfTat0en0vuaxYKPhDbzuTT+owU7IghIkry8UMXg==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -359,8 +377,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "${PLACEHOLDER}/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "JkkFrF7y7ChySIW5kkn6Jo7pa2V7Scn1SXka3ml2TipegmR8WCZ2MNvqfglYBa9O4KLpaLVjKXDds6NPgfdAkA==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -379,8 +400,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "9mKBVgc2lyyiv340Ivq962tLb3ikY/gzIfmRhVnmK8yXxAMfTat0en0vuaxYKPhDbzuTT+owU7IghIkry8UMXg==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -399,8 +423,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "@scope1/package1/registry.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "HJfXafivJOS+C7ZOGAXXpmYtUa86mstKBwPeYkjunEE=",
     "meta": {
       "registry": "npm",
@@ -416,8 +443,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "@scope2/package2/registry.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "zJgDfa3MO3f2+wwqhxdbP130NF+Yb52EaaLJTbCQhjY=",
     "meta": {
       "registry": "npm",
@@ -475,8 +505,11 @@ const fetcherTests: Array<Test> = [
       inNpmJsonContent: `[
   {
     "url": "${PLACEHOLDER}/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "JkkFrF7y7ChySIW5kkn6Jo7pa2V7Scn1SXka3ml2TipegmR8WCZ2MNvqfglYBa9O4KLpaLVjKXDds6NPgfdAkA==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -491,8 +524,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "9mKBVgc2lyyiv340Ivq962tLb3ikY/gzIfmRhVnmK8yXxAMfTat0en0vuaxYKPhDbzuTT+owU7IghIkry8UMXg==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -514,8 +550,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "${PLACEHOLDER}/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "JkkFrF7y7ChySIW5kkn6Jo7pa2V7Scn1SXka3ml2TipegmR8WCZ2MNvqfglYBa9O4KLpaLVjKXDds6NPgfdAkA==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -534,8 +573,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "9mKBVgc2lyyiv340Ivq962tLb3ikY/gzIfmRhVnmK8yXxAMfTat0en0vuaxYKPhDbzuTT+owU7IghIkry8UMXg==",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -554,8 +596,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "@scope1/package1/registry.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "HJfXafivJOS+C7ZOGAXXpmYtUa86mstKBwPeYkjunEE=",
     "meta": {
       "registry": "npm",
@@ -614,8 +659,11 @@ const fetcherTests: Array<Test> = [
       inJsrJsonContent: `[
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "7463bfae478fd913b87543c65ba4948bc8f66684b3bb1a68b8fe3eb26be37941",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -634,7 +682,7 @@ const fetcherTests: Array<Test> = [
       inServerFS: {
         "@scope/package/version1_meta.json": `{
   "manifest": {
-    "/file2": { "size": 1, "checksum": "hash2" }
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" }
   },
   "moduleGraph1": {
     "/file2": {}
@@ -649,8 +697,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "7463bfae478fd913b87543c65ba4948bc8f66684b3bb1a68b8fe3eb26be37941",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -669,8 +720,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -688,8 +742,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/meta.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "ZW_ALaNedyI3BN82yJBBmegi3i8hAtAwi2upi6efSPw=",
     "meta": {
       "registry": "jsr",
@@ -718,7 +775,7 @@ const fetcherTests: Array<Test> = [
 }`,
         "p9wCwr_piQ1Pg8bTBrhWua5JHdpQJZtcQKdMDG1F+Sc=": `{
   "manifest": {
-    "/file2": { "size": 1, "checksum": "hash2" }
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" }
   },
   "moduleGraph1": {
     "/file2": {}
@@ -737,8 +794,11 @@ const fetcherTests: Array<Test> = [
       inJsrJsonContent: `[
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "73dc853b1e4289c5aa743a462ca493aa052148ff722c853250c5d72a767f407c",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -753,8 +813,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version2_meta.json",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "7463bfae478fd913b87543c65ba4948bc8f66684b3bb1a68b8fe3eb26be37941",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -773,7 +836,7 @@ const fetcherTests: Array<Test> = [
       inServerFS: {
         "@scope/package/version1_meta.json": `{
   "manifest": {
-    "/file1": { "size": 1, "checksum": "hash2" }
+    "/file1": { "size": 1, "checksum": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e" }
   },
   "moduleGraph1": {
     "/file1": {}
@@ -784,7 +847,7 @@ const fetcherTests: Array<Test> = [
 }`,
         "@scope/package/version2_meta.json": `{
   "manifest": {
-    "/file2": { "size": 1, "checksum": "hash2" }
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" }
   },
   "moduleGraph1": {
     "/file2": {}
@@ -800,8 +863,11 @@ const fetcherTests: Array<Test> = [
 [
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "73dc853b1e4289c5aa743a462ca493aa052148ff722c853250c5d72a767f407c",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -820,8 +886,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file1",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -839,8 +908,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version2_meta.json",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "7463bfae478fd913b87543c65ba4948bc8f66684b3bb1a68b8fe3eb26be37941",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -859,8 +931,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version2/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version2",
@@ -878,8 +953,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/meta.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "ZW_ALaNedyI3BN82yJBBmegi3i8hAtAwi2upi6efSPw=",
     "meta": {
       "registry": "jsr",
@@ -909,7 +987,7 @@ const fetcherTests: Array<Test> = [
       outFetchedFilesFS: {
         "KQ5N5yM__YJBNzLFQdW_5QAD0gjbxac+y2HoBs6o0Ng=": `{
   "manifest": {
-    "/file2": { "size": 1, "checksum": "hash2" }
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" }
   },
   "moduleGraph1": {
     "/file2": {}
@@ -931,7 +1009,7 @@ const fetcherTests: Array<Test> = [
         "j0KcQTwaVwucALJk02QJBawei0tpH4IPEPjaKt37g+o=": `file2_content`,
         "p9wCwr_piQ1Pg8bTBrhWua5JHdpQJZtcQKdMDG1F+Sc=": `{
   "manifest": {
-    "/file1": { "size": 1, "checksum": "hash2" }
+    "/file1": { "size": 1, "checksum": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e" }
   },
   "moduleGraph1": {
     "/file1": {}
@@ -950,8 +1028,11 @@ const fetcherTests: Array<Test> = [
       inJsrJsonContent: `[
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "ca6f1cf6cba30b9d0bc6a6d118c4b769e4a380aeeaef18117125ccfaec8c91c2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -970,12 +1051,12 @@ const fetcherTests: Array<Test> = [
       inServerFS: {
         "@scope/package/version1_meta.json": `{
   "manifest": {
-    "/file1": { "size": 1, "checksum": "hash1" },
-    "/file2": { "size": 1, "checksum": "hash2" },
-    "/file3": { "size": 1, "checksum": "hash3" },
-    "/file4": { "size": 1, "checksum": "hash4" },
-    "/dir1/file1_1": { "size": 1, "checksum": "hash1_1" },
-    "/dir1/dir2/file2_1": { "size": 1, "checksum": "hash2_1" }
+    "/file1": { "size": 1, "checksum": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e" },
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" },
+    "/file3": { "size": 1, "checksum": "7acada80e8c3caff3753cffe872dd6308c70dcbccb81b4dd22c3e7c4d0dda085" },
+    "/file4": { "size": 1, "checksum": "ef994240619c32739ccdbac1e46c648310ef82ccefb4ebc6efeefb64f4906722" },
+    "/dir1/file1_1": { "size": 1, "checksum": "70da57b4041e8e52a0ca0984f83a8017a4dc8bcd29dfefa695d731a22e9f7146" },
+    "/dir1/dir2/file2_1": { "size": 1, "checksum": "823a1df28cb774b767de69a2b73bcfa28e4c3ce40791b3ca51e11515aa42a526" }
   },
   "moduleGraph2": {
     "/file1": {
@@ -1022,8 +1103,11 @@ const fetcherTests: Array<Test> = [
       outJsrJsonContent: `[
   {
     "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "ca6f1cf6cba30b9d0bc6a6d118c4b769e4a380aeeaef18117125ccfaec8c91c2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -1042,8 +1126,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1061,8 +1148,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/dir1/file1_1",
-    "hash": "hash1_1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "70da57b4041e8e52a0ca0984f83a8017a4dc8bcd29dfefa695d731a22e9f7146",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1080,8 +1170,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file4",
-    "hash": "hash4",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "ef994240619c32739ccdbac1e46c648310ef82ccefb4ebc6efeefb64f4906722",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1099,8 +1192,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1118,8 +1214,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/file3",
-    "hash": "hash3",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "7acada80e8c3caff3753cffe872dd6308c70dcbccb81b4dd22c3e7c4d0dda085",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1137,8 +1236,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/version1/dir1/dir2/file2_1",
-    "hash": "hash2_1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "823a1df28cb774b767de69a2b73bcfa28e4c3ce40791b3ca51e11515aa42a526",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "packageSpecifier": {
         "fullString": "@scope/package@version1",
@@ -1156,8 +1258,11 @@ const fetcherTests: Array<Test> = [
   },
   {
     "url": "${PLACEHOLDER}/@scope/package/meta.json",
-    "hash": "",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "outPath": "ZW_ALaNedyI3BN82yJBBmegi3i8hAtAwi2upi6efSPw=",
     "meta": {
       "registry": "jsr",
@@ -1183,12 +1288,12 @@ const fetcherTests: Array<Test> = [
         "umK2ZgwajOgbColbdZe8DkUwB1GO0xT6DemFRluvwD0=": `file2_1_content`,
         "p9wCwr_piQ1Pg8bTBrhWua5JHdpQJZtcQKdMDG1F+Sc=": `{
   "manifest": {
-    "/file1": { "size": 1, "checksum": "hash1" },
-    "/file2": { "size": 1, "checksum": "hash2" },
-    "/file3": { "size": 1, "checksum": "hash3" },
-    "/file4": { "size": 1, "checksum": "hash4" },
-    "/dir1/file1_1": { "size": 1, "checksum": "hash1_1" },
-    "/dir1/dir2/file2_1": { "size": 1, "checksum": "hash2_1" }
+    "/file1": { "size": 1, "checksum": "72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e" },
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" },
+    "/file3": { "size": 1, "checksum": "7acada80e8c3caff3753cffe872dd6308c70dcbccb81b4dd22c3e7c4d0dda085" },
+    "/file4": { "size": 1, "checksum": "ef994240619c32739ccdbac1e46c648310ef82ccefb4ebc6efeefb64f4906722" },
+    "/dir1/file1_1": { "size": 1, "checksum": "70da57b4041e8e52a0ca0984f83a8017a4dc8bcd29dfefa695d731a22e9f7146" },
+    "/dir1/dir2/file2_1": { "size": 1, "checksum": "823a1df28cb774b767de69a2b73bcfa28e4c3ce40791b3ca51e11515aa42a526" }
   },
   "moduleGraph2": {
     "/file1": {
