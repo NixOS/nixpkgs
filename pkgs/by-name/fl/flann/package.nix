@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
       sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
     })
+    # Fix cmake4 build: https://github.com/flann-lib/flann/pull/480
+    (fetchpatch {
+      name = "fix-cmake4-build.patch";
+      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
+      sha256 = "sha256-wj1z3Z1eTvvKEeWiqPHbNZkF1hsruh4AZ22ALbRWi8M=";
+      includes = [ "CMakeLists.txt" ];
+      hunks = [ "1" ];
+    })
   ]
   ++ lib.optionals (!stdenv.cc.isClang) [
     # Avoid the bundled version of LZ4 and instead use the system one.
@@ -42,8 +50,10 @@ stdenv.mkDerivation rec {
     })
     # Fix LZ4 string separator issue, see: https://github.com/flann-lib/flann/pull/480
     (fetchpatch {
+      name = "fix-lz4-string-separator.patch";
       url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
-      sha256 = "qt8h576Gn8uR7+T9u9bEBIRz6e6AoTKpa1JfdZVvW9s=";
+      sha256 = "sha256-iIztL1LtAO427SD12q2TV2HgMiFysQ4di2AEpUoMKfY=";
+      hunks = [ "2-" ];
     })
   ]
   ++ lib.optionals stdenv.cc.isClang [
