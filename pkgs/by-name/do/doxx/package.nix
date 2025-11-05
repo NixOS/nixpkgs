@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "doxx";
-  version = "0-unstable-2025-08-18";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
