@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ruff-api";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amyreese";
