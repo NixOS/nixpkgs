@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI tool to insert lines when command output stops";
     homepage = "https://github.com/hionay/tailer";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     license = lib.licenses.mit;
     mainProgram = "tailer";
   };
