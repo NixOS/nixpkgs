@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -26,16 +25,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.50.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vyRvBCpWOKeI7Y+RbxCdVCAF45vWjC7ZD4PCS0QloPg=";
+    hash = "sha256-aIe+s1Zw6J2Indh0+QmvvykRHx4S2sWqHJxodtQoAQY=";
   };
 
-  cargoHash = "sha256-4Nsq5Ta08wlHuevOfrr1mPi+qY+49q9S+AtbY35sfEM=";
+  cargoHash = "sha256-LqvXWIsSDzGznyIr1kyNU5e8rUSyoAiRn/4Nc9rzvM0=";
 
   nativeBuildInputs = [
     pkg-config
