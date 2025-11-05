@@ -37038,27 +37038,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-sumneko-lua = nodeEnv.buildNodePackage {
-    name = "coc-sumneko-lua";
-    packageName = "coc-sumneko-lua";
-    version = "0.0.42";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-sumneko-lua/-/coc-sumneko-lua-0.0.42.tgz";
-      sha512 = "elUmSurb51E17VV/1W/qsAoD5qq6pFsnRK549WFMcG+AThli6nTj2Y6Ta0FA6+zh7QSjbraOlza8gk7C2w3Nfg==";
-    };
-    dependencies = [
-      sources."tslib-2.8.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Lua extension using sumneko lua-language-server for coc.nvim";
-      homepage = "https://github.com/xiyaowong/coc-sumneko-lua#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-tabnine = nodeEnv.buildNodePackage {
     name = "coc-tabnine";
     packageName = "coc-tabnine";

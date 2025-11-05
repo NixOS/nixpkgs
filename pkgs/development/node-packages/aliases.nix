@@ -105,6 +105,7 @@ mapAliases {
   inherit (pkgs) coc-spell-checker; # added 2025-10-01
   inherit (pkgs) coc-sqlfluff; # Added 2025-11-05
   inherit (pkgs) coc-stylelint; # Added 2025-11-05
+  inherit (pkgs) coc-sumneko-lua; # Added 2025-11-05
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18

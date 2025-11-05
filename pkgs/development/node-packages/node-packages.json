@@ -23,7 +23,6 @@
 , "clipboard-cli"
 , "coc-go"
 , "coc-ltex"
-, "coc-sumneko-lua"
 , "coc-tabnine"
 , "coc-texlab"
 , "coc-tsserver"

@@ -29,8 +29,9 @@
   coc-snippets,
   coc-solargraph,
   coc-spell-checker,
-  coc-stylelint,
   coc-sqlfluff,
+  coc-stylelint,
+  coc-sumneko-lua,
   coc-toml,
 }:
 final: prev: {
@@ -182,14 +183,19 @@ final: prev: {
     src = "${coc-spell-checker}/lib/node_modules/coc-spell-checker";
   };
 
+  coc-sqlfluff = buildVimPlugin {
+    inherit (coc-sqlfluff) pname version meta;
+    src = "${coc-sqlfluff}/lib/node_modules/coc-sqlfluff";
+  };
+
   coc-stylelint = buildVimPlugin {
     inherit (coc-stylelint) pname version meta;
     src = "${coc-stylelint}/lib/node_modules/coc-stylelint";
   };
 
-  coc-sqlfluff = buildVimPlugin {
-    inherit (coc-sqlfluff) pname version meta;
-    src = "${coc-sqlfluff}/lib/node_modules/coc-sqlfluff";
+  coc-sumneko-lua = buildVimPlugin {
+    inherit (coc-sumneko-lua) pname version meta;
+    src = "${coc-sumneko-lua}/lib/node_modules/coc-sumneko-lua";
   };
 
   coc-toml = buildVimPlugin {

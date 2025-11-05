@@ -8,7 +8,6 @@ let
   nodePackageNames = [
     "coc-go"
     "coc-ltex"
-    "coc-sumneko-lua"
     "coc-tabnine"
     "coc-texlab"
     "coc-tsserver"
