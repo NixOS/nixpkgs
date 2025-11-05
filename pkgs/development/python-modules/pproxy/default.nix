@@ -28,7 +28,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   optional-dependencies = {
-    accelerated = [ pycryptodome uvloop ];
+    accelerated = [
+      pycryptodome
+      uvloop
+    ];
     sshtunnel = [ asyncssh ];
     quic = [ aioquic ];
     daemon = [ python-daemon ];
