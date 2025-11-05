@@ -85,9 +85,9 @@ function fixtureFrom(
     inputs: {
       args: [
         bin,
-        "common-lock-jsr-path",
+        "--common-lock-jsr-path",
         vars["common-lock-jsr-path"],
-        "common-lock-https-path",
+        "--common-lock-https-path",
         vars["common-lock-https-path"],
         "--deno-dir-path",
         vars["deno-dir-path"],
@@ -132,7 +132,7 @@ function fixtureFrom(
   };
 }
 
-const lockfileTransformerTests: Array<Test> = [
+const fileStructureTransformerVendorTests: Array<Test> = [
   {
     name: "jsr_2_files_1_package",
     fixture: fixtureFrom(
@@ -259,4 +259,4 @@ const lockfileTransformerTests: Array<Test> = [
   },
 ];
 
-runTests(lockfileTransformerTests);
+runTests(fileStructureTransformerVendorTests);

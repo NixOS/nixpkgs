@@ -121,8 +121,8 @@ function _fixtureFrom(
   }
 
   const vars: Vars = {
-    "in-path": "./npm.json",
-    "cache-path": "./deno-cache",
+    "common-lock-npm-path": "./npm.json",
+    "deno-dir-path": "./deno-cache",
   };
 
   checkFilesFs(f);
@@ -169,7 +169,7 @@ function _fixtureFrom(
   };
 }
 
-const lockfileTransformerTests: Array<Test> = [
+const fileStructureTransformerNpmTests: Array<Test> = [
   {
     name: "normal",
     ...fixtureFrom(
@@ -271,4 +271,4 @@ const lockfileTransformerTests: Array<Test> = [
   },
 ];
 
-runTests(lockfileTransformerTests);
+runTests(fileStructureTransformerNpmTests);
