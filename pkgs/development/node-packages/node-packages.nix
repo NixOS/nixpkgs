@@ -37077,24 +37077,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-vimtex = nodeEnv.buildNodePackage {
-    name = "coc-vimtex";
-    packageName = "coc-vimtex";
-    version = "1.1.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-vimtex/-/coc-vimtex-1.1.5.tgz";
-      sha512 = "3SY6vFcmBO8u6/6zrBzqgwCbus8k7877UCNVEua8lgC+T4tKgB4w9VthikMEcoUDPK17/QbLITSB+yPDNebbHw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "vimtex integration for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-vimtex#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-wxml = nodeEnv.buildNodePackage {
     name = "coc-wxml";
     packageName = "coc-wxml";

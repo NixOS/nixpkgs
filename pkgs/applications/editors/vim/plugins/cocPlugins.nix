@@ -36,6 +36,7 @@
   coc-texlab,
   coc-toml,
   coc-vimlsp,
+  coc-vimtex,
 }:
 final: prev: {
   coc-basedpyright = buildVimPlugin {
@@ -220,5 +221,10 @@ final: prev: {
   coc-vimlsp = buildVimPlugin {
     inherit (coc-vimlsp) pname version meta;
     src = "${coc-vimlsp}/lib/node_modules/coc-vimlsp";
+  };
+
+  coc-vimtex = buildVimPlugin {
+    inherit (coc-vimtex) pname version meta;
+    src = "${coc-vimtex}/lib/node_modules/coc-vimtex";
   };
 }
