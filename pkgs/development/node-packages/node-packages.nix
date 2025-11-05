@@ -32525,15 +32525,6 @@ let
         sha512 = "6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==";
       };
     };
-    "vscode-jsonrpc-8.2.0" = {
-      name = "vscode-jsonrpc";
-      packageName = "vscode-jsonrpc";
-      version = "8.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-jsonrpc/-/vscode-jsonrpc-8.2.0.tgz";
-        sha512 = "C+r0eKJUIfiDIfwJhria30+TYWPtuHJXHtI7J0YlOmKAo7ogxP20T0zxB7HZQIFhIyvoBPwWskjxrvAtfjyZfA==";
-      };
-    };
     "vscode-jsonrpc-8.2.1" = {
       name = "vscode-jsonrpc";
       packageName = "vscode-jsonrpc";
@@ -32595,15 +32586,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.17.3.tgz";
         sha512 = "924/h0AqsMtA5yK22GgMtCYiMdCOtWTSGgUOkgEDX+wk2b0x4sAfLiO4NxBxqbiVtz7K7/1/RgVrVI0NClZwqA==";
-      };
-    };
-    "vscode-languageserver-protocol-3.17.5" = {
-      name = "vscode-languageserver-protocol";
-      packageName = "vscode-languageserver-protocol";
-      version = "3.17.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.17.5.tgz";
-        sha512 = "mb1bvRJN8SVznADSGWM9u/b07H7Ecg0I3OgXDuLdn307rl/J3A9YD6/eYOssqhecL27hK1IPZAsaqh00i/Jljg==";
       };
     };
     "vscode-languageserver-textdocument-1.0.11" = {
@@ -37672,29 +37654,6 @@ in
       description = "Grammar/spell checker using LanguageTool with support for LaTeX, Markdown, and others";
       homepage = "https://valentjn.github.io/ltex";
       license = "MPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-r-lsp = nodeEnv.buildNodePackage {
-    name = "coc-r-lsp";
-    packageName = "coc-r-lsp";
-    version = "1.2.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-r-lsp/-/coc-r-lsp-1.2.1.tgz";
-      sha512 = "SOsCwIuQeE4eiX/Scgs2nL1WnR0JwFZ2/Edh3dx5ijmZSlEPxdc0PnMUN0hT9y96jK5/ZHAByC3qEperpWqPUA==";
-    };
-    dependencies = [
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-textdocument-1.0.12"
-      sources."vscode-languageserver-types-3.17.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "R language server extension for coc.nvim";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

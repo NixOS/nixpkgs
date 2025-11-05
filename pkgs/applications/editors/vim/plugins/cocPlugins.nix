@@ -22,6 +22,7 @@
   coc-pairs,
   coc-prettier,
   coc-pyright,
+  coc-r-lsp,
   coc-sh,
   coc-spell-checker,
   coc-toml,
@@ -136,6 +137,11 @@ final: prev: {
     pname = "coc-pyright";
     inherit (coc-pyright) version meta;
     src = "${coc-pyright}/lib/node_modules/coc-pyright";
+  };
+
+  coc-r-lsp = buildVimPlugin {
+    inherit (coc-r-lsp) pname version meta;
+    src = "${coc-r-lsp}/lib/node_modules/coc-r-lsp";
   };
 
   coc-sh = buildVimPlugin {
