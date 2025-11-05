@@ -34,7 +34,7 @@
 }:
 let
   pnpm = pnpm_10;
-  version = "2.0.1";
+  version = "2.2.2";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -108,14 +108,14 @@ let
     owner = "immich-app";
     repo = "immich";
     tag = "v${version}";
-    hash = "sha256-lpFUjjS7Q2F/Uhog1NdJ8vaVIGjmZM9ZWxW5d0zoQsc=";
+    hash = "sha256-0ibXs4c61CEp6s/gOCsIj2A7VTnA+72jTMXoo4kkt74=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     pname = "immich";
     inherit version src;
     fetcherVersion = 2;
-    hash = "sha256-+CwwTqjI+xOGCAb66lZplNMBwR2xJZBs6E0OyGHbSAE=";
+    hash = "sha256-igkO0ID0/9uPtFAXL2v5bcFbCpZK2lcYEctWBKtFKdU=";
   };
 
   web = stdenv.mkDerivation {
