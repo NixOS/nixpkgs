@@ -21,7 +21,6 @@
 , "browser-sync"
 , "cdk8s-cli"
 , "clipboard-cli"
-, "coc-flutter"
 , "coc-go"
 , "coc-haxe"
 , "coc-highlight"

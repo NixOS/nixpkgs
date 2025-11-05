@@ -9,6 +9,7 @@
   coc-emmet,
   coc-eslint,
   coc-explorer,
+  coc-flutter,
   coc-git,
   coc-pyright,
   coc-sh,
@@ -59,6 +60,11 @@ final: prev: {
   coc-explorer = buildVimPlugin {
     inherit (coc-explorer) pname version meta;
     src = "${coc-explorer}/lib/node_modules/coc-explorer";
+  };
+
+  coc-flutter = buildVimPlugin {
+    inherit (coc-flutter) pname version meta;
+    src = "${coc-flutter}/lib/node_modules/coc-flutter";
   };
 
   coc-git = buildVimPlugin {

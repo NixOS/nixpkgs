@@ -37643,23 +37643,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-flutter = nodeEnv.buildNodePackage {
-    name = "coc-flutter";
-    packageName = "coc-flutter";
-    version = "1.9.10";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-flutter/-/coc-flutter-1.9.10.tgz";
-      sha512 = "Of3V4dn76ZdBp0ZjUq0c600Z1IMzT9k6574a7V/pnxMIb1gYP8+MgDqO1Mw/YzNTU/ovXQLb2zGJm6UnJhgQ3g==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "flutter support for (Neo)vim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-go = nodeEnv.buildNodePackage {
     name = "coc-go";
     packageName = "coc-go";
