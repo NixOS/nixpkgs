@@ -5,6 +5,7 @@
   fetchpatch,
   cmake,
   makeWrapper,
+  ninja,
   boost,
   libpng,
   libiconv,
@@ -54,6 +55,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     makeWrapper
+    ninja
     catch2
   ];
 
