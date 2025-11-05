@@ -145,6 +145,7 @@ mapAliases {
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
+  inherit (pkgs) jsonplaceholder; # Added 2025-11-04
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
