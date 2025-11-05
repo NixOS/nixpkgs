@@ -11,7 +11,8 @@ lib.makeOverridable (
     repo,
     tag ? null,
     rev ? null,
-    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "github",
+    # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
+    # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
     fetchSubmodules ? false,
     leaveDotGit ? null,
     deepClone ? false,
@@ -110,9 +111,8 @@ lib.makeOverridable (
 
     gitRepoUrl = "${baseUrl}.git";
 
-    revWithTag = if tag != null then "refs/tags/${tag}" else rev;
-
     fetcherArgs =
+      finalAttrs:
       passthruAttrs
       // (
         if useFetchGit then
@@ -127,9 +127,19 @@ lib.makeOverridable (
               ;
             url = gitRepoUrl;
             inherit passthru;
+            derivationArgs = {
+              inherit
+                githubBase
+                owner
+                repo
+                ;
+            };
           }
           // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
+          let
+            revWithTag = finalAttrs.rev;
+          in
           {
             # Use the API endpoint for private repos, as the archive URI doesn't
             # support access with GitHub's fine-grained access tokens.
@@ -139,7 +149,7 @@ lib.makeOverridable (
             url =
               if private then
                 let
-                  endpoint = "/repos/${owner}/${repo}/tarball/${revWithTag}";
+                  endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
                 in
                 if githubBase == "github.com" then
                   "https://api.github.com${endpoint}"
@@ -148,7 +158,19 @@ lib.makeOverridable (
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-
+            derivationArgs = {
+              inherit
+                githubBase
+                owner
+                repo
+                tag
+                ;
+              rev = fetchgit.getRevWithTag {
+                inherit (finalAttrs) tag;
+                rev = finalAttrs.revCustom;
+              };
+              revCustom = rev;
+            };
             passthru = {
               inherit gitRepoUrl;
             }
@@ -157,14 +179,13 @@ lib.makeOverridable (
       )
       // privateAttrs
       // {
-        inherit name;
+        # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
+        name =
+          args.name
+            or (repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
+        meta = newMeta;
       };
   in
 
   fetcher fetcherArgs
-  // {
-    meta = newMeta;
-    inherit owner repo tag;
-    rev = revWithTag;
-  }
 )
