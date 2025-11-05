@@ -163,16 +163,16 @@ def _build_system(
                 flake,
                 build_host,
                 eval_flags=flake_common_flags,
-                flake_build_flags=flake_build_flags
-                | {"no_link": no_link, "dry_run": dry_run},
+                flake_build_flags={"no_link": no_link, "dry_run": dry_run}
+                | flake_build_flags,
                 copy_flags=copy_flags,
             )
         case (None, Flake(_)):
             path_to_config = nix.build_flake(
                 attr,
                 flake,
-                flake_build_flags=flake_build_flags
-                | {"no_link": no_link, "dry_run": dry_run},
+                flake_build_flags={"no_link": no_link, "dry_run": dry_run}
+                | flake_build_flags,
             )
         case (Remote(_), None):
             path_to_config = nix.build_remote(
@@ -187,7 +187,7 @@ def _build_system(
             path_to_config = nix.build(
                 attr,
                 build_attr,
-                build_flags=build_flags | {"no_out_link": no_link, "dry_run": dry_run},
+                build_flags={"no_out_link": no_link, "dry_run": dry_run} | build_flags,
             )
 
     # In dry_run mode there is nothing to copy

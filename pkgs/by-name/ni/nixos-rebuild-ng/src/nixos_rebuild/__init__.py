@@ -275,6 +275,8 @@ def execute(argv: list[str]) -> None:
     flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
     flake_build_flags = common_build_flags | flake_common_flags
     copy_flags = common_flags | vars(args_groups["copy_flags"])
+    if build_flags.get("no_build_output"):
+        flake_build_flags = flake_build_flags | {"no_link": True}
 
     if args.upgrade or args.upgrade_all:
         nix.upgrade_channels(args.upgrade_all, args.sudo)
