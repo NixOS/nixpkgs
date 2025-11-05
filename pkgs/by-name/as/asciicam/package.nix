@@ -17,16 +17,14 @@ buildGoModule {
 
   vendorHash = "sha256-Qnt1wo/yKC3Ce4JoZBIWtXyzlkh4bWz9vyE349iRsjk=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Displays your webcam on the terminal";
     homepage = "https://github.com/muesli/asciicam";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "asciicam";
+    platforms = lib.platforms.linux;
   };
 }

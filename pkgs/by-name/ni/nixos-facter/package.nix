@@ -24,16 +24,16 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     tag = "v${version}";
-    hash = "sha256-4kER7CyFvMKVpKxCYHuf9fkkYVzVK9AWpF55cBNzPc0=";
+    hash = "sha256-oMOiZhppyUwyhLMtTofmeQINi8rHwsuQ1cD8Kr1/KwM=";
   };
 
-  vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";
+  vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
 
   env.CGO_ENABLED = 1;
 
