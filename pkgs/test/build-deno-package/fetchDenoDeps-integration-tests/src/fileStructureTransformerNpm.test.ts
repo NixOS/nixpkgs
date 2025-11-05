@@ -5,13 +5,12 @@ import {
   runTests,
   virtualFileToFs,
 } from "./utils.ts";
-import {
+import type {
   Fixture,
   NestedVirtualFS,
   SetupFn,
   Test,
   Vars,
-  VirtualFile,
   VirtualFS,
 } from "./types.d.ts";
 
@@ -64,7 +63,7 @@ function createArchives(f: FileStructureTransformerFixture): SetupFn {
 
 function fixtureFrom(
   f: FileStructureTransformerFixture,
-): { fixture: Fixture; setupFn: SetupFn } {
+): Omit<Test, "name"> {
   return {
     fixture: _fixtureFrom(f),
     setupFn: createArchives(f),

@@ -1,18 +1,12 @@
 import {
-  argsToCommand,
   assertEq,
-  dec,
   globalPathPrefix,
   runTests,
-  virtualFileToFs,
 } from "./utils.ts";
-import {
+import type {
   Fixture,
-  NestedVirtualFS,
-  SetupFn,
   Test,
   Vars,
-  VirtualFile,
   VirtualFS,
 } from "./types.d.ts";
 
