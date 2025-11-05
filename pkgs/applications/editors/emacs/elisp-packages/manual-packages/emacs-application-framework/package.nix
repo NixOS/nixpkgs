@@ -36,7 +36,7 @@ let
     )
   ]
   ++ appPythonDeps;
-  pythonPkgs = ps: builtins.concatLists (map (f: f ps) pythonPackageLists);
+  pythonPkgs = ps: builtins.concatMap (f: f ps) pythonPackageLists;
   pythonEnv = python3.withPackages pythonPkgs;
 
   wmctrlExe = lib.getExe wmctrl;

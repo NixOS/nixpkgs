@@ -234,7 +234,7 @@ in
               type:
               if builtins.hasAttr type interfaceKernelModules then interfaceKernelModules."${type}" else [ ];
           in
-          lib.flatten (builtins.map enableModule initrdInterfaceTypes);
+          lib.concatMap enableModule initrdInterfaceTypes;
 
         systemd = {
           storePaths = [

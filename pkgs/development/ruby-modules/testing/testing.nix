@@ -42,16 +42,14 @@ let
   run =
     name: under: tests:
     if isList tests then
-      (concatLists (map (run name under) tests))
+      (concatMap (run name under) tests)
     else if isAttrs tests then
-      (concatLists (
-        map (
-          subName:
-          run (name + "." + subName) (if hasAttr subName under then getAttr subName under else "<MISSING!>") (
-            getAttr subName tests
-          )
-        ) (attrNames tests)
-      ))
+      (concatMap (
+        subName:
+        run (name + "." + subName) (if hasAttr subName under then getAttr subName under else "<MISSING!>") (
+          getAttr subName tests
+        )
+      ) (attrNames tests))
     else if isFunction tests then
       let
         res = tests under;

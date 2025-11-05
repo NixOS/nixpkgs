@@ -3,7 +3,7 @@
 { lib, stdenv }:
 let
   inherit (lib)
-    flatten
+    concatMap
     head
     optionals
     optionalString
@@ -18,7 +18,7 @@ in
     mods: modsDatFile: # a list of mod derivations
     let
       recursiveDeps = modDrv: [ modDrv ] ++ map recursiveDeps modDrv.deps;
-      modDrvs = unique (flatten (map recursiveDeps mods));
+      modDrvs = unique (concatMap recursiveDeps mods);
     in
     stdenv.mkDerivation {
       name = "factorio-mod-directory";

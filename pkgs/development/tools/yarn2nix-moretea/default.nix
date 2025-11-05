@@ -333,7 +333,7 @@ rec {
       baseName = unlessNull name "${safeName}-${version}";
 
       workspaceDependenciesTransitive = lib.unique (
-        (lib.flatten (map (dep: dep.workspaceDependencies) workspaceDependencies)) ++ workspaceDependencies
+        (lib.concatMap (dep: dep.workspaceDependencies) workspaceDependencies) ++ workspaceDependencies
       );
 
       deps = mkYarnModules {

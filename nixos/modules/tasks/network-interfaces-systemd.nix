@@ -21,8 +21,8 @@ let
   dhcpStr = useDHCP: boolToYesNo (useDHCP == true || useDHCP == null);
 
   slaves =
-    concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
-    ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
+    concatMap (bond: bond.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (bridge: bridge.interfaces) (attrValues cfg.bridges)
     ++ map (sit: sit.dev) (attrValues cfg.sits)
     ++ map (ipip: ipip.dev) (attrValues cfg.ipips)
     ++ map (gre: gre.dev) (attrValues cfg.greTunnels)

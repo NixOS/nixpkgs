@@ -161,7 +161,7 @@ in
             ...
           }:
           filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (attrValues root)));
-        configuredKeys = flatten (map extract relevantExtractions);
+        configuredKeys = concatMap extract relevantExtractions;
         itemize = xs: concatLines (map (x: " - ${x}") xs);
         descriptions = map (x: "`${x.description}`");
         missingKeys = filter (key: !builtins.elem key configuredKeys) (map (x: x.peer) cfg.settings.peers);

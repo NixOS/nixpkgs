@@ -167,8 +167,8 @@ assert builtins.elem variant [
 
 let
   inherit (lib)
-    flatten
     flip
+    concatMap
     concatMapStrings
     concatStringsSep
     getDev
@@ -250,8 +250,8 @@ let
   # See `postPatch` for details
   kdeDeps = symlinkJoin {
     name = "libreoffice-kde-dependencies-${version}";
-    paths = flatten (
-      map
+    paths =
+      concatMap
         (e: [
           (getDev e)
           (getLib e)
@@ -264,8 +264,7 @@ let
           kdePackages.ki18n
           kdePackages.kio
           kdePackages.kwindowsystem
-        ]
-    );
+        ];
   };
   tarballPath = "external/tarballs";
 

@@ -1484,7 +1484,7 @@ in
         description = "Nginx Web Server";
         wantedBy = [ "multi-user.target" ];
         wants = lib.optionals (!cfg.enableReload) (
-          concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames)
+          concatMap (certName: [ "acme-${certName}.service" ]) vhostCertNames
         );
         after = [
           "network.target"

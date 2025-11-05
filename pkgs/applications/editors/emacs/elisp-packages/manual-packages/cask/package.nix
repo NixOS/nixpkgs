@@ -22,7 +22,7 @@ let
     pkg:
     let
       direct = builtins.filter (x: x != null) (pkg.packageRequires or [ ]);
-      indirect = builtins.concatLists (map getAllDependenciesOfPkg direct);
+      indirect = builtins.concatMap getAllDependenciesOfPkg direct;
     in
     lib.unique (direct ++ indirect);
 in

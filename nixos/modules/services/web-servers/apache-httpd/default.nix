@@ -912,7 +912,7 @@ in
     systemd.services.httpd = {
       description = "Apache HTTPD";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
+      wants = concatMap (certName: [ "acme-${certName}.service" ]) vhostCertNames;
       after = [
         "network.target"
       ]

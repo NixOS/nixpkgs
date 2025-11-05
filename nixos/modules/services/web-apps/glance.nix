@@ -9,6 +9,7 @@ let
 
   inherit (lib)
     catAttrs
+    concatMap
     concatMapStrings
     getExe
     mkEnableOption
@@ -19,7 +20,6 @@ let
     ;
 
   inherit (builtins)
-    concatLists
     isAttrs
     isList
     attrNames
@@ -191,9 +191,9 @@ in
                 if data ? _secret then
                   [ data ]
                 else
-                  concatLists (map (attr: findSecrets (getAttr attr data)) (attrNames data))
+                  concatMap (attr: findSecrets (getAttr attr data)) (attrNames data)
               else if isList data then
-                concatLists (map findSecrets data)
+                concatMap findSecrets data
               else
                 [ ];
             secretPaths = catAttrs "_secret" (findSecrets cfg.settings);

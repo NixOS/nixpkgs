@@ -10,6 +10,7 @@ let
     addErrorContext
     attrNames
     concatLists
+    concatMap
     const
     filter
     genericClosure
@@ -56,7 +57,7 @@ let
     else if isDerivation x then
       optional (canEval x.drvPath) x
     else if isList x then
-      concatLists (map derivationsIn' x)
+      concatMap derivationsIn' x
     else if isAttrs x then
       concatLists (
         mapAttrsToList (n: v: addErrorContext "while finding tarballs in '${n}':" (derivationsIn' v)) x
@@ -95,7 +96,7 @@ let
     else if isDerivation x then
       optional (canEval x.drvPath) x
     else if isList x then
-      concatLists (map derivationsIn x)
+      concatMap derivationsIn x
     else
       [ ];
 

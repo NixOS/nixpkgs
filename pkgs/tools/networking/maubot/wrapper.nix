@@ -16,7 +16,7 @@ let
     }:
     let
       plugins' = plugins unwrapped.plugins;
-      extraPythonPackages = builtins.concatLists (map (p: p.propagatedBuildInputs or [ ]) plugins');
+      extraPythonPackages = builtins.concatMap (p: p.propagatedBuildInputs or [ ]) plugins';
     in
     symlinkJoin {
       name = "${unwrapped.pname}-with-plugins-${unwrapped.version}";

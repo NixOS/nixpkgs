@@ -70,13 +70,13 @@ let
       [ dep ]
       ++ (
         if builtins.hasAttr "propagatedBuildInputs" dep then
-          lib.unique (builtins.concatLists (map transitiveClosure dep.propagatedBuildInputs))
+          lib.unique (builtins.concatMap transitiveClosure dep.propagatedBuildInputs)
         else
           [ ]
       );
 
   allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs);
-  transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs));
+  transitiveDeps = lib.unique (builtins.concatMap transitiveClosure allInputs);
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)
   patch_names =
