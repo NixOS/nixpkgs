@@ -37668,40 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-java = nodeEnv.buildNodePackage {
-    name = "coc-java";
-    packageName = "coc-java";
-    version = "1.26.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-java/-/coc-java-1.26.1.tgz";
-      sha512 = "1hKYhoTtfhVV+tEo/hdWnDMEMMZxSI++wzku/uVPkdqKa69RPUKpSbytFoNoAJYh+Ad2gPOGJWMF7NDJApbkUA==";
-    };
-    dependencies = [
-      sources."anymatch-3.1.3"
-      sources."binary-extensions-2.3.0"
-      sources."braces-3.0.3"
-      sources."chokidar-3.6.0"
-      sources."fill-range-7.1.1"
-      sources."glob-parent-5.1.2"
-      sources."is-binary-path-2.1.0"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."normalize-path-3.0.0"
-      sources."picomatch-2.3.1"
-      sources."readdirp-3.6.0"
-      sources."to-regex-range-5.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Java language extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-java#readme";
-      license = "EPL-1.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-jest = nodeEnv.buildNodePackage {
     name = "coc-jest";
     packageName = "coc-jest";

@@ -7,7 +7,6 @@ final: prev:
 let
   nodePackageNames = [
     "coc-go"
-    "coc-java"
     "coc-jest"
     "coc-json"
     "coc-lists"
