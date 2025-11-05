@@ -20,6 +20,7 @@
   coc-lists,
   coc-markdownlint,
   coc-pairs,
+  coc-prettier,
   coc-pyright,
   coc-sh,
   coc-spell-checker,
@@ -124,6 +125,11 @@ final: prev: {
   coc-pairs = buildVimPlugin {
     inherit (coc-pairs) pname version meta;
     src = "${coc-pairs}/lib/node_modules/coc-pairs";
+  };
+
+  coc-prettier = buildVimPlugin {
+    inherit (coc-prettier) pname version meta;
+    src = "${coc-prettier}/lib/node_modules/coc-prettier";
   };
 
   coc-pyright = buildVimPlugin {

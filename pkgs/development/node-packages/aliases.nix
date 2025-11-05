@@ -92,6 +92,7 @@ mapAliases {
   inherit (pkgs) coc-markdownlint; # Added 2025-11-05
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   inherit (pkgs) coc-pairs; # added 2025-11-05
+  inherit (pkgs) coc-prettier; # added 2025-11-05
   inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
   coc-rls = throw "coc-rls was removed because rls was deprecated in 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01

@@ -24776,15 +24776,6 @@ let
         sha512 = "tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==";
       };
     };
-    "prettier-3.5.3" = {
-      name = "prettier";
-      packageName = "prettier";
-      version = "3.5.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/prettier/-/prettier-3.5.3.tgz";
-        sha512 = "QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==";
-      };
-    };
     "pretty-hrtime-1.0.3" = {
       name = "pretty-hrtime";
       packageName = "pretty-hrtime";
@@ -37681,27 +37672,6 @@ in
       description = "Grammar/spell checker using LanguageTool with support for LaTeX, Markdown, and others";
       homepage = "https://valentjn.github.io/ltex";
       license = "MPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-prettier = nodeEnv.buildNodePackage {
-    name = "coc-prettier";
-    packageName = "coc-prettier";
-    version = "11.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-prettier/-/coc-prettier-11.0.0.tgz";
-      sha512 = "QksBbo3rpqNdVljuzhnjyJGb6J6O+Q7vKhIqyB7nt4Jz3s9eAPI1NAqMaVhptE+V95D2A6srMl+YiBObZu94Qg==";
-    };
-    dependencies = [
-      sources."prettier-3.5.3"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Prettier extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-prettier#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
