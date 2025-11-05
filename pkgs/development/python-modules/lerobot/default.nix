@@ -150,6 +150,11 @@ buildPythonPackage rec {
     "test_construction_rejects_step_without_call"
   ];
 
+  disabledTestPaths = [
+    # Sometimes hang forever on some CPU models
+    "tests/policies/test_sac_policy.py"
+  ];
+
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
     homepage = "https://github.com/huggingface/lerobot";
