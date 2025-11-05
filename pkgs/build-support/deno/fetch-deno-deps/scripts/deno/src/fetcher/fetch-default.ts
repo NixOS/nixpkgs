@@ -1,6 +1,7 @@
 import type {
   Hash,
   HashAlgorithm,
+  HashEncoding,
   HashString,
   PackageFileIn,
   PackageFileOut,
@@ -16,35 +17,33 @@ const keepHeaders = [
   "x-typescript-types",
 ];
 
-export async function bytesToBase64Hash(
+export async function bytesToHash(
   byteArray: Uint8Array<ArrayBuffer>,
   cryptoSubtleAlgo: "SHA-256" | "SHA-512",
+  encoding: HashEncoding,
 ): Promise<string> {
   const hashBuffer = await crypto.subtle.digest(cryptoSubtleAlgo, byteArray);
   const hashArray = new Uint8Array(hashBuffer);
-  const base64 = btoa(String.fromCharCode(...hashArray));
-  return base64;
+  switch (encoding) {
+    case "base64":
+      return hashArray.toBase64();
+    case "hex":
+      return hashArray.toHex();
+    default:
+      throw `unexpected HashEncoding ${encoding}`;
+  }
 }
 
 export async function makeOutPath(p: PackageFileIn): Promise<string> {
   const data = new TextEncoder().encode(p.url);
-  const hash = await bytesToBase64Hash(data, "SHA-256");
+  const hash = await bytesToHash(data, "SHA-256", "base64");
   return hash.replaceAll("/", "_");
 }
 
-export function normalizeHashToSRI(
+export function normalizeHashPrefix(
   hash: Hash,
 ): HashString {
-  let result: HashString = hash.string;
-  result = result.replace(`${hash.algorithm}-`, "");
-
-  if (hash.encoding === "hex") {
-    const hex = Uint8Array.fromHex(result);
-    result = hex.toBase64();
-  }
-
-  result = `${hash.algorithm}-${result}`;
-  return result;
+  return hash.string.replace(`${hash.algorithm}-`, "");
 }
 
 export function toCryptoSubtleAlgo(hashAlgo: HashAlgorithm): "SHA-256" | "SHA-512" {
@@ -63,12 +62,12 @@ export async function checkHash(
   p: PackageFileIn,
 ) {
   const fileData = await Deno.readFile(filePath);
-  const hash = await bytesToBase64Hash(fileData, toCryptoSubtleAlgo(p.hash.algorithm));
-  const actualIntegrity = `${p.hash.algorithm}-${hash}`;
-  const expectedIntegrity = normalizeHashToSRI(p.hash);
+  const hash = await bytesToHash(fileData, toCryptoSubtleAlgo(p.hash.algorithm), p.hash.encoding);
+  const actualIntegrity = hash;
+  const expectedIntegrity = normalizeHashPrefix(p.hash);
 
   if (actualIntegrity !== expectedIntegrity) {
-    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`;
+    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`
   }
 }
 

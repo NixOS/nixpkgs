@@ -1,5 +1,5 @@
 export type Vars<T> = {
-  [key in keyof T]: Var
+  [key in keyof T]: Var;
 };
 export type Var = { flag: string; value: string };
 
