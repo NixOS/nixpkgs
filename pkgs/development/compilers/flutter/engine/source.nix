@@ -91,22 +91,9 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
       export -f clean_git
       export -f make_deterministic_repo
 
-    ''
-    + (
-      if lib.versionAtLeast flutterVersion "3.29" then
-        ''
-          mkdir --parents source
-          cp ${gclient} source/.gclient
-          cd source
-        ''
-      else
-        ''
-          mkdir --parents $out
-          cp ${gclient} $out/.gclient
-          cd $out
-        ''
-    )
-    + ''
+      mkdir --parents source
+      cp ${gclient} source/.gclient
+      cd source
       export PATH=$PATH:${tools.depot_tools}
       python3 ${tools.depot_tools}/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
     ''

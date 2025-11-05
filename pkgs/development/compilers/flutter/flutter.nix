@@ -3,11 +3,7 @@
   version,
   engineVersion,
   engineHashes ? { },
-  engineUrl ?
-    if lib.versionAtLeast version "3.29" then
-      "https://github.com/flutter/flutter.git@${engineVersion}"
-    else
-      "https://github.com/flutter/engine.git@${engineVersion}",
+  engineUrl ? "https://github.com/flutter/flutter.git@${engineVersion}",
   enginePatches ? [ ],
   engineRuntimeModes ? [
     "release"
