@@ -32,6 +32,7 @@
   coc-sqlfluff,
   coc-stylelint,
   coc-sumneko-lua,
+  coc-tabnine,
   coc-toml,
 }:
 final: prev: {
@@ -196,6 +197,11 @@ final: prev: {
   coc-sumneko-lua = buildVimPlugin {
     inherit (coc-sumneko-lua) pname version meta;
     src = "${coc-sumneko-lua}/lib/node_modules/coc-sumneko-lua";
+  };
+
+  coc-tabnine = buildVimPlugin {
+    inherit (coc-tabnine) pname version meta;
+    src = "${coc-tabnine}/lib/node_modules/coc-tabnine";
   };
 
   coc-toml = buildVimPlugin {

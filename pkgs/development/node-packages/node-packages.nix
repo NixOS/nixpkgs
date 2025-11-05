@@ -37038,23 +37038,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-tabnine = nodeEnv.buildNodePackage {
-    name = "coc-tabnine";
-    packageName = "coc-tabnine";
-    version = "1.3.7";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-tabnine/-/coc-tabnine-1.3.7.tgz";
-      sha512 = "aLh9A6/r1/1QZT/1lJnaLdShGHRrCCb3HA57UYeFR0cD1xjRY3YupfmsOwVSbpqv6AufEXeOdbA2enoVhRFY8g==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "tabnine extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-texlab = nodeEnv.buildNodePackage {
     name = "coc-texlab";
     packageName = "coc-texlab";
