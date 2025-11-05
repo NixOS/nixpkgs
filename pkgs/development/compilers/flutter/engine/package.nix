@@ -306,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     export TERM=dumb
   ''
   # ValueError: ZIP does not support timestamps before 1980
-  + lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+  + ''
     substituteInPlace src/flutter/build/zip.py \
       --replace-fail "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED)" "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False)"
   ''
