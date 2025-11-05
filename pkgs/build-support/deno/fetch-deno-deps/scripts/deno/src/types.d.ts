@@ -7,18 +7,18 @@ export type PackageSpecifier = {
   suffix: string | null;
 };
 
-type PathString = string;
-type PackageSpecifierString = string;
-type HashString = string;
+export type PathString = string;
+export type PackageSpecifierString = string;
+export type HashString = string;
 
-type PackageFileIn = {
+export type PackageFileIn = {
   url: UrlString;
   hash: HashString;
   hashAlgo: "sha256" | "sha512";
   meta?: any;
 };
 
-type PackageFileOut = {
+export type PackageFileOut = {
   url: UrlString;
   hash: HashString;
   hashAlgo: "sha256" | "sha512";
@@ -27,13 +27,13 @@ type PackageFileOut = {
   meta?: any;
 };
 
-type CommonLockFormatOut = Array<PackageFileOut>;
+export type CommonLockFormatOut = Array<PackageFileOut>;
 
-type CommonLockFormatIn = Array<PackageFileIn>;
+export type CommonLockFormatIn = Array<PackageFileIn>;
 
 // ==============
 
-type Dependency =
+export type Dependency =
   | {
     type: "static";
     kind: "importType" | "import" | "export";
@@ -51,7 +51,7 @@ type Dependency =
   };
 
 // Rough type modelling of the jsr `<version>_meta.json` file
-type VersionMetaJson = {
+export type VersionMetaJson = {
   manifest: { [filePath: PathString]: { size: number; checksum: HashString } };
   moduleGraph2: {
     [filePath: PathString]: { dependencies?: Array<Dependency> };
@@ -62,14 +62,14 @@ type VersionMetaJson = {
   exports: { [filePath: PathString]: PathString };
 };
 
-type MetaJson = {
+export type MetaJson = {
   name: string;
   scope: string;
   latest: string;
   versions: { [version: string]: Record<PropertyKey, never> };
 };
 
-type RegistryJson = {
+export type RegistryJson = {
   name: string;
   "dist-tags": Record<PropertyKey, never>;
   "_deno.etag": string;
@@ -86,13 +86,13 @@ type RegistryJson = {
 
 // ==============
 
-type RegistryPackageSpecifierString = string;
-type VersionString = string;
-type UrlString = string;
-type Sha512String = string;
-type Sha256String = string;
+export type RegistryPackageSpecifierString = string;
+export type VersionString = string;
+export type UrlString = string;
+export type Sha512String = string;
+export type Sha256String = string;
 
-type NpmPackages = {
+export type NpmPackages = {
   [p: PackageSpecifierString]: {
     integrity: Sha512String;
     os?: Array<string>;
@@ -103,17 +103,17 @@ type NpmPackages = {
     scripts?: boolean;
   };
 };
-type JsrPackages = {
+export type JsrPackages = {
   [p: PackageSpecifierString]: {
     integrity: Sha256String;
     dependencies: Array<PackageSpecifierString>;
   };
 };
-type HttpsPackages = {
+export type HttpsPackages = {
   [url: UrlString]: Sha256String;
 };
 // Rough type modelling of the `deno.lock` file
-type DenoLock = {
+export type DenoLock = {
   specifiers: Record<RegistryPackageSpecifierString, VersionString>;
   version: "3" | "4" | "5";
   jsr: JsrPackages;
@@ -129,11 +129,11 @@ type DenoLock = {
 
 // ==============
 
-type UnparsedArgs<T> = {
+export type UnparsedArgs<T> = {
   [key in keyof T]: UnparsedArg;
 };
-type ParsedArgs<T> = {
+export type ParsedArgs<T> = {
   [key in keyof T]: ParsedArg;
 };
-type UnparsedArg = Omit<ParsedArg, "value">;
-type ParsedArg = { flag: string; defaultValue: string; value: string };
+export type UnparsedArg = Omit<ParsedArg, "value">;
+export type ParsedArg = { flag: string; defaultValue: string; value: string };

@@ -120,9 +120,13 @@ function _fixtureFrom(
     throw new Error("test expects cli args[0]: binary to execute");
   }
 
-  const vars: Vars = {
-    "common-lock-npm-path": "./npm.json",
-    "deno-dir-path": "./deno-cache",
+  type VarNames = {
+    commonLockNpmPath: null;
+    denoDirPath: null;
+  }
+  const vars: Vars<VarNames> = {
+    commonLockNpmPath: {value:"./npm.json",flag:"--common-lock-npm-path"},
+    denoDirPath: {value:"./deno-cache",flag:"--deno-dir-path"},
   };
 
   checkFilesFs(f);
@@ -131,14 +135,14 @@ function _fixtureFrom(
     inputs: {
       args: [
         bin,
-        "--common-lock-npm-path",
-        vars["common-lock-npm-path"],
-        "--deno-dir-path",
-        vars["deno-dir-path"],
+        vars.commonLockNpmPath.flag,
+        vars.commonLockNpmPath.value,
+        vars.denoDirPath.flag,
+        vars.denoDirPath.value,
       ],
       files: [
         {
-          path: vars["common-lock-npm-path"],
+          path: vars.commonLockNpmPath.value,
           isReal: false,
           content: f.inNpmJsonContent,
         },
@@ -153,7 +157,7 @@ function _fixtureFrom(
       files: {
         expected: [
           ...Object.entries(f.outTransformedFilesFS).map(([path, content]) => ({
-            path: `${vars["deno-dir-path"]}/${path}`,
+            path: `${vars.denoDirPath.value}/${path}`,
             isReal: false,
             content,
           })),

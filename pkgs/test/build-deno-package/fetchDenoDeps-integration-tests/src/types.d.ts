@@ -1,5 +1,9 @@
+export type Vars<T> = {
+  [key in keyof T]: Var
+};
+export type Var = { flag: string; value: string };
+
 export type Args = Array<string>;
-export type Vars = Record<string, string>;
 export type VirtualFile = {
   path: string;
   content: string;

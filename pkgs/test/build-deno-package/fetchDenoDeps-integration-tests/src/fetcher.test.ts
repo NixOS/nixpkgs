@@ -114,12 +114,19 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
 
   const actualDomain = `http://${serverConfig.host}:${serverConfig.port}`;
 
-  const vars: Vars = {
-    "common-lock-jsr-path": "./jsr.json",
-    "common-lock-npm-path": "./npm.json",
-    "common-lock-https-path": "./https.json",
-    "jsr-registry-url": actualDomain,
-    "out-path-prefix": "./out",
+  type VarNames = {
+    commonLockJsrPath: null;
+    commonLockNpmPath: null;
+    commonLockHttpsPath: null;
+    jsrRegistryUrl: null;
+    outPathPrefix: null;
+  }
+  const vars: Vars<VarNames> = {
+    commonLockJsrPath: {value:"./jsr.json",flag:"--common-lock-jsr-path"},
+    commonLockNpmPath: {value:"./npm.json",flag:"--common-lock-npm-path"},
+    commonLockHttpsPath: {value:"./https.json",flag:"--common-lock-https-path"},
+    jsrRegistryUrl: {value:actualDomain,flag:"--jsr-registry-url"},
+    outPathPrefix: {value:"./out",flag:"--out-path-prefix"},
   };
 
   checkOutFetchedFilesFs(f);
@@ -139,30 +146,30 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     inputs: {
       args: [
         bin,
-        "--common-lock-jsr-path",
-        vars["common-lock-jsr-path"],
-        "--common-lock-https-path",
-        vars["common-lock-https-path"],
-        "--common-lock-npm-path",
-        vars["common-lock-npm-path"],
-        "--jsr-registry-url",
-        vars["jsr-registry-url"],
-        "--out-path-prefix",
-        vars["out-path-prefix"],
+        vars.commonLockJsrPath.flag,
+        vars.commonLockJsrPath.value,
+        vars.commonLockNpmPath.flag,
+        vars.commonLockNpmPath.value,
+        vars.commonLockHttpsPath.flag,
+        vars.commonLockHttpsPath.value,
+        vars.jsrRegistryUrl.flag,
+        vars.jsrRegistryUrl.value,
+        vars.outPathPrefix.flag,
+        vars.outPathPrefix.value,
       ],
       files: [
         {
-          path: vars["common-lock-jsr-path"],
+          path: vars.commonLockJsrPath.value,
           isReal: false,
           content: inJsrJsonContent,
         },
         {
-          path: vars["common-lock-npm-path"],
+          path: vars.commonLockNpmPath.value,
           isReal: false,
           content: inNpmJsonContent,
         },
         {
-          path: vars["common-lock-https-path"],
+          path: vars.commonLockHttpsPath.value,
           isReal: false,
           content: inHttpsJsonContent,
         },
@@ -177,17 +184,17 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
       files: {
         expected: [
           {
-            path: `${vars["out-path-prefix"]}/jsr.json`,
+            path: `${vars.outPathPrefix.value}/jsr.json`,
             isReal: false,
             content: JSON.stringify(JSON.parse(outJsrJsonContent), null, 2),
           },
           {
-            path: `${vars["out-path-prefix"]}/npm.json`,
+            path: `${vars.outPathPrefix.value}/npm.json`,
             isReal: false,
             content: JSON.stringify(JSON.parse(outNpmJsonContent), null, 2),
           },
           {
-            path: `${vars["out-path-prefix"]}/https.json`,
+            path: `${vars.outPathPrefix.value}/https.json`,
             isReal: false,
             content: JSON.stringify(
               JSON.parse(outHttpsJsonContent),
@@ -196,7 +203,7 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
             ),
           },
           ...Object.entries(f.outFetchedFilesFS).map(([path, content]) => ({
-            path: `${vars["out-path-prefix"]}/${path}`,
+            path: `${vars.outPathPrefix.value}/${path}`,
             isReal: false,
             content,
           })),
