@@ -37668,27 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-html = nodeEnv.buildNodePackage {
-    name = "coc-html";
-    packageName = "coc-html";
-    version = "1.8.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-html/-/coc-html-1.8.0.tgz";
-      sha512 = "NXmTfHF/TxysUeSstDyLUcfv6LlK08PnltVZCe1J7XpG/QHRRq0sjhkNqkHJVfFT/Vo2NC4lv5Bc9UIWdjGGuw==";
-    };
-    dependencies = [
-      sources."typescript-4.9.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Html extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-html#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-java = nodeEnv.buildNodePackage {
     name = "coc-java";
     packageName = "coc-java";
