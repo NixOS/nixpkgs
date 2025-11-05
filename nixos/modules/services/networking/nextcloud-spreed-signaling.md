@@ -1,7 +1,9 @@
-# Spreed standalone signaling server {#module-nextcloud-spreed-signaling}
+# Spreed standalone signaling server {#module-services-nextcloud-spreed-signaling}
 
 `pkgs.nextcloud-spreed-signaling` is a standalone signaling server for use with [Nextcloud Talk](https://apps.nextcloud.com/apps/spreed), as a "High Performance Backend".
 The project is situated at <https://github.com/strukturag/nextcloud-spreed-signaling>.
+
+Upstream's documentation for setting up a signaling server can be found at <https://github.com/strukturag/nextcloud-spreed-signaling#setup-of-nextcloud-talk>.
 
 The method of choice for running the signaling server is [`services.nextcloud-spreed-signaling`](#opt-services.nextcloud-spreed-signaling.enable).
 
@@ -50,12 +52,12 @@ To set up `nextcloud-spreed-signaling` as a high performance backend, the follow
 }
 ```
 
-## NATS {#module-nextcloud-spreed-signaling-nats}
+## NATS {#module-services-nextcloud-spreed-signaling-nats}
 
 By default, `services.nextcloud-spreed-signaling` uses an internal / loopback NATS implementation.
-To connect to an actual NATS backend (e.g. one enabled via [`services.nats`](#opt-services.nats)), set [`services.nextcloud-spreed-signaling.settings.nats.url`](#opt-services.nextcloud-spreed-signaling.settings.nats.url) accordingly.
+To connect to an actual NATS backend (e.g. one enabled via `services.nats`), set [`services.nextcloud-spreed-signaling.settings.nats.url`](#opt-services.nextcloud-spreed-signaling.settings.nats.url) accordingly.
 
-## Configuration & Secrets Management {#module-nextcloud-spreed-signaling-config}
+## Configuration & Secrets Management {#module-services-nextcloud-spreed-signaling-config}
 
 Configuration is done declaratively via [`services.nextcloud-spreed-signaling.settings`](#opt-services.nextcloud-spreed-signaling.settings).
 Secrets that are normally embedded into the server config file (e.g. `clients.internalsecret`) can be declared using auxiliary options that take in a file path instead, e.g. [`services.nextcloud-spreed-signaling.settings.clients.internalsecretFile`](#opt-services.nextcloud-spreed-signaling.settings.clients.internalsecretFile).
