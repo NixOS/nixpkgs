@@ -29,6 +29,7 @@
   coc-snippets,
   coc-solargraph,
   coc-spell-checker,
+  coc-stylelint,
   coc-sqlfluff,
   coc-toml,
 }:
@@ -179,6 +180,11 @@ final: prev: {
     pname = "coc-spell-checker";
     inherit (coc-spell-checker) version meta;
     src = "${coc-spell-checker}/lib/node_modules/coc-spell-checker";
+  };
+
+  coc-stylelint = buildVimPlugin {
+    inherit (coc-stylelint) pname version meta;
+    src = "${coc-stylelint}/lib/node_modules/coc-stylelint";
   };
 
   coc-sqlfluff = buildVimPlugin {
