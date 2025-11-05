@@ -26,8 +26,6 @@ let
     {
       inherit rocmClangStdenv;
       stdenv = rocmClangStdenv;
-      buildTests = false;
-      buildBenchmarks = false;
 
       rocmUpdateScript = self.callPackage ./update.nix { };
 
