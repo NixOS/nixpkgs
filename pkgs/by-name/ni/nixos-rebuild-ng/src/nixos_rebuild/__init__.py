@@ -6,7 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, Profile
+from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
 
@@ -268,15 +268,7 @@ def parse_args(
 
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
-
-    common_flags = vars(args_groups["common_flags"])
-    common_build_flags = common_flags | vars(args_groups["common_build_flags"])
-    build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
-    flake_build_flags = common_build_flags | flake_common_flags
-    copy_flags = common_flags | vars(args_groups["copy_flags"])
-    if build_flags.get("no_build_output"):
-        flake_build_flags = flake_build_flags | {"no_link": True}
+    grouped_nix_args = GroupedNixArgs.from_parsed_args_groups(args_groups)
 
     if args.upgrade or args.upgrade_all:
         nix.upgrade_channels(args.upgrade_all, args.sudo)
@@ -292,7 +284,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if WITH_REEXEC and can_run and not args.no_reexec:
-        services.reexec(argv, args, build_flags, flake_build_flags)
+        services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
@@ -301,7 +293,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        services.write_version_suffix(build_flags)
+        services.write_version_suffix(grouped_nix_args)
 
     match action:
         case (
@@ -323,15 +315,11 @@ def execute(argv: list[str]) -> None:
                 profile=profile,
                 flake=flake,
                 build_attr=build_attr,
-                build_flags=build_flags,
-                common_flags=common_flags,
-                copy_flags=copy_flags,
-                flake_build_flags=flake_build_flags,
-                flake_common_flags=flake_common_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case Action.EDIT:
-            services.edit(flake=flake, flake_build_flags=flake_build_flags)
+            services.edit(flake=flake, grouped_nix_args=grouped_nix_args)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
@@ -343,8 +331,7 @@ def execute(argv: list[str]) -> None:
             services.repl(
                 flake=flake,
                 build_attr=build_attr,
-                flake_build_flags=flake_build_flags,
-                build_flags=build_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case _:
