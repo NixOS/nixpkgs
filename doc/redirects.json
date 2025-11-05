@@ -3384,6 +3384,18 @@
   "javascript-buildNpmPackage-importNpmLock.buildNodeModules": [
     "index.html#javascript-buildNpmPackage-importNpmLock.buildNodeModules"
   ],
+  "javascript-fetchDenoDeps": [
+    "index.html#javascript-fetchDenoDeps"
+  ],
+  "javascript-fetchDenoDeps-usage": [
+    "index.html#javascript-fetchDenoDeps-usage"
+  ],
+  "javascript-fetchDenoDeps-missing-deno-features": [
+    "index.html#javascript-fetchDenoDeps-missing-deno-features"
+  ],
+  "javascript-fetchDenoDeps-missing-deno-features-type-files": [
+    "index.html#javascript-fetchDenoDeps-missing-deno-features-type-files"
+  ],
   "javascript-corepack": [
     "index.html#javascript-corepack"
   ],
