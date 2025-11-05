@@ -145,8 +145,11 @@ const fileStructureTransformerVendorTests: Array<Test> = [
         inJsrJsonContent: `[
   {
     "url": "https://jsr.io/@scope1/package1/version1/src/file1",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -162,8 +165,11 @@ const fileStructureTransformerVendorTests: Array<Test> = [
   },
   {
     "url": "https://jsr.io/@scope1/package1/version1/file2",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {

@@ -181,8 +181,11 @@ const fileStructureTransformerNpmTests: Array<Test> = [
         inNpmJsonContent: `[
   {
     "url": "url1",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -220,8 +223,11 @@ const fileStructureTransformerNpmTests: Array<Test> = [
         inNpmJsonContent: `[
   {
     "url": "url1/archive1.tgz",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -237,8 +243,11 @@ const fileStructureTransformerNpmTests: Array<Test> = [
   },
   {
     "url": "registry.json",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
