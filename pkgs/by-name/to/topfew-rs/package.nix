@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Rust implementation of Tim Bray's topfew tool";
     homepage = "https://github.com/djc/topfew-rs";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     license = lib.licenses.gpl3Only;
     mainProgram = "tf";
   };

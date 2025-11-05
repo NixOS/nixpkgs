@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Finds the fields (or combinations of fields) which appear most often in a stream of records";
     homepage = "https://github.com/timbray/topfew";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     license = lib.licenses.gpl3Only;
     mainProgram = "tf";
   };
