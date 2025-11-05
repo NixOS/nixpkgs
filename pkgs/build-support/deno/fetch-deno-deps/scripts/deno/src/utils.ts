@@ -1,4 +1,9 @@
-import { PackageSpecifier, PathString } from "./types.d.ts";
+import {
+  PackageSpecifier,
+  ParsedArgs,
+  PathString,
+  UnparsedArgs,
+} from "./types.d.ts";
 
 export function addPrefix(p: PathString, prefix: PathString): PathString {
   return prefix !== "" ? prefix + "/" + p : p;
@@ -32,7 +37,9 @@ export function getScopedNameVersion(
 export function getRegistryScopedNameVersion(
   packageSpecifier: PackageSpecifier,
 ): string {
-  const withRegistry = `${packageSpecifier.registry}:${getScopedNameVersion(packageSpecifier)}`;
+  const withRegistry = `${packageSpecifier.registry}:${
+    getScopedNameVersion(packageSpecifier)
+  }`;
   const withoutRegistry = getScopedNameVersion(packageSpecifier);
   return packageSpecifier.registry != null ? withRegistry : withoutRegistry;
 }
@@ -68,4 +75,34 @@ export function normalizeUnixPath(path: PathString): PathString {
   }
   const isAbsolute = path.startsWith("/");
   return (isAbsolute ? "/" : "") + stack.join("/");
+}
+
+function findFlag(flag: string, parsedArgs: UnparsedArgs): string | undefined {
+  return Object.keys(parsedArgs).find((name) => parsedArgs[name].flag === flag);
+}
+
+export function parseArgs(
+  unparsedArgs: UnparsedArgs,
+  denoArgs: string[],
+): ParsedArgs {
+  const result: ParsedArgs = structuredClone(unparsedArgs) as ParsedArgs;
+
+  Object.values(result).forEach((parsedArg) => {
+    parsedArg.value = parsedArg.defaultValue;
+  });
+
+  Deno.args.forEach((arg, index) => {
+    const parsedArgName = findFlag(arg, result);
+    if (parsedArgName && denoArgs.length > index + 1) {
+      result[parsedArgName].value = Deno.args[index + 1];
+    }
+  });
+
+  Object.values(result).forEach((parsedArg) => {
+    if (!parsedArg.value) {
+      throw `${parsedArg.flag} flag not set but required`;
+    }
+  });
+
+  return result;
 }

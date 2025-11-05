@@ -35,17 +35,20 @@ type CommonLockFormatIn = Array<PackageFileIn>;
 
 type Dependency =
   | {
-      type: "static";
-      kind: "importType" | "import" | "export";
-      specifier: PathString | PackageSpecifierString;
-      specifierRange: Array<Array<number>>;
-      importAttributes: any;
-    }
+    type: "static";
+    kind: "importType" | "import" | "export";
+    specifier: PathString | PackageSpecifierString;
+    specifierRange: Array<Array<number>>;
+    importAttributes: any;
+  }
   | {
-      type: "dynamic";
-      argument: PathString | PackageSpecifierString | Array<{type:string, value:any}>;
-      argumentRange: Array<Array<number>>;
-    };
+    type: "dynamic";
+    argument:
+      | PathString
+      | PackageSpecifierString
+      | Array<{ type: string; value: any }>;
+    argumentRange: Array<Array<number>>;
+  };
 
 // Rough type modelling of the jsr `<version>_meta.json` file
 type VersionMetaJson = {
@@ -123,3 +126,14 @@ type DenoLock = {
     dependencies: Array<RegistryPackageSpecifierString>;
   };
 };
+
+// ==============
+
+type UnparsedArgs<T> = {
+  [key in keyof T]: UnparsedArg;
+};
+type ParsedArgs<T> = {
+  [key in keyof T]: ParsedArg;
+};
+type UnparsedArg = Omit<ParsedArg, "value">;
+type ParsedArg = { flag: string; defaultValue: string; value: string };

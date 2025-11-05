@@ -1,8 +1,10 @@
-import { addPrefix, getBasePath, getScopedName } from "../utils.ts";
+import { addPrefix, getBasePath, getScopedName, parseArgs } from "../utils.ts";
 import type {
   CommonLockFormatOut,
   PackageSpecifier,
+  ParsedArgs,
   PathString,
+  UnparsedArgs,
 } from "../types.d.ts";
 
 type FileTransformerNpmConfig = {
@@ -15,32 +17,32 @@ type FileTransformerNpmConfig = {
 
 type Config = FileTransformerNpmConfig;
 function getConfig(): Config {
-  const flagsParsed = {
-    "common-lock-npm-path": "",
-    "deno-dir-path": "",
+  type ArgNames = {
+    commonLockNpmPath: null;
+    denoDirPath: null;
   };
-  const flags = Object.keys(flagsParsed).map((v) => "--" + v);
-  Deno.args.forEach((arg, index) => {
-    if (flags.includes(arg) && Deno.args.length > index + 1) {
-      flagsParsed[arg.replace(/^--/g, "") as keyof typeof flagsParsed] =
-        Deno.args[index + 1];
-    }
-  });
 
-  Object.entries(flagsParsed).forEach(([key, value]) => {
-    if (value === "") {
-      throw `--${key} flag not set but required`;
-    }
-  });
+  const unparsedArgs: UnparsedArgs<ArgNames> = {
+    commonLockNpmPath: {
+      flag: "--common-lock-npm-path",
+      defaultValue: "",
+    },
+    denoDirPath: {
+      flag: "--deno-dir-path",
+      defaultValue: "",
+    },
+  };
+
+  const parsedArgs: ParsedArgs<ArgNames> = parseArgs(unparsedArgs, Deno.args);
 
   return {
     commonLockNpm: JSON.parse(
-      Deno.readTextFileSync(flagsParsed["common-lock-npm-path"]),
+      Deno.readTextFileSync(parsedArgs.commonLockNpmPath.value),
     ),
-    denoDirPath: flagsParsed["deno-dir-path"],
-    commonLockNpmPath: flagsParsed["common-lock-npm-path"],
-    inBasePath: getBasePath(flagsParsed["common-lock-npm-path"]),
-    rootPath: `${flagsParsed["deno-dir-path"]}/npm/registry.npmjs.org`,
+    denoDirPath: parsedArgs.denoDirPath.value,
+    commonLockNpmPath: parsedArgs.commonLockNpmPath.value,
+    inBasePath: getBasePath(parsedArgs.commonLockNpmPath.value),
+    rootPath: `${parsedArgs.denoDirPath.value}/npm/registry.npmjs.org`,
   };
 }
 

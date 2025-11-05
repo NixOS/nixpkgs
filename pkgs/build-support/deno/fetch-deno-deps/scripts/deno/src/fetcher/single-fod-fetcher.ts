@@ -4,12 +4,14 @@
 
 import { fetchAllJsr } from "./fetch-jsr.ts";
 import { fetchAllNpm } from "./fetch-npm.ts";
-import { addPrefix, getFileName } from "../utils.ts";
+import { addPrefix, getFileName, parseArgs } from "../utils.ts";
 import { fetchAllHttps } from "./fetch-https.ts";
 import type {
   CommonLockFormatIn,
   CommonLockFormatOut,
+  ParsedArgs,
   PathString,
+  UnparsedArgs,
 } from "../types.d.ts";
 
 type SingleFodFetcherConfig = {
@@ -25,42 +27,54 @@ type SingleFodFetcherConfig = {
 
 type Config = SingleFodFetcherConfig;
 function getConfig(): Config {
-  const flagsParsed = {
-    "common-lock-jsr-path": "",
-    "common-lock-npm-path": "",
-    "common-lock-https-path": "",
-    "jsr-registry-url": "https://jsr.io",
-    "out-path-prefix": "",
+  type ArgNames = {
+    commonLockJsrPath: null;
+    commonLockNpmPath: null;
+    commonLockHttpsPath: null;
+    jsrRegistryUrl: null;
+    outPathPrefix: null;
   };
-  const flags = Object.keys(flagsParsed).map((v) => "--" + v);
-  Deno.args.forEach((arg, index) => {
-    if (flags.includes(arg) && Deno.args.length > index + 1) {
-      flagsParsed[arg.replace(/^--/g, "") as keyof typeof flagsParsed] =
-        Deno.args[index + 1];
-    }
-  });
 
-  Object.entries(flagsParsed).forEach(([key, value]) => {
-    if (value === "") {
-      throw `--${key} flag not set but required`;
-    }
-  });
+  const unparsedArgs: UnparsedArgs<ArgNames> = {
+    commonLockJsrPath: {
+      flag: "--common-lock-jsr-path",
+      defaultValue: "",
+    },
+    commonLockNpmPath: {
+      flag: "--common-lock-npm-path",
+      defaultValue: "",
+    },
+    commonLockHttpsPath: {
+      flag: "--common-lock-https-path",
+      defaultValue: "",
+    },
+    jsrRegistryUrl: {
+      flag: "--jsr-registry-url",
+      defaultValue: "https://jsr.io",
+    },
+    outPathPrefix: {
+      flag: "--out-path-prefix",
+      defaultValue: "",
+    },
+  };
+
+  const parsedArgs: ParsedArgs<ArgNames> = parseArgs(unparsedArgs, Deno.args);
 
   return {
     commonLockJsr: JSON.parse(
-      Deno.readTextFileSync(flagsParsed["common-lock-jsr-path"]),
+      Deno.readTextFileSync(parsedArgs.commonLockJsrPath.value),
     ),
     commonLockNpm: JSON.parse(
-      Deno.readTextFileSync(flagsParsed["common-lock-npm-path"]),
+      Deno.readTextFileSync(parsedArgs.commonLockNpmPath.value),
     ),
     commonLockHttps: JSON.parse(
-      Deno.readTextFileSync(flagsParsed["common-lock-https-path"]),
+      Deno.readTextFileSync(parsedArgs.commonLockHttpsPath.value),
     ),
-    commonLockJsrPath: flagsParsed["common-lock-jsr-path"],
-    commonLockNpmPath: flagsParsed["common-lock-npm-path"],
-    commonLockHttpsPath: flagsParsed["common-lock-https-path"],
-    jsrRegistryUrl: flagsParsed["jsr-registry-url"],
-    outPathPrefix: flagsParsed["out-path-prefix"] || "",
+    commonLockJsrPath: parsedArgs.commonLockJsrPath.value,
+    commonLockNpmPath: parsedArgs.commonLockNpmPath.value,
+    commonLockHttpsPath: parsedArgs.commonLockHttpsPath.value,
+    jsrRegistryUrl: parsedArgs.jsrRegistryUrl.value,
+    outPathPrefix: parsedArgs.outPathPrefix.value,
   };
 }
 
