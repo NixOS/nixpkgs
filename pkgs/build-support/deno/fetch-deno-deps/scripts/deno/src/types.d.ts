@@ -11,17 +11,16 @@ export type PathString = string;
 export type PackageSpecifierString = string;
 export type HashString = string;
 
-export type PackageFileIn = {
-  url: UrlString;
-  hash: HashString;
-  hashAlgo: "sha256" | "sha512";
-  meta?: any;
-};
+export type PackageFileIn = Omit<PackageFileOut, "outPath" | "headers">;
+
+export type HashAlgo = "sha256" | "sha512";
+export type HashEnc = "hex" | "base64";
 
 export type PackageFileOut = {
   url: UrlString;
   hash: HashString;
-  hashAlgo: "sha256" | "sha512";
+  hashAlgo: HashAlgo;
+  hashEnc: HashEnc;
   outPath: PathString;
   headers?: Record<string, string>;
   meta?: any;
@@ -129,10 +128,11 @@ export type DenoLock = {
 
 // ==============
 
-export type UnparsedArgs<T> = {
+export type ParsedArgsNames = Record<string, null>;
+export type UnparsedArgs<T extends ParsedArgsNames> = {
   [key in keyof T]: UnparsedArg;
 };
-export type ParsedArgs<T> = {
+export type ParsedArgs<T extends ParsedArgsNames> = {
   [key in keyof T]: ParsedArg;
 };
 export type UnparsedArg = Omit<ParsedArg, "value">;

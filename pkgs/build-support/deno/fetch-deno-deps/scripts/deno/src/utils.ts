@@ -1,6 +1,7 @@
-import {
+import type {
   PackageSpecifier,
   ParsedArgs,
+  ParsedArgsNames,
   PathString,
   UnparsedArgs,
 } from "./types.d.ts";
@@ -77,15 +78,15 @@ export function normalizeUnixPath(path: PathString): PathString {
   return (isAbsolute ? "/" : "") + stack.join("/");
 }
 
-function findFlag(flag: string, parsedArgs: UnparsedArgs): string | undefined {
-  return Object.keys(parsedArgs).find((name) => parsedArgs[name].flag === flag);
+function findFlag<T extends ParsedArgsNames>(flag: string, parsedArgs: UnparsedArgs<T>): keyof T | undefined {
+  return Object.keys(parsedArgs).find((name) => parsedArgs[name].flag === flag) as keyof T;
 }
 
-export function parseArgs(
-  unparsedArgs: UnparsedArgs,
+export function parseArgs<T extends ParsedArgsNames>(
+  unparsedArgs: UnparsedArgs<T>,
   denoArgs: string[],
-): ParsedArgs {
-  const result: ParsedArgs = structuredClone(unparsedArgs) as ParsedArgs;
+): ParsedArgs<T> {
+  const result: ParsedArgs<T> = structuredClone(unparsedArgs) as ParsedArgs<T>;
 
   Object.values(result).forEach((parsedArg) => {
     parsedArg.value = parsedArg.defaultValue;
