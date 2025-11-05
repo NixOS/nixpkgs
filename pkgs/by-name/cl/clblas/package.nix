@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -re 's/(set\(\s*Boost_USE_STATIC_LIBS\s+).*/\1OFF\ \)/g' src/CMakeLists.txt
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/library/tools/tplgen/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   preConfigure = ''
