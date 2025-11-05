@@ -1315,8 +1315,6 @@ with pkgs;
 
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
-  gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
-
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
     protobuf = protobuf_21;
   };
