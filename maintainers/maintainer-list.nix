@@ -7940,6 +7940,11 @@
       { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
     ];
   };
+  ethanthoma = {
+    name = "Ethan Thoma";
+    github = "ethanthoma";
+    githubId = 4424467;
+  };
   ethercrow = {
     email = "ethercrow@gmail.com";
     github = "ethercrow";
