@@ -849,9 +849,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [
-    bendlas
-    emilylange
-    pyrox0
-  ];
+  meta.maintainers = lib.teams.forgejo.members;
 }
