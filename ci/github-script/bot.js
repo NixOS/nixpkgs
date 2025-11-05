@@ -96,6 +96,47 @@ module.exports = async ({ github, context, core, dry }) => {
     return maintainerMaps[branch]
   }
 
+  // Caching the list of team members saves API requests when running the bot on the schedule and
+  // processing many PRs at once.
+  const members = {}
+  function getTeamMembers(team_slug) {
+    if (context.eventName === 'pull_request') {
+      // We have no chance of getting a token in the pull_request context with the right
+      // permissions to access the members endpoint below. Thus, we're pretending to have
+      // no members. This is OK; because this is only for the Test workflow, not for
+      // real use.
+      return []
+    }
+
+    if (!members[team_slug]) {
+      members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
+        org: context.repo.owner,
+        team_slug,
+        per_page: 100,
+      })
+    }
+
+    return members[team_slug]
+  }
+
+  // Caching users saves API requests when running the bot on the schedule and processing
+  // many PRs at once. It also helps to encapsulate the special logic we need, because
+  // actions/github doesn't support that endpoint fully, yet.
+  const users = {}
+  function getUser(id) {
+    if (!users[id]) {
+      users[id] = github
+        .request({
+          method: 'GET',
+          url: '/user/{id}',
+          id,
+        })
+        .then((resp) => resp.data)
+    }
+
+    return users[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -121,6 +162,8 @@ module.exports = async ({ github, context, core, dry }) => {
       pull_request,
       events,
       maintainers,
+      getTeamMembers,
+      getUser,
     })
 
     // When the same change has already been merged to the target branch, a PR will still be
@@ -496,7 +539,11 @@ module.exports = async ({ github, context, core, dry }) => {
     }
   }
 
-  await withRateLimit({ github, core }, async (stats) => {
+  // Controls level of parallelism. Applies to both the number of concurrent requests
+  // as well as the number of concurrent workers going through the list of PRs.
+  const maxConcurrent = 20
+
+  await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
@@ -625,11 +672,23 @@ module.exports = async ({ github, context, core, dry }) => {
             arr.findIndex((firstItem) => firstItem.number === thisItem.number),
         )
 
-      ;(await Promise.allSettled(items.map((item) => handle({ item, stats }))))
-        .filter(({ status }) => status === 'rejected')
-        .map(({ reason }) =>
-          core.setFailed(`${reason.message}\n${reason.cause.stack}`),
-        )
+      // Instead of handling all items in parallel we set up some workers to handle the queue
+      // with more controlled parallelism. This avoids problems with `pull_request` fetched at
+      // the beginning getting out of date towards the end, because it took the whole job 20
+      // minutes or more to go through 100's of PRs.
+      await Promise.all(
+        Array.from({ length: maxConcurrent }, async () => {
+          while (true) {
+            const item = items.pop()
+            if (!item) break
+            try {
+              await handle({ item, stats })
+            } catch (e) {
+              core.setFailed(`${e.message}\n${e.cause.stack}`)
+            }
+          }
+        }),
+      )
     }
   })
 }

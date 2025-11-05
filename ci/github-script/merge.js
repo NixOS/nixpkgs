@@ -80,6 +80,7 @@ function runChecklist({
 
   return {
     checklist,
+    eligible,
     result,
   }
 }
@@ -109,10 +110,6 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
-// Caching the list of team members saves API requests when running the bot on the schedule and
-// processing many PRs at once.
-const members = {}
-
 async function handleMerge({
   github,
   context,
@@ -122,31 +119,14 @@ async function handleMerge({
   pull_request,
   events,
   maintainers,
+  getTeamMembers,
+  getUser,
 }) {
   const pull_number = pull_request.number
 
-  function getTeamMembers(team_slug) {
-    if (context.eventName === 'pull_request') {
-      // We have no chance of getting a token in the pull_request context with the right
-      // permissions to access the members endpoint below. Thus, we're pretending to have
-      // no members. This is OK; because this is only for the Test workflow, not for
-      // real use.
-      return new Set()
-    }
-
-    if (!members[team_slug]) {
-      members[team_slug] = github
-        .paginate(github.rest.teams.listMembersInOrg, {
-          org: context.repo.owner,
-          team_slug,
-          per_page: 100,
-        })
-        .then((members) => new Set(members.map(({ id }) => id)))
-    }
-
-    return members[team_slug]
-  }
-  const committers = await getTeamMembers('nixpkgs-committers')
+  const committers = new Set(
+    (await getTeamMembers('nixpkgs-committers')).map(({ id }) => id),
+  )
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
     ...context.repo,
@@ -168,14 +148,15 @@ async function handleMerge({
       // Ignore comments where the user has been deleted already.
       user &&
       // Ignore comments which had already been responded to by the bot.
-      !events.some(
-        ({ event, body }) =>
-          ['commented'].includes(event) &&
-          // We're only testing this hidden reference, but not the author of the comment.
-          // We'll just assume that nobody creates comments with this marker on purpose.
-          // Additionally checking the author is quite annoying for local debugging.
-          body.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
-      ),
+      (dry ||
+        !events.some(
+          ({ event, body }) =>
+            ['commented'].includes(event) &&
+            // We're only testing this hidden reference, but not the author of the comment.
+            // We'll just assume that nobody creates comments with this marker on purpose.
+            // Additionally checking the author is quite annoying for local debugging.
+            body.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
+        )),
   )
 
   async function merge() {
@@ -184,32 +165,9 @@ async function handleMerge({
       return 'Merge completed (dry)'
     }
 
-    // Using GraphQL's enablePullRequestAutoMerge mutation instead of the REST
-    // /merge endpoint, because the latter doesn't work with Merge Queues.
-    // This mutation works both with and without Merge Queues.
-    // It doesn't work when there are no required status checks for the target branch.
-    // All development branches have these enabled, so this is a non-issue.
-    try {
-      await github.graphql(
-        `mutation($node_id: ID!, $sha: GitObjectID) {
-          enablePullRequestAutoMerge(input: {
-            expectedHeadOid: $sha,
-            pullRequestId: $node_id
-          })
-          { clientMutationId }
-        }`,
-        { node_id: pull_request.node_id, sha: pull_request.head.sha },
-      )
-      return 'Enabled Auto Merge'
-    } catch (e) {
-      log('Auto Merge failed', e.response.errors[0].message)
-    }
-
-    // TODO: Observe whether the below is true and whether manual enqueue is actually needed.
-    // Auto-merge doesn't work if the target branch has already run all CI, in which
-    // case the PR must be enqueued explicitly.
-    // We now have merge queues enabled on all development branches, thus don't need a
-    // fallback after this.
+    // Using GraphQL mutations instead of the REST /merge endpoint, because the latter
+    // doesn't work with Merge Queues. We now have merge queues enabled on all development
+    // branches, so we don't need a fallback for regular merges.
     try {
       const resp = await github.graphql(
         `mutation($node_id: ID!, $sha: GitObjectID) {
@@ -227,6 +185,25 @@ async function handleMerge({
       return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
     } catch (e) {
       log('Enqueing failed', e.response.errors[0].message)
+    }
+
+    // If required status checks are not satisfied, yet, the above will fail. In this case
+    // we can enable auto-merge. We could also only use auto-merge, but this often gets
+    // stuck for no apparent reason.
+    try {
+      await github.graphql(
+        `mutation($node_id: ID!, $sha: GitObjectID) {
+          enablePullRequestAutoMerge(input: {
+            expectedHeadOid: $sha,
+            pullRequestId: $node_id
+          })
+          { clientMutationId }
+        }`,
+        { node_id: pull_request.node_id, sha: pull_request.head.sha },
+      )
+      return 'Enabled Auto Merge'
+    } catch (e) {
+      log('Auto Merge failed', e.response.errors[0].message)
       throw new Error(e.response.errors[0].message)
     }
   }
@@ -265,7 +242,7 @@ async function handleMerge({
       }
     }
 
-    const { result, checklist } = runChecklist({
+    const { result, eligible, checklist } = runChecklist({
       committers,
       events,
       files,
@@ -294,6 +271,18 @@ async function handleMerge({
       ),
       '',
     ]
+
+    if (eligible.size > 0 && !eligible.has(comment.user.id)) {
+      const users = await Promise.all(
+        Array.from(eligible, async (id) => (await getUser(id)).login),
+      )
+      body.push(
+        '> [!TIP]',
+        '> Maintainers eligible to merge are:',
+        ...users.map((login) => `> - ${login}`),
+        '',
+      )
+    }
 
     if (result) {
       await react('ROCKET')
