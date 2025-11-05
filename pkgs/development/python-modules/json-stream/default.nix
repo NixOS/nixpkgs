@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "2.3.3";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "daggaz";
     repo = "json-stream";
     tag = "v${version}";
-    hash = "sha256-/GDEC/Poy84TGuXM34OW4+K/qMJELFfO+lNQ5M5VsdI=";
+    hash = "sha256-bhyoTvILap0/dKpmob6P1l9st7JwuHaLp7Y8FGfgLZA=";
   };
 
   build-system = [ setuptools ];
