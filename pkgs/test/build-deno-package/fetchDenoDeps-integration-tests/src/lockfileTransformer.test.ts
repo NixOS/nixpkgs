@@ -141,8 +141,11 @@ const lockfileTransformerTests: Array<Test> = [
 [
   {
     "url": "https://jsr.io/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -179,16 +182,22 @@ const lockfileTransformerTests: Array<Test> = [
 [
   {
     "url": "https://url1.com/path",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "url1.com"
     }
   },
   {
     "url": "https://esm.sh/package@version?target=esnext",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "esm.sh",
       "original_url": "https://esm.sh/package@version?target=esnext"
@@ -196,8 +205,11 @@ const lockfileTransformerTests: Array<Test> = [
   },
   {
     "url": "https://esm.sh/package@version?target=denonext",
-    "hash": "hash3",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash3",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "esm.sh",
       "original_url": "https://esm.sh/package@version"
@@ -225,8 +237,11 @@ const lockfileTransformerTests: Array<Test> = [
 [
   {
     "url": "https://registry.npmjs.org/@scope/package/-/package-version1.tgz",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -241,8 +256,11 @@ const lockfileTransformerTests: Array<Test> = [
   },
   {
     "url": "https://registry.npmjs.org/package/-/package-version2.tgz",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -286,8 +304,11 @@ const lockfileTransformerTests: Array<Test> = [
       commonLockJsrContent: `[
   {
     "url": "https://jsr.io/@scope/package/version1_meta.json",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "jsr",
       "packageSpecifier": {
@@ -304,8 +325,11 @@ const lockfileTransformerTests: Array<Test> = [
       commonLockNpmContent: `[
   {
     "url": "https://registry.npmjs.org/@scope/package/-/package-version1.tgz",
-    "hash": "hash1",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -320,8 +344,11 @@ const lockfileTransformerTests: Array<Test> = [
   },
   {
     "url": "https://registry.npmjs.org/package/-/package-version2.tgz",
-    "hash": "hash2",
-    "hashAlgo": "sha512",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
     "meta": {
       "registry": "npm",
       "packageSpecifier": {
@@ -339,16 +366,22 @@ const lockfileTransformerTests: Array<Test> = [
 [
   {
     "url": "https://url1.com/path",
-    "hash": "hash1",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash1",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "url1.com"
     }
   },
   {
     "url": "https://esm.sh/package@version?target=esnext",
-    "hash": "hash2",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash2",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "esm.sh",
       "original_url": "https://esm.sh/package@version?target=esnext"
@@ -356,8 +389,11 @@ const lockfileTransformerTests: Array<Test> = [
   },
   {
     "url": "https://esm.sh/package@version?target=denonext",
-    "hash": "hash3",
-    "hashAlgo": "sha256",
+    "hash": {
+      "string": "hash3",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
     "meta": {
       "registry": "esm.sh",
       "original_url": "https://esm.sh/package@version"
