@@ -15,7 +15,7 @@ let
   skopeo' = skopeo.override { buildGoModule = buildGoModule; };
   athens' = athens.override { buildGoModule = buildGoModule; };
   expectedCgoEnabledType = "DYN";
-  expectedCgoDisabledType = "DYN";
+  expectedCgoDisabledType = "EXE";
 in
 {
   skopeo = testers.testVersion { package = skopeo'; };

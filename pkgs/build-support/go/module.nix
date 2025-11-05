@@ -253,6 +253,9 @@ lib.extendMkDerivation {
             if [ -f "$NIX_CC_FOR_TARGET/nix-support/dynamic-linker" ]; then
               export GO_LDSO=$(cat $NIX_CC_FOR_TARGET/nix-support/dynamic-linker)
             fi
+            if [ "$CGO_ENABLED" = "0" ]; then
+              export GOFLAGS="-buildmode=exe $GOFLAGS"
+            fi
             cd "$modRoot"
           ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
