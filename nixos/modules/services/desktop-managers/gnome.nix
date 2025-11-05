@@ -232,7 +232,7 @@ in
 
     environment.gnome.excludePackages = mkOption {
       default = [ ];
-      example = literalExpression "[ pkgs.totem ]";
+      example = literalExpression "[ pkgs.showtime ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -467,9 +467,9 @@ in
         pkgs.nautilus
         pkgs.papers
         pkgs.gnome-connections
+        pkgs.showtime
         pkgs.simple-scan
         pkgs.snapshot
-        pkgs.totem
         pkgs.yelp
       ] config.environment.gnome.excludePackages;
 
