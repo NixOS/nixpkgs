@@ -55,7 +55,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     flake_common_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
+    classic_build_flags.add_argument(
+        "--no-build-output", "--no-link", "-Q", action="store_true"
+    )
 
     copy_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     copy_flags.add_argument(
