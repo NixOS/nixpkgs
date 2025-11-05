@@ -122,48 +122,51 @@ rec {
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
-    runCommand name
-      (
-        {
-          inherit
-            text
-            executable
-            destination
-            checkPhase
-            allowSubstitutes
-            preferLocalBuild
-            ;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
-          meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
-          passthru = passthru // derivationArgs.passthru or { };
-        }
-        // removeAttrs derivationArgs [
-          "passAsFile"
-          "meta"
-          "passthru"
-        ]
-      )
-      ''
-        target=$out$destination
-        mkdir -p "$(dirname "$target")"
+    stdenvNoCC.mkDerivation (
+      finalAttrs:
+      {
+        inherit name;
+        inherit
+          text
+          executable
+          destination
+          checkPhase
+          allowSubstitutes
+          preferLocalBuild
+          ;
+        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
+        meta =
+          lib.optionalAttrs (executable && matches != null) {
+            mainProgram = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
+        passthru = passthru // derivationArgs.passthru or { };
+      }
+      // removeAttrs derivationArgs [
+        "passAsFile"
+        "meta"
+        "passthru"
+      ]
+      // {
+        buildCommand = ''
+          target=$out$destination
+          mkdir -p "$(dirname "$target")"
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
+          if [ -e "$textPath" ]; then
+            mv "$textPath" "$target"
+          else
+            echo -n "$text" > "$target"
+          fi
 
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
 
-        eval "$checkPhase"
-      '';
+          eval "$checkPhase"
+        '';
+      }
+    );
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
