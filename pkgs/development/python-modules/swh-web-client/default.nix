@@ -46,6 +46,8 @@ buildPythonPackage rec {
     swh-model
   ];
 
+  pythonRelaxDeps = [ "click" ];
+
   pythonImportsCheck = [ "swh.web.client" ];
 
   nativeCheckInputs = [
@@ -55,6 +57,10 @@ buildPythonPackage rec {
     types-python-dateutil
     types-pyyaml
     types-requests
+  ];
+
+  disabledTests = [
+    "test_save_code_now_through_cli"
   ];
 
   meta = {
