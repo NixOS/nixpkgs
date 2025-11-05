@@ -21,7 +21,6 @@
 , "browser-sync"
 , "cdk8s-cli"
 , "clipboard-cli"
-, "coc-cmake"
 , "coc-emmet"
 , "coc-eslint"
 , "coc-flutter"

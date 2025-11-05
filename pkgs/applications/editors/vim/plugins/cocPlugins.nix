@@ -2,6 +2,7 @@
   buildVimPlugin,
   coc-basedpyright,
   coc-clangd,
+  coc-cmake,
   coc-css,
   coc-diagnostic,
   coc-docker,
@@ -21,6 +22,11 @@ final: prev: {
   coc-clangd = buildVimPlugin {
     inherit (coc-clangd) pname version meta;
     src = "${coc-clangd}/lib/node_modules/coc-clangd";
+  };
+
+  coc-cmake = buildVimPlugin {
+    inherit (coc-cmake) pname version meta;
+    src = "${coc-cmake}/lib/node_modules/coc-cmake";
   };
 
   coc-css = buildVimPlugin {

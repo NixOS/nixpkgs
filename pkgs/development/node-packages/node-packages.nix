@@ -37670,24 +37670,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-cmake = nodeEnv.buildNodePackage {
-    name = "coc-cmake";
-    packageName = "coc-cmake";
-    version = "0.2.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-cmake/-/coc-cmake-0.2.2.tgz";
-      sha512 = "CfZzfacIlFZqG5fjXDHiAu3ucy5YkhuW3+pv5iIGakChSuWoNYenG1LPDG7DEtlLRtFjfAkUbE7StcpMTUiaDw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "coc.nvim extension for cmake language";
-      homepage = "https://github.com/voldikss/coc-cmake#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-emmet = nodeEnv.buildNodePackage {
     name = "coc-emmet";
     packageName = "coc-emmet";
