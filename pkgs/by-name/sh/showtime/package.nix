@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Showtime";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.gnome ];
     mainProgram = "showtime";
   };
 }
