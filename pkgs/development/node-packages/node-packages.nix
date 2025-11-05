@@ -38047,27 +38047,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-sqlfluff = nodeEnv.buildNodePackage {
-    name = "coc-sqlfluff";
-    packageName = "coc-sqlfluff";
-    version = "0.11.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-sqlfluff/-/coc-sqlfluff-0.11.4.tgz";
-      sha512 = "0yKAPkIKoLJWksPefWXVvRcRQ+Ja3kc2Bx/tKL4tQwEOlAwc5qeUU+1FZRw+71Jp8HeC5Wo9YqtlgSIJlyic3g==";
-    };
-    dependencies = [
-      sources."semver-7.7.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "SQLFluff (A SQL linter and auto-formatter for Humans) extension for coc.nvim";
-      homepage = "https://github.com/yaegassy/coc-sqlfluff#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-tabnine = nodeEnv.buildNodePackage {
     name = "coc-tabnine";
     packageName = "coc-tabnine";

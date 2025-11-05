@@ -25,7 +25,6 @@
 , "coc-ltex"
 , "coc-stylelint"
 , "coc-sumneko-lua"
-, "coc-sqlfluff"
 , "coc-tabnine"
 , "coc-texlab"
 , "coc-tsserver"
