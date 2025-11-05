@@ -82,7 +82,7 @@ function checkOutFetchedFilesFs(f: FetcherFixture) {
   assertEq(
     fetchedFilesFsExpected,
     fetchedFilesFsFromFixture,
-    "outFetchedFilesFS specified in fixture, do not equal outPaths in outVendoredJsonContent and outNpmJsonContent",
+    "outFetchedFilesFS specified in fixture, do not equal outPaths in outJsrJsonContent, outHttpsJsonContent and outNpmJsonContent",
   );
 }
 
@@ -118,7 +118,7 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     "common-lock-jsr-path": "./jsr.json",
     "common-lock-npm-path": "./npm.json",
     "common-lock-https-path": "./https.json",
-    "in-jsr-registry-url": actualDomain,
+    "jsr-registry-url": actualDomain,
     "out-path-prefix": "./out",
   };
 
@@ -211,7 +211,7 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
   };
 }
 
-const lockfileTransformerTests: Array<Test> = [
+const fetcherTests: Array<Test> = [
   {
     name: "empty",
     ...fixtureFrom({
@@ -1231,4 +1231,4 @@ const lockfileTransformerTests: Array<Test> = [
   },
 ];
 
-runTests(lockfileTransformerTests);
+runTests(fetcherTests);
