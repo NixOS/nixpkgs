@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.83";
+  version = "0.84";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
     tag = "v${version}";
-    hash = "sha256-GlOydhDSg03uZUxLXDoaT/Jq3DMk+HsSxBtPQE9DQ3U=";
+    hash = "sha256-sqeU9FsIeWy4dHmC3K2ChHhtfSsWGXGWUGV90g7kmvs=";
   };
 
   build-system = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/python-holidays/releases/tag/${src.tag}";
+    changelog = "https://github.com/vacanza/holidays/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
