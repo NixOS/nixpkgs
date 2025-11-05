@@ -465,6 +465,7 @@ in
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
+        pkgs.papers
         pkgs.gnome-connections
         pkgs.simple-scan
         pkgs.snapshot
@@ -476,7 +477,6 @@ in
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
-      programs.evince.enable = notExcluded pkgs.evince;
       programs.file-roller.enable = notExcluded pkgs.file-roller;
       programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
