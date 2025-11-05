@@ -5,7 +5,9 @@
   fetchFromGitHub,
   importlib-metadata,
   lingva,
+  numpy,
   polib,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
   setuptools,
@@ -44,11 +46,11 @@ buildPythonPackage rec {
 
   dependencies = [ python-dateutil ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     importlib-metadata
+    numpy
     polib
+    pytest-cov-stub
     pytestCheckHook
   ];
 
