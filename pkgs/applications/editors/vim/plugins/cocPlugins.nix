@@ -12,6 +12,7 @@
   coc-flutter,
   coc-git,
   coc-haxe,
+  coc-highlight,
   coc-pyright,
   coc-sh,
   coc-spell-checker,
@@ -76,6 +77,11 @@ final: prev: {
   coc-haxe = buildVimPlugin {
     inherit (coc-haxe) pname version meta;
     src = "${coc-haxe}/lib/node_modules/coc-haxe";
+  };
+
+  coc-highlight = buildVimPlugin {
+    inherit (coc-highlight) pname version meta;
+    src = "${coc-highlight}/lib/node_modules/coc-highlight";
   };
 
   coc-pyright = buildVimPlugin {

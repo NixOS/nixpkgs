@@ -37668,23 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-highlight = nodeEnv.buildNodePackage {
-    name = "coc-highlight";
-    packageName = "coc-highlight";
-    version = "2.0.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-highlight/-/coc-highlight-2.0.4.tgz";
-      sha512 = "X6VGCqpDML0oRcyH77ANoQ0BAxEsQqVMB9OPbfXB/nSdN3xcO8+M1hNSJm4pBekvywxm6VQUsh/zFD4V55nxLw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Highlight extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-html = nodeEnv.buildNodePackage {
     name = "coc-html";
     packageName = "coc-html";
