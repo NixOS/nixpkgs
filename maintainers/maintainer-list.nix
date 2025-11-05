@@ -587,7 +587,7 @@
   };
   adamperkowski = {
     name = "Adam Perkowski";
-    email = "adas1per@protonmail.com";
+    email = "me@adamperkowski.dev";
     matrix = "@xx0a_q:matrix.org";
     github = "adamperkowski";
     githubId = 75480869;
