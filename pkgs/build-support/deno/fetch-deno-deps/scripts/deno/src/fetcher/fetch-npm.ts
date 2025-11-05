@@ -61,6 +61,7 @@ async function makeRegistryJson(
     url: registryJsonUrl,
     hash: "",
     hashAlgo: "sha256",
+    hashEnc: "hex",
     outPath: "",
     meta: structuredClone(versionRegistryJson.meta),
   };

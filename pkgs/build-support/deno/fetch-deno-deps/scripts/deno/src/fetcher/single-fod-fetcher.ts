@@ -10,6 +10,7 @@ import type {
   CommonLockFormatIn,
   CommonLockFormatOut,
   ParsedArgs,
+  ParsedArgsNames,
   PathString,
   UnparsedArgs,
 } from "../types.d.ts";
@@ -27,7 +28,7 @@ type SingleFodFetcherConfig = {
 
 type Config = SingleFodFetcherConfig;
 function getConfig(): Config {
-  type ArgNames = {
+  interface ArgNames extends ParsedArgsNames {
     commonLockJsrPath: null;
     commonLockNpmPath: null;
     commonLockHttpsPath: null;

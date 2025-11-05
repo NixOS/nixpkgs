@@ -5,6 +5,7 @@ import type {
   PackageFileIn,
   PackageSpecifier,
   ParsedArgs,
+  ParsedArgsNames,
   PathString,
   UnparsedArgs,
   UrlString,
@@ -20,7 +21,7 @@ type LockfileTransformerConfig = {
 
 type Config = LockfileTransformerConfig;
 function getConfig(): Config {
-  type ArgNames = {
+  interface ArgNames extends ParsedArgsNames {
     denoLockPath: null;
     commonLockJsrPath: null;
     commonLockHttpsPath: null;
@@ -104,10 +105,12 @@ function makeJsrCommonLock(denolock: DenoLock): CommonLockFormatIn {
     const url = makeVersionMetaJsonUrl(packageSpecifier);
     const hash = value.integrity;
     const hashAlgo = "sha256";
+    const hashEnc = "hex";
     result.push({
       url,
       hash,
       hashAlgo,
+      hashEnc,
       meta: {
         registry,
         packageSpecifier,
@@ -129,10 +132,12 @@ function makeNpmCommonLock(denolock: DenoLock): CommonLockFormatIn {
     const url = makeNpmPackageUrl(packageSpecifier);
     const hash = value.integrity;
     const hashAlgo = "sha512";
+    const hashEnc = "base64";
     result.push({
       url,
       hash,
       hashAlgo,
+      hashEnc,
       meta: {
         registry,
         packageSpecifier,
@@ -179,10 +184,12 @@ function makeHttpsCommonLock(denolock: DenoLock): CommonLockFormatIn {
   Object.entries(denolock.remote).forEach(([url, hash]) => {
     const registry = getRegistry(url);
     const hashAlgo = "sha256";
+    const hashEnc = "hex";
     result[url] = transformHttpsPackageFile({
       url,
       hash,
       hashAlgo,
+      hashEnc,
       meta: {
         registry,
       },

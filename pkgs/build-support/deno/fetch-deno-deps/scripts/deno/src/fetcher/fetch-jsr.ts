@@ -156,6 +156,7 @@ async function fetchJsrPackageFiles(
       url: makeJsrPackageFileUrl(inJsrRegistryUrl, packageSpecifier, filePath),
       hash,
       hashAlgo: "sha256",
+      hashEnc: "hex",
       meta: { packageSpecifier },
     };
     resultUnresolved.push(fetchDefault(outPathPrefix, packageFile));
@@ -201,6 +202,7 @@ async function makeMetaJson(
     url: metaJsonUrl,
     hash: "",
     hashAlgo: "sha256",
+    hashEnc: "hex",
     outPath: "",
     meta: structuredClone(versionMetaJson.meta),
   };

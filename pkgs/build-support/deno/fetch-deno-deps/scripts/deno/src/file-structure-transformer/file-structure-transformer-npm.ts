@@ -3,6 +3,7 @@ import type {
   CommonLockFormatOut,
   PackageSpecifier,
   ParsedArgs,
+  ParsedArgsNames,
   PathString,
   UnparsedArgs,
 } from "../types.d.ts";
@@ -17,7 +18,7 @@ type FileTransformerNpmConfig = {
 
 type Config = FileTransformerNpmConfig;
 function getConfig(): Config {
-  type ArgNames = {
+  interface ArgNames extends ParsedArgsNames {
     commonLockNpmPath: null;
     denoDirPath: null;
   };
