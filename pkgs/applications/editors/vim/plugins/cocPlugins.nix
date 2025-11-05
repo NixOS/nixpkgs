@@ -19,6 +19,7 @@
   coc-json,
   coc-lists,
   coc-markdownlint,
+  coc-pairs,
   coc-pyright,
   coc-sh,
   coc-spell-checker,
@@ -118,6 +119,11 @@ final: prev: {
   coc-markdownlint = buildVimPlugin {
     inherit (coc-markdownlint) pname version meta;
     src = "${coc-markdownlint}/lib/node_modules/coc-markdownlint";
+  };
+
+  coc-pairs = buildVimPlugin {
+    inherit (coc-pairs) pname version meta;
+    src = "${coc-pairs}/lib/node_modules/coc-pairs";
   };
 
   coc-pyright = buildVimPlugin {

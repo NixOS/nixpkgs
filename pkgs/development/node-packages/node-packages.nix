@@ -37686,24 +37686,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-pairs = nodeEnv.buildNodePackage {
-    name = "coc-pairs";
-    packageName = "coc-pairs";
-    version = "1.5.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-pairs/-/coc-pairs-1.5.1.tgz";
-      sha512 = "/wQOKlptsj2KB4yoIBYN3xtTbCKSsGbRdkNAeYCKCQZX0J5uVMFNgo363+k1BVp9KrkWQDlvVluF3Xf1ei8PfA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Auto pair extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-pairs#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-prettier = nodeEnv.buildNodePackage {
     name = "coc-prettier";
     packageName = "coc-prettier";
