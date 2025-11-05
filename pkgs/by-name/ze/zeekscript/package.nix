@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,6 +35,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "zeekscript"
   ];
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Zeek script formatter and analyzer";
