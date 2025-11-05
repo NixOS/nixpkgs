@@ -3,27 +3,26 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-git-versioning,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LIbj2aBHmKxVZ5O87YOIFilqLwhQF2ZOSZXLQKEEegI=";
+    hash = "sha256-J6XHcNBowRDZ7ZMj8k8VQ+g7LzAKaHt4kcGm1Wtpe1s=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-git-versioning
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # https://github.com/pytoolz/toolz/issues/577
-    "test_inspect_wrapped_property"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";
