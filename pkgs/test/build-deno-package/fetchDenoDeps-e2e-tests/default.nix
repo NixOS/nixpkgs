@@ -8,17 +8,17 @@ in
     just-jsr-linux = fetchDenoDeps {
       name = "test-deno-fetch-${fetcherSrc}";
       denoLock = ./just-jsr/deno.lock;
-      hash = "sha256-e3PiKCDZo6b+4BsS087cvKwxpSDu2RD5fkhxOLt89uE=";
+      hash = "sha256-CV/2kYxYYA1g5/dwSKiC4h1F2+6seTItTLBYQoSt0og=";
     };
     with-https-linux = fetchDenoDeps {
       name = "test-deno-fetch-${fetcherSrc}";
       denoLock = ./with-https/deno.lock;
-      hash = "sha256-vhM+WIH28FA+W3wW496UZ+vxWkOK7c9Xlk9t8fMAXco=";
+      hash = "sha256-O3P2x8kkD92AdbuRIUNp+OJN54ymRhSS1Xscu8dWIGY=";
     };
     with-https-and-npm-linux = fetchDenoDeps {
       name = "test-deno-fetch-${fetcherSrc}";
       denoLock = ./with-https-and-npm/deno.lock;
-      hash = "sha256-AeGnHTQHIiK8DbITmUPMqRpfyrEplSYfgrgvXQqRCXg=";
+      hash = "sha256-TrYrURHG57nGLTSrTEqOGIkQXcpP81NDrIvGVtgwNv0=";
     };
   };
 }
