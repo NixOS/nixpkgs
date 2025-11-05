@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Thu, 23 Oct 2025 05:46:07 -0700
+Subject: [PATCH] nixos-rebuild-ng: patch out print_help to use the man page
+
+Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src`
+---
+ nixos_rebuild/help.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/nixos_rebuild/help.py b/nixos_rebuild/help.py
+index 7437550a37b8..dcb730e09ced 100644
+--- a/nixos_rebuild/help.py
++++ b/nixos_rebuild/help.py
+@@ -1,7 +1,10 @@
+ import argparse
++from subprocess import run
+ from typing import NoReturn
+ 
++from .constants import EXECUTABLE
++
+ 
+ def print_help(parser: argparse.ArgumentParser) -> NoReturn:
+-    parser.print_help()
+-    parser.exit()
++    r = run(["man", "8", EXECUTABLE], check=False)
++    parser.exit(r.returncode)
+-- 
+2.51.0
+

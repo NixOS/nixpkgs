@@ -1070,6 +1070,7 @@ in
   nixos-rebuild-specialisations-ng = runTestOn [ "x86_64-linux" ] {
     imports = [ ./nixos-rebuild-specialisations.nix ];
     _module.args.withNg = true;
+    _module.args.withNom = true;
   };
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];

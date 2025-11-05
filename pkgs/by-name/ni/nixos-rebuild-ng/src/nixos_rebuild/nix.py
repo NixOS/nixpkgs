@@ -13,6 +13,16 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
+from .constants import (
+    NIX,
+    NIX_BUILD,
+    NIX_CHANNEL,
+    NIX_COPY_CLOSURE,
+    NIX_ENV,
+    NIX_INSTANTIATE,
+    NIX_OR_NOM,
+    NIX_STORE,
+)
 from .models import (
     Action,
     BuildAttr,
@@ -57,7 +67,7 @@ def build(
     Returns the built attribute as path.
     """
     run_args = [
-        "nix-build",
+        NIX_BUILD,
         build_attr.path,
         "--attr",
         build_attr.to_attr(attr),
@@ -77,9 +87,9 @@ def build_flake(
     Returns the built attribute as path.
     """
     run_args = [
-        "nix",
-        *FLAKE_FLAGS,
+        NIX_OR_NOM,
         "build",
+        *FLAKE_FLAGS,
         "--print-out-paths",
         flake.to_attr(attr),
         *dict_to_flags(flake_build_flags),
@@ -101,7 +111,7 @@ def build_remote(
     # > by the garbage collector
     r = run_wrapper(
         [
-            "nix-instantiate",
+            NIX_INSTANTIATE,
             build_attr.path,
             "--attr",
             build_attr.to_attr(attr),
@@ -122,7 +132,7 @@ def build_remote(
     try:
         r = run_wrapper(
             [
-                "nix-store",
+                NIX_STORE,
                 "--realise",
                 drv,
                 "--add-root",
@@ -152,7 +162,7 @@ def build_remote_flake(
 ) -> Path:
     r = run_wrapper(
         [
-            "nix",
+            NIX,
             *FLAKE_FLAGS,
             "eval",
             "--raw",
@@ -165,9 +175,9 @@ def build_remote_flake(
     copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
     r = run_wrapper(
         [
-            "nix",
-            *FLAKE_FLAGS,
+            NIX_OR_NOM,
             "build",
+            *FLAKE_FLAGS,
             f"{drv}^*",
             "--print-out-paths",
             *dict_to_flags(flake_build_flags),
@@ -196,7 +206,7 @@ def copy_closure(
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
             [
-                "nix-copy-closure",
+                NIX_COPY_CLOSURE,
                 *dict_to_flags(copy_flags),
                 "--to" if to else "--from",
                 host.host,
@@ -208,7 +218,7 @@ def copy_closure(
     def nix_copy(to_host: Remote, from_host: Remote) -> None:
         run_wrapper(
             [
-                "nix",
+                NIX,
                 *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
@@ -248,7 +258,7 @@ def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
     "Try to find and open NixOS configuration file in editor for Flake config."
     run_wrapper(
         [
-            "nix",
+            NIX,
             *FLAKE_FLAGS,
             "edit",
             *dict_to_flags(flake_flags),
@@ -262,7 +272,7 @@ def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
 def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
-        ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
+        [NIX_INSTANTIATE, "--find-file", file, *dict_to_flags(nix_flags)],
         stdout=PIPE,
         check=False,
     )
@@ -283,7 +293,7 @@ def get_build_image_name(
     )
     r = run_wrapper(
         [
-            "nix-instantiate",
+            NIX_INSTANTIATE,
             "--eval",
             "--strict",
             "--json",
@@ -310,7 +320,7 @@ def get_build_image_name_flake(
 ) -> str:
     r = run_wrapper(
         [
-            "nix",
+            NIX,
             "eval",
             "--json",
             flake.to_attr(
@@ -335,7 +345,7 @@ def get_build_image_variants(
     )
     r = run_wrapper(
         [
-            "nix-instantiate",
+            NIX_INSTANTIATE,
             "--eval",
             "--strict",
             "--json",
@@ -361,7 +371,7 @@ def get_build_image_variants_flake(
 ) -> ImageVariants:
     r = run_wrapper(
         [
-            "nix",
+            NIX,
             "eval",
             "--json",
             flake.to_attr("config.system.build.images"),
@@ -450,7 +460,7 @@ def get_generations_from_nix_env(
 
     # Using `nix-env --list-generations` needs root to lock the profile
     r = run_wrapper(
-        ["nix-env", "-p", profile.path, "--list-generations"],
+        [NIX_ENV, "-p", profile.path, "--list-generations"],
         stdout=PIPE,
         remote=target_host,
         sudo=sudo,
@@ -534,7 +544,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
 
 
 def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
-    run_args = ["nix", "repl", "--file", build_attr.path]
+    run_args = [NIX, "repl", "--file", build_attr.path]
     if build_attr.attr:
         run_args.append(build_attr.attr)
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
@@ -554,7 +564,7 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     )
     run_wrapper(
         [
-            "nix",
+            NIX,
             *FLAKE_FLAGS,
             "repl",
             "--impure",
@@ -568,7 +578,7 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
 def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
     run_wrapper(
-        ["nix-env", "--rollback", "-p", profile.path],
+        [NIX_ENV, "--rollback", "-p", profile.path],
         remote=target_host,
         sudo=sudo,
     )
@@ -631,7 +641,7 @@ def set_profile(
             raise NixOSRebuildError(msg)
 
     run_wrapper(
-        ["nix-env", "-p", profile.path, "--set", path_to_config],
+        [NIX_ENV, "-p", profile.path, "--set", path_to_config],
         remote=target_host,
         sudo=sudo,
     )
@@ -700,7 +710,7 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
             run_wrapper(
-                ["nix-channel", "--update", channel_path.name],
+                [NIX_CHANNEL, "--update", channel_path.name],
                 check=False,
                 sudo=sudo,
             )

@@ -11,6 +11,16 @@ from pytest import MonkeyPatch
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
 import nixos_rebuild.process as p
+from nixos_rebuild.constants import (
+    NIX,
+    NIX_BUILD,
+    NIX_CHANNEL,
+    NIX_COPY_CLOSURE,
+    NIX_ENV,
+    NIX_INSTANTIATE,
+    NIX_OR_NOM,
+    NIX_STORE,
+)
 
 from .helpers import get_qualified_name
 
@@ -28,7 +38,7 @@ def test_build(mock_run: Mock) -> None:
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
-            "nix-build",
+            NIX_BUILD,
             "<nixpkgs/nixos>",
             "--attr",
             "config.system.build.attr",
@@ -42,7 +52,7 @@ def test_build(mock_run: Mock) -> None:
         "config.system.build.attr", m.BuildAttr(Path("file"), "preAttr")
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
-        ["nix-build", Path("file"), "--attr", "preAttr.config.system.build.attr"],
+        [NIX_BUILD, Path("file"), "--attr", "preAttr.config.system.build.attr"],
         stdout=PIPE,
     )
 
@@ -63,10 +73,10 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
-            "nix",
+            NIX_OR_NOM,
+            "build",
             "--extra-experimental-features",
             "nix-command flakes",
-            "build",
             "--print-out-paths",
             '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
@@ -88,11 +98,11 @@ def test_build_remote(
     def run_wrapper_side_effect(
         args: list[str], **kwargs: Any
     ) -> CompletedProcess[str]:
-        if args[0] == "nix-instantiate":
+        if args[0] == NIX_INSTANTIATE:
             return CompletedProcess([], 0, stdout=" \n/path/to/file\n ")
         elif args[0] == "mktemp":
             return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir\n ")
-        elif args[0] == "nix-store":
+        elif args[0] == NIX_STORE:
             return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir/config\n ")
         elif args[0] == "readlink":
             return CompletedProcess([], 0, stdout=" \n/path/to/config\n ")
@@ -115,7 +125,7 @@ def test_build_remote(
         [
             call(
                 [
-                    "nix-instantiate",
+                    NIX_INSTANTIATE,
                     "<nixpkgs/nixos>",
                     "--attr",
                     "preAttr.config.system.build.toplevel",
@@ -127,7 +137,7 @@ def test_build_remote(
             ),
             call(
                 [
-                    "nix-copy-closure",
+                    NIX_COPY_CLOSURE,
                     "--copy",
                     "--to",
                     "user@host",
@@ -144,7 +154,7 @@ def test_build_remote(
             ),
             call(
                 [
-                    "nix-store",
+                    NIX_STORE,
                     "--realise",
                     Path("/path/to/file"),
                     "--add-root",
@@ -189,7 +199,7 @@ def test_build_remote_flake(
         [
             call(
                 [
-                    "nix",
+                    NIX,
                     "--extra-experimental-features",
                     "nix-command flakes",
                     "eval",
@@ -201,7 +211,7 @@ def test_build_remote_flake(
             ),
             call(
                 [
-                    "nix-copy-closure",
+                    NIX_COPY_CLOSURE,
                     "--copy",
                     "--to",
                     "user@host",
@@ -213,10 +223,10 @@ def test_build_remote_flake(
             ),
             call(
                 [
-                    "nix",
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "/path/to/file^*",
                     "--print-out-paths",
                     "--build",
@@ -239,7 +249,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
-            ["nix-copy-closure", "--to", "user@target.host", closure],
+            [NIX_COPY_CLOSURE, "--to", "user@target.host", closure],
             extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         )
 
@@ -247,7 +257,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, None, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
-            ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
+            [NIX_COPY_CLOSURE, "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
                 "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-opt"])
             },
@@ -261,7 +271,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
             [
-                "nix",
+                NIX,
                 "--extra-experimental-features",
                 "nix-command flakes",
                 "copy",
@@ -295,7 +305,7 @@ def test_edit_flake(mock_run: Mock) -> None:
     n.edit_flake(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
-            "nix",
+            NIX,
             "--extra-experimental-features",
             "nix-command flakes",
             "edit",
@@ -329,7 +339,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     }
     mock_run.assert_called_with(
         [
-            "nix-instantiate",
+            NIX_INSTANTIATE,
             "--eval",
             "--strict",
             "--json",
@@ -352,7 +362,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     }
     mock_run.assert_called_with(
         [
-            "nix-instantiate",
+            NIX_INSTANTIATE,
             "--eval",
             "--strict",
             "--json",
@@ -392,7 +402,7 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
     }
     mock_run.assert_called_with(
         [
-            "nix",
+            NIX,
             "eval",
             "--json",
             "/flake.nix#myAttr.config.system.build.images",
@@ -495,7 +505,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
         ]
         mock_run.assert_called_with(
-            ["nix-env", "-p", path, "--list-generations"],
+            [NIX_ENV, "-p", path, "--list-generations"],
             stdout=PIPE,
             remote=None,
             sudo=False,
@@ -513,7 +523,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
         ]
         mock_run.assert_called_with(
-            ["nix-env", "-p", path, "--list-generations"],
+            [NIX_ENV, "-p", path, "--list-generations"],
             stdout=PIPE,
             remote=remote,
             sudo=True,
@@ -565,11 +575,11 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 def test_repl(mock_run: Mock) -> None:
     n.repl(m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
-        ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
+        [NIX, "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
 
     n.repl(m.BuildAttr(Path("file.nix"), "myAttr"))
-    mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
+    mock_run.assert_called_with([NIX, "repl", "--file", Path("file.nix"), "myAttr"])
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -589,7 +599,7 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
 
     assert n.rollback(profile, None, False) == profile.path
     mock_run.assert_called_with(
-        ["nix-env", "--rollback", "-p", path],
+        [NIX_ENV, "--rollback", "-p", path],
         remote=None,
         sudo=False,
     )
@@ -597,7 +607,7 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
     target_host = m.Remote("user@localhost", [], None)
     assert n.rollback(profile, target_host, True) == profile.path
     mock_run.assert_called_with(
-        ["nix-env", "--rollback", "-p", path],
+        [NIX_ENV, "--rollback", "-p", path],
         remote=target_host,
         sudo=True,
     )
@@ -624,7 +634,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
         )
         mock_run.assert_called_with(
             [
-                "nix-env",
+                NIX_ENV,
                 "-p",
                 path,
                 "--list-generations",
@@ -641,7 +651,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
         )
         mock_run.assert_called_with(
             [
-                "nix-env",
+                NIX_ENV,
                 "-p",
                 path,
                 "--list-generations",
@@ -670,7 +680,7 @@ def test_set_profile(mock_run: Mock) -> None:
     )
 
     mock_run.assert_called_with(
-        ["nix-env", "-p", profile_path, "--set", config_path],
+        [NIX_ENV, "-p", profile_path, "--set", config_path],
         remote=None,
         sudo=False,
     )
@@ -836,17 +846,15 @@ def test_upgrade_channels(
 
     n.upgrade_channels(all_channels=False, sudo=True)
     mock_run.assert_called_once_with(
-        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+        [NIX_CHANNEL, "--update", "nixos"], check=False, sudo=True
     )
 
     mock_geteuid.return_value = 0
     n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
-            call(
-                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
-            ),
-            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
+            call([NIX_CHANNEL, "--update", "nixos"], check=False, sudo=False),
+            call([NIX_CHANNEL, "--update", "nixos-hardware"], check=False, sudo=False),
+            call([NIX_CHANNEL, "--update", "home-manager"], check=False, sudo=False),
         ]
     )

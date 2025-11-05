@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Wed, 22 Oct 2025 17:02:15 -0700
+Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
+
+Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src HEAD^1`
+---
+ nixos_rebuild/constants.py | 18 +++++++++---------
+ pyproject.toml             |  6 +++---
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
+index f79922ea5c87..ee4fc0c49373 100644
+--- a/nixos_rebuild/constants.py
++++ b/nixos_rebuild/constants.py
+@@ -2,15 +2,15 @@ from typing import Final
+ 
+ # The name of this executable, for purposes of replacing `nixos-rebuild`.
+ # The derivation replaces this using a patch file.
+-EXECUTABLE: Final[str] = "nixos-rebuild-ng"
++EXECUTABLE: Final[str] = "@executable@"
+ 
+ # These names are replaced with absolute paths to Nix in the store in the derivation.
+ # Some of these names could be either `nix` or `nom`, and are called out as such.
+-NIX: Final[str] = "nix"
+-NIX_OR_NOM: Final[str] = "nix"
+-NIX_BUILD: Final[str] = "nix-build"
+-NIX_CHANNEL: Final[str] = "nix-channel"
+-NIX_COPY_CLOSURE: Final[str] = "nix-copy-closure"
+-NIX_ENV: Final[str] = "nix-env"
+-NIX_INSTANTIATE: Final[str] = "nix-instantiate"
+-NIX_STORE: Final[str] = "nix-store"
++NIX: Final[str] = "@nix@"
++NIX_OR_NOM: Final[str] = "@nix-or-nom@"
++NIX_BUILD: Final[str] = "@nix-build@"
++NIX_CHANNEL: Final[str] = "@nix-channel@"
++NIX_COPY_CLOSURE: Final[str] = "@nix-copy-closure@"
++NIX_ENV: Final[str] = "@nix-env@"
++NIX_INSTANTIATE: Final[str] = "@nix-instantiate@"
++NIX_STORE: Final[str] = "@nix-store@"
+diff --git a/pyproject.toml b/pyproject.toml
+index 757067db9f06..68dfa825a824 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -3,11 +3,11 @@ requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
+-name = "nixos-rebuild"
+-version = "0.0.0"
++name = "@executable@"
++version = "@version@"
+ 
+ [project.scripts]
+-nixos-rebuild = "nixos_rebuild:main"
++@executable@ = "nixos_rebuild:main"
+ 
+ [tool.setuptools.package-data]
+ nixos_rebuild = ["*.nix.template"]
+-- 
+2.51.0
+
