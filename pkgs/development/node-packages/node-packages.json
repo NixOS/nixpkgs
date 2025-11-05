@@ -22,7 +22,6 @@
 , "cdk8s-cli"
 , "clipboard-cli"
 , "coc-go"
-, "coc-haxe"
 , "coc-highlight"
 , "coc-html"
 , "coc-java"

@@ -81,6 +81,7 @@ mapAliases {
   inherit (pkgs) coc-explorer; # added 2025-10-01
   inherit (pkgs) coc-flutter; # Added 2025-11-05
   inherit (pkgs) coc-git; # added 2025-10-01
+  inherit (pkgs) coc-haxe; # Added 2025-11-05
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16

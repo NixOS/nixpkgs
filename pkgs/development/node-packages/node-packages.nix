@@ -37668,24 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-haxe = nodeEnv.buildNodePackage {
-    name = "coc-haxe";
-    packageName = "coc-haxe";
-    version = "0.21.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-haxe/-/coc-haxe-0.21.1.tgz";
-      sha512 = "oz4kKSH/rw3pk/T3Ecro2qDpG4nt64BuyKyJkiETEIf2HMgbmYzFdz6e8TklobclQTbOic903+3azwze95BVsQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Haxe language server extension for coc.nvim";
-      homepage = "https://github.com/vantreeseba/coc-haxe#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-highlight = nodeEnv.buildNodePackage {
     name = "coc-highlight";
     packageName = "coc-highlight";
