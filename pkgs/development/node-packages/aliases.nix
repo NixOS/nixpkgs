@@ -77,6 +77,7 @@ mapAliases {
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   inherit (pkgs) coc-docker; # added 2025-10-01
   inherit (pkgs) coc-emmet; # Added 2025-11-05
+  inherit (pkgs) coc-eslint; # Added 2025-11-05;
   inherit (pkgs) coc-explorer; # added 2025-10-01
   inherit (pkgs) coc-git; # added 2025-10-01
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21

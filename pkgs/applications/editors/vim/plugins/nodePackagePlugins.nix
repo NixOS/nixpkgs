@@ -6,7 +6,6 @@
 final: prev:
 let
   nodePackageNames = [
-    "coc-eslint"
     "coc-flutter"
     "coc-go"
     "coc-haxe"

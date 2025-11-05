@@ -37643,24 +37643,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-eslint = nodeEnv.buildNodePackage {
-    name = "coc-eslint";
-    packageName = "coc-eslint";
-    version = "1.7.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-eslint/-/coc-eslint-1.7.0.tgz";
-      sha512 = "NCL4qXmj9CClh9E87BagmHx4wLmKL7OzK0eLBZMovXphG5woHKPLwMfDOfoNEthloE4G3bG3TzoMsQIwhKvayA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Eslint extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-eslint#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-flutter = nodeEnv.buildNodePackage {
     name = "coc-flutter";
     packageName = "coc-flutter";
