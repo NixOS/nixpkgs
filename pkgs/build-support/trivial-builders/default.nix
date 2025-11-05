@@ -92,7 +92,6 @@ rec {
       }
       // (lib.optionalAttrs runLocal {
         preferLocalBuild = true;
-        allowSubstitutes = false;
       })
       // removeAttrs derivationArgs [ "passAsFile" ]
     );
@@ -108,7 +107,7 @@ rec {
       checkPhase ? "",
       meta ? { },
       passthru ? { },
-      allowSubstitutes ? false,
+      allowSubstitutes ? true,
       preferLocalBuild ? true,
       derivationArgs ? { },
     }:
@@ -343,7 +342,6 @@ rec {
         ;
       executable = true;
       destination = "/bin/${name}";
-      allowSubstitutes = true;
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
@@ -404,7 +402,6 @@ rec {
         passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
-        allowSubstitutes = false;
         meta = {
           mainProgram = pname;
         };
@@ -583,7 +580,7 @@ rec {
       paths,
       stripPrefix ? "",
       preferLocalBuild ? true,
-      allowSubstitutes ? false,
+      allowSubstitutes ? true,
       postBuild ? "",
       failOnMissing ? stripPrefix == "",
       ...
@@ -678,7 +675,6 @@ rec {
     runCommand name
       {
         preferLocalBuild = true;
-        allowSubstitutes = false;
         passthru.entries = entries';
       }
       ''
@@ -958,7 +954,6 @@ rec {
       outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
-      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_
@@ -1053,7 +1048,6 @@ rec {
             postPatch
             ;
           preferLocalBuild = true;
-          allowSubstitutes = false;
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
