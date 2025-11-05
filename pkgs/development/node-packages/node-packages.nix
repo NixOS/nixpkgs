@@ -37668,24 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-lists = nodeEnv.buildNodePackage {
-    name = "coc-lists";
-    packageName = "coc-lists";
-    version = "1.5.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-lists/-/coc-lists-1.5.4.tgz";
-      sha512 = "RROel79iUEzY3ICwqLIfWkftdA95mlluSa933CxfxvZxQiPcnlSd9XWGc770RZOEv6R5TCihht2LRt0Lj1PrGQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Basic list sources for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-lists#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-ltex = nodeEnv.buildNodePackage {
     name = "coc-ltex";
     packageName = "coc-ltex";

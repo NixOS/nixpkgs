@@ -88,6 +88,7 @@ mapAliases {
   inherit (pkgs) coc-java; # Added 2025-11-05
   inherit (pkgs) coc-jest; # Added 2025-11-05
   inherit (pkgs) coc-json; # Added 2025-11-05
+  inherit (pkgs) coc-lists; # Added 2025-11-05
   inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
