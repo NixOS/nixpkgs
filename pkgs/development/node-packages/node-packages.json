@@ -23,7 +23,6 @@
 , "clipboard-cli"
 , "coc-go"
 , "coc-ltex"
-, "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
 , "coc-stylelint"

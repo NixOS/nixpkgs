@@ -25,6 +25,7 @@
   coc-r-lsp,
   coc-rust-analyzer,
   coc-sh,
+  coc-smartf,
   coc-spell-checker,
   coc-toml,
 }:
@@ -154,6 +155,11 @@ final: prev: {
     pname = "coc-sh";
     inherit (coc-sh) version meta;
     src = "${coc-sh}/lib/node_modules/coc-sh";
+  };
+
+  coc-smartf = buildVimPlugin {
+    inherit (coc-smartf) pname version meta;
+    src = "${coc-smartf}/lib/node_modules/coc-smartf";
   };
 
   coc-spell-checker = buildVimPlugin {

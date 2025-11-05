@@ -99,6 +99,7 @@ mapAliases {
   coc-rls = throw "coc-rls was removed because rls was deprecated in 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
   inherit (pkgs) coc-rust-analyzer; # added 2025-11-05
   inherit (pkgs) coc-sh; # added 2025-10-02
+  inherit (pkgs) coc-smartf; # Added 2025-11-05
   inherit (pkgs) coc-spell-checker; # added 2025-10-01
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18

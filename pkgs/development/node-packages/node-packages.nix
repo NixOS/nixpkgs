@@ -37659,24 +37659,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-smartf = nodeEnv.buildNodePackage {
-    name = "coc-smartf";
-    packageName = "coc-smartf";
-    version = "1.2.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-smartf/-/coc-smartf-1.2.1.tgz";
-      sha512 = "Zlm+lt03V1qmJVvQw81svaWE+jC9e42VTnHBh8qjlUJUMG1GDjuC8cwM1ulamdovSsKdlmtHwVpScdKBgg3/Fg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Smart find extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-smartf#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-snippets = nodeEnv.buildNodePackage {
     name = "coc-snippets";
     packageName = "coc-snippets";
