@@ -49,6 +49,8 @@ let
 
         programs.biome = {
           enable = true;
+          # Disable settings validation because its inputs are liable to hash mismatch
+          validate.enable = false;
           settings.formatter = {
             useEditorconfig = true;
           };
