@@ -98,19 +98,6 @@ final: prev: {
     };
   });
 
-  jsonplaceholder = prev.jsonplaceholder.override {
-    buildInputs = [ nodejs ];
-    postInstall = ''
-      exe=$out/bin/jsonplaceholder
-      mkdir -p $out/bin
-      cat >$exe <<EOF
-      #!${pkgs.runtimeShell}
-      exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
-      EOF
-      chmod a+x $exe
-    '';
-  };
-
   makam = prev.makam.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
