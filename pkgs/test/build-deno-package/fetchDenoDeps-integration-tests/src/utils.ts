@@ -1,4 +1,4 @@
-import { Args, Fixture, SetupFn, TeardownFn, Test, VirtualFile } from "./types.d.ts";
+import type { Args, Fixture, SetupFn, TeardownFn, Test, VirtualFile } from "./types.d.ts";
 
 export const globalPathPrefix = "./testFolder";
 

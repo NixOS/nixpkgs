@@ -1,5 +1,5 @@
 import { runTests } from "./utils.ts";
-import { Fixture, Test, Vars } from "./types.d.ts";
+import type { Fixture, Test, Vars } from "./types.d.ts";
 
 type LockfileTransformerFixture = {
   denoLockContent: string;

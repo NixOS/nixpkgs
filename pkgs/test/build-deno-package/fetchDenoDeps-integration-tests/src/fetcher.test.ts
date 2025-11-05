@@ -1,5 +1,5 @@
 import { argsToCommand, assertEq, dec, runTests } from "./utils.ts";
-import { Fixture, SetupFn, Test, Vars, VirtualFS } from "./types.d.ts";
+import type { Fixture, SetupFn, Test, Vars, VirtualFS } from "./types.d.ts";
 
 type FetcherFixture = {
   inJsrJsonContent: string;
@@ -60,10 +60,10 @@ const serverConfig = {
 
 const PLACEHOLDER = "$DOMAIN$";
 
-function fixtureFrom(f: FetcherFixture): { fixture: Fixture; preFn: SetupFn } {
+function fixtureFrom(f: FetcherFixture): Omit<Test, "name"> {
   return {
     fixture: _fixtureFrom(f, serverConfig),
-    preFn: startMockServer(serverConfig),
+    setupFn: startMockServer(serverConfig),
   };
 }
 
