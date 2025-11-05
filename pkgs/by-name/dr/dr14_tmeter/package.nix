@@ -35,6 +35,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "dr14_tmeter";
     license = lib.licenses.gpl3Plus;
     homepage = "http://dr14tmeter.sourceforge.net/";
-    maintainers = [ ];
+    maintainers = with maintainers; [ sciencentistguy ];
   };
 }
