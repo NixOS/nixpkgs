@@ -7,6 +7,7 @@
   cmake,
   rocm-cmake,
   clr,
+  diffutils,
   python3,
   tensile,
   boost,
@@ -148,6 +149,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "4.43.0" "4.44.0" \
       --replace-fail '0.10' '1.0'
+  ''
+  # Fixes sh: line 1: /usr/bin/diff: No such file or directory
+  # /build/source/clients/gtest/../include/testing_logging.hpp:1117: Failure
+  + lib.optionals buildTests ''
+    substituteInPlace clients/include/testing_logging.hpp \
+      --replace-fail "/usr/bin/diff" "${lib.getExe' diffutils "diff"}"
   '';
 
   postInstall =
