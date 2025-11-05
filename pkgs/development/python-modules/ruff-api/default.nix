@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "amyreese";
     repo = "ruff-api";
     tag = "v${version}";
-    hash = "sha256-1XULyxu3XujhAcFnvqI5zMiXOc0axx1LS4EevjhoGDc=";
+    hash = "sha256-+tGBaHEau2OjAjj452wEAQ4gyxczg6Fb+NJ42oIkKQY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-q8Y5oqoSzUk1Xg4AmjLs7RO8Kr87Oi3eKLSpmXlHp4U=";
+    hash = "sha256-cpW2XsrQvFC5wkGF8hBQ7xFp5oLEJpbHuHBLi6VFkEo=";
   };
 
   nativeBuildInputs = [
