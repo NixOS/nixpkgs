@@ -45,6 +45,10 @@ export function getBasePath(path: PathString): PathString {
   return path.split("/").slice(0, -1).join("/");
 }
 
+export function getFileName(path: PathString): PathString {
+  return path.split("/").slice(-1).join("/");
+}
+
 export function normalizeUnixPath(path: PathString): PathString {
   const segments = path.split("/");
   const stack = [];

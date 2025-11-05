@@ -34,7 +34,7 @@ struct Args {
     deno_dir_path: PathBuf,
     #[arg(short, long)]
     vendor_dir_path: PathBuf,
-    #[arg(short, long)]
+    #[arg(short, long, default_value_t=String::from("https://jsr.io/"))]
     jsr_registry_url: String,
 }
 
@@ -71,11 +71,7 @@ fn main() -> Result<()> {
 
     let sys = RealSys;
     let global_cache = Rc::new(GlobalHttpCache::new(sys, args.deno_dir_path));
-    let jsr_registry_url = if args.jsr_registry_url.is_empty() {
-        "https://jsr.io/"
-    } else {
-        &args.jsr_registry_url
-    };
+    let jsr_registry_url = &args.jsr_registry_url;
     let cache = LocalHttpCache::new(
         args.vendor_dir_path,
         global_cache.clone(),

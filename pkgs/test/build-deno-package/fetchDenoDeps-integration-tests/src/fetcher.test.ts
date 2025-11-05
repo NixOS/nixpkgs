@@ -115,9 +115,9 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
   const actualDomain = `http://${serverConfig.host}:${serverConfig.port}`;
 
   const vars: Vars = {
-    "in-path-jsr": "./jsr.json",
-    "in-path-npm": "./npm.json",
-    "in-path-https": "./https.json",
+    "common-lock-jsr-path": "./jsr.json",
+    "common-lock-npm-path": "./npm.json",
+    "common-lock-https-path": "./https.json",
     "in-jsr-registry-url": actualDomain,
     "out-path-prefix": "./out",
   };
@@ -177,17 +177,17 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
       files: {
         expected: [
           {
-            path: `${vars["out-path-prefix"]}/jsr.json}`,
+            path: `${vars["out-path-prefix"]}/jsr.json`,
             isReal: false,
             content: JSON.stringify(JSON.parse(outJsrJsonContent), null, 2),
           },
           {
-            path: `${vars["out-path-prefix"]}/npm.json}`,
+            path: `${vars["out-path-prefix"]}/npm.json`,
             isReal: false,
             content: JSON.stringify(JSON.parse(outNpmJsonContent), null, 2),
           },
           {
-            path: `${vars["out-path-prefix"]}/https.json}`,
+            path: `${vars["out-path-prefix"]}/https.json`,
             isReal: false,
             content: JSON.stringify(
               JSON.parse(outHttpsJsonContent),

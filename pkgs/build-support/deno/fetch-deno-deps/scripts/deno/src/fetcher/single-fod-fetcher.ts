@@ -4,7 +4,7 @@
 
 import { fetchAllJsr } from "./fetch-jsr.ts";
 import { fetchAllNpm } from "./fetch-npm.ts";
-import { addPrefix } from "../utils.ts";
+import { addPrefix, getFileName } from "../utils.ts";
 import { fetchAllHttps } from "./fetch-https.ts";
 import type {
   CommonLockFormatIn,
@@ -91,17 +91,17 @@ async function fetchAndWrite(config: Config) {
   const lockfiles = await fetchAll(config);
   const promises = [
     Deno.writeTextFile(
-      addPrefix(config.commonLockJsrPath, config.outPathPrefix),
+      addPrefix(getFileName(config.commonLockJsrPath), config.outPathPrefix),
       JSON.stringify(lockfiles.jsr, null, 2),
       { create: true },
     ),
     Deno.writeTextFile(
-      addPrefix(config.commonLockHttpsPath, config.outPathPrefix),
+      addPrefix(getFileName(config.commonLockHttpsPath), config.outPathPrefix),
       JSON.stringify(lockfiles.https, null, 2),
       { create: true },
     ),
     Deno.writeTextFile(
-      addPrefix(config.commonLockNpmPath, config.outPathPrefix),
+      addPrefix(getFileName(config.commonLockNpmPath), config.outPathPrefix),
       JSON.stringify(lockfiles.npm, null, 2),
       { create: true },
     ),
