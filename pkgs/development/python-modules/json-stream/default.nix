@@ -6,7 +6,6 @@
   httpx,
   iconv,
   pytestCheckHook,
-  pythonOlder,
   requests,
   json-stream-rs-tokenizer,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "json-stream";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "daggaz";
