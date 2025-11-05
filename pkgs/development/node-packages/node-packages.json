@@ -76,7 +76,6 @@
 , "gatsby-cli"
 , "grunt-cli"
 , "makam"
-, "gulp"
 , "gulp-cli"
 , "he"
 , "hs-airdrop"
