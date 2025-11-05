@@ -21,9 +21,12 @@ python3Packages.buildPythonPackage rec {
 
   build-system = [ python3Packages.setuptools ];
 
+  nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
+  ];
+
   dependencies = [
     python3Packages.pyqt5
-    libsForQt5.wrapQtAppsHook
   ];
 
   patchPhase = ''
