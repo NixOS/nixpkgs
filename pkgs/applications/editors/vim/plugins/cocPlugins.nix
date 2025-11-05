@@ -6,6 +6,7 @@
   coc-css,
   coc-diagnostic,
   coc-docker,
+  coc-emmet,
   coc-explorer,
   coc-git,
   coc-pyright,
@@ -42,6 +43,11 @@ final: prev: {
   coc-docker = buildVimPlugin {
     inherit (coc-docker) pname version meta;
     src = "${coc-docker}/lib/node_modules/coc-docker";
+  };
+
+  coc-emmet = buildVimPlugin {
+    inherit (coc-emmet) pname version meta;
+    src = "${coc-emmet}/lib/node_modules/coc-emmet";
   };
 
   coc-explorer = buildVimPlugin {

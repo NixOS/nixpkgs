@@ -914,15 +914,6 @@ let
         sha512 = "YfASnrhJ+ve6Q43ZiDwmpBgYgi2u0bYjeAVi2tDfN7YWAKO8X9EEOuPGtqbJpPLM6TfAHimghICjWe2eaJ8BAg==";
       };
     };
-    "@emmetio/extract-abbreviation-0.1.6" = {
-      name = "_at_emmetio_slash_extract-abbreviation";
-      packageName = "@emmetio/extract-abbreviation";
-      version = "0.1.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@emmetio/extract-abbreviation/-/extract-abbreviation-0.1.6.tgz";
-        sha512 = "Ce3xE2JvTSEbASFbRbA1gAIcMcZWdS2yUYRaQbeM0nbOzaZrUYfa3ePtcriYRZOZmr+CkKA+zbjhvTpIOAYVcw==";
-      };
-    };
     "@eslint-community/eslint-utils-4.5.1" = {
       name = "_at_eslint-community_slash_eslint-utils";
       packageName = "@eslint-community/eslint-utils";
@@ -17943,15 +17934,6 @@ let
         sha512 = "XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==";
       };
     };
-    "jsonc-parser-1.0.3" = {
-      name = "jsonc-parser";
-      packageName = "jsonc-parser";
-      version = "1.0.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jsonc-parser/-/jsonc-parser-1.0.3.tgz";
-        sha512 = "hk/69oAeaIzchq/v3lS50PXuzn5O2ynldopMC+SWBql7J2WtdptfB9dy8Y7+Og5rPkTCpn83zTiO8FMcqlXJ/g==";
-      };
-    };
     "jsonc-parser-2.2.1" = {
       name = "jsonc-parser";
       packageName = "jsonc-parser";
@@ -32516,15 +32498,6 @@ let
         sha512 = "2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==";
       };
     };
-    "vscode-emmet-helper-1.2.17" = {
-      name = "vscode-emmet-helper";
-      packageName = "vscode-emmet-helper";
-      version = "1.2.17";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-emmet-helper/-/vscode-emmet-helper-1.2.17.tgz";
-        sha512 = "X4pzcrJ8dE7M3ArFuySF5fgipKDd/EauXkiJwtjBIVRWpVNq0tF9+lNCyuC7iDUwP3Oq7ow/TGssD3GdG96Jow==";
-      };
-    };
     "vscode-json-languageservice-4.2.1" = {
       name = "vscode-json-languageservice";
       packageName = "vscode-json-languageservice";
@@ -37664,29 +37637,6 @@ in
     meta = {
       description = "Access the system clipboard (copy/paste)";
       homepage = "https://github.com/sindresorhus/clipboard-cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-emmet = nodeEnv.buildNodePackage {
-    name = "coc-emmet";
-    packageName = "coc-emmet";
-    version = "1.1.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-emmet/-/coc-emmet-1.1.6.tgz";
-      sha512 = "lvHA9iSgU/46Iw7E14tSP+Hh1e6STYUegqTBGDPQ/9L9JOicE2USqwuo2y5cbslc2RQqv3EdUIr9nQf0T725mQ==";
-    };
-    dependencies = [
-      sources."@emmetio/extract-abbreviation-0.1.6"
-      sources."jsonc-parser-1.0.3"
-      sources."vscode-emmet-helper-1.2.17"
-      sources."vscode-languageserver-types-3.17.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "emmet extension for coc";
       license = "MIT";
     };
     production = true;
