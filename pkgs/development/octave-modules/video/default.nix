@@ -4,6 +4,8 @@
   lib,
   fetchFromGitHub,
   pkg-config,
+  autoconf,
+  automake,
   ffmpeg,
 }:
 
@@ -14,12 +16,24 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "Andy1978";
     repo = "octave-video";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fn9LNfuS9dSStBfzBjRRkvP50JJ5K+Em02J9+cHqt6w=";
   };
 
+  preBuild = ''
+    pushd src
+    patchShebangs bootstrap configure
+    ./bootstrap
+    ./configure
+    popd
+
+    tar --transform 's,^,video-${version}/,' -cz * -f video-${version}.tar.gz
+  '';
+
   nativeBuildInputs = [
     pkg-config
+    autoconf
+    automake
   ];
 
   propagatedBuildInputs = [
