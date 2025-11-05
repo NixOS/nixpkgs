@@ -4,17 +4,17 @@
     just-jsr-linux = fetchDenoDeps {
       name = "test-deno-fetch";
       denoLock = ./just-jsr/deno.lock;
-      hash = "sha256-yjZ7XCjmjAiCL00XrbwRS6UDTNk72kz9uvv5eborq1I=";
+      hash = "sha256-e3PiKCDZo6b+4BsS087cvKwxpSDu2RD5fkhxOLt89uE=";
     };
     with-https-linux = fetchDenoDeps {
       name = "test-deno-fetch";
       denoLock = ./with-https/deno.lock;
-      hash = "sha256-Ktjoqz1c7FzhXbez2xtqX6hjFnvAFtXu7YxaSRGtTFs=";
+      hash = "sha256-vhM+WIH28FA+W3wW496UZ+vxWkOK7c9Xlk9t8fMAXco=";
     };
     with-https-and-npm-linux = fetchDenoDeps {
       name = "test-deno-fetch";
       denoLock = ./with-https-and-npm/deno.lock;
-      hash = "sha256-VmwJbCXY8du2zkIQCySxwxMBitOuWQO8HQPRXVUiDLg=";
+      hash = "sha256-AeGnHTQHIiK8DbITmUPMqRpfyrEplSYfgrgvXQqRCXg=";
     };
   };
 }

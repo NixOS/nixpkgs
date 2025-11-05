@@ -51,7 +51,7 @@ let
           --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
           --common-lock-npm-path ${transformedDenoLock}/npm.json \
           --common-lock-https-path ${transformedDenoLock}/https.json \
-          --out-path-prefix $out \
+          --out-path-prefix $out;
         cp ${denoLock} $out/deno.lock
       '';
       nativeBuildInputs = [
@@ -90,10 +90,16 @@ let
       buildPhase = ''
         export vendorDir="$out/${vendorDir}";
         export DENO_DIR="$out/${denoDir}";
-        mkdir -p $DENO_DIR
-        mkdir -p $vendorDir
-        file-structure-transformer-npm --deno-dir-path $DENO_DIR --common-lock-npm-path "${fetched}/npm.json"
-        file-structure-transformer-vendor --deno-dir-path $DENO_DIR --vendor-dir-path $vendorDir --common-lock-jsr-path "${fetched}/jsr.json" --common-lock-https-path "${fetched}/https.json"
+        mkdir -p $DENO_DIR;
+        mkdir -p $vendorDir;
+        file-structure-transformer-npm \
+          --deno-dir-path $DENO_DIR \
+          --common-lock-npm-path "${fetched}/npm.json";
+        file-structure-transformer-vendor \
+          --deno-dir-path $DENO_DIR \
+          --vendor-dir-path $vendorDir \
+          --common-lock-jsr-path "${fetched}/jsr.json" \
+          --common-lock-https-path "${fetched}/https.json";
       '';
 
       meta = {
