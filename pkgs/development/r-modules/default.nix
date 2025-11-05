@@ -1248,6 +1248,7 @@ let
       zlib.dev
     ];
     GrafGen = [ pkgs.zlib ];
+    tidypopgen = [pkgs.zlib.dev ];
     tikzDevice = with pkgs; [
       which
       texliveMedium
