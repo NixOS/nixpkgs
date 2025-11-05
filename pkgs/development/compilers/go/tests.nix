@@ -3,15 +3,19 @@
   stdenv,
   go,
   buildGoModule,
+  # A package that relies on CGO
   skopeo,
   testers,
   runCommand,
   bintools,
-  clickhouse-backup,
+  # A package with CGO_ENABLED=0
+  athens,
 }:
 let
   skopeo' = skopeo.override { buildGoModule = buildGoModule; };
-  clickhouse-backup' = clickhouse-backup.override { buildGoModule = buildGoModule; };
+  athens' = athens.override { buildGoModule = buildGoModule; };
+  expectedCgoEnabledType = "DYN";
+  expectedCgoDisabledType = "DYN";
 in
 {
   skopeo = testers.testVersion { package = skopeo'; };
@@ -20,20 +24,37 @@ in
     command = "go version";
     version = "go${go.version}";
   };
-  # Picked clickhouse-backup as a package that sets CGO_ENABLED=0
-  # Running and outputting the right version proves a working ELF interpreter was picked
-  clickhouse-backup = testers.testVersion { package = clickhouse-backup'; };
-  clickhouse-backup-is-pie = runCommand "has-pie" { meta.broken = stdenv.hostPlatform.isStatic; } ''
+  athens = testers.testVersion { package = athens'; };
+}
+# bin type tests assume ELF file + linux-specific exe types
+// lib.optionalAttrs stdenv.hostPlatform.isLinux {
+  skopeo-bin-type = runCommand "skopeo-bin-type" { meta.broken = stdenv.hostPlatform.isStatic; } ''
+    bin="${lib.getExe' skopeo' ".skopeo-wrapped"}"
+    if ! ${lib.getExe' bintools "readelf"} -p .comment $bin | grep -Fq "GCC: (GNU)"; then
+      echo "${lib.getExe skopeo} should have been externally linked, but no GNU .comment section found"
+      exit 1
+    fi
+    if ${lib.getExe' bintools "readelf"} -h $bin | grep -q "Type:.*${expectedCgoEnabledType}"; then
+      touch $out
+    else
+      echo "ERROR: $bin is NOT ${expectedCgoEnabledType}"
+      exit 1
+    fi
+  '';
+  athens-bin-type = runCommand "athens-bin-type" { meta.broken = stdenv.hostPlatform.isStatic; } ''
+    bin="${lib.getExe athens'}"
     ${lib.optionalString (stdenv.buildPlatform == stdenv.targetPlatform) ''
-      if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe clickhouse-backup'} | grep -Fq "GCC: (GNU)"; then
-        echo "${lib.getExe clickhouse-backup'} has a GCC .comment, but it should have used the internal go linker"
+      # For CGO_ENABLED=0 the internal linker should be used, except
+      # for cross where we rely on external linking by default
+      if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe athens'} | grep -Fq "GCC: (GNU)"; then
+        echo "${lib.getExe athens'} has a GCC .comment, but it should have used the internal go linker"
         exit 1
       fi
     ''}
-    if ${lib.getExe' bintools "readelf"} -h ${lib.getExe clickhouse-backup'} | grep -q "Type:.*DYN"; then
+    if ${lib.getExe' bintools "readelf"} -h "$bin" | grep -q "Type:.*${expectedCgoDisabledType}"; then
       touch $out
     else
-      echo "ERROR: clickhouse-backup is NOT PIE"
+      echo "ERROR: $bin is NOT ${expectedCgoDisabledType}"
       exit 1
     fi
   '';
