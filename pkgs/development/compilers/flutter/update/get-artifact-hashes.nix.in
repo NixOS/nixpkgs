@@ -32,9 +32,8 @@ let
       systemPlatform:
       callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/artifacts/fetch-artifacts.nix" {
         flutter = flutterPackages."v${flutterCompactVersion}";
-        inherit flutterPlatform;
-        inherit systemPlatform;
-        hash = lib.fakeSha256;
+        inherit flutterPlatform systemPlatform;
+        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       }
     ) systemPlatforms)
   ) [ ] flutterPlatforms;
