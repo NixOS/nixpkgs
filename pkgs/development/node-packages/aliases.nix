@@ -128,6 +128,7 @@ mapAliases {
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
+  gulp = self.gulp-cli; # Added 2025-11-04
   hs-client = pkgs.hsd; # added 2023-08-20
   inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
