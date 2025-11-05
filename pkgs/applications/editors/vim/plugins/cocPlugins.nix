@@ -33,6 +33,7 @@
   coc-stylelint,
   coc-sumneko-lua,
   coc-tabnine,
+  coc-texlab,
   coc-toml,
 }:
 final: prev: {
@@ -202,6 +203,11 @@ final: prev: {
   coc-tabnine = buildVimPlugin {
     inherit (coc-tabnine) pname version meta;
     src = "${coc-tabnine}/lib/node_modules/coc-tabnine";
+  };
+
+  coc-texlab = buildVimPlugin {
+    inherit (coc-texlab) pname version meta;
+    src = "${coc-texlab}/lib/node_modules/coc-texlab";
   };
 
   coc-toml = buildVimPlugin {
