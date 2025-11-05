@@ -14438,6 +14438,8 @@ self: super: with self; {
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
+  pysrdaligateway = callPackage ../development/python-modules/pysrdaligateway { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
