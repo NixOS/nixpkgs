@@ -18190,6 +18190,12 @@
     matrix = "@neoney:matrix.org";
     keys = [ { fingerprint = "9E6A 25F2 C1F2 9D76 ED00  1932 1261 173A 01E1 0298"; } ];
   };
+  n3rdium = {
+    name = "n3rdium";
+    email = "n3rdium@n3rdium.dev";
+    github = "n3rdium";
+    githubId = 74598401;
+  };
   n8henrie = {
     name = "Nathan Henrie";
     email = "nate@n8henrie.com";
