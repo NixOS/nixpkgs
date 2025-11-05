@@ -445,6 +445,10 @@ stdenv.mkDerivation (finalAttrs: {
     # independent of upstream changes to the default.
     (lib.mesonOption "debug-shell" "/bin/sh")
 
+    # Use the correct path for Bash for user shells (e.g. used in nspawn and
+    # homed), which otherwise defaults to /bin/bash.
+    (lib.mesonOption "default-user-shell" "/run/current-system/sw/bin/bash")
+
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
     # We set it to false since stdenv moves sbin/* to bin and creates a symlink,
