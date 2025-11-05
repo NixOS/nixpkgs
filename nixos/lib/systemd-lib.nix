@@ -75,7 +75,6 @@ rec {
       pkgs.runCommand "unit-${mkPathSafeName name}"
         {
           preferLocalBuild = true;
-          allowSubstitutes = false;
           # unit.text can be null. But variables that are null listed in
           # passAsFile are ignored by nix, resulting in no file being created,
           # making the mv operation fail.
@@ -91,7 +90,6 @@ rec {
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
         {
           preferLocalBuild = true;
-          allowSubstitutes = false;
         }
         ''
           name=${shellEscape name}
@@ -381,7 +379,6 @@ rec {
     pkgs.runCommand "${type}-units"
       {
         preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         mkdir -p $out

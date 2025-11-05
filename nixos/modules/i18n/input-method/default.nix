@@ -20,7 +20,6 @@ let
     pkgs.runCommand "gtk2-immodule.cache"
       {
         preferLocalBuild = true;
-        allowSubstitutes = false;
         buildInputs = [
           cfg.package
         ];
@@ -34,7 +33,6 @@ let
     pkgs.runCommand "gtk3-immodule.cache"
       {
         preferLocalBuild = true;
-        allowSubstitutes = false;
         buildInputs = [
           cfg.package
         ];

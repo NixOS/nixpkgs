@@ -167,7 +167,6 @@ let
           psl
         ];
         preferLocalBuild = true;
-        allowSubstitutes = false;
         inherit (unwrapped) meta;
       }
       (

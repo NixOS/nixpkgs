@@ -66,7 +66,6 @@ let
     {
       name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
       preferLocalBuild = true;
-      allowSubstitutes = false;
       passAsFile = [ "extraDependencies" ];
       buildCommand = systemBuilder;
 

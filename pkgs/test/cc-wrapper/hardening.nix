@@ -22,7 +22,6 @@ let
         derivationArgs = {
           inherit codePath;
           preferLocalBuild = true;
-          allowSubstitutes = false;
         }
         // env;
       }

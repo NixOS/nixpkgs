@@ -286,5 +286,4 @@ stdenv.mkDerivation {
     ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
   '';
   preferLocalBuild = true;
-  allowSubstitutes = false;
 }

@@ -49,7 +49,6 @@ let
     pkgs.runCommand "journalwatch-config"
       {
         preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         mkdir -p $out/journalwatch

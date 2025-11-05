@@ -16,7 +16,6 @@ in
 runCommand "fc-cache"
   {
     preferLocalBuild = true;
-    allowSubstitutes = false;
     passAsFile = [ "fontDirs" ];
     fontDirs = ''
       <!-- Font directories -->
