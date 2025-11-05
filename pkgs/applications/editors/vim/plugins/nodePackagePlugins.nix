@@ -10,7 +10,6 @@ let
     "coc-ltex"
     "coc-tsserver"
     "coc-ultisnips"
-    "coc-vimlsp"
     "coc-vimtex"
     "coc-wxml"
     "coc-yaml"
