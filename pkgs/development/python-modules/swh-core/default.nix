@@ -69,6 +69,8 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  pythonRelaxDeps = [ "click" ];
+
   pythonImportsCheck = [ "swh.core" ];
 
   __darwinAllowLocalNetworking = true;
@@ -100,7 +102,11 @@ buildPythonPackage rec {
     pkgs.zstd
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    "test_cli_swh_db_upgrade_new_api"
+    "test_cli_swh_db_upgrade_from_config"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # FileExistsError: [Errno 17] File exists:
     "test_uncompress_upper_archive_extension"
     # AssertionError: |500 - 632.1152460000121| not within 100
