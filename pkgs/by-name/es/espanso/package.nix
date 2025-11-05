@@ -123,6 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       '';
 
   passthru = {
+    inherit waylandSupport;
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       inherit (finalAttrs) version;
