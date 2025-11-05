@@ -21,6 +21,9 @@
       hash = "sha256-VFBkOWHGZP7GjekHL3GY3BGkVXQbtyD1YPmu0xaQ1ME=";
     };
 
+    # drop upstreamed cmake-4 patch
+    patches = [ ];
+
     postPatch =
       builtins.replaceStrings
         [
