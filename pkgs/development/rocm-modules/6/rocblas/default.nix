@@ -24,6 +24,7 @@
   python3Packages,
   rocm-smi,
   pkg-config,
+  removeReferencesTo,
   buildTensile ? true,
   buildTests ? false,
   buildBenchmarks ? false,
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     clr
     gitMinimal
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals buildTensile [
     tensile
@@ -147,6 +149,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "4.43.0" "4.44.0" \
       --replace-fail '0.10' '1.0'
   '';
+
+  postInstall =
+    # tensile isn't needed at runtime and pulls in ~400MB of python deps
+    ''
+      remove-references-to -t ${tensile} \
+        "$out/lib/librocblas.so."*
+    '';
 
   passthru = {
     amdgpu_targets = gpuTargets';
