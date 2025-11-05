@@ -5335,6 +5335,7 @@ with pkgs;
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     cargo-pgrx_0_16_0
+    cargo-pgrx_0_16_1
     cargo-pgrx
     ;
 
