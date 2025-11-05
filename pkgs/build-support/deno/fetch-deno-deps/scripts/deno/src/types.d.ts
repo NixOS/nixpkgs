@@ -13,14 +13,18 @@ export type HashString = string;
 
 export type PackageFileIn = Omit<PackageFileOut, "outPath" | "headers">;
 
-export type HashAlgo = "sha256" | "sha512";
-export type HashEnc = "hex" | "base64";
+export type HashAlgorithm = "sha256" | "sha512";
+export type CryptoSubtleHashAlgo = "SHA-256" | "SHA-512";
+export type HashEncoding = "hex" | "base64";
+export type Hash = {
+  string: HashString;
+  algorithm: HashAlgorithm;
+  encoding: HashEncoding;
+}
 
 export type PackageFileOut = {
   url: UrlString;
-  hash: HashString;
-  hashAlgo: HashAlgo;
-  hashEnc: HashEnc;
+  hash: Hash;
   outPath: PathString;
   headers?: Record<string, string>;
   meta?: any;

@@ -2,6 +2,7 @@ import { getScopedName, parseArgs } from "../utils.ts";
 import type {
   CommonLockFormatIn,
   DenoLock,
+  Hash,
   PackageFileIn,
   PackageSpecifier,
   ParsedArgs,
@@ -26,7 +27,7 @@ function getConfig(): Config {
     commonLockJsrPath: null;
     commonLockHttpsPath: null;
     commonLockNpmPath: null;
-  };
+  }
 
   const unparsedArgs: UnparsedArgs<ArgNames> = {
     denoLockPath: {
@@ -103,14 +104,14 @@ function makeJsrCommonLock(denolock: DenoLock): CommonLockFormatIn {
     const registry = "jsr";
     packageSpecifier.registry = registry;
     const url = makeVersionMetaJsonUrl(packageSpecifier);
-    const hash = value.integrity;
-    const hashAlgo = "sha256";
-    const hashEnc = "hex";
+    const hash: Hash = {
+      string: value.integrity,
+      algorithm: "sha256",
+      encoding: "hex",
+    };
     result.push({
       url,
       hash,
-      hashAlgo,
-      hashEnc,
       meta: {
         registry,
         packageSpecifier,
@@ -130,14 +131,14 @@ function makeNpmCommonLock(denolock: DenoLock): CommonLockFormatIn {
     const registry = "npm";
     packageSpecifier.registry = registry;
     const url = makeNpmPackageUrl(packageSpecifier);
-    const hash = value.integrity;
-    const hashAlgo = "sha512";
-    const hashEnc = "base64";
+    const hash: Hash = {
+      string: value.integrity,
+      algorithm: "sha512",
+      encoding: "base64",
+    };
     result.push({
       url,
       hash,
-      hashAlgo,
-      hashEnc,
       meta: {
         registry,
         packageSpecifier,
@@ -181,15 +182,16 @@ function makeHttpsCommonLock(denolock: DenoLock): CommonLockFormatIn {
   if (!denolock.remote) {
     return [];
   }
-  Object.entries(denolock.remote).forEach(([url, hash]) => {
+  Object.entries(denolock.remote).forEach(([url, integrity]) => {
     const registry = getRegistry(url);
-    const hashAlgo = "sha256";
-    const hashEnc = "hex";
+    const hash: Hash = {
+      string: integrity,
+      algorithm: "sha256",
+      encoding: "hex",
+    };
     result[url] = transformHttpsPackageFile({
       url,
       hash,
-      hashAlgo,
-      hashEnc,
       meta: {
         registry,
       },

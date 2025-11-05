@@ -59,9 +59,11 @@ async function makeRegistryJson(
 
   const packageFile: PackageFileOut = {
     url: registryJsonUrl,
-    hash: "",
-    hashAlgo: "sha256",
-    hashEnc: "hex",
+    hash: {
+      string: "",
+      algorithm: "sha256",
+      encoding: "hex",
+    },
     outPath: "",
     meta: structuredClone(versionRegistryJson.meta),
   };
