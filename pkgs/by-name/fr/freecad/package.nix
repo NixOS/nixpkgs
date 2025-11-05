@@ -30,6 +30,7 @@
   nix-update-script,
   gmsh,
   which,
+  orocos-kdl,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -90,6 +91,7 @@ freecad-utils.makeCustomizable (
       zlib
       opencascade-occt
       microsoft-gsl
+      orocos-kdl
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
@@ -129,6 +131,7 @@ freecad-utils.makeCustomizable (
       "-DFREECAD_USE_PYBIND11=ON"
       "-DBUILD_QT5=OFF"
       "-DBUILD_QT6=ON"
+      "-DREECAD_USE_EXTERNAL_KDL=ON"
     ];
 
     qtWrapperArgs =
