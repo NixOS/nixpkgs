@@ -43,7 +43,9 @@ async function fetchVersionMetaJson(
 
 function makeMetaJsonContent(packageSpecifier: PackageSpecifier): MetaJson {
   if (!packageSpecifier.scope) {
-    throw `scope in jsr package required but not found in ${JSON.stringify(packageSpecifier)}`;
+    throw `scope in jsr package required but not found in ${
+      JSON.stringify(packageSpecifier)
+    }`;
   }
 
   return {
@@ -151,12 +153,14 @@ async function fetchJsrPackageFiles(
     outPathPrefix,
     versionMetaJson,
   );
-  for (const [filePath, hash] of Object.entries(files)) {
+  for (const [filePath, integrity] of Object.entries(files)) {
     const packageFile: PackageFileIn = {
       url: makeJsrPackageFileUrl(inJsrRegistryUrl, packageSpecifier, filePath),
-      hash,
-      hashAlgo: "sha256",
-      hashEnc: "hex",
+      hash: {
+        string: integrity,
+        algorithm: "sha256",
+        encoding: "hex",
+      },
       meta: { packageSpecifier },
     };
     resultUnresolved.push(fetchDefault(outPathPrefix, packageFile));
@@ -200,9 +204,11 @@ async function makeMetaJson(
 
   const packageFile: PackageFileOut = {
     url: metaJsonUrl,
-    hash: "",
-    hashAlgo: "sha256",
-    hashEnc: "hex",
+    hash: {
+      string: "",
+      algorithm: "sha256",
+      encoding: "hex",
+    },
     outPath: "",
     meta: structuredClone(versionMetaJson.meta),
   };

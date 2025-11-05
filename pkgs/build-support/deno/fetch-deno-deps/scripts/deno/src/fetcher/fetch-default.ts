@@ -1,6 +1,6 @@
 import type {
-  HashAlgo,
-  HashEnc,
+  Hash,
+  HashAlgorithm,
   HashString,
   PackageFileIn,
   PackageFileOut,
@@ -16,32 +16,38 @@ const keepHeaders = [
   "x-typescript-types",
 ];
 
-export async function makeOutPath(p: PackageFileIn): Promise<string> {
-  const data = new TextEncoder().encode(p.url);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+export async function bytesToBase64Hash(
+  byteArray: Uint8Array<ArrayBuffer>,
+  cryptoSubtleAlgo: "SHA-256" | "SHA-512",
+): Promise<string> {
+  const hashBuffer = await crypto.subtle.digest(cryptoSubtleAlgo, byteArray);
   const hashArray = new Uint8Array(hashBuffer);
   const base64 = btoa(String.fromCharCode(...hashArray));
-  return base64.replaceAll("/", "_");
+  return base64;
+}
+
+export async function makeOutPath(p: PackageFileIn): Promise<string> {
+  const data = new TextEncoder().encode(p.url);
+  const hash = await bytesToBase64Hash(data, "SHA-256");
+  return hash.replaceAll("/", "_");
 }
 
 export function normalizeHashToSRI(
-  hash: HashString,
-  hashAlgo: HashAlgo,
-  hashEnc: HashEnc,
+  hash: Hash,
 ): HashString {
-  let result: HashString = hash;
-  result = result.replace(`${hashAlgo}-`, "");
+  let result: HashString = hash.string;
+  result = result.replace(`${hash.algorithm}-`, "");
 
-  if (hashEnc === "hex") {
+  if (hash.encoding === "hex") {
     const hex = Uint8Array.fromHex(result);
     result = hex.toBase64();
   }
 
-  result = `${hashAlgo}-${result}`;
+  result = `${hash.algorithm}-${result}`;
   return result;
 }
 
-export function toCryptoSubtleAlgo(hashAlgo: HashAlgo): "SHA-256" | "SHA-512" {
+export function toCryptoSubtleAlgo(hashAlgo: HashAlgorithm): "SHA-256" | "SHA-512" {
   switch (hashAlgo) {
     case "sha256":
       return "SHA-256";
@@ -49,6 +55,20 @@ export function toCryptoSubtleAlgo(hashAlgo: HashAlgo): "SHA-256" | "SHA-512" {
       return "SHA-512";
     default:
       throw `unexpected hashAlgo ${hashAlgo}`;
+  }
+}
+
+export async function checkHash(
+  filePath: PathString,
+  p: PackageFileIn,
+) {
+  const fileData = await Deno.readFile(filePath);
+  const hash = await bytesToBase64Hash(fileData, toCryptoSubtleAlgo(p.hash.algorithm));
+  const actualIntegrity = `${p.hash.algorithm}-${hash}`;
+  const expectedIntegrity = normalizeHashToSRI(p.hash);
+
+  if (actualIntegrity !== expectedIntegrity) {
+    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`;
   }
 }
 
@@ -84,21 +104,7 @@ export async function fetchDefault(
 
   await response.body?.pipeTo(file.writable);
 
-  const fileData = Deno.readFileSync(filePath);
-
-  const hashBuffer = await crypto.subtle.digest(
-    toCryptoSubtleAlgo(p.hashAlgo),
-    fileData,
-  );
-  const hashArray = new Uint8Array(hashBuffer);
-  const actualIntegrity = `${p.hashAlgo}-${
-    btoa(String.fromCharCode(...hashArray))
-  }`;
-  const expectedIntegrity = normalizeHashToSRI(p.hash, p.hashAlgo, p.hashEnc);
-
-  if (actualIntegrity !== expectedIntegrity) {
-    throw `integrity check failed during fetch to ${p.url}: ${actualIntegrity} !== ${expectedIntegrity}`;
-  }
+  await checkHash(filePath, p);
 
   return {
     ...p,
