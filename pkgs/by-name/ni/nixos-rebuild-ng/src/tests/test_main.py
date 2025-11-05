@@ -65,8 +65,7 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g1["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.common_flags) == [
         "--option",
         "foo1",
         "bar1",
@@ -74,7 +73,13 @@ def test_parse_args() -> None:
         "foo2",
         "bar2",
     ]
-    assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.flake_common_flags) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
         "--update-input",
         "input1",
         "--update-input",
@@ -112,13 +117,15 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g2["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.common_flags) == [
         "-vvv",
         "--quiet",
         "--quiet",
     ]
-    assert nr.utils.dict_to_flags(vars(g2["common_build_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.build_flags) == [
+        "-vvv",
+        "--quiet",
+        "--quiet",
         "--include",
         "include1",
         "--include",

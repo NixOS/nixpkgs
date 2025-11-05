@@ -198,13 +198,15 @@ def get_main_parser() -> argparse.ArgumentParser:
 
 def parse_args(
     argv: list[str],
-) -> tuple[argparse.Namespace, dict[str, argparse.Namespace]]:
+) -> tuple[argparse.Namespace, GroupedNixArgs]:
     parser, sub_parsers = get_parser()
     args = parser.parse_args(argv[1:])
-    args_groups = {
-        group: parser.parse_known_args(argv[1:])[0]
-        for group, parser in sub_parsers.items()
-    }
+    grouped_nix_args = GroupedNixArgs.from_parsed_args_groups(
+        {
+            group: parser.parse_known_args(argv[1:])[0]
+            for group, parser in sub_parsers.items()
+        }
+    )
 
     if args.help or args.action is None:
         if WITH_SHELL_FILES:
@@ -266,12 +268,11 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
-    return args, args_groups
+    return args, grouped_nix_args
 
 
 def execute(argv: list[str]) -> None:
-    args, args_groups = parse_args(argv)
-    grouped_nix_args = GroupedNixArgs.from_parsed_args_groups(args_groups)
+    args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
         nix.upgrade_channels(args.upgrade_all, args.sudo)
