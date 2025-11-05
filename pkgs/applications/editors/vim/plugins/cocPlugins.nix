@@ -16,6 +16,7 @@
   coc-html,
   coc-java,
   coc-jest,
+  coc-json,
   coc-pyright,
   coc-sh,
   coc-spell-checker,
@@ -100,6 +101,11 @@ final: prev: {
   coc-jest = buildVimPlugin {
     inherit (coc-jest) pname version meta;
     src = "${coc-jest}/lib/node_modules/coc-jest";
+  };
+
+  coc-json = buildVimPlugin {
+    inherit (coc-json) pname version meta;
+    src = "${coc-json}/lib/node_modules/coc-json";
   };
 
   coc-pyright = buildVimPlugin {

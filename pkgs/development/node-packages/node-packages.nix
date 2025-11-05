@@ -37668,23 +37668,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-json = nodeEnv.buildNodePackage {
-    name = "coc-json";
-    packageName = "coc-json";
-    version = "1.9.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-json/-/coc-json-1.9.2.tgz";
-      sha512 = "6fflZTS2d8bJFKXGBIb9uGSkB8tRa+VIcSvX6GAxKRyiz4ft4116c6MGG9bPh+qe7Gwe/+FomBMW7gB08GEjTQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Json extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-lists = nodeEnv.buildNodePackage {
     name = "coc-lists";
     packageName = "coc-lists";

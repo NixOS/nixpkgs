@@ -22,7 +22,6 @@
 , "cdk8s-cli"
 , "clipboard-cli"
 , "coc-go"
-, "coc-json"
 , "coc-lists"
 , "coc-ltex"
 , "coc-markdownlint"
