@@ -153,6 +153,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--ask-sudo-password",
+        "-S",
         action="store_true",
         help="Asks for sudo password for remote activation, implies --sudo",
     )
