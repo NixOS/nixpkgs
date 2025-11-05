@@ -913,7 +913,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 `fetchDenoDeps` allows you to create a derivation containing all dependencies needed to run a [Deno](https://deno.com/) package.
 
-### Usage
+### Usage {#javascript-fetchDenoDeps-usage}
 
 1. Define the derivation for the dependencies like this:
 
