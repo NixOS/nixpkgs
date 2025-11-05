@@ -2,7 +2,7 @@
   stdenv,
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   pkg-config,
   openssl,
   withLsp ? true,
@@ -15,13 +15,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taplo";
   version = "0.10.0";
 
-  src = fetchCrate {
-    inherit (finalAttrs) version;
-    pname = "taplo-cli";
-    hash = "sha256-iKc4Nu7AZE1LSuqXffi3XERbOqZMOkI3PV+6HaJzh4c=";
+  src = fetchFromGitHub {
+    owner = "tamasfe";
+    repo = "taplo";
+    tag = "release-taplo-cli-${finalAttrs.version}";
+    hash = "sha256-FW8OQ5TRUuQK8M2NDmp4c6p22jsHodxKqzOMrcdiqXU=";
   };
 
-  cargoHash = "sha256-tvijtB5fwOzQnnK/ClIvTbjCcMeqZpXcRdWWKZPIulM=";
+  cargoPatches = [
+    # Update reqwest to fix darwin sandboxing issues
+    # See also: https://github.com/tamasfe/taplo/pull/669
+    ./update-reqwest.patch
+  ];
+
+  cargoHash = "sha256-FMpGo+kRcNgDj4qwYvdQKGwGazUKKMIVq0HCYMrTql0=";
+
+  buildAndTestSubdir = "crates/taplo-cli";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,20 +41,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = lib.optional withLsp "lsp";
 
-  postInstall =
-    lib.optionalString
-      (
-        stdenv.buildPlatform.canExecute stdenv.hostPlatform
-        &&
-          # Creation of the completions fails on Darwin platforms.
-          !stdenv.hostPlatform.isDarwin
-      )
-      ''
-        installShellCompletion --cmd taplo \
-          --bash <($out/bin/taplo completions bash) \
-          --fish <($out/bin/taplo completions fish) \
-          --zsh <($out/bin/taplo completions zsh)
-      '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd taplo \
+      --bash <($out/bin/taplo completions bash) \
+      --fish <($out/bin/taplo completions fish) \
+      --zsh <($out/bin/taplo completions zsh)
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
