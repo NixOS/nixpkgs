@@ -164,6 +164,11 @@ freecad-utils.makeCustomizable (
       "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
       "--prefix PATH : ${lib.makeBinPath externalTools}"
       "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonCoreDeps}"
+
+      # use new python netgen bindings instead of shelling to binary
+      "--add-flag '--set-config'"
+      "--add-flag UseLegacyNetgen"
+      "--add-flag 0"
     ];
 
     postFixup = ''
