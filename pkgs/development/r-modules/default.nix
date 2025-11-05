@@ -1200,6 +1200,7 @@ let
       quantlib.dev
       boost.dev
     ];
+    saeMSPE = [ pkgs.gsl.dev ];
     sf = with pkgs; [
       pkg-config
       sqlite.dev
