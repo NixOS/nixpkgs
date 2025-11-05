@@ -17355,12 +17355,6 @@
     githubId = 14153763;
     name = "modderme123";
   };
-  modulistic = {
-    email = "modulistic@gmail.com";
-    github = "modulistic";
-    githubId = 1902456;
-    name = "Pablo Costa";
-  };
   mog = {
     email = "mog-lists@rldn.net";
     github = "mogorman";
