@@ -363,6 +363,20 @@ with lib.maintainers;
     shortName = "Flying Circus employees";
   };
 
+  forgejo = {
+    members = [
+      adamcstephens
+      bendlas
+      christoph-heiss
+      emilylange
+      marie
+      pyrox0
+      tebriel
+    ];
+    scope = "Maintain the Forgejo code forge, packages and modules.";
+    shortName = "Forgejo";
+  };
+
   formatter = {
     github = "nix-formatting";
   };
