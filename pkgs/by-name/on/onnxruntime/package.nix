@@ -325,7 +325,7 @@ effectiveStdenv.mkDerivation rec {
   postFixup = lib.optionalString cudaSupport ''
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
-  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
+  disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module

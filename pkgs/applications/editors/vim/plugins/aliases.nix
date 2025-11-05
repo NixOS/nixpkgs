@@ -42,7 +42,7 @@ mapAliases (
     blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
-    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # addedd 2025-10-01
+    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
     coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
     coffee-script = vim-coffee-script;
     coffeeScript = vim-coffee-script; # backwards compat, added 2014-10-18
@@ -120,6 +120,7 @@ mapAliases (
     repeat = vim-repeat;
     riv = riv-vim;
     rhubarb = vim-rhubarb;
+    rust-tools-nvim = lib.warnOnInstantiate "rust-tools-nvim is abandoned by upstream; you should use rustaceanvim" rust-tools-nvim;
     sensible = vim-sensible;
     signature = vim-signature;
     snipmate = vim-snipmate;

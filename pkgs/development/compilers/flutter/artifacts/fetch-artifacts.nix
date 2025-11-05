@@ -73,8 +73,6 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
       lndir -silent '${flutter'}' "$FLUTTER_ROOT"
       rm --recursive --force "$FLUTTER_ROOT/bin/cache"
       mkdir "$FLUTTER_ROOT/bin/cache"
-    ''
-    + lib.optionalString (lib.versionAtLeast flutter'.version "3.26") ''
       mkdir "$FLUTTER_ROOT/bin/cache/dart-sdk"
       lndir -silent '${flutter'}/bin/cache/dart-sdk' "$FLUTTER_ROOT/bin/cache/dart-sdk"
     ''
@@ -94,8 +92,6 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
         }
 
       rm --recursive --force "$FLUTTER_ROOT/bin/cache/lockfile"
-    ''
-    + lib.optionalString (lib.versionAtLeast flutter'.version "3.26") ''
       rm --recursive --force "$FLUTTER_ROOT/bin/cache/dart-sdk"
     ''
     + ''

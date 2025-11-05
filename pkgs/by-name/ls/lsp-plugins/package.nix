@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       - LADSPA - set of plugins for Linux Audio Developer's Simple Plugin API
       - LV2 - set of plugins and UIs for Linux Audio Developer's Simple Plugin API (LADSPA) version 2
       - LinuxVST - set of plugins and UIs for Steinberg's VST 2.4 format ported on GNU/Linux Platform
+      - VST3 - set of plugins and UIs for Steinberg's VST 3 format
       - JACK - Standalone versions for JACK Audio connection Kit with UI
 
       Contains the following plugins (https://lsp-plug.in/?page=plugins)

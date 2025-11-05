@@ -25,7 +25,7 @@ let
         flutterVersion = version;
         version = engineVersion;
         url = "https://github.com/flutter/flutter.git@${engineVersion}";
-        hashes."${buildPlatform}"."${targetPlatform}" = lib.fakeSha256;
+        hashes."${buildPlatform}"."${targetPlatform}" = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       }
     ) systemPlatforms)
   ) [ ] systemPlatforms;

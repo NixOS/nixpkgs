@@ -16,31 +16,36 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ringracers";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "KartKrewDev";
     repo = "RingRacers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X2rSwZOEHtnSJBpu+Xf2vkxGUAZSNSXi6GCuGlM6jhY=";
+    hash = "sha256-iMbrbZCarMebP+ruu1JH4kwks6rR9A9CMquDUnMCUhU=";
   };
 
   assets = fetchzip {
     name = "${finalAttrs.pname}-${finalAttrs.version}-assets";
     url = "https://github.com/KartKrewDev/RingRacers/releases/download/v${finalAttrs.version}/Dr.Robotnik.s-Ring-Racers-v${finalAttrs.version}-Assets.zip";
-    hash = "sha256-sHeI1E6uNF0gBNd1e1AU/JT9wyZdkCQgYLiMPZqXAVc=";
+    hash = "sha256-vL3Ceu6/tIOl/+TJFjntCksDdjpgLc1aNHvSx6x8/90=";
     stripRoot = false;
   };
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
     nasm
     makeWrapper
     copyDesktopItems
+    pkg-config
   ];
 
   buildInputs = [
@@ -85,17 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postPatch = ''
-    substituteInPlace src/acs/vm/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Kart racing video game based on Sonic Robo Blast 2 (SRB2), itself based on a modified version of Doom Legacy";
     homepage = "https://kartkrew.org";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       donovanglover
       iedame
     ];

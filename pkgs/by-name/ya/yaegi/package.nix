@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -43,5 +44,7 @@ buildGoModule rec {
     changelog = "https://github.com/traefik/yaegi/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
