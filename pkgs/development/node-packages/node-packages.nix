@@ -37068,24 +37068,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-yank = nodeEnv.buildNodePackage {
-    name = "coc-yank";
-    packageName = "coc-yank";
-    version = "1.2.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-yank/-/coc-yank-1.2.4.tgz";
-      sha512 = "tNCysSDUKNHAE/cBbfB9kbaSkDbeTleRwfho0vXuaxA6TLAbHqKPA81ecF4pHG4JJm9V156d7uhotYsm4InuyA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Yank extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-yank#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   code-theme-converter = nodeEnv.buildNodePackage {
     name = "code-theme-converter";
     packageName = "code-theme-converter";
