@@ -20,6 +20,7 @@
   nixosTests,
   nix-update-script,
   darwin,
+  versionCheckHook,
   zlib,
 }:
 
@@ -110,6 +111,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace ./src/dns.rs \
       --replace-fail "#[tokio::test]" ""
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     tests = {
