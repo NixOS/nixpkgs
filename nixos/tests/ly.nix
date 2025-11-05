@@ -67,6 +67,8 @@ in
           # reset cursor to user selection
           machine.send_key("tab")
 
+      # https://github.com/NixOS/nixpkgs/pull/455191#discussion_r2507716719
+      machine.wait_until_succeeds("getfacl /dev/dri/card0 | grep video")
       machine.wait_until_tty_matches("1", "password")
       machine.send_key("ctrl-alt-f1")
       machine.sleep(1)
