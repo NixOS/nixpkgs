@@ -7,17 +7,18 @@
   buildkit,
   cni-plugins,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   extraPackages ? [ ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nerdctl";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "nerdctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M3np4NfzEfMt4ii7Fdbdt+y1K7lSTWrqA9Bl+zpzxog=";
   };
 
@@ -38,7 +39,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=v${version}"
+      "-X ${t}.Version=v${finalAttrs.version}"
       "-X ${t}.Revision=<unknown>"
     ];
 
@@ -59,16 +60,21 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/nerdctl --help
-    $out/bin/nerdctl --version | grep "nerdctl version ${version}"
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://github.com/containerd/nerdctl/";
-    changelog = "https://github.com/containerd/nerdctl/releases/tag/v${version}";
+    changelog = "https://github.com/containerd/nerdctl/releases/tag/v${finalAttrs.version}";
     description = "Docker-compatible CLI for containerd";
     mainProgram = "nerdctl";
     license = lib.licenses.asl20;
@@ -78,4 +84,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
