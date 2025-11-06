@@ -388,6 +388,7 @@ let
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
     RQuantLib = [ kupac ];
+    XLConnect = [ b-rodrigues ];
   };
 
   packagesWithRDepends = {
@@ -951,7 +952,6 @@ let
       zlib
       libxml2.dev
     ];
-    XLConnect = [ pkgs.jdk ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [
       libtool
@@ -2556,6 +2556,83 @@ let
           cp ${redatam-core}/lib/libredengine-1.0.0-rc2.so ./inst/redengine/libredengine-1.0.0-rc2.so
         '';
     });
+
+    XLConnect =
+      let
+        poi-ooxml-full = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml-full/5.4.1/poi-ooxml-full-5.4.1.jar";
+          hash = "sha256-xRsFFlXVjXTV64nn03NscFLCV09Dx52wyKg60hb23Tc=";
+        };
+        poi-ooxml = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml/5.4.1/poi-ooxml-5.4.1.jar";
+          hash = "sha256-/SAMnm901wQWCpfp1SBBmV7YdDlFRTAAHt2SBojxn1M=";
+        };
+        poi = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi/5.4.1/poi-5.4.1.jar";
+          hash = "sha256-2lq/QtpGBMWnvKOJVq9unW8ZbZttTLfqvuT0gLWA1QU=";
+        };
+        commons-compress = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.27.1/commons-compress-1.27.1.jar";
+          hash = "sha256-KT2A9UtTa3QJXc1+o88KKbv8NAJRkoEzJJX0Qg03DRY=";
+        };
+        commons-lang3 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.16.0/commons-lang3-3.16.0.jar";
+          hash = "sha256-CHCd101gK3Bc5AF9JlRCEAVqS6WD1bIMCTc0Bv56APg=";
+        };
+        xmlbeans = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/5.3.0/xmlbeans-5.3.0.jar";
+          hash = "sha256-bMado7TTW4PF5HfNTauiBORBCYM+NK8rmoosh4gomRc=";
+        };
+        commons-collections4 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar";
+          hash = "sha256-Hfi5QwtcjtFD14FeQD4z71NxskAKrb6b2giDdi4IRtE=";
+        };
+        commons-math3 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar";
+          hash = "sha256-HlbXsFjSi2Wr0la4RY44hbZ0wdWI+kPNfRy7nH7yswg=";
+        };
+        log4j-api = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.24.3/log4j-api-2.24.3.jar";
+          hash = "sha256-W0oKDNDnUd7UMcFiRCvb3VMyjR+Lsrrl/Bu+7g9m2A8=";
+        };
+        commons-codec = fetchurl {
+          url = "https://repo1.maven.org/maven2/commons-codec/commons-codec/1.18.0/commons-codec-1.18.0.jar";
+          hash = "sha256-ugBfMEzvkqPe3iSjitWsm4r8zw2PdYOdbBM4Y0z39uQ=";
+        };
+        commons-io = fetchurl {
+          url = "https://repo1.maven.org/maven2/commons-io/commons-io/2.18.0/commons-io-2.18.0.jar";
+          hash = "sha256-88oPjWPEDiOlbVQQHGDV7e4Ta0LYS/uFvHljCTEJz4s=";
+        };
+        SparseBitSet = fetchurl {
+          url = "https://repo1.maven.org/maven2/com/zaxxer/SparseBitSet/1.3/SparseBitSet-1.3.jar";
+          hash = "sha256-92uFrbDAByGuJnt8/eTaf3HTEhzCFgyfwAwMifjFPIo=";
+        };
+      in
+      old.XLConnect.overrideAttrs (attrs: {
+        preConfigure = ''
+          cp ${poi-ooxml-full} inst/java/poi-ooxml-full-5.4.1.jar
+          cp ${poi-ooxml} inst/java/poi-ooxml-5.4.1.jar
+          cp ${poi} inst/java/poi-5.4.1.jar
+          cp ${commons-compress} inst/java/commons-compress-1.27.1.jar
+          cp ${commons-lang3} inst/java/commons-lang3-3.16.0.jar
+          cp ${xmlbeans} inst/java/xmlbeans-5.3.0.jar
+          cp ${commons-collections4} inst/java/commons-collections4-4.4.jar
+          cp ${commons-math3} inst/java/commons-math3-3.6.1.jar
+          cp ${log4j-api} inst/java/log4j-api-2.24.3.jar
+          cp ${commons-codec} inst/java/commons-codec-1.18.0.jar
+          cp ${commons-io} inst/java/commons-io-2.18.0.jar
+          cp ${SparseBitSet} inst/java/SparseBitSet-1.3.jar
+        '';
+
+        postPatch = ''
+          substituteInPlace R/onLoad.R \
+            --replace-fail 'system2("java",' 'system2("${lib.getExe pkgs.jre_headless}",'
+
+          # Misleading startup message, JARs are downloaded at build-time
+          substituteInPlace R/onAttach.R \
+            --replace-fail 'if(file.exists(file.path(libname, pkgname, ".fail"))){' 'if(FALSE){'
+        '';
+      });
 
     immunotation =
       let
