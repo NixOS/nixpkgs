@@ -68,6 +68,8 @@ buildPythonPackage rec {
     # on a system with 96 GB RAM. In order to avoid build errors on "low"-memory systems, this
     # test is disabled for now.
     "tests/test_BlockParallelReaders.py"
+    # Depends on data files embedded in the test directory
+    "tests/test_AutoMountLayer.py"
   ];
 
   disabledTests = [
