@@ -35,6 +35,8 @@ in
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
+  "@babel/cli" =
+    throw "@babel/cli was removed because upstream highly suggests installing it in your project instead of globally."; # Added 2025-11-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@commitlint/config-conventional" =
     throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
