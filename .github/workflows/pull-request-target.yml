@@ -112,18 +112,6 @@ jobs:
     with:
       headBranch: ${{ needs.prepare.outputs.headBranch }}
 
-  reviewers:
-    name: Reviewers
-    needs: [prepare, eval]
-    if: |
-      needs.prepare.outputs.targetSha &&
-      !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development')
-    uses: ./.github/workflows/reviewers.yml
-    secrets:
-      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-    with:
-      artifact-prefix: ${{ inputs.artifact-prefix }}
-
   build:
     name: Build
     needs: [prepare]

@@ -117,12 +117,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.1.0";
+  version = "9.1.1";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-sRUg6wa0KOG+hoR+6QEVyPe/9O9yEefNB69BMO+H+iU=";
+    hash = "sha256-TEP2YNKUuAnvLg+aDOkMmYfPQIjUXWYOhprfqsr8EgQ=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''

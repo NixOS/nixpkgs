@@ -7,6 +7,7 @@
   python313,
   replaceVars,
   ffmpeg-headless,
+  ffmpeg_7-headless,
   inetutils,
   nixosTests,
   home-assistant,
@@ -85,7 +86,7 @@ let
         ];
       });
 
-      av = super.av.overridePythonAttrs rec {
+      av = (super.av.override { ffmpeg-headless = ffmpeg_7-headless; }).overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
