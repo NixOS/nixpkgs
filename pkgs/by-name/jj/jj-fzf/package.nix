@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
 
     # Fix Makefile to use absolute path for env
     substituteInPlace Makefile.mk \
-      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"\n  '';
+      --replace-fail "/usr/bin/env" "${lib.getExe coreutils \"env\"}"
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
       --replace-fail 'readonly SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"' "readonly SCRIPT_DIR=\"$out/libexec/jj-fzf\""
 
     wrapProgram $out/bin/jj-fzf \
-      --prefix PATH : ${lib.makeBinPath buildInputs}
+      --prefix PATH : "${lib.makeBinPath buildInputs}"
   '';
 
   meta = with lib; {
