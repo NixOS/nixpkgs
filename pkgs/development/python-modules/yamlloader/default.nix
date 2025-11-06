@@ -49,6 +49,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Phynix/yamlloader";
     changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = with lib.maintainers; [
+      freezeboy
+      sarahec
+    ];
   };
 }
