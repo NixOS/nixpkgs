@@ -21,6 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1m99hi0kjpj5Yl1nAmwSMMdQWcP0rfLLPFJPkU4oVbM=";
   };
 
+  # src/zatackax.c:2069:5: error: conflicting types for 'SDL_main'
+  # Fix SDL_main redefinition issue on darwin
+  patches = lib.optional stdenv.hostPlatform.isDarwin ./0001-Fix-SDL_main-redefinition-issue-on-macOS.patch;
+
+  # malloc.h is not needed because stdlib.h is already included.
+  # On darwin, malloc.h does not even exist, resulting in an error.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/zatackax.h \
+      --replace-fail '#include <malloc.h>' ""
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -45,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.alch-emi ];
     mainProgram = "zatackax";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
