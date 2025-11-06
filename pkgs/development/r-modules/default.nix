@@ -971,6 +971,7 @@ let
     oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib.dev ];
+    Rsubbotools = [ pkgs.gsl ];
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = with pkgs; [
       zlib.dev
