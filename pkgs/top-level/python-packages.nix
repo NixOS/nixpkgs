@@ -8080,6 +8080,8 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
+  keeper-pam-webrtc-rs = callPackage ../development/python-modules/keeper-pam-webrtc-rs { };
+
   keeper-secrets-manager-core =
     callPackage ../development/python-modules/keeper-secrets-manager-core
       { };
