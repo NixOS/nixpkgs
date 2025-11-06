@@ -5,6 +5,15 @@ declare -g pname
 declare -g composerVendor
 declare -g -i composerStrictValidation="${composerStrictValidation:-0}"
 
+declare -g composerNoDev
+declare -g composerNoPlugins
+declare -g composerNoScripts
+
+declare -ga composerFlags=()
+[[ -n "${composerNoDev-}" ]] && composerFlags+=(--no-dev)
+[[ -n "${composerNoPlugins-}" ]] && composerFlags+=(--no-plugins)
+[[ -n "${composerNoScripts-}" ]] && composerFlags+=(--no-scripts)
+
 preConfigureHooks+=(composerInstallConfigureHook)
 preBuildHooks+=(composerInstallBuildHook)
 preCheckHooks+=(composerInstallCheckHook)
@@ -41,6 +50,21 @@ composerInstallConfigureHook() {
 composerInstallBuildHook() {
   echo "Executing composerInstallBuildHook"
 
+  setComposerEnvVariables
+
+  echo -e "\e[32mInstalling Composer vendor in \"${COMPOSER_VENDOR_DIR}\" directory...\e[0m"
+  cp -r "${composerVendor}"/${COMPOSER_VENDOR_DIR} .
+  chmod -R +w ${COMPOSER_VENDOR_DIR}
+
+  if [[ -f "composer.lock" ]]; then
+    composer \
+      "${composerFlags[@]}" \
+      --no-interaction \
+      --no-progress \
+      --optimize-autoloader \
+      install
+  fi
+
   echo "Finished composerInstallBuildHook"
 }
 
@@ -54,8 +78,6 @@ composerInstallCheckHook() {
 
 composerInstallInstallHook() {
   echo "Executing composerInstallInstallHook"
-
-  cp -ar "${composerVendor}"/* .
 
   # Copy the relevant files only in the store.
   mkdir -p "$out"/share/php/"${pname}"

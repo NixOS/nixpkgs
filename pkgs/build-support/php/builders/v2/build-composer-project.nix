@@ -11,12 +11,11 @@ let
     {
       php ? finalAttrs.php or toplevel.php,
       composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
-      composerLock ? finalAttrs.composerLock or null,
-      vendorHash ? finalAttrs.vendorHash or "",
-      composerNoDev ? finalAttrs.composerNoDev or true,
-      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
-      composerNoScripts ? finalAttrs.composerNoScripts or true,
-      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
+      composerLock ? null,
+      composerNoDev ? true,
+      composerNoPlugins ? true,
+      composerNoScripts ? true,
+      composerStrictValidation ? true,
       buildInputs ? [ ],
       nativeBuildInputs ? [ ],
       strictDeps ? true,
@@ -35,6 +34,10 @@ let
         doCheck
         doInstallCheck
         dontCheckForBrokenSymlinks
+        composerNoDev
+        composerNoPlugins
+        composerNoScripts
+        composerStrictValidation
         ;
 
       nativeBuildInputs = nativeBuildInputs ++ [

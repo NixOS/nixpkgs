@@ -77,13 +77,16 @@ composerVendorBuildHook() {
 
   setComposerEnvVariables
 
+  echo -e "\e[32mBuilding Composer vendor in directory \"${COMPOSER_VENDOR_DIR}\"...\e[0m"
   composer \
-    --no-cache \
     --no-interaction \
     --no-progress \
-    --optimize-autoloader \
+    --no-autoloader \
     "${composerFlags[@]}" \
     install
+
+  echo -e "\e[32mDeleting Composer \"bin\" directory, regenerating it later ...\e[0m"
+  rm -rf $(composer config bin-dir)
 
   echo "Finished composerVendorBuildHook"
 }
@@ -101,7 +104,8 @@ composerVendorInstallHook() {
 
   mkdir -p "$out"
 
-  cp -ar composer.json "$(composer config vendor-dir)" "$out"/
+  echo -e "\e[32mComposer vendor detected in \"${COMPOSER_VENDOR_DIR}\", restoring...\e[0m"
+  cp -ar composer.json ${COMPOSER_VENDOR_DIR} "$out"/
   mapfile -t installer_paths < <(jq -r -c 'try((.extra."installer-paths") | keys[])' composer.json)
 
   for installer_path in "${installer_paths[@]}"; do
