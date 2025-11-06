@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexhallam/tv";
     changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 }
