@@ -473,6 +473,10 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+    ciflyr = with pkgs; [
+      cargo
+      rustc
+    ];
     interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
@@ -519,6 +523,10 @@ let
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
+    gadjid = with pkgs; [
+      cargo
+      rustc
+    ];
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools =
@@ -689,6 +697,10 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
+    rbm25 = with pkgs; [
+      cargo
+      rustc
+    ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl ];
@@ -843,6 +855,14 @@ let
       cargo
       rustc
     ];
+    socratadata = with pkgs; [
+      cargo
+      rustc
+    ];
+    SQLFormatteR = with pkgs; [
+      cargo
+      rustc
+    ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -917,8 +937,16 @@ let
     ];
     units = [ pkgs.udunits ];
     unigd = [ pkgs.pkg-config ];
+    unsum = with pkgs; [
+      cargo
+      rustc
+    ];
     vdiffr = [ pkgs.libpng.dev ];
     V8 = [ pkgs.nodejs.libv8 ];
+    xactonomial = with pkgs; [
+      cargo
+      rustc
+    ];
     XBRL = with pkgs; [
       zlib
       libxml2.dev
@@ -1911,6 +1939,10 @@ let
       '';
     });
 
+    ciflyr = old.ciflyr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     clarabel = old.clarabel.overrideAttrs (attrs: {
       postPatch = ''
         patchShebangs configure
@@ -1938,6 +1970,10 @@ let
       '';
     });
 
+    gadjid = old.gadjid.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     genoCN = old.genoCN.overrideAttrs (attrs: {
       postPatch = ''
         # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
@@ -1945,6 +1981,18 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
+    });
+
+    rbm25 = old.rbm25.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    socratadata = old.socratadata.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    SQLFormatteR = old.SQLFormatteR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     tok = old.tok.overrideAttrs (attrs: {
@@ -1976,6 +2024,10 @@ let
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
       ];
+    });
+
+    unsum = old.unsum.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     vapour = old.vapour.overrideAttrs (attrs: {
@@ -2082,6 +2134,10 @@ let
     });
 
     SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    xactonomial = old.xactonomial.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
