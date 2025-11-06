@@ -38,7 +38,10 @@ let
           asl20
           mit
         ];
-        maintainers = with maintainers; [ cameronfyfe ];
+        maintainers = with maintainers; [
+          andreashgk
+          cameronfyfe
+        ];
         mainProgram = name;
       };
     };
