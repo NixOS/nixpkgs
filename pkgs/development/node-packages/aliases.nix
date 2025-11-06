@@ -179,6 +179,7 @@ mapAliases {
   inherit (pkgs) js-beautify; # Added 2025-11-06
   inherit (pkgs) jshint; # Added 2025-11-06
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
+  inherit (pkgs) json-server; # Added 2025-11-06
   joplin = pkgs.joplin-cli; # Added 2025-11-02
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
