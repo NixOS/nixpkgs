@@ -6,30 +6,34 @@
   installShellFiles,
   buildkit,
   cni-plugins,
+  writableTmpDirAsHomeHook,
   extraPackages ? [ ],
 }:
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "1.7.7";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "nerdctl";
     rev = "v${version}";
-    hash = "sha256-GHFs8QvLcXu+DZ851TCLI7EVc9wMS5fRC4TYBXzyv3Q=";
+    hash = "sha256-M3np4NfzEfMt4ii7Fdbdt+y1K7lSTWrqA9Bl+zpzxog=";
   };
 
-  vendorHash = "sha256-5LRsT04T/CKv+YHaiM2g6giimWWXyzPju3iZuj2DfAY=";
+  vendorHash = "sha256-cnusyughQitdvYhHtuvCGS9/LdI/ku7DETBdAWttKsY=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
+
+    # Workaround for: "FATA[0000] mkdir /homeless-shelter: permission denied" when building completions
+    writableTmpDirAsHomeHook
   ];
 
   ldflags =
     let
-      t = "github.com/containerd/nerdctl/pkg/version";
+      t = "github.com/containerd/nerdctl/v2/pkg/version";
     in
     [
       "-s"
@@ -37,6 +41,8 @@ buildGoModule rec {
       "-X ${t}.Version=v${version}"
       "-X ${t}.Revision=<unknown>"
     ];
+
+  subPackages = [ "cmd/nerdctl" ];
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
