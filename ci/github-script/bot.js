@@ -375,6 +375,17 @@ module.exports = async ({ github, context, core, dry }) => {
       })
 
       if (!pull_request.draft) {
+        let owners = []
+        try {
+          // TODO: Create owner map similar to maintainer map.
+          owners = (await readFile(`${pull_number}/owners.txt`, 'utf-8')).split(
+            '\n',
+          )
+        } catch (e) {
+          // Older artifacts don't have the owners.txt, yet.
+          if (e.code !== 'ENOENT') throw e
+        }
+
         // We set this label earlier already, but the current PR state can be very different
         // after handleReviewers has requested reviews, so update it in this case to prevent
         // this label from flip-flopping.
@@ -392,10 +403,7 @@ module.exports = async ({ github, context, core, dry }) => {
               await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
             ),
           ).map((id) => parseInt(id)),
-          // TODO: Create owner map similar to maintainer map.
-          owners: (await readFile(`${pull_number}/owners.txt`, 'utf-8')).split(
-            '\n',
-          ),
+          owners,
           getTeamMembers,
           getUser,
         })
