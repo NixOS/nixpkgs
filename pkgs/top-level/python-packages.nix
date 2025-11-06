@@ -13411,6 +13411,8 @@ self: super: with self; {
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
 
+  pykeepass-cache = callPackage ../development/python-modules/pykeepass-cache { };
+
   pykerberos = callPackage ../development/python-modules/pykerberos { krb5-c = pkgs.krb5; };
 
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
