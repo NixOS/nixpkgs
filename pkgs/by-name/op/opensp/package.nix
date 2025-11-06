@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
   '';
 
+  preConfigure = "";
+
   strictDeps = true;
 
   nativeBuildInputs = [
