@@ -6,18 +6,18 @@
   },
   {
     "pname": "Azure.Core",
-    "version": "1.47.1",
-    "hash": "sha256-YJR1bDI9H9lr6p/9QcOWEhnpMD8ePyxxO39S32VAOak="
+    "version": "1.47.3",
+    "hash": "sha256-fWyfqF1lpnap4cF3l9J0fYtZbxIqm6UFsuJgN+/hwW4="
   },
   {
     "pname": "Azure.Identity",
-    "version": "1.15.0",
-    "hash": "sha256-eqR6Akmrtu4U4fPvkDwMbwk2dPGx+MaKPj+Y80e0/Ak="
+    "version": "1.16.0",
+    "hash": "sha256-vJa746fywiLlC2QoUu2SLf+mQPzGTGxbXzGoWqAUb0Q="
   },
   {
     "pname": "Azure.Storage.Blobs",
-    "version": "12.25.0",
-    "hash": "sha256-SjIwM1sIBd4I9ShAeaIAfPUzc3K7tbodW6y1vNAD+4U="
+    "version": "12.25.1",
+    "hash": "sha256-OJgmzE7+BJsrqGMErUwG4wmaguYL1zPbhtdQvvqFuHY="
   },
   {
     "pname": "Azure.Storage.Common",
@@ -126,13 +126,13 @@
   },
   {
     "pname": "Microsoft.Identity.Client",
-    "version": "4.73.1",
-    "hash": "sha256-cd5ArtDvQK4gdX8M0GHQEsCFWlqpdm6lxvaM2yMHkhc="
+    "version": "4.76.0",
+    "hash": "sha256-v5/iulShs0yMHvNoRo/pbDVYu3tOl9Y7kovSKJbgQnc="
   },
   {
     "pname": "Microsoft.Identity.Client.Extensions.Msal",
-    "version": "4.73.1",
-    "hash": "sha256-wc4oHBGKCJhAqNIyD4LlugCFvmyiW5iVzGYP88bnWqs="
+    "version": "4.76.0",
+    "hash": "sha256-OCt+XN0tt1URnn0Wh7y19YCNo3ViG5th9HAa6GusFeE="
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
@@ -181,8 +181,8 @@
   },
   {
     "pname": "System.ClientModel",
-    "version": "1.5.1",
-    "hash": "sha256-n4PHKtjmFXo37s5yhfUQ9UbfnWplqHpC+wsvlHxctow="
+    "version": "1.6.1",
+    "hash": "sha256-OMnamkT9Nt5ZSR6xPKFmOQRUjdn0a4nP9jkD2eZxxc0="
   },
   {
     "pname": "System.Diagnostics.DiagnosticSource",
@@ -223,6 +223,11 @@
     "pname": "System.Memory.Data",
     "version": "8.0.1",
     "hash": "sha256-cxYZL0Trr6RBplKmECv94ORuyjrOM6JB0D/EwmBSisg="
+  },
+  {
+    "pname": "System.Numerics.Tensors",
+    "version": "9.0.9",
+    "hash": "sha256-wc7lhmydATxle8Wv124yFPT+bkpKpcCQL2TAPGodIAc="
   },
   {
     "pname": "System.Numerics.Vectors",
