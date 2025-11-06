@@ -11,7 +11,6 @@
   scipy,
   statsmodels,
   urllib3,
-  pythonOlder,
   python,
   pytest7CheckHook,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pmdarima";
   version = "2.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";
@@ -76,6 +73,11 @@ buildPythonPackage rec {
   disabledTests = [
     # touches internet
     "test_load_from_web"
+    # assert "'force_all_f...moved in 1.8." == 'information_...terion = aic.'
+    # namely, picks up UserWarning from sklearn about deprecated parameter
+    "test_oob_with_zero_out_of_sample_size"
+    # assert 3 == 1
+    "test_issue_351"
   ];
 
   pythonImportsCheck = [ "pmdarima" ];
