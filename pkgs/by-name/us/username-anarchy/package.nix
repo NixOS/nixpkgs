@@ -3,16 +3,17 @@
   stdenv,
   fetchFromGitHub,
   ruby,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "username-anarchy";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "urbanadventurer";
     repo = "username-anarchy";
-    tag = "v0.6";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-46hl1ynA/nc2R70VHhOqbux6B2hwiJWs/sf0ZRwNFf0=";
   };
 
@@ -29,12 +30,14 @@ stdenv.mkDerivation {
       sed -i -e '1i#!/usr/bin/env ruby' format-plugins.rb
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/urbanadventurer/username-anarchy/";
     description = "Username generator tool for penetration testing";
-    license = licenses.mit;
-    maintainers = [ maintainers.akechishiro ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ akechishiro ];
+    platforms = lib.platforms.unix;
     mainProgram = "username-anarchy";
   };
-}
+})
