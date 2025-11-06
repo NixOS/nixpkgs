@@ -775,6 +775,7 @@ rec {
 
       `inheritFunctionArgs` (default to `true`)
       : Whether to inherit `__functionArgs` from the base build helper.
+        Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
 
       `transformDrv` (default to `lib.id`)
       : Function to apply to the result derivation.
