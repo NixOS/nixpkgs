@@ -10,6 +10,7 @@ type FetcherFixture = {
   outHttpsJsonContent: string;
   outNpmJsonContent: string;
   outFetchedFilesFS: VirtualFS;
+  outExitCode?: number;
   outStdout?: string;
   outStderr?: string;
 };
@@ -120,13 +121,16 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     commonLockHttpsPath: null;
     jsrRegistryUrl: null;
     outPathPrefix: null;
-  }
+  };
   const vars: Vars<VarNames> = {
-    commonLockJsrPath: {value:"./jsr.json",flag:"--common-lock-jsr-path"},
-    commonLockNpmPath: {value:"./npm.json",flag:"--common-lock-npm-path"},
-    commonLockHttpsPath: {value:"./https.json",flag:"--common-lock-https-path"},
-    jsrRegistryUrl: {value:actualDomain,flag:"--jsr-registry-url"},
-    outPathPrefix: {value:"./out",flag:"--out-path-prefix"},
+    commonLockJsrPath: { value: "./jsr.json", flag: "--common-lock-jsr-path" },
+    commonLockNpmPath: { value: "./npm.json", flag: "--common-lock-npm-path" },
+    commonLockHttpsPath: {
+      value: "./https.json",
+      flag: "--common-lock-https-path",
+    },
+    jsrRegistryUrl: { value: actualDomain, flag: "--jsr-registry-url" },
+    outPathPrefix: { value: "./out", flag: "--out-path-prefix" },
   };
 
   checkOutFetchedFilesFs(f);
@@ -138,6 +142,7 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
     outJsrJsonContent,
     outHttpsJsonContent,
     outNpmJsonContent,
+    outExitCode,
     outStdout,
     outStderr,
   } = replacePlaceholder(f, actualDomain);
@@ -212,6 +217,7 @@ function _fixtureFrom(f: FetcherFixture, serverConfig: ServerConfig): Fixture {
       console: {
         expected: {
           stderr: outStderr || "",
+          code: outExitCode,
         },
       },
     },
@@ -275,6 +281,36 @@ const fetcherTests: Array<Test> = [
       outFetchedFilesFS: {
         "aJ71c5fp_Oq5mI1LF6wBuBGlKg4NzKuOGytcD4AyoXM=": "file1_content",
       },
+    }),
+  },
+
+  {
+    name: "https_integrity_fail",
+    ...fixtureFrom({
+      inJsrJsonContent: `[]`,
+      inNpmJsonContent: `[]`,
+      inHttpsJsonContent: `[
+{
+  "url": "${PLACEHOLDER}/file1",
+  "hash": {
+    "string": "ababab",
+    "algorithm": "sha256",
+    "encoding": "hex"
+  },
+  "meta": {
+    "registry": "${PLACEHOLDER}"
+  }
+}
+]`,
+      inServerFS: { "file1": "file1_content" },
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
+      outNpmJsonContent: `[]`,
+      outFetchedFilesFS: {},
+      outStderr:
+        `error: Uncaught (in promise) "integrity check failed during fetch to http://127.0.0.1:8080/file1: 72ccb3d992389b04ac8d1a0b341d673b9ccd9c8b158e38541209cc1d7c65372e !== ababab"
+`,
+      outExitCode: 1,
     }),
   },
 
@@ -495,6 +531,44 @@ const fetcherTests: Array<Test> = [
   }
 }`,
       },
+    }),
+  },
+
+  {
+    name: "npm_integrity_fail",
+    ...fixtureFrom({
+      inJsrJsonContent: `[]`,
+      inNpmJsonContent: `[
+  {
+    "url": "${PLACEHOLDER}/file1",
+    "hash": {
+      "string": "ababab",
+      "algorithm": "sha512",
+      "encoding": "base64"
+    },
+    "meta": {
+      "registry": "npm",
+      "packageSpecifier": {
+        "fullString": "@scope1/package1@version1",
+        "registry": "npm",
+        "scope": "scope1",
+        "name": "package1",
+        "version": "version1",
+        "suffix": null
+      }
+    }
+  }
+]`,
+      inHttpsJsonContent: `[]`,
+      inServerFS: { "file1": "file1_content" },
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
+      outNpmJsonContent: `[]`,
+      outFetchedFilesFS: {},
+      outStderr:
+        `error: Uncaught (in promise) "integrity check failed during fetch to http://127.0.0.1:8080/file1: JkkFrF7y7ChySIW5kkn6Jo7pa2V7Scn1SXka3ml2TipegmR8WCZ2MNvqfglYBa9O4KLpaLVjKXDds6NPgfdAkA== !== ababab"
+`,
+      outExitCode: 1,
     }),
   },
 
@@ -785,6 +859,56 @@ const fetcherTests: Array<Test> = [
   }
 }`,
       },
+    }),
+  },
+
+  {
+    name: "jsr_integrity_fail",
+    ...fixtureFrom({
+      inJsrJsonContent: `[
+  {
+    "url": "${PLACEHOLDER}/@scope/package/version1_meta.json",
+    "hash": {
+      "string": "ababab",
+      "algorithm": "sha256",
+      "encoding": "hex"
+    },
+    "meta": {
+      "registry": "jsr",
+      "packageSpecifier": {
+        "fullString": "@scope/package@version1",
+        "registry": "jsr",
+        "scope": "scope",
+        "name": "package",
+        "version": "version1",
+        "suffix": null
+      }
+    }
+  }
+]`,
+      inNpmJsonContent: `[]`,
+      inHttpsJsonContent: `[]`,
+      inServerFS: {
+        "@scope/package/version1_meta.json": `{
+  "manifest": {
+    "/file2": { "size": 1, "checksum": "16c4c6c767910c2eca896281f1d56f2b62fc42b073004b469a2c1d8e4f9e5722" }
+  },
+  "moduleGraph1": {
+    "/file2": {}
+  },
+  "exports": {
+    ".": "./file2"
+  }
+}`,
+      },
+      outJsrJsonContent: `[]`,
+      outHttpsJsonContent: `[]`,
+      outNpmJsonContent: `[]`,
+      outFetchedFilesFS: {},
+      outStderr:
+        `error: Uncaught (in promise) "integrity check failed during fetch to http://127.0.0.1:8080/@scope/package/version1_meta.json: 7463bfae478fd913b87543c65ba4948bc8f66684b3bb1a68b8fe3eb26be37941 !== ababab"
+`,
+      outExitCode: 1,
     }),
   },
 

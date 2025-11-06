@@ -131,8 +131,12 @@ export function assertEq(a: any, b: any, msg?: string) {
   ===
 "${bString}"
 `;
-    throw new Error(_msg + (msg || ""));
+    throw new Error((msg || "") + _msg);
   }
+}
+
+function removeAnsiEscapeSequences(s?:string): string|undefined {
+  return s?.replaceAll(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "")
 }
 
 async function runTest(
@@ -161,26 +165,30 @@ async function runTest(
       code: Number(code),
     };
 
-    console.log(f.outputs.console.actual!.stderr);
-    console.log(f.outputs.console.actual!.stdout);
-
     if (f.outputs.console.expected.stderr !== undefined) {
       assertEq(
-        f.outputs.console.actual.stderr,
-        f.outputs.console.expected.stderr,
+        removeAnsiEscapeSequences(f.outputs.console.actual.stderr),
+        removeAnsiEscapeSequences(f.outputs.console.expected.stderr),
+        "while comparing stderr: ",
       );
     }
     if (f.outputs.console.expected.stdout !== undefined) {
       assertEq(
-        f.outputs.console.actual.stdout,
-        f.outputs.console.expected.stdout,
+        removeAnsiEscapeSequences(f.outputs.console.actual.stdout),
+        removeAnsiEscapeSequences(f.outputs.console.expected.stdout),
+        "while comparing stdout: ",
       );
     }
     if (f.outputs.console.expected.code !== undefined) {
       assertEq(
         f.outputs.console.actual.code,
         f.outputs.console.expected.code,
+        "while comparing exit code: ",
       );
+    }
+
+    if (f.outputs.console.actual.code !== 0) {
+      return
     }
 
     f.outputs.files.actual = await Promise.all(
