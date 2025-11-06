@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tidy-viewer";
   version = "1.8.93";
 
   src = fetchFromGitHub {
     owner = "alexhallam";
     repo = "tv";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-wiVcdTnjEFh5kSyxmK+ab0LkEAbQaygmLdrFfM12DyM=";
   };
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/alexhallam/tv/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
-    mainProgram = "tidy-viewer";
     homepage = "https://github.com/alexhallam/tv";
-    changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
+    mainProgram = "tidy-viewer";
     maintainers = with lib.maintainers; [ phanirithvij ];
   };
-}
+})
