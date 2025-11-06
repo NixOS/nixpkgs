@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -40,6 +41,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
     hash = "sha256-390zANong6IZaf+t4oiYF/t8GQak75JJfrpllps9q1o=";
   };
+
+  # TODO apply unconditionally on rebuild
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "timersub.patch";
+      url = "https://github.com/GNOME/at-spi2-core/commit/02108ea1b96db0189b2d4a9eceb843e1f13b7bdf.diff";
+      hash = "sha256-pVBhawfRnJoXmovl9CAmzh+YWJkbvlOVrCs8XanjP00=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib
