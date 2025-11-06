@@ -27,23 +27,14 @@ stdenv.mkDerivation {
     hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
-  patches = [
-    ./fix-test-float-variance.patch
-    (fetchpatch {
-      name = "failing_tests.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/failing_tests.patch?h=arc_unpacker-git&id=bda1ad9f69e6802e703b2e6913d71a36d76cfef9";
-      hash = "sha256-bClACsf/+SktyLAPtt7EcSqprkw8JVIi1ZLpcJcv9IE=";
-    })
-    (fetchpatch {
-      name = "include_cstdint.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/include_cstdint.patch?h=arc_unpacker-git&id=8c5c5121b23813c7650db19cb617b409d8fdcc9f";
-      hash = "sha256-3BQ1v7s9enUK/js7Jqrqo2RdSRvGVd7hMcY4iL51SiE=";
-    })
-  ];
+  patches = [ ./fix-test-float-variance.patch ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
+
+    # missing includes
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
+    sed '1i#include <cstdint>' -i src/types.h # gcc13
     sed '1i#include <vector>' -i src/flow/cli_facade.h # gcc14
 
     # cmake-4 support
@@ -70,10 +61,18 @@ stdenv.mkDerivation {
   ];
 
   checkPhase = ''
+    # Specify test targets
+    # https://catch2-temp.readthedocs.io/en/latest/command-line.html#specifying-which-tests-to-run
+    checkTarget=('~CatSystem INT archives')
+
     runHook preCheck
 
+    local flagsArray=()
+    concatTo flagsArray checkFlags checkFlagsArray checkTarget
+
     pushd ..
-    ./build/run_tests
+    echoCmd 'check flags' "''${flagsArray[@]}"
+    ./build/run_tests "''${flagsArray[@]}"
     popd
 
     runHook postCheck
