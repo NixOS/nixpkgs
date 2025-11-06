@@ -18,6 +18,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # Calculates the amount of time the machine slept but doesn't account for heavy loads
+    "test_retry"
+    "test_funcSetTimeout"
+    "test_funcSetTimeCalculate"
+    "test_funcSetTimeCalculateWithOverride"
+    "test_setFuncTimeoutetry"
+  ];
+
   pythonImportsCheck = [ "func_timeout" ];
 
   meta = {
