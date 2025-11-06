@@ -11390,12 +11390,6 @@
     githubId = 8095978;
     name = "j-mendez";
   };
-  j03 = {
-    email = "github@johannesloetzsch.de";
-    github = "johannesloetzsch";
-    githubId = 175537;
-    name = "Johannes Lötzsch";
-  };
   j0hax = {
     name = "Johannes Arnold";
     email = "johannes.arnold@stud.uni-hannover.de";
