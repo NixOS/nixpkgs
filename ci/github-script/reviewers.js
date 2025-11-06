@@ -55,7 +55,7 @@ async function handleReviewers({
           return username
         } catch (e) {
           if (e.status !== 404) throw e
-          core.warn(
+          core.warning(
             `PR #${pull_number}: User ${username} cannot be requested for review because they don't exist or are not a repository collaborator, ignoring. They probably missed the automated invite to the maintainers team (see <https://github.com/NixOS/nixpkgs/issues/234293>).`,
           )
         }
