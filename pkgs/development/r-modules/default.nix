@@ -1705,6 +1705,7 @@ let
     "dataverse"
     "immuneSIM"
     "mastif"
+    "rdss"
     "shinymeta"
     "shinyobjects"
     "wppi"
