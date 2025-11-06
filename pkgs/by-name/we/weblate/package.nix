@@ -22,7 +22,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.14.1";
+  version = "5.14.2";
 
   pyproject = true;
 
@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-/XgscuFDbUqr9p3wiLzwsR3/BZhyjpznClZTQw4YGYU=";
+    hash = "sha256-3Z32Zq6CaAqXELKdmEZXO6ACE9ZA6OloW+cuu34DKX8=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
