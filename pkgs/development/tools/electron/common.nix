@@ -65,73 +65,23 @@ in
   unpackPhase = null; # prevent chromium's unpackPhase from being used
   sourceRoot = "src";
 
-  env =
-    base.env
-    // {
-      # Hydra can fail to build electron due to clang spamming deprecation
-      # warnings mid-build, causing the build log to grow beyond the limit
-      # of 64mb and then getting killed by Hydra.
-      # For some reason, the log size limit appears to only be enforced on
-      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
-      # unbreak the build on h.n.o, we simply disable those warnings for now.
-      # https://hydra.nixos.org/build/283952243
-      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
-    }
-    // lib.optionalAttrs (lib.versionAtLeast info.version "35") {
-      # Needed for header generation in electron 35 and above
-      ELECTRON_OUT_DIR = "Release";
-    };
+  env = base.env // {
+    # Hydra can fail to build electron due to clang spamming deprecation
+    # warnings mid-build, causing the build log to grow beyond the limit
+    # of 64mb and then getting killed by Hydra.
+    # For some reason, the log size limit appears to only be enforced on
+    # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
+    # unbreak the build on h.n.o, we simply disable those warnings for now.
+    # https://hydra.nixos.org/build/283952243
+    NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
+    # Needed for header generation in electron 35 and above
+    ELECTRON_OUT_DIR = "Release";
+  };
 
   src = null;
 
   patches =
     base.patches
-    # Fix building with Rust 1.87+
-    # https://issues.chromium.org/issues/407024458
-    ++ lib.optionals (lib.versionOlder info.version "37") [
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6432410
-      # Not using fetchpatch here because it ignores file renames: https://github.com/nixos/nixpkgs/issues/32084
-      ./Reland-Use-global_allocator-to-provide-Rust-allocator-implementation.patch
-
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6434355
-      (fetchpatch {
-        name = "Call-Rust-default-allocator-directly-from-Rust.patch";
-        url = "https://github.com/chromium/chromium/commit/73eef8797a8138f5c26f52a1372644b20613f5ee.patch";
-        hash = "sha256-IcSjPv21xT+l9BwJuzeW2AfwBdKI0dQb3nskk6yeKHU=";
-      })
-
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6439711
-      (fetchpatch {
-        name = "Roll-rust.patch";
-        url = "https://github.com/chromium/chromium/commit/a6c30520486be844735dc646cd5b9b434afa0c6b.patch";
-        includes = [ "build/rust/allocator/*" ];
-        hash = "sha256-MFdR75oSAdFW6telEZt/s0qdUvq/BiYFEHW0vk+RgDk=";
-      })
-
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6456604
-      (fetchpatch {
-        name = "Drop-remap_alloc-dep.patch";
-        url = "https://github.com/chromium/chromium/commit/87d5ad2f621e0d5c81849dde24f3a5347efcb167.patch";
-        hash = "sha256-bEoR6jxEyw6Fzm4Zv4US54Cxa0li/0UTZTU2WUf0Rgo=";
-      })
-
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6454872
-      (fetchpatch {
-        name = "rust-Clean-up-build-rust-allocator-after-a-Rust-tool.patch";
-        url = "https://github.com/chromium/chromium/commit/5c74fcf6fd14491f33dd820022a9ca045f492f68.patch";
-        hash = "sha256-vcD0Zfo4Io/FVpupWOdgurFEqwFCv+oDOtSmHbm+ons=";
-      })
-    ]
-    # Fix building with gperf 3.2+
-    # https://issues.chromium.org/issues/40209959
-    ++ lib.optionals (lib.versionOlder info.version "37") [
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
-      (fetchpatch {
-        name = "Dont-apply-FALLTHROUGH-edit-to-gperf-3-2-output.patch";
-        url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch";
-        hash = "sha256-z/aQ1oQjFZnkUeRnrD6P/WDZiYAI1ncGhOUM+HmjMZA=";
-      })
-    ]
     # Fix build with Rust 1.89.0
     ++ lib.optionals (lib.versionOlder info.version "38") [
       # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
@@ -233,8 +183,6 @@ in
         done
       done
     )
-  ''
-  + lib.optionalString (lib.versionAtLeast info.version "36") ''
     echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
     echo 'checkout_mutter = false' >> build/config/gclient_args.gni
   ''
