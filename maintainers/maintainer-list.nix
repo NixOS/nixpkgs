@@ -21788,12 +21788,6 @@
       { fingerprint = "01D7 5486 3A6D 64EA AC77 0D26 FBF1 9A98 2CCE 0048"; }
     ];
   };
-  redbaron = {
-    email = "ivanov.maxim@gmail.com";
-    github = "redbaron";
-    githubId = 16624;
-    name = "Maxim Ivanov";
-  };
   redfish64 = {
     email = "engler@gmail.com";
     github = "redfish64";
