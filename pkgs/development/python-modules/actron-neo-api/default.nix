@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "actron-neo-api";
-  version = "0.1.84";
+  version = "0.1.87";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kclif9";
     repo = "actronneoapi";
     tag = "v${version}";
-    hash = "sha256-ihIg264ZX0tCfRwVLkiq62ke2G125ObcrVabPCDrc4c=";
+    hash = "sha256-8Y1vl+KjjAnobb9wORZCcXTLStuGOth3dlX0Goq+pxE=";
   };
 
   build-system = [
