@@ -6725,6 +6725,8 @@ self: super: with self; {
 
   histoprint = callPackage ../development/python-modules/histoprint { };
 
+  hive-metastore-client = callPackage ../development/python-modules/hive-metastore-client { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hjson = callPackage ../development/python-modules/hjson { };
@@ -8012,6 +8014,12 @@ self: super: with self; {
   lakeside = callPackage ../development/python-modules/lakeside { };
 
   lammps = callPackage ../development/python-modules/lammps { inherit (pkgs) lammps; };
+
+  lance-namespace = callPackage ../development/python-modules/lance-namespace { };
+
+  lance-namespace-urllib3-client =
+    callPackage ../development/python-modules/lance-namespace-urllib3-client
+      { };
 
   lancedb = callPackage ../development/python-modules/lancedb { inherit (pkgs) protobuf; };
 
@@ -11084,6 +11092,8 @@ self: super: with self; {
       enableDocs = true;
     }
   );
+
+  opendal = callPackage ../development/python-modules/opendal { };
 
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
