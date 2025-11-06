@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -36,5 +37,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "eureka";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
