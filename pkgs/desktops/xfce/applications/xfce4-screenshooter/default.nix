@@ -11,6 +11,7 @@
   wrapGAppsHook3,
   exo,
   gtk3,
+  gtk-layer-shell,
   libX11,
   libXext,
   libXfixes,
@@ -21,23 +22,19 @@
   wlr-protocols,
   xfce4-panel,
   xfconf,
-  curl,
-  zenity,
-  jq,
-  xclip,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-screenshooter";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "xfce4-screenshooter";
     tag = "xfce4-screenshooter-${finalAttrs.version}";
-    hash = "sha256-LELPY3SU25e3Dk9/OljWMLIbZYrDiQD1h6dMq+jRaH8=";
+    hash = "sha256-VN9j5Ieg3MZwhS4mE4LMRbQ5AM9F8O2n5lx/V0Qk0Po=";
   };
 
   strictDeps = true;
@@ -59,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     exo
     gtk3
+    gtk-layer-shell
     libX11
     libXext
     libXfixes
@@ -70,21 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-panel
     xfconf
   ];
-
-  preFixup = ''
-    # For Imgur upload action
-    # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
-    gappsWrapperArgs+=(
-      --prefix PATH : ${
-        lib.makeBinPath [
-          curl
-          zenity
-          jq
-          xclip
-        ]
-      }
-    )
-  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "xfce4-screenshooter-"; };
 
