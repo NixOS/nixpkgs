@@ -51,7 +51,6 @@
 , "imapnotify"
 , "js-yaml"
 , "jsdoc"
-, "jshint"
 , "json"
 , "json-diff"
 , "json-refs"
