@@ -8824,11 +8824,6 @@
     githubId = 32936898;
     name = "Wu Zhenyu";
   };
-  freezeboy = {
-    github = "freezeboy";
-    githubId = 13279982;
-    name = "freezeboy";
-  };
   frenetic00 = {
     github = "frenetic00";
     githubId = 50942055;
