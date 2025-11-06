@@ -11,20 +11,21 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "7.0";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
-    rev = "v${version}";
-    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IfRh6F6vA+nFa+diPKD2aMv9kRbvVIY80IqX0d+d5JA=";
   };
 
   postPatch = ''
-    substituteInPlace external/CMakeLists.txt \
-      --replace-fail 'set(mimalloc_min_version "2.1")' 'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+    substituteInPlace external/CMakeLists.txt --replace-fail \
+      'set(mimalloc_min_version "2.2")' \
+      'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
   '';
 
   cmakeFlags = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
-    "-DSLANG_INCLUDE_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DSLANG_INCLUDE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   nativeBuildInputs = [
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     python3
     ninja
   ];
+
+  strictDeps = true;
 
   buildInputs = [
     boost
@@ -62,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
