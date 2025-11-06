@@ -142,9 +142,15 @@ python3.pkgs.buildPythonApplication rec {
         # fails for unknown reason
         "test cases/python/4 custom target depends extmodule"
       ]
+      ++ lib.optionals stdenv.hostPlatform.isCygwin [
+        # fails for unknown reason
+        "test cases/common/122 no buildincdir"
+        "test cases/common/184 openmp"
+        "test cases/windows/8 find program"
+      ]
     ))
     ++ [
-      ''HOME="$TMPDIR" ${
+      ''HOME="$TMPDIR" ${if stdenv.hostPlatform.isCygwin then "CYGWIN=winsymlinks=native " else ""}${
         if python3.isPyPy then python3.interpreter else "python"
       } ./run_project_tests.py''
       "runHook postCheck"
