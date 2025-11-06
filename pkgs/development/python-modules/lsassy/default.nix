@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.13";
+  version = "3.1.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Hackndo";
     repo = "lsassy";
     tag = "v${version}";
-    hash = "sha256-DdIEDseGLI+hUIaUNPBqpkGGe+F+Z+jZ0g/JzXB8pf8=";
+    hash = "sha256-cQfyRCZv0ZTaj7Ay7zTzFnU7PQluP3VweeFof8+W70M=";
   };
 
   pythonRelaxDeps = [
