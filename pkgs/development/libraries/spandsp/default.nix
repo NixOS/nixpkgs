@@ -13,8 +13,11 @@
   patches = [
     (fetchpatch {
       url = "https://github.com/freeswitch/spandsp/commit/f7b96b08db148763039cf3459d0e00da9636eb92.patch";
-      includes = [ "spandsp-sim/g1050.c" ];
-      hash = "sha256-TwMhWJXQG/UaWddWgice0klp1uATyHMiE6DcsCebXYQ=";
+      includes = [
+        "spandsp-sim/g1050.c"
+        "spandsp-sim/test_utils.c"
+      ];
+      hash = "sha256-2MmVgyMUK0Zn+mL7IX57Y7brYpgmt4GVlis5/NstuNM=";
     })
     (fetchpatch {
       url = "https://github.com/freeswitch/spandsp/commit/f47bcdc301fbddad44e918939eed1b361882f740.patch";
