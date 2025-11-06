@@ -91,5 +91,13 @@ buildGoModule rec {
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ anhduy ];
+    knownVulnerabilities = [
+      "There are some CVEs in the nerdctl dependency. Has been fixed in Nixpkgs unstable."
+      "CVE-2024-25621"
+      "CVE-2025-64329"
+      "CVE-2025-31133"
+      "CVE-2025-52565"
+      "CVE-2025-52881"
+    ];
   };
 }
