@@ -5,6 +5,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const withRateLimit = require('./withRateLimit.js')
   const { classify } = require('../supportedBranches.js')
   const { handleMerge } = require('./merge.js')
+  const { handleReviewers } = require('./reviewers.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -209,10 +210,16 @@ module.exports = async ({ github, context, core, dry }) => {
       }
     }
 
-    const reviews = await github.paginate(github.rest.pulls.listReviews, {
-      ...context.repo,
-      pull_number,
-    })
+    // Check for any human reviews other than GitHub actions and other GitHub apps.
+    // Accounts could be deleted as well, so don't count them.
+    const reviews = (
+      await github.paginate(github.rest.pulls.listReviews, {
+        ...context.repo,
+        pull_number,
+      })
+    ).filter(
+      (r) => r.user && !r.user.login.endsWith('[bot]') && r.user.type !== 'Bot',
+    )
 
     const approvals = new Set(
       reviews
@@ -282,13 +289,6 @@ module.exports = async ({ github, context, core, dry }) => {
     log('Last eval run', run_id ?? '<n/a>')
 
     if (conclusion === 'success') {
-      // Check for any human reviews other than GitHub actions and other GitHub apps.
-      // Accounts could be deleted as well, so don't count them.
-      const humanReviews = reviews.filter(
-        (r) =>
-          r.user && !r.user.login.endsWith('[bot]') && r.user.type !== 'Bot',
-      )
-
       Object.assign(prLabels, {
         // We only set this label if the latest eval run was successful, because if it was not, it
         // *could* have requested reviewers. We will let the PR author fix CI first, before "escalating"
@@ -301,7 +301,7 @@ module.exports = async ({ github, context, core, dry }) => {
         '9.needs: reviewer':
           !pull_request.draft &&
           pull_request.requested_reviewers.length === 0 &&
-          humanReviews.length === 0,
+          reviews.length === 0,
       })
     }
 
@@ -373,6 +373,41 @@ module.exports = async ({ github, context, core, dry }) => {
           maintainers[pkg]?.some((m) => approvals.has(m)),
         ),
       })
+
+      if (!pull_request.draft) {
+        let owners = []
+        try {
+          // TODO: Create owner map similar to maintainer map.
+          owners = (await readFile(`${pull_number}/owners.txt`, 'utf-8')).split(
+            '\n',
+          )
+        } catch (e) {
+          // Older artifacts don't have the owners.txt, yet.
+          if (e.code !== 'ENOENT') throw e
+        }
+
+        // We set this label earlier already, but the current PR state can be very different
+        // after handleReviewers has requested reviews, so update it in this case to prevent
+        // this label from flip-flopping.
+        prLabels['9.needs: reviewer'] = await handleReviewers({
+          github,
+          context,
+          core,
+          log,
+          dry,
+          pull_request,
+          reviews,
+          // TODO: Use maintainer map instead of the artifact.
+          maintainers: Object.keys(
+            JSON.parse(
+              await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+            ),
+          ).map((id) => parseInt(id)),
+          owners,
+          getTeamMembers,
+          getUser,
+        })
+      }
     }
 
     return prLabels
@@ -521,7 +556,7 @@ module.exports = async ({ github, context, core, dry }) => {
       const hasChanges = Object.keys(after).some(
         (name) => (before[name] ?? false) !== after[name],
       )
-      if (log('Has changes', hasChanges, !hasChanges)) return
+      if (log('Has label changes', hasChanges, !hasChanges)) return
 
       // Skipping labeling on a pull_request event, because we have no privileges.
       const labels = Object.entries(after)
