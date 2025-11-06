@@ -723,6 +723,6 @@ in
     };
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ c2fc2f ];
   };
 }
