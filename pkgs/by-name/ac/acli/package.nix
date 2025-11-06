@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation (
         text = ''
           NEW_VERSION=$(curl --fail -L -s https://developer.atlassian.com/cloud/acli/changelog/ | grep -oP 'Atlassian CLI v([0-9]+\.[0-9]+\.[0-9]+)-stable' | head -n1 | sed -E 's/.*v(.*)-stable/\1/')
 
-          if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+          if [[ "$UPDATE_NIX_OLD_VERSION" = "$NEW_VERSION" ]]; then
               echo "The new version same as the old version."
               exit 0
           fi
