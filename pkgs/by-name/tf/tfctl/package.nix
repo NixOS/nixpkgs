@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace tfctl/break_glass.go \
       --replace-fail 'exec.Command("kubectl"' 'exec.Command("${lib.getExe kubectl}"'
   '';
