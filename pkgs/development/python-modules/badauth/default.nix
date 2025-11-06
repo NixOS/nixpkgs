@@ -4,21 +4,21 @@
   asysocks,
   buildPythonPackage,
   fetchFromGitHub,
-  minikerberos-bad,
+  kerbad,
   setuptools,
   unicrypto,
 }:
 
-buildPythonPackage rec {
-  pname = "asyauth-bad";
-  version = "0.0.20";
+buildPythonPackage {
+  pname = "badauth";
+  version = "0.1.4-unstable-2025-10-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
-    repo = "asyauth-bAD";
-    tag = version;
-    hash = "sha256-NX6bvOxA4Y5KRPCIsI+o0cB4dFOXlV89iH7YqNDdaXE=";
+    repo = "badauth";
+    rev = "86d6091470c98e1a5f6dc4b8749053189372bb53"; # no tag available
+    hash = "sha256-p7V5WkQ48b1IqCPwmJfbCiyqekfp9zW41J81JHyZNUQ=";
   };
 
   build-system = [ setuptools ];
@@ -26,19 +26,18 @@ buildPythonPackage rec {
   dependencies = [
     asn1crypto
     asysocks
-    minikerberos-bad
+    kerbad
     unicrypto
   ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "asyauth" ];
+  pythonImportsCheck = [ "badauth" ];
 
   meta = {
     description = "Unified authentication library";
-    homepage = "https://github.com/CravateRouge/asyauth-bAD";
-    changelog = "https://github.com/CravateRouge/asyauth-bAD/releases/tag/${src.tag}";
+    homepage = "https://github.com/CravateRouge/badauth";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

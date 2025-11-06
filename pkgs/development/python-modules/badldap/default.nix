@@ -1,43 +1,49 @@
 {
   lib,
-  asn1crypto,
-  asyauth-bad,
-  asysocks,
   buildPythonPackage,
   fetchFromGitHub,
-  minikerberos-bad,
-  prompt-toolkit,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  asn1crypto,
+  asysocks,
+  badauth,
+  kerbad,
+  prompt-toolkit,
   tabulate,
   tqdm,
   unicrypto,
+  unidns,
   wcwidth,
   winacl,
 }:
 
-buildPythonPackage rec {
-  pname = "msldap-bad";
-  version = "0.5.10";
+buildPythonPackage {
+  pname = "badldap";
+  version = "0.7.1-unstable-2025-10-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
-    repo = "msldap-bAD";
-    tag = version;
-    hash = "sha256-CnHXEE1tdIXv+Qb3pS+cNxVtcTOVaq6mrQxu3wr1Xxo=";
+    repo = "badldap";
+    rev = "65af61fd7daf7dc7bef9c6248553398e6f604d43"; # no tag available
+    hash = "sha256-14mV+EBrpoR9suPmOYdt2ro1Gcrpj3tuVx/meaVKC2c=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    asyauth-bad
     asn1crypto
     asysocks
-    minikerberos-bad
+    badauth
+    kerbad
     prompt-toolkit
     tabulate
     tqdm
     unicrypto
+    unidns
     wcwidth
     winacl
   ];
@@ -45,12 +51,11 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "msldap" ];
+  pythonImportsCheck = [ "badldap" ];
 
   meta = {
     description = "LDAP library for auditing MS AD";
-    homepage = "https://github.com/CravateRouge/msldap-bAD";
-    changelog = "https://github.com/CravateRouge/asyauth-bAD/releases/tag/${src.tag}";
+    homepage = "https://github.com/CravateRouge/badldap";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
