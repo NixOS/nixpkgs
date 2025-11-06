@@ -29,6 +29,7 @@
   enableVultr ? true,
   enableXDS ? true,
   enableZookeeper ? true,
+  versionCheckHook,
 }:
 
 let
@@ -179,6 +180,12 @@ buildGoModule (finalAttrs: {
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     tests = { inherit (nixosTests) prometheus; };
     updateScript = ./update.sh;
@@ -188,6 +195,7 @@ buildGoModule (finalAttrs: {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
     license = licenses.asl20;
+    mainProgram = "prometheus";
     changelog = "https://github.com/prometheus/prometheus/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [
       fpletz
