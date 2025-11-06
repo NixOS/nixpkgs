@@ -24,7 +24,12 @@ stdenv.mkDerivation {
     install -Dm 555 username-anarchy $out/bin/
   '';
 
-  meta = {
+  postPatch = ''
+    # Add shebang line to make the script executable
+      sed -i -e '1i#!/usr/bin/env ruby' format-plugins.rb
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/urbanadventurer/username-anarchy/";
     description = "Username generator tool for penetration testing";
     license = lib.licenses.mit;
