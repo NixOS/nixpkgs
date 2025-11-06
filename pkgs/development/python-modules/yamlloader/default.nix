@@ -7,15 +7,12 @@
   pytestCheckHook,
   pyyaml,
   hypothesis,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
   version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,11 +36,11 @@ buildPythonPackage rec {
     "yamlloader"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
     changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
 }
