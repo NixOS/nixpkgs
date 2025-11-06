@@ -71,5 +71,13 @@ buildGoModule rec {
       jk
     ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "CVEs in the dependency of this version have been fixed in nerdctl version 2.2.0."
+      "CVE-2024-25621"
+      "CVE-2025-64329"
+      "CVE-2025-31133"
+      "CVE-2025-52565"
+      "CVE-2025-52881"
+    ];
   };
 }
