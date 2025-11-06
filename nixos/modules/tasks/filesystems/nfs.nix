@@ -153,7 +153,7 @@ in
 
         system.fsPackages = [ pkgs.nfs-utils ];
 
-        boot.initrd.kernelModules = lib.mkIf inInitrd [ "nfs" ];
+        boot.initrd.availableKernelModules = lib.optional inInitrd "nfsv3";
 
         systemd.packages = [ pkgs.nfs-utils ];
 
