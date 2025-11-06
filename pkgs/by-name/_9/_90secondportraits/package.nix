@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Silly speed painting game";
     mainProgram = "90secondportraits";
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = with licenses; [
       zlib

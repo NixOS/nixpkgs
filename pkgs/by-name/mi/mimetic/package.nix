@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     description = "MIME handling library";
     homepage = "https://www.codesink.org/mimetic_mime_library.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
   };
 }

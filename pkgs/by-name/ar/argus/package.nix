@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://qosient.com/argus";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
   };
 }

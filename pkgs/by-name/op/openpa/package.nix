@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "Atomic primitives for high performance, concurrent software";
     homepage = "https://trac.mpich.org/projects/openpa";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.unix;
     longDescription = ''
       OPA (or sometimes OpenPA or Open Portable Atomics) is an

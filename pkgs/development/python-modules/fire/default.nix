@@ -65,6 +65,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

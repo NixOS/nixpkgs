@@ -115,7 +115,6 @@ python3.pkgs.buildPythonApplication rec {
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      leenaars
       antonmosich
     ];
     mainProgram = "todo";

@@ -48,6 +48,5 @@ buildPythonPackage rec {
     '';
     homepage = "https://launchpad.net/dkimpy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

@@ -38,7 +38,6 @@ stdenvNoCC.mkDerivation rec {
       serif. Both members comes in 3 weights with matching italics.
     '';
     license = licenses.ofl;
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };
 }

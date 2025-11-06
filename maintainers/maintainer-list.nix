@@ -14455,12 +14455,6 @@
     githubId = 736291;
     name = "Lee Machin";
   };
-  leenaars = {
-    email = "ml.software@leenaa.rs";
-    github = "leenaars";
-    githubId = 4158274;
-    name = "Michiel Leenaars";
-  };
   legojames = {
     github = "jrobinson-uk";
     githubId = 4701504;
