@@ -121,6 +121,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
+    changelog = "https://www.pcloud.com/release-notes/linux.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];
