@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitea,
+  nix-update-script,
 
   # asset compression
   brotli,
@@ -56,6 +57,12 @@ buildGoModule (finalAttrs: {
     mkdir -p $out/lib/go-away
     cp -rv examples/snippets $out/lib/go-away/
   '';
+
+  passthru.updateScript = nix-update-script {
+    # the main repository does not have the releases feed enabled, so use the
+    # codeberg mirror
+    url = "https://codeberg.org/gone/go-away";
+  };
 
   meta = {
     changelog = "https://git.gammaspectra.live/git/go-away/releases/tag/${finalAttrs.src.tag}";
