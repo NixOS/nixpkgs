@@ -59,6 +59,8 @@ self: super: with self; {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  actron-neo-api = callPackage ../development/python-modules/actron-neo-api { };
+
   acunetix = callPackage ../development/python-modules/acunetix { };
 
   adafruit-board-toolkit = callPackage ../development/python-modules/adafruit-board-toolkit { };
@@ -177,6 +179,8 @@ self: super: with self; {
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
+
+  aio-ownet = callPackage ../development/python-modules/aio-ownet { };
 
   aio-pika = callPackage ../development/python-modules/aio-pika { };
 
@@ -8929,6 +8933,8 @@ self: super: with self; {
 
   lunarcalendar = callPackage ../development/python-modules/lunarcalendar { };
 
+  lunatone-rest-api-client = callPackage ../development/python-modules/lunatone-rest-api-client { };
+
   lupa = callPackage ../development/python-modules/lupa { };
 
   lupupy = callPackage ../development/python-modules/lupupy { };
@@ -9334,6 +9340,8 @@ self: super: with self; {
   metar = callPackage ../development/python-modules/metar { };
 
   metawear = callPackage ../development/python-modules/metawear { };
+
+  meteo-lt-pkg = callPackage ../development/python-modules/meteo-lt-pkg { };
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
@@ -12069,8 +12077,6 @@ self: super: with self; {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
-  plumlightpad = callPackage ../development/python-modules/plumlightpad { };
-
   pluthon = callPackage ../development/python-modules/pluthon { };
 
   plux = callPackage ../development/python-modules/plux { };
@@ -13122,6 +13128,8 @@ self: super: with self; {
 
   pyfiglet = callPackage ../development/python-modules/pyfiglet { };
 
+  pyfirefly = callPackage ../development/python-modules/pyfirefly { };
+
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
@@ -13717,6 +13725,8 @@ self: super: with self; {
 
   pynina = callPackage ../development/python-modules/pynina { };
 
+  pynintendoparental = callPackage ../development/python-modules/pynintendoparental { };
+
   pynipap = callPackage ../development/python-modules/pynipap { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
@@ -13838,8 +13848,6 @@ self: super: with self; {
   pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
 
   pyowm = callPackage ../development/python-modules/pyowm { };
-
-  pyownet = callPackage ../development/python-modules/pyownet { };
 
   pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
 
@@ -14433,6 +14441,8 @@ self: super: with self; {
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
+  pysrdaligateway = callPackage ../development/python-modules/pysrdaligateway { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
@@ -14517,6 +14527,8 @@ self: super: with self; {
   pytest-aio = callPackage ../development/python-modules/pytest-aio { };
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
+
+  pytest-aioresponses = callPackage ../development/python-modules/pytest-aioresponses { };
 
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
@@ -14865,6 +14877,8 @@ self: super: with self; {
   python-can = callPackage ../development/python-modules/python-can { };
 
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
+
+  python-citybikes = callPackage ../development/python-modules/python-citybikes { };
 
   python-clementine-remote = callPackage ../development/python-modules/python-clementine-remote { };
 
@@ -17253,6 +17267,8 @@ self: super: with self; {
   softlayer = callPackage ../development/python-modules/softlayer { };
 
   solaredge-local = callPackage ../development/python-modules/solaredge-local { };
+
+  solaredge-web = callPackage ../development/python-modules/solaredge-web { };
 
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 

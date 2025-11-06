@@ -2,24 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
+  voluptuous,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.25.2";
+  version = "0.25.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-deconz";
     tag = version;
-    hash = "sha256-9wsdL2mtT6Q6+4Z6f+Aoae7d0x7EDqkZ5n2O3Ml4PbA=";
+    hash = "sha256-kwQF6RY6Fxba44wa3q4Hx4MRAbWl3Ho7WYvR7jRfrW8=";
   };
 
   postPatch = ''
@@ -28,11 +27,10 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyserial
-    pyserial-asyncio
+  dependencies = [
+    voluptuous
     zigpy
   ];
 
