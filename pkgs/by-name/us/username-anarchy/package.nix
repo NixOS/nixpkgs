@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ruby,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,23 +21,27 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ ruby ];
 
   preInstall = ''
-    mkdir -p $out/bin
-    install -Dm 555 format-plugins.rb $out/bin/
-    install -Dm 555 username-anarchy $out/bin/
-  '';
+    mkdir -p $out/bin $out/lib
+    install -Dm 555 format-plugins.rb $out/lib/
+    install -Dm 555 username-anarchy $out/lib/
 
-  postPatch = ''
-    # Add shebang line to make the script executable
-      sed -i -e '1i#!/usr/bin/env ruby' format-plugins.rb
+    ln -s $out/lib/username-anarchy $out/bin/username-anarchy
   '';
 
   passthru.updateScript = nix-update-script { };
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://github.com/urbanadventurer/username-anarchy/";
     description = "Username generator tool for penetration testing";
+    changelog = "https://github.com/adityatelange/evil-winrm-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ akechishiro ];
+    maintainers = with lib.maintainers; [
+      akechishiro
+      letgamer
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "username-anarchy";
   };
