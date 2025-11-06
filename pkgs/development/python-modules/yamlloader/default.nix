@@ -33,6 +33,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # TypeError: cannot pickle '_thread.RLock' object
+    # https://github.com/Phynix/yamlloader/issues/64
+    "tests/test_ordereddict.py"
+  ];
+
   pythonImportsCheck = [
     "yaml"
     "yamlloader"
