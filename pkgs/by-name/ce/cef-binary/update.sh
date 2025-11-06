@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-current_version=$(nix-instantiate --eval -E "with import ./. {}; libcef.version or (lib.getVersion libcef)" | tr -d '"')
+current_version=$(nix-instantiate --eval -E "with import ./. {}; cef-binary or (lib.getVersion cef-binary)" | tr -d '"')
 
 ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
@@ -23,7 +23,7 @@ fi
 update_nix_value() {
     local key="$1"
     local value="${2:-}"
-    sed -i "s|$key = \".*\"|$key = \"$value\"|" $ROOT/default.nix
+    sed -i "s|$key ? \".*\"|$key ? \"$value\"|" $ROOT/package.nix
 }
 
 update_nix_value version "$cef_version"
@@ -39,5 +39,5 @@ for platform in "${platforms[@]}"; do
     read -r system arch <<< "$platform"
     url="https://cef-builds.spotifycdn.com/cef_binary_${cef_version}+g${git_revision}+chromium-${chromium_version}_linux${arch}_minimal.tar.bz2"
     hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")
-    update-source-version libcef "$cef_version" "$hash" --system="$system" --ignore-same-version
+    update-source-version cef-binary "$cef_version" "$hash" --system="$system" --ignore-same-version
 done

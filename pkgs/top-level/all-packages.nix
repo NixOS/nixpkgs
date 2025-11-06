@@ -7694,8 +7694,6 @@ with pkgs;
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
-  libcef = callPackage ../development/libraries/libcef { };
-
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
   libchamplain_libsoup3 = libchamplain.override { withLibsoup3 = true; };
