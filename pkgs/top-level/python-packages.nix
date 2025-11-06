@@ -460,6 +460,8 @@ self: super: with self; {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiortc = callPackage ../development/python-modules/aiortc { };
+
   aiortm = callPackage ../development/python-modules/aiortm { };
 
   aiortsp = callPackage ../development/python-modules/aiortsp { };
