@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "cloudpipe";
     repo = "cloudpickle";
     tag = "v${version}";
-    hash = "sha256-e8kEznjuIrdjNsXwXJO3lcEEpiCR+UQzXnGrTarUb5E=";
+    hash = "sha256-BsCOEpNCNqq8PS+SdbzF1wq0LXEmtcHJs0pdt2qFw/w=";
   };
 
   nativeBuildInputs = [ flit-core ];
