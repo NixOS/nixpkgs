@@ -6,7 +6,9 @@
 }:
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.nfs or false;
+  nfsInInitrd = config.boot.initrd.supportedFilesystems.nfs or false;
+
+  nfs4InInitrd = config.boot.initrd.supportedFilesystems.nfs4 or false;
 
   nfsStateDir = "/var/lib/nfs";
 
@@ -153,7 +155,8 @@ in
 
         system.fsPackages = [ pkgs.nfs-utils ];
 
-        boot.initrd.availableKernelModules = lib.optional inInitrd "nfsv3";
+        boot.initrd.availableKernelModules =
+          lib.optional nfsInInitrd "nfsv3" ++ lib.optional nfs4InInitrd "nfsv4";
 
         systemd.packages = [ pkgs.nfs-utils ];
 
