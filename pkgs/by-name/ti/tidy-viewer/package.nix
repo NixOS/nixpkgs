@@ -17,12 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-HF7M4s2OHCAyVkbCIBxGButAxbxrhjmY3YE/do8et1s=";
 
-  # this test parses command line arguments
-  # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  checkFlags = [
-    "--skip=build_reader_can_create_reader_without_file_specified"
-  ];
-
   meta = {
     changelog = "https://github.com/alexhallam/tv/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
