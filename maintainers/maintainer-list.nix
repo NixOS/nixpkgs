@@ -3218,12 +3218,6 @@
     githubId = 10439709;
     name = "Bert Moens";
   };
-  berdario = {
-    email = "berdario@gmail.com";
-    github = "berdario";
-    githubId = 752835;
-    name = "Dario Bertini";
-  };
   bergey = {
     email = "bergey@teallabs.org";
     github = "bergey";
