@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "0.10.0";
 
   src = fetchFromGitHub {
-    owner = "mrmarble";
+    owner = "MrMarble";
     repo = "termsvg";
     rev = "v${version}";
     hash = "sha256-tNvr8ptMortP7iI6GwT4AGbqTvNFposca8I2JribGnk=";
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Record, share and export your terminal as a animated SVG image";
-    homepage = "https://github.com/mrmarble/termsvg";
+    homepage = "https://github.com/MrMarble/termsvg";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "termsvg";
