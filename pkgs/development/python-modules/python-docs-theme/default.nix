@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_docs_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
     changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

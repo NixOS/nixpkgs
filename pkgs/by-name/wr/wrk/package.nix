@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cp wrk $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTTP benchmarking tool";
     homepage = "https://github.com/wg/wrk";
     longDescription = ''
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
       combines a multithreaded design with scalable event notification
       systems such as epoll and kqueue.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragge ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ragge ];
+    platforms = lib.platforms.unix;
     mainProgram = "wrk";
   };
 }

@@ -39,10 +39,10 @@ buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SVGinOT color font builder";
     homepage = "https://github.com/13rac1/scfbuild";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "scfbuild";
   };

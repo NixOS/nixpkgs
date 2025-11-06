@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_automodapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for generating API documentation";
     homepage = "https://github.com/astropy/sphinx-automodapi";
     changelog = "https://github.com/astropy/sphinx-automodapi/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

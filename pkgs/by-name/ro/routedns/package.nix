@@ -24,11 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/folbricht/routedns";
     description = "DNS stub resolver, proxy and router";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jsimonetti ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jsimonetti ];
     mainProgram = "routedns";
   };
 }

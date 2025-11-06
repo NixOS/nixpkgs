@@ -49,11 +49,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
       extlib
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Library that parses Java .class files into OCaml data structures";
       homepage = "https://javalib-team.github.io/javalib/";
-      license = licenses.lgpl3;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.lgpl3;
+      maintainers = [ lib.maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

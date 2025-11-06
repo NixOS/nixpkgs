@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highlight mouse pointer/cursor using a dot";
     homepage = "https://github.com/swillner/highlight-pointer";
     changelog = "https://github.com/swillner/highlight-pointer/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ DCsunset ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ DCsunset ];
     mainProgram = "highlight-pointer";
   };
 })

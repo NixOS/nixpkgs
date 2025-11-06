@@ -29,10 +29,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mloader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to download manga from mangaplus";
     homepage = "https://github.com/hurlenko/mloader";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "mloader";
   };

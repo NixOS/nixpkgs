@@ -34,12 +34,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/supabase/auth";
     description = "JWT based API for managing users and issuing JWT tokens";
     mainProgram = "auth";
     changelog = "https://github.com/supabase/auth/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

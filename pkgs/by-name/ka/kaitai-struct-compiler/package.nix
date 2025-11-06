@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/kaitai-struct-compiler --prefix PATH : ${lib.makeBinPath [ jre ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kaitai-io/kaitai_struct_compiler";
     description = "Compiler to generate binary data parsers in C++ / C# / Go / Java / JavaScript / Lua / Perl / PHP / Python / Ruby ";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qubasa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ qubasa ];
+    platforms = lib.platforms.unix;
   };
 }

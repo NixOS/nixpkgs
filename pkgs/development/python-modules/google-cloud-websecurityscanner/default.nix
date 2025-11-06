@@ -42,11 +42,11 @@ buildPythonPackage rec {
     "google.cloud.websecurityscanner_v1beta"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Web Security Scanner API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-websecurityscanner";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-websecurityscanner-v${version}/packages/google-cloud-websecurityscanner";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

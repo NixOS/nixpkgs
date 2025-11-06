@@ -43,13 +43,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flux_led" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with the flux_led smart bulbs";
     homepage = "https://github.com/Danielhiversen/flux_led";
     changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "flux_led";
   };
 }

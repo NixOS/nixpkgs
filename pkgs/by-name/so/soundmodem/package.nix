@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio based modem for ham radio supporting ax.25";
     longDescription = ''
       This software allows a standard PC soundcard to be used as a packet radio "modem". The whole processing is done on the main processor CPU.
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     #homepage = "http://gna.org/projects/soundmodem"; # official, but "Connection refused"
     homepage = "http://soundmodem.vk4msl.id.au/";
     downloadPage = "https://archive.org/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ymarkus ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ymarkus ];
+    platforms = lib.platforms.all;
   };
 }

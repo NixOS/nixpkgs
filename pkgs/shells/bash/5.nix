@@ -270,8 +270,8 @@ lib.warnIf (withDocs != null)
         interactive use.  In addition, most sh scripts can be run by
         Bash without modification.
       '';
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = with lib.maintainers; [ infinisil ];

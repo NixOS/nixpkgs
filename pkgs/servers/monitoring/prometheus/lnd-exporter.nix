@@ -23,11 +23,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) lnd; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lightninglabs/lndmon";
     description = "Prometheus exporter for lnd (Lightning Network Daemon)";
     mainProgram = "lndmon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmilata ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mmilata ];
   };
 }

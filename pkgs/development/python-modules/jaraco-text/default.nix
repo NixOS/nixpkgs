@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.text" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for text manipulation";
     homepage = "https://github.com/jaraco/jaraco.text";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

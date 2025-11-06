@@ -62,11 +62,11 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) gvisor; };
 
-  meta = with lib; {
+  meta = {
     description = "Application Kernel for Containers";
     homepage = "https://github.com/google/gvisor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gpl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gpl ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

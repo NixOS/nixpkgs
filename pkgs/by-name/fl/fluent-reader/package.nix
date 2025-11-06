@@ -28,12 +28,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern desktop RSS reader built with Electron, React, and Fluent UI";
     mainProgram = "fluent-reader";
     homepage = "https://hyliu.me/fluent-reader";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "unrar";
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.all;
   };
 })

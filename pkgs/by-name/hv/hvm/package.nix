@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nLcT+o6xrxPmQqK7FQpCqTlxOOUA1FzqRGQIypcq4fo=";
 
-  meta = with lib; {
+  meta = {
     description = "Massively parallel, optimal functional runtime in Rust";
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

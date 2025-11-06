@@ -26,9 +26,9 @@ buildPythonPackage rec {
   # No tests distributed. https://github.com/cablehead/python-consul/issues/133
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Consul (https://www.consul.io/)";
     homepage = "https://github.com/cablehead/python-consul";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

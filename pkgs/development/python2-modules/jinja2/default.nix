@@ -34,15 +34,15 @@ buildPythonPackage rec {
     pytest -v tests -W ignore::DeprecationWarning
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://jinja.pocoo.org/";
     description = "Stand-alone template engine";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     longDescription = ''
       Jinja2 is a template engine written in pure Python. It provides a
       Django inspired non-XML syntax but supports inline expressions and
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with lib.maintainers; [ pierron ];
   };
 }

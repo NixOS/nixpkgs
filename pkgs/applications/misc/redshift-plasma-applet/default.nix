@@ -60,12 +60,12 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "KDE Plasma 5 widget for controlling Redshift";
     homepage = "https://github.com/kotelnik/plasma-applet-redshift-control";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       benley
       zraexy
     ];

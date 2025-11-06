@@ -92,11 +92,11 @@ buildPythonPackage rec {
     "test_gridliner_labels_bbox_style"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "feature_download";
   };

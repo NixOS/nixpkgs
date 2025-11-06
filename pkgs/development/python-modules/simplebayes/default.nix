@@ -30,9 +30,9 @@ buildPythonPackage {
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Memory-based naive bayesian text classifier";
     homepage = "https://github.com/hickeroar/simplebayes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -51,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       --fish <(xvfb-run $out/bin/nixbit --completion-fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KDE Plasma application to update your NixOS system from a git repository";
     homepage = "https://github.com/pbek/nixbit";
     changelog = "https://github.com/pbek/nixbit/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbek ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "nixbit";
   };
 })

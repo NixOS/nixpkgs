@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fedora" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the infrastructure of the Fedora Project";
     homepage = "https://github.com/fedora-infra/python-fedora";
     changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${version}";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

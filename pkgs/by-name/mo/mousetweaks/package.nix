@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Provides mouse accessibility enhancements for the GNOME desktop";
     longDescription = ''
       Mousetweaks provides mouse accessibility enhancements for the GNOME
@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
       panel of the GNOME Control Center.
     '';
     homepage = "https://gitlab.gnome.org/Archive/mousetweaks";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.johnazoidberg ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.johnazoidberg ];
     mainProgram = "mousetweaks";
   };
 }

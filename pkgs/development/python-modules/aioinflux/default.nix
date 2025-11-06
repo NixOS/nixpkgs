@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioinflux" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for InfluxDB";
     homepage = "https://github.com/gusutabopb/aioinflux";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       liamdiprose
       lopsided98
     ];

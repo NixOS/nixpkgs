@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     mv ./hid_listen $out/bin/hid_listen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool thats prints debugging information from usb HID devices";
     homepage = "https://www.pjrc.com/teensy/hid_listen.html";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tomsmeets ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tomsmeets ];
+    platforms = lib.platforms.linux;
     mainProgram = "hid_listen";
   };
 }

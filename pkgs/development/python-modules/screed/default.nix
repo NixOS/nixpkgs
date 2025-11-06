@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "Test_fq_shell_command"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple read-only sequence database, designed for short reads";
     mainProgram = "screed";
     homepage = "https://pypi.org/project/screed/";
-    maintainers = with maintainers; [ luizirber ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ luizirber ];
+    license = lib.licenses.bsd3;
   };
 }

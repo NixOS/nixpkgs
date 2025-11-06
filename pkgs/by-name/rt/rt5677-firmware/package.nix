@@ -19,10 +19,10 @@ stdenvNoCC.mkDerivation {
     cp ./firmware/rt5677_elf_vad $out/lib/firmware
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Firmware for Realtek rt5677 device";
-    license = licenses.unfreeRedistributableFirmware;
-    maintainers = [ maintainers.zohl ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributableFirmware;
+    maintainers = [ lib.maintainers.zohl ];
+    platforms = lib.platforms.linux;
   };
 }

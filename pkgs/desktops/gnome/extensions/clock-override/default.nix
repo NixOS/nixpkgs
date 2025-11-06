@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Customize the date and time format displayed in clock in the top bar in GNOME Shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
     homepage = "https://github.com/stuartlangridge/gnome-shell-clock-override";
     broken = versionOlder gnome-shell.version "3.18";
   };

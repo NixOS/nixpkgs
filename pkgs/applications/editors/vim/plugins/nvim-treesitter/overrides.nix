@@ -169,10 +169,9 @@ in
   };
 
   meta =
-    with lib;
-    (super.nvim-treesitter.meta or { })
-    // {
-      license = licenses.asl20;
+
+    (super.nvim-treesitter.meta or { }) // {
+      license = lib.licenses.asl20;
       maintainers = [ ];
     };
 }

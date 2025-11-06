@@ -64,16 +64,16 @@ let
         rev = "v${version}";
         sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
-      meta = with lib; {
+      meta = {
         description = "Hunspell dictionary for ${shortDescription} from rla";
         homepage = "https://github.com/sbosio/rla-es";
-        license = with licenses; [
+        license = with lib.licenses; [
           gpl3
           lgpl3
           mpl11
         ];
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+        maintainers = with lib.maintainers; [ renzo ];
+        platforms = lib.platforms.all;
       };
       nativeBuildInputs = [
         bash
@@ -116,15 +116,15 @@ let
         url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
         sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
       };
-      meta = with lib; {
+      meta = {
         longDescription = ''
           Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
           Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
           LibreOffice då dsso.se inte längre verkar vara med oss.
         '';
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = licenses.lgpl3;
-        platforms = platforms.all;
+        license = lib.licenses.lgpl3;
+        platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
@@ -163,13 +163,13 @@ let
         url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
         sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
       };
-      meta = with lib; {
+      meta = {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
         homepage = "https://www.dicollecte.org/home.php?prj=fr";
-        license = licenses.mpl20;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+        license = lib.licenses.mpl20;
+        maintainers = with lib.maintainers; [ renzo ];
+        platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
@@ -198,12 +198,12 @@ let
       pname = "hunspell-dict-${shortName}-wordlist";
       srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
-      meta = with lib; {
+      meta = {
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
         homepage = "http://wordlist.aspell.net/";
-        license = licenses.bsd3;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+        license = lib.licenses.bsd3;
+        maintainers = with lib.maintainers; [ renzo ];
+        platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
@@ -229,12 +229,12 @@ let
       version = "2.4";
       pname = "hunspell-dict-${shortName}-linguistico";
       readmeFile = dictFileName + "_README.txt";
-      meta = with lib; {
+      meta = {
         description = "Hunspell dictionary for ${shortDescription}";
         homepage = "https://sourceforge.net/projects/linguistico/";
-        license = licenses.gpl3;
-        maintainers = with maintainers; [ renzo ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl3;
+        maintainers = with lib.maintainers; [ renzo ];
+        platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
@@ -275,13 +275,13 @@ let
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://xuxen.eus/";
         description = shortDescription;
         longDescription = longDescription;
-        license = licenses.gpl2;
-        maintainers = with maintainers; [ zalakain ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl2;
+        maintainers = with lib.maintainers; [ zalakain ];
+        platforms = lib.platforms.all;
       };
     };
 
@@ -321,15 +321,15 @@ let
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
         description = shortDescription;
-        license = with licenses; [
+        license = with lib.licenses; [
           gpl2
           gpl3
         ];
-        maintainers = with maintainers; [ timor ];
-        platforms = platforms.all;
+        maintainers = with lib.maintainers; [ timor ];
+        platforms = lib.platforms.all;
       };
     };
 
@@ -355,12 +355,12 @@ let
       buildPhase = ''
         cp -a ${sourceRoot}/* .
       '';
-      meta = with lib; {
+      meta = {
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = license;
-        maintainers = with maintainers; [ vlaci ];
-        platforms = platforms.all;
+        maintainers = with lib.maintainers; [ vlaci ];
+        platforms = lib.platforms.all;
       };
     };
 
@@ -812,12 +812,12 @@ rec {
       unzip $src ${dictFileName}/{${dictFileName}.dic,${dictFileName}.aff,${readmeFile}}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Ukrainian (Ukraine) from LibreOffice";
       homepage = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ dywedir ];
-      platforms = platforms.all;
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [ dywedir ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -908,7 +908,7 @@ rec {
       unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile} -d ${dictFileName}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Danish (Denmark) from Stavekontrolden";
       homepage = "https://github.com/jeppebundsgaard/stavekontrolden";
       license = with lib.licenses; [
@@ -916,7 +916,7 @@ rec {
         lgpl21Only
         mpl11
       ];
-      maintainers = with maintainers; [ louisdk1 ];
+      maintainers = with lib.maintainers; [ louisdk1 ];
     };
   };
 
@@ -942,14 +942,14 @@ rec {
     dictFileName = "nl_NL";
     readmeFile = "README.md";
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with licenses; [
+      license = with lib.licenses; [
         bsd3 # or
         cc-by-30
       ];
-      maintainers = with maintainers; [ artturin ];
+      maintainers = with lib.maintainers; [ artturin ];
     };
   };
 
@@ -978,12 +978,12 @@ rec {
       rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
       sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
       homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
-      license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ toastal ]; # looking for a native speaker
-      platforms = platforms.all;
+      license = with lib.licenses; [ gpl3 ];
+      maintainers = with lib.maintainers; [ toastal ]; # looking for a native speaker
+      platforms = lib.platforms.all;
     };
   };
 
@@ -1054,7 +1054,7 @@ rec {
 
     dontBuild = true;
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Toki Pona";
       homepage = "https://github.com/somasis/hunspell-tok";
       license = with lib.licenses; [
@@ -1063,8 +1063,8 @@ rec {
         cc-by-sa-30
         cc-by-sa-40
       ];
-      maintainers = with maintainers; [ somasis ];
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ somasis ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -1134,12 +1134,12 @@ rec {
       sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
       runHook postBuild
     '';
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Persian (Iran)";
       homepage = "https://github.com/b00f/lilak";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ nix-julia ];
-      platforms = platforms.all;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ nix-julia ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -1188,12 +1188,12 @@ rec {
     dictFileName = "tr_TR";
     readmeFile = "README.md";
 
-    meta = with lib; {
+    meta = {
       description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
       homepage = "https://github.com/tdd-ai/hunspell-tr/";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ samemrecebi ];
-      platforms = platforms.all;
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [ samemrecebi ];
+      platforms = lib.platforms.all;
     };
   };
 

@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schiene" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with Bahn.de";
     homepage = "https://github.com/kennell/schiene";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

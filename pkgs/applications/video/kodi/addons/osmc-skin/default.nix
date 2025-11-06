@@ -15,11 +15,11 @@ buildKodiAddon rec {
     hash = "sha256-3BR6HfKefuyybDv9c/ZkkZMRDyWNZWpftulXyUAD9nY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/osmc/skin.osmc";
     description = "Default skin for OSMC";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.cc-by-nc-sa-30;
+    license = lib.licenses.cc-by-nc-sa-30;
   };
 }

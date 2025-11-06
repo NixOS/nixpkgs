@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
     mainProgram = "rfkill-hook.sh";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

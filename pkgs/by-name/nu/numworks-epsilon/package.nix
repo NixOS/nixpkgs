@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulator for Epsilon, a High-performance graphing calculator operating system";
     homepage = "https://numworks.com/";
-    license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ erikbackman ];
+    license = lib.licenses.cc-by-nc-sa-40;
+    maintainers = with lib.maintainers; [ erikbackman ];
     platforms = [ "x86_64-linux" ];
   };
 }

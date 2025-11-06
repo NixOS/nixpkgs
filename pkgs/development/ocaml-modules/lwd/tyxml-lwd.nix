@@ -19,10 +19,10 @@ buildDunePackage {
     tyxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Make reactive webpages in Js_of_ocaml using Tyxml and Lwd";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
 }

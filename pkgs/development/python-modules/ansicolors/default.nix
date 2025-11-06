@@ -22,10 +22,10 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/verigak/colors/";
     description = "ANSI colors for Python";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

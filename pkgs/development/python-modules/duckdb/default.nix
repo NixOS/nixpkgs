@@ -148,10 +148,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

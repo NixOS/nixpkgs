@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slugify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Slugify application that handles Unicode";
     mainProgram = "slugify";
     homepage = "https://github.com/un33k/python-slugify";
     changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

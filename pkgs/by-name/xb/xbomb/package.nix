@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     "INSTDIR=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gedanken.org.uk/software/xbomb/";
     description = "Minesweeper for X11 with various grid sizes and shapes";
     mainProgram = "xbomb";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

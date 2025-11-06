@@ -42,11 +42,11 @@ stdenvNoCC.mkDerivation {
     mv build $out/share/iso-flags
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joielechong/iso-country-flags-svg-collection";
     description = "248 country flag SVG & PNG icons with different icon styles";
-    license = [ licenses.publicDomain ];
-    platforms = platforms.linux; # the output assets should work anywhere, but unsure about the tools to build them...
-    maintainers = [ maintainers.mkg20001 ];
+    license = [ lib.licenses.publicDomain ];
+    platforms = lib.platforms.linux; # the output assets should work anywhere, but unsure about the tools to build them...
+    maintainers = [ lib.maintainers.mkg20001 ];
   };
 }

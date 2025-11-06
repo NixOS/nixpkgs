@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dio_chacon_wifi_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API via wifi for DIO devices from Chacon. Useful for homeassistant or other automations";
     homepage = "https://github.com/cnico/dio-chacon-wifi-api";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

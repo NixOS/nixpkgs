@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
     changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
       multiple programming languages without needing to load, run, or
       import the project being documented.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "generic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic programming (Multiple dispatch) library for Python";
     homepage = "https://github.com/gaphor/generic";
     changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

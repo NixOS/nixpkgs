@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=timer::timer_tests::test_timer_reset"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform secure TUI secret locker";
     homepage = "https://github.com/Canop/safecloset";
     changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     mainProgram = "safecloset";
   };

@@ -29,12 +29,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-d2kKF13ESntZ0pRTYs5eFpkCTuOhei/bTyTmdYWvvRY=";
 
-  meta = with lib; {
+  meta = {
     description = "Control mouse and keyboard from the web browser of a smartphone";
     mainProgram = "remote-touchpad";
     homepage = "https://github.com/unrud/remote-touchpad";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ schnusch ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ schnusch ];
+    platforms = lib.platforms.linux;
   };
 }

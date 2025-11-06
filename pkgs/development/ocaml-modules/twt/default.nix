@@ -39,11 +39,11 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 
     dontStrip = true;
 
-    meta = with lib; {
+    meta = {
       description = "“The Whitespace Thing” for OCaml";
       homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
-      license = licenses.mit;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.vbgl ];
       mainProgram = "ocaml+twt";
       inherit (ocaml.meta) platforms;
     };

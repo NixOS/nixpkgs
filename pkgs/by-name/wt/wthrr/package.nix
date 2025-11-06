@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=modules::location::tests::geolocation_response"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Weather companion for the terminal";
     homepage = "https://github.com/ttytm/wthrr-the-weathercrab";
     changelog = "https://github.com/ttytm/wthrr-the-weathercrab/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "wthrr";
   };

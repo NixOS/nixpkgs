@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # no tests in repository
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic C kernel for Jupyter";
     mainProgram = "install_c_kernel";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

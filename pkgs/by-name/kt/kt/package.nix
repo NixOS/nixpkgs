@@ -24,12 +24,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Kafka command line tool";
     homepage = "https://github.com/fgeller/kt";
-    maintainers = with maintainers; [ utdemir ];
-    platforms = with platforms; unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ utdemir ];
+    platforms = with lib.platforms; unix;
+    license = lib.licenses.mit;
     mainProgram = "kt";
   };
 }

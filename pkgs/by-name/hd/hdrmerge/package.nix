@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     install -Dm444 ../data/images/icon.png $out/share/icons/hicolor/128x128/apps/hdrmerge.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jcelaya/hdrmerge";
     description = "Combines two or more raw images into an HDR";
     mainProgram = "hdrmerge";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.paperdigits ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.paperdigits ];
   };
 }

@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
   # https://github.com/kevinkreiser/prime_server/issues/95
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=unused-variable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";
     homepage = "https://github.com/kevinkreiser/prime_server";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

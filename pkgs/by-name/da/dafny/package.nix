@@ -94,11 +94,11 @@ buildDotnetModule rec {
 
   passthru.tests = tests;
 
-  meta = with lib; {
+  meta = {
     description = "Programming language with built-in specification constructs";
     homepage = "https://research.microsoft.com/dafny";
-    maintainers = with maintainers; [ layus ];
-    license = licenses.mit;
-    platforms = with platforms; (linux ++ darwin);
+    maintainers = with lib.maintainers; [ layus ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; (linux ++ darwin);
   };
 }

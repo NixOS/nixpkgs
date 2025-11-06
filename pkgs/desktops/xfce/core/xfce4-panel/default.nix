@@ -65,8 +65,8 @@ mkXfceDerivation {
        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Panel for the Xfce desktop environment";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

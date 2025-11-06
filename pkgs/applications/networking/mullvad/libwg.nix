@@ -33,10 +33,10 @@ buildGoModule {
     mv $out/lib/libwg{,.a}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny wrapper around wireguard-go";
     homepage = "https://github.com/mullvad/mullvadvpn-app/tree/main/wireguard-go-rs/libwg";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
 }

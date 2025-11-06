@@ -26,10 +26,10 @@ buildDunePackage rec {
     alsa-lib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-dssi";
     description = "Bindings for the DSSI API which provides audio synthesizers";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

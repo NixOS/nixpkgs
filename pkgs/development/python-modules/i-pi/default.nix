@@ -60,14 +60,14 @@ buildPythonPackage rec {
       --set IPI_ROOT $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal force engine for ab initio and force field driven (path integral) molecular dynamics";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       mit
     ];
     homepage = "https://ipi-code.org/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

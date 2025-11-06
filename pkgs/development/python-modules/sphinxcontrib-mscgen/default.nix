@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension using mscgen to render diagrams";
     homepage = "https://github.com/sphinx-contrib/mscgen";
-    license = licenses.bola11;
+    license = lib.licenses.bola11;
     maintainers = [ ];
   };
 }

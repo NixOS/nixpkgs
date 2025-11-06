@@ -37,11 +37,11 @@ buildGoModule rec {
     unset CGO_ENABLED
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Right imports sorting & code formatting tool (goimports alternative)";
     mainProgram = "goimports-reviser";
     homepage = "https://github.com/incu6us/goimports-reviser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

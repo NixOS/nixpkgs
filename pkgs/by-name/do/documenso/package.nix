@@ -115,12 +115,12 @@ buildNpmPackage {
     rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/auth
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source DocuSign Alternative";
     homepage = "https://github.com/documenso/documenso";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
     mainProgram = pname;
   };
 }

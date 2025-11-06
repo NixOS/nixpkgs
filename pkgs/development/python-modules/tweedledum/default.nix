@@ -38,10 +38,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   enabledTestPaths = [ "python/test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

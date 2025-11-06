@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the EBU R128 loudness standard";
     homepage = "https://github.com/jiixyj/libebur128";
-    license = licenses.mit;
-    maintainers = [ maintainers.andrewrk ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.andrewrk ];
+    platforms = lib.platforms.unix;
   };
 }

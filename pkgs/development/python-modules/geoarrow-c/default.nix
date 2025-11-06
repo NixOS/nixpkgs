@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.c" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental C and C++ implementation of the GeoArrow specification";
     homepage = "https://github.com/geoarrow/geoarrow-c";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];

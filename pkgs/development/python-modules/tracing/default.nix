@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://liw.fi/tracing/";
     description = "Python debug logging helper";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

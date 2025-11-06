@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ladspaH ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-alsa";
     description = "Bindings for the LADSPA API which provides audio effects";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }
