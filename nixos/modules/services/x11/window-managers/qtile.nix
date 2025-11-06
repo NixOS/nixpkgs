@@ -68,7 +68,11 @@ in
       xserver.windowManager.qtile.finalPackage = cfg.package.override {
         extraPackages = cfg.extraPackages cfg.package.pythonModule.pkgs;
       };
+
       displayManager.sessionPackages = [ cfg.finalPackage ];
+
+      # Recommended by upstream for libqtile/widget/imapwidget.py
+      gnome.gnome-keyring.enable = lib.mkDefault true;
     };
 
     environment = {
