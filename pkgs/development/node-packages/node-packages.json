@@ -85,7 +85,6 @@
 , "json"
 , "json-diff"
 , "json-refs"
-, "json-server"
 , "jsonlint"
 , "katex"
 , "lcov-result-merger"
