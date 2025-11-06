@@ -128,6 +128,7 @@ mapAliases {
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
+  gulp = self.gulp-cli; # Added 2025-11-04
   hs-client = pkgs.hsd; # added 2023-08-20
   inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
@@ -144,6 +145,8 @@ mapAliases {
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
+  inherit (pkgs) jsonplaceholder; # Added 2025-11-04
+  joplin = pkgs.joplin-cli; # Added 2025-11-02
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
@@ -285,6 +288,7 @@ mapAliases {
   inherit (pkgs) ungit; # added 2023-08-20
   unified-language-server = throw "unified-language-server was removed as it is a library that should be imported within a Javascript project, not an end-user tool"; # added 2025-10-02
   inherit (pkgs) uppy-companion; # Added 2025-11-01
+  inherit (pkgs) vega-lite; # Added 2025-11-04
   inherit (pkgs) vim-language-server; # added 2024-06-25
   vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30

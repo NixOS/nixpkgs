@@ -3100,8 +3100,6 @@ with pkgs;
 
   jkqtplotter = libsForQt5.callPackage ../development/libraries/jkqtplotter { };
 
-  joplin = nodePackages.joplin;
-
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
@@ -6868,6 +6866,20 @@ with pkgs;
   });
 
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
+
+  wild-wrapped =
+    let
+      ldWrapper = ../build-support/bintools-wrapper/ld-wrapper.sh;
+    in
+    wrapBintoolsWith {
+      bintools = wild;
+      extraBuildCommands = ''
+        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild}
+      '';
+    };
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;

@@ -190,13 +190,13 @@
     "vendorHash": "sha256-q942GCRd5czCdlpLYsXzj8Kt91GjCpyzhOkgWfkyHo8="
   },
   "cloudflare_cloudflare": {
-    "hash": "sha256-Lc9bC1dM4wNe+ZN2EYFRYfoZosocBEOI9SHvxJIOQCY=",
+    "hash": "sha256-Fx8Vh/2ALKIA3AlPEca+A0flVL7hHHNJM4Cfdklpq28=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.11.0",
+    "rev": "v5.12.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-N1vG3U7gxEbVbBax7g6AfHr2Aj1ypVefsEIuvZyLPYQ="
+    "vendorHash": "sha256-PZsYazLRmURTrtIq6KBUKPlzxewzbUzJTXN6YWbK288="
   },
   "cloudfoundry-community_cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -1057,11 +1057,11 @@
     "vendorHash": null
   },
   "ovh_ovh": {
-    "hash": "sha256-G6pLpThqKuCDx4QdTYvJYpba56ZWaxPML/3H1oslw34=",
+    "hash": "sha256-PNVbGn+MTb1139uDVSLBCKVMtDmY/c8uJCiTSBtbZAE=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v2.8.0",
+    "rev": "v2.9.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1075,11 +1075,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-ydLlwg7gnyp0tbDWUzYgigqycgTnfoJRswH61kD0P4k=",
+    "hash": "sha256-VcVvToBrmgLWiv7NpC6DEvXlq+bIydYat/g6E/8Uyhc=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.30.4",
+    "rev": "v3.30.5",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1354,11 +1354,11 @@
     "vendorHash": "sha256-AlB9tC3KejgUAjjT2pY7Q2mTS/AV4QRusSnyPiOheXE="
   },
   "terraform-routeros_routeros": {
-    "hash": "sha256-ixqTSPKaLyzIRjdBDkq/4XmWEYEP5ZnaV54SR++Dl70=",
+    "hash": "sha256-X7HyHSVYNTOM1gPc9MEfs50o2pquKT8SbFXtVfQ44eQ=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.89.0",
+    "rev": "v1.90.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-AHl0rUuAASk+3qH0C1bRl8IgKWKY+g5rMhzf5/IHQIA="
   },
