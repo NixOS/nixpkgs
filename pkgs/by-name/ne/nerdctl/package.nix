@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   ldflags =
     let
-      t = "github.com/containerd/nerdctl/v2/pkg/version";
+      t = "github.com/containerd/nerdctl/v${lib.versions.major finalAttrs.version}/pkg/version";
     in
     [
       "-s"
@@ -82,6 +82,22 @@ buildGoModule (finalAttrs: {
       developer-guy
       jk
     ];
-    platforms = lib.platforms.linux;
+
+    # Background for this clarification: https://github.com/NixOS/nixpkgs/pull/354002/files#r2021031543
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+
+      "aarch64-linux"
+      "armv7l-linux"
+
+      "loong64-linux" # Added in 2.1.0: https://github.com/containerd/nerdctl/pull/2533
+
+      "powerpc64le-linux"
+      "riscv64-linux"
+      "s390x-linux"
+
+      "x86_64-freebsd"
+    ];
   };
 })
