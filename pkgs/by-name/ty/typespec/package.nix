@@ -2,7 +2,9 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  jq,
   makeWrapper,
+  moreutils,
   nix-update-script,
   nodejs,
   pnpm,
@@ -24,7 +26,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    jq
     makeWrapper
+    moreutils
     nodejs
     pnpm.configHook
   ];
@@ -45,8 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     # The `packageManager` attribute matches the version _exactly_, which makes
     # the build fail if it doesn't match exactly.
-    substituteInPlace package.json \
-      --replace-fail '"packageManager": "pnpm@10.11.0"' '"packageManager": "pnpm"'
+    jq 'del(.packageManager)' package.json | sponge package.json
     # `fetchFromGitHub` doesn't clone via git and thus installing would otherwise fail.
     substituteInPlace packages/compiler/scripts/generate-manifest.js \
       --replace-fail 'execSync("git rev-parse HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
