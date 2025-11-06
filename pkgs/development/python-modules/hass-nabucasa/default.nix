@@ -2,6 +2,7 @@
   lib,
   acme,
   aiohttp,
+  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     acme
     aiohttp
+    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
