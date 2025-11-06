@@ -13,6 +13,34 @@ async function handleReviewers({
 }) {
   const pull_number = pull_request.number
 
+  const requested_reviewers = new Set(
+    pull_request.requested_reviewers.map(({ login }) => login),
+  )
+  log(
+    'reviewers - requested_reviewers',
+    Array.from(requested_reviewers).join(', '),
+  )
+
+  const existing_reviewers = new Set(
+    reviews.map(({ user }) => user?.login).filter(Boolean),
+  )
+  log(
+    'reviewers - existing_reviewers',
+    Array.from(existing_reviewers).join(', '),
+  )
+
+  // Early sanity check, before we start making any API requests. The list of maintainers
+  // does not have duplicates so the only user to filter out from this list would be the
+  // PR author. Therefore, we check for a limit of 15+1, where 15 is the limit we check
+  // further down again.
+  // This is to protect against huge treewides consuming all our API requests for no
+  // reason.
+  if (maintainers.length > 16) {
+    core.warning('Too many potential reviewers, skipping review requests.')
+    // Return a boolean on whether the "needs: reviewers" label should be set.
+    return existing_reviewers.size === 0 && requested_reviewers.size === 0
+  }
+
   const users = new Set([
     ...(await Promise.all(
       maintainers.map(async (id) => (await getUser(id)).login),
@@ -47,6 +75,9 @@ async function handleReviewers({
   const reviewers = (
     await Promise.all(
       Array.from(new_reviewers, async (username) => {
+        // TODO: Restructure this file to only do the collaborator check for those users
+        // who were not already part of a team. Being a member of a team makes them
+        // collaborators by definition.
         try {
           await github.rest.repos.checkCollaborator({
             ...context.repo,
@@ -64,24 +95,8 @@ async function handleReviewers({
   ).filter(Boolean)
   log('reviewers - reviewers', reviewers.join(', '))
 
-  const requested_reviewers = new Set(
-    pull_request.requested_reviewers.map(({ login }) => login),
-  )
-  log(
-    'reviewers - requested_reviewers',
-    Array.from(requested_reviewers).join(', '),
-  )
-
-  const existing_reviewers = new Set(
-    reviews.map(({ user }) => user?.login).filter(Boolean),
-  )
-  log(
-    'reviewers - existing_reviewers',
-    Array.from(existing_reviewers).join(', '),
-  )
-
   if (reviewers.length > 15) {
-    log(
+    core.warning(
       `Too many reviewers (${reviewers.join(', ')}), skipping review requests.`,
     )
     // Return a boolean on whether the "needs: reviewers" label should be set.
