@@ -2156,15 +2156,6 @@ let
         sha512 = "yx6KAqlt3TAHBduS2fMQtJDL2ufIHnDRArrJEOoTTuizxqmjLT+psGYOHpmMl3gvQpFJ11Hs76guUUktzAF9Bg==";
       };
     };
-    "@one-ini/wasm-0.1.1" = {
-      name = "_at_one-ini_slash_wasm";
-      packageName = "@one-ini/wasm";
-      version = "0.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@one-ini/wasm/-/wasm-0.1.1.tgz";
-        sha512 = "XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==";
-      };
-    };
     "@orval/angular-7.7.0" = {
       name = "_at_orval_slash_angular";
       packageName = "@orval/angular";
@@ -8519,15 +8510,6 @@ let
         sha512 = "LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==";
       };
     };
-    "commander-10.0.1" = {
-      name = "commander";
-      packageName = "commander";
-      version = "10.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-10.0.1.tgz";
-        sha512 = "y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==";
-      };
-    };
     "commander-11.1.0" = {
       name = "commander";
       packageName = "commander";
@@ -11110,15 +11092,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/edge-runtime/-/edge-runtime-2.5.9.tgz";
         sha512 = "pk+k0oK0PVXdlT4oRp4lwh+unuKB7Ng4iZ2HB+EZ7QCEQizX360Rp/F4aRpgpRgdP2ufB35N+1KppHmYjqIGSg==";
-      };
-    };
-    "editorconfig-1.0.4" = {
-      name = "editorconfig";
-      packageName = "editorconfig";
-      version = "1.0.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/editorconfig/-/editorconfig-1.0.4.tgz";
-        sha512 = "L9Qe08KWTlqYMVvMcTIvMAdl1cDUubzRNYL+WfA4bLDMHe4nemKkpmYzkznE1FwLKu0EEmy6obgQKzMJrg4x9Q==";
       };
     };
     "ee-first-1.1.1" = {
@@ -17340,15 +17313,6 @@ let
         sha512 = "WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==";
       };
     };
-    "js-cookie-3.0.5" = {
-      name = "js-cookie";
-      packageName = "js-cookie";
-      version = "3.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz";
-        sha512 = "cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==";
-      };
-    };
     "js-levenshtein-1.1.6" = {
       name = "js-levenshtein";
       packageName = "js-levenshtein";
@@ -20939,15 +20903,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/minimatch/-/minimatch-7.4.6.tgz";
         sha512 = "sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==";
-      };
-    };
-    "minimatch-9.0.1" = {
-      name = "minimatch";
-      packageName = "minimatch";
-      version = "9.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/minimatch/-/minimatch-9.0.1.tgz";
-        sha512 = "0jWhJpD/MdhPXwPuiRkCbfYfSKp2qnn2eOc279qI7f+osl/l+prKSrvhg157zSYvx/1nmgn2NqdT6k2Z7zSH9w==";
       };
     };
     "minimatch-9.0.5" = {
@@ -40573,99 +40528,6 @@ in
     meta = {
       description = "Execute scripts on new messages using IDLE imap command";
       homepage = "https://github.com/a-sk/node-imapnotify#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  js-beautify = nodeEnv.buildNodePackage {
-    name = "js-beautify";
-    packageName = "js-beautify";
-    version = "1.15.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/js-beautify/-/js-beautify-1.15.4.tgz";
-      sha512 = "9/KXeZUKKJwqCXUdBxFJ3vPh467OCckSBmYDwSK/EtV090K+iMJ7zx2S3HLVDIWFQdqMIsZWbnaGiba18aWhaA==";
-    };
-    dependencies = [
-      sources."@isaacs/cliui-8.0.2"
-      sources."@one-ini/wasm-0.1.1"
-      sources."abbrev-2.0.0"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-6.2.1"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-2.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-10.0.1"
-      sources."config-chain-1.1.13"
-      sources."cross-spawn-7.0.6"
-      sources."eastasianwidth-0.2.0"
-      sources."editorconfig-1.0.4"
-      sources."emoji-regex-9.2.2"
-      sources."foreground-child-3.3.1"
-      (
-        sources."glob-10.4.5"
-        // {
-          dependencies = [
-            sources."minimatch-9.0.5"
-          ];
-        }
-      )
-      sources."ini-1.3.8"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."isexe-2.0.0"
-      sources."jackspeak-3.4.3"
-      sources."js-cookie-3.0.5"
-      sources."lru-cache-10.4.3"
-      sources."minimatch-9.0.1"
-      sources."minipass-7.1.2"
-      sources."nopt-7.2.1"
-      sources."package-json-from-dist-1.0.1"
-      sources."path-key-3.1.1"
-      sources."path-scurry-1.11.1"
-      sources."proto-list-1.2.4"
-      sources."semver-7.7.1"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-5.1.2"
-      (
-        sources."string-width-cjs-4.2.3"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      (
-        sources."strip-ansi-7.1.0"
-        // {
-          dependencies = [
-            sources."ansi-regex-6.1.0"
-          ];
-        }
-      )
-      sources."strip-ansi-cjs-6.0.1"
-      sources."which-2.0.2"
-      sources."wrap-ansi-8.1.0"
-      (
-        sources."wrap-ansi-cjs-7.0.0"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "beautifier.io for node";
-      homepage = "https://beautifier.io/";
       license = "MIT";
     };
     production = true;
