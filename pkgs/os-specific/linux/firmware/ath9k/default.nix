@@ -186,5 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw";
     downloadPage = "https://github.com/qca/open-ath9k-htc-firmware";
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

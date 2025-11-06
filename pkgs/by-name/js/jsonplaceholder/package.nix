@@ -9,13 +9,13 @@
 
 buildNpmPackage {
   pname = "jsonplaceholder";
-  version = "0-unstable-2021-06-14";
+  version = "0.3.3-unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "typicode";
     repo = "jsonplaceholder";
     rev = "7ae4432ac3f60e7226a899c25e04826207d07098";
-    hash = "sha256-b+p1bByq0oRj3zqVsFFoXFR2ydrbZqWwJdVIaXEmQwQ";
+    hash = "sha256-b+p1bByq0oRj3zqVsFFoXFR2ydrbZqWwJdVIaXEmQwQ=";
   };
 
   npmDepsHash = "sha256-x+EN33CQE4ga9T0V4oJRPkELT8x4WbNIsQmvyW+hHi8=";

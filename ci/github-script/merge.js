@@ -128,11 +128,20 @@ async function handleMerge({
     (await getTeamMembers('nixpkgs-committers')).map(({ id }) => id),
   )
 
-  const files = await github.paginate(github.rest.pulls.listFiles, {
-    ...context.repo,
-    pull_number,
-    per_page: 100,
-  })
+  const files = (
+    await github.rest.pulls.listFiles({
+      ...context.repo,
+      pull_number,
+      per_page: 100,
+    })
+  ).data
+
+  // Early exit to prevent treewides from using up a lot of API requests (and time!) to list
+  // all the files in the pull request. For now, the merge-bot will not work when 100 or more
+  // files are touched in a PR - which should be more than fine.
+  // TODO: Find a more efficient way of downloading all the *names* of the touched files,
+  // including an early exit when the first non-by-name file is found.
+  if (files.length >= 100) return false
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -182,7 +191,9 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
-      return `[Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge`
+      return [
+        `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
+      ]
     } catch (e) {
       log('Enqueing failed', e.response.errors[0].message)
     }
@@ -201,7 +212,12 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
-      return 'Enabled Auto Merge'
+      return [
+        `:heavy_check_mark: Enabled Auto Merge (#306934)`,
+        '',
+        '> [!TIP]',
+        '> Sometimes GitHub gets stuck after enabling Auto Merge. In this case, leaving another approval should trigger the merge.',
+      ]
     } catch (e) {
       log('Auto Merge failed', e.response.errors[0].message)
       throw new Error(e.response.errors[0].message)
@@ -287,7 +303,7 @@ async function handleMerge({
     if (result) {
       await react('ROCKET')
       try {
-        body.push(`:heavy_check_mark: ${await merge()} (#306934)`)
+        body.push(...(await merge()))
       } catch (e) {
         // Remove the HTML comment with node_id reference to allow retrying this merge on the next run.
         body.shift()

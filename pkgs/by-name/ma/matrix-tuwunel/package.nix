@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libredirect,
   bzip2,
   zstd,
   stdenv,
@@ -17,6 +18,7 @@
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
   nixosTests,
+  writeTextFile,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -85,16 +87,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.2";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7a8nbKZ6cK6SoAGwORc6+D+jJxQOut7y5KzHfBbqDE=";
+    hash = "sha256-tZKq8ypDU1MkWORHFQhieDSUOqOzBcfqIQ40amyc1ls=";
   };
 
-  cargoHash = "sha256-RjoO5eiAXYhC8Tg5UNqCpBsFVN1I+0UhchslAmhm0Qo=";
+  cargoHash = "sha256-x+LhpwDytwH/NzKWqAuRRbX77OZ2JGaYSaQxqinf81Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -136,6 +138,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jemalloc_conf"
   ]
   ++ lib.optional enableLiburing "io_uring";
+
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  preCheck =
+    let
+      fakeResolvConf = writeTextFile {
+        name = "resolv.conf";
+        text = ''
+          nameserver 0.0.0.0
+        '';
+      };
+    in
+    ''
+      export NIX_REDIRECTS="/etc/resolv.conf=${fakeResolvConf}"
+      export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
+    '';
+  doCheck = true;
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
