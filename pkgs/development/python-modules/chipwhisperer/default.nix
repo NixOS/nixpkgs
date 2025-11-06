@@ -43,8 +43,6 @@ buildPythonPackage rec {
     hash = "sha256-C7QP044QEP7vmz1lMseLtMTYoKn5SoFV/q9URY7yQ6I=";
   };
 
-  # Build
-
   pyproject = true;
 
   build-system = [
@@ -70,8 +68,6 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  # Install
-
   nativeInstallCheckInputs = [
     udevCheckHook
   ];
@@ -89,8 +85,6 @@ buildPythonPackage rec {
     SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="6124", TAG+="uaccess", SYMLINK+="cw_bootloader%n"
     EOF
   '';
-
-  # Check
 
   pythonImportsCheck = [ "chipwhisperer" ];
 
