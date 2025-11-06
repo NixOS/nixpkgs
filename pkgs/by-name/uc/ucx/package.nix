@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
     autoAddDriverRunpath
   ];
 
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvml_dev
-
   ]
   ++ lib.optionals enableRocm rocmList;
 
@@ -101,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
+  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   postInstall = ''
