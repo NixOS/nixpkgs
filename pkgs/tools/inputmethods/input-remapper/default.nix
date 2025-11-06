@@ -38,14 +38,14 @@ let
 in
 (buildPythonApplication rec {
   pname = "input-remapper";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
     tag = version;
-    hash = "sha256-GMKcs2UK1yegGT/TBsLGgTBJROQ38M6WwnLbJIuAZwg=";
+    hash = "sha256-MZO40Y8ym/lwHB8PETdtByAJb/UMMM6pRAAgAYao8UI=";
   };
 
   postPatch = ''
