@@ -32,6 +32,6 @@ buildLua rec {
     changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ thegu5 ];
   };
 }
