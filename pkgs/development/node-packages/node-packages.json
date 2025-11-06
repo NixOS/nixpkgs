@@ -1,7 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@babel/cli"
 , "@commitlint/cli"
 , "@microsoft/rush"
 , "@tailwindcss/aspect-ratio"

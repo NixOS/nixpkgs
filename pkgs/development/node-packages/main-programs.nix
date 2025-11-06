@@ -8,7 +8,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
