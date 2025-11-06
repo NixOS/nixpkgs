@@ -576,7 +576,10 @@ module.exports = async ({ github, context, core, dry }) => {
 
   // Controls level of parallelism. Applies to both the number of concurrent requests
   // as well as the number of concurrent workers going through the list of PRs.
-  const maxConcurrent = 20
+  // We'll only boost concurrency when we're running many PRs in parallel on a schedule,
+  // but not for single PRs. This avoids things going wild, when we accidentally make
+  // too many API requests on treewides.
+  const maxConcurrent = context.eventName === 'pull_request' ? 1 : 20
 
   await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
