@@ -22,7 +22,7 @@ let
   meta = with lib; {
     homepage = "https://plik.root.gg/";
     description = "Scalable & friendly temporary file upload system";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     license = licenses.mit;
     mainProgram = "plik";
   };

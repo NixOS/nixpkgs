@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     description = "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

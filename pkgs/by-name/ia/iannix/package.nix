@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://www.iannix.org/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }
