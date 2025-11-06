@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "theme-obsidian2";
-  version = "2.24";
+  version = "2.25";
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
-    sha256 = "sha256-P+62cdYiCk8419S+u1w6EmzJL0rgHAh7G5eTuBOrAGY=";
+    sha256 = "sha256-Hajz2bFcsi+9kSjxuZ6Jav8t7S6trDUF5yJivw+Vypw=";
   };
 
   sourceRoot = ".";
