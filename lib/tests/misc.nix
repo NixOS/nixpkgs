@@ -4841,4 +4841,193 @@ runTests {
       ];
     }
   );
+
+  # lib.lists.uniqueByString
+
+  testUniqueByStringBasic = {
+    expr = lists.uniqueByString (x: x) [
+      "a"
+      "b"
+      "a"
+      "c"
+      "b"
+    ];
+    expected = [
+      "a"
+      "b"
+      "c"
+    ];
+  };
+
+  testUniqueByStringEmpty = {
+    expr = lists.uniqueByString (x: x) [ ];
+    expected = [ ];
+  };
+
+  testUniqueByStringNoDuplicates = {
+    expr = lists.uniqueByString (x: x) [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = [
+      "a"
+      "b"
+      "c"
+    ];
+  };
+
+  testUniqueByStringAllDuplicates = {
+    expr = lists.uniqueByString (x: x) [
+      "a"
+      "a"
+      "a"
+    ];
+    expected = [ "a" ];
+  };
+
+  testUniqueByStringPreservesOrder = {
+    expr = lists.uniqueByString (x: x) [
+      "z"
+      "a"
+      "m"
+      "z"
+      "b"
+      "a"
+    ];
+    expected = [
+      "z"
+      "a"
+      "m"
+      "b"
+    ];
+  };
+
+  testUniqueByStringCustomKey = {
+    expr = lists.uniqueByString (x: x.id) [
+      {
+        id = "1";
+        value = "first";
+      }
+      {
+        id = "2";
+        value = "second";
+      }
+      {
+        id = "1";
+        value = "duplicate";
+      }
+      {
+        id = "3";
+        value = "third";
+      }
+    ];
+    expected = [
+      {
+        id = "1";
+        value = "first";
+      }
+      {
+        id = "2";
+        value = "second";
+      }
+      {
+        id = "3";
+        value = "third";
+      }
+    ];
+  };
+
+  testUniqueByStringNumbers = {
+    expr = lists.uniqueByString toString [
+      1
+      2
+      1
+      3
+      2
+      4
+    ];
+    expected = [
+      1
+      2
+      3
+      4
+    ];
+  };
+
+  testUniqueByStringWithContext = {
+    expr =
+      let
+        drv1 = derivation {
+          name = "foo";
+          system = "x86_64-linux";
+          builder = "/bin/sh";
+        };
+        drv2 = derivation {
+          name = "bar";
+          system = "x86_64-linux";
+          builder = "/bin/sh";
+        };
+        drv3 = derivation {
+          name = "foo";
+          system = "x86_64-linux";
+          builder = "/bin/sh";
+        }; # same as drv1
+      in
+      lists.uniqueByString (d: d.drvPath) [
+        drv1
+        drv2
+        drv3
+      ];
+    expected =
+      let
+        drv1 = derivation {
+          name = "foo";
+          system = "x86_64-linux";
+          builder = "/bin/sh";
+        };
+        drv2 = derivation {
+          name = "bar";
+          system = "x86_64-linux";
+          builder = "/bin/sh";
+        };
+      in
+      [
+        drv1
+        drv2
+      ];
+  };
+
+  testUniqueByStringSingleElement = {
+    expr = lists.uniqueByString (x: x) [ "only" ];
+    expected = [ "only" ];
+  };
+
+  testUniqueByStringKeepsFirstOccurrence = {
+    expr = lists.uniqueByString (x: x.key) [
+      {
+        key = "a";
+        order = 1;
+      }
+      {
+        key = "b";
+        order = 2;
+      }
+      {
+        key = "a";
+        order = 3;
+      }
+    ];
+    expected = [
+      {
+        key = "a";
+        order = 1;
+      }
+      {
+        key = "b";
+        order = 2;
+      }
+    ];
+  };
+
 }

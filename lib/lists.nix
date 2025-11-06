@@ -1829,9 +1829,9 @@ rec {
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.
 
-    :::{.note}
-    If the list only contains strings and order is not important, the complexity can be reduced to O(n log n) by using [`lib.lists.uniqueStrings`](#function-library-lib.lists.uniqueStrings) instead.
-    :::
+    See also:
+    - [`uniqueStrings`](#function-library-lib.lists.uniqueStrings) for O(n log n) performance with strings (does not preserve order)
+    - [`uniqueByString`](#function-library-lib.lists.uniqueByString) for comparing elements by a custom string key function
 
     # Inputs
 
@@ -1869,6 +1869,10 @@ rec {
     This function fails when the list contains a non-string element or a [string with context](https://nix.dev/manual/nix/latest/language/string-context.html).
     In that case use [`lib.lists.unique`](#function-library-lib.lists.unique) instead.
     :::
+
+    See also:
+    - [`unique`](#function-library-lib.lists.unique) for arbitrary types (O(n^2), preserves order)
+    - [`uniqueByString`](#function-library-lib.lists.uniqueByString) for comparing elements by a custom string key function (O(n^2), preserves order)
 
     # Inputs
 
@@ -1924,6 +1928,87 @@ rec {
     :::
   */
   allUnique = list: (length (unique list) == length list);
+
+  /**
+    Remove duplicate elements from a list based on a string key function.
+
+    This is a "stable" deduplication that:
+    - Keeps the first occurrence of each unique key
+    - Preserves the relative ordering of kept elements
+    - Uses string comparison for determining uniqueness
+
+    This is more predictable than approaches that rely on attribute set ordering
+    (like `listToAttrs` -> `attrValues`), especially when dealing with store paths
+    whose hashes affect ordering on every change.
+
+    See also:
+    - [`unique`](#function-library-lib.lists.unique) for comparing elements directly (O(n^2), preserves order)
+    - [`uniqueStrings`](#function-library-lib.lists.uniqueStrings) for simple string deduplication (O(n log n), does not preserve order)
+
+    # Type
+
+    ```
+    uniqueByString :: (a -> String) -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.uniqueByString` usage example
+
+    ```nix
+    uniqueByString (x: x) [ "a" "b" "a" "c" ]
+    => [ "a" "b" "c" ]
+
+    uniqueByString (x: x.id) [
+      { id = "1"; name = "foo"; }
+      { id = "2"; name = "bar"; }
+      { id = "1"; name = "baz"; }
+    ]
+    => [ { id = "1"; name = "foo"; } { id = "2"; name = "bar"; } ]
+
+    uniqueByString toString [ 1 2 1 3 2 ]
+    => [ 1 2 3 ]
+    ```
+
+    :::
+  */
+  # Tests in: ./tests/misc.nix
+  uniqueByString =
+    key: l:
+    let
+      r =
+        foldl'
+          (
+            a@{ list, set }:
+            elem:
+            let
+              k = builtins.unsafeDiscardStringContext (key elem);
+            in
+            if set ? ${k} then
+              a
+            else
+              let
+                # Note: O(n²) copying. Use linkedLists to concat them in one go at the end.
+                # https://github.com/NixOS/nixpkgs/pull/452088
+                # When fixing this, also update the O(n^2) complexity mentioned in the "See also" cross-references elsewhere.
+                newList = list ++ [ elem ];
+                newSet = set // {
+                  ${k} = null;
+                };
+              in
+              # seq: avoid building an unnecessary tower of thunks
+              builtins.seq newList {
+                list = newList;
+                set = newSet;
+              }
+          )
+          {
+            list = [ ];
+            set = { };
+          }
+          l;
+    in
+    r.list;
 
   /**
     Intersects list 'list1' and another list (`list2`).
