@@ -11,33 +11,33 @@
   enablePython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flann";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "flann-lib";
     repo = "flann";
-    rev = version;
-    sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-TD4z3PJL99qLSA3TY2IayGwCvIxrByMDUUkX+ZVNj44=";
   };
 
   patches = [
     # Patch HDF5_INCLUDE_DIR -> HDF_INCLUDE_DIRS.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-Updated-fix-cmake-hdf5.patch";
-      sha256 = "yM1ONU4mu6lctttM5YcSTg8F344TNUJXwjxXLqzr5Pk=";
+      hash = "sha256-yM1ONU4mu6lctttM5YcSTg8F344TNUJXwjxXLqzr5Pk=";
     })
     # Patch no-source library workaround that breaks on CMake > 3.11.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
-      sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
+      hash = "sha256-REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
     })
     # Fix cmake4 build: https://github.com/flann-lib/flann/pull/480
     (fetchpatch {
       name = "fix-cmake4-build.patch";
-      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
-      sha256 = "sha256-wj1z3Z1eTvvKEeWiqPHbNZkF1hsruh4AZ22ALbRWi8M=";
+      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch?full_index=1";
+      hash = "sha256-wj1z3Z1eTvvKEeWiqPHbNZkF1hsruh4AZ22ALbRWi8M=";
       includes = [ "CMakeLists.txt" ];
       hunks = [ "1" ];
     })
@@ -46,20 +46,20 @@ stdenv.mkDerivation rec {
     # Avoid the bundled version of LZ4 and instead use the system one.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0003-Use-system-version-of-liblz4.patch";
-      sha256 = "xi+GyFn9PEjLgbJeAIEmsbp7ut9G9KIBkVulyT3nfsg=";
+      hash = "sha256-xi+GyFn9PEjLgbJeAIEmsbp7ut9G9KIBkVulyT3nfsg=";
     })
     # Fix LZ4 string separator issue, see: https://github.com/flann-lib/flann/pull/480
     (fetchpatch {
       name = "fix-lz4-string-separator.patch";
-      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
-      sha256 = "sha256-iIztL1LtAO427SD12q2TV2HgMiFysQ4di2AEpUoMKfY=";
+      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch?full_index=1";
+      hash = "sha256-iIztL1LtAO427SD12q2TV2HgMiFysQ4di2AEpUoMKfY=";
       hunks = [ "2-" ];
     })
   ]
   ++ lib.optionals stdenv.cc.isClang [
     # Fix build with Clang 16.
     (fetchpatch {
-      url = "https://github.com/flann-lib/flann/commit/be80cefa69b314a3d9e1ab971715e84145863ebb.patch";
+      url = "https://github.com/flann-lib/flann/commit/be80cefa69b314a3d9e1ab971715e84145863ebb.patch?full_index=1";
       hash = "sha256-4SUKzQCm0Sx8N43Z6ShuMbgbbe7q8b2Ibk3WgkB0qa4=";
     })
   ];
@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
     maintainers = [ ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
