@@ -128,11 +128,20 @@ async function handleMerge({
     (await getTeamMembers('nixpkgs-committers')).map(({ id }) => id),
   )
 
-  const files = await github.paginate(github.rest.pulls.listFiles, {
-    ...context.repo,
-    pull_number,
-    per_page: 100,
-  })
+  const files = (
+    await github.rest.pulls.listFiles({
+      ...context.repo,
+      pull_number,
+      per_page: 100,
+    })
+  ).data
+
+  // Early exit to prevent treewides from using up a lot of API requests (and time!) to list
+  // all the files in the pull request. For now, the merge-bot will not work when 100 or more
+  // files are touched in a PR - which should be more than fine.
+  // TODO: Find a more efficient way of downloading all the *names* of the touched files,
+  // including an early exit when the first non-by-name file is found.
+  if (files.length >= 100) return false
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
