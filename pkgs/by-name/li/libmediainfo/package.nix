@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "25.09";
+  version = "25.10";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-hWLo6gPir4veJ/ZteaD1c4WbjxMZPsEVq/EPc1sxOhI=";
+    hash = "sha256-rRPZeXsEbOOdDGWm+B0q7yQpc0whhlpqTFksfAHySd0=";
   };
 
   nativeBuildInputs = [
