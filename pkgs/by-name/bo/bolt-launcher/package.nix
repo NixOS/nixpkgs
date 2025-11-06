@@ -40,14 +40,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.20.2";
+    version = "0.20.4";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-FuBxZaTKGgaCqCiBEP5d0T44V7PQ4BNWJnckucqv+Cw=";
+      hash = "sha256-/d6+2KDUpe3gOSoGDILYQXOKBmeV1yp7iUbUQAGWC0c=";
     };
 
     nativeBuildInputs = [
