@@ -1069,6 +1069,13 @@
       }
     ];
   };
+  alch-emi = {
+    email = "emi@alchemi.dev";
+    github = "Alch-Emi";
+    githubId = 38897201;
+    name = "Emi";
+    matrix = "@emi:the-apothecary.club";
+  };
   aldenparker = {
     github = "aldenparker";
     githubId = 32986873;
