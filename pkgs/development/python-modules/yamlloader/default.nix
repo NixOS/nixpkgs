@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatch-vcs,
   hatchling,
   pytestCheckHook,
@@ -14,9 +14,11 @@ buildPythonPackage rec {
   version = "1.5.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wQrBMhpiaxyosJ0/Ov6YVbgYORxZmSp2tl5KLZXqxBs=";
+  src = fetchFromGitHub {
+    owner = "Phynix";
+    repo = "yamlloader";
+    tag = version;
+    hash = "sha256-SNb1iXao+TNW872qDtEldZj6S+yJxRlsnw6ye92RFSk=";
   };
 
   build-system = [
