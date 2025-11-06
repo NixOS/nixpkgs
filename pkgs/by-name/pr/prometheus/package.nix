@@ -29,6 +29,7 @@
   enableVultr ? true,
   enableXDS ? true,
   enableZookeeper ? true,
+  versionCheckHook,
 }:
 
 let
@@ -185,6 +186,12 @@ buildGoModule (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     tests = { inherit (nixosTests) prometheus; };
