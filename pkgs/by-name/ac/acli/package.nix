@@ -16,25 +16,25 @@ stdenvNoCC.mkDerivation (
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://acli.atlassian.com/linux/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_linux_amd64.tar.gz";
-        hash = "sha256-STqZ5+wcKcRwce0Kqmh4a9RQKaSW+az3uEiK03OGPgs=";
+        hash = "sha256-50YqKQ2GxIHGYg+banDCzdgWhaQGtkTOhK96HAsgvOY=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://acli.atlassian.com/linux/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_linux_arm64.tar.gz";
-        hash = "sha256-uawp7EhBaO8pHAuzoH4Wkf8mOUl4j3PhqWypsIIyitA=";
+        hash = "sha256-rpKINoT/S9WVCHehqeFn4bTx/zmG1b0WQ1SdbsCJ+sg=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://acli.atlassian.com/darwin/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_darwin_arm64.tar.gz";
-        hash = "sha256-eoT5f9qDyY7AXzEjygG/gtyqzxdTlQ3gyFA0KxK8Iv0=";
+        hash = "sha256-j9Yf6hfqenTvOdLcXTzRmJRGOUI5rMQQTLYQaZYKq44=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://acli.atlassian.com/darwin/${finalAttrs.version}-stable/acli_${finalAttrs.version}-stable_darwin_amd64.tar.gz";
-        hash = "sha256-mjSF0wfKtVu6wuqUgJmAUN8dnwGkHU6IzdxRFZvl4Oc=";
+        hash = "sha256-GB5SBGJfX20xzsN7ita+c/xwCfDvBieWUrRWNXl7RJQ=";
       };
     };
   in
   {
     pname = "acli";
-    version = "1.3.5";
+    version = "1.3.6";
 
     src =
       finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
