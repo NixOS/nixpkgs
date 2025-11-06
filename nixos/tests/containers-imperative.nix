@@ -5,7 +5,6 @@
     maintainers = with lib.maintainers; [
       aristid
       aszlig
-      kampfschlaefer
     ];
   };
 

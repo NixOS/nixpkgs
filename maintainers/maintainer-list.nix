@@ -13253,12 +13253,6 @@
     githubId = 54859825;
     keys = [ { fingerprint = "B2D0 AA53 8DBE 60B0 0811  3FC0 2D52 5F67 791E 5834"; } ];
   };
-  kampfschlaefer = {
-    email = "arnold@arnoldarts.de";
-    github = "kampfschlaefer";
-    githubId = 3831860;
-    name = "Arnold Krille";
-  };
   kanashimia = {
     email = "chad@redpilled.dev";
     github = "kanashimia";
