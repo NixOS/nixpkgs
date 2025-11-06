@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "username-anarchy";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
-    rev = "d5e653f0ab31d8d3fff79b2986f6ef9624d80fba";
     owner = "urbanadventurer";
     repo = "username-anarchy";
-    hash = "sha256-1he1FzNc6y7jm/UwedG81z5QGehh2qsd1QkAsIXwrag=";
+    tag = "v0.6";
+    hash = "sha256-46hl1ynA/nc2R70VHhOqbux6B2hwiJWs/sf0ZRwNFf0=";
   };
 
   buildInputs = [ ruby ];
