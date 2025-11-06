@@ -7892,6 +7892,10 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
+  keeper_secrets_manager_core =
+    callPackage ../development/python-modules/keeper_secrets_manager_core
+      { };
+
   keepkey = callPackage ../development/python-modules/keepkey { };
 
   keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
