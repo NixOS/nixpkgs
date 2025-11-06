@@ -41866,24 +41866,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  fx = nodeEnv.buildNodePackage {
-    name = "fx";
-    packageName = "fx";
-    version = "35.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/fx/-/fx-35.0.0.tgz";
-      sha512 = "O07q+Lknrom5RUX/u53tjo2KTTLUnL0K703JbqMYb19ORijfJNvijzFqqYXEjdk25T9R14S6t6wHD8fCWXCM0g==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command-line JSON viewer";
-      homepage = "https://fx.wtf";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   grunt-cli = nodeEnv.buildNodePackage {
     name = "grunt-cli";
     packageName = "grunt-cli";
