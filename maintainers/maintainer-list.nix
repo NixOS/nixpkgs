@@ -15585,12 +15585,6 @@
     githubId = 1433367;
     name = "Marc Fontaine";
   };
-  magenbluten = {
-    email = "magenbluten@codemonkey.cc";
-    github = "magenbluten";
-    githubId = 1140462;
-    name = "magenbluten";
-  };
   magicquark = {
     name = "magicquark";
     github = "magicquark";

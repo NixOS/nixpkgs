@@ -123,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [
       adev
-      magenbluten
     ];
   };
 })
