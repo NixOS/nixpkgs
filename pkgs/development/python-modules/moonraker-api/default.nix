@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
@@ -28,7 +29,10 @@ buildPythonPackage rec {
       --replace 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
   '';
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+    async-timeout
+  ];
 
   nativeCheckInputs = [
     pytest-aiohttp

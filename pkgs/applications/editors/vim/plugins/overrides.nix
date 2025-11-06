@@ -503,6 +503,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-dotenv = super.cmp-dotenv.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };

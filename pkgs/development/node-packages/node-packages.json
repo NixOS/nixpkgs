@@ -130,7 +130,6 @@
 , "ts-node"
 , "ttf2eot"
 , "vega-cli"
-, "vega-lite"
 , "vercel"
 , "wavedrom-cli"
 , "wring"
