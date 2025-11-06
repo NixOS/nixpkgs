@@ -1,0 +1,48 @@
+diff --git a/third_party/crabbyavif/src/src/capi/io.rs b/third_party/crabbyavif/src/src/capi/io.rs
+index e7994ce3129c4d7f46553f527bf8f10376ff9ed8..60a3c13b788a560e9669db013e3b8e88e5f9947b 100644
+--- a/third_party/crabbyavif/src/src/capi/io.rs
++++ b/third_party/crabbyavif/src/src/capi/io.rs
+@@ -207,7 +207,7 @@ impl Drop for avifIOWrapper {
+ }
+ 
+ impl crate::decoder::IO for avifIOWrapper {
+-    #[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
++    #[cfg_attr(feature = "disable_cfi", no_sanitize(cfi))]
+     fn read(&mut self, offset: u64, size: usize) -> AvifResult<&[u8]> {
+         // SAFETY: Calling into a C function.
+         let res = unsafe {
+diff --git a/third_party/crabbyavif/src/src/lib.rs b/third_party/crabbyavif/src/src/lib.rs
+index 90fa41188905a8aaf7b74594937b3a335ceed18d..a05f0a5e8b6cbffbf6e1a0f5fefc8a1e1480273f 100644
+--- a/third_party/crabbyavif/src/src/lib.rs
++++ b/third_party/crabbyavif/src/src/lib.rs
+@@ -13,7 +13,7 @@
+ // limitations under the License.
+ 
+ #![deny(unsafe_op_in_unsafe_fn)]
+-#![cfg_attr(feature = "disable_cfi", feature(sanitize))]
++#![cfg_attr(feature = "disable_cfi", feature(no_sanitize))]
+ 
+ #[macro_use]
+ mod internal_utils;
+diff --git a/third_party/crabbyavif/src/src/reformat/libyuv.rs b/third_party/crabbyavif/src/src/reformat/libyuv.rs
+index 9df874ccf7b6a943c6dcebe495ce15b7a7e9cd66..3f68c16f2b2e8e22b3edfd0dcedbb95fe34887f9 100644
+--- a/third_party/crabbyavif/src/src/reformat/libyuv.rs
++++ b/third_party/crabbyavif/src/src/reformat/libyuv.rs
+@@ -372,7 +372,7 @@ fn find_conversion_function(
+ // Returns Ok(Some(false)) if only YUV was converted and alpha
+ // needs to be imported separately.
+ // Returns Ok(None) if the conversion is not implemented.
+-#[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
++#[cfg_attr(feature = "disable_cfi", no_sanitize(cfi))]
+ pub(crate) fn yuv_to_rgb(image: &image::Image, rgb: &mut rgb::Image) -> AvifResult<Option<bool>> {
+     if (rgb.depth != 8 && rgb.depth != 10) || !image.depth_valid() {
+         return Ok(None); // Not implemented.
+@@ -833,7 +833,7 @@ fn rgb_to_yuv_conversion_function(
+     }
+ }
+ 
+-#[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
++#[cfg_attr(feature = "disable_cfi", no_sanitize(cfi))]
+ pub(crate) fn rgb_to_yuv(rgb: &rgb::Image, image: &mut image::Image) -> AvifResult<Option<()>> {
+     let conversion_function = match rgb_to_yuv_conversion_function(rgb, image) {
+         Some(conversion_function) => conversion_function,

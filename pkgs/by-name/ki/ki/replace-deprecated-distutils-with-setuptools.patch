@@ -1,0 +1,13 @@
+diff --git a/tests/test_integration.py b/tests/test_integration.py
+index 93d3661..ef24fca 100644
+--- a/tests/test_integration.py
++++ b/tests/test_integration.py
+@@ -7,7 +7,7 @@ import sqlite3
+ import tempfile
+ import subprocess
+ from pathlib import Path
+-from distutils.dir_util import copy_tree
++from setuptools._distutils.dir_util import copy_tree
+ from importlib.metadata import version
+ 
+ import git

@@ -1,0 +1,150 @@
+commit a881a5b110d2f23a11924604bff64ab3c2755bc6
+Author: Brandon Maier <brandon.maier@gmail.com>
+Date:   Thu Mar 6 20:30:47 2025 -0600
+
+    meson: support building libfdt without static library
+    
+    Some packaging systems like NixOS don't support compiling static
+    libraries. However libfdt's meson.build uses `both_library()` which
+    forces the build to always compile shared and static libraries. Removing
+    `both_library()` will make packaging easier.
+    
+    libfdt uses `both_libraries()` to support the 'static-build' option.
+    But we do not need the 'static-build' option as Meson can natively
+    build static using
+    
+    > meson setup builddir/ -Dc_link_args='-static' --prefer-static --default-library=static
+    
+    So drop 'static-build' and then replace `both_libraries()` with
+    `library()`.
+    
+    Signed-off-by: Brandon Maier <brandon.maier@gmail.com>
+    Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
+
+diff --git a/libfdt/meson.build b/libfdt/meson.build
+index bf8343f..c2f4bd6 100644
+--- a/libfdt/meson.build
++++ b/libfdt/meson.build
+@@ -26,7 +26,7 @@ else
+ endif
+ 
+ link_args += version_script
+-libfdt = both_libraries(
++libfdt = library(
+   'fdt', sources,
+   version: meson.project_version(),
+   link_args: link_args,
+@@ -34,17 +34,11 @@ libfdt = both_libraries(
+   install: true,
+ )
+ 
+-if static_build
+-  link_with = libfdt.get_static_lib()
+-else
+-  link_with = libfdt.get_shared_lib()
+-endif
+-
+ libfdt_inc = include_directories('.')
+ 
+ libfdt_dep = declare_dependency(
+   include_directories: libfdt_inc,
+-  link_with: link_with,
++  link_with: libfdt,
+ )
+ 
+ install_headers(
+diff --git a/meson.build b/meson.build
+index 310699f..603ffaa 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,7 +1,7 @@
+ project('dtc', 'c',
+   version: files('VERSION.txt'),
+   license: ['GPL2+', 'BSD-2'],
+-  default_options: 'werror=true',
++  default_options: ['werror=true', 'default_library=both'],
+   meson_version: '>=0.57.0'
+ )
+ 
+@@ -27,16 +27,8 @@ add_project_arguments(
+   language: 'c'
+ )
+ 
+-if get_option('static-build')
+-  static_build = true
+-  extra_link_args = ['-static']
+-else
+-  static_build = false
+-  extra_link_args = []
+-endif
+-
+ yamltree = 'yamltree.c'
+-yaml = dependency('yaml-0.1', version: '>=0.2.3', required: get_option('yaml'), static: static_build)
++yaml = dependency('yaml-0.1', version: '>=0.2.3', required: get_option('yaml'))
+ if not yaml.found()
+   add_project_arguments('-DNO_YAML', language: 'c')
+   yamltree = []
+@@ -92,7 +84,6 @@ if get_option('tools')
+       ],
+       dependencies: util_dep,
+       install: true,
+-      link_args: extra_link_args,
+     )
+   endif
+ 
+@@ -113,11 +104,10 @@ if get_option('tools')
+     ],
+     dependencies: [util_dep, yaml],
+     install: true,
+-    link_args: extra_link_args,
+   )
+ 
+   foreach e: ['fdtdump', 'fdtget', 'fdtput', 'fdtoverlay']
+-    dtc_tools += executable(e, files(e + '.c'), dependencies: util_dep, install: true, link_args: extra_link_args)
++    dtc_tools += executable(e, files(e + '.c'), dependencies: util_dep, install: true)
+   endforeach
+ 
+   install_data(
+diff --git a/meson_options.txt b/meson_options.txt
+index 36f391a..62b31b3 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -8,7 +8,5 @@ option('valgrind', type: 'feature', value: 'auto',
+        description: 'Valgrind support')
+ option('python', type: 'feature', value: 'auto',
+        description: 'Build pylibfdt Python library')
+-option('static-build', type: 'boolean', value: false,
+-       description: 'Build static binaries')
+ option('tests', type: 'boolean', value: true,
+        description: 'Build tests')
+diff --git a/tests/meson.build b/tests/meson.build
+index 9cf6e3d..baed174 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -96,22 +96,20 @@ tests += [
+   'truncated_string',
+ ]
+ 
++test_deps = [testutil_dep, util_dep, libfdt_dep]
++
+ dl = cc.find_library('dl', required: false)
+-if dl.found() and not static_build
++if dl.found()
+   tests += [
+     'asm_tree_dump',
+     'value-labels',
+   ]
+-endif
+-
+-test_deps = [testutil_dep, util_dep, libfdt_dep]
+-if not static_build
+   test_deps += [dl]
+ endif
+ 
+ tests_exe = []
+ foreach t: tests
+-  tests_exe += executable(t, files(t + '.c'), dependencies: test_deps, link_args: extra_link_args)
++  tests_exe += executable(t, files(t + '.c'), dependencies: test_deps)
+ endforeach
+ 
+ run_tests = find_program('run_tests.sh')

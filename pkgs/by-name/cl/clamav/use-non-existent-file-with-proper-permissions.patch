@@ -1,0 +1,13 @@
+diff --git a/unit_tests/check_clamd.c b/unit_tests/check_clamd.c
+index 2f526709a..df67c36ed 100644
+--- a/unit_tests/check_clamd.c
++++ b/unit_tests/check_clamd.c
+@@ -144,7 +144,7 @@ static void conn_teardown(void)
+ #define CLEANREPLY CLEANFILE ": OK"
+ #define UNKNOWN_REPLY "UNKNOWN COMMAND"
+ 
+-#define NONEXISTENT PATHSEP "nonexistentfilename"
++#define NONEXISTENT PATHSEP "tmp" PATHSEP "nonexistentfilename"
+ 
+ #define NONEXISTENT_REPLY NONEXISTENT ": File path check failure: No such file or directory. ERROR"
+ 

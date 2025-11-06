@@ -1,0 +1,14 @@
+diff --git a/crates/server/src/notification/dummy.rs b/crates/server/src/notification/dummy.rs
+index f85dda0..7489f22 100644
+--- a/crates/server/src/notification/dummy.rs
++++ b/crates/server/src/notification/dummy.rs
+@@ -1,6 +1,9 @@
++#[cfg(test)]
+ use crate::notification::traits;
+ 
++#[cfg(test)]
+ #[derive(Clone, Copy, Debug, Default)]
+ pub struct Notification {}
+ 
++#[cfg(test)]
+ impl traits::Notification for Notification {}

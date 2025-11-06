@@ -1,0 +1,16 @@
+--- a/src/utils/slpaths.cpp
++++ b/src/utils/slpaths.cpp
+@@ -165,13 +165,10 @@
+ 			usync_paths.push_back(bundle);
+ 		}
+ 		if (!SlPaths::IsPortableMode()) {
+-			/*
+-//FIXME: reenable when #707 is fixed / spring 102.0 is "established"
+ 			LSL::SpringBundle systembundle;
+ 			if (LSL::SpringBundle::LocateSystemInstalledSpring(systembundle)) {
+ 				usync_paths.push_back(systembundle);
+ 			}
+-*/
+ 
+ 			std::vector<std::string> paths;
+ 			PossibleEnginePaths(paths);

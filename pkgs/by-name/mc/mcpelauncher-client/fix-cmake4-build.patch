@@ -1,0 +1,31 @@
+diff --git a/mcpelauncher-errorwindow/CMakeLists.txt b/mcpelauncher-errorwindow/CMakeLists.txt
+index c9a01b9..448b50b 100644
+--- a/mcpelauncher-errorwindow/CMakeLists.txt
++++ b/mcpelauncher-errorwindow/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(mcpelauncher-errorwindow LANGUAGES CXX)
+ 
+diff --git a/mcpelauncher-webview/CMakeLists.txt b/mcpelauncher-webview/CMakeLists.txt
+index 7a6b8fe..af80cbf 100644
+--- a/mcpelauncher-webview/CMakeLists.txt
++++ b/mcpelauncher-webview/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(mcpelauncher-webview)
+ 
+diff --git a/simple-ipc/CMakeLists.txt b/simple-ipc/CMakeLists.txt
+index 2f475e1..09b800a 100644
+--- a/simple-ipc/CMakeLists.txt
++++ b/simple-ipc/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.10)
+ 
+ project(simpleipc LANGUAGES CXX)
+ 
+

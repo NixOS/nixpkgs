@@ -1,0 +1,30 @@
+diff --git a/fizz/CMakeLists.txt b/fizz/CMakeLists.txt
+index c60177c2b9..425326c529 100644
+--- a/fizz/CMakeLists.txt
++++ b/fizz/CMakeLists.txt
+@@ -50,7 +50,7 @@
+ find_package(fmt CONFIG REQUIRED)
+ 
+ find_package(OpenSSL REQUIRED)
+-find_package(Glog REQUIRED)
++find_package(Glog CONFIG REQUIRED)
+ find_package(Threads REQUIRED)
+ find_package(Zstd REQUIRED)
+ if (UNIX AND NOT APPLE)
+@@ -198,7 +198,6 @@
+     ${sodium_INCLUDE_DIR}
+     ${ZSTD_INCLUDE_DIR}
+   PRIVATE
+-    ${GLOG_INCLUDE_DIRS}
+     ${FIZZ_INCLUDE_DIRECTORIES}
+ )
+ 
+@@ -212,7 +211,7 @@
+     ZLIB::ZLIB
+     ${ZSTD_LIBRARY}
+   PRIVATE
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     ${GFLAGS_LIBRARIES}
+     ${FIZZ_LINK_LIBRARIES}
+     ${CMAKE_DL_LIBS}

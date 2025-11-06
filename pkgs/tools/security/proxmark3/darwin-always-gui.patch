@@ -1,0 +1,13 @@
+diff --git a/client/src/proxmark3.c b/client/src/proxmark3.c
+index 6c77bfad3..0d41a2d6b 100644
+--- a/client/src/proxmark3.c
++++ b/client/src/proxmark3.c
+@@ -1098,7 +1098,7 @@ int main(int argc, char *argv[]) {
+ 
+ #ifdef HAVE_GUI
+ 
+-#  if defined(_WIN32)
++#  if defined(_WIN32) || (defined(__MACH__) && defined(__APPLE__))
+     InitGraphics(argc, argv, script_cmds_file, script_cmd, stayInCommandLoop);
+     MainGraphics();
+ #  else

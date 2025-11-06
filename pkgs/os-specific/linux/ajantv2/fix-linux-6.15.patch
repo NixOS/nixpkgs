@@ -1,0 +1,61 @@
+From 8eacfa908f7d9b366d68e0ea0516fdd867a1e492 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sun, 22 Jun 2025 19:38:10 +0100
+Subject: [PATCH 5/5] Use ccflags-y instead of EXTRA_CFLAGS, which stopped
+ working in Linux 6.15
+
+---
+ driver/linux/Makefile | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/driver/linux/Makefile b/driver/linux/Makefile
+index f714ff9b..da4ee90b 100644
+--- a/driver/linux/Makefile
++++ b/driver/linux/Makefile
+@@ -25,10 +25,10 @@ VERSIONING 	 = -DSDKVER_MAJ=$(SDKVER_MAJ) -DSDKVER_MIN=$(SDKVER_MIN) -DSDKVER_PN
+ DISTRO_INFO  = -DDISTRO_TYPE=$(DISTRO_TYPE) -DDISTRO_IS_RHEL_LIKE=$(DISTRO_IS_RHEL_LIKE) \
+ 			   -DDISTRO_MAJ_VERSION=$(DISTRO_MAJ_VERSION) -DDISTRO_MIN_VERSION=$(DISTRO_MIN_VERSION)  \
+ 			   -DDISTRO_KERNEL_PKG_MAJ=$(DISTRO_KERNEL_PKG_MAJ) -DDISTRO_KERNEL_PKG_MIN=$(DISTRO_KERNEL_PKG_MIN) -DDISTRO_KERNEL_PKG_PNT=$(DISTRO_KERNEL_PKG_PNT)
+-EXTRA_CFLAGS += -DAJALinux -DXENA2 $(DBG) -D$(NTV2TARGET) -D$(A_ARCH) $(EXTRA_DEPS) $(VERSIONING) $(DISTRO_INFO) $(INCLUDES) -Wall -Wno-implicit-fallthrough
++ccflags-y += -DAJALinux -DXENA2 $(DBG) -D$(NTV2TARGET) -D$(A_ARCH) $(EXTRA_DEPS) $(VERSIONING) $(DISTRO_INFO) $(INCLUDES) -Wall -Wno-implicit-fallthrough
+ 
+ ifdef AJA_HEVC
+-	EXTRA_CFLAGS += -DAJA_HEVC=$(AJA_HEVC)
++	ccflags-y += -DAJA_HEVC=$(AJA_HEVC)
+ endif
+ 
+ # if rdma is set
+@@ -73,7 +73,7 @@ ifeq ($(NVIDIA_KO),)
+ endif
+ 
+ ifdef NVIDIA_IGPU
+-	EXTRA_CFLAGS += -DAJA_IGPU=1
++	ccflags-y += -DAJA_IGPU=1
+ ifneq ($(NVIDIA_KO),)
+ ifeq ($(NVIDIA_SYMVERS),)
+ 	NVIDIA_GEN_SYMVERS := ./nvidia-ko-to-module-symvers $(NVIDIA_KO) $(A_LINUX_DRIVER_PATH)/nvidia.symvers
+@@ -91,17 +91,17 @@ endif
+ 
+ # determine if the ko is gpl - no ko is proprietary igpu
+ ifeq ($(NVIDIA_KO),)
+-	EXTRA_CFLAGS += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1 -DNVIDIA_PROPRIETARY=1
++	ccflags-y += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1 -DNVIDIA_PROPRIETARY=1
+ else
+ ifeq ($(shell modinfo $(NVIDIA_KO) | grep license: | grep GPL),)
+-	EXTRA_CFLAGS += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1 -DNVIDIA_PROPRIETARY=1
++	ccflags-y += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1 -DNVIDIA_PROPRIETARY=1
+ else
+-	EXTRA_CFLAGS += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1
++	ccflags-y += -I$(NVIDIA_SRC_DIR) -DAJA_RDMA=1
+ endif
+ endif
+ 
+ ifdef AJA_CREATE_DEVICE_NODES
+-	EXTRA_CFLAGS += -DAJA_CREATE_DEVICE_NODES=$(AJA_CREATE_DEVICE_NODES)
++	ccflags-y += -DAJA_CREATE_DEVICE_NODES=$(AJA_CREATE_DEVICE_NODES)
+ endif
+ 
+ AJANTV2INCS = $(A_LIB_NTV2_INC)/ajaexport.h \
+-- 
+2.49.0
+

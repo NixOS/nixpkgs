@@ -1,0 +1,22 @@
+From a4ca664abfac0b7efa7dbc48c6438bc1a5333962 Mon Sep 17 00:00:00 2001
+From: Fazzi <faaris.ansari@proton.me>
+Date: Sat, 24 May 2025 20:55:50 +0100
+Subject: [PATCH] desktopFile: hide entry from app launchers
+
+---
+ linux-release/com.steamgriddb.SGDBoop.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux-release/com.steamgriddb.SGDBoop.desktop b/linux-release/com.steamgriddb.SGDBoop.desktop
+index 9c84cdb..9899682 100644
+--- a/linux-release/com.steamgriddb.SGDBoop.desktop
++++ b/linux-release/com.steamgriddb.SGDBoop.desktop
+@@ -4,7 +4,7 @@ Comment=Apply Steam assets from SteamGridDB
+ Exec=SGDBoop %U
+ Terminal=false
+ Type=Application
+-NoDisplay=false
++NoDisplay=true
+ Icon=com.steamgriddb.SGDBoop
+ MimeType=x-scheme-handler/sgdb
+ Categories=Utility

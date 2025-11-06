@@ -1,0 +1,32 @@
+From 833856bd77dc6ea77557ab0659c1459bee393653 Mon Sep 17 00:00:00 2001
+From: averyv <avery@averyv.me>
+Date: Sat, 6 Sep 2025 17:51:48 +0100
+Subject: [PATCH 1/2] Remove sudo
+
+Rely on polkit and sensible permissions
+---
+ pihole | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/pihole b/pihole
+index 7b5e3eb..b00617e 100755
+--- a/pihole
++++ b/pihole
+@@ -570,14 +570,6 @@ if [[ -z ${USER} ]]; then
+   USER=$(whoami)
+ fi
+ 
+-# Check if the current user is not root and if the command
+-# requires root. If so, exit with an error message.
+-if [[ $EUID -ne 0 && need_root -eq 1 ]];then
+-  echo -e "  ${CROSS} The Pi-hole command requires root privileges, try:"
+-  echo -e "      ${COL_GREEN}sudo pihole $*${COL_NC}"
+-  exit 1
+-fi
+-
+ # Handle redirecting to specific functions based on arguments
+ case "${1}" in
+   "allow" | "allowlist"           ) listFunc "$@";;
+-- 
+2.50.1
+

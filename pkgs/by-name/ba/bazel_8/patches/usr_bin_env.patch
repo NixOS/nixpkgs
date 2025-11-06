@@ -1,0 +1,33 @@
+diff --git a/src/zip_builtins.sh b/src/zip_builtins.sh
+index d78ca5526a..c7d8f251cc 100755
+--- a/src/zip_builtins.sh
++++ b/src/zip_builtins.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@usrBinEnv@ bash
+ 
+ # Copyright 2020 The Bazel Authors. All rights reserved.
+ #
+
+diff --git a/src/zip_files.sh b/src/zip_files.sh
+index 1422a6c659..4b1c221784 100755
+--- a/src/zip_files.sh
++++ b/src/zip_files.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@usrBinEnv@ bash
+ 
+ # Copyright 2019 The Bazel Authors. All rights reserved.
+ #
+
+diff --git a/src/package-bazel.sh b/src/package-bazel.sh
+index 56e94db400..65fef20988 100755
+--- a/src/package-bazel.sh
++++ b/src/package-bazel.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@usrBinEnv@ bash
+ #
+ # Copyright 2015 The Bazel Authors. All rights reserved.
+ #
+

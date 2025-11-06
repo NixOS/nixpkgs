@@ -1,0 +1,28 @@
+diff --git a/src/fuxi-gmac-net.c b/src/fuxi-gmac-net.c
+index d5baa9c..1667cc9 100755
+--- a/src/fuxi-gmac-net.c
++++ b/src/fuxi-gmac-net.c
+@@ -870,9 +870,9 @@ static void fxgmac_stop_timers(struct fxgmac_pdata *pdata)
+             if (!channel->tx_ring)
+                 break;
+ 
+-            del_timer_sync(&channel->tx_timer);
++            timer_delete_sync(&channel->tx_timer);
+ #if FXGMAC_TX_HANG_TIMER_ENABLED
+-            del_timer_sync(&channel->tx_hang_timer);
++            timer_delete_sync(&channel->tx_hang_timer);
+             channel->tx_hang_timer_active = 0;
+ #endif
+         }
+diff --git a/src/fuxi-gmac-phy.c b/src/fuxi-gmac-phy.c
+index b2e9455..8123d41 100755
+--- a/src/fuxi-gmac-phy.c
++++ b/src/fuxi-gmac-phy.c
+@@ -368,6 +368,6 @@ int fxgmac_phy_timer_init(struct fxgmac_pdata *pdata)
+ 
+ void fxgmac_phy_timer_destroy(struct fxgmac_pdata *pdata)
+ {
+-    del_timer_sync(&pdata->expansion.phy_poll_tm);
++    timer_delete_sync(&pdata->expansion.phy_poll_tm);
+     DPRINTK("fxgmac_phy_timer removed\n");
+ }

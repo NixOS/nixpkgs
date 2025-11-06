@@ -1,0 +1,23 @@
+diff --git a/app/app.pro b/app/app.pro
+index 89ff5c0b..9625ecd1 100644
+--- a/app/app.pro
++++ b/app/app.pro
+@@ -159,12 +159,13 @@ macx {
+ 
+ } else:unix {
+     # pkgconfig-based configuration does not work @ Ubuntu
+-    #  CONFIG += link_pkgconfig
+-    #  PKGCONFIG += hunspell
++    # but does on NixOS
++    CONFIG += link_pkgconfig
++    PKGCONFIG += hunspell
+ 
+-    # hardcoded paths are (unfortunately) more robust:
+-    INCLUDEPATH += /usr/include/hunspell
+-    LIBS += -lhunspell
++    # Where hardcoded paths are (unfortunately) more robust^W^W^W^Wannoying:
++    #  INCLUDEPATH += /usr/include/hunspell
++    #  LIBS += -lhunspell
+ 
+     HEADERS += \
+       ./src/qt/spelling/dictionary_provider_hunspell.h \

@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index d96114619..119040151 100755
+--- a/configure
++++ b/configure
+@@ -1913,7 +1913,7 @@ set_default_version()
+ 	echo "${script_name}: determining default version string."
+
+ 	# Use what's in the version file as-is.
+-	version="AOCL-BLAS $(cat "${version_file}") Build $(date +%Y%m%d)"
++	version="AOCL-BLAS $(cat "${version_file}") Build $(date -d "@$SOURCE_DATE_EPOCH" +%Y%m%d)"
+ }
+
+

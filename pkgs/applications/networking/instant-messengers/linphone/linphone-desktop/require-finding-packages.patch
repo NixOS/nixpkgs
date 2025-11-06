@@ -1,0 +1,41 @@
+diff --git a/linphone-app/CMakeLists.txt b/linphone-app/CMakeLists.txt
+index d40842fa2..5ea1330ca 100644
+--- a/linphone-app/CMakeLists.txt
++++ b/linphone-app/CMakeLists.txt
+@@ -24,14 +24,11 @@ cmake_minimum_required(VERSION 3.22)
+ 
+ 
+ #Linphone targets
+-set(LINPHONE_PACKAGES LinphoneCxx Mediastreamer2 Belcard LibLinphone)
++set(LINPHONE_PACKAGES LinphoneCxx Mediastreamer2 BelCard LibLinphone)
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+ 
+-find_package(BCToolbox)
+-if(NOT BCToolbox_FOUND)
+-	find_package(bctoolbox CONFIG REQUIRED)
+-endif()
++find_package(BCToolbox REQUIRED)
+ if(NOT LINPHONEAPP_VERSION)
+ 	bc_compute_full_version(LINPHONEAPP_VERSION)
+ endif()
+@@ -105,17 +102,14 @@ set(ENABLE_DB_STORAGE ON CACHE BOOLEAN "Enable Storage")
+ 
+ foreach(PACKAGE ${LINPHONE_PACKAGES})
+ 	message(STATUS "Trying to find ${PACKAGE}")
+-	find_package(${PACKAGE})
+-	if(NOT ${PACKAGE}_FOUND)
+-		find_package(${PACKAGE} CONFIG REQUIRED)
+-	endif()
++  find_package(${PACKAGE} REQUIRED)
+ endforeach()
+ 
+ set(PLUGIN_TARGETS ${LinphoneCxx_TARGET})
+ set(APP_TARGETS ${LinphoneCxx_TARGET}
+ 				${BCToolbox_TARGET}#Logger/App
+ 				${Mediastreamer2_TARGET}#MediastreamerUtils
+-				${Belcard_TARGET}#VCard Model
++				${BelCard_TARGET}#VCard Model
+ 				${LibLinphone_TARGET})#MediastreamerUtils
+ 
+ ####################################
