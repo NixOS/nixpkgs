@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "immich-cli";
-  version = "2.2.100";
+  version = "2.2.101";
   inherit (immich) src pnpmDeps;
 
   postPatch = ''
