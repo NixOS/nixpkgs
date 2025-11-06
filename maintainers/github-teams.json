@@ -724,7 +724,6 @@
     "description": "Provides leadership for and has authority over Nixpkgs.",
     "id": 14317027,
     "maintainers": {
-      "K900": 386765,
       "alyssais": 2768870,
       "emilazy": 18535642,
       "wolfgangwalther": 9132420
