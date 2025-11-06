@@ -156,7 +156,6 @@ let
 in
 rec {
   inherit pkgs fmt;
-  requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations
