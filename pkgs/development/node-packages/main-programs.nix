@@ -2,7 +2,6 @@
 {
   # Packages that provide multiple executables where one is clearly the `mainProgram`.
   "@antfu/ni" = "ni";
-  "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
 
