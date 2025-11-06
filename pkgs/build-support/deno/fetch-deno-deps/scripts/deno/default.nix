@@ -38,8 +38,13 @@ in
         cp -r $src/* $out;
       ''
       + wrappers;
+      checkPhase = ''
+        deno test
+      '';
+      doCheck = true;
       nativeBuildInputs = [
         makeWrapper
+        deno
       ];
     };
 }

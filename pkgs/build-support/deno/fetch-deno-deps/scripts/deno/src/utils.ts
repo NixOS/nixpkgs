@@ -107,3 +107,23 @@ export function parseArgs<T extends ParsedArgsNames>(
 
   return result;
 }
+
+export function assertEq(a: any, b: any, msg?: string) {
+  function throwNow() {
+    const aString = typeof a === "object" ? JSON.stringify(a, null, 2) : a;
+    const bString = typeof b === "object" ? JSON.stringify(b, null, 2) : b;
+    const _msg = `Assertion failed:
+"${aString}"
+  ===
+"${bString}"
+`;
+    throw new Error(_msg + (msg || ""));
+  }
+  if (JSON.stringify(a) === JSON.stringify(b)) {
+    return;
+  } else if (a === b) {
+    return;
+  }
+  throwNow();
+}
+
