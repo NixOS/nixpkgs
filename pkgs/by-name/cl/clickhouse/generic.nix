@@ -27,6 +27,7 @@
   cargo,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 let
   llvmStdenv = llvmPackages_19.stdenv;
@@ -183,6 +184,12 @@ llvmStdenv.mkDerivation (finalAttrs: {
   # https://github.com/ClickHouse/ClickHouse/issues/49988
   hardeningDisable = [ "fortify" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  preVersionCheck = ''
+    version=${builtins.head (lib.splitString "-" version)}
+  '';
+
   postInstall = ''
     sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
       $out/etc/clickhouse-server/config.xml
@@ -218,12 +225,16 @@ llvmStdenv.mkDerivation (finalAttrs: {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      thevar1able
-    ];
+    changelog = "https://github.com/ClickHouse/ClickHouse/blob/v${version}/CHANGELOG.md";
+
+    mainProgram = "clickhouse";
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
+
+    maintainers = with maintainers; [
+      thevar1able
+    ];
   };
 })

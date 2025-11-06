@@ -55,7 +55,7 @@ buildGoModule rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     tests.versionTest = testers.testVersion {
       package = immich-go;
       command = "immich-go --version";

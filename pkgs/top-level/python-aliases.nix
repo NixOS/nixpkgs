@@ -284,6 +284,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
+  plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
   postgrest-py = postgrest; # added 2025-08-29
@@ -320,6 +321,7 @@ mapAliases {
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
+  pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29

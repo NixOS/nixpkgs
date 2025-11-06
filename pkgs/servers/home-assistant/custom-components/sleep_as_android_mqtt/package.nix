@@ -11,19 +11,25 @@
   paho-mqtt,
 }:
 let
-  version = "2.3.2";
+  version = "3.0.2";
 in
 buildHomeAssistantComponent {
   owner = "IATkachenko";
-  domain = "sleep_as_android";
+  domain = "sleep_as_android_mqtt";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "IATkachenko";
     repo = "HA-SleepAsAndroid";
     tag = "v${version}";
-    hash = "sha256-aJKjHZcRdmiXJdtWRY4fv5oxCHTDIVpvZEwhIE9ISv8=";
+    hash = "sha256-vJAi63RMF7jdmLUZNmnSqNxbiJi52/PgmTQm0KB3ZP8=";
   };
+
+  postPatch = ''
+    # Fix incomplete rename of package name
+    substituteInPlace tests/unit/test_instance.py \
+      --replace-fail "sleep_as_android." "sleep_as_android_mqtt."
+  '';
 
   dependencies = [
     pyhaversion

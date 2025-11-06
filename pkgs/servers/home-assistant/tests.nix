@@ -18,14 +18,9 @@ let
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
     homeassistant_sky_connect = getComponentDeps "zha";
     homeassistant_yellow = getComponentDeps "zha";
-    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
     lovelace = [
       pychromecast
     ];
-    matrix = [
-      pydantic
-    ];
-    mopeka = getComponentDeps "switchbot";
     onboarding = [
       pymetno
       radios
@@ -44,7 +39,6 @@ let
     system_log = [
       isal
     ];
-    tesla_fleet = getComponentDeps "teslemetry";
     xiaomi_miio = [
       arrow
     ];
@@ -57,33 +51,11 @@ let
   };
 
   extraDisabledTestPaths = {
-    backup = [
-      # outdated snapshot
-      "tests/components/backup/test_sensors.py::test_sensors"
-    ];
-    bosch_alarm = [
-      # outdated snapshots
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-solution_3000]"
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-amax_3000]"
-      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-b5512]"
-    ];
-    bmw_connected_drive = [
-      # outdated snapshot
-      "tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
-    ];
-    dnsip = [
-      # Tries to resolve DNS entries
-      "tests/components/dnsip/test_config_flow.py::test_options_flow"
-    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
       "tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       "tests/components/jellyfin/test_media_source.py::test_music_library"
-    ];
-    matter = [
-      # outdated snapshot in eve_weather_sensor variant
-      "tests/components/matter/test_number.py::test_numbers"
     ];
     minecraft_server = [
       # FileNotFoundError: [Errno 2] No such file or directory: '/etc/resolv.conf'
@@ -104,22 +76,17 @@ let
       "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
     ];
     openai_conversation = [
-      # outdated snapshot
-      "tests/components/openai_conversation/test_conversation.py::test_function_call"
       # Pydantic validation error
       "tests/components/openai_conversation/test_conversation.py"
       "tests/components/openai_conversation/test_ai_task.py"
-      # TypeError: object ImagesResponse can't be used in 'await' expression
-      "tests/components/openai_conversation/test_init.py::test_generate_image_service"
-      "tests/components/openai_conversation/test_init.py::test_generate_image_service_error"
     ];
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
     ];
-    technove = [
+    youtube = [
       # outdated snapshot
-      "tests/components/technove/test_switch.py::test_switches"
+      "tests/components/youtube/test_sensor.py::test_sensor"
     ];
   };
 
@@ -127,10 +94,6 @@ let
     conversation = [
       # intent fixture mismatch
       "test_error_no_device_on_floor"
-    ];
-    forecast_solar = [
-      # language fixture mismatch
-      "test_enabling_disable_by_default"
     ];
     sensor = [
       # Failed: Translation not found for sensor
@@ -146,14 +109,6 @@ let
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
-    ];
-    smartthings = [
-      # outdated snapshots
-      "test_all_entities"
-    ];
-    websocket_api = [
-      # AssertionError: assert 'unknown_error' == 'template_error'
-      "test_render_template_with_timeout"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
