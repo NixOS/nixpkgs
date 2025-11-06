@@ -75,6 +75,9 @@ async function handleReviewers({
   const reviewers = (
     await Promise.all(
       Array.from(new_reviewers, async (username) => {
+        // TODO: Restructure this file to only do the collaborator check for those users
+        // who were not already part of a team. Being a member of a team makes them
+        // collaborators by definition.
         try {
           await github.rest.repos.checkCollaborator({
             ...context.repo,
