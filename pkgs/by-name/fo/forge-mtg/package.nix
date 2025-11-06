@@ -3,6 +3,7 @@
   fetchFromGitHub,
   gnused,
   lib,
+  stdenv,
   maven,
   makeWrapper,
   openjdk,
@@ -108,10 +109,12 @@ maven.buildMavenPackage {
       PREFIX_CMD=""
       if [ "$commandToInstall" = "forge-adventure" ]; then
         PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${
-          lib.makeLibraryPath [
-            libGL
-            alsa-lib
-          ]
+          lib.makeLibraryPath (
+            [
+              libGL
+            ]
+            ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ]
+          )
         }"
       fi
 
