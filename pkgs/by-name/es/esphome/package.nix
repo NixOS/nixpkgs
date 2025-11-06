@@ -8,8 +8,11 @@
   platformio,
   esptool,
   git,
+  gcc,
   versionCheckHook,
   nixosTests,
+  esphome,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -112,6 +115,7 @@ python.pkgs.buildPythonApplication rec {
     # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
+        gcc
         platformio
         esptool
         git
@@ -131,13 +135,16 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       hypothesis
-      mock
       pytest-asyncio
       pytest-cov-stub
       pytest-mock
+      pytest-xdist
       pytestCheckHook
     ]
-    ++ [ versionCheckHook ];
+    ++ [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
@@ -145,6 +152,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   preCheck = ''
+    # Tests call wrapped esphome
     export PATH=$PATH:$out/bin
   '';
 
@@ -182,6 +190,12 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) esphome;
       inherit (nixosTests) esphome-dashboard;
+      esphomeWithIntegrationTests = esphome.overrideAttrs (oldAttrs: {
+        disabledTestPaths = [ ];
+        enabledTestPaths = [
+          "tests/integration"
+        ];
+      });
     };
   };
 
