@@ -38272,23 +38272,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  emojione = nodeEnv.buildNodePackage {
-    name = "emojione";
-    packageName = "emojione";
-    version = "4.5.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/emojione/-/emojione-4.5.0.tgz";
-      sha512 = "Tq55Y3UgPOnayFDN+Qd6QMP0rpoH10a1nhSFN27s8gXW3qymgFIHiXys2ECYYAI134BafmI3qP9ni2rZOe9BjA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG formats provided for the emoji images";
-      homepage = "https://www.emojione.com";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   esy = nodeEnv.buildNodePackage {
     name = "esy";
     packageName = "esy";

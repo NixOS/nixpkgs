@@ -36,7 +36,6 @@
 , "@electron-forge/cli"
 , "elm-oracle"
 , "emoj"
-, "emojione"
 , "esy"
 , "fast-cli"
 , "fauna-shell"
