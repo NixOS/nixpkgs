@@ -69,7 +69,6 @@ jobs:
               '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/pull-request-target.yml',
-              '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
               'ci/github-script/bot.js',
               'ci/github-script/merge.js',

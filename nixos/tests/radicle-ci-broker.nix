@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  seed-nid = "z6Mkg52RcwDrPKRzzHaYgBkHH3Gi5p4694fvPstVE9HTyMB6";
+  seed-nid = "z6MkhwX7wBkHQvcLazu2KDFK6UifGkLcoxNm2iA38fPH9LwU";
   seed-ssh-keys = import ./ssh-keys.nix pkgs;
 
   radicleConfig =
