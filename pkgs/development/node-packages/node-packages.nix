@@ -7934,15 +7934,6 @@ let
         sha512 = "TyUIUJgdFnCISzG5zu3291TAsE77ddchd0bepon1VVQrKLGKFED4iXFEDQ24mIPdPBbyE16PK3F8MYE1CmcBEQ==";
       };
     };
-    "cli-1.0.1" = {
-      name = "cli";
-      packageName = "cli";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cli/-/cli-1.0.1.tgz";
-        sha512 = "41U72MB56TfUMGndAKK8vJ78eooOD4Z5NOL4xEfjc0c23s+6EYKXlXsmACBVclLP1yOfWCgEganVzddVrSNoTg==";
-      };
-    };
     "cli-boxes-2.2.1" = {
       name = "cli-boxes";
       packageName = "cli-boxes";
@@ -8859,15 +8850,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/consola/-/consola-3.4.0.tgz";
         sha512 = "EiPU8G6dQG0GFHNR8ljnZFki/8a+cQwEQ+7wpxdChl02Q8HXlwEZWD5lqAF8vC2sEC3Tehr8hy7vErz88LHyUA==";
-      };
-    };
-    "console-browserify-1.1.0" = {
-      name = "console-browserify";
-      packageName = "console-browserify";
-      version = "1.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/console-browserify/-/console-browserify-1.1.0.tgz";
-        sha512 = "duS7VP5pvfsNLDvL1O4VOEbw37AI3A4ZUQYemvDlnpGrNu9tprR7BYWpDYwC0Xia0Zxz5ZupdiIrUp0GH1aXfg==";
       };
     };
     "console-browserify-1.2.0" = {
@@ -9915,15 +9897,6 @@ let
         sha512 = "39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==";
       };
     };
-    "date-now-0.1.4" = {
-      name = "date-now";
-      packageName = "date-now";
-      version = "0.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/date-now/-/date-now-0.1.4.tgz";
-        sha512 = "AsElvov3LoNB7tf5k37H2jYSB+ZZPMT5sG2QjJCcdlV5chIv6htBUBUui2IKRjgtKAKtCBN7Zbwa+MtwLjSeNw==";
-      };
-    };
     "dateformat-2.2.0" = {
       name = "dateformat";
       packageName = "dateformat";
@@ -10788,15 +10761,6 @@ let
         sha512 = "OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==";
       };
     };
-    "domhandler-2.3.0" = {
-      name = "domhandler";
-      packageName = "domhandler";
-      version = "2.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/domhandler/-/domhandler-2.3.0.tgz";
-        sha512 = "q9bUwjfp7Eif8jWxxxPSykdRZAb6GkguBGSgvvCrhI9wB71W2K/Kvv4E61CF/mcCfnVJDeDWx/Vb/uAqbDj6UQ==";
-      };
-    };
     "domino-2.1.6" = {
       name = "domino";
       packageName = "domino";
@@ -10804,15 +10768,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/domino/-/domino-2.1.6.tgz";
         sha512 = "3VdM/SXBZX2omc9JF9nOPCtDaYQ67BGp5CoLpIQlO2KCAPETs8TcDHacF26jXadGbvUteZzRTeos2fhID5+ucQ==";
-      };
-    };
-    "domutils-1.5.1" = {
-      name = "domutils";
-      packageName = "domutils";
-      version = "1.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz";
-        sha512 = "gSu5Oi/I+3wDENBsOWBiRK1eoGxcywYSqg3rR960/+EfY0CF4EX1VPkgHOZ3WiS/Jg2DtliF6BhWcHlfpYUcGw==";
       };
     };
     "domutils-3.2.2" = {
@@ -11326,15 +11281,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-2.3.0.tgz";
         sha512 = "n6e4bsCpzsP0OB76X+vEWhySUQI8GHPVFVK+3QkX35tbryy2WoeGeK5kQ+oxzgDVHjIZyz5fyS60Mi3EpQLc0Q==";
-      };
-    };
-    "entities-1.0.0" = {
-      name = "entities";
-      packageName = "entities";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/entities/-/entities-1.0.0.tgz";
-        sha512 = "LbLqfXgJMmy81t+7c14mnulFHJ170cM6E+0vMXR9k/ZiZwgX8i5pNgjTCX3SO4VeUsFLV+8InixoretwU+MjBQ==";
       };
     };
     "entities-1.1.2" = {
@@ -12307,15 +12253,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/exif-parser/-/exif-parser-0.1.12.tgz";
         sha512 = "c2bQfLNbMzLPmzQuOr8fy0csy84WmwnER81W88DzTp9CYNPJ6yzOj2EZAh9pywYpqHnshVLHQJ8WzldAyfY+Iw==";
-      };
-    };
-    "exit-0.1.2" = {
-      name = "exit";
-      packageName = "exit";
-      version = "0.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/exit/-/exit-0.1.2.tgz";
-        sha512 = "Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==";
       };
     };
     "exit-hook-1.1.1" = {
@@ -15007,15 +14944,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/htmlescape/-/htmlescape-1.1.1.tgz";
         sha512 = "eVcrzgbR4tim7c7soKQKtxa/kQM4TzjnlU83rcZ9bHU6t31ehfV7SktN6McWgwPWg+JYMA/O3qpGxBvFq1z2Jg==";
-      };
-    };
-    "htmlparser2-3.8.3" = {
-      name = "htmlparser2";
-      packageName = "htmlparser2";
-      version = "3.8.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.8.3.tgz";
-        sha512 = "hBxEg3CYXe+rPIua8ETe7tmG3XDn9B0edOE/e9wH2nLczxzgdu0m0aNHY+5wFZiviLWLdANPJTssa92dMcXQ5Q==";
       };
     };
     "http-auth-3.1.3" = {
@@ -28907,15 +28835,6 @@ let
         sha512 = "mnVSV2l+Zv6BLpSD/8V87CW/y9EmmbYzGCIavsnsI6/nwn26DwffM/yztm30Z/I2DY9wdS3vXVCMnHDgZaVNoA==";
       };
     };
-    "strip-json-comments-1.0.4" = {
-      name = "strip-json-comments";
-      packageName = "strip-json-comments";
-      version = "1.0.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz";
-        sha512 = "AOPG8EBc5wAikaG1/7uFCNFJwnKOuQwFTpYBdTW6OvWHeZBQBrAA/amefHGrEiOnCPcLFZK6FUPtWVKpQVIRgg==";
-      };
-    };
     "strip-json-comments-2.0.1" = {
       name = "strip-json-comments";
       packageName = "strip-json-comments";
@@ -40599,68 +40518,6 @@ in
       description = "API documentation generator for JavaScript";
       homepage = "https://github.com/jsdoc/jsdoc#readme";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  jshint = nodeEnv.buildNodePackage {
-    name = "jshint";
-    packageName = "jshint";
-    version = "2.13.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/jshint/-/jshint-2.13.6.tgz";
-      sha512 = "IVdB4G0NTTeQZrBoM8C5JFVLjV2KtZ9APgybDA1MK73xb09qFs0jCXyQLnCOp1cSZZZbvhq/6mfXHUTaDkffuQ==";
-    };
-    dependencies = [
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."cli-1.0.1"
-      sources."concat-map-0.0.1"
-      sources."console-browserify-1.1.0"
-      sources."core-util-is-1.0.3"
-      sources."date-now-0.1.4"
-      (
-        sources."dom-serializer-0.2.2"
-        // {
-          dependencies = [
-            sources."domelementtype-2.3.0"
-            sources."entities-2.2.0"
-          ];
-        }
-      )
-      sources."domelementtype-1.3.1"
-      sources."domhandler-2.3.0"
-      sources."domutils-1.5.1"
-      sources."entities-1.0.0"
-      sources."exit-0.1.2"
-      sources."fs.realpath-1.0.0"
-      (
-        sources."glob-7.2.3"
-        // {
-          dependencies = [
-            sources."minimatch-3.1.2"
-          ];
-        }
-      )
-      sources."htmlparser2-3.8.3"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."isarray-0.0.1"
-      sources."lodash-4.17.21"
-      sources."minimatch-3.0.8"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."readable-stream-1.1.14"
-      sources."string_decoder-0.10.31"
-      sources."strip-json-comments-1.0.4"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Static analysis tool for JavaScript";
-      homepage = "http://jshint.com/";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
