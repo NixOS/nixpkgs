@@ -33,7 +33,6 @@
 , "diff2html-cli"
 , "dotenv-vault"
 , "elasticdump"
-, "@electron-forge/cli"
 , "elm-oracle"
 , "emoj"
 , "emojione"
