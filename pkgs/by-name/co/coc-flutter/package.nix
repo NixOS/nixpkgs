@@ -37,7 +37,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coc-flutter";
-  version = "0-unstable-2023-03-22";
+  version = "1.9.3-unstable-2023-03-22";
 
   src = fetchFromGitHub {
     owner = "iamcco";
