@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -10,14 +10,14 @@
   udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "projecteur";
   version = "0.10";
 
   src = fetchFromGitHub {
     owner = "jahnf";
     repo = "Projecteur";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
     hash = "sha256-F7o93rBjrDTmArTIz8RB/uGBOYE6ny/U7ppk+jEhM5A=";
   };
@@ -56,4 +56,4 @@ mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
