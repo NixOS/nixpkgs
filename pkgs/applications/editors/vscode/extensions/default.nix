@@ -1154,8 +1154,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.14.158";
-          hash = "sha256-c+5CJqjn7dmwDgNcaaDBapi3T8OI+5UnPJj9+t8sWng=";
+          version = "3.14.172";
+          hash = "sha256-bJnGao3RrbjeMSkRkakM6UA9piYGEzwMInoBOev2YeM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
