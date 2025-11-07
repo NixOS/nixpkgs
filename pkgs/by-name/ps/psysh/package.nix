@@ -40,12 +40,12 @@ php.buildComposerProject2 (finalAttrs: {
 
     preBuild = ''
       composer config platform.php 7.4
-      composer require --no-update symfony/polyfill-iconv:1.31 symfony/polyfill-mbstring:1.31
-      composer require --no-update --dev roave/security-advisories:dev-latest
-      composer update --lock --no-install
+      composer require --no-cache --no-update symfony/polyfill-iconv:1.31 symfony/polyfill-mbstring:1.31
+      composer require --no-cache --no-update --dev roave/security-advisories:dev-latest
+      composer update --no-cache --lock --no-install
     '';
 
-    vendorHash = "sha256-8l5bQ+VnLOtPUspMN1f+iXo7LldPTuYqyrAeW2aVoH8=";
+    vendorHash = "sha256-S3rekG0KPHk6cmQecmb5ETQ1V4ey5+pK+PpHNSEcXNw=";
   };
 
   doInstallCheck = true;
@@ -58,7 +58,5 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    # `composerVendor` doesn't build
-    broken = true;
   };
 })
