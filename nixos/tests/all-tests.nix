@@ -673,7 +673,10 @@ in
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
-  h2o = import ./web-servers/h2o { inherit runTest; };
+  h2o = import ./web-servers/h2o {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   hadoop = import ./hadoop {
     inherit handleTestOn;
     package = pkgs.hadoop;
