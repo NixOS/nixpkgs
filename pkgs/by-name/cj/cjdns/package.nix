@@ -86,8 +86,9 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.basic = nixosTests.cjdns;
 
   meta = {
-    homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
+    homepage = "https://github.com/cjdelisle/cjdns";
+    changelog = "https://github.com/cjdelisle/cjdns/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
