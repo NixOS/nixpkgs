@@ -81,8 +81,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Implementation of the Data model of the Software Heritage project, used to archive source code artifacts";
-    homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-model";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/tags/${src.tag}";
+    description = "Source code scanner to analyze code bases and compare them with source code artifacts archived by Software Heritage";
+    homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
