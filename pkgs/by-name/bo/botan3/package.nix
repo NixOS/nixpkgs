@@ -52,7 +52,7 @@ let
       '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.9.0";
+  version = "3.10.0";
   pname = "botan";
 
   __structuredAttrs = true;
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jD8oS1jd1C6OQ+n6hqcSnYfqfD93aoDT2mPsIHIrCIM=";
+    hash = "sha256-/eGUI29tVDTxNuoKBif2zJ0mr4uW6fHhx9jILNkPTyQ=";
   };
 
   nativeBuildInputs = [
