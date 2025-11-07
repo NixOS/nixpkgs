@@ -11,7 +11,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-vimlsp";
-  version = "0-unstable-2023-06-26";
+  version = "0.8.0-unstable-2023-06-26";
 
   src = fetchFromGitHub {
     owner = "iamcco";

@@ -207,7 +207,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLIBDIR=/does-not-exist"
-    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/include"
   ];
 
   preConfigure = ''
