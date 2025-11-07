@@ -3115,15 +3115,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luasnip";
-      version = "2.4.0-1";
+      version = "2.4.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luasnip-2.4.0-1.rockspec";
-          sha256 = "0rbv9z1bb8dy70mmy7w621zlhxcdv1g3bmmdxp012hicg7zrikyy";
+          url = "mirror://luarocks/luasnip-2.4.1-1.rockspec";
+          sha256 = "03cl2qybqa06q41vxckamr46s7ij9igqz59ak0wshhzp7yysn2xr";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.4.0.zip";
-        sha256 = "055mbyszd7gyxib4yi4wsiazs63p4d6ms3sp6x7xya7d0szfkl0n";
+        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.4.1.zip";
+        sha256 = "1vjn0fwxv89p4dxycwn5lf7c0fgspzymbjp76n27rqnkab6v1qzy";
       };
 
       disabled = luaOlder "5.1";
@@ -4081,8 +4081,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hrsh7th";
         repo = "nvim-cmp";
-        rev = "cf22c9e32512de3be1fd6b65fd25e3aabead4d8b";
-        hash = "sha256-ePRShNaOBYjsUBrGbNRXAzEs+JNG+LMjMm6Hu+QX1kE=";
+        rev = "106c4bcc053a5da783bf4a9d907b6f22485c2ea0";
+        hash = "sha256-Pnfa1u+hoVIKo7Jvv3VF/p6m0ALXywwUNEb2FI7TeEc=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
@@ -4648,15 +4648,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "6.9.6-1";
+      version = "6.9.7-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-6.9.6-1.rockspec";
-          sha256 = "0azl1qrr7jgrczhgv39f2way8d8693kxid1psvv2zrzqyk5h81gm";
+          url = "mirror://luarocks/rustaceanvim-6.9.7-1.rockspec";
+          sha256 = "16vy2x8rbwxg3f9ff9qfklz8hcb6vzgg6apd1p63wd3piv6gl99w";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/v6.9.6.zip";
-        sha256 = "0n27nkjzr8hcy6yqx3zfxjrwc26imivnqlm28yxncpzvqvwivy4v";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/v6.9.7.zip";
+        sha256 = "12ah2vdhxxfaglylrw64dvgqsfzmp0smydz2npw76qqngklh9dlq";
       };
 
       disabled = luaOlder "5.1";
@@ -5005,8 +5005,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "b4da76be54691e854d3e0e02c36b0245f945c2c7";
-        hash = "sha256-JpW0ehsX81yVbKNzrYOe1hdgVMs6oaaxMLH6lECnOJg=";
+        rev = "0294ae3eafe662c438addb8692d9c98ef73a983e";
+        hash = "sha256-9u2S9Tn1ZhB6JTm8k34FcFV4ex4FL4eAn5InGrWPgD0=";
       };
 
       disabled = lua.luaversion != "5.1";
