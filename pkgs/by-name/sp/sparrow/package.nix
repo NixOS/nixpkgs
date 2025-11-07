@@ -301,7 +301,6 @@ stdenvNoCC.mkDerivation rec {
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [
-      emmanuelrosa
       msgilligan
       _1000101
     ];
