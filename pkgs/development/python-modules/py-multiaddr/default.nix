@@ -50,5 +50,6 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with maintainers; [ Luflosi ];
+    broken = true; # depends on py-cid, now broken
   };
 }
