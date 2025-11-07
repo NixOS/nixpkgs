@@ -23,13 +23,13 @@ duckstation_storepath=$(nix --extra-experimental-features "nix-command flakes" f
 pinned_versions=$duckstation_storepath/scripts/deps/versions
 
 echo "Using pinned discord_rpc..."
-discord_rpc_rev=$(grep "DISCORD_RPC=" "$pinned_versions" | sed 's|.*=||g')
+discord_rpc_rev=$(grep "DISCORD_RPC_COMMIT=" "$pinned_versions" | sed 's|.*=||g')
 discord_rpc_hash=$(nix --extra-experimental-features "nix-command flakes" \
   flake prefetch github:stenzek/discord-rpc/"$discord_rpc_rev" --json |
   jq -r '.hash')
 
 echo "Using pinned shaderc..."
-shaderc_rev=$(grep "SHADERC=" "$pinned_versions" | sed 's|.*=||g')
+shaderc_rev=$(grep "SHADERC_COMMIT=" "$pinned_versions" | sed 's|.*=||g')
 shaderc_hash=$(nix --extra-experimental-features "nix-command flakes" flake prefetch github:stenzek/shaderc/"$shaderc_rev" --json | jq -r '.hash')
 
 echo "Fetching latest chtdb commit..."
