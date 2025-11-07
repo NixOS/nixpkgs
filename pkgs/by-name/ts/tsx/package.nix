@@ -12,19 +12,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
-  version = "4.19.3";
+  version = "4.21.0";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wdv2oqJNc6U0Fyv4jT+0LUcYaDfodHk1vQZGMdyFF/E=";
+    hash = "sha256-vlVRq637l84xi9Og0ryzYuu+1b/eBq13jQJIptY0u0o=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
+    hash = "sha256-6ZizQtZC43yXrz634VXksRCKGkDKryICvT3Q+JCuIEw=";
   };
 
   nativeBuildInputs = [
