@@ -69,7 +69,7 @@ let
   # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
   commonServiceConfig = {
     after = [
-      "systemd-udevd.service"
+      "systemd-udev-settle.service"
       "network-pre.target"
       "systemd-sysusers.service"
       "systemd-sysctl.service"
