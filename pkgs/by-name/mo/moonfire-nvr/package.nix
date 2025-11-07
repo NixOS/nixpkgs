@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/ui
+    mkdir -p $out/lib
     ln -s ${ui} $out/lib/ui
   '';
 
