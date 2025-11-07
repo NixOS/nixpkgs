@@ -75,6 +75,7 @@ let
       # constants
       licenses = callLibs ./licenses.nix;
       sourceTypes = callLibs ./source-types.nix;
+      packageTypes = callLibs ./package-types.nix;
       systems = callLibs ./systems;
 
       # serialization
