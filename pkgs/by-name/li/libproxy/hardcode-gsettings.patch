@@ -1,8 +1,8 @@
 diff --git a/src/backend/plugins/config-gnome/config-gnome.c b/src/backend/plugins/config-gnome/config-gnome.c
-index 52e812e..a1141c5 100644
+index d4cea85..9940761 100644
 --- a/src/backend/plugins/config-gnome/config-gnome.c
 +++ b/src/backend/plugins/config-gnome/config-gnome.c
-@@ -83,11 +83,60 @@ px_config_gnome_init (PxConfigGnome *self)
+@@ -86,11 +86,60 @@ px_config_gnome_init (PxConfigGnome *self)
    if (!self->available)
      return;
  
@@ -69,7 +69,7 @@ index 52e812e..a1141c5 100644
  
  static void
 diff --git a/tests/config-gnome-test.c b/tests/config-gnome-test.c
-index 677a3e9..a28d277 100644
+index f1cde61..a046208 100644
 --- a/tests/config-gnome-test.c
 +++ b/tests/config-gnome-test.c
 @@ -60,11 +60,60 @@ static void

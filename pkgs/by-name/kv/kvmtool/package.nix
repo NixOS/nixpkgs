@@ -21,15 +21,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags =
-    [
-      "prefix=${placeholder "out"}"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
-      "LIBFDT_DIR=${dtc}/lib"
-    ]);
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "LIBFDT_DIR=${dtc}/lib"
+  ];
 
   meta = with lib; {
     description = "Lightweight tool for hosting KVM guests";

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "1.4.0";
+  version = "1.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "ulid-transform";
     tag = "v${version}";
-    hash = "sha256-qGqqb1V5wVKQK4/K2t8j/Vm52iS2EybEleCT3nLCJzc=";
+    hash = "sha256-S9+vP0frNvA4wWZMyLPYq6L/5PmLcyFNdN8NY+IrlzQ=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ulid_transform" ];
 

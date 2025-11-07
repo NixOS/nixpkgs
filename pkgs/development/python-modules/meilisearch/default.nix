@@ -3,23 +3,20 @@
   buildPythonPackage,
   camel-converter,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.34.1";
+  version = "0.37.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meilisearch-python";
     tag = "v${version}";
-    hash = "sha256-y4iGA0SJxjzddej5uXH2k3doaKBfXFVHlrRAjrD0CBA=";
+    hash = "sha256-yPZs8PIwrb4LhaEGX3vLvTJwo6Rb9zbChtq1Wbgh9cw=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +24,8 @@ buildPythonPackage rec {
   dependencies = [
     camel-converter
     requests
-  ] ++ camel-converter.optional-dependencies.pydantic;
+  ]
+  ++ camel-converter.optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "meilisearch" ];
 
@@ -38,7 +36,7 @@ buildPythonPackage rec {
     description = "Client for the Meilisearch API";
     homepage = "https://github.com/meilisearch/meilisearch-python";
     changelog = "https://github.com/meilisearch/meilisearch-python/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

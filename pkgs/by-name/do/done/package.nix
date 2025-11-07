@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-yEpaQa9hKOq0k9MurihbFM4tDB//TPCJdOgKA9tyqVc=";
   };
 
@@ -66,6 +65,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = licenses.mpl20;
     mainProgram = "done";
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

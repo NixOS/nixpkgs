@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "oguri";
-  version = "unstable-2020-12-19";
+  version = "0-unstable-2020-12-19";
 
   src = fetchFromGitHub {
     owner = "vilhalmer";
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/vilhalmer/oguri/";
     description = "Very nice animated wallpaper daemon for Wayland compositors";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # this should be enfoced by wayland platforms in the future
   };

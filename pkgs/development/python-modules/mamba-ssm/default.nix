@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   env = {
     MAMBA_FORCE_BUILD = "TRUE";
-  } // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
+  }
+  // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
 
   # pytest tests not enabled due to nvidia GPU dependency
   pythonImportsCheck = [ "mamba_ssm" ];

@@ -21,7 +21,6 @@ let
     let
       # reports boolean as yes / no
       mkValueString =
-        with lib;
         v:
         if lib.isInt v then
           toString v
@@ -42,7 +41,7 @@ let
       # values must be separated by whitespace or even commas.
       # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
       # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
-      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      # for each. But fortunately this fact is documented for most of them in the manpage.
       commaSeparated = [
         "Ciphers"
         "KexAlgorithms"
@@ -178,8 +177,8 @@ in
 
 {
   imports = [
-    (lib.mkAliasOptionModuleMD [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
-    (lib.mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (lib.mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (lib.mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (lib.mkRenamedOptionModule
       [ "services" "openssh" "challengeResponseAuthentication" ]
       [ "services" "openssh" "kbdInteractiveAuthentication" ]
@@ -319,7 +318,7 @@ in
                 '';
               };
               port = lib.mkOption {
-                type = lib.types.nullOr lib.types.int;
+                type = lib.types.nullOr lib.types.port;
                 default = null;
                 description = ''
                   Port to listen to.
@@ -366,13 +365,11 @@ in
             type = "rsa";
             bits = 4096;
             path = "/etc/ssh/ssh_host_rsa_key";
-            rounds = 100;
             openSSHFormat = true;
           }
           {
             type = "ed25519";
             path = "/etc/ssh/ssh_host_ed25519_key";
-            rounds = 100;
             comment = "key comment";
           }
         ];
@@ -458,7 +455,7 @@ in
                 default = "none"; # upstream default
                 description = ''
                   Specifies a file that lists principal names that are accepted for certificate authentication. The default
-                  is `"none"`, i.e. not to use	a principals file.
+                  is `"none"`, i.e. not to use a principals file.
                 '';
               };
               LogLevel = lib.mkOption {
@@ -487,7 +484,6 @@ in
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                # apply if cfg.useDns then "yes" else "no"
                 default = false;
                 description = ''
                   Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for
@@ -768,6 +764,7 @@ in
         restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
         serviceConfig = {
+          Type = "notify-reload";
           Restart = "always";
           ExecStart = lib.concatStringsSep " " [
             (lib.getExe' cfg.package "sshd")
@@ -798,7 +795,6 @@ in
               ssh-keygen \
                 -t "${k.type}" \
                 ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
-                ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
                 ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
                 ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                 -f "${k.path}" \
@@ -827,37 +823,29 @@ in
       authPrincipalsFiles != { }
     ) "/etc/ssh/authorized_principals.d/%u";
 
-    services.openssh.extraConfig = lib.mkOrder 0 ''
-      Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
-
-      AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-      ${lib.concatMapStrings (port: ''
-        Port ${toString port}
-      '') cfg.ports}
-
-      ${lib.concatMapStrings (
-        { port, addr, ... }:
+    services.openssh.extraConfig = lib.mkOrder 0 (
+      lib.concatStringsSep "\n" (
+        [
+          "Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}"
+          "AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}"
+        ]
+        ++ lib.map (port: ''Port ${toString port}'') cfg.ports
+        ++ lib.map (
+          { port, addr, ... }:
+          ''ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}''
+        ) cfg.listenAddresses
+        ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${lib.getExe pkgs.xorg.xauth}"
+        ++ lib.optional cfg.allowSFTP ''Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}''
+        ++ [
+          "AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}"
+        ]
+        ++ lib.optional (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
         ''
-          ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}
-        ''
-      ) cfg.listenAddresses}
-
-      ${lib.optionalString cfgc.setXAuthLocation ''
-        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-      ''}
-      ${lib.optionalString cfg.allowSFTP ''
-        Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}
-      ''}
-      AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-      ${lib.optionalString (cfg.authorizedKeysCommand != "none") ''
-        AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
-        AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
-      ''}
-
-      ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-        HostKey ${k.path}
-      '')}
-    '';
+        ++ lib.map (k: "HostKey ${k.path}") cfg.hostKeys
+      )
+    );
 
     system.checks = [
       (pkgs.runCommand "check-sshd-config"
@@ -880,54 +868,53 @@ in
       )
     ];
 
-    assertions =
-      [
+    assertions = [
+      {
+        assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
+        message = "cannot enable X11 forwarding without setting xauth location";
+      }
+      {
+        assertion =
+          (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
+          != null
+          -> cfgc.package.withKerberos;
+        message = "cannot enable Kerberos authentication without using a package with Kerberos support";
+      }
+      {
+        assertion =
+          (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
+          != null
+          -> cfgc.package.withKerberos;
+        message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
+      }
+      (
+        let
+          duplicates =
+            # Filter out the groups with more than 1 element
+            lib.filter (l: lib.length l > 1) (
+              # Grab the groups, we don't care about the group identifiers
+              lib.attrValues (
+                # Group the settings that are the same in lower case
+                lib.groupBy lib.strings.toLower (lib.attrNames cfg.settings)
+              )
+            );
+          formattedDuplicates = lib.concatMapStringsSep ", " (
+            dupl: "(${lib.concatStringsSep ", " dupl})"
+          ) duplicates;
+        in
         {
-          assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-          message = "cannot enable X11 forwarding without setting xauth location";
+          assertion = lib.length duplicates == 0;
+          message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
         }
-        {
-          assertion =
-            (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-            != null
-            -> cfgc.package.withKerberos;
-          message = "cannot enable Kerberos authentication without using a package with Kerberos support";
-        }
-        {
-          assertion =
-            (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-            != null
-            -> cfgc.package.withKerberos;
-          message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
-        }
-        (
-          let
-            duplicates =
-              # Filter out the groups with more than 1 element
-              lib.filter (l: lib.length l > 1) (
-                # Grab the groups, we don't care about the group identifiers
-                lib.attrValues (
-                  # Group the settings that are the same in lower case
-                  lib.groupBy lib.strings.toLower (lib.attrNames cfg.settings)
-                )
-              );
-            formattedDuplicates = lib.concatMapStringsSep ", " (
-              dupl: "(${lib.concatStringsSep ", " dupl})"
-            ) duplicates;
-          in
-          {
-            assertion = lib.length duplicates == 0;
-            message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
-          }
-        )
-      ]
-      ++ lib.forEach cfg.listenAddresses (
-        { addr, ... }:
-        {
-          assertion = addr != null;
-          message = "addr must be specified in each listenAddresses entry";
-        }
-      );
+      )
+    ]
+    ++ lib.forEach cfg.listenAddresses (
+      { addr, ... }:
+      {
+        assertion = addr != null;
+        message = "addr must be specified in each listenAddresses entry";
+      }
+    );
   };
 
 }

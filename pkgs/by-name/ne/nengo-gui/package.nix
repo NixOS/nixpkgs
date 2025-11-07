@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
   version = "0.4.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nengo";
@@ -25,6 +26,6 @@ python3Packages.buildPythonPackage rec {
     description = "Nengo interactive visualizer";
     homepage = "https://nengo.ai/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ arjix ];
+    maintainers = [ ];
   };
 }

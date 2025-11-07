@@ -3,19 +3,25 @@
   stdenv,
   fetchurl,
   directoryListingUpdater,
+  gawk,
   man,
+  pcre2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.13";
+  version = "6.16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
-    hash = "sha256-osigwu/oqXjOUc6ABGHrnokx8SzHukt/qjCCtpun8Sw=";
+    hash = "sha256-jiR6vXXNgICc/ghpbIG4xwaQWDsEV0lISyQvtDYx16M=";
   };
 
-  nativeInstallCheckInputs = [ man ];
+  nativeInstallCheckInputs = [
+    gawk
+    man
+    pcre2
+  ];
 
   dontBuild = true;
   enableParallelInstalling = true;

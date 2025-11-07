@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "pulumi-esc";
-  version = "0.13.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "esc";
     rev = "v${version}";
-    hash = "sha256-EmlZLtlioBbXX71TiqZF9bH2VxLT6u4X7CQQsV0ioeY=";
+    hash = "sha256-TsYMGPL4Lru7T1p4v/gaql665JO2LIKayb3GupxYbiI=";
   };
 
   subPackages = "cmd/esc";
 
-  vendorHash = "sha256-v2+fisMMNUZVcDbUhXDGAUU6rC+Clrh/rb3cuuSCLF0=";
+  vendorHash = "sha256-IcQaWo5/EoPJjn5pDKwHjd56JeareznE7iSansJIfso=";
 
   ldflags = [
     "-s"

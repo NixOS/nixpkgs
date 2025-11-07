@@ -1,59 +1,84 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  fetchpatch2,
   fetchFromGitHub,
-  unstableGitUpdater,
   cmake,
   gfortran,
   perl,
   mpi,
   metis,
   mmg,
+  scotch,
+  vtk-full,
+  withVtk ? true,
+  testers,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parmmg";
-  version = "1.4.0-unstable-2024-04-22";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "MmgTools";
     repo = "ParMmg";
-    rev = "f8a5338ea1bb2c778bfb4559c2c3974ba15b4730";
-    hash = "sha256-ieFHREAVeD7IwDUCtsMG5UKxahxM+wzNCAqCOHIHwu8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LDbfGuTRd2wzmNHxXd381qVuOlWqqDdP8+Y/v1H68uM=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/MmgTools/ParMmg/commit/a9551c502c58a1f8a109fb17d8f45cb9370f8fc6.patch?full_index=1";
+      hash = "sha256-i0KwzseffeI9UYIYuyNYmdF9eTZ+nQQfSI6ukSowIYs=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs --build scripts
+  '';
 
   nativeBuildInputs = [
     cmake
     gfortran
-    mpi
     perl
   ];
 
   buildInputs = [
     mpi
     metis
-    mmg
-  ];
-
-  strictDeps = true;
-
-  preConfigure = ''
-    patchShebangs --build ./
-  '';
+    scotch
+    (mmg.override {
+      inherit withVtk;
+      vtk = vtk-full;
+    })
+  ]
+  ++ lib.optional withVtk vtk-full;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=TRUE"
-    "-DDOWNLOAD_MMG=OFF"
-    "-DDOWNLOAD_METIS=OFF"
-    "-Wno-dev"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "DOWNLOAD_MMG" false)
+    (lib.cmakeBool "DOWNLOAD_METIS" false)
+    (lib.cmakeBool "USE_ELAS" false)
+    (lib.cmakeBool "USE_SCOTCH" true)
+    (lib.cmakeBool "USE_VTK" withVtk)
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "ParMmg" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
     description = "Distributed parallelization of 3D volume mesh adaptation";
     homepage = "http://www.mmgtools.org/";
-    platforms = platforms.unix;
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ mkez ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ mkez ];
   };
-}
+})

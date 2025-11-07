@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  gnumake,
   libnetfilter_acct,
   libnetfilter_conntrack,
   libnetfilter_log,
@@ -22,13 +21,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.0.8";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.0.9";
   pname = "ulogd";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-Tq1sOXDD9X+h6J/i18xIO6b+K9GwhwFSHgs6/WZ98pE=";
+    url = "https://www.netfilter.org/pub/ulogd/ulogd-${finalAttrs.version}.tar.xz";
+    hash = "sha256-UjplH+Cp8lsM2H1dNfw32Tgufuz89h5I1VBf88+A7aU=";
   };
 
   outputs = [
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ulogd.8 --replace "/usr/share/doc" "$doc/share/doc"
+    substituteInPlace ulogd.8 --replace-fail "/usr/share/doc" "$doc/share/doc"
   '';
 
   postBuild = ''
@@ -49,9 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} ulogd.conf doc/ulogd.txt doc/ulogd.html README doc/*table
-    install -Dm444 -t $out/share/doc/${pname}-mysql doc/mysql*.sql
-    install -Dm444 -t $out/share/doc/${pname}-pgsql doc/pgsql*.sql
+    install -Dm444 -t $out/share/doc/ulogd ulogd.conf doc/ulogd.txt doc/ulogd.html README doc/*table
+    install -Dm444 -t $out/share/doc/ulogd-mysql doc/mysql*.sql
+    install -Dm444 -t $out/share/doc/ulogd-pgsql doc/pgsql*.sql
   '';
 
   buildInputs = [
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ulogd; };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace logging daemon for netfilter/iptables";
     mainProgram = "ulogd";
 
@@ -95,8 +94,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.netfilter.org/projects/ulogd/index.html";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ p-h ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ p-h ];
   };
-}
+})

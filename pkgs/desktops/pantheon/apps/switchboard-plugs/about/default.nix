@@ -19,7 +19,7 @@
   packagekit,
   polkit,
   switchboard,
-  udisks2,
+  udisks,
   fwupd,
   appstream,
   elementary-settings-daemon,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-about";
     rev = version;
     sha256 = "sha256-H4BDLP3yzQi+ougpvBvnv1R1TImzUjSOVDGbOqw9hvg=";
   };
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     packagekit
     polkit
     switchboard
-    udisks2
+    udisks
   ];
 
   passthru = {

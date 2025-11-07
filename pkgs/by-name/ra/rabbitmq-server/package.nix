@@ -1,9 +1,8 @@
 {
   lib,
+  beamPackages,
   stdenv,
   fetchurl,
-  erlang,
-  elixir,
   python3,
   libxml2,
   libxslt,
@@ -27,7 +26,7 @@
 let
   runtimePath = lib.makeBinPath (
     [
-      erlang
+      beamPackages.erlang
       getconf # for getting memory limits
       socat
       gnused
@@ -62,8 +61,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    erlang
-    elixir
+    beamPackages.erlang
+    beamPackages.elixir
     libxml2
     libxslt
     glibcLocales

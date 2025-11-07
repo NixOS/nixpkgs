@@ -1,18 +1,45 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  buildNpmPackage,
+  fetchFromGitHub,
+  stdenv,
 }:
+let
+  src = buildNpmPackage (finalAttrs: {
+    pname = "fava-frontend";
+    version = "1.30.7";
 
-python3Packages.buildPythonApplication rec {
+    src = fetchFromGitHub {
+      owner = "beancount";
+      repo = "fava";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-gO6eJIFp/yWAXFWhUcqkkfk2pA8/vyTxgPRPBmv4a6Q=";
+    };
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    npmDepsHash = "sha256-cXIhEzYFpLOxUEY7lhTWW7R3/ptkx7hB9K92Fd2m1Ng=";
+    makeCacheWritable = true;
+
+    preBuild = ''
+      chmod -R u+w ..
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R .. $out
+      runHook postInstall
+    '';
+  });
+in
+python3Packages.buildPythonApplication {
   pname = "fava";
-  version = "1.30.1";
+  inherit (src) version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-69Wx9/H7nLDPZP9LOUnDJngY9YTCcr+oQ0E6+xeIWPE=";
-  };
+  inherit src;
+
+  patches = [ ./dont-compile-frontend.patch ];
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
@@ -40,14 +67,16 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
+  # tests/test_cli.py
+  __darwinAllowLocalNetworking = true;
+
+  # flaky, fails only on ci
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_core_watcher.py" ];
+
   env = {
     # Disable some tests when building with beancount2
     SNAPSHOT_IGNORE = lib.versions.major python3Packages.beancount.version == "2";
   };
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
 
   meta = {
     description = "Web interface for beancount";
@@ -57,6 +86,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bhipple
+      prince213
       sigmanificient
     ];
   };

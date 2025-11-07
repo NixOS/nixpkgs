@@ -1,7 +1,8 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   hyprutils,
@@ -12,16 +13,25 @@
 let
   inherit (lib.strings) makeBinPath;
 in
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2dModE32doiyQMmd6EDAQeZnz+5LOs6KXyE0qX76WIg=";
+    hash = "sha256-bTYedtQFqqVBAh42scgX7+S3O6XKLnT6FTC6rpmyCCc=";
   };
+
+  patches = [
+    # this should be removed in the next release
+    (fetchpatch {
+      name = "Fix build with Qt 6.10";
+      url = "https://github.com/hyprwm/hyprland-qtutils/commit/5ffdfc13ed03df1dae5084468d935f0a3f2c9a4c.patch";
+      hash = "sha256-5nVj4AFJpmazX9o9tQD6mzBW9KtRYov4yRbGpUwFcgc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

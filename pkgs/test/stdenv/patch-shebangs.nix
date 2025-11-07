@@ -105,6 +105,143 @@ let
         assertion = "grep '^#!/usr/bin/builtin' $out/bin/test > /dev/null";
       };
     };
+
+    read-only-script =
+      (derivation {
+        name = "read-only-script";
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            echo "#!/bin/bash" > $out/bin/test
+            echo "echo -n hello" >> $out/bin/test
+            chmod 555 $out/bin/test
+            patchShebangs $out/bin/test
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
+
+    preserves-read-only =
+      (derivation {
+        name = "preserves-read-only";
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            echo "#!/bin/bash" > $out/bin/test
+            echo "echo -n hello" >> $out/bin/test
+            chmod 555 $out/bin/test
+            original_perms=$(stat -c %a $out/bin/test)
+            patchShebangs $out/bin/test
+            new_perms=$(stat -c %a $out/bin/test)
+            if ! [ "$original_perms" = "$new_perms" ]; then
+              echo "Permissions changed from $original_perms to $new_perms"
+              exit 1
+            fi
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
+
+    # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
+    preserves-timestamp =
+      (derivation {
+        name = "preserves-timestamp";
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            echo "#!/bin/bash" > $out/bin/test
+            echo "echo -n hello" >> $out/bin/test
+            chmod +x $out/bin/test
+            # Set a specific timestamp (2000-01-01 00:00:00)
+            touch -t 200001010000 $out/bin/test
+            original_timestamp=$(stat -c %Y $out/bin/test)
+            patchShebangs $out/bin/test
+            new_timestamp=$(stat -c %Y $out/bin/test)
+            if ! [ "$original_timestamp" = "$new_timestamp" ]; then
+              echo "Timestamp changed from $original_timestamp to $new_timestamp"
+              exit 1
+            fi
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
+
+    preserves-binary-data =
+      (derivation {
+        name = "preserves-binary-data";
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            # Create a script with binary data after the shebang
+            echo "#!/bin/bash" > $out/bin/test
+            echo "echo 'script start'" >> $out/bin/test
+            # Add some binary data (null bytes and other non-printable chars)
+            printf '\x00\x01\x02\xff\xfe' >> $out/bin/test
+            echo >> $out/bin/test
+            echo "echo 'script end'" >> $out/bin/test
+            chmod +x $out/bin/test
+            patchShebangs $out/bin/test
+            # Verify binary data is still present by checking file size and content
+            if ! printf '\x00\x01\x02\xff\xfe' | cmp -s - <(sed -n '3p' $out/bin/test | tr -d '\n'); then
+              echo "Binary data corrupted during patching"
+              exit 1
+            fi
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
   };
 in
 stdenv.mkDerivation {
@@ -116,6 +253,11 @@ stdenv.mkDerivation {
       updates-nix-store
       split-string
       without-trailing-newline
+      dont-patch-builtins
+      read-only-script
+      preserves-read-only
+      preserves-timestamp
+      preserves-binary-data
       ;
   };
   buildCommand = ''

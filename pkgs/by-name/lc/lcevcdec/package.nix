@@ -3,6 +3,7 @@
   fetchFromGitHub,
   git,
   gitUpdater,
+  fetchpatch,
   lib,
   nlohmann_json,
   pkg-config,
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "3.3.5";
+  version = "4.0.3";
 
   outputs = [
     "out"
@@ -25,31 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-PcV31lLABv7SGzrD/+rR9j1Z9/uZrp1hFPdW0EZwOqc=";
+    hash = "sha256-UGOKl4fr+zOlzRm75BcL1+jIU5+A0d6GHXE1cOHsPP8=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace cmake/tools/version_files.py \
-        --replace-fail "args.git_version" '"${finalAttrs.version}"' \
-        --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
-        --replace-fail "args.git_date" '"1970-01-01"'
-      substituteInPlace cmake/templates/lcevc_dec.pc.in \
-        --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
-
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
-      substituteInPlace cmake/modules/Compiler/GNU.cmake \
-        --replace-fail "-mavx" ""
-
-       substituteInPlace src/core/decoder/src/common/simd.c \
-        --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
-    '';
+  postPatch = ''
+    substituteInPlace cmake/tools/version_files.py \
+      --replace-fail "args.git_version" '"${finalAttrs.version}"' \
+      --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
+      --replace-fail "args.git_date" '"1970-01-01"'
+  '';
 
   env = {
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
   nativeBuildInputs = [
@@ -71,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
     # Requires avx for checking on runtime
     (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)
+    (lib.cmakeBool "VN_SDK_SIMD" stdenv.hostPlatform.avxSupport)
   ];
 
   passthru = {

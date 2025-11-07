@@ -15,16 +15,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dlvfY2AMBvTl0j9YaT+u4CeWQGGihFD8AZaAK4/hUWU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+VVkrXvsqtizeVhfuO0U8ADfSkmovpT7DVwrz7QljU0=";
 
-  meta = with lib; {
-    description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis 🐱";
+  meta = {
+    description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis";
     mainProgram = "mdbook-emojicodes";
     homepage = "https://github.com/blyxyas/mdbook-emojicodes";
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

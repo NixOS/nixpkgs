@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2024.01.0";
+  version = "2025.09.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioridwell";
     tag = version;
-    hash = "sha256-B5k8uXDHq0U6fJVW8oy2sWUj5OIVGUfe9EtCjnIr3OE=";
+    hash = "sha256-lZ4Hmf1OruKTUMkpPYhqkqj+j+yeckXynjxa1oOtXzc=";
   };
 
   nativeBuildInputs = [ poetry-core ];

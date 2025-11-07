@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "encpipe";
-    rev = version;
+    tag = version;
     hash = "sha256-YlEKSWzZuQyDi0mbwJh9Dfn4gKiOeqihSHPt4yY6YdY=";
     fetchSubmodules = true;
   };
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Encryption tool";
     homepage = "https://github.com/jedisct1/encpipe";
     license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "encpipe";
   };
 }

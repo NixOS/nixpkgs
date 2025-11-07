@@ -27,7 +27,7 @@ buildNpmPackage rec {
   meta = {
     description = "Converts TTF/WOFF fonts to compact bitmap format";
     mainProgram = "lv_font_conv";
-    homepage = " https://lvgl.io/tools/fontconverter";
+    homepage = "https://lvgl.io/tools/fontconverter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };

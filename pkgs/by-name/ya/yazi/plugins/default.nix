@@ -50,6 +50,11 @@ let
         meta = meta // {
           description = meta.description or "";
           platforms = meta.platforms or lib.platforms.all;
+          homepage =
+            if (src ? owner && src.owner == "yazi-rs") then
+              "https://github.com/yazi-rs/plugins/tree/main/${pname}"
+            else
+              meta.homepage or null;
         };
         passthru = (args.passthru or { }) // {
           updateScript = {

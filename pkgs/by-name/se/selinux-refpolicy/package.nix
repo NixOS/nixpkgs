@@ -34,22 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  makeFlags =
-    [
-      "CHECKPOLICY=${lib.getExe checkpolicy}"
-      "CHECKMODULE=${lib.getExe' checkpolicy "checkmodule"}"
-      "SEMODULE=${lib.getExe' policycoreutils "semodule"}"
-      "SEMOD_PKG=${lib.getExe' semodule-utils "semodule_package"}"
-      "SEMOD_LNK=${lib.getExe' semodule-utils "semodule_link"}"
-      "SEMOD_EXP=${lib.getExe' semodule-utils "semodule_expand"}"
-      "DESTDIR=${placeholder "out"}"
-      "prefix=${placeholder "out"}"
-      "DISTRO=nixos"
-      "SYSTEMD=y"
-      "UBAC=y"
-    ]
-    ++ lib.optional (policyVersion != null) "OUTPUT_POLICY=${toString policyVersion}"
-    ++ lib.optional (moduleVersion != null) "OUTPUT_MODULE=${toString moduleVersion}";
+  makeFlags = [
+    "CHECKPOLICY=${lib.getExe checkpolicy}"
+    "CHECKMODULE=${lib.getExe' checkpolicy "checkmodule"}"
+    "SEMODULE=${lib.getExe' policycoreutils "semodule"}"
+    "SEMOD_PKG=${lib.getExe' semodule-utils "semodule_package"}"
+    "SEMOD_LNK=${lib.getExe' semodule-utils "semodule_link"}"
+    "SEMOD_EXP=${lib.getExe' semodule-utils "semodule_expand"}"
+    "DESTDIR=${placeholder "out"}"
+    "prefix=${placeholder "out"}"
+    "DISTRO=nixos"
+    "SYSTEMD=y"
+    "UBAC=y"
+  ]
+  ++ lib.optional (policyVersion != null) "OUTPUT_POLICY=${toString policyVersion}"
+  ++ lib.optional (moduleVersion != null) "OUTPUT_MODULE=${toString moduleVersion}";
 
   installTargets = "all install install-headers install-docs";
 

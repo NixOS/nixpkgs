@@ -8,21 +8,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit version;
-    hash = "sha256-Ux4QGyzK2SJDOtRsRqR1KeZKCXM0bzD5GgEt4WOlIxE=";
+    hash = "sha256-w8tX3yzxUuvmLrqumx1d7/Wiauxb1uHH9n5Ev29FGPQ=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +28,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

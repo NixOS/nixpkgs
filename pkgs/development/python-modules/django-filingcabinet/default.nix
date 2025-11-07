@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -28,13 +29,15 @@
   poppler-utils,
   pytest-playwright,
   playwright-driver,
-  pnpm_9,
+  pnpm,
   nodejs,
+  markdown,
+  nh3,
 }:
 
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2024-11-15";
+  version = "0.17-unstable-2025-08-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,11 +45,13 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "33c88e1ca9fccd0ea70f8b609580eeec486bda5c";
-    hash = "sha256-p7VJUiO7dhTR+S3/4QrmrQeJO6xGj7D7I8W3CBF+jo8=";
+    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
+    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
   };
 
   postPatch = ''
+    # zipstream is discontinued and outdated
+    # https://github.com/okfde/django-filingcabinet/issues/90
     substituteInPlace pyproject.toml \
       --replace-fail "zipstream" "zipstream-ng"
   '';
@@ -55,7 +60,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm.configHook
   ];
 
   dependencies = [
@@ -68,6 +73,8 @@ buildPythonPackage rec {
     djangorestframework
     feedgen
     jsonschema
+    markdown
+    nh3
     pikepdf
     pycryptodome
     pypdf
@@ -85,9 +92,10 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-32kOhB2+37DD4hKXKep08iDxhXpasKPfcv9fkwISxeU=";
+    fetcherVersion = 1;
+    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
   };
 
   postBuild = ''
@@ -119,10 +127,15 @@ buildPythonPackage rec {
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
 
   pythonImportsCheck = [ "filingcabinet" ];
+
+  # Playwright tests not supported on RiscV yet
+  doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";

@@ -51,19 +51,17 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.1.5";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = version;
-    hash = "sha256-XwzYlSP2MbEb0U3tuVOq3NNqLTS08UzSfSFBidHbpAY=";
+    hash = "sha256-VkHTX0j963N2HMwHoJv8M314SykXFB9u4eqIUDeJ+tw=";
   };
 
   postPatch = ''
-    substituteInPlace datalad/distribution/create_sibling.py \
-      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
     # Remove vendorized versioneer.py
     rm versioneer.py
   '';
@@ -82,23 +80,22 @@ buildPythonPackage rec {
     optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
 
   optional-dependencies = {
-    core =
-      [
-        platformdirs
-        chardet
-        distro
-        iso8601
-        humanize
-        fasteners
-        packaging
-        patool
-        tqdm
-        annexremote
-        looseversion
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-      ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-      ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    core = [
+      platformdirs
+      chardet
+      distro
+      iso8601
+      humanize
+      fasteners
+      packaging
+      patool
+      tqdm
+      annexremote
+      looseversion
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
     downloaders = [
       boto3
       keyrings-alt
@@ -120,9 +117,11 @@ buildPythonPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd datalad \
-         --bash <($out/bin/datalad shell-completion) \
-         --zsh  <($out/bin/datalad shell-completion)
-    wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
+      --bash <($out/bin/datalad shell-completion) \
+      --zsh  <($out/bin/datalad shell-completion)
+    wrapProgram $out/bin/datalad \
+      --prefix PATH : "${git-annex}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   preCheck = ''
@@ -230,10 +229,9 @@ buildPythonPackage rec {
     httpretty
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Deprecated in 3.13. Use exc_type_str instead.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];
@@ -242,6 +240,9 @@ buildPythonPackage rec {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [
+      renesat
+      malik
+    ];
   };
 }

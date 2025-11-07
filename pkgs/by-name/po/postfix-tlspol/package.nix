@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "postfix-tlspol";
-  version = "1.8.8";
+  version = "1.8.20";
 
   src = fetchFromGitHub {
     owner = "Zuplu";
     repo = "postfix-tlspol";
     tag = "v${version}";
-    hash = "sha256-XEQ2SOITUPmqI/+R7/O9ST5m5lHJT5fcBoBQk7GoOZM=";
+    hash = "sha256-/+FWTrb39PB1L6UDXAr3w0c0bMrpptX23g8WHI794GA=";
   };
 
   vendorHash = null;
@@ -22,10 +23,20 @@ buildGoModule rec {
 
   ldflags = [ "-X main.Version=${version}" ];
 
+  passthru.tests = {
+    inherit (nixosTests) postfix-tlspol;
+  };
+
   meta = {
-    description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE.";
+    changelog = "https://github.com/Zuplu/postfix-tlspol/releases/tag/${src.tag}";
+    description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE";
     homepage = "https://github.com/Zuplu/postfix-tlspol";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ valodim ];
+    maintainers = with lib.maintainers; [
+      hexa
+      valodim
+    ];
+    mainProgram = "postfix-tlspol";
+    platforms = lib.platforms.linux;
   };
 }

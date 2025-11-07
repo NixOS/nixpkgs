@@ -31,7 +31,7 @@ in
       default = false;
       description = ''
         Whether to open TCP firewall ports, which are specified in
-        {option}`services.stalwart-mail.settings.listener` on all interfaces.
+        {option}`services.stalwart-mail.settings.server.listener` on all interfaces.
       '';
     };
 
@@ -71,6 +71,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          !(
+            (lib.hasAttrByPath [ "settings" "queue" ] cfg)
+            && (builtins.any (lib.hasAttrByPath [
+              "value"
+              "next-hop"
+            ]) (lib.attrsToList cfg.settings.queue))
+          );
+        message = ''
+          Stalwart deprecated `next-hop` in favor of "virtual queues" `queue.strategy.route` \
+          with v0.13.0 see [Outbound Strategy](https://stalw.art/docs/mta/outbound/strategy/#configuration) \
+          and [release announcement](https://github.com/stalwartlabs/stalwart/blob/main/UPGRADING.md#upgrading-from-v012x-and-v011x-to-v013x).
+        '';
+      }
+    ];
 
     # Default config: all local
     services.stalwart-mail.settings = {
@@ -107,21 +124,17 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      config = {
-        spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
-        webadmin =
-          let
-            hasHttpListener = builtins.any (listener: listener.protocol == "http") (
-              lib.attrValues cfg.settings.server.listener
-            );
-          in
-          {
-            path = "/var/cache/stalwart-mail";
-          }
-          // lib.optionalAttrs ((builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener) {
-            resource = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
-          };
-      };
+      spam-filter.resource = lib.mkDefault "file://${cfg.package.spam-filter}/spam-filter.toml";
+      webadmin =
+        let
+          hasHttpListener = builtins.any (listener: listener.protocol == "http") (
+            lib.attrValues (cfg.settings.server.listener or { })
+          );
+        in
+        {
+          path = "/var/cache/stalwart-mail";
+          resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
+        };
     };
 
     # This service stores a potentially large amount of data.
@@ -162,7 +175,7 @@ in
         serviceConfig = {
           ExecStart = [
             ""
-            "${cfg.package}/bin/stalwart-mail --config=${configFile}"
+            "${lib.getExe cfg.package} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 
@@ -174,6 +187,10 @@ in
           ];
           CacheDirectory = "stalwart-mail";
           StateDirectory = "stalwart-mail";
+
+          # Upstream uses "stalwart" as the username since 0.12.0
+          User = "stalwart-mail";
+          Group = "stalwart-mail";
 
           # Bind standard privileged ports
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
@@ -232,6 +249,7 @@ in
       happysalada
       euxane
       onny
+      norpol
     ];
   };
 }

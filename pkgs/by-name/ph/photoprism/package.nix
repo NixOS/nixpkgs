@@ -17,25 +17,24 @@
 }:
 
 let
-  version = "250321-57590c48b";
+  version = "250707-d28b3101e";
   pname = "photoprism";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "photoprism";
+    repo = "photoprism";
     rev = version;
-    hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
+    hash = "sha256-KT50tjgM3b3edRB3R8dR3tIF9sXFr+Cm0BMsFqBJG6s=";
   };
 
-  libtensorflow = callPackage ./libtensorflow.nix { };
-  backend = callPackage ./backend.nix { inherit libtensorflow src version; };
+  backend = callPackage ./backend.nix { inherit src version; };
   frontend = callPackage ./frontend.nix { inherit src version; };
 
   fetchModel =
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.org/tensorflow/${name}.zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip";
       stripRoot = false;
     };
 
@@ -54,7 +53,7 @@ let
     hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
-  assets_path = "$out/share/${pname}";
+  assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
-    inherit (libtensorflow.meta) platforms;
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ benesim ];
     mainProgram = "photoprism";

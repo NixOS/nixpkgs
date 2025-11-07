@@ -13,12 +13,12 @@
 }:
 
 mkDerivation rec {
-  version = "2.4.3";
+  version = "2.4.4";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.4.x/${pname}-${version}.tar.xz";
-    hash = "sha256-+mdh9ZilkVr1CkI90qYHBIvbxUCm1XI4X+Qi31ge6/Y=";
+    hash = "sha256-/6zTdIDzIPPz+PMERf5AiX6d9EyU7oe6BBPjZAhvS5A=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
@@ -54,7 +54,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = "http://www.lyx.org";
+    homepage = "https://www.lyx.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;

@@ -1,6 +1,15 @@
 {
-  mkXfceDerivation,
-  gobject-introspection,
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  docbook_xml_dtd_412,
+  docbook-xsl-ns,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  xmlto,
   dbus-glib,
   garcon,
   glib,
@@ -17,22 +26,37 @@
   systemd,
   xfconf,
   xfdesktop,
-  lib,
+  gitUpdater,
 }:
 
 let
   # For xfce4-screensaver-configure
   pythonEnv = python3.withPackages (pp: [ pp.pygobject3 ]);
 in
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-screensaver";
-  version = "4.18.4";
+  version = "4.20.1";
 
-  sha256 = "sha256-vkxkryi7JQg1L/JdWnO9qmW6Zx6xP5Urq4kXMe7Iiyc=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-screensaver";
+    tag = "xfce4-screensaver-${finalAttrs.version}";
+    hash = "sha256-FdO6fZTKBPjncjBBe2rK5DSfVLHTRFpo9NtgZ5nFgRU=";
+  };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    gobject-introspection
+    docbook_xml_dtd_412
+    docbook-xsl-ns
+    gettext
+    glib # glib-compile-resources
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+    xmlto
   ];
 
   buildInputs = [
@@ -53,18 +77,20 @@ mkXfceDerivation {
     xfconf
   ];
 
-  configureFlags = [ "--without-console-kit" ];
-
-  makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
-
   preFixup = ''
     # For default wallpaper.
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xfdesktop}/share")
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-screensaver-"; };
+
+  meta = {
+    homepage = "https://gitlab.xfce.org/apps/xfce4-screensaver";
     description = "Screensaver for Xfce";
-    maintainers = with maintainers; [ symphorien ];
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-screensaver";
+    maintainers = with lib.maintainers; [ symphorien ];
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

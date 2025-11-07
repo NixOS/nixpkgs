@@ -27,7 +27,7 @@ let
 
     src = fetchFromGitHub {
       owner = "jupyter";
-      repo = pname;
+      repo = "nbclient";
       tag = "v${version}";
       hash = "sha256-+qSed6yy4YVZ25GigNTap+kMaoDiMYSJO85wurbzeDs=";
     };

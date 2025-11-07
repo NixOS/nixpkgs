@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   cffi,
-  # overriden as pkgs.brotli
+  # overridden as pkgs.brotli
   brotli,
   setuptools,
   pytestCheckHook,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # Test data is only available from libbrotli git checkout, not brotli.src
   doCheck = false;
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   pythonImportsCheck = [ "brotlicffi" ];
 

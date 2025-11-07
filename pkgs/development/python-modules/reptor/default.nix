@@ -1,69 +1,63 @@
 {
   lib,
-  asgiref,
   buildPythonPackage,
   certifi,
-  charset-normalizer,
   cvss,
   deepl,
   django,
   fetchFromGitHub,
+  fetchpatch,
   gql,
-  idna,
-  markdown-it-py,
-  mdurl,
-  pygments,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   rich,
   setuptools,
   sqlparse,
   termcolor,
-  tomli,
   tomli-w,
+  tomli,
   tomlkit,
   urllib3,
+  writableTmpDirAsHomeHook,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.28";
+  version = "0.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     tag = version;
-    hash = "sha256-hzdgG2/bTkzTUPK/Rnch4q12R5kY+qlr6gRwx54vbcE=";
+    hash = "sha256-nNG4rQHloOqcPZPnvw3hbw0+wCbB2XAdQ5/XnJtCHnE=";
   };
+
+  patches = [
+    # https://github.com/Syslifters/reptor/pull/221
+    (fetchpatch {
+      url = "https://github.com/Syslifters/reptor/commit/0fc43c246e2f99aaac9e78af818f360a3a951980.patch";
+      hash = "sha256-eakbI7hMJdshD0OA6n7dEO4+qPB21sYl09uZgepiWu0=";
+    })
+  ];
 
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
   dependencies = [
-    asgiref
     certifi
-    charset-normalizer
     cvss
     django
-    idna
-    markdown-it-py
-    mdurl
-    pygments
     pyyaml
     requests
     rich
-    sqlparse
     termcolor
     tomli
-    tomlkit
     tomli-w
+    tomlkit
     urllib3
     xmltodict
   ];
@@ -75,24 +69,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [ "reptor" ];
 
-  disabledTestPaths = [
-    # Tests want to use pip install dependencies
-    "reptor/plugins/importers/GhostWriter/tests/test_ghostwriter.py"
-  ];
-
-  disabledTests = [
+  disabledTestMarks = [
     # Tests need network access
-    "TestDummy"
-    "TestIntegration"
+    "integration"
   ];
 
   meta = with lib; {

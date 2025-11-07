@@ -3,9 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   build,
-  git,
+  gitMinimal,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
@@ -17,21 +16,19 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "2.1.2";
+  version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-fNj/LI4A4RjjPzYT+0ekwqmm3qzzZL3aACOe8BHviuk=";
+    hash = "sha256-l5WTjKa+A66QfWLmrjCQq7ZrSaeuylGIRZr8jsiYq+A=";
   };
 
   nativeCheckInputs = [
     build
-    git
+    gitMinimal
     pytest-mock
     pytest-cov-stub
     pytestCheckHook
@@ -59,11 +56,11 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
     description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
-    license = licenses.mit;
-    teams = [ teams.python ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }

@@ -34,14 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags =
-    [
-      (lib.enableFeature finalAttrs.finalPackage.doCheck "backend-test-runs")
-      (lib.withFeature true "custom-compilers")
-    ]
-    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-      "ac_scorep_cross_compiling=yes"
-    ];
+  configureFlags = [
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "backend-test-runs")
+    (lib.withFeature true "custom-compilers")
+  ]
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ac_scorep_cross_compiling=yes"
+  ];
 
   nativeBuildInputs = [
     which # used in configure script

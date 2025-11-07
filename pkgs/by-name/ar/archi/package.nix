@@ -7,7 +7,7 @@
   jdk,
   libsecret,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   _7zz,
   nixosTests,
@@ -15,23 +15,23 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Archi";
-  version = "5.5.0";
+  version = "5.7.0";
 
   src =
     {
       "x86_64-linux" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Linux64-${version}.tgz";
-        hash = "sha256-DLYgfYzSsxW4JZfWM+EU8icY+DvMMkvrIkj4NMiNBL0=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Linux64-${finalAttrs.version}.tgz";
+        hash = "sha256-MIUlWt3GP/1oQAeq4W2xnhG63a2zhGldgyoyZ9lNOiI=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-${version}.dmg";
-        hash = "sha256-BeQPTsY4pgCsoE4P+dMKE+P3UP+8WiUTbiWFespkzsk=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Mac-${finalAttrs.version}.dmg";
+        hash = "sha256-wIlhJ6XmhL5rMb5zwHJYwamCwV13PK53wi9uEXIga5I=";
       };
       "aarch64-darwin" = fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
-        hash = "sha256-g5FFgv7w4Hs26GlUXCpV3VQjNrWd355vtxt6FD84DWg=";
+        url = "https://github.com/archimatetool/archi.io/releases/download/57/Archi-Mac-Silicon-${finalAttrs.version}.dmg";
+        hash = "sha256-2/w4+aKfjfTGLjjl/nOouFtnv7/kjmfezkrmSa4ablc=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -40,18 +40,17 @@ stdenv.mkDerivation rec {
     libsecret
   ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      _7zz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    _7zz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
 
@@ -68,10 +67,10 @@ stdenv.mkDerivation rec {
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
           --prefix LD_LIBRARY_PATH : ${
-            lib.makeLibraryPath ([
+            lib.makeLibraryPath [
               glib
-              webkitgtk_4_0
-            ])
+              webkitgtk_4_1
+            ]
           } \
           --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
           --prefix PATH : ${jdk}/bin
@@ -96,7 +95,7 @@ stdenv.mkDerivation rec {
       desktopName = "Archi";
       exec = "Archi";
       type = "Application";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "archi";
       categories = [
         "Development"
@@ -108,20 +107,20 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) archi; };
 
-  meta = with lib; {
+  meta = {
     description = "ArchiMate modelling toolkit";
     longDescription = ''
       Archi is an open source modelling toolkit to create ArchiMate
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       earldouglas
       paumr
     ];
     mainProgram = "Archi";
   };
-}
+})

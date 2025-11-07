@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textcompare";
-  version = "0.1.2";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "josephmawa";
     repo = "TextCompare";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-npF2kCYeW/RGaS7x2FrHEX3BdmO8CXj47biOw9IZ4nk=";
+    hash = "sha256-d+P5Vf1WQCNCTXUl6yK2dYp8HhwTj1Wjf8puFKHuFtw=";
   };
 
   strictDeps = true;

@@ -10,8 +10,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mholt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "archiver";
+    tag = "v${version}";
     hash = "sha256-l9exOq8QF3WSQ/+WQr0NfPeRQ/R6VQwfT+YS76BBwd8=";
   };
 

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "glocaltokens";
-  version = "0.7.3";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "leikoilja";
     repo = "glocaltokens";
     tag = "v${version}";
-    hash = "sha256-wX0L9sNjPbd5lXtFs5B3DG3gtZKhlZG9bnnBKV32rSE=";
+    hash = "sha256-+7HpyZUumu1r/UXM4awckjTkpVbCz7MsAJOp2JiJzho=";
   };
 
   build-system = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library to extract google home devices local authentication tokens from google servers";
     homepage = "https://github.com/leikoilja/glocaltokens";
-    changelog = "https://github.com/leikoilja/glocaltokens/releases/tag/v${version}";
+    changelog = "https://github.com/leikoilja/glocaltokens/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hensoko

@@ -5,25 +5,29 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
-  version = "0.1.16";
+  version = "0.1.18";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "janten";
-    repo = pname;
+    repo = "dpt-rp1-py";
     rev = "v${version}";
-    sha256 = "0zvf09b9rzpx5b0w81ziqd7v321hfhgsgvshdx23karj2hf75bvj";
+    sha256 = "sha256-5Ny62Kp1GHH9vmPSZ6smNqyEt9PZYPHAiungHZQMB/A=";
   };
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     anytree
     fusepy
     httpsig
     pbkdf2
     pyyaml
     requests
-    setuptools
     tqdm
     urllib3
     zeroconf

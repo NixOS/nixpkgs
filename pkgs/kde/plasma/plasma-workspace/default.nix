@@ -2,12 +2,12 @@
   lib,
   mkKdeDerivation,
   replaceVars,
-  dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
@@ -17,14 +17,12 @@
   qttools,
   qqc2-breeze-style,
   gpsd,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
@@ -32,13 +30,6 @@ mkKdeDerivation {
       xrdb = lib.getExe xorg.xrdb;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
-    })
-
-    # Backport patch recommended by upstream
-    # FIXME: remove in 6.3.5
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/47d502353720004fa2d0e7b0065994b75b3e0ded.patch";
-      hash = "sha256-wt0ZIF4zcEOmP0o4ZcjBYxVjr2hVUlOKVJ8SMNSYt68=";
     })
   ];
 
@@ -52,6 +43,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland

@@ -34,13 +34,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "5.9.0.3";
+  version = "5.16.0.2";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-anX/zVCKG3azROamIIqG9hrj+2Tcw+sFIE60RDCJjaY=";
+    hash = "sha256-Bkye2Is3GbdnYYaS//AkNfrt8ppWP9zE58obcmUm0wE=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -66,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
+    })
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/040-megasync-app-add-missing-link-to-zlib.patch?h=megasync&id=c1f647871f5aad7e421971165b07e51b3e7900e9";
+      hash = "sha256-HMsS5TlzkQZbfANSIrvH8Cp6mTxLJ04idcWUWeD2A0U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
     ./dont-fetch-clang-format.patch
@@ -122,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
+    (lib.cmakeBool "USE_BREAKPAD" false)
+    (lib.cmakeBool "ENABLE_DESKTOP_APP_TESTS" false)
   ];
 
   preFixup = ''
@@ -146,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "megasync";
   };
 })

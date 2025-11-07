@@ -25,17 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.3.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zAICgEwErB6lHC/AK/3WuhL5u+Y5l+DXd4H63OLBQl8=";
+    hash = "sha256-5sGVVJ8Y90yJoikQnPeGbZhNlSR/d3EkMct9isSWies=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-NlT+j3OD52HgDMeWAm9MewPQaQ+xf0FIpsRd5rTTVdQ=";
+  cargoHash = "sha256-+Yc7u6q4U4MwT5eHnxHC2DCG66SmEyRfNMeMqSO+GeQ=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -57,16 +56,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64-unknown-linux-gnu" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "x86_64-unknown-linux-musl" = self.build ++ [
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "aarch64-unknown-linux-musl" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
         });
       in
@@ -132,7 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Platform for developing distributed fault-tolerant applications.";
+    description = "Platform for developing distributed fault-tolerant applications";
     homepage = "https://restate.dev";
     changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";

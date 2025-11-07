@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -15,15 +14,13 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "simplejson";
+    repo = "simplejson";
     tag = "v${version}";
     hash = "sha256-wE/jqBMXVtmbc/78X4lgfvuj074CrzfLJL1CM6LCfas=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "simplejson" ];
 

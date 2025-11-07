@@ -6,25 +6,29 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "xboot";
     repo = "xfel";
-    tag = "v${version}";
-    hash = "sha256-fmf+jqCWC7RaLknr/TyRV6VQz4+fp83ynHNk2ACkyfQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5Io2qOIeGovDpbxSlmqtGMrGMxUjMu/e1304euTEtJc=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "/usr/local" "$out" \
+      --replace-fail "/etc" "$out/etc" \
+      --replace-fail "/usr/share" "$out/share"
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX=/"
-  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tooling for working with the FEL mode on Allwinner SoCs";
@@ -34,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xfel";
   };
-}
+})

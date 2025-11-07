@@ -2,52 +2,40 @@
   directoryListingUpdater,
   fetchurl,
   lib,
-  stdenv,
+  stdenvNoCC,
   coreutils,
   kmod,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.12";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Fo58BUm3v4mRCS+iv7kDYx33edxMQ+6PQnf8t3LYwDU=";
+    hash = "sha256-MumAn1ktkrl4qhAy41KTwzuNDx7Edfk3Aiw+6aMGnCE=";
   };
 
   dontBuild = true;
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      substituteInPlace ucm2/lib/card-init.conf \
-        --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
-        --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+    substituteInPlace ucm2/lib/card-init.conf \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    substituteInPlace ucm2/common/ctl/led.conf \
+      --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
+  ''
+  + ''
 
-      files=(
-          "ucm2/HDA/HDA.conf"
-          "ucm2/codecs/rt715/init.conf"
-          "ucm2/codecs/rt715-sdca/init.conf"
-          "ucm2/Intel/cht-bsw-rt5672/cht-bsw-rt5672.conf"
-          "ucm2/Intel/bytcr-rt5640/bytcr-rt5640.conf"
-      )
+    mkdir -p $out/share/alsa
+    cp -r ucm ucm2 $out/share/alsa
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for file in "''${files[@]}"; do
-          substituteInPlace "$file" \
-              --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
-      done
-    ''
-    + ''
-
-      mkdir -p $out/share/alsa
-      cp -r ucm ucm2 $out/share/alsa
-
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/lib/";
@@ -63,7 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.roastiek ];
+    maintainers = with lib.maintainers; [
+      roastiek
+      mvs
+    ];
+
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

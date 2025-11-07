@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.19";
+  version = "3.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "flow.record";
     tag = version;
-    hash = "sha256-9slOisPr2pW18zurBoJ8AA55fGuBA4QP1tY7YSLiYEM=";
+    hash = "sha256-3jXxKA+MHjKfzKqOuP0EJxVD5QPvwjWE3N4qhIEFNvM=";
   };
 
   build-system = [
@@ -57,7 +57,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     elastic-transport
     pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "flow.record" ];
 

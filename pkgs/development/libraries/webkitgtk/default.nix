@@ -18,7 +18,7 @@
   gnutls,
   libgcrypt,
   libgpg-error,
-  gtk3,
+  gtk4,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -32,7 +32,7 @@
   at-spi2-core,
   cairo,
   libxml2,
-  libsoup,
+  libsoup_3,
   libsecret,
   libxslt,
   harfbuzz,
@@ -57,6 +57,7 @@
   fontconfig,
   freetype,
   openssl,
+  openxr-loader,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -75,18 +76,18 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  fetchpatch,
 }:
+
+let
+  abiVersion = if lib.versionAtLeast gtk4.version "4.0" then "6.0" else "4.1";
+in
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.48.1";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
-    if lib.versionAtLeast gtk3.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"
-  }";
+  version = "2.50.1";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
     "out"
@@ -100,7 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mO/fIcTNyg/gtzq1qMtSCTtapS2bGwFqk/cdv6HrJY8=";
+    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -108,100 +109,109 @@ clangStdenv.mkDerivation (finalAttrs: {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })
+
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      gettext
-      gobject-introspection
-      gperf
-      ninja
-      perl
-      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-      pkg-config
-      python3
-      ruby
-      gi-docgen
-      glib # for gdbus-codegen
-      unifdef
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+    pkg-config
+    python3
+    ruby
+    gi-docgen
+    glib # for gdbus-codegen
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      cairo # required even when using skia
-      enchant2
-      flite
-      libavif
-      libepoxy
-      libjxl
-      gnutls
-      gst-plugins-bad
-      gst-plugins-base
-      harfbuzz
-      hyphen
-      icu
-      libGL
-      libGLU
-      libgbm
-      libgcrypt
-      libgpg-error
-      libidn
-      libintl
-      lcms2
-      libpthreadstubs
-      libsysprof-capture
-      libtasn1
-      libwebp
-      libxkbcommon
-      libxml2
-      libxslt
-      libbacktrace
-      nettle
-      p11-kit
-      sqlite
-      woff2
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-      # https://bugs.webkit.org/show_bug.cgi?id=274032
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-      libedit
-      readline
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libseccomp
-      libmanette
-      wayland
-      xorg.libX11
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableExperimental [
-      # For ENABLE_WEB_RTC
-      openssl
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-      wayland-protocols
-    ];
+  buildInputs = [
+    at-spi2-core
+    cairo # required even when using skia
+    enchant2
+    flite
+    libavif
+    libepoxy
+    libjxl
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    hyphen
+    icu
+    libGL
+    libGLU
+    libgbm
+    libgcrypt
+    libgpg-error
+    libidn
+    libintl
+    lcms2
+    libpthreadstubs
+    libsysprof-capture
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    libbacktrace
+    nettle
+    p11-kit
+    sqlite
+    woff2
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libedit
+    readline
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libseccomp
+    libmanette
+    wayland
+    xorg.libX11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+    # For ENABLE_WEBXR
+    openxr-loader
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk4.version "4.0") [
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
-    gtk3
-    libsoup
+    gtk4
+    libsoup_3
   ];
 
   cmakeFlags =
@@ -211,7 +221,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
@@ -230,7 +240,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "-DUSE_APPLE_ICU=OFF"
       "-DUSE_OPENGL_OR_ES=OFF"
     ]
-    ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+    ++ lib.optionals (lib.versionOlder gtk4.version "4.0") [
       "-DUSE_GTK4=OFF"
     ]
     ++ lib.optionals (!systemdSupport) [
@@ -256,9 +266,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [
-      "javascriptcoregtk-4.0"
-      "webkit2gtk-4.0"
-      "webkit2gtk-web-extension-4.0"
+      "javascriptcoregtk-${abiVersion}"
+      "webkit2gtk-${abiVersion}"
+      "webkit2gtk-web-extension-${abiVersion}"
     ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];

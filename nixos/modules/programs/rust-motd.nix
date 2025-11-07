@@ -12,7 +12,7 @@ let
   # Order the sections in the TOML according to the order of sections
   # in `cfg.order`.
   motdConf =
-    pkgs.runCommand "motd.conf"
+    pkgs.runCommand "motd.toml"
       {
         __structuredAttrs = true;
         inherit (cfg) order settings;
@@ -113,7 +113,7 @@ in
       }
     ];
     systemd.services.rust-motd = {
-      path = with pkgs; [ bash ];
+      path = with pkgs; [ bash ] ++ lib.optional (cfg.settings.fail_2_ban or { } != { }) fail2ban;
       documentation = [
         "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md"
       ];
@@ -150,13 +150,12 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = cfg.refreshInterval;
     };
-    security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (
-      lib.mkDefault (
-        lib.mkAfter ''
-          session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
-        ''
-      )
-    );
+
+    security.pam.services.sshd.showMotd = lib.mkIf cfg.enableMotdInSSHD true;
+    users.motdFile = lib.mkIf cfg.enableMotdInSSHD "/var/lib/rust-motd/motd";
+
+    programs.rust-motd.settings.global.show_legacy_warning = false;
+
     services.openssh.extraConfig =
       lib.mkIf (cfg.settings ? last_login && cfg.settings.last_login != { })
         ''

@@ -9,7 +9,6 @@
   libiconv,
   numactl,
   libffi,
-  llvmPackages,
   coreutils,
   targetPackages,
 
@@ -206,8 +205,6 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
-
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
     map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
@@ -215,19 +212,15 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
-  runtimeDeps =
-    [
-      targetPackages.stdenv.cc
-      targetPackages.stdenv.cc.bintools
-      coreutils # for cat
-    ]
-    ++ lib.optionals useLLVM [
-      (lib.getBin llvmPackages.llvm)
-    ]
-    # On darwin, we need unwrapped bintools as well (for otool)
-    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-      targetPackages.stdenv.cc.bintools.bintools
-    ];
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -258,13 +251,13 @@ stdenv.mkDerivation {
           buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"'';
         in
         lib.concatStringsSep "\n" [
-          (''
+          ''
             shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
             fi
-          '')
+          ''
           (lib.concatMapStringsSep "\n" (
             { fileToCheckFor, nixPackage }:
             lib.optionalString (fileToCheckFor != null) ''
@@ -289,7 +282,7 @@ stdenv.mkDerivation {
       for exe in $(find . -type f -executable); do
         isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
     ''
 
@@ -311,12 +304,17 @@ stdenv.mkDerivation {
                     -i {} \;
     ''
     +
-      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-        find . -name package.conf.in \
-            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-      ''
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -341,21 +339,20 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   # Patch scripts to include runtime dependencies in $PATH.
-  postInstall =
-    ''
-      for i in "$out/bin/"*; do
-        test ! -h "$i" || continue
-        isScript "$i" || continue
-        sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
-      done
-    ''
-    + lib.optionalString stdenv.targetPlatform.isDarwin ''
-      # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
-      # detects `llvm-ar` even though the resulting archives are not supported by ld64.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
-      # https://github.com/haskell/cabal/issues/8882
-      sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
-    '';
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  ''
+  + lib.optionalString stdenv.targetPlatform.isDarwin ''
+    # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
+    # detects `llvm-ar` even though the resulting archives are not supported by ld64.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
+  '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
@@ -421,7 +418,7 @@ stdenv.mkDerivation {
       for exe in $(find "$out" -type f -executable); do
         isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
 
       for file in $(find "$out" -name setup-config); do
@@ -461,7 +458,7 @@ stdenv.mkDerivation {
     targetPrefix = "";
     enableShared = true;
 
-    inherit llvmPackages;
+    llvmPackages = null;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
@@ -472,7 +469,7 @@ stdenv.mkDerivation {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
@@ -487,5 +484,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
+    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   boost,
-  tbb,
+  onetbb,
   makeWrapper,
 }:
 
@@ -21,13 +21,15 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    tbb
+    onetbb
   ];
 
   nativeBuildInputs = [
     makeWrapper
     cmake
   ];
+
+  cmakeFlags = [ (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
 
   postPatch = ''
     runHook prePatch

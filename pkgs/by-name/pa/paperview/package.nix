@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "paperview";
-  version = "unstable-2020-09-22";
+  version = "0-unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "glouw";

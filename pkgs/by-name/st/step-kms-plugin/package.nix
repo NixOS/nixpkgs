@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "step-kms-plugin";
-  version = "0.12.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
-    repo = pname;
+    repo = "step-kms-plugin";
     rev = "v${version}";
-    hash = "sha256-6+5xZGzLsXu+283aOCeRmzxvjsk5PXTpbszVYuSSuGA=";
+    hash = "sha256-Evi5rXdb/2WDlIUXJcQjQ0d1Zrfg1x00tFonlNmLi6E=";
   };
 
-  vendorHash = "sha256-S8T2GMFOVYqG2+8jdDRNJfAN057HagUA3HR0/UBpBR0=";
+  vendorHash = "sha256-CxX4tQRBPtza1PAVeidp+KNeYxIh5y1tJ+RgcBKdORs=";
 
   proxyVendor = true;
 
@@ -43,7 +43,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "step plugin to manage keys and certificates on cloud KMSs and HSMs";
+    description = "Step plugin to manage keys and certificates on cloud KMSs and HSMs";
     homepage = "https://smallstep.com/cli/";
     license = licenses.asl20;
     maintainers = with maintainers; [ qbit ];

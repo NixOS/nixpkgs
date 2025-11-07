@@ -3,65 +3,56 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_0,
+  cython,
   fastrlock,
   numpy,
-  wheel,
   pytestCheckHook,
   mock,
   setuptools,
   cudaPackages,
   addDriverRunpath,
-  pythonOlder,
   symlinkJoin,
 }:
 
 let
   inherit (cudaPackages) cudnn;
 
-  shouldUsePkg =
-    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
 
   # some packages are not available on all platforms
   cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
-  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  libcutensor = shouldUsePkg (cudaPackages.libcutensor or null);
   nccl = shouldUsePkg (cudaPackages.nccl or null);
 
-  outpaths = with cudaPackages; [
-    cuda_cccl # <nv/target>
-    cuda_cudart
-    cuda_nvcc # <crt/host_defines.h>
-    cuda_nvprof
-    cuda_nvrtc
-    cuda_nvtx
-    cuda_profiler_api
-    libcublas
-    libcufft
-    libcurand
-    libcusolver
-    libcusparse
-
-    # Missing:
-    # cusparselt
-  ];
+  outpaths = lib.filter (outpath: outpath != null) (
+    with cudaPackages;
+    [
+      cuda_cccl # <nv/target>
+      cuda_cudart
+      cuda_nvcc # <crt/host_defines.h>
+      cuda_nvprof
+      cuda_nvrtc
+      cuda_nvtx
+      cuda_profiler_api
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+      # NOTE: libcusparse_lt is too new for CuPy, so we must do without.
+      # libcusparse_lt
+    ]
+  );
   cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
+    name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
     paths =
-      outpaths
-      ++ lib.concatMap (f: lib.map f outpaths) [
-        lib.getLib
-        lib.getDev
-        (lib.getOutput "static")
-        (lib.getOutput "stubs")
-      ];
+      outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "13.6.0";
+  pyproject = true;
 
   stdenv = cudaPackages.backendStdenv;
 
@@ -69,9 +60,14 @@ buildPythonPackage rec {
     owner = "cupy";
     repo = "cupy";
     tag = "v${version}";
-    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    hash = "sha256-nU3VL0MSCN+mI5m7C5sKAjBSL6ybM6YAk5lJiIDY0ck=";
     fetchSubmodules = true;
   };
+
+  env.LDFLAGS = toString [
+    # Fake libcuda.so (the real one is deployed impurely)
+    "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+  ];
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
@@ -83,25 +79,28 @@ buildPythonPackage rec {
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    cython
+    fastrlock
     setuptools
-    wheel
+  ];
+
+  nativeBuildInputs = [
     addDriverRunpath
-    cython_0
-    cudaPackages.cuda_nvcc
+    cudatoolkit-joined
   ];
 
   buildInputs = [
     cudatoolkit-joined
     cudnn
-    cutensor
+    libcutensor
     nccl
   ];
 
-  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+  # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastrlock
     numpy
   ];
@@ -126,7 +125,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
-    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
+    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
     license = licenses.mit;
     platforms = [
       "aarch64-linux"

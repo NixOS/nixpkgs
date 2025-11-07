@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/sogaiu/tree-sitter-clojure",
-  "rev": "f4236d4da8aa92bc105d9c118746474c608e6af7",
-  "date": "2024-05-22T23:05:15+09:00",
-  "path": "/nix/store/vl1d7aql1bcvn65khrgs13rfk90q08ik-tree-sitter-clojure",
-  "sha256": "16hnb5d8shz216sv9hj5hxpg63ri86w5pf9bzi5z3f37zh7vlljj",
-  "hash": "sha256-UlK6D/xnuPFL/Cu5W7hBMQ/zbodFwrS1CeJDjVpZFpo=",
+  "rev": "e43eff80d17cf34852dcd92ca5e6986d23a7040f",
+  "date": "2025-08-26T15:59:05+09:00",
+  "path": "/nix/store/gpvw9wn3mg5j7mzj91qvkxm8l5rlgid6-tree-sitter-clojure",
+  "sha256": "0bmclmbjk58w8092q52yra5axrr3q22v73yva9wvqh5fif81x2cf",
+  "hash": "sha256-jokekIuuQLx5UtuPs4XAI+euispeFCwSQByVKVelrC4=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

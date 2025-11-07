@@ -50,7 +50,7 @@ buildDunePackage {
 
   meta = with lib; {
     homepage = "https://github.com/hannesm/jackline";
-    description = "minimalistic secure XMPP client in OCaml";
+    description = "Minimalistic secure XMPP client in OCaml";
     mainProgram = "jackline";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];

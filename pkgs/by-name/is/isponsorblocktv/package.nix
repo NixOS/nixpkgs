@@ -7,27 +7,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "isponsorblocktv";
-  version = "2.4.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
     tag = "v${version}";
-    hash = "sha256-/lUs4EuifHKKyA8QiLsbqz0h6mxJpsFMjovpYE8+SxY=";
+    hash = "sha256-AGjLehhGYz8FyojSFmSYKLCkHAExtpQiukQnTNt1YoY=";
   };
 
   patches = [
     # Port iSponsorBlockTV to pyytlounge v3
     (fetchpatch {
-      url = "https://github.com/lukegb/iSponsorBlockTV/commit/89b7b1c029cfbe3b5a481647cdd2d03dec5259ce.patch";
-      hash = "sha256-ISMrNrfPTnEbb0lZbREf+kAniJopWx3FePMGFm4ycJY=";
-    })
-
-    # Update setup_wizard for Textual v3
-    (fetchpatch {
-      url = "https://github.com/lukegb/iSponsorBlockTV/commit/89dd1d65335689c73a78509689396888599bbe58.patch";
-      hash = "sha256-hhWXcqNK3b3mXLCK7W0eXNWgP4lPSl6qgB59Fx8+yeA=";
+      url = "https://github.com/ameertaweel/iSponsorBlockTV/commit/1809ca5a0d561bc9326a51e82118f290423ed3e6.patch";
+      hash = "sha256-v5YXfKUPTzpZPIkVSQF2VUe9EvclAH+kJyiiyUEe/HM=";
     })
   ];
 
@@ -59,6 +53,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "iSponsorBlockTV";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

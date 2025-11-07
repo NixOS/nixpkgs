@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autotiling-rs";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ammgws";
     repo = "autotiling-rs";
     rev = "v${version}";
-    sha256 = "sha256-LQbmF2M6pWa0QEbKF770x8TFLMGrJeq5HnXHvLrDDPA=";
+    sha256 = "sha256-21XIKZ2rzuQMpkaOhGu1pg4J3OGOzHNQ20Rcw1V4BfI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-s2r8517RgcMq+6S2M+gTI7a+C4AhxIkDOHG0XjRI4rI=";
+  cargoHash = "sha256-+5GibhSkiKmgRrESKrliKLrrtUQ7iv2sFz46OFwAIwE=";
 
   meta = with lib; {
     description = "Autotiling for sway (and possibly i3)";

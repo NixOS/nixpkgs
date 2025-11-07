@@ -13,13 +13,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl2740dwlpr";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101727/${pname}-${version}.i386.deb";
-    sha256 = "10a2bc672bd54e718b478f3afc7e47d451557f7d5513167d3ad349a3d00bffaf";
+    url = "https://download.brother.com/welcome/dlf101727/mfcl2740dwlpr-${finalAttrs.version}.i386.deb";
+    hash = "sha256-EKK8ZyvVTnGLR486/H5H1FFVf31VExZ9OtNJo9AL/68=";
   };
 
   nativeBuildInputs = [
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ ];
   };
-}
+})

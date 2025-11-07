@@ -15,7 +15,7 @@
   python3,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "name"
     "sourceRoot"
     "nativeBuildInputs"
@@ -70,7 +70,8 @@ let
             "aarch64-linux"
             "x86_64-linux"
           ];
-        } // meta;
+        }
+        // meta;
       }
     );
 in

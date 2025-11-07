@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tYSbyDipZg6Qj/CWk1QVUT5AG8ncTt+5V1+ekpmsKXA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-K9+SGpWcsOy0l8uj1z6AQggZq+M7wHARACFxsZ6vbUo=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   meta = with lib; {
-    description = ''The "Command Line Interactive Controller for Kubernetes"'';
+    description = "Command Line Interactive Controller for Kubernetes";
     homepage = "https://github.com/databricks/click";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mbode ];

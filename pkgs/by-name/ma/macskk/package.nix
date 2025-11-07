@@ -22,7 +22,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     _7zz
     cpio
     xar
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [ darwin.autoSignDarwinBinariesHook ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [ darwin.autoSignDarwinBinariesHook ];
 
   unpackPhase = ''
     runHook preUnpack

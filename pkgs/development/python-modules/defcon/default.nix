@@ -11,25 +11,23 @@
 
 buildPythonPackage rec {
   pname = "defcon";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rKhnSo9xcjr2oI8zLz7TFWug/gBZHrWv91csqtFHLQk=";
-    extension = "zip";
+    hash = "sha256-Jd/n/QFSzPKSyxkNGSikfViImcILBGhUKT4DnhyT5eA=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs =
-    [
-      fonttools
-    ]
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.unicode;
+  propagatedBuildInputs = [
+    fonttools
+  ]
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.unicode;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

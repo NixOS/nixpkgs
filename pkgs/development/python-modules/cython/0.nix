@@ -14,22 +14,23 @@
 }:
 
 let
-  excludedTests =
-    [ "reimport_from_subinterpreter" ]
-    # cython's testsuite is not working very well with libc++
-    # We are however optimistic about things outside of testsuite still working
-    ++ lib.optionals (stdenv.cc.isClang or false) [
-      "cpdef_extern_func"
-      "libcpp_algo"
-    ]
-    # Some tests in the test suite isn't working on aarch64. Disable them for
-    # now until upstream finds a workaround.
-    # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [
-      "future_division"
-      "overflow_check_longlong"
-    ];
+  excludedTests = [
+    "reimport_from_subinterpreter"
+  ]
+  # cython's testsuite is not working very well with libc++
+  # We are however optimistic about things outside of testsuite still working
+  ++ lib.optionals (stdenv.cc.isClang or false) [
+    "cpdef_extern_func"
+    "libcpp_algo"
+  ]
+  # Some tests in the test suite isn't working on aarch64. Disable them for
+  # now until upstream finds a workaround.
+  # Upstream issue here: https://github.com/cython/cython/issues/2308
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    "future_division"
+    "overflow_check_longlong"
+  ];
 in
 buildPythonPackage rec {
   pname = "cython";

@@ -1,11 +1,11 @@
 {
   "name": "shopify",
-  "version": "3.69.3",
+  "version": "3.86.1",
   "private": true,
   "bin": {
     "shopify": "node_modules/@shopify/cli/bin/run.js"
   },
   "dependencies": {
-    "@shopify/cli": "3.69.3"
+    "@shopify/cli": "3.86.1"
   }
 }

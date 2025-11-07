@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
 
   pname = "tracefilegen";
-  version = "unstable-2017-05-13";
+  version = "0-unstable-2017-05-13";
 
   src = fetchFromGitHub {
     owner = "GarCoSim";
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     install -Dm755 TraceFileGen $out/bin/TraceFileGen
     mkdir -p $out/share/doc/${pname}-${version}/
     cp -ar $src/Documentation/html $out/share/doc/${pname}-${version}/.
+  '';
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = with lib; {

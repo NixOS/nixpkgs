@@ -1,28 +1,68 @@
 {
   "game": {
     "latest": {
-      "linux": "51.10",
+      "linux": "53.02",
       "darwin": "0.47.05"
     },
     "versions": {
-      "51.10": {
+      "53.02": {
         "df": {
-          "version": "51.10",
+          "version": "53.02",
           "urls": {
             "linux": {
-              "url": "https://www.bay12games.com/dwarves/df_51_10_linux.tar.bz2",
-              "outputHash": "sha256-r4dadc/nch2smNHt4Ixa2FG2Sc1NFmY88iSnFFeMcz0="
+              "url": "https://www.bay12games.com/dwarves/df_53_02_linux.tar.bz2",
+              "outputHash": "sha256-SprD05MMynNCBr2oKnBYvimm+RmOoceEC2MF9IhCc5Q="
             }
           }
         },
         "hack": {
-          "version": "51.10-r1",
+          "version": "53.02-r1",
           "git": {
             "url": "https://github.com/DFHack/dfhack.git",
-            "revision": "51.10-r1",
-            "outputHash": "sha256-TsgafCiLX/IZXgBdqQaRt7hmATwKz80x2xclCwdE3fM="
+            "revision": "53.02-r1",
+            "outputHash": "sha256-ybDaFYNVhNS1xJU/dD8KBzNu3ceetFbvX7xNp5DLzyU="
           },
-          "xmlRev": "ec3ab067aef716817d9c5b84a6fb85bc22516caa"
+          "xmlRev": "99cb51ac849a17652dbb74efa757df5b5716a9ba"
+        }
+      },
+      "52.05": {
+        "df": {
+          "version": "52.05",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_52_05_linux.tar.bz2",
+              "outputHash": "sha256-LPbkt9s/Lx/0tvN5bac6d0r7+nr4P+u3xmDNo+EXHkw="
+            }
+          }
+        },
+        "hack": {
+          "version": "52.05-r2",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "52.05-r2",
+            "outputHash": "sha256-wv/4sRAIkb90uStGJ6eMdd/cAMVX5Uqtoe0BR+CDy7s="
+          },
+          "xmlRev": "df0ec27701a2aeaa1ccfb81323f4be55b78e1c10"
+        }
+      },
+      "51.13": {
+        "df": {
+          "version": "51.13",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_51_13_linux.tar.bz2",
+              "outputHash": "sha256-Fdb3QS+P0xL4/U0z6nZyMh78KVHDiu9TI3fF6saAw3I="
+            }
+          }
+        },
+        "hack": {
+          "version": "51.13-r1",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "51.13-r1",
+            "outputHash": "sha256-Z6ZmXl4BmSg9jRwPpYKMIw3fW6DYxBJEv8oboh+PbZQ="
+          },
+          "xmlRev": "ae7424d3f40bf60b3906b5b9b472cb9a7209a3a8"
         }
       },
       "50.15": {
@@ -96,12 +136,12 @@
     }
   },
   "therapist": {
-    "version": "42.1.12",
-    "maxDfVersion": "51.10",
+    "version": "42.1.20",
+    "maxDfVersion": "52.05",
     "git": {
       "url": "https://github.com/Dwarf-Therapist/Dwarf-Therapist.git",
-      "revision": "v42.1.12",
-      "outputHash": "sha256-/6tiFjfrAziw7XeEzPoNFgrsXk8Z7ea2PGjCvJlRt+A="
+      "revision": "v42.1.20",
+      "outputHash": "sha256-nKMQSDrxhqRRaCDUK7GbexFHdxeD/P9c2UDkiMdWsyU="
     }
   }
 }

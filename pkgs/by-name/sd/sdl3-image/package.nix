@@ -42,17 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [
-      sdl3
-      libtiff
-      libwebp
-      libavif
-    ]
-    ++ (lib.optionals (!enableSTB) [
-      libpng
-      libjpeg
-    ]);
+  buildInputs = [
+    sdl3
+    libtiff
+    libwebp
+    libavif
+  ]
+  ++ (lib.optionals (!enableSTB) [
+    libpng
+    libjpeg
+  ]);
 
   cmakeFlags = [
     # fail when a dependency could not be found
@@ -79,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.evythedemon ];
+    teams = [ lib.teams.sdl ];
     inherit (sdl3.meta) platforms;
   };
 })

@@ -26,11 +26,17 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-Q2GjinNBWLL+HXUtslzDJ7CJSTflckbjweiSMCnIVwg=";
     }
   );
+  # https://github.com/htacg/tidy-html5/issues/1139
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required (VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.5)'
+  '';
 
   nativeBuildInputs = [
     cmake
     libxslt # manpage
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) html-tidy;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) html-tidy;
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DHOST_TIDY=tidy"

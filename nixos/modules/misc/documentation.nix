@@ -69,6 +69,7 @@ let
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
+    checkRedirects = cfg.nixos.checkRedirects;
     options =
       let
         scrubbedEval = evalModules {
@@ -76,7 +77,8 @@ let
             {
               _module.check = false;
             }
-          ] ++ docModules.eager;
+          ]
+          ++ docModules.eager;
           class = "nixos";
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
@@ -114,18 +116,34 @@ let
           && (t == "directory" -> baseNameOf n != "tests")
           && (t == "file" -> hasSuffix ".nix" n)
         );
+        prefixRegex = "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos)($|/.*))";
+        filteredModules = builtins.path {
+          name = "source";
+          inherit (pkgs) path;
+          filter =
+            n: t:
+            builtins.match prefixRegex n != null
+            && cleanSourceFilter n t
+            && (t == "directory" -> baseNameOf n != "tests")
+            && (t == "file" -> hasSuffix ".nix" n);
+        };
       in
       pkgs.runCommand "lazy-options.json"
-        {
+        rec {
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
-          nixosPath = filter (pkgs.path + "/nixos");
+          nixosPath = filteredModules + "/nixos";
           NIX_ABORT_ON_WARN = warningsAreErrors;
           modules =
             "[ "
             + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
             + " ]";
           passAsFile = [ "modules" ];
+          disallowedReferences = [
+            filteredModules
+            libPath
+            pkgsLibPath
+          ];
         }
         ''
           export NIX_STORE_DIR=$TMPDIR/store
@@ -350,6 +368,14 @@ in
         example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
+        '';
+      };
+
+      nixos.checkRedirects = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Check redirects for manualHTML.
         '';
       };
 

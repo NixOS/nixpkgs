@@ -1,10 +1,10 @@
-import nixos_render_docs
-from nixos_render_docs.options import AnchorStyle
-
 import json
-from markdown_it.token import Token
 from pathlib import Path
 import pytest
+from markdown_it.token import Token
+
+import nixos_render_docs
+from nixos_render_docs.options import AnchorStyle
 
 def test_option_headings() -> None:
     c = nixos_render_docs.options.HTMLConverter({}, 'local', 'vars', 'opt-', {})

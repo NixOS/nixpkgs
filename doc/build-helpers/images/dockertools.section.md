@@ -1,6 +1,6 @@
 # pkgs.dockerTools {#sec-pkgs-dockerTools}
 
-`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.1](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md).
 Docker itself is not used to perform any of the operations done by these functions.
 
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
@@ -47,8 +47,8 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
   A value of `null` can be seen as an equivalent of `FROM scratch`.
 
-  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
-  Otherwise, the resulting image with contain the single layer created by `buildImage`.
+  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image and the layer created by `buildImage`).
+  Otherwise, the resulting image will contain the single layer created by `buildImage`.
 
   :::{.note}
   Only **Env** configuration is inherited from the base image.
@@ -130,7 +130,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 `config` (Attribute Set or Null; _optional_)
 
 : Used to specify the configuration of the containers that will be started off the generated image.
-  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.1](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md#image-json-field-descriptions).
 
   _Default value:_ `null`.
 
@@ -138,21 +138,21 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 : Used to specify the image architecture.
   This is useful for multi-architecture builds that don't need cross compiling.
-  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/v1.1.1/config.md#properties), which should still be compatible with Docker.
   According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 
   _Default value:_ the same value from `pkgs.go.GOARCH`.
 
 `diskSize` (Number; _optional_)
 
-: Controls the disk size (in megabytes) of the VM used to run the script specified in `runAsRoot`.
+: Controls the disk size in MiB (1024x1024 bytes) of the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 1024.
 
 `buildVMMemorySize` (Number; _optional_)
 
-: Controls the amount of memory (in megabytes) provisioned for the VM used to run the script specified in `runAsRoot`.
+: Controls the amount of memory in MiB (1024x1024 bytes) provisioned for the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 512.
@@ -201,6 +201,10 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   :::
 
   _Default value:_ `false`.
+
+`meta` (Attribute Set)
+
+: The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
 
 `contents` **DEPRECATED**
 
@@ -507,7 +511,7 @@ This allows the function to produce reproducible images.
   This can be seen as an equivalent of `ADD contents/ /` in a `Dockerfile`.
 
   All the contents specified by `contents` will be added as a final layer in the generated image.
-  They will be added as links to the actual files (e.g. links to the store paths).
+  They will be added as links to the actual files (e.g., links to the store paths).
   The actual files will be added in previous layers.
 
   _Default value:_ `[]`
@@ -561,7 +565,7 @@ This allows the function to produce reproducible images.
 `gname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-gname}
 
 : Credentials for Nix store ownership.
-  Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+  Can be overridden to, e.g., `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
 
   _Default value:_ `0` / `0` / `"root"` / `"root"`
 
@@ -634,6 +638,10 @@ This allows the function to produce reproducible images.
   :::
 
   _Default value:_ `false`.
+
+`meta` (Attribute Set)
+
+: The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
 
 `passthru` (Attribute Set; _optional_)
 
@@ -1577,9 +1585,7 @@ This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting po
 dockerTools.streamNixShellImage {
   tag = "latest";
   drv = hello.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
-      cowsay
-    ];
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ cowsay ];
   });
 }
 ```

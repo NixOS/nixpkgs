@@ -314,56 +314,55 @@ in
       ];
       startAt = "hourly";
 
-      serviceConfig =
-        {
-          Type = "oneshot";
-          ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
 
-          # performance
-          Nice = 19;
-          IOSchedulingClass = "best-effort";
-          IOSchedulingPriority = 7;
+        # performance
+        Nice = 19;
+        IOSchedulingClass = "best-effort";
+        IOSchedulingPriority = 7;
 
-          # hardening
-          CapabilityBoundingSet = [
-            "CAP_CHOWN"
-            "CAP_DAC_OVERRIDE"
-            "CAP_FOWNER"
-            "CAP_KILL"
-            "CAP_SETUID"
-            "CAP_SETGID"
-          ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "full";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = false; # can create sgid directories
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @resources"
-            "@chown @setuid"
-          ];
-          UMask = "0027";
-        }
-        // lib.optionalAttrs (!cfg.allowNetworking) {
-          PrivateNetwork = true; # e.g. mail delivery
-          RestrictAddressFamilies = [ "AF_UNIX" ];
-        };
+        # hardening
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
+          "CAP_KILL"
+          "CAP_SETUID"
+          "CAP_SETGID"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = false; # can create sgid directories
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+          "@chown @setuid"
+        ];
+        UMask = "0027";
+      }
+      // lib.optionalAttrs (!cfg.allowNetworking) {
+        PrivateNetwork = true; # e.g. mail delivery
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+      };
     };
     systemd.services.logrotate-checkconf = {
       description = "Logrotate configuration check";

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mini-graph-card";
-  version = "0.13.0-dev.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "kalkih";
     repo = "mini-graph-card";
     tag = "v${version}";
-    hash = "sha256-JpteGI9oR2twCTvEQ8xtb55EGQw//9EVuELh4BG0BE0=";
+    hash = "sha256-flZfOVY0/xZOL1ZktRGQhRyGAZronLAjpM0zFpc+X1U=";
   };
 
-  npmDepsHash = "sha256-Mg58i0L1e1YwBd81WwVgB56P7EYaq3FnMysIrgu0+qQ=";
+  npmDepsHash = "sha256-xzhyYYZLl8pyfK3+MRn35Ffdw/c78v8PjwLlAuQO92g=";
 
   installPhase = ''
     runHook preInstall

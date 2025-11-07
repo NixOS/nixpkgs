@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Beautiful calculator app for macOS";
     homepage = "https://numi.app/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

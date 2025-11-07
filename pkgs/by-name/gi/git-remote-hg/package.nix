@@ -13,6 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-hg";
   version = "1.0.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mnauw";
@@ -29,6 +30,8 @@ python3Packages.buildPythonApplication rec {
     libxslt
     libxml2
   ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [ mercurial ];
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   mkDerivation,
+  fetchpatch,
   fetchurl,
   cmake,
   runtimeShell,
@@ -12,6 +13,7 @@
   fftw,
   curl,
   gcc,
+  libsForQt5,
   libXt,
   qtbase,
   qttools,
@@ -25,6 +27,7 @@
   supercolliderPlugins,
   writeText,
   runCommand,
+  withWebengine ? false, # vulnerable, so disabled by default
 }:
 
 mkDerivation rec {
@@ -39,6 +42,12 @@ mkDerivation rec {
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
     ./supercollider-3.12.0-env-dirs.patch
+
+    # Fixes the build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
+      hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
+    })
   ];
 
   postPatch = ''
@@ -51,7 +60,9 @@ mkDerivation rec {
     cmake
     pkg-config
     qttools
-  ] ++ lib.optionals useSCEL [ emacs ];
+    libsForQt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals useSCEL [ emacs ];
 
   buildInputs = [
     gcc
@@ -61,16 +72,18 @@ mkDerivation rec {
     curl
     libXt
     qtbase
-    qtwebengine
     qtwebsockets
     readline
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  ]
+  ++ lib.optional withWebengine qtwebengine
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
 
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" withWebengine)
   ];
 
   passthru = {

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "guumaster";
-    repo = pname;
+    repo = "hostctl";
     rev = "v${version}";
     hash = "sha256-9BbPHqAZKw8Rpjpdd/e9ip3V0Eh06tEFt/skQ97ij4g=";
   };
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hostctl \
       --bash <($out/bin/hostctl completion bash) \
       --zsh <($out/bin/hostctl completion zsh)
@@ -42,7 +43,7 @@ buildGoModule rec {
     '';
     homepage = "https://guumaster.github.io/hostctl/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "hostctl";
   };
 }

@@ -22,6 +22,7 @@
   libXext,
   libXi,
   libXxf86vm,
+  libxcb,
   ninja,
   pcre2,
   pixman,
@@ -33,15 +34,35 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.7";
+  version = "1.3.13";
 
-  src = fetchFromGitHub {
-    owner = "aseprite";
-    repo = "aseprite";
-    rev = "v" + finalAttrs.version;
-    fetchSubmodules = true;
-    hash = "sha256-75kYJXmyags0cW2D5Ksq1uUrFSCAkFOdmn7Ya/6jLXc=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      name = "aseprite-source";
+      owner = "aseprite";
+      repo = "aseprite";
+      tag = "v${finalAttrs.version}";
+      fetchSubmodules = true;
+      hash = "sha256-eeB/4fQp1lbNYQj9LpNhOn7DYxaTc+BcmyvY2vPzpxk=";
+    })
+
+    # Translation strings
+    (fetchFromGitHub {
+      name = "aseprite-strings";
+      owner = "aseprite";
+      repo = "strings";
+      rev = "7b0af61dec1d98242d7eb2e9cab835d442d21235";
+      hash = "sha256-8OwwHCFP55pwLjk5O+a36hDZf9uX3P7cNliJM5SZdAg=";
+    })
+  ];
+
+  # Sets the main build directory to "aseprite-source" since multiple sources are fetched.
+  sourceRoot = "aseprite-source";
+
+  # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
+  postUnpack = ''
+    cp --no-clobber $PWD/aseprite-strings/* ./aseprite-source/data/strings
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +88,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libXext
     libXi
     libXxf86vm
+    libxcb
     pcre2
     pixman
     skia-aseprite
@@ -75,35 +97,18 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # https://github.com/aseprite/aseprite/issues/4486
-    # FIXME: remove on next release.
-    (fetchpatch {
-      name = "ENABLE_UPDATER-fix.patch";
-      url = "https://github.com/aseprite/aseprite/commit/8fce589.patch";
-      hash = "sha256-DbL6kK//gQXbsXEn/t+KTuoM7E9ocPAsVqEO+lYrka4=";
-    })
     ./shared-fmt.patch
     ./shared-libwebp.patch
     ./shared-skia-deps.patch
   ];
 
-  postPatch =
-    let
-      # Translation strings
-      strings = fetchFromGitHub {
-        owner = "aseprite";
-        repo = "strings";
-        rev = "e18a09fefbb6cd904e506183d5fbe08558a52ed4";
-        hash = "sha256-GyCCxbhgf0vST20EH/+KkNLrF+U9Xzgpxlao8s925PQ=";
-      };
-    in
-    ''
-      sed -i src/ver/CMakeLists.txt -e "s-set(VERSION \".*\")-set(VERSION \"$version\")-"
-      rm -rf data/strings
-      cp -r ${strings} data/strings
-    '';
+  postPatch = ''
+    substituteInPlace src/ver/CMakeLists.txt \
+      --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+  '';
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DENABLE_DESKTOP_INTEGRATION=ON"
     "-DENABLE_UPDATER=OFF"
     "-DUSE_SHARED_CMARK=ON"
@@ -116,7 +121,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DUSE_SHARED_LIBPNG=ON"
     "-DUSE_SHARED_LIBWEBP=ON"
     "-DUSE_SHARED_PIXMAN=ON"
-    "-DUSE_SHARED_TINYXML=ON"
+    "-DUSE_SHARED_TINYXML=OFF"
     "-DUSE_SHARED_WEBP=ON"
     "-DUSE_SHARED_ZLIB=ON"
     # Disable libarchive programs.
@@ -124,7 +129,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_CPIO=OFF"
     "-DENABLE_TAR=OFF"
     # UI backend.
-    "-DLAF_OS_BACKEND=skia"
+    "-DLAF_BACKEND=skia"
     "-DLAF_WITH_EXAMPLES=OFF"
     "-DSKIA_DIR=${skia-aseprite}"
     "-DSKIA_LIBRARY_DIR=${skia-aseprite}/lib"
@@ -166,5 +171,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       orivej
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "aseprite";
   };
 })

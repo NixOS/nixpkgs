@@ -15,12 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "foriequal0";
-    repo = pname;
+    repo = "git-trim";
     rev = "v${version}";
     sha256 = "sha256-XAO3Qg5I2lYZVNx4+Z5jKHRIFdNwBJsUQwJXFb4CbvM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-irgekVTWCujzSbZQMNJw3NZ3cjaUftpSJha6iZQqYJ8=";
 
   cargoPatches = [

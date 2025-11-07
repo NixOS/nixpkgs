@@ -1,32 +1,35 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitea,
   pkg-config,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   libgit2,
   oniguruma,
   openssl,
   zlib,
 }:
-let
-  version = "0.2.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  inherit version;
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Cyborus";
     repo = "forgejo-cli";
-    rev = "v${version}";
-    hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PkKinAZrZ+v1/eygiPis4F7EJnmjYfeQFPKfGpza0yA=";
+  cargoHash = "sha256-kW7Pexydkosaufk1e8P5FaY+dgkeeTG5qgJxestWkVs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook # Needed for shell completions
+  ];
 
   buildInputs = [
     libgit2
@@ -40,15 +43,25 @@ rustPlatform.buildRustPackage {
     BUILD_TYPE = "nixpkgs";
   };
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fj \
+      --bash <($out/bin/fj completion bash) \
+      --fish <($out/bin/fj completion fish) \
+      --zsh <($out/bin/fj completion zsh)
+  '';
+
   meta = {
     description = "CLI application for interacting with Forgejo";
     homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${version}";
+    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      da157
+      isabelroses
+    ];
     mainProgram = "fj";
   };
-}
+})

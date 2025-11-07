@@ -5,17 +5,18 @@
   makeWrapper,
   jq,
   glow,
+  nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0.2.0.2";
+  version = "0.2.0.2-unstable-2025-11-01";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
-    rev = "v${version}";
-    sha256 = "sha256-ASJIFQ/BpZMQGRtw8kPhtMCbXC1eb/X8TWQz+CAnaSM=";
+    rev = "cb09ebd6479e276070a55fcffae9a5320bc52ed5";
+    hash = "sha256-VpMSMWwYD0GIPtAuSkdG417RxSx6XCRh09IMrLDOi6A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,6 +38,8 @@ stdenvNoCC.mkDerivation rec {
       }"
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Shell script which checks your $HOME for unwanted files and directories";

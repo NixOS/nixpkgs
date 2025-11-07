@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypseus-singe";
-  version = "2.11.4";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "DirtBagXon";
     repo = "hypseus-singe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-04WC0fO/eNUz4muwDAbjDy5AA53QPpX5dq5Xgt8qeBI=";
+    hash = "sha256-fSqlpzA2NUY1Sk+OTj9SmeRfQ+nqY9iAa3vTwr4OV9Q=";
   };
 
   patches = [ ./use-shared-mpeg2.patch ];
@@ -39,20 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bash
-      SDL2
-      SDL2_image
-      SDL2_ttf
-      SDL2_mixer
-      libmpeg2
-      libvorbis
-      libzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-    ];
+  buildInputs = [
+    bash
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    SDL2_mixer
+    libmpeg2
+    libvorbis
+    libzip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev SDL2_image}/include/SDL2"

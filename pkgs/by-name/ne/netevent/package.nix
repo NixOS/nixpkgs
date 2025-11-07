@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     export RST2MAN=rst2man
     ./configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''

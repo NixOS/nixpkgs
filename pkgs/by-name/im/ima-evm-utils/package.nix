@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   env.MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   meta = {
-    description = "evmctl utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
+    description = "Utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
     mainProgram = "evmctl";
     homepage = "https://github.com/linux-integrity/ima-evm-utils";
     license = with lib.licenses; [

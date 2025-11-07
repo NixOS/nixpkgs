@@ -8,13 +8,13 @@
   stdenv,
 }:
 let
-  version = "0.23.1";
+  version = "0.24.2";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-UCYBT+KegoXpMRMoA3iuX8WiXhkX43JVOmhHksH5Pwk=";
+    hash = "sha256-gzQIgpouCsoMkQtjWubH7IGLiTUS6oX7oAboU8IuEOs=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +24,8 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-MByoIJtynv38TFNVDdZWjkJJpABCjJU2wBrChxM2rdE=";
+      fetcherVersion = 1;
+      hash = "sha256-5cn3fAvOXCQyiqlA0trIi/hCIfgB6xNO1pc5ZMBfouc=";
     };
 
     nativeBuildInputs = [
@@ -56,7 +57,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-O7dzdMGZ1l+cmVA3svbh/Ig1SbXXiMwJ7TXmrT2IM+g=";
+  vendorHash = "sha256-uQuurwrrhs+JM72/Nd4xOLampIKwwpOehQ7dqMZi3v0=";
 
   ldflags = [
     "-X=main.version=${version}"
@@ -80,6 +81,9 @@ buildGoModule rec {
     changelog = "https://github.com/parca-dev/parca/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      brancz
+      metalmatze
+    ];
   };
 }

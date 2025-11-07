@@ -5,28 +5,21 @@
   cython,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kasa-crypt";
-  version = "0.6.3";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "kasa-crypt";
     tag = "v${version}";
-    hash = "sha256-PQycv0JHXKIEzuKVnXoyuU/BfKG19r3eDE4rYDiYYaY=";
+    hash = "sha256-rSRLrlV3QLatI2G8sd2jDwd6U8k4MrJil62ki1kNEMc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [
     cython
@@ -34,7 +27,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "kasa_crypt" ];
 

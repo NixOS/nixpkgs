@@ -36,7 +36,6 @@ buildGoModule {
     homepage = "https://github.com/raymond-w-ko/tewisay";
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ Madouura ];
     mainProgram = "tewisay";
   };
 }

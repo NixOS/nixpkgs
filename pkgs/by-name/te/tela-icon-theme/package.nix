@@ -4,6 +4,8 @@
   fetchFromGitHub,
   gtk3,
   jdupes,
+  adwaita-icon-theme,
+  libsForQt5,
   hicolor-icon-theme,
 }:
 
@@ -23,13 +25,18 @@ stdenvNoCC.mkDerivation rec {
     jdupes
   ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    libsForQt5.breeze-icons
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall
@@ -49,6 +56,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
     platforms = subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

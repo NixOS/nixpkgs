@@ -23,7 +23,11 @@ let
     restrict 127.0.0.1
     restrict -6 ::1
 
-    ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+    ${toString (
+      map (
+        server: "${if lib.strings.hasInfix "pool" server then "pool" else "server"} " + server + " iburst\n"
+      ) cfg.servers
+    )}
 
     ${cfg.extraConfig}
   '';
@@ -33,7 +37,8 @@ let
     "${configFile}"
     "-u"
     "ntp:ntp"
-  ] ++ cfg.extraFlags;
+  ]
+  ++ cfg.extraFlags;
 
 in
 

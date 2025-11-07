@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-worktree-switcher";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "mateusauler";
     repo = "git-worktree-switcher";
     tag = "${finalAttrs.version}-fork";
-    hash = "sha256-N+bDsLEUM6FWhyliUav2n5hwMa5EEuVPoIK+Cja0DxA=";
+    hash = "sha256-vPnAXiizCU5nXce+aE2x2G5ei+7A+eBTUpxcGleSSa8=";
   };
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mateusauler/git-worktree-switcher";
-    description = "Switch between git worktrees with speed.";
+    description = "Switch between git worktrees with speed";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "wt";

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "goeland";
-  version = "0.18.3";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "slurdge";
-    repo = pname;
+    repo = "goeland";
     rev = "v${version}";
-    sha256 = "sha256-4xhw6L6CuwW2MepwGvpVLVafMcU/g0bn/2M/8ZSRF/U=";
+    sha256 = "sha256-5MKkjUOAXz6R7PdChuJA4ybc07gHdO9BF68CpI7OExA=";
   };
 
-  vendorHash = "sha256-TZIHYFE4kJu5EOQ9oT8S0Tp/r38d5RhoLdmIrus8Ibc=";
+  vendorHash = "sha256-Jnui1toAV4VvPs6T7UqgAUarFjuik/OnLUrF5VqI+EU=";
 
   ldflags = [
     "-s"
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X github.com/slurdge/goeland/version.GitCommit=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative to rss2email written in golang with many filters";
     mainProgram = "goeland";
     longDescription = ''
@@ -34,7 +34,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/slurdge/goeland";
     changelog = "https://github.com/slurdge/goeland/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.sweenu ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.sweenu ];
   };
 }

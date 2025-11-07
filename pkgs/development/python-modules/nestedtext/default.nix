@@ -43,12 +43,9 @@ buildPythonPackage rec {
   # enabled when building passthru.tests.
   doCheck = false;
 
-  pytestFlagsArray = [
-    # Avoids an ImportMismatchError.
-    "--ignore=build"
-  ];
-
   disabledTestPaths = [
+    # Avoids an ImportMismatchError.
+    "build"
     # Examples are prefixed with test_
     "examples/"
   ];

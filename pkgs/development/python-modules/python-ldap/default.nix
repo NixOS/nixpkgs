@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   distutils,
@@ -23,17 +21,20 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "3.4.4";
+  version = "3.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
     tag = "python-ldap-${version}";
-    hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
+    hash = "sha256-olRu5HacRKaAcNbQczA+UCbDxhySUOO7qH0KdWlSbT0=";
   };
+
+  postPatch = ''
+    # unused in 3.4.5; https://github.com/python-ldap/python-ldap/pull/597
+    sed -i "/setuptools-scm/d" pyproject.toml
+  '';
 
   build-system = [
     distutils
@@ -68,7 +69,7 @@ buildPythonPackage rec {
     "test_tls_ext_noca"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python modules for implementing LDAP clients";

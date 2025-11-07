@@ -1,12 +1,13 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
   jre,
   jre8,
   genericUpdater,
   writeShellScript,
+  makeWrapper,
   common-updater-scripts,
   gnused,
 }:
@@ -27,7 +28,7 @@ let
       license ? lib.licenses.mpl20,
       updateScript ? null,
     }:
-    stdenv.mkDerivation (
+    stdenvNoCC.mkDerivation (
       finalAttrs:
       let
         mainProgram = if prog == null then pname else prog;
@@ -36,21 +37,38 @@ let
       {
         inherit pname version src;
 
-        nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [
+          unzip
+          makeWrapper
+        ];
 
-        buildCommand = ''
-          unzip $src -d $out
-          mkdir -p $out/bin $out/share $out/share/java
-          cp -s "$out"/*.jar "$out/share/java/"  # */
-          rm -rf $out/notices
-          mv $out/doc $out/share
-          cat > $out/bin/${mainProgram} <<EOF
-          #! $shell
-          export JAVA_HOME=${jre}
-          exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
-          EOF
-          chmod a+x $out/bin/${mainProgram}
-        '';
+        sourceRoot = ".";
+
+        installPhase = ''
+          runHook preInstall
+
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
+
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
+
+          # Other distributions like debian distribute it as saxon*-xslt,
+          # this makes compilling packages that target other distros easier.
+          ln -s $out/bin/${mainProgram} $out/bin/${mainProgram}-xslt
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
@@ -113,7 +131,7 @@ in
     version = "6.5.3";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
-      sha256 = "0l5y3y2z4wqgh80f26dwwxwncs8v3nkz3nidv14z024lmk730vs3";
+      hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
     # https://saxon.sourceforge.net/saxon6.5.3/conditions.html
@@ -127,7 +145,7 @@ in
     jar = "saxon8";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxonb${dashify version}j.zip";
-      sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
+      hash = "sha256-aOk+BB5kAbZElAifVG+AP1bo7Se3patzISA40bzLf5U=";
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
     java = jre8;
@@ -159,11 +177,11 @@ in
 
   saxon_11-he = common rec {
     pname = "saxon-he";
-    version = "11.6";
+    version = "11.7";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      sha256 = "/AVX5mtZSO6Is19t3+FlEvtIBsnwB3MIWAPCht8Aqnw=";
+      sha256 = "MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
@@ -171,11 +189,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.5";
+    version = "12.9";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-NaRnKHkr1M7C/CYtSHd7THm1ze7wPSmB46ZOyzoZ9xY=";
+      hash = "sha256-8olb7zeUESxlChWL4nw5qG6IwXF+u44OiAZ9HwdjXRI=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

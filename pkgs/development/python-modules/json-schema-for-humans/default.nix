@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "1.3.4";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = "json-schema-for-humans";
     tag = "v${version}";
-    hash = "sha256-+IvLFejEcu477BNY8F0h4WLqe18f6i2+gXyx/mRHzpI=";
+    hash = "sha256-TmHqKf4/zzw3kImyYvnXsYJB7sL6RRs3vGCl8+Y+4BQ=";
   };
 
   postPatch = ''
@@ -62,6 +62,10 @@ buildPythonPackage rec {
     "test_references_url"
     # Tests are failing
     "TestMdGenerate"
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # Click 8.2 separates stdout and stderr, but upstream is on click 8.1 (https://github.com/pallets/click/pull/2523)
+    "test_nonexistent_output_path"
+    "test_config_parameters_with_nonexistent_output_path"
   ];
 
   pythonImportsCheck = [ "json_schema_for_humans" ];

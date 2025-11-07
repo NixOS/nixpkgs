@@ -12,29 +12,30 @@
   buildPackages,
 
   # apparmor deps
-  libapparmor,
   apparmor-parser,
   apparmor-teardown,
 }:
+let
+  inherit (python3Packages) libapparmor;
+in
 python3Packages.buildPythonApplication {
   pname = "apparmor-utils";
   inherit (libapparmor) version src;
 
-  postPatch =
-    ''
-      patchShebangs .
-      cd utils
+  postPatch = ''
+    patchShebangs .
+    cd utils
 
-      substituteInPlace aa-remove-unknown \
-        --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
-      substituteInPlace Makefile \
-        --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
-      sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' Makefile
-      sed -i aa-unconfined -e "/my_env\['PATH'\]/d"
-    ''
-    + (lib.optionalString stdenv.hostPlatform.isMusl ''
-      sed -i Makefile -e "/\<vim\>/d"
-    '');
+    substituteInPlace aa-remove-unknown \
+      --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+    substituteInPlace Makefile \
+      --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
+    sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' Makefile
+    sed -i aa-unconfined -e "/my_env\['PATH'\]/d"
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isMusl ''
+    sed -i Makefile -e "/\<vim\>/d"
+  '');
 
   format = "other";
   strictDeps = true;

@@ -42,7 +42,8 @@ buildPythonPackage rec {
     paho-mqtt
     python-dateutil
     weconnect
-  ] ++ weconnect.optional-dependencies.Images;
+  ]
+  ++ weconnect.optional-dependencies.Images;
 
   nativeCheckInputs = [
     pytest-cov-stub

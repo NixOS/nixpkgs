@@ -11,9 +11,9 @@
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager = {
-        gdm.enable = true;
-        gdm.debug = true;
+      services.displayManager.gdm = {
+        enable = true;
+        debug = true;
       };
 
       services.displayManager.autoLogin = {
@@ -21,8 +21,8 @@
         user = "alice";
       };
 
-      services.xserver.desktopManager.gnome.enable = true;
-      services.xserver.desktopManager.gnome.debug = true;
+      services.desktopManager.gnome.enable = true;
+      services.desktopManager.gnome.debug = true;
 
       systemd.user.services = {
         "org.gnome.Shell@wayland" = {
@@ -76,7 +76,8 @@
           # wait for alice to be logged in
           machine.wait_for_unit("default.target", "${user.name}")
           # check that logging in has given the user ownership of devices
-          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
+          # Change back to /dev/snd/timer after systemd-258.1
+          assert "alice" in machine.succeed("getfacl -p /dev/dri/card0")
 
       with subtest("Wait for GNOME Shell"):
           # correct output should be (true, 'false')

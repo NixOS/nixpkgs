@@ -39,9 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1QMEN/tDa7HZOo29v7RrqqYGEzGPT7P1hx1ygV0e7YA=";
   };
 
+  # TODO: sdcc version 4.5.0 does not currently produce a man output.
+  # Until the fix to sdcc's makefiles is released, this workaround
+  # conditionally withholds the man output on darwin.
+  #
+  # sdcc's tracking issue:
+  # <https://sourceforge.net/p/sdcc/bugs/3848/>
   outputs = [
     "out"
     "doc"
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
     "man"
   ];
 
@@ -53,15 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  buildInputs =
-    [
-      boost
-      texinfo
-      zlib
-    ]
-    ++ lib.optionals withGputils [
-      gputils
-    ];
+  buildInputs = [
+    boost
+    texinfo
+    zlib
+  ]
+  ++ lib.optionals withGputils [
+    gputils
+  ];
 
   # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`
   # rule in the process. As a result, on macOS (which uses a case-insensitive

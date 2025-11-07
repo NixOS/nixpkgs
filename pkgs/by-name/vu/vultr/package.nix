@@ -21,7 +21,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Vultr CLI and API client library";
+    description = "CLI and API client library";
     mainProgram = "vultr";
     homepage = "https://jamesclonk.github.io/vultr";
     changelog = "https://github.com/JamesClonk/vultr/releases/tag/${src.rev}";

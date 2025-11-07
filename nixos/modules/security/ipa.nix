@@ -7,7 +7,6 @@
 with lib;
 let
   cfg = config.security.ipa;
-  pyBool = x: if x then "True" else "False";
 
   ldapConf = pkgs.writeText "ldap.conf" ''
     # Turning this off breaks GSSAPI used with krb5 when rdns = false
@@ -43,8 +42,8 @@ in
         '';
         example = literalExpression ''
           pkgs.fetchurl {
-            url = http://ipa.example.com/ipa/config/ca.crt;
-            sha256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            url = "http://ipa.example.com/ipa/config/ca.crt";
+            hash = lib.fakeHash;
           };
         '';
       };
@@ -190,13 +189,13 @@ in
           }
       '';
 
-      "openldap/ldap.conf".source = ldapConf;
-    };
+      "ldap.conf".source = ldapConf;
 
-    environment.etc."chromium/policies/managed/freeipa.json" = mkIf cfg.chromiumSupport {
-      text = ''
-        { "AuthServerWhitelist": "*.${cfg.domain}" }
-      '';
+      "chromium/policies/managed/freeipa.json" = mkIf cfg.chromiumSupport {
+        text = builtins.toJSON {
+          AuthServerWhitelist = "*.${cfg.domain}";
+        };
+      };
     };
 
     systemd.services."ipa-activation" = {
@@ -207,8 +206,10 @@ in
       ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
       script = ''
         # libcurl requires a hard copy of the certificate
         if ! ${pkgs.diffutils}/bin/diff ${cfg.certificate} /etc/ipa/ca.crt > /dev/null 2>&1; then
@@ -226,58 +227,64 @@ in
             4. Restart sssd systemd service: sudo systemctl restart sssd
 
         EOF
+        # let service fail, to raise awareness
+        exit 1
         fi
       '';
     };
 
-    services.sssd.config = ''
-      [domain/${cfg.domain}]
-      id_provider = ipa
-      auth_provider = ipa
-      access_provider = ipa
-      chpass_provider = ipa
+    services.sssd = {
+      enable = true;
+      settings = {
+        "domain/${cfg.domain}" = {
+          id_provider = "ipa";
+          auth_provider = "ipa";
+          access_provider = "ipa";
+          chpass_provider = "ipa";
 
-      ipa_domain = ${cfg.domain}
-      ipa_server = _srv_, ${cfg.server}
-      ipa_hostname = ${cfg.ipaHostname}
+          ipa_domain = cfg.domain;
+          ipa_server = "_srv_, ${cfg.server}";
+          ipa_hostname = cfg.ipaHostname;
 
-      cache_credentials = ${pyBool cfg.cacheCredentials}
-      krb5_store_password_if_offline = ${pyBool cfg.offlinePasswords}
-      ${optionalString ((toLower cfg.domain) != (toLower cfg.realm)) "krb5_realm = ${cfg.realm}"}
+          cache_credentials = cfg.cacheCredentials;
+          krb5_store_password_if_offline = cfg.offlinePasswords;
+          krb5_realm = lib.mkIf ((toLower cfg.domain) != (toLower cfg.realm)) cfg.realm;
 
-      dyndns_update = ${pyBool cfg.dyndns.enable}
-      dyndns_iface = ${cfg.dyndns.interface}
+          dyndns_update = cfg.dyndns.enable;
+          dyndns_iface = cfg.dyndns.interface;
 
-      ldap_tls_cacert = /etc/ipa/ca.crt
-      ldap_user_extra_attrs = mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock
+          ldap_tls_cacert = "/etc/ipa/ca.crt";
+          ldap_user_extra_attrs = "mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock";
+        };
 
-      [sssd]
-      services = nss, sudo, pam, ssh, ifp
-      domains = ${cfg.domain}
+        sssd = {
+          services = "nss, sudo, pam, ssh, ifp";
+          domains = cfg.domain;
+        };
 
-      [nss]
-      homedir_substring = /home
+        nss.homedir_substring = "/home";
 
-      [pam]
-      pam_pwd_expiration_warning = 3
-      pam_verbosity = 3
+        pam = {
+          pam_pwd_expiration_warning = 3;
+          pam_verbosity = 3;
+        };
 
-      [sudo]
+        sudo = { };
 
-      [autofs]
+        autofs = { };
 
-      [ssh]
+        ssh = { };
 
-      [pac]
+        pac = { };
 
-      [ifp]
-      user_attributes = +mail, +telephoneNumber, +givenname, +sn, +lock
-      allowed_uids = ${concatStringsSep ", " cfg.ifpAllowedUids}
-    '';
+        ifp = {
+          user_attributes = "+mail, +telephoneNumber, +givenname, +sn, +lock";
+          allowed_uids = concatStringsSep ", " cfg.ifpAllowedUids;
+        };
+      };
+    };
 
-    services.ntp.servers = singleton cfg.server;
-    services.sssd.enable = true;
-    services.ntp.enable = true;
+    networking.timeServers = singleton cfg.server;
 
     security.pki.certificateFiles = singleton cfg.certificate;
   };

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6Y7ZI0kIPE7uMMOkXgm75JMEec090xZPBJFJr9DaswA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9VybBzW+saOjtQiyGu2pKHm94yCPw35Y56mhayCeW/c=";
 
   meta = with lib; {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ryochack/peep";
     changelog = "https://github.com/ryochack/peep/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "peep";
   };
 }

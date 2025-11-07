@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "typer";
-  version = "unstable-2023-02-08";
+  version = "0-unstable-2023-02-08";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
@@ -26,7 +26,7 @@ buildGoModule {
     description = "Typing test in your terminal";
     homepage = "https://github.com/maaslalani/typer";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "typer";
   };
 }

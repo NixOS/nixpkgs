@@ -40,17 +40,16 @@ stdenv.mkDerivation rec {
   glibc = stdenv.cc.libc.out;
 
   # Patch paths for linux systems. Other platforms will need their own patches.
-  patches =
-    [
-      ./mark-paths.patch # mark paths for later substitution in postPatch
-    ]
-    ++ lib.optional stdenv.hostPlatform.isAarch64 (fetchpatch {
-      # backport upstream patch for aarch64 glibc 2.34
-      url = "https://gitlab.com/freepascal.org/fpc/source/-/commit/a20a7e3497bccf3415bf47ccc55f133eb9d6d6a0.patch";
-      hash = "sha256-xKTBwuOxOwX9KCazQbBNLhMXCqkuJgIFvlXewHY63GM=";
-      stripLen = 1;
-      extraPrefix = "fpcsrc/";
-    });
+  patches = [
+    ./mark-paths.patch # mark paths for later substitution in postPatch
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 (fetchpatch {
+    # backport upstream patch for aarch64 glibc 2.34
+    url = "https://gitlab.com/freepascal.org/fpc/source/-/commit/a20a7e3497bccf3415bf47ccc55f133eb9d6d6a0.patch";
+    hash = "sha256-xKTBwuOxOwX9KCazQbBNLhMXCqkuJgIFvlXewHY63GM=";
+    stripLen = 1;
+    extraPrefix = "fpcsrc/";
+  });
 
   postPatch = ''
     # substitute the markers set by the mark-paths patch
@@ -112,5 +111,9 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = platforms.unix;
+    # See:
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/issues/41045>
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/887>
+    broken = stdenv.cc.isClang && stdenv.hostPlatform.isx86_64;
   };
 }

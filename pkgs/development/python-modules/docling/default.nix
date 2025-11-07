@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -29,11 +30,13 @@
   pypdfium2,
   python-docx,
   python-pptx,
-  rapidocr-onnxruntime,
+  rapidocr,
   requests,
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -49,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.31.0";
+  version = "2.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-hvNvplEjF/zEchJBN2yJ0/D5Yec/Grr6kdpzRLXeyZU=";
+    hash = "sha256-U82hGvWXkKwZ4um0VevVoYiIfzswu5hLDYvxtqJqmHU=";
   };
 
   build-system = [
@@ -64,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -86,17 +90,20 @@ buildPythonPackage rec {
     pypdfium2
     python-docx
     python-pptx
-    rapidocr-onnxruntime
+    rapidocr
     requests
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 
   pythonRelaxDeps = [
+    "lxml"
+    "pypdfium2"
     "pillow"
-    "typer"
   ];
 
   optional-dependencies = {
@@ -105,7 +112,7 @@ buildPythonPackage rec {
     ];
     rapidocr = [
       onnxruntime
-      rapidocr-onnxruntime
+      rapidocr
     ];
     tesserocr = [
       tesserocr
@@ -154,10 +161,16 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+    "test_formula_conversion_with_page_range"
 
     # requires network access
     "test_page_range"
     "test_parser_backends"
+    "test_confidence"
+    "test_e2e_webp_conversions"
+    "test_asr_pipeline_conversion"
+    "test_threaded_pipeline"
+    "test_pipeline_comparison"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

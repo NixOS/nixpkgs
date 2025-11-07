@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
-    rev = version;
+    tag = version;
     hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
   };
 
@@ -60,11 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest -j 1
-    runHook postCheck
-  '';
+  enableParallelChecking = false;
 
   meta = with lib; {
     description = "Open framework for storing and sharing scene data";

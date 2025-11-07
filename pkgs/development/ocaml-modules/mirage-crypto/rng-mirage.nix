@@ -3,8 +3,8 @@
   mirage-crypto-rng,
   duration,
   mirage-runtime,
-  mirage-time,
-  mirage-clock,
+  mirage-mtime,
+  mirage-sleep,
   mirage-unix,
   mirage-time-unix,
   mirage-clock-unix,
@@ -30,8 +30,8 @@ buildDunePackage {
     duration
     mirage-crypto-rng
     mirage-runtime
-    mirage-time
-    mirage-clock
+    mirage-mtime
+    mirage-sleep
     logs
     lwt
   ];

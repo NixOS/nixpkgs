@@ -1,29 +1,39 @@
 {
   lib,
-  fetchFromGitHub,
   buildHomeAssistantComponent,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
+
+  # dependency
   moonraker-api,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.7.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
     tag = version;
-    hash = "sha256-BPlHMTGb1xSxFydeLsHKBlXSqgh1qmTrenPo+XPx2IM=";
+    hash = "sha256-3qxTigKBZ7maUylx0NCf70tURNUWFpo2TzgxnxqjUpA=";
   };
 
   dependencies = [
     moonraker-api
   ];
 
+  nativeCheckInputs = [
+    pytest-homeassistant-custom-component
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
   #skip phases with nothing to do
   dontConfigure = true;
-  doCheck = false;
 
   meta = with lib; {
     changelog = "https://github.com/marcolivierarsenault/moonraker-home-assistant/releases/tag/${version}";

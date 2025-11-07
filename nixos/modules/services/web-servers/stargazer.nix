@@ -74,7 +74,7 @@ in
     };
 
     requestTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 5;
       description = ''
         Number of seconds to wait for the client to send a complete
@@ -83,7 +83,7 @@ in
     };
 
     responseTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 0;
       description = ''
         Number of seconds to wait for the client to send a complete
@@ -260,26 +260,26 @@ in
         LockPersonality = true;
         RestrictRealtime = true;
         RemoveIPC = true;
-        CapabilityBoundingSet =
-          [
-            "~CAP_SYS_PTRACE"
-            "~CAP_SYS_ADMIN"
-            "~CAP_SETPCAP"
-            "~CAP_SYS_TIME"
-            "~CAP_SYS_PACCT"
-            "~CAP_SYS_TTY_CONFIG "
-            "~CAP_SYS_CHROOT"
-            "~CAP_SYS_BOOT"
-            "~CAP_NET_ADMIN"
-          ]
-          ++ lib.lists.optional (!cfg.allowCgiUser) [
-            "~CAP_SETGID"
-            "~CAP_SETUID"
-          ];
+        CapabilityBoundingSet = [
+          "~CAP_SYS_PTRACE"
+          "~CAP_SYS_ADMIN"
+          "~CAP_SETPCAP"
+          "~CAP_SYS_TIME"
+          "~CAP_SYS_PACCT"
+          "~CAP_SYS_TTY_CONFIG "
+          "~CAP_SYS_CHROOT"
+          "~CAP_SYS_BOOT"
+          "~CAP_NET_ADMIN"
+        ]
+        ++ lib.lists.optional (!cfg.allowCgiUser) [
+          "~CAP_SETGID"
+          "~CAP_SETUID"
+        ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "~@cpu-emulation @debug @keyring @mount @obsolete"
-        ] ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
+        ]
+        ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
       };
     };
 

@@ -42,6 +42,7 @@ let
 
   lightdmConf = writeText "lightdm.conf" ''
     [LightDM]
+    minimum-vt = 1
     ${optionalString cfg.greeter.enable ''
       greeter-user = ${config.users.users.lightdm.name}
       greeters-directory = ${cfg.greeter.package}
@@ -234,19 +235,11 @@ in
       exec ${lightdm}/sbin/lightdm
     '';
 
-    # Replaces getty
-    systemd.services.display-manager.conflicts = [
-      "getty@tty7.service"
-      # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
-      # quits. Currently this breaks switching to configurations with plymouth.
-    ];
-
     # Pull in dependencies of services we replace.
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty7.service"
       "user.slice"
     ];
 
@@ -336,7 +329,6 @@ in
     ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
-    services.xserver.tty = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }

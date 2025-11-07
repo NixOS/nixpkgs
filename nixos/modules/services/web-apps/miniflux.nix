@@ -17,12 +17,14 @@ let
     ;
   cfg = config.services.miniflux;
 
-  defaultAddress = "localhost:8080";
+  boolToInt = b: if b then 1 else 0;
 
   pgbin = "${config.services.postgresql.package}/bin";
+  # The hstore extension is no longer needed as of v2.2.14
+  # and would prevent Miniflux from starting.
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
   '';
 in
 
@@ -39,30 +41,58 @@ in
         description = ''
           Whether a PostgreSQL database should be automatically created and
           configured on the local host. If set to `false`, you need provision a
-          database yourself and make sure to create the hstore extension in it.
+          database yourself.
         '';
       };
 
       config = mkOption {
-        type =
-          with types;
-          attrsOf (oneOf [
-            str
-            int
-          ]);
-        example = literalExpression ''
-          {
-            CLEANUP_FREQUENCY = 48;
-            LISTEN_ADDR = "localhost:8080";
-          }
-        '';
+        type = types.submodule {
+          freeformType =
+            with types;
+            attrsOf (oneOf [
+              str
+              int
+            ]);
+          options = {
+            LISTEN_ADDR = mkOption {
+              type = types.str;
+              default = "localhost:8080";
+              description = ''
+                Address to listen on. Use absolute path for a Unix socket.
+                Multiple addresses can be specified, separated by commas.
+              '';
+              example = "127.0.0.1:8080, 127.0.0.1:8081";
+            };
+            DATABASE_URL = mkOption {
+              type = types.str;
+              defaultText = "user=miniflux host=/run/postgresql dbname=miniflux";
+              description = ''
+                Postgresql connection parameters.
+                See [lib/pq](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters) for more details.
+              '';
+            };
+            RUN_MIGRATIONS = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Run database migrations.";
+            };
+            CREATE_ADMIN = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Create an admin user from environment variables.";
+            };
+            WATCHDOG = mkOption {
+              type = with types; coercedTo bool boolToInt int;
+              default = true;
+              description = "Enable or disable Systemd watchdog.";
+            };
+          };
+        };
+        default = { };
         description = ''
           Configuration for Miniflux, refer to
           <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
-
-          Correct configuration for the database is already provided.
-          By default, listens on ${defaultAddress}.
         '';
       };
 
@@ -87,11 +117,7 @@ in
       }
     ];
     services.miniflux.config = {
-      LISTEN_ADDR = mkDefault defaultAddress;
       DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
-      RUN_MIGRATIONS = 1;
-      CREATE_ADMIN = lib.mkDefault 1;
-      WATCHDOG = 1;
     };
 
     services.postgresql = lib.mkIf cfg.createDatabaseLocally {
@@ -107,10 +133,10 @@ in
 
     systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
       serviceConfig = {
         Type = "oneshot";
@@ -123,12 +149,13 @@ in
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
       requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
-      after =
-        [ "network.target" ]
-        ++ lib.optionals cfg.createDatabaseLocally [
-          "postgresql.service"
-          "miniflux-dbsetup.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.createDatabaseLocally [
+        "postgresql.target"
+        "miniflux-dbsetup.service"
+      ];
 
       serviceConfig = {
         Type = "notify";
@@ -185,9 +212,9 @@ in
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
+        include <abstractions/golang>
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         r ${cfg.package}/bin/miniflux,
-        r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
         rw /run/miniflux/**,
       }
     '';

@@ -25,11 +25,18 @@ let
         disabledTestPaths = [
           # Requires python-on-whales
           "tests/autobahn/test_autobahn.py"
-        ] ++ (old.disabledTestPaths or [ ]);
+        ]
+        ++ (old.disabledTestPaths or [ ]);
       });
 
       databricks-sdk = super.databricks-sdk.overridePythonAttrs (old: {
         # Tests require langchain-openai which is incompatible with pydantic_1
+        doCheck = false;
+      });
+
+      versioningit = super.versioningit.overridePythonAttrs (old: {
+        # Tests fail with pydantic_1
+        # AttributeError: type object 'CaseDetails' has no attribute 'model_validate_...
         doCheck = false;
       });
     };
@@ -109,28 +116,32 @@ python.pkgs.buildPythonApplication rec {
     gcp = [ google-cloud-storage ];
   };
 
-  nativeCheckInputs =
-    [
-      addBinToPathHook
-      gitMinimal
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python.pkgs; [
-      pytest-asyncio
-      pytest-mock
-      pytest-timeout
-      pytest-xdist
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    addBinToPathHook
+    gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python.pkgs; [
+    pytest-asyncio
+    pytest-mock
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Fails because of dbfs CLI wrong call
     "test_dbfs_unknown_user"
     "test_dbfs_no_root"
+
     # Requires pylint, prospector, pydocstyle
     "test_python_basic_sanity_check"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmph3veuluv...
+    "test_load_file"
+    "test_storage_serde"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -146,6 +157,6 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/databrickslabs/dbx";
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.databricks-dbx;
-    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
   };
 }

@@ -43,11 +43,10 @@ self: super:
     # darwin doesn't have sub-second resolution
     # https://github.com/hspec/mockery/issues/11
     mockery = overrideCabal (drv: {
-      preCheck =
-        ''
-          export TRAVIS=true
-        ''
-        + (drv.preCheck or "");
+      preCheck = ''
+        export TRAVIS=true
+      ''
+      + (drv.preCheck or "");
     }) super.mockery;
 
     # https://github.com/ndmitchell/shake/issues/206
@@ -62,19 +61,16 @@ self: super:
 
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
-    with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
     git-annex = overrideCabal (drv: {
       # We can't use testFlags since git-annex side steps the Cabal test mechanism
-      preCheck =
-        drv.preCheck or ""
-        + ''
-          checkFlagsArray+=(
-            # The addurl test cases require security(1) to be in PATH which we can't
-            # provide from nixpkgs to my (@sternenseemann) knowledge.
-            "-p" "!/addurl/"
-          )
-        '';
+      preCheck = drv.preCheck or "" + ''
+        checkFlagsArray+=(
+          # The addurl test cases require security(1) to be in PATH which we can't
+          # provide from nixpkgs to my (@sternenseemann) knowledge.
+          "-p" "!/addurl/"
+        )
+      '';
     }) super.git-annex;
 
     # on*Finish tests rely on a threadDelay timing differential of 0.1s.
@@ -97,26 +93,28 @@ self: super:
     x509-system = overrideCabal (
       drv:
       lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch =
-          ''
-            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-          ''
-          + (drv.postPatch or "");
+        postPatch = ''
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
       }
     ) super.x509-system;
     crypton-x509-system = overrideCabal (
       drv:
       lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch =
-          ''
-            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-          ''
-          + (drv.postPatch or "");
+        postPatch = ''
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
       }
     ) super.crypton-x509-system;
 
     # https://github.com/haskell-foundation/foundation/pull/412
     foundation = dontCheck super.foundation;
+
+    # Test suite attempts to create illegal paths on HFS+
+    # https://github.com/fpco/haskell-filesystem/issues/37
+    system-fileio = dontCheck super.system-fileio;
 
     llvm-hs = overrideCabal (oldAttrs: {
       # One test fails on darwin.
@@ -125,11 +123,10 @@ self: super:
       # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
       # when called from GHC, probably because clang is version 7, but we are
       # using LLVM8.
-      preCompileBuildDriver =
-        ''
-          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
-        ''
-        + (oldAttrs.preCompileBuildDriver or "");
+      preCompileBuildDriver = ''
+        substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+      ''
+      + (oldAttrs.preCompileBuildDriver or "");
     }) super.llvm-hs;
 
     sym = markBroken super.sym;
@@ -146,13 +143,12 @@ self: super:
     OpenGLRaw = overrideCabal (drv: {
       librarySystemDepends = [ ];
       libraryHaskellDepends = drv.libraryHaskellDepends;
-      preConfigure =
-        ''
-          frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-          frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-          configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-        ''
-        + (drv.preConfigure or "");
+      preConfigure = ''
+        frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
+        frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
+        configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
+      ''
+      + (drv.preConfigure or "");
     }) super.OpenGLRaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
@@ -168,18 +164,18 @@ self: super:
 
     HTF = overrideCabal (drv: {
       # GNU find is not prefixed in stdenv
-      postPatch =
-        ''
-          substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
+      ''
+      + (drv.postPatch or "");
     }) super.HTF;
 
     # conditional dependency via a cabal flag
     cas-store = overrideCabal (drv: {
       libraryHaskellDepends = [
         self.kqueue
-      ] ++ (drv.libraryHaskellDepends or [ ]);
+      ]
+      ++ (drv.libraryHaskellDepends or [ ]);
     }) super.cas-store;
 
     # We are lacking pure pgrep at the moment for tests to work
@@ -188,21 +184,19 @@ self: super:
     # On darwin librt doesn't exist and will fail to link against,
     # however linking against it is also not necessary there
     GLHUI = overrideCabal (drv: {
-      postPatch =
-        ''
-          substituteInPlace GLHUI.cabal --replace " rt" ""
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace GLHUI.cabal --replace " rt" ""
+      ''
+      + (drv.postPatch or "");
     }) super.GLHUI;
 
     SDL-image = overrideCabal (drv: {
       # Prevent darwin-specific configuration code path being taken
       # which doesn't work with nixpkgs' SDL libraries
-      postPatch =
-        ''
-          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+      ''
+      + (drv.postPatch or "");
       patches = [
         # Work around SDL_main.h redefining main to SDL_main
         ./patches/SDL-image-darwin-hsc.patch
@@ -212,11 +206,10 @@ self: super:
     # Prevent darwin-specific configuration code path being taken which
     # doesn't work with nixpkgs' SDL libraries
     SDL-mixer = overrideCabal (drv: {
-      postPatch =
-        ''
-          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+      ''
+      + (drv.postPatch or "");
     }) super.SDL-mixer;
 
     # Work around SDL_main.h redefining main to SDL_main
@@ -331,6 +324,23 @@ self: super:
 
     sysinfo = dontCheck super.sysinfo;
 
+    network = super.network.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
+    # 2025-08-04: Some RNG tests fail only on Darwin
+    botan-low = overrideCabal (drv: {
+      testFlags =
+        drv.testFlags or [ ]
+        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+          # botan-low-rng-tests
+          "/rdrand/rngInit/"
+          "/rdrand/rngGet/"
+          "/rdrand/rngReseed/"
+          "/rdrand/rngReseedFromRNGCtx/"
+          "/rdrand/rngAddEntropy/"
+        ]);
+    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -344,22 +354,24 @@ self: super:
     # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
     # the check, sticking with the status quo. Ideally there'll be zero cases of
     # the latter in the future!
-    inherit
-      (lib.mapAttrs (
-        _:
-        overrideCabal (old: {
-          postInstall = ''
-            remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-            # Note: The `data` output is needed at runtime.
-            remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    cabal2nix = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "''${!outputBin}/bin/hackage2nix"
 
-            ${old.postInstall or ""}
-          '';
-        })
-      ) super)
-      cabal2nix
-      cabal2nix-unstable
-      ;
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix;
+    cabal2nix-unstable = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "''${!outputBin}/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix-unstable;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -386,8 +398,12 @@ self: super:
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
     }) (disableCabalFlag "fixity-th" super.fourmolu);
 
-    # https://github.com/NixOS/nixpkgs/issues/149692
-    Agda = disableCabalFlag "optimise-heavily" super.Agda;
+    Agda = lib.pipe super.Agda [
+      # https://github.com/NixOS/nixpkgs/issues/149692
+      (disableCabalFlag "optimise-heavily")
+      # https://github.com/agda/agda/issues/8016
+      (appendConfigureFlag "--ghc-option=-Wwarn=deprecations")
+    ];
 
     # https://github.com/NixOS/nixpkgs/issues/198495
     eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pymsgbox";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyMsgBox";

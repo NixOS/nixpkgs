@@ -177,7 +177,7 @@ let
     {
       postInstall = ''
         alias='cursor -xfree86-cursor-medium-r-normal--0-${sizeString}-0-0-p-0-adobe-fontspecific'
-        echo "$alias" > $out/lib/X11/fonts/Type1/fonts.alias
+        echo "$alias" > $out/share/fonts/X11/Type1/fonts.alias
       '';
     }
   );
@@ -277,6 +277,11 @@ in
         "dir"
       ];
     })
+    (lib.mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "tty"
+    ] "'services.xserver.tty' was removed because it was ineffective.")
   ];
 
   ###### interface
@@ -675,12 +680,6 @@ in
         '';
       };
 
-      tty = mkOption {
-        type = types.nullOr types.int;
-        default = 7;
-        description = "Virtual console for the X server.";
-      };
-
       display = mkOption {
         type = types.nullOr types.int;
         default = 0;
@@ -761,16 +760,17 @@ in
         dmConf = cfg.displayManager;
         default =
           !(
-            dmConf.gdm.enable
+            config.services.displayManager.gdm.enable
             || config.services.displayManager.sddm.enable
             || dmConf.xpra.enable
             || dmConf.sx.enable
             || dmConf.startx.enable
             || config.services.greetd.enable
             || config.services.displayManager.ly.enable
+            || config.services.displayManager.lemurs.enable
           );
       in
-      mkIf (default) (mkDefault true);
+      mkIf default (mkDefault true);
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
@@ -879,21 +879,19 @@ in
       };
     };
 
-    services.xserver.displayManager.xserverArgs =
-      [
-        "-config ${configFile}"
-        "-xkbdir"
-        "${cfg.xkb.dir}"
-      ]
-      ++ optional (cfg.display != null) ":${toString cfg.display}"
-      ++ optional (cfg.tty != null) "vt${toString cfg.tty}"
-      ++ optional (cfg.dpi != null) "-dpi ${toString cfg.dpi}"
-      ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
-      ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
-      ++ optional (!cfg.enableTCP) "-nolisten tcp"
-      ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-      ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
-      ++ optional cfg.terminateOnReset "-terminate";
+    services.xserver.displayManager.xserverArgs = [
+      "-config ${configFile}"
+      "-xkbdir"
+      "${cfg.xkb.dir}"
+    ]
+    ++ optional (cfg.display != null) ":${toString cfg.display}"
+    ++ optional (cfg.dpi != null) "-dpi ${toString cfg.dpi}"
+    ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
+    ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
+    ++ optional (!cfg.enableTCP) "-nolisten tcp"
+    ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+    ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+    ++ optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules = concatLists (catAttrs "modules" cfg.drivers) ++ [
       xorg.xorgserver.out

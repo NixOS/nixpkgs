@@ -6,7 +6,6 @@
   fetchPypi,
   flatdict,
   jwcrypto,
-  pycryptodome,
   pycryptodomex,
   pydash,
   pyfakefs,
@@ -15,7 +14,6 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
-  python-jose,
   pythonOlder,
   pyyaml,
   setuptools,
@@ -42,11 +40,9 @@ buildPythonPackage rec {
     aiohttp
     flatdict
     jwcrypto
-    pycryptodome
     pycryptodomex
     pydash
     pyjwt
-    python-jose
     pyyaml
     xmltodict
     yarl
@@ -60,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"

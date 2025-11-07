@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e2Nire1TLcliq5KxoINJIZJdgohHRTXqIZPj1GNIe2A=";
 
   # openssl crate requires perl during build process

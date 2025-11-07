@@ -12,7 +12,6 @@ packages=(
   types-aiobotocore-account
   types-aiobotocore-acm
   types-aiobotocore-acm-pca
-  # types-aiobotocore-alexaforbusiness  Obsolete, will be removed soon
   types-aiobotocore-amp
   types-aiobotocore-amplify
   types-aiobotocore-amplifybackend
@@ -39,7 +38,6 @@ packages=(
   types-aiobotocore-autoscaling-plans
   types-aiobotocore-backup
   types-aiobotocore-backup-gateway
-  # types-aiobotocore-backupstorage  Obsolete, will be removed soon
   types-aiobotocore-batch
   types-aiobotocore-billingconductor
   types-aiobotocore-braket
@@ -73,7 +71,6 @@ packages=(
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
-  # types-aiobotocore-codestar  Obsolete, will be removed soon
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -117,7 +114,6 @@ packages=(
   types-aiobotocore-ecs
   types-aiobotocore-efs
   types-aiobotocore-eks
-  types-aiobotocore-elastic-inference
   types-aiobotocore-elasticache
   types-aiobotocore-elasticbeanstalk
   types-aiobotocore-elastictranscoder
@@ -140,7 +136,6 @@ packages=(
   types-aiobotocore-frauddetector
   types-aiobotocore-fsx
   types-aiobotocore-gamelift
-  # types-aiobotocore-gamesparks  Obsolete, will be removed soon
   types-aiobotocore-glacier
   types-aiobotocore-globalaccelerator
   types-aiobotocore-glue
@@ -151,7 +146,6 @@ packages=(
   types-aiobotocore-guardduty
   types-aiobotocore-health
   types-aiobotocore-healthlake
-  # types-aiobotocore-honeycode  Obsolete, will be removed soon
   types-aiobotocore-iam
   types-aiobotocore-identitystore
   types-aiobotocore-imagebuilder
@@ -162,9 +156,6 @@ packages=(
   types-aiobotocore-iot
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
-  # types-aiobotocore-iot-roborunner  Obsolete, will be removed soon
-  # types-aiobotocore-iot1click-devices
-  # types-aiobotocore-iot1click-projects
   types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
@@ -210,7 +201,6 @@ packages=(
   types-aiobotocore-lookoutvision
   types-aiobotocore-m2
   types-aiobotocore-machinelearning
-  # types-aiobotocore-macie  Obsolete, will be removed soon
   types-aiobotocore-macie2
   types-aiobotocore-managedblockchain
   types-aiobotocore-managedblockchain-query
@@ -235,14 +225,12 @@ packages=(
   types-aiobotocore-migrationhub-config
   types-aiobotocore-migrationhuborchestrator
   types-aiobotocore-migrationhubstrategy
-  # types-aiobotocore-mobile  Obsolete, will be removed soon
   types-aiobotocore-mq
   types-aiobotocore-mturk
   types-aiobotocore-mwaa
   types-aiobotocore-neptune
   types-aiobotocore-network-firewall
   types-aiobotocore-networkmanager
-  types-aiobotocore-nimble
   types-aiobotocore-oam
   types-aiobotocore-omics
   types-aiobotocore-opensearch
@@ -266,7 +254,6 @@ packages=(
   types-aiobotocore-pipes
   types-aiobotocore-polly
   types-aiobotocore-pricing
-  types-aiobotocore-privatenetworks
   types-aiobotocore-proton
   types-aiobotocore-qldb
   types-aiobotocore-qldb-session
@@ -320,7 +307,6 @@ packages=(
   types-aiobotocore-signer
   types-aiobotocore-simspaceweaver
   types-aiobotocore-sms
-  types-aiobotocore-sms-voice
   types-aiobotocore-snow-device-management
   types-aiobotocore-snowball
   types-aiobotocore-sns
@@ -355,7 +341,6 @@ packages=(
   types-aiobotocore-wellarchitected
   types-aiobotocore-wisdom
   types-aiobotocore-workdocs
-  # types-aiobotocore-worklink
   types-aiobotocore-workmail
   types-aiobotocore-workmailmessageflow
   types-aiobotocore-workspaces
@@ -371,7 +356,7 @@ for package in "${packages[@]}"; do
 
   url="https://pypi.io/packages/source/t/${package}/${package//-/_}-${version}.tar.gz"
   hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash convert --hash-algo sha256 --to sri $hash)"
+  sri_hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $hash)"
   package_short="${package#types-aiobotocore-}"
 
   awk -i inplace -v pkg="$package" -v pkg_short="$package_short" -v ver="$version" -v hash="$sri_hash" '

@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gql";
-  version = "0.38.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
     rev = version;
-    hash = "sha256-/cTU+LBoXnMzNKd18nYoGkEN/cfUVQIDFBFQNrmdWuM=";
+    hash = "sha256-iczBVix56aKbvOksxYmZ8WPgngnTDn9MIlVnZ2nA5Ts=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4sdbTcDDvA7MYMiTKKAWg0sYnBPeVj3eBCo7HTZYkUY=";
+  cargoHash = "sha256-vblQuUSpTK93UEYdiEPq1C3N+E3WCTZHoLJDWG4rZNs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/AmrDeveloper/GQL";
     changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "gitql";
   };
 }

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "txredisapi";
-  version = "1.4.9";
+  version = "1.4.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "IlyaSkriblovsky";
     repo = "txredisapi";
     tag = version;
-    hash = "sha256-6Z2vurTAw9YHxvEiixtdxBH0YHj+Y9aTdsSkafPMZus=";
+    hash = "sha256-gPXkpUcHAuXx/olB/nKstRrfIUFFLf4gFyv7ReRvV2E=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -25,7 +25,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "txredisapi" ];
 
@@ -35,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/IlyaSkriblovsky/txredisapi";
-    description = "non-blocking redis client for python";
+    description = "Non-blocking redis client for python";
     license = licenses.asl20;
     maintainers = with maintainers; [ dandellion ];
   };

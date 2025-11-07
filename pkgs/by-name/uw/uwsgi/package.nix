@@ -4,7 +4,7 @@
   lib,
   pkg-config,
   jansson,
-  pcre,
+  pcre2,
   libxcrypt,
   expat,
   zlib,
@@ -61,7 +61,8 @@ let
         php-embed.extensions.session
         php-embed.extensions.session.dev
         php-embed.unwrapped.dev
-      ] ++ php-embed.unwrapped.buildInputs;
+      ]
+      ++ php-embed.unwrapped.buildInputs;
     })
   ];
 
@@ -75,18 +76,18 @@ let
     else
       throw "Unknown UWSGI plugin ${name}, available : ${all}";
 
-  needed = builtins.map getPlugin plugins;
+  needed = map getPlugin plugins;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.29";
+  version = "2.0.31";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     tag = finalAttrs.version;
-    hash = "sha256-WlbvvAu+A0anPItnG8RnWrXm450/xbOloPzUd2L9TuU=";
+    hash = "sha256-WWZ+ClLWoUFi64xsiyuLXcxQsYdOv1DVhG+4oVYJJMI=";
   };
 
   patches = [
@@ -100,20 +101,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      jansson
-      pcre
-      libxcrypt
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      expat
-      zlib
-    ]
-    ++ lib.optional withPAM pam
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withCap libcap
-    ++ lib.concatMap (x: x.inputs) needed;
+  buildInputs = [
+    jansson
+    pcre2
+    libxcrypt
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    expat
+    zlib
+  ]
+  ++ lib.optional withPAM pam
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withCap libcap
+  ++ lib.concatMap (x: x.inputs) needed;
 
   basePlugins = lib.concatStringsSep "," (
     lib.optional withPAM "pam" ++ lib.optional withSystemd "systemd_logger"
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
   # the hack works in coordination with ./additional-php-ldflags.patch
-  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (builtins.any (x: x.name == "php") needed) (
+  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (lib.elem "php" needed) (
     lib.concatStringsSep "," [
       "-Wl"
       "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString (builtins.any (x: x.name == "php") needed) ''
+  postFixup = lib.optionalString (lib.elem "php" needed) ''
     wrapProgram $out/bin/uwsgi --set PHP_INI_SCAN_DIR ${php-embed}/lib
   '';
 
@@ -185,8 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      abbradar
-      schneefux
       globin
     ];
     platforms = lib.platforms.unix;

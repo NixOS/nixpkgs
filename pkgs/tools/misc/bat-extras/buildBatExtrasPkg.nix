@@ -8,10 +8,12 @@
   fish,
   getconf,
   makeWrapper,
+  nushell,
   zsh,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
+    "name"
     "dependencies"
     "meta"
   ];
@@ -26,6 +28,7 @@ stdenv.mkDerivation (
   finalAttrs:
   cleanArgs args
   // {
+    pname = name;
     inherit (core) version;
 
     src = core;
@@ -35,41 +38,42 @@ stdenv.mkDerivation (
     buildInputs = dependencies;
 
     # Patch shebangs now because our tests rely on them
-    postPatch = ''
+    postPatch = (args.postPatch or "") + ''
       patchShebangs --host bin/${name}
     '';
 
     dontConfigure = true;
-    dontBuild = true; # we've already built
+    dontBuild = true; # we've already built it
 
-    doCheck = true;
+    doCheck = args.doCheck or true;
     nativeCheckInputs = [
       bat
       bash
       fish
+      nushell
       zsh
-    ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
-      bash ./test.sh --compiled --suite ${name}
+      bash ./test.sh --compiled --suite ${name} --verbose --snapshot:show
       runHook postCheck
     '';
 
-    installPhase =
-      ''
-        runHook preInstall
-        mkdir -p $out/bin
-        cp -p bin/${name} $out/bin/${name}
-      ''
-      + lib.optionalString (dependencies != [ ]) ''
-        wrapProgram $out/bin/${name} \
-          --prefix PATH : ${lib.makeBinPath dependencies}
-      ''
-      + ''
-        runHook postInstall
-      '';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      cp -p bin/${name} $out/bin/${name}
+    ''
+    + lib.optionalString (dependencies != [ ]) ''
+      wrapProgram $out/bin/${name} \
+        --prefix PATH : ${lib.makeBinPath dependencies}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
-    # We already patched
+    # We have already patched
     dontPatchShebangs = true;
 
     meta = core.meta // { mainProgram = name; } // meta;

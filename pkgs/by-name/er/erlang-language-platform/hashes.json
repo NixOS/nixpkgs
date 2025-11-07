@@ -1,0 +1,14 @@
+{
+  "elp-linux-aarch64-unknown-linux-gnu-otp-26.2": "sha256-xKl19cLz3Pm39QS8+9fOCGJHpxl4NoPYHIwTqKDq4Jc=",
+  "elp-linux-aarch64-unknown-linux-gnu-otp-27.3": "sha256-GNoV6Ihtro3ecl4cncyQKQez/5CBqj1E3JV1JK8l2V8=",
+  "elp-linux-aarch64-unknown-linux-gnu-otp-28": "sha256-DW00mSXJWIBfwsV9juMKaiFwNkezT1Ro+5zMaCwFRzE=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-26.2": "sha256-fQvlzwS7crDsqmSjsUlFXbqKnCKldOYuiQDmGojqJb8=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-27.3": "sha256-4pZtSVCDIiJ7k83go7WjJq4wxWbc9nG4hJoAgXDMOZM=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-28": "sha256-3hY+5TDBobRjKgfptvgHmdtuWm8UE7KoWFhsR2qmQhc=",
+  "elp-macos-aarch64-apple-darwin-otp-26.2": "sha256-38N+0msiPMv9eFTSzWdEqmczDp49JvTlu3kDedmC+Lw=",
+  "elp-macos-aarch64-apple-darwin-otp-27.3": "sha256-2uZyvyVwQULz+3HtvkIGvjO5Dm7qAAIbHE/VUcqcXkQ=",
+  "elp-macos-aarch64-apple-darwin-otp-28": "sha256-BosctdlXWTxkVyLX8awlJtyHAtfoVxFlvs7qrSlPTZc=",
+  "elp-macos-x86_64-apple-darwin-otp-26.2": "sha256-p0xotdrflT2CANJi4OaevJZT4nhFRAfdzrhQ/7M8ykA=",
+  "elp-macos-x86_64-apple-darwin-otp-27.3": "sha256-qTvsGRCVqqoSWK/t7MysE1wlD0PwtUQQ1N1Zols+Egk=",
+  "elp-macos-x86_64-apple-darwin-otp-28": "sha256-DSB8AXWM1KByuzg5HY2lh2x4zmeeR2nyiERR3Iovpns="
+}

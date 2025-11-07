@@ -25,7 +25,7 @@ let
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = config.system.modulesTree;
     firmware = config.hardware.firmware;
-    allowMissing = false;
+    allowMissing = config.boot.initrd.allowMissingModules;
     inherit (config.boot.initrd) extraFirmwarePaths;
   };
 
@@ -33,9 +33,6 @@ let
   # booting (such as the FS containing `/nix/store`, or an FS needed for
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
-  # Determine whether zfs-mount(8) is needed.
-  zfsRequiresMountHelper = any (fs: lib.elem "zfsutil" fs.options) fileSystems;
 
   # A utility for enumerating the shared-library dependencies of a program
   findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
@@ -118,24 +115,9 @@ let
           copy_bin_and_libs $BIN
         done
 
-        ${optionalString zfsRequiresMountHelper ''
-          # Filesystems using the "zfsutil" option are mounted regardless of the
-          # mount.zfs(8) helper, but it is required to ensure that ZFS properties
-          # are used as mount options.
-          #
-          # BusyBox does not use the ZFS helper in the first place.
-          # util-linux searches /sbin/ as last path for helpers (stage-1-init.sh
-          # must symlink it to the store PATH).
-          # Without helper program, both `mount`s silently fails back to internal
-          # code, using default options and effectively ignore security relevant
-          # ZFS properties such as `setuid=off` and `exec=off` (unless manually
-          # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
-          copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
-          copy_bin_and_libs ${config.boot.zfs.package}/bin/mount.zfs
-        ''}
-
         # Copy some util-linux stuff.
         copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
+        copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
 
         # Copy dmsetup and lvm.
         copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
@@ -225,17 +207,7 @@ let
         # Make sure that the patchelf'ed binaries still work.
         echo "testing patched programs..."
         $out/bin/ash -c 'echo hello world' | grep "hello world"
-        ${
-          if zfsRequiresMountHelper then
-            ''
-              $out/bin/mount -V 1>&1 | grep -q "mount from util-linux"
-              $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
-            ''
-          else
-            ''
-              $out/bin/mount --help 2>&1 | grep -q "BusyBox"
-            ''
-        }
+        $out/bin/mount -V 2>&1 | grep -q "mount from util-linux"
         $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
         $out/bin/udevadm --version
         $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
@@ -396,50 +368,49 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
-    contents =
-      [
-        {
-          object = bootStage1;
-          symlink = "/init";
-        }
-        {
-          object = "${modulesClosure}/lib";
-          symlink = "/lib";
-        }
-        {
-          object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          symlink = "/etc/modprobe.d/ubuntu.conf";
-        }
-        {
-          object = config.environment.etc."modprobe.d/nixos.conf".source;
-          symlink = "/etc/modprobe.d/nixos.conf";
-        }
-        {
-          object = pkgs.kmod-debian-aliases;
-          symlink = "/etc/modprobe.d/debian.conf";
-        }
-      ]
-      ++ lib.optionals config.services.multipath.enable [
-        {
-          object =
-            pkgs.runCommand "multipath.conf"
-              {
-                src = config.environment.etc."multipath.conf".text;
-                preferLocalBuild = true;
-              }
-              ''
-                target=$out
-                printf "$src" > $out
-                substituteInPlace $out \
-                  --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
-              '';
-          symlink = "/etc/multipath.conf";
-        }
-      ]
-      ++ (lib.mapAttrsToList (symlink: options: {
-        inherit symlink;
-        object = options.source;
-      }) config.boot.initrd.extraFiles);
+    contents = [
+      {
+        object = bootStage1;
+        symlink = "/init";
+      }
+      {
+        object = "${modulesClosure}/lib";
+        symlink = "/lib";
+      }
+      {
+        object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+        symlink = "/etc/modprobe.d/ubuntu.conf";
+      }
+      {
+        object = config.environment.etc."modprobe.d/nixos.conf".source;
+        symlink = "/etc/modprobe.d/nixos.conf";
+      }
+      {
+        object = pkgs.kmod-debian-aliases;
+        symlink = "/etc/modprobe.d/debian.conf";
+      }
+    ]
+    ++ lib.optionals config.services.multipath.enable [
+      {
+        object =
+          pkgs.runCommand "multipath.conf"
+            {
+              src = config.environment.etc."multipath.conf".text;
+              preferLocalBuild = true;
+            }
+            ''
+              target=$out
+              printf "$src" > $out
+              substituteInPlace $out \
+                --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
+            '';
+        symlink = "/etc/multipath.conf";
+      }
+    ]
+    ++ (lib.mapAttrsToList (symlink: options: {
+      inherit symlink;
+      object = options.source;
+    }) config.boot.initrd.extraFiles);
   };
 
   # Script to add secret files to the initrd at bootloader update time
@@ -768,7 +739,7 @@ in
             source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
           ) (attrValues config.boot.initrd.secrets);
         message = ''
-          boot.loader.initrd.secrets values must be unquoted paths when
+          boot.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd
           secrets, e.g.:
 
@@ -783,7 +754,14 @@ in
     ];
 
     system.build = mkMerge [
-      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+      {
+        inherit
+          bootStage1
+          initialRamdiskSecretAppender
+          extraUtils
+          modulesClosure
+          ;
+      }
 
       # generated in nixos/modules/system/boot/systemd/initrd.nix
       (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })

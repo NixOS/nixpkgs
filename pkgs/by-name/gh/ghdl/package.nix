@@ -21,65 +21,60 @@ assert backend == "mcode" || backend == "llvm" || backend == "gcc";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v3wl+tn92Bks0VnW80Q1KwHwUtUxlbeMSI3WWvgDky4=";
+    hash = "sha256-vPeODNTptxIjN6qLoIHaKOFf3P3iAK2GloVreHPaAz8=";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
-  nativeBuildInputs =
-    [
-      gnat
-    ]
-    ++ lib.optionals (backend == "gcc") [
-      texinfo
-      makeWrapper
-    ];
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals (backend == "llvm") [
-      llvm
-    ]
-    ++ lib.optionals (backend == "gcc") [
-      gmp
-      mpfr
-      libmpc
-    ];
-  propagatedBuildInputs =
-    [
-    ]
-    ++ lib.optionals (backend == "llvm" || backend == "gcc") [
-      zlib
-    ];
+  nativeBuildInputs = [
+    gnat
+  ]
+  ++ lib.optionals (backend == "gcc") [
+    texinfo
+    makeWrapper
+  ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals (backend == "llvm") [
+    llvm
+  ]
+  ++ lib.optionals (backend == "gcc") [
+    gmp
+    mpfr
+    libmpc
+  ];
+  propagatedBuildInputs = [
+  ]
+  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
+    zlib
+  ];
 
-  preConfigure =
-    ''
-      # If llvm 7.0 works, 7.x releases should work too.
-      sed -i 's/check_version  7.0/check_version  7/g' configure
-    ''
-    + lib.optionalString (backend == "gcc") ''
-      ${gnutar}/bin/tar -xf ${gcc-unwrapped.src}
-    '';
+  preConfigure = ''
+    # If llvm 7.0 works, 7.x releases should work too.
+    sed -i 's/check_version  7.0/check_version  7/g' configure
+  ''
+  + lib.optionalString (backend == "gcc") ''
+    ${gnutar}/bin/tar -xf ${gcc-unwrapped.src}
+  '';
 
-  configureFlags =
-    [
-      # See https://github.com/ghdl/ghdl/pull/2058
-      "--disable-werror"
-      "--enable-synth"
-    ]
-    ++ lib.optionals (backend == "llvm") [
-      "--with-llvm-config=${llvm.dev}/bin/llvm-config"
-    ]
-    ++ lib.optionals (backend == "gcc") [
-      "--with-gcc=gcc-${gcc-unwrapped.version}"
-    ];
+  configureFlags = [
+    # See https://github.com/ghdl/ghdl/pull/2058
+    "--disable-werror"
+    "--enable-synth"
+  ]
+  ++ lib.optionals (backend == "llvm") [
+    "--with-llvm-config=${llvm.dev}/bin/llvm-config"
+  ]
+  ++ lib.optionals (backend == "gcc") [
+    "--with-gcc=gcc-${gcc-unwrapped.version}"
+  ];
 
   buildPhase = lib.optionalString (backend == "gcc") ''
     make copy-sources
@@ -111,13 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
   '';
 
-  hardeningDisable =
-    [
-    ]
-    ++ lib.optionals (backend == "gcc") [
-      # GCC compilation fails with format errors
-      "format"
-    ];
+  hardeningDisable = [
+  ]
+  ++ lib.optionals (backend == "gcc") [
+    # GCC compilation fails with format errors
+    "format"
+  ];
 
   enableParallelBuilding = true;
 
@@ -141,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
     ];
     platforms =
-      lib.platforms.linux
-      ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
+      lib.platforms.linux ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
   };
 })

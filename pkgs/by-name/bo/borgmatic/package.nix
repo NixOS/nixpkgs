@@ -15,12 +15,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "2.0.4";
+  version = "2.0.11";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-keQ92kSbJ8c1JUZQdHnXdanMhnJie1xtsfzBZ8S6ILk=";
+    hash = "sha256-X8IrLAH0rwUOGWMx9tDHIL8DeII35YCOeZyD979x/gk=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   postInstall =
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
         --bash <($out/bin/borgmatic --bash-completion)
     ''
@@ -67,10 +67,10 @@ python3Packages.buildPythonApplication rec {
       # there is another "sleep", so choose the one with the space after it
       # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
       substitute sample/systemd/borgmatic.service \
-                 $out/lib/systemd/system/borgmatic.service \
-                 --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-                 --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-                 --replace "sleep " "${coreutils}/bin/sleep "
+        $out/lib/systemd/system/borgmatic.service \
+        --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+        --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+        --replace-fail "sleep " "${coreutils}/bin/sleep "
     '';
 
   passthru.tests = {

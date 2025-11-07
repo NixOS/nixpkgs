@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-17PzGHSwruHPRKjyiHWBMqHANR5ulb+/J5UoVsOrbyc=";
 
   meta = with lib; {
@@ -33,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fundoc";
     homepage = "https://github.com/daynin/fundoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -4,39 +4,33 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-rerunfailures,
   pytestCheckHook,
-  pythonOlder,
+  typing-extensions,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "11.1.1";
+  version = "12.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-mine";
-    repo = pname;
+    repo = "mcstatus";
     tag = "v${version}";
-    hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
+    hash = "sha256-lo96dZ7YaqZz/fmhuo8XWm5tSsB6ixtdxkZ3Hd6mq78=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-    poetry-dynamic-versioning
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncio-dgram
     dnspython
   ];
@@ -45,26 +39,31 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-rerunfailures
+    pytest-cov-stub
     pytestCheckHook
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "mcstatus" ];
 
   disabledTests = [
     # DNS features are limited in the sandbox
-    "test_query"
-    "test_query_retry"
     "test_resolve_localhost"
     "test_async_resolve_localhost"
+    "test_java_server_with_query_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for checking the status of Minecraft servers";
-    mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
-    changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      perchun
+    ];
+    mainProgram = "mcstatus";
   };
 }

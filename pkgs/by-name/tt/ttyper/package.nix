@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-g4OD4Mc3KHN9rrzM+9JvN2xTnSojGQy6yptdGj3zgW4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-M8LG/rZLFRUztniCmUuyj5mdzH3qUKoj02uUQ2zlq8M=";
 
   meta = with lib; {
@@ -24,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/max-niederman/ttyper/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       max-niederman
     ];
     mainProgram = "ttyper";

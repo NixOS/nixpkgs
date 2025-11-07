@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdaq";
-  version = "3.0.18";
+  version = "3.0.21";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "libdaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PMb8q8QcfUXxEf0s2UdaZogmxzqUCw0wRdzfT1xio/E=";
+    hash = "sha256-ifG7Ccuwus+ftTzjTrvgkGDAxEhYT9pJVrILn7K17P8=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       aycanirican
       brianmcgillion
     ];
-    changelog = "https://github.com/snort3/libdaq/releases/tag/v${finalAttrs.version}/changelog.md";
+    changelog = "https://github.com/snort3/libdaq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2;
     outputsToInstall = [
       "lib"

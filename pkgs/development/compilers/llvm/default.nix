@@ -5,15 +5,14 @@
   buildPackages,
   targetPackages,
   stdenv,
-  gcc12Stdenv,
   pkgs,
-  recurseIntoAttrs,
   # This is the default binutils, but with *this* version of LLD rather
   # than the default LLVM version's, if LLD is the choice. We use these for
   # the `useLLVM` bootstrapping below.
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
+  generateSplicesForMkScope,
   patchesFn ? lib.id,
   # Allows passthrough to packages via newScope in ./common/default.nix.
   # This makes it possible to do
@@ -23,21 +22,17 @@
 }@packageSetArgs:
 let
   versions = {
-    "12.0.1".officialRelease.sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
-    "13.0.1".officialRelease.sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
-    "14.0.6".officialRelease.sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
-    "15.0.7".officialRelease.sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
-    "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
-    "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
     "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
-    "20.1.3".officialRelease.sha256 = "sha256-sOl90iRBlD+DGJs72JrP9cJz6XmWs/5PL+uW4nt6LA0=";
-    "21.0.0-git".gitRelease = {
-      rev = "ed95624e208e5bf7c3eeadfccee0fb6060a4ca98";
-      rev-version = "21.0.0-unstable-2025-04-27";
-      sha256 = "sha256-L7H/+V+rdhddNLPEbn9h4cRy+ioxUYxuMMhvORB5Q6s=";
+    "20.1.8".officialRelease.sha256 = "sha256-ysyB/EYxi2qE9fD5x/F2zI4vjn8UDoo1Z9ukiIrjFGw=";
+    "21.1.2".officialRelease.sha256 = "sha256-SgZdBL0ivfv6/4EqmPQ+I57qT2t6i/rqnm20+T1BsFY=";
+    "22.0.0-git".gitRelease = {
+      rev = "492f82fa46065b3afcfed1a4dca9a029d7c5acf1";
+      rev-version = "22.0.0-unstable-2025-11-02";
+      sha256 = "sha256-N0OJrXy9vtEFrr6pxoEdPIdOUju6sIjKX1s6wtYZ/7c=";
     };
-  } // llvmVersions;
+  }
+  // llvmVersions;
 
   mkPackage =
     {
@@ -60,36 +55,27 @@ let
         args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
     in
     lib.nameValuePair attrName (
-      recurseIntoAttrs (
+      lib.recurseIntoAttrs (
         callPackage ./common (
           {
             inherit (stdenvAdapters) overrideCC;
-            buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
-            targetLlvmLibraries =
-              # Allow overriding targetLlvmLibraries; this enables custom runtime builds.
-              packageSetArgs.targetLlvmLibraries or targetPackages."llvmPackages_${attrName}".libraries
-                or llvmPackages."${attrName}".libraries;
-            targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
             inherit
               officialRelease
               gitRelease
               monorepoSrc
               version
               patchesFn
+              bootBintools
+              bootBintoolsNoLibc
               ;
+
+            otherSplices = generateSplicesForMkScope "llvmPackages_${attrName}";
           }
           // packageSetArgs # Allow overrides.
-          // {
-            stdenv =
-              if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
-                gcc12Stdenv
-              else
-                stdenv; # does not build with gcc13
-          }
         )
       )
     );
 
   llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
 in
-llvmPackages // { inherit mkPackage; }
+llvmPackages // { inherit mkPackage versions; }

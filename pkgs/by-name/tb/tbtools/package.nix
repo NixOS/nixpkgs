@@ -8,19 +8,18 @@
   systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tbtools";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tbtools";
-    tag = "v${version}";
-    hash = "sha256-zq8q3JaoqWAQUat2gIW0Wimi/tZiC6XDphUVjH0viU4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gVVJzStmLJQMsc6DF8vEcJxTwpoRC0Kwq5WMzyNweB4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SAHIDjELm4qr4whoQVdt3EuNA72qFqXEg3H0hYr7yLc=";
+  cargoHash = "sha256-0zwxpvCKpR78L6d/nJk/e1S5GQHL0lCQi2Ns9J/U1/o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

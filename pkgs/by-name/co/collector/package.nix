@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
-    description = "Drag multiple files and folders on to Collection window, drop them anywhere!";
+    description = "Drag multiple files and folders on to Collection window, drop them anywhere";
     mainProgram = "collector";
     homepage = "https://github.com/mijorus/collector";
     license = lib.licenses.gpl3;

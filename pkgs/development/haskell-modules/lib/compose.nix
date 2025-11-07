@@ -459,13 +459,11 @@ rec {
     enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
-    postFixup =
-      drv.postFixup or ""
-      + ''
+    postFixup = drv.postFixup or "" + ''
 
-        # Remove every directory which could have links to other store paths.
-        rm -rf $out/lib $out/nix-support $out/share/doc
-      '';
+      # Remove every directory which could have links to other store paths.
+      rm -rf $out/lib $out/nix-support $out/share/doc
+    '';
     disallowGhcReference = true;
   });
 
@@ -540,12 +538,10 @@ rec {
   triggerRebuild =
     i:
     overrideCabal (drv: {
-      postUnpack =
-        drv.postUnpack or ""
-        + ''
+      postUnpack = drv.postUnpack or "" + ''
 
-          # trigger rebuild ${toString i}
-        '';
+        # trigger rebuild ${toString i}
+      '';
     });
 
   /*
@@ -576,36 +572,6 @@ rec {
   # nix-shell evaluation, return a nix-shell optimized environment.
   shellAware = p: if lib.inNixShell then p.env else p;
 
-  ghcInfo = ghc: rec {
-    isCross = (ghc.cross or null) != null;
-    isGhcjs = ghc.isGhcjs or false;
-    nativeGhc = if isCross || isGhcjs then ghc.bootPkgs.ghc else ghc;
-  };
-
-  ### mkDerivation helpers
-  # These allow external users of a haskell package to extract
-  # information about how it is built in the same way that the
-  # generic haskell builder does, by reusing the same functions.
-  # Each function here has the same interface as mkDerivation and thus
-  # can be called for a given package simply by overriding the
-  # mkDerivation argument it used. See getHaskellBuildInputs above for
-  # an example of this.
-
-  # Some information about which phases should be run.
-  controlPhases =
-    ghc:
-    let
-      inherit (ghcInfo ghc) isCross;
-    in
-    {
-      doCheck ? !isCross,
-      doBenchmark ? false,
-      ...
-    }:
-    {
-      inherit doCheck doBenchmark;
-    };
-
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
   #
@@ -633,23 +599,21 @@ rec {
   __generateOptparseApplicativeCompletion =
     exeName:
     overrideCabal (drv: {
-      postInstall =
-        (drv.postInstall or "")
-        + ''
-          bashCompDir="''${!outputBin}/share/bash-completion/completions"
-          zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
-          fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
-          mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
-          "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
-          "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
-          "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
+      postInstall = (drv.postInstall or "") + ''
+        bashCompDir="''${!outputBin}/share/bash-completion/completions"
+        zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
+        fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
+        mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
+        "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
+        "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
+        "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
 
-          # Sanity check
-          grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
-            echo 'Could not find ${exeName} in completion script.'
-            exit 1
-          }
-        '';
+        # Sanity check
+        grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
+          echo 'Could not find ${exeName} in completion script.'
+          exit 1
+        }
+      '';
     });
 
   /*
@@ -698,9 +662,9 @@ rec {
       # closePropagationFast.
       propagatedPlainBuildInputs =
         drvs:
-        builtins.map (i: i.val) (
+        map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv: {
+            startSet = map (drv: {
               key = drv.outPath;
               val = drv;
             }) drvs;

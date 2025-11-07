@@ -9,6 +9,7 @@
   pkgconfig,
   setuptools,
   setuptools-scm,
+  udevCheckHook,
 
   # dependneices
   numpy,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.10.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     tag = "v${version}";
-    hash = "sha256-q4qBblebCb5z67KgWBIzsvCWNZf146I7LHPCyAabDUM=";
+    hash = "sha256-PplymlXZlRt+BzhCzIYRMjr+rMFf+XfSq846QAlbRi0=";
     leaveDotGit = true;
   };
 
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pkgconfig
     setuptools
     setuptools-scm
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -77,7 +79,8 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [ "TestHardware" ];
 

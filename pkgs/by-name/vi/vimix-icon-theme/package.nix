@@ -33,7 +33,7 @@ lib.checkListOfEnum "${pname}: color variants"
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "vimix-icon-theme";
       rev = version;
       hash = "sha256-HNwEqp6G9nZDIJo9b6FD4d5NSXUx523enENM0NVwviA=";
     };
@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook preInstall
 
       ./install.sh \
-        ${if colorVariants != [ ] then builtins.toString colorVariants else "-a"} \
+        ${if colorVariants != [ ] then toString colorVariants else "-a"} \
         -d $out/share/icons
 
       # replace duplicate files with symlinks

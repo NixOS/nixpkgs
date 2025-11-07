@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zsh,
 }:
 
 # To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
@@ -19,7 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  buildInputs = [ zsh ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

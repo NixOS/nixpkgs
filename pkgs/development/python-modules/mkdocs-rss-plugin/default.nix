@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.1";
+  version = "1.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = version;
-    hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
+    hash = "sha256-K+cqBJmTz4WzkeXp3pGQoizfLMuxR17Q33Fc0xc5eWo=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,8 @@ buildPythonPackage rec {
     cachecontrol
     gitpython
     mkdocs
-  ];
+  ]
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     feedparser

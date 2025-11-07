@@ -30,7 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      oida
       Frostman
     ];
   };

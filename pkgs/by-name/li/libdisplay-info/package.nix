@@ -7,19 +7,19 @@
   ninja,
   python3,
   hwdata,
-  edid-decode,
+  v4l-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdisplay-info";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "libdisplay-info";
-    rev = version;
-    sha256 = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-nXf2KGovNKvcchlHlzKBkAOeySMJXgxMpbi5z9gLrdc=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-    edid-decode
+    v4l-utils
     hwdata
     python3
   ];
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ pedrohlc ];
   };
-}
+})

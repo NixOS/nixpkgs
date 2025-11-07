@@ -8,6 +8,7 @@
   lxml,
   oauthlib,
   pyjwt,
+  pytest-xdist,
   pytestCheckHook,
   python-jose,
   python3-openid,
@@ -15,12 +16,14 @@
   pythonOlder,
   requests,
   requests-oauthlib,
+  responses,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.5.4";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-social-auth";
     repo = "social-core";
     tag = version;
-    hash = "sha256-tFaRvNoO5K7ytqMhL//Ntasc7jb4PYXB1yyjFvFqQH8=";
+    hash = "sha256-PQPnLTTCAUE1UmaDRmEXLozY0607e2/fLsvzcJzo4bQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -54,27 +57,30 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    responses
+    typing-extensions
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  # Disable checking the code coverage
-  prePatch = ''
-    substituteInPlace social_core/tests/requirements.txt \
-      --replace "coverage>=3.6" "" \
-      --replace "pytest-cov>=2.7.1" ""
+  disabledTestPaths = [
+    # missing google-auth-stubs
+    "social_core/tests/backends/test_google.py"
 
-    substituteInPlace tox.ini \
-      --replace "{posargs:-v --cov=social_core}" "{posargs:-v}"
-  '';
+    # network access
+    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_login"
+    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_partial_pipeline"
+  ];
 
   pythonImportsCheck = [ "social_core" ];
 
   meta = with lib; {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
-    changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

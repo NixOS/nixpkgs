@@ -19,14 +19,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
+    repo = "rtoml";
     rev = "v${version}";
     hash = "sha256-1movtKMQkQ6PEpKpSkK0Oy4AV0ee7XrS0P9m6QwZTaM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-/elui0Rf3XwvD2jX+NGoJgf9S3XSp16qzdwkGZbKaZg=";
   };
 
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # TypeError: loads() got an unexpected keyword argument 'name'
@@ -60,6 +59,6 @@ buildPythonPackage rec {
     description = "Rust based TOML library for Python";
     homepage = "https://github.com/samuelcolvin/rtoml";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

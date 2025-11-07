@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   openssl,
   zlib,
@@ -21,6 +22,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-11677.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2f082ec31261f556969160143ba94875d783971a";
+      hash = "sha256-FeiZAbr1kpt+YNjhi2gfG2A6nXKiSssMFRmlALaneu4=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-11678.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a";
+      hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
+    })
+  ];
+
+  # Updating to 4.4.1 would bring some errors, and the patch doesn't apply cleanly
+  # https://github.com/warmcat/libwebsockets/commit/47efb8c1c2371fa309f85a32984e99b2cc1d614a
+  postPatch = ''
+    for f in $(find . -name CMakeLists.txt); do
+      sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i "$f"
+    done
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -34,25 +56,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DLWS_WITH_PLUGINS=ON"
-      "-DLWS_WITH_IPV6=ON"
-      "-DLWS_WITH_SOCKS5=ON"
-      "-DDISABLE_WERROR=ON"
-      "-DLWS_BUILD_HASH=no_hash"
-    ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-    ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
-    ++ (
-      if stdenv.hostPlatform.isStatic then
-        [ "-DLWS_WITH_SHARED=OFF" ]
-      else
-        [
-          "-DLWS_WITH_STATIC=OFF"
-          "-DLWS_LINK_TESTAPPS_DYNAMIC=ON"
-        ]
-    );
+  cmakeFlags = [
+    "-DLWS_WITH_PLUGINS=ON"
+    "-DLWS_WITH_IPV6=ON"
+    "-DLWS_WITH_SOCKS5=ON"
+    "-DDISABLE_WERROR=ON"
+    "-DLWS_BUILD_HASH=no_hash"
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
+  ++ (
+    if stdenv.hostPlatform.isStatic then
+      [ "-DLWS_WITH_SHARED=OFF" ]
+    else
+      [
+        "-DLWS_WITH_STATIC=OFF"
+        "-DLWS_LINK_TESTAPPS_DYNAMIC=ON"
+      ]
+  );
 
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.

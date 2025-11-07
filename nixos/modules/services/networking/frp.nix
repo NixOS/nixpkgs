@@ -80,7 +80,8 @@ in
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
-            ] ++ lib.optionals isClient [ "AF_UNIX" ];
+            ]
+            ++ lib.optionals isClient [ "AF_UNIX" ];
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
             RestrictRealtime = true;

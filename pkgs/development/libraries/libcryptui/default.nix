@@ -3,11 +3,13 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   pkg-config,
   intltool,
   glib,
   gnome,
   gtk3,
+  gtk-doc,
   gnupg,
   gpgme,
   dbus-glib,
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libcryptui/${lib.versions.majorMinor version}/libcryptui-${version}.tar.xz";
     sha256 = "0rh8wa5k2iwbwppyvij2jdxmnlfjbna7kbh2a5n7zw4nnjkx3ski";
   };
 
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
     pkg-config
     dbus-glib # dbus-binding-tool
     gtk3 # AM_GLIB_GNU_GETTEXT
+    gtk-doc
     intltool
     autoreconfHook
   ];
@@ -51,9 +54,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preAutoreconf = ''
+    # error: possibly undefined macro: AM_NLS
+    cp ${gettext}/share/gettext/m4/nls.m4 m4
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libcryptui";
       versionPolicy = "odd-unstable";
     };
   };

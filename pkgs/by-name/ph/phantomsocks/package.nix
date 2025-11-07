@@ -9,15 +9,15 @@
   withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap),
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "phantomsocks";
-  version = "unstable-2023-11-30";
+  version = "0-unstable-2025-08-07";
 
   src = fetchFromGitHub {
     owner = "macronut";
-    repo = pname;
-    rev = "b1b13c5b88cf3bac54f39c37c0ffcb0b46e31049";
-    hash = "sha256-ptCzd2/8dNHjAkhwA2xpZH8Ki/9DnblHI2gAIpgM+8E=";
+    repo = "phantomsocks";
+    rev = "c52f1bde25ed5df07eb4cd010a3d508c5cf023e0";
+    hash = "sha256-V9XBCHih409IqKx3TM37fvxYzP0bv46M0DgKgj64RFg=";
   };
 
   vendorHash = "sha256-0MJlz7HAhRThn8O42yhvU3p5HgTG8AkPM0ksSjWYAC4=";

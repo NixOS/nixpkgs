@@ -15,24 +15,23 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "acsone";
-    repo = pname;
+    repo = "hatch-odoo";
     tag = version;
     sha256 = "sha256-I3jaiG0Xu8B34q30p7zTs+FeBXUQiPKTAJLSVxE9gYE=";
   };
 
   buildInputs = [ hatch-vcs ];
 
-  propagatedBuildInputs =
-    [
-      hatchling
-      manifestoo-core
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
+  propagatedBuildInputs = [
+    hatchling
+    manifestoo-core
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
   meta = with lib; {
-    description = "A hatch plugin to develop and package Odoo projects";
+    description = "Hatch plugin to develop and package Odoo projects";
     homepage = "https://github.com/acsone/hatch-odoo";
     license = licenses.mit;
     maintainers = with maintainers; [ yajo ];

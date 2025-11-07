@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "osv-scanner";
-  version = "2.0.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "osv-scanner";
     tag = "v${version}";
-    hash = "sha256-x2lQqBjNbX+EhtnK6r3YpZX5yAadLMUKfypxsGTB5s4=";
+    hash = "sha256-8ossrNtZgxvzbTLLeELd5ODk3VuIcrC+aIavPzEDQqs=";
   };
 
-  vendorHash = "sha256-eN5KJWubE+NptdncfVPyglb5SS76Eh7jlrajcjBU8YI=";
+  vendorHash = "sha256-SiWQL33DZcg3H3ECXI+7RJQ1IxrrAmSTRUWPL0m2hcc=";
 
   subPackages = [
     "cmd/osv-scanner"
@@ -38,13 +38,13 @@ buildGoModule rec {
     package = osv-scanner;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability scanner written in Go which uses the data provided by https://osv.dev";
     mainProgram = "osv-scanner";
     homepage = "https://github.com/google/osv-scanner";
     changelog = "https://github.com/google/osv-scanner/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       stehessel
       urandom
     ];

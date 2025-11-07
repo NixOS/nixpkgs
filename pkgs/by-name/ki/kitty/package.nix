@@ -45,85 +45,82 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.41.1";
+  version = "0.44.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-oTkzFEPgbFa2wPBJxh/9ZbK8liM9isWGEwExJq5/h2o=";
+    hash = "sha256-5MBYj1d/KhTFcijLMLXpmHPeuSAXuOjzjganUpWnVF4=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-ld3cGJUjoi3od6gINyGE7fQodl9CSKmakJ1CPLMX+Ss=";
+      vendorHash = "sha256-Afk/I/+4KHcFJ4r3/RSs+G5V6aTa+muwERoMD0wi6Io=";
     }).goModules;
 
-  buildInputs =
-    [
-      harfbuzz
-      ncurses
-      simde
-      lcms2
-      librsync
-      matplotlib
-      openssl.dev
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-      python3
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      libunistring
-      libcanberra
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libxkbcommon
-      libXi
-      libXext
-      wayland-protocols
-      wayland
-      dbus
-      libGL
-      cairo
-    ];
+  buildInputs = [
+    harfbuzz
+    ncurses
+    simde
+    lcms2
+    librsync
+    matplotlib
+    openssl.dev
+    xxHash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+    python3
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
+    libGL
+    cairo
+  ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      ncurses
-      pkg-config
-      sphinx
-      furo
-      sphinx-copybutton
-      sphinxext-opengraph
-      sphinx-inline-tabs
-      go_1_24
-      fontconfig
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns # For the png2icns tool.
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
+    go_1_24
+    fontconfig
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns # For the png2icns tool.
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
@@ -135,9 +132,6 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
-    ./fix-test_ssh_env_vars.patch
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -147,12 +141,6 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
-
-    # Makes man page generation respect SOURCE_DATE_EPOCH. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-timestamp-reproducibility.patch
-
-    # Ensures deterministic ordering of fish shell completions. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-fish-completion-ordering.patch
   ];
 
   hardeningDisable = [
@@ -209,19 +197,18 @@ buildPythonApplication rec {
       runHook postBuild
     '';
 
-  nativeCheckInputs =
-    [
-      pillow
+  nativeCheckInputs = [
+    pillow
 
-      # Shells needed for shell integration tests
-      bashInteractive
-      zsh
-      fish
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # integration tests need sudo
-      sudo
-    ];
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # integration tests need sudo
+    sudo
+  ];
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -231,9 +218,13 @@ buildPythonApplication rec {
 
     substituteInPlace kitty_tests/ssh.py \
       --replace test_ssh_connection_data no_test_ssh_connection_data \
+      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+      --replace test_ssh_copy no_test_ssh_copy \
+      --replace test_ssh_env_vars no_test_ssh_env_vars
 
     substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration
+      --replace test_fish_integration no_test_fish_integration \
+      --replace test_zsh_integration no_test_zsh_integration
 
     substituteInPlace kitty_tests/fonts.py \
       --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
@@ -249,7 +240,6 @@ buildPythonApplication rec {
 
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-
     # Required for `test_ssh_shell_integration` to pass.
     export TERM=kitty
 
@@ -321,7 +311,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
-    description = "The fast, feature-rich, GPU based terminal emulator";
+    description = "Fast, feature-rich, GPU based terminal emulator";
     license = licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
@@ -330,7 +320,6 @@ buildPythonApplication rec {
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
     maintainers = with maintainers; [
-      tex
       rvolosatovs
       Luflosi
       kashw2

@@ -38,7 +38,8 @@ buildPythonPackage rec {
 
     # cli deps
     typer
-  ] ++ typer.optional-dependencies.standard;
+  ]
+  ++ typer.optional-dependencies.standard;
 
   preCheck = ''
     # make sphinx_path an alias of pathlib.Path, since sphinx_path was removed in Sphinx v7.2.0

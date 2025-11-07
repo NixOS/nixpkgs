@@ -73,17 +73,18 @@ stdenvNoCC.mkDerivation (
 
     sourceRoot = if stdenvNoCC.hostPlatform.isDarwin then "." else null;
 
-    nativeBuildInputs =
-      [ validatePkgConfig ]
-      ++ (
-        if stdenvNoCC.hostPlatform.isDarwin then
-          [
-            _7zz
-            cctools
-          ]
-        else
-          [ rpmextract ]
-      );
+    nativeBuildInputs = [
+      validatePkgConfig
+    ]
+    ++ (
+      if stdenvNoCC.hostPlatform.isDarwin then
+        [
+          _7zz
+          cctools
+        ]
+      else
+        [ rpmextract ]
+    );
 
     buildPhase =
       if stdenvNoCC.hostPlatform.isDarwin then
@@ -104,63 +105,62 @@ stdenvNoCC.mkDerivation (
           rpmextract ${oneapi-tbb}
         '';
 
-    installPhase =
-      ''
-        for f in $(find . -name 'mkl*.pc') ; do
-          bn=$(basename $f)
-          substituteInPlace $f \
-            --replace $\{MKLROOT} "$out" \
-            --replace "lib/intel64" "lib"
+    installPhase = ''
+      for f in $(find . -name 'mkl*.pc') ; do
+        bn=$(basename $f)
+        substituteInPlace $f \
+          --replace $\{MKLROOT} "$out" \
+          --replace "lib/intel64" "lib"
 
-          sed -r -i "s|^prefix=.*|prefix=$out|g" $f
-        done
+        sed -r -i "s|^prefix=.*|prefix=$out|g" $f
+      done
 
-        for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
-          substituteInPlace $f --replace "../compiler/lib" "lib"
-        done
+      for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
+        substituteInPlace $f --replace "../compiler/lib" "lib"
+      done
 
-        # License
-        install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/${mklVersion}/licensing/license.txt
+      # License
+      install -Dm0655 -t $out/share/doc/mkl opt/intel/oneapi/mkl/${mklVersion}/licensing/license.txt
 
-        # Dynamic libraries
-        mkdir -p $out/lib
-        cp -a opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
-        cp -a opt/intel/oneapi/compiler/${mklVersion}/${
-          if stdenvNoCC.hostPlatform.isDarwin then "mac" else "linux"
-        }/compiler/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64_lin"}/*${shlibExt}* $out/lib
-        cp -a opt/intel/oneapi/tbb/${tbbVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64/gcc4.8"}/*${shlibExt}* $out/lib
+      # Dynamic libraries
+      mkdir -p $out/lib
+      cp -a opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
+      cp -a opt/intel/oneapi/compiler/${mklVersion}/${
+        if stdenvNoCC.hostPlatform.isDarwin then "mac" else "linux"
+      }/compiler/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64_lin"}/*${shlibExt}* $out/lib
+      cp -a opt/intel/oneapi/tbb/${tbbVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64/gcc4.8"}/*${shlibExt}* $out/lib
 
-        # Headers
-        cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
+      # Headers
+      cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
 
-        # CMake config
-        cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib
-      ''
-      + (
-        if enableStatic then
-          ''
-            install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*.a
-            install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*.pc
-          ''
-        else
-          ''
-            cp opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
-            install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*dynamic*.pc
-          ''
-      )
-      + ''
-        # Setup symlinks for blas / lapack
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
-      ''
-      + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
-        ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
-      '';
+      # CMake config
+      cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib
+    ''
+    + (
+      if enableStatic then
+        ''
+          install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*.a
+          install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*.pc
+        ''
+      else
+        ''
+          cp opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
+          install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*dynamic*.pc
+        ''
+    )
+    + ''
+      # Setup symlinks for blas / lapack
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
+      ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
+    '';
 
     # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
     # larger updated load commands do not fit. Use install_name_tool

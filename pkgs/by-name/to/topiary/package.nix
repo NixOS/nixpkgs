@@ -3,46 +3,57 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  iconv,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topiary";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
-    tag = "v${version}";
-    hash = "sha256-nRVxjdEtYvgF8Vpw0w64hUd1scZh7f+NjFtbTg8L5Qc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-49LTUtgroD0wCwJYYb/IN1lsWbAtdfKjGNMuUa2+vhI=";
   };
 
+  cargoHash = "sha256-I3hsaA4N2x00J5+U0z2B1gi1N7QVf7Vnab2scjDpWoo=";
+
   nativeBuildInputs = [ installShellFiles ];
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EqalIF1wx3F/5CiD21IaYsPdks6Mv1VfwL8OTRWsWaU=";
-
-  # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
-  depsExtraArgs.postBuild = ''
-    find $out -name '*.ps1' -print | while read -r file; do
-      if [ "$(file --brief --mime-encoding "$file")" == utf-16be ]; then
-        ${iconv}/bin/iconv -f UTF-16BE -t UTF16LE "$file" > tmp && mv tmp "$file"
-      fi
-    done
-  '';
 
   cargoBuildFlags = [
     "-p"
     "topiary-cli"
   ];
-  cargoTestFlags = cargoBuildFlags;
 
   # Skip tests that cannot be executed in sandbox (operation not permitted)
   checkFlags = [
+    "--skip=formatted_query_tester"
+    "--skip=test_coverage::coverage_input_bash"
+    "--skip=test_coverage::coverage_input_css"
+    "--skip=test_coverage::coverage_input_json"
+    "--skip=test_coverage::coverage_input_nickel"
+    "--skip=test_coverage::coverage_input_ocaml"
+    "--skip=test_coverage::coverage_input_ocamllex"
+    "--skip=test_coverage::coverage_input_openscad"
+    "--skip=test_coverage::coverage_input_sdml"
+    "--skip=test_coverage::coverage_input_toml"
+    "--skip=test_coverage::coverage_input_tree_sitter_query"
+    "--skip=test_coverage::coverage_input_wit"
+    "--skip=test_fmt::fmt_input_bash"
+    "--skip=test_fmt::fmt_input_css"
+    "--skip=test_fmt::fmt_input_json"
+    "--skip=test_fmt::fmt_input_nickel"
+    "--skip=test_fmt::fmt_input_ocaml"
+    "--skip=test_fmt::fmt_input_ocaml_interface"
+    "--skip=test_fmt::fmt_input_ocamllex"
+    "--skip=test_fmt::fmt_input_openscad"
+    "--skip=test_fmt::fmt_input_sdml"
+    "--skip=test_fmt::fmt_input_toml"
+    "--skip=test_fmt::fmt_input_tree_sitter_query"
+    "--skip=test_fmt::fmt_input_wit"
+    "--skip=test_fmt::fmt_queries"
     "--skip=test_fmt_dir"
     "--skip=test_fmt_files"
     "--skip=test_fmt_files_query_fallback"
@@ -51,23 +62,23 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_fmt_stdin_query"
     "--skip=test_fmt_stdin_query_fallback"
     "--skip=test_vis"
-    "--skip=formatted_query_tester"
-    "--skip=input_output_tester"
-    "--skip=coverage_tester"
+    "--skip=test_vis_invalid"
   ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
-  postInstall =
-    ''
-      install -Dm444 topiary-queries/queries/* -t $out/share/queries
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd topiary \
-        --bash <($out/bin/topiary completion bash) \
-        --fish <($out/bin/topiary completion fish) \
-        --zsh <($out/bin/topiary completion zsh)
-    '';
+  postInstall = ''
+    install -Dm444 topiary-queries/queries/* -t $out/share/queries
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd topiary \
+      --bash <($out/bin/topiary completion bash) \
+      --fish <($out/bin/topiary completion fish) \
+      --zsh <($out/bin/topiary completion zsh)
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
@@ -76,13 +87,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
-    mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
-    changelog = "https://github.com/tweag/topiary/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tweag/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       nartsiss
     ];
+    mainProgram = "topiary";
   };
-}
+})

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "universal-ctags";
-  version = "6.1.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-f8+Ifjn7bhSYozOy7kn+zCLdHGrH3iFupHUZEGynz9Y=";
+    hash = "sha256-x5ZlWTNUc1J/yslKHc8rCIl9LtNTN/HTaAJpFyF0KRI=";
   };
 
   depsBuildBuild = [
@@ -38,15 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (p: [ p.docutils ]))
   ];
 
-  buildInputs =
-    [
-      libyaml
-      pcre2
-      libxml2
-      jansson
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  buildInputs = [
+    libyaml
+    pcre2
+    libxml2
+    jansson
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 

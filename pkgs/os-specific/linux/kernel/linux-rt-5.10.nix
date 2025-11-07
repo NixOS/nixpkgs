@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "5.10.234-rt127"; # updated by ./update-rt.sh
+  version = "5.10.245-rt139"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -25,7 +25,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
-      sha256 = "1rgb4v6dvqlw1mgzsli0hxaj2d5d4m1nylgcrwm4bkpiwbzc95wm";
+      hash = "sha256-Ex516xTab9aDs4grzYVghc/KR8waqJzS3rG0jSLSnZ8=";
     };
 
     kernelPatches =
@@ -34,12 +34,13 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "1pmfba5sjmhai2hbzgbwhak46jhc45rcxf7zdgx5hbhbpgbl9d49";
+            hash = "sha256-0/8We7wtj6Y3oMDdkLzmpuOz0kiY4RlWZeUcxy7UDds=";
           };
         };
       in
       [ rt-patch ] ++ kernelPatches;
 
+    isLTS = true;
     structuredExtraConfig =
       with lib.kernel;
       {

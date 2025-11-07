@@ -7,40 +7,36 @@
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
-  makeBinaryWrapper,
   pkg-config,
   openssl,
-  dbus,
-  glib,
   glib-networking,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   jq,
   moreutils,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.6.0";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    tag = "v${version}";
-    hash = "sha256-tSZ7qSEoLNUnMICT1oVccMY9J6uVZu8QJGJA9NK8JwU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M1p8rwdNEsKvZ1ssxsFyfiIBS8tKrXhuz85CKM4dSRw=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5rIbVYxSsjv+MvmZxviMhcfYN+jOFndvZa7PDO5DLn8=";
+  cargoHash = "sha256-Ie6xq21JoJ37j/BjdVrsiJ3JULVEV5ZwN3hf9NhfXVA=";
 
   postPatch =
     let
       cinny' =
         assert lib.assertMsg (
-          cinny.version == version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+          cinny.version == finalAttrs.version
+        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
@@ -64,30 +60,27 @@ rustPlatform.buildRustPackage rec {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/cinny.desktop
     '';
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram "$out/bin/cinny" \
-      --inherit-argv0 \
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+    )
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook3
-    pkg-config
     cargo-tauri_1.hook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     desktop-file-utils
-    makeBinaryWrapper
+    pkg-config
+    wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      glib
-      glib-networking
-      webkitgtk_4_0
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    openssl
+    webkitgtk_4_1
+  ];
 
   meta = {
     description = "Yet another matrix client for desktop";
@@ -99,5 +92,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
+    # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
+    # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
+    broken = stdenv.hostPlatform.isLinux;
   };
-}
+})

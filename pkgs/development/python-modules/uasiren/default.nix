@@ -10,6 +10,7 @@
   aiohttp,
 
   # tests
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -24,7 +25,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
-    repo = pname;
+    repo = "uasiren";
     rev = "v${version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
@@ -33,7 +34,10 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "uasiren"

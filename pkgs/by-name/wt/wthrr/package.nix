@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8o84FFdcEPRtbsxWCc97tTGGownxlhpIM71GiBRT6uM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-q2WkdSb6UKY1/Aut3W70vCQPsqhqv6DPuT40RaGZWAM=";
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ttytm/wthrr-the-weathercrab";
     changelog = "https://github.com/ttytm/wthrr-the-weathercrab/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "wthrr";
   };
 }

@@ -5,18 +5,18 @@
   pythonOlder,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
+  loro,
   markdown,
   narwhals,
   packaging,
   psutil,
-  pycrdt,
   pygments,
   pymdown-extensions,
   pyyaml,
@@ -33,32 +33,27 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.13.1";
+  version = "0.15.2";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-++GyVa6WaZw30apjqsBeZcCdaYMiUDaf1db6fxzHfiI=";
+    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
   };
 
-  build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "pycrdt"
-    "websockets"
-  ];
+  build-system = [ uv-build ];
 
   dependencies = [
     click
     docutils
     itsdangerous
     jedi
+    loro
     markdown
     narwhals
     packaging
     psutil
-    pycrdt
     pygments
     pymdown-extensions
     pyyaml
@@ -67,7 +62,8 @@ buildPythonPackage rec {
     tomlkit
     uvicorn
     websockets
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   pythonImportsCheck = [ "marimo" ];
 

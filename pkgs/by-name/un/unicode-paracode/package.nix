@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
   version = "2.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garabik";
@@ -18,31 +19,39 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
   };
 
+  patches = [
+    # Fix 3.13+ mutable locals()
+    (fetchurl {
+      url = "https://github.com/garabik/unicode/commit/412952b9b4730263f5b560924b84f8934ea4ba21.patch";
+      hash = "sha256-Rfm6Jc7V5n7ggQzA/yeDrYedGMWqRkeUX6FRCUkBWcI=";
+    })
+  ];
+
   ucdtxt = fetchurl {
-    url = "https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-gG6a7WUDcZfx7IXhK+bozYcPxWCLTeD//ZkPaJ83anM=";
+    url = "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt";
+    sha256 = "sha256-/1jlgjvQlRZlZKAG5H0RETCBPc+L8jTvefpRqHDttI8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
   '';
 
   postInstall = ''
     installManPage paracode.1 unicode.1
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Display unicode character properties";
     homepage = "https://github.com/garabik/unicode";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.woffs ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.woffs ];
+    platforms = lib.platforms.all;
   };
 }

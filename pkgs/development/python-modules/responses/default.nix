@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "getsentry";
-    repo = pname;
+    repo = "responses";
     tag = version;
     hash = "sha256-eiJwu0sRtr3S4yAnbsIak7g03CNqOTS16rNXoXRQumA=";
   };
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     pytest-httpserver
     pytestCheckHook
     tomli-w
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "responses" ];
 

@@ -17,13 +17,13 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "five-or-more";
-  version = "3.32.3";
+  version = "48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/five-or-more/${lib.versions.majorMinor version}/five-or-more-${version}.tar.xz";
-    hash = "sha256-LRDXLu/esyS0R9YyrwwySW4l/BWjwB230vAMm1HQnvQ=";
+    url = "mirror://gnome/sources/five-or-more/${lib.versions.major finalAttrs.version}/five-or-more-${finalAttrs.version}.tar.xz";
+    hash = "sha256-2UHOLjfqZsDYDx6BeX+8u+To72WnkLPMXla58QtepaM=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "five-or-more"; };
+    updateScript = gnome.updateScript {
+      packageName = "five-or-more";
+    };
   };
 
   meta = with lib; {
@@ -61,4 +63,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
-}
+})

@@ -1,26 +1,16 @@
-commit 070bf216bacf6ce1b473f2819a017d1be29716d0
-Author: kuflierl <41301536+kuflierl@users.noreply.github.com>
-Date:   Sun Apr 13 19:56:58 2025 +0200
+commit 3052c2c8be6a44aab2d4c5fa0d560a8109c5ed5e
+Author: 06kellyjac <dev@j-k.io>
+Date:   Mon Sep 22 13:17:14 2025 +0100
 
-    add support for nix-build-system for tests
+    fix(tests): add support for nix-build-system for tests
 
-diff --git a/Cargo.toml b/Cargo.toml
-index eba0ef8..9153f00 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -58,6 +58,7 @@ default = []
- as-root = [] # for tests only
- gen-man-pages = ["dep:clap_mangen"]
- nightly = [] # for benchmarks only
-+nix-build-env = [] # perform checks in a way compatable with nix build
- 
- [lints.rust]
- # https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html
+    Co-authored-by: kuflierl <41301536+kuflierl@users.noreply.github.com>
+
 diff --git a/src/systemd/resolver.rs b/src/systemd/resolver.rs
-index e2abbb7..1151592 100644
+index 989f378..0629fb5 100644
 --- a/src/systemd/resolver.rs
 +++ b/src/systemd/resolver.rs
-@@ -637,17 +637,14 @@ mod tests {
+@@ -650,17 +650,14 @@ mod tests {
          let OptionValue::List(opt_list) = &candidates[0].value else {
              panic!();
          };
@@ -44,7 +34,7 @@ index e2abbb7..1151592 100644
          let actions = vec![ProgramAction::Read("/var/data".into())];
          let candidates = resolve(&opts, &actions, &hardening_opts);
 diff --git a/tests/options.rs b/tests/options.rs
-index 835ee14..cac55e5 100644
+index cf20ea0..ab9f389 100644
 --- a/tests/options.rs
 +++ b/tests/options.rs
 @@ -24,7 +24,7 @@ fn run_true() {
@@ -62,7 +52,7 @@ index 835ee14..cac55e5 100644
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
 -        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
 +        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
-         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
 @@ -97,7 +97,7 @@ fn run_ls_dev() {
@@ -104,7 +94,7 @@ index 835ee14..cac55e5 100644
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
 -        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
 +        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
-         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
 @@ -201,7 +201,7 @@ fn run_read_kallsyms() {
@@ -116,47 +106,24 @@ index 835ee14..cac55e5 100644
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -227,11 +227,12 @@ fn run_read_kallsyms() {
+@@ -227,7 +227,7 @@ fn run_read_kallsyms() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
 -        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
 +        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
-         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
- #[test]
-+#[cfg_attr(feature = "nix-build-env", ignore)]
- fn run_ls_modules() {
-     Command::cargo_bin("shh")
-         .unwrap()
-@@ -240,7 +241,7 @@ fn run_ls_modules() {
-         .assert()
-         .success()
-         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
--        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
-             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
-         } else {
-             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -304,7 +305,7 @@ fn run_dmesg() {
- }
- 
- #[test]
--#[cfg_attr(feature = "as-root", ignore)]
-+#[cfg_attr(any(feature = "nix-build-env", feature = "as-root"), ignore)]
- fn run_systemctl() {
-     assert!(!Uid::effective().is_root());
- 
-@@ -344,6 +345,7 @@ fn run_systemctl() {
-         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+@@ -344,6 +344,7 @@ fn run_systemctl() {
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
 +// patched due to nix build isolation
  #[test]
  fn run_ss() {
      Command::cargo_bin("shh")
-@@ -353,7 +355,7 @@ fn run_ss() {
+@@ -353,7 +354,7 @@ fn run_ss() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
@@ -165,7 +132,7 @@ index 835ee14..cac55e5 100644
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -369,7 +371,7 @@ fn run_ss() {
+@@ -369,7 +370,7 @@ fn run_ss() {
          .stdout(predicate::str::contains("ProtectKernelModules=true\n").count(1))
          .stdout(predicate::str::contains("ProtectKernelLogs=true\n").count(1))
          .stdout(predicate::str::contains("ProtectControlGroups=true\n").count(1))
@@ -174,28 +141,12 @@ index 835ee14..cac55e5 100644
          .stdout(predicate::str::contains("MemoryDenyWriteExecute=true\n").count(1))
          .stdout(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK AF_UNIX\n").count(1).or(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK\n").count(1)))
          .stdout(predicate::str::contains("SocketBindDeny=ipv4:tcp\n").count(1))
-@@ -379,7 +381,7 @@ fn run_ss() {
+@@ -379,7 +380,7 @@ fn run_ss() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
 -        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
 +        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
-         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
-@@ -741,6 +743,7 @@ fn run_mknod() {
- }
- 
- #[test]
-+#[cfg_attr(feature = "nix-build-env", ignore)] // no raw socket cap in nix build
- fn run_ping_4() {
-     Command::cargo_bin("shh")
-         .unwrap()
-@@ -759,6 +762,7 @@ fn run_ping_4() {
- }
- 
- #[test]
-+#[cfg_attr(feature = "nix-build-env", ignore)] // no raw socket cap in nix build
- fn run_ping_6() {
-     Command::cargo_bin("shh")
-         .unwrap()

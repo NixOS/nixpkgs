@@ -4,67 +4,56 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   pyperclip,
   textual,
+  tree-sitter,
+  tree-sitter-python,
+  tree-sitter-sql,
 
   # tests
-  pytestCheckHook,
   pytest-asyncio,
-  tree-sitter-python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textual-textarea";
-  version = "0.15.0";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
     tag = "v${version}";
-    hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
+    hash = "sha256-y+2WvqD96eYkDEJn5qCGfGFNiJFAcF4KWWNgAIZUqJo=";
   };
 
-  patches = [
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    ./textual-2.0.0.diff
-  ];
-
-  pythonRelaxDeps = [
-    "textual"
-  ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pyperclip
     textual
-  ] ++ textual.optional-dependencies.syntax;
+    tree-sitter
+    tree-sitter-python
+    tree-sitter-sql
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-asyncio
-    tree-sitter-python
-  ];
-
-  pythonImportsCheck = [ "textual_textarea" ];
-
-  pytestFlagsArray = [
-    # "--deselect=tests/functional_tests/test_comments.py::test_comments[sql--- ]"
+    pytestCheckHook
   ];
 
   disabledTests = [
-    # Requires unpackaged tree-sitter-sql
-    #  textual.widgets._text_area.LanguageDoesNotExist
-    "test_comments"
-
-    # AssertionError: assert Selection(sta...), end=(0, 6)) == Selection(sta...), end=(1, 0))
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    "test_keys"
+    # AssertionError: assert None == 'word'
+    # https://github.com/tconbeer/textual-textarea/issues/312
+    "test_autocomplete"
+    "test_autocomplete_with_types"
   ];
+
+  pythonImportsCheck = [ "textual_textarea" ];
 
   meta = {
     description = "Text area (multi-line input) with syntax highlighting for Textual";

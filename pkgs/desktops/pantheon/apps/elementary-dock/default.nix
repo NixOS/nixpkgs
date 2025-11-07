@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-dock";
-  version = "8.0.2";
+  version = "8.2.0";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "elementary";
     repo = "dock";
     rev = finalAttrs.version;
-    hash = "sha256-bixNYpPdWU2FndiCPX7SxNTz2MEttRuj35NaWn3GJrI=";
+    hash = "sha256-aKRWb/xtusb9Q2xq6GdM7WzNSweBqWbYUejQq4Or86s=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     wayland
   ];
+
+  # Fix building with GCC 14
+  # https://github.com/elementary/dock/issues/418
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   passthru = {
     updateScript = nix-update-script { };

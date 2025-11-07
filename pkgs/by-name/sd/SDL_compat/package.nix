@@ -11,6 +11,12 @@
   pkg-config,
   pkg-config-unwrapped,
   stdenv,
+  testers,
+  dosbox,
+  SDL_image,
+  SDL_ttf,
+  SDL_mixer,
+  SDL_sound,
   # Boolean flags
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
@@ -21,38 +27,56 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.68";
+  version = "1.2.70";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
+    hash = "sha256-vmbkeBpuzgq1B/6rp9/Gy8+Y7aF5uz8lC/mK0uA9v7I=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
 
   # re-export PKG_CHECK_MODULES m4 macro used by sdl.m4
   propagatedNativeBuildInputs = [ pkg-config-unwrapped ];
 
-  buildInputs =
+  buildInputs = [
+    libX11
+    sdl2-compat
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals openglSupport [ libGLU ];
+
+  dontPatchELF = true; # don't strip rpath
+
+  cmakeFlags =
+    let
+      rpath = lib.makeLibraryPath [ sdl2-compat ];
+    in
     [
-      libX11
-      sdl2-compat
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals openglSupport [ libGLU ];
+      (lib.cmakeFeature "CMAKE_INSTALL_RPATH" rpath)
+      (lib.cmakeFeature "CMAKE_BUILD_RPATH" rpath)
+      (lib.cmakeBool "SDL12TESTS" finalAttrs.finalPackage.doCheck)
+    ];
 
   enableParallelBuilding = true;
+
+  # Darwin fails with "Critical error: required built-in appearance SystemAppearance not found"
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  checkPhase = ''
+    runHook preCheck
+    ./test/testver
+    runHook postCheck
+  '';
 
   postInstall = ''
     # allow as a drop in replacement for SDL
@@ -66,24 +90,17 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
 
-  postFixup = ''
-    for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
-      if [[ -L "$lib" ]]; then
-        ${
-          if stdenv.hostPlatform.isDarwin then
-            ''
-              install_name_tool ${
-                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
-              } "$lib"
-            ''
-          else
-            ''
-              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
-            ''
-        }
-      fi
-    done
-  '';
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+    inherit
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL_sound
+      dosbox
+      ;
+  };
 
   meta = {
     homepage = "https://www.libsdl.org/";
@@ -93,5 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ peterhoeg ];
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "sdl"
+      "sdl12_compat"
+    ];
   };
 })

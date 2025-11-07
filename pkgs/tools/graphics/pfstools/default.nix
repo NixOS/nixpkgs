@@ -54,25 +54,24 @@ mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      openexr
-      zlib
-      imagemagick6
-      fftwFloat
-      fftw
-      gsl
-      libexif
-      perl
-      qtbase
-      netpbm
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGLU
-      libGL
-      libglut
-    ]
-    ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
+  buildInputs = [
+    openexr
+    zlib
+    imagemagick6
+    fftwFloat
+    fftw
+    gsl
+    libexif
+    perl
+    qtbase
+    netpbm
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    libglut
+  ]
+  ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
 
   patches = [
     ./glut.patch

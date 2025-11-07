@@ -16,7 +16,7 @@
 }:
 let
   pname = "wl-kbptr";
-  version = "0.3.0";
+  version = "0.4.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "moverest";
     repo = "wl-kbptr";
     tag = "v${version}";
-    hash = "sha256-T7vxD5FW6Hjqc6io7Hypr6iJRM32KggQVMOGsy2Lg4Q=";
+    hash = "sha256-4ZxiRlIcVpYT9AzMguqzuZ5p7lZbH/m7ZX839tsCgMU=";
   };
 
   depsBuildBuild = [ pkg-config ];

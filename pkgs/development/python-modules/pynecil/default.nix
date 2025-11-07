@@ -1,6 +1,7 @@
 {
   aiohttp,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-regex-commit,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pynecil";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
     tag = "v${version}";
-    hash = "sha256-zgiOdVdc74m+DNg6Phn5L0F/u1jF4OOvGAyvMZzzhAU=";
+    hash = "sha256-ZEg5fmSE594YEgcJROOeVqc1reyGlyQiYNoCcfUanrY=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    bleak-retry-connector
   ];
 
   pythonImportsCheck = [ "pynecil" ];
@@ -41,6 +43,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires access to system D-Bus
+    "test_get_settings_communication_error"
   ];
 
   meta = {

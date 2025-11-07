@@ -38,20 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fig2dev
-      gettext
-      ghostscript
-      guile
-      guile-lib
-      guile-reader
-      imagemagick
-    ]
-    ++ optional enableEmacs emacs
-    ++ optional enableLout lout
-    ++ optional enablePloticus ploticus
-    ++ optional enableTex texliveSmall;
+  buildInputs = [
+    fig2dev
+    gettext
+    ghostscript
+    guile
+    guile-lib
+    guile-reader
+    imagemagick
+  ]
+  ++ optional enableEmacs emacs
+  ++ optional enableLout lout
+  ++ optional enablePloticus ploticus
+  ++ optional enableTex texliveSmall;
 
   postInstall = ''
     wrapProgram $out/bin/skribilo \
@@ -75,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       conventions used in emails, Usenet and text.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

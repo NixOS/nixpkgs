@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "VerSprite";
     repo = "alpnpass";
-    rev = version;
+    tag = version;
     hash = "sha256-hNZqGTV17rFSKLhZzNqH2E4SSb6Jhk7YQ4TN0HnE+9g=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "operator-framework";
-    repo = pname;
+    repo = "operator-sdk";
     tag = "v${version}";
     hash = "sha256-2Kv6mDC1MndUgttRYODnI8DZ84RVz8jn3+RpXmOemq0=";
   };
@@ -41,12 +41,12 @@ buildGoModule rec {
     wrapProgram $out/bin/operator-sdk --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding";
     homepage = "https://github.com/operator-framework/operator-sdk";
     changelog = "https://github.com/operator-framework/operator-sdk/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arnarg ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arnarg ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

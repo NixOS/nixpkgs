@@ -4,34 +4,36 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  gdu,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.30.1";
+  version = "5.31.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
-    tag = "v${version}";
-    hash = "sha256-3SymmE3J+lphyRKTQ+sLsnXaBvLyjJRlwpy79U4+t5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MAkD4Mh7aXWc8Y4TkXH7NSDgPQugB7Gjhr4nfOr/X1U=";
   };
 
   vendorHash = "sha256-aKhHC3sPRyi/l9BxeUgx+3TdYulb0cI9WxuPvbLoswg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major finalAttrs.version}/build.Version=${finalAttrs.version}"
   ];
 
   postPatch = ''
     substituteInPlace cmd/gdu/app/app_test.go \
-      --replace-fail "development" "${version}"
+      --replace-fail "development" "${finalAttrs.version}"
   '';
 
   postInstall = ''
@@ -40,14 +42,18 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  checkFlags = [
-    # https://github.com/dundee/gdu/issues/371
-    "-skip=TestStoredAnalyzer"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
+        "TestAnalyzePathWithIgnoring"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru.tests.version = testers.testVersion { package = gdu; };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Disk usage analyzer with console interface";
     longDescription = ''
       Gdu is intended primarily for SSD disks where it can fully
@@ -55,12 +61,12 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
-    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dundee/gdu/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       fab
       zowoq
     ];
     mainProgram = "gdu";
   };
-}
+})

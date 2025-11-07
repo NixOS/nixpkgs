@@ -35,20 +35,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests =
-    [
-      # `from gi.repository import Secret` fails to find libsecret
-      "test_token_cache_roundtrip_with_persistence_builder"
-      "test_libsecret_persistence"
-      "test_nonexistent_libsecret_persistence"
-      # network access
-      "test_token_cache_roundtrip_with_file_persistence"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      #  msal_extensions.osx.KeychainError
-      "test_keychain_roundtrip"
-      "test_keychain_persistence"
-    ];
+  disabledTests = [
+    # `from gi.repository import Secret` fails to find libsecret
+    "test_token_cache_roundtrip_with_persistence_builder"
+    "test_libsecret_persistence"
+    "test_nonexistent_libsecret_persistence"
+    # network access
+    "test_token_cache_roundtrip_with_file_persistence"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    #  msal_extensions.osx.KeychainError
+    "test_keychain_roundtrip"
+    "test_keychain_persistence"
+  ];
 
   pythonImportsCheck = [ "msal_extensions" ];
 

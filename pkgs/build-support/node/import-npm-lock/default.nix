@@ -4,6 +4,7 @@
   stdenv,
   callPackages,
   runCommand,
+  cctools,
 }:
 
 let
@@ -51,7 +52,7 @@ let
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
-              (builtins.fetchGit (
+              (fetchGit (
                 {
                   url = module.resolved;
                 }
@@ -208,19 +209,21 @@ lib.fix (self: {
           nodejs
           nodejs.passthru.python
           hooks.npmConfigHook
-        ] ++ derivationArgs.nativeBuildInputs or [ ];
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+        ++ derivationArgs.nativeBuildInputs or [ ];
 
         passAsFile = [
           "package"
           "packageLock"
-        ] ++ derivationArgs.passAsFile or [ ];
+        ]
+        ++ derivationArgs.passAsFile or [ ];
 
-        postPatch =
-          ''
-            cp --no-preserve=mode "$packagePath" package.json
-            cp --no-preserve=mode "$packageLockPath" package-lock.json
-          ''
-          + derivationArgs.postPatch or "";
+        postPatch = ''
+          cp --no-preserve=mode "$packagePath" package.json
+          cp --no-preserve=mode "$packageLockPath" package-lock.json
+        ''
+        + derivationArgs.postPatch or "";
       }
     );
 

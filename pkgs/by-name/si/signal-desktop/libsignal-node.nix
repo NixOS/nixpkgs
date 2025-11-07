@@ -24,23 +24,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.68.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bc9wsi+Y6PzNSt4+I8ULMUsrKDFLKaxZ/HqldlYOtoM=";
+    hash = "sha256-lSk9C2RIRsAlSUr8folhdHkHkpAfPM+vwJ/rZ6mys3Q=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-NmC/htksyrkaudVq3EuQ5gepmFZNQ7t/FVazfdxg8ds=";
+
+  cargoHash = "sha256-0P89+p0WlQaa48wpgsaapIhEzlAnWVPl9qD+jnBw9mM=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-hn7bfULZJTIJVU51Cuvj+9AAudSC/C3wBzkIEzlO3VQ=";
+    hash = "sha256-4sd8JVQfCC4dAkksICbb3e4JjNcgplOW26TyRkAFWp0=";
   };
 
   nativeBuildInputs = [
@@ -56,27 +56,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  patchPhase = ''
-    runHook prePatch
-
-    substituteInPlace node/binding.gyp \
-      --replace-fail "'--out-dir', '<(PRODUCT_DIR)/'," \
-                     "'--out-dir', '$out/lib/<(NODE_OS_NAME)-<(target_arch)/'," \
-      --replace-fail "'target_name': 'libsignal_client_<(NODE_OS_NAME)_<(target_arch).node'," \
-                     "'target_name': '@signalapp+libsignal-client',"
-
+  patches = [
+    # This is used to strip absolute paths of dependencies to avoid leaking info about build machine. Nix builders
+    # already solve this problem by chrooting os this is not needed.
+    ./dont-strip-absolute-paths.patch
+  ];
+  postPatch = ''
     substituteInPlace node/build_node_bridge.py \
-      --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
-                     "dst_base = '@signalapp+libsignal-client'"
-
-    runHook postPatch
+      --replace-fail "'prebuilds'" "'$out/lib'" \
+      --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
+                     "objcopy = os.getenv('OBJCOPY', 'objcopy')"
   '';
 
   buildPhase = ''
     runHook preBuild
 
     pushd node
-    npx node-gyp rebuild
+    npm run build -- --copy-to-prebuilds --node-arch ${stdenv.hostPlatform.node.arch}
     popd
 
     runHook postBuild

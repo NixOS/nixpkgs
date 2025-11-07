@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.26.1";
+  version = "0.27.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qNY6fcxkhMXBZ1sxqNG2cmw9yFsTeW+xQ9+wByJgk14=";
+    hash = "sha256-RfPdCz+xPfvqhW3ZbJrP53vrpXubAZRE7pYu0rdidt0=";
   };
 
   build-system = [ setuptools ];

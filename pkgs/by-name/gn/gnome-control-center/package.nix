@@ -63,8 +63,9 @@
   tinysparql,
   localsearch,
   tzdata,
-  udisks2,
+  udisks,
   upower,
+  wayland-scanner,
   libepoxy,
   gnome-user-share,
   gnome-remote-desktop,
@@ -74,11 +75,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "47.4";
+  version = "48.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KMfbdNcg/MnyE8EtNy5+rMF2ekm8TKZrK9ILD9ECJmg=";
+    hash = "sha256-KiDu5uBcjTrdru+lJNzh7p+Ip32Djj/R7e88DC5GetI=";
   };
 
   patches = [
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -145,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     tinysparql
     localsearch # for search locations dialog
-    udisks2
+    udisks
     upower
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base

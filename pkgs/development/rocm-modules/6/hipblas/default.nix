@@ -18,40 +18,42 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
+  # for passthru.tests
+  hipblas,
 }:
 
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Rz1KAhBUbvErHTF2PM1AkVhqo4OHldfSNMSpp5Tx9yk=";
+    hash = "sha256-lQv8Ik6+0ldqyeJ05CSGB0309nIpzlRL3CRYeQxVfd0=";
   };
 
   patches = [
-    # https://github.com/ROCm/hipBLAS/pull/952
     (fetchpatch {
-      name = "transitively-depend-hipblas-common.patch";
-      url = "https://github.com/ROCm/hipBLAS/commit/54220fdaebf0fb4fd0921ee9e418ace5b143ec8f.patch";
-      hash = "sha256-MFEhv8Bkrd2zD0FFIDg9oJzO7ztdyMAF+R9oYA0rmwQ=";
+      # Subject: [PATCH] Add gfx1150, gfx1150, gfx1200, gfx1201 support (#1055)
+      # This was merged to release/rocm-rel-6.4 but AMD forgot to tag it for 6.4.3
+      name = "release-6.4-arch-extra.patch";
+      url = "https://github.com/ROCm/hipBLAS/commit/0100b32ccff9a0f12134694315b4e44884e25a8e.patch";
+      hash = "sha256-BmktlLJpYaTcogHzEKpZdCnksIIysEO47WMezXoxvCs=";
     })
   ];
 
@@ -69,42 +71,38 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ hipblas-common ];
 
-  buildInputs =
-    [
-      rocblas
-      rocprim
-      rocsparse
-      rocsolver
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      lapack-reference
-    ];
+  buildInputs = [
+    rocblas
+    rocprim
+    rocsparse
+    rocsolver
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    lapack-reference
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCMAKE_CXX_COMPILER=${lib.getExe' clr "hipcc"}"
-      # Upstream is migrating to amdclang++, it is likely this will be correct in next version bump
-      #"-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/amdclang++"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DAMDGPU_TARGETS=${rocblas.amdgpu_targets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_BENCHMARKS=ON"
-    ]
-    ++ lib.optionals buildSamples [
-      "-DBUILD_CLIENTS_SAMPLES=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' clr "amdclang++"}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DBUILD_WITH_SOLVER=ON"
+    "-DAMDGPU_TARGETS=${rocblas.amdgpu_targets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_CLIENTS_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+  ]
+  ++ lib.optionals buildSamples [
+    "-DBUILD_CLIENTS_SAMPLES=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''
@@ -127,6 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
     name = finalAttrs.pname;
     inherit (finalAttrs.src) owner;
     inherit (finalAttrs.src) repo;
+  };
+  passthru.tests.hipblas-tested = hipblas.override {
+    buildTests = true;
+    buildBenchmarks = true;
+    buildSamples = true;
   };
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "adminerevo";
     repo = "adminerevo";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cyKSwzoVbS/0Fiv02kFIF4MTOqzpKSEFwwUwS4yqL6Q=";
     fetchSubmodules = true;
   };
@@ -69,9 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       asl20
       gpl2Only
     ];
-    maintainers = with maintainers; [
-      shyim
-    ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

@@ -67,7 +67,7 @@ buildGoModule rec {
     homepage = "https://github.com/AnalogJ/scrutiny";
     changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = [ ];
     mainProgram = "scrutiny";
     platforms = lib.platforms.linux;
   };

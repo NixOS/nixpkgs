@@ -16,25 +16,19 @@
   webuiSupport ? true,
   wrapGAppsHook3,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.0.4";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-8gSSUgYx0CSSb3ackFknZ9r0cWFLxkC7a3Tj8QJaylc=";
+    hash = "sha256-2hcG2rMwo5wxVQjCEXXqPLGpdT6ihqtt3HsNlK1D9CA=";
   };
-
-  # Partial backport of https://github.com/qbittorrent/qBittorrent/commit/a6809efbbbdf18a1b66df9c89d0d0aeefd78f461
-  # to fix build with Qt 6.9.
-  # FIXME: remove in next update
-  patches = [
-    ./qt-6.9.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -43,28 +37,28 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      libtorrent-rasterbar
-      openssl
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      zlib
-    ]
-    ++ lib.optionals guiSupport [ dbus ]
-    ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
-    ++ lib.optionals trackerSearch [ python3 ];
+  buildInputs = [
+    boost
+    libtorrent-rasterbar
+    openssl
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    zlib
+  ]
+  ++ lib.optionals guiSupport [ dbus ]
+  ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
+  ++ lib.optionals trackerSearch [ python3 ];
 
-  cmakeFlags =
-    [ "-DVERBOSE_CONFIGURE=ON" ]
-    ++ lib.optionals (!guiSupport) [
-      "-DGUI=OFF"
-      "-DSYSTEMD=ON"
-      "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
-    ]
-    ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
+  cmakeFlags = [
+    "-DVERBOSE_CONFIGURE=ON"
+  ]
+  ++ lib.optionals (!guiSupport) [
+    "-DGUI=OFF"
+    "-DSYSTEMD=ON"
+    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+  ]
+  ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
 
   qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 
@@ -81,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+    tests.testService = nixosTests.qbittorrent;
+  };
 
   meta = {
     description = "Featureful free software BitTorrent client";

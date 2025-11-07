@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.146.1";
+  version = "0.148.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     tag = version;
-    hash = "sha256-p+8TunZvxVtK+kwGu396td7io5/4d3taJk5NTgSPb3Q=";
+    hash = "sha256-odjuJrUXQXn3WeF/oS8DLO937p2nHpSk9QGO4Tgsd8o=";
   };
 
   build-system = [
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
     changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

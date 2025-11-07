@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+  ];
+
   meta = with lib; {
     description = "General purpose formula parser, interpreter, formula cell dependency tracker and spreadsheet document model backend all in one package";
     homepage = "https://gitlab.com/ixion/ixion";

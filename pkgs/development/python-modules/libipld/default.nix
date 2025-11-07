@@ -18,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "libipld";
-  version = "3.0.1";
+  version = "3.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   # use pypi, GitHub does not include Cargo.lock
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KXB1LecOX9ysRkaQDN76oNygjbm11ZxAtUltmeO/+mQ=";
+    hash = "sha256-ZUIw/9k4Kl7sKKrU4Nzdk/Ed2H2mVpOdvxODB/KGcSA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-V/UGTO+VEBtv5gwKR/fZmmhbeYILsIVc7Mq/Rl6E4Dw=";
+    hash = "sha256-jVZ3Oml/W6Kb9hYEXazF3/ogFHtl43d1YLd8vZFJDa8=";
   };
 
   build-system = [
@@ -48,6 +48,8 @@ buildPythonPackage rec {
     pytest-codspeed
     pytest-xdist
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # touches network

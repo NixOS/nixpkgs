@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-client";
-  version = "0.5.1";
+  version = "0.6.1";
 
   pyproject = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "scim2_client";
-    hash = "sha256-g2RR+Ruvjw88cGHcwEPoktTmB8VcWAPnea3BErS8JyI=";
+    hash = "sha256-5XOUOKf0vYHkewY22x5NQdhICXCd+EftKhsxtQurgHQ=";
   };
 
   build-system = [ hatchling ];
@@ -41,7 +41,8 @@ buildPythonPackage rec {
     scim2-server
     werkzeug
     cacert
-  ] ++ optional-dependencies.httpx;
+  ]
+  ++ optional-dependencies.httpx;
 
   # Werkzeug returns 500, didn't deem it worth it to investigate
   disabledTests = [

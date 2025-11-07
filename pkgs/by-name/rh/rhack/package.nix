@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "088ynf65szaa86pxwwasn3wwi00z5pn7i8w9gh5dyn983z4d8237";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-84dVBNvo45zG7s/tMY3O0Zv69CdcvjZCZX8siie6QnI=";
 
   meta = with lib; {
@@ -23,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rhack";
     homepage = "https://github.com/nakabonne/rhack";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

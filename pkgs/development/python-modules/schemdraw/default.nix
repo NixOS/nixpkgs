@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.20";
+  version = "0.21";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = "schemdraw";
     tag = version;
-    hash = "sha256-mt1XTrUH570zrJpCFo0jORAE/jo7H2T7sKpIskYw8bk=";
+    hash = "sha256-+pvVt7Of5v17PNdZMj8hHvE5tICiTRMelp4trdUZsz4=";
   };
 
   build-system = [ setuptools ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "schemdraw" ];
 

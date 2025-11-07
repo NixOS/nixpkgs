@@ -65,7 +65,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTestPaths = [
     # Skip the examples tests

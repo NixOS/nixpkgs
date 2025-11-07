@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.10.16";
+  version = "3.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,21 +39,21 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     tag = version;
-    hash = "sha256-hgyW3bff70yByxPFqw8pwPMPMAh9FxL1U+LQoJI6INo=";
+    hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-mOHOIKmcXjPwZ8uPth+yvreHG4IpiS6SFhWY+IZS69E=";
+    inherit pname version src;
+    hash = "sha256-y6FmK1RR1DAswVoTlnl19CmoYXAco1dY7lpV/KTypzE=";
   };
 
-  nativeBuildInputs =
-    [ cffi ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    cffi
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 

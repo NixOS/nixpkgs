@@ -41,37 +41,38 @@ Here's a typical setup:
   fileSystems."/mnt/my-dir" = {
     device = "my-user@example.com:/my-dir/";
     fsType = "sshfs";
-    options =
-      [ # Filesystem options
-        "allow_other"          # for non-root access
-        "_netdev"              # this is a network fs
-        "x-systemd.automount"  # mount on demand
+    options = [
+      # Filesystem options
+      "allow_other" # for non-root access
+      "_netdev" # this is a network fs
+      "x-systemd.automount" # mount on demand
 
-        # SSH options
-        "reconnect"              # handle connection drops
-        "ServerAliveInterval=15" # keep connections alive
-        "IdentityFile=/var/secrets/example-key"
-      ];
+      # SSH options
+      "reconnect" # handle connection drops
+      "ServerAliveInterval=15" # keep connections alive
+      "IdentityFile=/var/secrets/example-key"
+    ];
   };
 }
 ```
 More options from `ssh_config(5)` can be given as well, for example you can change the default SSH port or specify a jump proxy:
 ```nix
 {
-  options =
-    [ "ProxyJump=bastion@example.com"
-      "Port=22"
-    ];
+  options = [
+    "ProxyJump=bastion@example.com"
+    "Port=22"
+  ];
 }
 ```
 It's also possible to change the `ssh` command used by SSHFS to connect to the server.
 For example:
 ```nix
 {
-  options =
-    [ (builtins.replaceStrings [" "] ["\\040"]
-        "ssh_command=${pkgs.openssh}/bin/ssh -v -L 8080:localhost:80")
-    ];
+  options = [
+    (builtins.replaceStrings [ " " ] [ "\\040" ]
+      "ssh_command=${pkgs.openssh}/bin/ssh -v -L 8080:localhost:80"
+    )
+  ];
 
 }
 ```

@@ -50,13 +50,14 @@ buildPythonPackage rec {
   optional-dependencies = {
     botocore = [ botocore ];
     zarr = [ zarr ];
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
   };
 
   nativeCheckInputs = [
     geopandas
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTests = [
     # Require internet access

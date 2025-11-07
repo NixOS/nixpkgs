@@ -6,25 +6,23 @@
   makeBinaryWrapper,
   fetchFromGitHub,
   nix-update-script,
-  nvd,
   nix-output-monitor,
   buildPackages,
 }:
 let
   runtimeDeps = [
-    nvd
     nix-output-monitor
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.0.3";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BCD0tfDNlQHFM75THRtXM3GegMg/KbREsYllg7Az9ao=";
+    hash = "sha256-6n5SVO8zsdVTD691lri7ZcO4zpqYFU8GIvjI6dbxkA8=";
   };
 
   strictDeps = true;
@@ -34,17 +32,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
     ''
       mkdir completions
-      ${emulator} $out/bin/nh completions bash > completions/nh.bash
-      ${emulator} $out/bin/nh completions zsh > completions/nh.zsh
-      ${emulator} $out/bin/nh completions fish > completions/nh.fish
+
+      for shell in bash zsh fish; do
+        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+      done
 
       installShellCompletion completions/*
+
+      cargo xtask man --out-dir gen
+      installManPage gen/nh.1
     ''
   );
 
@@ -53,10 +55,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cNYPxM2DOLdyq0YcZ0S/WIa3gAx7aTzPp7Zhbtu4PKg=";
+  cargoHash = "sha256-cxZsePgraYevuYQSi3hTU2EsiDyn1epSIcvGi183fIU=";
 
   passthru.updateScript = nix-update-script { };
+
+  env.NH_REV = finalAttrs.src.tag;
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
@@ -65,7 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
-      drupol
       NotAShelf
       viperML
     ];

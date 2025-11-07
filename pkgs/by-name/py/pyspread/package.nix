@@ -21,6 +21,7 @@ let
     ;
 in
 python3.pkgs.buildPythonApplication {
+  format = "setuptools";
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -83,6 +84,6 @@ python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

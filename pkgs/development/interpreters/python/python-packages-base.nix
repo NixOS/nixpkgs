@@ -38,23 +38,51 @@ let
         }
       else
         result
-    );
+    )
+    // {
+      # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
+      # Ensure `makeOverridablePythonPackage` is applied to the result.
+      override = lib.mirrorFunctionArgs f.override (fdrv: makeOverridablePythonPackage (f.override fdrv));
+    };
+
+  overrideStdenvCompat =
+    f:
+    lib.setFunctionArgs (
+      args:
+      if !(lib.isFunction args) && (args ? stdenv) then
+        lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+          Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+            buildPythonPackage.override { stdenv = customStdenv; } { }
+        '' (f.override { stdenv = args.stdenv; } args)
+      else
+        f args
+    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
+    // {
+      # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
+      inherit (f) override;
+    };
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (
-    callPackage mkPythonDerivation {
-      inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
-      inherit toPythonModule; # Libraries provide modules
-    }
+    overrideStdenvCompat (
+      callPackage mkPythonDerivation {
+        inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
+        inherit toPythonModule; # Libraries provide modules
+        inherit (python) stdenv;
+      }
+    )
   );
 
   buildPythonApplication = makeOverridablePythonPackage (
-    callPackage mkPythonDerivation {
-      namePrefix = ""; # Python applications should not have any prefix
-      toPythonModule = x: x; # Application does not provide modules.
-    }
+    overrideStdenvCompat (
+      callPackage mkPythonDerivation {
+        namePrefix = ""; # Python applications should not have any prefix
+        toPythonModule = x: x; # Application does not provide modules.
+        inherit (python) stdenv;
+      }
+    )
   );
 
   # Check whether a derivation provides a Python module.
@@ -147,8 +175,5 @@ in
   python = toPythonModule python;
 
   # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
-  # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
-  pythonPackages = self // {
-    __attrsFailEvaluation = true;
-  };
+  pythonPackages = self;
 }

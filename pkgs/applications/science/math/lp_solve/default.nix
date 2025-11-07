@@ -5,6 +5,9 @@
   cctools,
   fixDarwinDylibNames,
   autoSignDarwinBinariesHook,
+  replaceVars,
+  buildPackages,
+  binutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       fixDarwinDylibNames
     ]
@@ -25,15 +31,20 @@ stdenv.mkDerivation rec {
       autoSignDarwinBinariesHook
     ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      NIX_LDFLAGS = "-headerpad_max_install_names";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   dontConfigure = true;
+
+  patches = [
+    (replaceVars ./0001-fix-cross-compilation.patch {
+      emulator = "${stdenv.hostPlatform.emulator buildPackages}";
+    })
+  ];
 
   buildPhase =
     let

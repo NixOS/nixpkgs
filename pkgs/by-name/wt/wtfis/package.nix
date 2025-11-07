@@ -6,12 +6,12 @@
 
 let
   pname = "wtfis";
-  version = "0.10.2";
+  version = "0.13.0";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
     tag = "v${version}";
-    hash = "sha256-2p5xFNr08WCgCQY8socmZ5UsyGCMId3zXQhXTX909PE=";
+    hash = "sha256-YEuj4WgRhAXMbYVcSy5eLH8284EGn3dtP2UEjXCA720=";
   };
 in
 python3.pkgs.buildPythonApplication {

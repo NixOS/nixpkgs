@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
     tag = "v${version}";
-    hash = "sha256-BVVHyRmgLLUgc3qLHOXiLYaTjsPMntvIP1os9eL8v74=";
+    hash = "sha256-MePv6LsK+8zCxG8l4vyiiZPSVqv9F4H4KQB0gHjm0YM=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
   ];
 

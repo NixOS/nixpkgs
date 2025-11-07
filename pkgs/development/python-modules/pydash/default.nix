@@ -5,6 +5,7 @@
   invoke,
   mock,
   pytest7CheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   sphinx-rtd-theme,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "8.0.1";
+  version = "8.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,13 +23,8 @@ buildPythonPackage rec {
     owner = "dgilland";
     repo = "pydash";
     tag = "v${version}";
-    hash = "sha256-4zNljz0U/iQd2DMC43qkdOY/mwtPlizgLmoaB7BVmxw=";
+    hash = "sha256-u8vLE0kjsnV2HNt3N3kmnaabgQzW3FcH4qxycNdv1Ls=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-    sed -i "/--no-cov/d" pyproject.toml
-  '';
 
   build-system = [ setuptools ];
 
@@ -38,6 +34,7 @@ buildPythonPackage rec {
     invoke
     mock
     pytest7CheckHook
+    pytest-cov-stub
     sphinx-rtd-theme
   ];
 
@@ -53,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://pydash.readthedocs.io";
     changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = [ ];
   };
 }

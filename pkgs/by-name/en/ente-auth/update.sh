@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gojq nix-prefetch-github common-updater-scripts
+#!nix-shell -i bash -p curl gojq nix-prefetch-github nix-prefetch-git common-updater-scripts
 
 set -eou pipefail
 pkg_dir="$(dirname "$0")"
@@ -17,7 +17,9 @@ fi
 echo "Updating to $short_version"
 
 # Subtree needed for lockfile and icons
-auth_tree="$(gh-curl "https://api.github.com/repos/ente-io/ente/git/trees/$version" | gojq '.tree[] | select(.path == "auth") | .url' --raw-output)"
+mobile_tree="$(gh-curl "https://api.github.com/repos/ente-io/ente/git/trees/$version" | gojq '.tree[] | select(.path == "mobile") | .url' --raw-output)"
+apps_tree="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "apps") | .url' --raw-output)"
+auth_tree="$(gh-curl "$apps_tree" | gojq '.tree[] | select(.path == "auth") | .url' --raw-output)"
 
 pushd "$pkg_dir"
 

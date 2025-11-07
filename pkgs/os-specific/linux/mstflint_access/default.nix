@@ -26,13 +26,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D ${pname}.ko $out/lib/modules/${kernel.modDirVersion}/extra/${pname}.ko
-
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "M=$(PWD)"
+  ]
+  ++ makeFlags;
 
   meta = with lib; {
     description = "Kernel module for Nvidia NIC firmware update";

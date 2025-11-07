@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  patches = [
+    # https://github.com/rheit/zdbsp/pull/7
+    ./fix-cmake-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];

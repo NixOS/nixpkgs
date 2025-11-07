@@ -24,15 +24,15 @@ rustPlatform.buildRustPackage rec {
     ncurses
     openssl
   ];
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-Pe6mNbn4GFjhpFZeWMlaRt7Bj5BLiIy789hXWkII2ps=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lom
       builditluc
       matthiasbeyer

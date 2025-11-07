@@ -4,32 +4,35 @@
   callPackage,
   fetchFromSourcehut,
   pkg-config,
-  river,
+  river-classic,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  zig_0_12,
+  zig_0_14,
 }:
 
+let
+  zig = zig_0_14;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rivercarro";
-  version = "0.4.0";
+  version = "0.6.0-unstable-2025-03-19";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = "rivercarro";
-    rev = "v${finalAttrs.version}";
+    rev = "199800235645a1771e2551a64d5b4f5e2601888c";
     fetchSubmodules = true;
-    hash = "sha256-nDKPv/roweW7ynEROsipUJPvs6VMmz3E4JzEFRBzE6s=";
+    hash = "sha256-im26hiRi24tLCSvLnIdcnIWml5kTs7YSCAC8o9mcR+M=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    river
+    river-classic
     wayland
     wayland-protocols
     wayland-scanner
-    zig_0_12.hook
+    zig.hook
   ];
 
   postPatch = ''
@@ -52,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
-    inherit (zig_0_12.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "rivercarro";
   };
 })

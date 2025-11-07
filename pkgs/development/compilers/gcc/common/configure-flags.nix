@@ -20,10 +20,11 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  enableDefaultPie,
+  targetPrefix,
 
   langC,
   langCC,
-  langD ? false,
   langFortran,
   langAda ? false,
   langGo,
@@ -38,7 +39,7 @@ assert !enablePlugin -> disableGdbPlugin;
 
 # Note [Windows Exception Handling]
 # sjlj (short jump long jump) exception handling makes no sense on x86_64,
-# it's forcably slowing programs down as it produces a constant overhead.
+# it's forcibly slowing programs down as it produces a constant overhead.
 # On x86_64 we have SEH (Structured Exception Handling) and we should use
 # that. On i686, we do not have SEH, and have to use sjlj with dwarf2.
 # Hence it's now conditional on x86_32 (i686 is 32bit).
@@ -59,17 +60,12 @@ let
   crossDarwin =
     (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.libc == "libSystem";
 
-  targetPrefix = lib.optionalString (
-    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
-
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (
       if withoutTargetLibc then
@@ -84,6 +80,11 @@ let
           "--disable-libatomic" # requires libc
           "--disable-decimal-float" # requires libc
           "--disable-libmpx" # requires libc
+          "--disable-hosted-libstdcxx" # requires libc
+          "--disable-libstdcxx-backtrace"
+          "--disable-linux-futex"
+          "--disable-libvtv"
+          "--disable-libitm"
         ]
         ++ lib.optionals crossMingw [
           "--with-headers=${lib.getDev libcCross}/include"
@@ -203,7 +204,6 @@ let
         lib.concatStringsSep "," (
           lib.optional langC "c"
           ++ lib.optional langCC "c++"
-          ++ lib.optional langD "d"
           ++ lib.optional langFortran "fortran"
           ++ lib.optional langAda "ada"
           ++ lib.optional langGo "go"
@@ -259,7 +259,7 @@ let
     ++ lib.optional (
       lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long"
       "--enable-libssp"
@@ -280,24 +280,12 @@ let
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
     ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
+    ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
     ]
-    ++ lib.optionals (langD) [
-      "--with-target-system-zlib=yes"
-    ]
-    # On mips64-unknown-linux-gnu libsanitizer defines collide with
-    # glibc's definitions and fail the build. It was fixed in gcc-13+.
-    ++
-      lib.optionals
-        (
-          targetPlatform.isMips
-          && targetPlatform.parsed.abi.name == "gnu"
-          && lib.versions.major version == "12"
-        )
-        [
-          "--disable-libsanitizer"
-        ]
     ++ lib.optionals targetPlatform.isAlpha [
       # Workaround build failures like:
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]

@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.112";
+  version = "0.1.116";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+2lmgkIXh8j+zIPoqrSBId7I7jjRGbZSkc/L4xUCink=";
+    hash = "sha256-UPrgaYZ8et4SWYiP8ePbhf7IbXCCUuU4W1pPOaeOxIM=";
   };
 
   patches = [
@@ -44,15 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ];
 
-  mesonFlags =
-    [
-      "-Dprefix-dev=${placeholder "dev"}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      # Docs are opt-out in native but opt-in in cross builds.
-      "-Dwith-docs=true"
-      "-Denable-gir=true"
-    ];
+  mesonFlags = [
+    "-Dprefix-dev=${placeholder "dev"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Docs are opt-out in native but opt-in in cross builds.
+    "-Dwith-docs=true"
+    "-Denable-gir=true"
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

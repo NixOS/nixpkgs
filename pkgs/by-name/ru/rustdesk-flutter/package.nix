@@ -4,7 +4,7 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter,
+  flutter329,
   ffmpeg,
   gst_all_1,
   fuse3,
@@ -29,11 +29,12 @@
   cargo-expand,
   yq,
   callPackage,
+  addDriverRunpath,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.2/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.1/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -46,7 +47,6 @@ let
       ./update-flutter-dev-path.patch
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-4khuq/DK4sP98AMHyr/lEo1OJdqLujOIi8IgbKBY60Y=";
     cargoBuildFlags = [
       "--package"
@@ -56,22 +56,22 @@ let
   };
 
   ffigen = callPackage ./ffigen {
-    inherit flutter;
+    flutter = flutter329;
   };
 
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.3.9";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-DvFsHrYLdAaEh2cXF8Zp5AvyG8Okiy2guW/r2x7Kz4U=";
+    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
   };
 
   strictDeps = true;
@@ -79,18 +79,9 @@ flutter.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.9/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = {
-    dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
-    desktop_multi_window = "sha256-NOe0jMcH02c0TDTtv62OMTR/qDPnRQrRe73vXDuEq8Q=";
-    dynamic_layouts = "sha256-eFp1YVI6vI2HRgtE5nTqGZIylB226H0O8kuxy9ypuf8=";
-    flutter_gpu_texture_renderer = "sha256-EZa1FOMbcwdVs/m0vsUvlHv+MifPby4I97ZFe1bqmwQ=";
-    window_manager = "sha256-40mwj4D8W2xW8C7RshTjOhelOiLPM7uU9rsF4NvQn8c=";
-    window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
-    texture_rgba_renderer = "sha256-V/bmT/5x+Bt7kdjLTkgkoXdBcFVXxPyp9kIUhf+Rnt4=";
-    uni_links = "sha256-O2BgNwu5HFRQyaNkskWHORx8pZhdwEjtljvw1+zFzfo=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -101,7 +92,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-D64W2+eBR2RGiN+puJW3QIO1334SgOOHv5fws5r3wmg=";
+    hash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
   };
 
   dontCargoBuild = true;
@@ -153,8 +144,6 @@ flutter.buildFlutterApplication rec {
 
   patches = [
     ./make-build-reproducible.patch
-    # Multiple version of core-foundation-sys will make fetchCargoVendor unhappy. Keep one of it.
-    ./update-cargo-lock.patch
   ];
 
   prepareBuildRunner = ''
@@ -207,6 +196,7 @@ flutter.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
     --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 

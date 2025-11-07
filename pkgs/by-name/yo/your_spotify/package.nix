@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
     tag = finalAttrs.version;
-    hash = "sha256-Acf+y8/Aga6rKwdb9b6im58IWqiKX4wHDeUzT5ApPqs=";
+    hash = "sha256-yz+IVrvnNt67TQCNNqpS+jSAEevsi+0cVGBTZNMcZbk=";
   };
 
   offlineCache = fetchYarnDeps {

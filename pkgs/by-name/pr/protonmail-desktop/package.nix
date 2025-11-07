@@ -6,32 +6,50 @@
   makeWrapper,
   dpkg,
   electron,
+  _7zz,
 }:
 let
   mainProgram = "proton-mail";
-  version = "1.8.0";
-
+  version = "1.9.1";
+  linuxHash = "sha256-P2i/uX++F1JUgwSUyndYazjLSCK1mP+XSGICPUoo1VE=";
+  darwinHash = "sha256-U+I0ttToDiLLjEaKlvdb7HhE4dMrLryc251GXBVsQEM=";
 in
 stdenv.mkDerivation {
   pname = "protonmail-desktop";
   inherit version;
 
-  src = fetchurl {
-    url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
-    sha256 = "sha256-ti00RSMnSwrGNUys7mO0AmK+OSq4SZmCsfPKm7RRm2g=";
-  };
+  src =
+    {
+      "x86_64-linux" = fetchurl {
+        url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
+        hash = linuxHash;
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
+        hash = darwinHash;
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
+        hash = darwinHash;
+      };
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-    asar
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      makeWrapper
+      asar
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      _7zz
+    ];
 
   # Rebuild the ASAR archive, hardcoding the resourcesPath
-  preInstall = ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     asar extract usr/lib/proton-mail/resources/app.asar tmp
     rm usr/lib/proton-mail/resources/app.asar
     substituteInPlace tmp/.webpack/main/index.js \
@@ -42,11 +60,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/proton-mail
     cp -r usr/share/ $out/
     cp -r usr/lib/proton-mail/resources/* $out/share/proton-mail/
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r "Proton Mail.app" $out/Applications/
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -72,7 +96,8 @@ stdenv.mkDerivation {
     ];
     platforms = [
       "x86_64-linux"
-    ];
+    ]
+    ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 
     inherit mainProgram;

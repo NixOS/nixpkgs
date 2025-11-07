@@ -7,7 +7,7 @@
   gradle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "crossfire-gridarta";
   version = "2025-04";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/crossfire-gridarta \
       --add-flags "-jar $out/share/java/CrossfireEditor.jar" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on' \
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
       --set _JAVA_AWT_WM_NONREPARENTING 1
 
     runHook postInstall

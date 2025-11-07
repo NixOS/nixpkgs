@@ -27,13 +27,12 @@
     "libheif"
     "libnsgif"
   ],
-  freeimage,
   libtiff,
   libjpeg_turbo,
   libjxl,
   libpng,
   librsvg,
-  netsurf,
+  libnsgif,
   libheif,
 }:
 
@@ -50,18 +49,18 @@ let
 
   backends = {
     inherit
-      freeimage
       libtiff
       libpng
       librsvg
       libheif
       libjxl
+      libnsgif
       ;
     libjpeg = libjpeg_turbo;
-    inherit (netsurf) libnsgif;
+    freeimage = throw "freeimage backend not supported";
   };
 
-  backendFlags = builtins.map (
+  backendFlags = map (
     b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
   ) (builtins.attrNames backends);
 in
@@ -92,7 +91,8 @@ stdenv.mkDerivation rec {
     "-Dwindows=${withWindowSystem}"
     "-Dtest=enabled"
     "-Dman=enabled"
-  ] ++ backendFlags;
+  ]
+  ++ backendFlags;
 
   strictDeps = true;
 
@@ -105,16 +105,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cmocka
-      icu75
-      libxkbcommon
-      pango
-      inih
-    ]
-    ++ windowSystems."${withWindowSystem}"
-    ++ builtins.map (b: backends."${b}") withBackends;
+  buildInputs = [
+    cmocka
+    icu75
+    libxkbcommon
+    pango
+    inih
+  ]
+  ++ windowSystems."${withWindowSystem}"
+  ++ map (b: backends."${b}") withBackends;
 
   patches = [
     (fetchpatch {

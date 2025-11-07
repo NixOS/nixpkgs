@@ -13,13 +13,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0.12-unstable-2025-03-08";
+  version = "0.12-unstable-2025-08-19";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "46d39da2613aa2f55a068b50e7ac45a8f270005d";
-    hash = "sha256-UNRNJubM9ePjXhqZ9RiZQIxGBMM3nOye83S7J8wCHMg=";
+    rev = "8bc0391117bd3639881ed947e49e4cd37c199a95";
+    hash = "sha256-GWG6FvBiowgiW7MWKxCOivmDbb5YveZR6Nn3foLifwY=";
   };
 
   collection = fetchurl {
@@ -51,7 +51,7 @@ in
 buildNpmPackage rec {
   pname = "icestudio";
   inherit version src;
-  npmDepsHash = "sha256-ZHvXC0hpAcPMsHhxQWELFC2b+WBNoEvbtLLNJsDhMso=";
+  npmDepsHash = "sha256-QHd4d0BQXqAs/4WnnawCW/tJvSbWOz++RwomNG4XBuU=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies
@@ -102,7 +102,9 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 

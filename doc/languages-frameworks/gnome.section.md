@@ -48,9 +48,7 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
 
 ```nix
 {
-  buildInputs = [
-    pantheon.elementary-icon-theme
-  ];
+  buildInputs = [ pantheon.elementary-icon-theme ];
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.
@@ -113,7 +111,7 @@ Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that a
 - [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4} for GTK 4 apps. Same as `wrapGAppsHook3` but replaces `gtk3` with `gtk4`.
 - [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook} for programs without a graphical interface. Same as the above but does not bring `gtk3` and `librsvg` into the closure.
 
-The hooks do the the following:
+The hooks do the following:
 
 - `wrapGApps*` hook itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 

@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
     description = "G.Projector transforms an input map image into any of about 200 global and regional map projections";
     homepage = "https://www.giss.nasa.gov/tools/gprojector/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ alyaeanyx ];
+    maintainers = with lib.maintainers; [ pentane ];
     license = lib.licenses.unfree;
     inherit (jre.meta) platforms;
   };

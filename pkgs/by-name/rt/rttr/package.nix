@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
 
   src = fetchFromGitHub {
-    owner = "${pname}org";
-    repo = pname;
+    owner = "rttrorg";
+    repo = "rttr";
     rev = "v${version}";
     sha256 = "1yxad8sj40wi75hny8w6imrsx8wjasjmsipnlq559n4b6kl84ijp";
   };
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_UNIT_TESTS=OFF"
     "-DBUILD_PACKAGE=OFF"
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

@@ -9,21 +9,20 @@
 
 buildGoModule rec {
   pname = "mongodb-cli";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-cli";
     tag = "mongocli/v${version}";
-    sha256 = "sha256-vhx8dxTNngDBy+34e+Er7uqIAGJImJiPmwxZX+EwIG0=";
+    hash = "sha256-ltNYphGNUyg12Xjg3kmmMVdSYyzMUjdVeXjDi6O4T08=";
   };
 
-  vendorHash = "sha256-825S3jMwgZC3aInuahg6/jg4A9u/bKeie30MB9HexJY=";
-
-  nativeBuildInputs = [ installShellFiles ];
+  vendorHash = "sha256-X5qIte7TFn9b54cg0NF4yrFuAjqTdLXPx0qPGK54jnY=";
 
   subPackages = [ "cmd/mongocli" ];
 
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mongocli \
       --bash <($out/bin/mongocli completion bash) \
@@ -31,10 +30,10 @@ buildGoModule rec {
       --zsh <($out/bin/mongocli completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=mongocli/v(.+)" ]; };
 
   meta = {
-    description = "MongoDB CLI enable you to manage your MongoDB via ops manager and cloud manager";
+    description = "Manage your MongoDB via ops manager and cloud manager";
     homepage = "https://github.com/mongodb/mongodb-cli";
     changelog = "https://www.mongodb.com/docs/mongocli/current/release-notes/#mongodb-cli-${version}";
     license = lib.licenses.asl20;

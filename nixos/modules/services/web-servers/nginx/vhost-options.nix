@@ -170,12 +170,6 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-    };
-
     forceSSL = mkOption {
       type = types.bool;
       default = false;
@@ -240,7 +234,7 @@ with lib;
         IP address / port.
         If there is one server block configured to enable http2, then it is
         enabled for all server blocks on this IP.
-        See https://stackoverflow.com/a/39466948/263061.
+        See <https://stackoverflow.com/a/39466948/263061>.
       '';
     };
 
@@ -254,7 +248,7 @@ with lib;
         and activate the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that HTTP/3 support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
         HTTP/3 availability must be manually advertised, preferably in each location block.
       '';
     };
@@ -269,7 +263,7 @@ with lib;
         and activate the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that special application protocol support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 
@@ -282,7 +276,7 @@ with lib;
         which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that QUIC support is experimental and
         *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.26.1";
+  version = "2.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = version;
-    hash = "sha256-mgmUIN49zLo5XYWW5Y9XXeZ9RurB1LekF3/vl8EDhxM=";
+    hash = "sha256-PYlNMAomqN9T60b8bRqb8mnLjFRn3JnI79Tynncxje8=";
   };
 
   postPatch = ''
@@ -54,7 +54,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     virtualenv
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -68,7 +69,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ charlesbaynham ];
+    maintainers = with maintainers; [
+      charlesbaynham
+      mdaniels5757
+    ];
     mainProgram = "pipdeptree";
   };
 }

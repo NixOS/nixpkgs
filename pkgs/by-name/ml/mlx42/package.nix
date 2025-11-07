@@ -30,14 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      patchShebangs --build ./tools
-    ''
-    + lib.optionalString enableShared ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "mlx42 STATIC" "mlx42 SHARED"
-    '';
+  postPatch = ''
+    patchShebangs --build ./tools
+  ''
+  + lib.optionalString enableShared ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "mlx42 STATIC" "mlx42 SHARED"
+  '';
 
   strictDeps = true;
 

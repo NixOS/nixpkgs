@@ -1,15 +1,20 @@
 diff --git a/bin/melos.dart b/bin/melos.dart
 index 0db7013..218276f 100644
---- a/bin/melos.dart
-+++ b/bin/melos.dart
+--- a/packages/melos/bin/melos.dart
++++ b/packages/melos/bin/melos.dart
 @@ -1,11 +1,37 @@
 +import 'dart:io';
  import 'package:cli_launcher/cli_launcher.dart';
  import 'package:melos/src/command_runner.dart';
  
 -Future<void> main(List<String> arguments) async => launchExecutable(
--      arguments,
--      LaunchConfig(
+-  arguments,
+-  LaunchConfig(
+-    name: ExecutableName('melos'),
+-    launchFromSelf: false,
+-    entrypoint: melosEntryPoint,
+-  ),
+-);
 +Future<void> main(List<String> arguments) async {
 +  final melosYamlPath = findMelosYaml();
 +
@@ -24,13 +29,10 @@ index 0db7013..218276f 100644
 +    LaunchContext(
 +      directory: Directory.current,
 +      localInstallation: ExecutableInstallation(
-         name: ExecutableName('melos'),
--        launchFromSelf: false,
--        entrypoint: melosEntryPoint,
++        name: ExecutableName('melos'),
 +        isSelf: false,
 +        packageRoot: melosYamlPath,
-       ),
--    );
++      ),
 +    ),
 +  );
 +}

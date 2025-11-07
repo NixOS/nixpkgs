@@ -20,10 +20,10 @@ let
 
   cfg = config.services.redlib;
 
-  args = concatStringsSep " " ([
+  args = concatStringsSep " " [
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
-  ]);
+  ];
 
   boolToString' = b: if b then "on" else "off";
 in
@@ -93,26 +93,67 @@ in
     systemd.services.redlib = {
       wantedBy = [ "default.target" ];
       environment = mapAttrs (_: v: if isBool v then boolToString' v else toString v) cfg.settings;
-      serviceConfig =
-        {
-          ExecStart = [
-            ""
-            "${lib.getExe cfg.package} ${args}"
-          ];
-        }
-        // (
-          if (cfg.port < 1024) then
-            {
-              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-              CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-            }
-          else
-            {
-              # A private user cannot have process capabilities on the host's user
-              # namespace and thus CAP_NET_BIND_SERVICE has no effect.
-              PrivateUsers = true;
-            }
-        );
+      serviceConfig = {
+        # Hardening
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "~@mount"
+          "~@swap"
+          "~@resources"
+          "~@reboot"
+          "~@raw-io"
+          "~@obsolete"
+          "~@module"
+          "~@debug"
+          "~@cpu-emulation"
+          "~@clock"
+          "~@privileged"
+        ];
+        UMask = "0027";
+
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} ${args}"
+        ];
+      }
+      // (
+        if (cfg.port < 1024) then
+          {
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+            CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          }
+        else
+          {
+            # A private user cannot have process capabilities on the host's user
+            # namespace and thus CAP_NET_BIND_SERVICE has no effect.
+            PrivateUsers = true;
+            CapabilityBoundingSet = false;
+          }
+      );
     };
 
     networking.firewall = mkIf cfg.openFirewall {

@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ aidalgol ];
+    maintainers = with maintainers; [ iedame ];
   };
 
   # Upstream no longer create git tags when bumping the version, so we have to

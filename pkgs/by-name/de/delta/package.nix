@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qF55A1CENoHu3LBtNRc/n2PKYxMls7pdn2d56Mp18Qs=";
 
   nativeBuildInputs = [
@@ -29,13 +28,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   nativeCheckInputs = [ git ];
 
@@ -59,15 +57,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_diff_real_files"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dandavison/delta";
     description = "Syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
-      figsoda
     ];
     mainProgram = "delta";
   };

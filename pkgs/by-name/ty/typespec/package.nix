@@ -5,42 +5,48 @@
   makeWrapper,
   nix-update-script,
   nodejs,
-  pnpm_9,
-  testers,
+  pnpm,
+  versionCheckHook,
 }:
 
 let
-  workspace = "compiler...";
+  workspace = "@typespec/compiler...";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
-  version = "0.64.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typespec";
-    tag = "typespec@${finalAttrs.version}";
-    hash = "sha256-zZTZdnmRTjhnoz/5JHnn4h/YlMpXF/I7o1mDeiRVPUA=";
+    tag = "typespec-stable@${finalAttrs.version}";
+    hash = "sha256-huyEQA+XhlGVxnxUzQH1aIZUE4EbCN6HakitzuDyR18=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm.configHook
   ];
 
   pnpmWorkspaces = [ workspace ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
+      postPatch
       ;
-    hash = "sha256-W8m6ibiy9Okga0qWpZWDYklXAwpHwk85Q6UTaFJhDrU=";
+    fetcherVersion = 2;
+    hash = "sha256-ztig1B10cQQy+4XKZjwwlCxGenwcU+C28TfTWHqZ59Y=";
   };
 
   postPatch = ''
+    # The `packageManager` attribute matches the version _exactly_, which makes
+    # the build fail if it doesn't match exactly.
+    substituteInPlace package.json \
+      --replace-fail '"packageManager": "pnpm@10.11.0"' '"packageManager": "pnpm"'
     # `fetchFromGitHub` doesn't clone via git and thus installing would otherwise fail.
     substituteInPlace packages/compiler/scripts/generate-manifest.js \
       --replace-fail 'execSync("git rev-parse HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
@@ -54,12 +60,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # Remove unnecessary files.
+    find -name node_modules -type d -exec rm -rf {} \; || true
+    pnpm config set hoist=false
+    pnpm install --offline --ignore-scripts --frozen-lockfile --filter="@typespec/compiler" --prod --no-optional
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin" "$out/lib/typespec/packages/compiler"
+    mkdir -p "$out/bin" "$out/lib/typespec"
     cp -r --parents \
-      node_modules \
+      node_modules/ \
       package.json \
       packages/compiler/cmd \
       packages/compiler/dist \
@@ -78,12 +91,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ ''--version-regex=typespec@(\d+\.\d+\.\d+)'' ];
+    extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];
   };
 
   meta = {
@@ -97,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       All this while keeping your TypeSpec definition as a single source of truth.
     '';
     homepage = "https://typespec.io/";
-    changelog = "https://github.com/microsoft/typespec/releases/tag/typespec@${finalAttrs.version}";
+    changelog = "https://github.com/microsoft/typespec/releases/tag/typespec-stable@${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paukaifler ];
     mainProgram = "tsp";

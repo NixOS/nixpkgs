@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto";
-  version = "0.15.3";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sFADZj0mBe8TQ2x6NeXLqvvXK13WhVGD2anGWoWrSZw=";
+    hash = "sha256-KdwKJ0ZKKHU+Fe/TTIITHOyRH9uoJ3LU3qXqUwpJI6g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ok4rgqiQ7N5knXdb0Mfn3fYPPLXoRtOZVv8RvWR2h3k=";
+  cargoHash = "sha256-5uWCpTnGbqoogOxSD2GcXMjQpoYIp1GfB9k4bd+Easc=";
 
   postPatch = ''
     tomlq -ti 'del(.bench)' crates/koto/Cargo.toml

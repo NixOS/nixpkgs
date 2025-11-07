@@ -3,6 +3,7 @@
   aioquic,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
@@ -15,10 +16,8 @@
   hypothesis,
   kaitaistruct,
   ldap3,
-  mitmproxy-linux,
   mitmproxy-rs,
   msgpack,
-  passlib,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -31,7 +30,6 @@
   ruamel-yaml,
   setuptools,
   sortedcontainers,
-  stdenv,
   tornado,
   urwid,
   wsproto,
@@ -40,21 +38,28 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.0.0";
+  version = "12.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-2dEoPgT8g59sLRV5gMPo7XII0XjTrn2cVdYetxDj/V0=";
+    hash = "sha256-2ldebsgR0xZV4WiCLV7DBUKXZo3oE+M6cmvRbSeCSLQ=";
   };
 
   pythonRelaxDeps = [
-    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
+    "bcrypt"
+    "cryptography"
+    "flask"
     "h2"
-    "passlib"
-    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
+    "kaitaistruct"
+    "pyopenssl"
+    "pyperclip"
+    "tornado"
+    "typing-extensions"
+    "urwid"
+    "zstandard"
   ];
 
   build-system = [ setuptools ];
@@ -64,6 +69,7 @@ buildPythonPackage rec {
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -74,7 +80,6 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -144,7 +149,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -14,31 +14,30 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "filen-cli";
-  version = "0.0.33";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-piGXcPUwJDOg8EAYML0BiSPRM+1LogU8s2BXtBud5ww=";
+    hash = "sha256-iISW9EAk8haWUCh9I8qHhrBKLqHeBUC8sWA0MnXqQSA=";
   };
 
-  npmDepsHash = "sha256-4GdipHnaqv3LrejMXF73duNyZKgD/0ApzUjiI/QQ30g=";
+  npmDepsHash = "sha256-0DpiUjUFc0ThzP6/qrSEebKDq2fnr/CpcmtPFaIVHhU=";
 
   inherit nodejs;
 
   env.npm_config_build_from_source = "true";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config # for keytar
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      # for utf-8-validate
-      # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
-      perl
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config # for keytar
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # for utf-8-validate
+    # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
+    perl
+  ];
 
   # for keytar
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];

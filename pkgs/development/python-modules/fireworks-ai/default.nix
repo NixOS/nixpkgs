@@ -4,15 +4,26 @@
   fetchPypi,
 
   # build-system
-  setuptools,
-  versioneer,
+  pdm-backend,
 
   # dependencies
-  httpx,
-  httpx-ws,
+  asyncstdlib-fw,
+  betterproto-fw,
+  googleapis-common-protos,
+  grpcio,
+  grpclib,
   httpx-sse,
-  pydantic,
+  httpx-ws,
+  httpx,
+  mmh3,
+  openai,
   pillow,
+  protobuf,
+  pydantic,
+  python-dateutil,
+  rich,
+  toml,
+  typing-extensions,
 
   # optional dependencies
   fastapi,
@@ -27,27 +38,44 @@
 
 buildPythonPackage rec {
   pname = "fireworks-ai";
-  version = "0.15.13";
+  version = "0.19.20";
   pyproject = true;
 
   # no source available
   src = fetchPypi {
     pname = "fireworks_ai";
     inherit version;
-    hash = "sha256-ZZSF4R1HOYpNmKnL2OPWoUwdSJJ2j2e3+hzW0QH55io=";
+    hash = "sha256-zK8lO+vFnMEPPl79QGfqPdemZT7kQdCqAPiCrcXdqYQ=";
   };
 
   build-system = [
-    setuptools
-    versioneer
+    pdm-backend
+  ];
+
+  pythonRelaxDeps = [
+    "attrs"
+    "protobuf"
   ];
 
   dependencies = [
+    asyncstdlib-fw
+    betterproto-fw
+    googleapis-common-protos
+    grpcio
+    grpclib
     httpx
-    httpx-ws
+    httpx
     httpx-sse
-    pydantic
+    httpx-ws
+    mmh3
+    openai
     pillow
+    protobuf
+    pydantic
+    python-dateutil
+    rich
+    toml
+    typing-extensions
   ];
 
   optional-dependencies = {

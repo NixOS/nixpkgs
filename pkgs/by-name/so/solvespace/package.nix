@@ -90,13 +90,17 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
+  cmakeFlags = [
+    "-DENABLE_OPENMP=ON"
+    # CMake 4 needs a minimum version
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Parametric 3d CAD program";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.edef ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.edef ];
+    platforms = lib.platforms.linux;
     homepage = "https://solvespace.com";
     changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };

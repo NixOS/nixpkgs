@@ -5,26 +5,24 @@
   rocmUpdateScript,
   cmake,
   clr,
-  git,
   rocdbgapi,
   elfutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocr-debug-agent";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocr_debug_agent";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-HYag5/E72hopDhS9EVcdyGgSvzbCMzKqLC+SIS28Y9M=";
+    hash = "sha256-otoxZ2NHkPDIFhvn4/nvaQ/W4LF38Nx9MZ9IYEf1DyY=";
   };
 
   nativeBuildInputs = [
     cmake
     clr
-    git
   ];
 
   buildInputs = [

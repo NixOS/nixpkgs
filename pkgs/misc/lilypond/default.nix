@@ -1,15 +1,17 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchzip,
   ghostscript,
-  gyre-fonts,
   texinfo,
   imagemagick,
   texi2html,
+  extractpdfmark,
   guile,
   python3,
   gettext,
+  glib,
+  gmp,
   flex,
   perl,
   bison,
@@ -21,9 +23,6 @@
   pango,
   fontforge,
   help2man,
-  zip,
-  netpbm,
-  groff,
   freefont_ttf,
   makeFontsConf,
   makeWrapper,
@@ -34,10 +33,11 @@
   texliveSmall,
   tex ? texliveSmall.withPackages (
     ps: with ps; [
-      lh
-      metafont
       epsf
       fontinst
+      fontware
+      lh
+      metafont
     ]
   ),
 }:
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   pname = "lilypond";
   version = "2.24.4";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-6W+gNXHHnyDhl5ZTr6vb5O5Cdlo9n9FJU/DNnupReBw=";
+    hash = "sha256-UYdORvodrVchxslOxpMiXrAh7DtB9sWp9yqZU/jeB9Y=";
   };
 
   postInstall = ''
@@ -68,48 +68,48 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [
-    "--disable-documentation"
-    # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
-    "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
-    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
-  ];
-
   preConfigure = ''
-    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
-    export HOME=$TMPDIR/home
+    substituteInPlace scripts/build/mf2pt1.pl \
+      --replace-fail "mem=mf2pt1" "mem=$PWD/mf/mf2pt1"
   '';
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     bison
-    flex
+    dblatex
+    extractpdfmark
+    flex # for flex binary
+    fontconfig
+    fontforge
+    gettext
+    ghostscript
+    guile
+    help2man
+    imagemagick
     makeWrapper
+    perl
     pkg-config
+    python3
+    rsync
+    t1utils
+    tex
+    texi2html
+    texinfo
   ];
 
   buildInputs = [
-    ghostscript
-    texinfo
-    imagemagick
-    texi2html
-    guile
-    dblatex
-    tex
-    zip
-    netpbm
-    python3
-    gettext
-    perl
-    fontconfig
-    freetype
-    pango
-    fontforge
-    help2man
-    groff
-    t1utils
     boehmgc
-    rsync
+    flex # FlexLexer.h
+    freetype
+    glib
+    gmp
+    pango
   ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
@@ -121,15 +121,23 @@ stdenv.mkDerivation rec {
     supportedFeatures = [ "commit" ];
   };
 
-  meta = with lib; {
+  # documentation makefile uses "out" for different purposes, hence we explicitly set it to an empty string
+  makeFlags = [ "out=" ];
+
+  meta = {
     description = "Music typesetting system";
-    homepage = "http://lilypond.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    homepage = "https://lilypond.org/";
+    license = with lib.licenses; [
+      gpl3Plus # most code
+      gpl3Only # ly/articulate.ly
+      fdl13Plus # docs
+      ofl # mf/
+    ];
+    maintainers = with lib.maintainers; [
       marcweber
       yurrriq
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {

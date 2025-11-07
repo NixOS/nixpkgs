@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
-    repo = pname;
+    repo = "kirigami-addons";
     rev = "v${version}";
     hash = "sha256-KTkEfGmQf9kj+9e/rJM7jd/4BqubDLu5/oLkX88uENA=";
   };

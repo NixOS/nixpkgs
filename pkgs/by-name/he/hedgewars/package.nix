@@ -8,8 +8,7 @@
   ffmpeg,
   libglut,
   lib,
-  fetchhg,
-  fetchpatch,
+  fetchurl,
   cmake,
   pkg-config,
   lua5_1,
@@ -43,24 +42,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hedgewars";
-  version = "1.0.2-unstable-2024-03-24";
+  version = "1.0.3";
 
-  src = fetchhg {
-    url = "https://hg.hedgewars.org/hedgewars/";
-    rev = "fcc98c953b5e";
-    hash = "sha256-bUmyYXmhOYjvbd0elyNnaUx3X1QJl3w2/hpxFK9KQCE=";
+  src = fetchurl {
+    url = "https://hedgewars.org/download/releases/hedgewars-src-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-xcGHfAuuE1THXSuVJ7b5qfeemZMuXQix9vfeFwgGYTA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/hedgewars/hw/pull/74
-      name = "Add support for ffmpeg 6.0";
-      url = "https://github.com/hedgewars/hw/pull/74/commits/71691fad8654031328f4af077fc32aaf29cdb7d0.patch";
-      hash = "sha256-nPfSQCc4eGCa4lCGl3gDx8fJp47N0lgVeDU5A5qb1yo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -81,7 +70,8 @@ stdenv.mkDerivation {
     libglut
     physfs
     qtbase
-  ] ++ lib.optional withServer ghc;
+  ]
+  ++ lib.optional withServer ghc;
 
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
@@ -114,7 +104,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Funny turn-based artillery game, featuring fighting hedgehogs!";
+    description = "Funny turn-based artillery game, featuring fighting hedgehogs";
     homepage = "https://hedgewars.org/";
     license = with lib.licenses; [
       gpl2Only
@@ -155,4 +145,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

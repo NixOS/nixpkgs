@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "l-smash";
-    repo = pname;
+    repo = "l-smash";
     rev = "v${version}";
     sha256 = "0rcq9727im6kd8da8b7kzzbzxdldvmh5nsljj9pvr4m3lj484b02";
   };
@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = [ ];
     platforms = platforms.all;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

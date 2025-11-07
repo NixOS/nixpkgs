@@ -44,6 +44,6 @@ buildGoModule rec {
     homepage = "https://github.com/sourcegraph/scip";
     changelog = "https://github.com/sourcegraph/scip/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -6,7 +6,9 @@
   cmake,
   dnsmasq,
   fetchFromGitHub,
+  fmt,
   git,
+  grpc,
   gtest,
   iproute2,
   iptables,
@@ -27,18 +29,6 @@
   xterm,
 }:
 
-let
-  # This is done here because a CMakeLists.txt from one of it's submodules tries
-  # to modify a file, so we grab the source for the submodule here, copy it into
-  # the source of the Multipass project which allows the modification to happen.
-  grpc_src = fetchFromGitHub {
-    owner = "canonical";
-    repo = "grpc";
-    rev = "ba8e7f72a57b9e0b25783a4d3cea58c79379f194";
-    hash = "sha256-DS1UNLCUdbipn5w4p2aVa8LgHHhdJiAfzfEdIXNO69o=";
-    fetchSubmodules = true;
-  };
-in
 stdenv.mkDerivation {
   inherit version;
   pname = "multipassd";
@@ -54,8 +44,6 @@ stdenv.mkDerivation {
     # in the Nix build environment. This patch disables the fetch in favour of providing
     # the googletest library from nixpkgs.
     ./cmake_no_fetch.patch
-    # Ensures '-Wno-ignored-attributes' is supported by the compiler before attempting to build.
-    ./cmake_warning.patch
     # As of Multipass 1.14.0, the upstream started using vcpkg for grabbing C++ dependencies,
     # which doesn't work in the nix build environment. This patch reverts that change, in favour
     # of providing those dependencies manually in this derivation.
@@ -83,9 +71,6 @@ stdenv.mkDerivation {
       --replace-fail "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
       --replace-fail "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
 
-    # Copy the grpc submodule we fetched into the source code.
-    cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
-
     # Configure CMake to use gtest from the nix store since we disabled fetching from the internet.
     cat >> tests/CMakeLists.txt <<'EOF'
       add_library(gtest INTERFACE)
@@ -111,6 +96,8 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DMULTIPASS_ENABLE_FLUTTER_GUI=false" ];
 
   buildInputs = [
+    fmt
+    grpc
     gtest
     libapparmor
     libvirt

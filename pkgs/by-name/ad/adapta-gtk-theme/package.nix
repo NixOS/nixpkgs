@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-gtk-theme";
-    rev = version;
+    tag = version;
     sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
   };
 
@@ -54,14 +54,14 @@ stdenv.mkDerivation rec {
     "--disable-unity"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adaptive GTK theme based on Material Design Guidelines";
     homepage = "https://github.com/adapta-project/adapta-gtk-theme";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       cc-by-sa-30
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

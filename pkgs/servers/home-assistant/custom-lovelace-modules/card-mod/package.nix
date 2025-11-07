@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "lovelace-card-mod";
-  version = "3.5.0";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "thomasloven";
     repo = "lovelace-card-mod";
     rev = "v${version}";
-    hash = "sha256-MjeLbo1r/PMbzDfZurZYm1fHUukHfzOx6njRgEB8rWk=";
+    hash = "sha256-eQwJOVpRy9MTILWrKSru90p+kKgRlIUBFhpeHrYX3X0=";
   };
 
-  npmDepsHash = "sha256-JJexFmVbDHi2JCiCpcDupzVf0xfwy+vqWILq/dLVcBo=";
+  npmDepsHash = "sha256-3KXu/RhDt0jzO9UJKRN3nOc/mm9tCOeQYGRGaCUv2wM=";
 
   installPhase = ''
     runHook preInstall

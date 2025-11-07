@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
     tag = "v${version}";
-    hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
+    hash = "sha256-DGOOMjP6dxIwbIhzRKf0+oy/2Cs+00tpwHkcmrukatw=";
   };
 
   nativeBuildInputs =
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "[0-9.]+"
+      "v([0-9.]+)"
     ];
   };
 

@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.3.0";
+  version = "2025.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-j25+DfWReonXKqxkX9OVHjKo+Indh13rlBE5PyGe69c=";
+    hash = "sha256-xPgMhydsFmwg0kyl3Lst1N+CsbbnsWdPOtkZ8BMPDR8=";
   };
 
   postPatch = ''
@@ -76,19 +76,19 @@ buildPythonPackage rec {
 
   optional-dependencies = lib.fix (self: {
     array = [ numpy ];
-    complete =
-      [
-        pyarrow
-        lz4
-      ]
-      ++ self.array
-      ++ self.dataframe
-      ++ self.distributed
-      ++ self.diagnostics;
+    complete = [
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       pandas
       pyarrow
-    ] ++ self.array;
+    ]
+    ++ self.array;
     distributed = [ distributed ];
     diagnostics = [
       bokeh
@@ -96,32 +96,29 @@ buildPythonPackage rec {
     ];
   });
 
-  nativeCheckInputs =
-    [
-      hypothesis
-      pyarrow
-      pytest-asyncio
-      pytest-cov-stub
-      pytest-mock
-      pytest-rerunfailures
-      pytest-xdist
-      pytestCheckHook
-      versionCheckHook
-    ]
-    ++ optional-dependencies.array
-    ++ optional-dependencies.dataframe;
+  nativeCheckInputs = [
+    hypothesis
+    pyarrow
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
+    pytest-rerunfailures
+    pytest-xdist
+    pytestCheckHook
+    versionCheckHook
+  ]
+  ++ optional-dependencies.array
+  ++ optional-dependencies.dataframe;
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
-    # Don't run tests that require network access
-    "-m 'not network'"
+    "--reruns=3"
   ];
 
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
+  disabledTestMarks = [
+    # Don't run tests that require network access
+    "network"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -42,6 +42,36 @@ rec {
     ;
 
   /**
+    Concatenates a list of strings with a separator between each element.
+
+    # Inputs
+
+    `sep`
+    : Separator to add between elements
+
+    `list`
+    : List of strings that will be joined
+
+    # Type
+
+    ```
+    join :: string -> [ string ] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.join` usage example
+
+    ```nix
+    join ", " ["foo" "bar"]
+    => "foo, bar"
+    ```
+
+    :::
+  */
+  join = builtins.concatStringsSep;
+
+  /**
     Concatenate a list of strings.
 
     # Type
@@ -331,6 +361,41 @@ rec {
     :::
   */
   concatLines = concatMapStrings (s: s + "\n");
+
+  /**
+    Given string `s`, replace every occurrence of the string `from` with the string `to`.
+
+    # Inputs
+
+    `from`
+    : The string to be replaced
+
+    `to`
+    : The string to replace with
+
+    `s`
+    : The original string where replacements will be made
+
+    # Type
+
+    ```
+    replaceString :: string -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.replaceString` usage example
+
+    ```nix
+    replaceString "world" "Nix" "Hello, world!"
+    => "Hello, Nix!"
+    replaceString "." "_" "v1.2.3"
+    => "v1_2_3"
+    ```
+
+    :::
+  */
+  replaceString = from: to: replaceStrings [ from ] [ to ];
 
   /**
     Repeat a string `n` times,
@@ -1100,7 +1165,7 @@ rec {
         "."
         "~"
       ];
-      toEscape = builtins.removeAttrs asciiTable unreserved;
+      toEscape = removeAttrs asciiTable unreserved;
     in
     replaceStrings (builtins.attrNames toEscape) (
       lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape
@@ -1138,7 +1203,7 @@ rec {
       string = toString arg;
     in
     if match "[[:alnum:],._+:@%/-]+" string == null then
-      "'${replaceStrings [ "'" ] [ "'\\''" ] string}'"
+      "'${replaceString "'" "'\\''" string}'"
     else
       string;
 
@@ -1402,9 +1467,6 @@ rec {
       [ "\"" "'" "<" ">" "&" ]
       [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
-  # warning added 12-12-2022
-  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
-
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -1499,6 +1561,63 @@ rec {
         in
         addContextFrom str (toUpper firstChar + toLower rest)
       );
+
+  /**
+    Converts a string to camelCase. Handles snake_case, PascalCase,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to camelCase
+
+    # Type
+
+    ```
+    toCamelCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toCamelCase` usage example
+
+    ```nix
+    toCamelCase "hello-world"
+    => "helloWorld"
+    toCamelCase "hello_world"
+    => "helloWorld"
+    toCamelCase "hello world"
+    => "helloWorld"
+    toCamelCase "HelloWorld"
+    => "helloWorld"
+    ```
+
+    :::
+  */
+  toCamelCase =
+    str:
+    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+
+        first = if length parts > 0 then toLower (head parts) else "";
+        rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
+      in
+      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+    );
 
   /**
     Appends string context from string like object `src` to `target`.
@@ -1684,7 +1803,7 @@ rec {
     if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
 
   /**
-    Return a string without the specified prefix, if the prefix matches.
+    Returns a string without the specified prefix, if the prefix matches.
 
     # Inputs
 
@@ -1735,7 +1854,7 @@ rec {
       );
 
   /**
-    Return a string without the specified suffix, if the suffix matches.
+    Returns a string without the specified suffix, if the suffix matches.
 
     # Inputs
 
@@ -1786,7 +1905,7 @@ rec {
       );
 
   /**
-    Return true if string `v1` denotes a version older than `v2`.
+    Returns true if string `v1` denotes a version older than `v2`.
 
     # Inputs
 
@@ -1818,7 +1937,7 @@ rec {
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
   /**
-    Return true if string v1 denotes a version equal to or newer than v2.
+    Returns true if string v1 denotes a version equal to or newer than v2.
 
     # Inputs
 
@@ -2457,30 +2576,6 @@ rec {
     lib.warnIf (!precise) "Imprecise conversion from float to string ${result}" result;
 
   /**
-    Check whether a value `val` can be coerced to a string.
-
-    :::{.warning}
-    Soft-deprecated function. While the original implementation is available as
-    `isConvertibleWithToString`, consider using `isStringLike` instead, if suitable.
-    :::
-
-    # Inputs
-
-    `val`
-    : 1\. Function argument
-
-    # Type
-
-    ```
-    isCoercibleToString :: a -> bool
-    ```
-  */
-  isCoercibleToString =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
-      isConvertibleWithToString;
-
-  /**
     Check whether a list or other value `x` can be passed to toString.
 
     Many types of value are coercible to string this way, including `int`, `float`,
@@ -2719,60 +2814,6 @@ rec {
     # Return result.
     else
       parsedInput;
-
-  /**
-    Read a list of paths from `file`, relative to the `rootPath`.
-    Lines beginning with `#` are treated as comments and ignored.
-    Whitespace is significant.
-
-    :::{.warning}
-    This function is deprecated and should be avoided.
-    :::
-
-    :::{.note}
-    This function is not performant and should be avoided.
-    :::
-
-    # Inputs
-
-    `rootPath`
-    : 1\. Function argument
-
-    `file`
-    : 2\. Function argument
-
-    # Type
-
-    ```
-    readPathsFromFile :: string -> string -> [string]
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.strings.readPathsFromFile` usage example
-
-    ```nix
-    readPathsFromFile /prefix
-      ./pkgs/development/libraries/qt-5/5.4/qtbase/series
-    => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
-         "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
-         "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
-         "/prefix/nix-profiles-library-paths.patch"
-         "/prefix/compose-search-path.patch" ]
-    ```
-
-    :::
-  */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead." (
-    rootPath: file:
-    let
-      lines = lib.splitString "\n" (readFile file);
-      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
-      relativePaths = removeComments lines;
-      absolutePaths = map (path: rootPath + "/${path}") relativePaths;
-    in
-    absolutePaths
-  );
 
   /**
     Read the contents of a file removing the trailing \n

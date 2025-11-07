@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ cryptsetup ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WJXrT1jLytFkJ0gTE/4GYmfMqgqAyVFKi0SdyYGI/ug=";
 
   meta = {

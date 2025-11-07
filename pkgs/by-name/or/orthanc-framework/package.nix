@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDK for building Orthanc plugins and related applications";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

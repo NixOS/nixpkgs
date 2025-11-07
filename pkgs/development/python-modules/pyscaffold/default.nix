@@ -23,7 +23,7 @@
   certifi,
   flake8,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-randomly,
   pytest-xdist,
   sphinx,
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       flake8
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-randomly
       pytest-xdist
       setuptools

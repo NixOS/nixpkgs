@@ -47,6 +47,12 @@ in
     package = lib.mkPackageOption pkgs "hedgedoc" { };
     enable = lib.mkEnableOption "the HedgeDoc Markdown Editor";
 
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
+
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -242,17 +248,46 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.${name} = { };
-    users.users.${name} = {
-      description = "HedgeDoc service user";
-      group = name;
-      isSystemUser = true;
+    users = {
+      groups.${name} = { };
+      users = {
+        nginx = lib.mkIf cfg.configureNginx {
+          extraGroups = [ "hedgedoc" ];
+        };
+        ${name} = {
+          description = "HedgeDoc service user";
+          group = name;
+          isSystemUser = true;
+        };
+      };
     };
 
-    services.hedgedoc.settings = {
-      defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
-      docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
-      viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
+    services = {
+      hedgedoc.settings = {
+        defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
+        docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+        path = lib.mkIf cfg.configureNginx "/run/hedgedoc/hedgedoc.sock";
+        viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
+      };
+
+      nginx = lib.mkIf cfg.configureNginx {
+        enable = true;
+        upstreams.hedgedoc.servers."unix:${cfg.settings.path}" = { };
+        virtualHosts."${cfg.settings.domain}" = {
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://hedgedoc";
+              recommendedProxySettings = lib.mkDefault true;
+            };
+            "/socket.io/" = {
+              proxyPass = "http://hedgedoc";
+              proxyWebsockets = true;
+              recommendedProxySettings = lib.mkDefault true;
+            };
+          };
+        };
+      };
     };
 
     systemd.services.hedgedoc = {
@@ -283,7 +318,8 @@ in
         WorkingDirectory = "/run/${name}";
         ReadWritePaths = [
           "-${cfg.settings.uploadsPath}"
-        ] ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
+        ]
+        ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=/run/${name}/config.json"

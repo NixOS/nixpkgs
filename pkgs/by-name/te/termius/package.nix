@@ -12,12 +12,13 @@
   udev,
   wrapGAppsHook3,
   writeScript,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.19.1";
-  revision = "222";
+  version = "9.32.2";
+  revision = "240";
 
   src = fetchurl {
     # find the latest version with
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-WwFXunaA7hERnOl1ZKxLC0QR2ZdBkvJBdBDRcNDDzAnBqHOdu9TibqXKdUk11CbE5j/q+ak9DoavemK2s3MKKg==";
+    hash = "sha512-TPfQ413zbnuKAhflLZPvLeVdrqdUEi+I/inWAs8SJ1j8rYW1TrHDyMB8S/HpWboRWXmUhPHulNXfGpHKUu453Q==";
   };
 
   desktopItem = makeDesktopItem {
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libsecret
     libgbm
+    sqlite
   ];
 
   unpackPhase = ''
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
     if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
 
         revision=$(jq -r .revision <<<"$data")
-        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+        hash=$(nix --extra-experimental-features nix-command hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
 
         update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
         update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"

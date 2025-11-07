@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = [ "clap_mangen" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qghc8HtJfpTYXAwC2xjq8lLlCu419Ttnu/AYapkAulI=";
 
   nativeCheckInputs = [

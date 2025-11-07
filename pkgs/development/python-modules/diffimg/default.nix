@@ -21,15 +21,14 @@ buildPythonPackage {
 
   # it imports the wrong diff,
   # fix offered to upstream https://github.com/nicolashahn/diffimg/pull/6
-  postPatch =
-    ''
-      substituteInPlace diffimg/test.py \
-        --replace-warn "from diff import diff" "from diffimg.diff import diff"
-    ''
-    + lib.optionalString (pythonAtLeast "3.12") ''
-      substituteInPlace diffimg/test.py \
-        --replace-warn "3503192421617232" "3503192421617233"
-    '';
+  postPatch = ''
+    substituteInPlace diffimg/test.py \
+      --replace-warn "from diff import diff" "from diffimg.diff import diff"
+  ''
+  + lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace diffimg/test.py \
+      --replace-warn "3503192421617232" "3503192421617233"
+  '';
 
   propagatedBuildInputs = [ pillow ];
 
@@ -41,6 +40,6 @@ buildPythonPackage {
     description = "Differentiate images in python - get a ratio or percentage difference, and generate a diff image";
     homepage = "https://github.com/nicolashahn/diffimg";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

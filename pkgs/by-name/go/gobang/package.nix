@@ -19,13 +19,12 @@ rustPlatform.buildRustPackage {
 
   cargoPatches = [ ./update-sqlx.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-K9oo0QrqcPNdV7WMlgSCVc+7AVfoyDkovvJLqKJPvTQ=";
 
   meta = {
     description = "Cross-platform TUI database management tool written in Rust";
     homepage = "https://github.com/tako8ki/gobang";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

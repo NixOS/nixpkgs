@@ -11,6 +11,7 @@
 
   # nativeBuildInputs
   cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
@@ -18,6 +19,7 @@
   numpy,
   orjson,
   packaging,
+  pyvers,
   torch,
 
   # tests
@@ -27,15 +29,20 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.8.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-yEwuCsIKNHQf8iCSB38R8mJXvdOi0+MeNk9M9+jWfxU=";
+    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
 
   build-system = [
     pybind11
@@ -45,6 +52,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
   dontUseCmakeConfigure = true;
 
@@ -54,6 +62,7 @@ buildPythonPackage rec {
     numpy
     orjson
     packaging
+    pyvers
     torch
   ];
 
@@ -76,17 +85,27 @@ buildPythonPackage rec {
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs due to the use of a pool
+    "test_chunksize_num_chunks"
+    "test_index_with_generator"
+    "test_map_exception"
+    "test_map"
+    "test_multiprocessing"
   ];
 
-  disabledTestPaths =
-    [
-      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-      "test/test_compile.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Hangs forever
-      "test/test_distributed.py"
-    ];
+  disabledTestPaths = [
+    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+    "test/test_compile.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/test_distributed.py"
+    # Hangs after testing due to pool usage
+    "test/test_h5.py"
+    "test/test_memmap.py"
+  ];
 
   meta = {
     description = "Pytorch dedicated tensor container";

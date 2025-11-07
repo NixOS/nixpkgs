@@ -63,20 +63,19 @@ stdenv.mkDerivation rec {
     CXXFLAGS = "-std=c++03";
   };
 
-  configureFlags =
-    [
-      "--disable-multiplatform"
-      "--without-x11"
-      "--without-xdvik"
-      "--without-oxdvik"
-      "--without-texinfo"
-      "--without-texi2html"
-      "--with-system-zlib"
-      "--with-system-pnglib"
-      "--with-system-ncurses"
-    ]
-    # couldn't get gsftopk working on darwin
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--without-gsftopk";
+  configureFlags = [
+    "--disable-multiplatform"
+    "--without-x11"
+    "--without-xdvik"
+    "--without-oxdvik"
+    "--without-texinfo"
+    "--without-texi2html"
+    "--with-system-zlib"
+    "--with-system-pnglib"
+    "--with-system-ncurses"
+  ]
+  # couldn't get gsftopk working on darwin
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--without-gsftopk";
 
   postUnpack = ''
     mkdir -p $out/share/texmf

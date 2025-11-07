@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     # _JAVA_AWT_WM_NONREPARENTING=1.
     makeWrapper ${jdk8}/bin/java $out/bin/brmodelo \
        --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-       --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on" \
+       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
        --add-flags "-jar $out/share/java/brModelo.jar"
 
     for size in 16 24 32 48 64 128 256; do
@@ -127,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/chcandido/brModelo";
     license = licenses.gpl3;
     mainProgram = "brmodelo";
-    maintainers = with maintainers; [ yuu ];
+    maintainers = [ ];
   };
 })

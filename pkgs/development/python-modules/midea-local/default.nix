@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "midea-local";
-  version = "6.1.0";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
-    repo = pname;
+    repo = "midea-local";
     tag = "v${version}";
-    hash = "sha256-N6e6aVjsAOMbUPFAGbVWuQIqXOX/XC9tlvx1P6ZqB8w=";
+    hash = "sha256-l5wV6W0CR3Jlir1DEpuh7/I8hGnH5+yrq0JjKcFh4sk=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = " Control your Midea M-Smart appliances via local area network";
+    description = "Control your Midea M-Smart appliances via local area network";
     homepage = "https://github.com/midea-lan/midea-local";
     changelog = "https://github.com/midea-lan/midea-local/releases/tag/${src.tag}";
     maintainers = with maintainers; [ k900 ];

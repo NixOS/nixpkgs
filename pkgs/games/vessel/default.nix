@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     else
       throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
 
-  phases = "installPhase";
   ld_preload = ./isatty.c;
 
   libPath =
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
       alsa-lib
     ];
 
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/libexec/strangeloop/vessel/
     mkdir -p $out/bin
 

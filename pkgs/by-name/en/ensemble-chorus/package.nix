@@ -47,6 +47,18 @@ stdenv.mkDerivation {
     libjack2
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION "3.3")' \
+      'cmake_minimum_required(VERSION 4.0)'
+    substituteInPlace thirdparty/gsl-lite/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required( VERSION 3.0 FATAL_ERROR )' \
+      'cmake_minimum_required(VERSION 4.0)'
+    substituteInPlace thirdparty/jsl/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.3)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/jpcima/ensemble-chorus";
     description = "Digital model of electronic string ensemble chorus";

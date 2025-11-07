@@ -4,6 +4,7 @@
   fetchPypi,
   pkgsCross,
   avrdude,
+  bootloadhid,
   dfu-programmer,
   dfu-util,
   wb32-dfu-updater,
@@ -14,12 +15,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.6";
+  version = "1.1.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3ENs26vy+M7G261FPeODK+AbrI5+nBkHXCmGbuIqi1A=";
+    hash = "sha256-C0Jra/IK61tngGsuEnMD4mySRc/iZVgdYEbMXtwpBZ0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -42,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ [
       # Binaries need to be in the path so this is in propagatedBuildInputs
       avrdude
+      bootloadhid
       dfu-programmer
       dfu-util
       wb32-dfu-updater
@@ -51,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
       pkgsCross.avr.buildPackages.binutils
       pkgsCross.avr.buildPackages.binutils.bintools
       pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libcCross
+      pkgsCross.avr.libc
     ];
 
   # no tests implemented

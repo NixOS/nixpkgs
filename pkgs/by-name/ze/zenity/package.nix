@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "4.0.5";
+  version = "4.1.90";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ij/+d1G+1JenWCKezge+kRStTkagZquuTl8x1tpMDp4=";
+    hash = "sha256-vzZ5xiBf9I3OvR4d/zo6SmoLOlPhy8OwmKnsC2K9cjY=";
   };
 
   nativeBuildInputs = [

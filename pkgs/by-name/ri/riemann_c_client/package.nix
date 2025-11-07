@@ -33,19 +33,21 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     check
     pkg-config
+    protobufc
   ];
-  buildInputs =
-    [
-      file
-      protobufc
-    ]
-    ++ lib.optional withWolfSSL wolfssl
-    ++ lib.optional withGnuTLS gnutls
-    ++ lib.optional withJSON json_c;
+  buildInputs = [
+    file
+    protobufc
+  ]
+  ++ lib.optional withWolfSSL wolfssl
+  ++ lib.optional withGnuTLS gnutls
+  ++ lib.optional withJSON json_c;
 
   configureFlags =
     [ ] ++ lib.optional withWolfSSL "--with-tls=wolfssl" ++ lib.optional withGnuTLS "--with-tls=gnutls";
@@ -58,7 +60,6 @@ stdenv.mkDerivation rec {
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ pradeepchhetri ];
     platforms = platforms.linux;
   };
 }

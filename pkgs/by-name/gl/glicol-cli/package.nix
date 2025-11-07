@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-v90FfF4vP5UPy8VnQFvYMKiCrledgNMpWbJR59Cv6a0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-u6H+4cikI/jmcKpA2Ty2DjZF8wLiNylFMInA6sdNl0k=";
 
   nativeBuildInputs = [
@@ -35,7 +34,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/glicol/glicol-cli";
     changelog = "https://github.com/glicol/glicol-cli/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "glicol-cli";
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

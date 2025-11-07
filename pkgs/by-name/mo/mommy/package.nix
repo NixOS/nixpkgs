@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "mommy's here to support you, in any shell, on any system~ ❤️";
     homepage = "https://github.com/FWDekker/mommy";
     changelog = "https://github.com/FWDekker/mommy/blob/v${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    platforms = platforms.all;
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "mommy";
   };

@@ -12,6 +12,7 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 let
   image =
     (import ../lib/eval-config.nix {
+      system = null;
       modules = [
         ../maintainers/scripts/openstack/openstack-image.nix
         ../modules/testing/test-instrumentation.nix

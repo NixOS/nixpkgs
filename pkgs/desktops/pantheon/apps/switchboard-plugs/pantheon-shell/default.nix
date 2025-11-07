@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-desktop";
     rev = version;
-    sha256 = "sha256-S6EJGF9jRiCzH0f7WNrbLtAX23fjD/Hzd8YLEzkXesw=";
+    sha256 = "sha256-TYwiL6+VjfSDiFAlMe482gB8a/OtCYHl5r8gh9Hcvfg=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Desktop Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
+    homepage = "https://github.com/elementary/settings-desktop";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];

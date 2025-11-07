@@ -11,17 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hddfancontrol";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "hddfancontrol";
     tag = finalAttrs.version;
-    hash = "sha256-GdvGFNmarLxtO6BoZ8PktVvAiKIxu4FdZWCJeVtW/fI=";
+    hash = "sha256-VnHXRheqh+NwbFBWsX9XUbRuto7weyX7aHZ+BDi2Vns=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1GPct+CabVE8/tMpWsQ3/XRJQkcAmS6UDNuz5c/Oewo=";
+  cargoHash = "sha256-lm4ARffPOYCewNyREb1PQ8M5icqh8c+z6ZNXZKpBlRE=";
 
   nativeBuildInputs = [
     makeWrapper

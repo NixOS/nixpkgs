@@ -107,15 +107,14 @@ stdenv.mkDerivation {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      libsForQt5.qtserialport
-      libsForQt5.qtmultimedia
-      libsForQt5.qttools
-    ]
-    ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
-      libsForQt5.qtscript
-    ];
+  buildInputs = [
+    libsForQt5.qtserialport
+    libsForQt5.qtmultimedia
+    libsForQt5.qttools
+  ]
+  ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
+    libsForQt5.qtscript
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -173,6 +172,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       carloscraveiro
       tomasajt
+      iedame
     ];
     platforms = [
       "x86_64-linux"

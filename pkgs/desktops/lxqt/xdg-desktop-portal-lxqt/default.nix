@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   kwindowsystem,
   libexif,
@@ -14,16 +15,26 @@
   extraQtStyles ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-lxqt";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-uII6elLoREc/AO6NSe9QsT+jYARd2hgKSa84NCDza10=";
+    repo = "xdg-desktop-portal-lxqt";
+    tag = finalAttrs.version;
+    hash = "sha256-y3VqDuFagKcG8O5m5qjRGtlUZXfIXV0tclvZLChhWkg=";
   };
+
+  patches = [
+    # fix build against Qt >= 6.10 (https://github.com/lxqt/xdg-desktop-portal-lxqt/pull/50)
+    # TODO: drop when upgrading beyond version 1.2.0
+    (fetchpatch {
+      name = "cmake-fix-build-with-Qt-6.10.patch";
+      url = "https://github.com/lxqt/xdg-desktop-portal-lxqt/commit/15fae3c57a8e8149ef19a8c919f5728016390e3f.patch";
+      hash = "sha256-oReYMEr+tBDHtnFDZahBwTtzgtL/BABZO64yob9tem4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,15 +48,16 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ] ++ extraQtStyles;
+  ]
+  ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/xdg-desktop-portal-lxqt";
     description = "Backend implementation for xdg-desktop-portal that is using Qt/KF5/libfm-qt";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

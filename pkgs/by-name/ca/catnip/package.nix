@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "catnip";
-  version = "1.8.5";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "noriah";
     repo = "catnip";
     rev = "v${version}";
-    hash = "sha256-9gneteQIzbMNjg/08uq+pCbs2a32He2gL+hovxcJFzE=";
+    hash = "sha256-M9VGpDsBambe9kXyEgDg53pKOSL2zH1ugfSbRgAiaCo=";
   };
 
   vendorHash = "sha256-Hj453+5fhbUL6YMeupT5D6ydaEMe+ZQNgEYHtCUtTx4=";
@@ -46,7 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/noriah/catnip";
     changelog = "https://github.com/noriah/catnip/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "catnip";
   };
 }

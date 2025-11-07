@@ -1,51 +1,53 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
   pkg-config,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";
-  version = "7.5.0";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
-    rev = "v${version}";
-    hash = "sha256-aCwQ07z7MhBS4C03npwjQOmfJXwD7trYo/upT3GAkHU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4i0Oo4M7SP09E+D81Lf7coaEQWgM03PbQ0lB6PwTjr0=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-naItqyJaIxFZuswbrE8RZqMffGy1MaIa0RX9RLOWmyw=";
+  cargoHash = "sha256-UkK/QQI98bIty8lT3UrekeAISEAwo/QD8AScRUkIvgE=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
-  OPENSSL_NO_VENDOR = "1";
+  env.OPENSSL_NO_VENDOR = true;
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/rojo";
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/rojo-rbx/rojo/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Project management tool for Roblox";
-    mainProgram = "rojo";
-    longDescription = ''
-      Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
-    '';
+    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${finalAttrs.version}";
     homepage = "https://rojo.space";
-    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
-    changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mpl20;
+    longDescription = ''
+      Tool designed to enable Roblox developers to use professional-grade software engineering tools.
+    '';
+    mainProgram = "rojo";
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
   };
-}
+})

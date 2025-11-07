@@ -36,12 +36,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tweedledum" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "python/test" ];
+  enabledTestPaths = [ "python/test" ];
 
   meta = with lib; {
     description = "Library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

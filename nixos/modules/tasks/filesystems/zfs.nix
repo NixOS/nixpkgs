@@ -167,12 +167,14 @@ let
       # https://github.com/zfsonlinux/zfs/pull/4943
       wants = [
         "systemd-udev-settle.service"
-      ] ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      ]
+      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
-      ] ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      ]
+      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy =
         let
           poolFilesystems = getPoolFilesystems pool;
@@ -233,7 +235,7 @@ let
                     tries=3
                     success=false
                     while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                      ${systemd}/bin/systemd-ask-password ${lib.optionalString cfgZfs.useKeyringForCredentials ("--keyname=zfs-$ds")} --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+                      ${systemd}/bin/systemd-ask-password ${lib.optionalString cfgZfs.useKeyringForCredentials "--keyname=zfs-$ds"} --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
                         && success=true \
                         || tries=$((tries - 1))
                     done
@@ -715,6 +717,7 @@ in
         kernelModules = [ "zfs" ];
         extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
+          copy_bin_and_libs ${cfgZfs.package}/sbin/mount.zfs
           copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
           copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           copy_bin_and_libs ${cfgZfs.package}/lib/udev/vdev_id
@@ -723,6 +726,7 @@ in
         extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/zfs --help >/dev/null 2>&1
           $out/bin/zpool --help >/dev/null 2>&1
+          $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
         '';
         postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
           lib.concatStringsSep "\n" (
@@ -794,6 +798,7 @@ in
           extraBin = {
             zpool = "${cfgZfs.package}/sbin/zpool";
             zfs = "${cfgZfs.package}/sbin/zfs";
+            "mount.zfs" = "${cfgZfs.package}/sbin/mount.zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
           storePaths = [
@@ -832,7 +837,7 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
-          pkgs.nettools
+          pkgs.hostname-debian
           pkgs.util-linux
         ];
       };

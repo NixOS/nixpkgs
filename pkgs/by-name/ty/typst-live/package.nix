@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bR4Rhhs6rAC6C1nfPFj/3rCtfEziuTGn5m33CR0qZkU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C85hV7uCsuRsxH2/8arjz9Pqs5j23s5b9RHmFsRtZSw=";
 
   nativeBuildInputs = [
@@ -31,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "typst-live";
   };
 }

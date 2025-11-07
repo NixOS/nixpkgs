@@ -4,22 +4,17 @@
   exiv2,
   fetchFromGitHub,
   libraw,
-  libsForQt5,
   kdePackages,
+  qt6,
   libtiff,
   opencv4,
   pkg-config,
   stdenv,
-  qtVersion ? 5,
 }:
-let
-  myQt = if qtVersion == 5 then libsForQt5 else kdePackages;
-  inherit (myQt) wrapQtAppsHook;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.19.1";
-  hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
+  version = "3.21.1";
+  hash = "sha256-RRa19vj7iTtGzdssdtHVOsDzS4X+p1HeiZKy8EIWxq8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
@@ -32,14 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   plugins = fetchFromGitHub {
     owner = "novomesk";
     repo = "nomacs-plugins";
-    rev = "40d0f7089b7f108077dac5dede52e8a303b243b3";
-    hash = "sha256-7+JMmHaTvWjVTkLwXGtQHnoaC/3vK7haCzNvVIZ9F/g=";
+    rev = "20101da282f13d3184ece873388e1c234a79b5e7";
+    hash = "sha256-gcRc4KoWJQ5BirhLuk+c+5HwBeyQtlJ3iyX492DXeVk=";
   };
 
-  outputs =
-    [ "out" ]
-    # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
+  outputs = [
+    "out"
+  ]
+  # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
@@ -52,28 +48,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
   ];
 
-  buildInputs =
-    [
-      exiv2
-      libraw
-      libtiff
-      # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
-      # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
-      # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
-      (lib.getOutput "cxxdev" opencv4)
-    ]
-    ++ (with myQt; [
-      kimageformats
-      qtbase
-      qtimageformats
-      qtsvg
-      qttools
-      quazip
-    ]);
+  buildInputs = [
+    exiv2
+    libraw
+    libtiff
+    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+    (lib.getOutput "cxxdev" opencv4)
+
+    kdePackages.kimageformats
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtsvg
+    qt6.qttools
+    kdePackages.quazip
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -123,6 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
       mindavi
       ppenguin
     ];
-    inherit (myQt.qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
   };
 })

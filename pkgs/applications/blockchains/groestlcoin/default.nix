@@ -42,74 +42,72 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "17b83jch717d91srw1yc93p8ndl894ld9gx916wyy6jis07px6xh";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      boost
-      libevent
-      zeromq
-      zlib
-    ]
+  buildInputs = [
+    boost
+    libevent
+    zeromq
+    zlib
+  ]
+  ++ lib.optionals withWallet [
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
     ++ lib.optionals withWallet [
-      db53
-      sqlite
-    ]
-    ++ lib.optionals withGui [
-      qrencode
-      qtbase
-      qttools
-    ];
+    db53
+    sqlite
+  ]
+  ++ lib.optionals withGui [
+    qrencode
+    qtbase
+    qttools
+  ];
 
-  postInstall =
-    ''
-      cd ..
-      installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
-      installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
-      installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
+  postInstall = ''
+    cd ..
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
 
-      for file in contrib/completions/fish/groestlcoin-*.fish; do
-        installShellCompletion --fish $file
-      done
-    ''
-    + lib.optionalString withGui ''
-      installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
+    for file in contrib/completions/fish/groestlcoin-*.fish; do
+      installShellCompletion --fish $file
+    done
+  ''
+  + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
 
-      install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
-      substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
-      install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
-    '';
+    install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
+    substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
+    install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
+  '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_BENCH" false)
-      (lib.cmakeBool "WITH_ZMQ" true)
-      (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
-    ]
-    ++ lib.optionals (!withWallet) [
-      (lib.cmakeBool "ENABLE_WALLET" false)
-    ]
-    ++ lib.optionals withGui [
-      (lib.cmakeBool "BUILD_GUI" true)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_BENCH" false)
+    (lib.cmakeBool "WITH_ZMQ" true)
+    (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
+  ]
+  ++ lib.optionals (!withWallet) [
+    (lib.cmakeBool "ENABLE_WALLET" false)
+  ]
+  ++ lib.optionals withGui [
+    (lib.cmakeBool "BUILD_GUI" true)
+  ];
 
   nativeCheckInputs = [ python3 ];
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

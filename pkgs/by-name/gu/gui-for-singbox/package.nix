@@ -1,54 +1,57 @@
 {
-  stdenv,
-  nodejs,
-  pnpm_9,
-  fetchFromGitHub,
-  buildGoModule,
   lib,
-  wails,
-  webkitgtk_4_0,
-  pkg-config,
-  libsoup_3,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
   autoPatchelfHook,
-  makeDesktopItem,
   copyDesktopItems,
+  nodejs,
+  pkg-config,
+  pnpm_10,
+  wails,
+  webkitgtk_4_1,
+  makeDesktopItem,
   nix-update-script,
 }:
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.6";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-qmYZWLzGAjUlbORhr67KqhTTeOxskAb7/HO+pPZ6uQE=";
+    hash = "sha256-oReDI6w+N82f+DSv1mPvr0hPG7CJ7CbIFljhSNQ86cI=";
   };
 
   metaCommon = {
-    description = "SingBox GUI program developed by vue3 + wails";
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpm_10.configHook
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-RIkdnDyHjl5C0+Hdtne1NYEh46+yylW7Q/agT7AtDBo=";
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 2;
+      hash = "sha256-gSgryNui5uXuJEKoojz+knZ8rlJpjaR2+XF3xTwV5YI=";
     };
-
-    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     buildPhase = ''
       runHook preBuild
@@ -66,34 +69,34 @@ let
       runHook postInstall
     '';
 
-    meta = metaCommon;
+    meta = metaCommon // {
+      description = "GUI program developed by vue3";
+      platforms = lib.platforms.all;
+    };
   });
 in
 
 buildGoModule {
   inherit pname version src;
 
-  patches = [ ./bridge.patch ];
+  patches = [ ./xdg-path-and-restart-patch.patch ];
 
+  # As we need the $out reference, we can't use `replaceVars` here.
   postPatch = ''
-    # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace bridge/bridge.go \
-      --replace-fail '@basepath@' "$out"
+      --subst-var out
   '';
 
-  vendorHash = "sha256-4MPKAI1/F/sgfUORulhcpKJYHX7LpLknlzZx4DqnCfY=";
+  vendorHash = "sha256-3kQWCjxCom/Sb4RzRF55NsDfSA9F9mOLy9sYVFUaevY=";
 
   nativeBuildInputs = [
-    wails
-    pkg-config
     autoPatchelfHook
     copyDesktopItems
+    pkg-config
+    wails
   ];
 
-  buildInputs = [
-    webkitgtk_4_0
-    libsoup_3
-  ];
+  buildInputs = [ webkitgtk_4_1 ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist
@@ -102,7 +105,7 @@ buildGoModule {
   buildPhase = ''
     runHook preBuild
 
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.SingBox
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_41 -o GUI.for.SingBox
 
     runHook postBuild
   '';
@@ -114,12 +117,8 @@ buildGoModule {
       icon = "gui-for-singbox";
       genericName = "GUI.for.SingBox";
       desktopName = "GUI.for.SingBox";
-      categories = [
-        "Network"
-      ];
-      keywords = [
-        "Proxy"
-      ];
+      categories = [ "Network" ];
+      keywords = [ "Proxy" ];
     })
   ];
 
@@ -127,7 +126,7 @@ buildGoModule {
     runHook preInstall
 
     install -Dm 0755 build/bin/GUI.for.SingBox $out/bin/GUI.for.SingBox
-    install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-singbox.png
+    install -Dm 0644 build/appicon.png $out/share/icons/hicolor/256x256/apps/gui-for-singbox.png
 
     runHook postInstall
   '';
@@ -136,6 +135,8 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];
@@ -143,6 +144,8 @@ buildGoModule {
   };
 
   meta = metaCommon // {
+    description = "SingBox GUI program developed by vue3 + wails";
     mainProgram = "GUI.for.SingBox";
+    platforms = lib.platforms.linux;
   };
 }

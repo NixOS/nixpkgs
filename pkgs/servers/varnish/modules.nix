@@ -43,7 +43,7 @@ let
 
       postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 
-      meta = with lib; {
+      meta = {
         description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
         homepage = "https://github.com/varnish/varnish-modules";
         inherit (varnish.meta) license platforms teams;
@@ -54,10 +54,6 @@ in
   modules15 = common {
     version = "0.15.1";
     hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
-  };
-  modules25 = common {
-    version = "0.25.0";
-    hash = "sha256-m/7moizVyvoP8xnpircAFVUqCmCfTGkgVyRc6zkdVsk=";
   };
   modules26 = common {
     version = "0.26.0";

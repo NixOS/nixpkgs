@@ -11,7 +11,6 @@
   py-serializable,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "8.8.0";
+  version = "11.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     tag = "v${version}";
-    hash = "sha256-igT1QroP260cqSAiaJv4Zrji691WIjyDLZ1p5dtPF5Y=";
+    hash = "sha256-AN3PjJ1HAERDXlmE9K8k2OGLAh5vs1286EhJShH0xE4=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
@@ -69,7 +66,8 @@ buildPythonPackage rec {
     ddt
     pytestCheckHook
     xmldiff
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
 
@@ -77,7 +75,7 @@ buildPythonPackage rec {
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     # These tests require network access

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "typing-inspection";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "typing-inspection";
     tag = "v${version}";
-    hash = "sha256-sWWO+TRqNf791s+q5YeEcl9ZMHCBuxQLGXHmEk1AU0Y=";
+    hash = "sha256-aGScO+FLEJ5IyI6hBqdsiKJRN7vEG36V5131nhVZEbc=";
   };
 
   build-system = [ hatchling ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pydantic/typing-inspection/releases/tag/${src.tag}";
+    changelog = "https://github.com/pydantic/typing-inspection/blob/${src.tag}/HISTORY.md";
     description = "Runtime typing introspection tools";
     homepage = "https://github.com/pydantic/typing-inspection";
     license = lib.licenses.mit;

@@ -10,18 +10,17 @@
   vte-gtk4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neovim-gtk";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "Lyude";
-    repo = pname;
-    rev = "v${version}";
+    repo = "neovim-gtk";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-inva7pYwOw3bXvFeKZ4aKSQ65iCat5HxM+NME8jN4/I=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-93cKoyLNSLDmm9PnJzn0x6VONPqiCA3wcLwYgdOLIg8=";
 
   nativeBuildInputs = [
@@ -42,11 +41,13 @@ rustPlatform.buildRustPackage rec {
     make PREFIX=$out install-resources
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gtk ui for neovim";
     homepage = "https://github.com/Lyude/neovim-gtk";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      aleksana
+    ];
     mainProgram = "nvim-gtk";
   };
-}
+})

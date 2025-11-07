@@ -20,7 +20,8 @@ let
         crateName = "nixtestcrate";
         version = "0.1.0";
         authors = [ "Test <test@example.com>" ];
-      } // args;
+      }
+      // args;
     in
     buildRustCrate p;
   mkHostCrate = mkCrate buildRustCrate;
@@ -90,7 +91,7 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
@@ -181,7 +182,7 @@ let
     assert (builtins.isList expectedFiles);
 
     let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       crateOutput = if output == null then crate else crate."${output}";
       expectedFilesFile = writeTextFile {
         name = "expected-files-${name}";
@@ -227,7 +228,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -705,7 +706,7 @@ rec {
 
         rustCargoTomlInTopDir =
           let
-            withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+            withoutCargoTomlSearch = removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
           in
           withoutCargoTomlSearch
           // {
@@ -766,15 +767,14 @@ rec {
           ];
           src = mkBin "src/foobar.rs";
         };
-        expectedFiles =
-          [
-            "./bin/test_binary1"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            # On Darwin, the debug symbols are in a separate directory.
-            "./bin/test_binary1.dSYM/Contents/Info.plist"
-            "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
-          ];
+        expectedFiles = [
+          "./bin/test_binary1"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # On Darwin, the debug symbols are in a separate directory.
+          "./bin/test_binary1.dSYM/Contents/Info.plist"
+          "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+        ];
       };
 
       crateBinNoPath1Outputs = assertOutputs {
@@ -838,6 +838,19 @@ rec {
         ];
       };
 
+      crateWasm32BinHyphens = assertOutputs {
+        name = "wasm32-crate-bin-hyphens";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-bin-hyphens";
+          crateBin = [ { name = "wasm32-crate-bin-hyphens"; } ];
+          src = mkBin "src/main.rs";
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-bin-hyphens.wasm"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
@@ -897,13 +910,14 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

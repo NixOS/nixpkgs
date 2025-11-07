@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.27.0";
+  version = "4.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     tag = version;
-    hash = "sha256-UozVUdqNxxwWTBoq7ekr8ZX5KdkvQj+SiNSwebVXblI=";
+    hash = "sha256-djiuIHTcPiKIfMxFevCa4c3V8ydGpSqH4mo0qH+Cpw8=";
   };
 
   build-system = [ hatchling ];
@@ -47,13 +47,12 @@ buildPythonPackage rec {
     watchdog = [ watchdog ];
   };
 
-  checkInputs =
-    [
-      pytestCheckHook
-      requests
-    ]
-    ++ optional-dependencies.watchdog
-    ++ optional-dependencies.aiohttp;
+  checkInputs = [
+    pytestCheckHook
+    requests
+  ]
+  ++ optional-dependencies.watchdog
+  ++ optional-dependencies.aiohttp;
 
   pythonImportsCheck = [ "telebot" ];
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "blitzpp";
     repo = "blitz";
-    rev = version;
+    tag = version;
     hash = "sha256-wZDg+4lCd9iHvxuQQE/qs58NorkxZ0+mf+8PKQ57CDE=";
   };
 
@@ -43,6 +43,14 @@ stdenv.mkDerivation rec {
       hash = "sha256-8hYFNyWrejjIWPN/HzIOphD4Aq6Soe0FFUBmwV4tpWQ=";
     })
   ];
+
+  # CMake 4 is no longer retro compatible with versions < 3.5
+  # cmake_minimum_required was already to an upper version, but not cmake_policy
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_policy(VERSION 3.1)" \
+      ""
+  '';
 
   nativeBuildInputs = [
     cmake

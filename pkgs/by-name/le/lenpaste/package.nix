@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitea {
     domain = "git.lcomrade.su";
     owner = "root";
-    repo = pname;
+    repo = "lenpaste";
     rev = "v${version}";
     sha256 = "sha256-d+FjfEbInlxUllWIoVLwQRdRWjxBLTpNHYn+oYU3fBc=";
   };
@@ -34,7 +34,7 @@ buildGoModule rec {
     description = "Web service that allows you to share notes anonymously, an alternative to pastebin.com";
     homepage = "https://git.lcomrade.su/root/lenpaste";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ vector1dev ];
+    maintainers = [ ];
     mainProgram = "lenpaste";
   };
 }

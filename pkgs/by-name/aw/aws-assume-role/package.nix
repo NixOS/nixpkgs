@@ -38,7 +38,7 @@ buildGoModule rec {
     homepage = "https://github.com/remind101/assume-role";
     license = licenses.bsd2;
     mainProgram = "assume-role";
-    maintainers = with lib.maintainers; [ williamvds ];
+    maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = platforms.all;
   };
 }

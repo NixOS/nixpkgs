@@ -79,8 +79,11 @@ in
     };
 
     services.journald.audit = lib.mkOption {
-      default = null;
-      type = lib.types.nullOr lib.types.bool;
+      default = "keep";
+      type = lib.types.oneOf [
+        lib.types.bool
+        (lib.types.enum [ "keep" ])
+      ];
       description = ''
         If enabled systemd-journald will turn on auditing on start-up.
         If disabled it will turn it off. If unset it will neither enable nor disable it, leaving the previous state unchanged.
@@ -116,22 +119,19 @@ in
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits =
-      [
-        "systemd-journald.socket"
-        "systemd-journald@.socket"
-        "systemd-journald-varlink@.socket"
-        "systemd-journald.service"
-        "systemd-journald@.service"
-        "systemd-journal-flush.service"
-        "systemd-journal-catalog-update.service"
-        "systemd-journald-sync@.service"
-      ]
-      ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
-      ++ [
-        "systemd-journald-dev-log.socket"
-        "syslog.socket"
-      ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-journald.socket"
+      "systemd-journald@.socket"
+      "systemd-journald-varlink@.socket"
+      "systemd-journald.service"
+      "systemd-journald@.service"
+      "systemd-journal-flush.service"
+      "systemd-journal-catalog-update.service"
+      "systemd-journald-sync@.service"
+      "systemd-journald-audit.socket"
+      "systemd-journald-dev-log.socket"
+      "syslog.socket"
+    ];
 
     systemd.sockets.systemd-journald-audit.wantedBy = [
       "systemd-journald.service"

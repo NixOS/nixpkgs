@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     tag = "v${version}";
-    hash = "sha256-E8vRKH2Xgva7W5qW9kJBWzVfCuSiRyoAyO72mcGvkpg=";
+    hash = "sha256-ex6amnB51Jla5ia2HVaMOZsDOEtgJ8RB1eNTLpXNzSY=";
   };
 
   patches = [
@@ -52,18 +52,17 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  dependencies =
-    [
-      aiodns
-      aiohttp
-      brotli
-      orjson
-      pynacl
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      audioop-lts
-    ];
+  dependencies = [
+    aiodns
+    aiohttp
+    brotli
+    orjson
+    pynacl
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
+  ];
 
   # upstream has no tests
   doCheck = false;

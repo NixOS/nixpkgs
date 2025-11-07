@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "auth0-cli";
-  version = "1.12.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
     tag = "v${version}";
-    hash = "sha256-T3AJYDPdVkFYsvZUIdqndaxsJmsoJeeyr0316rafg7Q=";
+    hash = "sha256-y+vNIXwSNVWwR6uSyLqsk366Y558sZxK4RYG/Cres/4=";
   };
 
-  vendorHash = "sha256-/F3GNGCfsa9LM1F+eYJ+okqqjIuKfxHDT90ZS9gsJzs=";
+  vendorHash = "sha256-eqeicg4ZWd/oOjaULXKjI5t8+4lSl5HFG3fOaeF5zB4=";
 
   ldflags = [
     "-s"
@@ -47,12 +47,14 @@ buildGoModule rec {
 
   subPackages = [ "cmd/auth0" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Supercharge your developer workflow";
     homepage = "https://auth0.github.io/auth0-cli";
     changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "auth0";
   };
 }

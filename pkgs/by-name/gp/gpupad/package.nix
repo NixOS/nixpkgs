@@ -7,7 +7,7 @@
   glslang,
   imath,
   ktx-tools,
-  openimageio_2,
+  openimageio,
   qt6Packages,
   spdlog,
   spirv-cross,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpupad";
-  version = "2.5.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "gpupad";
     tag = finalAttrs.version;
-    hash = "sha256-ajT4mctCfNJVUfhVsHzEoz2M9HjMJ6uNgf1hieDjhtY=";
+    hash = "sha256-Y0LNz8qHNfYhkh+ukJFi56zdaNIy5Gfvena+gSo0oOo=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     imath # needed for openimageio
     ktx-tools
-    openimageio_2
+    openimageio
     qt6Packages.qtbase
     qt6Packages.qtdeclarative
     qt6Packages.qtmultimedia

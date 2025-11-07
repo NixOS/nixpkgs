@@ -33,16 +33,20 @@ buildGoModule rec {
     scdoc < doc/senpai.1.scd > doc/senpai.1
     scdoc < doc/senpai.5.scd > doc/senpai.5
     installManPage doc/senpai.*
+    install -D -m 444 -t $out/share/applications contrib/senpai.desktop
+    install -D -m 444 res/icon.48.png $out/share/icons/hicolor/48x48/apps/senpai.png
+    install -D -m 444 res/icon.128.png $out/share/icons/hicolor/128x128/apps/senpai.png
+    install -D -m 444 res/icon.svg $out/share/icons/hicolor/scalable/apps/senpai.svg
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Your everyday IRC student";
     mainProgram = "senpai";
     homepage = "https://sr.ht/~delthas/senpai/";
     changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ malte-v ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   hatchling,
   flake8,
@@ -10,15 +9,14 @@
 
 buildPythonPackage rec {
   pname = "flake8-deprecated";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "flake8_deprecated";
-    inherit version;
-    hash = "sha256-7pbKAB0coFYfqORvI+LSRgsYqGaWNzyrZE4QKuD/KqI=";
+  src = fetchFromGitHub {
+    owner = "gforcada";
+    repo = "flake8-deprecated";
+    tag = version;
+    hash = "sha256-KF0hWhMZEWuSPUyfStayNa5Nfss9NpTvMXPeemWbQXU=";
   };
 
   build-system = [ hatchling ];
@@ -27,14 +25,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "run_tests.py" ];
+  enabledTestPaths = [ "run_tests.py" ];
 
   pythonImportsCheck = [ "flake8_deprecated" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/gforcada/flake8-deprecated/blob/${src.tag}/CHANGES.rst";
     description = "Flake8 plugin that warns about deprecated method calls";
     homepage = "https://github.com/gforcada/flake8-deprecated";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

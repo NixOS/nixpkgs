@@ -28,6 +28,7 @@
   libwmf,
   zlib,
   libzip,
+  xz,
   ghostscript,
   aalib,
   shared-mime-info,
@@ -89,87 +90,90 @@ stdenv.mkDerivation (finalAttrs: {
     ./force-enable-libheif.patch
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
-      pkg-config
-      intltool
-      gettext
-      makeWrapper
-      gtk-doc
-      libxslt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  # error: possibly undefined macro: AM_NLS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/nls.m4 m4macros
+  '';
 
-  buildInputs =
-    [
-      babl
-      gegl
-      gtk2
-      glib
-      gdk-pixbuf
-      pango
-      cairo
-      gexiv2
-      harfbuzz
-      isocodes
-      freetype
-      fontconfig
-      lcms
-      libpng
-      libjpeg
-      libjxl
-      poppler
-      poppler_data
-      libtiff
-      openexr
-      libmng
-      librsvg
-      libwmf
-      zlib
-      libzip
-      ghostscript
-      aalib
-      shared-mime-info
-      libwebp
-      libheif
-      libexif
-      xorg.libXpm
-      glib-networking
-      libmypaint
-      mypaint-brushes1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gtk-mac-integration-gtk2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libgudev
-    ]
-    ++ lib.optionals withPython [
-      python
-      # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-      python2.pkgs.pygtk
-    ];
+  nativeBuildInputs = [
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
+    pkg-config
+    intltool
+    gettext
+    makeWrapper
+    gtk-doc
+    libxslt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
+
+  buildInputs = [
+    babl
+    gegl
+    gtk2
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libjpeg
+    libjxl
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    libzip
+    xz
+    ghostscript
+    aalib
+    shared-mime-info
+    libwebp
+    libheif
+    libexif
+    xorg.libXpm
+    glib-networking
+    libmypaint
+    mypaint-brushes1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration-gtk2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libgudev
+  ]
+  ++ lib.optionals withPython [
+    python
+    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+    python2.pkgs.pygtk
+  ];
 
   # needed by gimp-2.0.pc
   propagatedBuildInputs = [
     gegl
   ];
 
-  configureFlags =
-    [
-      "--without-webkit" # old version is required
-      "--disable-check-update"
-      "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-      "--with-icc-directory=/run/current-system/sw/share/color/icc"
-      # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
-      "--libdir=\${exec_prefix}/lib"
-    ]
-    ++ lib.optionals (!withPython) [
-      "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
-    ];
+  configureFlags = [
+    "--without-webkit" # old version is required
+    "--disable-check-update"
+    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
+  ]
+  ++ lib.optionals (!withPython) [
+    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
+  ];
 
   enableParallelBuilding = true;
 
@@ -214,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "gimp";

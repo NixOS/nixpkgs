@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-D+CcUNVMgn8fiGcr+dYkQJoRHzpo3l5qTacCUKCydOQ=";
 
   meta = with lib; {

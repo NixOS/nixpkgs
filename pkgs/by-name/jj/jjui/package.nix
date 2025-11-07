@@ -3,30 +3,37 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jjui";
-  version = "0.8.6";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
-    tag = "v${version}";
-    hash = "sha256-FfodDPHMNiB4vh+v+m2k6x9o82idHM68Os9OuXpyVGY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QaAjxpn7VHUdL8PFQcDUsa7xA/7bMtGaGl1aTpKOs2M=";
   };
 
-  vendorHash = "sha256-YlOK+NvyH/3uvvFcCZixv2+Y2m26TP8+ohUSdl3ppro=";
+  vendorHash = "sha256-YBRHpHBb3uzgXhwxVu3493CtPyG9Vzm8IPc1VW6/CKU=";
+
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TUI for Jujutsu VCS";
+    description = "TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
-    changelog = "https://github.com/idursun/jjui/releases/tag/v${version}";
+    changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       adda
     ];
     mainProgram = "jjui";
   };
-}
+})

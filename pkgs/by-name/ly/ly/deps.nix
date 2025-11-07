@@ -89,27 +89,36 @@ let
 in
 linkFarm name [
   {
-    name = "122062d301a203d003547b414237229b09a7980095061697349f8bef41be9c30266b";
+    name = "clap-0.11.0-oBajB-HnAQDPCKYzwF7rO3qDFwRcD39Q0DALlTSz5H7e";
     path = fetchZigArtifact {
       name = "clap";
-      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.9.1.tar.gz";
-      hash = "sha256-7qxm/4xb+58MGG+iUzssUtR97OG2dRjAqyS0BAet4HY=";
+      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.11.0.tar.gz";
+      hash = "sha256-fDWd7EQYZuAlBlrpynBuznK89OiiX74xcZsekv84lkg=";
     };
   }
   {
-    name = "12209b971367b4066d40ecad4728e6fdffc4cc4f19356d424c2de57f5b69ac7a619a";
+    name = "zigini-0.3.2-BSkB7WJJAADybd5DGd9MLCp6ikGGUq9wicxsjv0HF1Qc";
     path = fetchZigArtifact {
       name = "zigini";
-      url = "https://github.com/Kawaii-Ash/zigini/archive/0bba97a12582928e097f4074cc746c43351ba4c8.tar.gz";
-      hash = "sha256-OdaJ5tqmk2MPwaAbpK4HRD/CcQCN+Cjj8U63BqUcFMs=";
+      url = "https://github.com/AnErrupTion/zigini/archive/96ca1d9f1a7ec741f07ceb104dae2b3a7bdfd48a.tar.gz";
+      hash = "sha256-Hhc/+a8ToHI9RAJTIQ6Z3KZKQFvoPvd5ODz7HRbytdw=";
     };
   }
   {
-    name = "1220b0979ea9891fa4aeb85748fc42bc4b24039d9c99a4d65d893fb1c83e921efad8";
+    name = "ini-0.1.0-YCQ9YkUnAAA7SjpLwvomwrngMn3TConSAlNgo7Q8ibMZ";
     path = fetchZigArtifact {
       name = "ini";
-      url = "https://github.com/ziglibs/ini/archive/e18d36665905c1e7ba0c1ce3e8780076b33e3002.tar.gz";
-      hash = "sha256-RQ6OPJBqqH7PCL+xiI58JT7vnIo6zbwpLWn+byZO5iM=";
+      url = "https://github.com/AnErrupTion/ini/archive/ac6e656157b2ac6c98392283a139b47c44a85d54.tar.gz";
+      hash = "sha256-rOXuHsd4WiLDODruQioADMWQ7UkNtx5LUdTcK2dve40=";
+    };
+  }
+  {
+    name = "N-V-__8AAGcUBQAa5vov1Yi_9AXEffFQ1e2KsXaK4dgygRKq";
+    path = fetchZigArtifact {
+      name = "termbox2";
+      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#290ac6b8225aacfd16851224682b851b65fcb918";
+      hash = "sha256-of95/wJeCTWI3p7NxvnUlb618qffUZv2YxgBgzp+crs=";
+      rev = "290ac6b8225aacfd16851224682b851b65fcb918";
     };
   }
 ]

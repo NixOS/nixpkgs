@@ -15,8 +15,10 @@
   gevent,
   geventhttpclient,
   msgpack,
+  locust-cloud,
   psutil,
   pyquery,
+  pytest,
   pyzmq,
   requests,
   retry,
@@ -26,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.33.1";
+  version = "2.42.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-cOYdf3F1OF1P4xFEG3isuiePIl1tHnjL7UVoFIpb40A=";
+    hash = "sha256-yyG4HVti0BAcGWQHID799YfkCEIBmpTkUUm8QzXMivc=";
   };
 
   postPatch = ''
@@ -49,6 +51,11 @@ buildPythonPackage rec {
     src = "${src}/locust/webui";
   };
 
+  preBuild = ''
+    mkdir -p $out/${python.sitePackages}/locust/webui/dist
+    ln -sf ${webui}/dist/* $out/${python.sitePackages}/locust/webui/dist
+  '';
+
   build-system = [
     hatchling
     hatch-vcs
@@ -57,6 +64,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     # version 0.7.0.dev0 is not considered to be >= 0.6.3
     "flask-login"
+    # version 6.0.1 is listed as 0.0.1 in the dependency check and 0.0.1 is not >= 3.0.10
+    "flask-cors"
+    "requests"
   ];
 
   dependencies = [
@@ -67,11 +77,13 @@ buildPythonPackage rec {
     gevent
     geventhttpclient
     msgpack
+    locust-cloud
     psutil
     pyzmq
     requests
     tomli
     werkzeug
+    pytest
   ];
 
   pythonImportsCheck = [ "locust" ];

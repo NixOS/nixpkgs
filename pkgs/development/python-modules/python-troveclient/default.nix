@@ -25,16 +25,16 @@
 
 buildPythonPackage rec {
   pname = "python-troveclient";
-  version = "8.6.0";
+  version = "8.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-troveclient";
     tag = version;
-    hash = "sha256-6JviPG2ikKRqvW/eqPIHMvpV6GjqbaXYHhcOOpaIS4U=";
+    hash = "sha256-iyCI/0He2vG6VNBCQ9sbQoUYkgn6ciWrnfACQDKuJ6M=";
   };
 
   env.PBR_VERSION = version;

@@ -91,7 +91,7 @@ let
     ];
   };
 
-  version = "0.90.0";
+  version = "0.102.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -103,12 +103,14 @@ stdenv.mkDerivation {
     in
     fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
+      # TODO: Write an update script to update all 4 hashes.
+      # nixpkgs-update: no auto update
       hash =
         {
-          "sdk-ia32" = "sha256-dETXtOdJ9/1wZ47l/j/K5moN4m+KNc7vu7wVGql8NXQ=";
-          "sdk-x64" = "sha256-mRIKIrFIdXQ+tLled3ygJvMCBDKP08bl3IlqTbQmYq0=";
-          "ia32" = "sha256-+nGIQuWdPfctPNzDu7mkEUOmLx1cwcJoVCAk6ImNBxQ=";
-          "x64" = "sha256-uEb0GTONaR58nhjGAan1HCOqQKtQ2JDrTaSL+SfRY6E=";
+          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
+          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
+          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
+          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
         }
         ."${flavor + bits}";
     };

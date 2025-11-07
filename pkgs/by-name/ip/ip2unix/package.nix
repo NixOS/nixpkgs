@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     python3Packages.pytest
     python3Packages.pytest-timeout
     systemd
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [ yaml-cpp ];
 

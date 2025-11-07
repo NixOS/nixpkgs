@@ -35,7 +35,8 @@ buildPythonPackage rec {
     pytz
     textual
     tzdata
-  ] ++ textual.optional-dependencies.syntax;
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   optional-dependencies = {
     polars = [ polars ];
@@ -45,7 +46,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-textual-snapshot
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
+    description = "Performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
     homepage = "https://github.com/tconbeer/textual-fastdatatable";
     changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${src.tag}";
     license = lib.licenses.mit;

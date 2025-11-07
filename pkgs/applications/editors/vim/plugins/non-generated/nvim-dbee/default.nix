@@ -21,7 +21,8 @@ let
     pname = "dbee-bin";
     inherit version;
 
-    src = "${src}/dbee";
+    inherit src;
+    sourceRoot = "${src.name}/dbee";
 
     vendorHash = "sha256-U/3WZJ/+Bm0ghjeNUILsnlZnjIwk3ySaX3Rd4L9Z62A=";
     buildInputs = [
@@ -51,7 +52,7 @@ vimUtils.buildVimPlugin {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = "vimPlugins.nvim-dbee.dbee-lib";
+      attrPath = "vimPlugins.nvim-dbee.dbee-bin";
     };
 
     # needed for the update script

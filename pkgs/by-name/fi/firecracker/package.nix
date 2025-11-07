@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  version = "1.11.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${version}";
-    hash = "sha256-Iqhj4BteFTBhhgQmyJVNdRHrXd/kaMRbOJ3eRKilYpw=";
+    hash = "sha256-ZrIvz5hmP0d8ADF723Z+lOP9hi5nYbi6WUtV4wTp73U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-G6PtJb0Qh7TOq5PcfoYvkY4LEwRj63RbDdxYbzqVxkc=";
+  cargoHash = "sha256-BjaNUYZRPKJKjiQWMUyoBIdD2zsNqZX37CPzdwb+lCE=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
   AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
@@ -83,14 +82,14 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
     changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
     mainProgram = "firecracker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       usertam
       thoughtpolice
       qjoly

@@ -11,13 +11,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.9.15";
+  version = "3.9.17";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
-    hash = "sha256-VX3xQQn8FKcrqyx1RpGste2QmATgTh6cCowAmtnpbeM=";
+    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
   nativeBuildInputs = [
@@ -38,18 +38,17 @@ python3.pkgs.buildPythonApplication rec {
     zeroconf
   ];
 
-  buildInputs =
-    [
-      gtk3
-      librsvg
-    ]
-    ++ (with xorg; [
-      libX11
-      libXxf86vm
-      libXext
-      libXinerama
-      libXrandr
-    ]);
+  buildInputs = [
+    gtk3
+    librsvg
+  ]
+  ++ (with xorg; [
+    libX11
+    libXxf86vm
+    libXext
+    libXinerama
+    libXrandr
+  ]);
 
   # Workaround for eoyilmaz/displaycal-py3#261
   setupPyGlobalFlags = [ "appdata" ];

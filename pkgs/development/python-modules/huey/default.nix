@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.5.3";
+  version = "2.5.4";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
+    repo = "huey";
     tag = version;
-    hash = "sha256-Avy5aMYoeIhO7Q83s2W4o6RBMaVFdRBqa7HGNIGNOqE=";
+    hash = "sha256-PIMnPb6QQh20/LPfk8LaidhLHMrL8dHigLigyy2ki4Q=";
   };
 
   nativeBuildInputs = [

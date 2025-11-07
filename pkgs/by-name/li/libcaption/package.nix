@@ -8,15 +8,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcaption";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "szatmary";
     repo = "libcaption";
-    rev = finalAttrs.version;
-    hash = "sha256-OBtxoFJF0cxC+kfSK8TIKIdLkmCh5WOJlI0fejnisJo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9tszEKR30GHoGQ3DE9ejU3yOdtDiZwSZHiIJUPLgOdU=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ re2c ];

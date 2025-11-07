@@ -25,7 +25,9 @@ The `image.modules` option can be used to set specific options per image variant
 E.g. images for the cloud provider Linode use `grub2` as a bootloader by default. If you are using `systemd-boot` on other platforms and want to disable it for Linode only, you could use the following options:
 
 ``` nix
+{
   image.modules.linode = {
     boot.loader.systemd-boot.enable = lib.mkForce false;
   };
+}
 ```

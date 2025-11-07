@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uk4XLF0QsH9Nhz73PmdSpwhxPdCh+DlNNqtbJtLWgNI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2wJBYTOfaPBm+24ABl1cOs4W7UsRPYn70PSFDRRMCyU=";
 
   # tests require rust nightly
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       replaceStrings [ "." ] [ "" ] version
     }";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "grass";
   };
 }

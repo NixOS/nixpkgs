@@ -5,23 +5,20 @@
   standard-library,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "agdarsec";
-  version = "0.4.1";
+  version = "0.5.0-unstable-2025-08-05";
 
   src = fetchFromGitHub {
     owner = "gallais";
     repo = "agdarsec";
-    rev = "v${version}";
-    sha256 = "02fqkycvicw6m2xsz8p01aq8n3gj2d2gyx8sgj15l46f8434fy0x";
+    rev = "28c5233e905474f3b02cb97fe410beb60364ba80";
+    sha256 = "sha256-IMxRqZQ7XtPT2cDkoP5mBAj2ovMf5cHcN4U4V5FMEaQ=";
   };
 
-  everythingFile = "./index.agda";
-
-  includePaths = [
-    "src"
-    "examples"
-  ];
+  postPatch = ''
+    sed -Ei 's/standard-library-[0-9.]+/standard-library/' agdarsec.agda-lib
+  '';
 
   buildInputs = [ standard-library ];
 
@@ -31,6 +28,5 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ turion ];
-    broken = true;
   };
 }

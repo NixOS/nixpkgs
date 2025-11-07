@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "rpiplay";
-  version = "unstable-2021-06-14";
+  version = "0-unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "FD-";
@@ -51,6 +51,11 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
   ];
+
+  postPatch = ''
+    substituteInPlace {lib/playfair/,lib/llhttp/,lib/,renderers/,./}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

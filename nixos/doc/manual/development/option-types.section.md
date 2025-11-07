@@ -31,6 +31,21 @@ merging is handled.
 :   A path that is contained in the Nix store. This can be a top-level store
     path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
+`types.externalPath`
+
+:   A path that is not contained in the Nix store. Typical use cases are:
+    secrets, password or any other external file.
+
+::: {.warning}
+This type only validates that the path is not *currently* in the Nix store.
+It does NOT prevent the value from being copied to the store later when:
+- Referenced in a derivation
+- Used in certain path operations (e.g., `${path}` interpolation)
+- Passed to functions that copy to the store
+
+Users must still be careful about how they reference these paths.
+:::
+
 `types.pathWith` { *`inStore`* ? `null`, *`absolute`* ? `null` }
 
 :   A filesystem path. Either a string or something that can be coerced
@@ -316,21 +331,33 @@ A union of types is a type such that a value is valid when it is valid for at le
 
 If some values are instances of more than one of the types, it is not possible to distinguish which type they are meant to be instances of. If that's needed, consider using a [sum type](#sec-option-types-sums).
 
+<!-- SYNC WITH oneOf BELOW -->
 `types.either` *`t1 t2`*
 
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
     Multiple definitions cannot be merged.
 
+    ::: {.warning}
+    `either` and `oneOf` eagerly decide the active type based on the passed types' shallow check method. For composite types like `attrsOf` and `submodule`, which both match all attribute set definitions, the first type argument will be chosen for the returned option value, and this therefore also decides how nested values are checked and merged. For example, `either (attrsOf int) (submodule {...})` will always use `attrsOf int` for any attribute set value, even if it was intended as a submodule. This behavior is a trade-off that keeps the implementation simple and the evaluation order predictable, avoiding unexpected strictness problems such as infinite recursions. When proper type discrimination is needed, consider using a [sum type](#sec-option-types-sums) like `attrTag` instead.
+    :::
+
+<!-- SYNC WITH either ABOVE -->
 `types.oneOf` \[ *`t1 t2`* ... \]
 
 :   Type *`t1`* or type *`t2`* and so forth, e.g.
     `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
     merged.
 
+    ::: {.warning}
+    `either` and `oneOf` eagerly decide the active type based on the passed types' shallow check method. For composite types like `attrsOf` and `submodule`, which both match all attribute set definitions, the first matching type in the list will be chosen for the returned option value, and this therefore also decides how nested values are checked and merged. For example, `oneOf [ (attrsOf int) (submodule {...}) ]` will always use `attrsOf int` for any attribute set value, even if it was intended as a submodule. This behavior is a trade-off that keeps the implementation simple and the evaluation order predictable, avoiding unexpected strictness problems such as infinite recursions. When proper type discrimination is needed, consider using a [sum type](#sec-option-types-sums) like `attrTag` instead.
+    :::
+
 `types.nullOr` *`t`*
 
 :   `null` or type *`t`*. Multiple definitions are merged according to
     type *`t`*.
+
+    This is mostly equivalent to `either (enum [ null ]) t`, but `nullOr` provides a `null` fallback for attribute values with `mkIf false` definitions in `lazyAttrsOf (nullOr t)`, whereas `either` would throw an error when the attribute is accessed.
 
 
 ## Sum types {#sec-option-types-sums}
@@ -495,16 +522,14 @@ if you want to allow users to leave it undefined.
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; submodule {
-      options = {
-        foo = mkOption {
-          type = int;
-        };
-        bar = mkOption {
-          type = str;
+    type =
+      with types;
+      submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
       };
-    };
   };
 }
 ```
@@ -516,12 +541,8 @@ if you want to allow users to leave it undefined.
 let
   modOptions = {
     options = {
-      foo = mkOption {
-        type = int;
-      };
-      bar = mkOption {
-        type = int;
-      };
+      foo = mkOption { type = int; };
+      bar = mkOption { type = int; };
     };
   };
 in
@@ -546,16 +567,14 @@ multiple definitions of the submodule option set
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; listOf (submodule {
-      options = {
-        foo = mkOption {
-          type = int;
+    type =
+      with types;
+      listOf (submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
-        bar = mkOption {
-          type = str;
-        };
-      };
-    });
+      });
   };
 }
 ```
@@ -566,8 +585,14 @@ multiple definitions of the submodule option set
 ```nix
 {
   config.mod = [
-    { foo = 1; bar = "one"; }
-    { foo = 2; bar = "two"; }
+    {
+      foo = 1;
+      bar = "one";
+    }
+    {
+      foo = 2;
+      bar = "two";
+    }
   ];
 }
 ```
@@ -584,16 +609,14 @@ multiple named definitions of the submodule option set
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; attrsOf (submodule {
-      options = {
-        foo = mkOption {
-          type = int;
+    type =
+      with types;
+      attrsOf (submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
-        bar = mkOption {
-          type = str;
-        };
-      };
-    });
+      });
   };
 }
 ```
@@ -603,8 +626,14 @@ multiple named definitions of the submodule option set
 ### Definition of attribute sets of submodules
 ```nix
 {
-  config.mod.one = { foo = 1; bar = "one"; };
-  config.mod.two = { foo = 2; bar = "two"; };
+  config.mod.one = {
+    foo = 1;
+    bar = "one";
+  };
+  config.mod.two = {
+    foo = 2;
+    bar = "two";
+  };
 }
 ```
 :::

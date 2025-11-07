@@ -8,7 +8,7 @@
 }:
 
 let
-  auctex = stdenv.mkDerivation (rec {
+  auctex = stdenv.mkDerivation rec {
     # Make this a valid tex(live-new) package;
     # the pkgs attribute is provided with a hack below.
     pname = "auctex";
@@ -50,7 +50,7 @@ let
       license = licenses.gpl3Plus;
       platforms = platforms.unix;
     };
-  });
+  };
 
 in
 auctex // { pkgs = [ auctex.tex ]; }

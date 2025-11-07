@@ -5,23 +5,25 @@
   gitUpdater,
   nixosTests,
   bash,
+  boost,
   cmake,
   inotify-tools,
   pkg-config,
   mir,
   libxkbcommon,
   swaybg,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "25.02.1";
+  version = "25.11";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HHHF9dhVYMxugJZckAnQduuSBLAw5StbwRJF5Fz+rU=";
+    hash = "sha256-tXxRKGP/MMXOD1QtOYj5E9IurLoUUu1JBg8+l5z0KCQ=";
   };
 
   postPatch = ''
@@ -31,9 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # Source has a path "systemd/usr/{libexec,lib}/...", don't break references to that
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -41,8 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
+    boost
     mir
     libxkbcommon
+    wayland # wayland-server.pc, for mirwayland.pc
   ];
 
   postInstall = ''

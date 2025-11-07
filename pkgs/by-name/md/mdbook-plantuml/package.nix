@@ -1,34 +1,23 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-plantuml";
-  version = "0.8.0";
+  version = "0.8.0-unstable-2022-12-28";
 
   src = fetchFromGitHub {
     owner = "sytsereitsma";
     repo = "mdbook-plantuml";
-    tag = "v${version}";
-    hash = "sha256-26epwn6j/ZeMAphiFsrLjS0KIewvElr7V3p/EDr4Uqk=";
+    rev = "c156b53aad6d7bce8479e5406a4a3465c12714ef";
+    hash = "sha256-5/6NQO++MsV7GS69jGkdpkiRhadtQyYZeHreft4h6hQ=";
   };
 
-  cargoPatches = [
-    # https://github.com/sytsereitsma/mdbook-plantuml/pull/60
-    (fetchpatch {
-      name = "update-mdbook-for-rust-1.64.patch";
-      url = "https://github.com/sytsereitsma/mdbook-plantuml/commit/a1c7fdaff65fbbcc086006f6d180b27e180739e7.patch";
-      hash = "sha256-KXFQxogR6SaoX8snsSYMA8gn1FrQVKMl5l8khxB09WE=";
-    })
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JI5UdLb2ZcPcAIvprVdpQRGMzc0Qu0awIUpMjNyaAPQ=";
+  cargoHash = "sha256-LzzAaWLDODbqGNVeEULLOgrpyLGKzaknIbLjKyF2zBw=";
 
   nativeBuildInputs = [ pkg-config ];
 

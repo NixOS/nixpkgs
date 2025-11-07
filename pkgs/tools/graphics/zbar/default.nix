@@ -9,6 +9,7 @@
   libX11,
   libv4l,
   qtbase,
+  qtwayland,
   qtx11extras,
   wrapQtAppsHook,
   wrapGAppsHook3,
@@ -61,41 +62,45 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mchehab/zbar/commit/a549566ea11eb03622bd4458a1728ffe3f589163.patch";
       hash = "sha256-NY3bAElwNvGP9IR6JxUf62vbjx3hONrqu9pMSqaZcLY=";
     })
+    # PR from fork not yet merged into upstream
+    # See PR: https://github.com/mchehab/zbar/pull/299
+    # Remove this patch if the PR is merged or if the issue is solved another way.
+    # See https://github.com/NixOS/nixpkgs/issues/456461 for discussion of the root issue
+    ./darwin-segfault-optimized-pointer-assignment.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      xmlto
-      autoreconfHook
-      docbook_xsl
-    ]
-    ++ lib.optionals enableVideo [
-      wrapGAppsHook3
-      wrapQtAppsHook
-      qtbase
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    xmlto
+    autoreconfHook
+    docbook_xsl
+  ]
+  ++ lib.optionals enableVideo [
+    wrapGAppsHook3
+    wrapQtAppsHook
+    qtbase
+  ];
 
-  buildInputs =
-    [
-      imagemagickBig
-      libintl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals enableDbus [
-      dbus
-    ]
-    ++ lib.optionals withXorg [
-      libX11
-    ]
-    ++ lib.optionals enableVideo [
-      libv4l
-      gtk3
-      qtbase
-      qtx11extras
-    ];
+  buildInputs = [
+    imagemagickBig
+    libintl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals enableDbus [
+    dbus
+  ]
+  ++ lib.optionals withXorg [
+    libX11
+  ]
+  ++ lib.optionals enableVideo [
+    libv4l
+    gtk3
+    qtbase
+    qtwayland
+    qtx11extras
+  ];
 
   nativeCheckInputs = [
     bash
@@ -105,6 +110,11 @@ stdenv.mkDerivation rec {
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
   ];
+
+  # fix iconv linking on macOS
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="-liconv"
+  '';
 
   # Note: postConfigure instead of postPatch in order to include some
   # autoconf-generated files. The template files for the autogen'd scripts are
@@ -116,32 +126,31 @@ stdenv.mkDerivation rec {
   # Disable assertions which include -dev QtBase file paths.
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
-  configureFlags =
-    [
-      "--without-python"
-    ]
-    ++ (
-      if enableDbus then
-        [
-          "--with-dbusconfdir=${placeholder "out"}/share"
-        ]
-      else
-        [
-          "--without-dbus"
-        ]
-    )
-    ++ (
-      if enableVideo then
-        [
-          "--with-gtk=gtk3"
-        ]
-      else
-        [
-          "--disable-video"
-          "--without-gtk"
-          "--without-qt"
-        ]
-    );
+  configureFlags = [
+    "--without-python"
+  ]
+  ++ (
+    if enableDbus then
+      [
+        "--with-dbusconfdir=${placeholder "out"}/share"
+      ]
+    else
+      [
+        "--without-dbus"
+      ]
+  )
+  ++ (
+    if enableVideo then
+      [
+        "--with-gtk=gtk3"
+      ]
+    else
+      [
+        "--disable-video"
+        "--without-gtk"
+        "--without-qt"
+      ]
+  );
 
   doCheck = true;
 

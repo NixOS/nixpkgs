@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0yLEpNkl7KjBEGxNONtfMjVlWMSKGZ6TbYJMsCeQ3ms=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-v4lgHx+sR58CshZJCUYrtaW4EDFBUKFPJJ6V+eyf5Bc=";
 
   cargoBuildFlags = [
@@ -29,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kaleidawave/ezno";
     changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

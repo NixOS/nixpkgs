@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2025.3.0";
+  version = "2025.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = version;
-    hash = "sha256-+vegdEXhQi3ns5iMs6FavKnAlRNIWCUNyZENVBWZsuQ=";
+    hash = "sha256-qO03jwZeOjDP/BQxK8OFma5BxGF9nBoXVFWFGa+EQ00=";
   };
 
   postPatch = ''
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml;
 
   pythonRelaxDeps = [ "dask" ];
 

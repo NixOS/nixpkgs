@@ -14,7 +14,7 @@ let
   pname = "colloid-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: scheme variants"
+lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   [
     "default"
     "nord"
@@ -26,7 +26,7 @@ lib.checkListOfEnum "${pname}: scheme variants"
   ]
   schemeVariants
   lib.checkListOfEnum
-  "${pname}: color variants"
+  "colloid-icon-theme: color variants"
   [
     "default"
     "purple"
@@ -48,8 +48,8 @@ lib.checkListOfEnum "${pname}: scheme variants"
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
-      rev = version;
+      repo = "colloid-icon-theme";
+      tag = version;
       hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
@@ -77,8 +77,8 @@ lib.checkListOfEnum "${pname}: scheme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + builtins.toString schemeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
+        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + toString schemeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--theme " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share

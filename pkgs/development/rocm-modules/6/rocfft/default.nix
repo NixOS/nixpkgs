@@ -14,18 +14,19 @@
   gtest,
   openmp,
   rocrand,
+  hiprand,
   gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-RrxdwZ64uC7lQzyJI1eGHX2dmRnW8TfNThnuvuz5XWo=";
+    hash = "sha256-yaOjBF2aJkCBlxkydyOsrfT4lNZ0BVkS2jJC0fEiBug=";
   };
 
   nativeBuildInputs = [
@@ -35,24 +36,32 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  # FIXME: rocfft_aot_helper runs at the end of the build and has a risk of timing it out
-  # due to a long period with no terminal output
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+    hiprand
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ];
+  patches = [
+    # Fixes build timeout due to no log output during rocfft_aot step
+    ./log-every-n-aot-jobs.patch
+  ];
+
+  cmakeFlags = [
+    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+    "-DHIP_PLATFORM=amd"
+    "-DBUILD_CLIENTS=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_HIPRAND=ON"
+    "-DROCFFT_KERNEL_CACHE_ENABLE=ON"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -75,11 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         gtest
         openmp
         rocrand
-      ];
-
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
+        hiprand
       ];
 
       postInstall = ''
@@ -113,11 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
         rocrand
       ];
 
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
-      ];
-
       postInstall = ''
         cp -a ../../../scripts/perf "$out/bin"
       '';
@@ -140,11 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
         finalAttrs.finalPackage
         openmp
         rocrand
-      ];
-
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
       ];
 
       installPhase = ''

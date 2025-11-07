@@ -13,24 +13,26 @@
   pandas,
   peewee,
   platformdirs,
+  protobuf,
   pytz,
   requests-cache,
   requests-ratelimiter,
   requests,
   scipy,
   setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.58";
+  version = "0.2.66";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
     tag = version;
-    hash = "sha256-Xndky4sMVn0sPH4CFdLuwcfhPzMXtH4rdakQdve3RK0=";
+    hash = "sha256-v8K/mVNnun7ogBixaKAVYwSQgSrnnfvVw40/BeClCKY=";
   };
 
   build-system = [ setuptools ];
@@ -47,8 +49,10 @@ buildPythonPackage rec {
     pandas
     peewee
     platformdirs
+    protobuf
     pytz
     requests
+    websockets
   ];
 
   optional-dependencies = {
@@ -71,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ranaroussi/yfinance";
     changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

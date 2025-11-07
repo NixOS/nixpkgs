@@ -1,8 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   stdenv,
   makeWrapper,
+  gitUpdater,
   cdrtools,
   curl,
   gawk,
@@ -29,30 +31,29 @@
   installShellFiles,
 }:
 let
-  runtimePaths =
-    [
-      cdrtools
-      curl
-      gawk
-      gnugrep
-      gnused
-      jq
-      pciutils
-      procps
-      python3
-      (qemu.override { smbdSupport = true; })
-      socat
-      swtpm
-      util-linux
-      unzip
-      xrandr
-      zsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa-demos
-      usbutils
-      xdg-user-dirs
-    ];
+  runtimePaths = [
+    cdrtools
+    curl
+    gawk
+    gnugrep
+    gnused
+    jq
+    pciutils
+    procps
+    python3
+    (qemu.override { smbdSupport = true; })
+    socat
+    swtpm
+    util-linux
+    unzip
+    xrandr
+    zsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mesa-demos
+    usbutils
+    xdg-user-dirs
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "correctly-handle-version-10.0.0-of-qemu.patch";
+      url = "https://github.com/quickemu-project/quickemu/commit/f25205f4513c4fa72be6940081c62e613d1fddc6.patch";
+      hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
+    })
+  ];
 
   postPatch = ''
     sed -i \
@@ -98,7 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   boost,
   zlib,
-  botan2,
   libidn,
   lua,
   pcre,
@@ -19,11 +18,14 @@
   autoreconfHook,
   texinfo,
   fetchpatch,
+  callPackage,
 }:
 
 let
   version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
+
+  botan = callPackage ./botan2.nix { enableForMonotone = true; };
 in
 
 assert perlVersion != "";
@@ -59,16 +61,15 @@ stdenv.mkDerivation rec {
     ./monotone-1.1-gcc-14.patch
   ];
 
-  postPatch =
-    ''
-      sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
-    ''
-    + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
-      find . -type f -exec sed -i \
-        -e 's/ E(/ internal_E(/g' \
-        -e 's/{E(/{internal_E(/g' \
-        {} +
-    '';
+  postPatch = ''
+    sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
+  ''
+  + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
+    find . -type f -exec sed -i \
+      -e 's/ E(/ internal_E(/g' \
+      -e 's/{E(/{internal_E(/g' \
+      {} +
+  '';
 
   CXXFLAGS = " --std=c++11 ";
 
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     zlib
-    botan2
+    botan
     libidn
     lua
     pcre

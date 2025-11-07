@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
     rev = "v${version}";
-    hash = "sha256-/28yo1V4/xYMirt2bNTB/l9Xl8NgRmxTitOW21TY8gE=";
+    hash = "sha256-+/TTlGk1ePPTHrSTSZmPHT2h3gKs9ouCF4ElvLWHF/g=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       orivej
-      artuuge
     ];
     platforms = platforms.x86;
   };

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.3.7";
+  version = "4.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
     tag = version;
-    hash = "sha256-hHLFrcCw9PXGh7JbHo76SUZ09ZCK9u72BjiaL5HuVMc=";
+    hash = "sha256-52nlqgKWh37Qr5UvCRBEPz2WHb2BU987+Ibt9yQyFVM=";
   };
 
   pythonRelaxDeps = [ "tablib" ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     chardet
     psycopg2
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkPhase = ''
     runHook preCheck

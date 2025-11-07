@@ -1,4 +1,5 @@
 {
+  acl,
   coreutils,
   cryptsetup,
   e2fsprogs,
@@ -12,26 +13,46 @@
   lib,
   libargon2,
   lsof,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  util-linux,
+  util-linuxMinimal,
+  versionCheckHook,
   zsh,
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  runtimeDependencies = [
+    acl # setfacl
+    coreutils # shred
+    cryptsetup
+    e2fsprogs # resize2fs
+    file
+    gawk
+    getent
+    gettext
+    gnugrep
+    gnupg
+    libargon2
+    lsof
+    pinentry
+    util-linuxMinimal
+  ];
+
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tomb";
-  version = "2.11";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "dyne";
-    repo = "Tomb";
-    tag = "v${version}";
-    hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
+    repo = "tomb";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z7LkCes0wg+1bZrNXXy4Lh5VwMotCULJQy5DmCisu+Q=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     pinentry
@@ -42,31 +63,26 @@ stdenvNoCC.mkDerivation rec {
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
       --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
+
+    # Fix version variable
+    sed -i 's/VERSION=".*"/VERSION="${finalAttrs.version}"/' tomb
   '';
 
   installPhase = ''
-    install -Dm755 tomb $out/bin/tomb
-    install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
+    runHook preInstall
+
+    install -D -m755 -t $out/bin tomb
+    install -D -m644 -t $out/share/man/man1/ doc/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${
-        lib.makeBinPath [
-          coreutils
-          cryptsetup
-          e2fsprogs
-          file
-          gawk
-          getent
-          gettext
-          gnugrep
-          gnupg
-          libargon2
-          lsof
-          pinentry
-          util-linux
-        ]
-      }
+      --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
+
+    runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -74,8 +90,8 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "File encryption on GNU/Linux";
-    homepage = "https://www.dyne.org/software/tomb/";
-    changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
+    homepage = "https://dyne.org/tomb/";
+    changelog = "https://github.com/dyne/tomb/blob/v${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "tomb";
     maintainers = with lib.maintainers; [
@@ -84,4 +100,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

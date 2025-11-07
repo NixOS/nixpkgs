@@ -59,5 +59,5 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ blackheaven ];
+  meta.maintainers = with lib.maintainers; [ gdifolco ];
 }

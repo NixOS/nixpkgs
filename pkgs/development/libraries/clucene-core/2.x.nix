@@ -24,46 +24,50 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_CONTRIBS=ON"
-      "-DBUILD_CONTRIBS_LIB=ON"
-      "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
-      "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
-      "-D_CL_HAVE_NAMESPACES_EXITCODE__TRYRUN_OUTPUT="
-      "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE=0"
-      "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE__TRYRUN_OUTPUT="
-      "-D_CL_HAVE_TRY_BLOCKS_EXITCODE=0"
-      "-D_CL_HAVE_TRY_BLOCKS_EXITCODE__TRYRUN_OUTPUT="
-      "-D_CL_HAVE_PTHREAD_MUTEX_RECURSIVE=0"
-      "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE=0"
-      "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE__TRYRUN_OUTPUT="
-    ];
+  cmakeFlags = [
+    "-DBUILD_CONTRIBS=ON"
+    "-DBUILD_CONTRIBS_LIB=ON"
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
+    "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
+    "-D_CL_HAVE_NAMESPACES_EXITCODE__TRYRUN_OUTPUT="
+    "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE__TRYRUN_OUTPUT="
+    "-D_CL_HAVE_TRY_BLOCKS_EXITCODE=0"
+    "-D_CL_HAVE_TRY_BLOCKS_EXITCODE__TRYRUN_OUTPUT="
+    "-D_CL_HAVE_PTHREAD_MUTEX_RECURSIVE=0"
+    "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE=0"
+    "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE__TRYRUN_OUTPUT="
+  ];
 
-  patches =
-    [
-      # From debian
-      ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
-      ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
-      ./Install-contribs-lib.patch
-      # From arch
-      ./fix-missing-include-time.patch
+  patches = [
+    # From debian
+    ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
+    ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
+    ./Install-contribs-lib.patch
+    # From arch
+    ./fix-missing-include-time.patch
 
-      # required for darwin and linux-musl
-      ./pthread-include.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./fix-darwin.patch
+    # required for darwin and linux-musl
+    ./pthread-include.patch
 
-      # see https://bugs.gentoo.org/869170
-      (fetchpatch {
-        url = "https://869170.bugs.gentoo.org/attachment.cgi?id=858825";
-        hash = "sha256-TbAfBKdXh+1HepZc8J6OhK1XGwhwBCMvO8QBDsad998=";
-      })
-    ];
+    # cmake 4 support
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-cpp/clucene/files/clucene-2.3.3.4-cmake4.patch?id=e06df280c75b0f0803954338466e5278d777f984";
+      hash = "sha256-e0u6J91bnuy24hIrSl+Ap5Xwds/nzzGiWpzskwaGx9o=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./fix-darwin.patch
+
+    # see https://bugs.gentoo.org/869170
+    (fetchpatch {
+      url = "https://869170.bugs.gentoo.org/attachment.cgi?id=858825";
+      hash = "sha256-TbAfBKdXh+1HepZc8J6OhK1XGwhwBCMvO8QBDsad998=";
+    })
+  ];
 
   # see https://github.com/macports/macports-ports/commit/236d43f2450c6be52dc42fd3a2bbabbaa5136201
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

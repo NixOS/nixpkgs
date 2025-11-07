@@ -24,38 +24,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.9";
+  version = "0.5.11";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withIntrospection [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
     rev = finalAttrs.version;
-    hash = "sha256-Z70TjLk5zulyYMAK+uMDhpsdvLa6m25pY8jahUA6ASE=";
+    hash = "sha256-CSI6GrTDBoYR6RFAQvgNjwzkMk8oXatEMpsv5FYB5eE=";
   };
 
-  patches =
-    [
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # Disable schema presence detection, it would fail because it cannot be autopatched,
-      # and it will be hardcoded by the next patch anyway.
-      ./skip-gsettings-detection.patch
+  patches = [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # Disable schema presence detection, it would fail because it cannot be autopatched,
+    # and it will be hardcoded by the next patch anyway.
+    ./skip-gsettings-detection.patch
 
-      # Hardcode path to Settings schemas for GNOME & related desktops.
-      # Otherwise every app using libproxy would need to be wrapped individually.
-      (replaceVars ./hardcode-gsettings.patch {
-        gds = glib.getSchemaPath gsettings-desktop-schemas;
-      })
-    ];
+    # Hardcode path to Settings schemas for GNOME & related desktops.
+    # Otherwise every app using libproxy would need to be wrapped individually.
+    (replaceVars ./hardcode-gsettings.patch {
+      gds = glib.getSchemaPath gsettings-desktop-schemas;
+    })
+  ];
 
   postPatch = ''
     # Fix running script that will try to install git hooks.
@@ -70,38 +68,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      curl
-      duktape
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      glib
-      gsettings-desktop-schemas
-    ];
+  buildInputs = [
+    curl
+    duktape
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    glib
+    gsettings-desktop-schemas
+  ];
 
-  mesonFlags =
-    [
-      # Prevent installing commit hook.
-      "-Drelease=true"
-      (lib.mesonBool "docs" withIntrospection)
-      (lib.mesonBool "introspection" withIntrospection)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dconfig-gnome=false"
-    ];
+  mesonFlags = [
+    # Prevent installing commit hook.
+    "-Drelease=true"
+    (lib.mesonBool "docs" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dconfig-gnome=false"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

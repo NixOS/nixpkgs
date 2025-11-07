@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   ghostscript,
   libpng,
@@ -20,6 +21,19 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
     hash = "sha256-YeGFOTF2hS8DuQGzsFsZ+8Wtglj/FC89pucLG4NRMyY=";
   };
+
+  patches = [
+    ./CVE-2025-31162.patch
+    ./CVE-2025-31163.patch
+
+    # Fix build with gcc15
+    # https://sourceforge.net/p/mcj/fig2dev/ci/ab4eee3cf0d0c1d861d64b9569a5d1497800cae2
+    (fetchpatch {
+      name = "fig2dev-prototypes.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/fig2dev/files/fig2dev-3.2.9a-prototypes.patch?id=93644497325b6df7a17f8bd05ad0495607aa5c34";
+      hash = "sha256-F6z0m3Ez9JpgZg+TjVjuIZhAyTMHodB7O/l8lDTOL54=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];

@@ -10,11 +10,13 @@ let
   json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
+  inherit (pkgs) stdenv;
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat =
     pkgs.runCommand "${cfg.package.pname}-docker-compat-${cfg.package.version}"
       {
+        nativeBuildInputs = [ pkgs.installShellFiles ];
         outputs = [
           "out"
           "man"
@@ -31,7 +33,14 @@ let
           basename=$(basename $f | sed s/podman/docker/g)
           ln -s $f $man/share/man/man1/$basename
         done
-      '';
+      ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export HOME=$(mktemp -d) # work around `docker <cmd>`
+      installShellCompletion --cmd docker \
+        --bash <($out/bin/docker completion bash) \
+        --zsh <($out/bin/docker completion zsh) \
+        --fish <($out/bin/docker completion fish)
+    '';
 
 in
 {
@@ -103,13 +112,24 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
+      description = ''
+        Extra dependencies for podman to be placed on $PATH in the wrapper.
+      '';
+    };
+
+    extraRuntimes = mkOption {
+      type = with types; listOf package;
+      # keep the default in sync with the podman package
+      default = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ];
+      defaultText = lib.literalExpression ''lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ]'';
       example = lib.literalExpression ''
         [
           pkgs.gvisor
         ]
       '';
       description = ''
-        Extra packages to be installed in the Podman wrapper.
+        Extra runtime packages to be installed in the Podman wrapper.
+        Those are then placed in libexec/podman, i.e. are seen as podman internal commands.
       '';
     };
 
@@ -162,18 +182,19 @@ in
               ]
               ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
             extraRuntimes =
-              [ pkgs.runc ]
-              ++ lib.optionals
-                (
-                  config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
-                  == "slirp4netns"
-                )
-                (
-                  with pkgs;
-                  [
-                    slirp4netns
-                  ]
-                );
+              cfg.extraRuntimes
+              ++
+                lib.optionals
+                  (
+                    config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
+                    == "slirp4netns"
+                  )
+                  (
+                    with pkgs;
+                    [
+                      slirp4netns
+                    ]
+                  );
           };
       };
 
@@ -233,7 +254,10 @@ in
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
-          network.network_backend = "netavark";
+          network = {
+            network_backend = "netavark";
+            firewall_driver = lib.mkIf config.networking.nftables.enable "nftables";
+          };
         };
       };
 

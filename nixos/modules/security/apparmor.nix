@@ -1,4 +1,5 @@
 {
+  options,
   config,
   lib,
   pkgs,
@@ -10,11 +11,6 @@ let
   cfg = config.security.apparmor;
   enabledPolicies = lib.filterAttrs (n: p: p.state != "disable") cfg.policies;
   buildPolicyPath = n: p: lib.defaultTo (pkgs.writeText n p.profile) p.path;
-
-  # Accessing submodule options when not defined results in an error thunk rather than a regular option object
-  # We can emulate the behavior of `<option>.isDefined` by attempting to evaluate it instead
-  # This is required because getting isDefined on a submodule is not possible in global module asserts.
-  submoduleOptionIsDefined = value: (builtins.tryEval value).success;
 in
 
 {
@@ -130,7 +126,9 @@ in
           # which does not recurse into sub-directories.
         }
         {
-          assertion = lib.xor (policyCfg.path != null) (submoduleOptionIsDefined policyCfg.profile);
+          assertion =
+            lib.xor (policyCfg.path != null)
+              options.security.apparmor.policies.valueMeta.attrs.${policyName}.configuration.options.profile.isDefined;
           message = "`security.apparmor.policies.\"${policyName}\"` must define exactly one of either path or profile.";
         }
       ]) cfg.policies
@@ -149,13 +147,12 @@ in
       }) enabledPolicies
       ++ lib.mapAttrsToList (name: path: { inherit name path; }) cfg.includes
     );
-    environment.etc."apparmor/parser.conf".text =
-      ''
-        ${if cfg.enableCache then "write-cache" else "skip-cache"}
-        cache-loc /var/cache/apparmor
-        Include /etc/apparmor.d
-      ''
-      + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
+    environment.etc."apparmor/parser.conf".text = ''
+      ${if cfg.enableCache then "write-cache" else "skip-cache"}
+      cache-loc /var/cache/apparmor
+      Include /etc/apparmor.d
+    ''
+    + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
     environment.etc."apparmor/apparmor.conf".text = '''';
     # For aa-logprof

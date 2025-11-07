@@ -4,7 +4,7 @@
   vdr,
   fetchFromGitHub,
   graphicsmagick,
-  boost,
+  boost186,
   libgcrypt,
   ncurses,
   callPackage,
@@ -37,18 +37,6 @@ in
   skincurses = (mkPlugin "skincurses").overrideAttrs (oldAttr: {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
-
-  inherit
-    (lib.genAttrs [
-      "epgtableid0"
-      "hello"
-      "osddemo"
-      "pictures"
-      "servicedemo"
-      "status"
-      "svdrpdemo"
-    ] mkPlugin)
-    ;
 
   femon = stdenv.mkDerivation rec {
     pname = "vdr-femon";
@@ -155,7 +143,7 @@ in
 
     buildInputs = [
       vdr
-      boost
+      boost186
       libgcrypt
     ];
 
@@ -170,3 +158,12 @@ in
     };
   };
 }
+// (lib.genAttrs [
+  "epgtableid0"
+  "hello"
+  "osddemo"
+  "pictures"
+  "servicedemo"
+  "status"
+  "svdrpdemo"
+] mkPlugin)

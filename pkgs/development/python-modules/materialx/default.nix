@@ -8,7 +8,7 @@
   libX11,
   libXt,
   libGL,
-  openimageio_2,
+  openimageio,
   imath,
   python,
   apple-sdk_14,
@@ -16,16 +16,13 @@
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.38.10";
+  version = "1.39.4";
 
-  # nixpkgs-update: no auto update
-  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
-  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    hash = "sha256-XNfXOC76zM5Ns2DyyE3mKCJ1iJaszs1M0rBdVLRDo8E=";
   };
 
   format = "other";
@@ -35,22 +32,22 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs =
-    [
-      openimageio_2
-      imath
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXt
-      libGL
-    ];
+  buildInputs = [
+    openimageio
+    imath
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXt
+    libGL
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
+    (lib.cmakeBool "MATERIALX_BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
       stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin
@@ -66,12 +63,6 @@ buildPythonPackage rec {
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
   '';
-
-  # Update to 1.39 has major API changes and downstream software
-  # needs to adapt, first. So, do not include in mass updates. For reference, see
-  # https://github.com/NixOS/nixpkgs/pull/326466#issuecomment-2293029160
-  # and https://github.com/NixOS/nixpkgs/issues/380230
-  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";

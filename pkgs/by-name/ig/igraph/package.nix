@@ -25,13 +25,13 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.15";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
-    rev = finalAttrs.version;
-    hash = "sha256-TSAVRLeOWh3IQ9X0Zr4CQS+h1vTeUZnzMp/IYujGMn0=";
+    tag = finalAttrs.version;
+    hash = "sha256-SwcihzISSmeVhpMrysOhWrUzVVuB4ZBVEjC0vHJwrdw=";
   };
 
   postPatch = ''
@@ -57,19 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
   ];
 
-  buildInputs =
-    [
-      arpack
-      blas
-      glpk
-      gmp
-      lapack
-      libxml2
-      plfit
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    arpack
+    blas
+    glpk
+    gmp
+    lapack
+    libxml2
+    plfit
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     "-DIGRAPH_USE_INTERNAL_BLAS=OFF"
@@ -93,14 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc "$out/share"
   '';
 
-  postFixup =
-    ''
-      substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
-        --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
-    '';
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+  '';
 
   passthru.tests = {
     python = python3.pkgs.igraph;
@@ -109,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   python3,
-  fetchpatch,
   cmake,
   lingeling,
   btor2tools,
@@ -13,23 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "boolector";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "boolector";
     repo = "boolector";
-    rev = version;
-    hash = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
+    tag = version;
+    hash = "sha256-CKhaPaWUB6Fz0LfnCl81LVmTebCWzTvZLKeC0KH3by4=";
   };
 
-  patches = [
-    # present in master - remove after 3.2.3
-    (fetchpatch {
-      name = "update-unit-tests-to-cpp-14.patch";
-      url = "https://github.com/Boolector/boolector/commit/cc13f371c0c5093d98638ddd213dc835ef3aadf3.patch";
-      hash = "sha256-h8DBhAvUu+wXBwmvwRhHnJv3XrbEpBpvX9D1FI/+avc=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -45,7 +40,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DUSE_LINGELING=YES"
     "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
-  ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
+  ]
+  ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;

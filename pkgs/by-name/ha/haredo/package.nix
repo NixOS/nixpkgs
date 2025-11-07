@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = true;
 
-  env.PREFIX = builtins.placeholder "out";
+  env.PREFIX = placeholder "out";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

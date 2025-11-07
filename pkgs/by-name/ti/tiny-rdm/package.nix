@@ -6,24 +6,23 @@
   npmHooks,
   nodejs,
   wails,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pkg-config,
-  libsoup_3,
   copyDesktopItems,
   makeDesktopItem,
   autoPatchelfHook,
-  nix-update-script,
+  writeScript,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tiny-rdm";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "tiny-craft";
     repo = "tiny-rdm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7e+thMIEYmPHJAePJdEQo1q/Zzf+iKPhlkqrrr2O9iE=";
+    hash = "sha256-LzZsnO14cyYzmEas23Mrf0I+ZZa7y4ZfLg/gPBLcNc8=";
   };
 
   postPatch = ''
@@ -31,13 +30,13 @@ buildGoModule (finalAttrs: {
       --replace-fail "prefStore.autoCheckUpdate" "false"
   '';
 
-  vendorHash = "sha256-LWa0eZibFc7bXYMWgm+/awOaerd6kBrFpk/dDSGoKlE=";
+  vendorHash = "sha256-dv+1yRl0UUo6lkLjfYAgRDR8pMfuh4lM6JapIXNQG9Q=";
 
   env = {
     CGO_ENABLED = 1;
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/frontend";
-      hash = "sha256-/kkLabtYXcipyiBpY2UFYBbbbNYHaFqYSNgLYiwErGc=";
+      hash = "sha256-0QMakUr2QBDYb/BRMALOACsfknrzimgaNkdFMjg73og=";
     };
     npmRoot = "frontend";
   };
@@ -51,15 +50,12 @@ buildGoModule (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    webkitgtk_4_0
-    libsoup_3
-  ];
+  buildInputs = [ webkitgtk_4_1 ];
 
   buildPhase = ''
     runHook preBuild
 
-    wails build -m -trimpath -devtools -tags webkit2_40 -o tiny-rdm
+    wails build -m -trimpath -devtools -tags webkit2_41 -o tiny-rdm
 
     runHook postBuild
   '';
@@ -88,14 +84,29 @@ buildGoModule (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (finalAttrs.env) npmDeps;
+    updateScript = writeScript "update-tiny-rdm" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p bash nix nix-update common-updater-scripts
+      set -eou pipefail
+      version=$(nix eval --log-format raw --raw --file default.nix tiny-rdm.version)
+      nix-update tiny-rdm || true
+      latestVersion=$(nix eval --log-format raw --raw --file default.nix tiny-rdm.version)
+      if [[ "$latestVersion" == "$version" ]]; then
+        exit 0
+      fi
+      update-source-version tiny-rdm "$latestVersion" --source-key=npmDeps --ignore-same-version
+      nix-update tiny-rdm --version skip
+    '';
+  };
 
   meta = {
     description = "Modern, colorful, super lightweight Redis GUI client";
     homepage = "https://github.com/tiny-craft/tiny-rdm";
     mainProgram = "tiny-rdm";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

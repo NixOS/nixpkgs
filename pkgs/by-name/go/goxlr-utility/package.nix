@@ -8,21 +8,21 @@
   dbus,
   openssl,
   speechd-minimal,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "goxlr-utility";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
     rev = "v${version}";
-    hash = "sha256-Z/VqQKmfzqd1htMlXU8sDkOSw2xczb3tG53LVC0MZhM=";
+    hash = "sha256-+hwNevUT9AwMXHUxmjYVrJ3AKaxICrOJZ642GPRq17Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tSlFMMZWsyZBXBeEW64s0eBt/qrAREfOpfxAgcTK4XQ=";
+  cargoHash = "sha256-NzqyBe/qeWtTcAWu2bE3fyhegtxKpQokEEvNxdu/zUo=";
 
   buildInputs = [
     libpulseaudio
@@ -35,9 +35,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     installShellFiles
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildFeatures = [ "tts" ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gtree";
-  version = "1.11.5";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     rev = "v${version}";
-    hash = "sha256-AEzquSbDFy5vXyIjRvVxMp6ArDiPqy0XfPiPVPisobw=";
+    hash = "sha256-wb7VzjAxcxFDOquYd1P9jcqR0ivBIuEUZ1R/812w7Ew=";
   };
 
-  vendorHash = "sha256-N+w8UreFq/SYjZgFh6QNcC/YsCDze/v2jvD0D19dDUs=";
+  vendorHash = "sha256-3r3nriiOtKX6pzSpAI4ro1VqcQRTArocEuleqhYKOj0=";
 
   subPackages = [
     "cmd/gtree"
@@ -42,6 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/ddddddO/gtree";
     changelog = "https://github.com/ddddddO/gtree/releases/tag/${src.rev}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

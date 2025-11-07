@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
   httpx,
   zstandard,
@@ -10,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pbs-installer";
-  version = "2025.03.17";
+  version = "2025.10.31";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "pbs-installer";
     tag = version;
-    hash = "sha256-4SwbxTwl0DQjtYTxFMBg4p9aTyELNIOSRQw9fiweDhg=";
+    hash = "sha256-LVDrUUWxX7APjDJG+Nzij15aeDjDBpz8jj01DQLOL8U=";
   };
 
   build-system = [ pdm-backend ];

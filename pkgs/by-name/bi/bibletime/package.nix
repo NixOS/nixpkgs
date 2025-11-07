@@ -6,15 +6,17 @@
   docbook_xml_dtd_45,
   docbook_xsl_ns,
   fetchFromGitHub,
+  gettext,
+  libxslt,
   perlPackages,
   pkg-config,
-  qt5,
+  qt6,
   stdenv,
   sword,
 }:
 
 let
-  inherit (qt5)
+  inherit (qt6)
     qtbase
     qtsvg
     qttools
@@ -23,18 +25,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
-  version = "3.0.3";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "bibletime";
     repo = "bibletime";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
+    hash = "sha256-kYQjkwfWsEijJ/umOylnfvHgv4u16xr3pkr3ALN4O8c=";
   };
 
   nativeBuildInputs = [
     cmake
     docbook_xml_dtd_45
+    gettext
+    libxslt
     pkg-config
     wrapQtAppsHook
     perlPackages.Po4a
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Powerful cross platform Bible study tool";
     license = lib.licenses.gpl2Plus;
     mainProgram = "bibletime";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

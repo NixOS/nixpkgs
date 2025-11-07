@@ -7,6 +7,7 @@
   libX11,
   makeWrapper,
   sox,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-/2NHUlAojDamNq/EVs8hoBYVikPLAFFFu/2syG4Xo4U=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/EliasOenal/multimon-ng/commit/1c111e83053e9e78ba568463cc015edadf77ed5f.diff";
+      hash = "sha256-gW9ihUn3rZcyurbu7+IhkWSotqWlJsHdeFHu12oVld4=";
+    })
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Multimon is a digital baseband audio protocol decoder";
+    description = "Digital baseband audio protocol decoder";
     mainProgram = "multimon-ng";
     longDescription = ''
       multimon-ng a fork of multimon, a digital baseband audio

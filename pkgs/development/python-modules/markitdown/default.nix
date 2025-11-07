@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   beautifulsoup4,
+  defusedxml,
   ffmpeg-headless,
   magika,
   mammoth,
@@ -29,22 +30,26 @@
 
 buildPythonPackage rec {
   pname = "markitdown";
-  version = "0.1.1";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${version}";
-    hash = "sha256-siXam2a+ryyLBbciQgjd9k6zC8r46LbzjPMoc1dG0wk=";
+    hash = "sha256-bHnJsv4ln1W0lVbWwLmCzQ15KOGJZ9gF2yx4TDuBqBI=";
   };
 
   sourceRoot = "${src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "magika"
+  ];
   dependencies = [
     beautifulsoup4
+    defusedxml
     ffmpeg-headless
     lxml
     magika
@@ -83,7 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

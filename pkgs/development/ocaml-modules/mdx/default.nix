@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   fetchurl,
   buildDunePackage,
   ocaml,
   findlib,
   alcotest,
   astring,
+  cmdliner,
   cppo,
   fmt,
   logs,
@@ -13,19 +15,20 @@
   camlp-streams,
   lwt,
   re,
+  result,
   csexp,
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mdx";
-  version = "2.5.0";
+  version = "2.5.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    hash = "sha256-wtpY19UYLxXARvsyC7AsFmAtLufLmfNJ4/SEHCY2UCk=";
+    url = "https://github.com/realworldocaml/mdx/releases/download/${finalAttrs.version}/mdx-${finalAttrs.version}.tbz";
+    hash = "sha256-3YKYDdERpIBv+akdnS7Xwmrvsdp9zL0V5zw6j2boY/U=";
   };
 
   nativeBuildInputs = [ cppo ];
@@ -34,9 +37,11 @@ buildDunePackage rec {
     fmt
     logs
     csexp
+    cmdliner
     ocaml-version
     camlp-streams
     re
+    result
     findlib
   ];
   checkInputs = [
@@ -44,7 +49,7 @@ buildDunePackage rec {
     lwt
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   outputs = [
     "bin"
@@ -54,7 +59,7 @@ buildDunePackage rec {
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib ${pname}
+    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib mdx
     runHook postInstall
   '';
 
@@ -63,9 +68,9 @@ buildDunePackage rec {
   meta = {
     description = "Executable OCaml code blocks inside markdown files";
     homepage = "https://github.com/realworldocaml/mdx";
-    changelog = "https://github.com/realworldocaml/mdx/raw/${version}/CHANGES.md";
+    changelog = "https://github.com/realworldocaml/mdx/raw/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.romildo ];
     mainProgram = "ocaml-mdx";
   };
-}
+})

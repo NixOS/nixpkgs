@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   libsodium,
   ncurses,
@@ -15,32 +15,33 @@
 let
   buildToxAV = !stdenv.hostPlatform.isAarch32;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtoxcore";
-  version = "0.2.20";
+  version = "0.2.21";
 
-  src =
-    # We need the prepared sources tarball.
-    fetchurl {
-      url = "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
-      hash = "sha256-qciaja6nRdU+XXjnqsuZx7R5LEQApaaccSOPRdYWT0w=";
-    };
+  src = fetchFromGitHub {
+    owner = "TokTok";
+    repo = "c-toxcore";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0lWUKW09JvHa0QDX7v4n5B2ckQrKU9TDkjKegDLTIUw=";
+    fetchSubmodules = true;
+  };
 
   cmakeFlags = [
-    "-DDHT_BOOTSTRAP=ON"
-    "-DBOOTSTRAP_DAEMON=ON"
-  ] ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
+    (lib.cmakeBool "DHT_BOOTSTRAP" true)
+    (lib.cmakeBool "BOOTSTRAP_DAEMON" true)
+  ]
+  ++ lib.optional buildToxAV (lib.cmakeBool "MUST_BUILD_TOXAV" true);
 
-  buildInputs =
-    [
-      libsodium
-      ncurses
-      libconfig
-    ]
-    ++ lib.optionals buildToxAV [
-      libopus
-      libvpx
-    ];
+  buildInputs = [
+    libsodium
+    ncurses
+    libconfig
+  ]
+  ++ lib.optionals buildToxAV [
+    libopus
+    libvpx
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,8 +65,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
-      ehmry
+      zatm8
     ];
     platforms = lib.platforms.all;
   };
-}
+})

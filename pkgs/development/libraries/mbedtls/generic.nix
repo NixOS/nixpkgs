@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  # trivialautovarinit on clang causes test failures
+  hardeningDisable = lib.optional stdenv.cc.isClang "trivialautovarinit";
+
   postConfigure = lib.optionalString enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
@@ -69,5 +72,8 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     maintainers = with maintainers; [ raphaelr ];
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "3.0") [
+      "Mbed TLS 2 is not maintained anymore. Please migrate to newer versions"
+    ];
   };
 }

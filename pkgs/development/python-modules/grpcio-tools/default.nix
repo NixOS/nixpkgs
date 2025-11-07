@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.71.0";
+  version = "1.75.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-ONuo4NXg+yOgNOCWRP3G7YYr4jcYh+7lSQGZno9nkqg=";
+    hash = "sha256-u3iWDPPViUHh/scMvazPJVkYvu0Tw0ESppFabY+s69E=";
   };
 
   outputs = [

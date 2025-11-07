@@ -6,6 +6,7 @@
   python3,
   perlPackages,
   makeWrapper,
+  versionCheckHook,
 }:
 
 let
@@ -17,17 +18,18 @@ let
     perlPackages.GD
     perlPackages.JSONXS
     perlPackages.PathTools
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perlPackages.MemoryProcess ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perlPackages.MemoryProcess ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcov";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
-    rev = "v${version}";
-    hash = "sha256-31318or9AQ7iyu9DNQEvf5jaDzrneOOqOXu0HF1eag4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-msttwM5QlSkeruKoVwZYpymz5JOJRb6QoSeF19AkEGI=";
   };
 
   nativeBuildInputs = [
@@ -42,17 +44,27 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=${finalAttrs.version}"
+    "RELEASE=1"
+  ];
+
   preBuild = ''
     patchShebangs --build bin/{fix.pl,get_version.sh} tests/*/*
-    patchShebangs --host bin/{gen*,lcov,perl2lcov}
-    makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=${lib.getExe perl})
   '';
 
   postInstall = ''
-    for f in "$out"/bin/{gen*,lcov,perl2lcov}; do
+    for f in "$out"/bin/{gen*,lcov,llvm2lcov,perl2lcov}; do
       wrapProgram "$f" --set PERL5LIB ${perlPackages.makeFullPerlPath perlDeps}
     done
   '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Code coverage tool that enhances GNU gcov";
@@ -67,9 +79,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://github.com/linux-test-project/lcov";
+    changelog = "https://github.com/linux-test-project/lcov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -7,6 +7,7 @@
   jfx-bridge,
   networkx,
   platformdirs,
+  ply,
   prompt-toolkit,
   psutil,
   pycparser,
@@ -18,16 +19,25 @@
   writableTmpDirAsHomeHook,
 }:
 
+let
+  # Binary files from https://github.com/binsync/bs-artifacts (only used for testing and only here)
+  binaries = fetchFromGitHub {
+    owner = "binsync";
+    repo = "bs-artifacts";
+    rev = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
+    hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
+  };
+in
 buildPythonPackage rec {
   pname = "libbs";
-  version = "2.13.0";
+  version = "2.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${version}";
-    hash = "sha256-QNiI8qNqh3DlYoGcfExu5PXK1FHXRmcyefMsAfpOMy0=";
+    hash = "sha256-JE/eDs9vOiislIrsgBUx36XFenxgcoLtHA/veOMj2IY=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +48,7 @@ buildPythonPackage rec {
     jfx-bridge
     networkx
     platformdirs
+    ply
     prompt-toolkit
     psutil
     pycparser
@@ -50,6 +61,14 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  # Place test binaries in place
+  preCheck = ''
+    export HOME=$TMPDIR
+    mkdir -p $HOME/bs-artifacts/binaries
+    cp -r ${binaries} $HOME/bs-artifacts/binaries
+    export TEST_BINARIES_DIR=$HOME/bs-artifacts/binaries
+  '';
 
   pythonImportsCheck = [ "libbs" ];
 

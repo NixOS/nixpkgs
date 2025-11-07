@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   ninja,
   intltool,
@@ -46,12 +47,22 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.54.3";
+  version = "3.56.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-dGz4HvXDJa8X9Tsvq0bWcmDzsT2gFNiZTUrZ6Ea4Ves=";
+    hash = "sha256-ff3JrrLasybav9wfhXfE7MEjoS2gAS+MZKcmBlo8Cys=";
   };
+
+  patches = [
+    # fix crash when opening attachment with recent webkitgtk versions
+    # https://gitlab.gnome.org/GNOME/evolution/-/issues/3124
+    # remove when updating to 3.58.0
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/evolution/-/commit/811a6df1f990855e49ecc0ba7b1a7f7a5ec251e6.patch";
+      hash = "sha256-Aj8H7PnAblInX2zRPQH7n0HOdLNuhITNHunWRYCPBsI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

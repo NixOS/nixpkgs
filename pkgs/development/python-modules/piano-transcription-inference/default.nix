@@ -68,7 +68,7 @@ buildPythonPackage rec {
   # Project has no tests.
   # In order to make pythonImportsCheck work, NUMBA_CACHE_DIR env var need to
   # be set to a writable dir (https://github.com/numba/numba/issues/4032#issuecomment-488102702).
-  # pythonImportsCheck has no pre* hook, use checkPhase to wordaround that.
+  # pythonImportsCheck has no pre* hook, use checkPhase to workaround that.
   checkPhase = ''
     export NUMBA_CACHE_DIR="$(mktemp -d)"
   '';

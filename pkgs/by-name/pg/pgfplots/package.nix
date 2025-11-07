@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pgfplots";
-  version = "1.18.1";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgfplots";
     tag = finalAttrs.version;
-    hash = "sha256-cTfOMasBptm0lydKeNHPnjdEyFjEb88awYPn8S2m73c=";
+    hash = "sha256-Qw7H/oCZDtqm6sdCfwDm9SbIxdoemmhj/XCaHZf5/5c=";
   };
 
   installPhase = ''
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://pgfplots.sourceforge.net";
     description = "TeX package to draw plots directly in TeX in two and three dimensions";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

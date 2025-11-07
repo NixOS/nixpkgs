@@ -13,17 +13,18 @@
   openssl,
   unixODBC,
   libmysqlclient,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    hash = "sha256-acq2eja61sH/QHwMPmiDNns2jvXRTk0se/tHj9XRSiU=";
+    hash = "sha256-koREkrfAHWfpqITN5afiXwZg37Wve2Ftx8sr8t2bSV4=";
     rev = "poco-${version}-release";
   };
 
@@ -54,10 +55,26 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  cmakeFlags = [
-    # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
-    (lib.cmakeBool "POCO_UNBUNDLED" true)
-  ];
+  cmakeFlags =
+    let
+      excludeTestsRegex = lib.concatStringsSep "|" [
+        # These tests require running services, which the checkPhase is ill equipeed to provide
+        # TODO get them running in a nixosTest
+        "Redis"
+        "DataODBC"
+        "MongoDB"
+        "DataMySQL"
+        # network not accessible from nix sandbox
+        "NetSSL" # around 25 test failures
+        "Net" # could be made to work when public network access is patched out
+      ];
+    in
+    [
+      # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
+      (lib.cmakeBool "POCO_UNBUNDLED" true)
+      (lib.cmakeBool "ENABLE_TESTS" true)
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
+    ];
 
   patches = [
     # Remove on next release
@@ -67,12 +84,26 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
       hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
     })
+    # https://github.com/pocoproject/poco/issues/4977
+    ./disable-flaky-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./disable-broken-tests-darwin.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ./disable-broken-tests-linux.patch
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [
+    # workaround for some tests trying to write to /homeless-shelter
+    writableTmpDirAsHomeHook
   ];
 
   postFixup = ''
     grep -rlF INTERFACE_INCLUDE_DIRECTORIES "$dev/lib/cmake/Poco" | while read -r f; do
       substituteInPlace "$f" \
-        --replace "$"'{_IMPORT_PREFIX}/include' ""
+        --replace-quiet "$"'{_IMPORT_PREFIX}/include' ""
     done
   '';
 

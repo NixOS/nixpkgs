@@ -20,16 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
   };
 
-  nativeBuildInputs =
-    [
-      flex
-      bison
-      which
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    flex
+    bison
+    which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+    xcbuild
+  ];
 
   buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 

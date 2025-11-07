@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3EHZvgHlM3ldX6SEyqGf6MZIrDFOLXbKTZnJNczT570=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-n9UHyr7W4hrN0+2dsYAYqkP/uzBv74p5XHU0g2MReJY=";
 
   meta = with lib; {
@@ -23,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cristianoliveira/funzzy";
     changelog = "https://github.com/cristianoliveira/funzzy/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

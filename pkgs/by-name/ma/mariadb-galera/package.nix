@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.22";
+  version = "26.4.24";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
-    rev = "release_${version}";
-    hash = "sha256-Vi5gLl53ytgmAGYN/dHLDAaUqNb8mHmeqB/I6Sdbn1I=";
+    tag = "release_${version}";
+    hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";
     fetchSubmodules = true;
   };
 

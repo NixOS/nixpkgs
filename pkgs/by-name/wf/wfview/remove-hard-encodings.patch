@@ -1,0 +1,171 @@
+diff --git a/audioconverter.h b/audioconverter.h
+index d3cf510..308725d 100644
+--- a/audioconverter.h
++++ b/audioconverter.h
+@@ -20,13 +20,8 @@
+ #endif
+ 
+ /* Opus and Eigen */
+-#ifndef Q_OS_LINUX
+-#include "opus.h"
+-#include <Eigen/Eigen>
+-#else
+ #include "opus/opus.h"
+ #include <eigen3/Eigen/Eigen>
+-#endif
+ 
+ #include "wfviewtypes.h"
+ 
+diff --git a/audiodevices.h b/audiodevices.h
+index 3521eb5..0569e49 100644
+--- a/audiodevices.h
++++ b/audiodevices.h
+@@ -13,11 +13,7 @@
+ #include <QFontMetrics>
+ 
+ #include <portaudio.h>
+-#ifndef Q_OS_LINUX
+-#include "RtAudio.h"
+-#else
+ #include "rtaudio/RtAudio.h"
+-#endif
+ 
+ #include "wfviewtypes.h"
+ 
+diff --git a/rthandler.h b/rthandler.h
+index b422cc2..02b1117 100644
+--- a/rthandler.h
++++ b/rthandler.h
+@@ -6,11 +6,7 @@
+ #include <QThread>
+ #include <QMutex>
+ 
+-#ifndef Q_OS_LINUX
+-#include "RtAudio.h"
+-#else
+ #include "rtaudio/RtAudio.h"
+-#endif
+ 
+ 
+ #include <QAudioFormat>
+diff --git a/tciserver.h b/tciserver.h
+index 9b38886..af56763 100644
+--- a/tciserver.h
++++ b/tciserver.h
+@@ -9,13 +9,8 @@
+ #include "cachingqueue.h"
+ 
+ /* Opus and Eigen */
+-#ifndef Q_OS_LINUX
+-#include "opus.h"
+-#include <Eigen/Eigen>
+-#else
+ #include "opus/opus.h"
+ #include <eigen3/Eigen/Eigen>
+-#endif
+ 
+ #define TCI_AUDIO_LENGTH 4096
+ struct tciCommandStruct
+diff --git a/wfmain.h b/wfmain.h
+index 0404fda..e400a74 100644
+--- a/wfmain.h
++++ b/wfmain.h
+@@ -68,11 +68,7 @@
+ #include <memory>
+ 
+ #include <portaudio.h>
+-#ifndef Q_OS_LINUX
+-#include "RtAudio.h"
+-#else
+ #include "rtaudio/RtAudio.h"
+-#endif
+ 
+ #ifdef USB_CONTROLLER
+     #ifdef Q_OS_WIN
+diff --git a/wfview.pro b/wfview.pro
+index a0943bd..e8f97e1 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -62,10 +62,8 @@ win32:DEFINES += __WINDOWS_WASAPI__
+ #linux:DEFINES += __LINUX_OSS__
+ linux:DEFINES += __LINUX_PULSE__
+ macx:DEFINES += __MACOSX_CORE__
+-!linux:SOURCES += ../rtaudio/RTAudio.cpp
+-!linux:HEADERS += ../rtaudio/RTAUdio.h
+-!linux:INCLUDEPATH += ../rtaudio
+ 
++macx:LIBS += -lrtaudio
+ linux:LIBS += -lpulse -lpulse-simple -lrtaudio -lpthread -ludev
+ 
+ win32:INCLUDEPATH += ../portaudio/include
+@@ -107,8 +105,6 @@ win32:RC_ICONS = "resources/icons/Windows/wfview 512x512.ico"
+ 
+ macx{
+     ICON = resources/wfview.icns
+-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+-    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+     MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+     MY_ENTITLEMENTS.value = resources/wfview.entitlements
+     QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
+@@ -120,8 +116,7 @@ macx{
+ 
+ QMAKE_TARGET_BUNDLE_PREFIX = org.wfview
+ 
+-!win32:DEFINES += HOST=\\\"`hostname`\\\" UNAME=\\\"`whoami`\\\"
+-!win32:DEFINES += GITSHORT="\\\"$(shell git -C \"$$PWD\" rev-parse --short HEAD)\\\""
++!win32:DEFINES += HOST=\\\"nixos\\\" UNAME=\\\"nix\\\" GITSHORT=\\\"0.0\\\"
+ 
+ win32:DEFINES += GITSHORT=\\\"$$system(git -C $$PWD rev-parse --short HEAD)\\\"
+ win32:DEFINES += HOST=\\\"$$system(hostname)\\\"
+@@ -169,19 +164,8 @@ macx:LIBS += -framework CoreAudio -framework CoreFoundation -lpthread -lopus
+ 
+ CONFIG(debug, release|debug) {
+ 
+-  macos:LIBS += -L ../qcustomplot/qcustomplot-sharedlib/build -lqcustomplotd
+-
+-  lessThan(QT_MAJOR_VERSION, 6) {
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotd.so/ {print \"-lQCustomPlotd\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd2.so/ {print \"-lqcustomplotd2\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd.so/ {print \"-lqcustomplotd\"}'")
+-
+-  } else {
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotdQt6.so/ {print \"-lQCustomPlotdQt6\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd2qt6.so/ {print \"-lqcustomplotd2qt6\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotdqt6.so/ {print \"-lqcustomplotdqt6\"}'")
+-  }
+-
++  macos:LIBS += -lqcustomplotd
++  linux:LIBS += -lqcustomplotd
+   win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
+       LIBS += -L../opus/win32/VS2015/x64/DebugDLL/
+@@ -211,17 +195,8 @@ CONFIG(debug, release|debug) {
+   }
+ } else {
+ 
+-  macos:LIBS += -L ../qcustomplot/qcustomplot-sharedlib/build -lqcustomplot
+-
+-  lessThan(QT_MAJOR_VERSION, 6) {
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlot.so/ {print \"-lQCustomPlot\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot2.so/ {print \"-lqcustomplot2\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot.so/ {print \"-lqcustomplot\"}'")
+-  } else {
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotQt6.so/ {print \"-lQCustomPlotQt6\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot2qt6.so/ {print \"-lqcustomplot2qt6\"}'")
+-    linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotqt6.so/ {print \"-lqcustomplotqt6\"}'")
+-  }
++  macos:LIBS += -lqcustomplot
++  linux:LIBS += -lqcustomplot
+   win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
+       LIBS += -L../opus/win32/VS2015/x64/ReleaseDLL/
+@@ -264,9 +239,6 @@ win32:LIBS += -lopus -lole32 -luser32
+ #macx:HEADERS += ../qcustomplot/qcustomplot.h
+ 
+ win32:INCLUDEPATH += ../qcustomplot
+-!linux:INCLUDEPATH += ../opus/include
+-!linux:INCLUDEPATH += ../eigen
+-!linux:INCLUDEPATH += ../r8brain-free-src
+ 
+ INCLUDEPATH += resampler
+ 

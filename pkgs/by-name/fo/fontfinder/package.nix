@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-g6PRGHrkHA0JTekKaQs+8mtyOCj99m0zPbgP8AnP7GU=";
   };
 
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mmstick/fontfinder";
     changelog = "https://github.com/mmstick/fontfinder/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fontfinder-gtk";
   };
 }

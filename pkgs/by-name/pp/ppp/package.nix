@@ -2,6 +2,7 @@
   autoreconfHook,
   bash,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   libpcap,
   libxcrypt,
@@ -25,6 +26,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-NV8U0F8IhHXn0YuVbfFr992ATQZaXA16bb5hBIwm9Gs=";
   };
 
+  patches = [
+    # Fix build with gcc15
+    # https://github.com/ppp-project/ppp/pull/548
+    (fetchpatch {
+      url = "https://github.com/ppp-project/ppp/commit/05361692ee7d6260ce5c04c9fa0e5a1aa7565323.patch";
+      hash = "sha256-ybuWyA1t9IJ1Sg06a0b0tin4qssr0qzmenfGoA1X0BE=";
+    })
+  ];
+
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -37,17 +47,16 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      bash
-      libpcap
-      libxcrypt
-      linux-pam
-      openssl
-    ]
-    ++ lib.optionals withSystemd [
-      systemdMinimal
-    ];
+  buildInputs = [
+    bash
+    libpcap
+    libxcrypt
+    linux-pam
+    openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+  ];
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do

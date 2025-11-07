@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "kalibrate-rtl";
-  version = "unstable-2022-02-02";
+  version = "0-unstable-2022-02-02";
 
   src = fetchFromGitHub {
     owner = "steve-m";

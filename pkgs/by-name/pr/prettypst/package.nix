@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fGm3HDMJ12HlVOjLtaS2hcAzVl/jl4nqMYly0aBVRxw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zfx6SDtvn5waKWZB1gVxcvCzP+Rp7+J+txaRHoRfaBM=";
 
   meta = {
@@ -24,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/antonWetzel/prettypst";
     license = lib.licenses.mit;
     mainProgram = "prettypst";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

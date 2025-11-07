@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.16.1";
+  version = "1.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jasonacox";
     repo = "tinytuya";
     tag = "v${version}";
-    hash = "sha256-+ReTNPKMYUXNA5tu7kZM8/7Bh4XjHSjZTiW8ROHkk5M=";
+    hash = "sha256-ojwopholSQPND246PJMmEFSdzyXEZjAIgzpIRfS3VBw=";
   };
 
   build-system = [ setuptools ];

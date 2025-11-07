@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
     cli = [
       click
       consolekit
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     readme = [
       docutils
       readme-renderer
-    ] ++ readme-renderer.optional-dependencies.md;
+    ]
+    ++ readme-renderer.optional-dependencies.md;
   };
 
   meta = {

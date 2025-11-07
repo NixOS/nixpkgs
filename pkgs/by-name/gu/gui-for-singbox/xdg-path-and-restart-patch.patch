@@ -1,0 +1,31 @@
+--- a/bridge/bridge.go
++++ b/bridge/bridge.go
+@@ -41,13 +41,13 @@
+ }
+
+ func CreateApp(fs embed.FS) *App {
+-	exePath, err := os.Executable()
+-	if err != nil {
+-		panic(err)
++	Env.AppName = "GUI.for.SingBox"
++	xdgDataHome := os.Getenv("XDG_DATA_HOME")
++	if xdgDataHome == "" {
++		homeDir, _ := os.UserHomeDir()
++		xdgDataHome = filepath.Join(homeDir, ".local", "share")
+ 	}
+-
+-	Env.BasePath = filepath.Dir(exePath)
+-	Env.AppName = filepath.Base(exePath)
++	Env.BasePath = filepath.Join(xdgDataHome, Env.AppName)
+
+ 	if slices.Contains(os.Args, "tasksch") {
+ 		Env.FromTaskSch = true
+@@ -76,7 +76,7 @@
+ }
+
+ func (a *App) RestartApp() FlagResult {
+-	exePath := Env.BasePath + "/" + Env.AppName
++	exePath := "@basepath@/bin" + "/" + Env.AppName
+
+ 	cmd := exec.Command(exePath)
+ 	SetCmdWindowHidden(cmd)

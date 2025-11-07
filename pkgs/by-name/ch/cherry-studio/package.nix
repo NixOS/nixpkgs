@@ -4,8 +4,8 @@
   fetchFromGitHub,
   yarn-berry_4,
   nodejs,
-  python3,
-  electron,
+  electron_37,
+  autoPatchelfHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -14,17 +14,18 @@
 }:
 
 let
+  electron = electron_37;
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.2.10";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-txzZbtA6Fvc/2cpD9YM5wwtZix+qjtW0B6aAV4I7Ce8=";
+    hash = "sha256-9oEMnGaloY3tFY/qpjTlYbO7n1ORIK49s3N9SGSMvHE=";
   };
 
   postPatch = ''
@@ -41,17 +42,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rKXUGfBL8upKU5MIe9fqHyEETNKsWdiUdsbHmvJPQdQ=";
+    hash = "sha256-LstTTVKXVL6hIC5TiUKeBIcDFaRPdmEjO2LmvVXB7dQ=";
   };
 
   nativeBuildInputs = [
     yarn-berry.yarnBerryConfigHook
     yarn-berry
+    autoPatchelfHook
     makeWrapper
     writableTmpDirAsHomeHook
     copyDesktopItems
-    (python3.withPackages (ps: with ps; [ setuptools ]))
     nodejs
+    (nodejs.python.withPackages (ps: with ps; [ setuptools ]))
   ];
 
   env = {
@@ -62,11 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    cp -r "${electron.dist}" $HOME/.electron-dist
+    chmod -R u+w $HOME/.electron-dist
+
     yarn run electron-vite build
-    yarn run electron-builder --linux --dir \
-      --config electron-builder.yml \
-      -c.electronDist="${electron}/libexec/electron" \
-      -c.electronVersion=${electron.version}
+    yarn run electron-builder --dir \
+      --config=electron-builder.yml \
+      --config.mac.identity=null \
+      --config.electronDist="$HOME/.electron-dist" \
+      --config.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -79,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "cherry-studio --no-sandbox %U";
       terminal = false;
       icon = "cherry-studio";
-      startupWMClass = "Cherry Studio";
+      startupWMClass = "CherryStudio";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/cherrystudio" ];
     })
@@ -87,16 +93,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/lib/cherry-studio
-    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv "dist/mac-${stdenv.hostPlatform.darwinArch}/Cherry Studio.app" "$out/Applications/Cherry Studio.app"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/cherry-studio
+    ${
+      if stdenv.hostPlatform.isAarch64 then
+        "cp -r dist/linux-arm64-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+      else
+        "cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+    }
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
-      --add-flags $out/lib/cherry-studio/resources/app.asar \
+      --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
-
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -107,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CherryHQ/cherry-studio";
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     license = with lib.licenses; [ agpl3Only ];
   };
 })

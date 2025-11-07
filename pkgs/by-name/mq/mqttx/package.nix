@@ -8,7 +8,7 @@
 
 let
   pname = "mqttx";
-  version = "1.11.1";
+  version = "1.12.1";
 
   suffixedUrl =
     suffix:
@@ -16,11 +16,11 @@ let
   sources = {
     "aarch64-linux" = fetchurl {
       url = suffixedUrl "-arm64";
-      hash = "sha256-gRR0gFHqIPXOrSytqERAi7msfrrYXm2xP84Jy+UhrKg=";
+      hash = "sha256-IfxPrr4VjSGFOWjrpiwwq9OKQ33J1YIJKK0ILF9nTXw=";
     };
     "x86_64-linux" = fetchurl {
       url = suffixedUrl "";
-      hash = "sha256-rqzh4whp8NaeQb98mKTu+hL3RXQBEOKgvJKwLhzu+hg=";
+      hash = "sha256-TUtW2heIjTB+mb8U8v90Saz98alha3aFjqHotWW4tgw=";
     };
   };
 
@@ -48,13 +48,13 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful cross-platform MQTT 5.0 Desktop, CLI, and WebSocket client tools";
     homepage = "https://mqttx.app/";
     changelog = "https://github.com/emqx/MQTTX/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "mqttx";
   };
 }

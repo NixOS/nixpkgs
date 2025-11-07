@@ -27,19 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
 
-      substituteInPlace Source/CMakeLists.txt \
-        --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
-    ''
-    # LTO needs special setup on Linux
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace Source/CMakeLists.txt \
-        --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-    '';
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
+  ''
+  # LTO needs special setup on Linux
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
+  '';
 
   strictDeps = true;
 

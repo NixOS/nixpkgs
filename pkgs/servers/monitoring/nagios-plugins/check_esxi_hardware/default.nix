@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "check-esxi-hardware";
-  version = "20250221";
+  version = "20250716";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Napsty";
     repo = "check_esxi_hardware";
     tag = version;
-    hash = "sha256-80yru0ltioxNc6goiMKZGTFmfcyHw3N01zd91DXq9lQ=";
+    hash = "sha256-tw1b2ZmkEIdlqov4JoEDc8cR2AmAiZWocKjir4AFIv0=";
   };
 
   dontBuild = true;

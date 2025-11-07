@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   pkg-config,
   git,
@@ -32,15 +34,16 @@
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
+  miniupnpc,
+  rtmidi,
+  asmjit,
+  glslang,
+  zstd,
+  hidapi,
+  vulkan-memory-allocator,
 }:
 
 let
-  # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17736-c86a25079";
-  rpcs3Version = "0.0.36-17736-c86a25079";
-  rpcs3Revision = "c86a25079518032d73395a79979970acb2581a91";
-  rpcs3Hash = "sha256-e+mT3qn1oz1fh2bqu5YM+m774Can34If57Kd1T1EGbk=";
-
   inherit (qt6Packages)
     qtbase
     qtmultimedia
@@ -48,28 +51,23 @@ let
     qtwayland
     ;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = rpcs3Version;
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = rpcs3Revision;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
     fetchSubmodules = true;
-    hash = rpcs3Hash;
   };
 
-  patches = [
-    # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
-    ./fix-qt6.9-compilation.patch
-  ];
-
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "${rpcs3GitVersion}"
+    #define RPCS3_GIT_VERSION "nixpkgs"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -89,6 +87,13 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
+    (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIUPNPC" true)
+    (lib.cmakeBool "USE_SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "USE_SYSTEM_GLSLANG" true)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "USE_SYSTEM_HIDAPI" true)
+    (lib.cmakeBool "USE_SYSTEM_VULKAN_MEMORY_ALLOCATOR" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -107,36 +112,52 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
-      openal
-      glew
-      vulkan-headers
-      vulkan-loader
-      libpng
-      ffmpeg
-      libevdev
-      zlib
-      libusb1
-      curl
-      wolfssl
-      python3
-      pugixml
-      SDL2 # Still needed by FAudio's CMake
-      sdl3
-      flatbuffers
-      llvm_18
-      libSM
-      opencv
-    ]
-    ++ cubeb.passthru.backendLibs
-    ++ lib.optional faudioSupport faudio
-    ++ lib.optionals waylandSupport [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg
+    libevdev
+    zlib
+    libusb1
+    curl
+    wolfssl
+    python3
+    pugixml
+    SDL2 # Still needed by FAudio's CMake
+    sdl3
+    flatbuffers
+    llvm_18
+    libSM
+    opencv.cxxdev
+    cubeb
+    miniupnpc
+    rtmidi
+    asmjit
+    glslang
+    zstd
+    hidapi
+    vulkan-memory-allocator
+  ]
+  ++ lib.optional faudioSupport faudio
+  ++ lib.optionals waylandSupport [
+    wayland
+    qtwayland
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-qt-6.10.patch";
+      url = "https://github.com/RPCS3/rpcs3/commit/038ee090b731bf63917371a3586c2f7d7cf4e585.patch";
+      hash = "sha256-jTIxsheG9b9zp0JEeWQ73BunAXmEIg5tj4SrWBfdHy8=";
+    })
+  ];
+
+  doInstallCheck = true;
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -153,10 +174,7 @@ stdenv.mkDerivation {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [
-      abbradar
-      neonfuz
       ilian
-      zane
     ];
     license = licenses.gpl2Only;
     platforms = [
@@ -165,4 +183,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "rpcs3";
   };
-}
+})

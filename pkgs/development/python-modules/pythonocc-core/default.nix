@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -32,28 +32,26 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
   ];
-  buildInputs =
-    [
-      glib
-      gnutls
-      libbfd
-      libxml2
-      zlib
-    ]
-    ++ lib.optionals enableGui [
-      gtk2
-    ];
+  buildInputs = [
+    glib
+    gnutls
+    libbfd
+    libxml2
+    zlib
+  ]
+  ++ lib.optionals enableGui [
+    gtk2
+  ];
 
   configureScript = "./build.sh";
-  configureFlags =
-    [
-      "--configure-only"
-      # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
-      "--disable-malloc"
-    ]
-    ++ lib.optionals (!enableGui) [
-      "--topless"
-    ];
+  configureFlags = [
+    "--configure-only"
+    # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
+    "--disable-malloc"
+  ]
+  ++ lib.optionals (!enableGui) [
+    "--topless"
+  ];
 
   enableParallelBuilding = true;
 
@@ -69,5 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

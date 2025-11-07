@@ -11,21 +11,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.20.2";
+  version = "3.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;
-    hash = "sha256-tUOE7lX0vF2WbO4OELCBT/7hN1wfKvcLkiDTvPWNhfg=";
+    hash = "sha256-yaDlK4VG8AlkBiifa+dB+Q6kGhTAWpjpbSkr/vGsfnM=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +33,8 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils

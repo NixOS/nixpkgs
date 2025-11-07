@@ -23,6 +23,7 @@
 }:
 buildPythonPackage rec {
   version = "4.6.11";
+  format = "setuptools";
   pname = "pytest";
 
   src = fetchPypi {
@@ -40,20 +41,19 @@ buildPythonPackage rec {
     mock
   ];
   buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs =
-    [
-      attrs
-      py
-      setuptools
-      six
-      pluggy
-      more-itertools
-      atomicwrites
-      wcwidth
-      packaging
-    ]
-    ++ lib.optionals (!isPy3k) [ funcsigs ]
-    ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  propagatedBuildInputs = [
+    attrs
+    py
+    setuptools
+    six
+    pluggy
+    more-itertools
+    atomicwrites
+    wcwidth
+    packaging
+  ]
+  ++ lib.optionals (!isPy3k) [ funcsigs ]
+  ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
   checkPhase = ''
@@ -95,7 +95,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix

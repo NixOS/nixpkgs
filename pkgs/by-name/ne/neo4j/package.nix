@@ -7,6 +7,7 @@
   openjdk17,
   which,
   gawk,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bashNonInteractive ];
+  strictDeps = true;
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"

@@ -40,10 +40,7 @@ let
     mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      maxbrunet
-      tomasajt
-    ];
+    maintainers = [ lib.maintainers.tomasajt ];
   };
 
   devpod = buildGoModule (finalAttrs: {
@@ -90,7 +87,6 @@ let
     cargoRoot = "src-tauri";
     buildAndTestSubdir = "src-tauri";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-BwuV5nAQcTAtdfK4+NKEt8Cj7gqnatRwHh/BYJJrIPo=";
 
     patches = [
@@ -108,35 +104,33 @@ let
       ./exit-update-checker-loop.patch
     ];
 
-    postPatch =
-      ''
-        ln -s ${lib.getExe devpod} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
+    postPatch = ''
+      ln -s ${lib.getExe devpod} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
 
-        # disable upstream updater
-        jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
-          | sponge src-tauri/tauri.conf.json
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-          --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-      '';
+      # disable upstream updater
+      jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
+        | sponge src-tauri/tauri.conf.json
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    '';
 
-    nativeBuildInputs =
-      [
-        cargo-tauri.hook
-        jq
-        moreutils
-        nodejs
-        yarnConfigHook
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        desktop-file-utils
-        pkg-config
-        wrapGAppsHook3
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        makeBinaryWrapper
-      ];
+    nativeBuildInputs = [
+      cargo-tauri.hook
+      jq
+      moreutils
+      nodejs
+      yarnConfigHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      desktop-file-utils
+      pkg-config
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeBinaryWrapper
+    ];
 
     buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking

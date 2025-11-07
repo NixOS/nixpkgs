@@ -16,10 +16,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
   version = "22.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
-    repo = pname;
+    repo = "mate-tweak";
     rev = version;
     sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };

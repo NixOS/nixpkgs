@@ -2,10 +2,10 @@
 
 grafanaPlugin {
   pname = "volkovlabs-rss-datasource";
-  version = "4.3.0";
-  zipHash = "sha256-HF37azbhlYp8RndUMr7Xs1ajgOTJplVP7rQzGQ0GrU4=";
+  version = "4.4.0";
+  zipHash = "sha256-0/B5E1DSjVq9e+1FAFw0J3Kuc7oud6apP9b07icg1Hk=";
   meta = with lib; {
-    description = "The RSS/Atom data source is a plugin for Grafana that retrieves RSS/Atom feeds and allows visualizing them using Dynamic Text and other panels.";
+    description = "Plugin for Grafana that retrieves RSS/Atom feeds and allows visualizing them using Dynamic Text and other panels";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

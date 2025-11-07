@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "checksumdir";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "to-mc";
     repo = "checksumdir";
-    rev = version;
-    hash = "sha256-PO8sRGFQ1Dt/UYJuFH6Y3EaQVaS+4DJlOQtvF8ZmBWQ=";
+    tag = version;
+    hash = "sha256-rOHRJAK+Or8bwAtzpbINdnEjK3WQcU+4sEZI91tMvAk=";
   };
 
   nativeBuildInputs = [ setuptools ];

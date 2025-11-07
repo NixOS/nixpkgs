@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.7";
+  version = "0.5.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = "click-option-group";
     tag = "v${version}";
-    hash = "sha256-MiTOAgIZZEvU6aLdUpQvLTd7dJpYXU1gJz+ea8C/95Y=";
+    hash = "sha256-ASzX80aZB3SQqz8AgDTJTE1jgY+MgA0P5yTW9m6+Ovk=";
   };
 
   build-system = [
@@ -33,11 +33,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "click_option_group" ];
-
-  disabledTests = [
-    # https://github.com/click-contrib/click-option-group/issues/65
-    "test_missing_group_decl_first_api"
-  ];
 
   meta = with lib; {
     description = "Option groups missing in Click";

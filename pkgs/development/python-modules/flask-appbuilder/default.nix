@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.6.1";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-Z1PZbSjiPb97ShMhkk6oyD9/AW/oAhDFZYkTErEZBmA=";
+    hash = "sha256-MrkDcUCNgHzHnTM3DJenPXOP7HLTTthD/YBtupNprhM=";
   };
 
   propagatedBuildInputs = [
@@ -59,7 +59,8 @@ buildPythonPackage rec {
     pyjwt
     pyyaml
     sqlalchemy-utils
-  ] ++ apispec.optional-dependencies.yaml;
+  ]
+  ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \

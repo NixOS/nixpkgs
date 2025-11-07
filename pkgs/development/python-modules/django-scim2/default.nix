@@ -18,22 +18,15 @@
 
 buildPythonPackage rec {
   pname = "django-scim2";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15five";
     repo = "django-scim2";
     tag = version;
-    hash = "sha256-larDh4f9/xVr11/n/WfkJ2Tx45DMQqyK3ZzkWAvzeig=";
+    hash = "sha256-OsfC6Jc/oQl6nzy3Nr3vkY+XicRxUoV62hK8MHa3LJ8=";
   };
-
-  # remove this when upstream releases a new version > 0.19.0
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry>=0.12" "poetry-core>=1.5.2" \
-      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
 
   build-system = [ poetry-core ];
 
@@ -51,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/15five/django-scim2/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/15five/django-scim2/blob/${src.tag}/CHANGES.txt";
     description = "SCIM 2.0 Service Provider Implementation (for Django)";
     homepage = "https://github.com/15five/django-scim2";
     license = licenses.mit;

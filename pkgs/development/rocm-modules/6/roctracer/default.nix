@@ -19,35 +19,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "roctracer";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-GhnF7rqNLQLLB7nzIp0xNqyqBOwj9ZJ+hzzj1EAaXWU=";
+    hash = "sha256-Dwk5cBZLysmsVA2kwpQM0FQt2KXOGcaZcAw/d8VUaXw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      clr
-    ]
-    ++ lib.optionals buildDocs [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    clr
+  ]
+  ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libxml2
@@ -70,14 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=array-bounds"
   ];
 
-  postPatch =
-    ''
-      export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(test)" ""
-    '';
+  postPatch = ''
+    export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
+  ''
+  + lib.optionalString (!buildTests) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+  '';
 
   # Tests always fail, probably need GPU
   # doCheck = buildTests;

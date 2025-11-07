@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
-    rev = version;
-    sha256 = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
+    tag = version;
+    hash = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
   patches = [
@@ -29,7 +29,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://github.com/grke/burp/commit/1d6c931af7c11f164cf7ad3479781e8f03413496.patch";
-      sha256 = "14sfbfahlankz3xg6v10i8fnmpnmqpp73q9xm0l0hnjh25igv6bl";
+      hash = "sha256-dJn9YhFQWggoqD3hce7F1d5qHYogbPP6+NMqCpVbTpM=";
+    })
+    # Pull upstream fix for backup resuming
+    (fetchpatch {
+      name = "fix-resume.patch";
+      url = "https://github.com/grke/burp/commit/b5ed667f73805b5af9842bb0351f5af95d4d50b3.patch";
+      hash = "sha256-MT9D2thLgV4nT3LsIDHZp8sWQF2GlOENj0nkOQXZKuk=";
     })
   ];
 
@@ -45,14 +51,15 @@ stdenv.mkDerivation rec {
     openssl_legacy
     zlib
     uthash
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
 
   installFlags = [ "localstatedir=/tmp" ];
 
   meta = with lib; {
-    description = "BURP - BackUp and Restore Program";
+    description = "BackUp and Restore Program";
     homepage = "https://burp.grke.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ arjan-s ];

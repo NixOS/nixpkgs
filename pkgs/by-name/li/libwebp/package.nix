@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   threadingSupport ? true, # multi-threading
   openglSupport ? false,
@@ -29,18 +30,30 @@
   opencv,
   python3,
   vips,
+  testers,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebp";
     rev = "v${version}";
-    hash = "sha256-DMHP7DVWXrTsqU0m9tc783E6dNO0EQoSXZTn5kZOtTg=";
+    hash = "sha256-7i4fGBTsTjAkBzCjVqXqX4n22j6dLgF/0mz4ajNA45U=";
   };
+
+  patches = [
+    # Fixes endianness-related behaviour in build result when targeting big-endian via CMake
+    # https://groups.google.com/a/webmproject.org/g/webp-discuss/c/wvBsO8n8BKA/m/eKpxLuagAQAJ
+    (fetchpatch {
+      name = "0001-libwebp-Fix-endianness-with-CMake.patch";
+      url = "https://github.com/webmproject/libwebp/commit/0e5f4ee3deaba5c4381877764005d981f652791f.patch";
+      hash = "sha256-VNiLv1y3cjSDCNen9KxqbdrldI6EhshTSnsq8g9x8HA=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
@@ -79,6 +92,7 @@ stdenv.mkDerivation rec {
       ;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
+    pkg-config = testers.hasPkgConfigModules { package = libwebp; };
   };
 
   meta = with lib; {
@@ -87,5 +101,15 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ajs124 ];
+    pkgConfigModules = [
+      # configure_pkg_config() calls for these are unconditional
+      "libwebp"
+      "libwebpdecoder"
+      "libwebpdemux"
+      "libsharpyuv"
+    ]
+    ++ lib.optionals libwebpmuxSupport [
+      "libwebpmux"
+    ];
   };
 }

@@ -7,7 +7,6 @@
 
 let
   cfg = config.services.technitium-dns-server;
-  stateDir = "/var/lib/technitium-dns-server";
   inherit (lib)
     mkEnableOption
     mkPackageOption
@@ -61,13 +60,11 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/technitium-dns-server ${stateDir}";
+        ExecStart = "${cfg.package}/bin/technitium-dns-server $STATE_DIRECTORY";
 
         DynamicUser = true;
 
         StateDirectory = "technitium-dns-server";
-        WorkingDirectory = stateDir;
-        BindPaths = stateDir;
 
         Restart = "always";
         RestartSec = 10;

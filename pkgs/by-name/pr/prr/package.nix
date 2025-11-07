@@ -4,25 +4,27 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  cacert,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "prr";
-  version = "0.17.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "danobi";
     repo = "prr";
     rev = "v${version}";
-    hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
+    hash = "sha256-G8/T3Jyr0ZtY302AvYxhaC+8Ld03cVL5Cuflz62e0mw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VIJFr1HpXMC2DXt79Yb1DuLYSbo9g6zsXaNDTXjtlR4=";
+  cargoHash = "sha256-R3gycEs9k0VSNd0tD8Fzgbu2ibhGvXgw8H1mnSlQMug=";
 
   buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  checkInputs = [ cacert ];
 
   meta = with lib; {
     description = "Tool that brings mailing list style code reviews to Github PRs";

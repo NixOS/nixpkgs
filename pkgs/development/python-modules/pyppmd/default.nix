@@ -35,6 +35,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [
     "pyppmd"
   ];

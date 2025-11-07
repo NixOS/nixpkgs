@@ -29,14 +29,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocelot-desktop";
-  version = "1.13.1";
+  version = "1.14.1";
 
   __darwinAllowLocalNetworking = true;
 
   # Cannot build from source because sbt/scala support is completely non-existent in nixpkgs
   src = fetchurl {
     url = "https://gitlab.com/api/v4/projects/9941848/packages/generic/ocelot-desktop/v${finalAttrs.version}/ocelot-desktop-v${finalAttrs.version}.jar";
-    hash = "sha256-aXjz2H4vO8D7BGHxhanbmpxqd8op31v1Gwk/si4CBfg=";
+    hash = "sha256-OO+fgb9PO72znb2sU0olxFf+YuWZvgZkWdszFPpMZg8=";
   };
 
   dontUnpack = true;
@@ -77,14 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/{bin,share/${finalAttrs.pname}}
-      install -Dm644 ${finalAttrs.src} $out/share/${finalAttrs.pname}/ocelot-desktop.jar
+      mkdir -p $out/{bin,share/ocelot-desktop}
+      install -Dm644 ${finalAttrs.src} $out/share/ocelot-desktop/ocelot-desktop.jar
 
       makeBinaryWrapper ${jre}/bin/java $out/bin/ocelot-desktop \
         --set JAVA_HOME ${jre.home} \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}" \
         --prefix PATH : "${lib.makeBinPath runtimePrograms}" \
-        --add-flags "-jar $out/share/${finalAttrs.pname}/ocelot-desktop.jar"
+        --add-flags "-jar $out/share/ocelot-desktop/ocelot-desktop.jar"
 
       # copy icons from zip file
       # ocelot/desktop/images/icon*.png
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       for size in 16 32 64 128 256; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        unzip -p $out/share/${finalAttrs.pname}/ocelot-desktop.jar \
+        unzip -p $out/share/ocelot-desktop/ocelot-desktop.jar \
           ocelot/desktop/images/icon"$size".png > $out/share/icons/hicolor/"$size"x"$size"/apps/ocelot-desktop.png
       done
 
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "An advanced OpenComputers emulator";
+    description = "Advanced OpenComputers emulator";
     homepage = "https://ocelot.fomalhaut.me/desktop";
     changelog = "https://gitlab.com/cc-ru/ocelot/ocelot-desktop/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;

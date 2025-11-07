@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   nodejs,
   node-gyp,
   inter,
@@ -15,22 +17,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.23.2";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cm6e1XEmMHzQ3vODxa9+Yuwt+9zLvQ9S7jmwAozjA/k=";
+    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
   };
 
   patches = [
     ./patches/use-local-font.patch
-    ./patches/fix-migrations-path.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
   postPatch = ''
-    ln -s ${inter}/share/fonts/truetype ./apps/landing/app/fonts
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
   '';
 
@@ -52,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-HZb11CAbnlGSmP/Gxyjncd/RuIWkPv3GvwYs9QZ12Ss=";
+    fetcherVersion = 1;
+    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
   };
   buildPhase = ''
     runHook preBuild
@@ -72,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "Building apps/cli"
     pushd apps/cli
+    pnpm run build
+    popd
+
+    echo "Building apps/workers"
+    pushd apps/workers
     pnpm run build
     popd
 
@@ -124,6 +130,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # remove hardcoded version if upstream syncs general version with cli
+        # version
+        version = "0.25.0";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://karakeep.app/";

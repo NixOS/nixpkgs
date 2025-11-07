@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goodvibes";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
     rev = "v${version}";
-    hash = "sha256-AHw8KlU1lmgH837GOpxGBgngwRIs5XV3+TvH4MuCx54=";
+    hash = "sha256-Lh4FPH0Bdxg2J4IxsZPs8Zjc7Tcobb4bTpvJzVNIy0Y=";
   };
 
   nativeBuildInputs = [
@@ -36,22 +36,21 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      glib
-      # for libsoup TLS support
-      glib-networking
-      gtk3
-      libsoup_3
-      keybinder3
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    glib
+    # for libsoup TLS support
+    glib-networking
+    gtk3
+    libsoup_3
+    keybinder3
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   postPatch = ''
     patchShebangs scripts

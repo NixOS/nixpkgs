@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   installShellFiles,
   fetchFromGitHub,
@@ -8,21 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";
-  version = "0.30.3";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "pamburus";
     repo = "hl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-18FzXUvpMHu3EfECgcslhReinMM6Oa1qdTKbbqFiv1w=";
+    hash = "sha256-SYPzYdbrXltBk/A5T/yZo3IJXdowsHk38yL86BreF0k=";
   };
 
-  cargoHash = "sha256-qx3NxWgCsCurU+TObQIvn1Xyn5IRP/iNem3s201MD4A=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-1iBpzoTyNB6ECDuGW26JMdu2YolrPmIT040V35Pi+C4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hl \
       --bash <($out/bin/hl --shell-completions bash) \
       --fish <($out/bin/hl --shell-completions fish) \

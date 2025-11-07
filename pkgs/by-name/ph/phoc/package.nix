@@ -19,17 +19,27 @@
   wayland,
   libdrm,
   libxkbcommon,
-  wlroots_0_17,
+  wlroots_0_19,
   xorg,
-  directoryListingUpdater,
+  nix-update-script,
   nixosTests,
   testers,
   gmobile,
 }:
 
+let
+  # Derived from subprojects/gvdb.wrap
+  gvdb = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gvdb";
+    rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
+    hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.44.1";
+  version = "0.50.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -37,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Whke7wTRp5NaRauiiQZLjs0pSD1uAyr0aAhlK5e1+Hw=";
+    hash = "sha256-Fq/XinXdFerzuutjXUGbpvAvJBt/23ISHvY5KfVgbFI=";
   };
 
   nativeBuildInputs = [
@@ -66,11 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
     gmobile
   ];
 
+  postPatch = ''
+    ln -s ${gvdb} subprojects/gvdb
+  '';
+
   mesonFlags = [ "-Dembed-wlroots=disabled" ];
 
   # Patch wlroots to remove a check which crashes Phosh.
   # This patch can be found within the phoc source tree.
-  wlroots = wlroots_0_17.overrideAttrs (old: {
+  wlroots = wlroots_0_19.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
@@ -87,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -98,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       masipcat
       zhaofengli
+      armelclo
     ];
     platforms = platforms.linux;
   };

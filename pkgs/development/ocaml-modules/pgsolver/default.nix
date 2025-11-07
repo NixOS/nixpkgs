@@ -1,9 +1,11 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildOasisPackage,
   ounit,
-  tcslib,
+  tcs-lib,
+  extlib,
   ocaml-sat-solvers,
 }:
 
@@ -18,9 +20,25 @@ buildOasisPackage rec {
     sha256 = "16skrn8qql9djpray25xv66rjgfl20js5wqnxyq1763nmyizyj8a";
   };
 
+  # Compatibility with ocaml-sat-solvers 0.8
+  patches = fetchpatch {
+    url = "https://github.com/tcsprojects/pgsolver/commit/e57a4fc5c8050b8d4ada5583a6c65ecf8cd65141.patch";
+    hash = "sha256-QFKxWByptnCl1SfleNASyXmKM2gkh1OE66L8PAZX+TU=";
+    includes = [
+      "src/solvers/*.ml"
+      "src/tools/*.ml"
+    ];
+  };
+
+  # Compatibility with tcs-lib ≥ 0.6
+  postPatch = ''
+    substituteInPlace _oasis --replace-fail TCSLib tcs-lib
+  '';
+
   buildInputs = [ ounit ];
   propagatedBuildInputs = [
-    tcslib
+    extlib
+    tcs-lib
     ocaml-sat-solvers
   ];
 

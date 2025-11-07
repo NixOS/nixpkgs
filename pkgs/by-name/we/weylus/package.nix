@@ -23,62 +23,55 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "weylus";
-  version = "unstable-2025-02-24";
+  version = "unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
-    repo = pname;
-    rev = "5202806798ccca67c24da52ba51ee50b973b7089";
-    sha256 = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
+    repo = "weylus";
+    rev = "56e29ecbde3a4aba994a9df047b5398feb447c1b";
+    hash = "sha256-dHdgWrygSXqKf9fpYRVDj+Ql97Or/kjBfN/mECy2ipc=";
   };
 
-  buildInputs =
-    [
-      ffmpeg
-      x264
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      libva
-      gst_all_1.gst-plugins-base
-      xorg.libXext
-      xorg.libXft
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXrender
-      xorg.libXfixes
-      xorg.libXtst
-      xorg.libXrandr
-      xorg.libXcomposite
-      xorg.libXi
-      xorg.libXv
-      pango
-      libdrm
-      wayland
-      libxkbcommon
-    ];
+  buildInputs = [
+    ffmpeg
+    x264
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+    libva
+    gst_all_1.gst-plugins-base
+    xorg.libXext
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXtst
+    xorg.libXrandr
+    xorg.libXcomposite
+    xorg.libXi
+    xorg.libXv
+    pango
+    libdrm
+    wayland
+    libxkbcommon
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      typescript
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      autoconf
-      libtool
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    typescript
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    autoconf
+    libtool
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "autopilot-0.4.0" = "sha256-1DRuhAAXaIADUmXlDVr8UNbI/Ab2PYdrx9Qh0j9rTX8=";
-    };
-  };
+  cargoHash = "sha256-Mx8/zMG36qztbFYgqC7SB75bf8T0NkYQA+2Hs9/pnjk=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];

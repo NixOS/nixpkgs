@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lainsce";
-    repo = pname;
+    repo = "notejot";
     rev = version;
     hash = "sha256-p5F0OITgfZyvHwndI5r5BE524+nft7A2XfR3BJZFamU=";
   };
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/notejot";
     description = "Stupidly-simple notes app";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "io.github.lainsce.Notejot";
   };

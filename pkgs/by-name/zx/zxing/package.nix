@@ -4,21 +4,30 @@
   fetchurl,
   jre,
 }:
-stdenv.mkDerivation rec {
-  pname = "zxing";
-  version = "3.1.0";
+
+let
+  version = "3.5.3";
+
   # Maven builds are hard to get right
   core_jar = fetchurl {
-    url = "http://repo1.maven.org/maven2/com/google/zxing/core/${version}/core-${version}.jar";
-    sha256 = "199l4xvlcpafqn69r3k9qjpqkw9lvkl02hzpm0ackvdhl7vk42zh";
+    url = "https://repo1.maven.org/maven2/com/google/zxing/core/${version}/core-${version}.jar";
+    hash = "sha256-jYBkwWNv2u9xid2QVcfVmVColAoS8ik5VkRuw8EJ/YI=";
   };
+
   javase_jar = fetchurl {
-    url = "http://repo1.maven.org/maven2/com/google/zxing/javase/${version}/javase-${version}.jar";
-    sha256 = "0fzxvvf5dqyrs5m9rqw4ffm9h1s27bi7q3jb1dam34s80q2rp2zq";
+    url = "https://repo1.maven.org/maven2/com/google/zxing/javase/${version}/javase-${version}.jar";
+    hash = "sha256-1leVt4nvrIohVssqS2SNIOWL/gNhMWW7Xc5ocOzveY4=";
   };
-  inherit jre;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "zxing";
+  inherit version jre;
+
   dontUnpack = true;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/java" "$out/bin"
     cp "${core_jar}" "${javase_jar}" "$out/lib/java"
     substituteAll "${./java-zxing.sh}" "$out/bin/java-zxing"
@@ -26,8 +35,15 @@ stdenv.mkDerivation rec {
     substituteAll "${./zxing-cmdline-encoder.sh}" "$out/bin/zxing-cmdline-encoder"
     substituteAll "${./zxing.sh}" "$out/bin/zxing"
     chmod a+x "$out/bin"/*
-    cd "$out/lib/java"; for i in *.jar; do mv "$i" "''${i#*-}"; done
+    pushd "$out/lib/java"
+    for i in *.jar; do
+      mv "$i" "''${i#*-}"
+    done
+    popd
+
+    runHook postInstall
   '';
+
   meta = {
     description = "1D and 2D code reading library";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
@@ -36,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://github.com/zxing/zxing";
   };
-}
+})

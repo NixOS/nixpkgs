@@ -70,9 +70,9 @@ let
     (wrapNeovimUnstable neovim-unwrapped {
       luaRcContent = "this is an invalid lua statement to break the build";
     }).overrideAttrs
-      ({
+      {
         doCheck = true;
-      });
+      };
 
   nvimAutoDisableWrap = makeNeovimConfig { };
 
@@ -101,10 +101,10 @@ let
   runTest =
     neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}"
-      ({
+      {
         nativeBuildInputs = [ ];
         meta.platforms = neovim-drv.meta.platforms;
-      })
+      }
       (
         ''
           source ${nmt}/bash-lib/assertions.sh
@@ -128,7 +128,7 @@ let
     }
   );
 in
-pkgs.recurseIntoAttrs (rec {
+pkgs.lib.recurseIntoAttrs rec {
 
   inherit nmt;
 
@@ -213,14 +213,14 @@ pkgs.recurseIntoAttrs (rec {
     wrapRc = true;
   });
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs ({
+  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
     plugins = [
       pkgs.vimPlugins.hex-nvim
     ];
     autowrapRuntimeDeps = true;
     # legacy wrapper sets it to false
     wrapRc = true;
-  });
+  };
 
   nvim_with_ftplugin =
     let
@@ -258,6 +258,21 @@ pkgs.recurseIntoAttrs (rec {
     result="$(cat plugin_was_loaded_too_late)"
     echo $result
     [ "$result" = 0 ]
+  '';
+
+  # Generate a neovim wrapper with only a init.lua and no init.vim file
+  nvim_with_only_init_lua = wrapNeovim2 "-only-lua-init-file" {
+    luaRcContent = "-- some text";
+  };
+
+  # check that we do not generate an init.vim file if it is not needed
+  no_init_vim_file = runTest nvim_with_only_init_lua ''
+    ${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.vim"})) == 0 | quit | else | cquit | fi'
+    # This does now work because the lua file is sourced via loadfile() which
+    # does not add the file name to :scriptnames and getscriptinfo().
+    #${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.lua"})) == 1 | quit | else | cquit | fi'
+
+    assertFileRegex ${nvim_with_only_init_lua}/bin/nvim 'VIMINIT=.*init.lua'
   '';
 
   # check that the vim-doc hook correctly generates the tag
@@ -409,4 +424,4 @@ pkgs.recurseIntoAttrs (rec {
   '';
 
   inherit (vimPlugins) corePlugins;
-})
+}

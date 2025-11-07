@@ -5,20 +5,21 @@
   hypothesis,
   jsonpath-ng,
   lupa,
-  poetry-core,
+  hatchling,
   pyprobables,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   redis,
   redisTestHook,
   sortedcontainers,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.26.2";
+  version = "2.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,14 +28,15 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
+    hash = "sha256-esouWM32qe4iO5AcRC0HuUF+lwEDHnyXoknwqsZhr+o=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     redis
     sortedcontainers
+    valkey
   ];
 
   optional-dependencies = {
@@ -47,7 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-mock
     pytestCheckHook
     redisTestHook
@@ -55,7 +57,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fakeredis" ];
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
+
+  disabledTests = [
+    "test_init_args" # AttributeError: module 'fakeredis' has no attribute 'FakeValkey'
+    "test_async_init_kwargs" # AttributeError: module 'fakeredis' has no attribute 'FakeAsyncValkey'"
+
+    # KeyError: 'tot-mem'
+    "test_acl_log_auth_exist"
+    "test_acl_log_invalid_channel"
+    "test_acl_log_invalid_key"
+    "test_client_id"
+    "test_client_info"
+    "test_client_list"
+  ];
 
   preCheck = ''
     redisTestPort=6390
@@ -64,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${src.tag}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

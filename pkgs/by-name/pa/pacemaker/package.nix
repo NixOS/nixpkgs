@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pacemaker";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
     rev = "Pacemaker-${version}";
-    sha256 = "sha256-2Uj81hWNig30baS9a9Uc0+T1lZuADtcSDmn/TX5koL8=";
+    sha256 = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     "--with-corosync"
     # allows Type=notify in the systemd service
     "--enable-systemd"
-  ] ++ lib.optional (!forOCF) "--with-ocfdir=${ocf-resource-agents}/usr/lib/ocf";
+  ]
+  ++ lib.optional (!forOCF) "--with-ocfdir=${ocf-resource-agents}/usr/lib/ocf";
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://clusterlabs.org/pacemaker/";
-    description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters";
+    description = "Open source, high availability resource manager suitable for both small and large clusters";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [

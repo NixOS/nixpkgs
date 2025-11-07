@@ -12,6 +12,7 @@
   gtest,
   dfu-util,
   avrdude,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -25,11 +26,16 @@ mkDerivation rec {
     sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
+  patches = [
+    # fix error "The LOCATION property may not be read from target" and ensure proper linking of Qt modules so build don't fail
+    ./fix-cmake-qt-linking-and-location.patch
+  ];
   nativeBuildInputs = [
     cmake
     gcc-arm-embedded
     python3Packages.pillow
     qttools
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -42,6 +48,12 @@ mkDerivation rec {
     sed -i companion/src/burnconfigdialog.cpp \
       -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|' \
       -e 's|/usr/.*bin/avrdude|${avrdude}/bin/avrdude|'
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0023 OLD)" "cmake_policy(SET CMP0023 NEW)"
+    substituteInPlace companion/src/thirdparty/maxlibqt/src/widgets/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [
@@ -53,6 +65,8 @@ mkDerivation rec {
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "OpenTX Companion transmitter support software";

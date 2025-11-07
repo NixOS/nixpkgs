@@ -2,35 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   jaxtyping,
   linear-operator,
   mpmath,
   scikit-learn,
   scipy,
-  setuptools,
-  setuptools-scm,
   torch,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.14";
+  version = "1.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
-    repo = pname;
+    repo = "gpytorch";
     tag = "v${version}";
-    hash = "sha256-whZjqAs3nyjKMzAGi+OnyBtboq0UuV8m11A4IzkWtec=";
+    hash = "sha256-yDIGiA7q4e6T7SdnO+ALcc3ezmJK964T5Nn48+NGJV8=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
   ];
-
-  pythonRelaxDeps = [ "jaxtyping" ];
 
   dependencies = [
     jaxtyping
@@ -56,10 +60,12 @@ buildPythonPackage rec {
     "test_t_matmul_matrix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    downloadPage = "https://github.com/cornellius-gp/gpytorch";
+    changelog = "https://github.com/cornellius-gp/gpytorch/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

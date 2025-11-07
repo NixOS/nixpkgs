@@ -8,15 +8,15 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmenu";
-  version = "4.5.5";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xmenu";
-    rev = "v${version}";
-    sha256 = "sha256-Gg4hSBBVBOB/wlY44C5bJOuOnLoA/tPvcNZamXae/WE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pCjL6cTH6hMzSV1L6wdMjfA2Dbf85KKCnBxmI9ibc7Y=";
   };
 
   buildInputs = [
@@ -26,14 +26,17 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch = "sed -i \"s:/usr/local:$out:\" config.mk";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LOCALINC=${placeholder "out"}/include"
+    "LOCALLIB=${placeholder "out"}/lib"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ neonfuz ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "xmenu";
   };
-}
+})

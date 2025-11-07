@@ -4,8 +4,11 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  ghostunnel,
   apple-sdk_12,
   darwinMinVersionHook,
+  writeScript,
+  runtimeShell,
 }:
 
 buildGoModule rec {
@@ -39,12 +42,21 @@ buildGoModule rec {
     podman = nixosTests.podman-tls-ghostunnel;
   };
 
-  meta = with lib; {
+  passthru.services.default = {
+    imports = [
+      (lib.modules.importApply ./service.nix {
+        inherit writeScript runtimeShell;
+      })
+    ];
+    ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
+  };
+
+  meta = {
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       roberth
       mjm
     ];

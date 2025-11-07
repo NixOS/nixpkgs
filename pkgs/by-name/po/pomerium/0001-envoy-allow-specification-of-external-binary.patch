@@ -1,4 +1,4 @@
-From dfb6e2797e7c9166c8dd3dc0d87a4d91474244c7 Mon Sep 17 00:00:00 2001
+From 640d11fae5bcf1fa8c1a54facbe168a256cacc1b Mon Sep 17 00:00:00 2001
 From: Morgan Helton <mhelton@gmail.com>
 Date: Sun, 26 May 2024 12:17:01 -0500
 Subject: [PATCH] envoy: allow specification of external binary
@@ -8,7 +8,7 @@ Subject: [PATCH] envoy: allow specification of external binary
  1 file changed, 16 insertions(+), 4 deletions(-)
 
 diff --git a/pkg/envoy/envoy.go b/pkg/envoy/envoy.go
-index 8224f364..bb8b6506 100644
+index 85c725629..4a726a44b 100644
 --- a/pkg/envoy/envoy.go
 +++ b/pkg/envoy/envoy.go
 @@ -8,9 +8,9 @@ import (
@@ -21,8 +21,8 @@ index 8224f364..bb8b6506 100644
 -	"path"
  	"path/filepath"
  	"regexp"
- 	"strconv"
-@@ -35,8 +35,17 @@ import (
+ 	"runtime"
+@@ -36,8 +36,17 @@ import (
  
  const (
  	configFileName = "envoy-config.yaml"
@@ -40,7 +40,7 @@ index 8224f364..bb8b6506 100644
  // A Server is a pomerium proxy implemented via envoy.
  type Server struct {
  	ServerOptions
-@@ -94,14 +103,17 @@ func NewServer(ctx context.Context, src config.Source, builder *envoyconfig.Buil
+@@ -95,14 +104,17 @@ func NewServer(ctx context.Context, src config.Source, builder *envoyconfig.Buil
  		log.Ctx(ctx).Debug().Err(err).Msg("couldn't preserve RLIMIT_NOFILE before starting Envoy")
  	}
  
@@ -62,5 +62,5 @@ index 8224f364..bb8b6506 100644
  		grpcPort:      src.GetConfig().GRPCPort,
  		httpPort:      src.GetConfig().HTTPPort,
 -- 
-2.48.1
+2.49.0
 

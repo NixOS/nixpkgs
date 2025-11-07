@@ -3,38 +3,40 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   mkdocs,
   mkdocs-material,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-redoc-tag";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-redoc-tag";
     tag = "v${version}";
-    hash = "sha256-TOGFch+Uto3qeVMaHqK8SEy0v0cKtHofoGE8T1mnBOk=";
+    hash = "sha256-pgJMcK8LZOj0niyRcbHi8Szsro2iNTj6hz6r24jrtVw=";
   };
+
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     mkdocs
     beautifulsoup4
   ];
 
-  nativeBuildInputs = [ setuptools ];
-
   nativeCheckInputs = [
     mkdocs-material
     pytestCheckHook
   ];
+
+  pytestFlags = [ "-s" ];
 
   meta = with lib; {
     description = "MkDocs plugin supports for add Redoc UI in page";

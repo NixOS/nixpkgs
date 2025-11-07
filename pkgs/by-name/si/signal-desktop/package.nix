@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_35,
+  electron_38,
   python3,
   makeWrapper,
   callPackage,
@@ -14,29 +14,16 @@
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs ? "",
+
   withAppleEmojis ? false,
 }:
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_35;
-
-  nodeOS =
-    {
-      "linux" = "linux";
-      "darwin" = "darwin";
-    }
-    .${stdenv.hostPlatform.parsed.kernel.name}
-      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.kernel.name}");
-
-  nodeArch =
-    {
-      # https://nodejs.org/api/os.html#osarch
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
+  electron = electron_38;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -65,13 +52,13 @@ let
     '';
   });
 
-  version = "7.52.0";
+  version = "7.77.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-dV99PUcXhFwdI6VmS3tuvLYNkPMJOFhxg+lbDqIV7Ms=";
+    hash = "sha256-IFMNUuGL3sQVlEJI4N2rXrYStcDEZW/YxmZyPM0hhVU=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -81,9 +68,11 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-TuPyRVNFIlR0A4YHMpQsQ6m+lm2fsp79FzQ1P5qqjIc=";
+      fetcherVersion = 1;
+      hash = "sha256-m/JxsKnVhcya7dUz1MBMQKwEdqoV3xQiGOoT4egh3K4=";
     };
 
+    strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpm.configHook
@@ -106,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop";
   inherit src version;
 
+  strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
@@ -122,6 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  postPatch = ''
+    # The spell checker dictionary URL interpolates the electron version,
+    # however, the official website only provides dictionaries for electron
+    # versions which they vendor into the binary releases. Since we unpin
+    # electron to use the one from nixpkgs the URL may point to nonexistent
+    # resource if the nixpkgs version is different. To fix this we hardcode
+    # the electron version to the declared one here instead of interpolating
+    # it at runtime.
+    substituteInPlace app/updateDefaultSession.main.ts \
+      --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+  '';
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
@@ -129,26 +131,27 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-fCA1tBpj0l3Ur9z1o1IAz+HtfDlC5DzPa3m1/8NsFkY="
+        "sha256-RquJqKUDdz8QRJXz7eWiAcdUF+WhYEqnyOkhrIw7tgQ="
       else
-        "sha256-XQzjctXrpIy1zCWshJY2bA1BvKJ2o2cBA8/ikNYKXok=";
+        "sha256-v1KbjFLo5pD1uoNtDrX2kUbhCgGeEqbuHLZRIJqshHw=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1745425141;
+    SOURCE_DATE_EPOCH = 1761859038;
   };
 
   preBuild = ''
-    if [ "`jq -r '.engines.node' < package.json | head -c 2`" != `head -c 2 <<< "${nodejs.version}"` ]
+    if [ "`jq -r '.engines.node' < package.json | cut -d. -f1`" != "${lib.versions.major nodejs.version}" ]
     then
       die "nodejs version mismatch"
     fi
 
-    if [ "`jq -r '.devDependencies.electron' < package.json | head -c 2`" != `head -c 2 <<< "${electron.version}"` ]
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1`" != "${lib.versions.major electron.version}" ]
     then
       die "electron version mismatch"
     fi
@@ -168,14 +171,21 @@ stdenv.mkDerivation (finalAttrs: {
       die "ringrtc version mismatch"
     fi
 
-    mkdir -p node_modules/@signalapp/ringrtc/build
     install -D ${ringrtc}/lib/libringrtc${stdenv.hostPlatform.extensions.library} \
-      node_modules/@signalapp/ringrtc/build/${nodeOS}/libringrtc-${nodeArch}.node
+      node_modules/@signalapp/ringrtc/build/libringrtc.node
 
-    rm -fr node_modules/@signalapp/libsignal-client/prebuilds
+    substituteInPlace package.json \
+      --replace-fail '"node_modules/@signalapp/ringrtc/build/''${platform}/*''${arch}*.node",' \
+                     '"node_modules/@signalapp/ringrtc/build/libringrtc.node",'
+
+    substituteInPlace node_modules/@signalapp/ringrtc/dist/ringrtc/Native.js \
+      --replace-fail 'exports.default = require(`../../build/''${os.platform()}/libringrtc-''${process.arch}.node`);' \
+                     'exports.default = require(`../../build/libringrtc.node`);'
+
+    rm -r node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
 
-    rm -fr node_modules/@signalapp/sqlcipher
+    rm -r node_modules/@signalapp/sqlcipher
     cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
   '';
 
@@ -189,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run generate
     pnpm exec electron-builder \
-      --dir \
+      --linux "dir:${stdenv.hostPlatform.node.arch}" \
       --config.extraMetadata.environment=$SIGNAL_ENV \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
@@ -211,14 +221,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "signal";
       desktopName = "Signal";
       exec = "${finalAttrs.meta.mainProgram} %U";
       type = "Application";
@@ -269,6 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
       marcin-serwin
+      teutat3s
     ];
     mainProgram = "signal-desktop";
     platforms = [

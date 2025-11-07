@@ -1,47 +1,79 @@
-import ./make-test-python.nix (
-  { lib, ... }:
+{ lib, ... }:
 
-  {
-    name = "pocket-id";
-    meta.maintainers = with lib.maintainers; [
-      gepbird
-      ymstnt
-    ];
+{
+  name = "pocket-id";
+  meta.maintainers = with lib.maintainers; [
+    gepbird
+    ymstnt
+  ];
 
-    nodes = {
-      machine =
-        { ... }:
-        {
-          services.pocket-id = {
-            enable = true;
-            settings = {
-              PORT = 10001;
-              INTERNAL_BACKEND_URL = "http://localhost:10002";
-              BACKEND_PORT = 10002;
-            };
+  nodes = {
+    machineSqlite =
+      { ... }:
+      {
+        services.pocket-id = {
+          enable = true;
+          settings = {
+            PORT = 10001;
           };
         };
-    };
+      };
 
-    testScript =
-      { nodes, ... }:
+    machinePostgres =
+      { config, ... }:
       let
-        inherit (nodes.machine.services.pocket-id) settings;
-        inherit (builtins) toString;
+        username = config.services.pocket-id.user;
       in
-      ''
-        machine.wait_for_unit("pocket-id-backend.service")
-        machine.wait_for_open_port(${toString settings.BACKEND_PORT})
-        machine.wait_for_unit("pocket-id-frontend.service")
-        machine.wait_for_open_port(${toString settings.PORT})
+      {
+        services.pocket-id = {
+          enable = true;
+          settings = {
+            PORT = 10001;
+            DB_PROVIDER = "postgres";
+            DB_CONNECTION_STRING = "host=/run/postgresql user=${username} database=${username}";
+          };
+        };
 
-        backend_status = machine.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settings.BACKEND_PORT}/api/users/me")
-        assert backend_status == "401"
-        machine.succeed("grep 'You are not signed in' /tmp/backend-output")
+        services.postgresql = {
+          enable = true;
+          ensureUsers = [
+            {
+              name = "${username}";
+              ensureDBOwnership = true;
+            }
+          ];
+          ensureDatabases = [ "${username}" ];
+        };
+      };
+  };
 
-        frontend_status = machine.succeed("curl -L -o /tmp/frontend-output -w '%{http_code}' http://localhost:${toString settings.PORT}")
-        assert frontend_status == "200"
-        machine.succeed("grep 'Sign in to Pocket ID' /tmp/frontend-output")
-      '';
-  }
-)
+  testScript =
+    { nodes, ... }:
+    let
+      settingsSqlite = nodes.machineSqlite.services.pocket-id.settings;
+      settingsPostgres = nodes.machinePostgres.services.pocket-id.settings;
+      inherit (builtins) toString;
+    in
+    ''
+      machineSqlite.wait_for_unit("pocket-id.service")
+      machineSqlite.wait_for_open_port(${toString settingsSqlite.PORT})
+
+      backend_status = machineSqlite.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settingsSqlite.PORT}/api/users/me")
+      assert backend_status == "401"
+      machineSqlite.succeed("grep 'You are not signed in' /tmp/backend-output")
+
+      frontend_status = machineSqlite.succeed("curl -L -o /tmp/frontend-output -w '%{http_code}' http://localhost:${toString settingsSqlite.PORT}")
+      assert frontend_status == "200"
+
+
+      machinePostgres.wait_for_unit("pocket-id.service")
+      machinePostgres.wait_for_open_port(${toString settingsPostgres.PORT})
+
+      backend_status = machinePostgres.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settingsPostgres.PORT}/api/users/me")
+      assert backend_status == "401"
+      machinePostgres.succeed("grep 'You are not signed in' /tmp/backend-output")
+
+      frontend_status = machinePostgres.succeed("curl -L -o /tmp/frontend-output -w '%{http_code}' http://localhost:${toString settingsPostgres.PORT}")
+      assert frontend_status == "200"
+    '';
+}

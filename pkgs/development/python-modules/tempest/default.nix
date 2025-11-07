@@ -33,12 +33,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "43.0.0";
+  version = "45.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Py8SwyBYO35t+xv8oaxLv58owEUX/T9uhp3XM5wjsAI=";
+    hash = "sha256-z+DJ5ODgWaIcYM0orXYA/Ci0hrzfSGkOZt/z7L3DWJs=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];

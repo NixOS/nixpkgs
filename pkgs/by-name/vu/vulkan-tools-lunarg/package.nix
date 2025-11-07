@@ -22,18 +22,18 @@
   vulkan-loader,
   vulkan-utility-libraries,
   writeText,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.4.309.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-M4DM9gUJXB+4npbtxPdVaxsh4AqKQ9J6nexa9y1an9w=";
+    hash = "sha256-kywAcpBYLSlhEbgssXGwMoXQC03QUEz4dwsvI0I8Nh4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     jq
     which
     pkg-config
-    libsForQt5.qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     wayland
     xcbutilkeysyms
     xcbutilwm
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   cmakeFlags = [
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/*
-    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated

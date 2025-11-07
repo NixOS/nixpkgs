@@ -7,7 +7,7 @@
   openssl,
   zeromq,
   cppzmq,
-  tbb_2021_11,
+  onetbb,
   spdlog,
   libsodium,
   fmt,
@@ -32,56 +32,54 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.9.6";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
+    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals enableWayland [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals enableWayland [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zeromq
-      cppzmq
-      tbb_2021_11
-      spdlog
-      libsodium
-      fmt
-      vips
-      nlohmann_json
-      libsixel
-      microsoft-gsl
-      chafa
-      cli11
-      libexif
-      range-v3
-    ]
-    ++ lib.optionals enableOpencv [
-      opencv
-    ]
-    ++ lib.optionals enableWayland [
-      extra-cmake-modules
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals enableX11 [
-      xorg.libX11
-      xorg.xcbutilimage
-    ];
+  buildInputs = [
+    openssl
+    zeromq
+    cppzmq
+    onetbb
+    spdlog
+    libsodium
+    fmt
+    vips
+    nlohmann_json
+    libsixel
+    microsoft-gsl
+    chafa
+    cli11
+    libexif
+    range-v3
+  ]
+  ++ lib.optionals enableOpencv [
+    opencv
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals enableX11 [
+    xorg.libX11
+    xorg.xcbutilimage
+  ];
 
   cmakeFlags =
     lib.optionals (!enableOpencv) [

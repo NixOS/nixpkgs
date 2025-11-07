@@ -1,40 +1,60 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython,
-  ecos,
   eigen,
+
+  # build-system
+  cython,
+  numpy,
+  packaging,
+  scikit-learn,
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  ecos,
   joblib,
   numexpr,
-  numpy,
   osqp,
   pandas,
-  setuptools-scm,
-  scikit-learn,
   scipy,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
     tag = "v${version}";
-    hash = "sha256-El5q2eE6wJKg/8rcFZPZQl7MVxw1jMsggjiCJHj7il8=";
+    hash = "sha256-OvdmZ2vDptYB2tq7OtokIQzjKzhQBWwnXZLW0m6FqlI=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    ln -s ${lib.getInclude eigen}/include/eigen3/Eigen \
+      sksurv/linear_model/src/eigen
+  '';
+
+  build-system = [
     cython
+    numpy
+    packaging
+    scikit-learn
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "osqp"
+  ];
+  dependencies = [
     ecos
     joblib
     numexpr
@@ -49,40 +69,33 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    ln -s ${lib.getInclude eigen}/include/eigen3/Eigen \
-      sksurv/linear_model/src/eigen
-  '';
-
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
   preCheck = ''
-    export HOME=$(mktemp -d)
-    cp -r $TMP/$sourceRoot/tests $HOME
-    pushd $HOME
+    rm -rf sksurv
   '';
-  postCheck = "popd";
 
-  # very long tests, unnecessary for a leaf package
-  disabledTests =
-    [
-      "test_coxph"
-      "test_datasets"
-      "test_ensemble_selection"
-      "test_minlip"
-      "test_pandas_inputs"
-      "test_survival_svm"
-      "test_tree"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-      # floating point mismatch on aarch64
-      # 27079905.88052468 to far from 27079905.880496684
-      "test_coxnet";
+  disabledTests = [
+    # very long tests, unnecessary for a leaf package
+    "test_coxph"
+    "test_datasets"
+    "test_ensemble_selection"
+    "test_minlip"
+    "test_pandas_inputs"
+    "test_survival_svm"
+    "test_tree"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # floating point mismatch on aarch64
+    # 27079905.88052468 to far from 27079905.880496684
+    "test_coxnet"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    changelog = "https://github.com/sebp/scikit-survival/releases/tag/v${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

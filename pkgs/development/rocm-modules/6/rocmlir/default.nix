@@ -5,9 +5,7 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocminfo,
   clr,
-  git,
   libxml2,
   libedit,
   zstd,
@@ -41,33 +39,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals (!buildRockCompiler) [
-      "external"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (!buildRockCompiler) [
+    "external"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-0SQ6uLDRfVfdCX+8a7D6pu6dYlFvX0HFzCDEvlKYfak=";
+    hash = "sha256-p/gvr1Z6yZtO5N+ecSouXiCrf520jt1HMOy/tohUHfI=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    clr
     python3Packages.python
     python3Packages.tomli
   ];
 
   buildInputs = [
-    git
     libxml2
     libedit
   ];
@@ -78,30 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  patches = [
-    ./initparamdata-sort-const.patch
+  cmakeFlags = [
+    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_USE_LINKER=lld"
+    "-DLLVM_ENABLE_ZSTD=FORCE_ON"
+    "-DLLVM_ENABLE_ZLIB=FORCE_ON"
+    "-DLLVM_ENABLE_LIBCXX=ON"
+    "-DLLVM_ENABLE_TERMINFO=ON"
+    "-DROCM_PATH=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeBool "BUILD_FAT_LIBROCKCOMPILER" buildRockCompiler)
+  ]
+  ++ lib.optionals (!buildRockCompiler) [
+    "-DROCM_TEST_CHIPSET=gfx000"
   ];
-
-  cmakeFlags =
-    [
-      "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DLLVM_USE_LINKER=lld"
-      "-DLLVM_ENABLE_ZSTD=FORCE_ON"
-      "-DLLVM_ENABLE_ZLIB=FORCE_ON"
-      "-DLLVM_ENABLE_LIBCXX=ON"
-      "-DLLVM_ENABLE_TERMINFO=ON"
-      "-DROCM_PATH=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      (lib.cmakeBool "BUILD_FAT_LIBROCKCOMPILER" buildRockCompiler)
-    ]
-    ++ lib.optionals (!buildRockCompiler) [
-      "-DROCM_TEST_CHIPSET=gfx000"
-    ];
 
   postPatch = ''
     patchShebangs mlir
@@ -111,12 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace mlir/lib/Analysis/BufferDependencyAnalysis.cpp \
       --replace-fail "enum EffectType { read, write, unknown };" "enum class EffectType { read, write, unknown };"
 
-    # remove when no longer required
-    substituteInPlace mlir/test/{e2e/generateE2ETest.py,fusion/e2e/generate-fusion-tests.py} \
-      --replace-fail "\"/opt/rocm/bin" "\"${rocminfo}/bin"
-
     substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
-      --replace-fail "/opt/rocm" "${clr}"
+      --replace-fail " PATHS /opt/rocm" ""
   '';
 
   dontBuild = true;

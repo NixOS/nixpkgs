@@ -10,20 +10,20 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "opa-envoy-plugin";
-  version = "1.3.0-envoy-1";
+  version = "1.10.0-envoy";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
     tag = "v${version}";
-    hash = "sha256-IJe/JKdsjJ0oJWa35UjxXHiVsm7M1mFwVx5oQ45uuSE=";
+    hash = "sha256-qKLeSpVy/ImeJ2WPLa3uQSHA/6Y4Visb9lgC4PkURkI=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-l/0IaHz1wTNqX/Im8g0fjTqVOtMHSdqSpl0Oo1ByyxA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,7 +67,7 @@ buildGoModule rec {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
     changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${version}/CHANGELOG.md";
-    description = "A plugin to enforce OPA policies with Envoy";
+    description = "Plugin to enforce OPA policies with Envoy";
     longDescription = ''
       OPA-Envoy extends OPA with a gRPC server that implements the Envoy
       External Authorization API. You can use this version of OPA to enforce

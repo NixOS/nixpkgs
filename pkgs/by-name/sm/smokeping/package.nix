@@ -26,24 +26,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  propagatedBuildInputs =
-    [ rrdtool ]
-    ++ (with perlPackages; [
-      perl
-      FCGI
-      CGI
-      CGIFast
-      ConfigGrammar
-      DigestHMAC
-      NetTelnet
-      NetOpenSSH
-      NetSNMP
-      LWP
-      IOTty
-      fping
-      NetDNS
-      perlldap
-    ]);
+  propagatedBuildInputs = [
+    rrdtool
+  ]
+  ++ (with perlPackages; [
+    perl
+    FCGI
+    CGI
+    CGIFast
+    ConfigGrammar
+    DigestHMAC
+    NetTelnet
+    NetOpenSSH
+    NetSNMP
+    LWP
+    IOTty
+    fping
+    NetDNS
+    perlldap
+  ]);
 
   nativeBuildInputs = [ autoreconfHook ];
 

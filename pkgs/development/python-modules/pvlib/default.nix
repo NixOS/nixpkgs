@@ -10,7 +10,6 @@
   pytest-remotedata,
   pytest-rerunfailures,
   pytest-timeout,
-  pythonOlder,
   pytz,
   requests,
   requests-mock,
@@ -21,14 +20,12 @@
 
 buildPythonPackage rec {
   pname = "pvlib";
-  version = "0.12.0";
+  version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IivLe4jyKJROf36TFwgrcYIjK40KXRsUmc/1ACfR6WQ=";
+    hash = "sha256-qT/RGNBIt4fbZsI0SGwFwMZc8J2zRNggg5YbyCat9G8=";
   };
 
   build-system = [

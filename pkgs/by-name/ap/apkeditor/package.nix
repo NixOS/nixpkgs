@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   callPackage,
+  versionCheckHook,
 
   jre,
   gradle,
@@ -40,7 +41,8 @@ let
               fromSource
               binaryBytecode # mitm cache
             ];
-          } // args.meta;
+          }
+          // args.meta;
         }
       );
     in
@@ -53,7 +55,7 @@ let
   apkeditor =
     let
       pname = "apkeditor";
-      version = "1.4.1";
+      version = "1.4.5";
       projectName = "APKEditor";
     in
     REAndroidLibrary {
@@ -68,8 +70,8 @@ let
       src = fetchFromGitHub {
         owner = "REAndroid";
         repo = "APKEditor";
-        rev = "V${version}";
-        hash = "sha256-a72j9qGjJXnTFeqLez2rhBSArFVYCX+Xs7NQd8CY5Yk=";
+        tag = "V${version}";
+        hash = "sha256-yuNMyEnxTjHPSBPWVD8b+f612hWGGayZHKHxtWtxXDg=";
       };
 
       patches = [
@@ -98,8 +100,15 @@ let
           --add-flags "-jar $out/${apkeditor.outJar}"
       '';
 
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [ versionCheckHook ];
+
+      passthru.updateScript = ./update.sh;
+
       meta = {
         description = "Powerful android apk resources editor";
+        homepage = "https://github.com/REAndroid/APKEditor";
+        changelog = "https://github.com/REAndroid/APKEditor/releases/tag/V${version}";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;

@@ -24,7 +24,7 @@ let
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo = pname;
+    repo = "monosat";
     inherit rev sha256;
   };
 
@@ -47,7 +47,10 @@ let
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src patches;
-    postPatch = commonPostPatch;
+    postPatch = commonPostPatch + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.02)" "cmake_minimum_required(VERSION 3.10)"
+    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       zlib
@@ -88,6 +91,7 @@ let
       pytestCheckHook,
     }:
     buildPythonPackage {
+      format = "setuptools";
       inherit
         pname
         version

@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "xZetsubou";
   domain = "localtuya";
-  version = "2025.3.2";
+  version = "2025.10.0";
 
   src = fetchFromGitHub {
     owner = "xZetsubou";
     repo = "hass-localtuya";
-    rev = version;
-    hash = "sha256-6JE2hVD650YE7pSrLt+Ie1QpvHcG0bJ2yrTpwTukBG0=";
+    tag = version;
+    hash = "sha256-PjxDPZK/T4meafMFX3WFoA5ur0NPJsbPOxaOuL0+NWg=";
   };
 
   meta = with lib; {

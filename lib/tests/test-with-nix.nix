@@ -3,9 +3,10 @@
 
   IMPORTANT:
   This is used by the github.com/NixOS/nix CI.
+  This is used by Lix's CI (see flake.nix in the Lix repo).
 
   Try not to change the interface of this file, or if you need to, ping the
-  Nix maintainers for help. Thank you!
+  Nix AND Lix maintainers (`nix eval -f . lib.teams.lix`) for help. Thank you!
 */
 {
   pkgs,
@@ -17,16 +18,6 @@
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
   {
     buildInputs = [
-      (import ./check-eval.nix)
-      (import ./fetchers.nix)
-      (import ./maintainers.nix {
-        inherit pkgs;
-        lib = import ../.;
-      })
-      (import ./teams.nix {
-        inherit pkgs;
-        lib = import ../.;
-      })
       (import ../path/tests {
         inherit pkgs;
       })
@@ -34,7 +25,8 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
     nativeBuildInputs = [
       nix
       pkgs.gitMinimal
-    ] ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
+    ]
+    ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
     strictDeps = true;
   }
   ''
@@ -76,6 +68,12 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
 
     echo "Running lib/tests/systems.nix"
     [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
+
+    echo "Running lib/tests/misc.nix"
+    [[ $(nix-instantiate --eval --strict lib/tests/misc.nix | tee /dev/stderr) == '[ ]' ]];
+
+    echo "Running lib/tests/fetchers.nix"
+    [[ $(nix-instantiate --eval --strict lib/tests/fetchers.nix | tee /dev/stderr) == '[ ]' ]];
 
     mkdir $out
     echo success > $out/${nix.version}

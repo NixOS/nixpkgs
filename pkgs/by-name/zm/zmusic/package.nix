@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zmusic";
-  version = "1.1.14";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
     rev = version;
-    hash = "sha256-rEE3MZLwqnvn5MqbSTCErbsGRjKMK8cC3wTJxtf8WaU=";
+    hash = "sha256-Lg0DN5p2xDB4j+kxa/TxM27rC+GPMK8kaPLajNDMvBg=";
   };
 
   outputs = [
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     libsndfile
     mpg123
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   meta = {
     description = "GZDoom's music system as a standalone library";

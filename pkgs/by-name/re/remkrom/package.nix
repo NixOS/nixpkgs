@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "remkrom";
-  version = "unstable-2020-10-17";
+  version = "0-unstable-2020-10-17";
 
   src = fetchFromGitHub {
     owner = "siraben";
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-DhfNfV9bd0p5dLXKgrVLyugQHK+RHsepeg0tGq5J6cI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-H+SZ+aUQReFJiN2MQHxaI0/bM1sXaSFVlIhedCKBQ0M=";
 
   meta = with lib; {

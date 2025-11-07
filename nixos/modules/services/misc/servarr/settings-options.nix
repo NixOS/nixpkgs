@@ -26,7 +26,7 @@
           };
           server = {
             port = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.port;
               description = "Port Number";
               default = port;
             };

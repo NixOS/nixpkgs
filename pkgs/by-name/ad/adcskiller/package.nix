@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python-based tool designed to automate the process of discovering and exploiting Active Directory Certificate Services (ADCS) vulnerabilities";
     homepage = "https://github.com/grimlockx/ADCSKiller";
-    license = licenses.mit;
-    maintainers = with maintainers; [ exploitoverload ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "ADCSKiller";
   };
 }

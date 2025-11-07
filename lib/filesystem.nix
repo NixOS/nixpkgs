@@ -56,25 +56,7 @@ in
 
     :::
   */
-  pathType =
-    builtins.readFileType or
-    # Nix <2.14 compatibility shim
-    (
-      path:
-      if
-        !pathExists path
-      # Fail irrecoverably to mimic the historic behavior of this function and
-      # the new builtins.readFileType
-      then
-        abort "lib.filesystem.pathType: Path ${toString path} does not exist."
-      # The filesystem root is the only path where `dirOf / == /` and
-      # `baseNameOf /` is not valid. We can detect this and directly return
-      # "directory", since we know the filesystem root can't be anything else.
-      else if dirOf path == path then
-        "directory"
-      else
-        (readDir (dirOf path)).${baseNameOf path}
-    );
+  pathType = builtins.readFileType;
 
   /**
     Whether a path exists and is a directory.
@@ -239,16 +221,15 @@ in
     ```
   */
   listFilesRecursive =
-    dir:
-    lib.flatten (
-      lib.mapAttrsToList (
-        name: type:
-        if type == "directory" then
-          lib.filesystem.listFilesRecursive (dir + "/${name}")
-        else
-          dir + "/${name}"
-      ) (builtins.readDir dir)
-    );
+    let
+      # We only flatten at the very end, as flatten is recursive.
+      internalFunc =
+        dir:
+        (lib.mapAttrsToList (
+          name: type: if type == "directory" then internalFunc (dir + "/${name}") else dir + "/${name}"
+        ) (builtins.readDir dir));
+    in
+    dir: lib.flatten (internalFunc dir);
 
   /**
     Transform a directory tree containing package files suitable for
@@ -385,7 +366,6 @@ in
         recurseIntoAttrs
         removeSuffix
         ;
-      inherit (lib.path) append;
 
       # Generate an attrset corresponding to a given directory.
       # This function is outside `packagesFromDirectoryRecursive`'s lambda expression,
@@ -396,7 +376,7 @@ in
           name: type:
           # for each directory entry
           let
-            path = append directory name;
+            path = directory + "/${name}";
           in
           if type == "directory" then
             {
@@ -429,7 +409,7 @@ in
       directory,
     }@args:
     let
-      defaultPath = append directory "package.nix";
+      defaultPath = directory + "/package.nix";
     in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
@@ -454,4 +434,46 @@ in
       )
     else
       processDir args;
+
+  /**
+    Append `/default.nix` if the passed path is a directory.
+
+    # Type
+
+    ```
+    resolveDefaultNix :: (Path | String) -> (Path | String)
+    ```
+
+    # Inputs
+
+    A single argument which can be a [path](https://nix.dev/manual/nix/stable/language/types#type-path) value or a string containing an absolute path.
+
+    # Output
+
+    If the input refers to a directory that exists, the output is that same path with `/default.nix` appended.
+    Furthermore, if the input is a string that ends with `/`, `default.nix` is appended to it.
+    Otherwise, the input is returned unchanged.
+
+    # Examples
+    :::{.example}
+    ## `lib.filesystem.resolveDefaultNix` usage example
+
+    This expression checks whether `a` and `b` refer to the same locally available Nix file path.
+
+    ```nix
+    resolveDefaultNix a == resolveDefaultNix b
+    ```
+
+    For instance, if `a` is `/some/dir` and `b` is `/some/dir/default.nix`, and `/some/dir/` exists, the expression evaluates to `true`, despite `a` and `b` being different references to the same Nix file.
+  */
+  resolveDefaultNix =
+    v:
+    if pathIsDirectory v then
+      v + "/default.nix"
+    else if lib.isString v && hasSuffix "/" v then
+      # A path ending in `/` can only refer to a directory, so we take the hint, even if we can't verify the validity of the path's `/` assertion.
+      # A `/` is already present, so we don't add another one.
+      v + "default.nix"
+    else
+      v;
 }

@@ -71,18 +71,17 @@ in
       after = [ "network-online.target" ];
       # Since at least devpi-server 6.10.0, devpi requires the secrets file to
       # have 0600 permissions.
-      preStart =
-        ''
-          ${lib.optionalString (
-            !isNull cfg.secretFile
-          ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
+      preStart = ''
+        ${lib.optionalString (
+          !isNull cfg.secretFile
+        ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
 
-          if [ -f ${serverDir}/.nodeinfo ]; then
-            # already initialized the package index, exit gracefully
-            exit 0
-          fi
-          ${cfg.package}/bin/devpi-init --serverdir ${serverDir} ''
-        + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
+        if [ -f ${serverDir}/.nodeinfo ]; then
+          # already initialized the package index, exit gracefully
+          exit 0
+        fi
+        ${cfg.package}/bin/devpi-init --serverdir ${serverDir} ''
+      + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
         LoadCredential = lib.mkIf (!isNull cfg.secretFile) [
@@ -91,25 +90,24 @@ in
         Restart = "always";
         ExecStart =
           let
-            args =
-              [
-                "--request-timeout=5"
-                "--serverdir=${serverDir}"
-                "--host=${cfg.host}"
-                "--port=${builtins.toString cfg.port}"
-              ]
-              ++ lib.optionals (!isNull cfg.secretFile) [
-                "--secretfile=${runtimeDir}/${secretsFileName}"
-              ]
-              ++ (
-                if cfg.replica then
-                  [
-                    "--role=replica"
-                    "--master-url=${cfg.primaryUrl}"
-                  ]
-                else
-                  [ "--role=master" ]
-              );
+            args = [
+              "--request-timeout=5"
+              "--serverdir=${serverDir}"
+              "--host=${cfg.host}"
+              "--port=${builtins.toString cfg.port}"
+            ]
+            ++ lib.optionals (!isNull cfg.secretFile) [
+              "--secretfile=${runtimeDir}/${secretsFileName}"
+            ]
+            ++ (
+              if cfg.replica then
+                [
+                  "--role=replica"
+                  "--master-url=${cfg.primaryUrl}"
+                ]
+              else
+                [ "--role=master" ]
+            );
           in
           "${cfg.package}/bin/devpi-server ${lib.concatStringsSep " " args}";
         DynamicUser = true;

@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0aryfx9qlnjdq3iq2d823c82fhkafvibmbz58g48b8ah5x5fv3ir";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BjUPXsErdLGmZaDIMaY+iV3XcoQHGNZbRmFJb/fblwU=";
 
   meta = with lib; {
     description = "Typing tui with visualized results and historical logging";
     homepage = "https://github.com/thatvegandev/thokr";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "thokr";
   };
 }

@@ -7,6 +7,10 @@
 with lib;
 let
   cfg = config.services.handheld-daemon;
+  hhdPackage = cfg.package.override {
+    withAdjustor = cfg.adjustor.enable;
+    adjustor = cfg.adjustor.package;
+  };
 in
 {
   options.services.handheld-daemon = {
@@ -16,6 +20,18 @@ in
     ui = {
       enable = mkEnableOption "Handheld Daemon UI";
       package = mkPackageOption pkgs "handheld-daemon-ui" { };
+    };
+
+    adjustor = {
+      enable = mkEnableOption "Handheld Daemon TDP control plugin";
+      package = mkPackageOption pkgs "adjustor" { };
+      loadAcpiCallModule = mkOption {
+        type = types.bool;
+        description = ''
+          Whether to load the acpi_call kernel module.
+          Required for TDP control by adjustor on most devices.
+        '';
+      };
     };
 
     user = mkOption {
@@ -28,11 +44,18 @@ in
 
   config = mkIf cfg.enable {
     services.handheld-daemon.ui.enable = mkDefault true;
+    services.handheld-daemon.adjustor.loadAcpiCallModule = mkDefault cfg.adjustor.enable;
     environment.systemPackages = [
-      cfg.package
-    ] ++ lib.optional cfg.ui.enable cfg.ui.package;
+      hhdPackage
+    ]
+    ++ lib.optional cfg.ui.enable cfg.ui.package;
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
+
+    boot.kernelModules = mkIf cfg.adjustor.loadAcpiCallModule [ "acpi_call" ];
+    boot.extraModulePackages = mkIf cfg.adjustor.loadAcpiCallModule [
+      config.boot.kernelPackages.acpi_call
+    ];
 
     systemd.services.handheld-daemon = {
       description = "Handheld Daemon";
@@ -47,7 +70,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --user ${cfg.user}";
+        ExecStart = "${lib.getExe hhdPackage} --user ${cfg.user}";
         Nice = "-12";
         Restart = "on-failure";
         RestartSec = "10";
@@ -55,5 +78,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.appsforartists ];
+  meta.maintainers = [ maintainers.toast ];
 }

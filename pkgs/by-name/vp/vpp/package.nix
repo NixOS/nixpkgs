@@ -38,11 +38,6 @@ let
     ];
   });
 
-  xdp-tools' = xdp-tools.overrideAttrs (old: {
-    postInstall = "";
-    dontDisableStatic = true;
-  });
-
   # in 25.02 only ID seems to be of interest, so keep it simple
   os-release-fake = writeText "os-release-fake" ''
     ID=nixos
@@ -50,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vpp";
-  version = "25.02";
+  version = "25.06";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     rev = "v${version}";
-    hash = "sha256-UDO1mlOEQNCmtR18CCTF+ng5Ms9gfTsnohSygLlPopY=";
+    hash = "sha256-BuHKPQA4qHoADqBg2IztlzUMpbvYKK5uH7ktChSW5vk=";
   };
 
   postPatch = ''
@@ -83,42 +78,46 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
-  ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
+  ]
+  ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optional enableDpdk dpdk'
-    ++ lib.optional enableRdma rdma-core'.dev;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optional enableDpdk dpdk'
+  ++ lib.optional enableRdma rdma-core'.dev;
 
-  buildInputs =
-    [
-      check
-      openssl
-      (python3.withPackages (ps: [ ps.ply ]))
+  buildInputs = [
+    check
+    openssl
+    (python3.withPackages (ps: [ ps.ply ]))
 
-      subunit # vapi tests
-      mbedtls_2 # tlsmbed plugin
-      libpcap # bpf_trace_filter plugin
+    subunit # vapi tests
+    mbedtls_2 # tlsmbed plugin
+    libpcap # bpf_trace_filter plugin
 
-      # linux-cp plugin
-      libnl
-      libmnl
-    ]
-    ++ lib.optionals enableDpdk [
-      # dpdk plugin
-      libelf
-      jansson
-      zlib
-    ]
-    ++ lib.optionals enableAfXdp [
-      # af_xdp plugin
-      libelf
-      libbpf
-      xdp-tools'
-    ];
+    # linux-cp plugin
+    libnl
+    libmnl
+  ]
+  ++ lib.optionals enableDpdk [
+    # dpdk plugin
+    libelf
+    jansson
+    zlib
+  ]
+  ++ lib.optionals enableAfXdp [
+    # af_xdp plugin
+    libelf
+    libbpf
+    xdp-tools
+    zlib
+  ];
+
+  patches = lib.optionals enableAfXdp [
+    ./use-dynamic-libxdp-libbpf.patch
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -126,7 +125,7 @@ stdenv.mkDerivation rec {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
     homepage = "https://s3-docs.fd.io/vpp/${version}/";
     license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ romner-set ];
+    maintainers = with lib.maintainers; [ azey7f ];
     mainProgram = "vpp";
     platforms = lib.platforms.linux;
   };

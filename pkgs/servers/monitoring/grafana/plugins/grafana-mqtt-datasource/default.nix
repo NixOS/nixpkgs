@@ -10,7 +10,7 @@ grafanaPlugin {
     aarch64-darwin = "sha256-i2/lE7QickowFSvHoo7CuaZ1ChFVpsQgZjvuBTQapq4=";
   };
   meta = with lib; {
-    description = "The MQTT data source plugin allows you to visualize streaming MQTT data from within Grafana.";
+    description = "Visualize streaming MQTT data from within Grafana";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

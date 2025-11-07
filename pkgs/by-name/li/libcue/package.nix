@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
+  '';
+
   doCheck = true;
 
   meta = with lib; {
@@ -35,7 +43,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/lipnitsk/libcue";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.unix;
   };
 }

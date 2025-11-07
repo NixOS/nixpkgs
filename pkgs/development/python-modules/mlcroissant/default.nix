@@ -22,6 +22,7 @@
   # tests
   apache-beam,
   gitpython,
+  librosa,
   pillow,
   pytestCheckHook,
   pyyaml,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "mlcroissant";
-  version = "1.0.17";
+  version = "1.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlcommons";
     repo = "croissant";
     tag = "v${version}";
-    hash = "sha256-jiyr8x+YRSsRwOVxDPaWemPqglTKVb5jg4rRzUXd3BE=";
+    hash = "sha256-uJOxKNrK3eN2wyPFEQr2J4+vZeSK1KPyFDag2jcyWZw=";
   };
 
   sourceRoot = "${src.name}/python/mlcroissant";
@@ -58,13 +59,15 @@ buildPythonPackage rec {
     requests
     scipy
     tqdm
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "mlcroissant" ];
 
   nativeCheckInputs = [
     apache-beam
     gitpython
+    librosa
     pillow
     pytestCheckHook
     pyyaml
@@ -88,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "High-level format for machine learning datasets that brings together four rich layers";
     homepage = "https://github.com/mlcommons/croissant";
-    changelog = "https://github.com/mlcommons/croissant/releases/tag/v${version}";
+    changelog = "https://github.com/mlcommons/croissant/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;

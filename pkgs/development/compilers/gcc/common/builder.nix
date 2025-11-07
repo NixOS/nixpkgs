@@ -126,6 +126,20 @@ originalAttrs:
               EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
           fi
 
+          # We include `-fmacro-prefix-map` in `cc-wrapper` for non‐GCC
+          # platforms only, but they get picked up and passed down to
+          # e.g. GFortran calls that complain about the option not
+          # applying to the language. Hack around it by asking GCC not
+          # to complain.
+          #
+          # TODO: Someone please fix this to do things that make sense.
+          if [[ $EXTRA_FLAGS_FOR_BUILD == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_BUILD+=" -Wno-complain-wrong-lang"
+          fi
+          if [[ $EXTRA_FLAGS_FOR_TARGET == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_TARGET+=" -Wno-complain-wrong-lang"
+          fi
+
           # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
           # the startfiles.
           # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
@@ -175,36 +189,34 @@ originalAttrs:
       eval "$oldOpts"
     '';
 
-    preConfigure =
-      (originalAttrs.preConfigure or "")
-      + ''
-        if test -n "$newlibSrc"; then
-            tar xvf "$newlibSrc" -C ..
-            ln -s ../newlib-*/newlib newlib
-            # Patch to get armvt5el working:
-            sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
-        fi
+    preConfigure = (originalAttrs.preConfigure or "") + ''
+      if test -n "$newlibSrc"; then
+          tar xvf "$newlibSrc" -C ..
+          ln -s ../newlib-*/newlib newlib
+          # Patch to get armvt5el working:
+          sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
+      fi
 
-        # Bug - they packaged zlib
-        if test -d "zlib"; then
-            # This breaks the build without-headers, which should build only
-            # the target libgcc as target libraries.
-            # See 'configure:5370'
-            rm -Rf zlib
-        fi
+      # Bug - they packaged zlib
+      if test -d "zlib"; then
+          # This breaks the build without-headers, which should build only
+          # the target libgcc as target libraries.
+          # See 'configure:5370'
+          rm -Rf zlib
+      fi
 
-        if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
-            mkdir -p ../mingw
-            # --with-build-sysroot expects that:
-            cp -R $libcCross/include ../mingw
-            appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
-        fi
+      if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
+          mkdir -p ../mingw
+          # --with-build-sysroot expects that:
+          cp -R $libcCross/include ../mingw
+          appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
+      fi
 
-        # Perform the build in a different directory.
-        mkdir ../build
-        cd ../build
-        configureScript=../$sourceRoot/configure
-      '';
+      # Perform the build in a different directory.
+      mkdir ../build
+      cd ../build
+      configureScript=../$sourceRoot/configure
+    '';
 
     postConfigure = ''
       # Avoid store paths when embedding ./configure flags into gcc.
@@ -266,100 +278,99 @@ originalAttrs:
           makeCompatibilitySymlink lib $targetConfig/lib64
         '';
 
-    postInstall =
-      ''
-        # Clean up our compatibility symlinks (see above)
-        for link in "''${compatibilitySymlinks[@]}"; do
-          echo "Removing compatibility symlink: $link"
-          rm -f "$link"
-        done
+    postInstall = ''
+      # Clean up our compatibility symlinks (see above)
+      for link in "''${compatibilitySymlinks[@]}"; do
+        echo "Removing compatibility symlink: $link"
+        rm -f "$link"
+      done
 
-        # Move target runtime libraries to lib output.
-        # For non-cross, they're in $out/lib; for cross, they're in $out/$targetConfig/lib.
-        targetLibDir="''${targetConfig+$targetConfig/}lib"
+      # Move target runtime libraries to lib output.
+      # For non-cross, they're in $out/lib; for cross, they're in $out/$targetConfig/lib.
+      targetLibDir="''${targetConfig+$targetConfig/}lib"
 
-        moveToOutput "$targetLibDir/lib*.so*" "''${!outputLib}"
-        moveToOutput "$targetLibDir/lib*.dylib" "''${!outputLib}"
-        moveToOutput "$targetLibDir/lib*.dll.a" "''${!outputLib}"
-        moveToOutput "$targetLibDir/lib*.dll" "''${!outputLib}"
-        moveToOutput "share/gcc-*/python" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.so*" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dylib" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dll.a" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dll" "''${!outputLib}"
+      moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
-        if [ -z "$enableShared" ]; then
-            moveToOutput "$targetLibDir/lib*.a" "''${!outputLib}"
-        fi
+      if [ -z "$enableShared" ]; then
+          moveToOutput "$targetLibDir/lib*.a" "''${!outputLib}"
+      fi
 
-        for i in "''${!outputLib}"/$targetLibDir/*.py; do
-            substituteInPlace "$i" --replace "$out" "''${!outputLib}"
-        done
+      for i in "''${!outputLib}"/$targetLibDir/*.py; do
+          substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+      done
 
-        # Multilib and cross can't exist at the same time, so just use lib64 here
-        if [ -n "$enableMultilib" ]; then
-            moveToOutput "lib64/lib*.so*" "''${!outputLib}"
-            moveToOutput "lib64/lib*.dylib" "''${!outputLib}"
-            moveToOutput "lib64/lib*.dll.a" "''${!outputLib}"
-            moveToOutput "lib64/lib*.dll" "''${!outputLib}"
+      # Multilib and cross can't exist at the same time, so just use lib64 here
+      if [ -n "$enableMultilib" ]; then
+          moveToOutput "lib64/lib*.so*" "''${!outputLib}"
+          moveToOutput "lib64/lib*.dylib" "''${!outputLib}"
+          moveToOutput "lib64/lib*.dll.a" "''${!outputLib}"
+          moveToOutput "lib64/lib*.dll" "''${!outputLib}"
 
-            for i in "''${!outputLib}"/lib64/*.py; do
-                substituteInPlace "$i" --replace "$out" "''${!outputLib}"
-            done
-        fi
+          for i in "''${!outputLib}"/lib64/*.py; do
+              substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+          done
+      fi
 
-        # Remove `fixincl' to prevent a retained dependency on the
-        # previous gcc.
-        rm -rf $out/libexec/gcc/*/*/install-tools
-        rm -rf $out/lib/gcc/*/*/install-tools
+      # Remove `fixincl' to prevent a retained dependency on the
+      # previous gcc.
+      rm -rf $out/libexec/gcc/*/*/install-tools
+      rm -rf $out/lib/gcc/*/*/install-tools
 
-        # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
-        rm -rf $out/bin/gccbug
+      # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
+      rm -rf $out/bin/gccbug
 
-        # Remove .la files, they're not adjusted for the makeCompatibilitySymlink magic,
-        # which confuses libtool and leads to weird linking errors.
-        # Removing the files just makes libtool link .so files directly, which is usually
-        # what we want anyway.
-        find $out -name '*.la' -delete
+      # Remove .la files, they're not adjusted for the makeCompatibilitySymlink magic,
+      # which confuses libtool and leads to weird linking errors.
+      # Removing the files just makes libtool link .so files directly, which is usually
+      # what we want anyway.
+      find $out -name '*.la' -delete
 
-        if type "install_name_tool"; then
-            for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
-                install_name_tool -id "$i" "$i" || true
-                for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-                  new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
-                  install_name_tool -change "$old_path" "$new_path" "$i" || true
-                done
-            done
-        fi
+      if type "install_name_tool"; then
+          for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
+              install_name_tool -id "$i" "$i" || true
+              for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
+                new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
+                install_name_tool -change "$old_path" "$new_path" "$i" || true
+              done
+          done
+      fi
 
-        # Get rid of some "fixed" header files
-        rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
+      # Get rid of some "fixed" header files
+      rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
-        # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
-        for i in $out/bin/*-gcc*; do
-            if cmp -s $out/bin/gcc $i; then
-                ln -sfn gcc $i
-            fi
-        done
+      # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
+      for i in $out/bin/*-gcc*; do
+          if cmp -s $out/bin/gcc $i; then
+              ln -sfn gcc $i
+          fi
+      done
 
-        for i in $out/bin/c++ $out/bin/*-c++* $out/bin/*-g++*; do
-            if cmp -s $out/bin/g++ $i; then
-                ln -sfn g++ $i
-            fi
-        done
+      for i in $out/bin/c++ $out/bin/*-c++* $out/bin/*-g++*; do
+          if cmp -s $out/bin/g++ $i; then
+              ln -sfn g++ $i
+          fi
+      done
 
-        # Two identical man pages are shipped (moving and compressing is done later)
-        for i in "$out"/share/man/man1/*g++.1; do
-            if test -e "$i"; then
-                man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
-                ln -sf "$man_prefix"gcc.1 "$i"
-            fi
-        done
-      ''
-      # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
-      # since native-compiles have $lib/lib as a directory (not a
-      # symlink), this ensures that in every case we can assume that
-      # $lib/lib contains the .so files
-      + lib.optionalString isCross ''
-        if [ -e "$lib/$targetConfig/lib" ]; then
-          ln -s "$lib/$targetConfig/lib" "$lib/lib"
-        fi
-      '';
+      # Two identical man pages are shipped (moving and compressing is done later)
+      for i in "$out"/share/man/man1/*g++.1; do
+          if test -e "$i"; then
+              man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
+              ln -sf "$man_prefix"gcc.1 "$i"
+          fi
+      done
+    ''
+    # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
+    # since native-compiles have $lib/lib as a directory (not a
+    # symlink), this ensures that in every case we can assume that
+    # $lib/lib contains the .so files
+    + lib.optionalString isCross ''
+      if [ -e "$lib/$targetConfig/lib" ]; then
+        ln -s "$lib/$targetConfig/lib" "$lib/lib"
+      fi
+    '';
   }
 ))

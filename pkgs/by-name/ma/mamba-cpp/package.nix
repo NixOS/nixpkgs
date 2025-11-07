@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   bzip2,
   cmake,
   cli11,
@@ -15,16 +14,9 @@
   python3,
   versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mamba-cpp";
-  version = "2.1.0";
-
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    tag = version;
-    hash = "sha256-7YR3ToPz80I9d1pRNiEaoIacVyaz2mqzdm0h5WGSb2g=";
-  };
+  inherit (libmamba) version src;
 
   nativeBuildInputs = [ cmake ];
 

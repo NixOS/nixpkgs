@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     tag = version;
-    hash = "sha256-BPZ+5xvKqEaz+tkccVL0hEDAxLkICW5O+qPf73bOqRU=";
+    hash = "sha256-Fgik1TCWDlkyEI9QkXpc/94mGKb7U7hMoamdYU7nTJc=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acme.sh/";
     changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
     description = "Pure Unix shell script implementing ACME client protocol";
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       - IPv6 ready
       - Cron job notifications for renewal or error etc.
     '';
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     teams = [ lib.teams.serokell ];
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";

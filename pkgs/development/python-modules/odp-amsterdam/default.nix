@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
-  version = "6.1.1";
+  version = "6.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     tag = "v${version}";
-    hash = "sha256-ZSo0CNN4NjHQDq3Nx6aqfPEssfty7wNefFX6QG5+pQ4=";
+    hash = "sha256-vamWelyEcwvYI5I9wmKk8kKc7j0OMer/BKgC0pbN4g0=";
   };
 
   postPatch = ''

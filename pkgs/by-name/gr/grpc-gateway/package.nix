@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "grpc-gateway";
-  version = "2.26.3";
+  version = "2.27.3";
 
   src = fetchFromGitHub {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     tag = "v${version}";
-    sha256 = "sha256-e/TPCli2wXyzEpn84hZdtVaAmXJK+d0vMRLilXohiN8=";
+    sha256 = "sha256-NXcfr/+VZnYlK5A/RuTboB33WadoutG7GnACfrWBvwg=";
   };
 
-  vendorHash = "sha256-Des02yenoa6am0xIqto7xlOWHh44F5EBVEhi9t+v644=";
+  vendorHash = "sha256-EgFB5ADytn9h8P2CrM9mr5siX5G4+8HGyWt/upp3yHg=";
 
   ldflags = [
     "-X=main.version=${version}"
@@ -39,7 +39,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A gRPC to JSON proxy generator plugin for Google Protocol Buffers";
+    description = "GRPC to JSON proxy generator plugin for Google Protocol Buffers";
     longDescription = ''
       This is a plugin for the Google Protocol Buffers compiler (protoc). It reads
       protobuf service definitions and generates a reverse-proxy server which

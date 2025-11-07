@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.3.3";
+  version = "2.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     tag = version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
-    hash = "sha256-0ltTmF09EKs+55Mitfe5vxPjmCtnhla6q6SAvhyIQPk=";
+    hash = "sha256-X85co03fMG7OSpkL02n3ektRNzu7oHChtwZzkspsSTk=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   pythonImportsCheck = [ "geventhttpclient" ];
 

@@ -25,20 +25,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shishi";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "mirror://gnu/shishi/shishi-${version}.tar.gz";
-    sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
+    hash = "sha256-lXmP/RLdAaT4jgMR7gPKSibly05ekFmkDk/E2fKRfpI=";
   };
 
   separateDebugInfo = true;
-
-  # Fixes support for gcrypt 1.6+
-  patches = [
-    ./gcrypt-fix.patch
-    ./freebsd-unistd.patch
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -73,21 +67,20 @@ stdenv.mkDerivation rec {
   installFlags = [ "sysconfdir=\${out}/etc" ];
 
   # Fix *.la files
-  postInstall =
-    ''
-      sed -i $out/lib/libshi{sa,shi}.la \
-    ''
-    + optionalString (optLibidn != null) ''
-      -e 's,\(-lidn\),-L${optLibidn.out}/lib \1,' \
-    ''
-    + optionalString (optGnutls != null) ''
-      -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
-    ''
-    + ''
-      -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
-      -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
-      -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
-    '';
+  postInstall = ''
+    sed -i $out/lib/libshi{sa,shi}.la \
+  ''
+  + optionalString (optLibidn != null) ''
+    -e 's,\(-lidn\),-L${optLibidn.out}/lib \1,' \
+  ''
+  + optionalString (optGnutls != null) ''
+    -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
+  ''
+  + ''
+    -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
+    -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
+    -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
+  '';
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/shishi/";

@@ -15,14 +15,14 @@
 let
   self = buildPythonPackage rec {
     pname = "fastapi-cli";
-    version = "0.0.7";
+    version = "0.0.8";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "tiangolo";
       repo = "fastapi-cli";
       tag = version;
-      hash = "sha256-LLk9DMYRqSgiisDfJVP961Blp2u8XLeGDVuDY7IBv/k=";
+      hash = "sha256-7SYsIgRSFZgtIHBC5Ic9Nlh+LtGJDz0Xx1yxMarAuYY=";
     };
 
     build-system = [ pdm-backend ];
@@ -31,12 +31,14 @@ let
       rich-toolkit
       typer
       uvicorn
-    ] ++ uvicorn.optional-dependencies.standard;
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
     optional-dependencies = {
       standard = [
         uvicorn
-      ] ++ uvicorn.optional-dependencies.standard;
+      ]
+      ++ uvicorn.optional-dependencies.standard;
     };
 
     doCheck = false;
@@ -46,7 +48,8 @@ let
     nativeCheckInputs = [
       pytestCheckHook
       rich
-    ] ++ optional-dependencies.standard;
+    ]
+    ++ optional-dependencies.standard;
 
     # coverage
     disabledTests = [ "test_script" ];

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     tag = "v${version}";
-    hash = "sha256-XONgT0qE6SHgHULCnjI9JvqKN1SAnr/Xw/nfeGUwYjs=";
+    hash = "sha256-ERFRLNHD3OhbMEGBEnDLkRYGv4f+bYg9MStS5IarcPA=";
   };
 
   build-system = [ hatchling ];
@@ -65,7 +65,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "securesystemslib" ];
 

@@ -1,5 +1,6 @@
 {
   buildPgrxExtension,
+  cargo-pgrx_0_16_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -8,19 +9,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_16_0;
 
   pname = "pgx_ulid";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "pksunkara";
     repo = "pgx_ulid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VdLWwkUA0sVs5Z/Lyf5oTRhcHVzPmhgnYQhIM8MWJ0c=";
+    hash = "sha256-yjPTCJTeT1HQt8huDHBHs0DAHpmseMHeSaQhpPV6qdo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OyrfwLMHn2aihfijHxE5oaz+XQC1HFlYbTp8Sw8RcK0=";
+  cargoHash = "sha256-LRfn/TO/bBEvvzY9m6C8Lb0qdUStQD3oAzjDovS6H1s=";
 
   postInstall = ''
     # Upstream renames the extension when packaging
@@ -44,6 +45,9 @@ buildPgrxExtension (finalAttrs: {
     homepage = "https://github.com/pksunkara/pgx_ulid";
     changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ myypo ];
+    maintainers = with lib.maintainers; [
+      myypo
+      typedrat
+    ];
   };
 })

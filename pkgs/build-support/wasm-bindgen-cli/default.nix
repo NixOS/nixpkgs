@@ -23,11 +23,12 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   nativeCheckInputs = [ nodejs_latest ];
 
@@ -37,13 +38,16 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
+    homepage = "https://wasm-bindgen.github.io/wasm-bindgen/";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
-    maintainers = with lib.maintainers; [ rizary ];
+    maintainers = with lib.maintainers; [
+      rizary
+      insipx
+    ];
     mainProgram = "wasm-bindgen";
   };
 }

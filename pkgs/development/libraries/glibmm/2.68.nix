@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.82.0";
+  version = "2.84.0";
 
   outputs = [
     "out"
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-OGhM/zFyc2FcZ7j6mAbxYpnVHlUG2bkJuuFbWJ+pnLY=";
+    url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor version}/glibmm-${version}.tar.xz";
+    hash = "sha256-Vu5fUcis/Ar99GlZMW5MhVTLUO0ra8XOOJ2XnLtkJQk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       attrPath = "glibmm_2_68";
       versionPolicy = "odd-unstable";
     };

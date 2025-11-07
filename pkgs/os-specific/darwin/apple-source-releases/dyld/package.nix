@@ -167,5 +167,5 @@ mkAppleDerivation {
 
   dontUseCmakeConfigure = true;
 
-  meta.description = "dyld-related commands for Darwin";
+  meta.description = "Dyld-related commands for Darwin";
 }

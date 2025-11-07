@@ -7,12 +7,12 @@
   alsa-lib,
   curl,
   freetype,
-  gtk3,
   libGL,
   libX11,
+  libXcursor,
   libXext,
   libXinerama,
-  webkitgtk_4_0,
+  libXrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     python3
@@ -36,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     curl
     freetype
-    gtk3
     libGL
     libX11
+    libXcursor
     libXext
     libXinerama
-    webkitgtk_4_0
+    libXrandr
   ];
 
   makeFlags = [
@@ -60,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/{lv2,vst,vst3/Tunefish4.vst3}
+    mkdir -p $out/lib/{lv2,vst,vst3}
 
     pushd src/tunefish4/Builds/LinuxMakefile/build
     cp -r "Tunefish4.lv2" $out/lib/lv2
-    cp -r "Tunefish4.vst3/Contents/x86_64-linux"/* $out/lib/vst3/Tunefish4.vst3
+    cp -r "Tunefish4.vst3" $out/lib/vst3
     cp "Tunefish4.so" $out/lib/vst
     popd
 

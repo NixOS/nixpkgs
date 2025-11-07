@@ -18,6 +18,7 @@
   glib,
   systemd,
   polkit,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    rev = version;
+    tag = version;
     hash = "sha256-sDPipSIT2MJMdsOjOQSB+uOe6KXzVnyAqcQxPPr2NsU=";
   };
 
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -85,6 +87,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dlocalstatedir=/var"
   ];
+
+  doInstallCheck = true;
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";

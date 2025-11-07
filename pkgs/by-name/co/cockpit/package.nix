@@ -16,6 +16,7 @@
   glib-networking,
   gnused,
   gnutls,
+  hostname,
   iproute2,
   json-glib,
   krb5,
@@ -32,21 +33,24 @@
   pkg-config,
   polkit,
   python3Packages,
+  sscg,
   systemd,
   udev,
   xmlto,
-  which,
+  # Enables lightweight NixOS branding, replacing the default Cockpit icons
+  withBranding ? true,
+  nixos-icons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "337";
+  version = "350";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-49ijtHUP0Z1ZfiydFfDlEv290yBVDo8ZsBktokdDu8I=";
+    hash = "sha256-DOMX3msM5Ko7TDMRS+GcAf+gmyogjSExNEM9sjK0cCY=";
     fetchSubmodules = true;
   };
 
@@ -66,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.setuptools
     systemd
     xmlto
-    which
   ];
 
   buildInputs = [
@@ -80,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     python3Packages.pygobject3
     python3Packages.pip
+    bashInteractive
   ];
 
   postPatch = ''
@@ -98,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
 
     substituteInPlace src/**/*.c \
-      --replace '"/bin/sh"' "\"$(which sh)\""
+      --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
 
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \
@@ -147,6 +151,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     # hardcode libexecdir, I am assuming that cockpit only use it to find it's binaries
     printf 'def get_libexecdir() -> str:\n\treturn "%s"' "$out/libexec" >> src/cockpit/packages.py
+
+    # patch paths used as visibility conditions in apps
+    substituteInPlace pkg/*/manifest.json \
+      --replace-warn '"/usr/bin' '"/run/current-system/sw/bin' \
+      --replace-warn '"/usr/sbin' '"/run/current-system/sw/bin' \
+      --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
+      --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
+
+    # replace reference to system python interpreter, used for e.g. sosreport
+    substituteInPlace pkg/lib/python.ts \
+      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
   '';
 
   configureFlags = [
@@ -167,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
+          sscg
           openssl
         ]
       } \
@@ -182,8 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/share/cockpit/issue/update-issue \
       --prefix PATH : ${
         lib.makeBinPath [
-          iproute2
           gnused
+          hostname
+          iproute2
         ]
       }
 
@@ -196,6 +213,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/lib/systemd/*/* \
       --replace-warn /bin /run/current-system/sw/bin
+
+    ${lib.optionalString withBranding ''
+      mkdir -p "$out/share/cockpit/branding/nixos"
+      pushd "$out/share/cockpit/branding/nixos"
+
+      icons="${nixos-icons}/share/icons/hicolor"
+      ln -s "$icons/16x16/apps/nix-snowflake.png" favicon.ico
+      ln -s "$icons/256x256/apps/nix-snowflake.png" logo.png
+      ln -s "$icons/256x256/apps/nix-snowflake.png" apple-touch-icon.png
+      cp "${./branding.css}" branding.css
+
+      popd
+    ''}
 
     runHook postFixup
   '';
@@ -216,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    make check  -j$NIX_BUILD_CORES || true
+    make check -j$NIX_BUILD_CORES || true
     npm run eslint
     npm run stylelint
   '';
@@ -232,6 +262,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cockpit-project.org/";
     changelog = "https://cockpit-project.org/blog/cockpit-${finalAttrs.version}.html";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = with lib.maintainers; [
+      lucasew
+      andre4ik3
+    ];
   };
 })

@@ -69,10 +69,20 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
+        # We unfortunately can’t use the customized `cfg.package` when
+        # cross‐compiling. Instead we detect that situation and work
+        # around it by using the vanilla one, like the OpenSSH module.
+        buildPackage =
+          if pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform then
+            cfg.package
+          else
+            pkgs.buildPackages.man-db;
+
         manualCache =
           pkgs.runCommand "man-cache"
             {
-              nativeBuildInputs = [ cfg.package ];
+              nativeBuildInputs = [ buildPackage ];
+              preferLocalBuild = true;
             }
             ''
               echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf

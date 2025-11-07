@@ -17,27 +17,18 @@
   bluez,
   libpulseaudio,
 }:
-let
-
-  owner = "kaii-lb";
-  name = "overskride";
-  version = "0.6.1";
-
-in
-rustPlatform.buildRustPackage {
-
-  pname = name;
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "overskride";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo = name;
-    rev = "v${version}";
-    hash = "sha256-SqaPhub/HwZz7uBg/kevH8LvPDVLgRd/Rvi03ivNrRc=";
+    owner = "kaii-lb";
+    repo = "overskride";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-snyVSQG4eXAW8gIw9ryowTlLbrGo+2y+b4mEQ9ZEBzE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Axeywo7Ryig84rS/6MXl2v9Pe3yzdivq7/l/mfi5mOA=";
+  cargoHash = "sha256-AVdo6HPdCvitynqtWZEJMHF5UZpy9ZX6z4SqoqgyOTA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -69,22 +60,19 @@ rustPlatform.buildRustPackage {
   '';
 
   # The "Validate appstream file" test fails.
-  # TODO: This appears to have been fixed upstream
-  # so checks should be enabled with the next version.
   doCheck = false;
 
   preFixup = ''
-    glib-compile-schemas $out/share/gsettings-schemas/${name}-${version}/glib-2.0/schemas
+    glib-compile-schemas $out/share/gsettings-schemas/overskride-${finalAttrs.version}/glib-2.0/schemas
   '';
 
-  meta = with lib; {
-    description = "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
-    homepage = "https://github.com/${owner}/${name}";
-    changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    mainProgram = name;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.linux;
+  meta = {
+    description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+    homepage = "https://github.com/kaii-lb/overskride";
+    changelog = "https://github.com/kaii-lb/overskride/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "overskride";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.linux;
   };
-
-}
+})

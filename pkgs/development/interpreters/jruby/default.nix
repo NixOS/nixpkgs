@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchurl,
+  fetchMavenArtifact,
   gitUpdater,
   mkRubyVersion,
   makeBinaryWrapper,
@@ -11,15 +12,15 @@
 
 let
   # The version number here is whatever is reported by the RUBY_VERSION string
-  rubyVersion = mkRubyVersion "3" "1" "4" "";
+  rubyVersion = mkRubyVersion "3" "4" "2" "";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jruby";
-  version = "9.4.12.0";
+  version = "10.0.2.0";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/jruby.org/downloads/${finalAttrs.version}/jruby-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-BcXSA9aZDJJnHMQvV9L6HBCDu/0W+nAj3FhIzbjwqi4=";
+    url = "https://repo1.maven.org/maven2/org/jruby/jruby-dist/${finalAttrs.version}/jruby-dist-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-uKAm84qphGGgTtCqCyCJHOJX7L5T4SRxnOnuW4BFJfE=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -pv $out/share/jruby/docs
     mv * $out
-    rm $out/bin/*.{bat,dll,exe,sh}
+    rm $out/bin/*.{bat,dll,exe}
     mv $out/samples $out/share/jruby/
     mv $out/BSDL $out/COPYING $out/LEGAL $out/LICENSE* $out/share/jruby/docs/
 
@@ -35,8 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $i \
         --set JAVA_HOME ${jre.home}
     done
-
-    ln -s $out/bin/jruby $out/bin/ruby
 
     # Bundler tries to create this directory
     mkdir -pv $out/${finalAttrs.passthru.gemPath}

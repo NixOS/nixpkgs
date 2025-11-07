@@ -15,7 +15,6 @@
   mock,
   pip,
   postgresql,
-  postgresqlTestHook,
   pygments,
   pytestCheckHook,
   pytest-cov-stub,
@@ -31,8 +30,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "django-extensions";
+    repo = "django-extensions";
     tag = version;
     hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
@@ -51,7 +50,6 @@ buildPythonPackage rec {
     mock
     pip
     postgresql
-    postgresqlTestHook
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-cov-stub
     pytest-django
@@ -60,13 +58,6 @@ buildPythonPackage rec {
     vobject
     werkzeug
   ];
-
-  env = {
-    postgresqlEnableTCP = 1;
-    PGUSER = "postgres";
-    PGPASSWORD = "postgres";
-    PGDATABASE = "django_extensions_test";
-  };
 
   disabledTestPaths = [
     # https://github.com/django-extensions/django-extensions/issues/1871

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-picnic-api2";
-  version = "1.2.4";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codesalatdev";
     repo = "python-picnic-api";
     tag = "v${version}";
-    hash = "sha256-vlb53f+k+oX9ycyTe/63u0qoqIn8kHKtCehl82Ks9wY=";
+    hash = "sha256-GFxs2ZjyGADMG8YWtpy+sAZClLOYt70KtEp5MCgY+7I=";
   };
 
   build-system = [ hatchling ];

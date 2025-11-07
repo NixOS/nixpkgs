@@ -15,7 +15,7 @@ let
       postgresql-clauses = makeEnsureTestFor package;
     };
 
-  test-sql = pkgs.writeText "postgresql-test" (''
+  test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION pgcrypto; -- just to check if lib loading works
     CREATE TABLE sth (
       id int
@@ -38,7 +38,7 @@ let
       }
       console.log(xs.reduce((acc, x) => acc + x, 0));
     $$ LANGUAGE plv8;
-  '');
+  '';
 
   makeTestForWithBackupAll =
     package: backupAll:
@@ -54,6 +54,9 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
+            identMap = ''
+              postgres root postgres
+            '';
             # TODO(@Ma27) split this off into its own VM test and move a few other
             # extension tests to use postgresqlTestExtension.
             extensions = ps: with ps; [ plv8 ];
@@ -62,6 +65,8 @@ let
           services.postgresqlBackup = {
             enable = true;
             databases = lib.optional (!backupAll) "postgres";
+            pgdumpOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            pgdumpAllOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           };
         };
 
@@ -73,13 +78,13 @@ let
         in
         ''
           def check_count(statement, lines):
-              return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+              return 'test $(psql -U postgres postgres -tAc "{}"|wc -l) -eq {}'.format(
                   statement, lines
               )
 
 
           machine.start()
-          machine.wait_for_unit("postgresql")
+          machine.wait_for_unit("postgresql.target")
 
           with subtest("Postgresql is available just after unit start"):
               machine.succeed(
@@ -91,12 +96,18 @@ let
               import time
               time.sleep(2)
               machine.start()
-              machine.wait_for_unit("postgresql")
+              machine.wait_for_unit("postgresql.target")
 
           machine.fail(check_count("SELECT * FROM sth;", 3))
           machine.succeed(check_count("SELECT * FROM sth;", 5))
           machine.fail(check_count("SELECT * FROM sth;", 4))
           machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
+
+          with subtest("killing postgres process should trigger an automatic restart"):
+              machine.succeed("systemctl kill -s KILL postgresql")
+
+              machine.wait_until_succeeds("systemctl is-active postgresql.service")
+              machine.wait_until_succeeds("systemctl is-active postgresql.target")
 
           with subtest("Backup service works"):
               machine.succeed(
@@ -216,7 +227,7 @@ let
         ''
           import json
           machine.start()
-          machine.wait_for_unit("postgresql")
+          machine.wait_for_unit("postgresql.target")
 
           with subtest("All user permissions are set according to the ensureClauses attr"):
               clauses = json.loads(

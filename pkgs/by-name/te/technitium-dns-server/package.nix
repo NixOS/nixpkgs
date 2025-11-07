@@ -4,6 +4,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   technitium-dns-server-library,
+  libmsquic,
   nixosTests,
   nix-update-script,
 }:
@@ -35,6 +36,10 @@ buildDotnetModule rec {
   postFixup = ''
     mv $out/bin/DnsServerApp $out/bin/technitium-dns-server
   '';
+
+  runtimeDeps = [
+    libmsquic
+  ];
 
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;

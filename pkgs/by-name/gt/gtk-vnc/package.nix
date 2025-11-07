@@ -53,20 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs =
-    [
-      gnutls
-      cairo
-      gdk-pixbuf
-      zlib
-      glib
-      gmp
-      cyrus_sasl
-      gtk3
-    ]
-    ++ lib.optionals pulseaudioSupport [
-      libpulseaudio
-    ];
+  buildInputs = [
+    gnutls
+    cairo
+    gdk-pixbuf
+    zlib
+    glib
+    gmp
+    cyrus_sasl
+    gtk3
+  ]
+  ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
 
   mesonFlags = lib.optionals (!pulseaudioSupport) [
     "-Dpulseaudio=disabled"

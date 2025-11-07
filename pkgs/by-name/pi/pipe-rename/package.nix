@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-av/ig76O7t3dB4Irfi3yqyL30nkJJCzs5EayWRbpOI0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-0+m11mPR/s45MeY90WM3vmnGk6Xb0j2DJnZrEZ/EX1g=";
 
   nativeCheckInputs = [ python3 ];
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Rename your files using your favorite text editor";
     homepage = "https://github.com/marcusbuffett/pipe-rename";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "renamer";
   };
 }

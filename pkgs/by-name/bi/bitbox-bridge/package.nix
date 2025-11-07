@@ -7,6 +7,7 @@
   libudev-zero,
   nixosTests,
   nix-update-script,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-+pMXWXGHyyBx3N0kiro9NS0mPmSQzzBmp+pkoBLH7z0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6vD0XjGH1PXjiRjgnHWSZSixXOc2Yecui8U5FAGefBU=";
 
   postPatch = ''
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -43,13 +44,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 bitbox-bridge/release/linux/hid-digitalbitbox.rules $out/etc/udev/rules.d/50-hid-digitalbitbox.rules
   '';
 
+  doInstallCheck = true;
+
   passthru = {
     tests.basic = nixosTests.bitbox-bridge;
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A bridge service that connects web wallets like Rabby to BitBox02";
+    description = "Bridge service that connects web wallets like Rabby to BitBox02";
     homepage = "https://github.com/BitBoxSwiss/bitbox-bridge";
     downloadPage = "https://bitbox.swiss/download/";
     changelog = "https://github.com/BitBoxSwiss/bitbox-bridge/blob/v${finalAttrs.version}/CHANGELOG.md";

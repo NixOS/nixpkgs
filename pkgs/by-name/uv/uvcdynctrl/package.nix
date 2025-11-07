@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   libxml2,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [ libxml2 ];
 
@@ -36,6 +38,17 @@ stdenv.mkDerivation {
         --replace "/lib/udev" "$out/lib/udev"
     done
   '';
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libwebcam/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace uvcdynctrl/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Simple interface for devices supported by the linux UVC driver";

@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "discord-sh";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "ChaoticWeg";
     repo = "discord.sh";
     rev = "v${version}";
-    sha256 = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
+    sha256 = "sha256-z57uMbH6PI68aTMAjA8UIPEefV8sQRR4cS0eK6Ypxuk=";
   };
 
   # ignore Makefile by disabling buildPhase. Upstream Makefile tries to download
@@ -36,9 +36,11 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
+
     $out/bin/discord.sh --help
-    runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   installPhase = ''

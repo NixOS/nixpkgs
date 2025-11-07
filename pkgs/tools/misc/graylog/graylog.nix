@@ -36,17 +36,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) graylog; };
 
-  installPhase =
-    ''
-      mkdir -p $out
-      cp -r {graylog.jar,bin,plugin} $out
-    ''
-    + lib.optionalString (lib.versionOlder version "4.3") ''
-      cp -r lib $out
-    ''
-    + ''
-      wrapProgram $out/bin/graylogctl $makeWrapperArgs
-    '';
+  installPhase = ''
+    mkdir -p $out
+    cp -r {graylog.jar,bin,plugin} $out
+  ''
+  + lib.optionalString (lib.versionOlder version "4.3") ''
+    cp -r lib $out
+  ''
+  + ''
+    wrapProgram $out/bin/graylogctl $makeWrapperArgs
+  '';
 
   meta = with lib; {
     description = "Open source log management solution";

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7Uvo5+saxwTMQjfDliyOYC6j6LbpMf/FiONfX38xepI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-RGSc+jy2i97QZGfafe3M25bunBmCYAJ0UW3dAnvl5gs=";
 
   nativeBuildInputs = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "slippy";
   };
 }

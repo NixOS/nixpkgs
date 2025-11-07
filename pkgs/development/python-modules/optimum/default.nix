@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -17,7 +16,6 @@
 
   # optional-dependencies
   diffusers,
-  evaluate,
   h5py,
   onnx,
   onnxruntime,
@@ -29,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.24.0";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-0D/kHPUI+gM7IblA4ULs0JuGTNQVezIYg0SPD3ESukw=";
+    hash = "sha256-aeGWjzktpxY6Xym1licGCZf+Vzia9BdUnXE80Ja28jg=";
   };
 
   build-system = [ setuptools ];
@@ -51,29 +47,31 @@ buildPythonPackage rec {
     packaging
     torch
     transformers
-  ] ++ transformers.optional-dependencies.sentencepiece;
+  ]
+  ++ transformers.optional-dependencies.sentencepiece;
 
   optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
     diffusers = [ diffusers ];
     intel = [
@@ -112,7 +110,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "optimum" ];
 
   meta = {
-    description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    description = "Accelerate training and inference of Transformers and Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";

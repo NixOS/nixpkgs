@@ -75,7 +75,7 @@ in
       };
 
       port = lib.mkOption {
-        type = lib.types.ints.unsigned;
+        type = lib.types.port;
         default = 7125;
         description = "The port to listen on.";
       };
@@ -152,35 +152,33 @@ in
 
     environment.etc."moonraker.cfg".source =
       let
-        forcedConfig =
-          {
-            server = {
-              host = cfg.address;
-              port = cfg.port;
-              klippy_uds_address = cfg.klipperSocket;
-            };
-            machine = {
-              validate_service = false;
-            };
-          }
-          // (lib.optionalAttrs (cfg.configDir != null) {
-            file_manager = {
-              config_path = cfg.configDir;
-            };
-          });
+        forcedConfig = {
+          server = {
+            host = cfg.address;
+            port = cfg.port;
+            klippy_uds_address = cfg.klipperSocket;
+          };
+          machine = {
+            validate_service = false;
+          };
+        }
+        // (lib.optionalAttrs (cfg.configDir != null) {
+          file_manager = {
+            config_path = cfg.configDir;
+          };
+        });
         fullConfig = lib.recursiveUpdate cfg.settings forcedConfig;
       in
       format.generate "moonraker.cfg" fullConfig;
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-      ]
-      ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -"
-      ++ lib.optionals cfg.analysis.enable [
-        "d '${cfg.stateDir}/tools/klipper_estimator' - ${cfg.user} ${cfg.group} - -"
-        "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${lib.getExe pkgs.klipper-estimator}"
-      ];
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+    ]
+    ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -"
+    ++ lib.optionals cfg.analysis.enable [
+      "d '${cfg.stateDir}/tools/klipper_estimator' - ${cfg.user} ${cfg.group} - -"
+      "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${lib.getExe pkgs.klipper-estimator}"
+    ];
 
     systemd.services.moonraker = {
       description = "Moonraker, an API web server for Klipper";

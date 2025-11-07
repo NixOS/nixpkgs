@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   fetchpatch,
+  fetchDebianPatch,
 }:
 
 stdenv.mkDerivation {
   pname = "cld2";
-  version = "unstable-2015-08-21";
+  version = "0-unstable-2015-08-21";
 
   src = fetchFromGitHub {
     owner = "CLD2Owners";
@@ -18,10 +19,17 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    (fetchDebianPatch {
+      pname = "cld2";
+      version = "0.0.0-git20150806";
+      debianRevision = "10";
+      patch = "add-cmake-file.patch";
+      hash = "sha256-iLacWD4jQxid76pzGpDW3ZJ8Dyaksfj1pNTrU7qSBQM=";
+    })
     (fetchpatch {
-      name = "add-cmakelists.txt";
-      url = "https://github.com/CLD2Owners/cld2/pull/65/commits/9cfac02c2ac7802ab7079560b38a474473c45f51.patch";
-      hash = "sha256-uOjmUk8kMFl+wED44ErXoLRyblhgDwFx9K1Wj65Omh8=";
+      name = "fix-narrowing-errors.txt";
+      url = "https://github.com/ripjar/cld2/pull/1/commits/79be1adea78f0d376cb793f4dae8e70b100dadcc.patch";
+      hash = "sha256-i4WWYBx16kYXZ5IQPACWbS/HGsQysXre1SngYlAfNaM=";
     })
   ];
 

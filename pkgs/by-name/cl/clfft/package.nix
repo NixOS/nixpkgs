@@ -28,20 +28,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required( VERSION 2.6 )' \
+      'cmake_minimum_required( VERSION 3.5 ) '
   '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      fftw
-      fftwFloat
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      opencl-clhpp
-      ocl-icd
-    ];
+  buildInputs = [
+    fftw
+    fftwFloat
+    boost
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    opencl-clhpp
+    ocl-icd
+  ];
 
   # https://github.com/clMathLibraries/clFFT/issues/237
   CXXFLAGS = "-std=c++98";

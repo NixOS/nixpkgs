@@ -5,14 +5,15 @@
   autoreconfHook,
   fetchurl,
   fetchpatch,
+  directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-firmware";
   version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://alsa/firmware/alsa-firmware-${version}.tar.bz2";
+    url = "mirror://alsa/firmware/alsa-firmware-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
   };
 
@@ -47,11 +48,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/bin
   '';
 
-  meta = with lib; {
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://alsa-project.org/files/pub/firmware/";
+  };
+
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "Soundcard firmwares from the alsa project";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ l-as ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

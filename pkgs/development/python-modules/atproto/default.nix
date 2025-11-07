@@ -27,16 +27,15 @@
 
 buildPythonPackage rec {
   pname = "atproto";
-  version = "0.0.61";
+  version = "0.0.62";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
-    hash = "sha256-90u/ew5j6kRU8Mow/dXTUXpv2FbEFpKRPGoaWQ7gvSA=";
+    hash = "sha256-T1Jdg62fSV+5qC486Agsuk6qrDhGSNHq75uvOyvOwpA=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -58,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "websockets"
   ];
 

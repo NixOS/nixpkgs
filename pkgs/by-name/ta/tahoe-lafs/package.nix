@@ -2,26 +2,32 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   texinfo,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "1.20.0";
+  version = "1.20.0-unstable-2025-10-12";
   pyproject = true;
+
+  # workaround required to build an unstable version
+  # TODO: when moving to a tagged version, remove this and the workaround for versionCheckHook
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = builtins.elemAt (builtins.split "-" version) 0;
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
     repo = "tahoe-lafs";
-    tag = "tahoe-lafs-${version}";
-    hash = "sha256-9qaL4GmdjClviKTnwAxaTywvJChQ5cVVgWs1IkFxhIY=";
+    rev = "7b96d16aba511fd34dcc0c14c9db754229e19531";
+    hash = "sha256-7qMeyL0j0D6Yos7qDhhplinKPV87Vu72dbE4eWql/g4=";
   };
 
   outputs = [
     "out"
     "doc"
     "info"
+    "man"
   ];
 
   # Remove broken and expensive tests.
@@ -42,13 +48,16 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    # docs
+  nativeBuildInputs = # docs
+  [
+    installShellFiles
+    texinfo
+  ]
+  ++ (with python3Packages; [
     recommonmark
     sphinx
     sphinx-rtd-theme
-    texinfo
-  ];
+  ]);
 
   dependencies =
     with python3Packages;
@@ -63,8 +72,8 @@ python3Packages.buildPythonApplication rec {
       eliot
       filelock
       foolscap
-      future
       klein
+      legacy-cgi
       magic-wormhole
       netifaces
       psutil
@@ -95,6 +104,8 @@ python3Packages.buildPythonApplication rec {
       make info
       mkdir -p "$info/share/info"
       cp -rv _build/texinfo/*.info "$info/share/info"
+
+      installManPage man/man*/*
     )
   '';
 
@@ -113,13 +124,13 @@ python3Packages.buildPythonApplication rec {
     ++ [
       versionCheckHook
     ];
-  versionCheckProgram = "${placeholder "out"}/bin/tahoe";
+
   versionCheckProgramArg = "--version";
 
   checkPhase = ''
     runHook preCheck
 
-    runHook versionCheckHook
+    version=$SETUPTOOLS_SCM_PRETEND_VERSION runHook versionCheckHook
     trial --rterrors allmydata
 
     runHook postCheck
@@ -137,7 +148,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tahoe-lafs.org/";
     license = [
       lib.licenses.gpl2Plus # or
-      "TGPPLv1+"
+      {
+        fullName = "Transitive Grace Period Public Licence version 1.0";
+        url = "https://github.com/tahoe-lafs/tahoe-lafs/blob/master/COPYING.TGPPL.rst";
+      }
     ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
     platforms = lib.platforms.linux;

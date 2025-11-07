@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/DNSCrypt/encrypted-dns-server/releases/tag/${version}";
-    description = "An easy to install, high-performance, zero maintenance proxy to run an encrypted DNS server";
+    description = "Easy to install, high-performance, zero maintenance proxy to run an encrypted DNS server";
     homepage = "https://github.com/DNSCrypt/encrypted-dns-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paepcke ];

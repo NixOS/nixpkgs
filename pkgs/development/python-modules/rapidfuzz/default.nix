@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.13.0";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
+    hash = "sha256-p+Z2c+PBNdjfaRjZErWwWgihzuddV14PgTHE3NVNHs8=";
   };
 
   build-system = [
@@ -59,11 +59,6 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # segfaults
-    "test_cdist"
   ];
 
   pythonImportsCheck = [

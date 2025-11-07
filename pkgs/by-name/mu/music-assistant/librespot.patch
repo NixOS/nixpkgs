@@ -1,29 +1,26 @@
 diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
-index 8b6c4e78..20c2a269 100644
+index 6f87b44f46b64805ef6799a54d596fd1684017f1..23de7fc2145619dd4f02551e81cb383f2b79fa15 100644
 --- a/music_assistant/providers/spotify/helpers.py
 +++ b/music_assistant/providers/spotify/helpers.py
-@@ -11,23 +11,4 @@ from music_assistant.helpers.process import check_output
- async def get_librespot_binary() -> str:
-     """Find the correct librespot binary belonging to the platform."""
+@@ -4,6 +4,7 @@ from __future__ import annotations
  
--    # ruff: noqa: SIM102
--    async def check_librespot(librespot_path: str) -> str | None:
--        try:
--            returncode, output = await check_output(librespot_path, "--version")
--            if returncode == 0 and b"librespot" in output:
--                return librespot_path
--        except OSError:
--            return None
--
+ import os
+ import platform
++from shutil import which
+ 
+ from music_assistant.helpers.process import check_output
+ 
+@@ -20,12 +21,8 @@ async def get_librespot_binary() -> str:
+         except OSError:
+             return None
+ 
 -    base_path = os.path.join(os.path.dirname(__file__), "bin")
 -    system = platform.system().lower().replace("darwin", "macos")
 -    architecture = platform.machine().lower()
 -
--    if bridge_binary := await check_librespot(
+     if librespot_binary := await check_librespot(
 -        os.path.join(base_path, f"librespot-{system}-{architecture}")
--    ):
--        return bridge_binary
--
--    msg = f"Unable to locate Librespot for {system}/{architecture}"
--    raise RuntimeError(msg)
-+    return "@librespot@"
++        which("librespot")
+     ):
+         return librespot_binary
+ 

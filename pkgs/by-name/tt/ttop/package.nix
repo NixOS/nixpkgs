@@ -7,13 +7,13 @@
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
-  version = "1.5.3";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KfPlO0RmahavA3dsxNDozuNOXIRAwDTtT+zFaF6hYd0=";
+    hash = "sha256-JdUoVP/R3epkx53kMdIflDEuFuJRzCxQY1BgsyVItqM=";
   };
 
   lockFile = ./lock.json;
@@ -35,7 +35,6 @@ buildNimPackage (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      figsoda
       sikmir
     ];
     mainProgram = "ttop";

@@ -84,11 +84,9 @@ stdenv.mkDerivation rec {
           hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
         };
         patches = lib.optional (old ? patches) (lib.head old.patches);
-        postPatch =
-          (old.postPatch or "")
-          + ''
-            patchShebangs src/box_drawing_generate.sh
-          '';
+        postPatch = (old.postPatch or "") + ''
+          patchShebangs src/box_drawing_generate.sh
+        '';
       }
       // lib.optionalAttrs sixelSupport {
         buildInputs = old.buildInputs ++ [ libsixel ];
@@ -106,16 +104,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dblackbox_is_flatpak=false" ];
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful GTK 4 terminal";
     mainProgram = "blackbox";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       chuangzhu
       linsui
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -24,20 +24,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.19.7";
+  version = "1.20.2";
 
   outputs = [
     "bin"
     "out"
     "dev"
     "man"
+    "lib"
   ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    hash = "sha256-FXq6AOq1tUM05++fkzowApbLnlgeS5ZJ+UmypHrF11g=";
+    hash = "sha256-PVfdX3/Oe3DXpYU5WMnCSi2p9X4fPszq2X3uuyh8RVU=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,13 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix installation path for gdk-pixbuf module
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/heif.thumbnailer \
+      --replace-fail "TryExec=heif-thumbnailer" "TryExec=$bin/bin/heif-thumbnailer" \
+      --replace-fail "Exec=heif-thumbnailer" "Exec=$bin/bin/heif-thumbnailer"
+  '';
 
   # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
   postFixup = ''
@@ -81,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ kuflierl ];
   };
 }

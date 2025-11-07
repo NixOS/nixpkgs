@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "nut-exporter";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "DRuggeri";
     repo = "nut_exporter";
     rev = "v${version}";
-    sha256 = "sha256-6qexTBCLitL+dgT1Ff+414AUQqgn9s+CP5J5MkByb7s=";
+    sha256 = "sha256-p1IUJOSY7dXAzSPBpKvDKvy4etM3q3oI5OXg6l+3KLw=";
   };
 
   vendorHash = "sha256-cMZ4GSal03LIZi7ESr/sQx8zLHNepOTZGEEsdvsNhec=";

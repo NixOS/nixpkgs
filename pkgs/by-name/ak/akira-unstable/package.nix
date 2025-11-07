@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       Br1ght0ne
-      neonfuz
     ];
     teams = [ teams.pantheon ];
     platforms = platforms.linux;

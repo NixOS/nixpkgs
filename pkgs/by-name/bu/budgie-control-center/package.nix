@@ -61,7 +61,7 @@
   shared-mime-info,
   testers,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   webp-pixbuf-loader,
   wrapGAppsHook3,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    udisks2
+    udisks
     upower
   ];
 

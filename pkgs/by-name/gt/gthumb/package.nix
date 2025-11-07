@@ -6,44 +6,42 @@
   pkg-config,
   meson,
   ninja,
-  adwaita-icon-theme,
   exiv2,
   libheif,
   libjpeg,
   libtiff,
   gst_all_1,
   libraw,
-  libsoup_2_4,
-  libsecret,
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  libchamplain,
+  libjxl,
   librsvg,
   libwebp,
   libX11,
-  json-glib,
   lcms2,
   bison,
+  brasero,
   flex,
   clutter-gtk,
+  colord,
   wrapGAppsHook3,
   shared-mime-info,
   python3,
   desktop-file-utils,
   itstool,
-  withWebservices ? true,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.7";
+  version = "3.12.8.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
+    sha256 = "sha256-JzYvwRylxYHzFoIjDJUCDlofzd9M/+vnVVeCjGF021s=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     bison
@@ -58,10 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    brasero
     clutter-gtk
+    colord
     exiv2
     glib
-    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -69,23 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
-    libchamplain
     libheif
     libjpeg
+    libjxl
     libraw
     librsvg
-    libsecret
-    libsoup_2_4
     libtiff
     libwebp
     libX11
-  ] ++ lib.optional withWebservices webkitgtk_4_0;
-
-  mesonFlags = [
-    "-Dlibchamplain=true"
-    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''
@@ -115,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    maintainers = with maintainers; [
+      bobby285271
+      mimame
+    ];
   };
 })

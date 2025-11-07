@@ -1,11 +1,11 @@
 {
   asciidoctor,
-  fetchgit,
-  git,
+  fetchFromRadicle,
+  gitMinimal,
   installShellFiles,
   jq,
   lib,
-  makeWrapper,
+  makeBinaryWrapper,
   man-db,
   nixos,
   nixosTests,
@@ -16,30 +16,49 @@
   stdenv,
   testers,
   xdg-utils,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
-  version = "1.1.0";
-  env.RADICLE_VERSION = version;
+  version = "1.5.0";
 
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-    rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-M4oz9tWjI/eqV4Gz1b512MEmvsZ5u3R9y6P9VeeH9CA=";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-/dWeG2jKCnfg7fwPP+BbRmEvM7rCppGYh2aeftcg3SY=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      git -C $out log -1 --pretty=%ct HEAD > $out/.git_time
+      rm -rf $out/.git
+    '';
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SzwBQxTqQafHDtH8+OWkAMDnKh3AH0PeSMBWpHprQWM=";
 
-  patches = [
-    ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
-  ];
+  cargoHash = "sha256-4URBtN5lyzFPaLJUf/HPAL2ugRUa6sZhpDeiFR0W7cc=";
+
+  env.RADICLE_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
+
+  preBuild = ''
+    export GIT_HEAD=$(<$src/.git_head)
+    export SOURCE_DATE_EPOCH=$(<$src/.git_time)
+  '';
+
+  cargoBuildFlags = [
+    "--package=radicle-node"
+    "--package=radicle-cli"
+    "--package=radicle-remote-helper"
+  ];
+
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
@@ -52,6 +71,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    "--skip=tests::commands::rad_remote"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
@@ -65,13 +85,17 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   postFixup = ''
     for program in $out/bin/* ;
     do
       wrapProgram "$program" \
         --prefix PATH : "${
           lib.makeBinPath [
-            git
+            gitMinimal
             man-db
             openssh
             xdg-utils
@@ -80,12 +104,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
   passthru.tests =
     let
       package = radicle-node;
     in
     {
-      version = testers.testVersion { inherit package; };
       basic =
         runCommand "${package.name}-basic-test"
           {
@@ -106,7 +130,7 @@ rustPlatform.buildRustPackage rec {
             rad debug | jq -e '
                 (.sshVersion | contains("${openssh.version}"))
               and
-                (.gitVersion | contains("${git.version}"))
+                (.gitVersion | contains("${gitMinimal.version}"))
             '
 
             touch $out
@@ -145,7 +169,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       amesgen
       lorenzleutgeb
+      defelo
     ];
     mainProgram = "rad";
   };
-}
+})

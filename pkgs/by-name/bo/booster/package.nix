@@ -21,8 +21,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "anatol";
-    repo = pname;
-    rev = version;
+    repo = "booster";
+    tag = version;
     hash = "sha256-uHxPzuD3PxKAI2JOZd7lcLvcqYqk9gW9yeZgOS1Y7x4=";
   };
 

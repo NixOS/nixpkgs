@@ -2,34 +2,37 @@
   lib,
   buildPythonPackage,
   defusedxml,
+  fastjsonschema,
   fetchFromGitHub,
+  jsonschema,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semantic-version,
   setuptools,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "lib4sbom";
-  version = "0.8.4";
+  version = "0.8.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4sbom";
     tag = "v${version}";
-    hash = "sha256-QTYtaEo5LdDPfv8KgQ3IUJgKphQl2xyQXrcSn19IeKo=";
+    hash = "sha256-JfY47bskOnQeh5ueQfBtQz8Hmi9mPjCMoaFrzpxQMhU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     defusedxml
+    fastjsonschema
+    jsonschema
     pyyaml
     semantic-version
+    xmlschema
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

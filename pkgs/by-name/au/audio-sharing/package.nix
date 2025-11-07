@@ -33,27 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ePgEAVYXLOHWQXG92Grb9nmenyGj0JkgVy1UDsQF0xw=";
   };
 
-  nativeBuildInputs =
-    [
-      appstream-glib
-      cargo
-      desktop-file-utils
-      git
-      meson
-      ninja
-      pkg-config
-      python3
-      rustc
-      wrapGAppsHook4
-    ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-    ]);
+  nativeBuildInputs = [
+    appstream-glib
+    cargo
+    desktop-file-utils
+    git
+    meson
+    ninja
+    pkg-config
+    python3
+    rustc
+    wrapGAppsHook4
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+  ]);
 
   buildInputs = [
     glib

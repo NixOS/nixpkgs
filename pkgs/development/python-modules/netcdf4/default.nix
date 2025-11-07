@@ -76,7 +76,8 @@ buildPythonPackage {
     NETCDF4_DIR = netcdf;
     CURL_DIR = curl.dev;
     JPEG_DIR = libjpeg.dev;
-  } // lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion"; };
+  }
+  // lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion"; };
 
   pythonImportsCheck = [ "netCDF4" ];
 

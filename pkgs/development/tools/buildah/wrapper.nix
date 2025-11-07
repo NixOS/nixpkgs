@@ -1,7 +1,7 @@
 {
   buildah-unwrapped,
   runCommand,
-  makeWrapper,
+  makeBinaryWrapper,
   symlinkJoin,
   lib,
   stdenv,
@@ -11,7 +11,7 @@
   conmon, # Container runtime monitor
   slirp4netns, # User-mode networking for unprivileged namespaces
   fuse-overlayfs, # CoW for images, much faster than default vfs
-  util-linux, # nsenter
+  util-linuxMinimal, # nsenter
   iptables,
   aardvark-dns,
   netavark,
@@ -28,7 +28,7 @@ let
       conmon
       slirp4netns
       fuse-overlayfs
-      util-linux
+      util-linuxMinimal
       iptables
     ]
     ++ extraPackages
@@ -38,14 +38,13 @@ let
     name = "${buildah-unwrapped.pname}-helper-binary-wrapper-${buildah-unwrapped.version}";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths =
-      [
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        netavark
-        passt
-      ];
+    paths = [
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      aardvark-dns
+      netavark
+      passt
+    ];
   };
 
 in
@@ -56,7 +55,7 @@ runCommand buildah-unwrapped.name
 
     preferLocalBuild = true;
 
-    meta = builtins.removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
+    meta = removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
 
     outputs = [
       "out"
@@ -64,14 +63,14 @@ runCommand buildah-unwrapped.name
     ];
 
     nativeBuildInputs = [
-      makeWrapper
+      makeBinaryWrapper
     ];
 
   }
   ''
     ln -s ${buildah-unwrapped.man} $man
 
-    mkdir -p $out/bin
+    mkdir -p $out
     ln -s ${buildah-unwrapped}/share $out/share
     makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
       --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \

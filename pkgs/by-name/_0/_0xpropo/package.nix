@@ -23,12 +23,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proportional version of the 0xProto font";
     homepage = "https://github.com/0xType/0xPropo";
     changelog = "https://github.com/0xType/0xPropo/releases/tag/${version}";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ vinnymeller ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ vinnymeller ];
+    platforms = lib.platforms.all;
   };
 }

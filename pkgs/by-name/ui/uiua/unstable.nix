@@ -1,7 +1,7 @@
 rec {
-  version = "0.16.0-dev.1";
+  version = "0.18.0-dev.2";
   tag = version;
-  hash = "sha256-fW8ntGSK6MX6shXqnKxLD52vDovFol+/tZtr0Hw5Btc=";
-  cargoHash = "sha256-1pcDM7VUVqigBeJ+loEUEOOPlggOsYir/Dge663UtSQ=";
+  hash = "sha256-coa+jE83EAIJDHrSdLMG/zDXxRYx6/uivTbNNufz17Q=";
+  cargoHash = "sha256-i8YFLkV2T9Cx/shRTbeYrNlccCzCO8w2zoa5ZuEuLSM=";
   updateScript = ./update-unstable.sh;
 }

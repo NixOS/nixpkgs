@@ -1,31 +1,49 @@
 {
-  fetchFromGitHub,
   lib,
   llvmPackages,
+  fetchFromGitHub,
   makeBinaryWrapper,
-  nix-update-script,
   which,
+  nix-update-script,
 }:
 
 let
   inherit (llvmPackages) stdenv;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2025-01";
+  version = "dev-2025-10";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "dev-2025-01";
-    hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
+    tag = finalAttrs.version;
+    hash = "sha256-mHu+kCdFEeWMZmQHCAqyv6hlIRFWuRX7rTIprohc7p0=";
   };
 
   patches = [
     ./darwin-remove-impure-links.patch
+    # The default behavior is to use the statically linked Raylib libraries,
+    # but GLFW still attempts to load Xlib at runtime, which won't normally be
+    # available on Nix based systems. Instead, use the "system" Raylib version,
+    # which can be provided by a pure Nix expression, for example in a shell.
+    ./system-raylib.patch
   ];
 
-  LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+  postPatch = ''
+    # Odin is still using 'arm64-apple-macos' as the target name on
+    # aarch64-darwin architectures. This results in a warning whenever the
+    # Odin compiler runs a build. Replacing the target in the Odin compiler
+    # removes the nix warning when the Odin compiler is ran on aarch64-darwin.
+    substituteInPlace src/build_settings.cpp \
+      --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
+
+    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+
+    patchShebangs --build build_odin.sh
+  '';
+
+  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 
@@ -72,12 +90,14 @@ stdenv.mkDerivation {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
+    changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
+      diniamo
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

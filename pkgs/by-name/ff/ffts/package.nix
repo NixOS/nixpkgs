@@ -20,8 +20,12 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DENABLE_SHARED=ON" ];
 
+  patches = [
+    ./cmake4.patch
+  ];
+
   meta = {
-    description = "The Fastest Fourier Transform in the South";
+    description = "Fastest Fourier Transform in the South";
     homepage = "https://github.com/linkotec/ffts";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bgamari ];

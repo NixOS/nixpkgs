@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "tomerfiliba";
     repo = "plumbum";
     tag = "v${version}";
-    hash = "sha256-3PAvSjZ0+BMq+/g4qNNZl27KnAm01fWFYxBBY+feNTU=";
+    hash = "sha256-ca9avbBJnMecuKljIrx3mYIGA50QXmhC/LP3hM9Uvcs=";
   };
 
   build-system = [
@@ -42,7 +42,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMP
@@ -66,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module Shell Combinators";
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
-    homepage = " https://github.com/tomerfiliba/plumbum";
+    homepage = "https://github.com/tomerfiliba/plumbum";
     license = licenses.mit;
     maintainers = [ ];
   };

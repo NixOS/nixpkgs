@@ -14,11 +14,17 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      callPackage ./gyp-patches.nix { patch_tools = false; }
+    else
+      [ ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.14.0";
-  sha256 = "c609946bf793b55c7954c26582760808d54c16185d79cb2fb88065e52de21914";
+  version = "22.20.0";
+  sha256 = "ff7a6a6e8a1312af5875e40058351c4f890d28ab64c32f12b2cc199afa22002d";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -44,17 +50,12 @@ buildNodejs {
         hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
       })
     ]
+    ++ gypPatches
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
-      # fix test failure on macos 15.4
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/33f6e1ea296cd20366ab94e666b03899a081af94.patch?full_index=1";
-        hash = "sha256-aVBMcQlhQeviUQpMIfC988jjDB2BgYzlMYsq+w16mzU=";
-      })
+      ./use-nix-codesign.patch
     ];
 }

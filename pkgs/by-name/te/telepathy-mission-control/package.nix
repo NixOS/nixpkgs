@@ -29,18 +29,17 @@ stdenv.mkDerivation rec {
 
   # TODO: optional build inputs missing
 
-  nativeBuildInputs =
-    [
-      telepathy-glib # glib-genmarshal
-      pkg-config
-      python3
-      libxslt
-      makeWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoreconfHook
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    telepathy-glib # glib-genmarshal
+    pkg-config
+    python3
+    libxslt
+    makeWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoreconfHook
+    gtk-doc
+  ];
 
   propagatedBuildInputs = [
     telepathy-glib
@@ -62,5 +61,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = [ ];
     platforms = platforms.unix;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

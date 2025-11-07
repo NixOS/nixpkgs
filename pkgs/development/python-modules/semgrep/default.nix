@@ -22,6 +22,7 @@
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
+  mcp,
   packaging,
   peewee,
   pytest-freezegun,
@@ -47,6 +48,7 @@ let
   semgrepBinPath = lib.makeBinPath [ semgrep-core ];
 in
 buildPythonPackage rec {
+  format = "setuptools";
   pname = "semgrep";
   inherit (common) version;
   src = fetchFromGitHub {
@@ -96,6 +98,7 @@ buildPythonPackage rec {
     packaging
     jsonschema
     wcmatch
+    mcp
     peewee
     defusedxml
     urllib3
@@ -124,6 +127,7 @@ buildPythonPackage rec {
     "tests/default/e2e"
     "tests/default/e2e-pysemgrep"
     "tests/default/e2e-other"
+    "tests/default/mcp"
   ];
 
   disabledTests = [

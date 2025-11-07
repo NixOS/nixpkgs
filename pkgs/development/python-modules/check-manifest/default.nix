@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.50";
+  version = "0.51";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mgedmin";
     repo = "check-manifest";
     tag = version;
-    hash = "sha256-wZ0mx2b3QkwTOPMLQ03SFVwnbsVO5RezOSX50ZOYvw8=";
+    hash = "sha256-tT6xQZwqJIsyrO9BjWweIeNgYaopziewerVBk0mFVYg=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     build
     pep517
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     git

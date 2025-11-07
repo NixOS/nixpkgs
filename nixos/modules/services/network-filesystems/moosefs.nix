@@ -81,7 +81,8 @@ let
       ExecStop = "${pkgs.moosefs}/bin/mfs${name} -c ${configFile} stop";
       ExecReload = "${pkgs.moosefs}/bin/mfs${name} -c ${configFile} reload";
       PIDFile = "${cfg."${name}".settings.DATA_PATH}/.mfs${name}.lock";
-    } // extraConfig;
+    }
+    // extraConfig;
   };
 
 in
@@ -307,20 +308,19 @@ in
           (lib.optional (cfg.cgiserver.enable && cfg.cgiserver.openFirewall) cfg.cgiserver.settings.PORT)
         ];
 
-        systemd.tmpfiles.rules =
-          [
-            # Master directories
-            (lib.optionalString cfg.master.enable "d ${cfg.master.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+        systemd.tmpfiles.rules = [
+          # Master directories
+          (lib.optionalString cfg.master.enable "d ${cfg.master.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
 
-            # Metalogger directories
-            (lib.optionalString cfg.metalogger.enable "d ${cfg.metalogger.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+          # Metalogger directories
+          (lib.optionalString cfg.metalogger.enable "d ${cfg.metalogger.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
 
-            # Chunkserver directories
-            (lib.optionalString cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
-          ]
-          ++ lib.optionals (cfg.chunkserver.enable && cfg.chunkserver.hdds != null) (
-            map (dir: "d ${dir} 0755 ${mfsUser} ${mfsUser} -") cfg.chunkserver.hdds
-          );
+          # Chunkserver directories
+          (lib.optionalString cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+        ]
+        ++ lib.optionals (cfg.chunkserver.enable && cfg.chunkserver.hdds != null) (
+          map (dir: "d ${dir} 0755 ${mfsUser} ${mfsUser} -") cfg.chunkserver.hdds
+        );
 
         systemd.services = lib.mkMerge [
           (lib.mkIf cfg.master.enable {

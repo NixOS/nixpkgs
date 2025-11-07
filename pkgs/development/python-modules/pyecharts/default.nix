@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyecharts";
-  version = "2.0.8";
+  version = "2.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pyecharts";
     repo = "pyecharts";
     tag = "v${version}";
-    hash = "sha256-Aax/HpYJRrfituiAIT7Y6F9v9tX9EmVXtr+4R98tces=";
+    hash = "sha256-AMdPsTQsndc0fr4NF2AnJy98k4I2832/GNWeY4IWSRA=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +45,8 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyecharts" ];
 

@@ -11,17 +11,19 @@
   asciidoc,
   libxslt,
   docbook_xsl,
+
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "unclutter-xfixes";
-  version = "1.6";
+  version = "1.6-unstable-2024-11-25";
 
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
-    rev = "v${version}";
-    sha256 = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
+    rev = "0eb7a8f4365c05d09db048bd1a45f8943c1d5da3";
+    hash = "sha256-ipMifLFCh2vW8D9/KkxWL7W5T5dshRZ5wyQY0wgoaxQ=";
   };
 
   nativeBuildInputs = [
@@ -39,17 +41,20 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    substituteInPlace Makefile --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
-    platforms = platforms.unix;
+    homepage = "https://github.com/Airblader/unclutter-xfixes";
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.ryand56 ];
     mainProgram = "unclutter";
   };
 }

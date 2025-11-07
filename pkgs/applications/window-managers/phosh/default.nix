@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  directoryListingUpdater,
+  fetchFromGitLab,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -39,16 +39,40 @@
   evolution-data-server,
   nixosTests,
   gmobile,
+  appstream,
 }:
 
+let
+  # Derived from subprojects/libcall-ui.wrap
+  libcall-ui = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
+    repo = "libcall-ui";
+    tag = "v0.1.4";
+    hash = "sha256-6fiqdvagcMnvaZ9UxC05haBwObcsqwgJL/V03LuSMF8=";
+  };
+
+  # Derived from subprojects/gvc.wrap
+  gvc = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libgnome-volume-control";
+    rev = "5f9768a2eac29c1ed56f1fbb449a77a3523683b6";
+    hash = "sha256-gdgTnxzH8BeYQAsvv++Yq/8wHi7ISk2LTBfU8hk12NM=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.44.1";
+  version = "0.50.0";
 
-  src = fetchurl {
-    # Release tarball which includes subprojects gvc and libcall-ui
-    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
+    repo = "phosh";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AvnMiLapHKSObz6x/fkLxqreksBkwLbcG6myj5xMuwc=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     callaudiod
     evolution-data-server
     pulseaudio
-    glib
     modemmanager
     gcr
     networkmanager
@@ -87,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     upower
     wayland
     feedbackd
+    appstream
   ];
 
   nativeCheckInputs = [
@@ -97,10 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
+  postPatch = ''
+    ln -s ${libcall-ui} subprojects/libcall-ui
+    ln -s ${gvc} subprojects/gvc
+  '';
+
   mesonFlags = [
     "-Dcompositor=${phoc}/bin/phoc"
     # Save some time building if tests are disabled
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0/"
   ];
 
   checkPhase = ''
@@ -123,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     providedSessions = [ "phosh" ];
     tests.phosh = nixosTests.phosh;
-    updateScript = directoryListingUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -134,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       masipcat
       zhaofengli
+      armelclo
     ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";

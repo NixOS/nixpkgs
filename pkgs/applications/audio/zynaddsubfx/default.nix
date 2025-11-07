@@ -45,9 +45,10 @@
   # Test dependencies
   cxxtest,
   ruby,
+  ctestCheckHook,
 }:
 
-assert builtins.any (g: guiModule == g) [
+assert builtins.elem guiModule [
   "fltk"
   "ntk"
   "zest"
@@ -70,8 +71,8 @@ stdenv.mkDerivation rec {
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "zynaddsubfx";
+    repo = "zynaddsubfx";
     tag = version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
@@ -100,47 +101,46 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      liblo
-      minixml
-      zlib
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals dssiSupport [
-      dssi
-      ladspaH
-    ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals lashSupport [ lash ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals (guiModule == "fltk") [
-      fltk
-      libjpeg
-      libXpm
-    ]
-    ++ lib.optionals (guiModule == "ntk") [
-      ntk
-      cairo
-      libXpm
-    ]
-    ++ lib.optionals (guiModule == "zest") [
-      libGL
-      libX11
-    ];
+  buildInputs = [
+    fftw
+    liblo
+    minixml
+    zlib
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals dssiSupport [
+    dssi
+    ladspaH
+  ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals lashSupport [ lash ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals sndioSupport [ sndio ]
+  ++ lib.optionals (guiModule == "fltk") [
+    fltk
+    libjpeg
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "ntk") [
+    ntk
+    cairo
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "zest") [
+    libGL
+    libX11
+  ];
 
-  cmakeFlags =
-    [
-      "-DGuiModule=${guiModule}"
-      "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
-    ]
-    # OSS library is included in glibc.
-    # Must explicitly disable if support is not wanted.
-    ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
-    # Find FLTK without requiring an OpenGL library in buildInputs
-    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+  cmakeFlags = [
+    "-DGuiModule=${guiModule}"
+    "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ]
+  # OSS library is included in glibc.
+  # Must explicitly disable if support is not wanted.
+  ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
+  # Find FLTK without requiring an OpenGL library in buildInputs
+  ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
   CXXFLAGS = [
     # GCC 13: error: 'uint8_t' does not name a type
@@ -151,28 +151,19 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     cxxtest
     ruby
+    ctestCheckHook
   ];
 
-  # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase =
-    let
-      disabledTests =
-        # PortChecker is non-deterministic. It's fixed in the master
-        # branch, but backporting would require an update to rtosc, so
-        # we'll just disable it until the next release.
-        [ "PortChecker" ]
-
-        # Tests fail on aarch64
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "MessageTest"
-          "UnisonTest"
-        ];
-    in
-    ''
-      runHook preCheck
-      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-      runHook postCheck
-    '';
+  disabledTests =
+    # PortChecker is non-deterministic. It's fixed in the master
+    # branch, but backporting would require an update to rtosc, so
+    # we'll just disable it until the next release.
+    [ "PortChecker" ]
+    # Tests fail on aarch64
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "MessageTest"
+      "UnisonTest"
+    ];
 
   # Use Zyn-Fusion logo for zest build
   # An SVG version of the logo isn't hosted anywhere we can fetch, I

@@ -23,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional buildDevDoc "devdoc";
+  ]
+  ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
   src = fetchurl {
@@ -40,16 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gtk_doc" buildDevDoc)
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    ++ lib.optionals buildDevDoc [
-      gtk-doc
-      file
-      docbook-xsl-nons
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ]
+  ++ lib.optionals buildDevDoc [
+    gtk-doc
+    file
+    docbook-xsl-nons
+  ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
   doCheck =

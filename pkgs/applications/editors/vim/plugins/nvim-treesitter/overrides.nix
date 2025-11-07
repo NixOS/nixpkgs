@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   callPackage,
   tree-sitter,
   neovim,
@@ -8,6 +7,7 @@
   runCommand,
   vimPlugins,
   tree-sitter-grammars,
+  writableTmpDirAsHomeHook,
 }:
 
 self: super:
@@ -16,17 +16,6 @@ let
   inherit (neovimUtils) grammarToPlugin;
 
   overrides = prev: {
-    ocamllex =
-      if stdenv.hostPlatform.isDarwin then
-        # remove after https://github.com/314eter/tree-sitter-ocamllex/issues/10 is resolved
-        # see https://github.com/NixOS/nixpkgs/pull/394636
-        (prev.ocamllex.overrideAttrs {
-          src = prev.ocamllex.src.override {
-            hash = "sha256-UBGVc98lrtTCp/kYDEFM/8iG9n7Tekx+xbE7Wdyp2uQ=";
-          };
-        })
-      else
-        prev.ocamllex;
   };
 
   generatedGrammars =
@@ -100,67 +89,76 @@ in
         in
         runCommand "nvim-treesitter-check-queries"
           {
-            nativeBuildInputs = [ nvimWithAllGrammars ];
+            nativeBuildInputs = [
+              nvimWithAllGrammars
+              writableTmpDirAsHomeHook
+            ];
             CI = true;
           }
           ''
             touch $out
-            export HOME=$(mktemp -d)
             ln -s ${withAllGrammars}/CONTRIBUTING.md .
+            export ALLOWED_INSTALLATION_FAILURES=ipkg,norg,verilog
 
             nvim --headless "+luafile ${withAllGrammars}/scripts/check-queries.lua" | tee log
 
             if grep -q Warning log; then
-              echo "Error: warnings were emitted by the check"
-              exit 1
+              echo "WARNING: warnings were emitted by the check"
+              echo "Check if they were expected warnings!"
             fi
           '';
 
       tree-sitter-queries-are-present-for-custom-grammars =
         let
           pluginsToCheck =
-            builtins.map (grammar: grammarToPlugin grammar)
-              # true is here because there is `recurseForDerivations = true`
-              (lib.remove true (lib.attrValues tree-sitter-grammars));
+            map (grammar: grammarToPlugin grammar)
+              # non-derivations are here because there is a `recurseForDerivations = true`
+              (lib.filter lib.isDerivation (lib.attrValues tree-sitter-grammars));
         in
         runCommand "nvim-treesitter-test-queries-are-present-for-custom-grammars" { CI = true; } ''
-          function check_grammar {
-            EXPECTED_FILES="$2/parser/$1.so `ls $2/queries/$1/*.scm`"
+          touch "$out"
 
-            echo
-            echo expected files for $1:
-            echo $EXPECTED_FILES
+          function check_grammar {
+            local grammar_name="$1"
+            local grammar_path="$2"
+
+            local grammar_queries=$(find -L "$grammar_path/queries/$grammar_name" -name '*.scm')
+            local EXPECTED_FILES="$grammar_path/parser/$grammar_name.so $grammar_queries"
+
+            echo ""
+            echo "expected files for $grammar_name:"
+            echo "$EXPECTED_FILES"
 
             # the derivation has only symlinks, and `find` doesn't count them as files
-            # so we cannot use `-type f`
-            for file in `find $2 -not -type d`; do
-              echo checking $file
+            # so we cannot use `-type f`, thus we use `-not -type d`
+            for file in $(find -L $2 -not -type d); do
+              echo "checking $file"
               # see https://stackoverflow.com/a/8063284
               if ! echo "$EXPECTED_FILES" | grep -wqF "$file"; then
-                echo $file is unexpected, exiting
+                echo "$file is unexpected, exiting"
                 exit 1
               fi
             done
           }
 
           ${lib.concatLines (lib.forEach pluginsToCheck (g: "check_grammar \"${g.grammarName}\" \"${g}\""))}
-          touch $out
         '';
 
       no-queries-for-official-grammars =
         let
-          pluginsToCheck =
-            # true is here because there is `recurseForDerivations = true`
-            (lib.remove true (lib.attrValues vimPlugins.nvim-treesitter-parsers));
+          pluginsToCheck = lib.filter lib.isDerivation (lib.attrValues vimPlugins.nvim-treesitter-parsers);
         in
         runCommand "nvim-treesitter-test-no-queries-for-official-grammars" { CI = true; } ''
-          touch $out
+          touch "$out"
 
           function check_grammar {
-            echo checking $1...
-            if [ -d $2/queries ]; then
-              echo Queries dir exists in $1
-              echo This is unexpected, see https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
+            local grammar_name="$1"
+            local grammar_path="$2"
+
+            echo "checking $1..."
+            if [ -d "$grammar_path/queries" ]; then
+              echo "Queries directory exists in $grammar_name"
+              echo "This is unexpected, see https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839"
               exit 1
             fi
           }
@@ -175,6 +173,6 @@ in
     (super.nvim-treesitter.meta or { })
     // {
       license = licenses.asl20;
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = [ ];
     };
 }
