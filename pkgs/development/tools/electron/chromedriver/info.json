@@ -23,14 +23,14 @@
     },
     "37": {
         "hashes": {
-            "aarch64-darwin": "fba6e9342f6414f08bb49466a8cb7028b44042342a64b55a212565af3b674bfb",
-            "aarch64-linux": "c4ee6ff8d3a3a96217557360bda4271fb49ab2383b8962f458fa0b6dc77ff8e2",
-            "armv7l-linux": "1c9d6799f14c14699fee37af08af515777f4da436b9998ba74a69613e7e957da",
-            "headers": "0p2h0517di52sziqycn0dbf9knsg243lkrbiqv2h2f5pwnskhw3w",
-            "x86_64-darwin": "066d453bd62f02ecb1ddf10cfb064e6200c2af1842bd5963546f37c03eebd426",
-            "x86_64-linux": "2ce28af3e7481126d5dd9dcacdeeed39778a28892e5c594b10c0cfba06400ddb"
+            "aarch64-darwin": "1e2b6822ec49e253f765b34e5078f8261df0fcb086c7a8bfbbebdd35bdb8801e",
+            "aarch64-linux": "66877c9863c967dc435fa18e5177673b9f9e139bd73981c5945d92546d71a5ea",
+            "armv7l-linux": "deedf5b7f387721b4bcb9cea274ceaf7625852f88f3217eabd2104f42259f8be",
+            "headers": "0lwcdw882hjb2vhj9vvngkwq5l6nrh7d2hr9adpqdm1any4rssl5",
+            "x86_64-darwin": "e367440fdc5c915cd137c49ddd2912bda893996da6d14f1d678f02bcb726b135",
+            "x86_64-linux": "62ae1633d05f165d4ee42c2d6675f46db8cb55714433fddb5cb082dc9e40bffb"
         },
-        "version": "37.7.1"
+        "version": "37.9.0"
     },
     "38": {
         "hashes": {
