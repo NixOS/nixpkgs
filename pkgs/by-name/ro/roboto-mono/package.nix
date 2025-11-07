@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 fonts/ttf/*.ttf -t $out/share/fonts/truetype/RobotoMono
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.google.com/fonts/specimen/Roboto+Mono";
