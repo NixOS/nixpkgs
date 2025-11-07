@@ -1,0 +1,44 @@
+diff --git a/torch/CMakeLists.txt b/torch/CMakeLists.txt
+index ba3859a..cf3da99 100644
+--- a/torch/CMakeLists.txt
++++ b/torch/CMakeLists.txt
+@@ -36,8 +36,7 @@ if(USE_STANDALONE)
+     # Because libgfxd is not a CMake project, we have to manually fetch it and add it to the build
+     FetchContent_Declare(
+         libgfxd
+-        GIT_REPOSITORY https://github.com/glankk/libgfxd.git
+-        GIT_TAG 96fd3b849f38b3a7c7b7f3ff03c5921d328e6cdf
++        URL @libgfxd_src@
+     )
+ 
+     FetchContent_GetProperties(libgfxd)
+@@ -205,8 +204,7 @@ set(YAML_CPP_BUILD_TESTS OFF)
+ set(YAML_CPP_DISABLE_UNINSTALL ON)
+ FetchContent_Declare(
+     yaml-cpp
+-    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+-    GIT_TAG 2f86d13775d119edbb69af52e5f566fd65c6953b
++    URL @yaml-cpp_src@
+ )
+ set(YAML_CPP_BUILD_TESTS OFF)
+ FetchContent_MakeAvailable(yaml-cpp)
+@@ -219,8 +217,7 @@ endif()
+ if(USE_STANDALONE)
+ 	FetchContent_Declare(
+ 		spdlog
+-		GIT_REPOSITORY https://github.com/gabime/spdlog.git
+-		GIT_TAG 7e635fca68d014934b4af8a1cf874f63989352b7
++        URL @spdlog_src@
+ 	)
+ 
+ 	FetchContent_MakeAvailable(spdlog)
+@@ -234,8 +231,7 @@ endif()
+ set(tinyxml2_BUILD_TESTING OFF)
+ FetchContent_Declare(
+     tinyxml2
+-    GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+-    GIT_TAG 10.0.0
++    URL @tinyxml2_src@
+     OVERRIDE_FIND_PACKAGE
+ )
+ FetchContent_MakeAvailable(tinyxml2)

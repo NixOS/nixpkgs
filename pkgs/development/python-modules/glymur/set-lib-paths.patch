@@ -1,0 +1,16 @@
+diff --git a/glymur/config.py b/glymur/config.py
+index 962e299..dab44ba 100644
+--- a/glymur/config.py
++++ b/glymur/config.py
+@@ -53,6 +53,11 @@ def _determine_full_path(libname):
+     if path is not None:
+         return path
+ 
++    if libname == "openjp2":
++        return "@openjp2_lib@"
++    if libname == "tiff":
++        return "@tiff_lib@"
++
+     # No joy on config file.  Cygwin?  Cygwin is a bit of an odd case.
+     if platform.system().startswith('CYGWIN'):
+         g = pathlib.Path('/usr/bin').glob('cygopenjp2*.dll')

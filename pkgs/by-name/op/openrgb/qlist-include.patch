@@ -1,0 +1,16 @@
+Commit ID: 2fa7aa0ec87d9878293033db0e86bb62cddc47df
+Change ID: mvrytuwvnokxyvmuworxptmtqpqpppxq
+Author   : Marie Ramlow <me@nycode.dev> (2025-10-11 12:10:21)
+Committer: Marie Ramlow <me@nycode.dev> (2025-10-11 12:17:20)
+
+    OpenRGBFont: add QList include
+
+diff --git a/qt/OpenRGBFont.cpp b/qt/OpenRGBFont.cpp
+index 628bd35281..db1ab5fb76 100644
+--- a/qt/OpenRGBFont.cpp
++++ b/qt/OpenRGBFont.cpp
+@@ -1,3 +1,4 @@
++#include <QStringList>
+ #include "OpenRGBFont.h"
+ #include <QFontDatabase>
+ 

@@ -1,0 +1,39 @@
+From ba86d5d0826d221075329aaf67f1f4f8f868550f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sandro=20J=C3=A4ckel?= <sandro.jaeckel@gmail.com>
+Date: Fri, 11 Apr 2025 03:24:38 +0200
+Subject: [PATCH] Fix installation of cmake files
+
+When binaries, libs and development files like include or cmake files
+are installed to different target directories then those where before
+relatively installed to the binary and not in the correct directory
+where other development related files where installed.
+
+Tested inside of nixpkgs with zxing using the system library of zint.
+---
+ CMakeLists.txt         | 2 +-
+ backend/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6f7cf220..ecfe53c3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -201,4 +201,4 @@ if(ZINT_UNINSTALL)
+ endif()
+ 
+ configure_file("zint-config.cmake.in" "zint-config.cmake" @ONLY)
+-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/zint-config.cmake" DESTINATION "${CMAKE_INSTALL_DATADIR}/zint")
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/zint-config.cmake" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/zint")
+diff --git a/backend/CMakeLists.txt b/backend/CMakeLists.txt
+index 45538515..1e7e40b3 100644
+--- a/backend/CMakeLists.txt
++++ b/backend/CMakeLists.txt
+@@ -131,7 +131,7 @@ endif()
+ if(ZINT_STATIC)
+     install(TARGETS zint-static EXPORT zint-targets ${INSTALL_TARGETS_DEFAULT_ARGS})
+ endif()
+-install(EXPORT zint-targets NAMESPACE zint:: DESTINATION "${CMAKE_INSTALL_DATADIR}/zint")
++install(EXPORT zint-targets NAMESPACE zint:: DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/zint")
+ install(FILES zint.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT Devel)
+ 
+ if(ZINT_TEST)

@@ -1,0 +1,27 @@
+diff --git a/Make.common b/Make.common
+index 3f0b919..ee365f5 100644
+--- a/Make.common
++++ b/Make.common
+@@ -33,22 +33,6 @@ ARCH            ?= $(HOSTARCH)
+ 
+ # Note: TIANOBASE is defined in master Makefile and exported
+ GENFW           = $(TIANOBASE)/BaseTools/Source/C/bin/GenFw
+-prefix          = /usr/bin/
+-ifeq ($(ARCH),aarch64)
+-  CC            = $(prefix)aarch64-linux-gnu-gcc
+-  AS            = $(prefix)aarch64-linux-gnu-as
+-  LD            = $(prefix)aarch64-linux-gnu-ld
+-  AR            = $(prefix)aarch64-linux-gnu-ar
+-  RANLIB        = $(prefix)aarch64-linux-gnu-ranlib
+-  OBJCOPY       = $(prefix)aarch64-linux-gnu-objcopy
+-else
+-  CC            = $(prefix)gcc
+-  AS            = $(prefix)as
+-  LD            = $(prefix)ld
+-  AR            = $(prefix)ar
+-  RANLIB        = $(prefix)ranlib
+-  OBJCOPY       = $(prefix)objcopy
+-endif
+ 
+ ifeq ($(MAKEWITH),TIANO)
+ # Below file defines TARGET (RELEASE or DEBUG) and TOOL_CHAIN_TAG (GCC44, GCC45, GCC46, or GCC47)

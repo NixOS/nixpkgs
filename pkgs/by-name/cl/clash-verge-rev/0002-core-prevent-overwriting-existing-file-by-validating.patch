@@ -1,0 +1,33 @@
+From f7b094a19a47ba515d734f65754d4e57b87239c1 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Thu, 19 Jun 2025 15:45:44 +0800
+Subject: [PATCH 2/2] core: prevent overwriting existing file by validating its
+ existence
+
+Add a check to verify whether the specified `log_file` already exists before proceeding.
+If the file exists, return an error to prevent accidental or malicious overwriting of files.
+This enhances the security of log file handling by mitigating arbitrary file overwrite risks.
+---
+ src/service/core.rs | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/service/core.rs b/src/service/core.rs
+index 21efb26..004d0f0 100644
+--- a/src/service/core.rs
++++ b/src/service/core.rs
+@@ -123,6 +123,12 @@ impl CoreManager {
+         let config_file = config.config_file.as_str();
+         let log_file = config.log_file.as_str();
+         let args = vec!["-d", config_dir, "-f", config_file];
++        {
++            let log_file_2 = std::path::Path::new(log_file);
++            if log_file_2.exists() {
++                return Err(anyhow!(format!("Log file already exists: {}", log_file_2.display())));
++            }
++        }
+ 
+         info!("正在启动mihomo: {} -d {} -f {}", bin_path, config_dir, config_file);
+ 
+-- 
+2.49.0
+

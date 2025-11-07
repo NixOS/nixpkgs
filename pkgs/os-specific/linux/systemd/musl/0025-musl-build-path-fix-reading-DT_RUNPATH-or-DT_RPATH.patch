@@ -1,0 +1,33 @@
+From 7cade54777e9b715ca5b1023dd8fead64d1f4b3e Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sat, 6 Sep 2025 12:06:06 +0900
+Subject: [PATCH 25/30] musl: build-path: fix reading DT_RUNPATH or DT_RPATH
+
+musl records DT_STRTAB as offset, rather than address. So, need to add
+obtained bias to read runpath or rpath.
+---
+ src/basic/build-path.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/basic/build-path.c b/src/basic/build-path.c
+index 577ff72bce..3212089379 100644
+--- a/src/basic/build-path.c
++++ b/src/basic/build-path.c
+@@ -34,11 +34,11 @@ static int get_runpath_from_dynamic(const ElfW(Dyn) *d, ElfW(Addr) bias, const c
+                         break;
+ 
+                 case DT_STRTAB:
+-                        /* On MIPS and RISC-V DT_STRTAB records an offset, not a valid address, so it has to be adjusted
+-                         * using the bias calculated earlier. */
++                        /* On MIPS, RISC-V, or with musl, DT_STRTAB records an offset, not a valid address,
++                         * so it has to be adjusted using the bias calculated earlier. */
+                         if (d->d_un.d_val != 0)
+                                 strtab = (const char *) ((uintptr_t) d->d_un.d_val
+-#if defined(__mips__) || defined(__riscv)
++#if defined(__mips__) || defined(__riscv) || !defined(__GLIBC__)
+                                          + bias
+ #endif
+                                 );
+-- 
+2.51.0
+

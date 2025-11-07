@@ -1,0 +1,15 @@
+Index: config/version.sh
+===================================================================
+--- a/config/version.sh
++++ b/config/version.sh
+@@ -11,9 +11,9 @@
+     git=" `git -C $srcdir describe --long --dirty`"
+ else
+     git=
+ fi
+-date="`TZ=GMT0 date +'%Y-%m-%d %T'` +0000"
++date="$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y-%m-%d)"
+ 
+ cat <<E
+ char *version_str = "nmh-$version$git built $date on $host";
+ char *version_num = "nmh-$version";

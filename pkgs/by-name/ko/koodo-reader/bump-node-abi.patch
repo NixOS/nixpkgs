@@ -1,0 +1,17 @@
+diff --git a/yarn.lock b/yarn.lock
+index 83cf080..8bee81e 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -10914,9 +10914,9 @@ node-abi@^3.0.0, node-abi@^3.3.0:
+     semver "^7.3.5"
+ 
+ node-abi@^3.45.0:
+-  version "3.74.0"
+-  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.74.0.tgz#5bfb4424264eaeb91432d2adb9da23c63a301ed0"
+-  integrity sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==
++  version "3.77.0"
++  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.77.0.tgz#3ad90d5c9d45663420e5aa4ff58dbf4e3625419a"
++  integrity sha512-DSmt0OEcLoK4i3NuscSbGjOf3bqiDEutejqENSplMSFA/gmB8mkED9G4pKWnPl7MDU4rSHebKPHeitpDfyH0cQ==
+   dependencies:
+     semver "^7.3.5"
+ 

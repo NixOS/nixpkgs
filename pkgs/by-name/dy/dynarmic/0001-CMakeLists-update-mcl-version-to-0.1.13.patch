@@ -1,0 +1,29 @@
+From cdbf3ba41ddce41d8ae375464e514f72d158ec0b Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 5 Jul 2025 22:26:49 +0200
+Subject: [PATCH] CMakeLists: update mcl version to 0.1.13
+
+The mcl in externals is already at this version, but it wasn't bumped
+here which makes it impossible to use prebuilt mcl.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e95050da..edd153d0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -145,7 +145,7 @@ set(TSL_ROBIN_MAP_ENABLE_INSTALL ON)
+ 
+ find_package(Boost 1.57 REQUIRED)
+ find_package(fmt 9 CONFIG)
+-find_package(mcl 0.1.12 EXACT CONFIG)
++find_package(mcl 0.1.13 EXACT CONFIG)
+ find_package(tsl-robin-map CONFIG)
+ 
+ if ("arm64" IN_LIST ARCHITECTURE OR DYNARMIC_TESTS)
+-- 
+2.49.0
+

@@ -1,0 +1,52 @@
+{
+  "idea-community": {
+    "version": "2025.1.1.1",
+    "buildNumber": "251.25410.129",
+    "buildType": "idea",
+    "ideaHash": "sha256-9YatnO+9Pcrlx7EXmq4wMVdeR3DzJF2fsQOvRWH11tk=",
+    "androidHash": "sha256-ueMdEkXt/x5WIex163iwTlOm5bvZNluNO7SNxs+bPYs=",
+    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "idea_maven_artefacts.json",
+    "repositories": [
+      "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ij/intellij-dependencies",
+      "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2",
+      "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository",
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/kpm/public",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ki/maven",
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev"
+    ],
+    "kotlin-jps-plugin": {
+      "version": "2.1.10",
+      "hash": "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4="
+    }
+  },
+  "pycharm-community": {
+    "version": "2025.1.1.1",
+    "buildNumber": "251.25410.159",
+    "buildType": "pycharm",
+    "ideaHash": "sha256-0VHoFk9/xKei4jvkEvl+9KiJwCoVPKh7g5EBSXQ+Ios=",
+    "androidHash": "sha256-af1RJeU7BJTtYTvZRNcH77/Tn4j4lLsRRJUGS80rM4U=",
+    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "pycharm_maven_artefacts.json",
+    "repositories": [
+      "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ij/intellij-dependencies",
+      "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2",
+      "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository",
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/kpm/public",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ki/maven",
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev"
+    ],
+    "kotlin-jps-plugin": {
+      "version": "2.1.10",
+      "hash": "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4="
+    }
+  }
+}

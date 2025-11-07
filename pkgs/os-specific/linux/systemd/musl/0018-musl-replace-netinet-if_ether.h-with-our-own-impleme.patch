@@ -1,0 +1,72 @@
+From 6e77a74ca91e689a43651d9eeb5f8f40893eed76 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 23 Jun 2025 16:08:37 +0900
+Subject: [PATCH 18/30] musl: replace netinet/if_ether.h with our own
+ implementation
+
+musl's netinet/if_ether.h conflicts with linux/if_ether.h.
+The reimplementation is mostly equivalent with what glibc does.
+
+This also unset __UAPI_DEF_ETHHDR before including linux/if_ether.h,
+otherwise struct ethhdr may not be defined by the header when it is
+defined.
+---
+ src/include/musl/linux/if_ether.h   |  5 +++++
+ src/include/musl/netinet/if_ether.h | 33 +++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 src/include/musl/linux/if_ether.h
+ create mode 100644 src/include/musl/netinet/if_ether.h
+
+diff --git a/src/include/musl/linux/if_ether.h b/src/include/musl/linux/if_ether.h
+new file mode 100644
+index 0000000000..e28cd4a014
+--- /dev/null
++++ b/src/include/musl/linux/if_ether.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#undef __UAPI_DEF_ETHHDR
++#include_next <linux/if_ether.h>
+diff --git a/src/include/musl/netinet/if_ether.h b/src/include/musl/netinet/if_ether.h
+new file mode 100644
+index 0000000000..62f4ac03b3
+--- /dev/null
++++ b/src/include/musl/netinet/if_ether.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++/* glibc's netinet/if_ether.h does the following:
++ * - include linux/if_ether.h, net/ethernet.h, and net/if_arp.h,
++ * - define struct ether_arp, and relevant macros,
++ * - define ETHER_MAP_IP_MULTICAST() macro (currently we do not use it).
++ * However, musl's netinet/if_ether.h conflicts with linux/if_ether.h.
++ * Let's use the same way that glibc uses. */
++
++#include <linux/if_ether.h>     /* IWYU pragma: export */
++#include <net/ethernet.h>       /* IWYU pragma: export */
++#include <net/if_arp.h>         /* IWYU pragma: export */
++
++/*
++ * Ethernet Address Resolution Protocol.
++ *
++ * See RFC 826 for protocol description.  Structure below is adapted
++ * to resolving internet addresses.  Field names used correspond to
++ * RFC 826.
++ */
++struct  ether_arp {
++        struct  arphdr ea_hdr;          /* fixed-size header */
++        uint8_t arp_sha[ETH_ALEN];      /* sender hardware address */
++        uint8_t arp_spa[4];             /* sender protocol address */
++        uint8_t arp_tha[ETH_ALEN];      /* target hardware address */
++        uint8_t arp_tpa[4];             /* target protocol address */
++};
++#define arp_hrd ea_hdr.ar_hrd
++#define arp_pro ea_hdr.ar_pro
++#define arp_hln ea_hdr.ar_hln
++#define arp_pln ea_hdr.ar_pln
++#define arp_op  ea_hdr.ar_op
+-- 
+2.51.0
+

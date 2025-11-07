@@ -1,0 +1,24 @@
+--- a/Lib/tkinter/test/test_ttk/test_widgets.py
++++ b/Lib/tkinter/test/test_ttk/test_widgets.py
+@@ -911,12 +911,20 @@ class ScrollbarTest(AbstractWidgetTest, unittest.TestCase):
+         return ttk.Scrollbar(self.root, **kwargs)
+ 
+ 
+-@add_standard_options(IntegerSizeTests, StandardTtkOptionsTests)
++@add_standard_options(StandardTtkOptionsTests)
+ class NotebookTest(AbstractWidgetTest, unittest.TestCase):
+     OPTIONS = (
+         'class', 'cursor', 'height', 'padding', 'style', 'takefocus', 'width',
+     )
+ 
++    def test_configure_height(self):
++        widget = self.create()
++        self.checkPixelsParam(widget, 'height', '10c', 402, -402, 0, conv=False)
++
++    def test_configure_width(self):
++        widget = self.create()
++        self.checkPixelsParam(widget, 'width', '10c', 402, -402, 0, conv=False)
++
+     def setUp(self):
+         super().setUp()
+         self.nb = self.create(padding=0)

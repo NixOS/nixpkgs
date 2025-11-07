@@ -1,0 +1,87 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 492bcccd9a..9c907a87a8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -108,7 +108,7 @@
+ # Find required dependencies for thrift/lib
+ if (THRIFT_LIB_ONLY OR build_all)
+   find_package(Gflags REQUIRED)
+-  find_package(Glog REQUIRED)
++  find_package(Glog CONFIG REQUIRED)
+   find_package(fizz CONFIG REQUIRED)
+   find_package(wangle CONFIG REQUIRED)
+   find_package(ZLIB REQUIRED)
+@@ -120,7 +120,6 @@
+   find_package(Threads)
+   include_directories(
+     ${LIBGFLAGS_INCLUDE_DIR}
+-    ${GLOG_INCLUDE_DIRS}
+     ${OPENSSL_INCLUDE_DIR}
+     ${ZSTD_INCLUDE_DIRS}
+     ${Xxhash_INCLUDE_DIR}
+diff --git a/thrift/example/cpp2/CMakeLists.txt b/thrift/example/cpp2/CMakeLists.txt
+index afa28dad61..318860b3d6 100644
+--- a/thrift/example/cpp2/CMakeLists.txt
++++ b/thrift/example/cpp2/CMakeLists.txt
+@@ -28,7 +28,7 @@
+   thriftcpp2
+   chatroom-cpp2
+   ${LIBGFLAGS_LIBRARY}
+-  ${GLOG_LIBRARIES}
++  glog::glog
+ )
+ install(
+   TARGETS example_server
+diff --git a/thrift/lib/cpp/CMakeLists.txt b/thrift/lib/cpp/CMakeLists.txt
+index 2c65e1f0a8..1e80060100 100644
+--- a/thrift/lib/cpp/CMakeLists.txt
++++ b/thrift/lib/cpp/CMakeLists.txt
+@@ -43,7 +43,7 @@
+   PUBLIC
+     Folly::folly
+     ${LIBGFLAGS_LIBRARY}
+-    ${GLOG_LIBRARIES}
++    glog::glog
+ )
+ 
+ add_library(
+@@ -121,7 +121,7 @@
+     Boost::boost
+     Folly::folly
+     wangle::wangle
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     ${OPENSSL_LIBRARIES}
+ )
+ 
+@@ -137,7 +137,7 @@
+     thriftprotocol
+     transport
+     Folly::folly
+-    ${GLOG_LIBRARIES}
++    glog::glog
+ )
+ 
+ set(THRIFT1_HEADER_DIRS
+diff --git a/thrift/lib/cpp2/CMakeLists.txt b/thrift/lib/cpp2/CMakeLists.txt
+index 03216f5d6f..5f31fc0c64 100644
+--- a/thrift/lib/cpp2/CMakeLists.txt
++++ b/thrift/lib/cpp2/CMakeLists.txt
+@@ -75,7 +75,7 @@
+     Folly::folly
+     thriftmetadata
+     thriftprotocol
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     ${LIBGFLAGS_LIBRARY}
+ )
+ 
+@@ -207,7 +207,7 @@
+     thrift
+     Folly::folly
+     wangle::wangle
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     thrift-core
+ )
+ 

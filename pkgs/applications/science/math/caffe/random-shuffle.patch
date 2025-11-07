@@ -1,0 +1,67 @@
+From 11e585e52ab92bb9d7a995c5002cb55fbff687b2 Mon Sep 17 00:00:00 2001
+From: uku <hi@uku.moe>
+Date: Thu, 15 May 2025 11:10:50 +0200
+Subject: [PATCH] fix: remove usages of random_shuffle
+
+---
+ src/caffe/layers/hdf5_data_layer.cpp | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/src/caffe/layers/hdf5_data_layer.cpp b/src/caffe/layers/hdf5_data_layer.cpp
+index 00716a92..01213691 100644
+--- a/src/caffe/layers/hdf5_data_layer.cpp
++++ b/src/caffe/layers/hdf5_data_layer.cpp
+@@ -61,7 +61,9 @@ void HDF5DataLayer<Dtype>::LoadHDF5FileData(const char* filename) {
+ 
+   // Shuffle if needed.
+   if (this->layer_param_.hdf5_data_param().shuffle()) {
+-    std::random_shuffle(data_permutation_.begin(), data_permutation_.end());
++    std::random_device rand_device;
++    std::default_random_engine rand_engine(rand_device());
++    std::shuffle(data_permutation_.begin(), data_permutation_.end(), rand_engine);
+     DLOG(INFO) << "Successfully loaded " << hdf_blobs_[0]->shape(0)
+                << " rows (shuffled)";
+   } else {
+@@ -104,7 +106,9 @@ void HDF5DataLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+ 
+   // Shuffle if needed.
+   if (this->layer_param_.hdf5_data_param().shuffle()) {
+-    std::random_shuffle(file_permutation_.begin(), file_permutation_.end());
++    std::random_device rand_device;
++    std::default_random_engine rand_engine(rand_device());
++    std::shuffle(file_permutation_.begin(), file_permutation_.end(), rand_engine);
+   }
+ 
+   // Load the first HDF5 file and initialize the line counter.
+@@ -137,14 +141,17 @@ bool HDF5DataLayer<Dtype>::Skip() {
+ 
+ template<typename Dtype>
+ void HDF5DataLayer<Dtype>::Next() {
++  std::random_device rand_device;
++  std::default_random_engine rand_engine(rand_device());
+   if (++current_row_ == hdf_blobs_[0]->shape(0)) {
+     if (num_files_ > 1) {
+       ++current_file_;
+       if (current_file_ == num_files_) {
+         current_file_ = 0;
+         if (this->layer_param_.hdf5_data_param().shuffle()) {
+-          std::random_shuffle(file_permutation_.begin(),
+-                              file_permutation_.end());
++          std::shuffle(file_permutation_.begin(),
++                              file_permutation_.end(),
++                              rand_engine);
+         }
+         DLOG(INFO) << "Looping around to first file.";
+       }
+@@ -153,7 +160,7 @@ void HDF5DataLayer<Dtype>::Next() {
+     }
+     current_row_ = 0;
+     if (this->layer_param_.hdf5_data_param().shuffle())
+-      std::random_shuffle(data_permutation_.begin(), data_permutation_.end());
++      std::shuffle(data_permutation_.begin(), data_permutation_.end(), rand_engine);
+   }
+   offset_++;
+ }
+-- 
+2.49.0
+
