@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-ecoflow-exporter";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "tess1o";
     repo = "go-ecoflow-exporter";
     tag = finalAttrs.version;
-    hash = "sha256-VCzMItYgnuDXDYdrk/ojzqUE2Fjr7KWGNnLhoQ+ZPYs=";
+    hash = "sha256-oh/i4LToGnI2TuforL36tIYrhq4VUNNYVtYgaU2sf8w=";
   };
 
   vendorHash = "sha256-UbV6V06zxXMTd0v+rDPGoMFn9X5mMCiX41g49IGnoT8=";
