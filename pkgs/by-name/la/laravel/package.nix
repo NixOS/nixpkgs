@@ -19,7 +19,7 @@ php.buildComposerProject2 (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-lKyMzBamoUTqQ43RwpOokeA0BZzUqabYqaFY7JpzRoA=";
+  vendorHash = "sha256-9274SgID0/B0WefNuwSyT3RQWjW/ouWsdZNj1tEOGso=";
 
   # Adding npm (nodejs) and php composer to path
   postInstall = ''
