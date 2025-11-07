@@ -28895,6 +28895,16 @@
     name = "Zexin Yuan";
     keys = [ { fingerprint = "FE16 B281 90EF 6C3F F661  6441 C2DD 1916 FE47 1BE2"; } ];
   };
+  zacharyarnaise = {
+    name = "Zachary Arnaise";
+    github = "zacharyarnaise";
+    githubId = 121795280;
+    keys = [
+      {
+        fingerprint = "5C1A 2BE8 C6B4 AFC0 DE82  73E9 B1F3 94D8 D460 C3B2";
+      }
+    ];
+  };
   zacharyweiss = {
     name = "Zachary Weiss";
     email = "me@zachary.ws";
