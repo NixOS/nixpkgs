@@ -1,27 +1,30 @@
 {
   lib,
-  args,
   buildPythonPackage,
-  clint,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  args,
+  clint,
   libffi,
   matlink-gpapi,
   ndg-httpsclient,
   protobuf,
   pyasn1,
   pyaxmlparser,
-  pytestCheckHook,
-  pythonOlder,
   requests,
-  setuptools,
+
+  # test
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gplaycli";
   version = "3.29";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matlink";
@@ -30,17 +33,18 @@ buildPythonPackage rec {
     hash = "sha256-uZBrIxnDSaJDOPcD7J4SCPr9nvecDDR9h+WnIjIP7IE=";
   };
 
-  propagatedBuildInputs = [
-    libffi
-    pyasn1
+  build-system = [ setuptools ];
+
+  dependencies = [
+    args
     clint
+    libffi
+    matlink-gpapi
     ndg-httpsclient
     protobuf
-    requests
-    args
-    matlink-gpapi
+    pyasn1
     pyaxmlparser
-    setuptools
+    requests
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -64,12 +68,12 @@ buildPythonPackage rec {
     "test_update"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Play Downloader via Command line";
     mainProgram = "gplaycli";
     homepage = "https://github.com/matlink/gplaycli";
-    changelog = "https://github.com/matlink/gplaycli/releases/tag/${version}";
-    license = licenses.agpl3Plus;
+    changelog = "https://github.com/matlink/gplaycli/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Plus;
     maintainers = [ ];
   };
 }
