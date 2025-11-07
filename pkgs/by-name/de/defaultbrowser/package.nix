@@ -3,16 +3,15 @@
   stdenv,
   fetchFromGitHub,
 }:
-
 stdenv.mkDerivation {
   pname = "defaultbrowser";
-  version = "unstable-2020-07-23";
+  version = "1.1-unstable-2024-09-04";
 
   src = fetchFromGitHub {
     owner = "kerma";
     repo = "defaultbrowser";
-    rev = "d2860c00dd7fbb5d615232cc819d7d492a6a6ddb";
-    sha256 = "sha256-SelUQXoKtShcDjq8uKg3wM0kG2opREa2DGQCDd6IsOQ=";
+    rev = "ad812c4e678a1e1f04cc44b8ab6d1ed5b8733359";
+    hash = "sha256-lZgIfbvTxlxlEh/NvNonZ1fVvcFynXWW1Fu2f9FIWiU=";
   };
 
   makeFlags = [
