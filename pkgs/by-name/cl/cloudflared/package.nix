@@ -78,9 +78,24 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";
+    description = "Client for various Cloudflare services, including Tunnel, Access, and DNS over HTTPS";
+    longDescription = ''
+      Contains the command-line client for Cloudflare Tunnel, a tunneling daemon that proxies traffic from the Cloudflare network to your origins.
+      This daemon sits between Cloudflare network and your origin (e.g. a webserver). Cloudflare attracts client requests and sends them to you
+      via this daemon, without requiring you to poke holes on your firewall --- your origin can remain as closed as possible.
+      Extensive documentation can be found in the [Cloudflare Tunnel section](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel) of the Cloudflare Docs.
+      All usages related with proxying to your origins are available under `cloudflared tunnel help`.
+
+      You can also use `cloudflared` to access Tunnel origins (that are protected with `cloudflared tunnel`) for TCP traffic
+      at Layer 4 (i.e., not HTTP/websocket), which is relevant for use cases such as SSH, RDP, etc.
+      Such usages are available under `cloudflared access help`.
+
+      You can instead use [WARP client](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/) (`pkgs.cloudflare-warp` or `services.cloudflare-warp` on NixOS)
+      to access private origins behind Tunnels for Layer 4 traffic without requiring `cloudflared access` commands on the client side.
+    '';
     homepage = "https://www.cloudflare.com/products/tunnel";
-    changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
+    downloadPage = "https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/";
+    changelog = "https://raw.githubusercontent.com/cloudflare/cloudflared/refs/tags/${version}/RELEASE_NOTES";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [
