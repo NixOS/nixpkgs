@@ -346,6 +346,33 @@ self: super:
           "/rdrand/rngAddEntropy/"
         ]);
     }) super.botan-low;
+
+    # 2025-11-07: Broken since 2015 - https://github.com/NixOS/nixpkgs/pull/459465
+    hamid = markBroken super.hamid;
+    # 2025-11-07: Broken since 2016 - https://github.com/NixOS/nixpkgs/pull/459465
+    huckleberry = markBroken super.huckleberry;
+    log = markBroken super.log;
+    # 2025-11-07: Broken since 2017 - https://github.com/NixOS/nixpkgs/pull/459465
+    gtk-traymanager = markBroken super.gtk-traymanager;
+    pipes-zlib = markBroken super.pipes-zlib;
+    pthread = markBroken super.pthread;
+    # 2025-11-07: Broken since 2018 - https://github.com/NixOS/nixpkgs/pull/459465
+    system-linux-proc = markBroken super.system-linux-proc;
+    # 2025-11-07: Broken since 2021 - https://github.com/NixOS/nixpkgs/pull/459465
+    gerrit = markBroken super.gerrit;
+    # 2025-11-07: Broken since 2023 - https://github.com/NixOS/nixpkgs/pull/459465
+    copilot-c99 = markBroken super.copilot-c99;
+    error-codes = markBroken super.error-codes;
+    epub-metadata = markBroken super.epub-metadata;
+    HsHTSLib = markBroken super.HsHTSLib;
+    zlib-bytes = markBroken super.zlib-bytes;
+    # 2025-11-07: Broken since 2024 - https://github.com/NixOS/nixpkgs/pull/459465
+    bytestring-encoding = markBroken super.bytestring-encoding;
+    duckdb-haskell = markBroken super.duckdb-haskell;
+    freetype2 = markBroken super.freetype2;
+    memzero = markBroken super.memzero;
+    rawfilepath = markBroken super.rawfilepath;
+    reform-blaze = markBroken super.reform-blaze;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -448,5 +475,8 @@ self: super:
         "!/issue-108/"
       ];
     }) super.ad;
+
+    # 2025-11-07: Broken since 2024 - https://github.com/NixOS/nixpkgs/pull/459465
+    hlibgit2 = markBroken super.hlibgit2;
   }
 )
