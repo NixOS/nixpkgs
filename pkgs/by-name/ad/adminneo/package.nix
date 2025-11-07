@@ -21,16 +21,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     php
   ];
 
-  # Package provides a Makefile, which is currently broken
-  # https://github.com/adminneo-org/adminneo/issues/161
-  # As soon, as this is fixed, the buildPhase can be removed
-  buildPhase = ''
-    runHook preBuild
-
-    ${php}/bin/php bin/compile.php
-
-    runHook postBuild
-  '';
+  makeFlags = [
+    "PHP=${php}/bin/php"
+  ];
 
   installPhase = ''
     runHook preInstall
