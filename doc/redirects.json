@@ -155,6 +155,36 @@
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
   ],
+  "lib.packageTypes.application": [
+    "index.html#lib.packageTypes.application"
+  ],
+  "lib.packageTypes.container": [
+    "index.html#lib.packageTypes.container"
+  ],
+  "lib.packageTypes.data": [
+    "index.html#lib.packageTypes.data"
+  ],
+  "lib.packageTypes.device-driver": [
+    "index.html#lib.packageTypes.device-driver"
+  ],
+  "lib.packageTypes.file": [
+    "index.html#lib.packageTypes.file"
+  ],
+  "lib.packageTypes.firmware": [
+    "index.html#lib.packageTypes.firmware"
+  ],
+  "lib.packageTypes.framework": [
+    "index.html#lib.packageTypes.framework"
+  ],
+  "lib.packageTypes.library": [
+    "index.html#lib.packageTypes.library"
+  ],
+  "lib.packageTypes.operating-system": [
+    "index.html#lib.packageTypes.operating-system"
+  ],
+  "lib.packageTypes.runtime": [
+    "index.html#lib.packageTypes.runtime"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
@@ -267,6 +297,9 @@
   ],
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
+  ],
+  "sec-meta-type": [
+    "index.html#sec-meta-type"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
