@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
   };
 })
