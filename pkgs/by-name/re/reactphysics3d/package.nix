@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source C++ physics engine library";
     homepage = "https://www.reactphysics3d.com";
     changelog = "https://github.com/DanielChappuis/reactphysics3d/releases/tag/${finalAttrs.src.rev}";
-    maintainers = with maintainers; [ rexxDigital ];
+    maintainers = with maintainers; [
+      rexxDigital
+      pandapip1
+    ];
     license = licenses.zlib;
     platforms = platforms.all;
   };
