@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miro";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "vincent-uden";
     repo = "miro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkZSyxdcHeumBMlinwA3DT2Y/FgLzbeuVbsFbTfvINg=";
+    hash = "sha256-2RyBjWeb94bxiZ7hy//654YP1bc6bl13slNxRwrhtyk=";
   };
 
-  cargoHash = "sha256-4NE9nMmOTQpWvMsGexW6GpBGao4yQoofrzGaaM4+rWE=";
+  cargoHash = "sha256-wRlze8VZ9I4O/eycWvlNPUsa/ucBeZ8SWtD9eJ+Uxvs=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
