@@ -9624,6 +9624,12 @@
     githubId = 105204;
     name = "Godefroid Chapelle";
   };
+  gotha = {
+    email = "h.georgiev@hotmail.com";
+    github = "gotha";
+    githubId = 522391;
+    name = "Hristo Georgiev";
+  };
   govanify = {
     name = "Gauvain 'GovanifY' Roussel-Tarbouriech";
     email = "gauvain@govanify.com";
