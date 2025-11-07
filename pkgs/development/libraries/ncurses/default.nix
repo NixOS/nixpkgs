@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-versioned-syms"
   ]
   ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
-  ++ lib.optional unicodeSupport "--enable-widec"
+  ++ lib.optional (!unicodeSupport) "--disable-widec"
   ++ lib.optional (!withCxx) "--without-cxx"
   ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
   ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
