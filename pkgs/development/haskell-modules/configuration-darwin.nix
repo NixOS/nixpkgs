@@ -341,6 +341,10 @@ self: super:
           "/rdrand/rngAddEntropy/"
         ]);
     }) super.botan-low;
+
+    # 2025-11-07: Broken since 2015-11-15
+    # https://hydra.nixos.org/build/310565541
+    hamid = markBroken super.hamid;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
