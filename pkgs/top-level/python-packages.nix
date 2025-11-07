@@ -13247,7 +13247,15 @@ self: super: with self; {
 
   pyglossary = callPackage ../development/python-modules/pyglossary { };
 
-  pygls = callPackage ../development/python-modules/pygls { };
+  pygls = pygls_1;
+
+  pygls_1 = callPackage ../development/python-modules/pygls/1.nix {
+    lsprotocol = lsprotocol_2023;
+  };
+
+  pygls_2 = callPackage ../development/python-modules/pygls/2.nix {
+    lsprotocol = lsprotocol_2025;
+  };
 
   pygltflib = callPackage ../development/python-modules/pygltflib { };
 
@@ -16338,6 +16346,8 @@ self: super: with self; {
   ropper = callPackage ../development/python-modules/ropper { };
 
   rosbags = callPackage ../development/python-modules/rosbags { };
+
+  rospkg = callPackage ../development/python-modules/rospkg { };
 
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
