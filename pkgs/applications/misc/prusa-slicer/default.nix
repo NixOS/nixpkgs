@@ -62,12 +62,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-B2uHrh09xKehmxnk3I4MHIjBfB/pGgFXC6R5k10JoJY=";
+    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
     rev = "version_${finalAttrs.version}";
   };
 
