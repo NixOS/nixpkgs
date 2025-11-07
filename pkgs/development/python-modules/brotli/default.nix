@@ -1,5 +1,6 @@
 {
   lib,
+  brotli,
   buildPythonPackage,
   fetchFromGitHub,
   pkgconfig,
@@ -28,6 +29,12 @@ buildPythonPackage rec {
 
   # only returns information how to really build
   dontConfigure = true;
+
+  env.USE_SYSTEM_BROTLI = 1;
+
+  buildInputs = [
+    brotli
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
