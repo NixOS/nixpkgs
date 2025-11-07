@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jen";
   version = "1.7.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nouAHEo5JJtZ0pV8ig/iJ3eB8uPz3yMVIYP6RrNVlSA=";
   };
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qYEnKFC1Y24TEY0dXa9N7QNvxhHULq+vd4Wej/RK8HQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI generation tool for creating large datasets";
     mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
