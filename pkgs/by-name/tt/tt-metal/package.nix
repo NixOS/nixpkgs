@@ -12,6 +12,7 @@
   mpi,
   hwloc,
   python3,
+  capstone,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";
@@ -25,12 +26,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZIUjZLifRVmpWpG8Ty+I+pwgpIf5r9gJkI8ULTau4OE=";
   };
 
+  outputs = [
+    "out"
+    "build"
+  ];
+
   cpm = fetchurl {
     url = "https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.40.2/CPM.cmake";
     hash = "sha256-yM3DLAOBZTjOInge1ylk3IZLKjSjENO3EEgSpcotg10=";
   };
 
   sfpi = callPackage ./sfpi.nix { };
+
+  patches = [
+    ./fix-clang.diff
+  ];
 
   postUnpack = ''
     mkdir -p "$sourceRoot/runtime"
@@ -46,18 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
+    (lib.cmakeBool "ENABLE_TRACY" true)
+    (lib.cmakeBool "WITH_PYTHON_BINDINGS" true)
+    (lib.cmakeBool "TT_UNITY_BUILDS" true)
+    (lib.cmakeBool "TT_INSTALL" true)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   preConfigure = ''
     mkdir -p build/_deps
-    ${lib.concatMapAttrsStringSep "\n"
-      (name: src: "cp -r --no-preserve=ownership,mode ${src} build/_deps/${name}-src")
-      (
-        import ./deps.nix {
-          inherit fetchFromGitHub;
-        }
-      )
-    }
+    ${lib.concatMapAttrsStringSep "\n" (
+      name: src: "cp -r --no-preserve=ownership,mode ${src} build/_deps/${name}-src"
+    ) finalAttrs.passthru.deps}
     cp $cpm build/_deps/tt-logger-src/cmake/CPM.cmake
   '';
 
@@ -65,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p $out/include
     cp -r ../build/_deps/tt-logger-src/include/tt-logger $out/include/tt-logger
+  '';
+
+  postInstall = ''
+    cp -r ../build $build
   '';
 
   enableParallelBuilding = true;
@@ -81,7 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     mpi
     hwloc
+    capstone
   ];
+
+  passthru.deps = import ./deps.nix {
+    inherit fetchFromGitHub;
+  };
 
   # Fixes the parallel hook crashing in the fixupPhase with no error.
   noAuditTmpdir = true;

@@ -1,0 +1,22 @@
+diff --git a/cmake/tracy.cmake b/cmake/tracy.cmake
+index d44cb086f5..20f849afb5 100644
+--- a/cmake/tracy.cmake
++++ b/cmake/tracy.cmake
+@@ -60,7 +60,7 @@ ExternalProject_Add(
+     INSTALL_COMMAND
+         cp ${TRACY_HOME}/csvexport/build/unix/csvexport-release .
+     BUILD_COMMAND
+-        cd ${TRACY_HOME}/csvexport/build/unix && CXX=g++ TRACY_NO_LTO=1 make -f
++        cd ${TRACY_HOME}/csvexport/build/unix && TRACY_NO_LTO=1 make -f
+         ${TRACY_HOME}/csvexport/build/unix/Makefile
+ )
+ ExternalProject_Add(
+@@ -78,7 +78,7 @@ ExternalProject_Add(
+     INSTALL_COMMAND
+         cp ${TRACY_HOME}/capture/build/unix/capture-release .
+     BUILD_COMMAND
+-        cd ${TRACY_HOME}/capture/build/unix && CXX=g++ TRACY_NO_LTO=1 make -f ${TRACY_HOME}/capture/build/unix/Makefile
++        cd ${TRACY_HOME}/capture/build/unix && TRACY_NO_LTO=1 make -f ${TRACY_HOME}/capture/build/unix/Makefile
+ )
+ add_custom_target(
+     tracy_tools

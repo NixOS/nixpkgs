@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt	2025-09-20 13:49:33.574145987 -0700
++++ b/CMakeLists.txt	2025-09-20 13:50:18.504693928 -0700
+@@ -112,8 +112,7 @@
+   message(FATAL_ERROR "In-source builds are not allowed. Please make a new directory (called a build directory) and run CMake from there.")
+ endif()
+
+-# If there are multiple python env we need to explicitly set the python3 executable
+-set(Python3_EXECUTABLE $ENV{TTMLIR_VENV_DIR}/bin/python3)
++find_package(Python COMPONENTS Interpreter Development REQUIRED)
+
+ include(FindMLIR)
+ include(TTMLIRVersion)
