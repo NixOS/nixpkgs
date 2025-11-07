@@ -45,7 +45,7 @@ php.buildComposerProject2 (finalAttrs: {
       composer update --lock --no-install
     '';
 
-    vendorHash = "sha256-8l5bQ+VnLOtPUspMN1f+iXo7LldPTuYqyrAeW2aVoH8=";
+    vendorHash = "sha256-ylqweU7b8SPkk04bM4Sa0WwqoaiwAeoUB1pCoqMOtoo=";
   };
 
   doInstallCheck = true;
@@ -58,7 +58,5 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    # `composerVendor` doesn't build
-    broken = true;
   };
 })
