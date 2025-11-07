@@ -27,6 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # app bundle may be messed up by standard fixup
+  dontFixup = true;
+
   meta = {
     description = "Powerful and full-featured professional HTML and text editor for macOS";
     homepage = "https://www.barebones.com/products/bbedit/";
