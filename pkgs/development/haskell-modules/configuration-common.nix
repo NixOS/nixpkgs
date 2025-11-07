@@ -2932,6 +2932,7 @@ with haskellLib;
   zinza = dontCheck super.zinza;
 
   pdftotext = overrideCabal (drv: {
+    jailbreak = true;
     postPatch = ''
       # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
       substituteInPlace pdftotext.cabal --replace-quiet c-sources cxx-sources
@@ -2943,7 +2944,7 @@ with haskellLib;
       substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
     ''
     + (drv.postPatch or "");
-  }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
+  }) (super.pdftotext.override { poppler-cpp = pkgs.poppler; });
 
   # QuickCheck <2.15
   # https://github.com/google/proto-lens/issues/403
