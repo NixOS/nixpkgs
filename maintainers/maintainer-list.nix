@@ -9109,6 +9109,12 @@
     githubId = 7047019;
     name = "Florent Becker";
   };
+  galabovaa = {
+    name = "Ivet Galabova";
+    email = "galabovaa@gmail.com";
+    github = "galabovaa";
+    githubId = 4016566;
+  };
   galagora = {
     email = "lightningstrikeiv@gmail.com";
     github = "Galagora";
