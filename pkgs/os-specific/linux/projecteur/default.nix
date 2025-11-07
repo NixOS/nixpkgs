@@ -23,10 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-F7o93rBjrDTmArTIz8RB/uGBOYE6ny/U7ppk+jEhM5A=";
   };
 
-  postPatch = ''
-    sed '1i#include <array>' -i src/device.h # gcc12
-  '';
-
   buildInputs = [
     qtbase
     qtgraphicaleffects
