@@ -61,10 +61,6 @@ buildPythonPackage rec {
     hash = "sha256-LqYGrrWgSZazk0hjQvTFwqtU/PtMEaPi+m1Ya8Ds+pU=";
   };
 
-  patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
-    ./remove-isal.patch
-  ];
-
   postPatch = ''
     rm -r vendor
     patchShebangs tools
