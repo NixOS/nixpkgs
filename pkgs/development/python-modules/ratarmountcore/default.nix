@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "mxmlnkn";
     repo = "ratarmount";
     tag = "v${version}";
-    hash = "sha256-8DjmYYTb0BR5KvtSeI2s7VtYdbRSI+QCjhZfDwqnk3M=";
+    hash = "sha256-X7P06+wsK+Zli0t/T+8ybHz737xz94xbVwaUHoqbn/o=";
     fetchSubmodules = true;
   };
 
@@ -71,14 +71,14 @@ buildPythonPackage rec {
     # on a system with 96 GB RAM. In order to avoid build errors on "low"-memory systems, this
     # test is disabled for now.
     "tests/test_BlockParallelReaders.py"
+    # ratarmountcore.utils.RatarmountError: Mount source does not exist: /build/t...
+    "tests/test_AutoMountLayer.py"
   ];
 
+  # Tests with issues
   disabledTests = [
-    # Tests with issues
-    "test_file_versions"
     "test_stream_compressed"
     "test_chimera_file"
-    "test_URLContextManager"
     "test_URL"
   ];
 
