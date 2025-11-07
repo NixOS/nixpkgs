@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/noriah/catnip";
     changelog = "https://github.com/noriah/catnip/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "catnip";
   };
 })
