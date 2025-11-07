@@ -460,7 +460,6 @@ def install_bootloader() -> None:
         timeout: {timeout}
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
-        graphics: yes
         default_entry: {3 if len(last_gen_boot_spec.specialisations.items()) > 0 else 2}
     ''')
 
