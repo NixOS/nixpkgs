@@ -34,46 +34,46 @@ buildGoModule rec {
     # Workaround for: protocol_test.go:11:
     #   lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:51876->[::1]:53: read: connection refused
     substituteInPlace "edgediscovery/protocol_test.go" \
-      --replace "TestProtocolPercentage" "SkipProtocolPercentage"
+      --replace-warn "TestProtocolPercentage" "SkipProtocolPercentage"
 
     # Workaround for: origin_icmp_proxy_test.go:46:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied
     substituteInPlace "ingress/origin_icmp_proxy_test.go" \
-      --replace "TestICMPRouterEcho" "SkipICMPRouterEcho"
+      --replace-warn "TestICMPRouterEcho" "SkipICMPRouterEcho"
 
     # Workaround for: origin_icmp_proxy_test.go:110:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied
     substituteInPlace "ingress/origin_icmp_proxy_test.go" \
-      --replace "TestConcurrentRequestsToSameDst" "SkipConcurrentRequestsToSameDst"
+      --replace-warn "TestConcurrentRequestsToSameDst" "SkipConcurrentRequestsToSameDst"
 
     # Workaround for: origin_icmp_proxy_test.go:242:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied
     substituteInPlace "ingress/origin_icmp_proxy_test.go" \
-      --replace "TestICMPRouterRejectNotEcho" "SkipICMPRouterRejectNotEcho"
+      --replace-warn "TestICMPRouterRejectNotEcho" "SkipICMPRouterRejectNotEcho"
 
     # Workaround for: origin_icmp_proxy_test.go:108:
     #   Received unexpected error: cannot create ICMPv4 proxy: Group ID 100 is not between ping group 65534 to 65534 nor ICMPv6 proxy: socket: permission denied
     substituteInPlace "ingress/origin_icmp_proxy_test.go" \
-      --replace "TestTraceICMPRouterEcho" "SkipTraceICMPRouterEcho"
+      --replace-warn "TestTraceICMPRouterEcho" "SkipTraceICMPRouterEcho"
 
     # Workaround for: icmp_posix_test.go:28: socket: permission denied
     substituteInPlace "ingress/icmp_posix_test.go" \
-      --replace "TestFunnelIdleTimeout" "SkipFunnelIdleTimeout"
+      --replace-warn "TestFunnelIdleTimeout" "SkipFunnelIdleTimeout"
 
     # Workaround for: icmp_posix_test.go:88: Received unexpected error: Group ID 100 is not between ping group 65534 to 65534
     substituteInPlace "ingress/icmp_posix_test.go" \
-      --replace "TestReuseFunnel" "SkipReuseFunnel"
+      --replace-warn "TestReuseFunnel" "SkipReuseFunnel"
 
     # Workaround for: manager_test.go:197:
     #   Should be false
     substituteInPlace "datagramsession/manager_test.go" \
-      --replace "TestManagerCtxDoneCloseSessions" "SkipManagerCtxDoneCloseSessions"
+      --replace-warn "TestManagerCtxDoneCloseSessions" "SkipManagerCtxDoneCloseSessions"
   '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    tests.simple = callPackage ./tests.nix { inherit version; };
+    tests = callPackage ./tests.nix { inherit version; };
     updateScript = gitUpdater { };
   };
 
