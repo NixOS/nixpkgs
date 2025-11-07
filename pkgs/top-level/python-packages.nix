@@ -2818,6 +2818,10 @@ self: super: with self; {
 
   cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
 
+  cocotbext-axi = callPackage ../development/python-modules/cocotbext-axi {
+    inherit (self) cocotb cocotb-bus;
+  };
+
   codepy = callPackage ../development/python-modules/codepy { };
 
   coffea = callPackage ../development/python-modules/coffea { };
