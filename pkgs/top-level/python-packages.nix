@@ -11530,6 +11530,8 @@ self: super: with self; {
 
   panphon = callPackage ../development/python-modules/panphon { };
 
+  panzi-json-logic = callPackage ../development/python-modules/panzi-json-logic { };
+
   paperbush = callPackage ../development/python-modules/paperbush { };
 
   papermill = callPackage ../development/python-modules/papermill { };
@@ -12274,6 +12276,8 @@ self: super: with self; {
   pretty-errors = callPackage ../development/python-modules/pretty-errors { };
 
   prettytable = callPackage ../development/python-modules/prettytable { };
+
+  price-parser = callPackage ../development/python-modules/price-parser { };
 
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
@@ -13960,6 +13964,8 @@ self: super: with self; {
   pyportainer = callPackage ../development/python-modules/pyportainer { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
+  pyppeteer-ng = callPackage ../development/python-modules/pyppeteer-ng { };
 
   pyppmd = callPackage ../development/python-modules/pyppmd { };
 
