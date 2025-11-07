@@ -41,6 +41,16 @@ buildPythonPackage rec {
       url = "https://0xacab.org/jvoisin/mat2/-/commit/473903b70e1b269a6110242a9c098a10c18554e2.patch";
       hash = "sha256-vxxjAFwiTDlcTT3ZlfhOG4rlzBJS+LhLoA++8y2hEok=";
     })
+    (fetchpatch {
+      name = "fix-test-on-python313.patch";
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/f07344444d6d2f04a1f93e2954f4910b194bee0c.patch";
+      hash = "sha256-y756sKkjGO11A2lrRsXAwWgupOZ00u0cDypvkbsiNbY=";
+    })
+    (fetchpatch {
+      name = "fix-test-on-python312.patch";
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/7a8ea224bc327b8ee929379d577c74968ea1c352.patch";
+      hash = "sha256-pPiYhoql5WhjhLKvd6y3OnvxORSbXIGCsZMc7UH3i1Q=";
+    })
     # hardcode paths to some binaries
     (replaceVars ./paths.patch {
       exiftool = lib.getExe exiftool;
@@ -54,6 +64,11 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+    (fetchpatch {
+      name = "fix-test_html.patch";
+      url = "https://github.com/jvoisin/mat2/commit/00b4f110711754496932c59d5af3c0b2ed694484.patch";
+      hash = "sha256-5h/nM1dK8HmYtoIBVGOvUegMFBpGxcfpn5O6QrjLi9M=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     (replaceVars ./bubblewrap-path.patch {
