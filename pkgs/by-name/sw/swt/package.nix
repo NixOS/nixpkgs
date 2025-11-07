@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     x86_64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
     x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
+    aarch64-linux.platform = "gtk-linux-aarch64";
+    aarch64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    aarch64-darwin.platform = "cocoa-macosx-aarch64";
+    aarch64-darwin.hash = "sha256-G8DOuRuTdFneJSe8ZYdy6WUnFmuUiAyQexxdAOZkYRU=";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;
@@ -36,25 +40,37 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://archive.eclipse.org/eclipse/downloads/drops4/R-${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
       inherit (srcMetadata) hash;
       stripRoot = false;
-      postFetch = ''
-        mkdir "$unpackDir"
-        cd "$unpackDir"
+      postFetch =
+        # On Darwin, copy the prebuilt swt.jar before processing sources and
+        # save it with a different name so it doesn't get removed.
+        if stdenv.hostPlatform.isDarwin then
+          ''
+            cp "$out/swt.jar" "$out/swt-prebuilt.jar" || echo "Warning: swt.jar not found"
+            ls -la "$out/"
+          ''
+        else
+          # On Linux, extract and use only the sources from src.zip
+          ''
+            mkdir "$unpackDir"
+            cd "$unpackDir"
 
-        renamed="$TMPDIR/src.zip"
-        mv -- "$out/src.zip" "$renamed"
-        unpackFile "$renamed"
-        rm -r -- "$out"
+            renamed="$TMPDIR/src.zip"
+            mv -- "$out/src.zip" "$renamed"
+            unpackFile "$renamed"
+            rm -r -- "$out"
 
-        mv -- "$unpackDir" "$out"
-      '';
+            mv -- "$unpackDir" "$out"
+          '';
     };
 
   nativeBuildInputs = [
     jdk
     stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     libGLU
   ];
@@ -65,14 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
   OUTPUT_DIR = "${placeholder "out"}/lib";
   # GTK4 is not supported yet. See:
   # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
-  makeFlags = "gtk3";
-  preBuild = ''
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "gtk3" ];
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     cd library
     mkdir -p ${finalAttrs.OUTPUT_DIR}
   '';
 
-  # Build the jar
-  postBuild = ''
+  # Build the jar (Linux only, Darwin uses prebuilt)
+  postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     cd ../
     mkdir out
     find org/ -name '*.java' -type f -exec javac -encoding utf8 -d out/ {} +
@@ -86,9 +102,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -d -- "$out/jars"
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # On Darwin, use the prebuilt swt.jar which includes native libraries
+    # Remove signature files to avoid validation errors after stripJavaArchivesHook modifies the jar
+    mkdir -p jar-temp
+    cd jar-temp
+    ${jdk}/bin/jar -xf ../swt.jar
+    rm -f META-INF/*.SF META-INF/*.RSA META-INF/*.DSA
+    ${jdk}/bin/jar -cf "$out/jars/swt.jar" *
+    cd ..
+    rm -rf jar-temp
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # On Linux, build from source
     install -m 644 -t out -- version.txt
+
+    # Copy native libraries into the jar
+    cp -v ${finalAttrs.OUTPUT_DIR}/*.so out/ || true
+
     (cd out && jar -c *) > "$out/jars/swt.jar"
 
+  ''
+  + ''
     runHook postInstall
   '';
 
