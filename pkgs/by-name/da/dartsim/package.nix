@@ -142,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "dartpy" ];
 
+  # fix build error on darwin identifier 'xxx' preceded by whitespace in a literal operator declaration is deprecated
+  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin [ "-Wno-deprecated-literal-operator" ];
+
   cmakeFlags = [
     (lib.cmakeBool "DART_VERBOSE" true)
     (lib.cmakeBool "DART_BUILD_DARTPY" pythonSupport)
