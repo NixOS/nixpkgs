@@ -100,7 +100,6 @@ let
           _cuda
           autoAddDriverRunpath
           autoPatchelfHook
-          config
           fetchurl
           lib
           srcOnly
@@ -115,7 +114,7 @@ let
           cudaNamePrefix
           manifests
           markForCudatoolkitRootHook
-          setupCudaHook
+          removeStubsFromRunpathHook
           ;
       };
 

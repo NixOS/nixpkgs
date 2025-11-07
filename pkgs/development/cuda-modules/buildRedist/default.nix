@@ -6,7 +6,6 @@
   autoAddDriverRunpath,
   autoPatchelfHook,
   backendStdenv,
-  config,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
@@ -14,7 +13,7 @@
   lib,
   manifests,
   markForCudatoolkitRootHook,
-  setupCudaHook,
+  removeStubsFromRunpathHook,
   srcOnly,
   stdenv,
   stdenvNoCC,
@@ -24,6 +23,7 @@ let
   inherit (_cuda.lib) getNixSystems _mkCudaVariant mkRedistUrl;
   inherit (lib.attrsets)
     foldlAttrs
+    getDev
     hasAttr
     isAttrs
     attrNames
@@ -55,6 +55,7 @@ let
     ;
   inherit (lib.strings)
     concatMapStringsSep
+    optionalString
     toUpper
     stringLength
     substring
@@ -108,6 +109,9 @@ extendMkDerivation {
     "redistName"
     "release"
 
+    # Fixups
+    "includeRemoveStubsFromRunpathHook"
+
     # Misc
     "brokenAssertions"
     "platformAssertions"
@@ -138,6 +142,7 @@ extendMkDerivation {
 
       # Fixups
       appendRunpaths ? [ ],
+      includeRemoveStubsFromRunpathHook ? elem "stubs" finalAttrs.outputs,
 
       # Extra
       passthru ? { },
@@ -266,6 +271,9 @@ extendMkDerivation {
         # in typically /lib/opengl-driver by adding that
         # directory to the rpath of all ELF binaries.
         # Check e.g. with `patchelf --print-rpath path/to/my/binary
+        # TODO(@connorbaker): Given we'll have stubs available, we can switch from autoPatchelfIgnoreMissingDeps to
+        # allowing autoPatchelf to find and link against the stub files and rely on removeStubsFromRunpathHook to
+        # automatically find and replace those references with ones to the driver link lib directory.
         autoAddDriverRunpath
         markForCudatoolkitRootHook
       ]
@@ -324,6 +332,37 @@ extendMkDerivation {
         # Move the outputs into their respective outputs.
         + ''
           ${concatMapStringsSep "\n" mkMoveToOutputCommand (tail finalAttrs.outputs)}
+        ''
+        # Install the stub removal hook if requested.
+        #
+        # NOTE:
+        #
+        #   We must add the hook to both the propagated-host-host-deps and propagated-build-build-deps to ensure the
+        #   the hook is used regardless of whether the CUDA dependency is in nativeBuildInputs or buildInputs,
+        #   respectively. We use the same selection logic with `__spliced` that `make-derivation.nix` uses for
+        #   `stdenv`.
+        #
+        #   As an example, if `cuda_cudart` (which has stubs) was in `nativeBuildInputs`, our hook should have been
+        #   sourced from propagated-host-host-deps:
+        #
+        #   cuda12.8-cuda-samples> source: sourcing removeStubsFromRunpathHook.bash (hostOffset=-1) (targetOffset=-1)
+        #
+        #   Likewise, if `cuda_cudart` was in `buildInputs`, our hook should have been sourced from
+        #   propagated-build-build-deps:
+        #
+        #   cuda12.8-cuda-samples> source: sourcing removeStubsFromRunpathHook.bash (hostOffset=-1) (targetOffset=-1)
+        #
+        #   This ensures that our hook is always running on the build platform and that the patchelf used is able to
+        #   execute on the build platform -- we cannot trust that useres will always put packages in the correct
+        #   dependency arrays.
+        #
+        + optionalString includeRemoveStubsFromRunpathHook ''
+          nixLog "installing stub removal runpath hook"
+          mkdir -p "''${!outputStubs:?}/nix-support"
+          printWords >>"''${!outputStubs:?}/nix-support/propagated-build-build-deps" \
+            "${getDev removeStubsFromRunpathHook.__spliced.buildBuild or removeStubsFromRunpathHook}"
+          printWords >>"''${!outputStubs:?}/nix-support/propagated-host-host-deps" \
+            "${getDev removeStubsFromRunpathHook.__spliced.hostHost or removeStubsFromRunpathHook}"
         ''
         # Post-install hook
         + ''
