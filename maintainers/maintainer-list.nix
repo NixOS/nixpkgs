@@ -5563,7 +5563,7 @@
   };
   da157 = {
     email = "da157@voidq.com";
-    matrix = "@awwpotato:envs.net";
+    matrix = "@da157:catgirl.cloud";
     github = "0xda157";
     githubId = 153149335;
     name = "0xda157";
