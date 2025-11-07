@@ -6053,7 +6053,8 @@ with pkgs;
   ansible_2_18 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.18.8";
-      src = oldAttrs.src.override {
+      src = fetchPypi {
+        pname = "ansible_core";
         inherit version;
         hash = "sha256-sHZiFalqR845kz0n4emWyivrVM8bOQfHQtNckTsfeM0=";
       };
@@ -6062,7 +6063,8 @@ with pkgs;
   ansible_2_17 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.17.8";
-      src = oldAttrs.src.override {
+      src = fetchPypi {
+        pname = "ansible_core";
         inherit version;
         hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
       };
@@ -6071,7 +6073,8 @@ with pkgs;
   ansible_2_16 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.16.14";
-      src = oldAttrs.src.override {
+      src = fetchPypi {
+        pname = "ansible_core";
         inherit version;
         hash = "sha256-gCef/9mGhrrfqjLh7HhdmKbfGy/B5Al97AWXZA10ZBU=";
       };
@@ -13784,8 +13787,6 @@ with pkgs;
   simulide_1_2_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.2.0"; };
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
-
-  caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 

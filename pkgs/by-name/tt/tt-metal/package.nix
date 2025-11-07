@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   preConfigure = ''
