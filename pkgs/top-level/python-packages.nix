@@ -13240,7 +13240,15 @@ self: super: with self; {
 
   pyglossary = callPackage ../development/python-modules/pyglossary { };
 
-  pygls = callPackage ../development/python-modules/pygls { };
+  pygls = pygls_1;
+
+  pygls_1 = callPackage ../development/python-modules/pygls/1.nix {
+    lsprotocol = lsprotocol_2023;
+  };
+
+  pygls_2 = callPackage ../development/python-modules/pygls/2.nix {
+    lsprotocol = lsprotocol_2025;
+  };
 
   pygltflib = callPackage ../development/python-modules/pygltflib { };
 
