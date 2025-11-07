@@ -839,6 +839,7 @@ mapAliases {
   lightly-qt = throw "'lightly-qt' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
   lima-bin = warnAlias "lima-bin has been replaced by lima" lima; # Added 2025-05-13
+  limbo = warnAlias "limbo has been renamed to turso" turso; # Added 2025-11-07
   lincity_ng = warnAlias "lincity_ng has been renamed to lincity-ng" lincity-ng; # Added 2025-10-09
   linphone = linphonePackages.linphone-desktop; # Added 2025-09-20
   linux-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
