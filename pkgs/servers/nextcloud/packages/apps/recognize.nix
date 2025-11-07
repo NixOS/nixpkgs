@@ -22,9 +22,9 @@ let
       modelHash = "sha256-h3tYtnQUcuFbWAuiKsN2wiFSbbRy/7eNO992MtGrzkc=";
     };
     "32" = {
-      version = "10.0.4";
-      appHash = "sha256-/RHnnvGJMcxe4EuceYc20xh3qkYy1ZzGsyvp0h03eLk=";
-      modelHash = "sha256-AJzVVdZrQs1US1JokW5VokL/uTsK7WiKmuZhw7WeRnU=";
+      version = "10.0.5";
+      appHash = "sha256-wlXF42HpjSf2xwzu4yTKlBcQn8GgKFb44v9vz3NBpgg=";
+      modelHash = "sha256-sLcAiEV30O+oRupE+DtBPxUvDioK+7AEWFSPLKAsIH0=";
     };
   };
   currentVersionInfo =
