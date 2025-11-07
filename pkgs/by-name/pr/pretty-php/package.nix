@@ -15,7 +15,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-V+xncL02fY0olGxqjWBWqD6N1J0XOeOPe55aULuN2bA=";
   };
 
-  vendorHash = "sha256-62KnzttuLsDP7DlEING/koS7lxf5A673F5DwppJs3vw=";
+  vendorHash = "sha256-r5LhN2OjEpiHR0RtK7d/pMd8bqFJbM8CuCXEDGjgG4A=";
 
   passthru = {
     tests.version = testers.testVersion {
