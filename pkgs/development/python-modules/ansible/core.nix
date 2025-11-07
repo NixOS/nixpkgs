@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python,
   pythonOlder,
   installShellFiles,
@@ -39,10 +39,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    pname = "ansible_core";
-    inherit version;
-    hash = "sha256-JDppZpoAe+B5Q2C8RHf3DgEozgCR3Dr0xcuBxqRm9XM=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${version}";
+    hash = "sha256-/Eoq0ixAWoDvrHnxXgDth5TUKZzUDxDTzTDzjSUPugk=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
