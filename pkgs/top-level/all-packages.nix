@@ -13785,8 +13785,6 @@ with pkgs;
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
-  caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
-
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 
   geda = callPackage ../applications/science/electronics/geda {
