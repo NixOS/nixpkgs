@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qps";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qps";
     rev = version;
-    hash = "sha256-uWKTcFO5CoTU5jXB9x5tQ0goEvUpMaeUlMlTG2/xvYg=";
+    hash = "sha256-npTkPcjcxi/hAxUtyayEZeUnVx41iRJThKzhidC+4bQ=";
   };
 
   nativeBuildInputs = [
