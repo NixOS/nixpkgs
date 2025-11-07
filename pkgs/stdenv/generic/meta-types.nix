@@ -95,4 +95,12 @@ lib.fix (self: {
       name = "union<${concatStringsSep "," (map (t: t.name) types)}>";
       verify = v: any (func: func v) funcs;
     };
+
+  enum =
+    values:
+    assert isList values;
+    {
+      name = "enum<${concatStringsSep "," (map toString values)}>";
+      verify = v: any (i: i == v) values;
+    };
 })
