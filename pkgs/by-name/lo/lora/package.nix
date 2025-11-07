@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
-  version = "3.021";
+  version = ".3021";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
