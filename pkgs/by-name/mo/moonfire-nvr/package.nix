@@ -72,9 +72,9 @@ rustPlatform.buildRustPackage {
   passthru = {
     inherit ui;
     tests.version = testers.testVersion {
-      inherit version;
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
+      version = "Version: v${version}";
     };
   };
 
