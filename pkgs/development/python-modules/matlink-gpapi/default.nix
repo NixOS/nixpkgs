@@ -25,6 +25,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # the expected protoc is too old, so fall back to the pure python implementation
+  preBuild = ''
+    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+  '';
+
   dependencies = [
     cryptography
     protobuf
