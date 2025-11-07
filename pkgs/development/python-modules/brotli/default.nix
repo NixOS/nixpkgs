@@ -10,17 +10,8 @@
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.2.0";
+  inherit (brotli) version src;
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "brotli";
-    tag = "v${version}";
-    hash = "sha256-ePfllKdY12hOPuO9uHuXFZ3Bdib6BLD4ghiaeurJZ28=";
-    # .gitattributes is not correct or GitHub does not parse it correct and the archive is missing the test data
-    forceFetchGit = true;
-  };
 
   build-system = [
     pkgconfig
