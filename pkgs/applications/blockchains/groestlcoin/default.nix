@@ -58,9 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     zeromq
     zlib
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
   ++ lib.optionals withWallet [
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
-    ++ lib.optionals withWallet [
     db53
     sqlite
   ]
@@ -92,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_BENCH" false)
     (lib.cmakeBool "WITH_ZMQ" true)
     (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
-  ]
-  ++ lib.optionals (!withWallet) [
+    (lib.cmakeBool "ENABLE_WALLET" (!withWallet))
+    (lib.cmakeBool "BUILD_GUI" (!withGui))
     (lib.cmakeBool "ENABLE_WALLET" false)
   ]
   ++ lib.optionals withGui [
