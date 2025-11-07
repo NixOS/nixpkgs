@@ -12,6 +12,15 @@ if ! test -d "$kernel/lib/modules"; then
     fi
 fi
 
+allowedMissing() {
+  local module="$1"
+
+  # Check if allowMissing is not set, or if the current module is not in the allowMissing list
+  if test -z "$allowMissing" || { test "$allowMissing" != "1" && ! echo "$allowMissing" | grep -qw "$module"; }; then
+    exit 1
+  fi
+}
+
 version=$(cd $kernel/lib/modules && ls -d *)
 
 echo "kernel version is $version"
@@ -30,7 +39,7 @@ for module in $rootModules; do
                 echo "  builtin dependency: $module";;
             insmod)
                 touch found
-                if ! test -e "$module"; then
+                if ! test -e "$module" && ! allowedMissing "$module"; then
                     echo "  dependency not found: $module"
                     exit 1
                 fi
@@ -53,11 +62,12 @@ for module in $rootModules; do
                 echo "  unexpected modprobe output: $cmd $module"
                 exit 1;;
         esac
-    done || test -n "$allowMissing"
+    done || allowedMissing "$module"
     if ! test -e found; then
         echo "  not found"
-        if test -z "$allowMissing"; then
-            exit 1
+
+        if ! allowedMissing "$module"; then
+          exit 1
         fi
     else
         rm found
