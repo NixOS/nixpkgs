@@ -190,7 +190,7 @@ lib.extendMkDerivation {
         if hash != "" then
           {
             outputHashAlgo = null;
-            outputHash = hash;
+            outputHash = finalAttrs.hash;
           }
         else if outputHash != "" then
           if outputHashAlgo != "" then
@@ -200,17 +200,17 @@ lib.extendMkDerivation {
         else if sha512 != "" then
           {
             outputHashAlgo = "sha512";
-            outputHash = sha512;
+            outputHash = finalAttrs.sha512;
           }
         else if sha256 != "" then
           {
             outputHashAlgo = "sha256";
-            outputHash = sha256;
+            outputHash = finalAttrs.sha256;
           }
         else if sha1 != "" then
           {
             outputHashAlgo = "sha1";
-            outputHash = sha1;
+            outputHash = finalAttrs.sha1;
           }
         else if cacert != null then
           {
@@ -260,6 +260,14 @@ lib.extendMkDerivation {
 
       # New-style output content requirements.
       inherit (hash_) outputHashAlgo outputHash;
+
+      # Make overrideAttrs behave as expected
+      inherit
+        hash
+        sha1
+        sha256
+        sha512
+        ;
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
