@@ -52,17 +52,6 @@ The maintainer is designated by a `selector` which must be one of:
 
 [`maintainer-list.nix`]: ../maintainer-list.nix
 
-### `get-maintainer-pings-between.sh`
-
-Gets which maintainers would be pinged between two Nixpkgs revisions.
-Outputs a JSON object on stdout mapping GitHub usernames to the attributes that they would be getting pinged for.
-
-Example:
-
-```sh
-maintainers/scripts/get-maintainer-pings-between.sh HEAD^ HEAD
-```
-
 ## Conventions
 
 ### `sha-to-sri.py`
