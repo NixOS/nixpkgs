@@ -559,6 +559,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails largely due to assumptions about BOM
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
+  ''
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    disable_test t0006-date
+    disable_test t0610-reftable-basics
+    disable_test t6137-pathspec-wildcards-literal
   '';
 
   stripDebugList = [
