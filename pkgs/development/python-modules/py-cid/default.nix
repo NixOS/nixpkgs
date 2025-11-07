@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ipld/py-cid";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];
+    broken = true; # depends on pymultihash, now archived with no releases
   };
 }
