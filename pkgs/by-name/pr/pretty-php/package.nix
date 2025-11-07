@@ -2,7 +2,8 @@
   lib,
   php,
   fetchFromGitHub,
-  testers,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "pretty-php";
@@ -17,12 +18,11 @@ php.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-K9ONddt0Uq6v6VwLyQORVSLo1tCt+52jDdF72Ty5umc=";
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "HOME=$TMPDIR pretty-php --version";
-    };
-  };
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Opinionated PHP code formatter";
