@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pname = "ansible-core";
   # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
   # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
-  version = "2.19.3";
+  version = "2.19.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "ansible";
     tag = "v${version}";
-    hash = "sha256-/Eoq0ixAWoDvrHnxXgDth5TUKZzUDxDTzTDzjSUPugk=";
+    hash = "sha256-TjafUlPKuxpXrfREK65D88SoGThGBzpbfCHr0ZkviI0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
