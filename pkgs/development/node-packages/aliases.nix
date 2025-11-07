@@ -35,10 +35,14 @@ in
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
+  "@babel/cli" =
+    throw "@babel/cli was removed because upstream highly suggests installing it in your project instead of globally."; # Added 2025-11-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@commitlint/config-conventional" =
     throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
+  "@electron-forge/cli" =
+    throw "@electron-forge/cli was removed because upstream suggests that you install it locally in your project instead."; # Added 2025-11-06
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@gitbeaker/cli" = pkgs.gitbeaker-cli; # Added 2025-10-29
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
@@ -72,22 +76,51 @@ mapAliases {
   inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) coc-clangd; # added 2024-06-29
+  inherit (pkgs) coc-cmake; # Added 2025-11-05
   inherit (pkgs) coc-css; # added 2024-06-29
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   inherit (pkgs) coc-docker; # added 2025-10-01
+  inherit (pkgs) coc-emmet; # Added 2025-11-05
+  inherit (pkgs) coc-eslint; # Added 2025-11-05;
   inherit (pkgs) coc-explorer; # added 2025-10-01
+  inherit (pkgs) coc-flutter; # Added 2025-11-05
   inherit (pkgs) coc-git; # added 2025-10-01
+  inherit (pkgs) coc-haxe; # Added 2025-11-05
+  inherit (pkgs) coc-highlight; # Added 2025-11-05
+  inherit (pkgs) coc-html; # Added 2025-11-05
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
-  inherit (pkgs) coc-pyright; # added 2024-07-14
+  inherit (pkgs) coc-java; # Added 2025-11-05
+  inherit (pkgs) coc-jest; # Added 2025-11-05
+  inherit (pkgs) coc-json; # Added 2025-11-05
+  inherit (pkgs) coc-lists; # Added 2025-11-05
+  inherit (pkgs) coc-markdownlint; # Added 2025-11-05
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
+  inherit (pkgs) coc-pairs; # added 2025-11-05
+  inherit (pkgs) coc-prettier; # added 2025-11-05
+  inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
+  inherit (pkgs) coc-r-lsp; # added 2025-11-05
   coc-rls = throw "coc-rls was removed because rls was deprecated in 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
+  inherit (pkgs) coc-rust-analyzer; # added 2025-11-05
   inherit (pkgs) coc-sh; # added 2025-10-02
+  inherit (pkgs) coc-smartf; # Added 2025-11-05
+  inherit (pkgs) coc-snippets; # Added 2025-11-05
+  inherit (pkgs) coc-solargraph; # Added 2025-11-05
   inherit (pkgs) coc-spell-checker; # added 2025-10-01
+  inherit (pkgs) coc-sqlfluff; # Added 2025-11-05
+  inherit (pkgs) coc-stylelint; # Added 2025-11-05
+  inherit (pkgs) coc-sumneko-lua; # Added 2025-11-05
+  inherit (pkgs) coc-tabnine; # Added 2025-11-05
+  inherit (pkgs) coc-texlab; # Added 2025-11-05
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-vetur = throw "coc-vetur was removed because vetur was deprecated by Vue in favor of volar. Use coc-volar instead, which supports Vue 3"; # added 2025-10-01
+  inherit (pkgs) coc-vimlsp; # Added 2025-11-05
+  inherit (pkgs) coc-vimtex; # Added 2025-11-05
+  inherit (pkgs) coc-wxml; # Added 2025-11-05
+  inherit (pkgs) coc-yaml; # Added 2025-11-05
+  inherit (pkgs) coc-yank; # Added 2025-11-05
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
@@ -105,6 +138,7 @@ mapAliases {
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
+  emojione = throw "emojione was archived and abandoned upstream, so it has been removed"; # Added 2025-11-06
   escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
@@ -113,6 +147,7 @@ mapAliases {
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
+  inherit (pkgs) fx; # Added 2025-11-06
   ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
   inherit (pkgs) gatsby-cli; # Added 2025-11-05
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
@@ -146,7 +181,10 @@ mapAliases {
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
+  inherit (pkgs) js-beautify; # Added 2025-11-06
+  inherit (pkgs) jshint; # Added 2025-11-06
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
+  inherit (pkgs) json-server; # Added 2025-11-06
   joplin = pkgs.joplin-cli; # Added 2025-11-02
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
@@ -166,6 +204,7 @@ mapAliases {
   meat = throw "meat was removed because it was abandoned upstream."; # Added 2025-10-20
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
+  inherit (pkgs) mocha; # Added 2025-11-04
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   neovim = pkgs.neovim-node-client; # added 2024-11-13
@@ -196,7 +235,7 @@ mapAliases {
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
   react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
-  inherit (pkgs) react-static; # added 2023-08-21
+  react-static = throw "'react-static has been removed because of a lack of upstream maintainance"; # Converted to throw 2025-11-04
   react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12

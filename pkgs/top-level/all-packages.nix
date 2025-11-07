@@ -4311,9 +4311,6 @@ with pkgs;
   temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
   temurin-jre-bin-25 = javaPackages.compiler.temurin-bin.jre-25;
 
-  temurin-bin-23 = javaPackages.compiler.temurin-bin.jdk-23;
-  temurin-jre-bin-23 = javaPackages.compiler.temurin-bin.jre-23;
-
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
 
@@ -4981,7 +4978,6 @@ with pkgs;
 
   openjfx17 = openjfx;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
-  openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -5008,11 +5004,6 @@ with pkgs;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
-
-  openjdk23 = javaPackages.compiler.openjdk23;
-  openjdk23_headless = javaPackages.compiler.openjdk23.headless;
-  jdk23 = openjdk23;
-  jdk23_headless = openjdk23_headless;
 
   openjdk25 = javaPackages.compiler.openjdk25;
   openjdk25_headless = javaPackages.compiler.openjdk25.headless;
@@ -6132,7 +6123,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_35-bin
     electron_36-bin
     electron_37-bin
     electron_38-bin
@@ -6147,12 +6137,7 @@ with pkgs;
     electron-chromedriver_39
     ;
 
-  electron_35 = electron_35-bin;
-  electron_36 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_36 then
-      electron-source.electron_36
-    else
-      electron_36-bin;
+  electron_36 = electron_36-bin;
   electron_37 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_37 then
       electron-source.electron_37

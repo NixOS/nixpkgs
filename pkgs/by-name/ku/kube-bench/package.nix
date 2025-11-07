@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kube-bench";
-  version = "0.13.0";
+  version = "0.14.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "aquasecurity";
     repo = "kube-bench";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5P8kF8k25E7dezhQ7oKKlu/6y9Ofq3nAeenAI7IOBwE=";
+    hash = "sha256-zu1ckblQnn3Df71myPIYebIQHjMi7S3LoSbsY8RAiVQ=";
   };
 
-  vendorHash = "sha256-vueIQbsF34lkmIFpH8DiOSjxEBevxxiJLd0L/sQwJBE=";
+  vendorHash = "sha256-qRtEkYL+OgcfdYS+u2vRynr+6w6ZEEURxOXE/vCt2fM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
