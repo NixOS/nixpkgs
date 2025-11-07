@@ -244,6 +244,9 @@ in
       "services"
       "quagga"
     ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "quorum" ] ''
+      The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "railcar"

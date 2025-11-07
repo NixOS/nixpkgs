@@ -1294,7 +1294,6 @@ in
   quake3 = runTest ./quake3.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
-  quorum = runTest ./quorum.nix;
   rabbitmq = runTest ./rabbitmq.nix;
   radarr = runTest ./radarr.nix;
   radicale = runTest ./radicale.nix;
