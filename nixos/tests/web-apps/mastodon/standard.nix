@@ -52,14 +52,14 @@ import ../../make-test-python.nix (
           services.mastodon = {
             enable = true;
             configureNginx = true;
-            localDomain = "mastodon.local";
             enableUnixSocket = false;
             streamingProcesses = 2;
             smtp = {
               createLocally = false;
               fromAddress = "mastodon@mastodon.local";
             };
-            extraConfig = {
+            settings = {
+              LOCAL_DOMAIN = "mastodon.local";
               EMAIL_DOMAIN_ALLOWLIST = "example.com";
             };
           };
