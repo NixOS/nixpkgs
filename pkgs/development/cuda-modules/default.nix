@@ -150,6 +150,7 @@ let
           cudaNamePrefix
           manifests
           markForCudatoolkitRootHook
+          removeStubsFromRunpathHook
           ;
       };
 
