@@ -488,12 +488,6 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.9.0) Extra argument (demo platform) in list that is expected to be empty
-    "tests/scripts/test_check_config.py::test_config_platform_valid"
-    # (2025.9.0) Schema mismatch, diff shows a required field that needs to be removed
-    "tests/test_data_entry_flow.py::test_section_in_serializer"
-    # (2025.9.0) unique id collision in async_update_entry
-    "tests/test_config_entries.py::test_async_update_entry_unique_id_collision"
   ];
 
   preCheck = ''
