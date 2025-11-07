@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.1.8";
+  version = "2.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     tag = "v${version}";
-    hash = "sha256-q8TQYiPmm3w9Bh4+gvVW5XAa4FZ3+/MZqZL0RCgl77E=";
+    hash = "sha256-x0VhICEtZZz4Q7btCl7nP0D+YHPIKqbEUWnrEekJpt0=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     beautifulsoup4
     boto3
+    botocore
     lxml
     packaging
     pytz
