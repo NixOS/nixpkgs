@@ -26,7 +26,6 @@
   xorg,
   withQt ? true,
   qt6,
-  fetchpatch,
 }:
 
 let
@@ -96,13 +95,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2510";
+  version = "2511";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-C6Yeqo+KqA6OezxnpBAncTekOrPTgIq0vikQOmxaORA=";
+    hash = "sha256-CulENHssPkCXI+oyVKwf3GN5bjxUok2+AHsoOQ+Mchc=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -127,16 +126,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         External/vixl/test
     '';
   };
-
-  patches = [
-    # Backported fix of unit test build with LLVM 21.
-    # TODO: drop after next release
-    (fetchpatch {
-      name = "unittests-thunklibs-fix-build-with-llvm-21.patch";
-      url = "https://github.com/FEX-Emu/FEX/commit/5af2477d005bb0ab8b11633a678ed5f6121f81b6.patch";
-      hash = "sha256-QdJaexzBSOVaKc3h2uwPbX4iysqvGBDmWH938ZeXcdE=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt ThunkLibs/HostLibs/CMakeLists.txt \
