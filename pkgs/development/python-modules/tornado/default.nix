@@ -59,10 +59,10 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }
