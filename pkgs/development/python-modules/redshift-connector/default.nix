@@ -1,25 +1,30 @@
 {
-  beautifulsoup4,
-  boto3,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  beautifulsoup4,
+  boto3,
+  botocore,
   lxml,
   packaging,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   scramp,
+
+  # test
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redshift-connector";
   version = "2.1.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -33,7 +38,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     boto3
     lxml
@@ -42,6 +49,8 @@ buildPythonPackage rec {
     requests
     scramp
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   nativeCheckInputs = [
     pytest-mock
