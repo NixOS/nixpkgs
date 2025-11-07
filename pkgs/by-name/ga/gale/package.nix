@@ -21,13 +21,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
+    hash = "sha256-b+dngnrII8hBQXsdHKdZKAwRXMdztpNUWG7G/lrvJpM=";
   };
 
   patches = [ ./fix-frontend-backend-tauri-version-mismatch.patch ];
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       patches
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-ILhAhpY9a50a0KKWs5Y+G3jDyWuySHw8QcOJlYePzmc=";
+    fetcherVersion = 3;
+    hash = "sha256-IDt4sVApwI4FKKIhFOZQq4tGysDYFYuYkuY3l0mDU6A=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-tWQRYD6hMU7cvtelGryLdpfoEnUKYt7yYNwHTFZ4pLw=";
+  cargoHash = "sha256-fEOrWHkuJH/Y9gbp3wAn/dVgDwtCg3IRHcJSxok9Ub8=";
 
   nativeBuildInputs = [
     jq
