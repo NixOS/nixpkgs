@@ -1,0 +1,37 @@
+diff --git a/src/Native/Linux.cs b/src/Native/Linux.cs
+index f6eb4eb..1840db7 100644
+--- a/src/Native/Linux.cs
++++ b/src/Native/Linux.cs
+@@ -119,7 +119,7 @@ namespace SourceGit.Native
+             }
+         }
+ 
+-        private string FindExecutable(string filename)
++        public static string FindExecutable(string filename)
+         {
+             var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+             var paths = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+diff --git a/src/Native/MacOS.cs b/src/Native/MacOS.cs
+index a021a16..6b3dff0 100644
+--- a/src/Native/MacOS.cs
++++ b/src/Native/MacOS.cs
+@@ -46,18 +46,7 @@ namespace SourceGit.Native
+ 
+         public string FindGitExecutable()
+         {
+-            var gitPathVariants = new List<string>() {
+-                "/usr/bin/git",
+-                "/usr/local/bin/git",
+-                "/opt/homebrew/bin/git",
+-                "/opt/homebrew/opt/git/bin/git"
+-            };
+-
+-            foreach (var path in gitPathVariants)
+-                if (File.Exists(path))
+-                    return path;
+-
+-            return string.Empty;
++            return Linux.FindExecutable("git");
+         }
+ 
+         public string FindTerminal(Models.ShellOrTerminal shell)

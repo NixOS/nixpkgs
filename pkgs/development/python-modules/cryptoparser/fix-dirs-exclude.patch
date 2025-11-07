@@ -1,0 +1,27 @@
+From 512b5d6e30784594db46bcd0071d63da7065e478 Mon Sep 17 00:00:00 2001
+From: Ivan Mincik <ivan.mincik@gmail.com>
+Date: Wed, 17 Sep 2025 14:09:31 +0200
+Subject: [PATCH] Fix directories exclude from package
+
+* correctly exclude submodules directory
+* also exclude docs directory
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 73897d6..74d43e4 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -75,7 +75,7 @@ technical_name = 'cryptoparser'
+ license-files = ['LICENSE.txt']
+ 
+ [tool.setuptools.packages.find]
+-exclude = ['submodules']
++exclude = ['submodules*', 'docs']
+ 
+ [tool.tox]
+ envlist = [
+-- 
+GitLab
+

@@ -1,0 +1,20 @@
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index ebf20ab21b..2aa5d9e908 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -403,15 +403,6 @@ if (CPUINFO_SUPPORTED)
+ endif()
+ 
+ if(onnxruntime_USE_CUDA)
+-  onnxruntime_fetchcontent_declare(
+-    GSL
+-    URL ${DEP_URL_microsoft_gsl}
+-    URL_HASH SHA1=${DEP_SHA1_microsoft_gsl}
+-    PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/gsl/1064.patch
+-    EXCLUDE_FROM_ALL
+-    FIND_PACKAGE_ARGS 4.0 NAMES Microsoft.GSL
+-  )
+-else()
+   onnxruntime_fetchcontent_declare(
+     GSL
+     URL ${DEP_URL_microsoft_gsl}

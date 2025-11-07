@@ -1,0 +1,25 @@
+diff --git a/cmake/SearchForStuff.cmake b/cmake/SearchForStuff.cmake
+index 504b7a3..100a024 100644
+--- a/cmake/SearchForStuff.cmake
++++ b/cmake/SearchForStuff.cmake
+@@ -107,7 +107,7 @@ disable_compiler_warnings_for_target(cubeb)
+ disable_compiler_warnings_for_target(speex)
+ 
+ # Find the Qt components that we need.
+-find_package(Qt6 6.7.3 COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets LinguistTools REQUIRED)
++find_package(Qt6 6.7.3 COMPONENTS CoreTools Core CorePrivate GuiTools Gui GuiPrivate WidgetsTools Widgets WidgetsPrivate LinguistTools REQUIRED)
+ 
+ if(WIN32)
+   add_subdirectory(3rdparty/rainterface EXCLUDE_FROM_ALL)
+diff --git a/pcsx2-qt/CMakeLists.txt b/pcsx2-qt/CMakeLists.txt
+index a62df95..4883c64 100644
+--- a/pcsx2-qt/CMakeLists.txt
++++ b/pcsx2-qt/CMakeLists.txt
+@@ -266,6 +266,7 @@ target_link_libraries(pcsx2-qt PRIVATE
+ 	Qt6::Core
+ 	Qt6::Gui
+ 	Qt6::Widgets
++	Qt6::GuiPrivate
+ 	KDAB::kddockwidgets
+ )
+ 

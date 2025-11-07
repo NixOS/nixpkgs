@@ -1,0 +1,48 @@
+From 9f0024ae3a0377d15788256c72af7a692d250afc Mon Sep 17 00:00:00 2001
+From: dotlambda <github@dotlambda.de>
+Date: Thu, 23 Oct 2025 13:40:33 -0700
+Subject: [PATCH] test(metrics): some metrics only exists on Linux
+
+---
+ tests/metrics_test.py | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/tests/metrics_test.py b/tests/metrics_test.py
+index 1e1ea47..fecf3c0 100644
+--- a/tests/metrics_test.py
++++ b/tests/metrics_test.py
+@@ -2,6 +2,8 @@
+
+ from __future__ import annotations
+
++import platform
++
+ from typesense.metrics import Metrics
+
+
+@@ -9,13 +11,15 @@ def test_actual_retrieve(actual_metrics: Metrics) -> None:
+     """Test that the Debug object can retrieve a debug on Typesense server and verify response structure."""
+     response = actual_metrics.retrieve()
+
+-    assert "system_cpu_active_percentage" in response
++    if platform.system() == "Linux":
++        assert "system_cpu_active_percentage" in response
++        assert "system_network_received_bytes" in response
++        assert "system_network_sent_bytes" in response
++
+     assert "system_disk_total_bytes" in response
+     assert "system_disk_used_bytes" in response
+     assert "system_memory_total_bytes" in response
+     assert "system_memory_used_bytes" in response
+-    assert "system_network_received_bytes" in response
+-    assert "system_network_sent_bytes" in response
+     assert "typesense_memory_active_bytes" in response
+     assert "typesense_memory_allocated_bytes" in response
+     assert "typesense_memory_fragmentation_ratio" in response
+@@ -23,4 +27,4 @@ def test_actual_retrieve(actual_metrics: Metrics) -> None:
+     assert "typesense_memory_mapped_bytes" in response
+     assert "typesense_memory_metadata_bytes" in response
+     assert "typesense_memory_resident_bytes" in response
+-    assert "typesense_memory_retained_bytes" in response
+\ No newline at end of file
++    assert "typesense_memory_retained_bytes" in response

@@ -1,0 +1,347 @@
+diff --git a/y4mdenoise/Region2D.hh b/y4mdenoise/Region2D.hh
+index b44e93f..ebc2821 100644
+--- a/y4mdenoise/Region2D.hh
++++ b/y4mdenoise/Region2D.hh
+@@ -97,35 +97,11 @@ public:
+ 		// Add the given horizontal extent to the region.  Note that
+ 		// a_tnXEnd is technically one past the end of the extent.
+ 
+-	template <class REGION, class REGION_TEMP>
+-	void UnionDebug (Status_t &a_reStatus, INDEX a_tnY,
+-			INDEX a_tnXStart, INDEX a_tnXEnd, REGION_TEMP &a_rTemp);
+-		// Add the given horizontal extent to the region.  Note that
+-		// a_tnXEnd is technically one past the end of the extent.
+-		// Exhaustively (i.e. slowly) verifies the results, using a
+-		// much simpler algorithm.
+-		// Requires the use of a temporary region, usually of the
+-		// final subclass' type, in order to work.  (Since that can't
+-		// be known at this level, a template parameter is included for
+-		// it.)
+-
+ 	template <class REGION>
+ 	void Union (Status_t &a_reStatus, const REGION &a_rOther);
+ 		// Make the current region represent the union between itself
+ 		// and the other given region.
+ 
+-	template <class REGION, class REGION_O, class REGION_TEMP>
+-	void UnionDebug (Status_t &a_reStatus,
+-			REGION_O &a_rOther, REGION_TEMP &a_rTemp);
+-		// Make the current region represent the union between itself
+-		// and the other given region.
+-		// Exhaustively (i.e. slowly) verifies the results, using a
+-		// much simpler algorithm.
+-		// Requires the use of a temporary region, usually of the
+-		// final subclass' type, in order to work.  (Since that can't
+-		// be known at this level, a template parameter is included for
+-		// it.)
+-
+ 	//void Merge (Status_t &a_reStatus, INDEX a_tnY, INDEX a_tnXStart,
+ 	//		INDEX a_tnXEnd);
+ 		// Merge this extent into the current region.
+@@ -166,37 +142,12 @@ public:
+ 		// Subtract the given horizontal extent from the region.  Note
+ 		// that a_tnXEnd is technically one past the end of the extent.
+ 
+-	template <class REGION_TEMP>
+-	void SubtractDebug (Status_t &a_reStatus, INDEX a_tnY,
+-			INDEX a_tnXStart, INDEX a_tnXEnd, REGION_TEMP &a_rTemp);
+-		// Subtract the given horizontal extent from the region.  Note
+-		// that a_tnXEnd is technically one past the end of the extent.
+-		// Exhaustively (i.e. slowly) verifies the results, using a
+-		// much simpler algorithm.
+-		// Requires the use of a temporary region, usually of the
+-		// final subclass' type, in order to work.  (Since that can't
+-		// be known at this level, a template parameter is included for
+-		// it.)
+-
+ 	template <class REGION>
+ 	void Subtract (Status_t &a_reStatus, const REGION &a_rOther);
+ 		// Subtract the other region from the current region, i.e.
+ 		// remove from the current region any extents that exist in the
+ 		// other region.
+ 	
+-	template <class REGION, class REGION_O, class REGION_TEMP>
+-	void SubtractDebug (Status_t &a_reStatus, REGION_O &a_rOther,
+-			REGION_TEMP &a_rTemp);
+-		// Subtract the other region from the current region, i.e.
+-		// remove from the current region any extents that exist in the
+-		// other region.
+-		// Exhaustively (i.e. slowly) verifies the results, using a
+-		// much simpler algorithm.
+-		// Requires the use of a temporary region, usually of the
+-		// final subclass' type, in order to work.  (Since that can't
+-		// be known at this level, a template parameter is included for
+-		// it.)
+-
+ 	//typedef ... ConstIterator;
+ 	//ConstIterator Begin (void) const { return m_setExtents.Begin(); }
+ 	//ConstIterator End (void) const { return m_setExtents.End(); }
+@@ -404,85 +355,6 @@ Region2D<INDEX,SIZE>::~Region2D()
+ 
+ 
+ 
+-// Add the given horizontal extent to the region.
+-template <class INDEX, class SIZE>
+-template <class REGION, class REGION_TEMP>
+-void
+-Region2D<INDEX,SIZE>::UnionDebug (Status_t &a_reStatus, INDEX a_tnY,
+-	INDEX a_tnXStart, INDEX a_tnXEnd, REGION_TEMP &a_rTemp)
+-{
+-	typename REGION::ConstIterator itHere;
+-	typename REGION_TEMP::ConstIterator itHereO;
+-	INDEX tnX;
+-		// Used to loop through points.
+-
+-	// Make sure they didn't start us off with an error.
+-	assert (a_reStatus == g_kNoError);
+-
+-	// Calculate the union.
+-	a_rTemp.Assign (a_reStatus, *this);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	a_rTemp.Union (a_reStatus, a_tnY, a_tnXStart, a_tnXEnd);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	
+-	// Loop through every point in the result, make sure it's in
+-	// one of the two input regions.
+-	for (itHereO = a_rTemp.Begin(); itHereO != a_rTemp.End(); ++itHereO)
+-	{
+-		const Extent &rHere = *itHereO;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!((rHere.m_tnY == a_tnY
+-				&& (tnX >= a_tnXStart && tnX < a_tnXEnd))
+-			|| this->DoesContainPoint (rHere.m_tnY, tnX)))
+-				goto error;
+-		}
+-	}
+-
+-	// Loop through every point in the original region, make sure
+-	// it's in the result.
+-	for (itHere = this->Begin(); itHere != this->End(); ++itHere)
+-	{
+-		const Extent &rHere = *itHere;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!a_rTemp.DoesContainPoint (rHere.m_tnY, tnX))
+-				goto error;
+-		}
+-	}
+-
+-	// Loop through every point in the added extent, make sure it's in
+-	// the result.
+-	for (tnX = a_tnXStart; tnX < a_tnXEnd; ++tnX)
+-	{
+-		if (!a_rTemp.DoesContainPoint (a_tnY, tnX))
+-			goto error;
+-	}
+-
+-	// The operation succeeded.  Commit it.
+-	Assign (a_reStatus, a_rTemp);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-
+-	// All done.
+-	return;
+-
+-error:
+-	// Handle deviations.
+-	fprintf (stderr, "Region2D::Union() failed\n");
+-	fprintf (stderr, "Input region:\n");
+-	PrintRegion (*this);
+-	fprintf (stderr, "Input extent: [%d,%d-%d]\n",
+-		int (a_tnY), int (a_tnXStart), int (a_tnXEnd));
+-	fprintf (stderr, "Result:\n");
+-	PrintRegion (a_rTemp);
+-	assert (false);
+-}
+-
+-
+-
+ // Make the current region represent the union between itself
+ // and the other given region.
+ template <class INDEX, class SIZE>
+@@ -513,182 +385,6 @@ Region2D<INDEX,SIZE>::Union (Status_t &a_reStatus,
+ 
+ 
+ 
+-// Make the current region represent the union between itself
+-// and the other given region.
+-template <class INDEX, class SIZE>
+-template <class REGION, class REGION_O, class REGION_TEMP>
+-void
+-Region2D<INDEX,SIZE>::UnionDebug (Status_t &a_reStatus,
+-	REGION_O &a_rOther, REGION_TEMP &a_rTemp)
+-{
+-	typename REGION::ConstIterator itHere;
+-	typename REGION_O::ConstIterator itHereO;
+-	typename REGION_TEMP::ConstIterator itHereT;
+-	INDEX tnX;
+-		// Used to loop through points.
+-
+-	// Make sure they didn't start us off with an error.
+-	assert (a_reStatus == g_kNoError);
+-
+-	// Calculate the union.
+-	a_rTemp.Assign (a_reStatus, *this);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	a_rTemp.Union (a_reStatus, a_rOther);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	
+-	// Loop through every point in the result, make sure it's in
+-	// one of the two input regions.
+-	for (itHereT = a_rTemp.Begin(); itHereT != a_rTemp.End(); ++itHereT)
+-	{
+-		const Extent &rHere = *itHereT;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!a_rOther.DoesContainPoint (rHere.m_tnY, tnX)
+-			&& !this->DoesContainPoint (rHere.m_tnY, tnX))
+-				goto error;
+-		}
+-	}
+-
+-	// Loop through every point in the first input region, make sure
+-	// it's in the result.
+-	for (itHere = this->Begin(); itHere != this->End(); ++itHere)
+-	{
+-		const Extent &rHere = *itHere;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!a_rTemp.DoesContainPoint (rHere.m_tnY, tnX))
+-				goto error;
+-		}
+-	}
+-
+-	// Loop through every point in the second input region, make sure
+-	// it's in the result.
+-	for (itHereO = a_rOther.Begin();
+-		 itHereO != a_rOther.End();
+-		 ++itHereO)
+-	{
+-		const Extent &rHere = *itHereO;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!a_rTemp.DoesContainPoint (rHere.m_tnY, tnX))
+-				goto error;
+-		}
+-	}
+-
+-	// The operation succeeded.  Commit it.
+-	Assign (a_reStatus, a_rTemp);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-
+-	// All done.
+-	return;
+-
+-error:
+-	// Handle deviations.
+-	fprintf (stderr, "Region2D::Union() failed\n");
+-	fprintf (stderr, "First input region:\n");
+-	PrintRegion (*this);
+-	fprintf (stderr, "Second input region:\n");
+-	PrintRegion (a_rOther);
+-	fprintf (stderr, "Result:\n");
+-	PrintRegion (a_rTemp);
+-	assert (false);
+-}
+-
+-
+-
+-// Subtract the other region from the current region, i.e.
+-// remove from the current region any areas that exist in the
+-// other region.
+-template <class INDEX, class SIZE>
+-template <class REGION, class REGION_O, class REGION_TEMP>
+-void
+-Region2D<INDEX,SIZE>::SubtractDebug (Status_t &a_reStatus,
+-	REGION_O &a_rOther, REGION_TEMP &a_rTemp)
+-{
+-	typename REGION::ConstIterator itHere;
+-	typename REGION_O::ConstIterator itHereO;
+-	typename REGION_TEMP::ConstIterator itHereT;
+-	INDEX tnX;
+-		// Used to loop through points.
+-
+-	// Make sure they didn't start us off with an error.
+-	assert (a_reStatus == g_kNoError);
+-
+-	// Calculate the difference.
+-	a_rTemp.Assign (a_reStatus, *this);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	a_rTemp.Subtract (a_reStatus, a_rOther);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-	
+-	// Loop through every point in the result, make sure it's in
+-	// the first input region but not the second.
+-	for (itHereT = a_rTemp.Begin(); itHereT != a_rTemp.End(); ++itHereT)
+-	{
+-		const Extent &rHere = *itHereT;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!(this->DoesContainPoint (rHere.m_tnY, tnX)
+-			&& !a_rOther.DoesContainPoint (rHere.m_tnY, tnX)))
+-				goto error;
+-		}
+-	}
+-
+-	// Loop through every point in the first input region, and if it's
+-	// not in the second input region, make sure it's in the result.
+-	for (itHere = this->Begin(); itHere != this->End(); ++itHere)
+-	{
+-		const Extent &rHere = *itHere;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (!a_rOther.DoesContainPoint (rHere.m_tnY, tnX))
+-			{
+-				if (!a_rTemp.DoesContainPoint (rHere.m_tnY, tnX))
+-					goto error;
+-			}
+-		}
+-	}
+-
+-	// Loop through every point in the second input region, make sure
+-	// it's not in the result.
+-	for (itHereO = a_rOther.Begin();
+-		 itHereO != a_rOther.End();
+-		 ++itHereO)
+-	{
+-		const Extent &rHere = *itHere;
+-		for (tnX = rHere.m_tnXStart; tnX < rHere.m_tnXEnd; ++tnX)
+-		{
+-			if (a_rTemp.DoesContainPoint (rHere.m_tnY, tnX))
+-				goto error;
+-		}
+-	}
+-
+-	// The operation succeeded.  Commit it.
+-	Assign (a_reStatus, a_rTemp);
+-	if (a_reStatus != g_kNoError)
+-		return;
+-
+-	// All done.
+-	return;
+-
+-error:
+-	// Handle deviations.
+-	fprintf (stderr, "Region2D::Subtract() failed\n");
+-	fprintf (stderr, "First input region:\n");
+-	PrintRegion (*this);
+-	fprintf (stderr, "Second input region:\n");
+-	PrintRegion (a_rOther);
+-	fprintf (stderr, "Result:\n");
+-	PrintRegion (a_rTemp);
+-	assert (false);
+-}
+-
+-
+-
+ // Flood-fill the current region.
+ template <class INDEX, class SIZE>
+ template <class CONTROL>

@@ -1,0 +1,17 @@
+--- a/src/dns.c   2007-06-25 23:58:38.000000000 -0700
++++ b/src/dns.c   2016-06-04 16:20:19.644865127 -0700
+@@ -113,12 +113,13 @@
+ lookup_host_addrinfo(struct addrinfo **res, const char *host, int port)
+ {
+   struct addrinfo hints;
+-  char ascport[10] = "whois";
++  char ascport[10] = "nicname";
+   int error;
+
+   memset(&hints, 0, sizeof(hints));
+   hints.ai_family = PF_UNSPEC;
+
++  hints.ai_flags = AI_ADDRCONFIG;
+   hints.ai_socktype = SOCK_STREAM;
+   if (port)
+     sprintf(ascport, "%9.9d", port);

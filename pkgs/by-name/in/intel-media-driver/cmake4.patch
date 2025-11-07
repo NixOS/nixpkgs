@@ -1,0 +1,156 @@
+diff --git a/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt b/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
+index 2c72d282d2b..025b9354254 100644
+--- a/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
++++ b/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(IntelGenDmyHexTool) 
+ add_compile_options(-std=c++11)
+ 
+diff --git a/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt b/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
+index cc586ba766d..519ca954d33 100644
+--- a/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
++++ b/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(GenKrnBin)
+ 
+diff --git a/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt b/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
+index 713d08600ec..91eacf15d8b 100644
+--- a/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
++++ b/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(IntelKernelBinToSourceTool) 
+ add_compile_options(-std=c++11)
+ 
+diff --git a/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt b/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
+index a3cb7341c6e..e2bfde5e884 100644
+--- a/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
++++ b/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(KrnToHexTool) 
+ add_compile_options(-std=c++11)
+ 
+diff --git a/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt b/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
+index af622be19cb..40e4eba171e 100644
+--- a/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
++++ b/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(KrnToHex_IGA)
+ 
+diff --git a/cmrtlib/CMakeLists.txt b/cmrtlib/CMakeLists.txt
+index 9ecb1e4e10a..54f907b3772 100644
+--- a/cmrtlib/CMakeLists.txt
++++ b/cmrtlib/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+ set(BUILD_ALL $ENV{BUILD_ALL})
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(CM_RT)
+ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/linux)
+ 
+diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
+index b066138d9df..df02bab2a69 100644
+--- a/cmrtlib/linux/CMakeLists.txt
++++ b/cmrtlib/linux/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ include (${CMAKE_CURRENT_LIST_DIR}/cmrt_utils.cmake)
+ 
+ 
+diff --git a/media_driver/linux/ult/CMakeLists.txt b/media_driver/linux/ult/CMakeLists.txt
+index 9fb5b39ee42..f06b490110b 100644
+--- a/media_driver/linux/ult/CMakeLists.txt
++++ b/media_driver/linux/ult/CMakeLists.txt
+@@ -17,7 +17,7 @@
+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ 
+ if ("${BUILD_TYPE}" STREQUAL "debug")
+     set(CMAKE_BUILD_TYPE "Debug")
+diff --git a/media_driver/linux/ult/libdrm_mock/CMakeLists.txt b/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
+index 438715a91c3..e5d2c88ed5b 100644
+--- a/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
++++ b/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
+@@ -17,7 +17,7 @@
+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(libdrm_mock)
+ 
+diff --git a/media_driver/linux/ult/ult_app/CMakeLists.txt b/media_driver/linux/ult/ult_app/CMakeLists.txt
+index 1b24fed7fc5..64217b9fe65 100644
+--- a/media_driver/linux/ult/ult_app/CMakeLists.txt
++++ b/media_driver/linux/ult/ult_app/CMakeLists.txt
+@@ -17,7 +17,7 @@
+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(devult)
+ 
+diff --git a/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt b/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
+index 6b1f7433596..bba044a97d8 100644
+--- a/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
++++ b/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
+@@ -17,7 +17,7 @@
+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(devult)
+ 
+diff --git a/os_release_info.cmake b/os_release_info.cmake
+index b4a84e2c5cb..a3b879d8545 100644
+--- a/os_release_info.cmake
++++ b/os_release_info.cmake
+@@ -29,7 +29,7 @@ set(_os_release_info TRUE)
+ # of the local cmake environment.
+ 
+ # Set cmake policies for at least this level:
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ 
+ 
+ # Function get_os_release_info - Determine and return OS name and version

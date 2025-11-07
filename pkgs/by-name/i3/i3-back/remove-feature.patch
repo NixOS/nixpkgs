@@ -1,0 +1,22 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 68cbda32f3..0e3f6ad1f6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,7 +1,7 @@
+ [package]
+ name = "i3-back"
+ version = "0.3.2"
+-edition = "2021"
++edition = "2024"
+ description = "An i3/Sway utility to switch focus to your last focused window. Allows for behavior similar to Alt+Tab on other desktop environments."
+ repository = "https://github.com/Cretezy/i3-back"
+ homepage = "https://github.com/Cretezy/i3-back"
+diff --git a/src/main.rs b/src/main.rs
+index e11a2a7550..91a34cab07 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,3 @@
+-#![feature(let_chains)]
+ use std::process;
+ use std::thread;
+ use std::time::Duration;
