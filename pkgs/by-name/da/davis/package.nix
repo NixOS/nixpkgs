@@ -16,9 +16,8 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-Ih06CKwgR2ljw3w9YfgVUdBCjt5Nbs34fMsErRUkfcc=";
   };
 
-  vendorHash = "sha256-e0qSI5naqM/mUSMduiku0yQkYMGw1y9Uwa5oYlxaDzs=";
-
   composerNoPlugins = false;
+  vendorHash = "sha256-jJ+woXeoAU7UD40iFa0oakryKswHwmj4UNhqxjlo+8I=";
 
   postInstall = ''
     chmod -R u+w $out/share
