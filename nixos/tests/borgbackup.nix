@@ -98,7 +98,7 @@ in
             dumpCommand = pkgs.writeScript "createTarArchive" ''
               ${lib.getExe pkgs.gnutar} cf - ${dataDir}
             '';
-            dumpCommandProducesTar = true;
+            createCommand = "import-tar";
             repo = localTarRepo;
             # Make sure in import-tar mode encryption flags are still respected.
             encryption = {

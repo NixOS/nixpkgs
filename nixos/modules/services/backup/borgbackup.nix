@@ -91,13 +91,13 @@ let
       ''
       + (
         let
-          import-tar = cfg.dumpCommand != null && cfg.dumpCommandProducesTar;
+          import-tar = cfg.createCommand == "import-tar";
         in
         ''
           (
             set -o pipefail
             ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
-            borgWrapper ${if import-tar then "import-tar" else "create"} "''${extraArgs[@]}" \
+            borgWrapper ${lib.escapeShellArg cfg.createCommand} "''${extraArgs[@]}" \
               --compression ${cfg.compression} \
               ${lib.optionalString (!import-tar) "--exclude-from ${mkExcludeFile cfg}"} \
               ${lib.optionalString (!import-tar) "--patterns-from ${mkPatternsFile cfg}"} \
@@ -315,15 +315,20 @@ let
     '';
   };
 
-  mkCreateCommandAssertions = name: cfg: {
-    assertion =
-      (cfg.exclude == [ ] && cfg.patterns == [ ])
-      || cfg.dumpCommand == null
-      || !cfg.dumpCommandProducesTar;
+  mkCreateCommandImportTarDumpCommandAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || cfg.dumpCommand != null;
     message = ''
-      Options borgbackup.jobs.${name}.exclude and borgbackup.jobs.${name}.patterns
-      have no effect when dumpCommand is specified and dumpCommandProducesTar is
-      true, as they are not supported by "borg import-tar".
+      Option borgbackup.jobs.${name}.dumpCommand is required when createCommand
+      is set to "import-tar".
+    '';
+  };
+
+  mkCreateCommandImportTarExclusionsAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || (cfg.exclude == [ ] && cfg.patterns == [ ]);
+    message = ''
+      Options borgbackup.jobs.${name}.exclude and
+      borgbackup.jobs.${name}.patterns have no effect when createCommand is set
+      to "import-tar".
     '';
   };
 
@@ -394,6 +399,25 @@ in
         { name, config, ... }:
         {
           options = {
+            createCommand = lib.mkOption {
+              type = lib.types.enum [
+                "create"
+                "import-tar"
+              ];
+              description = ''
+                Borg command to use for archive creation. The default (`create`)
+                creates a regular Borg archive.
+
+                Use `import-tar` to instead read a tar archive stream from
+                {option}`dumpCommand` output and import its contents into the
+                repository.
+
+                `import-tar` can not be used together with {option}`exclude` or
+                {option}`patterns`.
+              '';
+              default = "create";
+              example = "import-tar";
+            };
 
             paths = lib.mkOption {
               type = with lib.types; nullOr (coercedTo str lib.singleton (listOf str));
@@ -413,17 +437,6 @@ in
                 Mutually exclusive with {option}`paths`.
               '';
               example = "/path/to/createZFSsend.sh";
-            };
-
-            dumpCommandProducesTar = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = ''
-                Set to `true` to use {command}`borg import-tar` instead of
-                {command}`borg create` when creating an archive. Has no effect
-                when {option}`dumpCommand` is unset.
-              '';
-              example = true;
             };
 
             repo = lib.mkOption {
@@ -585,7 +598,8 @@ in
                 Exclude paths matching any of the given patterns. See
                 {command}`borg help patterns` for pattern syntax.
 
-                Conflicts with {option}`dumpCommandProducesTar`.
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -602,7 +616,8 @@ in
                 matches before an exclude pattern (prefix `-`), the file is
                 backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
 
-                Conflicts with {option}`dumpCommandProducesTar`.
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -920,7 +935,8 @@ in
         lib.mapAttrsToList mkPassAssertion jobs
         ++ lib.mapAttrsToList mkKeysAssertion repos
         ++ lib.mapAttrsToList mkSourceAssertions jobs
-        ++ lib.mapAttrsToList mkCreateCommandAssertions jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarDumpCommandAssertion jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarExclusionsAssertion jobs
         ++ lib.mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       systemd.tmpfiles.settings = lib.mapAttrs' mkTmpfiles jobs;
