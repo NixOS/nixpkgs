@@ -1,9 +1,11 @@
 {
   lib,
   python3Packages,
+  cacert,
   fetchFromGitHub,
   git,
   git-lfs,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,8 +34,13 @@ python3Packages.buildPythonApplication rec {
     ])
   ];
 
-  # has no unit tests
-  doCheck = false;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
   meta = with lib; {
     description = "Backup a github user or organization";
