@@ -991,7 +991,8 @@
       ];
     "compit" =
       ps: with ps; [
-      ]; # missing inputs: compit-inext-api
+        compit-inext-api
+      ];
     "concord232" =
       ps: with ps; [
         concord232
@@ -7168,6 +7169,7 @@
     "comfoconnect"
     "command_line"
     "compensation"
+    "compit"
     "config"
     "configurator"
     "control4"
