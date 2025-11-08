@@ -143,6 +143,9 @@ buildNpmPackage {
     # fix httpSafePort setting
     # https://github.com/cryptpad/cryptpad/pull/1571
     ./0001-env.js-fix-httpSafePort-handling.patch
+    # fix install-onlyyofice.sh check
+    # https://github.com/cryptpad/cryptpad/pull/2097
+    ./0001-install-onlyoffice.sh-fix-check-for-new-install_vers.patch
   ];
 
   # cryptpad build tries to write in cache dir
@@ -179,9 +182,11 @@ buildNpmPackage {
     # verify that we've installed the correct versions of the various
     # OnlyOffice components.
 
-    # TODO: Patch the new install method to only verify versions;
-    # patchShebangs --build $out_cryptpad/install-onlyoffice.sh
-    # $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
+    patchShebangs --build $out_cryptpad/install-onlyoffice.sh
+    mkdir -p $out_cryptpad/onlyoffice-conf
+    # Need to set this to verify older versions - next commit will optimize
+    echo oldest_needed_version=v1 > $out_cryptpad/onlyoffice-conf/onlyoffice.properties
+    $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
 
     # cryptpad assumes it runs in the source directory and also outputs
     # its state files there, which is not exactly great for us.
