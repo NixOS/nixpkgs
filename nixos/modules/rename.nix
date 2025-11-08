@@ -234,6 +234,10 @@ in
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
+    (mkRemovedOptionModule [ "services" "parsoid" ] ''
+      The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
+      and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
+    '')
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
     '')
