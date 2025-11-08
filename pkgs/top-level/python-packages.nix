@@ -3671,6 +3671,10 @@ self: super: with self; {
 
   deprecated = callPackage ../development/python-modules/deprecated { };
 
+  deprecated-crypt-alternative =
+    callPackage ../development/python-modules/deprecated-crypt-alternative
+      { };
+
   deprecation = callPackage ../development/python-modules/deprecation { };
 
   deprecation-alias = callPackage ../development/python-modules/deprecation-alias { };
