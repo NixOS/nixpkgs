@@ -76,5 +76,4 @@
 , "vega-cli"
 , "vercel"
 , "wavedrom-cli"
-, "@yaegassy/coc-nginx"
 ]

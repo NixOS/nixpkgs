@@ -66,6 +66,7 @@ mapAliases {
   "@webassemblyjs/wasm-text-gen-1.11.1" = pkgs.wasm-text-gen; # Added 2025-11-06
   "@webassemblyjs/wast-refmt-1.11.1" = pkgs.wast-refmt; # Added 2025-11-06
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
+  "@yaegassy/coc-nginx" = pkgs.coc-nginx; # Added 2025-11-08
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26

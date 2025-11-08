@@ -40129,22 +40129,4 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "@yaegassy/coc-nginx" = nodeEnv.buildNodePackage {
-    name = "_at_yaegassy_slash_coc-nginx";
-    packageName = "@yaegassy/coc-nginx";
-    version = "0.4.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@yaegassy/coc-nginx/-/coc-nginx-0.4.1.tgz";
-      sha512 = "GJeiQWiBDxKsWPowBLBjxnPzaRT50L9tLDtD9dZcKh8OQTdrOJGa7cqNz7T/xuqSq3r+AyD1mmeNSL7141HMsQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "nginx-language-server extension for coc.nvim";
-      homepage = "https://github.com/yaegassy/coc-nginx#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
 }

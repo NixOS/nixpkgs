@@ -2,6 +2,7 @@
   lib,
   buildVimPlugin,
   pkgs,
+  coc-nginx,
 }:
 final: prev:
 let
@@ -60,3 +61,9 @@ lib.genAttrs cocPackages (
     src = "${cocPkg}/lib/node_modules/${cocPkg.pname}";
   }
 )
+// {
+  coc-nginx = buildVimPlugin {
+    inherit (coc-nginx) pname version meta;
+    src = "${coc-nginx}/lib/node_modules/@yaegassy/coc-nginx";
+  };
+}
