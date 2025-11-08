@@ -919,6 +919,7 @@ in
                 if ! user_configured "$user"; then
                     # systemd has this user configured to linger despite them not
                     # existing.
+                    echo "Removing linger for missing user $user" >&2
                     rm -- "$user"
                 fi
             done
