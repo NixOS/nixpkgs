@@ -13129,8 +13129,6 @@ with pkgs;
     pythonSupport = true;
   };
 
-  leela-zero = libsForQt5.callPackage ../games/leela-zero { };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
