@@ -250,6 +250,7 @@ mapAliases {
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
+  matlink-gpapi = throw "'matlink-gpapi' has been removed as it was broken and unmaintained"; # Added 2025-11-09
   MDP = throw "'MDP' has been renamed to/replaced by 'mdp'"; # Converted to throw 2025-10-29
   MechanicalSoup = throw "'MechanicalSoup' has been renamed to/replaced by 'mechanicalsoup'"; # Converted to throw 2025-10-29
   memcached = throw "'memcached' has been renamed to/replaced by 'python-memcached'"; # Converted to throw 2025-10-29

@@ -9145,8 +9145,6 @@ self: super: with self; {
 
   mathutils = callPackage ../development/python-modules/mathutils { };
 
-  matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
-
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
   };
