@@ -42,7 +42,6 @@
 , "lcov-result-merger"
 , "live-server"
 , "livedown"
-, "localtunnel"
 , "madoko"
 , "mathjax"
 , "multi-file-swagger"
