@@ -33,6 +33,7 @@ let
 in
 
 mapAliases {
+  "@antfu/ni" = pkgs.ni; # Added 2025-11-08
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@babel/cli" =

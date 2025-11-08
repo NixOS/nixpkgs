@@ -4224,15 +4224,6 @@ let
         sha512 = "QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==";
       };
     };
-    "ansis-3.17.0" = {
-      name = "ansis";
-      packageName = "ansis";
-      version = "3.17.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ansis/-/ansis-3.17.0.tgz";
-        sha512 = "0qWUglt9JEqLFr3w1I1pbrChn1grhaiAR2ocX1PP/flRmxgtwTzPFFFnfIlD6aMOLQZgSuCRlidD70lvx8yhzg==";
-      };
-    };
     "any-base-1.1.0" = {
       name = "any-base";
       packageName = "any-base";
@@ -11719,15 +11710,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/fuzzy-search/-/fuzzy-search-3.2.1.tgz";
         sha512 = "vAcPiyomt1ioKAsAL2uxSABHJ4Ju/e4UeDM+g1OlR0vV4YhLGMNsdLNvZTpEDY4JCSt0E4hASCNM5t2ETtsbyg==";
-      };
-    };
-    "fzf-0.5.2" = {
-      name = "fzf";
-      packageName = "fzf";
-      version = "0.5.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/fzf/-/fzf-0.5.2.tgz";
-        sha512 = "Tt4kuxLXFKHy8KT40zwsUPUkg1CrsgY25FxA2U/j/0WgEDCk3ddc/zLTCCcbSHX9FcKtLuVaDGtGE/STWC+j3Q==";
       };
     };
     "gauge-2.7.4" = {
@@ -20278,15 +20260,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz";
         sha512 = "UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==";
-      };
-    };
-    "package-manager-detector-1.0.0" = {
-      name = "package-manager-detector";
-      packageName = "package-manager-detector";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/package-manager-detector/-/package-manager-detector-1.0.0.tgz";
-        sha512 = "7elnH+9zMsRo7aS72w6MeRugTpdRvInmEB4Kmm9BVvPw/SLG8gXUGQ+4wF0Mys0RSWPz0B9nuBbDe8vFeA2sfg==";
       };
     };
     "pacote-20.0.0" = {
@@ -29742,30 +29715,6 @@ in
     meta = {
       description = "CLI tool for Angular";
       homepage = "https://github.com/angular/angular-cli";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@antfu/ni" = nodeEnv.buildNodePackage {
-    name = "_at_antfu_slash_ni";
-    packageName = "@antfu/ni";
-    version = "24.2.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@antfu/ni/-/ni-24.2.0.tgz";
-      sha512 = "+B9wzpv+KOhqbOgHjHcBAX7IwIKdDt4SFzYlxIPr4srANFJfjAABC7nU8KNFba+DYLymRe2EPSUfE7+reJb5UA==";
-    };
-    dependencies = [
-      sources."ansis-3.17.0"
-      sources."fzf-0.5.2"
-      sources."package-manager-detector-1.0.0"
-      sources."tinyexec-0.3.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Use the right package manager";
-      homepage = "https://github.com/antfu-collective/ni#readme";
       license = "MIT";
     };
     production = true;
