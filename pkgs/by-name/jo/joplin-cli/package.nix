@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "joplin-cli";
-  version = "3.4.12";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "laurent22";
@@ -25,14 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
     '';
-    hash = "sha256-p9MY7E0qa7LcXBpGs/DmX2A2jXQoOPYiRo/nEzkkQd0=";
+    hash = "sha256-NNtdY6ajMfcMWj/AIo+b2nhylBCqyOIwCepYx/ZNCBY=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes postPatch;
-    hash = "sha256-7sZX39OtNNPq5RE7+Oj58QqHhcrTY8FOdncKp3b40jQ=";
+    hash = "sha256-EGP/nnz4u6I0efTQu41lgmk0tuHpiavVKHRdiSYdEUs=";
   };
 
   nativeBuildInputs = [

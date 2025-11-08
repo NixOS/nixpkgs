@@ -3,15 +3,10 @@
   # Packages that provide multiple executables where one is clearly the `mainProgram`.
   "@antfu/ni" = "ni";
   "@microsoft/rush" = "rush";
-  "@webassemblyjs/cli-1.11.1" = "wasm2wast";
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   "@commitlint/cli" = "commitlint";
-  "@webassemblyjs/repl-1.11.1" = "wasm";
-  "@webassemblyjs/wasm-strip" = "wasm-strip";
-  "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
-  "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
   cdk8s-cli = "cdk8s";
   clipboard-cli = "clipboard";
@@ -25,7 +20,6 @@
   gulp-cli = "gulp";
   jsonlint = "jsonlint";
   localtunnel = "lt";
-  parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
