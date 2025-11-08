@@ -135,6 +135,7 @@ mapAliases {
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
+  inherit (pkgs) conventional-changelog-cli; # Added 2025-11-08
   copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
   create-cycle-app = throw "create-cycle-app has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01

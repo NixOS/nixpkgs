@@ -17,7 +17,6 @@
 , "coc-ltex"
 , "coc-tsserver"
 , "coc-ultisnips"
-, "conventional-changelog-cli"
 , "cpy-cli"
 , "dhcp"
 , "dotenv-vault"
