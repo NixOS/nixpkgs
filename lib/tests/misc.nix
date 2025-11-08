@@ -169,6 +169,18 @@ runTests {
           version = "1.0";
           meta = {
             description = "Fake derivation that's an input for the unit test";
+            longDescription = "The default long description.";
+            outputs = {
+              out = {
+                # Maybe use a more detailed type from https://github.com/NixOS/nixpkgs/pull/459543
+                type = "program";
+                mainProgram = "examplectl";
+              };
+              lib = {
+                type = "library";
+                longDescription = "A library for computation tree logic.";
+              };
+            };
           };
         };
         drv = derivation {
@@ -209,11 +221,24 @@ runTests {
             "lib"
           ];
         assert p.meta.description == "Fake derivation that's an input for the unit test";
+
+        # `meta` output inheriting logic
+        assert p.outputName == "out" -> p.meta.type == "program";
+        assert p.outputName == "lib" -> p.meta.type == "library";
+        assert p.outputName == "out" -> p.meta.mainProgram == "examplectl";
+        assert p.outputName == "lib" -> !p.meta ? mainProgram;
+
+        assert p.outputName == "out" -> p.meta.longDescription == "The default long description.";
+        assert p.outputName == "lib" -> p.meta.longDescription == "A library for computation tree logic.";
+        assert p.outputName == "out" -> p.meta.mainProgram == "examplectl";
+        assert p.outputName == "lib" -> !p.meta ? mainProgram;
+
         true
       );
 
       assert lib.strings.hasSuffix "example-1.0" example.outPath;
       assert lib.strings.hasSuffix "example-1.0-lib" example.lib.outPath;
+      # Significant: this "activates" the `p.outputName == "out" ->` implications in the assertions above.
       assert example.outputName == "out";
       assert example ? outputSpecified == false;
 
