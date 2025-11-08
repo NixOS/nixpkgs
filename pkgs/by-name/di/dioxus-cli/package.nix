@@ -11,7 +11,6 @@
   testers,
   dioxus-cli,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
   version = "0.7.1";
@@ -40,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     # requires network access
     "--skip=serve::proxy::test"
     "--skip=wasm_bindgen::test"
+    # requires cli-harnesses directory
+    "--skip=test_harnesses::run_harness"
   ];
 
   passthru = {
