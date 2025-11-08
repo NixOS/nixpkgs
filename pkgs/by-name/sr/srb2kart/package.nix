@@ -27,24 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
   };
 
-  assets = stdenv.mkDerivation {
-    pname = "srb2kart-data";
-    version = finalAttrs.version;
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
-    src = fetchzip {
-      url = "https://github.com/STJr/Kart-Public/releases/download/v${finalAttrs.version}/AssetsLinuxOnly.zip";
-      hash = "sha256-yaVdsQUnyobjSbmemeBEyu35GeZCX1ylTRcjcbDuIu4=";
-      stripRoot = false;
-    };
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/srb2kart
-      cp -r * $out/share/srb2kart
-
-      runHook postInstall
-    '';
+  assets = fetchzip {
+    name = "srb2kart-data";
+    url = "https://github.com/STJr/Kart-Public/releases/download/v${finalAttrs.version}/AssetsLinuxOnly.zip";
+    hash = "sha256-yaVdsQUnyobjSbmemeBEyu35GeZCX1ylTRcjcbDuIu4=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
@@ -64,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}/share/srb2kart"
+    "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
@@ -91,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bin/srb2kart $out/bin/srb2kart
 
     wrapProgram $out/bin/srb2kart \
-      --set SRB2WADDIR "${finalAttrs.assets}/share/srb2kart"
+      --set-default SRB2WADDIR ${finalAttrs.assets}
 
     runHook postInstall
   '';
