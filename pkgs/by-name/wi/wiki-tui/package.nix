@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lom
-      builditluc
       matthiasbeyer
     ];
     mainProgram = "wiki-tui";

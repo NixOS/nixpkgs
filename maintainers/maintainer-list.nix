@@ -3914,13 +3914,6 @@
     githubId = 7214361;
     name = "Roman Gerasimenko";
   };
-  builditluc = {
-    email = "git@builditluc.eu";
-    github = "Builditluc";
-    githubId = 37375448;
-    name = "Builditluc";
-    keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
-  };
   burmudar = {
     email = "william.bezuidenhout@gmail.com";
     github = "burmudar";

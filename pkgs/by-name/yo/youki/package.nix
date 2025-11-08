@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://containers.github.io/youki/";
     changelog = "https://github.com/containers/youki/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ builditluc ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "youki";
   };

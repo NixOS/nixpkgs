@@ -48,7 +48,7 @@ buildGoModule rec {
     description = "CodeCrafters CLI to run tests";
     mainProgram = "codecrafters";
     homepage = "https://github.com/codecrafters-io/cli";
-    maintainers = with maintainers; [ builditluc ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }
