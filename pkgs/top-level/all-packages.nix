@@ -6044,21 +6044,21 @@ with pkgs;
   ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_18 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.18.8";
+      version = "2.18.11";
       src = fetchPypi {
         pname = "ansible_core";
         inherit version;
-        hash = "sha256-sHZiFalqR845kz0n4emWyivrVM8bOQfHQtNckTsfeM0=";
+        hash = "sha256-4eZhFVnXMOlalFaJXo4VfDeOl8R50d2CmeJaiWib/Z8=";
       };
     })
   );
   ansible_2_17 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.17.8";
+      version = "2.17.14";
       src = fetchPypi {
         pname = "ansible_core";
         inherit version;
-        hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
+        hash = "sha256-fBf+45+MKdcOMoKn6cEL1w1c1P0T3f/F3KpSrb0UL/g=";
       };
     })
   );
