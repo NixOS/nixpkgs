@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lmfit";
     repo = "asteval";
     tag = version;
-    hash = "sha256-DzLVe8TlWAPQXzai9CJlDAow6UTSmkA/DW3fT30YfZY=";
+    hash = "sha256-c+gVT947IpJC2gn1SWVth0ScOBh34m89dpgR5AikOHk=";
   };
 
   build-system = [ setuptools-scm ];
