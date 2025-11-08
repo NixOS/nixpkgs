@@ -149,7 +149,7 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
     let mut cmd_split = command.split_whitespace();
     let Some(argv0) = cmd_split.next() else {
-        bail!("missing first argument in install bootloader commands");
+        bail!("missing first argument in pre-switch check");
     };
 
     match std::process::Command::new(argv0)
