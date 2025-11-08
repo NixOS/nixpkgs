@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "asteval";
   version = "1.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "lmfit";
@@ -39,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/lmfit/asteval";
-    changelog = "https://github.com/lmfit/asteval/releases/tag/${version}";
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
