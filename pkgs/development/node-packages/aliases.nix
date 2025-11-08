@@ -57,6 +57,12 @@ mapAliases {
   "@uppy/companion" = pkgs.uppy-companion; # Added 2025-11-01
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
+  "@webassemblyjs/cli-1.11.1" = pkgs.webassemblyjs-cli; # Added 2025-11-06
+  "@webassemblyjs/repl-1.11.1" = pkgs.webassemblyjs-repl; # Added 2025-11-06
+  "@webassemblyjs/wasm-strip" =
+    "@webassemblyjs/wasm-strip has been removed because it was deprecated by upstream. Consider using wabt instead"; # Added 2025-11-06
+  "@webassemblyjs/wasm-text-gen-1.11.1" = pkgs.wasm-text-gen; # Added 2025-11-06
+  "@webassemblyjs/wast-refmt-1.11.1" = pkgs.wast-refmt; # Added 2025-11-06
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   inherit (pkgs) autoprefixer; # added 2024-06-25
@@ -229,6 +235,7 @@ mapAliases {
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23
   parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
   parcel-bundler = self.parcel; # added 2023-09-04
+  parsoid = throw "The Javascript version of Parsoid has been deprecated by upstream and no longer works with modern MediaWiki versions"; # Added 2025-11-04
   inherit (pkgs) patch-package; # added 2024-06-29
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22

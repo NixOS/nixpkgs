@@ -68,8 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+      # Fixes an error with having too many versions available
+      "--use-github-releases"
       "--version-regex"
-      "'gatsby-cli@(.*)'"
+      "gatsby@(.*)"
     ];
   };
 
