@@ -40,7 +40,6 @@
 , "js-yaml"
 , "jsdoc"
 , "json"
-, "json-diff"
 , "json-refs"
 , "jsonlint"
 , "katex"

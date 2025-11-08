@@ -741,15 +741,6 @@ let
         sha512 = "JubJ5B2pJ4k4yGxaNLdbjrnk9d/iDz6/q8wOilpIowd6PJPgaxCuHBnBszq7Ce2TyMrywm5r4PnKm6V3iiZF+g==";
       };
     };
-    "@ewoudenberg/difflib-0.1.0" = {
-      name = "_at_ewoudenberg_slash_difflib";
-      packageName = "@ewoudenberg/difflib";
-      version = "0.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@ewoudenberg/difflib/-/difflib-0.1.0.tgz";
-        sha512 = "OU5P5mJyD3OoWYMWY+yIgwvgNS9cFAU10f+DDuvtogcWQOoJIsQ4Hy2McSfUfhKjq8L0FuWVb4Rt7kgA+XK86A==";
-      };
-    };
     "@exodus/schemasafe-1.3.0" = {
       name = "_at_exodus_slash_schemasafe";
       packageName = "@exodus/schemasafe";
@@ -9390,15 +9381,6 @@ let
         sha512 = "yXcCvhkPKmq5M2cQXss6Qbig+LZnzRIT40XCYm/QCRnJaPG867StB1qnsBLxOGrPH1YEIRWW2gJq7LLMyw+NmA==";
       };
     };
-    "dreamopt-0.8.0" = {
-      name = "dreamopt";
-      packageName = "dreamopt";
-      version = "0.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/dreamopt/-/dreamopt-0.8.0.tgz";
-        sha512 = "vyJTp8+mC+G+5dfgsY+r3ckxlz+QMX40VjPQsZc5gxVAxLmi64TBoVkP54A/pRAXMXsbu2GMMBrZPxNv23waMg==";
-      };
-    };
     "dtrace-provider-0.6.0" = {
       name = "dtrace-provider";
       packageName = "dtrace-provider";
@@ -12835,15 +12817,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/he/-/he-1.2.0.tgz";
         sha512 = "F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==";
-      };
-    };
-    "heap-0.2.7" = {
-      name = "heap";
-      packageName = "heap";
-      version = "0.2.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/heap/-/heap-0.2.7.tgz";
-        sha512 = "2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==";
       };
     };
     "help-me-3.0.0" = {
@@ -35775,31 +35748,6 @@ in
     meta = {
       description = "a 'json' command for massaging and processing JSON on the command line";
       homepage = "https://github.com/trentm/json#readme";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  json-diff = nodeEnv.buildNodePackage {
-    name = "json-diff";
-    packageName = "json-diff";
-    version = "1.0.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/json-diff/-/json-diff-1.0.6.tgz";
-      sha512 = "tcFIPRdlc35YkYdGxcamJjllUhXWv4n2rK9oJ2RsAzV4FBkuV4ojKEDgcZ+kpKxDmJKv+PFK65+1tVVOnSeEqA==";
-    };
-    dependencies = [
-      sources."@ewoudenberg/difflib-0.1.0"
-      sources."colors-1.4.0"
-      sources."dreamopt-0.8.0"
-      sources."heap-0.2.7"
-      sources."wordwrap-1.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JSON diff";
-      homepage = "https://github.com/andreyvit/json-diff";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
