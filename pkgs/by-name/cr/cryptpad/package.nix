@@ -11,6 +11,18 @@
   nodejs,
   rdfind,
   unzip,
+  # Cryptpad supports multiple versions of onlyoffice:
+  # - the latest version is always used for new documents
+  # - old versions are used whenever opening a file that was created with an
+  # older version, at that point cryptpad coverts it to the latest version.
+  #
+  # The first version supported in nixpkgs came with v7 installed so no
+  # document have been created with an older version and we don't need
+  # anything earlier for nixos installs, but if someone wishes to migrate
+  # from an older instance to nixos they might need to use an older version
+  # so we still allow installing all the way back to v1.
+  # Older versions are not tested and might be removed in the future.
+  oldest_needed_version ? "v7",
 }:
 
 let
@@ -46,10 +58,15 @@ let
   onlyoffice_install = oo: ''
     oo_dir="$out_cryptpad/www/common/onlyoffice/dist/${oo.subdir}"
     ${
-      if oo ? "version" then
+      if lib.versionOlder oo.subdir oldest_needed_version then
+        ''
+          echo "Skipping onlyoffice ${oo.subdir} (< ${oldest_needed_version})"
+        ''
+      else if oo ? "version" then
         ''
           mkdir -p "$oo_dir"
-          unzip ${onlyoffice_fetch oo} -d "$oo_dir"
+          echo "Installing onlyoffice ${oo.subdir}"
+          unzip -q ${onlyoffice_fetch oo} -d "$oo_dir"
           echo "${oo.version}" > "$oo_dir/.version"
 
           # Clean up help files and dictionaries as per upstream
@@ -60,6 +77,7 @@ let
         ''
       else
         ''
+          echo "Installing onlyoffice ${oo.subdir}"
           cp -a "${onlyoffice_fetch oo}/." "$oo_dir"
           chmod -R +w "$oo_dir"
           echo "${oo.rev}" > "$oo_dir/.commit"
@@ -113,8 +131,9 @@ let
     hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
   };
   x2t_install = ''
+    echo "Installing x2t"
     local X2T_DIR=$out_cryptpad/www/common/onlyoffice/dist/x2t
-    unzip ${x2t} -d "$X2T_DIR"
+    unzip -q ${x2t} -d "$X2T_DIR"
     echo "${x2t_version}" > "$X2T_DIR"/.version
   '';
 
@@ -184,8 +203,8 @@ buildNpmPackage {
 
     patchShebangs --build $out_cryptpad/install-onlyoffice.sh
     mkdir -p $out_cryptpad/onlyoffice-conf
-    # Need to set this to verify older versions - next commit will optimize
-    echo oldest_needed_version=v1 > $out_cryptpad/onlyoffice-conf/onlyoffice.properties
+    # Need to set this before running the check script
+    echo oldest_needed_version=${oldest_needed_version} > $out_cryptpad/onlyoffice-conf/onlyoffice.properties
     $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
 
     # cryptpad assumes it runs in the source directory and also outputs
