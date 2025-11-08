@@ -29072,6 +29072,13 @@
     github = "zendo";
     githubId = 348013;
   };
+  zenisbestwolf = {
+    name = "Zen Dignan";
+    email = "zen@dignan.dev";
+    github = "zenisbestwolf";
+    githubId = 28688587;
+    keys = [ { fingerprint = "B7C6 82FE 5523 3555 B568  4772 445A 89D2 74B2 3095"; } ];
+  };
   zenithal = {
     name = "zenithal";
     email = "i@zenithal.me";
