@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uppy-companion";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "transloadit";
     repo = "uppy";
     tag = "@uppy/companion@${finalAttrs.version}";
-    hash = "sha256-Z7u0Wrkg1/jZtOF86hUbwRVWWGHuv4ktcXx+gEcLYlQ=";
+    hash = "sha256-FF5I4D9obRVJqyjucemnxZiPcNHdQdo3S0z/h96Fe6c=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-5XLOyz1QowX08C0IBcg9Um1eY+1qwtPyqIFb83FPFz8=";
+    hash = "sha256-euKvBI3Y15SmBoVOEbS8GIJT/kIOhayLKGVSd8JztqI=";
   };
 
   buildPhase = ''

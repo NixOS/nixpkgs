@@ -6286,8 +6286,6 @@ self: super: with self; {
 
   gower = callPackage ../development/python-modules/gower { };
 
-  gpapi = callPackage ../development/python-modules/gpapi { };
-
   gpaw = callPackage ../development/python-modules/gpaw { };
 
   gpgme = callPackage ../development/python-modules/gpgme { inherit (pkgs) gpgme; };
@@ -6297,8 +6295,6 @@ self: super: with self; {
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
-
-  gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
@@ -9149,8 +9145,6 @@ self: super: with self; {
 
   mathutils = callPackage ../development/python-modules/mathutils { };
 
-  matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
-
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
   };
@@ -9346,8 +9340,6 @@ self: super: with self; {
   );
 
   meson-python = callPackage ../development/python-modules/meson-python { inherit (pkgs) ninja; };
-
-  mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
@@ -12823,8 +12815,6 @@ self: super: with self; {
   pycasbin = callPackage ../development/python-modules/pycasbin { };
 
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
-
-  pycategories = callPackage ../development/python-modules/pycategories { };
 
   pycayennelpp = callPackage ../development/python-modules/pycayennelpp { };
 

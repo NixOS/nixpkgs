@@ -18,7 +18,7 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-HZmCxMKgxJ+ZiRDXh/iVmytNMbPoYzSuI0F8YmkcfZI=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   meta = {
     description = "Get a full fake REST API with zero coding in less than 30 seconds";

@@ -183,6 +183,8 @@ mapAliases {
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
+  gpapi = throw "'gpapi' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
+  gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29
   groestlcoin_hash = throw "'groestlcoin_hash' has been renamed to/replaced by 'groestlcoin-hash'"; # Converted to throw 2025-10-29
@@ -248,11 +250,13 @@ mapAliases {
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
+  matlink-gpapi = throw "'matlink-gpapi' has been removed as it was broken and unmaintained"; # Added 2025-11-09
   MDP = throw "'MDP' has been renamed to/replaced by 'mdp'"; # Converted to throw 2025-10-29
   MechanicalSoup = throw "'MechanicalSoup' has been renamed to/replaced by 'mechanicalsoup'"; # Converted to throw 2025-10-29
   memcached = throw "'memcached' has been renamed to/replaced by 'python-memcached'"; # Converted to throw 2025-10-29
   memory_profiler = throw "'memory_profiler' has been renamed to/replaced by 'memory-profiler'"; # Converted to throw 2025-10-29
   mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
+  mesonpep517 = throw "'mesonpep517' has been removed as it was broken and unmaintained."; # added 2025-11-08
   minikerberos-bad = throw "'minikerberos-bad' has been renamed to/replaced by 'kerbad'"; # added 2025-11-06
   mir_eval = throw "'mir_eval' has been renamed to/replaced by 'mir-eval'"; # Converted to throw 2025-10-29
   mistune_2_0 = throw "'mistune_2_0' has been renamed to/replaced by 'mistune'"; # Converted to throw 2025-10-29
@@ -306,6 +310,7 @@ mapAliases {
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
+  pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
