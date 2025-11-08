@@ -89,6 +89,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [
+      dandellion
+      jaysa68
+    ];
   };
 }
