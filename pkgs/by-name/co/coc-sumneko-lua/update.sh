@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nodejs nix-update git curl
+#!nix-shell -i bash -p bash nodejs nix-update git curl jq
 
 WORKDIR=$(mktemp -d)
 PACKAGE_DIR="$(realpath "$(dirname "$0")")"
