@@ -116,12 +116,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.3";
+  version = "4.5.4";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNVZUZpysCyB/Xt8yB352gO+UK8Cd4aDFGYuUDKyIrs=";
+    hash = "sha256-/cYMCWgojkO1mqzJ4BZwbwXPuBmg66T+gzpEuLiOskY=";
   };
 
   postPatch =
