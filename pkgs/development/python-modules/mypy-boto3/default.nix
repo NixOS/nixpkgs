@@ -358,8 +358,8 @@ in
       "sha256-BiKly8tW0MFacKF8mG80xsITdxegCcG3sKal7axoGf0=";
 
   mypy-boto3-controltower =
-    buildMypyBoto3Package "controltower" "1.40.60"
-      "sha256-1xHVUCYTzIWYU7RLk8MzqF3/5qfItTeIXC7um4ZgIwI=";
+    buildMypyBoto3Package "controltower" "1.40.69"
+      "sha256-kjvZbq00bwjGVPkPcSypkkMC0vIKURAJDI3RUpCPL2I=";
 
   mypy-boto3-cur =
     buildMypyBoto3Package "cur" "1.40.58"
@@ -446,8 +446,8 @@ in
       "sha256-eKwS+FXicnxiHr2aTDG+ih6kDxQ24NLCkI9XPt2LjvQ=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.40.64"
-      "sha256-6+jjuG6iqXLjjuztY1FX/exSl5BjdKsrg1EOQM1w0Io=";
+    buildMypyBoto3Package "ec2" "1.40.69"
+      "sha256-WUUBMnOX+mCVBrmWCy9fBIPuLOnk71djASEli0pKPZ8=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.40.57"
@@ -761,8 +761,8 @@ in
       "sha256-lViXLfbEMpMenVxZmcp2cfhd0SqH2IiMPOIaOdimU00=";
 
   mypy-boto3-kms =
-    buildMypyBoto3Package "kms" "1.40.63"
-      "sha256-TI+hBy1rbDzEaxb4aTQ5PbZyhGNChowdlmjDvVKltIU=";
+    buildMypyBoto3Package "kms" "1.40.69"
+      "sha256-bLWUM5Ol9WZGqReXlyeduBlXFmnSZorLL4HmbBpBZBM=";
 
   mypy-boto3-lakeformation =
     buildMypyBoto3Package "lakeformation" "1.40.55"
@@ -969,8 +969,8 @@ in
       "sha256-hjgvlTcA18OeMpJIgpl+ml4zSc73HXrUrM0adOzScl4=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.40.61"
-      "sha256-B5yKX/xElj3pjsLItXJNm5eV+KPmU/ivVz6MR6g88s0=";
+    buildMypyBoto3Package "opensearch" "1.40.69"
+      "sha256-ql9SD9ZZ2k54A2oZkSS3wWFfswetl5/oVoGyzYb29wI=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.40.58"
@@ -1385,8 +1385,8 @@ in
       "sha256-6usEXd0rpBSaLBKHawPIiPzqfHoNCGVO8c2p0eBqrvs=";
 
   mypy-boto3-vpc-lattice =
-    buildMypyBoto3Package "vpc-lattice" "1.40.59"
-      "sha256-39fPl4F2Xiz6+AN8HeGi33Yjj9mfxvU3ZmklLY0STMk=";
+    buildMypyBoto3Package "vpc-lattice" "1.40.69"
+      "sha256-pzWCGZbQ6idUKwNWxGyg45Z4rRzdReADX1u+934VmEs=";
 
   mypy-boto3-waf =
     buildMypyBoto3Package "waf" "1.40.64"
