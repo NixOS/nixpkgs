@@ -17781,6 +17781,9 @@ self: super: with self; {
   standard-chunk =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-chunk { } else null;
 
+  standard-crypt =
+    if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-crypt { } else null;
+
   standard-imghdr =
     if pythonAtLeast "3.13" then
       callPackage ../development/python-modules/standard-imghdr { }
