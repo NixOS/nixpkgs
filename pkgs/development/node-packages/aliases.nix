@@ -271,6 +271,7 @@ mapAliases {
   inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
+  tern = throw "'tern' was removed because it has been unmaintained upstream for several years"; # Added 2025-11-07
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13
   textlint-plugin-latex = throw "textlint-plugin-latex was removed because it is unmaintained for years. Please use textlint-plugin-latex2e instead."; # Added 2024-05-17

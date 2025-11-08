@@ -4125,15 +4125,6 @@ let
         sha512 = "PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==";
       };
     };
-    "acorn-6.4.2" = {
-      name = "acorn";
-      packageName = "acorn";
-      version = "6.4.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/acorn/-/acorn-6.4.2.tgz";
-        sha512 = "XtGIhXwF8YM8bJhGxG5kXgjkEuNGLTkoYqVE+KMR+aspr4KGYmKYg7yUe3KghyQ9yheNwLnjmzh/7+gfDBmHCQ==";
-      };
-    };
     "acorn-7.4.1" = {
       name = "acorn";
       packageName = "acorn";
@@ -4170,15 +4161,6 @@ let
         sha512 = "rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==";
       };
     };
-    "acorn-loose-6.1.0" = {
-      name = "acorn-loose";
-      packageName = "acorn-loose";
-      version = "6.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/acorn-loose/-/acorn-loose-6.1.0.tgz";
-        sha512 = "FHhXoiF0Uch3IqsrnPpWwCtiv5PYvipTpT1k9lDMgQVVYc9iDuSl5zdJV358aI8twfHCYMFBRVYvAVki9wC/ng==";
-      };
-    };
     "acorn-node-1.8.2" = {
       name = "acorn-node";
       packageName = "acorn-node";
@@ -4186,15 +4168,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/acorn-node/-/acorn-node-1.8.2.tgz";
         sha512 = "8mt+fslDufLYntIoPAaIMUe/lrbrehIiwmR3t2k9LljIzoigEPF27eLk2hy8zSGzmR/ogr7zbRKINMo1u0yh5A==";
-      };
-    };
-    "acorn-walk-6.2.0" = {
-      name = "acorn-walk";
-      packageName = "acorn-walk";
-      version = "6.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/acorn-walk/-/acorn-walk-6.2.0.tgz";
-        sha512 = "7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==";
       };
     };
     "acorn-walk-7.2.0" = {
@@ -10217,15 +10190,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-5.2.3.tgz";
         sha512 = "HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==";
-      };
-    };
-    "enhanced-resolve-2.3.0" = {
-      name = "enhanced-resolve";
-      packageName = "enhanced-resolve";
-      version = "2.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-2.3.0.tgz";
-        sha512 = "n6e4bsCpzsP0OB76X+vEWhySUQI8GHPVFVK+3QkX35tbryy2WoeGeK5kQ+oxzgDVHjIZyz5fyS60Mi3EpQLc0Q==";
       };
     };
     "entities-1.1.2" = {
@@ -18004,15 +17968,6 @@ let
         sha512 = "F2t4YIv9XQUBHt6AOJ0y7lSmP1+cY7Fm1DRh9GClTGzKST7UWLMx6ly9WZdLH/G/ppM5RL4MlQfRT71ri9t19A==";
       };
     };
-    "memory-fs-0.3.0" = {
-      name = "memory-fs";
-      packageName = "memory-fs";
-      version = "0.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/memory-fs/-/memory-fs-0.3.0.tgz";
-        sha512 = "QTNXnl79X97kZ9jJk/meJrtDuvgvRakX5LU7HZW1L7MsXHuSTwoMIzN9tOLLH3Xfsj/gbsSqX/ovnsqz246zKQ==";
-      };
-    };
     "meow-11.0.0" = {
       name = "meow";
       packageName = "meow";
@@ -23846,15 +23801,6 @@ let
         sha512 = "R7uiTjECzvOsWSfdM0QKFNBVFcK27aHOUwdvK53BcW8zqnGdYp0Fbj82cy54+2A4P2tFM22J5kRfe1R+lM/1yg==";
       };
     };
-    "resolve-from-2.0.0" = {
-      name = "resolve-from";
-      packageName = "resolve-from";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/resolve-from/-/resolve-from-2.0.0.tgz";
-        sha512 = "qpFcKaXsq8+oRoLilkwyc7zHGF5i9Q2/25NIgLQQ/+VVv9rU4qvr6nXVAw1DsnXJyQkZsR4Ytfbtg5ehfcUssQ==";
-      };
-    };
     "resolve-from-4.0.0" = {
       name = "resolve-from";
       packageName = "resolve-from";
@@ -26481,15 +26427,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.0.14.tgz";
         sha512 = "92YT2dpt671tFiHH/e1ok9D987N9fHD5VWoly1CdPD/Cd1HMglvZwP3nx2yTj2lbXDAHt8QssZkxTLCCTNL+xw==";
-      };
-    };
-    "tapable-0.2.9" = {
-      name = "tapable";
-      packageName = "tapable";
-      version = "0.2.9";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tapable/-/tapable-0.2.9.tgz";
-        sha512 = "2wsvQ+4GwBvLPLWsNfLCDYGsW6xb7aeC6utq2Qh0PFwgEy7K7dsma9Jsmb2zSQj7GvYAyUGSntLtsv++GmgL1A==";
       };
     };
     "tapable-2.2.1" = {
@@ -41231,55 +41168,6 @@ in
     meta = {
       description = "Svelte Code Checker Terminal Interface";
       homepage = "https://github.com/sveltejs/language-tools#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  tern = nodeEnv.buildNodePackage {
-    name = "tern";
-    packageName = "tern";
-    version = "0.24.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/tern/-/tern-0.24.3.tgz";
-      sha512 = "Z8uvtdWIlFn1GWy0HW5FhZ8VDryZwoJUdnjZU25C7/PBOltLIn1uv+WF3rVq6S1761YbsmbZYRP/l0ZJBCkvrw==";
-    };
-    dependencies = [
-      sources."acorn-6.4.2"
-      sources."acorn-loose-6.1.0"
-      sources."acorn-walk-6.2.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."concat-map-0.0.1"
-      sources."core-util-is-1.0.3"
-      sources."enhanced-resolve-2.3.0"
-      sources."errno-0.1.8"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."graceful-fs-4.2.11"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."isarray-1.0.0"
-      sources."memory-fs-0.3.0"
-      sources."minimatch-3.1.2"
-      sources."object-assign-4.1.1"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."process-nextick-args-2.0.1"
-      sources."prr-1.0.1"
-      sources."readable-stream-2.3.8"
-      sources."resolve-from-2.0.0"
-      sources."safe-buffer-5.1.2"
-      sources."string_decoder-1.1.1"
-      sources."tapable-0.2.9"
-      sources."util-deprecate-1.0.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A JavaScript code analyzer for deep, cross-editor language support";
-      homepage = "https://github.com/ternjs/tern#readme";
       license = "MIT";
     };
     production = true;
