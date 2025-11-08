@@ -1,0 +1,27 @@
+diff --git a/build.gradle b/build.gradle
+index 6adb040..f442496 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -56,8 +56,10 @@ sourceCompatibility = 1.8
+ javadoc.options.memberLevel = JavadocMemberLevel.PRIVATE
+ group = 'dev.roanh.kps'
+ ext.artifact = 'keyspersecond'
+-shadowJar.archiveName = 'KeysPerSecond-v' + version + '.jar'
+-application.mainClassName = 'dev.roanh.kps.Main'
++shadowJar.archiveBaseName = 'KeysPerSecond'
++shadowJar.archiveVersion = 'v' + version
++shadowJar.archiveClassifier = ''
++application.mainClass = 'dev.roanh.kps.Main'
+
+ test{
+ 	useJUnitPlatform()
+@@ -129,7 +131,7 @@ shadowJar{
+
+ launch4j{
+ 	jarTask = project.tasks.shadowJar
+-	mainClassName = application.mainClassName
++	mainClassName = application.mainClass
+ 	icon = "${projectDir}/kps.ico"
+ 	jreMinVersion = project.sourceCompatibility
+ 	bundledJrePath = "%JAVA_HOME%"
+--

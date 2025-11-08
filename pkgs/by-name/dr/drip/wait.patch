@@ -1,0 +1,11 @@
+diff --git a/src/drip_daemon.c b/src/drip_daemon.c
+index cbfd4d9..79fdaf4 100644
+--- a/src/drip_daemon.c
++++ b/src/drip_daemon.c
+@@ -5,6 +5,7 @@
+ #include <stdio.h>
+ #include <unistd.h>
+ #include <sys/stat.h>
++#include <sys/wait.h>
+
+ static char* jvm_dir;

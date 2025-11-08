@@ -1,0 +1,146 @@
+diff --git a/cmake/globals.cmake b/cmake/globals.cmake
+index e53248b..c705d67 100644
+--- a/cmake/globals.cmake
++++ b/cmake/globals.cmake
+@@ -334,6 +334,7 @@ if (APPLE)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources/app)
+       # handles Quarto share when not stored alongside bin
+       set(RSTUDIO_INSTALL_RESOURCES RStudio.app/Contents/Resources)
++      set(RSTUDIO_INSTALL_ELECTRON .)
+    else()
+       set(RSTUDIO_INSTALL_BIN        RStudio.app/Contents/MacOS)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources)
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+index 76f3acb..2910cee 100644
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -243,7 +243,7 @@ endif()
+ # determine whether we should statically link boost. we always do this
+ # unless we are building a non-packaged build on linux (in which case
+ # boost dynamic libraries are presumed to be installed on the system ldpath)
+-if(APPLE OR WIN32 OR RSTUDIO_PACKAGE_BUILD)
++if(WIN32 OR RSTUDIO_PACKAGE_BUILD)
+    set(Boost_USE_STATIC_LIBS ON)
+ endif()
+ 
+@@ -483,7 +483,7 @@ endif()
+ 
+ # find SOCI libraries
+ if(UNIX)
+-   if(NOT APPLE AND RSTUDIO_USE_SYSTEM_SOCI)
++   if(RSTUDIO_USE_SYSTEM_SOCI)
+       find_library(SOCI_CORE_LIB NAMES "libsoci_core.a" "soci_core" REQUIRED)
+       find_library(SOCI_SQLITE_LIB NAMES "libsoci_sqlite3.a" "soci_sqlite3" REQUIRED)
+       if(RSTUDIO_PRO_BUILD)
+diff --git a/src/node/CMakeNodeTools.txt b/src/node/CMakeNodeTools.txt
+index 40ae0f3..756fd5f 100644
+--- a/src/node/CMakeNodeTools.txt
++++ b/src/node/CMakeNodeTools.txt
+@@ -27,17 +27,7 @@ endif()
+ 
+ # set cmake env vars for node (NODEJS) and node tools, like YARN, and NPM
+ 
+-if(APPLE AND UNAME_M STREQUAL arm64)
+-
+-   # make sure we're using arm64 binaries of node / npm for arm64 builds
+-   set(NODEJS 
+-      "${CMAKE_CURRENT_LIST_DIR}/../../dependencies/common/node/${RSTUDIO_NODE_VERSION}-arm64/bin/node")
+-   set(NPM 
+-      "${CMAKE_CURRENT_LIST_DIR}/../../dependencies/common/node/${RSTUDIO_NODE_VERSION}-arm64/bin/npm")
+-   set(NPX 
+-      "${CMAKE_CURRENT_LIST_DIR}/../../dependencies/common/node/${RSTUDIO_NODE_VERSION}-arm64/bin/npx")
+-
+-else()
++if(true)
+ 
+    # Detect node.js, npm, and npx; use versions supplied by the dependency scripts
+    find_program(NODEJS
+diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
+index bccf5b3..0cc798a 100644
+--- a/src/node/desktop/CMakeLists.txt
++++ b/src/node/desktop/CMakeLists.txt
+@@ -236,16 +236,21 @@ if(WIN32)
+    install(FILES ${VCRUNTIME_X86_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}/x86")
+    install(FILES ${VCRUNTIME_X64_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}")
+ 
+-elseif(LINUX)
++elseif(LINUX OR APPLE)
+ 
+-   if(UNAME_M STREQUAL aarch64)
++   if(UNAME_M STREQUAL aarch64 OR UNAME_M STREQUAL arm64)
+       set(ELECTRON_ARCH arm64)
+    else()
+       set(ELECTRON_ARCH x64)
+    endif()
++   if(APPLE)
++      set(ELECTRON_PLATFORM darwin)
++   else()
++      set(ELECTRON_PLATFORM linux)
++   endif()
+ 
+    install(
+-      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-linux-${ELECTRON_ARCH}/"
++      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-${ELECTRON_PLATFORM}-${ELECTRON_ARCH}/"
+       DIRECTORY_PERMISSIONS
+       OWNER_READ OWNER_WRITE OWNER_EXECUTE
+       GROUP_READ GROUP_EXECUTE
+diff --git a/src/node/desktop/src/main/session-launcher.ts b/src/node/desktop/src/main/session-launcher.ts
+index 94f56ac..fe7d5d9 100644
+--- a/src/node/desktop/src/main/session-launcher.ts
++++ b/src/node/desktop/src/main/session-launcher.ts
+@@ -91,29 +91,9 @@ function launchProcess(absPath: FilePath, argList: string[]): ChildProcess {
+     // DYLD_INSERT_LIBRARIES to inject the library we wish to use
+     const rHome = new FilePath(getenv('R_HOME'));
+     const rLib = rHome.completePath('lib/libR.dylib');
+-    const dyldArgs = [
+-      '-e',
+-      `DYLD_INSERT_LIBRARIES=${rLib.getAbsolutePath()}`,
+-      '-e',
+-      `DYLD_FALLBACK_LIBRARY_PATH=${dyldFallbackLibraryPath}`,
+-    ];
+-
+-    // launch via /usr/bin/arch, so we can control whether the OS requests
+-    // x86 or arm64 versions of the libraries in the launched rsession
+-    const path = absPath.getAbsolutePath();
+-    if (process.arch === 'arm64') {
+-      const fileInfo = execSync(`/usr/bin/file "${rLib}"`, { encoding: 'utf-8' });
+-      if (fileInfo.indexOf('arm64') === -1 && fileInfo.indexOf('x86_64') !== -1) {
+-        argList = ['-x86_64', ...dyldArgs, path, ...argList];
+-        absPath = new FilePath('/usr/bin/arch');
+-      } else {
+-        argList = ['-arm64', ...dyldArgs, path, ...argList];
+-        absPath = new FilePath('/usr/bin/arch');
+-      }
+-    } else {
+-      argList = ['-x86_64', ...dyldArgs, path, ...argList];
+-      absPath = new FilePath('/usr/bin/arch');
+-    }
++
++    env['DYLD_INSERT_LIBRARIES'] = rLib.getAbsolutePath();
++    env['DYLD_FALLBACK_LIBRARY_PATH'] = dyldFallbackLibraryPath;
+   }
+ 
+   const rsessionOptions = new LogOptions('rsession');
+@@ -566,22 +546,6 @@ export class SessionLauncher {
+       }
+     }
+ 
+-    // on macOS, we need to look at R and figure out if we should be trying to run
+-    // with the arm64 session binary (rsession-arm64) or with the x64 session binary (rsession)
+-    if (app.isPackaged && process.platform === 'darwin' && process.arch === 'arm64') {
+-      const rHome = getenv('R_HOME');
+-      const rLibPath = `${rHome}/lib/libR.dylib`;
+-      logger().logDebug(`$ /usr/bin/file "${rLibPath}"`);
+-      const fileInfo = execSync(`/usr/bin/file "${rLibPath}"`, { encoding: 'utf-8' });
+-      logger().logDebug(fileInfo);
+-      if (fileInfo.indexOf('arm64') !== -1) {
+-        this.sessionPath = this.sessionPath.getParent().completeChildPath('rsession-arm64');
+-        logger().logDebug(`R is arm64; using ${this.sessionPath}`);
+-      } else {
+-        logger().logDebug(`R is x86_64; using ${this.sessionPath}`);
+-      }
+-    }
+-
+     // if we're running automation tests, set that up now
+     if (app.commandLine.hasSwitch('run-automation')) {
+       argList.push('--run-automation');

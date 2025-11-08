@@ -1,0 +1,28 @@
+--- a/entc/gen/graph.go	2025-08-26 12:42:17.548313631 +0100
++++ b/entc/gen/graph.go	2025-08-26 12:43:32.398186157 +0100
+@@ -1008,22 +1008,10 @@
+ 
+ // ModuleInfo returns the entgo.io/ent version.
+ func (Config) ModuleInfo() (m debug.Module) {
+-	const pkg = "entgo.io/ent"
+-	info, ok := debug.ReadBuildInfo()
+-	if !ok {
+-		return
+-	}
+-	// Was running as a CLI (ent/cmd/ent).
+-	if info.Main.Path == pkg {
+-		return info.Main
+-	}
+-	// Or, as a main package (ent/entc).
+-	for _, dep := range info.Deps {
+-		if dep.Path == pkg {
+-			return *dep
+-		}
++	return debug.Module{
++		Version: "@version@",
++		Sum:     "@sum@",
+ 	}
+-	return
+ }
+ 
+ // FeatureEnabled reports if the given feature name is enabled.

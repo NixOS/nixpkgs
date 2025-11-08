@@ -1,0 +1,16 @@
+this patch fixes build for clang-18+
+
+diff --git a/libgcc/config/aarch64/lse.S b/libgcc/config/aarch64/lse.S
+index d3235bc33..1a56eb61c 100644
+--- a/libgcc/config/aarch64/lse.S
++++ b/libgcc/config/aarch64/lse.S
+@@ -197,8 +197,8 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ 	.text
+ 	.balign	16
+ 	.private_extern	_\name
+-	.cfi_startproc
+ _\name:
++	.cfi_startproc
+ 	BTI_C
+ .endm
+ 

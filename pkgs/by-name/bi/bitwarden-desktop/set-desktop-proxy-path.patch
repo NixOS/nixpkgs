@@ -1,0 +1,13 @@
+diff --git a/apps/desktop/src/main/native-messaging.main.ts b/apps/desktop/src/main/native-messaging.main.ts
+index 30f3e03..6bbf96f 100644
+--- a/apps/desktop/src/main/native-messaging.main.ts
++++ b/apps/desktop/src/main/native-messaging.main.ts
+@@ -500,7 +500,7 @@ export class NativeMessagingMain {
+       }
+     }
+ 
+-    return path.join(path.dirname(this.exePath), `desktop_proxy${ext}`);
++    return "%%desktopProxyPath%%";
+   }
+ 
+   private homedir() {

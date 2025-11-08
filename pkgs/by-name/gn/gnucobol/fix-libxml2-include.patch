@@ -1,0 +1,16 @@
+libcob: Fix include for xmlCleanupParser
+
+common.c uses xmlCleanupParser, which is defined in libxml/parser.h.
+---
+
+--- a/libcob/common.c	2025-01-01 03:03:49.762316279 +0100
++++ b/libcob/common.c	2025-01-01 03:01:56.632597306 +0100
+@@ -136,6 +136,7 @@
+ #if defined (WITH_XML2)
+ #include <libxml/xmlversion.h>
+ #include <libxml/xmlwriter.h>
++#include <libxml/parser.h>
+ #endif
+ 
+ #if defined (WITH_CJSON)
+

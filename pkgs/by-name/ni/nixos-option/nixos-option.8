@@ -1,0 +1,133 @@
+.Dd January 1, 1980
+.Dt nixos-option 8
+.Os
+.Sh NAME
+.Nm nixos-option
+.Nd inspect a NixOS configuration
+.
+.
+.
+.Sh SYNOPSIS
+.Nm
+.Op Fl r | -recursive
+.Op Fl I Ar path
+.Op Fl F | -flake Ar flake-uri
+.br
+.Op Fl -no-flake
+.Op Fl -show-trace
+.Ar option.name
+.
+.
+.
+.Sh DESCRIPTION
+This command evaluates the configuration specified in
+.Ev NIXOS_CONFIG Ns
+,
+.Pa nixos-config
+in
+.Ev NIX_PATH
+(which by default is
+.Pa /etc/nixos/configuration.nix Ns
+),
+.Pa /etc/nixos/flake.nix
+or the file and attribute specified by the
+.Fl I
+or
+.Fl -flake
+parameter, and returns the properties of the option name given as argument.
+.
+.Pp
+When the option name is not an option but an attribute set, the command prints
+the list of attributes contained in it. When no option name is given, the
+command prints all top-level attributes in given NixOS configuration.
+.
+.
+.
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl r , -recursive
+Print all the values at or below the specified path recursively.
+.
+.It Fl I Ar path
+Add an entry to the Nix expression search path. This option is passed to the
+underlying
+.Xr nix-instantiate 1
+invocation.
+.
+.It Fl -show-trace
+Print eval trace. This option is passed to the underlying
+.Xr nix-instantiate 1
+invocation.
+.
+.It Fl F , -flake Ar flake-uri
+Specify the flake containing NixOS configuration. It defaults to
+.Pa /etc/nixos/flake.nix Ns
+, if the flake exists, it must contain an output named
+.Ql nixosConfigurations. Ns Va name Ns
+\&. If
+.Va name
+is omitted, it defaults to the current host name.
+.
+.It Fl -no-flake
+Do not imply
+.Fl -flake
+if
+.Pa /etc/nixos/flake.nix
+exists. With this option, it is possible to show options in non-flake NixOS
+configurations even if the current NixOS systems uses flakes.
+.
+.El
+.
+.
+.
+.Sh Ev ENVIRONMENT
+.Bl -tag -width indent
+.It Ev NIXOS_CONFIG
+Path to the main NixOS configuration module. Defaults to
+.Pa /etc/nixos/configuration.nix Ns
+\&.
+.El
+.
+.
+.
+.Sh EXAMPLES
+Investigate option values:
+.Bd -literal -offset indent
+$ nixos-option boot.loader
+This attribute set contains:
+generationsDir
+grub
+initScript
+
+$ nixos-option boot.loader.grub.enable
+Value:
+  true
+
+Default:
+  true
+
+Type:
+  boolean
+
+Description:
+  Whether to enable the GNU GRUB boot loader.
+
+Declared by:
+  /nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix
+
+Defined by:
+  /nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix
+.Ed
+.
+.
+.
+.Sh SEE ALSO
+.Xr configuration.nix 5
+.
+.
+.
+.Sh AUTHORS
+.An -nosplit
+.An Nicolas Pierron
+and
+.An the Nixpkgs/NixOS contributors

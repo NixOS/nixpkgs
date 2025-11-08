@@ -1,0 +1,77 @@
+Disable chown, uid and gid tests on Linux. These fail in the Nix sandbox.
+
+diff --git a/tests/unit/chown_test.ts b/tests/unit/chown_test.ts
+index 99e7dd4..a343122 100644
+--- a/tests/unit/chown_test.ts
++++ b/tests/unit/chown_test.ts
+@@ -69,7 +69,7 @@ Deno.test(
+ );
+ 
+ Deno.test(
+-  { permissions: { write: true }, ignore: Deno.build.os == "windows" },
++  { permissions: { write: true }, ignore: Deno.build.os == "windows" || Deno.build.os === "linux" },
+   function chownSyncPermissionDenied() {
+     const dirPath = Deno.makeTempDirSync();
+     const filePath = dirPath + "/chown_test_file.txt";
+@@ -84,7 +84,7 @@ Deno.test(
+ );
+ 
+ Deno.test(
+-  { permissions: { write: true }, ignore: Deno.build.os == "windows" },
++  { permissions: { write: true }, ignore: Deno.build.os == "windows" || Deno.build.os === "linux" },
+   async function chownPermissionDenied() {
+     const dirPath = await Deno.makeTempDir();
+     const filePath = dirPath + "/chown_test_file.txt";
+diff --git a/tests/unit/command_test.ts b/tests/unit/command_test.ts
+index fa941df..9292864 100644
+--- a/tests/unit/command_test.ts
++++ b/tests/unit/command_test.ts
+@@ -755,7 +755,7 @@ Deno.test(
+ Deno.test(
+   {
+     permissions: { run: true, read: true },
+-    ignore: Deno.build.os === "windows",
++    ignore: Deno.build.os === "windows" || Deno.build.os === "linux",
+   },
+   async function commandUid() {
+     const { stdout } = await new Deno.Command("id", {
+@@ -778,7 +778,7 @@ Deno.test(
+ Deno.test(
+   {
+     permissions: { run: true, read: true },
+-    ignore: Deno.build.os === "windows",
++    ignore: Deno.build.os === "windows" || Deno.build.os === "linux",
+   },
+   function commandSyncUid() {
+     const { stdout } = new Deno.Command("id", {
+@@ -801,7 +801,7 @@ Deno.test(
+ Deno.test(
+   {
+     permissions: { run: true, read: true },
+-    ignore: Deno.build.os === "windows",
++    ignore: Deno.build.os === "windows" || Deno.build.os === "linux",
+   },
+   async function commandGid() {
+     const { stdout } = await new Deno.Command("id", {
+@@ -824,7 +824,7 @@ Deno.test(
+ Deno.test(
+   {
+     permissions: { run: true, read: true },
+-    ignore: Deno.build.os === "windows",
++    ignore: Deno.build.os === "windows" || Deno.build.os === "linux",
+   },
+   function commandSyncGid() {
+     const { stdout } = new Deno.Command("id", {
+diff --git a/tests/unit_node/_fs/_fs_handle_test.ts b/tests/unit_node/_fs/_fs_handle_test.ts
+index 6bf37b6..3a4567f 100644
+--- a/tests/unit_node/_fs/_fs_handle_test.ts
++++ b/tests/unit_node/_fs/_fs_handle_test.ts
+@@ -276,7 +276,7 @@ Deno.test({
+ 
+ Deno.test({
+   name: "[node/fs filehandle.chown] Change owner of the file",
+-  ignore: Deno.build.os === "windows",
++  ignore: Deno.build.os === "windows" || Deno.build.os === "linux",
+   async fn() {
+     const fileHandle = await fs.open(testData);
+ 

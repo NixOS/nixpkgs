@@ -1,0 +1,34 @@
+diff --git a/src/rig-selector.c b/src/rig-selector.c
+index 425d41a..e040c0e 100644
+--- a/src/rig-selector.c
++++ b/src/rig-selector.c
+@@ -46,7 +46,7 @@ static void add     (GtkWidget *, gpointer);
+ static void delete  (GtkWidget *, gpointer);
+ static void edit    (GtkWidget *, gpointer);
+ static void cancel  (GtkWidget *, gpointer);
+-static void connect (GtkWidget *, gpointer);
++static void connectrig (GtkWidget *, gpointer);
+ static void selection_changed (GtkTreeSelection *sel, gpointer data);
+ 
+ static void render_civ (GtkTreeViewColumn *col,
+@@ -191,7 +191,7 @@ rig_selector_execute ()
+     g_signal_connect (G_OBJECT (cancbut), "clicked",
+                       G_CALLBACK (cancel), window);
+     g_signal_connect (G_OBJECT (conbut), "clicked",
+-                      G_CALLBACK (connect), window);
++                      G_CALLBACK (connectrig), window);
+     g_signal_connect (G_OBJECT (delbut), "clicked",
+                       G_CALLBACK (delete), NULL);
+     g_signal_connect (G_OBJECT (newbut), "clicked",
+@@ -439,7 +439,7 @@ static void cancel (GtkWidget *button, gpointer window)
+  * simply destroys the rig selector window and whereby control is returned
+  * to the main() function.
+  */
+-static void connect (GtkWidget *button, gpointer window)
++static void connectrig (GtkWidget *button, gpointer window)
+ {
+     
+     
+-- 
+2.47.0
+

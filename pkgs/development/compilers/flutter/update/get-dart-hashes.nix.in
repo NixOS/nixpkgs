@@ -1,0 +1,32 @@
+let
+  dartVersion = "@dart_version@";
+  platform = "@platform@";
+  channel = "@channel@";
+in
+{
+  x86_64-linux =
+    { fetchzip }:
+    fetchzip {
+      url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  aarch64-linux =
+    { fetchzip }:
+    fetchzip {
+      url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  x86_64-darwin =
+    { fetchzip }:
+    fetchzip {
+      url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  aarch64-darwin =
+    { fetchzip }:
+    fetchzip {
+      url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+}
+.${platform}
