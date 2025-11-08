@@ -41985,24 +41985,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  wring = nodeEnv.buildNodePackage {
-    name = "wring";
-    packageName = "wring";
-    version = "1.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/wring/-/wring-1.0.0.tgz";
-      sha512 = "XoFoUf9gxnQkergF+FK+AuaI/iaSh9P0N1hqIGTTs1V3rjexH1ZZKuxuDUbdVGrwxvoTW4xpeZrNhBw6WJIIag==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Extract content from websites using CSS Selectors and XPath";
-      homepage = "https://github.com/osener/wring#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "@yaegassy/coc-nginx" = nodeEnv.buildNodePackage {
     name = "_at_yaegassy_slash_coc-nginx";
     packageName = "@yaegassy/coc-nginx";

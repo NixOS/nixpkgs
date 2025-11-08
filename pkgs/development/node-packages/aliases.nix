@@ -354,6 +354,7 @@ mapAliases {
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
   webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
+  wring = throw "'wring' has been removed since it has been abandoned upstream"; # Added 2025-11-07
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29
   inherit (pkgs) yaml-language-server; # added 2023-09-05

@@ -85,6 +85,5 @@
 , "vega-cli"
 , "vercel"
 , "wavedrom-cli"
-, "wring"
 , "@yaegassy/coc-nginx"
 ]
