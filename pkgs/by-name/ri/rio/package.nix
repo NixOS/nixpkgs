@@ -7,8 +7,10 @@
   nixosTests,
   nix-update-script,
   autoPatchelfHook,
+  installShellFiles,
   cmake,
   ncurses,
+  scdoc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -62,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     ncurses
+    scdoc
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
@@ -99,6 +103,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    scdoc < extra/man/rio.1.scd > rio.1
+    scdoc < extra/man/rio.5.scd > rio.5
+    scdoc < extra/man/rio-bindings.5.scd > rio-bindings.5
+    installManPage rio.1 rio.5 rio-bindings.5
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications/
