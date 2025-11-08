@@ -36,7 +36,6 @@ in
       apply =
         pkg:
         pkg.override {
-          databaseType = cfg.settings.DATABASE_TYPE;
           collectApiEndpoint = optionalString (
             cfg.settings.COLLECT_API_ENDPOINT != null
           ) cfg.settings.COLLECT_API_ENDPOINT;
