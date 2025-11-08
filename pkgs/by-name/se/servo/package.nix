@@ -180,6 +180,8 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
+    # undefined libmozjs_sys symbols during linking
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;

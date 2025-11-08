@@ -11593,6 +11593,8 @@ self: super: with self; {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  partftpy = callPackage ../development/python-modules/partftpy { };
+
   partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
@@ -15309,8 +15311,6 @@ self: super: with self; {
   python-twitter = callPackage ../development/python-modules/python-twitter { };
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
-
-  python-u2flib-server = callPackage ../development/python-modules/python-u2flib-server { };
 
   python-uinput = callPackage ../development/python-modules/python-uinput { };
 

@@ -4008,8 +4008,6 @@ with pkgs;
     w3m = w3m-batch;
   };
 
-  systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
-
   tartube = callPackage ../applications/video/tartube { };
 
   tartube-yt-dlp = callPackage ../applications/video/tartube {
@@ -11218,7 +11216,7 @@ with pkgs;
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
-  q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
+  q4wine = kdePackages.callPackage ../applications/misc/q4wine { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
@@ -13130,8 +13128,6 @@ with pkgs;
     tlsSupport = true;
     pythonSupport = true;
   };
-
-  leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;

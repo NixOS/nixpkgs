@@ -98,7 +98,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_OWN_CURL" false)
     (lib.cmakeBool "ENABLE_DEV_PATHS" false)
     (lib.cmakeFeature "GAMEWINDOW_SYSTEM" "GLFW")
-    (lib.cmakeBool "USE_SDL3_AUDIO" false)
+    (lib.cmakeBool "SDL3_VENDORED" false)
     (lib.cmakeBool "BUILD_WEBVIEW" withQtWebview)
     (lib.cmakeBool "XAL_WEBVIEW_USE_CLI" (!withQtWebview))
     (lib.cmakeBool "XAL_WEBVIEW_USE_QT" withQtWebview)
