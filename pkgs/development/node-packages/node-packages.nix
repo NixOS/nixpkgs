@@ -41242,51 +41242,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  ts-node = nodeEnv.buildNodePackage {
-    name = "ts-node";
-    packageName = "ts-node";
-    version = "10.9.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/ts-node/-/ts-node-10.9.2.tgz";
-      sha512 = "f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==";
-    };
-    dependencies = [
-      sources."@cspotcode/source-map-support-0.8.1"
-      sources."@jridgewell/resolve-uri-3.1.2"
-      sources."@jridgewell/sourcemap-codec-1.5.0"
-      sources."@jridgewell/trace-mapping-0.3.9"
-      sources."@swc/core-1.11.9"
-      sources."@swc/counter-0.1.3"
-      sources."@swc/helpers-0.5.15"
-      sources."@swc/types-0.1.19"
-      sources."@swc/wasm-1.11.9"
-      sources."@tsconfig/node10-1.0.11"
-      sources."@tsconfig/node12-1.0.11"
-      sources."@tsconfig/node14-1.0.3"
-      sources."@tsconfig/node16-1.0.4"
-      sources."@types/node-22.13.10"
-      sources."acorn-8.14.1"
-      sources."acorn-walk-8.3.4"
-      sources."arg-4.1.3"
-      sources."create-require-1.1.1"
-      sources."diff-4.0.2"
-      sources."make-error-1.3.6"
-      sources."tslib-2.8.1"
-      sources."typescript-5.8.2"
-      sources."undici-types-6.20.0"
-      sources."v8-compile-cache-lib-3.0.1"
-      sources."yn-3.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "TypeScript execution environment and REPL for node.js, with source map support";
-      homepage = "https://typestrong.org/ts-node";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   ttf2eot = nodeEnv.buildNodePackage {
     name = "ttf2eot";
     packageName = "ttf2eot";
