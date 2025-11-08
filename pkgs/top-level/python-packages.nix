@@ -6296,8 +6296,6 @@ self: super: with self; {
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
-  gplaycli = callPackage ../development/python-modules/gplaycli { };
-
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
   gps3 = callPackage ../development/python-modules/gps3 { };
