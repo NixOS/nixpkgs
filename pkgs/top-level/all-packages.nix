@@ -10950,8 +10950,6 @@ with pkgs;
     sqlite = sqlite.override { enableDeserialize = true; };
   };
 
-  fritzing = qt6Packages.callPackage ../applications/science/electronics/fritzing { };
-
   fvwm = fvwm2;
 
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };

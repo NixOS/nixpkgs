@@ -2,32 +2,25 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  wrapQtAppsHook,
-  qmake,
+  kdePackages,
   pkg-config,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtserialport,
-  qtwayland,
-  qt5compat,
+  qt6,
   boost,
   libngspice,
   libgit2,
-  quazip,
   clipper,
 }:
 
 let
-  # SHA256 of the fritzing-parts HEAD on the master branch,
+  # SHA256 of the fritzing-parts HEAD on the develop branch,
   # which contains the latest stable parts definitions
-  partsSha = "4f7d39b22a6c307e6cca62c7f78eae96696e8b2c";
+  partsSha = "73bc0559bb8399b2f895d68f032e41d7efc720c0";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    hash = "sha256-mAzY5CVZJF5hAvWVlDiYRxoB+9mGDG9OI/8n9aY5aFE=";
+    hash = "sha256-2aXvSXWjQliEChQGhcCicOVoAqeNdeq69wQVYQsd2ew=";
   };
 
   # Header-only library
@@ -41,13 +34,13 @@ in
 
 stdenv.mkDerivation {
   pname = "fritzing";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-app";
-    rev = "b9add9eaa7c426963de20c8514a69d3f15e83bdf";
-    hash = "sha256-OnIX+2eXT0JAs6VgSAIr1t+2DhpoUDgKVGPFjjZrKas=";
+    rev = "04e5bb0241e8f1de24d0fce9be070041c6d5b68e";
+    hash = "sha256-JlqBdzWscJoD859KMYgT/af41WNWThP65K3zh2PC2jM=";
   };
 
   patches = [
@@ -56,25 +49,25 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    qmake
+    kdePackages.qmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qtserialport
-    qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtserialport
+    kdePackages.qt5compat
     boost
     libgit2
-    quazip
+    kdePackages.quazip
     libngspice
     clipper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+    qt6.qtwayland
   ];
 
   postPatch = ''
@@ -89,7 +82,7 @@ stdenv.mkDerivation {
       --replace-fail 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
 
     substituteInPlace phoenix.pro \
-      --replace-fail "6.5.10" "${qtbase.version}"
+      --replace-fail "6.5.10" "${qt6.qtbase.version}"
 
     substituteInPlace src/simulation/ngspice_simulator.cpp \
       --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
@@ -101,13 +94,13 @@ stdenv.mkDerivation {
   env = {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
       [
-        "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
+        "-I${lib.getDev kdePackages.quazip}/include/QuaZip-Qt${lib.versions.major qt6.qtbase.version}-${kdePackages.quazip.version}"
         "-I${svgpp}/include"
         "-I${clipper}/include/polyclipping"
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-F${qt5compat}/lib" ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-F${kdePackages.qt5compat}/lib" ]
     );
-    NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
+    NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qt6.qtbase.version}";
   };
 
   qmakeFlags = [
