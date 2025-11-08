@@ -25,6 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-wgHR0GzaPXlhL4ErklFqmWNFO49dvd5X5MgyYHVH4Eo=";
   };
 
+  # ERROR: '"session"' is not a valid asyncio_default_fixture_loop_scope. Valid scopes are: function, class, module, package, session.
+  # Post 1.2.1, the project switched from tox and is no longer affected, hence fixed in nixpkgs only.
+  postPatch = ''
+    substituteInPlace tox.ini --replace-fail \
+      'asyncio_default_fixture_loop_scope = "session"' \
+      'asyncio_default_fixture_loop_scope = session'
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
