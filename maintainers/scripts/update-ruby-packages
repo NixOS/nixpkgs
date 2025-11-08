@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bundler bundix
+#!nix-shell -i bash -p bundler bundix nixfmt
 
 set -euf -o pipefail
 
@@ -11,6 +11,7 @@ set -euf -o pipefail
   # platform from where it was executed.
   BUNDLE_FORCE_RUBY_PLATFORM=1 bundle lock
   bundix
+  nixfmt gemset.nix
   mv gemset.nix ../../../top-level/ruby-packages.nix
   rm -f Gemfile.lock
 )
