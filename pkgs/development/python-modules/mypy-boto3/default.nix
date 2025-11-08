@@ -969,8 +969,8 @@ in
       "sha256-hjgvlTcA18OeMpJIgpl+ml4zSc73HXrUrM0adOzScl4=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.40.61"
-      "sha256-B5yKX/xElj3pjsLItXJNm5eV+KPmU/ivVz6MR6g88s0=";
+    buildMypyBoto3Package "opensearch" "1.40.69"
+      "sha256-ql9SD9ZZ2k54A2oZkSS3wWFfswetl5/oVoGyzYb29wI=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.40.58"
