@@ -899,7 +899,6 @@ in
 
         script =
           let
-            lingerDir = "/var/lib/systemd/linger";
             userPartition = lib.lists.partition (u: u.linger) (builtins.attrValues cfg.users);
             lingeringUserNames = map (u: u.name) userPartition.right;
             nonLingeringUserNames = map (u: u.name) userPartition.wrong;
@@ -915,8 +914,6 @@ in
                 id "$1" >/dev/null
             }
 
-            mkdir -vp ${lingerDir}
-            cd ${lingerDir}
             shopt -s dotglob nullglob
             for user in *; do
                 if ! user_configured "$user"; then
@@ -934,7 +931,11 @@ in
             fi
           '';
 
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          StateDirectory = "systemd/linger";
+          WorkingDirectory = "/var/lib/systemd/linger";
+        };
       };
 
       # Warn about user accounts with deprecated password hashing schemes
