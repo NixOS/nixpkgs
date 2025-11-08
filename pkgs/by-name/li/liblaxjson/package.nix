@@ -18,11 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Library for parsing JSON config files";
     homepage = "https://github.com/andrewrk/liblaxjson";
     license = licenses.mit;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ maintainers.andrewrk ];
   };
 }

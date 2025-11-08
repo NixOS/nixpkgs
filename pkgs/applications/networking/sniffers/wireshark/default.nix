@@ -9,6 +9,7 @@
   buildPackages,
   c-ares,
   cmake,
+  darwinMinVersionHook,
   fixDarwinDylibNames,
   flex,
   gettext,
@@ -147,6 +148,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gmp
+    # Required by Qt 6
+    (darwinMinVersionHook "12.0")
   ];
 
   strictDeps = true;
@@ -192,7 +195,7 @@ stdenv.mkDerivation rec {
       flags+=(-change @rpath/"$(basename "$file")" "$file")
     done
 
-    for file in $out/lib/wireshark/extcap/*; do
+    for file in $out/libexec/wireshark/extcap/*; do
       if [ -L "$file" ]; then continue; fi
       echo "$file: fixing dylib references"
       # note that -id does nothing on binaries
@@ -210,7 +213,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/Applications/Wireshark.app/Contents/MacOS/extcap $out/Applications/Wireshark.app/Contents/PlugIns
     mkdir -p $out/Applications/Wireshark.app/Contents/PlugIns
     cp -r $out/lib/wireshark/plugins $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
-    cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
+    cp -r $out/libexec/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
   meta = {

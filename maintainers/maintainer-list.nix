@@ -11750,6 +11750,12 @@
     githubId = 29395089;
     name = "Jay Rovacsek";
   };
+  jaysa68 = {
+    email = "gh@jaysa.net";
+    github = "jaysa68";
+    githubId = 114126812;
+    name = "Jaysa Maria Garcia";
+  };
   jb55 = {
     email = "jb55@jb55.com";
     github = "jb55";
