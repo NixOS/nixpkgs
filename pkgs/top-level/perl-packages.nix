@@ -30376,51 +30376,6 @@ with self;
     };
   };
 
-  SDL = buildPerlModule {
-    pname = "SDL";
-    version = "2.548";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
-      hash = "sha256-JSoZK/qcIHCkiDcH0TnDpF2cRRjM1moeaZtbeVm9T7U=";
-    };
-    patches = [
-      # https://github.com/PerlGameDev/SDL/pull/304
-      ../development/perl-modules/sdl-modern-perl.patch
-      # sdl-compat correctly reports the bit depth of the test image,
-      # while SDL_classic rounded to the next byte
-      ../development/perl-modules/sdl-compat-bit-depth.patch
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
-        hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
-      })
-    ];
-    preCheck = "rm t/core_audiospec.t";
-    buildInputs = [
-      pkgs.SDL
-      pkgs.SDL_gfx
-      pkgs.SDL_mixer
-      pkgs.SDL_image
-      pkgs.SDL_ttf
-      pkgs.SDL_Pango
-      pkgs.SDL_net
-      AlienSDL
-      CaptureTiny
-      TestDeep
-      TestDifferences
-      TestException
-      TestMost
-      TestWarn
-    ];
-    propagatedBuildInputs = [
-      FileShareDir
-      TieSimple
-    ];
-    meta = {
-      description = "SDL bindings to Perl";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
@@ -39574,4 +39529,5 @@ with self;
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  SDL = throw "'SDL' has been removed as it was broken and unused"; # Added 2025-11-09
 }
