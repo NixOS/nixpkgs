@@ -6403,8 +6403,6 @@ with pkgs;
     inherit (llvmPackages_18) llvm libclang;
   };
 
-  inherit (nodePackages) csslint;
-
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {

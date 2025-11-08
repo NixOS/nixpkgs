@@ -27,7 +27,6 @@
 , "code-theme-converter"
 , "conventional-changelog-cli"
 , "cpy-cli"
-, "csslint"
 , "dhcp"
 , "diff2html-cli"
 , "dotenv-vault"

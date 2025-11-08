@@ -22326,15 +22326,6 @@ let
         sha512 = "jeAGzMDbfSHHA091hr0r31eYfTig+29g3GKKE/PPbEQ65X0lmMwlEoqmhzu0iztID5uJpZsFlUPDP8ThPL7M8w==";
       };
     };
-    "parserlib-1.1.1" = {
-      name = "parserlib";
-      packageName = "parserlib";
-      version = "1.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/parserlib/-/parserlib-1.1.1.tgz";
-        sha512 = "e1HbF3+7ASJ/uOZirg5/8ZfPljTh100auNterbHB8TUs5egciuWQ2eX/2al8ko0RdV9Xh/5jDei3jqJAmbTDcg==";
-      };
-    };
     "parseuri-0.0.6" = {
       name = "parseuri";
       packageName = "parseuri";
@@ -35887,28 +35878,6 @@ in
     meta = {
       description = "Copy files";
       homepage = "https://github.com/sindresorhus/cpy-cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  csslint = nodeEnv.buildNodePackage {
-    name = "csslint";
-    packageName = "csslint";
-    version = "1.0.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/csslint/-/csslint-1.0.5.tgz";
-      sha512 = "GXGpPqGIuEBKesM4bt2IKFrzDKpemh9wVZRHVuculUErar554QrXHOonhgkBOP3uiZzbAETz0N2A4oWlIoxPuw==";
-    };
-    dependencies = [
-      sources."clone-2.1.2"
-      sources."parserlib-1.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "CSSLint";
-      homepage = "http://csslint.net/";
       license = "MIT";
     };
     production = true;
