@@ -27,6 +27,10 @@ rustPlatform.buildRustPackage rec {
     dbus
   ];
 
+  postInstall = ''
+    install -Dm444 bluetui.desktop -t $out/share/applications
+  '';
+
   meta = {
     description = "TUI for managing bluetooth on Linux";
     homepage = "https://github.com/pythops/bluetui";
