@@ -38201,6 +38201,10 @@ with self;
       substituteInPlace ext/dnd/XS/DataObject.xs \
         --replace "#ifdef __WXGTK20__" "#if wxUSE_GUI"
     '';
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
