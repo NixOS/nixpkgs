@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -39,13 +40,13 @@ buildPythonPackage rec {
     "test_server_extra_fields"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
     changelog = "https://github.com/MoshiBin/ssdpy/releases/tag/${version}";
     description = "Lightweight, compatible SSDP library for Python";
     homepage = "https://github.com/MoshiBin/ssdpy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mjm ];
+    # Darwin's network interface names have changed since the package was last updated
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
