@@ -21,7 +21,6 @@
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
-  fleek-cli = "fleek";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   jsonlint = "jsonlint";

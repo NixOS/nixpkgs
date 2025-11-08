@@ -148,6 +148,7 @@ mapAliases {
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
+  fleek-cli = throw "'fleek-cli' was removed because the upstream source code repo has been deleted."; # Added 2025-11-07
   flood = pkgs.flood; # Added 2023-07-25
   inherit (pkgs) fx; # Added 2025-11-06
   ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
