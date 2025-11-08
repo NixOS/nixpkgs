@@ -91,10 +91,7 @@ mkDerivation rec {
     mainProgram = "lmms";
     homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }
