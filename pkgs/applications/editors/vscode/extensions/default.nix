@@ -1154,8 +1154,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.14.158";
-          hash = "sha256-c+5CJqjn7dmwDgNcaaDBapi3T8OI+5UnPJj9+t8sWng=";
+          version = "3.14.172";
+          hash = "sha256-bJnGao3RrbjeMSkRkakM6UA9piYGEzwMInoBOev2YeM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -2643,8 +2643,8 @@ let
         mktplcRef = {
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
-          version = "1.7.5";
-          hash = "sha256-DOSe0UhNMj6FRyHylnKYQsyhSLQQFvGfcmOBZSw+nVo=";
+          version = "1.7.6";
+          hash = "sha256-eSt4iT/o4mp17Dasr0gDr3SsQHX3R6jGmW4V/2KymnY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/k--kato.intellij-idea-keybindings/changelog";
@@ -3768,8 +3768,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.18.0";
-          hash = "sha256-wStFklnjX+UDykxLjl+vDYnvAgjrqFG4ahDuCX2glwI=";
+          version = "6.19.0";
+          hash = "sha256-IeeKk4gYFq+zTYpKHAOgEh3EC2g6bbb0Qcys2m5DeAo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4170,8 +4170,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.19";
-          hash = "sha256-F87YInLUkPUpB2oifCCq1xWD41LUdqg8cusGw2wEYg0=";
+          version = "0.8.20";
+          hash = "sha256-+dwLuqtEYirQaw/tuG5m5Ugk0crKQQZM43TmslJsBBc=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";

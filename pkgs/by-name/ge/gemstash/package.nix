@@ -5,20 +5,22 @@
   nixosTests,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "gemstash";
   gemdir = ./.;
-  exes = [ pname ];
+  exes = [ "gemstash" ];
 
   passthru = {
-    updateScript = bundlerUpdateScript pname;
+    updateScript = bundlerUpdateScript "gemstash";
     tests = { inherit (nixosTests) gemstash; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cache for RubyGems.org and a private gem server";
     homepage = "https://github.com/rubygems/gemstash";
-    license = licenses.mit;
-    maintainers = [ maintainers.viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      viraptor
+    ];
   };
 }

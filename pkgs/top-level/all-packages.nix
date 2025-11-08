@@ -2731,8 +2731,6 @@ with pkgs;
 
   fluentd = callPackage ../tools/misc/fluentd { };
 
-  gemstash = callPackage ../development/tools/gemstash { };
-
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -4225,8 +4223,6 @@ with pkgs;
   wio = callPackage ../by-name/wi/wio/package.nix {
     wlroots = wlroots_0_19;
   };
-
-  wring = nodePackages.wring;
 
   wyrd = callPackage ../tools/misc/wyrd {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
@@ -6401,8 +6397,6 @@ with pkgs;
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (llvmPackages_18) llvm libclang;
   };
-
-  inherit (nodePackages) csslint;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
@@ -11665,8 +11659,6 @@ with pkgs;
     shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
   };
 
-  mastodon-bot = nodePackages.mastodon-bot;
-
   matrix-commander =
     python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander
       { };
@@ -14518,5 +14510,9 @@ with pkgs;
 
   davis = callPackage ../by-name/da/davis/package.nix {
     php = php83; # https://github.com/tchapi/davis/issues/195
+  };
+
+  gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
+    releaseChannel = "unstable";
   };
 }

@@ -130,6 +130,7 @@ mapAliases {
   create-cycle-app = throw "create-cycle-app has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
   inherit (pkgs) cspell;
+  csslint = throw "'csslint' has been removed as upstream considers it abandoned."; # Addeed 2025-11-07
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
@@ -138,6 +139,7 @@ mapAliases {
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
+  elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
   emojione = throw "emojione was archived and abandoned upstream, so it has been removed"; # Added 2025-11-06
   escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
@@ -146,6 +148,7 @@ mapAliases {
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
+  fleek-cli = throw "'fleek-cli' was removed because the upstream source code repo has been deleted."; # Added 2025-11-07
   flood = pkgs.flood; # Added 2023-07-25
   inherit (pkgs) fx; # Added 2025-11-06
   ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
@@ -194,12 +197,14 @@ mapAliases {
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
   lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
+  lua-fmt = throw "'lua-fmt' has been removed because it has critical bugs that break formatting"; # Added 2025-11-07
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
+  mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   meat = throw "meat was removed because it was abandoned upstream."; # Added 2025-10-20
   inherit (pkgs) mermaid-cli; # added 2023-10-01
@@ -219,6 +224,7 @@ mapAliases {
     };
   }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
+  npm-merge-driver = throw "'npm-merge-driver' has been removed, since the upstream repo was archived on Aug 11, 2021"; # Added 2025-11-07
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23
   parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
@@ -251,6 +257,7 @@ mapAliases {
   shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
   inherit (pkgs) snyk; # Added 2023-08-30
   "socket.io" = throw "socket.io was removed because it provides no executable"; # added 2025-03-23
+  speed-test = throw "'speed-test' has been removed because it was broken"; # Added 2025-11-07
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
@@ -264,6 +271,7 @@ mapAliases {
   inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
+  tern = throw "'tern' was removed because it has been unmaintained upstream for several years"; # Added 2025-11-07
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13
   textlint-plugin-latex = throw "textlint-plugin-latex was removed because it is unmaintained for years. Please use textlint-plugin-latex2e instead."; # Added 2024-05-17
@@ -321,6 +329,7 @@ mapAliases {
   thelounge-theme-zenburn-sourcecodepro = throw "thelounge-theme-zenburn-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   triton = pkgs.triton; # Added 2023-05-06
+  ts-node = throw "'ts-node' was removed because it is unmaintained, and since NodeJS 22.6.0+, experimental TypeScript support is built-in to NodeJS."; # Added 2025-11-07
   typescript = pkgs.typescript; # Added 2023-06-21
   inherit (pkgs) typescript-language-server; # added 2024-02-27
   inherit (pkgs) uglify-js; # added 2024-06-15
@@ -345,6 +354,7 @@ mapAliases {
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
   webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
+  wring = throw "'wring' has been removed since it has been abandoned upstream"; # Added 2025-11-07
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29
   inherit (pkgs) yaml-language-server; # added 2023-09-05
