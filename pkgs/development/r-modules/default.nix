@@ -1166,6 +1166,7 @@ let
     XML = [ pkgs.pkg-config ];
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
+    CBN2Path = [ pkgs.gsl ];
     chebpol = [ pkgs.pkg-config ];
     baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
