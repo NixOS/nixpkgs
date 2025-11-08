@@ -59,6 +59,10 @@ in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
   version = "1.21.0";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "libretro";
