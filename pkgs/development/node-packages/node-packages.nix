@@ -34589,27 +34589,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  katex = nodeEnv.buildNodePackage {
-    name = "katex";
-    packageName = "katex";
-    version = "0.16.21";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/katex/-/katex-0.16.21.tgz";
-      sha512 = "XvqR7FgOHtWupfMiigNzmh+MgUVmDGU2kXZm899ZkPfcuoPuFxyHmXsgATDpFZDAXCI8tvinaVcDo8PIIJSo4A==";
-    };
-    dependencies = [
-      sources."commander-8.3.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fast math typesetting for the web";
-      homepage = "https://katex.org";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   lcov-result-merger = nodeEnv.buildNodePackage {
     name = "lcov-result-merger";
     packageName = "lcov-result-merger";

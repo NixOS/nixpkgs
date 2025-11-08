@@ -39,7 +39,6 @@
 , "json"
 , "json-refs"
 , "jsonlint"
-, "katex"
 , "lcov-result-merger"
 , "live-server"
 , "livedown"
