@@ -22,6 +22,7 @@ appimageTools.wrapType2 {
     mkdir -p $out/share/applications
     install -m 444 -D ${appimageContents}/ArtixGamesLauncher.desktop $out/share/applications/ArtixGamesLauncher.desktop
     install -m 444 -D ${appimageContents}/ArtixLogo.png $out/share/icons/ArtixLogo.png
+    substituteInPlace $out/share/applications/ArtixGamesLauncher.desktop --replace-fail 'Exec=ArtixGameLauncher %u' 'Exec=artix-games-launcher %u'
   '';
 
   meta = {
