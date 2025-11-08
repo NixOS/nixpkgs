@@ -161,27 +161,18 @@ in
   };
 
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
     extraBuildInputs = [
       lcms2
     ];
   };
 
   wlroots_0_19 = generic {
-    version = "0.19.1";
-    hash = "sha256-Q4x6obwzYYncgoUzqFVzn/scjxsiUeAIlEWY43emdvA=";
+    version = "0.19.2";
+    hash = "sha256-8VOhSaH9D0GkqyIP42W3uGcDT5ixPVDMT/OLlMXBNXA=";
     extraBuildInputs = [
       lcms2
-    ];
-    patches = [
-      (fetchpatch {
-        # https://gitlab.freedesktop.org/wlroots/wlroots/-/merge_requests/5134
-        # > backend, output: send commit events after applying all in wlr_backend_commit()
-        # fixes potential crash in sway. Remove once a new release is made of wlroots
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/7392b3313a7b483c61f4fea648ba8f2aa4ce8798.patch";
-        sha256 = "sha256-SK463pnIX2qjwRblCJRbvJeZTL6wAXho6wBIJ10OuNk=";
-      })
     ];
   };
 }

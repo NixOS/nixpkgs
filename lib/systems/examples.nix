@@ -23,7 +23,6 @@ rec {
 
   ppc64-elfv1 = {
     config = "powerpc64-unknown-linux-gnuabielfv1";
-    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
   };
   ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
@@ -301,15 +300,6 @@ rec {
   microblaze-embedded = {
     config = "microblazeel-none-elf";
     libc = "newlib";
-  };
-
-  #
-  # Redox
-  #
-
-  x86_64-unknown-redox = {
-    config = "x86_64-unknown-redox";
-    libc = "relibc";
   };
 
   #

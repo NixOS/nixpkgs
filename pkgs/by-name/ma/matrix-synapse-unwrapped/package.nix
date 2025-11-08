@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.140.0";
+  version = "1.141.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-nk1nOfJQOBgnlIAju+Q8+0Q0wTGaymhSQSdwecTJLUY=";
+    hash = "sha256-trn5+OOtubOOjlOjJ7WCgeMz2IAsxurHvPQYg/RkEX4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

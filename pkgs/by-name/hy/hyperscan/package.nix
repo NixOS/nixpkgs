@@ -19,38 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "hyperscan";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tzmVc6kJPzkFQLUM1MttQRLpgs0uckbV6rCxEZwk1yk=";
-    rev = "v${finalAttrs.version}";
   };
 
   outputs = [
     "out"
     "dev"
   ];
-
-  buildInputs = [ boost ];
-  nativeBuildInputs = [
-    cmake
-    ragel
-    python3
-    util-linux
-    pkg-config
-  ];
-
-  cmakeFlags = [
-    "-DBUILD_AVX512=ON"
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DFAT_RUNTIME=ON"
-  ++ lib.optional withStatic "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
-
-  # hyperscan CMake is completely broken for chimera builds when pcre is compiled
-  # the only option to make it build - building from source
-  # In case pcre is built from source, chimera build is turned on by default
-  preConfigure = lib.optional withStatic ''
-    mkdir -p pcre
-    tar xvf ${pcre.src} --strip-components 1 -C pcre
-  '';
 
   postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
@@ -63,7 +39,66 @@ stdenv.mkDerivation (finalAttrs: {
         #error Incorrect pcre version
         #endif
         main() {}" CORRECT_PCRE_VERSION)' 'set(CORRECT_PCRE_VERSION TRUE)'
+  ''
+  # CMake 4 dropped support of versions lower than 3.5,
+  # versions lower than 3.10 are deprecated.
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "cmake_minimum_required (VERSION 2.8.11)" \
+        "cmake_minimum_required (VERSION 3.10)" \
   '';
+
+  buildInputs = [ boost ];
+  nativeBuildInputs = [
+    cmake
+    ragel
+    python3
+    util-linux
+    pkg-config
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_AVX512" true)
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (lib.cmakeBool "FAT_RUNTIME" true)
+  ]
+  ++ lib.optionals withStatic [
+    (lib.cmakeBool "BUILD_STATIC_AND_SHARED" true)
+  ]
+  ++ lib.optionals (!withStatic) [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ];
+
+  # hyperscan CMake is completely broken for chimera builds when pcre is compiled
+  # the only option to make it build - building from source
+  # In case pcre is built from source, chimera build is turned on by default
+  preConfigure = lib.optionalString withStatic (
+    ''
+      mkdir -p pcre
+      tar xvf ${pcre.src} --strip-components 1 -C pcre
+    ''
+    # - CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
+    #   https://github.com/NixOS/nixpkgs/issues/445447
+    # - CMake Error at pcre/CMakeLists.txt:843 (GET_TARGET_PROPERTY):
+    #   The LOCATION property may not be read from target "pcretest".  Use the
+    #   target name directly with add_custom_command, or use the generator
+    #   expression $<TARGET_FILE>, as appropriate.
+    + ''
+      substituteInPlace pcre/CMakeLists.txt \
+        --replace-fail \
+          "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)" \
+          "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)" \
+        --replace-fail \
+          "CMAKE_POLICY(SET CMP0026 OLD)" \
+          "CMAKE_POLICY(SET CMP0026 NEW)" \
+        --replace-fail \
+          "GET_TARGET_PROPERTY(PCRETEST_EXE pcretest DEBUG_LOCATION)" \
+          "set(PCRETEST_EXE $<TARGET_FILE:pcretest>)"
+    ''
+  );
 
   doCheck = true;
   checkPhase = ''
@@ -75,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -91,11 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.hyperscan.io/";
-    maintainers = with maintainers; [ avnik ];
+    maintainers = with lib.maintainers; [ avnik ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 })

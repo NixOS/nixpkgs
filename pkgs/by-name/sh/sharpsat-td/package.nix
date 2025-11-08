@@ -48,6 +48,9 @@ stdenv.mkDerivation {
     # replace bundled version of mpreal/mpfrc++
     rm -r src/mpfr
     cp -r ${mpreal} src/mpfr
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];

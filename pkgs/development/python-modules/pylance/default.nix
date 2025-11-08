@@ -13,6 +13,7 @@
   protobuf,
 
   # dependencies
+  lance-namespace,
   numpy,
   pyarrow,
 
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.38.2";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-H4HQzLmQdDS8aS/OMsIHjWEogmctkF+5N5ClozeuITU=";
+    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +52,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-A4qZERrYm8FELuJNqy/fhbJxLxTp73oY7jc5bZavFFI=";
+    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pyarrow" ];
 
   dependencies = [
+    lance-namespace
     numpy
     pyarrow
   ];

@@ -1,9 +1,10 @@
 {
+  lib,
   callPackage,
-  lowPrio,
 }:
 
 let
+  inherit (lib) lowPrio;
   base3 = callPackage ./tesseract3.nix { };
   base4 = callPackage ./tesseract4.nix { };
   base5 = callPackage ./tesseract5.nix { };

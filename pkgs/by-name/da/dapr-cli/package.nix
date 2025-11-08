@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "dapr-cli";
-  version = "1.16.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-Z8Fuisx2hK6QAJ5NDh0f11t/hoHhbD2+/mZMsUFxPaQ=";
+    hash = "sha256-lDrVhY5dlaQe23WncUFpqsP7UuDgRPmMWrOlJezma/Y=";
   };
 
-  vendorHash = "sha256-qEbuu4+pQ6g3m1FtisYc26lG/4zY/boQM8d6qA5c1eo=";
+  vendorHash = "sha256-UzZJ9mgMvewahYjhTOBC/HgIaxk312a7iqbS4D5O2VU=";
 
   proxyVendor = true;
 

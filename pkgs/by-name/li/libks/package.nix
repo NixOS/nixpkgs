@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  ctestCheckHook,
   pkg-config,
   libuuid,
   openssl,
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
-    rev = "v${version}";
-    sha256 = "sha256-fiBemt71UJgN0RryGmGiK7sob1xbdmSOArEGt5Pg5YM=";
+    tag = "v${version}";
+    hash = "sha256-cBNNCOm+NcIvozN4Z4XnZWBBqq0LVELVqXubQB4JMTU=";
   };
 
   patches = [
@@ -43,16 +44,35 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isLinux libuuid
   ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = [
+    # Runs into certificate error on aarch64
+    # [ERROR] [...] testhttp.c:95    init_ssl [...] SSL ERR: CERT CHAIN FILE ERROR
+    "testhttp"
+
+    # Runs into what seems like an overflow / memory corruption in the testing framework on the community runner.
+    # Doesn't happen on local ARM hardware, maybe due to unexpectedly high core count?
+    "testthreadmutex"
+  ];
+
+  # Something seems to go wrong with testwebsock2 when using parallelism
+  enableParallelChecking = false;
+
   passthru = {
     tests.freeswitch = freeswitch;
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
+    teams = [ lib.teams.ngi ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

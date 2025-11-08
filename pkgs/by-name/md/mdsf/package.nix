@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  installShellFiles,
 }:
 let
   pname = "mdsf";
@@ -23,6 +25,17 @@ rustPlatform.buildRustPackage {
 
   # many tests fail for various reasons of which most depend on the build sandbox
   doCheck = false;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mdsf \
+      --bash <($out/bin/mdsf completions bash) \
+      --zsh <($out/bin/mdsf completions zsh) \
+      --fish <($out/bin/mdsf completions fish) \
+      --nushell <($out/bin/mdsf completions nushell)
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

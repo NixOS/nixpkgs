@@ -26,7 +26,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
-  version = "0.0.0";
+  version = lib.trivial.release;
   src = ./src;
   pyproject = true;
 

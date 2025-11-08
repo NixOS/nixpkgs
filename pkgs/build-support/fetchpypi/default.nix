@@ -1,7 +1,7 @@
 # `fetchPypi` function for fetching artifacts from PyPI.
 {
+  lib,
   fetchurl,
-  makeOverridable,
 }:
 
 let
@@ -46,13 +46,11 @@ let
     compute (removeAttrs attrs [ "format" ]);
 
 in
-makeOverridable (
+lib.makeOverridable (
   {
     format ? "setuptools",
     sha256 ? "",
     hash ? "",
-    pname,
-    version,
     ...
   }@attrs:
   let
@@ -62,20 +60,8 @@ makeOverridable (
         "hash"
       ]
     );
-    meta = {
-      identifiers.purlParts = {
-        type = "pypi";
-        # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/pypi-definition.md
-        spec = "${pname}@${version}";
-      };
-    };
   in
   fetchurl {
-    inherit
-      url
-      sha256
-      hash
-      meta
-      ;
+    inherit url sha256 hash;
   }
 )

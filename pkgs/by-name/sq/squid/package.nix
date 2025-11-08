@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "7.1";
+  version = "7.3";
 
   src = fetchurl {
     url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-djtaeFYc7cTkdjT6QrjmuNRsh8lJoVG056wjltL5feo=";
+    hash = "sha256-2twqmjkmzhs7q+qnp9eyHLsIkCWHbao/XBnn62OR3c0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

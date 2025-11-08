@@ -232,8 +232,6 @@ let
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
-        chacha = callPackage ../development/ocaml-modules/chacha { };
-
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
@@ -425,6 +423,8 @@ let
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
         dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
+        dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
         dolmen_type = callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
@@ -1473,6 +1473,7 @@ let
         ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
+        ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1510,6 +1511,8 @@ let
         ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
 
         ocolor = callPackage ../development/ocaml-modules/ocolor { };
+
+        ocp-browser = callPackage ../development/tools/ocaml/ocp-browser { };
 
         ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
@@ -2245,13 +2248,23 @@ let
 
         google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-        hol_light = callPackage ../applications/science/logic/hol_light { };
+        hol_light = callPackage ../applications/science/logic/hol_light {
+          camlp5 =
+            if lib.versionAtLeast camlp5.version "8.04.00" then
+              camlp5.overrideAttrs {
+                version = "8.03.2";
+                __intentionallyOverridingVersion = true;
+              }
+            else
+              camlp5;
+        };
 
         ### End ###
 
       }
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
+        chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }

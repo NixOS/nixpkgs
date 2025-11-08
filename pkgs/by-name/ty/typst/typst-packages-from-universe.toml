@@ -7076,7 +7076,7 @@ description = "A brainfuck implementation in pure Typst"
 license = [
     "MIT",
 ]
-homepage = "git@github.com:Thumuss/brainfuck.git"
+homepage = "https://github.com/Thumuss/brainfuck"
 
 [etykett."0.1.1"]
 url = "https://packages.typst.org/preview/etykett-0.1.1.tar.gz"

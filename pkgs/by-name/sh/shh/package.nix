@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shh";
-  version = "2025.9.22";
+  version = "2025.11.3";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "shh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Esb6IR49YtGWvLmGLtviAyMLjoWZLQka2igC6yKJ3A0=";
+    hash = "sha256-oXTrKUs6J3Us2m1hFbVa+G03q3oV3pqppQ+QfPXVrFA=";
   };
 
-  cargoHash = "sha256-CB0jhVDR40lZaYqNq43V/af1v3Ph+6Z9swSrrsNgA8k=";
+  cargoHash = "sha256-GGu/oy4bfsnJNbquDeu9bDJWY9HEWS3hwsOj3nhcUNQ=";
 
   patches = [
     ./fix_run_checks.patch

@@ -28,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: check with other distros and report upstream
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-m64" ""
+      --replace-fail "-m64" "" \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' \
+        'cmake_minimum_required(VERSION 3.5 FATAL_ERROR)'
   '';
 
   nativeBuildInputs = [ cmake ];

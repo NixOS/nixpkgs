@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "OttoMatic";
-  version = "4.0.1-unstable-2025-04-27";
+  version = "4.0.1-unstable-2025-09-28";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = "OttoMatic";
-    rev = "69f0111d1768abe56498bf8121f0f9cbc85aedd3";
-    hash = "sha256-7RpEVL3tNhEhkZYVjgsI6S+CQfyiz/ukroldrtohA4k=";
+    rev = "636056a92c1f276a5af5c3dc7df5c3cb952fd47a";
+    hash = "sha256-nSLa/g1irZY9uU7lZkeT9C0iNPgBuD5wm1AxIrIzG54=";
     fetchSubmodules = true;
   };
 

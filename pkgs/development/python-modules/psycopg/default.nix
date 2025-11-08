@@ -34,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.10";
+  version = "3.2.12";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-ZvqhvjDhrZ7uKi9fE/UYRaJblmfXXH6pYoUZ5u7cOu0=";
+    hash = "sha256-g1mms12EqRiln5dK/BmBa9dd9duSPRgRIiZkVmSRaYI=";
   };
 
   patches = [
@@ -199,6 +199,8 @@ buildPythonPackage rec {
     "test_connect_error_multi_hosts_each_message_preserved"
     # Flaky, fails intermittently
     "test_break_attempts"
+    # ConnectionResetError: [Errno 104] Connection reset by peer
+    "test_wait_r"
   ];
 
   disabledTestPaths = [

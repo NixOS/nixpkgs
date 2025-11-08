@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       basvandijk
-      figsoda
       jk
     ];
   };

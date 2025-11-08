@@ -22,13 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.18.2";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ayYRNclxbBedH6gIWTh5wI/AIvMzSq4x5fQXzxOT5c=";
+    hash = "sha256-hpsrHHh0Bk+9Z4Qp5aTqH5i8KnqCLQdseYGrbr4sh1k=";
     fetchSubmodules = true;
   };
 
@@ -57,9 +57,6 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
-
     # Specify a fixed date to improve build reproducibility
     echo "1970-01-01T00:00:00Z" >buildDate.txt
     substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
@@ -72,6 +69,11 @@ buildDotnetModule (finalAttrs: {
     # Use a vendored version of the nexus API's games.json data
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    ''}
   '';
 
   makeWrapperArgs = [

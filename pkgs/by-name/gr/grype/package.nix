@@ -6,17 +6,18 @@
   git,
   installShellFiles,
   openssl,
+  net-tools,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.101.0";
+  version = "0.103.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-20nl2mfU5PeEtUwyOUrKZ58nHyVvxZol4M37IPabx3A=";
+    hash = "sha256-AXhpdEJ0T0GF9DamboT+V4ivadzR3+7HpLQs8O1QTAQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -31,13 +32,14 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-VbJKdd04S1aXXnflEZTtpIh4eJFe17WXZXqWDDo9YiI=";
+  vendorHash = "sha256-aoqjzF4CSzBZxvAz0vMR4ztUvpLewYi7sSCeSlSiLd0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     git
     openssl
+    net-tools
   ];
 
   subPackages = [ "cmd/grype" ];

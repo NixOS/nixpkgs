@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-periphery";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "vsergeev";
     repo = "c-periphery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-azqGw7KW6/UrQ4eUPkeH8d6l6sSbotNMAAbn5pNMOB8=";
+    hash = "sha256-lGBDf10kolwPrURwUEtiSCJYdyxZqJN/B1SnY08Ytns=";
   };
 
   outputs = [

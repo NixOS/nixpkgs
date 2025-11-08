@@ -2,22 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
   numpy,
   setuptools,
+
+  # nativeBuildInputs
   pkgs,
-  jxrlib,
   lcms2,
+  openjpeg,
+
+  # buildInputs
+  jxrlib,
   lerc,
   libdeflate,
+  libjpeg,
   libpng,
   libtiff,
   libwebp,
-  openjpeg,
   xz,
   zlib,
-  zstd,
-  pytest,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -48,18 +56,19 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    pkgs.lz4
     jxrlib
     lcms2
     lerc
     libdeflate
+    libjpeg
     libpng
     libtiff
     libwebp
+    pkgs.lz4
     openjpeg
     xz # liblzma
     zlib
-    zstd
+    pkgs.zstd
   ];
 
   dependencies = [
@@ -73,7 +82,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

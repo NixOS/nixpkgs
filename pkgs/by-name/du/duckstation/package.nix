@@ -8,7 +8,6 @@
   ninja,
   extra-cmake-modules,
   wayland-scanner,
-  makeBinaryWrapper,
   qt6,
   sdl3,
   zstd,
@@ -29,7 +28,7 @@
   spirv-cross,
   udev,
   libbacktrace,
-  ffmpeg-headless,
+  ffmpeg_8-headless,
   alsa-lib,
   libjack2,
   libpulseaudio,
@@ -47,17 +46,11 @@ let
   meta = {
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64/RV64";
     longDescription = ''
-      # DISCLAIMER
-      This is an **unofficial** package, do not report any issues to
-      duckstation developers. Instead, please report them to
+      DISCLAIMER: This is an **unofficial** package, do not report any
+      issues to duckstation developers. Instead, please report them to
       <https://github.com/NixOS/nixpkgs> or use the officially
       supported platform build at <https://duckstation.org> or other
-      upstream-approved distribution mechanism not listed here. We
-      (nixpkgs) do not endorse or condone any action taken on your own
-      accord in regards to this package.
-
-      The SDL audio backend must be used as cubeb support is currently
-      non-functional without patches.
+      upstream-approved distribution mechanism not listed here.
     '';
     homepage = "https://duckstation.org";
     license = lib.licenses.cc-by-nc-nd-40;
@@ -71,14 +64,21 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = pkgSources.duckstation.version;
+    version = "0.1-9787-unstable-2025-10-13";
 
     src = fetchFromGitHub {
       owner = "stenzek";
       repo = "duckstation";
-      tag = "v${finalAttrs.version}";
-      hash = pkgSources.duckstation.hash_linux;
+      rev = "8f0c9dd171210dfd7f06223a393e2565abbaabf3";
+      hash = "sha256-CzHWdY0RaGBB6CY3PzHHHbq3/Mbf6WtUm6Dizr0IW6I=";
     };
+
+    # TODO: Remove once this is fixed upstream.
+    postPatch = ''
+      substituteInPlace src/util/animated_image.cpp \
+        --replace-fail "png_write_frame_head(png_ptr, info_ptr," \
+                       "png_write_frame_head(png_ptr, info_ptr, 0,"
+    '';
 
     vendorDiscordRPC = llvmPackages.stdenv.mkDerivation {
       pname = "discord-rpc-duckstation";
@@ -190,7 +190,8 @@ let
           - Improving performance.
           - Fixing game-breaking bugs.
           - Unlocking the frame rate (e.g. "60 FPS patches").
-          - Widescreen rendering where the built-in widescreen rendering rendering is insufficient.
+          - Widescreen rendering where the built-in widescreen
+            rendering rendering is insufficient.
         '';
         license = lib.licenses.mit;
         inherit (meta) maintainers;
@@ -209,7 +210,6 @@ let
       ninja
       extra-cmake-modules
       wayland-scanner
-      makeBinaryWrapper
       qt6.wrapQtAppsHook
       qt6.qttools
     ];
@@ -232,7 +232,7 @@ let
       qt6.qtbase
       udev
       libbacktrace
-      ffmpeg-headless
+      ffmpeg_8-headless
       alsa-lib
       libjack2
       pipewire
@@ -244,19 +244,14 @@ let
       finalAttrs.soundtouch
     ];
 
-    cmakeFlags = [
-      (lib.cmakeBool "ALLOW_INSTALL" true)
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib/duckstation")
-    ];
+    installPhase = ''
+      runHook preInstall
 
-    postInstall = ''
-      makeWrapper $out/lib/duckstation/duckstation-qt $out/bin/duckstation-qt
-
-      mkdir -p $out/share/applications
+      mkdir -p $out/{lib,bin,share/{applications,icons/hicolor/512x512/apps}}
+      cp -r bin $out/lib/duckstation
+      ln -s $out/lib/duckstation/duckstation-qt $out/bin/duckstation-qt
       ln -s $out/lib/duckstation/resources/org.duckstation.DuckStation.desktop \
             $out/share/applications
-
-      mkdir -p $out/share/icons/hicolor/512x512/apps
       ln -s $out/lib/duckstation/resources/org.duckstation.DuckStation.png \
             $out/share/icons/hicolor/512x512/apps
 
@@ -265,7 +260,18 @@ let
       install -Dm644 README.* -t $out/share/doc/duckstation
       install -Dm644 CONTRIBUTORS.md -t $out/share/doc/duckstation
       popd
+
+      runHook postInstall
     '';
+
+    qtWrapperArgs = [
+      "--prefix LD_LIBRARY_PATH : ${
+        (lib.makeLibraryPath [
+          ffmpeg_8-headless
+          finalAttrs.vendorShaderc
+        ])
+      }"
+    ];
 
     inherit passthru;
 

@@ -86,6 +86,9 @@ buildPythonPackage rec {
     "SQAStoreUtilsTest"
     "SQAStoreTest"
 
+    # ValueError: Expected dim to be an integer greater than or equal to 2. Found dim=1.
+    "test_get_model"
+
     # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
     "test_get_next_trials_with_db"
 

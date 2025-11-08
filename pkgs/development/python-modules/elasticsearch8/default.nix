@@ -7,21 +7,18 @@
   hatchling,
   orjson,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
-  version = "8.19.1";
+  version = "8.19.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/JkH60q7zk792R3IRo/DylOd8xVSqEgH1/KmXFPdy2U=";
+    hash = "sha256-lDfI5RI8JgtZdmGDv9kVIGdyVChJtpf3inlEbsiQqA4=";
   };
 
   build-system = [ hatchling ];

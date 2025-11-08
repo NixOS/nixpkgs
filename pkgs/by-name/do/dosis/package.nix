@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "http://www.impallari.com/dosis";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -72,7 +72,8 @@
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if Pantheon components actually start"):
           pgrep_list = [

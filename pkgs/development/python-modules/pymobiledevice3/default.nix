@@ -43,19 +43,18 @@
   uvicorn,
   wsproto,
   xonsh,
-  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "4.27.3";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-YYRDsE/rfTAnjDrJ0sMLeTyKshhl8NXhdspQUql2RAE=";
+    hash = "sha256-fw7KGijIgIXXFbtNpq1QBrxUP4F6ivLQXQn94YZnQL4=";
   };
 
   build-system = [
@@ -101,7 +100,6 @@ buildPythonPackage rec {
     uvicorn
     wsproto
     xonsh
-    zeroconf
   ]
   ++ fastapi.optional-dependencies.all;
 

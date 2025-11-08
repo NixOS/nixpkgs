@@ -7,6 +7,7 @@
   libgbm,
   libdrm,
   flutter332,
+  flutter335,
   pulseaudio,
   copyDesktopItems,
   makeDesktopItem,
@@ -28,23 +29,22 @@ let
     sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
   };
 in
-flutter332.buildFlutterApplication (
+flutter335.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.1.1";
+    version = "2.2.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-Gk3PtIb90rmrEIq52aL+vBHhRG6LoyfG2jrAGH5Iyqo=";
+      hash = "sha256-+puhKlg+ZJVjmL0hoWUXm7JU5hpoKqPZ3T5rWy+rPsQ=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
       flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-      flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
       flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
     };
 

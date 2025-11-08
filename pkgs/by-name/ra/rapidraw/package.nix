@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
   rustPlatform,
@@ -34,20 +35,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j9Mpg3o90/PdKlSpJEePcnXZoO2BfnGtJEielM/5/uQ=";
+    hash = "sha256-aDOE2VXStPx4POQoSxoQbLwdBmt3LuMPxSZ8ZshE7Fc=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-emwlK16NgeTYyQevWD4baHUxMP5xWJsKpQp/q5krAhQ=";
+  cargoHash = "sha256-+7CK2KxUMQ56CBVVb2esM+9ntJ7SzpVb2OmQ3mM5vNU=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-MULxH6gmHC58XdQe4ePvHcXP7/7fYNHgGHHltkODQ6w=";
+    hash = "sha256-QaPGXb26pDQLBJfYZoWt3jDeCdwameGkBvrTzhRMxYs=";
   };
 
   nativeBuildInputs = [
@@ -64,11 +66,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs_20
     glib-networking
     openssl
-    webkitgtk_4_1
     gtk3
     glib
     gdk-pixbuf
-    libappindicator
     cairo
     pango
     xorg.libX11
@@ -90,6 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libheif
     onnxruntime
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+    libappindicator
   ];
 
   cargoRoot = "src-tauri";
@@ -101,7 +105,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Configure Tauri to use lowercase binary name
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace '  "identifier": "com.rapidraw.app",' '  "identifier": "com.rapidraw.app", "mainBinaryName": "rapidraw",'
+      --replace-fail '  "identifier": "io.github.CyberTimon.RapidRAW",' '  "identifier": "io.github.CyberTimon.RapidRAW", "mainBinaryName": "rapidraw",'
+
+    # Disable downloading of ONNX runtime library this is correctly linked during postInstall
+    substituteInPlace src-tauri/build.rs \
+      --replace-fail 'if !is_valid' 'if false'
   '';
 
   dontWrapGApps = true;
@@ -109,7 +117,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # needs to be declared twice annoyingly
   ORT_STRATEGY = "system";
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch the .desktop file to set the Categories field
     sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
 
@@ -123,7 +131,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -rf $out/lib/RapidRAW/resources/libonnxruntime.dylib
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapGApp $out/bin/rapidraw \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
       --set ORT_STRATEGY "system" \

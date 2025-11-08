@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = [ ];
     mainProgram = "harec";
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/

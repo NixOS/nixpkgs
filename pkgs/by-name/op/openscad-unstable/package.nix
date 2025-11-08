@@ -44,26 +44,29 @@
   ctestCheckHook,
 }:
 # clang consume much less RAM than GCC
-clangStdenv.mkDerivation rec {
-  pname = "openscad-unstable";
-  version = "2025-06-04";
-  src = fetchFromGitHub {
-    owner = "openscad";
-    repo = "openscad";
-    rev = "65856c9330f8cc4ffcaccf03d91b4217f2eae28d";
-    hash = "sha256-jozcLFGVSfw8G12oSxHjqUyFtAfENgIByID+omk08mU=";
-    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
-  };
-
-  patches = [ ./test.diff ];
-
-  nativeBuildInputs = [
-    (python3.withPackages (
+let
+  python3withPackages = (
+    python3.withPackages (
       ps: with ps; [
         numpy
         pillow
       ]
-    ))
+    )
+  );
+in
+clangStdenv.mkDerivation rec {
+  pname = "openscad-unstable";
+  version = "2021.01-unstable-2025-10-27";
+  src = fetchFromGitHub {
+    owner = "openscad";
+    repo = "openscad";
+    rev = "aa785fe4ab3d52450a5e51eb73585ac9bbcc8798";
+    hash = "sha256-TngfItArYtm8243DdYkQlkfc/MBTZGYrf08hfloWRWk=";
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
+  };
+
+  nativeBuildInputs = [
+    python3withPackages
     bison
     cmake
     flex
@@ -127,6 +130,10 @@ clangStdenv.mkDerivation rec {
     # The sources enable this for only apple. We turn it off globally anyway to stay
     # consistent.
     "-DUSE_QT6=OFF"
+
+    # For tests
+    "-DVENV_DIR=${python3withPackages}"
+    "-DVENV_BIN_PATH=${python3withPackages}/bin"
   ];
 
   # tests rely on sysprof which is not available on darwin
@@ -138,6 +145,12 @@ clangStdenv.mkDerivation rec {
       for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
       do rm -r $m
       done )
+  '';
+
+  postPatch = ''
+    # Take Python3 executable as passed
+    sed -e '/set(VENV_DIR /d' -i tests/cmake/ImageCompare.cmake
+    sed -e '/find_path(VENV_BIN_PATH /d' -i tests/cmake/ImageCompare.cmake
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

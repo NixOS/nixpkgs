@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.24.2";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     tag = "v${version}";
-    hash = "sha256-5QkXWuMFNsYNsW8lgo9FQIZ5NuLiRZCFKGWedpddi8Y=";
+    hash = "sha256-qB88S5k+HLBSOxNo6JBSGihJnY1jUdIpJTdLwgAP6bA=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     addDriverRunpath $out/lib/libze_loader.so
   '';
+
+  setupHook = ./setup-hook.sh;
 
   passthru = {
     tests = {

@@ -67,20 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.1.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-WFN4z+LQwqy6bd59yWlglpXFqNZPEd3jcgeWhdphxYM=";
+    hash = "sha256-D8vLkV8T1igOoCgJDiccLytxlXdF0oLJZTQpBsLM7Z0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-LZXtAt4rP0rKaleMht1eFPdqgE8nu5NdLzhWBW69WW8=";
+    inherit pname version src;
+    hash = "sha256-f5lU1ClKEZjzOAkng1B37d4VmHYzLOP2uMvoN1RFFoo=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -93,6 +92,11 @@ buildPythonPackage rec {
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
     substituteInPlace pyproject.toml \
       --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
+
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    substituteInPlace chromadb/config.py \
+      --replace-fail "anonymized_telemetry: bool = True" \
+                     "anonymized_telemetry: bool = False"
   '';
 
   pythonRelaxDeps = [

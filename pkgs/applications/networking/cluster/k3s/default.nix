@@ -41,4 +41,27 @@ in
       ];
     }
   ) extraArgs;
+
+  k3s_1_34 =
+    (common (
+      (import ./1_34/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "34"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        patches = [
+          # Sets -mod=readonly for go list commands in scripts/version.sh to prevent go from using
+          # the (intentional) incomplete vendor directory. Additionally, sets -e for go list to
+          # change handling of erroneous packages.
+          ./1_34/version_sh_go_list.patch
+          # Adds explicit require of opencontainers/runc to go.mod before version.sh is called and
+          # removes it afterwards so that later build commands don't complain about inconsistent
+          # vendoring.
+          ./1_34/go_runc_require.patch
+        ];
+      };
 }

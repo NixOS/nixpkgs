@@ -92,7 +92,6 @@ in
         services.netbird.clients.default = {
           port = 51820;
           name = "netbird";
-          systemd.name = "netbird";
           interface = "wt0";
           hardened = false;
         };
@@ -229,6 +228,14 @@ in
                 description = ''
                   Opens up firewall `port` for communication between NetBird peers directly over LAN or public IP,
                   without using (internet-hosted) TURN servers as intermediaries.
+                '';
+              };
+
+              openInternalFirewall = mkOption {
+                type = bool;
+                default = true;
+                description = ''
+                  Opens up internal firewall ports for the NetBird's network interface.
                 '';
               };
 
@@ -503,8 +510,11 @@ in
         interfaces = listToAttrs (
           toClientList (client: {
             name = client.interface;
-            value.allowedUDPPorts = optionals client.openFirewall [
-              5353 # required for the DNS forwarding/routing to work
+            value.allowedUDPPorts = optionals client.openInternalFirewall [
+              # note: those should be opened up by NetBird itself, but it needs additional
+              #  NixOS -specific debugging and tweaking before it works
+              5353 # <0.59.0 DNS forwarder port, kept for compatibility with those clients
+              22054 # >=0.59.0 DNS forwarder port
             ];
           })
         );

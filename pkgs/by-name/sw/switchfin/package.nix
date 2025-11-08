@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchfin";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
     rev = version;
-    hash = "sha256-vmf7urq3lnfvmdZUJ+G5zn4ZpNA2N4jlLo8D5ZG3tUQ=";
+    hash = "sha256-WEqscGd7K5tTQcK8XXc02EQU2yCbTIdrzw40eXw8lYY=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/dragonflylee/switchfin/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.k900 ];
-    mainProgram = "switchfin";
+    mainProgram = "Switchfin";
     platforms = lib.platforms.all;
   };
 }

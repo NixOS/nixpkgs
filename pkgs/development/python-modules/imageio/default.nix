@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -44,28 +43,15 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.37.0";
+  version = "2.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     tag = "v${version}";
-    hash = "sha256-/nxJxZrTYX7F2grafIWwx9SyfR47ZXyaUwPHMEOdKkI=";
+    hash = "sha256-8wKTcmnep67zBMYgd6Gpr3wRCIrzYaqfytL1o7iBNAk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/imageio/imageio/issues/1139
-      # https://github.com/imageio/imageio/pull/1144
-      name = "fix-pyav-13-1-compat";
-      url = "https://github.com/imageio/imageio/commit/eadfc5906f5c2c3731f56a582536dbc763c3a7a9.patch";
-      excludes = [
-        "setup.py"
-      ];
-      hash = "sha256-ycsW1YXtiO3ZecIF1crYaX6vg/nRW4bF4So5uWCVzME=";
-    })
-  ];
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace tests/test_core.py \
@@ -111,14 +97,6 @@ buildPythonPackage rec {
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlags = [ "--test-images=file://${test_images}" ];
-
-  disabledTests = [
-    # These should have had `needs_internet` mark applied but don't so far.
-    # See https://github.com/imageio/imageio/pull/1142
-    "test_read_stream"
-    "test_uri_reading"
-    "test_trim_filter"
-  ];
 
   disabledTestMarks = [ "needs_internet" ];
 

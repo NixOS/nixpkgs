@@ -34,8 +34,7 @@ let
     toList
     isList
     elem
-    flatten
-    filter
+    unique
     ;
 
   inherit (lib.meta)
@@ -301,7 +300,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     ''
       The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
@@ -477,7 +476,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     if config.checkMeta then builtins.length missingOutputs > 0 else false;
 
@@ -669,8 +668,9 @@ let
       # Maintainers should be inclusive of teams.
       # Note that there may be external consumers of this API (repology, for instance) -
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
-      maintainers =
-        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+      maintainers = unique (
+        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ]
+      );
 
       identifiers =
         let
@@ -679,7 +679,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs ? pname then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
             #version = null;
             #update = null;
             edition = "*";
@@ -712,54 +712,14 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
-
-          purlParts = attrs.meta.identifiers.purlParts or { };
-          purlPartsFormatted =
-            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
-
-          # search for a PURL in the following order:
-          purl =
-            # 1) locally set through API
-            if purlPartsFormatted != null then
-              purlPartsFormatted
-            else
-              # 2) locally overwritten through meta.identifiers.purl
-              (attrs.src.meta.identifiers.purl or null);
-
-          # search for a PURL in the following order:
-          purls =
-            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
-            attrs.meta.identifiers.purls or (
-              # 2) locally set through API
-              if purlPartsFormatted != null then
-                [ purlPartsFormatted ]
-              else
-                # 3) src.meta.PURL
-                (attrs.src.meta.identifiers.purls or (
-                  # 4) srcs.meta.PURL
-                  if !attrs ? srcs then
-                    [ ]
-                  else if isList attrs.srcs then
-                    concatMap (drv: drv.meta.identifiers.purls or [ ]) attrs.srcs
-                  else
-                    attrs.srcs.meta.identifiers.purls or [ ]
-                )
-                )
-            );
-
           v1 = {
-            inherit
-              cpeParts
-              possibleCPEs
-              purls
-              ;
+            inherit cpeParts possibleCPEs;
             ${if cpe != null then "cpe" else null} = cpe;
-            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1 purlParts;
+          inherit v1;
         };
 
       # Expose the result of the checks for everyone to see.

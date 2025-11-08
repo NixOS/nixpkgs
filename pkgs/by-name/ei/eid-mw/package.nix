@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoconf-archive,
   autoreconfHook,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   replaceVarsWith,
   curl,
@@ -20,38 +20,42 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.1.23";
+  version = "5.1.25";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
-    rev = "v${version}";
-    hash = "sha256-nZn3LSXn8g0mtorJZjE9nc8vf99buwvW1fdxHOAsIwU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LdOfwgRGyNK+a4SByClPgH9SrDeCdnhI9sLO7agsNsA=";
   };
 
   postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+    sed 's@m4_esyscmd_s(.*,@[${finalAttrs.version}],@' -i configure.ac
+    substituteInPlace configure.ac \
+      --replace-fail 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    wrapGAppsHook3
-    autoreconfHook
     autoconf-archive
+    autoreconfHook
+    libassuan
+    makeBinaryWrapper
+    openssl
     pkg-config
-    makeWrapper
+    wrapGAppsHook3
   ];
+
   buildInputs = [
     curl
     gtk3
-    libassuan
     libbsd
     libproxy
     libxml2
-    openssl
     p11-kit
     pcsclite
   ];
@@ -62,9 +66,8 @@ stdenv.mkDerivation rec {
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)
-    substituteInPlace plugins_tools/eid-viewer/Makefile.in \
-      --replace "c_rehash" "openssl rehash"
   '';
+
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
 
@@ -81,20 +84,21 @@ stdenv.mkDerivation rec {
     ''
       install -D ${eid-nssdb-in} $out/bin/eid-nssdb
       substituteInPlace $out/bin/eid-nssdb \
-        --replace "modutil" "${nssTools}/bin/modutil"
+        --replace-fail "modutil" "${lib.getExe' nssTools "modutil"}"
 
       rm $out/bin/about-eid-mw
-      wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
+      wrapProgram $out/bin/eid-viewer \
+        --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
     '';
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = "https://eid.belgium.be/en";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.
@@ -117,10 +121,10 @@ stdenv.mkDerivation rec {
 
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bfortz
       chvp
     ];
   };
-}
+})

@@ -421,6 +421,11 @@ Check that two paths have the same contents.
 
 : A message that is printed last if the file system object contents at the two paths don't match exactly.
 
+`checkMetadata` (boolean)
+
+: Whether to fail on metadata differences, such as permissions or ownership.
+  Defaults to `true`.
+
 :::{.example #ex-testEqualContents-toyexample}
 
 # Check that two paths have the same contents

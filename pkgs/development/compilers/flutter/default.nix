@@ -54,19 +54,19 @@ let
           sources = {
             "${dartVersion}-x86_64-linux" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-              sha256 = dartHash.x86_64-linux;
+              hash = dartHash.x86_64-linux;
             };
             "${dartVersion}-aarch64-linux" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-              sha256 = dartHash.aarch64-linux;
+              hash = dartHash.aarch64-linux;
             };
             "${dartVersion}-x86_64-darwin" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
-              sha256 = dartHash.x86_64-darwin;
+              hash = dartHash.x86_64-darwin;
             };
             "${dartVersion}-aarch64-darwin" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
-              sha256 = dartHash.aarch64-darwin;
+              hash = dartHash.aarch64-darwin;
             };
           };
         };
@@ -75,7 +75,7 @@ let
             source = fetchFromGitHub {
               owner = "flutter";
               repo = "flutter";
-              rev = version;
+              tag = version;
               hash = flutterHash;
             };
           in
@@ -83,7 +83,7 @@ let
             if lib.versionAtLeast version "3.32" then
               # # Could not determine engine revision
               (runCommand source.name { } ''
-                cp -r ${source} $out
+                cp --recursive ${source} $out
                 chmod +w $out/bin
                 mkdir $out/bin/cache
                 cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp

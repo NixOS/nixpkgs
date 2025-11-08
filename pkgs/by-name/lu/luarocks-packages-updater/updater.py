@@ -18,8 +18,8 @@ from dataclasses import dataclass
 from multiprocessing.dummy import Pool
 from pathlib import Path
 
-import pluginupdate
-from pluginupdate import FetchConfig, update_plugins
+import nixpkgs_plugin_update
+from nixpkgs_plugin_update import FetchConfig, update_plugins
 
 
 class ColoredFormatter(logging.Formatter):
@@ -88,7 +88,7 @@ class LuaPlugin:
 
 
 # rename Editor to LangUpdate/ EcosystemUpdater
-class LuaEditor(pluginupdate.Editor):
+class LuaEditor(nixpkgs_plugin_update.Editor):
     def create_parser(self):
         parser = super().create_parser()
         parser.set_defaults(proc=1)

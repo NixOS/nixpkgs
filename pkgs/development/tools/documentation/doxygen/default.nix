@@ -6,7 +6,7 @@
   python3,
   flex,
   bison,
-  qt5,
+  qt6,
   libiconv,
   spdlog,
   fmt,
@@ -45,20 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     sqlite
   ]
-  ++ lib.optionals (qt5 != null) (
-    with qt5;
-    [
-      qtbase
-      wrapQtAppsHook
-    ]
-  );
+  ++ lib.optionals (qt6 != null) [
+    qt6.qtbase
+    qt6.wrapQtAppsHook
+    qt6.qtsvg
+  ];
 
   cmakeFlags = [
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_fmt=ON"
     "-Duse_sys_sqlite3=ON"
   ]
-  ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  ++ lib.optional (qt6 != null) "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
   outputs = [
@@ -85,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       off-line reference manual (in LaTeX) from a set of documented source
       files.
     '';
-    platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
+    platforms = if qt6 != null then lib.platforms.linux else lib.platforms.unix;
   };
 })

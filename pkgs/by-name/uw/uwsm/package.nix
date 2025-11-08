@@ -29,21 +29,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.23.3";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UP9Ztps5oWl0bdXhSlE4SCxHFprUf74DWygJy6GvO4k=";
+    hash = "sha256-gX+6fNnndmnEpuKymqVt/5U8RmUq2j9X99L34BJy6LI=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Vladimir-csp/uwsm/commit/bd4db0fd1880b9b798e8f67e2d4c5e4ca2a28aca.patch?full_index=1";
-      hash = "sha256-GxGwy9BkpBKZGkG00+bVIh6iDNBgRG1f1f9GUKm3ERw=";
-    })
-  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper

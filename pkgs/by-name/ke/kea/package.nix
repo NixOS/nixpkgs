@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "3.0.1"; # only even minor versions are stable
+  version = "3.0.2"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7IT+xLt/a50VqC51Wlcek0jrTW+8Yrs/bxKWzXokxWY=";
+    hash = "sha256-KfTkT6SPYv4VFY0XQR4ANJYgMlDbezRZwsecCfN5pUE=";
   };
 
   patches = [
@@ -119,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # error: in-class initializer for static data member is not a constant expression
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.isc.org/isc-projects/kea/-/wikis/Release-Notes/release-notes-${finalAttrs.version}";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";

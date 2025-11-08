@@ -6,6 +6,7 @@
   pkg-config,
   fftwFloat,
   libsamplerate,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # function is not defined in any headers but used in libcsdr.c
     echo "int errhead();" >> src/predefined.h
+
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.0)" \
+      "cmake_minimum_required (VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -41,6 +46,10 @@ stdenv.mkDerivation rec {
       --replace '=''${prefix}//' '=/' \
       --replace '=''${exec_prefix}//' '=/'
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/jketterl/csdr";

@@ -7,34 +7,33 @@
   flit-core,
   typing-extensions,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
 }:
 
 buildPythonPackage rec {
   pname = "submitit";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
     tag = version;
-    hash = "sha256-PDQLzqQjoBAZM9FKsoRby26Pbh4nik3SltIHUw/xWcY=";
+    hash = "sha256-uBlKbg1oKeUPcWzM9WxisGtpBu69eZyTetaANYpTG5E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     cloudpickle
-    flit-core
+    setuptools
     typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    # event_loop was removed in pytest-asyncio 1.x
+    pytest-asyncio_0
   ];
 
   pythonImportsCheck = [

@@ -233,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
     maintainers = with maintainers; [
       obadz
     ];

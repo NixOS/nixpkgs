@@ -62,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.7.0";
+  version = "8.8.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9t6tXrege3A5x5caUEfho23Pin7dON+e6x94rXC8XYE=";
+    hash = "sha256-yUrB0FXUcm+6QtlB7HMqdPpdhrV2iAo1oRkjgsHJiCU=";
   };
 
   patches = [

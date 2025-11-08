@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "prophet";
-  version = "1.1.7";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "facebook";
     repo = "prophet";
     tag = "v${version}";
-    hash = "sha256-94hxpfpZN3yvDUu+kM7Oc2Yu8+z0Gv6zqYRAwKXgHk4=";
+    hash = "sha256-rG21Q4V0XQjReIHd7vV/aFOUvnLEw/dm8AobXRDUfuA=";
   };
 
   sourceRoot = "${src.name}/python";

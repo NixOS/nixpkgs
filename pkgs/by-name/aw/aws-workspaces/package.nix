@@ -1,8 +1,10 @@
 {
+  lib,
   callPackage,
   writeShellApplication,
   buildFHSEnv,
   webkitgtk_4_1,
+  ffmpeg,
   gtk3,
   pango,
   atk,
@@ -33,14 +35,12 @@ let
       echo "Release: 22.04"
     '';
   };
-  pname = "aws-workspaces";
-
 in
 buildFHSEnv {
-  inherit pname;
+  pname = "aws-workspaces";
   inherit (workspacesclient) version;
 
-  runScript = "${workspacesclient}/bin/workspacesclient";
+  runScript = lib.getExe workspacesclient;
 
   includeClosures = true;
 
@@ -49,6 +49,7 @@ buildFHSEnv {
     custom_lsb_release
     webkitgtk_4_1
     gtk3
+    ffmpeg
     pango
     atk
     cairo
@@ -64,7 +65,7 @@ buildFHSEnv {
 
   # expected executable doesn't match the name of this package
   extraInstallCommands = ''
-    mv $out/bin/${pname} $out/bin/workspacesclient
+    mv $out/bin/aws-workspaces $out/bin/${workspacesclient.meta.mainProgram}
 
     ln -s ${workspacesclient}/share $out/
   '';

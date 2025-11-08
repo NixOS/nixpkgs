@@ -10,6 +10,7 @@
   wrapQtAppsHook ? null,
   boost,
   libevent,
+  libsodium,
   zeromq,
   zlib,
   db48,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libevent
+    libsodium
     zeromq
     zlib
   ]
@@ -87,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
         repo = "guix.sigs";
-        rev = "7ee29a9ffbd1c26ba065ba06055242a01c3e63ff";
-        sha256 = "sha256-ZW1I7Y35Pi4WZhgCCYSI5gPhcvbfnpBObhOUTqZGVvM=";
+        rev = "251a8f2141e5f8439175fdd7b6cd6819d743cc01";
+        sha256 = "sha256-pZOK/lD1m9x8mz1IB39kLA/27fBnLvEL3qrwTRjL9Ec=";
       };
 
       checksums = fetchurl {
@@ -98,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-jy4gxuczCSsJQkkH3axMljuf7k2VdmLp4PkgRoQnoSY=";
+        hash = "sha256-fSjYdscQ4viuXutP43prWjrNT7cMaJ9J8SsUykNjJtw";
       };
 
       verifyBuilderKeys =

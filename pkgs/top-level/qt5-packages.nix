@@ -92,8 +92,6 @@ makeScopeWithSplicing' {
 
         kdsoap = callPackage ../development/libraries/kdsoap { };
 
-        kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
-
         kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
 
         kimageannotator = callPackage ../development/libraries/kimageannotator { };
@@ -224,6 +222,12 @@ makeScopeWithSplicing' {
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+      }
+      // lib.optionalAttrs config.allowAliases {
+        kf5gpgmepp = throw ''
+          'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
+          Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
+        ''; # Added 2025-10-25
       }
     ))
   );

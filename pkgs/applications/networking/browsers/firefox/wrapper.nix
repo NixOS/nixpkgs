@@ -116,7 +116,7 @@ let
         ++ lib.optional smartcardSupport opensc
         ++ pkcs11Modules
         ++ lib.optionals (!isDarwin) gtk_modules;
-      gtk_modules = [ libcanberra-gtk3 ];
+      gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
       launcherName = "${applicationName}${lib.optionalString (!isDarwin) nameSuffix}";

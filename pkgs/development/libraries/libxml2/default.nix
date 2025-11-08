@@ -2,7 +2,7 @@
   lib,
   callPackage,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
 }:
 
 let
@@ -20,20 +20,27 @@ let
         # same as upstream patch but fixed conflict and added required import:
         # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
         ./CVE-2025-6021.patch
-        (fetchpatch2 {
+        (fetchpatch {
           name = "CVE-2025-49794-49796.patch";
           url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7ebc65f05bffded58d1e1b2138eb124c2e44f21.patch";
-          hash = "sha256-k+IGq6pbv9EA7o+uDocEAUqIammEjLj27Z+2RF5EMrs=";
+          hash = "sha256-p5Vc/lkakHKsxuFNnCQtFczjqFJBeLnCwIwv2GnrQco=";
         })
-        (fetchpatch2 {
+        (fetchpatch {
           name = "CVE-2025-49795.patch";
           url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c24909ba2601848825b49a60f988222da3019667.patch";
-          hash = "sha256-r7PYKr5cDDNNMtM3ogNLsucPFTwP/uoC7McijyLl4kU=";
+          hash = "sha256-vICVSb+X89TTE4QY92/v/6fRk77Hy9vzEWWsADHqMlk=";
           excludes = [ "runtest.c" ]; # tests were rewritten in C and are on schematron for 2.13.x, meaning this does not apply
         })
         # same as upstream, fixed conflicts
         # https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
         ./CVE-2025-6170.patch
+
+        # Unmerged ABI-breaking patch required to fix the following security issues:
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
+        # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
+        # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
+        # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
+        ./xml-attr-extra.patch
       ];
       freezeUpdateScript = true;
       extraMeta = {
@@ -43,14 +50,23 @@ let
       };
     };
     libxml2 = callPackage ./common.nix {
-      version = "2.14.6";
+      version = "2.15.0";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libxml2";
         tag = "v${packages.libxml2.version}";
-        hash = "sha256-EIcNL5B/o74hyc1N+ShrlKsPL5tHhiGgkCR1D7FcDjw=";
+        hash = "sha256-jumHSiIMDzqG2hvPUdcBP8LsszcU+loOY+vqEh/0Yqo=";
       };
+      extraPatches = [
+        # Fixes a regression in attribute normalization.
+        # Also see https://www.postgresql.org/message-id/flat/0756AC61-FBA3-46E2-B3C2-19B58B65EBDC%2540yesql.se
+        # To be removed with 2.15.1.
+        (fetchpatch {
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/da45a190f718e8e2f0e3d2a6325ffa23abc8b90c.patch";
+          hash = "sha256-wqmFszr7w1Lte12YR6Ug7Ng7fXABzizwUsJU1EhylgU=";
+        })
+      ];
       extraMeta = {
         maintainers = with lib.maintainers; [
           jtojnar

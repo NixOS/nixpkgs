@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "anndata";
-  version = "0.12.2";
+  version = "0.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "anndata";
     tag = version;
-    hash = "sha256-uGkeSlYcphRnIFfe9UcLvnupKeMzAIm5wT8fp3gmPKw=";
+    hash = "sha256-8tHM46wRr896JzZcWKBDy1QLrz/iwKE8YKfRby2Fmb8=";
   };
 
   build-system = [

@@ -2,6 +2,7 @@
 #!nix-shell -i bash -p curl jq bundix ruby_3_4 prefetch-yarn-deps nix-update nixfmt
 
 set -eu -o pipefail
+set -x
 dir="$(dirname "$(readlink -f "$0")")"
 
 current=$(nix --extra-experimental-features nix-command eval --raw -f . docuseal.src.tag)

@@ -2,6 +2,11 @@
   lib,
   buildDartApplication,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  writeShellScript,
+  dart,
+  yq-go,
 }:
 
 buildDartApplication rec {
@@ -15,11 +20,30 @@ buildDartApplication rec {
     hash = "sha256-8pSCYlbZLqHnpetM4luyfGo1qnWgKx93JPjRVWCOX0w=";
   };
 
-  sourceRoot = "${src.name}/protoc_plugin";
-
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  passthru.updateScript = ./update.sh;
+  preBuild = ''
+    pushd protoc_plugin
+  '';
+
+  postInstall = ''
+    popd
+  '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater { rev-prefix = "protoc_plugin-v"; } // { supportedFeatures = [ ]; })
+    (writeShellScript "update-protoc-gen-dart" ''
+      src=$(nix build --print-out-paths --no-link .#protoc-gen-dart.src)
+      export HOME=$(mktemp -d)
+      WORKDIR=$(mktemp -d)
+      cp --recursive --no-preserve=mode $src/* $WORKDIR
+      PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . protoc-gen-dart))
+      pushd $WORKDIR
+      ${lib.getExe dart} pub update
+      ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
+      popd
+    '')
+  ];
 
   meta = {
     description = "Protobuf plugin for generating Dart code";

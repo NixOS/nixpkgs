@@ -17,7 +17,7 @@ def package_attr attr_path
   JSON.parse stdout rescue abort "Failed to parse JSON output from nix-instantiate when reading attr #{attr_path}"
 end
 
-def github_api path, token: ENV['GITHUB_TOKEN']
+def github_api path, token: ENV['GITHUB_TOKEN'], headers: []
   uri = URI.join 'https://api.github.com', path
   res = Net::HTTP.start uri.host, uri.port, use_ssl: true do |http|
     req = Net::HTTP::Get.new uri
@@ -25,21 +25,16 @@ def github_api path, token: ENV['GITHUB_TOKEN']
     http.request req
   end
   abort "Failed to fetch #{path}: #{res.code} #{res.message}" unless res.is_a? Net::HTTPSuccess
-  JSON.parse res.body rescue abort "Failed to parse JSON response from GitHub"
+  body = JSON.parse res.body rescue abort "Failed to parse JSON response from GitHub"
+  return body if headers.empty?
+  header_values = headers.map { res[_1] }
+  [body, *header_values]
 end
 
 def prefetch_git url, rev
   stdout, status = Open3.capture2 'nix-prefetch-git', '--url', url, '--rev', rev
   abort "nix-prefetch-git failed with exit code #{status.exitstatus}" unless status.success?
   JSON.parse stdout rescue abort "Failed to parse JSON output from nix-prefetch-git"
-end
-
-def replace_in_file filename, searches, replacements
-  contents = File.read filename
-  searches.zip replacements do |search, replacement|
-    contents.sub! search, replacement or abort "Failed to replace #{search} -> #{replacement} in #{filename}"
-  end
-  File.write filename, contents
 end
 
 def json_write filename, object
@@ -57,13 +52,25 @@ log "Current version: #{old_version} #{old_rev} #{old_hash}"
 
 new_version = github_api("/repos/#{owner}/#{repo}/releases/latest")['tag_name'] or abort "No `tag_name` field in GitHub response"
 finish "Already up-to-date" if new_version == old_version
-new_rev, new_hash, src_path = prefetch_git(git_url, new_version).values_at 'rev', 'hash', 'path'
+new_rev, new_hash, src_path, date = prefetch_git(git_url, new_version).values_at 'rev', 'hash', 'path', 'date'
+date = Time.new(date).to_i
 log "New version: #{new_version} #{new_rev} #{new_hash}"
+
+_, commit_links = github_api "/repos/#{owner}/#{repo}/commits?sha=#{new_rev}&per_page=1", headers: ['link']
+git_count = commit_links[/[&?]page=(\d+)>; rel="last"/, 1]&.to_i
+abort "Cannot determine git commit count from GitHub response" unless git_count
 
 nix_filename = package_attr('meta.position')[/([^:]+):\d+/, 1] or abort "Failed to find the Nix file to be updated"
 nix_dir = File.dirname nix_filename
-replace_in_file nix_filename, [old_version, old_rev, old_hash], [new_version, new_rev, new_hash]
-log "Updated #{nix_filename}"
+src_info_path = File.join nix_dir, 'src-info.json'
+json_write src_info_path, {
+  version: new_version,
+  rev: new_rev,
+  revCount: git_count,
+  commitDate: date,
+  hash: new_hash
+}
+log "Updated #{src_info_path}"
 
 pubspec_lock_path = File.join nix_dir, 'pubspec.lock.json'
 old_pubspec_lock = JSON.load_file pubspec_lock_path rescue abort "Failed to read #{pubspec_lock_path}"

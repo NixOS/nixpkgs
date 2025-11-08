@@ -83,9 +83,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.2.0b3";
+    version = "1.2.0b4";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-UK7fbWI7NoW8sBo3OEafXX3DolFNQXhFDMHUoE1h/qA=";
+    hash = "sha256-v2Mu46qVpDKjGARgGkKzQm5QcK4Msj4XgdgWZwI8fS0=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker

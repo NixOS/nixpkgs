@@ -20,6 +20,10 @@ mkDerivation rec {
     sha256 = "1yldfsdamk4dag8dyryjn5n9j2pzi42s79kkafymfnbifhnhrbv7";
   };
 
+  patches = [
+    ./cmake-minimum-required.patch
+  ];
+
   nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [

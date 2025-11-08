@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
-  version = "15.1";
+  version = "15.2";
 
   buildInputs = [
     autoPatchelfHook
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-nZXfUbUyk9PDhBeXUHGt6T95hfMMDEH1oOgcm1wwi3E=";
+        outputHash = "sha256-OCpzKmwa4HbKTGSeVxBlYXB6TNe5uqLhtowLwAQjIJQ=";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 

@@ -57,6 +57,7 @@
       actual,
       expected,
       postFailureMessage ? null,
+      checkMetadata ? true,
     }:
     runCommand "equal-contents-${lib.strings.toLower assertion}"
       {
@@ -66,12 +67,13 @@
           expected
           postFailureMessage
           ;
+        excludeMetadata = if checkMetadata then "no" else "yes";
         nativeBuildInputs = [ diffoscopeMinimal ];
       }
       ''
         echo "Checking:"
         printf '%s\n' "$assertion"
-        if ! diffoscope --no-progress --text-color=always --exclude-directory-metadata=no -- "$actual" "$expected"
+        if ! diffoscope --no-progress --text-color=always --exclude-directory-metadata="$excludeMetadata" -- "$actual" "$expected"
         then
           echo
           echo 'Contents must be equal, but were not!'

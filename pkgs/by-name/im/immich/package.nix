@@ -34,7 +34,7 @@
 }:
 let
   pnpm = pnpm_10;
-  version = "2.1.0";
+  version = "2.2.3";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -108,14 +108,14 @@ let
     owner = "immich-app";
     repo = "immich";
     tag = "v${version}";
-    hash = "sha256-xbOzTJKutuR5/oRBUyXjZ4FWAmDnWO+nS7dQcNNRHlE=";
+    hash = "sha256-OoToTRDPXWOa7d1j1xvkZt+vKWBX4eHDiIsFs3bIlvw=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     pname = "immich";
     inherit version src;
     fetcherVersion = 2;
-    hash = "sha256-JqI7te2M88CVfvqEOIggGn64Ue0rkrMlC6HvSRW1CU0=";
+    hash = "sha256-igkO0ID0/9uPtFAXL2v5bcFbCpZK2lcYEctWBKtFKdU=";
   };
 
   web = stdenv.mkDerivation {
@@ -251,7 +251,7 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration;
+      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning;

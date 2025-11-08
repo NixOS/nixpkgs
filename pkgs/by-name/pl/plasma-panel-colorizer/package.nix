@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-panel-colorizer";
-  version = "5.0.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "plasma-panel-colorizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E6VX2naAS2xof5sdnuaSuKueIKecW0fi9SycgLVRQVU=";
+    hash = "sha256-QyW3F0PwTSE6wUNW3pwI/Xj9/7Rxl0GXJ6W02oZBeKU=";
   };
 
   nativeBuildInputs = [

@@ -568,9 +568,6 @@ in
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
 
-        # so NSS can look up usernames
-        "${pkgs.glibc}/lib/libnss_files.so.2"
-
         # Resolving sysroot symlinks without code exec
         "${config.system.nixos-init.package}/bin/chroot-realpath"
         # Find the etc paths
@@ -586,7 +583,8 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
-      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
+      ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
       targets.initrd.aliases = [ "default.target" ];
       units =

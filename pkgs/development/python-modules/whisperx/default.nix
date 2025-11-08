@@ -8,14 +8,17 @@
   setuptools,
 
   # dependencies
+  av,
   ctranslate2,
   faster-whisper,
   nltk,
+  numpy,
   pandas,
   pyannote-audio,
   torch,
   torchaudio,
   transformers,
+  triton,
 
   # native packages
   ffmpeg,
@@ -35,28 +38,15 @@ let
 in
 buildPythonPackage rec {
   pname = "whisperx";
-  version = "3.4.3";
+  version = "3.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
     tag = "v${version}";
-    hash = "sha256-zx77Fx8KYTWCFcC6Uy6pbe8LJtXP3b6lkwuOSEEYJfU=";
+    hash = "sha256-wmCGHRx1JaOs5+7fp2jeh8PIR5dlmOl8hKrIw2550Bk=";
   };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
-    ctranslate
-    faster-whisper
-    nltk
-    pandas
-    pyannote-audio # Missing from pyproject.toml, but used in `whisperx/vad.py`
-    torch
-    torchaudio
-    transformers
-  ];
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
   # we replace the `"ffmpeg"` string in `subprocess.run` with the full path to the binary.
@@ -67,13 +57,29 @@ buildPythonPackage rec {
       '"ffmpeg"' '"${lib.getExe ffmpeg}"'
   '';
 
-  pythonRelaxDeps = [
-    # > Checking runtime dependencies for whisperx-3.3.2-py3-none-any.whl
-    # >   - faster-whisper==1.1.0 not satisfied by version 1.1.1
-    # This has been updated on main, so we expect this clause to be removed upon the next update.
-    "faster-whisper"
+  build-system = [ setuptools ];
 
-    "ctranslate2"
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "pyannote-audio"
+    "torch"
+    "torchaudio"
+  ];
+  dependencies = [
+    av
+    ctranslate
+    faster-whisper
+    nltk
+    numpy
+    pandas
+    pyannote-audio
+    torch
+    torchaudio
+    transformers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
   ];
 
   # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime

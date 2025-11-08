@@ -181,7 +181,7 @@ stdenv.mkDerivation {
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     mainProgram = "pypy";
     license = licenses.mit;
-    platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
+    platforms = lib.attrNames downloadUrls;
   };
 
 }

@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.1.7";
+  version = "2.2.0";
 
   bundler = bundler.override { ruby = ruby_3_4; };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-zNfxQPJjobYrx/YPGRn5QKwUd1VXetFqtBeII0wlmk4=";
+    hash = "sha256-QKGIcLdyIeYcHXA3TRv7PS9V2mok3Y8UOuqCdnCpNfM=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };

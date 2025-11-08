@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       sigmanificient
     ];
     mainProgram = "fzf-make";

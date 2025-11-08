@@ -49,6 +49,7 @@ buildPythonPackage rec {
     # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
+    "syrupy"
   ];
 
   dependencies = [

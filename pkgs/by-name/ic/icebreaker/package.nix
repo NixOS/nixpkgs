@@ -41,7 +41,7 @@ buildGoModule {
     description = "Web app that allows students to ask real-time, anonymous questions during class";
     homepage = "https://github.com/jonhoo/icebreaker";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "icebreaker";
   };
 }

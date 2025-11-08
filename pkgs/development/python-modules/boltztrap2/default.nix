@@ -35,6 +35,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace external/spglib-1.9.9/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.4)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace pyproject.toml \
       --replace-fail "numpy>=2.0.0" "numpy"
   '';

@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.48";
+  version = "0.49.2";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "synadm";
     repo = "synadm";
     tag = "v${version}";
-    hash = "sha256-6t4CXXt22/yR0gIxSsM/r+zJQeoKz5q/Ifg8PLNojLI=";
+    hash = "sha256-Nh4pzOXBXwbhq49Hq8vmPi6AS6N/tRqDBjIVKH3Gh6s=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     tabulate
     pyyaml
     requests
+    requests-unixsocket
   ];
 
   checkPhase = ''

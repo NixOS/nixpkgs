@@ -6,10 +6,13 @@
   # build-system
   setuptools,
   cython,
-  numpy_2,
+  numpy,
 
   # dependencies
   torch,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,14 +30,17 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     cython
-    numpy_2
+    numpy
   ];
 
   dependencies = [
+    numpy
     torch
   ];
 
-  enabledTestPaths = [ "tests" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "monotonic_alignment_search" ];
 

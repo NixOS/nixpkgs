@@ -12,7 +12,7 @@
   lzop,
   openssl,
   ubootTools,
-  vboot_reference,
+  vboot-utils,
   xilinx-bootgen,
   xz,
   zstd,
@@ -85,7 +85,7 @@ rec {
         lzop
         openssl
         ubootTools
-        vboot_reference
+        vboot-utils
         xilinx-bootgen
         xz
         zstd

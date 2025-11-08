@@ -8,7 +8,6 @@
 let
   inherit (lib)
     hasPrefix
-    literalExpression
     mkEnableOption
     mkIf
     mkMerge
@@ -143,7 +142,7 @@ in
               else
                 "inet:${cfg.settings.server.address}";
           in
-          [ "socketmap:${address}:QUERYwithTLSRPT" ];
+          [ "socketmap:${address}:${if config.services.tlsrpt.enable then "QUERYwithTLSRPT" else "QUERY"}" ];
       };
 
       systemd.services.postfix = {

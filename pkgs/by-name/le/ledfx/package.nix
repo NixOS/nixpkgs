@@ -1,18 +1,27 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ledfx";
-  version = "2.0.111";
+  version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-b6WHulQa1er0DpMfeJLqqb4z8glUt1dHvvNigXgrf7Y=";
+  src = fetchFromGitHub {
+    owner = "LedFx";
+    repo = "LedFx";
+    tag = "v${version}";
+    hash = "sha256-N9EHK0GVohFCjEKsm3g4h+4XWfzZO1tzdd2z5IN1YjI=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"uv",' "" \
+      --replace-fail '"run",' "" \
+      --replace-fail '"ledfx",' "\"$out/bin/ledfx\","
+  '';
 
   pythonRelaxDeps = true;
 
@@ -27,43 +36,49 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
+    # sorted like in pyproject.toml in upstream
+    numpy
+    cffi
     aiohttp
     aiohttp-cors
     aubio
     certifi
-    flux-led
-    python-dotenv
-    icmplib
-    mss
     multidict
-    netifaces2
-    numpy
     openrgb-python
     paho-mqtt
-    pillow
     psutil
-    pybase64
     pyserial
     pystray
-    python-mbedtls
-    python-osc
     python-rtmidi
-    # rpi-ws281x # not packaged
     requests
     sacn
-    samplerate
     sentry-sdk
-    setuptools
     sounddevice
-    stupidartnet
-    uvloop
-    vnoise
+    samplerate
+    icmplib
     voluptuous
     zeroconf
+    pillow
+    flux-led
+    python-osc
+    pybase64
+    mss
+    uvloop
+    stupidartnet
+    python-dotenv
+    vnoise
+    netifaces2
+    packaging
   ];
 
-  # Project has no tests
-  doCheck = false;
+  optional-dependencies = {
+    hue = with pyproject.pkgs; [ python-mbedtls ];
+  };
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";

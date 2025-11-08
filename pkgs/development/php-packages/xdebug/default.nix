@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.4.6";
+  version = "3.4.7";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "xdebug";
     repo = "xdebug";
     rev = version;
-    hash = "sha256-xld8qUCkAOWqLQjqT9wl2PN+giXtq4gu/yFHBLdmg+c=";
+    hash = "sha256-TxwEyXyUGq3rUWyLExyDopJZ29eAoh9QG1TC2+hImmc=";
   };
 
   doCheck = true;

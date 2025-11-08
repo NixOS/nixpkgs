@@ -11,7 +11,6 @@
   py-serializable,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "11.2.0";
+  version = "11.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     tag = "v${version}";
-    hash = "sha256-HfHZKOae83ASym1MSlVb0+aVWpyziDgQEQxLzWMM/MQ=";
+    hash = "sha256-AN3PjJ1HAERDXlmE9K8k2OGLAh5vs1286EhJShH0xE4=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];

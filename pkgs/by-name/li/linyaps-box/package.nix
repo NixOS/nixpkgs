@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps-box";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = "linyaps-box";
     rev = finalAttrs.version;
-    hash = "sha256-h7tbjIcVgwTw3SLGzJzG17WpDdsCqHD4AXvAFEiwesw=";
+    hash = "sha256-i4wSddstCosDpBEcunoVsV464PTHmuvDDEFrsPQKnxU=";
   };
 
   nativeBuildInputs = [

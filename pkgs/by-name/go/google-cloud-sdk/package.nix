@@ -87,6 +87,9 @@ stdenv.mkDerivation rec {
     ./gsutil-disable-updates.patch
   ];
 
+  # Prevent Python from writing bytecode to ensure build determinism
+  PYTHONDONTWRITEBYTECODE = "1";
+
   installPhase = ''
     runHook preInstall
 

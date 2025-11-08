@@ -101,13 +101,20 @@ let
         iproute2
         systemd
       ];
-      # networkd doesn't provide a mechanism for refreshing endpoints.
+      # networkd doesn't automatically refresh peer endpoints.
       # See: https://github.com/systemd/systemd/issues/9911
-      # This hack does the job but takes down the whole interface to do it.
       script = ''
-        ip link delete ${name} || :
+        touch /etc/systemd/network/40-${name}.netdev
         networkctl reload
       '';
+    };
+
+  # netdev config must be a real file (not a symlink to a store file)
+  # so the refresh service can 'touch' it.
+  generateRefreshNetdevMode =
+    name: interface:
+    nameValuePair "systemd/network/40-${name}.netdev" {
+      mode = "0444";
     };
 
 in
@@ -225,6 +232,7 @@ in
       networks = mapAttrs generateNetwork cfg.interfaces;
     };
 
+    environment.etc = mapAttrs' generateRefreshNetdevMode refreshEnabledInterfaces;
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
     systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
       systemd-networkd.serviceConfig.LoadCredential = flatten (

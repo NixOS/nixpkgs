@@ -40,10 +40,7 @@ let
     mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      maxbrunet
-      tomasajt
-    ];
+    maintainers = [ lib.maintainers.tomasajt ];
   };
 
   devpod = buildGoModule (finalAttrs: {

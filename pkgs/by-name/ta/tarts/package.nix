@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
     description = "Screen saves and visual effects for your terminal";
     homepage = "https://github.com/oiwn/tarts";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "tarts";
   };
 }

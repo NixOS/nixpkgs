@@ -50,8 +50,8 @@ let
   # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
   aurPatches = fetchgit {
     url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
-    rev = "94dffc01e23a93c354a765ea7ac64484a3ef96c1";
-    hash = "sha256-c94qXNZyMrSf7Dik7jvz2ECaGELqN7WEYNpnbUkzeeU=";
+    rev = "cf1a1c571c425b4b66d12e468fc4ce45a397c583";
+    hash = "sha256-SERB5ihOroagJn7apAiqjUckbrfP2FZPCuTLWcBccoM=";
   };
 
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/840
@@ -101,11 +101,11 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "580.94.03";
+    version = "580.94.06";
     persistencedVersion = "580.95.05";
     settingsVersion = "580.95.05";
-    sha256_64bit = "sha256-RYU50xfIyrvk57o7/SIsVr34nkLaMm5WZPXQfWTreIE=";
-    openSha256 = "sha256-PEHr6heOBP+0JjcmUpDv6JlT0aAvzoWijsEsm/DD3rs=";
+    sha256_64bit = "sha256-UtOthZ5h/UN5dMSrO2MFwWktLRiW6LE5VR1yg04D/bE=";
+    openSha256 = "sha256-mti+bJ1EyZnjAxdJtJQuyLWNKs7R+NJiBy1y+c2cqBQ=";
     settingsSha256 = "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14=";
     persistencedSha256 = "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
@@ -166,26 +166,39 @@ rec {
   };
 
   # Last one supporting Kepler architecture
-  legacy_470 = generic {
-    version = "470.256.02";
-    sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
-    sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
-    settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
-    persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
+  legacy_470 =
+    let
+      # Source corresponding to https://aur.archlinux.org/packages/nvidia-470xx-dkms
+      aurPatches = fetchgit {
+        url = "https://aur.archlinux.org/nvidia-470xx-utils.git";
+        rev = "7c1c2c124147d960a6c7114eb26a4eadae9b9f3d";
+        hash = "sha256-sNW+I4dkPSudfORLEp1RNGHyQKWBYnBEeGrfJU7SYTs=";
+      };
+    in
+    generic {
+      version = "470.256.02";
+      sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
+      sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
+      settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
+      persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
 
-    patches = [
-      "${aurPatches}/gcc-14.patch"
-      # fixes 6.10 follow_pfn
-      ./follow_pfn.patch
-      # https://gist.github.com/joanbm/a6d3f7f873a60dec0aa4a734c0f1d64e
-      (fetchpatch {
-        url = "https://gist.github.com/joanbm/a6d3f7f873a60dec0aa4a734c0f1d64e/raw/6bae5606c033b6c6c08233523091992370e357b7/nvidia-470xx-fix-linux-6.12.patch";
-        hash = "sha256-6nbzcRTRCxW8GDAhB8Zwx9rVcCzwPtVYlqoUhL9gxlY=";
-        stripLen = 1;
-        extraPrefix = "kernel/";
-      })
-    ];
-  };
+      patches = map (patch: "${aurPatches}/${patch}") [
+        "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
+        "0002-Fix-conftest-to-use-a-short-wchar_t.patch"
+        "0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
+        "nvidia-470xx-fix-gcc-15.patch"
+        "kernel-6.10.patch"
+        "kernel-6.12.patch"
+        "nvidia-470xx-fix-linux-6.13.patch"
+        "nvidia-470xx-fix-linux-6.14.patch"
+        "nvidia-470xx-fix-linux-6.15.patch"
+        "nvidia-470xx-fix-linux-6.17.patch"
+      ];
+      patchFlags = [
+        "-p1"
+        "--directory=kernel"
+      ];
+    };
 
   # Last one supporting x86
   legacy_390 = generic {
@@ -206,8 +219,13 @@ rec {
       "gcc-14.patch"
       "kernel-6.10.patch"
       "kernel-6.12.patch"
+      "kernel-6.13.patch"
+      "kernel-6.14.patch"
+      "gcc-15.patch"
+      "kernel-6.15.patch"
+      "kernel-6.17.patch"
     ];
-    broken = kernel.kernelAtLeast "6.13";
+    broken = kernel.kernelAtLeast "6.18";
 
     # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
     # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651

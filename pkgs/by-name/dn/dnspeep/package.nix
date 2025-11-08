@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

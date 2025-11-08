@@ -49,6 +49,8 @@ let
 
         programs.biome = {
           enable = true;
+          # Disable settings validation because its inputs are liable to hash mismatch
+          validate.enable = false;
           settings.formatter = {
             useEditorconfig = true;
           };
@@ -136,6 +138,8 @@ let
             [ "--config=${config}" ];
           includes = [ "*.md" ];
         };
+
+        programs.zizmor.enable = true;
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
@@ -152,7 +156,6 @@ let
 in
 rec {
   inherit pkgs fmt;
-  requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.34.1";
+  version = "0.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "geopython";
     repo = "OWSLib";
     tag = version;
-    hash = "sha256-eLSODYal9rcualQrM03/hwLBngty+9fIlPIJh1EZduA=";
+    hash = "sha256-/5FJai6ad4ZQAK/IhiIuGv4yiBcT/iXFYcbZ+jeCoyI=";
   };
 
   postPatch = ''

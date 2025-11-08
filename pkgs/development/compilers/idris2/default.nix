@@ -1,6 +1,6 @@
-{ callPackage }:
+{ callPackage, idris2 }:
 {
-  idris2 = callPackage ./idris2.nix { };
+  inherit idris2;
   idris2Api = callPackage ./idris2-api.nix { };
   idris2Lsp = callPackage ./idris2-lsp.nix { };
 

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "1.2.1";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytries";
     repo = "marisa-trie";
     tag = version;
-    hash = "sha256-aWfm13nrASAaD+bcMpv85emXnCFyVtZTdhl79yJuOss=";
+    hash = "sha256-7T0V5levh9xjWmjJdFix0p8L3lZhfurikSWMI7Hotbs=";
   };
 
   patches = [
@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
     hypothesis
   ];
-
-  preBuild = ''
-    ./update_cpp.sh
-  '';
 
   disabledTestPaths = [
     # Don't test packaging

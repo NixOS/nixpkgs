@@ -637,6 +637,7 @@ in
         '';
       };
       appendConfig = ''
+        # frigate
         rtmp {
             server {
                 listen 1935;
@@ -653,6 +654,7 @@ in
         }
       '';
       appendHttpConfig = ''
+        # frigate
         map $sent_http_content_type $should_not_cache {
           'application/json' 0;
           default 1;
