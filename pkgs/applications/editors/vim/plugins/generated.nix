@@ -1609,6 +1609,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-env = buildVimPlugin {
+    pname = "blink-cmp-env";
+    version = "2025-09-13";
+    src = fetchFromGitHub {
+      owner = "bydlw98";
+      repo = "blink-cmp-env";
+      rev = "99af62c1f9aa46005e8f50ad4ccee581946546ca";
+      sha256 = "1wad8v0av1lfcfm8i07351n3zq41xil1fhfm8yj6kg96bk7cwk0c";
+    };
+    meta.homepage = "https://github.com/bydlw98/blink-cmp-env/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-git = buildVimPlugin {
     pname = "blink-cmp-git";
     version = "2025-10-09";
@@ -1661,6 +1674,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-tmux = buildVimPlugin {
+    pname = "blink-cmp-tmux";
+    version = "2025-05-23";
+    src = fetchFromGitHub {
+      owner = "mgalliou";
+      repo = "blink-cmp-tmux";
+      rev = "4586c705b6f80b536c34a61ed0d3cd4d7f08322d";
+      sha256 = "1d7kvpzjmasfk8lszwhpay46w1b11sas9s8542gdwqiv0l32dp7p";
+    };
+    meta.homepage = "https://github.com/mgalliou/blink-cmp-tmux/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-words = buildVimPlugin {
     pname = "blink-cmp-words";
     version = "2025-08-06";
@@ -1671,6 +1697,19 @@ final: prev: {
       sha256 = "14ffwpj5jk2gcvnv9mihxamnzljnqrcr0czjj80kx2jw6w2551f7";
     };
     meta.homepage = "https://github.com/archie-judd/blink-cmp-words/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  blink-cmp-yanky = buildVimPlugin {
+    pname = "blink-cmp-yanky";
+    version = "2025-06-24";
+    src = fetchFromGitHub {
+      owner = "marcoSven";
+      repo = "blink-cmp-yanky";
+      rev = "473b987c2a7d80cca116f6faf087dba4dbfbb3c5";
+      sha256 = "1m0bkvp0bccavw46b6ycmhmx5bn7nx3w4z27linhlqd5gmlr1j0d";
+    };
+    meta.homepage = "https://github.com/marcoSven/blink-cmp-yanky/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1710,6 +1749,19 @@ final: prev: {
       sha256 = "1hzzbx8sjjlwm0b2mdbi6wgkc87cf089pp2i3kycw7z0jsyk41wi";
     };
     meta.homepage = "https://github.com/moyiz/blink-emoji.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  blink-indent = buildVimPlugin {
+    pname = "blink.indent";
+    version = "2025-11-07";
+    src = fetchFromGitHub {
+      owner = "Saghen";
+      repo = "blink.indent";
+      rev = "a8feeeae8510d16f26afbb5c81f2ad1ccea38d62";
+      sha256 = "1qm8h8yfkwf79hnfwn18qmk3546qzr3b9qzr6038lnbf54gzvkff";
+    };
+    meta.homepage = "https://github.com/Saghen/blink.indent/";
     meta.hydraPlatforms = [ ];
   };
 
