@@ -9214,10 +9214,14 @@ with pkgs;
   kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
   };
+  kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
+    kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
+  };
 
   kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
+  kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
 
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
