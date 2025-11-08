@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
   boost,
-  opencl-headers,
+  cmake,
+  libsForQt5,
   ocl-icd,
-  qtbase,
+  opencl-headers,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "leela-zero";
-  version = "0.17";
+  version = "0.17-unstable-2023-02-07";
 
   src = fetchFromGitHub {
     owner = "gcp";
     repo = "leela-zero";
-    rev = "v${version}";
-    hash = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
+    rev = "3ee6d20d0b36ae26120331c610926359cc5837de";
+    hash = "sha256-JF25y471miw/0b7XXBURzK+4WBwZI5ZUP+36/cZUORo=";
     fetchSubmodules = true;
   };
 
@@ -26,11 +26,15 @@ stdenv.mkDerivation rec {
     boost
     opencl-headers
     ocl-icd
-    qtbase
+    libsForQt5.qtbase
     zlib
   ];
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ];
 
   dontWrapQtApps = true;
 

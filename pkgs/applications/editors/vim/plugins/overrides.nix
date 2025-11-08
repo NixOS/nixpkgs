@@ -314,6 +314,14 @@ assertNoAdditions {
     };
   });
 
+  blink-cmp-env = super.blink-cmp-env.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-yanky = super.blink-cmp-yanky.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };

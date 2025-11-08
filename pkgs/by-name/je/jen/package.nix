@@ -2,33 +2,36 @@
   lib,
   rustPlatform,
   fetchCrate,
-  fetchpatch,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jen";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-nouAHEo5JJtZ0pV8ig/iJ3eB8uPz3yMVIYP6RrNVlSA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-dRUIyy4aQRwofZ/zWOHThclfxxrpXGWHruqg2Pp2BtQ=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "fix-rust-1.80-build.patch";
-      url = "https://github.com/whitfin/jen/commit/a6b5239593cecfd803a111ff317afa88c94c3640.patch";
-      hash = "sha256-ikfmEj6Xm0nT9dxpx6xdm/mQbw0b3gh2PT6Zo69Zg0E=";
-    })
+  cargoHash = "sha256-2c4XHA8fl2BA/Qtz+Hp29SjiWqPEJEj4WQiIFG/O4fE=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  cargoHash = "sha256-qYEnKFC1Y24TEY0dXa9N7QNvxhHULq+vd4Wej/RK8HQ=";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI generation tool for creating large datasets";
     mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ liberodark ];
   };
-}
+})

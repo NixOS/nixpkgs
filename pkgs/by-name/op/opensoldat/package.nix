@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fpc,
-  zip,
   makeWrapper,
   SDL2,
   freetype,
@@ -13,30 +13,31 @@
   xorg,
   autoPatchelfHook,
   cmake,
+  python3,
 }:
 
 let
   base = stdenv.mkDerivation rec {
     pname = "opensoldat-base";
-    version = "unstable-2021-09-05";
+    version = "unstable-2025-10-16";
 
     src = fetchFromGitHub {
       name = "base";
       owner = "opensoldat";
       repo = "base";
-      rev = "6c74d768d511663e026e015dde788006c74406b5";
-      sha256 = "175gmkdccy8rnkd95h2zqldqfydyji1hfby8b1qbnl8wz4dh08mz";
+      rev = "5b6e5bef23f5c0d58fb1d4d887b9b94ebcf799b4";
+      sha256 = "sha256-k3P4xSO7DgXn6EzDqlo+RHHTuMDPNvG5y+2iXqguh/M=";
     };
 
-    nativeBuildInputs = [ zip ];
+    nativeBuildInputs = [ python3 ];
 
     buildPhase = ''
-      sh create_smod.sh
+      python create_smod.py
     '';
 
     installPhase = ''
-      install -Dm644 soldat.smod -t $out/share/soldat
-      install -Dm644 client/play-regular.ttf -t $out/share/soldat
+      install -Dm644 soldat.smod -t $out/share/opensoldat
+      install -Dm644 play-regular.ttf -t $out/share/opensoldat
     '';
 
     meta = with lib; {
@@ -51,14 +52,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opensoldat";
-  version = "unstable-2022-07-02";
+  version = "unstable-2025-10-21";
 
   src = fetchFromGitHub {
     name = "opensoldat";
     owner = "opensoldat";
     repo = "opensoldat";
-    rev = "9574f5791b7993067f03d2df03d625908bc3762f";
-    sha256 = "0kyxzikd4ngx3nshjw0411x61zqq1b7l01lxw41rlcy4nad3r0vi";
+    rev = "220468f558f6932ba1dc180a9ef84913d07ab324";
+    sha256 = "sha256-BnTLuc/wucFNKh0jnVggpHNvLj/1kqL7i7fF7ORiIZA=";
   };
 
   nativeBuildInputs = [
@@ -84,20 +85,24 @@ stdenv.mkDerivation rec {
   # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
   runtimeDependencies = [ xorg.libX11 ];
 
-  # make sure soldat{,server} find their game archive,
+  # make sure opensoldat{,server} find their game archive,
   # let them write their state and configuration files
   # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
   # the user specifies otherwise.
-  # TODO(@sternenseemann): rename config dir to opensoldat
+  # Add 'open' prefix to configuration directories
   postInstall = ''
-    for p in $out/bin/soldatserver $out/bin/soldat; do
-      configDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/soldat/$(basename "$p")"
+    for p in soldatserver soldat; do
+      configDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/opensoldat/open$p"
+      oldConfigDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/soldat/$p"
 
-      wrapProgram "$p" \
-        --run "mkdir -p \"$configDir\"" \
+      wrapProgram $out/bin/open$p \
+        --run "mkdir -p \"''${XDG_CONFIG_HOME:-\$HOME/.config}/opensoldat\"" \
+        --run "[ -d \"$oldConfigDir\" ] && [ -d \"$configDir\" ] && echo Please migrate \"$oldConfigDir\" to \"$configDir\" manually. && exit 1" \
+        --run "[ -d \"$oldConfigDir\" ] && [ ! -d \"$configDir\" ] && mv \"$oldConfigDir\" \"$configDir\"" \
+        --run "mkdir -p \"$configDir\"; rmdir \"$oldConfigDir\" 2>/dev/null || true" \
         --add-flags "-fs_portable 0" \
         --add-flags "-fs_userpath \"$configDir\"" \
-        --add-flags "-fs_basepath \"${base}/share/soldat\""
+        --add-flags "-fs_basepath \"${base}/share/opensoldat\""
     done
   '';
 
