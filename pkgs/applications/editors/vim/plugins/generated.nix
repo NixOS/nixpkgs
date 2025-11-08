@@ -5307,6 +5307,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  floaterm = buildVimPlugin {
+    pname = "floaterm";
+    version = "2025-09-23";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "floaterm";
+      rev = "34e14f0b5e2687fd31a93fe75982ec84e5145856";
+      sha256 = "0g0wf1f049sayj9d11xjjz37ssvp7g9q39b5dwimf3i6fn80b42k";
+    };
+    meta.homepage = "https://github.com/nvzone/floaterm/";
+    meta.hydraPlatforms = [ ];
+  };
+
   floating-input-nvim = buildVimPlugin {
     pname = "floating-input.nvim";
     version = "2025-05-28";
