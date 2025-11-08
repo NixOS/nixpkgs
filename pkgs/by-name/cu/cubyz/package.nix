@@ -26,6 +26,13 @@ let
         rev = "bd97b66186dabb3533df1ea9eb650d7574496a59";
         hash = "sha256-EVIg01kQ3JCZxnnrk6qMJn3Gm3+BZzPs75x9Q+sxqBw=";
       };
+
+      assets = fetchFromGitHub {
+        owner = "PixelGuys";
+        repo = "Cubyz-Assets";
+        rev = "fc6e9a79b7806fe753799ac0ebe83735da9cd999";
+        hash = "sha256-adMgfoAlyqRTIO8R42djn6FbLoDpFZDcWQdbm9f0p+A=";
+      };
     }).hook.overrideAttrs
       {
         zig_default_flags = "";
@@ -33,13 +40,13 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.0.0";
+  version = "0.0.1";
   pname = "cubyz";
   src = fetchFromGitHub {
     owner = "pixelguys";
     repo = "cubyz";
     tag = finalAttrs.version;
-    hash = "sha256-8dceQWoTUJHkClKiFH573gvi94SmTSiSl42Rh9+sPoE=";
+    hash = "sha256-SbMRr4kktwagYUyVBKFZLOwgSmkPngV8NbwkJRk2Zvg=";
   };
 
   postPatch = ''
@@ -77,9 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Symlink the assets to $out, add a desktop entry
   postBuild = ''
     mkdir -p $out/assets/cubyz
-    ln -s ${callPackage ./assets.nix { }}/* $out/assets/cubyz/
+    ln -s $assets/* $out/assets/cubyz/
     ln -s $src/assets/cubyz/* $out/assets/cubyz/
 
+    mkdir -p $out/share/applications
     printf "
       [Desktop Entry]
       Name=Cubyz
@@ -87,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       Icon=$out/assets/cubyz/logo.png
       Type=Application
       Categories=Game;
-    " > $out/cubyz.desktop
+    " > $out/share/applications/cubyz.desktop
   '';
 
   # Change some env variables, move a bunch of stuff under .config for modding purposes, symlink a desktop entry
@@ -96,16 +104,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       --prefix VK_LAYER_PATH : "${vulkan-validation-layers}/share/vulkan/explicit_layer.d" \
       --run "
-        cd \$HOME/.config/cubyz
         mkdir -p \$HOME/.config/cubyz/logs
         mkdir -p \$HOME/.config/cubyz/assets
+        cd \$HOME/.config/cubyz
         [ ! -d \$HOME/.config/cubyz/assets/cubyz ] && cp -pr $out/assets/cubyz \$HOME/.config/cubyz/assets/
 
         [ ! -f \$HOME/.config/cubyz/launchConfig.zon ] && printf \".{
           .cubyzDir = \\\"\$HOME/.config/cubyz\\\",
         }\" > \$HOME/.config/cubyz/launchConfig.zon
-
-        [ ! -l \$HOME/.local/share/applications/cubyz.desktop ] && ln -sf $out/cubyz.desktop \$HOME/.local/share/applications/cubyz.desktop
       "
   '';
 
