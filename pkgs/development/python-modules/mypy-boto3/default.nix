@@ -1385,8 +1385,8 @@ in
       "sha256-6usEXd0rpBSaLBKHawPIiPzqfHoNCGVO8c2p0eBqrvs=";
 
   mypy-boto3-vpc-lattice =
-    buildMypyBoto3Package "vpc-lattice" "1.40.59"
-      "sha256-39fPl4F2Xiz6+AN8HeGi33Yjj9mfxvU3ZmklLY0STMk=";
+    buildMypyBoto3Package "vpc-lattice" "1.40.69"
+      "sha256-pzWCGZbQ6idUKwNWxGyg45Z4rRzdReADX1u+934VmEs=";
 
   mypy-boto3-waf =
     buildMypyBoto3Package "waf" "1.40.64"
