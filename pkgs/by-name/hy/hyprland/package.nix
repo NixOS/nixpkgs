@@ -3,6 +3,7 @@
   stdenv,
   stdenvAdapters,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   makeWrapper,
   cmake,
@@ -91,15 +92,23 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TPlZf0urtvDH4Cb4By06szJmzR4sBlgQATuGQy8bH6U=";
+    hash = "sha256-5jYD01l95U/HTfZMAccAvhSnrWgHIRWEjLi9R4wPIVI=";
   };
+
+  patches = [
+    # NOTE: this is required to make plugins compile. should be removed with the next release.
+    (fetchpatch {
+      url = "https://github.com/hyprwm/Hyprland/commit/522edc87126a48f3ce4891747b6a92a22385b1e7.patch";
+      hash = "sha256-0BAlAVW5isa8gd833PjZdqO/uEpDqdTlu0iZbLP4U9s=";
+    })
+  ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation

@@ -21,12 +21,10 @@
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
-  fleek-cli = "fleek";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   jsonlint = "jsonlint";
   localtunnel = "lt";
-  lua-fmt = "luafmt";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   pulp = "pulp";

@@ -27,6 +27,11 @@ buildPythonPackage rec {
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
   sourceRoot = "${src.name}/python";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11==" "pybind11>="
+  '';
+
   build-system = [
     pybind11
     setuptools
