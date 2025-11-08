@@ -1009,6 +1009,7 @@ mapAliases {
   mediastreamer = throw "'mediastreamer' has been moved to 'linphonePackages.mediastreamer2'"; # Added 2025-09-20
   mediastreamer-openh264 = throw "'mediastreamer-openh264' has been moved to 'linphonePackages.msopenh264'"; # Added 2025-09-20
   meilisearch_1_11 = throw "'meilisearch_1_11' has been removed, as it is no longer supported"; # Added 2025-10-03
+  melmatcheq-lv2 = throw "'melmatcheq-lv2' has been removed due to lack of maintenance"; # Added 2025-11-08
   melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
   meshlab-unstable = throw "meshlab-unstable has been removed, as it was behind meshlab"; # Added 2025-09-21
   meteo = throw "'meteo' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
