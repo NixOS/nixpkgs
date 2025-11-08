@@ -11218,7 +11218,7 @@ with pkgs;
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
-  q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
+  q4wine = kdePackages.callPackage ../applications/misc/q4wine { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
