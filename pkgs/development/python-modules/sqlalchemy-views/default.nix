@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   sqlalchemy,
   pytestCheckHook,
@@ -11,6 +12,10 @@ buildPythonPackage rec {
   pname = "sqlalchemy-views";
   version = "0.3.2";
   format = "setuptools";
+
+  # ModuleNotFoundError: No module named 'imp'
+  # https://docs.python.org/3/library/imp.html
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     repo = "sqlalchemy-views";
