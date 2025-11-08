@@ -6,6 +6,7 @@
   pkg-config,
   stdenv,
   flac,
+  libogg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     flac
+    libogg
   ];
 
   strictDeps = true;
@@ -49,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_DEC_XMP" false)
     (lib.cmakeBool "USE_RESAMP_SOXR" false)
     (lib.cmakeBool "USE_RESAMP_SRC" false)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   meta = {
