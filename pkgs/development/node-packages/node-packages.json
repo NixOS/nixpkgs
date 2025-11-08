@@ -48,7 +48,6 @@
 , "node-gyp-build"
 , "node2nix"
 , "np"
-, "nrm"
 , "peerflix"
 , "peerflix-server"
 , "poor-mans-t-sql-formatter-cli"

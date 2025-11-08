@@ -240,6 +240,7 @@ mapAliases {
   }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   npm-merge-driver = throw "'npm-merge-driver' has been removed, since the upstream repo was archived on Aug 11, 2021"; # Added 2025-11-07
+  inherit (pkgs) nrm; # Added 2025-11-08
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23
   parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12

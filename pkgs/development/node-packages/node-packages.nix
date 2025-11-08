@@ -6960,15 +6960,6 @@ let
         sha512 = "QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==";
       };
     };
-    "commander-8.3.0" = {
-      name = "commander";
-      packageName = "commander";
-      version = "8.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-8.3.0.tgz";
-        sha512 = "OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==";
-      };
-    };
     "comment-json-4.2.5" = {
       name = "comment-json";
       packageName = "comment-json";
@@ -25653,15 +25644,6 @@ let
         sha512 = "5WsVTFcH1ut/kkhAaHf4PVgI8c7++GiVcpCGxPouI6ZVjsqPnSDf8h/8HtVqc0t4fzRXwnMK70EcZeAs3PIddg==";
       };
     };
-    "undici-5.28.2" = {
-      name = "undici";
-      packageName = "undici";
-      version = "5.28.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/undici/-/undici-5.28.2.tgz";
-        sha512 = "wh1pHJHnUeQV5Xa8/kyQhO7WFa8M34l026L5P/+2TYiakvGy5Rdc8jWZVyG7ieht/0WgJLEd3kcU5gKx+6GC8w==";
-      };
-    };
     "undici-5.28.4" = {
       name = "undici";
       packageName = "undici";
@@ -36185,59 +36167,6 @@ in
     meta = {
       description = "A better `npm publish`";
       homepage = "https://github.com/sindresorhus/np#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  nrm = nodeEnv.buildNodePackage {
-    name = "nrm";
-    packageName = "nrm";
-    version = "2.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/nrm/-/nrm-2.0.1.tgz";
-      sha512 = "4QDRVI64plGF/tXei29gYGl9zNkB0YwtASnjGaB7EUmqnMPoKLNlL43lrylg4HA8DBGoKI+9SuomDDXJone4rw==";
-    };
-    dependencies = [
-      sources."@fastify/busboy-2.1.1"
-      sources."@inquirer/checkbox-4.1.3"
-      sources."@inquirer/core-10.1.8"
-      sources."@inquirer/figures-1.0.11"
-      sources."@inquirer/select-4.0.10"
-      sources."@inquirer/type-3.0.5"
-      sources."@types/node-22.13.10"
-      sources."ansi-escapes-4.3.2"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."chalk-4.1.2"
-      sources."cli-width-4.1.0"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-8.3.0"
-      sources."define-lazy-prop-2.0.0"
-      sources."emoji-regex-8.0.0"
-      sources."has-flag-4.0.0"
-      sources."ini-4.1.3"
-      sources."is-docker-2.2.1"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-wsl-2.2.0"
-      sources."mute-stream-2.0.0"
-      sources."open-8.4.2"
-      sources."signal-exit-4.1.0"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."supports-color-7.2.0"
-      sources."type-fest-0.21.3"
-      sources."undici-5.28.2"
-      sources."undici-types-6.20.0"
-      sources."wrap-ansi-6.2.0"
-      sources."yoctocolors-cjs-2.1.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "npm registry manager can help you switch different npm registries easily and quickly";
-      homepage = "https://github.com/Pana/nrm";
       license = "MIT";
     };
     production = true;
