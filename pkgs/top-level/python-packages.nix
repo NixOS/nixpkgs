@@ -12818,8 +12818,6 @@ self: super: with self; {
 
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 
-  pycategories = callPackage ../development/python-modules/pycategories { };
-
   pycayennelpp = callPackage ../development/python-modules/pycayennelpp { };
 
   pycddl = callPackage ../development/python-modules/pycddl { };
