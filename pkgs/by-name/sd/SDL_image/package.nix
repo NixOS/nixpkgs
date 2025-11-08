@@ -49,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   outputs = [
     "out"
     "dev"
