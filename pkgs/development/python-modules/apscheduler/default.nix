@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "apscheduler";
-  version = "3.11.0";
+  version = "3.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "apscheduler";
     tag = version;
-    hash = "sha256-tFEm9yXf8CqcipSYtM7JM6WQ5Qm0YtgWhZvZOBAzy+w=";
+    hash = "sha256-3KSW1RdiUXlDTr30Wrc8fYb4rRnlOn6lVhBgz3r1D/4=";
   };
 
   postPatch = ''
