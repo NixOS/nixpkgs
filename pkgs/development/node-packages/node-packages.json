@@ -78,7 +78,6 @@
 , "semver"
 , "sloc"
 , "smartdc"
-, "speed-test"
 , "svelte-check"
 , "tern"
 , "tiddlywiki"
