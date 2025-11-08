@@ -1,0 +1,74 @@
+From 8fd471ff028cd3d5df5ee944fdbcefc7e77abc3d Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 23 Jan 2023 23:39:46 -0800
+Subject: [PATCH 10/30] musl: introduce GNU specific version of strerror_r()
+
+musl provides XSI compliant strerror_r(), and it is slightly different
+from the one by glibc.
+Let's introduce a tiny wrapper to convert XSI strerror_r() to GNU one.
+---
+ src/include/musl/string.h |  7 +++++++
+ src/libc/musl/meson.build |  1 +
+ src/libc/musl/string.c    | 26 ++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 src/include/musl/string.h
+ create mode 100644 src/libc/musl/string.c
+
+diff --git a/src/include/musl/string.h b/src/include/musl/string.h
+new file mode 100644
+index 0000000000..cc3da63012
+--- /dev/null
++++ b/src/include/musl/string.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <string.h>
++
++char* strerror_r_gnu(int errnum, char *buf, size_t buflen);
++#define strerror_r strerror_r_gnu
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index 3e205e1eb1..a64f292081 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -7,4 +7,5 @@ endif
+ libc_wrapper_sources += files(
+         'printf.c',
+         'stdio.c',
++        'string.c',
+ )
+diff --git a/src/libc/musl/string.c b/src/libc/musl/string.c
+new file mode 100644
+index 0000000000..c2a9f4a169
+--- /dev/null
++++ b/src/libc/musl/string.c
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <errno.h>
++#include <stdio.h>
++#include <string.h>
++
++/* The header errno.h overrides strerror_r with strerror_r_gnu, hence we need to undef it here. */
++#undef strerror_r
++
++char* strerror_r_gnu(int errnum, char *buf, size_t buflen) {
++        int saved_errno = errno;
++        const char *msg = strerror(errnum);
++        size_t l = strlen(msg);
++        if (l >= buflen) {
++                if (buflen > 0) {
++                        if (buflen > 1)
++                                memcpy(buf, msg, buflen - 1);
++                        buf[buflen - 1] = '\0';
++                }
++                errno = ERANGE;
++        } else {
++                memcpy(buf, msg, l + 1);
++                errno = saved_errno;
++        }
++        return buf;
++}
+-- 
+2.51.0
+

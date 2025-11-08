@@ -18,7 +18,7 @@
   gnutls,
   libgcrypt,
   libgpg-error,
-  gtk3,
+  gtk4,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -32,7 +32,7 @@
   at-spi2-core,
   cairo,
   libxml2,
-  libsoup,
+  libsoup_3,
   libsecret,
   libxslt,
   harfbuzz,
@@ -79,16 +79,15 @@
   fetchpatch,
 }:
 
+let
+  abiVersion = if lib.versionAtLeast gtk4.version "4.0" then "6.0" else "4.1";
+in
+
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
   version = "2.50.1";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
-    if lib.versionAtLeast gtk3.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"
-  }";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
     "out"
@@ -206,13 +205,13 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     libsecret
   ]
-  ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+  ++ lib.optionals (lib.versionAtLeast gtk4.version "4.0") [
     wayland-protocols
   ];
 
   propagatedBuildInputs = [
-    gtk3
-    libsoup
+    gtk4
+    libsoup_3
   ];
 
   cmakeFlags =
@@ -222,7 +221,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
@@ -241,7 +240,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "-DUSE_APPLE_ICU=OFF"
       "-DUSE_OPENGL_OR_ES=OFF"
     ]
-    ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+    ++ lib.optionals (lib.versionOlder gtk4.version "4.0") [
       "-DUSE_GTK4=OFF"
     ]
     ++ lib.optionals (!systemdSupport) [
@@ -267,9 +266,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [
-      "javascriptcoregtk-4.0"
-      "webkit2gtk-4.0"
-      "webkit2gtk-web-extension-4.0"
+      "javascriptcoregtk-${abiVersion}"
+      "webkit2gtk-${abiVersion}"
+      "webkit2gtk-web-extension-${abiVersion}"
     ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];

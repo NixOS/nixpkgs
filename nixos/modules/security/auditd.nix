@@ -86,7 +86,7 @@ let
   prepareConfigValue =
     v:
     if lib.isBool v then
-      (if v then "yes" else "no")
+      lib.boolToYesNo v
     else if lib.isList v then
       lib.concatStringsSep " " (map prepareConfigValue v)
     else

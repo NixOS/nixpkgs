@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # builds
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.1.4";
+  version = "7.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +37,14 @@ buildPythonPackage rec {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
-    hash = "sha256-u9hdwxAJIuTQ3zKstbwn88u1opzWXc8otJKbtIl4Li4=";
+    hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
   };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/RDFLib/rdflib/commit/0ab817f86b5733c9a3b4ede7ef065b8d79e53fc5.diff";
+      hash = "sha256-+yWzQ3MyH0wihgiQRMMXV/FpG8WlXaIBhpsDF4e3rbY=";
+    })
+  ];
 
   build-system = [ poetry-core ];
 

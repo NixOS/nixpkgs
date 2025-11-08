@@ -35,7 +35,6 @@ buildNimPackage (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      figsoda
       sikmir
     ];
     mainProgram = "ttop";

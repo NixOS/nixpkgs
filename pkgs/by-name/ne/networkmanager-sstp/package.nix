@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--with-pppd-plugin-dir=$(out)/lib/pppd/2.5.0"
     "--enable-absolute-paths"
   ];

@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfal2";
-  version = "2.23.2";
+  version = "2.23.5";
 
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gyEmz0sNHyxjvJA/3uSzLW42PQ3UVKx6nptNYl/3ExM=";
+    hash = "sha256-Dt6xA7U4aPKFZmO2iAiYM99w5ZIZNQJ+JXzuVItIlBM=";
   };
 
   passthru.enablePluginStatus = {
@@ -108,6 +108,36 @@ stdenv.mkDerivation (finalAttrs: {
       libuuid
     ]
   );
+
+  preConfigure =
+    let
+      cmakeFiles = [
+        "CMakeLists.txt"
+        "src/CMakeLists.txt"
+        "src/core/CMakeLists.txt"
+        "src/core/transfer/CMakeLists.txt"
+        "src/plugins/CMakeLists.txt"
+        "src/plugins/dcap/CMakeLists.txt"
+        "src/plugins/file/CMakeLists.txt"
+        "src/plugins/gridftp/CMakeLists.txt"
+        "src/plugins/http/CMakeLists.txt"
+        "src/plugins/lfc/CMakeLists.txt"
+        "src/plugins/mock/CMakeLists.txt"
+        "src/plugins/rfio/CMakeLists.txt"
+        "src/plugins/sftp/CMakeLists.txt"
+        "src/plugins/srm/CMakeLists.txt"
+        "src/plugins/xrootd/CMakeLists.txt"
+        "src/utils/CMakeLists.txt"
+        "src/version/CMakeLists.txt"
+      ];
+    in
+    ''
+      for f in ${lib.escapeShellArgs cmakeFiles}; do
+        substituteInPlace "$f" \
+          --replace-fail 'cmake_minimum_required (VERSION 2.6)' \
+                         'cmake_minimum_required (VERSION 3.10)'
+      done
+    '';
 
   cmakeFlags =
     (map (

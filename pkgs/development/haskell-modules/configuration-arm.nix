@@ -117,7 +117,7 @@ self: super:
   # AARCH32-SPECIFIC OVERRIDES
 
   # KAT/ECB/D2 test segfaults on armv7l
-  # https://github.com/haskell-crypto/cryptonite/issues/367
+  # https://github.com/haskell-crypto/cryptonite/issues/367 krank:ignore-line
   cryptonite = dontCheck super.cryptonite;
 }
 // lib.optionalAttrs (with pkgs.stdenv.hostPlatform; isAarch && isAndroid) {

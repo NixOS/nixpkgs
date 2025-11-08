@@ -21,7 +21,6 @@ let
     let
       # reports boolean as yes / no
       mkValueString =
-
         v:
         if lib.isInt v then
           toString v
@@ -178,8 +177,8 @@ in
 
 {
   imports = [
-    (lib.mkAliasOptionModuleMD [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
-    (lib.mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (lib.mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (lib.mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (lib.mkRenamedOptionModule
       [ "services" "openssh" "challengeResponseAuthentication" ]
       [ "services" "openssh" "kbdInteractiveAuthentication" ]
@@ -456,7 +455,7 @@ in
                 default = "none"; # upstream default
                 description = ''
                   Specifies a file that lists principal names that are accepted for certificate authentication. The default
-                  is `"none"`, i.e. not to use	a principals file.
+                  is `"none"`, i.e. not to use a principals file.
                 '';
               };
               LogLevel = lib.mkOption {
@@ -485,7 +484,6 @@ in
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                # apply if cfg.useDns then "yes" else "no"
                 default = false;
                 description = ''
                   Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for
@@ -825,37 +823,29 @@ in
       authPrincipalsFiles != { }
     ) "/etc/ssh/authorized_principals.d/%u";
 
-    services.openssh.extraConfig = lib.mkOrder 0 ''
-      Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
-
-      AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-      ${lib.concatMapStrings (port: ''
-        Port ${toString port}
-      '') cfg.ports}
-
-      ${lib.concatMapStrings (
-        { port, addr, ... }:
+    services.openssh.extraConfig = lib.mkOrder 0 (
+      lib.concatStringsSep "\n" (
+        [
+          "Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}"
+          "AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}"
+        ]
+        ++ lib.map (port: ''Port ${toString port}'') cfg.ports
+        ++ lib.map (
+          { port, addr, ... }:
+          ''ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}''
+        ) cfg.listenAddresses
+        ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${lib.getExe pkgs.xorg.xauth}"
+        ++ lib.optional cfg.allowSFTP ''Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}''
+        ++ [
+          "AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}"
+        ]
+        ++ lib.optional (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
         ''
-          ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}
-        ''
-      ) cfg.listenAddresses}
-
-      ${lib.optionalString cfgc.setXAuthLocation ''
-        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-      ''}
-      ${lib.optionalString cfg.allowSFTP ''
-        Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}
-      ''}
-      AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-      ${lib.optionalString (cfg.authorizedKeysCommand != "none") ''
-        AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
-        AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
-      ''}
-
-      ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-        HostKey ${k.path}
-      '')}
-    '';
+        ++ lib.map (k: "HostKey ${k.path}") cfg.hostKeys
+      )
+    );
 
     system.checks = [
       (pkgs.runCommand "check-sshd-config"

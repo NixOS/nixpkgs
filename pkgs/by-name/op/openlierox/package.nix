@@ -31,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed 1i'#include <libxml/parser.h>' -i include/XMLutils.h
     substituteInPlace src/common/StringUtils.cpp \
         --replace-fail "xmlErrorPtr" "const xmlError*"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeOlxCommon.cmake \
+      --replace-fail "cmake_minimum_required(VERSION 2.4)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(VERSION 2.4)" "cmake_policy(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0005 OLD)" "" \
+      --replace-fail "cmake_policy(SET CMP0003 OLD)" "" \
+      --replace-fail "cmake_policy(SET CMP0011 OLD)" ""
   '';
 
   strictDeps = true;
@@ -73,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://openlierox.net";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "openlierox";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      iedame
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -83,7 +83,7 @@ in
       };
       # the flag values will all be overwritten if also defined in the env file
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.cli.toGNUCommandLineShell { } cfg.settings}";
+        ExecStart = "${lib.getExe cfg.package} ${lib.cli.toCommandLineShellGNU { } cfg.settings}";
         DynamicUser = true;
         StateDirectory = "newt";
         StateDirectoryMode = "0700";

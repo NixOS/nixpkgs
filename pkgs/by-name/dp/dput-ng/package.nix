@@ -20,6 +20,10 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-zrH4h4C4y3oTiOXsidFv/rIJNzCdV2lqzNEg0SOkX4w=";
   };
 
+  postPatch = ''
+    substituteInPlace dput/core.py --replace-fail /usr/share/dput-ng "$out/share/dput-ng"
+  '';
+
   build-system = with python3.pkgs; [
     setuptools
   ];
@@ -31,10 +35,13 @@ python3.pkgs.buildPythonApplication {
     coverage
     xdg
     python-debian
+    distro-info
   ];
 
   postInstall = ''
     cp -r bin $out/
+    mkdir -p "$out/share/dput-ng"
+    cp -r skel/* "$out/share/dput-ng/"
   '';
 
   pythonImportsCheck = [ "dput" ];

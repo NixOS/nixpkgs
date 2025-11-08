@@ -38,6 +38,13 @@ in
         type = with types; nullOr str;
         default = null;
       };
+
+      extraFlags = mkOption {
+        description = "Extra flags to pass to snowflake-proxy";
+        type = with types; listOf str;
+        default = [ ];
+        example = [ "-metrics" ];
+      };
     };
   };
 
@@ -52,6 +59,7 @@ in
             ++ optional (cfg.capacity != null) "-capacity ${builtins.toString cfg.capacity}"
             ++ optional (cfg.relay != null) "-relay ${cfg.relay}"
             ++ optional (cfg.stun != null) "-stun ${cfg.stun}"
+            ++ cfg.extraFlags
           );
 
         # Security Hardening

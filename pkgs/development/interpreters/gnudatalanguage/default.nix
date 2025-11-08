@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   readline,
@@ -120,6 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fLsa/R8+7QZcxjqJLnHZivRF6dD4a6J6KuCqYvazaCU=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gnudatalanguage/gdl/commit/b648a63c5070f38e90167f858a79ba6f01dad1d3.patch?full_index=1";
+      includes = [ "CMakeLists.txt" ];
+      hash = "sha256-lYtAstI21Up4RArf6pXnjiTwJ3Omoisw43Ih1H2Wc0s=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

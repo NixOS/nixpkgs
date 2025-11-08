@@ -44,6 +44,6 @@ buildGoModule rec {
     homepage = "https://github.com/go-python/gpython";
     changelog = "https://github.com/go-python/gpython/releases/tag/${src.rev}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

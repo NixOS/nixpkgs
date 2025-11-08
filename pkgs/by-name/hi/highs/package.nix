@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highs";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ERGO-Code";
     repo = "HiGHS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CzHE2d0CtScexdIw95zHKY1Ao8xFodtfSNNkM6dNCac=";
+    hash = "sha256-FRiYtbl1kWEkHHEIIOpefC9UdusmJKl6UmP3dKRkAXA=";
   };
-
-  # CMake Error in CMakeLists.txt:
-  #   Imported target "highs::highs" includes non-existent path
-  #     "/include"
-  #   in its INTERFACE_INCLUDE_DIRECTORIES.
-  postPatch = ''
-    sed -i "/CMAKE_CUDA_PATH/d" src/CMakeLists.txt
-  '';
 
   strictDeps = true;
 
@@ -48,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.all;
     mainProgram = "highs";
-    maintainers = with maintainers; [ silky ];
+    maintainers = with maintainers; [
+      galabovaa
+      silky
+    ];
   };
 })

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "python-open-router";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-open-router";
     tag = "v${version}";
-    hash = "sha256-EoLBlgXKrAo2DKOuLGvN3MbWIJIG+Ehtznegnq3VX44=";
+    hash = "sha256-SSpSoo82FD1KUwbZpeHpl9I4A50yuJmdTVaHDxLZXso=";
   };
 
   build-system = [ poetry-core ];

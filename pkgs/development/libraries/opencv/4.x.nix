@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -298,6 +299,17 @@ effectiveStdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
+    (fetchpatch {
+      name = "ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/90c444abd387ffa70b2e72a34922903a2f0f4f5a.patch";
+      hash = "sha256-iRRparDJoNhrvELH6cAagWcVzpiE2lfivHVxvZyi3ik=";
+    })
+    (fetchpatch {
+      name = "fix-ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
+      hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
+    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -320,11 +332,6 @@ effectiveStdenv.mkDerivation {
       ${installExtraFiles face}
       ${installExtraFiles wechat_qrcode}
     '');
-
-  postConfigure = ''
-    [ -e modules/core/version_string.inc ]
-    echo '"(build info elided)"' > modules/core/version_string.inc
-  '';
 
   buildInputs = [
     boost

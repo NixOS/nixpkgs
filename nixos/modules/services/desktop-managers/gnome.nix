@@ -297,8 +297,12 @@ in
 
       systemd.packages = [
         pkgs.gnome-flashback
+        pkgs.metacity
+        (pkgs.gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
       ]
-      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm cfg.flashback.customSessions;
 
       environment.systemPackages = [
         pkgs.gnome-flashback
@@ -311,9 +315,7 @@ in
         wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
       ) flashbackWms)
       # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (
-        wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
-      ) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
@@ -444,38 +446,31 @@ in
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = utils.removePackagesByName (
-        [
-          pkgs.baobab
-          pkgs.decibels
-          pkgs.epiphany
-          pkgs.gnome-text-editor
-          pkgs.gnome-calculator
-          pkgs.gnome-calendar
-          pkgs.gnome-characters
-          pkgs.gnome-clocks
-          pkgs.gnome-console
-          pkgs.gnome-contacts
-          pkgs.gnome-font-viewer
-          pkgs.gnome-logs
-          pkgs.gnome-maps
-          pkgs.gnome-music
-          pkgs.gnome-system-monitor
-          pkgs.gnome-weather
-          pkgs.loupe
-          pkgs.nautilus
-          pkgs.gnome-connections
-          pkgs.simple-scan
-          pkgs.snapshot
-          pkgs.totem
-          pkgs.yelp
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # Since PackageKit Nix support is not there yet,
-          # only install gnome-software if flatpak is enabled.
-          pkgs.gnome-software
-        ]
-      ) config.environment.gnome.excludePackages;
+      environment.systemPackages = utils.removePackagesByName [
+        pkgs.baobab
+        pkgs.decibels
+        pkgs.epiphany
+        pkgs.gnome-text-editor
+        pkgs.gnome-calculator
+        pkgs.gnome-calendar
+        pkgs.gnome-characters
+        pkgs.gnome-clocks
+        pkgs.gnome-console
+        pkgs.gnome-contacts
+        pkgs.gnome-font-viewer
+        pkgs.gnome-logs
+        pkgs.gnome-maps
+        pkgs.gnome-music
+        pkgs.gnome-system-monitor
+        pkgs.gnome-weather
+        pkgs.loupe
+        pkgs.nautilus
+        pkgs.gnome-connections
+        pkgs.simple-scan
+        pkgs.snapshot
+        pkgs.totem
+        pkgs.yelp
+      ] config.environment.gnome.excludePackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -487,6 +482,12 @@ in
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
+
+      # Since PackageKit Nix support is not there yet,
+      # only install gnome-software if flatpak is enabled.
+      services.gnome.gnome-software.enable = lib.mkIf config.services.flatpak.enable (
+        notExcluded pkgs.gnome-software
+      );
 
       # VTE shell integration for gnome-console
       programs.bash.vteIntegration = mkDefault true;

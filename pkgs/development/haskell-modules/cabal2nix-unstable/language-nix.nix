@@ -13,10 +13,10 @@
 }:
 mkDerivation {
   pname = "language-nix";
-  version = "2.3.0-unstable-2025-09-17";
+  version = "2.3.0-unstable-2025-10-31";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/3cc36a5df16a10bac9a858208845e3d05b79845d.tar.gz";
-    sha256 = "1z1knv2ggm9ddyl0v120nhcnjmq50z7q1m88qj7rfz51gx1ifnim";
+    url = "https://github.com/NixOS/cabal2nix/archive/e89ec9afd5d6fd8a86e8514fb4406b2adf0783ab.tar.gz";
+    sha256 = "06mdyjy5yds5g51mby4n1jz3r32a24lnba61l0vjm707nzp31r9z";
   };
   postUnpack = "sourceRoot+=/language-nix; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [

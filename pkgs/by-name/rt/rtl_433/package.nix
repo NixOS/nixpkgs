@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = ''
+    substituteInPlace ./CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6)" \
+      "cmake_minimum_required(VERSION 2.6...3.10)"
+  '';
+
   meta = with lib; {
     description = "Decode traffic from devices that broadcast on 433.9 MHz, 868 MHz, 315 MHz, 345 MHz and 915 MHz";
     homepage = "https://github.com/merbanan/rtl_433";

@@ -1,0 +1,30 @@
+From 65a6110f75e3bcf980aa4138ad18c06f351b78f5 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 9 Jun 2025 14:00:55 +0900
+Subject: [PATCH 16/30] musl: define __THROW when not defined
+
+__THROW is internally used by glibc headers, hence our implementation of
+net/if.h and sys/mount.h also use it. However, musl does not provide
+the macro. Let's define it when not defined.
+---
+ src/include/musl/features.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 src/include/musl/features.h
+
+diff --git a/src/include/musl/features.h b/src/include/musl/features.h
+new file mode 100644
+index 0000000000..bd6d00a9d4
+--- /dev/null
++++ b/src/include/musl/features.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <features.h>
++
++#ifndef __THROW
++#define __THROW
++#endif
+-- 
+2.51.0
+

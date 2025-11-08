@@ -27,9 +27,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-  ]
-  # FIXME: apply unconditionally
-  ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+
     ./tests-libls.sh.patch
   ];
 
@@ -73,16 +71,18 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.ping <<EOF
-    $out/bin/ping {
+    abi <abi/4.0>,
+    include <tunables/global>
+    profile $out/bin/ping {
       include <abstractions/base>
       include <abstractions/consoles>
       include <abstractions/nameservice>
       include "${apparmorRulesFromClosure { name = "ping"; } [ stdenv.cc.libc ]}"
-      include <local/bin.ping>
       capability net_raw,
       network inet raw,
       network inet6 raw,
       mr $out/bin/ping,
+      include if exists <local/bin.ping>
     }
     EOF
   '';

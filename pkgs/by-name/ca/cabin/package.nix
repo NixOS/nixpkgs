@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "http://www.impallari.com/cabin";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

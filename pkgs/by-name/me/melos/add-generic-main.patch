@@ -1,7 +1,7 @@
 diff --git a/bin/melos.dart b/bin/melos.dart
 index 0db7013..218276f 100644
---- a/bin/melos.dart
-+++ b/bin/melos.dart
+--- a/packages/melos/bin/melos.dart
++++ b/packages/melos/bin/melos.dart
 @@ -1,11 +1,37 @@
 +import 'dart:io';
  import 'package:cli_launcher/cli_launcher.dart';

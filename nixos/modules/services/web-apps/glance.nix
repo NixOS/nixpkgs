@@ -172,7 +172,14 @@ in
     systemd.services.glance = {
       description = "Glance feed dashboard server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      # adding nss-user-lookup.target is a fix for https://github.com/NixOS/nixpkgs/issues/409348
+      after = [
+        "network.target"
+        "nss-user-lookup.target"
+      ];
+      requires = [
+        "nss-user-lookup.target"
+      ];
       path = [ pkgs.replace-secret ];
 
       serviceConfig = {
@@ -208,6 +215,7 @@ in
             ${secretReplacements}
           '';
         ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
+        Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
         EnvironmentFile = cfg.environmentFile;
         StateDirectory = "glance";

@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  hardeningEnable = [ "pie" ];
-
   enableParallelBuilding = true;
 
   nativeCheckInputs = [

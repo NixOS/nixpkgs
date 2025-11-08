@@ -351,7 +351,7 @@ index 7bc24fc..d470822 100644
  
      loc = info->location;
  
-     searchkey = g_strdup_printf ("<raw_text>%s", loc->code);
+     searchkey = g_strdup_printf ("<raw_text>METAR %s", loc->code);
 -    p = strstr (msg->response_body->data, searchkey);
 -    g_free (searchkey);
 +
@@ -398,7 +398,7 @@ index 7bc24fc..d470822 100644
      }
  
 -    msg = soup_form_request_new (
--        "GET", "https://aviationweather.gov/cgi-bin/data/dataserver.php",
+-        "GET", "https://aviationweather.gov/api/data/dataserver",
 +    query = soup_form_encode (
          "dataSource", "metars",
          "requestType", "retrieve",
@@ -409,7 +409,7 @@ index 7bc24fc..d470822 100644
          NULL);
 -    soup_session_queue_message (info->session, msg, metar_finish, info);
 +    msg = soup_message_new_from_encoded_form (
-+        "GET", "https://aviationweather.gov/cgi-bin/data/dataserver.php",
++        "GET", "https://aviationweather.gov/api/data/dataserver",
 +        query);
 +    soup_session_send_and_read_async (info->session, msg, G_PRIORITY_DEFAULT,
 +                                      NULL, metar_finish, info);

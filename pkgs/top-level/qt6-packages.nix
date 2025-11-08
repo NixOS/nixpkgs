@@ -151,8 +151,6 @@ makeScopeWithSplicing' {
       waylib = callPackage ../development/libraries/waylib { };
 
       wayqt = callPackage ../development/libraries/wayqt { };
-
-      xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
     }
   );
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   qt6,
   pkg-config,
@@ -22,6 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-KDxT9B+1SATWiZdUBAQvZu17vk3xmyXcw2Zy56bdWbY=";
   };
+
+  patches = [
+    # Fix Qt6::WaylandClientPrivate not found
+    # https://github.com/hyprwm/hyprsysteminfo/pull/21
+    (fetchpatch {
+      url = "https://github.com/hyprwm/hyprsysteminfo/commit/fe81610278676d26ff47f62770ac238220285d3a.patch";
+      hash = "sha256-rfKyV0gkfXEhTcPHlAB+yxZ+92umBV22YOK9aLMMBhM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

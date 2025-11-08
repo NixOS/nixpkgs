@@ -23,9 +23,11 @@
   pango,
   pcre2,
   cairo,
+  fmt_11,
   fribidi,
   lz4,
   icu,
+  simdutf,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fast-float,
@@ -36,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.80.3";
+  version = "0.82.0";
 
   outputs = [
     "out"
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Lllv0/vqu3FTFmIiTnH2osN/aEQmE21ihUYnJ2709pk=";
+    hash = "sha256-sHGNsyVHMHAbQ79eETy/jNssFHFdMu4einB9xutwU18=";
   };
 
   patches = [
@@ -76,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    fmt_11
     fribidi
     gnutls
     pango # duplicated with propagatedBuildInputs to support gtkVersion == null
@@ -83,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     icu
     fast-float
+    simdutf
   ]
   ++ lib.optionals systemdSupport [
     systemd

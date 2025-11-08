@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.4.3";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-ykGc3WovCkq+/UjBC+gnXklTvrDdIRVGE6mOHL2dT6w=";
+    hash = "sha256-VvxY5fXK/f1aCdIB0XPGTsWgEe/cA797kK6eLmb0vtg=";
   };
 
   sourceRoot = "${src.name}/libs/cli";

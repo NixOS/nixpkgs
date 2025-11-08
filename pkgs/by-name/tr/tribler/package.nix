@@ -1,26 +1,23 @@
 {
   lib,
-  stdenv,
   python312,
-  makeWrapper,
   nix-update-script,
   fetchFromGitHub,
-  rustPlatform,
   buildNpmPackage,
   nodejs_24,
   wrapGAppsHook3,
   libappindicator-gtk3,
 }:
 let
-  version = "8.2.3";
+  version = "8.2.3-unstable-2025-10-14";
   python3 = python312;
   nodejs = nodejs_24;
 
   src = fetchFromGitHub {
     owner = "tribler";
     repo = "Tribler";
-    tag = "v${version}";
-    hash = "sha256-yThl3HhPtwi/pK5Rcr2ClVLY8uCnIyfvdc53A8gjKDg=";
+    rev = "3e5bc56a15c568d0ba41262cad63155445e062da";
+    hash = "sha256-zGh2nVcJyOwVfPEdU8ZDgANFt0KnTqEXU3I3ZOGot2c=";
   };
 
   tribler-webui = buildNpmPackage {
@@ -59,7 +56,6 @@ python3.pkgs.buildPythonApplication {
 
   dependencies = with python3.pkgs; [
     # requirements.txt
-    bitarray
     configobj
     pyipv8
     ipv8-rust-tunnels
@@ -68,12 +64,17 @@ python3.pkgs.buildPythonApplication {
     pillow
     pony
     pystray
+
+    # build/requirements.txt
+    cx-freeze
+    requests
   ];
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = with python3.pkgs; [
     # setup.py requirements
     pygobject3
-    setuptools
     # sphinx requirements
     sphinxHook
     sphinx
@@ -81,53 +82,46 @@ python3.pkgs.buildPythonApplication {
     sphinx-rtd-theme
     astroid
     # tray icon deps
-    wrapGAppsHook3
     libappindicator-gtk3
     # test phase requirements
     pytestCheckHook
-
   ];
 
   outputs = [
     "out"
   ];
 
+  postPatch = ''
+    # fix the entrypoint
+    substituteInPlace build/setup.py --replace-fail '"tribler=tribler.run:main"' '"tribler=tribler.run:main_sync"'
+    substituteInPlace src/run_tribler.py --replace-fail 'if __name__ == "__main__":' 'def main_sync():'
+
+    # ValueError: ZIP does not support timestamps before 1980
+    substituteInPlace build/win/build.py --replace-fail "if {'setup.py', 'bdist_wheel'}.issubset(sys.argv):" "if True:"
+
+    # copy the built webui
+    rm -r src/tribler/ui
+    ln -s ${tribler-webui} src/tribler/ui
+  '';
+
   buildPhase = ''
-          # fix the entrypoint
-          substituteInPlace build/setup.py --replace-fail '"tribler=tribler.run:main"' '"tribler=tribler.run:main_sync"'
-          substituteInPlace src/run_tribler.py --replace-fail 'if __name__ == "__main__":' 'def main_sync():'
+    runHook preBuild
 
-          # copy the built webui
-          rm -r src/tribler/ui
-          ln -s ${tribler-webui} src/tribler/ui
+    export GITHUB_TAG=v${version}
+    python3 build/debian/update_metainfo.py
+    python3 build/setup.py bdist_wheel
 
-          # build the docs
-    # FIXME:      make doc SPHINXBUILD=${lib.getExe' python3.pkgs.sphinx "sphinx-build"}
-
-          # build the wheel
-          substituteInPlace build/win/build.py --replace-fail "if {'setup.py', 'bdist_wheel'}.issubset(sys.argv):" "if True:"
-          export GITHUB_TAG=v${version}
-          python3 build/debian/update_metainfo.py
-          python3 build/setup.py bdist_wheel
-
-        runHook pytestCheckHook
-
-          # build the docs
-        runHook sphinxHook
+    runHook postBuild
   '';
 
   postInstall = ''
-    ln -s ${tribler-webui} $out/lib/python3.12/site-packages/tribler/ui
+    ln -s ${tribler-webui} $out/lib/python*/site-packages/tribler/ui
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ libappindicator-gtk3 ]}"
     )
-  '';
-
-  postFixup = ''
-    runHook wrapGAppsHook3
   '';
 
   disabledTests = [
@@ -137,9 +131,6 @@ python3.pkgs.buildPythonApplication {
     "test_get_default_fallback"
     "test_get_default_fallback_half_tree"
     "test_get_set_explicit"
-  ];
-
-  disabledTestPaths = [
   ];
 
   passthru.updateScript = nix-update-script { };

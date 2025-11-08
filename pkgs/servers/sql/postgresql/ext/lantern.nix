@@ -21,6 +21,9 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace lantern_hnsw/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
+
     patchShebangs --build lantern_hnsw/scripts/link_llvm_objects.sh
   '';
 

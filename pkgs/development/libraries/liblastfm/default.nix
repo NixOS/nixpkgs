@@ -30,6 +30,14 @@ stdenv.mkDerivation {
     })
   ];
 
+  # CMake 2.8.6 is deprecated and no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.6)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     which
@@ -41,9 +49,9 @@ stdenv.mkDerivation {
     qtbase
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"
-  ) "-std=c++11";
+  env.NIX_CFLAGS_COMPILE =
+    (lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") "-std=c++11")
+    + (lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-dynamic-exception-spec");
 
   dontWrapQtApps = true;
 

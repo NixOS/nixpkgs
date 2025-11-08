@@ -6,21 +6,18 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.2.1";
+  version = "1.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     tag = "v${version}";
-    hash = "sha256-dWEXoqW4JyYeLFLS3J4CaRJ45wjdVf8wrtMGCKgBds8=";
+    hash = "sha256-PEkxEKet0nrowWJ4J3AqqqdecO4zSbTampz/Dx0QD2s=";
   };
 
   build-system = [ hatchling ];
@@ -42,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
-    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/v${version}";
+    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

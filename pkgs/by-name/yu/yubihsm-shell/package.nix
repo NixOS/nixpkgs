@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   openssl,
   libusb1,
@@ -24,6 +25,13 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-ymGS35kjhNlFee3FEXF8n6Jm7NVaynjv+lpix6F75BQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Yubico/yubihsm-shell/pull/493.patch";
+      hash = "sha256-mM4ef1GV7BJT+EZ8B7+ejleTocglhxCWO/RKHZN69GE=";
+    })
+  ];
 
   postPatch = ''
     # Can't find libyubihsm at runtime because of dlopen() in C code
@@ -65,7 +73,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
     homepage = "https://github.com/Yubico/yubihsm-shell";
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      numinit
+    ];
     license = licenses.asl20;
     platforms = platforms.all;
   };

@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     homepage = "https://cccc.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

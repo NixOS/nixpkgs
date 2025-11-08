@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw=";
   };
 
+  patches = [
+    # https://github.com/libgit2/libgit2/pull/7146
+    ./fix-ssh-custom-heap-buffer-overflow.patch
+  ];
+
   cmakeFlags = [
     "-DREGEX_BACKEND=pcre2"
     "-DUSE_HTTP_PARSER=llhttp"

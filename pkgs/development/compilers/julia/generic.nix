@@ -60,6 +60,15 @@ stdenv.mkDerivation rec {
     substituteInPlace deps/curl.mk \
       --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
                      'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
+  ''
+  + lib.optionalString (lib.versionOlder version "1.12") ''
+    substituteInPlace deps/tools/common.mk \
+      --replace-fail "CMAKE_COMMON := " "CMAKE_COMMON := ${lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10"} "
+  ''
+  + lib.optionalString (lib.versionAtLeast version "1.12") ''
+    substituteInPlace deps/openssl.mk \
+      --replace-fail 'cd $(dir $<) && $(TAR) -zxf $<' \
+                     'cd $(dir $<) && $(TAR) -zxf $< && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" openssl-$(OPENSSL_VER)/Configure'
   '';
 
   makeFlags = [

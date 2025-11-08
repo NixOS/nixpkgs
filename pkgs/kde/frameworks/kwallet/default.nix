@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
+  gpgme,
   libgcrypt,
   libsecret,
   kdoctools,
@@ -13,6 +14,7 @@ mkKdeDerivation {
   ];
 
   extraBuildInputs = [
+    gpgme
     libgcrypt
     libsecret
     kdoctools

@@ -69,7 +69,7 @@ vmTools.runInLinuxImage (
           # the log file
           export PAGER=cat
           ${checkinstall}/sbin/checkinstall --nodoc -y -D \
-            --fstrans=${if fsTranslation then "yes" else "no"} \
+            --fstrans=${lib.boolToYesNo fsTranslation} \
             --requires="${lib.concatStringsSep "," debRequires}" \
             --provides="${lib.concatStringsSep "," debProvides}" \
             ${

@@ -10,6 +10,7 @@
   gtk4,
   gtksourceview5,
   libadwaita,
+  libportal,
   libspelling,
   meson,
   ninja,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commit";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yNzMFOd0IN5EUKG7ztCEbQzQ9RHc+D4iC1OiBauMSwE=";
+    hash = "sha256-ACgt1xZTiHYiCTUvfQ+KP5TYm8tMimGizK1dn9UXzao=";
     fetchSubmodules = true;
   };
 
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
     gtksourceview5
     libadwaita
+    libportal
     libspelling
   ];
 

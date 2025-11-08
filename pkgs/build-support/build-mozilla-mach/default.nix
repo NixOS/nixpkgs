@@ -58,9 +58,7 @@ in
   pkgsCross, # wasm32 rlbox
   python3,
   runCommand,
-  rustc,
   rust-cbindgen,
-  rustPlatform,
   unzip,
   which,
   wrapGAppsHook3,
@@ -89,7 +87,6 @@ in
   nasm,
   nspr,
   nss_esr,
-  nss_3_115,
   nss_latest,
   onnxruntime,
   pango,
@@ -101,6 +98,7 @@ in
   # Darwin
   apple-sdk_14,
   apple-sdk_15,
+  apple-sdk_26,
   cups,
   rsync, # used when preparing .app directory
 
@@ -202,9 +200,25 @@ assert elfhackSupport -> isElfhackPlatform stdenv;
 let
   inherit (lib) enableFeature;
 
+  rustPackages =
+    pkgs:
+    (pkgs.rust.override (
+      # aarch64-darwin firefox crashes on loading favicons due to a llvm 21 bug:
+      # https://github.com/NixOS/nixpkgs/issues/453372
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
+      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+        llvmPackages = pkgs.llvmPackages_20;
+      }
+    )).packages.stable;
+
+  toRustC = pkgs: (rustPackages pkgs).rustc;
+
+  rustc = toRustC pkgs;
+  inherit (rustPackages pkgs) rustPlatform;
+
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = (toRustC pkgsBuildBuild).llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -219,7 +233,7 @@ let
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (
     llvmPackages.stdenv.cc.override {
-      bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
+      bintools = if ltoSupport then (toRustC buildPackages).llvmPackages.bintools else stdenv.cc.bintools;
     }
   );
 
@@ -314,15 +328,6 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    ++
-      lib.optionals
-        (
-          lib.versionAtLeast version "141.0.2"
-          || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
-        )
-        [
-          ./142-relax-apple-sdk.patch
-        ]
     ++ extraPatches;
 
   postPatch = ''
@@ -361,9 +366,11 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    pkg-config
     wrapGAppsHook3
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
   ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
   ++ lib.optionals crashreporterSupport [
@@ -451,6 +458,7 @@ buildStdenv.mkDerivation {
       (
         stdenv.hostPlatform.isDarwin
         && lib.versionAtLeast version "143"
+        && lib.versionOlder version "145"
         && lib.versionOlder apple-sdk_15.version "15.4"
       )
       ''
@@ -541,7 +549,14 @@ buildStdenv.mkDerivation {
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
+    (
+      if lib.versionAtLeast version "145" then
+        apple-sdk_26
+      else if lib.versionAtLeast version "138" then
+        apple-sdk_15
+      else
+        apple-sdk_14
+    )
     cups
   ]
   ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
@@ -572,14 +587,7 @@ buildStdenv.mkDerivation {
       xorg.pixman
       xorg.xorgproto
       zlib
-      (
-        if (lib.versionAtLeast version "144") then
-          nss_latest
-        else if (lib.versionAtLeast version "143") then
-          nss_3_115
-        else
-          nss_esr
-      )
+      (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
     ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional jackSupport libjack2

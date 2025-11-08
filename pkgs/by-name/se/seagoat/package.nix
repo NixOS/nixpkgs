@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
     "chromadb"
     "psutil"
     "setuptools"
+    "ollama"
   ];
 
   dependencies = with python3Packages; [
@@ -46,6 +47,7 @@ python3Packages.buildPythonApplication rec {
     ollama
     psutil
     pygments
+    python-dotenv
     requests
     stop-words
     waitress

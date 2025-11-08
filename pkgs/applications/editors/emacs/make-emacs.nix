@@ -53,14 +53,13 @@
   ncurses,
   nixosTests,
   pkg-config,
-  recurseIntoAttrs,
   sigtool,
   sqlite,
   replaceVars,
   systemdLibs,
   tree-sitter,
   texinfo,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   zlib,
 
@@ -141,6 +140,8 @@ let
   ++ lib.optionals (stdenv.cc ? cc.lib.libgcc) [
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
+
+  withWebkitgtk = withXwidgets && stdenv.hostPlatform.isLinux;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname =
@@ -351,8 +352,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withXinput2 [
     libXi
   ]
-  ++ lib.optionals (withXwidgets && stdenv.hostPlatform.isLinux) [
-    webkitgtk_4_0
+  ++ lib.optionals withWebkitgtk [
+    webkitgtk_4_1
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
@@ -494,7 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withNativeCompilation;
     inherit withTreeSitter;
     inherit withXwidgets;
-    pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
+    pkgs = lib.recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = {
       inherit (nixosTests) emacs-daemon;
       withPackages = callPackage ./build-support/wrapper-test.nix {
@@ -504,7 +505,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken =
+      (withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) || withWebkitgtk;
     knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
       "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
     ];

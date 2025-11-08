@@ -27,7 +27,10 @@ mkKdeDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [ ./nix-plugin.patch ];
+  patches = [
+    ./nix-plugin.patch
+    ./qt-6.10-fix.patch
+  ];
 
   extraNativeBuildInputs = [
     kpackage
@@ -52,6 +55,7 @@ mkKdeDerivation {
       ]
     ))
     (lib.cmakeFeature "Qt6_DIR" "${qtbase}/lib/cmake/Qt6")
+    "-DCMAKE_CXX_FLAGS=-Wno-error=stringop-overflow"
   ];
 
   postInstall = ''

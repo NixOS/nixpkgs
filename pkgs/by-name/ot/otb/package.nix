@@ -59,7 +59,7 @@ let
     # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2454#note_112821
     "fftw"
   ];
-  itkIsInDepsToRemove = dep: builtins.any (d: d == dep.name) itkDepsToRemove;
+  itkIsInDepsToRemove = dep: builtins.elem dep.name itkDepsToRemove;
 
   # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
   otbSwig = swig.overrideAttrs (oldArgs: {
@@ -94,6 +94,11 @@ let
         hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
       })
     ];
+
+    postPatch = ''
+      substituteInPlace Modules/ThirdParty/KWSys/src/KWSys/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+    '';
 
     # fix the CMake config files for ITK which contains double slashes
     postInstall = (oldArgs.postInstall or "") + ''

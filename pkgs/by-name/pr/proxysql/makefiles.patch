@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index b9ad6f71..60e71a86 100644
+index 01aa5730..6c71b3a5 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -81,10 +81,7 @@ endif
@@ -35,7 +35,7 @@ index b9ad6f71..60e71a86 100644
  	install -m 0755 etc/init.d/proxysql /etc/init.d
  ifeq ($(DISTRO),"CentOS Linux")
 diff --git a/deps/Makefile b/deps/Makefile
-index 7c8fcc85..4ae0aba1 100644
+index 87d2a20e..505e069a 100644
 --- a/deps/Makefile
 +++ b/deps/Makefile
 @@ -61,27 +61,22 @@ default: $(targets)
@@ -66,7 +66,7 @@ index 7c8fcc85..4ae0aba1 100644
  	cd libhttpserver/libhttpserver && patch -p1 < ../noexcept.patch
  	cd libhttpserver/libhttpserver && patch -p1 < ../re2_regex.patch
  	cd libhttpserver/libhttpserver && patch -p1 < ../final_val_post_process.patch
-@@ -99,58 +94,49 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
+@@ -99,77 +94,66 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
  
  
  libev/libev/.libs/libev.a:
@@ -83,7 +83,8 @@ index 7c8fcc85..4ae0aba1 100644
  	cd coredumper && rm -rf coredumper-*/ || true
  	cd coredumper && tar -zxf coredumper-*.tar.gz
  	cd coredumper/coredumper && patch -p1 < ../includes.patch
- 	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug
+-	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug
++	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POLICY_VERSION_MINIMUM=3.5
  	cd coredumper/coredumper && CC=${CC} CXX=${CXX} ${MAKE}
  coredumper: coredumper/coredumper/src/libcoredumper.a
  
@@ -125,7 +126,18 @@ index 7c8fcc85..4ae0aba1 100644
  	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
  
  lz4: lz4/lz4/lib/liblz4.a
-@@ -168,8 +154,6 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-s
+ 
+ 
+ clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a:
+ 	cd clickhouse-cpp && rm -rf clickhouse-cpp-*/ || true
+ 	cd clickhouse-cpp && tar -zxf v2.3.0.tar.gz
+ 	cd clickhouse-cpp && ln -fs clickhouse-cpp-*/ clickhouse-cpp
+ 	cd clickhouse-cpp/clickhouse-cpp && patch clickhouse/base/wire_format.h < ../wire_format.patch
+-	cd clickhouse-cpp/clickhouse-cpp && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .
++	cd clickhouse-cpp/clickhouse-cpp && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
+ 	cd clickhouse-cpp/clickhouse-cpp && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a
  
  
  libdaemon/libdaemon/libdaemon/.libs/libdaemon.a:
@@ -134,6 +146,15 @@ index 7c8fcc85..4ae0aba1 100644
  	cd libdaemon/libdaemon && patch -p0 < ../daemon_fork_umask.patch
  	cd libdaemon/libdaemon && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub && ./configure --disable-examples
  	cd libdaemon/libdaemon && CC=${CC} CXX=${CXX} ${MAKE}
+@@ -194,7 +178,7 @@ mariadb-client-library/mariadb_client/libmariadb/libmariadbclient.a:
+ 	cd mariadb-client-library && rm -rf mariadb-connector-c-*/ || true
+ 	cd mariadb-client-library && tar -zxf mariadb-connector-c-3.3.8-src.tar.gz
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../plugin_auth_CMakeLists.txt.patch
+-	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
++	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
+ ifeq ($(PROXYDEBUG),1)
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../ma_context.h.patch
+ else ifeq ($(USEVALGRIND),1)
 @@ -253,18 +237,13 @@ sqlite3/sqlite3/sqlite3.o:
  sqlite3: sqlite3/sqlite3/sqlite3.o
  
@@ -170,8 +191,8 @@ index 7c8fcc85..4ae0aba1 100644
 -	cd postgresql && tar -zxf postgresql-*.tar.gz
  	cd postgresql/postgresql && patch -p0 < ../get_result_from_pgconn.patch
  	cd postgresql/postgresql && patch -p0 < ../handle_row_data.patch
- 	#cd postgresql/postgresql && LD_LIBRARY_PATH="$(shell pwd)/libssl/openssl" ./configure --with-ssl=openssl --with-includes="$(shell pwd)/libssl/openssl/include/" --with-libraries="$(shell pwd)/libssl/openssl/" --without-readline --enable-debug  CFLAGS="-ggdb -O0 -fno-omit-frame-pointer" CPPFLAGS="-g -O0"
-@@ -360,4 +335,3 @@ cleanall:
+ 	cd postgresql/postgresql && patch -p0 < ../fmt_err_msg.patch
+@@ -361,4 +336,3 @@ cleanall:
  	cd libusual && rm -rf libusual-*/ || true
  	cd libscram && rm -rf lib/* obj/* || true
  .PHONY: cleanall

@@ -3,37 +3,36 @@
   fetchFromGitLab,
   python3Packages,
   wrapGAppsHook4,
-  gst_all_1,
   gobject-introspection,
   yt-dlp,
+  gst_all_1,
   libadwaita,
   glib-networking,
   nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "3.4.2";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    rev = "v${version}";
-    hash = "sha256-D/3yJ1KIXF1rv8iH4+HvfD6N94LzkZGRippZj8nk1nQ=";
+    tag = "v${version}";
+    hash = "sha256-0/yzOoO9WeArTm9qlL3++rn0EUCJAjmUX2zxClu3LRE=";
   };
 
   sourceRoot = "${src.name}/source";
 
   dependencies = with python3Packages; [
-    mpris-server
-    pygobject3
+    mprisify
+    requests
     ytmusicapi
   ];
 
   build-system = with python3Packages; [
-    pip
     setuptools
-    wheel
+    pip
   ];
 
   nativeBuildInputs = [
@@ -52,14 +51,7 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
-  pythonRelaxDeps = [
-    "mpris_server"
-    "ytmusicapi"
-  ];
-
-  postInstall = ''
-    make install prefix=$out
-  '';
+  postInstall = "make install prefix=$out";
 
   dontWrapGApps = true;
 
@@ -74,9 +66,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Linux app for streaming music from YouTube";
-    longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
+    longDescription = "Monophony allows you to stream and download music from YouTube Music without ads, as well as create and import playlists without signing in.";
     homepage = "https://gitlab.com/zehkira/monophony";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ quadradical ];
     mainProgram = "monophony";

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs";
-  version = "2025-04-26";
+  version = "2025-09-13-2";
 
   src = fetchurl {
     url = "https://bellard.org/quickjs/quickjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LyAHTCUWbvb3gfOBxQ1XtQLLhdRw1jmrzOu+95VMg78=";
+    hash = "sha256-mWxrUBj8lVrU0GQm0OnLcTaFoAyCWqXAQYvVP334sLQ=";
   };
 
   outputs = [

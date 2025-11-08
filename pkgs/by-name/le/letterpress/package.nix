@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitLab,
-  fetchpatch,
   wrapGAppsHook4,
   appstream,
   blueprint-compiler,
@@ -18,24 +17,15 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "letterpress";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "letterpress";
     rev = version;
-    hash = "sha256-9U8iH3V4WMljdtWLmb0RlexLeAN5StJ0c9RlEB2E7Xs=";
+    hash = "sha256-cqLodI6UjdLCKLGGcSIbXu1+LOcq2DE00V+lVS7OBMg=";
   };
-
-  patches = [
-    # Fix application segmentation fault on file chooser dialog opening
-    # https://gitlab.gnome.org/World/Letterpress/-/merge_requests/16
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/Letterpress/-/commit/15059eacca14204d1092a6e32ef30c6ce4df6d36.patch";
-      hash = "sha256-pjg/O9advtkZ0l73GQtL/GYcTWeOs5l3VGOdnsZCWI0=";
-    })
-  ];
 
   runtimeDeps = [
     jp2a
@@ -81,6 +71,7 @@ python3Packages.buildPythonApplication rec {
       High-res output can still be viewed comfortably by lowering the zoom factor.
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
+    changelog = "https://gitlab.gnome.org/World/Letterpress/-/releases/${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.dawidd6 ];
     teams = [ teams.gnome-circle ];

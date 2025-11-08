@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.21";
+  version = "0.4.22";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-3rVnKUZZXLxoKCW717pCiPOVWDudQpoN8lC1jQzpwuw=";
+    hash = "sha256-P53g/o4i+QETWdErZaGA3AREvnr8kL9h0B1BMQlKdFA=";
   };
 
   configureFlags = [

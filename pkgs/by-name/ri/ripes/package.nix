@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     rm -r external/VSRTL/external/cereal
     substituteInPlace {src/serializers.h,src/io/iobase.h} \
       --replace-fail "VSRTL/external/cereal/include/cereal/cereal.hpp" "cereal/cereal.hpp"
+
+    substituteInPlace external/libelfin/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

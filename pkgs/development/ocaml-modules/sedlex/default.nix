@@ -13,8 +13,8 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.26.0" then
       {
-        version = "3.6";
-        sha256 = "sha256-NiNqur7sce6dxictVB+saOC1c4N/EO/3Ici/icsGkIA=";
+        version = "3.7";
+        sha256 = "sha256-ucqrJkzS6cVogGUf1vU8oBpSryneMBqTjzxwsOi6Egs=";
       }
     else
       {
@@ -24,20 +24,20 @@ let
 in
 
 let
-  unicodeVersion = "16.0.0";
+  unicodeVersion = "17.0.0";
   baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
   DerivedCoreProperties = fetchurl {
     url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
-    sha256 = "sha256-OdNRYfKVRJf2ngi9uecBST9Haj0wIi3iACj+2jbB2r0=";
+    hash = "sha256-JMf+0RlcSC+q79XB5+uCHF7h+23gfs26pktWqZ2iLAg=";
   };
   DerivedGeneralCategory = fetchurl {
     url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
-    sha256 = "sha256-dnardVpB74IQhGAjhWnmCtZcGR3a/mGzbGdl7BNT8pM=";
+    hash = "sha256-1i5bq3DKdPCZND9xIk+gUcsf3WGhq0XASIxEz8C2EC4=";
   };
   PropList = fetchurl {
     url = "${baseUrl}/ucd/PropList.txt";
-    sha256 = "sha256-U9YUUI4qCyMFqKohzWDZk96TJs32WZNmDfzORQNUhYM=";
+    hash = "sha256-Ew3N3Kra8HEAi9/OHndD4E/fvJEIhvAX2fmskx2MZN0=";
   };
   atLeast31 = lib.versionAtLeast param.version "3.1";
 in

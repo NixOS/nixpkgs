@@ -50,5 +50,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
     maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -18,8 +18,8 @@
 +
  static QString qtToolFilePath(const QString &toolName, QLibraryInfo::LibraryPath location)
  {
--    QString filePath = QLibraryInfo::path(location) + QLatin1Char('/') + toolName;
-+    QString filePath = qtBasePath(location) + QLatin1Char('/') + toolName;
+-    QString filePath = QLibraryInfo::path(location) + u'/' + toolName;
++    QString filePath = qtBasePath(location) + u'/' + toolName;
  #ifdef Q_OS_WIN
      filePath.append(QLatin1String(".exe"));
  #endif

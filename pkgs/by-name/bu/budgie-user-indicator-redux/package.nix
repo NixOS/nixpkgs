@@ -7,7 +7,7 @@
   gtk3,
   intltool,
   libgee,
-  libpeas,
+  libpeas2,
   meson,
   ninja,
   nix-update-script,
@@ -40,9 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     budgie-desktop
     gtk3
     libgee
-    libpeas
+    libpeas2
     sassc
   ];
+
+  postPatch = ''
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
+    substituteInPlace meson.build \
+      --replace-fail "dependency('libpeas-1.0', version: '>= 1.26.0')" "dependency('libpeas-2')"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

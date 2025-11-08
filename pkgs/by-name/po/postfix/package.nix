@@ -74,11 +74,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.4";
+  version = "3.10.5";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-z7ZoYf6PlkeH3a6rFfPKPn7z3nMPlxca/EpeyjOMpEQ=";
+    hash = "sha256-apJr9wIXOGGwjkm8tR/KOi8mn5ozf3LvFZv0YFIIfjU=";
   };
 
   nativeBuildInputs = [
@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
-  hardeningEnable = [ "pie" ];
 
   patches = [
     ./postfix-script-shell.patch

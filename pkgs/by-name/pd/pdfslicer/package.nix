@@ -29,6 +29,16 @@ stdenv.mkDerivation rec {
     # Don't build tests, vendored catch doesn't build with latest glibc.
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory (tests)" ""
+
+    # Replace deprecated and now unsupported old cmake version
+    # https://github.com/NixOS/nixpkgs/issues/445447
+
+    substituteInPlace third-party/fmtlib/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace third-party/GSL/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.3)" \
+        "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

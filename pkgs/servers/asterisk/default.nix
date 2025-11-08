@@ -209,20 +209,20 @@ let
 
 in
 {
-  # Supported releases (as of 2023-04-19).
-  # v16 and v19 have been dropped because they go EOL before the NixOS 23.11 release.
+  # Supported releases (as of 2025-10-19).
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
   # Exact version can be found at https://www.asterisk.org/downloads/asterisk/all-asterisk-versions/
   #
   # Series  Type       Rel. Date   Sec. Fixes  EOL
-  # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09 (dropped)
-  # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
+  # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20 (dropped)
   # 19.x    Standard   2021-11-02  2022-11-02  2023-11-02 (dropped)
   # 20.x    LTS        2022-11-02  2026-10-19  2027-10-19
-  # 21.x    Standard   2023-10-18  2025-10-18  2026-10-18 (unreleased)
-  asterisk-lts = versions.asterisk_18;
+  # 21.x    Standard   2023-10-18  2025-10-18  2026-10-18
+  # 22.x    LTS        2024-10-16  2028-10-16  2029-10-16
+  # 23.x    Standard   2025-10-15  2026-10-15  2027-10-15
+  asterisk-lts = versions.asterisk_22;
   asterisk-stable = versions.asterisk_20;
-  asterisk = versions.asterisk_20.overrideAttrs (o: {
+  asterisk = versions.asterisk_22.overrideAttrs (o: {
     passthru = (o.passthru or { }) // {
       inherit updateScript;
     };

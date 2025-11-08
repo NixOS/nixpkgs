@@ -20,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0ipqna7a9mxqm0fl9ggwhbc7i9yxz3jfyi0w3dymjp40v7jw1n20";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 3.5)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

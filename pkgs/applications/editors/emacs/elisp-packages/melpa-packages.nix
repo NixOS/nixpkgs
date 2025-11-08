@@ -830,7 +830,7 @@ let
                     rm --recursive --verbose etc/elisp/screenshot
                   ''
                 else
-                  previousAttrs.preBuild or null;
+                  previousAttrs.preBuild or "";
             }
           );
 
@@ -897,7 +897,7 @@ let
                     rm --verbose --force test-bpr.el
                   ''
                 else
-                  previousAttrs;
+                  previousAttrs.preBuild or "";
             }
           );
 
@@ -991,7 +991,7 @@ let
                       })
                     ]
                   else
-                    previousAttrs.patches or null;
+                    previousAttrs.patches or [ ];
               }
             )
           );
@@ -1055,7 +1055,7 @@ let
                   ''
                   + previousAttrs.preBuild or ""
                 else
-                  previousAttrs.preBuild or null;
+                  previousAttrs.preBuild or "";
             }
           );
 
@@ -1221,7 +1221,7 @@ let
                     rm --verbose packages/javascript/test-suppport.el
                   ''
                 else
-                  previousAttrs.preBuild or null;
+                  previousAttrs.preBuild or "";
             }
           );
 
@@ -1392,7 +1392,7 @@ let
                     })
                   ]
                 else
-                  previousAttrs.patches or null;
+                  previousAttrs.patches or [ ];
             }
           );
 
@@ -1543,7 +1543,7 @@ let
                     })
                   ]
                 else
-                  previousAttrs.patches or null;
+                  previousAttrs.patches or [ ];
             }
           );
 
@@ -1561,7 +1561,7 @@ let
                   ''
                   + previousAttrs.preBuild or ""
                 else
-                  previousAttrs.preBuild or null;
+                  previousAttrs.preBuild or "";
             }
           );
 

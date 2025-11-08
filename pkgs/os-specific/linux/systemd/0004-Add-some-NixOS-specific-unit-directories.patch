@@ -16,10 +16,10 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 7 insertions(+), 21 deletions(-)
 
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index f3b85b0190..f7aa5fca50 100644
+index 58f2463104..0c263430a7 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
-@@ -43,10 +43,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
+@@ -46,10 +46,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
  systemd_user_conf_dir=${sysconfdir}/systemd/user
  systemduserconfdir=${systemd_user_conf_dir}
  
@@ -32,7 +32,7 @@ index f3b85b0190..f7aa5fca50 100644
  systemduserunitpath=${systemd_user_unit_path}
  
  systemd_system_generator_dir=${prefix}/lib/systemd/system-generators
-@@ -55,10 +55,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
+@@ -58,10 +58,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
  systemd_user_generator_dir=${prefix}/lib/systemd/user-generators
  systemdusergeneratordir=${systemd_user_generator_dir}
  
@@ -46,10 +46,10 @@ index f3b85b0190..f7aa5fca50 100644
  
  systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
 diff --git a/src/libsystemd/sd-path/path-lookup.c b/src/libsystemd/sd-path/path-lookup.c
-index a3b09208cb..91a085c6bc 100644
+index 3ddbda0e9f..3eddc80c90 100644
 --- a/src/libsystemd/sd-path/path-lookup.c
 +++ b/src/libsystemd/sd-path/path-lookup.c
-@@ -69,11 +69,7 @@ int runtime_directory(RuntimeScope scope, const char *suffix, char **ret) {
+@@ -64,11 +64,7 @@ int runtime_directory(RuntimeScope scope, const char *suffix, char **ret) {
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -61,7 +61,7 @@ index a3b09208cb..91a085c6bc 100644
          NULL
  };
  
-@@ -481,16 +477,13 @@ int lookup_paths_init(
+@@ -476,16 +472,13 @@ int lookup_paths_init(
                                         persistent_config,
                                         SYSTEM_CONFIG_UNIT_DIR,
                                         "/etc/systemd/system",
@@ -79,7 +79,7 @@ index a3b09208cb..91a085c6bc 100644
                                         STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -508,13 +501,10 @@ int lookup_paths_init(
+@@ -503,13 +496,10 @@ int lookup_paths_init(
                          add = strv_new(persistent_config,
                                         USER_CONFIG_UNIT_DIR,
                                         "/etc/systemd/user",
@@ -95,7 +95,7 @@ index a3b09208cb..91a085c6bc 100644
                          break;
  
                  case RUNTIME_SCOPE_USER:
-@@ -653,7 +643,6 @@ void lookup_paths_log(LookupPaths *lp) {
+@@ -648,7 +638,6 @@ void lookup_paths_log(LookupPaths *lp) {
  static const char* const system_generator_paths[] = {
          "/run/systemd/system-generators",
          "/etc/systemd/system-generators",
@@ -103,7 +103,7 @@ index a3b09208cb..91a085c6bc 100644
          SYSTEM_GENERATOR_DIR,
          NULL,
  };
-@@ -661,7 +650,6 @@ static const char* const system_generator_paths[] = {
+@@ -656,7 +645,6 @@ static const char* const system_generator_paths[] = {
  static const char* const user_generator_paths[] = {
          "/run/systemd/user-generators",
          "/etc/systemd/user-generators",
@@ -111,7 +111,7 @@ index a3b09208cb..91a085c6bc 100644
          USER_GENERATOR_DIR,
          NULL,
  };
-@@ -669,7 +657,6 @@ static const char* const user_generator_paths[] = {
+@@ -664,7 +652,6 @@ static const char* const user_generator_paths[] = {
  static const char* const system_env_generator_paths[] = {
          "/run/systemd/system-environment-generators",
          "/etc/systemd/system-environment-generators",
@@ -119,7 +119,7 @@ index a3b09208cb..91a085c6bc 100644
          SYSTEM_ENV_GENERATOR_DIR,
          NULL,
  };
-@@ -677,7 +664,6 @@ static const char* const system_env_generator_paths[] = {
+@@ -672,7 +659,6 @@ static const char* const system_env_generator_paths[] = {
  static const char* const user_env_generator_paths[] = {
          "/run/systemd/user-environment-generators",
          "/etc/systemd/user-environment-generators",

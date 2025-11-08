@@ -9,7 +9,7 @@
   boost,
   catch2_3,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbgcode";
   version = "0-unstable-2025-02-19";
 
@@ -29,7 +29,16 @@ stdenv.mkDerivation {
     heatshrink
     zlib
     boost
+  ];
+
+  checkInputs = [
     catch2_3
+  ];
+
+  doCheck = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "LibBGCode_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   meta = with lib; {
@@ -40,4 +49,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ lach ];
     platforms = platforms.unix;
   };
-}
+})

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   cmake,
   bzip2,
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "HEASARC";
-    repo = finalAttrs.pname;
-    tag = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-WLsX23hNhaITjCvMEV7NUEvyDfQiObSJt1qFC12z7wY=";
+    repo = "cfitsio";
+    tag = "cfitsio-${finalAttrs.version}";
+    hash = "sha256-nKxX3YNRJZpmcP8/0O2pMsYjcH6vzAWMpqaHYO+HoUo=";
   };
 
   outputs = [
@@ -30,12 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./cfitsio-pc-cmake.patch
-
-    (fetchpatch {
-      name = "cfitsio-fix-cmake-4.patch";
-      url = "https://github.com/HEASARC/cfitsio/commit/101e0880fca41e2223df7eec56d9e84e90b9ed56.patch";
-      hash = "sha256-rufuqOBfE7ItTYwsGdu9G4BXSz4vZd52XmJi09kqrCM=";
-    })
   ];
 
   nativeBuildInputs = [

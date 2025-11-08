@@ -36,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
   };
 
+  # ref. https://github.com/Simple-Robotics/proxsuite/pull/408 merged upstream
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.10)" \
+      "cmake_minimum_required(VERSION 3.22)"
+  '';
+
   outputs = [
     "doc"
     "out"

@@ -9,6 +9,7 @@
   haskellPackages,
   writeText,
   runCommand,
+  nixosTests,
 }:
 
 # This argument is a function which selects a list of Haskell packages from any
@@ -136,6 +137,8 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
       ${finalAttrs.finalPackage}/bin/hoogle search Prelude.map > $out
     '';
   };
+
+  passthru.tests.nixos = nixosTests.hoogle;
 
   meta = {
     description = "Local Hoogle database";

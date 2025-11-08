@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pdm-pep517,
   aiohttp,
-  async-timeout,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +20,13 @@ buildPythonPackage rec {
 
   build-system = [ pdm-pep517 ];
 
+  pythonRemoveDeps = [
+    # https://github.com/Imeon-Inverters-for-Home-Assistant/inverter-api/pull/1
+    "async-timeout"
+  ];
+
   dependencies = [
     aiohttp
-    async-timeout
   ];
 
   pythonImportsCheck = [ "imeon_inverter_api" ];

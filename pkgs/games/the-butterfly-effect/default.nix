@@ -25,6 +25,11 @@ mkDerivation rec {
 
     # fix translations not building: https://gitlab.kitware.com/cmake/cmake/-/issues/21931
     substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/Box2D/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

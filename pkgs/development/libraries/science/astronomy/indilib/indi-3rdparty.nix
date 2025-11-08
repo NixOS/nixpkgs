@@ -9,7 +9,6 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -42,12 +41,13 @@
 }:
 
 let
+  thirdparty_version = "2.1.6.2";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
-    rev = "v${indilib.version}";
-    hash = "sha256-+WBQdu1iWleHf6xC4SK69y505wqZ36IUM4xnh1fnc6s=";
+    rev = "v${thirdparty_version}";
+    hash = "sha256-FMvdm7dkOkRlmbPNeQjh0jd+2bOinzW13QPP2NnOr/M=";
   };
 
   buildIndi3rdParty =
@@ -58,7 +58,7 @@ let
       cmakeFlags ? [ ],
       postInstall ? "",
       doCheck ? true,
-      version ? indilib.version,
+      version ? thirdparty_version,
       src ? src-3rdparty,
       meta ? { },
       ...
@@ -551,14 +551,6 @@ in
   indi-astarbox = buildIndi3rdParty {
     pname = "indi-astarbox";
     buildInputs = [ indilib ];
-    # TODO patch already upstream, remove with version > 2.1.5.1
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/c347000ec227a5ef98911aab34c7b08a91509cba.patch";
-        hash = "sha256-M3b4ySoGJRpfNmBaagjDaeEPKqwaVgRUWaQY626SGBI=";
-        stripLen = 1;
-      })
-    ];
   };
 
   indi-astroasis = buildIndi3rdParty {
@@ -713,15 +705,6 @@ in
       glib
       zlib
     ];
-    # TODO patch already upstream, remove with version > 2.1.5.1
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/c33c08b50093698e2aa73d73783d96f85df488a9.patch";
-        hash = "sha256-EQ2G9gTexf9FESCAR28f2cwzvH4TOAA8bvyJCxFv/E8=";
-        stripLen = 1;
-      })
-    ];
-
   };
 
   indi-gphoto = buildIndi3rdParty {

@@ -1,12 +1,12 @@
 {
   lib,
-  apple-sdk_14,
   buildNpmPackage,
   cargo,
   copyDesktopItems,
   darwin,
-  electron_36,
+  electron_37,
   fetchFromGitHub,
+  fetchpatch2,
   gnome-keyring,
   jq,
   llvmPackages_18,
@@ -25,7 +25,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_36;
+  electron = electron_37;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.9.0";
+  version = "2025.10.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-vxGyDYtv0O5U4pnVrQm/BOIpDtpcDUOyFFdBDehQ2to=";
+    hash = "sha256-A7bxAdFDChr7yiexV70N3tqhaUVAwJdGhhRKJyX0ra8=";
   };
 
   patches = [
@@ -55,6 +55,11 @@ buildNpmPackage' rec {
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
     ./dont-use-platform-triple.patch
+
+    (fetchpatch2 {
+      url = "https://github.com/bitwarden/clients/commit/cd56d01894c38cf046a7e44dcacc7e0ff2aa2a37.patch?full_index=1";
+      hash = "sha256-NRZiM+Y/ifh77vS+8mldbiwv/vPDr1JUOJzSu2tFMS8=";
+    })
   ];
 
   postPatch = ''
@@ -87,7 +92,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-R3IyNrSHcqz+Sz/OHbg16To0WXRu8S4mpWcJchEPwdY=";
+  npmDepsHash = "sha256-Qhj8Lh25vNnJzbUm/M+mKIc6Fa5plSCiy53vjevs7Tc=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +102,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-sKK/8YNLNYVg7L3IFGaWEVK91eC17gS54jib6G0RUGI=";
+    hash = "sha256-fgnf+yT3UV8dHTE2tDHdBWTBW+LHAYI/JGgfS0J/Bgk=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -122,10 +127,6 @@ buildNpmPackage' rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     darwin.autoSignDarwinBinariesHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   preBuild = ''

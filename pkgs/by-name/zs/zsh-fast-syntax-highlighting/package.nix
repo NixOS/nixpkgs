@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    plugindir="$out/share/zsh/site-functions"
+    plugindir="$out/share/zsh/plugins/fast-syntax-highlighting"
 
     mkdir -p "$plugindir"
     cp -r -- {,_,-,.}fast-* *chroma themes "$plugindir"/

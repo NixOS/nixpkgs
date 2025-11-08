@@ -18,6 +18,7 @@
   lib ? import (path + "/lib"),
   trace ? false,
   path ? ./../..,
+  extraNixpkgsConfigJson ? "{}",
 }:
 let
 
@@ -46,6 +47,7 @@ let
 
   outpaths = import ./outpaths.nix {
     inherit path;
+    extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
     attrNamesOnly = true;
   };
 

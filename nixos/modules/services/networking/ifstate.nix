@@ -198,7 +198,7 @@ in
         {
           assertion =
             initrdCfg.package.passthru.features.withWireguard
-            || !(builtins.any (kind: kind == "wireguard") initrdInterfaceTypes);
+            || !(builtins.elem "wireguard" initrdInterfaceTypes);
           message = "IfState initrd package is configured without the `wireguard` feature, but wireguard interfaces are configured. Please see the `boot.initrd.network.ifstate.package` option.";
         }
         {

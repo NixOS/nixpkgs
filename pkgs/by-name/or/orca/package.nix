@@ -29,13 +29,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "48.6";
+  version = "49.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
-    hash = "sha256-7cUDRODf1yR2tcFLOqclyiaHGOpt2JvE7ib0ULM51pY=";
+    hash = "sha256-ZTKWhs0V9iq05MDQDOuYTUmbKOwsURdQjDuCiQ1i5+M=";
   };
 
   patches = [
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonPath = with python3.pkgs; [
+    dasbus
     pygobject3
     dbus-python
     pyxdg

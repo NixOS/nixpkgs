@@ -1,7 +1,7 @@
 {
+  lib,
   callPackage,
   fetchFromGitHub,
-  recurseIntoAttrs,
 }:
 
 let
@@ -14,7 +14,7 @@ let
   };
 in
 
-recurseIntoAttrs {
+lib.recurseIntoAttrs {
   backend = callPackage ./backend.nix { inherit src version; };
 
   frontend = callPackage ./frontend.nix { inherit src version; };

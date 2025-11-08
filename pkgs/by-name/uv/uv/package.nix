@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.8.19";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-TbCkkZQoRItBmzwn7B8JbXWs72lYiqWV5mOfkvRarsg=";
+    hash = "sha256-e7yvEQggfBLq4akqnVoZTfvcpZLlbQRWr2fruGfF/N4=";
   };
 
-  cargoHash = "sha256-09A40qwbRex8WEgCFC2yRZoq+6UnxurJAX8e27G+Rhg=";
+  cargoHash = "sha256-lEGhXwzotvCuDAvVyrt22e/ReotWT7m1lt6d2GL8lFU=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -62,7 +62,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests.uv-python = python3Packages.uv;
 
-    # Updating `uv` needs to be done on staging. Disabling r-ryantm update bot:
+    # Updating `uv` needs to be done on staging until the next staging branch-off.
+    # Disabling r-ryantm update bot:
     # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };

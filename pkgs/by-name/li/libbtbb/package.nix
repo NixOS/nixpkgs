@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # https://github.com/greatscottgadgets/libbtbb/issues/63
   postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    # https://github.com/greatscottgadgets/libbtbb/issues/63
     substituteInPlace lib/libbtbb.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@

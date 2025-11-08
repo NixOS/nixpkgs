@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

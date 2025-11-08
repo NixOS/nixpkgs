@@ -8,7 +8,7 @@
 let
   self = REAndroidLibrary {
     pname = "smali";
-    version = "0-unstable-2024-10-15";
+    version = "0-unstable-2024-11-24";
     projectName = "smali";
 
     src = fetchFromGitHub {
@@ -18,8 +18,8 @@ let
       # it is hard to determine the actual commit that APKEditor is intended to use,
       # so I think we should use the latest commit that doesn't break compilation or basic functionality.
       # Currently this is the latest commit at the time of packaging.
-      rev = "c781eafb31f526abce9fdf406ce2c925fec20d28";
-      hash = "sha256-6tkvikgWMUcKwzsgbfpxlB6NZBAlZtTE34M3qPQw7Y4=";
+      rev = "76b35b4e0c9e8c874ca3e374bb943bba8d280770";
+      hash = "sha256-PhRBjiIKA4EIiafPplZNBErXG8V84Xn0cZLWVPmJelQ=";
     };
 
     patches = [

@@ -46,8 +46,5 @@ buildDunePackage (finalAttrs: {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
   };
 })

@@ -4,43 +4,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  mock,
   pytestCheckHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-vcr,
-  requests,
-  requests-toolbelt,
-  testfixtures,
   vcrpy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "asyncprawcore";
-  version = "2.4.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncprawcore";
     tag = "v${version}";
-    hash = "sha256-FDQdtnNjsbiEp9BUYdQFMC/hkyJDhCh2WHhQWSQwrFY=";
+    hash = "sha256-0FOMY/0LXGcHwDe4t+NMAovMhX83/mMv8sWvIf5gxok=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
-    requests
     aiohttp
     yarl
   ];
 
   nativeCheckInputs = [
-    testfixtures
-    mock
-    requests-toolbelt
     pytestCheckHook
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-vcr
     vcrpy
   ];
@@ -49,6 +41,11 @@ buildPythonPackage rec {
     # Ignored due to error with request cannot pickle 'BufferedReader' instances
     # Upstream issue: https://github.com/kevin1024/vcrpy/issues/737
     "tests/integration/test_sessions.py"
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_initialize"
   ];
 
   pythonImportsCheck = [ "asyncprawcore" ];

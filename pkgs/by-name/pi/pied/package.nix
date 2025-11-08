@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   gst_all_1,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "pied";
   version = "0.3.1";
 

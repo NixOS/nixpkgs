@@ -1,23 +1,33 @@
 {
   lib,
-  black,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  gitpython,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
   jinja2,
   platformdirs,
-  poetry-core,
+  tqdm,
+
+  # optional-dependencies
+  black,
+  gitpython,
+
+  # tests
+  addBinToPathHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  tqdm,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.27.0";
+  version = "0.28.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,11 +36,14 @@ buildPythonPackage rec {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${version}";
-    hash = "sha256-Yel9SB7KrDqtuZxNx4omz6u4AID8Fk5kFYKBEZD1fuU=";
+    hash = "sha256-9SO3G8SQOkxxSyro9dwSI6oH6BT8Rd66WqM5bvdVQkg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
     click
     jinja2
@@ -43,18 +56,23 @@ buildPythonPackage rec {
     sqlfmt_primer = [ gitpython ];
   };
 
+  pythonImportsCheck = [ "sqlfmt" ];
+
   nativeCheckInputs = [
+    addBinToPathHook
     pytest-asyncio
     pytestCheckHook
+    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
+  versionCheckProgramArg = "--version";
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
-  pythonImportsCheck = [ "sqlfmt" ];
+  disabledTestPaths = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "tests/functional_tests/test_end_to_end.py"
+    "tests/unit_tests/test_cli.py"
+  ];
 
   meta = {
     description = "Sqlfmt formats your dbt SQL files so you don't have to";

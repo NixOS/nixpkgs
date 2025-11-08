@@ -187,13 +187,27 @@ let
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
-          patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
-            # When using a baseruby, ruby always sets "libdir" to the build
-            # directory, which nix rejects due to a reference in to /build/ in
-            # the final product. Removing this reference doesn't seem to break
-            # anything and fixes cross compilation.
-            ./dont-refer-to-build-dir.patch
-          ];
+          patches =
+            op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch
+            ++ [
+              # When using a baseruby, ruby always sets "libdir" to the build
+              # directory, which nix rejects due to a reference in to /build/ in
+              # the final product. Removing this reference doesn't seem to break
+              # anything and fixes cross compilation.
+              ./dont-refer-to-build-dir.patch
+            ]
+            ++ ops (lib.versionAtLeast ver.majMin "3.4" && lib.versionOlder ver.majMin "3.5") [
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-1.patch";
+                url = "https://github.com/ruby/ruby/commit/846bb760756a3bf1ab12d56d8909e104f16e6940.patch";
+                hash = "sha256-+f0mzHsGAe9FT9NWE345BxzaB6vmWzMTvEfWF84uFOs=";
+              })
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-2.patch";
+                url = "https://github.com/ruby/ruby/commit/18e176659e8afe402cab7d39972f2d56f2cf378f.patch";
+                hash = "sha256-TKPG1hcC1G2WmUkvNV6QSnvUpTEDqrYKrIk/4fAS8QE=";
+              })
+            ];
 
           cargoRoot = opString yjitSupport "yjit";
 
@@ -398,8 +412,8 @@ in
   mkRuby = generic;
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "9" "";
-    hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
+    version = rubyVersion "3" "3" "10" "";
+    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 

@@ -1,27 +1,36 @@
 {
+  stdenv,
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "gcovr";
-  version = "8.3";
+  version = "8.4";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+qNx+cSn94yYANplUQfU+Z8EtxjRwNn0jK/cvvAEkHk=";
+  src = fetchFromGitHub {
+    owner = "gcovr";
+    repo = "gcovr";
+    tag = version;
+    hash = "sha256-v3jNODYD9qa3mwttfuldhhIHrfR5LcsZ+WNWiOWb35E=";
   };
 
-  build-system = [ python3Packages.hatchling ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-fancy-pypi-readme
+    hatch-vcs
+  ];
 
   # pythonRelaxDeps do not work on pyproject.toml
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.26.1" "hatchling"
+      --replace-fail "hatchling==1.26.3" "hatchling"
     substituteInPlace pyproject.toml \
       --replace-fail "hatch-fancy-pypi-readme==24.1.0" "hatch-fancy-pypi-readme>=24.1.0"
     substituteInPlace pyproject.toml \
@@ -36,21 +45,38 @@ python3Packages.buildPythonPackage rec {
         jinja2
         lxml
         pygments
-        hatch-fancy-pypi-readme
-        hatch-vcs
       ]
       ++ lib.optionals (pythonOlder "3.11") [ tomli ]
     );
 
-  # There are no unit tests in the pypi tarball. Most of the unit tests on the
-  # github repository currently only work with gcc5, so we just disable them.
-  # See also: https://github.com/gcovr/gcovr/issues/206
-  # Despite the CI passing many GCC version, ~300 tests are failing on nixos
-  doCheck = false;
-
   pythonImportsCheck = [
     "gcovr"
     "gcovr.configuration"
+  ];
+
+  preCheck = ''
+    rm -rf src # this causes some pycache issues
+    rm -rf admin/bump_version.py
+    export CC_REFERENCE="gcc-${lib.versions.major stdenv.cc.version}"
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    writableTmpDirAsHomeHook
+    pytestCheckHook
+    pytest-timeout
+    yaxmldiff
+    nox
+    requests
+    gitMinimal
+  ];
+
+  disabledTests = [
+    # too fragile
+    "test_build"
+    "test_example"
+    # assert 40 == 30 on log levels
+    "test_multiple_output_formats_to_stdout"
+    "test_multiple_output_formats_to_stdout_1"
   ];
 
   meta = {

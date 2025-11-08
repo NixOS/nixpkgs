@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.13.1";
+  version = "1.13.2";
 
   outputs = [
     "out"
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "spiffe";
     repo = "spire";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-1i2zT2oTJXMmISzUc4ixlZQjtjCcqUEi6RzgF9Zwm9s=";
+    sha256 = "sha256-iZMeD5ZwWKjY9mfuXgEgh+QLotmv28T8xBgpKoQTgxw=";
   };
 
   vendorHash = "sha256-tho3Qm9uHiiSNFmBZGZFgxhAKD4HKWsIUmiqkWlToQk=";
@@ -99,6 +99,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       fkautz
       jk
+      mjm
     ];
   };
 })

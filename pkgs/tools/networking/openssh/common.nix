@@ -18,6 +18,7 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+  audit,
   zlib,
   openssl,
   softhsm,
@@ -36,7 +37,7 @@
   nixosTests,
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
-  withPAM ? stdenv.hostPlatform.isLinux,
+  withPAM ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   # Attempts to mlock the entire sshd process on startup to prevent swapping.
   # Currently disabled when PAM support is enabled due to crashes
   # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
@@ -51,6 +52,12 @@ assert withFIDO -> withSecurityKey;
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   patches = [
     # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
     # so the session 'bash' will receive the proper locale archive, and thus process
@@ -59,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # See discussion in https://github.com/NixOS/nixpkgs/issues/453782 and
+    # https://github.com/openssh/openssh-portable/pull/602
+    ./fix_pkcs11_tests.patch
   ]
   ++ extraPatches;
 
@@ -66,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     # On Hydra this makes installation fail (sometimes?),
     # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+      substituteInPlace Makefile.in --replace-fail '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
   strictDeps = true;
@@ -87,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withFIDO libfido2
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
-  ++ lib.optional withPAM pam;
+  ++ lib.optional withPAM pam
+  ++ lib.optional stdenv.hostPlatform.isStatic audit;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -136,8 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
   doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [
@@ -163,9 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       # invoked directly and those invoked by the "remote" session
       cat > ~/.ssh/environment.base <<EOF
       NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-      ${lib.optionalString (
-        !stdenv.buildPlatform.isStatic
-      ) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
+      ${lib.optionalString (!stdenv.hostPlatform.isStatic) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
       EOF
 
       # use an ssh environment file to ensure environment is set
@@ -181,13 +189,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       # explicitly enable the PermitUserEnvironment feature
       substituteInPlace regress/test-exec.sh \
-        --replace \
+        --replace-fail \
           'cat << EOF > $OBJ/sshd_config' \
           $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
 
       # some tests want to use files under /bin as example files
       for f in regress/sftp-cmds.sh regress/forwarding.sh; do
-        substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+        substituteInPlace $f --replace-fail '/bin' "$(dirname $(type -p ls))"
       done
 
       # set up NIX_REDIRECTS for direct invocations
@@ -196,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
       # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
       substituteInPlace regress/test-exec.sh \
-        --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+        --replace-fail /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
     ''
   );
   # integration tests hard to get working on darwin with its shaky
@@ -218,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    cp contrib/ssh-copy-id.1 $man/share/man/man1/
   '';
 
   installTargets = [ "install-nokeys" ];

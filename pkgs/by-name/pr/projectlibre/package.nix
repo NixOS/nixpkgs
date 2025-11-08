@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.cpal10;
     mainProgram = "projectlibre";
     maintainers = with lib.maintainers; [
-      Mogria
       tomasajt
     ];
     platforms = jre.meta.platforms;

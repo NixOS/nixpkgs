@@ -6,19 +6,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "glm";
 
   src = fetchFromGitHub {
     owner = "g-truc";
     repo = "glm";
     rev = version;
-    sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
+    sha256 = "sha256-2xKv1nO+OdwA0r+I9OZ+OCL9dJFg/LJsQfIvIF76vc0=";
   };
 
   outputs = [
     "out"
     "doc"
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    # Remove when https://github.com/g-truc/glm/pull/1001 merged & in release.
+    # Relies on <endian.h>, Linux-specific
+    ./1001-glm-Fix-packing-on-BE.patch
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -62,6 +68,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/g-truc/glm";
     license = licenses.mit;
     platforms = platforms.unix;
+    # https://github.com/g-truc/glm/issues/897 indicates that packing isn't implemented properly on non-LE.
+    # Patch from https://github.com/g-truc/glm/pull/1001 currently relies on Linux-only header.
+    broken = !stdenv.hostPlatform.isLittleEndian && !stdenv.hostPlatform.isLinux;
     maintainers = with maintainers; [ smancill ];
   };
 }

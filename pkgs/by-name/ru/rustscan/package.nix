@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RustScan/RustScan";
     changelog = "https://github.com/RustScan/RustScan/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rustscan";
   };
 }

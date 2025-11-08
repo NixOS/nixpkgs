@@ -11,6 +11,7 @@
   platformdirs,
   rich,
   typing-extensions,
+  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.3.0";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-3KxSuyfczyulbpysAO8mF7wvzd+807Lj6l6g0TygBnI=";
+    hash = "sha256-Z9KevcicU+mt1XglYOdGWnMbRa1zpbts+0D2nwtgAac=";
   };
 
   build-system = [ poetry-core ];
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
   dependencies = [
     markdown-it-py
+    mdit-py-plugins
     platformdirs
     rich
     typing-extensions

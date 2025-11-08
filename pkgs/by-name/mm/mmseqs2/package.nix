@@ -16,12 +16,12 @@
   llvmPackages,
   zlib,
   bzip2,
-  pkgsStatic,
+  zstd,
   runCommand,
-}:
+}@args:
 let
   # require static library, libzstd.a
-  inherit (pkgsStatic) zstd;
+  zstd = args.zstd.override { enableStatic = true; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     xxd
     perl
     installShellFiles
-    zstd
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -58,17 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
-  buildInputs =
-    lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-      zlib
-      bzip2
-    ]
-    ++ lib.optional enableMpi mpi
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+    zlib
+    bzip2
+  ]
+  ++ lib.optional enableMpi mpi
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ];
 
   postInstall = ''
     installShellCompletion --bash --cmd mmseqs $out/util/bash-completion.sh

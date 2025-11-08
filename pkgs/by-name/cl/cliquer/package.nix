@@ -3,10 +3,11 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.22";
+  version = "1.23";
   pname = "cliquer";
 
   # autotoolized version of the original cliquer
@@ -14,13 +15,14 @@ stdenv.mkDerivation rec {
     owner = "dimpase";
     repo = "autocliquer";
     rev = "v${version}";
-    sha256 = "00gcmrhi2fjn8b246w5a3b0pl7p6haxy5wjvd9kcqib1xanz59z4";
+    hash = "sha256-SGpur3sF1dYQU97wprERUqlr6LIX+NyXZVl0eSEd3uM=";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
   ];
 
   meta = with lib; {

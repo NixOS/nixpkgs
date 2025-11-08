@@ -20,6 +20,7 @@
   # tests
   datafusion,
   pytestCheckHook,
+  tomli,
   torch,
 }:
 
@@ -67,6 +68,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     datafusion
     pytestCheckHook
+    tomli
     torch
   ];
 

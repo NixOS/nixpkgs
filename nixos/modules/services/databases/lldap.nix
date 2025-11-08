@@ -224,7 +224,7 @@ in
           fi
         ''
         + ''
-          ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
+          exec ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
         '';
       serviceConfig = {
         StateDirectory = "lldap";

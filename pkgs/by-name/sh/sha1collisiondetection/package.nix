@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.mit;
+    mainProgram = "sha1dcsum";
   };
 }

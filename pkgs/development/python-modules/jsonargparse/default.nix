@@ -10,7 +10,6 @@
   omegaconf,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   reconplogger,
   requests,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.41.0";
+  version = "4.42.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-uNgtxQuAkOB651lbPPWQg0p4T8G1dgFbx/EyO/sJSjs=";
+    hash = "sha256-M6CEUDf6JcjZWRBoHfVyFmX9ZV8xsB7illoBk0YzZs0=";
   };
 
   build-system = [ setuptools ];

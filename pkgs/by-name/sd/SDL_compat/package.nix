@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.68";
+  version = "1.2.70";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
+    hash = "sha256-vmbkeBpuzgq1B/6rp9/Gy8+Y7aF5uz8lC/mK0uA9v7I=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals openglSupport [ libGLU ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_SKIP_RPATH TRUE)' 'set(CMAKE_SKIP_RPATH FALSE)'
-  '';
-
   dontPatchELF = true; # don't strip rpath
 
   cmakeFlags =
@@ -79,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase = ''
     runHook preCheck
-    ./testver
+    ./test/testver
     runHook postCheck
   '';
 

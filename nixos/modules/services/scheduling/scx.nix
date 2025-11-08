@@ -101,13 +101,14 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = utils.escapeSystemdExecArgs (
-          [
-            (lib.getExe' cfg.package cfg.scheduler)
-          ]
-          ++ cfg.extraArgs
-        );
+        ExecStart = ''
+          ${pkgs.runtimeShell} -c 'exec ${cfg.package}/bin/''${SCX_SCHEDULER_OVERRIDE:-$SCX_SCHEDULER} ''${SCX_FLAGS_OVERRIDE:-$SCX_FLAGS}'
+        '';
         Restart = "on-failure";
+      };
+      environment = {
+        SCX_SCHEDULER = cfg.scheduler;
+        SCX_FLAGS = lib.escapeShellArgs cfg.extraArgs;
       };
 
       wantedBy = [ "multi-user.target" ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "magicmonty";
     repo = "bash-git-prompt";
     rev = "e733ada3e93fd9fdb6e9d1890e38e6e523522da7";
-    hash = "sha256-FWeYzISY4+cS2xg6skfcpTXgbkBs41E/EzEb3JNdFoQ=";
+    hash = "sha256-6uUoYSjpGJGOgnLiIR0SdmLZKPG4GNB+e2Y9HpJUODQ=";
   };
 
   buildInputs = [ python3 ];

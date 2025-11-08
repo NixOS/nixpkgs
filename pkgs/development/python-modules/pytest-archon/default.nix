@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-archon";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwbargsten";
     repo = "pytest-archon";
     tag = "v${version}";
-    hash = "sha256-ZKs7ifqgazEywszPGxkcPCf2WD2tEpEsbh8kHN/PL7s=";
+    hash = "sha256-0YBujBUBpW/FSIlJDRjL5mvYZfirHW07bRyygyoapw8=";
   };
 
   build-system = [

@@ -35,8 +35,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/lib/uhub/" "$out/plugins" \
-      --replace "/etc/uhub" "$TMPDIR"
+      --replace-fail "/usr/lib/uhub/" "$out/plugins" \
+      --replace-fail "/etc/uhub" "$TMPDIR" \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [

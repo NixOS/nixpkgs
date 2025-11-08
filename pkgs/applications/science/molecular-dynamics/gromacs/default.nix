@@ -20,7 +20,7 @@
   cpuAcceleration ? null,
 }:
 
-# CUDA is only implemented for single precission
+# CUDA is only implemented for single precision
 assert enableCuda -> singlePrec;
 
 let

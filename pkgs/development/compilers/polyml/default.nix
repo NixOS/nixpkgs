@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
     maintainers = with maintainers; [
-      maggesi
       kovirobi
     ];
   };

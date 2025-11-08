@@ -69,6 +69,6 @@ rustPlatform.buildRustPackage rec {
       # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

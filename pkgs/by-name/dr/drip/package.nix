@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       rybern
-      awwpotato
+      da157
     ];
   };
 })

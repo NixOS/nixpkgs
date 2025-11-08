@@ -52,6 +52,9 @@ buildPythonPackage rec {
     "test_lkm"
   ];
 
+  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+  disabledTestPaths = lib.optional cudaSupport "tests/test_foreground.py";
+
   meta = with lib; {
     description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";

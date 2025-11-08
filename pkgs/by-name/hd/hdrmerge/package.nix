@@ -15,13 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "hdrmerge";
-  version = "0.5.0-unstable-2024-08-02";
+  version = "0.5.0-unstable-2025-04-26";
   src = fetchFromGitHub {
     owner = "jcelaya";
     repo = "hdrmerge";
-    rev = "e2a46f97498b321b232cc7f145461212677200f1";
-    hash = "sha256-471gJtF9M36pAId9POG8ZIpNk9H/157EdHqXSAPlhN0=";
+    rev = "3bbe43771ba15b899151721bc14aa57e86b60f2f";
+    hash = "sha256-4FIGchwROXe8qLRBaYih2k9zDll2YoYGDj06SrIqK9Q=";
   };
+
+  # Disable find_package(ALGLIB REQUIRED) in the CMake file by providing a empty
+  # FindALGLIB.cmake, and provide ALGLIB_INCLUDES and ALGLIB_LIBRARIES ourselves
+  preConfigure = ''
+    touch cmake/FindALGLIB.cmake
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -39,12 +45,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DALGLIB_DIR:PATH=${alglib}"
-  ];
-
-  CXXFLAGS = [
-    # GCC 13: error: 'uint32_t' does not name a type
-    "-include cstdint"
+    (lib.cmakeFeature "ALGLIB_INCLUDES" "${alglib}/include/alglib")
+    (lib.cmakeFeature "ALGLIB_LIBRARIES" "alglib3")
   ];
 
   desktopItems = [

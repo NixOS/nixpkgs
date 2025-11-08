@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.coroa ];
+    maintainers = [ ];
   };
 }

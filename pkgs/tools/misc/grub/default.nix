@@ -219,7 +219,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_prerequisite_1_key_protector_add_key_protectors_framework.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=5d260302da672258444b01239803c8f4d753e3f3";
-      hash = "sha256-9WnFN6xMiv+1XMhNHgVEegkhwzp9KpRZI6MIZY/Ih3Q=";
+      hash = "sha256-5aFHzc5qXBNLEc6yzI17AH6J7EYogcXdLxk//1QgumY=";
     })
     (fetchpatch {
       name = "23_prerequisite_2_disk_cryptodisk_allow_user_to_retry_failed_passphrase.patch";
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_CVE-2024-49504.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=13febd78db3cd85dcba67d8ad03ad4d42815f11e";
-      hash = "sha256-U7lNUb4iVAyQ1yEg5ECHCQGE51tKvY13T9Ji09Q1W9Y=";
+      hash = "sha256-GejDL9IKbmbSUmp8F1NuvBcFAp2/W04jxmOatI5dKn8=";
     })
     (fetchpatch {
       name = "24_disk_loopback_reference_tracking_for_the_loopback.patch";

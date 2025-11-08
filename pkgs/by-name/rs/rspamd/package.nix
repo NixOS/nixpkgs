@@ -56,8 +56,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningEnable = [ "pie" ];
-
   nativeBuildInputs = [
     cmake
     pkg-config

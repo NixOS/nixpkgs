@@ -4,8 +4,6 @@
   fontconfig,
   llvmPackages,
   nix-update-script,
-  python3Packages,
-  pythonSupport ? false,
   stdenv,
 
   # nativeBuildInputs
@@ -23,18 +21,19 @@
   pinocchio,
 
   # checkInputs
+  catch2_3,
   gbenchmark,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x9vOj5Dy2SaQOLBCM13wZ/4SxgBz+99K/UxJqhKTg3c=";
+    hash = "sha256-OyCJa2iTkCxVLooSKdVgBd0y7rHObo4vFcc56t48TSY=";
   };
 
   outputs = [
@@ -49,48 +48,33 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     graphviz
     pkg-config
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
   ];
+
   buildInputs = [
     fmt
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
+
   propagatedBuildInputs = [
-    suitesparse
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.crocoddyl
-    python3Packages.matplotlib
-    python3Packages.pinocchio
-  ]
-  ++ lib.optionals (!pythonSupport) [
     crocoddyl
     pinocchio
+    suitesparse
   ];
+
   checkInputs = [
+    catch2_3
     gbenchmark
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.matplotlib
-    python3Packages.pytest
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
     (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
     (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
     (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
-    # ignore one failing test for now
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
   ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -105,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  pythonImportsCheck = [ "aligator" ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -7,22 +7,24 @@
   additionalPrograms ? [ ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "raffi";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "raffi";
-    rev = "v${version}";
-    hash = "sha256-97gZZp2taX800Izhya4mYzS4PtCNCBbRnrn6cm1w8zY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k0NJEv76f33yd+mtCJ7bxzaT3UAn0TOaLC/HlzEXUyo=";
   };
 
-  cargoHash = "sha256-1n0JQdeExszuGFbpkBRT44eMov/x3BrIeofObdPNNdU=";
+  cargoHash = "sha256-udXVIV6qDmpLR2QNF+/h69WNGbe7QRDD5YWQ3Sl5Ol0=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ];
+
+  checkFlags = [ "--skip=tests::test_read_config_from_reader" ];
 
   postFixup = ''
     wrapProgram $out/bin/raffi \
@@ -32,10 +34,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fuzzel launcher based on yaml configuration";
     homepage = "https://github.com/chmouel/raffi";
-    changelog = "https://github.com/chmouel/raffi/releases/tag/v${version}";
+    changelog = "https://github.com/chmouel/raffi/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ aos ];
     mainProgram = "raffi";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -8,6 +8,7 @@
   myChunk,
   includeBroken,
   systems,
+  extraNixpkgsConfigJson,
 }:
 
 let
@@ -17,6 +18,7 @@ let
   unfiltered = import ./outpaths.nix {
     inherit path;
     inherit includeBroken systems;
+    extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
   };
 
   # Turns the unfiltered recursive attribute set into one that is limited to myAttrpaths

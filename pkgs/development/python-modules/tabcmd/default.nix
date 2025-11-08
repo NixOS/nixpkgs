@@ -1,13 +1,11 @@
 {
   lib,
   appdirs,
-  argparse,
   buildPythonPackage,
   doit,
-  fetchPypi,
+  fetchFromGitHub,
   ftfy,
   mock,
-  pyinstaller-versionfile,
   pytest-order,
   pytestCheckHook,
   python,
@@ -28,17 +26,19 @@ buildPythonPackage rec {
   version = "2.0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-erGngJ3CW+c3PuVq4BTrPGSZ2L/M0EykSoZocku0lOE=";
+  src = fetchFromGitHub {
+    owner = "tableau";
+    repo = "tabcmd";
+    tag = "v${version}";
+    hash = "sha256-Eb9ZboYdco6opKW3Tz0+U9VREWdEyt2xuG62n9WIXPk=";
   };
 
   prePatch = ''
     # Remove an unneeded dependency that can't be resolved
     # https://github.com/tableau/tabcmd/pull/282
     sed -i "/'argparse',/d" pyproject.toml
+    # Uses setuptools-scm instead
+    sed -i "/'pyinstaller_versionfile',/d" pyproject.toml
   '';
 
   pythonRelaxDeps = [
@@ -46,14 +46,19 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  pythonRemoveDeps = [
+    "pyinstaller_versionfile"
+  ];
 
   dependencies = [
     appdirs
-    argparse
     doit
     ftfy
-    pyinstaller-versionfile
     requests
     setuptools-scm
     tableauserverclient

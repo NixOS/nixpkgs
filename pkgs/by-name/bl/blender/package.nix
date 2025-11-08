@@ -16,7 +16,7 @@
   embree,
   fetchzip,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   fftw,
   fftwFloat,
   freetype,
@@ -207,7 +207,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLIBDIR=/does-not-exist"
-    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/include"
   ];
 
   preConfigure = ''
@@ -239,7 +239,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     alembic
     boost
-    ffmpeg
+    ffmpeg_7
     fftw
     fftwFloat
     freetype
@@ -434,9 +434,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license =
-      with lib.licenses;
-      [ gpl2Plus ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
 
     platforms = [
       "aarch64-linux"

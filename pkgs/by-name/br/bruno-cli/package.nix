@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  clang_20,
   buildNpmPackage,
   bruno,
   pkg-config,
@@ -24,7 +26,8 @@ buildNpmPackage {
 
   nativeBuildInputs = [
     pkg-config
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin clang_20; # clang_21 breaks gyp builds
 
   buildInputs = [
     pango

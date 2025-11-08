@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.5.0";
+  version = "2025.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
+    hash = "sha256-7z9SkkE4WqULW0m7lk+oohq1uwSO7XLcrnh6U7wqTgo=";
   };
 
   build-system = [
@@ -88,5 +88,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+    # dask-awkward is incompatible with recent dask versions.
+    # See https://github.com/dask-contrib/dask-awkward/pull/582 for context.
+    broken = lib.versionAtLeast dask.version "2025.4.0";
   };
 }

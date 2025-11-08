@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [
-      maggesi
       vbmithr
       gal_bolle
     ];

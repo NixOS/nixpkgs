@@ -426,8 +426,7 @@ let
           # Fix a crash in the mono test project build. It no longer seems to
           # happen in 4.4, but an existing fix couldn't be identified.
           ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-        ]
-        ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
+        ];
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE

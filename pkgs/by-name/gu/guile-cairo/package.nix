@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       management, exceptions, macros, and a dynamic programming environment.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

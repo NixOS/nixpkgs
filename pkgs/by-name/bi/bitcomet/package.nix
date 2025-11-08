@@ -6,7 +6,7 @@
   fetchurl,
   desktop-file-utils,
   dpkg,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   runScript ? "BitComet",
 }:
 
@@ -15,6 +15,8 @@ let
   version = "2.15.0";
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     homepage = "https://www.bitcomet.com";
     description = "BitTorrent download client";
     mainProgram = "BitComet";
@@ -82,7 +84,7 @@ buildFHSEnv {
     pkgs:
     [
       bitcomet
-      webkitgtk_4_0
+      # webkitgtk_4_0
     ]
     ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs;
 

@@ -56,7 +56,7 @@ buildPythonPackage rec {
     description = "Python wrapper to libcangjie";
     homepage = "https://cangjians.github.io/projects/pycangjie/";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.linquize ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

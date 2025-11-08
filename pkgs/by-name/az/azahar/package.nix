@@ -42,8 +42,7 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  darwinMinVersionHook,
-  apple-sdk_12,
+  fetchpatch2,
 }:
 let
   inherit (lib)
@@ -65,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/azahar-emu/azahar/pull/1305
     ./fix-zstd-seekable-include.patch
+
+    # TODO: Remove in next release
+    (fetchpatch2 {
+      url = "https://github.com/azahar-emu/azahar/commit/1f483e1d335374482845d0325ac8b13af3162c53.patch?full_index=1";
+      hash = "sha256-9rmRbv7VFMhHly5qTGaeBLpvtWMu6HkCGUUM+t78Meg=";
+    })
   ];
 
   strictDeps = true;
@@ -122,10 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
-
-    # error: 'lowPowerModeEnabled' is unavailable: not available on macOS
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
   ];
 
   postPatch = ''

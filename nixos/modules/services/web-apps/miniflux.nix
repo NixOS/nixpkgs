@@ -20,9 +20,11 @@ let
   boolToInt = b: if b then 1 else 0;
 
   pgbin = "${config.services.postgresql.package}/bin";
+  # The hstore extension is no longer needed as of v2.2.14
+  # and would prevent Miniflux from starting.
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "miniflux" -c "DROP EXTENSION IF EXISTS hstore"
   '';
 in
 
@@ -39,7 +41,7 @@ in
         description = ''
           Whether a PostgreSQL database should be automatically created and
           configured on the local host. If set to `false`, you need provision a
-          database yourself and make sure to create the hstore extension in it.
+          database yourself.
         '';
       };
 
@@ -205,15 +207,18 @@ in
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor.policies."bin.miniflux".profile = ''
+      abi <abi/4.0>,
       include <tunables/global>
-      ${cfg.package}/bin/miniflux {
+
+      profile ${cfg.package}/bin/miniflux {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
+        include <abstractions/golang>
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
-        r ${cfg.package}/bin/miniflux,
-        r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
-        rw /run/miniflux/**,
+        ${cfg.package}/bin/miniflux r,
+        /run/miniflux/** rw,
+        include if exists <local/bin.miniflux>
       }
     '';
   };

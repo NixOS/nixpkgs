@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   replaceVars,
   setuptools,
@@ -8,7 +9,6 @@
   tcl,
   tclPackages,
   tk,
-  tkinter,
   xvfb-run,
 }:
 
@@ -27,21 +27,26 @@ buildPythonPackage {
     cp -rv Modules/clinic ../tkinter/
     cp -rv Lib/tkinter ../tkinter/
 
-    pushd $NIX_BUILD_TOP/tkinter
-
     # install our custom pyproject.toml
     cp ${
       replaceVars ./pyproject.toml {
         python_version = python.version;
         python_internal_dir = "${python}/include/${python.libPrefix}/internal";
       }
-    } ./pyproject.toml
+    } $NIX_BUILD_TOP/tkinter/pyproject.toml
 
   ''
   + lib.optionalString (pythonOlder "3.13") ''
-    substituteInPlace "tkinter/tix.py" --replace-fail \
+    substituteInPlace "$NIX_BUILD_TOP/tkinter/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
       "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
+  '';
+
+  # Adapted from https://github.com/python/cpython/pull/124542
+  patches = lib.optional (pythonOlder "3.12") ./fix-ttk-notebook-test.patch;
+
+  preConfigure = ''
+    pushd $NIX_BUILD_TOP/tkinter
   '';
 
   build-system = [ setuptools ];
@@ -64,29 +69,46 @@ buildPythonPackage {
     ];
   };
 
-  doCheck = false;
-
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
 
   preCheck = ''
     cd $NIX_BUILD_TOP/Python-*/Lib
     export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
-      python -m unittest test.test_tkinter
-
-    runHook postCheck
-  '';
-
-  passthru.tests.unittests = tkinter.overridePythonAttrs { doCheck = true; };
+  checkPhase =
+    let
+      testsNoGui = [
+        "test.test_tcl"
+        "test.test_ttk_textonly"
+      ];
+      testsGui =
+        if pythonOlder "3.12" then
+          [
+            "test.test_tk"
+            "test.test_ttk_guionly"
+          ]
+        else
+          [
+            "test.test_tkinter"
+            "test.test_ttk"
+          ];
+    in
+    ''
+      runHook preCheck
+      ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsNoGui}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+        ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsGui}
+    ''
+    + ''
+      runHook postCheck
+    '';
 
   pythonImportsCheck = [ "tkinter" ];
 
   meta = {
-    broken = pythonOlder "3.12"; # tommath.h: No such file or directory
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
     description = "Standard Python interface to the Tcl/Tk GUI toolkit";
     longDescription = ''

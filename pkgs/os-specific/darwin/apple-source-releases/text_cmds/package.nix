@@ -1,7 +1,6 @@
 {
   lib,
   apple-sdk,
-  apple-sdk_13,
   bzip2,
   libmd,
   libresolv,
@@ -18,7 +17,6 @@
 
 let
   Libc = apple-sdk.sourceRelease "Libc";
-  Libc_13 = apple-sdk_13.sourceRelease "Libc";
 
   CommonCrypto = apple-sdk.sourceRelease "CommonCrypto";
   libplatform = apple-sdk.sourceRelease "libplatform";
@@ -30,7 +28,7 @@ let
     buildCommand = ''
       install -D -t "$out/include" \
         '${libplatform}/private/_simple.h' \
-        '${Libc_13}/include/vis.h'
+        '${Libc}/include/vis.h'
       install -D -t "$out/include/os" \
         '${Libc}/os/assumes.h' \
         '${xnu}/libkern/os/base_private.h'
@@ -47,7 +45,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-dZ+yJyfflhmUyx3gitRXC115QxS87SGC4/HjMa199Ts=";
+  xcodeHash = "sha256-4nwDGUBSx5jjeLQ3EGQFdPZE2MfNGcBvlTU/Sye6OIk=";
 
   postPatch = ''
     # Improve compatiblity with libmd in nixpkgs.
@@ -60,18 +58,6 @@ mkAppleDerivation {
       --replace-fail SHA224_CTX SHA2_CTX \
       --replace-fail '<sha384.h>' '<sha512.h>' \
       --replace-fail 'const void *, unsigned int, char *' 'const uint8_t *, size_t, char *'
-  ''
-  + lib.optionalString (lib.versionOlder (lib.getVersion apple-sdk) "13.0") ''
-    # Backport vis APIs from the 13.3 SDK (needed by vis).
-    cp '${Libc_13}/gen/FreeBSD/vis.c' vis/vis-libc.c
-    # Backport errx APIs from the 13.3 SDK (needed by lots of things).
-    mkdir sys
-    cp '${Libc_13}/gen/FreeBSD/err.c' err-libc.c
-    cp '${Libc_13}/include/err.h' err.h
-    cp '${Libc_13}/fbsdcompat/sys/cdefs.h' sys/cdefs.h
-    substituteInPlace err.h \
-      --replace-fail '__cold' ""
-    touch namespace.h un-namespace.h libc_private.h
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";

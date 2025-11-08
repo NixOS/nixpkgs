@@ -9,6 +9,7 @@
 
   # dependencies
   glib,
+  libxfixes,
   libXinerama,
   catch2,
   gperf,
@@ -129,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [
     freetype
+    libxfixes
     xorg.libICE
     xorg.libX11
     xorg.libXext

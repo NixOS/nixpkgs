@@ -28,29 +28,29 @@ let
     owner = "whisperfish";
     repo = "presage";
     # match with commit from Cargo.toml
-    rev = "31a418d0a35ad746590165520b652d6adb7a0384";
-    hash = "sha256-Mf8RvwfrVpbsUj+mA9L7IjnbMKoZDjZKYor2iqFWSx4=";
+    rev = "ed011688fc8d9c0ee07c3d44743c138c1fa4dfda";
+    hash = "sha256-NTSxSOAmA9HOH52GPwl6pL0MQly+NTfJDk7k7TUP9II=";
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
   # NOTE: also update presage commit
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-3SYsVF3aUJYSr3pM/BGXYExQwbwckExYwEcF3cZ/94g=";
+    hash = "sha256-Nezg+fNC29blGhyetJqs9l6/IL08b7tHn+D3pzKj26I=";
   };
 
   cargoDeps =
     let
       cargoDeps = rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) pname version src;
-        hash = "sha256-cxhnfdYcsyXxvTpGGXm2rK3cKVsNk66FYif7/c16NhU=";
+        hash = "sha256-Y6jY588axEcqv0WN6Fcm8Kd5yd2JXvKwMd8h1L6J9TE=";
       };
     in
     # Replace with simpler solution:

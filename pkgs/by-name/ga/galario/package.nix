@@ -10,7 +10,6 @@
   pythonPackages ? null,
   llvmPackages,
 }:
-
 let
   # CMake recipes are needed to build galario
   # Build process would usually download them
@@ -50,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace python/utils.py \
       --replace-fail "trapz" "trapezoid" \
       --replace-fail "np.int" "int"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeCheckInputs = lib.optionals enablePython [

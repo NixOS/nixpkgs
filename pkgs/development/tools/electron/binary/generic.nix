@@ -44,11 +44,7 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
-      yayayayaka
-      teutat3s
-      tomasajt
-    ];
+    teams = [ teams.electron ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
@@ -58,7 +54,7 @@ let
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "36.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =

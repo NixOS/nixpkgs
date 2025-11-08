@@ -35,9 +35,6 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
 
-  # /nix/store/.../bin/ld: internal/mkcw/embed/entrypoint_amd64.o: relocation R_X86_64_32S against `.rodata.1' can not be used when making a PIE object; recompile with -fPIE
-  hardeningDisable = [ "pie" ];
-
   nativeBuildInputs = [
     go-md2man
     installShellFiles

@@ -88,6 +88,11 @@ stdenv.mkDerivation {
     "-DNGSCOPECLIENT_VERSION=${version}"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # error: variable 'empty_string' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+    "-Wno-error=uninitialized"
+  ];
+
   patches = [
     ./remove-git-derived-version.patch
   ]

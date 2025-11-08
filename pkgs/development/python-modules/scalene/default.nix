@@ -38,7 +38,7 @@ in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.52";
+  version = "1.5.55";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${version}";
-    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
+    hash = "sha256-aO7l/paYqbneDArAbXxptIlMGfvc1dAaFLucEj/7xbk=";
   };
 
   patches = [
@@ -95,6 +95,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Flaky -- socket collision
     "test_show_browser"
+    # File not found
+    "test_nested_package_relative_import"
   ];
 
   # remove scalene directory to prevent pytest import confusion

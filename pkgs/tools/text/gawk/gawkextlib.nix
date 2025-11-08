@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  recurseIntoAttrs,
   fetchgit,
   pkg-config,
   autoreconfHook,
@@ -212,7 +211,7 @@ let
     };
   };
 in
-recurseIntoAttrs (
+lib.recurseIntoAttrs (
   libs
   // {
     inherit gawkextlib buildExtension;

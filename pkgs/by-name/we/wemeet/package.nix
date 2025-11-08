@@ -133,16 +133,16 @@ let
 in
 stdenv.mkDerivation {
   pname = "wemeet";
-  version = "3.19.2.400";
+  version = "3.26.10.400";
 
   src = selectSystem {
     x86_64-linux = fetchurl {
-      url = "https://updatecdn.meeting.qq.com/cos/fb7464ffb18b94a06868265bed984007/TencentMeeting_0300000000_3.19.2.400_x86_64_default.publish.officialwebsite.deb";
-      hash = "sha256-PSGc4urZnoBxtk1cwwz/oeXMwnI02Mv1pN2e9eEf5kE=";
+      url = "https://updatecdn.meeting.qq.com/cos/9cfd93b10ee81b2fc3ad26357f27ed13/TencentMeeting_0300000000_3.26.10.400_x86_64_default.publish.officialwebsite.deb";
+      hash = "sha256-7gN40mkAD/0/k0E+bBNfiMcY+YtIaLWycFoI+hhrjgc=";
     };
     aarch64-linux = fetchurl {
-      url = "https://updatecdn.meeting.qq.com/cos/867a8a2e99a215dcd4f60fe049dbe6cf/TencentMeeting_0300000000_3.19.2.400_arm64_default.publish.officialwebsite.deb";
-      hash = "sha256-avN+PHKKC58lMC5wd0yVLD0Ct7sbb4BtXjovish0ULU=";
+      url = "https://updatecdn.meeting.qq.com/cos/e5f447f30343e27c49438db8d035ae23/TencentMeeting_0300000000_3.26.10.400_arm64_default.publish.officialwebsite.deb";
+      hash = "sha256-ShxcDwwBThwe2YKNy/5+HmYcnnodPhrMaOwkw3gTq0E=";
     };
   };
 
@@ -206,6 +206,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  postInstall = selectSystem {
+    x86_64-linux = ''
+      # According to @mnixry:
+      #   The thing is, it's a coroutine library that involves a series of low-level operations like stack and register restoration and saving, so there's quite a bit of code that looks like hand-written assembly.
+      #   Then they apparently changed the usage of co_jump_to_link, but the registers used in the assembly weren't updated accordingly.
+      #   And then under certain versions of libc/libcpp implementations, that original register happens to have a value, so the tests also pass.
+
+      # cmp rdi, 0 -> cmp r12, 0, at co_jump_to_link to address coroutine context resume issue
+      echo -ne '\x49\x83\xfc\x00' | dd of=$out/app/wemeet/lib/libwemeet_base.so bs=1 seek=$((0x94c833)) conv=notrunc
+    '';
+    aarch64-linux = ''
+      # I don't know if aarch64-linux version needs similar patch, I don't have aarch64 device.
+    '';
+  };
+
   # set LP_NUM_THREADS limit the number of cores used by rendering
   # set XDG_SESSION_TYPE; unset WAYLAND_DISPLAY getting border shadows to work
   # set QT_STYLE_OVERRIDE solve the color of the font is not visible when using the included Qt
@@ -227,6 +242,7 @@ stdenv.mkDerivation {
       ];
       xwaylandWrapperArgs = baseWrapperArgs ++ [
         "--set XDG_SESSION_TYPE x11"
+        "--set QT_QPA_PLATFORM xcb"
         "--unset WAYLAND_DISPLAY"
         "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-wayland-screenshare}/lib/wemeet/libhook.so"
       ];

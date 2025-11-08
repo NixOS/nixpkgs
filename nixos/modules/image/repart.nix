@@ -223,7 +223,7 @@ in
             }
             repartConfig = {
               Type = "esp";
-              Format = "fat";
+              Format = "vfat";
             };
           };
           "20-root" = {

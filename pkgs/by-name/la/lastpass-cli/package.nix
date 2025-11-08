@@ -11,6 +11,7 @@
   curl,
   libxml2,
   libxslt,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,14 @@ stdenv.mkDerivation rec {
   installTargets = [
     "install"
     "install-doc"
+  ];
+
+  patches = [
+    # CMake 3.1 is deprecated and no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    # The patch comes from https://github.com/lastpass/lastpass-cli/pull/716 while
+    # it is not merged and integrated in a new release.
+    ./716-bump-cmake-minimum-version.patch
   ];
 
   postInstall = ''

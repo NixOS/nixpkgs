@@ -9,6 +9,7 @@
   buildPackages,
   c-ares,
   cmake,
+  darwinMinVersionHook,
   fixDarwinDylibNames,
   flex,
   gettext,
@@ -25,6 +26,7 @@
   libpcap,
   libsmi,
   libssh,
+  libxml2,
   lua5_4,
   lz4,
   makeWrapper,
@@ -56,7 +58,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.9";
+  version = "4.6.0";
 
   outputs = [
     "out"
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-0+uPXSNabsYNGn+4753WNoUBe9lJ2EH3i3J36lqI4Ak=";
+    hash = "sha256-XkHcVN3xCYwnS69nJ4/AT76Iaggt1GXA6JWi+IG15IM=";
   };
 
   patches = [
@@ -111,6 +113,7 @@ stdenv.mkDerivation rec {
     libpcap
     libsmi
     libssh
+    libxml2
     lua5_4
     lz4
     minizip
@@ -145,6 +148,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gmp
+    # Required by Qt 6
+    (darwinMinVersionHook "12.0")
   ];
 
   strictDeps = true;
@@ -190,7 +195,7 @@ stdenv.mkDerivation rec {
       flags+=(-change @rpath/"$(basename "$file")" "$file")
     done
 
-    for file in $out/lib/wireshark/extcap/*; do
+    for file in $out/libexec/wireshark/extcap/*; do
       if [ -L "$file" ]; then continue; fi
       echo "$file: fixing dylib references"
       # note that -id does nothing on binaries
@@ -208,7 +213,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/Applications/Wireshark.app/Contents/MacOS/extcap $out/Applications/Wireshark.app/Contents/PlugIns
     mkdir -p $out/Applications/Wireshark.app/Contents/PlugIns
     cp -r $out/lib/wireshark/plugins $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
-    cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
+    cp -r $out/libexec/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
   meta = {

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
     tag = version;
-    hash = "sha256-G8RKTccsJRcLgTQPTOXAgK6ViVEwIQydUwdAexEJ2bc=";
+    hash = "sha256-EKcURfC4IpLGzr5ibzVlUnRHIhwPP+kYYusW9Mk8R/s=";
   };
 
   build-system = [

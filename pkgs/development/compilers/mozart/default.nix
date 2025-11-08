@@ -76,6 +76,17 @@ stdenv.mkDerivation rec {
     tk
   ];
 
+  postPatch = ''
+    substituteInPlace {vm,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace vm/vm/test/gtest/{googletest,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace bootcompiler/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace {boosthost,opi,wish,stdlib}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Open source implementation of Oz 3";
     maintainers = with maintainers; [

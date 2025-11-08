@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pkarr";
-  version = "4.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "pubky";
     repo = "pkarr";
     rev = "v${version}";
-    hash = "sha256-9sTF5h2+vWcz5ohAoo95vldTJGQyz/ICkVpIgaxilwA=";
+    hash = "sha256-564JL7EG/RB2k2JdxAENpP5UZtKtaGlrZfeYOgsLBEY=";
   };
 
-  cargoHash = "sha256-26OlV/Xnl1+VFOaCWUjb8LxuJWrCsfY7QTlPZ7VMBCs=";
+  cargoHash = "sha256-HG4cmKQleiWdYBrOgv1Aj/erWjZX5PMwIZpQSQc+sFU=";
 
   meta = {
     description = "Public Key Addressable Resource Records (sovereign TLDs) ";

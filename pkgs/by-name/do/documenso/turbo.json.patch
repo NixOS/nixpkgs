@@ -1,0 +1,104 @@
+diff --git a/turbo.json b/turbo.json
+index d767b46..b2d1ad3 100644
+--- a/turbo.json
++++ b/turbo.json
+@@ -1,41 +1,8 @@
+ {
+   "$schema": "https://turbo.build/schema.json",
+-  "pipeline": {
+-    "build": {
+-      "dependsOn": ["prebuild", "^build"],
+-      "outputs": [".next/**", "!.next/cache/**"]
+-    },
+-    "prebuild": {
+-      "cache": false,
+-      "dependsOn": ["^prebuild"]
+-    },
+-    "lint": {
+-      "cache": false
+-    },
+-    "lint:fix": {
+-      "cache": false
+-    },
+-    "clean": {
+-      "cache": false
+-    },
+-    "dev": {
+-      "cache": false,
+-      "persistent": true
+-    },
+-    "start": {
+-      "dependsOn": ["^build"],
+-      "cache": false,
+-      "persistent": true
+-    },
+-    "dev:test": {
+-      "cache": false
+-    },
+-    "test:e2e": {
+-      "dependsOn": ["^build"],
+-      "cache": false
+-    }
+-  },
+-  "globalDependencies": ["**/.env.*local"],
++  "globalDependencies": [
++    "**/.env.*local"
++  ],
+   "globalEnv": [
+     "APP_VERSION",
+     "NEXT_PRIVATE_ENCRYPTION_KEY",
+@@ -119,5 +86,53 @@
+     "E2E_TEST_AUTHENTICATE_USERNAME",
+     "E2E_TEST_AUTHENTICATE_USER_EMAIL",
+     "E2E_TEST_AUTHENTICATE_USER_PASSWORD"
+-  ]
++  ],
++  "tasks": {
++    "build": {
++      "dependsOn": [
++        "prebuild",
++        "^build"
++      ],
++      "outputs": [
++        ".next/**",
++        "!.next/cache/**"
++      ]
++    },
++    "prebuild": {
++      "cache": false,
++      "dependsOn": [
++        "^prebuild"
++      ]
++    },
++    "lint": {
++      "cache": false
++    },
++    "lint:fix": {
++      "cache": false
++    },
++    "clean": {
++      "cache": false
++    },
++    "dev": {
++      "cache": false,
++      "persistent": true
++    },
++    "start": {
++      "dependsOn": [
++        "^build"
++      ],
++      "cache": false,
++      "persistent": true
++    },
++    "dev:test": {
++      "cache": false
++    },
++    "test:e2e": {
++      "dependsOn": [
++        "^build"
++      ],
++      "cache": false
++    }
++  },
++  "envMode": "loose"
+ }

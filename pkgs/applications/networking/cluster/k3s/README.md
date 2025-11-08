@@ -9,6 +9,7 @@ K3s is a simplified [Kubernetes](https://wiki.nixos.org/wiki/Kubernetes) version
 ## Configuration Examples
 
 * [Nvidia GPU Passthru](docs/examples/NVIDIA.md)
+* [Intel GPU Passthru](docs/examples/INTEL.md)
 * [Storage Examples](docs/examples/STORAGE.md)
 
 ## Cluster Maintenance and Troubleshooting

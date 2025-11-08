@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }
