@@ -76,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@assets@" "$out/share/diasurgical/devilutionx/"
   '';
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
