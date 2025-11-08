@@ -256,6 +256,7 @@ mapAliases {
   memcached = throw "'memcached' has been renamed to/replaced by 'python-memcached'"; # Converted to throw 2025-10-29
   memory_profiler = throw "'memory_profiler' has been renamed to/replaced by 'memory-profiler'"; # Converted to throw 2025-10-29
   mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
+  mesonpep517 = throw "'mesonpep517' has been removed as it was broken and unmaintained."; # added 2025-11-08
   minikerberos-bad = throw "'minikerberos-bad' has been renamed to/replaced by 'kerbad'"; # added 2025-11-06
   mir_eval = throw "'mir_eval' has been renamed to/replaced by 'mir-eval'"; # Converted to throw 2025-10-29
   mistune_2_0 = throw "'mistune_2_0' has been renamed to/replaced by 'mistune'"; # Converted to throw 2025-10-29
