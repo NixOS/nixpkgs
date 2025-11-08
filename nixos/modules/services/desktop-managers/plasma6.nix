@@ -8,6 +8,33 @@
 let
   cfg = config.services.desktopManager.plasma6;
 
+  # Use only for **internal** options.
+  # This is not exactly user-friendly.
+  kdeConfigurationType =
+    with types;
+    let
+      valueTypes =
+        (oneOf [
+          bool
+          float
+          int
+          str
+        ])
+        // {
+          description = "KDE Configuration value";
+          emptyValue.value = "";
+        };
+      set = (nullOr (lazyAttrsOf valueTypes)) // {
+        description = "KDE Configuration set";
+        emptyValue.value = { };
+      };
+    in
+    (lazyAttrsOf set)
+    // {
+      description = "KDE Configuration file";
+      emptyValue.value = { };
+    };
+
   inherit (pkgs) kdePackages;
   inherit (lib)
     literalExpression
@@ -43,6 +70,37 @@ in
         default = [ "noto-fonts" ];
         example = "noto-fonts-lgc-plus";
       };
+
+      # Internally allows configuring kdeglobals globally
+      kdeglobals = mkOption {
+        internal = true;
+        default = { };
+        type = kdeConfigurationType;
+      };
+
+      # Internally allows configuring kwin globally
+      kwinrc = mkOption {
+        internal = true;
+        default = { };
+        type = kdeConfigurationType;
+      };
+
+      mobile.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable support for running the Plasma Mobile shell.
+        '';
+      };
+
+      mobile.installRecommendedSoftware = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Installs software recommended for use with Plasma Mobile, but which
+          is not strictly required for Plasma Mobile to run.
+        '';
+      };
     };
 
     environment.plasma6.excludePackages = mkOption {
@@ -69,7 +127,7 @@ in
   ];
 
   config = mkMerge [
-    (mkIf cfg.enable {
+    (mkIf (cfg.enable || cfg.mobile.enable) {
       qt.enable = true;
       programs.xwayland.enable = true;
       environment.systemPackages =
@@ -90,9 +148,6 @@ in
             kimageformats # provides Qt plugins
             qtimageformats # provides optional image formats such as .webp and .avif
             kio # provides helper service + a bunch of other stuff
-            kio-admin # managing files as admin
-            kio-extras # stuff for MTP, AFC, etc
-            kio-fuse # fuse interface for KIO
             knighttime # night mode switching daemon
             kpackage # provides kpackagetool tool
             kservice # provides kbuildsycoca6 tool
@@ -115,12 +170,10 @@ in
             kwrited # wall message proxy, not to be confused with kwrite
             baloo # system indexer
             milou # search engine atop baloo
-            kdegraphics-thumbnailers # pdf etc thumbnailer
             polkit-kde-agent-1 # polkit auth ui
             plasma-desktop
             plasma-workspace
             drkonqi # crash handler
-            kde-inotify-survey # warns the user on low inotifywatch limits
 
             # Application integration
             libplasma # provides Kirigami platform theme
@@ -141,35 +194,14 @@ in
             pkgs.xdg-user-dirs # recommended upstream
 
             # Plasma utilities
-            kmenuedit
-            kinfocenter
-            plasma-systemmonitor
-            ksystemstats
-            libksysguard
-            systemsettings
             kcmutils
           ];
           optionalPackages = [
             aurorae
             plasma-browser-integration
             plasma-workspace-wallpapers
-            konsole
             kwin-x11
             (lib.getBin qttools) # Expose qdbus in PATH
-            ark
-            elisa
-            gwenview
-            okular
-            kate
-            ktexteditor # provides elevated actions for kate
-            khelpcenter
-            dolphin
-            baloo-widgets # baloo information in Dolphin
-            dolphin-plugins
-            spectacle
-            ffmpegthumbs
-            krdp
-            kconfig # required for xdg-terminal from xdg-utils
           ]
           ++ lib.optionals config.hardware.sensor.iio.enable [
             # This is required for autorotation in Plasma 6
@@ -299,10 +331,6 @@ in
       # Enable screen reader by default
       services.orca.enable = mkDefault true;
 
-      services.displayManager = {
-        sessionPackages = [ kdePackages.plasma-workspace ];
-        defaultSession = mkDefault "plasma";
-      };
       services.displayManager.sddm = {
         package = kdePackages.sddm;
         theme = mkDefault "breeze";
@@ -346,27 +374,11 @@ in
         };
       };
 
-      security.wrappers = {
-        kwin_wayland = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_sys_nice+ep";
-          source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
-        };
-
-        ksystemstats_intel_helper = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_perfmon+ep";
-          source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
-        };
-
-        ksgrd_network_helper = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_net_raw+ep";
-          source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
-        };
+      security.wrappers.kwin_wayland = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_sys_nice+ep";
+        source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
 
       # Upstream recommends allowing set-timezone and set-ntp so that the KCM and
@@ -402,6 +414,156 @@ in
         serviceConfig.Type = "oneshot";
         script = activationScript;
       };
+    })
+
+    (mkIf (cfg.kwinrc != { }) {
+      environment.etc."xdg/kwinrc".text = lib.generators.toINI { } cfg.kwinrc;
+    })
+
+    (mkIf (cfg.kdeglobals != { }) {
+      environment.etc."xdg/kdeglobals".text = lib.generators.toINI { } cfg.kdeglobals;
+    })
+
+    # Plasma Desktop
+    (mkIf cfg.enable {
+      services.displayManager = {
+        sessionPackages = [ kdePackages.plasma-workspace ];
+        defaultSession = mkDefault "plasma";
+      };
+
+      environment.systemPackages =
+        with kdePackages;
+        let
+          requiredPackages = [
+            # Plasma utilities
+            kmenuedit
+            kinfocenter
+            plasma-systemmonitor
+            ksystemstats
+            libksysguard
+            systemsettings
+
+            kdegraphics-thumbnailers # pdf etc thumbnailer
+            kde-inotify-survey # warns the user on low inotifywatch limits
+            kio-admin # managing files as admin
+            kio-extras # stuff for MTP, AFC, etc
+            kio-fuse # fuse interface for KIO
+          ];
+          optionalPackages = [
+            konsole
+            ark
+            elisa
+            kate
+            ktexteditor # provides elevated actions for kate
+            gwenview
+            okular
+            khelpcenter
+            dolphin
+            baloo-widgets # baloo information in Dolphin
+            dolphin-plugins
+            spectacle
+            ffmpegthumbs
+            krdp
+            kconfig # required for xdg-terminal from xdg-utils
+          ];
+        in
+        requiredPackages
+        ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages;
+
+      security.wrappers = {
+        ksystemstats_intel_helper = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_perfmon+ep";
+          source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
+        };
+
+        ksgrd_network_helper = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_net_raw+ep";
+          source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
+        };
+      };
+    })
+
+    # Plasma Mobile
+    (mkIf cfg.mobile.enable {
+      assertions = [
+        {
+          # The user interface breaks without pulse
+          assertion =
+            config.services.pulseaudio.enable
+            || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
+          message = "Plasma Mobile requires a Pulseaudio compatible sound server.";
+        }
+      ];
+
+      environment.systemPackages =
+        with pkgs.kdePackages;
+        [
+          # Basic packages without which Plasma Mobile fails to work properly.
+          plasma-mobile
+          plasma-nano
+          pkgs.maliit-framework
+          pkgs.maliit-keyboard
+        ]
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (
+          with pkgs.kdePackages;
+          [
+            # Additional software made for Plasma Mobile.
+            alligator
+            # TODO: doesn't build
+            # angelfish
+            audiotube
+            calindori
+            kalk
+            kasts
+            kclock
+            keysmith
+            koko
+            krecorder
+            ktrip
+            kweather
+            plasma-dialer
+            # TODO: should be packaged independently, see https://plasma-mobile.org/info/
+            # plasma-phonebook
+            # plasma-settings
+            qmlkonsole
+            spacebar
+          ]
+        );
+
+      # The following services are needed or the UI is broken.
+      hardware.bluetooth.enable = true;
+      networking.networkmanager.enable = true;
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
+
+      # Recommendations can be found here:
+      #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
+      # This configuration is the minimum required for Plasma Mobile to *work*.
+      services.desktopManager.plasma6 = {
+        kdeglobals = {
+          KDE = {
+            # This forces a numeric PIN for the lockscreen, which is the
+            # recommendation from upstream.
+            LookAndFeelPackage = lib.mkDefault "org.kde.plasma.phone";
+          };
+        };
+        kwinrc = {
+          "Wayland" = {
+            "InputMethod[$e]" = "/run/current-system/sw/share/applications/com.github.maliit.keyboard.desktop";
+            "VirtualKeyboardEnabled" = "true";
+          };
+          "org.kde.kdecoration2" = {
+            # No decorations (title bar)
+            NoPlugin = lib.mkDefault "true";
+          };
+        };
+      };
+
+      services.displayManager.sessionPackages = [ pkgs.kdePackages.plasma-mobile ];
     })
   ];
 }
