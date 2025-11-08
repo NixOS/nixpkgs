@@ -1,4 +1,19 @@
-{ lib, bashInteractive, coreutils, fetchFromGitHub, fzf, gawk, gnused, jujutsu, makeWrapper, pandoc, python3, stdenv, util-linux, installShellFiles, }
+{
+  lib,
+  bashInteractive,
+  coreutils,
+  fetchFromGitHub,
+  fzf,
+  gawk,
+  gnused,
+  jujutsu,
+  makeWrapper,
+  pandoc,
+  python3,
+  stdenv,
+  util-linux,
+  installShellFiles,
+}
 
 stdenv.mkDerivation rec {
   pname = "jj-fzf";
@@ -59,7 +74,7 @@ stdenv.mkDerivation rec {
 
     # Install helper scripts and libraries to libexec
     install -D -t $out/libexec/jj-fzf preflight.sh version.sh
-    cp -r lib $out/libexec/jj-fzf/;
+    cp -r lib $out/libexec/jj-fzf/
 
     # Install documentation
     installManPage doc/jj-fzf.1
