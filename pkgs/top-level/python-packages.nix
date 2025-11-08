@@ -6286,8 +6286,6 @@ self: super: with self; {
 
   gower = callPackage ../development/python-modules/gower { };
 
-  gpapi = callPackage ../development/python-modules/gpapi { };
-
   gpaw = callPackage ../development/python-modules/gpaw { };
 
   gpgme = callPackage ../development/python-modules/gpgme { inherit (pkgs) gpgme; };
@@ -6297,8 +6295,6 @@ self: super: with self; {
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
-
-  gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
@@ -9148,8 +9144,6 @@ self: super: with self; {
   materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
 
   mathutils = callPackage ../development/python-modules/mathutils { };
-
-  matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
