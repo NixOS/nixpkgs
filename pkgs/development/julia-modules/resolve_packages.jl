@@ -87,7 +87,7 @@ if VERSION >= VersionNumber("1.9")
             push!(orig_pkgs, pkg)
             ctx.env.project.deps[name] = uuid
             entry = Pkg.Types.manifest_info(ctx.env.manifest, uuid)
-            if VERSION >= VersionNumber("1.11")
+            if VERSION >= VersionNumber("1.11") && VERSION < VersionNumber("1.12")
                 orig_pkgs[length(orig_pkgs)] = update_package_add(ctx, pkg, entry, nothing, nothing, false)
             else
                 orig_pkgs[length(orig_pkgs)] = update_package_add(ctx, pkg, entry, false)
