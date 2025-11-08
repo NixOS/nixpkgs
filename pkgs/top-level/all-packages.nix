@@ -4227,8 +4227,6 @@ with pkgs;
     wlroots = wlroots_0_19;
   };
 
-  wring = nodePackages.wring;
-
   wyrd = callPackage ../tools/misc/wyrd {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
@@ -6402,8 +6400,6 @@ with pkgs;
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (llvmPackages_18) llvm libclang;
   };
-
-  inherit (nodePackages) csslint;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
@@ -11666,8 +11662,6 @@ with pkgs;
     VoiceOfFaust = callPackage ../applications/audio/magnetophonDSP/VoiceOfFaust { };
     shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
   };
-
-  mastodon-bot = nodePackages.mastodon-bot;
 
   matrix-commander =
     python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander
