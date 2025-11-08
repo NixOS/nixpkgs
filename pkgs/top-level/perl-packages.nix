@@ -34224,6 +34224,10 @@ with self;
       url = "mirror://cpan/authors/id/T/TM/TMOERTEL/Test-LectroTest-0.5001.tar.gz";
       hash = "sha256-rCtPDZWJmvGhoex4TLdAsrkCVqvuEcg+eykRA+ye1zU=";
     };
+    preCheck = ''
+      # Remove impure test
+      rm t/gens.t
+    '';
     meta = {
       description = "Easy, automatic, specification-based tests";
       license = with lib.licenses; [
