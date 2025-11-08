@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "philipstv";
-  version = "2.1.1";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bcyran";
     repo = "philipstv";
     tag = version;
-    hash = "sha256-BvQurZls9NjtHhTXLQ9t8fHkAF/QU/c6mmRvNmE0v90=";
+    hash = "sha256-9OlPaGruD6HDJArvIOb/pIVw5nqTUleDfxeYp2xBbEA=";
   };
 
   build-system = [
