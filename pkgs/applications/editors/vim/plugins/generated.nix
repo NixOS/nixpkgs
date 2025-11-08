@@ -1752,6 +1752,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-indent = buildVimPlugin {
+    pname = "blink.indent";
+    version = "2025-11-07";
+    src = fetchFromGitHub {
+      owner = "Saghen";
+      repo = "blink.indent";
+      rev = "a8feeeae8510d16f26afbb5c81f2ad1ccea38d62";
+      sha256 = "1qm8h8yfkwf79hnfwn18qmk3546qzr3b9qzr6038lnbf54gzvkff";
+    };
+    meta.homepage = "https://github.com/Saghen/blink.indent/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-nerdfont-nvim = buildVimPlugin {
     pname = "blink-nerdfont.nvim";
     version = "2025-02-06";
