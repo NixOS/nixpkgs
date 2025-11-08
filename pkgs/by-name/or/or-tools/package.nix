@@ -35,6 +35,25 @@ let
   python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
   pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { protobuf_29 = protobuf; };
 
+  # local revert of 58daf511687f191829238fc7f571e08dc9dedf56,
+  # working around https://github.com/google/or-tools/issues/4911
+  _highs = highs.overrideAttrs (old: rec {
+    version = "1.10.0";
+    src = fetchFromGitHub {
+      owner = "ERGO-Code";
+      repo = "HiGHS";
+      rev = "v${version}";
+      hash = "sha256-CzHE2d0CtScexdIw95zHKY1Ao8xFodtfSNNkM6dNCac=";
+    };
+    # CMake Error in CMakeLists.txt:
+    #   Imported target "highs::highs" includes non-existent path
+    #     "/include"
+    #   in its INTERFACE_INCLUDE_DIRECTORIES.
+    postPatch = ''
+      sed -i "/CMAKE_CUDA_PATH/d" src/CMakeLists.txt
+    '';
+  });
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "or-tools";
@@ -124,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     glpk
     gbenchmark
     gtest
-    highs
+    _highs
     python3.pkgs.absl-py
     python3.pkgs.pybind11
     python3.pkgs.pybind11-abseil
@@ -138,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [
     abseil-cpp
-    highs
+    _highs
     protobuf
     python-protobuf
     python3.pkgs.immutabledict
