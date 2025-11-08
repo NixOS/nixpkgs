@@ -115,14 +115,6 @@ final: prev: {
     name = "rush";
   };
 
-  ts-node = prev.ts-node.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/ts-node" \
-      --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
-    '';
-  };
-
   tsun = prev.tsun.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
