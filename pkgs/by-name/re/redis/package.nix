@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.2.2";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-0TMUSNCrDEtOkojcmFFhmLQ0ghyLAn+OS4xl4Sbr76c=";
+    hash = "sha256-PsTAo92Vz+LNxOsbI9VVnx+rHFm67a3bBMeDcLdhXFA=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
