@@ -3653,10 +3653,6 @@ with pkgs;
     llvm = llvm_19;
   };
 
-  ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
-
-  ossec-server = callPackage ../tools/security/ossec/server.nix { };
-
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
   };
