@@ -61,7 +61,10 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script {
     # the main repository does not have the releases feed enabled, so use the
     # codeberg mirror
-    url = "https://codeberg.org/gone/go-away";
+    extraArgs = [
+      "--url"
+      "https://codeberg.org/gone/go-away"
+    ];
   };
 
   meta = {
