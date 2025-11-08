@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   poetry-core,
   poetry-dynamic-versioning,
   installShellFiles,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "philipstv";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bcyran";
@@ -65,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "CLI and library to control Philips Android-powered TVs";
     homepage = "https://github.com/bcyran/philipstv";
-    changelog = "https://github.com/bcyran/philipstv/releases/tag/${version}";
+    changelog = "https://github.com/bcyran/philipstv/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     mainProgram = "philipstv";
     maintainers = with lib.maintainers; [ bcyran ];
