@@ -27500,21 +27500,11 @@ with self;
 
   PDL = buildPerlPackage {
     pname = "PDL";
-    version = "2.025";
+    version = "2.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.025.tar.gz";
-      hash = "sha256-G1oWfq0ndy2V2tJ/jrfQlRnSkVbu1TxvwUQVGUtaitY=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.100.tar.gz";
+      hash = "sha256-iqpu35AlWj0LTQBH1icOESS/HhrNJBSATocxC2s5vkA=";
     };
-    patchPhase = ''
-      substituteInPlace perldl.conf \
-        --replace 'POSIX_THREADS_LIBS => undef' 'POSIX_THREADS_LIBS => "-L${pkgs.glibc.dev}/lib"' \
-        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${pkgs.glibc.dev}/include"' \
-        --replace 'WITH_MINUIT => undef' 'WITH_MINUIT => 0' \
-        --replace 'WITH_SLATEC => undef' 'WITH_SLATEC => 0' \
-        --replace 'WITH_HDF => undef' 'WITH_HDF => 0' \
-        --replace 'WITH_GD => undef' 'WITH_GD => 0' \
-        --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
-    '';
 
     # FIXME: Why are these libraries in `nativeBuildInputs`?
     nativeBuildInputs = with pkgs; [
