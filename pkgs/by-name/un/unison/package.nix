@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ynsu9jLGFtjlzmHZtOdLEH5G6eXFAhZs9UayYrmKqp0=";
   };
 
+  # Allow the build scripts to correctly call ocamlfind & detect dependencies
+  patches = [ ./fix-ocamlfind-env.patch ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
