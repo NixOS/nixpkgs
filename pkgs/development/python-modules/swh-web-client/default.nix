@@ -37,6 +37,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
+  ];
+
   dependencies = [
     click
     dateutils

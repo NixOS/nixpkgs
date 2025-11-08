@@ -18096,6 +18096,8 @@ self: super: with self; {
 
   swh-scheduler = callPackage ../development/python-modules/swh-scheduler { };
 
+  swh-shard = callPackage ../development/python-modules/swh-shard { };
+
   swh-storage = callPackage ../development/python-modules/swh-storage { };
 
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
