@@ -24644,6 +24644,9 @@ with self;
       substituteInPlace Makefile.PL \
         --replace-fail '`which pkg-config`' "'$PKG_CONFIG'"
     '';
+    patches = [
+      ../development/perl-modules/MusicBrainz-DiscID---ExtUtils-ParseXS-compat.patch
+    ];
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
