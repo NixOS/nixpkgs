@@ -578,7 +578,7 @@ in
               add_header Cache-Control "public";
             '';
           };
-          "~ ^/.*-([A-Za-z0-9]+)\.webmanifest$" = {
+          "~ ^/.*-([A-Za-z0-9]+)\\.webmanifest$" = {
             root = cfg.package.web;
             extraConfig = ''
               access_log off;
