@@ -154,11 +154,11 @@
     "vendorHash": "sha256-Puf8Rex1o3P1XAO+LIXBWx9MTUUsaD+iJQkFLjqVJA0="
   },
   "ciscodevnet_aci": {
-    "hash": "sha256-+aD4M07xXMTbvp69IuGlO3rSkVEi5NVe5fqEPkWNeM0=",
+    "hash": "sha256-MxcHtbuU2tMJpF8seEDqmsnamm58Lugi3Hw+l9wAcOU=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
     "owner": "CiscoDevNet",
     "repo": "terraform-provider-aci",
-    "rev": "v2.17.0",
+    "rev": "v2.18.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
