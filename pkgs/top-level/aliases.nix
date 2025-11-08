@@ -1176,6 +1176,8 @@ mapAliases {
   ortp = throw "'ortp' has been moved to 'linphonePackages.ortp'"; # Added 2025-09-20
   OSCAR = throw "'OSCAR' has been renamed to/replaced by 'oscar'"; # Converted to throw 2025-10-27
   osm2xmap = throw "osm2xmap has been removed, as it is unmaintained upstream and depended on old dependencies with broken builds"; # Added 2025-09-16
+  ossec-agent = throw "'ossec-agent' has been removed due to lack of maintenance"; # Added 2025-11-08
+  ossec-server = throw "'ossec-server' has been removed due to lack of maintenance"; # Added 2025-11-08
   overrideLibcxx = throw "overrideLibcxx has been removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = throw "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
   pacup = throw "'pacup' has been renamed to/replaced by 'perlPackages.pacup'"; # Converted to throw 2025-10-27
