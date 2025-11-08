@@ -73,7 +73,7 @@ in
       example = lib.literalExpression ''
         {
           customRC = '''
-            " here your custom VimScript configuration goes!
+            -- here your custom VimScript configuration goes!
           ''';
           customLuaRC = '''
             -- here your custom Lua configuration goes!
