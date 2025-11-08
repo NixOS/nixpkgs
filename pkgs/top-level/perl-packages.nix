@@ -38230,6 +38230,10 @@ with self;
       pkgs.libGLU
       Wx
     ];
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     doCheck = false;
     meta = {
       description = "wxPerl demo helper for Wx::GLCanvas";
