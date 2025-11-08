@@ -17929,6 +17929,8 @@ self: super: with self; {
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
+  streamingjson = callPackage ../development/python-modules/streamingjson { };
+
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
   streamlit = callPackage ../development/python-modules/streamlit { };
