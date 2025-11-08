@@ -31206,10 +31206,10 @@ with self;
 
   StatisticsCaseResampling = buildPerlPackage {
     pname = "Statistics-CaseResampling";
-    version = "0.15";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SM/SMUELLER/Statistics-CaseResampling-0.15.tar.gz";
-      hash = "sha256-hRxDvW8Q0yKJUipQxqIJw7JGz9PrVmdz5oYe2gSkkIc=";
+      url = "mirror://cpan/authors/id/S/SM/SMUELLER/Statistics-CaseResampling-0.17.tar.gz";
+      hash = "sha256-buZtDu2BiC7E+kj//hY6BP2YxNVqwejNwUqfg70YObw=";
     };
     meta = {
       description = "Efficient resampling and calculation of medians with confidence intervals";
