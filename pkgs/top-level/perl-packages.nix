@@ -1862,10 +1862,10 @@ with self;
 
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
-    version = "1.10";
+    version = "1.11";
     src = fetchurl {
-      url = "https://github.com/Logitech/slimserver-vendor/raw/public/9.0/CPAN/Audio-Scan-1.10.tar.gz";
-      hash = "sha256-Vqi/rnYKijmaWYwTFTyj88aMoDB2cCSHxHeR1bkfqSk=";
+      url = "https://github.com/Logitech/slimserver-vendor/raw/public/9.1/CPAN/Audio-Scan-1.11.tar.gz";
+      hash = "sha256-G+0qaqP2c1w/UKuOmRawq/qKZjsWvZUzTAl5C6H6bUI=";
     };
     buildInputs = [
       pkgs.zlib
