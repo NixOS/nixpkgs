@@ -3,6 +3,7 @@
   lib,
   itstool,
   fetchurl,
+  fetchpatch,
   gdk-pixbuf,
   telepathy-glib,
   gjs,
@@ -42,6 +43,13 @@ stdenv.mkDerivation rec {
     # If we wrap it in a shell script, gjs can no longer run it.
     # Let’s change the code to run the script directly by making it executable and having gjs in shebang.
     ./make-thumbnailer-wrappable.patch
+
+    # Switch to girepository-2.0
+    # https://gitlab.gnome.org/GNOME/polari/-/merge_requests/356
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/polari/-/commit/d7946c7fe39f112cd3f751bb95b170446022980d.patch";
+      hash = "sha256-naRzZ5Iple11HJ+d8DL9oJy3C4VKLkz+FdMuhO7sc7k=";
+    })
   ];
 
   propagatedUserEnvPkgs = [ telepathy-idle ];
