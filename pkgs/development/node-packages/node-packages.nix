@@ -3027,15 +3027,6 @@ let
         sha512 = "cE3+jb9WRlu+uOSAugewNpITJDt1VF8dHOopPO4IABFc3SXYL5WE/+PTz/FCdZRRfIujiWW3n3aMbv1eIGVRWA==";
       };
     };
-    "@types/commander-2.12.5" = {
-      name = "_at_types_slash_commander";
-      packageName = "@types/commander";
-      version = "2.12.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/commander/-/commander-2.12.5.tgz";
-        sha512 = "YXGZ/rz+s57VbzcvEV9fUoXeJlBt5HaKu5iUheiIWNsJs23bz6AnRuRiZBRVBLYyPnixNvVnuzM5pSaxr8Yp/g==";
-      };
-    };
     "@types/concat-stream-2.0.3" = {
       name = "_at_types_slash_concat-stream";
       packageName = "@types/concat-stream";
@@ -3070,15 +3061,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@types/debug/-/debug-4.1.12.tgz";
         sha512 = "vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==";
-      };
-    };
-    "@types/diff-3.5.8" = {
-      name = "_at_types_slash_diff";
-      packageName = "@types/diff";
-      version = "3.5.8";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/diff/-/diff-3.5.8.tgz";
-        sha512 = "CZ5vepL87+M8PxRIvJjR181Erahch2w7Jev/XJm+Iot/SOvJh8QqH/N79b+vsKtYF6fFzoPieiiq2c5tzmXR9A==";
       };
     };
     "@types/es-aggregate-error-1.0.6" = {
@@ -18155,16 +18137,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz";
         sha512 = "jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==";
-      };
-    };
-    "luaparse-git+https://github.com/oxyc/luaparse#ac42a00ebf4020b8c9d3219e4b0f84bf7ce6e802" = {
-      name = "luaparse";
-      packageName = "luaparse";
-      version = "0.2.1";
-      src = fetchgit {
-        url = "https://github.com/oxyc/luaparse";
-        rev = "ac42a00ebf4020b8c9d3219e4b0f84bf7ce6e802";
-        sha256 = "f813d671f8f8088d70d29f7a7770bdd5ed41ed97240ae9346d7ced0c094ee049";
       };
     };
     "lunr-2.3.9" = {
@@ -39261,35 +39233,6 @@ in
     meta = {
       description = "Expose localhost to the world";
       homepage = "https://github.com/localtunnel/localtunnel#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  lua-fmt = nodeEnv.buildNodePackage {
-    name = "lua-fmt";
-    packageName = "lua-fmt";
-    version = "2.6.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lua-fmt/-/lua-fmt-2.6.0.tgz";
-      sha512 = "J4D7TK+BhSJ9ePQPpZPlu/aHE3X9ojN+D7DNv1HXZPryBJ74XWVmXpRX+qceXdE15TUsQRCj9w81waVOOFhfWA==";
-    };
-    dependencies = [
-      sources."@types/commander-2.12.5"
-      sources."@types/diff-3.5.8"
-      sources."@types/get-stdin-5.0.1"
-      sources."@types/node-22.13.10"
-      sources."commander-2.20.3"
-      sources."diff-3.5.0"
-      sources."get-stdin-5.0.1"
-      sources."luaparse-git+https://github.com/oxyc/luaparse#ac42a00ebf4020b8c9d3219e4b0f84bf7ce6e802"
-      sources."undici-types-6.20.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Format Lua code";
-      homepage = "https://github.com/trixnz/lua-fmt";
       license = "MIT";
     };
     production = true;
