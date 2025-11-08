@@ -20736,22 +20736,23 @@ with self;
 
   MathPari = buildPerlPackage rec {
     pname = "Math-Pari";
-    version = "2.030523";
+    version = "2.030528";
     nativeBuildInputs = [ pkgs.unzip ];
-    pariversion = "2.1.7";
+    pariversion = "2.3.5";
     pari_tgz = fetchurl {
-      url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.1/pari-${pariversion}.tgz";
-      hash = "sha256-kULyza8wg8iWLxpcK7Dp/okV99lJDAMxKsI2HH6hVfo=";
+      url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.3/pari-${pariversion}.tar.gz";
+      hash = "sha256-R92uGvc7RHZmDSqJM4SDlJBnqX/7h1jILoGJ36TInYg=";
     };
+
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
     env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
-    preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
-    makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tgz" ];
+    preConfigure = "cp ${pari_tgz} pari-${pariversion}.tar.gz";
+    makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tar.gz" ];
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030518.zip";
-      hash = "sha256-3DiVWpaQvmuvqN4lJiEjd8Psn+jaXsAiY6nK+UtYu5E=";
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030528.tar.gz";
+      hash = "sha256-Z/dNIWxpY1qxxuo+J84ZdQqUorVgrnKIuy1s9xT85sg=";
     };
     meta = {
       description = "Perl interface to PARI";
