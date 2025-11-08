@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiobtclientapi";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "plotski";
     repo = "aiobtclientapi";
     tag = "v${version}";
-    hash = "sha256-ZpUaMsJs1vdVGQOid7aJ+SJKaCbTtHfSw7cOwPTL0ss=";
+    hash = "sha256-ga3EyKhfdEKkjFktUlgLSX54QbTc/a48vmWjmRqa+4w=";
   };
 
   pythonRelaxDeps = [
