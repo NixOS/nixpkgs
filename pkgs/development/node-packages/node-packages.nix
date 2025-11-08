@@ -41175,24 +41175,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  npm-merge-driver = nodeEnv.buildNodePackage {
-    name = "npm-merge-driver";
-    packageName = "npm-merge-driver";
-    version = "2.3.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/npm-merge-driver/-/npm-merge-driver-2.3.6.tgz";
-      sha512 = "uPjCEWZ93f379zw0AMEgFtZIlpSSnpXc8BEIcs8yYHEZs5Y3d85OZHisLjNhjbYnbdAznxTq+VbyBWAQZDEm9w==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "git merge driver for automatically merging lockfiles";
-      homepage = "https://github.com/npm/npm-merge-driver#readme";
-      license = "ISC";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   nrm = nodeEnv.buildNodePackage {
     name = "nrm";
     packageName = "nrm";
