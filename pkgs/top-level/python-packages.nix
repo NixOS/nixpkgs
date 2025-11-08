@@ -9341,8 +9341,6 @@ self: super: with self; {
 
   meson-python = callPackage ../development/python-modules/meson-python { inherit (pkgs) ninja; };
 
-  mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
-
   messagebird = callPackage ../development/python-modules/messagebird { };
 
   metaflow = callPackage ../development/python-modules/metaflow { };
@@ -12817,8 +12815,6 @@ self: super: with self; {
   pycasbin = callPackage ../development/python-modules/pycasbin { };
 
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
-
-  pycategories = callPackage ../development/python-modules/pycategories { };
 
   pycayennelpp = callPackage ../development/python-modules/pycayennelpp { };
 
