@@ -39,6 +39,7 @@ mapAliases {
   "@babel/cli" =
     throw "@babel/cli was removed because upstream highly suggests installing it in your project instead of globally."; # Added 2025-11-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@commitlint/cli" = pkgs.commitlint; # Added 2025-11-08
   "@commitlint/config-conventional" =
     throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17

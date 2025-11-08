@@ -444,141 +444,6 @@ let
         sha512 = "Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==";
       };
     };
-    "@commitlint/config-validator-19.8.0" = {
-      name = "_at_commitlint_slash_config-validator";
-      packageName = "@commitlint/config-validator";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/config-validator/-/config-validator-19.8.0.tgz";
-        sha512 = "+r5ZvD/0hQC3w5VOHJhGcCooiAVdynFlCe2d6I9dU+PvXdV3O+fU4vipVg+6hyLbQUuCH82mz3HnT/cBQTYYuA==";
-      };
-    };
-    "@commitlint/ensure-19.8.0" = {
-      name = "_at_commitlint_slash_ensure";
-      packageName = "@commitlint/ensure";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/ensure/-/ensure-19.8.0.tgz";
-        sha512 = "kNiNU4/bhEQ/wutI1tp1pVW1mQ0QbAjfPRo5v8SaxoVV+ARhkB8Wjg3BSseNYECPzWWfg/WDqQGIfV1RaBFQZg==";
-      };
-    };
-    "@commitlint/execute-rule-19.8.0" = {
-      name = "_at_commitlint_slash_execute-rule";
-      packageName = "@commitlint/execute-rule";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/execute-rule/-/execute-rule-19.8.0.tgz";
-        sha512 = "fuLeI+EZ9x2v/+TXKAjplBJWI9CNrHnyi5nvUQGQt4WRkww/d95oVRsc9ajpt4xFrFmqMZkd/xBQHZDvALIY7A==";
-      };
-    };
-    "@commitlint/format-19.8.0" = {
-      name = "_at_commitlint_slash_format";
-      packageName = "@commitlint/format";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/format/-/format-19.8.0.tgz";
-        sha512 = "EOpA8IERpQstxwp/WGnDArA7S+wlZDeTeKi98WMOvaDLKbjptuHWdOYYr790iO7kTCif/z971PKPI2PkWMfOxg==";
-      };
-    };
-    "@commitlint/is-ignored-19.8.0" = {
-      name = "_at_commitlint_slash_is-ignored";
-      packageName = "@commitlint/is-ignored";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/is-ignored/-/is-ignored-19.8.0.tgz";
-        sha512 = "L2Jv9yUg/I+jF3zikOV0rdiHUul9X3a/oU5HIXhAJLE2+TXTnEBfqYP9G5yMw/Yb40SnR764g4fyDK6WR2xtpw==";
-      };
-    };
-    "@commitlint/lint-19.8.0" = {
-      name = "_at_commitlint_slash_lint";
-      packageName = "@commitlint/lint";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/lint/-/lint-19.8.0.tgz";
-        sha512 = "+/NZKyWKSf39FeNpqhfMebmaLa1P90i1Nrb1SrA7oSU5GNN/lksA4z6+ZTnsft01YfhRZSYMbgGsARXvkr/VLQ==";
-      };
-    };
-    "@commitlint/load-19.8.0" = {
-      name = "_at_commitlint_slash_load";
-      packageName = "@commitlint/load";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/load/-/load-19.8.0.tgz";
-        sha512 = "4rvmm3ff81Sfb+mcWT5WKlyOa+Hd33WSbirTVUer0wjS1Hv/Hzr07Uv1ULIV9DkimZKNyOwXn593c+h8lsDQPQ==";
-      };
-    };
-    "@commitlint/message-19.8.0" = {
-      name = "_at_commitlint_slash_message";
-      packageName = "@commitlint/message";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/message/-/message-19.8.0.tgz";
-        sha512 = "qs/5Vi9bYjf+ZV40bvdCyBn5DvbuelhR6qewLE8Bh476F7KnNyLfdM/ETJ4cp96WgeeHo6tesA2TMXS0sh5X4A==";
-      };
-    };
-    "@commitlint/parse-19.8.0" = {
-      name = "_at_commitlint_slash_parse";
-      packageName = "@commitlint/parse";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/parse/-/parse-19.8.0.tgz";
-        sha512 = "YNIKAc4EXvNeAvyeEnzgvm1VyAe0/b3Wax7pjJSwXuhqIQ1/t2hD3OYRXb6D5/GffIvaX82RbjD+nWtMZCLL7Q==";
-      };
-    };
-    "@commitlint/read-19.8.0" = {
-      name = "_at_commitlint_slash_read";
-      packageName = "@commitlint/read";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/read/-/read-19.8.0.tgz";
-        sha512 = "6ywxOGYajcxK1y1MfzrOnwsXO6nnErna88gRWEl3qqOOP8MDu/DTeRkGLXBFIZuRZ7mm5yyxU5BmeUvMpNte5w==";
-      };
-    };
-    "@commitlint/resolve-extends-19.8.0" = {
-      name = "_at_commitlint_slash_resolve-extends";
-      packageName = "@commitlint/resolve-extends";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/resolve-extends/-/resolve-extends-19.8.0.tgz";
-        sha512 = "CLanRQwuG2LPfFVvrkTrBR/L/DMy3+ETsgBqW1OvRxmzp/bbVJW0Xw23LnnExgYcsaFtos967lul1CsbsnJlzQ==";
-      };
-    };
-    "@commitlint/rules-19.8.0" = {
-      name = "_at_commitlint_slash_rules";
-      packageName = "@commitlint/rules";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/rules/-/rules-19.8.0.tgz";
-        sha512 = "IZ5IE90h6DSWNuNK/cwjABLAKdy8tP8OgGVGbXe1noBEX5hSsu00uRlLu6JuruiXjWJz2dZc+YSw3H0UZyl/mA==";
-      };
-    };
-    "@commitlint/to-lines-19.8.0" = {
-      name = "_at_commitlint_slash_to-lines";
-      packageName = "@commitlint/to-lines";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/to-lines/-/to-lines-19.8.0.tgz";
-        sha512 = "3CKLUw41Cur8VMjh16y8LcsOaKbmQjAKCWlXx6B0vOUREplp6em9uIVhI8Cv934qiwkbi2+uv+mVZPnXJi1o9A==";
-      };
-    };
-    "@commitlint/top-level-19.8.0" = {
-      name = "_at_commitlint_slash_top-level";
-      packageName = "@commitlint/top-level";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/top-level/-/top-level-19.8.0.tgz";
-        sha512 = "Rphgoc/omYZisoNkcfaBRPQr4myZEHhLPx2/vTXNLjiCw4RgfPR1wEgUpJ9OOmDCiv5ZyIExhprNLhteqH4FuQ==";
-      };
-    };
-    "@commitlint/types-19.8.0" = {
-      name = "_at_commitlint_slash_types";
-      packageName = "@commitlint/types";
-      version = "19.8.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@commitlint/types/-/types-19.8.0.tgz";
-        sha512 = "LRjP623jPyf3Poyfb0ohMj8I3ORyBDOwXAgxxVPbSD0unJuW2mJWeiRfaQinjtccMqC5Wy1HOMfa4btKjbNxbg==";
-      };
-    };
     "@conventional-changelog/git-client-1.0.1" = {
       name = "_at_conventional-changelog_slash_git-client";
       packageName = "@conventional-changelog/git-client";
@@ -3025,15 +2890,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@types/concat-stream/-/concat-stream-2.0.3.tgz";
         sha512 = "3qe4oQAPNwVNwK4C9c8u+VJqv9kez+2MR4qJpoPFfXtgxxif1QbFusvXzK0/Wra2VX07smostI2VMmJNSpZjuQ==";
-      };
-    };
-    "@types/conventional-commits-parser-5.0.1" = {
-      name = "_at_types_slash_conventional-commits-parser";
-      packageName = "@types/conventional-commits-parser";
-      version = "5.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/conventional-commits-parser/-/conventional-commits-parser-5.0.1.tgz";
-        sha512 = "7uz5EHdzz2TqoMfV7ee61Egf5y6NkcO4FB/1iCCQnbeiI1F3xzv3vK5dBCXUCLQgGYS+mUeigK1iKQzvED+QnQ==";
       };
     };
     "@types/cors-2.8.17" = {
@@ -7590,15 +7446,6 @@ let
         sha512 = "tuUH8H/19VjtD9Ig7l6TQRh+Z0Yt0NZ6w/cCkkyzUbGQTnUEmKfGtkC9gGfVgCfOL1Rzno5NgNF4KY8vR+Jo3w==";
       };
     };
-    "conventional-changelog-angular-7.0.0" = {
-      name = "conventional-changelog-angular";
-      packageName = "conventional-changelog-angular";
-      version = "7.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/conventional-changelog-angular/-/conventional-changelog-angular-7.0.0.tgz";
-        sha512 = "ROjNchA9LgfNMTTFSIWPzebCwOGFdgkEq45EnvvrmSLvCtAw0HSmrCs7/ty+wAeYUZyNay0YMUNYFTRL72PkBQ==";
-      };
-    };
     "conventional-changelog-angular-8.0.0" = {
       name = "conventional-changelog-angular";
       packageName = "conventional-changelog-angular";
@@ -7714,15 +7561,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/conventional-commits-filter/-/conventional-commits-filter-5.0.0.tgz";
         sha512 = "tQMagCOC59EVgNZcC5zl7XqO30Wki9i9J3acbUvkaosCT6JX3EeFwJD7Qqp4MCikRnzS18WXV3BLIQ66ytu6+Q==";
-      };
-    };
-    "conventional-commits-parser-5.0.0" = {
-      name = "conventional-commits-parser";
-      packageName = "conventional-commits-parser";
-      version = "5.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/conventional-commits-parser/-/conventional-commits-parser-5.0.0.tgz";
-        sha512 = "ZPMl0ZJbw74iS9LuX9YIAiW8pfM5p3yh2o/NbXHbkFuZzY5jvdi5jFycEOkmBW5H5I7nA+D6f3UcsCLP2vvSEA==";
       };
     };
     "conventional-commits-parser-6.1.0" = {
@@ -7885,15 +7723,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cosmiconfig/-/cosmiconfig-9.0.0.tgz";
         sha512 = "itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==";
-      };
-    };
-    "cosmiconfig-typescript-loader-6.1.0" = {
-      name = "cosmiconfig-typescript-loader";
-      packageName = "cosmiconfig-typescript-loader";
-      version = "6.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-6.1.0.tgz";
-        sha512 = "tJ1w35ZRUiM5FeTzT7DtYWAFFv37ZLqSRkGi2oeCK1gPhvaWjkAtfXvLmvE1pRfxxp9aQo6ba/Pvg1dKj05D4g==";
       };
     };
     "cp-file-10.0.0" = {
@@ -8398,15 +8227,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz";
         sha512 = "ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==";
-      };
-    };
-    "dargs-8.1.0" = {
-      name = "dargs";
-      packageName = "dargs";
-      version = "8.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/dargs/-/dargs-8.1.0.tgz";
-        sha512 = "wAV9QHOsNbwnWdNW2FYvE1P56wtgSbM+3SZcdGiWQILwVjACCXDCI3Ai8QlCjMDB8YK5zySiXZYBiwGmNY3lnw==";
       };
     };
     "dash-ast-1.0.0" = {
@@ -11199,15 +11019,6 @@ let
         sha512 = "v2ZsoEuVHYy8ZIlYqwPe/39Cy+cFDzp4dXPaxNvkEuouymu+2Jbz0PxpKarJHYJTmv2HWT3O382qY8l4jMWthw==";
       };
     };
-    "find-up-7.0.0" = {
-      name = "find-up";
-      packageName = "find-up";
-      version = "7.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/find-up/-/find-up-7.0.0.tgz";
-        sha512 = "YyZM99iHrqLKjmt4LJDj58KI+fYyufRLBSYcqycxf//KpBk9FoewoGX0450m9nB44qrZnovzC2oeP5hUibxc/g==";
-      };
-    };
     "find-up-simple-1.0.1" = {
       name = "find-up-simple";
       packageName = "find-up-simple";
@@ -11962,15 +11773,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/git-diff-tree/-/git-diff-tree-1.1.0.tgz";
         sha512 = "PdNkH2snpXsKIzho6OWMZKEl+KZG6Zm+1ghQIDi0tEq1sz/S1tDjvNuYrX2ZpomalHAB89OUQim8O6vN+jesNQ==";
-      };
-    };
-    "git-raw-commits-4.0.0" = {
-      name = "git-raw-commits";
-      packageName = "git-raw-commits";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/git-raw-commits/-/git-raw-commits-4.0.0.tgz";
-        sha512 = "ICsMM1Wk8xSGMowkOmPrzo2Fgmfo4bMHLNX6ytHjajRJUqvHOw/TFapQ+QG75c3X/tTDDhOSRPGC52dDbNM8FQ==";
       };
     };
     "git-raw-commits-5.0.0" = {
@@ -13386,15 +13188,6 @@ let
         sha512 = "f8KcQ1D80V7RnqVm+/lirO9zkOxjGxhaTC1IPrBGd3MEfNgmNG67tSUO9gTi2F3Blr2Az6g1vocaxzkVnWl9MA==";
       };
     };
-    "import-meta-resolve-4.1.0" = {
-      name = "import-meta-resolve";
-      packageName = "import-meta-resolve";
-      version = "4.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz";
-        sha512 = "I6fiaX09Xivtk+THaMfAwnA3MVA5Big1WHF1Dfx9hFuvNIWpXnorlkzhcQf6ehrqQiiZECRt1poOAkPmer3ruw==";
-      };
-    };
     "imurmurhash-0.1.4" = {
       name = "imurmurhash";
       packageName = "imurmurhash";
@@ -14698,15 +14491,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/is-symbol/-/is-symbol-1.1.1.tgz";
         sha512 = "9gGx6GTtCQM73BgmHQXfDmLtfjjTUDSyoxTCbp5WtoixAhfgsDirWIcVQ/IHpvI5Vgd5i/J5F7B9cN/WlVbC/w==";
-      };
-    };
-    "is-text-path-2.0.0" = {
-      name = "is-text-path";
-      packageName = "is-text-path";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-text-path/-/is-text-path-2.0.0.tgz";
-        sha512 = "+oDTluR6WEjdXEJMnC2z6A4FRwFoYuvShVVEGsS7ewc0UTi2QtAKMDJuL4BDEVt+5T7MjFo12RP8ghOM75oKJw==";
       };
     };
     "is-typed-array-1.1.15" = {
@@ -16329,15 +16113,6 @@ let
         sha512 = "yv3cSQZmfpbIKo4Yo45B1taEvxjNvcpF1CEOc0Y6dEyvhPIfEJE3twDwPgWTPQubcSgXyBwBKG6wpQvWMDOf6Q==";
       };
     };
-    "lodash.kebabcase-4.1.1" = {
-      name = "lodash.kebabcase";
-      packageName = "lodash.kebabcase";
-      version = "4.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.kebabcase/-/lodash.kebabcase-4.1.1.tgz";
-        sha512 = "N8XRTIMMqqDgSy4VLKPnJ/+hpGZN+PHQiJnSenYqPaVV/NCqEogTnAdZLQiGKhxX+JCs8waWq2t1XHWKOmlY8g==";
-      };
-    };
     "lodash.memoize-3.0.4" = {
       name = "lodash.memoize";
       packageName = "lodash.memoize";
@@ -16356,15 +16131,6 @@ let
         sha512 = "0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==";
       };
     };
-    "lodash.mergewith-4.6.2" = {
-      name = "lodash.mergewith";
-      packageName = "lodash.mergewith";
-      version = "4.6.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz";
-        sha512 = "GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==";
-      };
-    };
     "lodash.omitby-4.6.0" = {
       name = "lodash.omitby";
       packageName = "lodash.omitby";
@@ -16381,24 +16147,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz";
         sha512 = "Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==";
-      };
-    };
-    "lodash.snakecase-4.1.1" = {
-      name = "lodash.snakecase";
-      packageName = "lodash.snakecase";
-      version = "4.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.snakecase/-/lodash.snakecase-4.1.1.tgz";
-        sha512 = "QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==";
-      };
-    };
-    "lodash.startcase-4.4.0" = {
-      name = "lodash.startcase";
-      packageName = "lodash.startcase";
-      version = "4.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.startcase/-/lodash.startcase-4.4.0.tgz";
-        sha512 = "+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==";
       };
     };
     "lodash.template-4.5.0" = {
@@ -16489,15 +16237,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash.uniqwith/-/lodash.uniqwith-4.5.0.tgz";
         sha512 = "7lYL8bLopMoy4CTICbxygAUq6CdRJ36vFc80DucPueUee+d5NBRxz3FdT9Pes/HEx5mPoT9jwnsEJWz1N7uq7Q==";
-      };
-    };
-    "lodash.upperfirst-4.3.1" = {
-      name = "lodash.upperfirst";
-      packageName = "lodash.upperfirst";
-      version = "4.3.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.upperfirst/-/lodash.upperfirst-4.3.1.tgz";
-        sha512 = "sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==";
       };
     };
     "lodash.zip-4.2.0" = {
@@ -24798,15 +24537,6 @@ let
         sha512 = "9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==";
       };
     };
-    "split2-4.2.0" = {
-      name = "split2";
-      packageName = "split2";
-      version = "4.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/split2/-/split2-4.2.0.tgz";
-        sha512 = "UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==";
-      };
-    };
     "sprintf-js-1.0.3" = {
       name = "sprintf-js";
       packageName = "sprintf-js";
@@ -25840,15 +25570,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/text-decoder/-/text-decoder-1.2.3.tgz";
         sha512 = "3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==";
-      };
-    };
-    "text-extensions-2.4.0" = {
-      name = "text-extensions";
-      packageName = "text-extensions";
-      version = "2.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/text-extensions/-/text-extensions-2.4.0.tgz";
-        sha512 = "te/NtwBwfiNRLf9Ijqx3T0nlqZiQ2XrrtBvu+cLL8ZRrGkO0NHTug8MYFKyoSrv/sHTaSKfilUkizV6XhxMJ3g==";
       };
     };
     "text-hex-1.0.0" = {
@@ -29688,130 +29409,6 @@ in
     meta = {
       description = "CLI tool for Angular";
       homepage = "https://github.com/angular/angular-cli";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@commitlint/cli" = nodeEnv.buildNodePackage {
-    name = "_at_commitlint_slash_cli";
-    packageName = "@commitlint/cli";
-    version = "19.8.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@commitlint/cli/-/cli-19.8.0.tgz";
-      sha512 = "t/fCrLVu+Ru01h0DtlgHZXbHV2Y8gKocTR5elDOqIRUzQd0/6hpt2VIWOj9b3NDo7y4/gfxeR2zRtXq/qO6iUg==";
-    };
-    dependencies = [
-      sources."@babel/code-frame-7.26.2"
-      sources."@babel/helper-validator-identifier-7.25.9"
-      sources."@commitlint/config-validator-19.8.0"
-      sources."@commitlint/ensure-19.8.0"
-      sources."@commitlint/execute-rule-19.8.0"
-      sources."@commitlint/format-19.8.0"
-      sources."@commitlint/is-ignored-19.8.0"
-      sources."@commitlint/lint-19.8.0"
-      sources."@commitlint/load-19.8.0"
-      sources."@commitlint/message-19.8.0"
-      sources."@commitlint/parse-19.8.0"
-      sources."@commitlint/read-19.8.0"
-      sources."@commitlint/resolve-extends-19.8.0"
-      sources."@commitlint/rules-19.8.0"
-      sources."@commitlint/to-lines-19.8.0"
-      sources."@commitlint/top-level-19.8.0"
-      sources."@commitlint/types-19.8.0"
-      sources."@types/conventional-commits-parser-5.0.1"
-      sources."@types/node-22.13.10"
-      sources."JSONStream-1.3.5"
-      sources."ajv-8.17.1"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."argparse-2.0.1"
-      sources."array-ify-1.0.0"
-      sources."callsites-3.1.0"
-      sources."chalk-5.4.1"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."compare-func-2.0.0"
-      sources."conventional-changelog-angular-7.0.0"
-      sources."conventional-commits-parser-5.0.0"
-      sources."cosmiconfig-9.0.0"
-      sources."cosmiconfig-typescript-loader-6.1.0"
-      sources."dargs-8.1.0"
-      sources."dot-prop-5.3.0"
-      sources."emoji-regex-8.0.0"
-      sources."env-paths-2.2.1"
-      sources."error-ex-1.3.2"
-      sources."escalade-3.2.0"
-      sources."fast-deep-equal-3.1.3"
-      sources."fast-uri-3.0.6"
-      sources."find-up-7.0.0"
-      sources."get-caller-file-2.0.5"
-      sources."git-raw-commits-4.0.0"
-      sources."global-directory-4.0.1"
-      (
-        sources."import-fresh-3.3.1"
-        // {
-          dependencies = [
-            sources."resolve-from-4.0.0"
-          ];
-        }
-      )
-      sources."import-meta-resolve-4.1.0"
-      sources."ini-4.1.1"
-      sources."is-arrayish-0.2.1"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-obj-2.0.0"
-      sources."is-text-path-2.0.0"
-      sources."jiti-2.4.2"
-      sources."js-tokens-4.0.0"
-      sources."js-yaml-4.1.0"
-      sources."json-parse-even-better-errors-2.3.1"
-      sources."json-schema-traverse-1.0.0"
-      sources."jsonparse-1.3.1"
-      sources."lines-and-columns-1.2.4"
-      sources."locate-path-7.2.0"
-      sources."lodash.camelcase-4.3.0"
-      sources."lodash.isplainobject-4.0.6"
-      sources."lodash.kebabcase-4.1.1"
-      sources."lodash.merge-4.6.2"
-      sources."lodash.mergewith-4.6.2"
-      sources."lodash.snakecase-4.1.1"
-      sources."lodash.startcase-4.4.0"
-      sources."lodash.uniq-4.5.0"
-      sources."lodash.upperfirst-4.3.1"
-      sources."meow-12.1.1"
-      sources."minimist-1.2.8"
-      sources."p-limit-4.0.0"
-      sources."p-locate-6.0.0"
-      sources."parent-module-1.0.1"
-      sources."parse-json-5.2.0"
-      sources."path-exists-5.0.0"
-      sources."picocolors-1.1.1"
-      sources."require-directory-2.1.1"
-      sources."require-from-string-2.0.2"
-      sources."resolve-from-5.0.0"
-      sources."semver-7.7.1"
-      sources."split2-4.2.0"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."text-extensions-2.4.0"
-      sources."through-2.3.8"
-      sources."tinyexec-0.3.2"
-      sources."typescript-5.8.2"
-      sources."undici-types-6.20.0"
-      sources."unicorn-magic-0.1.0"
-      sources."wrap-ansi-7.0.0"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-      sources."yocto-queue-1.2.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Lint your commit messages";
-      homepage = "https://commitlint.js.org/";
       license = "MIT";
     };
     production = true;

@@ -5,7 +5,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@commitlint/cli" = "commitlint";
   aws-cdk = "cdk";
   cdk8s-cli = "cdk8s";
   clipboard-cli = "clipboard";
