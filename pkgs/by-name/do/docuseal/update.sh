@@ -32,15 +32,8 @@ BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --remove-platform aarch64-linux --lo
 # generate gemset.nix
 bundix --lock --lockfile="$repo/Gemfile.lock" --gemfile="$repo/Gemfile" --gemset="$dir/gemset.nix"
 
-# patch yarn.lock
-sed -i 's$, "@hotwired/turbo@https://github.com/docusealco/turbo#main"$$g' "$repo/yarn.lock"
-
-# calc yarn hash
-YARN_HASH="$(prefetch-yarn-deps "$repo/yarn.lock")"
-YARN_HASH="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$YARN_HASH")"
-
 # update
-cp "$repo/Gemfile" "$repo/Gemfile.lock" "$repo/yarn.lock" "$dir/"
+cp "$repo/Gemfile" "$repo/Gemfile.lock" "$dir/"
 nix-update docuseal --version "$latest"
 nix-update docuseal --subpackage "docusealWeb"
 
