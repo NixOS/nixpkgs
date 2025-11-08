@@ -11593,6 +11593,8 @@ self: super: with self; {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  partftpy = callPackage ../development/python-modules/partftpy { };
+
   partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
