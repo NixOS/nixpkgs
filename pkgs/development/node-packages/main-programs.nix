@@ -10,7 +10,6 @@
   clipboard-cli = "clipboard";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
-  diff2html-cli = "diff2html";
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";

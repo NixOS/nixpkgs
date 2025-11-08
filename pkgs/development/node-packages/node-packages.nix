@@ -8184,15 +8184,6 @@ let
         sha512 = "NxuWFXR3+HJULO6F6VprWnUQbx0MXgfEuOfz3m+pw8LYZV06SHRjcaBVvVlwH132xJq12mljySVDLcbMcFM7EA==";
       };
     };
-    "data-uri-to-buffer-4.0.1" = {
-      name = "data-uri-to-buffer";
-      packageName = "data-uri-to-buffer";
-      version = "4.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz";
-        sha512 = "0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==";
-      };
-    };
     "data-uri-to-buffer-6.0.2" = {
       name = "data-uri-to-buffer";
       packageName = "data-uri-to-buffer";
@@ -8821,24 +8812,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/diff/-/diff-5.2.0.tgz";
         sha512 = "uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==";
-      };
-    };
-    "diff-7.0.0" = {
-      name = "diff";
-      packageName = "diff";
-      version = "7.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/diff/-/diff-7.0.0.tgz";
-        sha512 = "PJWHUb1RFevKCwaFA9RlG5tCd+FO5iRh9A8HEtkmBH2Li03iJriB6m6JIN4rGz3K3JLawI7/veA1xzRKP6ISBw==";
-      };
-    };
-    "diff2html-3.4.51" = {
-      name = "diff2html";
-      packageName = "diff2html";
-      version = "3.4.51";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/diff2html/-/diff2html-3.4.51.tgz";
-        sha512 = "/rVCSDyokkzSCEGaGjkkElXtIRwyNDRzIa3S8VUhR6pjk25p6+AMnb1s2zGmhjl66D5m/HnV3IeZoxnWsvTy+w==";
       };
     };
     "diffie-hellman-5.0.3" = {
@@ -10596,15 +10569,6 @@ let
         sha512 = "OP2IUU6HeYKJi3i0z4A19kHMQoLVs4Hc+DPqqxI2h/DPZHTm/vjsfC6P0b4jCMy14XizLBqvndQ+UilD7707Jw==";
       };
     };
-    "fetch-blob-3.2.0" = {
-      name = "fetch-blob";
-      packageName = "fetch-blob";
-      version = "3.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/fetch-blob/-/fetch-blob-3.2.0.tgz";
-        sha512 = "7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==";
-      };
-    };
     "fifo-0.1.4" = {
       name = "fifo";
       packageName = "fifo";
@@ -11089,15 +11053,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/format/-/format-0.2.2.tgz";
         sha512 = "wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==";
-      };
-    };
-    "formdata-polyfill-4.0.10" = {
-      name = "formdata-polyfill";
-      packageName = "formdata-polyfill";
-      version = "4.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz";
-        sha512 = "buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==";
       };
     };
     "formidable-1.2.6" = {
@@ -12394,15 +12349,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz";
         sha512 = "Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==";
-      };
-    };
-    "hogan.js-3.0.2" = {
-      name = "hogan.js";
-      packageName = "hogan.js";
-      version = "3.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz";
-        sha512 = "RqGs4wavGYJWE07t35JQccByczmNUXQT0E12ZYV1VKYu5UiAU9lsos/yBAcf840+zrUQQxgVduCR5/B8nNtibg==";
       };
     };
     "homedir-polyfill-1.0.3" = {
@@ -17823,15 +17769,6 @@ let
         sha512 = "WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==";
       };
     };
-    "mkdirp-0.3.0" = {
-      name = "mkdirp";
-      packageName = "mkdirp";
-      version = "0.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.3.0.tgz";
-        sha512 = "OHsdUcVAQ6pOtg5JYWpCBo9W/GySVuwvP9hueRMW7UqshC0tbfzLv8wjySTPm3tfUZ/21CE9E1pJagOA91Pxew==";
-      };
-    };
     "mkdirp-0.3.5" = {
       name = "mkdirp";
       packageName = "mkdirp";
@@ -18381,15 +18318,6 @@ let
         sha512 = "h66cRVEWnPQFxh5Y1hk9MNs6jvlB26CjT727ZztkIkPN+eyRI2c9powQrBJ9pty2Kj7IBySDnYHig7QElmU4Pg==";
       };
     };
-    "node-domexception-1.0.0" = {
-      name = "node-domexception";
-      packageName = "node-domexception";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz";
-        sha512 = "/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==";
-      };
-    };
     "node-emoji-1.11.0" = {
       name = "node-emoji";
       packageName = "node-emoji";
@@ -18424,15 +18352,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz";
         sha512 = "c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==";
-      };
-    };
-    "node-fetch-3.3.2" = {
-      name = "node-fetch";
-      packageName = "node-fetch";
-      version = "3.3.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/node-fetch/-/node-fetch-3.3.2.tgz";
-        sha512 = "dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==";
       };
     };
     "node-fetch-h2-2.3.0" = {
@@ -18496,15 +18415,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/nomnom/-/nomnom-1.8.1.tgz";
         sha512 = "5s0JxqhDx9/rksG2BTMVN1enjWSvPidpoSgViZU4ZXULyTe+7jxcCRLB6f42Z0l1xYJpleCBtSyY6Lwg3uu5CQ==";
-      };
-    };
-    "nopt-1.0.10" = {
-      name = "nopt";
-      packageName = "nopt";
-      version = "1.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz";
-        sha512 = "NWmpvLSqUrgrAC9HCuxEvb+PSloHpqVu+FqcO4eeF2h5qYRhA7ev6KvelyQAKtegUbC6RypJnlEOhd8vloNKYg==";
       };
     };
     "nopt-2.0.0" = {
@@ -27624,15 +27534,6 @@ let
         sha512 = "bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==";
       };
     };
-    "web-streams-polyfill-3.3.3" = {
-      name = "web-streams-polyfill";
-      packageName = "web-streams-polyfill";
-      version = "3.3.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz";
-        sha512 = "d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==";
-      };
-    };
     "web-vitals-0.2.4" = {
       name = "web-vitals";
       packageName = "web-vitals";
@@ -32182,89 +32083,6 @@ in
       description = "A DHCP server written in JavaScript";
       homepage = "https://github.com/infusion/node-dhcp";
       license = "MIT OR GPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  diff2html-cli = nodeEnv.buildNodePackage {
-    name = "diff2html-cli";
-    packageName = "diff2html-cli";
-    version = "5.2.15";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/diff2html-cli/-/diff2html-cli-5.2.15.tgz";
-      sha512 = "w1WJSzyiXDSVsz6cYPE7eu0f3KptN1fT2s/i0ENavaB9aT1Fj/3zjH00mYB14JiPdj3X0hl4PsrtBNjgGKdpkA==";
-    };
-    dependencies = [
-      sources."abbrev-1.1.1"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."bundle-name-4.1.0"
-      sources."clipboardy-4.0.0"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."cross-spawn-7.0.6"
-      sources."data-uri-to-buffer-4.0.1"
-      sources."default-browser-5.2.1"
-      sources."default-browser-id-5.0.0"
-      sources."define-lazy-prop-3.0.0"
-      sources."diff-7.0.0"
-      sources."diff2html-3.4.51"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.2.0"
-      sources."execa-8.0.1"
-      sources."fetch-blob-3.2.0"
-      sources."formdata-polyfill-4.0.10"
-      sources."get-caller-file-2.0.5"
-      sources."get-stream-8.0.1"
-      sources."hogan.js-3.0.2"
-      sources."human-signals-5.0.0"
-      sources."is-docker-3.0.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-inside-container-1.0.0"
-      sources."is-stream-3.0.0"
-      sources."is-wsl-3.1.0"
-      sources."is64bit-2.0.0"
-      sources."isexe-2.0.0"
-      sources."merge-stream-2.0.0"
-      sources."mimic-fn-4.0.0"
-      sources."mkdirp-0.3.0"
-      sources."node-domexception-1.0.0"
-      sources."node-fetch-3.3.2"
-      sources."nopt-1.0.10"
-      (
-        sources."npm-run-path-5.3.0"
-        // {
-          dependencies = [
-            sources."path-key-4.0.0"
-          ];
-        }
-      )
-      sources."onetime-6.0.0"
-      sources."open-10.1.0"
-      sources."path-key-3.1.1"
-      sources."require-directory-2.1.1"
-      sources."run-applescript-7.0.0"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."strip-final-newline-3.0.0"
-      sources."system-architecture-0.1.0"
-      sources."web-streams-polyfill-3.3.3"
-      sources."which-2.0.2"
-      sources."wrap-ansi-7.0.0"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fast Diff to colorized HTML";
-      homepage = "https://diff2html.xyz/index.html#cli";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

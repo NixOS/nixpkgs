@@ -20,7 +20,6 @@
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "dhcp"
-, "diff2html-cli"
 , "dotenv-vault"
 , "elasticdump"
 , "emoj"
