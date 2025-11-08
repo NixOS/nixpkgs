@@ -16618,25 +16618,6 @@ with self;
     };
   };
 
-  HTTPHeaderParserXS = buildPerlPackage {
-    pname = "HTTP-HeaderParser-XS";
-    version = "0.20";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKSMITH/HTTP-HeaderParser-XS-0.20.tar.gz";
-      hash = "sha256-qeAP/7PYmRoUqq/dxh1tFoxP8U4xSuPbstTaMAjXRu8=";
-    };
-    meta = {
-      description = "XS extension for processing HTTP headers";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-      broken =
-        stdenv.hostPlatform.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
-        || stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
-    };
-  };
-
   HTTPHeadersFast = buildPerlModule {
     pname = "HTTP-Headers-Fast";
     version = "0.22";
@@ -39487,4 +39468,5 @@ with self;
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
+  HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08
 }
