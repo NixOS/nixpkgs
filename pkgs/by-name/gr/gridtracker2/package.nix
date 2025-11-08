@@ -9,7 +9,7 @@
   makeDesktopItem,
 }:
 let
-  version = "2.250914.1";
+  version = "2.251106.7";
 in
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
@@ -19,10 +19,10 @@ buildNpmPackage (finalAttrs: {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${version}";
-    hash = "sha256-ME68kGRlIRPs5tUOGb3g2CXJKC52QuMuTMc1ctAMzlk=";
+    hash = "sha256-g1njDFodCHvILZZNrI/exAqWLZsbNBGHy3jlzo3uLJ8=";
   };
 
-  npmDepsHash = "sha256-MUXwJPo/A0gxtUbM3MOWfMcspM1losuDhc5XTc2oqCo=";
+  npmDepsHash = "sha256-8bhOfLLsNSK+/mXku5ukLr65bfk+RwC3SyOGRHndqVQ=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
