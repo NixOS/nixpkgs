@@ -90,6 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  patches = [
+    # See https://github.com/WiVRn/WiVRn/pull/557
+    (fetchpatch {
+      name = "wivrn-fix-qt6.10-build.patch";
+      url = "https://github.com/WiVRn/WiVRn/commit/2204fdd39682cfc052556d58fdb9404dd8ecf63f.patch?full_index=1";
+      hash = "sha256-05MLfJNCznBt6eaggUfSk1jaNDB2/eou6CfexUkIHZE=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     git

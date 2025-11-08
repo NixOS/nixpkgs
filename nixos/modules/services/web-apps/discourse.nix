@@ -17,7 +17,10 @@ let
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_15;
 
   postgresqlPackage =
-    if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
+    if config.services.postgresql.enable then
+      config.services.postgresql.finalPackage
+    else
+      pkgs.postgresql;
 
   postgresqlVersion = lib.getVersion postgresqlPackage;
 
@@ -540,7 +543,7 @@ in
     assertions = [
       {
         assertion = (cfg.database.host != null) -> (cfg.database.passwordFile != null);
-        message = "When services.gitlab.database.host is customized, services.discourse.database.passwordFile must be set!";
+        message = "When services.discourse.database.host is customized, services.discourse.database.passwordFile must be set!";
       }
       {
         assertion = cfg.hostname != "";
@@ -694,6 +697,9 @@ in
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
+      extensions = ps: [
+        ps.pgvector
+      ];
       ensureUsers = [ { name = "discourse"; } ];
     };
 
@@ -719,6 +725,7 @@ in
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'discourse'" | grep -q 1 || psql -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
+          psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS vector"
         '';
 
         serviceConfig = {
@@ -805,8 +812,11 @@ in
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
+          cp -r ${cfg.package.assets.generated}/* /run/discourse/assets-generated/
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
+          # discourse creates images in this folder, and by default it only has u=rx
+          chmod 750 /run/discourse/public/images
 
           (
               umask u=rwx,g=,o=
@@ -839,6 +849,7 @@ in
           "assets/javascripts/plugins"
           "public"
           "sockets"
+          "assets-generated"
         ];
         RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [

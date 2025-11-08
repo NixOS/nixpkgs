@@ -7,6 +7,7 @@
   avogadrolibs,
   molequeue,
   hdf5,
+  jkqtplotter,
   openbabel,
   qttools,
   wrapQtAppsHook,
@@ -17,20 +18,20 @@ let
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    tag = "1.101.0";
-    hash = "sha256-3qFx/rc5xqfrLq3Kr5b/Rid2LR/gfP6uqhhATyQL6Y8=";
+    tag = "1.102.1";
+    hash = "sha256-doY+AWJ0GiE6VsTolgmFIRcRVl52lTgwNJLpXgVQ57c=";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avogadro2";
-  version = "1.101.0";
+  version = "1.102.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
-    rev = version;
-    hash = "sha256-F8to1DyeyyhsivkXDB/KH10/7teVnsoSU/ZHIsNISqc=";
+    rev = finalAttrs.version;
+    hash = "sha256-nBkOiw6JO/cG1Ob9gw7Tt/076OoRaRRmDc/a9YAfZCA=";
   };
 
   postUnpack = ''
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     molequeue
     eigen
     hdf5
+    jkqtplotter
     qttools
   ];
 
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     inherit (mesa.meta) platforms;
     license = licenses.bsd3;
   };
-}
+})

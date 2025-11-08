@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "speedscope";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "jlfwong";
     repo = "speedscope";
     tag = "v${version}";
-    hash = "sha256-PIyx4ceihTSLRDP5MW3n6edtYNFOnx8Uo7qUWW7LTs8=";
+    hash = "sha256-QL+Hm3ujfZeKHMoNgQdxYStgWOIbxjDmXMHKnWddTfs=";
 
     # scripts/prepack.sh wants to extract the git commit from .git
     # We don't want to keep .git for reproducibility reasons, so save the commit
@@ -25,7 +25,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-xpFrkKAaFbVE1zJ/haibQte4HjUWmeBR8BVjZuSoyjI=";
+  npmDepsHash = "sha256-MgCIiVeq9w5XRPIsZ/9AbZpVwRQdzZgK7VC5Gl7cn78=";
 
   patches = [
     ./fix-shebang.patch

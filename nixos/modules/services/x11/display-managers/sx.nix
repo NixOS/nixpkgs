@@ -51,7 +51,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    figsoda
     thiagokokada
   ];
 }

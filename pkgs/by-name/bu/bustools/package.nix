@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8.12)' \
+      'cmake_minimum_required(VERSION 3.5)'
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = bustools;
     command = "bustools version";

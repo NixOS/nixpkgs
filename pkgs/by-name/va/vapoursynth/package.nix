@@ -13,6 +13,7 @@
   libass,
   python3,
   testers,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
         cython
       ]
     ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   enableParallelBuilding = true;

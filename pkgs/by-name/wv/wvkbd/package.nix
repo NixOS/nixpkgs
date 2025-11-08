@@ -24,11 +24,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-RfZbPAaf8UB4scUZ9XSL12QZ4UkYMzXqfmNt9ObOgQ0=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "pkg-config" "$PKG_CONFIG"
-  '';
-
   nativeBuildInputs = [
     pkg-config
     scdoc
@@ -52,5 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "wvkbd-mobintl";
+    maintainers = with lib.maintainers; [ colinsane ];
   };
 }

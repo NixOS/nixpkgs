@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
       # The --to-dir and --ui-bundle-url options are not included in the
       # playbook due to Antora and Nix limitations.
       antora ${
-        lib.cli.toGNUCommandLineShell { } {
+        lib.cli.toCommandLineShellGNU { } {
           cache-dir = "$(mktemp --directory)";
           extension = if antora-lunr-extension-test then antora-lunr-extension else false;
           to-dir = placeholder "out";

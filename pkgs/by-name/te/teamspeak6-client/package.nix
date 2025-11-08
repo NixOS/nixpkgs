@@ -21,7 +21,9 @@
   libpulseaudio,
   libxkbcommon,
   libgbm,
+  libvdpau,
   nss,
+  pipewire,
   udev,
   libGL,
   xorg,
@@ -29,11 +31,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta2";
+  version = "6.0.0-beta3.2";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-3jNPv3uQ2RztR1p4XQNLUg5IVrvW/dcdtqXdiGJKVSs=";
+    hash = "sha256-sZrYGonBw3BgUSExovs8GW5E54vhr3i/VR9eH9/qjWM=";
   };
 
   sourceRoot = ".";
@@ -54,7 +56,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libpulseaudio
     libxkbcommon
     libgbm
+    libvdpau
     nss
+    pipewire
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXdamage
@@ -102,6 +106,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           udev
           libGL
           libpulseaudio
+          libvdpau
+          pipewire
         ]
       }"
 
@@ -116,6 +122,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.teamspeak;
     mainProgram = "TeamSpeak";
     maintainers = with lib.maintainers; [
+      drafolin
       gepbird
       jojosch
     ];

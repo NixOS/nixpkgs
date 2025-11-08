@@ -172,6 +172,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    bitstreamCharter = {
+      spdxId = "Bitstream-Charter";
+      fullName = "Bitstream Charter Font License";
+    };
+
     bitstreamVera = {
       spdxId = "Bitstream-Vera";
       fullName = "Bitstream Vera Font License";
@@ -615,11 +620,6 @@ lib.mapAttrs mkLicense (
       fullName = "Unspecified free software license";
     };
 
-    freeimage = {
-      spdxId = "FreeImage";
-      fullName = "FreeImage Public License v1.0";
-    };
-
     fsl11Mit = {
       fullName = "Functional Source License, Version 1.1, MIT Future License";
       spdxId = "FSL-1.1-MIT";
@@ -663,6 +663,11 @@ lib.mapAttrs mkLicense (
     gfsl = {
       fullName = "GUST Font Source License";
       url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
+    };
+
+    gnuplot = {
+      spdxId = "gnuplot";
+      fullName = "gnuplot License";
     };
 
     gpl1Only = {
@@ -986,6 +991,11 @@ lib.mapAttrs mkLicense (
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";
+    };
+
+    mit-enna = {
+      spdxId = "MIT-enna";
+      fullName = "enna License";
     };
 
     mit-feh = {

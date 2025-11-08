@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   ninja,
   pkg-config,
@@ -66,6 +67,15 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (variant == "qt6") [
     qt6Packages.qtbase
+  ];
+
+  patches = [
+    # See https://github.com/flatpak/libportal/pull/200
+    (fetchpatch2 {
+      name = "libportal-fix-qt6.9-private-api-usage.patch";
+      url = "https://github.com/flatpak/libportal/commit/796053d2eebe4532aad6bd3fd80cdf3b197806ec.patch?full_index=1";
+      hash = "sha256-TPIKKnZCcp/bmmsaNlDxAsKLTBe6BKPCTOutLjXPCHQ=";
+    })
   ];
 
   mesonFlags = [

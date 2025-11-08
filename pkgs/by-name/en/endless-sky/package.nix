@@ -3,9 +3,12 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  libavif,
   libpng,
   libjpeg,
+  libogg,
   libX11,
+  flac,
   glew,
   openal,
   cmake,
@@ -17,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.10.14";
+  version = "0.10.16";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     tag = "v${version}";
-    hash = "sha256-/jW9TXmK2xgHUQe6H+WSCHPQthxvoNepdkdnOD3sXXo=";
+    hash = "sha256-QO7Yv8H7hvavyOG/G9+HZh+a7XlCAf7fyPlszvOF91M=";
   };
 
   patches = [
@@ -47,9 +50,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+    libavif
     libpng
     libjpeg
+    libogg
     libX11
+    flac
     glew
     openal
     libmad

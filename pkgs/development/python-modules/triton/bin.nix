@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.4.0";
+  version = "3.5.0";
   format = "wheel";
 
   src =
@@ -63,6 +63,9 @@ buildPythonPackage rec {
       mit
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

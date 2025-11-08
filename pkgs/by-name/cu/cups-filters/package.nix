@@ -6,6 +6,7 @@
   dbus,
   dejavu_fonts,
   fetchFromGitHub,
+  fetchpatch,
   fontconfig,
   gawk,
   ghostscript,
@@ -61,6 +62,16 @@
         rev = version;
         hash = "sha256-bLOl64bdeZ10JLcQ7GbU+VffJu3Lzo0ves7O7GQIOWY=";
       };
+
+      patches = [
+        # Fix build with gcc15
+        # https://github.com/OpenPrinting/cups-filters/pull/618
+        (fetchpatch {
+          name = "cups-filters-fix-build-with-gcc15-c23.patch";
+          url = "https://github.com/OpenPrinting/cups-filters/commit/9871a50b5c1f9c2caa2754aac1f5db70c886021b.patch";
+          hash = "sha256-Hu3nCHzX6K4tD7T5XIt0dh6GPQxmgfuHqbBXWfdXxoA=";
+        })
+      ];
 
       strictDeps = true;
 

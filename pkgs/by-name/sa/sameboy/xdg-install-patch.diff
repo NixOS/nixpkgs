@@ -1,8 +1,6 @@
-diff --git a/Makefile b/Makefile
-index 3377b3f..4492f96 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -788,15 +788,7 @@ install: $(BIN)/XdgThumbnailer/sameboy-thumbnailer sdl $(shell find FreeDesktop)
+@@ -796,15 +796,7 @@
  	install -m 755 $(BIN)/SDL/sameboy $(DESTDIR)$(PREFIX)/bin/sameboy
  	install -m 755 $(BIN)/XdgThumbnailer/sameboy-thumbnailer $(DESTDIR)$(PREFIX)/bin/sameboy-thumbnailer
  	install -m 644 XdgThumbnailer/sameboy.thumbnailer $(DESTDIR)$(PREFIX)/share/thumbnailers/sameboy.thumbnailer
@@ -16,14 +14,14 @@ index 3377b3f..4492f96 100644
 -	done
 -else
 +
- 	install -m 644 FreeDesktop/sameboy.xml $(DESTDIR)$(PREFIX)/share/mime/sameboy.xml
+ 	install -m 644 FreeDesktop/sameboy.xml $(DESTDIR)$(PREFIX)/share/mime/packages/sameboy.xml
  	install -m 644 FreeDesktop/sameboy.desktop $(DESTDIR)$(PREFIX)/share/applications/sameboy.desktop
  	for size in 16x16 32x32 64x64 128x128 256x256 512x512; do \
-@@ -807,7 +799,6 @@ else
+@@ -815,7 +807,6 @@
  		install -m 644 FreeDesktop/ColorCartridge/$$size.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/$$size/mimetypes/x-gameboy-color-rom.png; \
  	done
  endif
 -endif
- 
+
  ios: bootroms
  	@$(MAKE) _ios

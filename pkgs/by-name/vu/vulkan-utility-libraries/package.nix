@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-utility-libraries";
-  version = "1.4.321.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Utility-Libraries";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-MaEn0qVTnhp5kKCbyMhFXysIcAnZF+ba4+KaVD4wSPY=";
+    hash = "sha256-qcCATZWM0YJ02Dl5VxjvbFYoE2b0r7Ku+ELr2is2VIg=";
   };
 
   nativeBuildInputs = [

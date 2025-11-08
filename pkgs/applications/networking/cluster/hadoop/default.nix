@@ -144,6 +144,8 @@ let
 
       passthru = { inherit tests; };
 
+      # The recursiveUpdate below breaks default meta.position, so manually override it.
+      pos = __curPos;
       meta =
         with lib;
         recursiveUpdate {

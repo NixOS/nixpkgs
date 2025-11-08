@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   cmake,
   gdk-pixbuf,
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
     tag = version;
     sha256 = "0cjw7iz0p7x1bi4vmwrivfidry5wlkgfgdl9wly88cm3z9ib98jj";
   };
+
+  patches = [
+    # Pull cmake-4 fix:
+    #   https://github.com/sonald/blur-effect/pull/7
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/sonald/blur-effect/commit/76322ad8bd0e653726a6791eb8ebcc829cbb1b38.patch?full_index=1";
+      hash = "sha256-f0PBhfdrcLCZBzYx+j8+qIG9boW3S4CSyz+bS9vFKRc=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -113,6 +113,6 @@ echo "" >> gemset.nix  # Create trailing newline to please EditorConfig checks
 
 echo "Updating yarnHash"
 yarn-berry-fetcher missing-hashes "$SOURCE_DIR/yarn.lock" > missing-hashes.json
-YARN_HASH="$(yarn-berry-fetcher prefetch "$SOURCE_DIR/yarn.lock" 2>/dev/null)"
+YARN_HASH="$(yarn-berry-fetcher prefetch "$SOURCE_DIR/yarn.lock" ./missing-hashes.json 2>/dev/null)"
 sed -i "s;sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=;$YARN_HASH;g" source.nix
 

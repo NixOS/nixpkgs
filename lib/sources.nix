@@ -509,22 +509,6 @@ let
 
 in
 {
-
-  pathType =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathType has been moved to lib.filesystem.pathType."
-      lib.filesystem.pathType;
-
-  pathIsDirectory =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsDirectory has been moved to lib.filesystem.pathIsDirectory."
-      lib.filesystem.pathIsDirectory;
-
-  pathIsRegularFile =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsRegularFile has been moved to lib.filesystem.pathIsRegularFile."
-      lib.filesystem.pathIsRegularFile;
-
   inherit
     pathIsGitRepo
     commitIdFromGitRepo

@@ -503,6 +503,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-dotenv = super.cmp-dotenv.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -1862,6 +1866,10 @@ assertNoAdditions {
       ];
   };
 
+  maple-nvim = super.maple-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
@@ -3186,6 +3194,12 @@ assertNoAdditions {
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
+      "snacks.explorer.init"
+      "snacks.gh.actions"
+      "snacks.gh.buf"
+      "snacks.gh.init"
+      "snacks.gh.render"
+      "snacks.gh.render.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -3198,6 +3212,8 @@ assertNoAdditions {
       "snacks.picker.actions"
       "snacks.picker.config.highlights"
       "snacks.picker.core.list"
+      "snacks.picker.source.gh"
+      "snacks.picker.util.diff"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"
@@ -4086,8 +4102,9 @@ assertNoAdditions {
 
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
-      # Optional telescope integration
+      # Optional picker integration
       self.telescope-nvim
+      self.fzf-lua
     ];
   };
 

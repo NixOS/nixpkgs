@@ -7,16 +7,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "composer-require-checker";
-  version = "4.16.1";
+  version = "4.18.0";
 
   # Upstream no longer provides the composer.lock in their release artifact
   src = fetchgit {
     url = "https://github.com/maglnet/ComposerRequireChecker";
     tag = finalAttrs.version;
-    hash = "sha256-UAofdc8mqSnJXhCTABSf9JZERqur86lzNDI66EHgEQE=";
+    hash = "sha256-8y8ziaWCno389ti263N+xinADoPZZGXqhTHoc9ZkF4Y=";
   };
 
-  vendorHash = "sha256-TlBrL4KyMVHaxqlfvnTkj3TkmU8h5/0BRC5e8yWrhCI=";
+  vendorHash = "sha256-BDGxHoDLSEdukN+zv8QNZPtVXfRpp/o95ysGFs0wl9Q=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -54,6 +54,13 @@ buildPythonPackage rec {
     # Fails under Python 3.12 on Darwin with I/O errors
     # Permission denied: '/tmp/path_does_not_exist/...'
     "test_critical_path_overlaid_trace"
+    # Permission error: [Errno 1] Operation not permitted
+    "test_get_mtia_aten_op_kernels_and_delay_inference_single_rank"
+    # No cuda on Darwin, can cause hangs in nixpkgs-review
+    "test_frequent_cuda_kernel_sequences"
+    "test_get_cuda_kernel_launch_stats_for_h100"
+    "test_get_cuda_kernel_launch_stats_inference_single_rank"
+    "test_get_cuda_kernel_launch_stats_training_multiple_ranks"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

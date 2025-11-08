@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [
       basvandijk
-      figsoda
       matthiasbeyer
     ];
   };

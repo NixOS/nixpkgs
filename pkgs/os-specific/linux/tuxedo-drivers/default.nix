@@ -13,17 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.15.4";
+  version = "4.18.0";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WJeju+czbCw03ALW7yzGAFENCEAvDdKqHvedchd7NVY=";
+    hash = "sha256-9XtogovzAWaMkJI5CxszY5qO3q6NOACZ7pnejyobJlY=";
   };
 
-  patches = [ ./no-cp-etc-usr.patch ];
+  patches = [ ./no-cp-usr.patch ];
 
   postInstall = ''
     echo "Running postInstallhook"
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       keksgesicht
       xaverdh
       XBagon
+      wetisobe
     ];
     platforms = lib.platforms.linux;
   };

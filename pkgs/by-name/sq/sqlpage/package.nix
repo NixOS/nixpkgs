@@ -42,13 +42,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlpage";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sIbEyW1/EuZuspU9pBOe6y9Ktwvz9ZNEsQ4CU/yU278=";
+    hash = "sha256-M9WtpDc067G/EfRTJBoDxBrdXRMqOwVTdGgyXSdHlhE=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "$(cat ${tomselect})"
   '';
 
-  cargoHash = "sha256-uWdEzuEKxN50OM40i/BedgfoWf3oijks8tM5bs7qUao=";
+  cargoHash = "sha256-lUQ1j2f/LXpqpb6VK4Bq2NI0L9KoyEdlPkENMOKkt0w=";
 
   nativeBuildInputs = [ pkg-config ];
 

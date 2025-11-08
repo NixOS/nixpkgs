@@ -156,6 +156,7 @@
   lp_solve,
   xmlsec,
   libcmis,
+  frozen-containers,
 }:
 
 assert builtins.elem variant [
@@ -221,16 +222,7 @@ let
     main = importVariant "main.nix";
     help = importVariant "help.nix";
     translations = importVariant "translations.nix";
-    deps = (importVariant "deps.nix") ++ [
-      # TODO: Why is this needed?
-      rec {
-        name = "unowinreg.dll";
-        url = "https://dev-www.libreoffice.org/extern/${md5name}";
-        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-        md5 = "185d60944ea767075d27247c3162b3bc";
-        md5name = "${md5}-${name}";
-      }
-    ];
+    deps = importVariant "deps.nix";
   };
   srcs = {
     third_party = map (
@@ -313,7 +305,26 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
-
+  ]
+  ++ lib.optionals (lib.versionOlder version "25.8.2.1") [
+    # Backport patch to fix build with Poppler 25.09
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
+      includes = [ "sdext/*" ];
+      hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
+    })
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2") [
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/f7b0e4385108b95c134599502a7bccf0a41925c8/poppler-25.10.patch";
+      hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
+    })
   ]
   ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
@@ -322,6 +333,14 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "sdext/*" ];
       hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
     })
+    # Currently included in the condition above
+    # Uncomment if Collabora is again the only version needing it
+    # Remove if Collabora is updated far enough not to need it anymore
+    ## Fix build with Poppler 25.10
+    #(fetchpatch2 {
+    #  url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+    #  hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    #})
   ]
   ++ lib.optionals (variant == "collabora") [
     ./fix-unpack-collabora.patch
@@ -464,6 +483,7 @@ stdenv.mkDerivation (finalAttrs: {
       which
       xmlsec
       zlib
+      frozen-containers
     ]
     ++ optionals kdeIntegration [
       qt6.qtbase
@@ -556,10 +576,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-orcus"
     "--with-system-postgresql"
     "--with-system-xmlsec"
+    "--with-system-frozen"
 
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
-    "--without-system-frozen"
     "--without-system-libeot"
     "--without-system-libfreehand"
     "--without-system-libmspub"
@@ -588,9 +608,6 @@ stdenv.mkDerivation (finalAttrs: {
     # cannot find headers, no idea why
     "--without-system-boost"
 
-    "--with-system-rhino"
-    "--with-rhino-jar=${rhino}/share/java/js.jar"
-
     "--without-system-java-websocket"
   ]
   ++ optionals kdeIntegration [
@@ -598,6 +615,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-qt6"
   ]
   ++ optionals withJava [
+    "--with-system-rhino"
+    "--with-rhino-jar=${rhino}/share/java/js.jar"
+
     "--with-system-beanshell"
     "--with-ant-home=${ant.home}"
     "--with-beanshell-jar=${bsh}"

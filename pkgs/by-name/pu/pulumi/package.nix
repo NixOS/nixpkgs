@@ -187,7 +187,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
     maintainers = with lib.maintainers; [
-      trundle
       veehaitch
       tie
     ];

@@ -28,13 +28,13 @@
   xorg,
 }:
 let
-  version = "2.18.4";
+  version = "2.19.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-sQ5laFO6DSg+4tF9jk2yuV0q2Vp7VC/+hu2XrVj8/bY=";
+    hash = "sha256-VhBo61jW4lZeJYJcRRuVuYbR4enpM2JD47DDDlFJuao=";
   };
 
   python = python3.override {
@@ -80,7 +80,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-fs9a2uI/TnWalQ/qRb6m4d1CsU7O6VYCJMz2xWLdC0I=";
+      hash = "sha256-AJp796oO8qOltPKndOXlLx1luCOfzsRSFscCUCe6MZo=";
     };
 
     nativeBuildInputs = [
@@ -168,10 +168,9 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
-    "django-guardian"
+    "django-cors-headers"
+    "drf-spectacular-sidecar"
     "filelock"
-    "ocrmypdf"
-    "rapidfuzz"
     "redis"
   ];
 
@@ -207,6 +206,7 @@ python.pkgs.buildPythonApplication rec {
       django-guardian
       django-multiselectfield
       django-soft-delete
+      django-treenode
       djangorestframework
       djangorestframework-guardian
       drf-spectacular

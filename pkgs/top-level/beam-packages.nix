@@ -6,16 +6,23 @@
   wxSupport ? true,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  __splicedPackages,
 }:
 
 let
   self = beam;
 
+  pkgs = __splicedPackages;
+  callErlang =
+    drv: args:
+    let
+      genericBuilder =
+        versionArgs: import ../development/interpreters/erlang/generic-builder.nix (versionArgs // args);
+    in
+    pkgs.callPackage (import drv genericBuilder) { };
 in
 
 {
-  beamLib = callPackage ../development/beam-modules/lib.nix { };
-
   latestVersion = "erlang_28";
 
   # Each
@@ -27,15 +34,15 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
-    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
+    erlang_28 = callErlang ../development/interpreters/erlang/28.nix {
       inherit wxSupport systemdSupport;
     };
 
-    erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
+    erlang_27 = callErlang ../development/interpreters/erlang/27.nix {
       inherit wxSupport systemdSupport;
     };
 
-    erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
+    erlang_26 = callErlang ../development/interpreters/erlang/26.nix {
       inherit wxSupport systemdSupport;
     };
 

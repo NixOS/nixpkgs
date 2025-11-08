@@ -29,7 +29,7 @@ buildGoModule rec {
     description = "MarkDown Renderer for the terminal";
     homepage = "https://github.com/MichaelMure/mdr";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "mdr";
   };
 }

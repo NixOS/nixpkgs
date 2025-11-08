@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dysk";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     rev = "v${version}";
-    hash = "sha256-2YqKKgNOx5+DLzIEkJTYqTAuxmKMhpCb79w7qLabvOk=";
+    hash = "sha256-trqHMlBA2s5l0ay3/e6hzMZTtKndrHRTy1LhuLwrJb4=";
   };
 
-  cargoHash = "sha256-2raAjpHh49ifZQfG2/WK94gR0lQzF/5cgmUzd69Kh3o=";
+  cargoHash = "sha256-uloX/Mk4m7jEU5z5cb/gSuCLEGhG9qHTCQwjy+FCUsk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Canop/dysk/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       koral
     ];
     mainProgram = "dysk";

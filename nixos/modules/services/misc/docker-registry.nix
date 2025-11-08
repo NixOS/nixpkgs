@@ -48,7 +48,7 @@ in
   options.services.dockerRegistry = {
     enable = lib.mkEnableOption "Docker Registry";
 
-    package = lib.mkPackageOption pkgs "docker-distribution" {
+    package = lib.mkPackageOption pkgs "distribution" {
       example = "gitlab-container-registry";
     };
 

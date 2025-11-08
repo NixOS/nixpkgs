@@ -6,6 +6,7 @@
   perl,
   zlib,
   db,
+  nixosTests,
 }:
 
 let
@@ -68,6 +69,8 @@ stdenv.mkDerivation rec {
 
   # Copy the web examples for the NixOS module
   postInstall = "cp -R sampleWeb $webSamples";
+
+  passthru.tests.nixos = nixosTests.sks;
 
   meta = with lib; {
     description = "Easily deployable & decentralized OpenPGP keyserver";

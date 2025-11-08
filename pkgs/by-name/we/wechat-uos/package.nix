@@ -43,12 +43,9 @@
   libva,
   libGL,
   libnotify,
+  krb5,
   buildFHSEnv,
   writeShellScript,
-  runCommandLocal,
-  cacert,
-  coreutils,
-  curl,
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -125,6 +122,7 @@ let
     pulseaudio
     qt6.qt5compat
     bzip2
+    krb5
   ];
 
   wechat =
@@ -133,37 +131,14 @@ let
 
       pname = "wechat-uos";
       version = sources.version;
-      fetch =
+      src = fetchurl (
         {
-          url,
-          hash,
-        }:
-        runCommandLocal "wechat-uos-${version}-src"
-          {
-            outputHashAlgo = "sha256";
-            outputHash = hash;
-
-            nativeBuildInputs = [
-              curl
-              coreutils
-            ];
-
-            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-            SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          }
-          ''
-            curl -A "debian APT-HTTP/1.3 (1.6.11)" --retry 3 --retry-delay 3 -L "${url}" > $out
-          '';
-
-      srcs = {
-        x86_64-linux = fetch sources.amd64;
-        aarch64-linux = fetch sources.arm64;
-        loongarch64-linux = fetch sources.loongarch64;
-      };
-
-      src =
-        srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
+          curlOpts = "-A apt";
+        }
+        // (sources.${stdenv.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+        )
+      );
     in
     stdenvNoCC.mkDerivation {
       inherit pname src version;

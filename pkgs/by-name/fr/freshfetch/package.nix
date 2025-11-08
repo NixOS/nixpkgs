@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "freshfetch";
   };
 }

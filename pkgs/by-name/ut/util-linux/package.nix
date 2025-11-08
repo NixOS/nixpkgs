@@ -41,11 +41,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.1";
+  version = "2.41.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
+    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
   };
 
   patches = [

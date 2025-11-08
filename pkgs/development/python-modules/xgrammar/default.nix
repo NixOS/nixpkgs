@@ -12,15 +12,16 @@
 
   # dependencies
   mlx-lm,
+  numpy,
   pydantic,
-  sentencepiece,
-  tiktoken,
   torch,
   transformers,
   triton,
 
   # tests
   pytestCheckHook,
+  sentencepiece,
+  tiktoken,
   writableTmpDirAsHomeHook,
 }:
 
@@ -50,9 +51,8 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    numpy
     pydantic
-    sentencepiece
-    tiktoken
     torch
     transformers
   ]
@@ -65,6 +65,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    sentencepiece
+    tiktoken
     writableTmpDirAsHomeHook
   ];
 

@@ -160,13 +160,13 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.28";
+      version = "0.1.31";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
+        sha256 = "sha256-WUiBFJ8L8NzSGoEwTAw/iHAzPqJqaOUSFyqGeEf+f94==";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
@@ -184,13 +184,13 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-lrucache";
-      version = "0.13";
+      version = "0.15";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-lrucache";
         rev = "v${version}";
-        sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
+        sha256 = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
       };
 
       meta = with lib; {

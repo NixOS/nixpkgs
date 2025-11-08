@@ -466,8 +466,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "v1.0.285",
-        "resolved-ref": "18fb1ad15ee6d2c8c5ec67722bf8b90fe0f4746d",
+        "ref": "v1.0.293",
+        "resolved-ref": "3eedfd55916eede70aeb28605469a43623a9791b",
         "url": "https://github.com/lollipopkit/dartssh2"
       },
       "source": "git",
@@ -628,8 +628,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "v1.0.355",
-        "resolved-ref": "73d5f2603859a9f70459d798ed2d267b1d9a86e5",
+        "ref": "v1.0.358",
+        "resolved-ref": "c8e55d054875bb3ccdab9894a01fe82d173dc54e",
         "url": "https://github.com/lppcg/fl_lib"
       },
       "source": "git",
@@ -2322,8 +2322,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "v4.0.4",
-        "resolved-ref": "5747837cdb7b113ef733ce0104e4f2bfa1eb4a36",
+        "ref": "v4.0.13",
+        "resolved-ref": "6343b0e5f744d2c11090d34690ad5049ebbc599b",
         "url": "https://github.com/lollipopkit/xterm.dart"
       },
       "source": "git",

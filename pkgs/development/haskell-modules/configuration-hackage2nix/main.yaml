@@ -656,6 +656,7 @@ package-maintainers:
   turion:
     - Agda
     - cabal-gild
+    - clay
     - dunai
     - essence-of-live-coding
     - essence-of-live-coding-gloss
@@ -667,6 +668,7 @@ package-maintainers:
     - monad-bayes
     - monad-schedule
     - pulse-simple
+    - openapi3-code-generator
     - rhine
     - rhine-gloss
     - simple-affine-space

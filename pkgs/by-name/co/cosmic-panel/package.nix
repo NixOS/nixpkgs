@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-panel";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0-beta.5";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-panel";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-gSTvF6Zcixh5/uYZuUiCIdBlXJj31+lISBwLujTuOfo=";
+    hash = "sha256-a23VexqsWz2e6/gTw6pbrTwRgU2c+y740zhn5g0u4nk=";
   };
 
   cargoHash = "sha256-8KOl581VmsfE7jiVFXy3ZDIfAqnaJuiDd7paqiFI/mk=";

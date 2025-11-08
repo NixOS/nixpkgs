@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       substituteInPlace $file \
         --replace "-march=nocona -mtune=haswell" ""
     done
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

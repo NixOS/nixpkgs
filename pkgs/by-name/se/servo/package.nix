@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   # build deps
   cargo-deny,
@@ -21,7 +22,6 @@
   uv,
   which,
   yasm,
-  zlib,
 
   # runtime deps
   apple-sdk_14,
@@ -36,6 +36,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  zlib,
 
   # tests
   nixosTests,
@@ -65,13 +66,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-07-30";
+  version = "0.0.1-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "0e180578632facc10f0e8fb29df9084369adc600";
-    hash = "sha256-4EQ15jOZNYjGmhIOJivHT8R6BeT6moGj+AI9DBq58v4=";
+    rev = "32c0c41d118e55fda1ab9aa778c2a59fa27710e9";
+    hash = "sha256-kQbwqKTsW5gkEeHE7Yp/fbGObjUJnvOG/0U6RSZc7oU=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -81,7 +82,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  cargoHash = "sha256-fqIlN+6SEY0LVrUk47U12TuVoRte0oCGJhO7DHovzBM=";
+  cargoHash = "sha256-wwS4fhYG8pvmNLCgSO26yf65No7wL1Xrqm+38sP2pxM=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -108,10 +109,20 @@ rustPlatform.buildRustPackage {
     uv
     which
     yasm
-    zlib
   ];
 
   env.UV_PYTHON = customPython.interpreter;
+
+  postPatch = ''
+    # mozjs-sys attempts to find the header path of the icu_capi crate through cargo-metadata at build time.
+    # Unfortunately, cargo-metadata also attempts to fetch optional, disabled crates in the process.
+    # As these are not part of servo's Cargo.lock, they are not included in our cache and cargo-metadata fails.
+    # We work around this by finding the header path ourselves and substituting the invocation in mozjs-sys' build.rs.
+    icu_capi_dir=$(find $cargoDepsCopy -maxdepth 2 -type d -name icu_capi-\*)
+    icu_c_include_path="$icu_capi_dir/bindings/c"
+    substituteInPlace $cargoDepsCopy/mozjs_sys-*/build.rs \
+      --replace-fail "let icu_c_include_path = get_icu_capi_include_path();" "let icu_c_include_path = \"$icu_c_include_path\".to_string();"
+  '';
 
   buildInputs = [
     fontconfig
@@ -124,6 +135,7 @@ rustPlatform.buildRustPackage {
     harfbuzz
     libunwind
     libGL
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
@@ -141,7 +153,16 @@ rustPlatform.buildRustPackage {
     "servo_allocator/use-system-allocator"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # mozjs-sys fails with:
+      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+      "-Wno-error=format-security"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ]
+  );
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
@@ -154,12 +175,11 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
     tests = { inherit (nixosTests) servo; };
   };
 
   meta = {
-    broken = true; # cargo fetcher leaves invalid Cargo.toml around, which breaks mozjs-sys build
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
@@ -167,6 +187,7 @@ rustPlatform.buildRustPackage {
       hexa
       supinie
     ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

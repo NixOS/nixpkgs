@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-mollie";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-mollie";
     tag = "v${version}";
-    hash = "sha256-YdBDYpxKqb0UOkSU6zEYoLAtlUbkfDHUTIA538ILbjk=";
+    hash = "sha256-lQ1y6w7zP0sy67jf5+K6584DP10LAZqo1hLsHF3H2UA=";
   };
 
   build-system = [

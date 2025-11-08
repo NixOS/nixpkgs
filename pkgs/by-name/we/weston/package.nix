@@ -10,7 +10,7 @@
   wayland-scanner,
   cairo,
   libGL,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libdrm,
   libevdev,
   libinput,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     libGL
-    libdisplay-info
+    libdisplay-info_0_2
     libdrm
     libevdev
     libinput

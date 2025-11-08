@@ -26,13 +26,14 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Checkout the merge commit
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
       # because the cache would be invalidated on every commit - treefmt checks every file.
@@ -60,13 +61,14 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Checkout the merge commit
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -87,6 +89,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Checkout merge and target commits
         uses: ./.github/actions/checkout
@@ -94,7 +97,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:

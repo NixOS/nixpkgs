@@ -12,6 +12,7 @@
   nix-update-script,
 
   components ? [
+    "cmd/kubeadm"
     "cmd/kubelet"
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
@@ -50,12 +51,7 @@ buildGoModule (finalAttrs: {
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  WHAT = lib.concatStringsSep " " (
-    [
-      "cmd/kubeadm"
-    ]
-    ++ components
-  );
+  WHAT = lib.concatStringsSep " " components;
 
   buildPhase = ''
     runHook preBuild

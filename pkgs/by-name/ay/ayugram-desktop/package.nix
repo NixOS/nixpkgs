@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  fetchpatch2,
   fetchFromGitHub,
   nix-update-script,
   telegram-desktop,
@@ -21,6 +21,15 @@ telegram-desktop.override {
         rev = "aafdac6da465e6498e39e1b55566fc8fe2402843";
         hash = "sha256-GNFkGw/CxtbeoEMBjExNudBcKFwlfXee5VVnXa4wGko=";
         fetchSubmodules = true;
+      };
+
+      # fix build failure with Qt 6.10
+      patches = fetchpatch2 {
+        name = "fix-build-with-qt-610.patch";
+        url = "https://github.com/desktop-app/cmake_helpers/commit/682f1b57.patch";
+        hash = "sha256-DHwgxAEFc1byQkVvrPwyctQKvUsK/KQ/cnzRv6PQuTM=";
+        stripLen = 1;
+        extraPrefix = "cmake/";
       };
 
       passthru.updateScript = nix-update-script { };

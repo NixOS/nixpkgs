@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-scheduler-plugins";
     tag = "v${version}";
-    hash = "sha256-Z/rJGkby9AcYB+Gil00xhbrySChqEIEOtzLyzQPhObk=";
+    hash = "sha256-BowMwZllFR9IKYUMhISAbf606awTxfmS/nQxkGgb4y8=";
   };
 in
 buildPythonPackage {

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.4.2";
+  version = "4.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${version}";
-    hash = "sha256-guQ8fIA20wtCkB5CkU7zg/INE+g8/fvQfIs5TNteQGo=";
+    hash = "sha256-opbbcYjsR+xuo2uQ7Ic/2+BfkiwdEe1xD/whRonDBWo=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -50,8 +50,8 @@ python3Packages.buildPythonApplication rec {
     pyfakefs
     pytest-mock
     pytest-subprocess
-    pytest-vcr
     pytestCheckHook
+    vcrpy
     writableTmpDirAsHomeHook
   ];
 
@@ -65,6 +65,8 @@ python3Packages.buildPythonApplication rec {
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
+    # TypeError: 'LocalPath' object is not subscriptable
+    "tests/utils/test_config.py"
   ];
 
   disabledTests = [

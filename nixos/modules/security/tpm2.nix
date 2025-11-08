@@ -39,7 +39,7 @@ let
           ima_log_file = cfg.fapi.imaLogFile;
         }
         // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
-          ek_cert_less = if cfg.fapi.ekCertLess then "yes" else "no";
+          ek_cert_less = lib.boolToYesNo cfg.fapi.ekCertLess;
         }
         // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
       )

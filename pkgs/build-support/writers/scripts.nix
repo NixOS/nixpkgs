@@ -812,7 +812,13 @@ rec {
       strip ? true,
     }:
     let
-      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+      optionFormat = optionName: {
+        option = "--${optionName}";
+        sep = ":";
+        explicitBool = false;
+      };
+
+      nimCompileCmdArgs = lib.cli.toCommandLineShell optionFormat (
         {
           d = "release";
           nimcache = ".";

@@ -747,43 +747,6 @@ with haskellLib;
   # https://github.com/illia-shkroba/pfile/issues/2
   pfile = doJailbreak super.pfile;
 
-  # Manually maintained
-  cachix-api = overrideCabal (drv: {
-    # FIXME: should use overrideSrc
-    version = "1.7.9";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      tag = "v1.7.9";
-      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-  }) super.cachix-api;
-  cachix = (
-    overrideCabal
-      (drv: {
-        # FIXME: should use overrideSrc
-        version = "1.7.9";
-        src = pkgs.fetchFromGitHub {
-          owner = "cachix";
-          repo = "cachix";
-          tag = "v1.7.9";
-          hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
-        };
-        postUnpack = "sourceRoot=$sourceRoot/cachix";
-        # Fix ambiguous 'show' reference: https://github.com/cachix/cachix/pull/704
-        postPatch = ''
-          sed -i 's/<> show i/<> Protolude.show i/' src/Cachix/Client/NixVersion.hs
-        '';
-      })
-      (
-        super.cachix.override {
-          nix = self.hercules-ci-cnix-store.nixPackage;
-          hnix-store-core = self.hnix-store-core_0_8_0_0;
-        }
-      )
-  );
-
   # Overly strict bounds on postgresql-simple (< 0.7), tasty (< 1.5) and tasty-quickcheck (< 0.11)
   # https://github.com/tdammers/migrant/pull/5
   migrant-core = doJailbreak super.migrant-core;
@@ -4068,5 +4031,43 @@ with haskellLib;
     amazonka-test = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka-test" (doJailbreak super.amazonka-test)
     );
+  }
+)
+
+# Cachix packages
+# Manually maintained
+// (
+  let
+    version = "1.9.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      tag = "v${version}";
+      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+    };
+  in
+  {
+    cachix-api = overrideSrc {
+      inherit version;
+      src = src + "/cachix-api";
+    } super.cachix-api;
+
+    cachix = lib.pipe super.cachix [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix";
+      })
+      (addBuildDepends [
+        self.pqueue
+      ])
+      (
+        drv:
+        drv.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+          hnix-store-core = self.hnix-store-core_0_8_0_0;
+        }
+      )
+    ];
   }
 )

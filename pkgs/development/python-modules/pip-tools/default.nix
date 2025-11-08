@@ -5,6 +5,7 @@
   build,
   click,
   fetchPypi,
+  fetchpatch,
   pep517,
   pip,
   pytest-xdist,
@@ -29,7 +30,22 @@ buildPythonPackage rec {
     hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
   };
 
-  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
+  patches = [
+    ./fix-setup-py-bad-syntax-detection.patch
+
+    # Backport click 8.2 + 8.3 compatibility from 7.5.1
+    # We can't update to 7.5.1 because of https://github.com/jazzband/pip-tools/issues/2231,
+    # which breaks home-assisstant-chip-wheels.
+    (fetchpatch {
+      url = "https://github.com/jazzband/pip-tools/commit/c7f128e7c533033c2436b52c972eee521fe3890c.diff";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-cIFAE/VKyyDWVQktPtPPuxY85DtTvH6pK539WD2cDn4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/jazzband/pip-tools/commit/816ee196c543be53ddba0ea33fb4c7e84217b3b3.diff";
+      hash = "sha256-3GTUNWoy/AmpWv7NUCWIZ+coxb1vUgg6CZhwh6FehZo=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 

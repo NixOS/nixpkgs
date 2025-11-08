@@ -51,15 +51,15 @@ assert builtins.elem gpuBackend [
 ];
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.8.0-unstable-2025-07-23";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
-    rev = "258c8c6543af0350ac002a52fbe18221ea275590";
-    hash = "sha256-HHt3iw3muIGz86NmI9p6yuv7jrXoiz/83qTTueU7Lpk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bhY+LCxOikS1at0ONFAhmvfnWhAVHsRQ4GfXJOZbBA=";
   };
 
   outputs = [
@@ -182,4 +182,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
-}
+})

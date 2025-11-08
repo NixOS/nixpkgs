@@ -5,17 +5,17 @@
   fpath,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "directories";
-  version = "0.6";
+  version = "0.7";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
-    repo = pname;
-    tag = version;
-    hash = "sha256-c/9ChiSODD1K7YsMj65tjErAwXeWvEQ8BkAcUvsr19c=";
+    repo = "directories";
+    tag = finalAttrs.version;
+    hash = "sha256-6qPdHqkZ0xREOTFOe5sGfz2ysDX+9JZDrEmJvenBcqw=";
   };
 
   propagatedBuildInputs = [
@@ -35,8 +35,11 @@ buildDunePackage rec {
       xdg-user-dirs on Linux, Known Folders on Windows, Standard Directories on
       macOS.
     '';
-    changelog = "https://raw.githubusercontent.com/OCamlPro/directories/refs/tags/${src.tag}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/OCamlPro/directories/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ bcc32 ];
+    maintainers = with lib.maintainers; [
+      bcc32
+      redianthus
+    ];
   };
-}
+})

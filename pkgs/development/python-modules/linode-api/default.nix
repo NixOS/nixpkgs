@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.37.0";
+  version = "5.38.0";
   pyproject = true;
 
   # Sources from Pypi exclude test fixtures
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-fRTTXWkn1YBWW9xrFm3y6o7f8ZdYhObqVLSHAuiNHak=";
+    hash = "sha256-ToM3ur0bqU5xXCtO8ekZwpvM1bRxtwa7CqOzGJEyY7I=";
   };
 
   build-system = [ setuptools ];

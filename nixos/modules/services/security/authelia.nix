@@ -270,7 +270,7 @@ let
     lib.updateManyAttrsByPath [
       {
         path = lib.init pathList;
-        update = old: lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+        update = old: lib.removeAttrs old [ (lib.last pathList) ];
       }
     ] set;
 in

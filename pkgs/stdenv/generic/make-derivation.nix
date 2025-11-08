@@ -426,7 +426,7 @@ let
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
-        if any (x: x == flag) list then (list ++ impliesFlags) else list;
+        if builtins.elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [
@@ -706,19 +706,14 @@ let
               __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
             }
           )
-          // optionalAttrs (isWindows || isCygwin) (
-            let
-              dlls =
-                allowedImpureDLLs
-                ++ lib.optionals isCygwin [
-                  "KERNEL32.dll"
-                  "cygwin1.dll"
-                ];
-            in
-            {
-              allowedImpureDLLs = if dlls != [ ] then dlls else null;
-            }
-          )
+          // optionalAttrs (isWindows || isCygwin) {
+            allowedImpureDLLs =
+              allowedImpureDLLs
+              ++ lib.optionals isCygwin [
+                "KERNEL32.dll"
+                "cygwin1.dll"
+              ];
+          }
           // (
             if !__structuredAttrs then
               makeOutputChecks attrs

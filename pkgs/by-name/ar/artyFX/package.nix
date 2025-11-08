@@ -40,6 +40,15 @@ stdenv.mkDerivation rec {
     ntk
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required (VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 4.0)'
+    substituteInPlace src/avtk/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required (VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   meta = with lib; {
     homepage = "http://openavproductions.com/artyfx/";
     description = "LV2 plugin bundle of artistic realtime effects";

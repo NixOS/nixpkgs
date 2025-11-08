@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "250426-27ec7a128";
+  version = "250707-d28b3101e";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-wsSWCTFfKQ+8aE8GKvXpA49LbBLMTE1lsJMYFLvquBM=";
+    hash = "sha256-KT50tjgM3b3edRB3R8dR3tIF9sXFr+Cm0BMsFqBJG6s=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
@@ -34,7 +34,7 @@ let
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.org/tensorflow/${name}.zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip";
       stripRoot = false;
     };
 

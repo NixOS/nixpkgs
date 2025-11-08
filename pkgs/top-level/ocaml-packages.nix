@@ -424,6 +424,8 @@ let
 
         dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
 
+        dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
+
         dolmen_type = callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
         dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -1471,6 +1473,7 @@ let
         ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
+        ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1508,6 +1511,8 @@ let
         ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
 
         ocolor = callPackage ../development/ocaml-modules/ocolor { };
+
+        ocp-browser = callPackage ../development/tools/ocaml/ocp-browser { };
 
         ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
@@ -2243,7 +2248,16 @@ let
 
         google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-        hol_light = callPackage ../applications/science/logic/hol_light { };
+        hol_light = callPackage ../applications/science/logic/hol_light {
+          camlp5 =
+            if lib.versionAtLeast camlp5.version "8.04.00" then
+              camlp5.overrideAttrs {
+                version = "8.03.2";
+                __intentionallyOverridingVersion = true;
+              }
+            else
+              camlp5;
+        };
 
         ### End ###
 

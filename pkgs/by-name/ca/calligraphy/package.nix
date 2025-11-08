@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "calligraphy";
     maintainers = with lib.maintainers; [
       aleksana
-      awwpotato
+      da157
     ];
     platforms = lib.platforms.linux;
   };

@@ -18,6 +18,7 @@
   kglobalacceld = callPackage ./kglobalacceld { };
   kinfocenter = callPackage ./kinfocenter { };
   kmenuedit = callPackage ./kmenuedit { };
+  knighttime = callPackage ./knighttime { };
   kpipewire = callPackage ./kpipewire { };
   krdp = callPackage ./krdp { };
   kscreen = callPackage ./kscreen { };

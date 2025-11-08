@@ -33,13 +33,13 @@ let
       fileName,
       version,
       toolId ? ovftoolId,
-      artifactId ? 21342,
+      artifactId ? 29161,
       fileType ? "Download",
       source ? "",
       hash ? "",
     }:
     let
-      requestJson = builtins.toJSON {
+      requestJson = lib.strings.toJSON {
         inherit
           fileName
           artifactId
@@ -73,14 +73,14 @@ let
 
   ovftoolSystems = {
     "x86_64-linux" = rec {
-      version = "4.6.3-24031167";
+      version = "5.0.0-24781994";
       fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
-      hash = "sha256-NEwwgmEh/mrZkMMhI+Kq+SYdd3MJ0+IBLdUhd1+kPow=";
+      hash = "sha256-I389VdRZQH9BJT/qxSyUPlRZC7MHv++TDc8rJ1jY788=";
     };
     "x86_64-darwin" = rec {
-      version = "4.6.3-24031167";
+      version = "5.0.0-24781994";
       fileName = "VMware-ovftool-${version}-mac.x64.zip";
-      hash = "sha256-vhACcc4tjaQhvKwZyWkgpaKaoC+coWGl1zfSIC6WebM=";
+      hash = "sha256-vfhagEOnTGxOsY8kFY555c8EhI12GwQ2JwgTjEz7UT0=";
     };
   };
 
@@ -158,9 +158,7 @@ stdenv.mkDerivation (final: {
     # libgoogleurl and libcurl.
     #
     # FIXME: Replace libgoogleurl? Possibly from Chromium?
-    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
-    # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
-    # support LTS release: https://www.openssl.org/support/contracts.html
+    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS.
 
     # Install all libs that are not patched in preFixup.
     # Darwin dylibs are under `lib` in the zip.
@@ -174,7 +172,7 @@ stdenv.mkDerivation (final: {
     libvmacore.so \
     libvmomi.so
   ''
-  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
+  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3 and later, but Linux is in the clear
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     lib/libcrypto.1.0.2.dylib \
     lib/libgoogleurl.59.0.30.45.2.dylib \
@@ -326,24 +324,24 @@ stdenv.mkDerivation (final: {
       set +x
     '';
 
-  meta = with lib; {
+  meta = {
     description = "VMware tools for working with OVF, OVA, and VMX images";
     homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       numinit
       thanegill
     ];
-    platforms = builtins.attrNames ovftoolSystems;
+    platforms = lib.attrNames ovftoolSystems;
     mainProgram = "ovftool";
-    knownVulnerabilities = lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "The bundled version of openssl 1.0.2zj in ovftool for Darwin has open vulnerabilities."
+    knownVulnerabilities = lib.optionals stdenv.hostPlatform.isDarwin [
+      "The bundled version of openssl 1.0.2zk in ovftool for Darwin has open vulnerabilities (maximum severity: Moderate)"
       "https://openssl-library.org/news/vulnerabilities-1.0.2/"
-      "CVE-2024-0727"
-      "CVE-2024-5535"
+      "Please nag Broadcom to update to OpenSSL 3 for Darwin."
       "CVE-2024-9143"
       "CVE-2024-13176"
+      "CVE-2025-9230"
     ];
   };
 })

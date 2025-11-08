@@ -4,7 +4,7 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter,
+  flutter329,
   ffmpeg,
   gst_all_1,
   fuse3,
@@ -56,22 +56,22 @@ let
   };
 
   ffigen = callPackage ./ffigen {
-    inherit flutter;
+    flutter = flutter329;
   };
 
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-nS8KjLzgdzgvn5mM1lJL2vFk0g/ZUZBvdkjyC+MdHDE=";
+    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
   };
 
   strictDeps = true;
@@ -81,16 +81,7 @@ flutter.buildFlutterApplication rec {
   sourceRoot = "${src.name}/flutter";
   # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = {
-    dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
-    desktop_multi_window = "sha256-NOe0jMcH02c0TDTtv62OMTR/qDPnRQrRe73vXDuEq8Q=";
-    dynamic_layouts = "sha256-eFp1YVI6vI2HRgtE5nTqGZIylB226H0O8kuxy9ypuf8=";
-    flutter_gpu_texture_renderer = "sha256-EZa1FOMbcwdVs/m0vsUvlHv+MifPby4I97ZFe1bqmwQ=";
-    window_manager = "sha256-40mwj4D8W2xW8C7RshTjOhelOiLPM7uU9rsF4NvQn8c=";
-    window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
-    texture_rgba_renderer = "sha256-V/bmT/5x+Bt7kdjLTkgkoXdBcFVXxPyp9kIUhf+Rnt4=";
-    uni_links = "sha256-O2BgNwu5HFRQyaNkskWHORx8pZhdwEjtljvw1+zFzfo=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -101,7 +92,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-ecLR6cMVDrTKeoTE5Yxkw5dN4ceAm+RD7BVXwIQ1fnk=";
+    hash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
   };
 
   dontCargoBuild = true;

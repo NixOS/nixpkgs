@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Config files for esbuild";
     homepage = "https://github.com/bpierre/esbuild-config";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "esbuild-config";
   };
 }

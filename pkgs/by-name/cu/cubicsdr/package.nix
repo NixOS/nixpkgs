@@ -55,6 +55,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libliquid.dylib ${lib.getLib liquid-dsp}/lib/libliquid.dylib ''${out}/bin/CubicSDR
   '';

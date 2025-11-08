@@ -30,7 +30,7 @@ let
     mapAttrs'
     mapAttrsToList
     match
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkDefault
     mkIf
     mkMerge
@@ -666,8 +666,8 @@ let
 in
 {
   imports = [
-    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkRenamedOptionModule
       [ "security" "initialRootPassword" ]
       [ "users" "users" "root" "initialHashedPassword" ]
@@ -871,6 +871,7 @@ in
         render.gid = ids.gids.render;
         sgx.gid = ids.gids.sgx;
         shadow.gid = ids.gids.shadow;
+        clock.gid = ids.gids.clock;
       };
 
       system.activationScripts.users =
@@ -1033,6 +1034,7 @@ in
           cdrom = { };
           tape = { };
           kvm = { };
+          clock = { };
         };
       };
 

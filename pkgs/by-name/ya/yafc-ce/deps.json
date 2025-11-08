@@ -35,6 +35,21 @@
     "hash": "sha256-1tHxDuJwwvJWZ3H9ooPFAKuaJIthSdTDlmjHlxH/euc="
   },
   {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.11.0",
+    "hash": "sha256-hQ2l6E6PO4m7i+ZsfFlEx+93UsLPo4IY3wDkNG11/Sw="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "4.14.0",
+    "hash": "sha256-ne/zxH3GqoGB4OemnE8oJElG5mai+/67ASaKqwmL2BE="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "4.14.0",
+    "hash": "sha256-5Mzj3XkYYLkwDWh17r1NEXSbXwwWYQPiOmkSMlgo1JY="
+  },
+  {
     "pname": "Microsoft.CodeCoverage",
     "version": "17.11.1",
     "hash": "sha256-1dLlK3NGh88PuFYZiYpT+izA96etxhU3BSgixDgdtGA="
@@ -95,9 +110,19 @@
     "hash": "sha256-KQmlUpG9ovRpNqKhKe6rz3XMLUjkBqjyQhEm2hV5Sow="
   },
   {
+    "pname": "System.Collections.Immutable",
+    "version": "9.0.0",
+    "hash": "sha256-+6q5VMeoc5bm4WFsoV6nBXA9dV5pa/O4yW+gOdi8yac="
+  },
+  {
     "pname": "System.Reflection.Metadata",
     "version": "1.6.0",
     "hash": "sha256-JJfgaPav7UfEh4yRAQdGhLZF1brr0tUWPl6qmfNWq/E="
+  },
+  {
+    "pname": "System.Reflection.Metadata",
+    "version": "9.0.0",
+    "hash": "sha256-avEWbcCh7XgpsSesnR3/SgxWi/6C5OxjR89Jf/SfRjQ="
   },
   {
     "pname": "xunit",

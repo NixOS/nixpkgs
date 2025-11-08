@@ -57,7 +57,7 @@ let
 
     let
       inherit (lib)
-        any
+        elem
         optionalString
         optionals
         optional
@@ -66,11 +66,11 @@ let
 
       smartmon = smartmontools.override { inherit enableMail; };
 
-      buildKernel = any (n: n == configFile) [
+      buildKernel = elem configFile [
         "kernel"
         "all"
       ];
-      buildUser = any (n: n == configFile) [
+      buildUser = elem configFile [
         "user"
         "all"
       ];

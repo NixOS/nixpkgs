@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "plakar";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gClQiXZEPui7g3Ps6yhB2tN36PnkqADo9iD4Gm6DpD4=";
+    hash = "sha256-cuPz0xg/cGKczHLpFqSBfFD7KlygCX6fnfrigv0K2Zs=";
   };
 
-  vendorHash = "sha256-JVk8wiuuicwWgEbqIjp7ryC4k3uc4DiXnJ5FxYbXV5M=";
+  vendorHash = "sha256-ySzDtj8EdGcWl6H1q44+QR5ebSC76leVygl+c8fa7sk=";
 
   buildInputs = [
     fuse

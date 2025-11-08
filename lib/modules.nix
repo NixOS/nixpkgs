@@ -1126,6 +1126,29 @@ let
       __toString = _: showOption loc;
     };
 
+  # Check that a type with v2 merge has a coherent check attribute.
+  # Throws an error if the type uses an ad-hoc `type // { check }` override.
+  # Returns the last argument like `seq`, allowing usage: checkV2MergeCoherence loc type expr
+  checkV2MergeCoherence =
+    loc: type: result:
+    if type.check.isV2MergeCoherent or false then
+      result
+    else
+      throw ''
+        The option `${showOption loc}' has a type `${type.description}' that uses
+        an ad-hoc `type // { check = ...; }' override, which is incompatible with
+        the v2 merge mechanism.
+
+        Please use `lib.types.addCheck` instead of `type // { check }' to add
+        custom validation. For example:
+
+          lib.types.addCheck baseType (value: /* your check */)
+
+        instead of:
+
+          baseType // { check = value: /* your check */; }
+      '';
+
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
@@ -1201,10 +1224,13 @@ let
         (
           if type.merge ? v2 then
             let
-              r = type.merge.v2 {
-                inherit loc;
-                defs = defsFinal;
-              };
+              # Check for v2 merge coherence
+              r = checkV2MergeCoherence loc type (
+                type.merge.v2 {
+                  inherit loc;
+                  defs = defsFinal;
+                }
+              );
             in
             r
             // {
@@ -1467,11 +1493,6 @@ let
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
-
-  defaultPriority =
-    warnIf (oldestSupportedReleaseIsAtLeast 2305)
-      "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead."
-      defaultOverridePriority;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -1787,11 +1808,10 @@ let
     };
 
   /**
-    Transitional version of mkAliasOptionModule that uses MD docs.
-
-    This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+    Deprecated alias of mkAliasOptionModule that uses MD docs.
+    This function is no longer necessary will be removed in 26.05`.
   */
-  mkAliasOptionModuleMD = mkAliasOptionModule;
+  mkAliasOptionModuleMD = lib.warn "mkAliasOptionModuleMD is deprecated and will be removed in 26.05; please use mkAliasOptionModule." mkAliasOptionModule;
 
   /**
     mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
@@ -2163,7 +2183,6 @@ private
   inherit
     defaultOrderPriority
     defaultOverridePriority
-    defaultPriority
     doRename
     evalModules
     evalOptionValue # for use by lib.types

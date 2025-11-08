@@ -64,6 +64,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     mainProgram = "pigment";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 }

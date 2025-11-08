@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   pytz,
@@ -12,10 +11,8 @@
 
 buildPythonPackage rec {
   pname = "pyfireservicerota";
-  version = "0.0.46";
+  version = "0.0.47";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";

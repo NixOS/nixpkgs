@@ -27,7 +27,6 @@
     "libheif"
     "libnsgif"
   ],
-  freeimage,
   libtiff,
   libjpeg_turbo,
   libjxl,
@@ -50,7 +49,6 @@ let
 
   backends = {
     inherit
-      freeimage
       libtiff
       libpng
       librsvg
@@ -59,6 +57,7 @@ let
       libnsgif
       ;
     libjpeg = libjpeg_turbo;
+    freeimage = throw "freeimage backend not supported";
   };
 
   backendFlags = map (

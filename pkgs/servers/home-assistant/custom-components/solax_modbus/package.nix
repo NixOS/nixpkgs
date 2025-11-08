@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "wills106";
   domain = "solax_modbus";
-  version = "2025.10.4";
+  version = "2025.11.1";
 
   src = fetchFromGitHub {
     owner = "wills106";
     repo = "homeassistant-solax-modbus";
     tag = version;
-    hash = "sha256-ai9Dt68TM2qDbWhypct6KdMwsLbrnDocL6GIR7D0guw=";
+    hash = "sha256-uzwXJ9GJuzp7IVpdM6r7+ZU2KF7jORpqIwqKTc8Iuok=";
   };
 
   dependencies = [ pymodbus ];

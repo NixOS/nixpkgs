@@ -162,5 +162,9 @@ let
         buildPackages.stdenv.cc;
   };
 
+  pkgs = dfold folder postStage (_: { }) withAllowCustomOverrides;
+
 in
-dfold folder postStage (_: { }) withAllowCustomOverrides
+# Return the spliced package set, so that consumers of the nixpkgs top-level
+# attributes, like NixOS, don't break when cross-compiling.
+pkgs.__splicedPackages

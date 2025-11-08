@@ -15,7 +15,6 @@
   makeWrapper,
   nspr,
   nss,
-  sbclPackages,
   sqlite,
 }:
 
@@ -59,7 +58,6 @@ buildPythonPackage rec {
     libGL
     nspr
     nss
-    sbclPackages.cl-dejavu
     sqlite
   ];
 
@@ -82,15 +80,7 @@ buildPythonPackage rec {
     rm -rf $out/${python.sitePackages}/kaleido/executable/etc/fonts
     mkdir -p $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d
     ln -s ${fontconfig.out}/etc/fonts/fonts.conf $out/${python.sitePackages}/kaleido/executable/etc/fonts/
-    ls -s ${fontconfig.out}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
-    ln -s ${sbclPackages.cl-dejavu}/dejavu-fonts-ttf-2.37/fontconfig/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
-
-    # Replace bundled fonts with nixpkgs-packaged fonts
-    # Currently this causes an issue where the fonts aren't found. I'm not sure why, so I'm leaving this commented out for now.
-    #rm -rf $out/${python.sitePackages}/kaleido/executable/xdg/fonts
-    #mkdir -p $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato
-    #ln -s ${dejavu_fonts}/share/fonts/truetype/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu/
-    #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
+    ln -s ${fontconfig.out}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Replace bundled swiftshader with libGL

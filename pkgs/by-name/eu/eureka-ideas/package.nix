@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -34,7 +35,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/simeg/eureka";
     changelog = "https://github.com/simeg/eureka/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "eureka";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

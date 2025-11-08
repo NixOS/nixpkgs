@@ -48,6 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobtclientapi" ];
 
+  disabledTests = [
+    # Timing-sensitive, e.g. "AssertionError: assert 9 <= 7"
+    "test_Monitor_block_until_timeout"
+  ];
+
   disabledTestPaths = [
     # AttributeError
     "tests/clients_test/rtorrent_test/rtorrent_api_test.py"

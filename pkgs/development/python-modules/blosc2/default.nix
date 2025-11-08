@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "3.7.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     tag = "v${version}";
-    hash = "sha256-mA7/8i77wtl9b6IT4Wp/uFDYp/IacnPnAsRoXe64+z4=";
+    hash = "sha256-L4NTURGmRlM2ZY11NvP36EoImPu1ncb+CBFCeuCC+eQ=";
   };
 
   nativeBuildInputs = [

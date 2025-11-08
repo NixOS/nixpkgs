@@ -8,7 +8,7 @@
 let
   cfg = config.services.journald.gateway;
 
-  cliArgs = lib.cli.toGNUCommandLineShell { } {
+  cliArgs = lib.cli.toCommandLineShellGNU { } {
     # If either of these are null / false, they are not passed in the command-line
     inherit (cfg)
       cert
@@ -75,7 +75,7 @@ in
     };
 
     system = lib.mkOption {
-      default = true;
+      default = false;
       type = lib.types.bool;
       description = ''
         Serve entries from system services and the kernel.
@@ -85,7 +85,7 @@ in
     };
 
     user = lib.mkOption {
-      default = true;
+      default = false;
       type = lib.types.bool;
       description = ''
         Serve entries from services for the current user.
@@ -108,18 +108,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        # This prevents the weird case were disabling "system" and "user"
-        # actually enables both because the cli flags are not present.
-        assertion = cfg.system || cfg.user;
-        message = ''
-          systemd-journal-gatewayd cannot serve neither "system" nor "user"
-          journals.
-        '';
-      }
-    ];
-
     systemd.additionalUpstreamSystemUnits = [
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"

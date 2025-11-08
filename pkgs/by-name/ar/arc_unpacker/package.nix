@@ -43,6 +43,11 @@ stdenv.mkDerivation {
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
     sed '1i#include <vector>' -i src/flow/cli_facade.h # gcc14
+
+    # cmake-4 support
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8.8)' \
+      'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [

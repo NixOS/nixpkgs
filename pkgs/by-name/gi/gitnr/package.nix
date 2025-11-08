@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/reemus-dev/gitnr/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
     mainProgram = "gitnr";

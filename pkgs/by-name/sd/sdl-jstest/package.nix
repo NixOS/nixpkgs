@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  SDL,
   SDL2,
   ncurses,
   docbook_xsl,
@@ -13,21 +12,21 @@
 
 stdenv.mkDerivation {
   pname = "sdl-jstest";
-  version = "2018-06-15";
+  version = "0.2.2-unstable-2025-03-27";
 
   src = fetchFromGitHub {
     owner = "Grumbel";
     repo = "sdl-jstest";
-    rev = "aafbdb1ed3e687583037ba55ae88b1210d6ce98b";
-    hash = "sha256-Mw+ENOVZ0O8WercdDNLAAkNMPZ2NyxSa+nMtgNmXjFw=";
+    rev = "917d27b3b45a335137bd2c8597f8bcf2bac8a569";
+    hash = "sha256-lUHI72fcIEllbcieUrp9A/iKSjUHqmKOUXbzdXCV5jE=";
     fetchSubmodules = true;
   };
 
   buildInputs = [
-    SDL
     SDL2
     ncurses
   ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -35,11 +34,14 @@ stdenv.mkDerivation {
     git
   ];
 
-  meta = with lib; {
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SDL_JSTEST" false) ];
+
+  meta = {
     homepage = "https://github.com/Grumbel/sdl-jstest";
     description = "Simple SDL joystick test application for the console";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
+    mainProgram = "sdl2-jstest";
   };
 }

@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_HELP=OFF"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Table Editor And Planner, Or: Teapot";
     longDescription = ''

@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     sed -i '/managementgen/d' CMakeLists.txt
     sed -i '/ENV/d' src/CMakeLists.txt
     sed -i '/management/d' CMakeLists.txt
+
+    substituteInPlace {./,examples/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_policy(SET CMP0022 OLD)" ""
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (

@@ -26,7 +26,6 @@ let
       (case "8.18" "1.3.1-8.18")
       (case "8.19" "1.3.3-8.19")
       (case "8.20" "1.3.4-8.20")
-      (case "9.0" "1.3.4-9.0")
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";

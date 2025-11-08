@@ -7,6 +7,7 @@
   python3,
   stdenvNoCC,
   makeWrapper,
+  codeowners,
 }:
 let
   python = python3.withPackages (ps: [
@@ -48,7 +49,7 @@ in
 {
   combinedDir,
   touchedFilesJson,
-  githubAuthorId,
+  ownersFile ? ../../OWNERS,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -155,22 +156,19 @@ let
                 # Only set this label when no other label with indication for staging has been set.
                 # This avoids confusion whether to target staging or batch this with kernel updates.
                 lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
-            # Set the "11.by: package-maintainer" label to whether all packages directly
-            # changed are maintained by the PR's author.
-            "11.by: package-maintainer" =
-              maintainers ? ${githubAuthorId}
-              && lib.all (lib.flip lib.elem maintainers.${githubAuthorId}) (
-                lib.flatten (lib.attrValues maintainers)
-              );
           };
       }
     );
 
-  maintainers = callPackage ./maintainers.nix { } {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
-    changedpathsjson = touchedFilesJson;
-    removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
-  };
+  inherit
+    (callPackage ./maintainers.nix { } {
+      changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
+      changedpathsjson = touchedFilesJson;
+      removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
+    })
+    maintainers
+    packages
+    ;
 in
 runCommand "compare"
   {
@@ -178,9 +176,14 @@ runCommand "compare"
     nativeBuildInputs = map lib.getBin [
       jq
       cmp-stats
+      codeowners
     ];
     maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
+    packages = builtins.toJSON packages;
+    passAsFile = [
+      "maintainers"
+      "packages"
+    ];
   }
   ''
     mkdir $out
@@ -222,5 +225,43 @@ runCommand "compare"
       } >> $out/step-summary.md
     fi
 
+    jq -r '.[]' "${touchedFilesJson}" > ./touched-files
+    readarray -t touchedFiles < ./touched-files
+    echo "This PR touches ''${#touchedFiles[@]} files"
+
+    # TODO: Move ci/OWNERS to Nix and produce owners.json instead of owners.txt.
+    touch "$out/owners.txt"
+    for file in "''${touchedFiles[@]}"; do
+        result=$(codeowners --file "${ownersFile}" "$file")
+
+        # Remove the file prefix and trim the surrounding spaces
+        read -r owners <<< "''${result#"$file"}"
+        if [[ "$owners" == "(unowned)" ]]; then
+            echo "File $file is unowned"
+            continue
+        fi
+        echo "File $file is owned by $owners"
+
+        # Split up multiple owners, separated by arbitrary amounts of spaces
+        IFS=" " read -r -a entries <<< "$owners"
+
+        for entry in "''${entries[@]}"; do
+            # GitHub technically also supports Emails as code owners,
+            # but we can't easily support that, so let's not
+            if [[ ! "$entry" =~ @(.*) ]]; then
+                echo -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m"
+                # Don't fail, because the PR for which this script runs can't fix it,
+                # it has to be fixed in the base branch
+                continue
+            fi
+            # The first regex match is everything after the @
+            entry=''${BASH_REMATCH[1]}
+
+            echo "$entry" >> "$out/owners.txt"
+        done
+
+    done
+
     cp "$maintainersPath" "$out/maintainers.json"
+    cp "$packagesPath" "$out/packages.json"
   ''

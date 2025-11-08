@@ -80,16 +80,10 @@ let
       [
         b2sdk
         boto3
-        cffi
-        cryptography
-        ecdsa
         idna
         pygobject3
         fasteners
-        lockfile
         paramiko
-        pyasn1
-        pycrypto
         # Currently marked as broken.
         # pydrive2
       ]

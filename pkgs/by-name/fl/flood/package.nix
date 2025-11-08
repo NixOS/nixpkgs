@@ -9,13 +9,13 @@
 
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
     rev = "v${version}";
-    hash = "sha256-+mVfaCxSHGy4r3ULO2bnV5X2xG7LJT27Bce0y55i6DA=";
+    hash = "sha256-RBWDEFhLEZdC7luGFGx3qY0Hk7nM44RZgRyCWXFPh1k=";
   };
 
   npmConfigHook = pnpm_9.configHook;

@@ -126,7 +126,7 @@ in
                 DNS.1 = ${config.networking.fqdn}
               '';
               csrData =
-                pkgs.runCommandNoCC "csr-and-key"
+                pkgs.runCommand "csr-and-key"
                   {
                     buildInputs = [ pkgs.openssl ];
                   }

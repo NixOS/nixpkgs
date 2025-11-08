@@ -69,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/svenstaro/miniserve/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
-      figsoda
       defelo
     ];
     mainProgram = "miniserve";

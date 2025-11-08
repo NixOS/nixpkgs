@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/j-lentz/iwgtk";
     changelog = "https://github.com/j-lentz/iwgtk/blob/v${version}/CHANGELOG";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "iwgtk";
   };

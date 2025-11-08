@@ -1,0 +1,44 @@
+From 7e023763fb7f56b7c1ea6fa139d79ec2c3e0164f Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sun, 21 Sep 2025 15:24:06 +0900
+Subject: [PATCH 08/30] musl: introduce dummy gshadow header file for userdb
+
+Even 'gshadow' meson option is disabled, src/shared/userdb.c and
+src/shared/user-record-nss.c include gshadow.h unconditionally.
+Let's introduce dummy header to make them compiled gracefully.
+---
+ src/include/musl/gshadow.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 src/include/musl/gshadow.h
+
+diff --git a/src/include/musl/gshadow.h b/src/include/musl/gshadow.h
+new file mode 100644
+index 0000000000..b57c74ca83
+--- /dev/null
++++ b/src/include/musl/gshadow.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include <errno.h>
++#include <stddef.h>
++
++struct sgrp {
++        char *sg_namp;
++        char *sg_passwd;
++        char **sg_adm;
++        char **sg_mem;
++};
++
++static inline int getsgnam_r(
++                const char *__name,
++                struct sgrp *__result_buf,
++                char *__buffer,
++                size_t __buflen,
++                struct sgrp **__result) {
++
++        return EOPNOTSUPP; /* this function returns positive errno in case of error. */
++}
+-- 
+2.51.0
+

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/samwho/spacer";
     changelog = "https://github.com/samwho/spacer/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "spacer";
   };
 }

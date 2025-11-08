@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage rec {
     description = "Small script to submit to Gradescope via GitHub";
     homepage = "https://github.com/nmittu/gradescope-submit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "submit";
   };
 }

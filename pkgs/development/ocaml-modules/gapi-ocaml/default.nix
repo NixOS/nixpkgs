@@ -12,7 +12,7 @@
 
 buildDunePackage rec {
   pname = "gapi-ocaml";
-  version = "0.4.6";
+  version = "0.4.7";
 
   minimalOCamlVersion = "4.08";
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
     owner = "astrada";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pMieplqWGjgA6NVK0hEEVTRjggZtiPP/OepRi9SxMok=";
+    hash = "sha256-uQJfrgF0oafURlamHslt9hX9MP4vFeVqDhuX7T/kjiY=";
   };
 
   nativeBuildInputs = [ cppo ];

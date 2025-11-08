@@ -60,6 +60,8 @@ python3Packages.buildPythonApplication {
     "test_update"
     "test_download"
     "test_comma_list_error"
+    "test_cleanup"
+    "test_pipe_mark"
   ];
 
   postInstall = ''

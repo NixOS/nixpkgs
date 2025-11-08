@@ -45,7 +45,6 @@
   pyfakefs,
   pygments,
   pykwalify,
-  pylint,
   pyperclip,
   pyserial,
   python,
@@ -166,6 +165,9 @@ stdenv.mkDerivation rec {
       patch -p1 < $patch
     done
 
+    # ecdsa is insecure and only used in tests
+    patch -p1 < ${./dont-import-ecdsa.patch}
+
     # unpin dependencies
     # there are many files to modify, in different formats
     sed -i 's/==.*$//' third_party/pigweed/repo/pw_env_setup/py/pw_env_setup/virtualenv_setup/python_base_requirements.txt
@@ -242,7 +244,6 @@ stdenv.mkDerivation rec {
         pyelftools
         pygments
         pykwalify
-        pylint
         pyperclip
         pyserial
         python-daemon

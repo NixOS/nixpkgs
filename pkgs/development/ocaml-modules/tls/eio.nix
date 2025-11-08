@@ -17,6 +17,8 @@ buildDunePackage {
 
   minimalOCamlVersion = "5.0";
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   nativeCheckInputs = [
     mdx.bin

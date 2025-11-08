@@ -74,6 +74,7 @@ import ./default.nix
       aarch64-apple-darwin = "87baeb57fb29339744ac5f99857f0077b12fa463217fc165dfd8f77412f38118";
       powerpc64-unknown-linux-gnu = "30d97f8d757c6ff171815c8af36eed85e44401a58c5e04f25b721c7776ed8337";
       powerpc64le-unknown-linux-gnu = "80db8e203357a050780fb8a2cdc027b81d5ae1634fa999c3be69cf8a2e10bbf6";
+      powerpc64le-unknown-linux-musl = "88d370dec3c382db9f1227822c725bab88621904c60f8f950745fa2e903264a4";
       riscv64gc-unknown-linux-gnu = "3885629641fd670e50c9e6553bdc6505457ef2163757a27dbf33fbc6351b2161";
       s390x-unknown-linux-gnu = "696dad74886467a5092ee8bd2265aaab85039fc563803166966c7cae389e2ef7";
       loongarch64-unknown-linux-gnu = "171696c45e4a91ccf17a239f00d5a3a8bbd40125d7a274506e1630423d714bec";

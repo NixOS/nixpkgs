@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vnc";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-vnc";
     tag = "${finalAttrs.version}";
-    hash = "sha256-eTvKACeVFFw6DOFAiWaG/m14jYyzZc61e79S8oVWrCs=";
+    hash = "sha256-bveTfyhHH7RAM24Lp0mWlt52ao9Rn6vCuKjfQH+B8Rw=";
   };
 
   nativeBuildInputs = [

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2xaiyF3dK4BfSa7u5kwYGYaXY0c9/MLiV34jmvTzI4k=";
+    hash = "sha256-KXQRQieyDPuSmLltf7iOVO4QdsHgaek+x1vneZyEg0E=";
   };
 
   patches = [

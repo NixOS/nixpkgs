@@ -1217,18 +1217,30 @@ with self;
     ];
   };
 
-  ppx_derive_at_runtime = janePackage {
-    pname = "ppx_derive_at_runtime";
-    hash = "sha256-Y/z4BKFRt3z1lUGdc7SznIv/ys//dZHoPSnsouj1GtI=";
-    meta.description = "Define a new ppx deriver by naming a runtime module";
-    propagatedBuildInputs = [
-      base
-      expect_test_helpers_core
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_derive_at_runtime = janePackage (
+    {
+      pname = "ppx_derive_at_runtime";
+      meta.description = "Define a new ppx deriver by naming a runtime module";
+      propagatedBuildInputs = [
+        base
+        expect_test_helpers_core
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-bbUV2t8MhqDCHDJp7fqJTnRrfZdYO8DLnygqQF0+ouY=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-Y/z4BKFRt3z1lUGdc7SznIv/ys//dZHoPSnsouj1GtI=";
+        }
+    )
+  );
 
   ppx_diff = janePackage (
     {
@@ -1425,18 +1437,30 @@ with self;
     ];
   };
 
-  ppx_jsonaf_conv = janePackage {
-    pname = "ppx_jsonaf_conv";
-    hash = "sha256-v7CYOJ1g4LkqIv5De5tQjjkBWXqKHbvqfSr0X5jBUuM=";
-    meta.description = "[@@deriving] plugin to generate Jsonaf conversion functions";
-    propagatedBuildInputs = [
-      base
-      jsonaf
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_jsonaf_conv = janePackage (
+    {
+      pname = "ppx_jsonaf_conv";
+      meta.description = "[@@deriving] plugin to generate Jsonaf conversion functions";
+      propagatedBuildInputs = [
+        base
+        jsonaf
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-BnkYY+Td9zV++PuPs/gm5U58rCZjew1OJQ2k8KE+dfA=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-v7CYOJ1g4LkqIv5De5tQjjkBWXqKHbvqfSr0X5jBUuM=";
+        }
+    )
+  );
 
   ppx_js_style = janePackage (
     {
@@ -1543,13 +1567,25 @@ with self;
     ];
   };
 
-  ppx_pattern_bind = janePackage {
-    pname = "ppx_pattern_bind";
-    hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
-    meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
-    propagatedBuildInputs = [ ppx_let ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_pattern_bind = janePackage (
+    {
+      pname = "ppx_pattern_bind";
+      meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
+      propagatedBuildInputs = [ ppx_let ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=$";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
+        }
+    )
+  );
 
   ppx_pipebang = janePackage {
     pname = "ppx_pipebang";
@@ -1570,26 +1606,38 @@ with self;
     doCheck = false; # test rules broken
   };
 
-  ppx_quick_test = janePackage {
-    pname = "ppx_quick_test";
-    hash = "sha256-Kxb0IJcosC4eYlUjEfZE9FhY8o1/gDHHLWD5Cby5hXY=";
-    meta.description = "Spiritual equivalent of let%expect_test, but for property based tests";
-    propagatedBuildInputs = [
-      async
-      async_kernel
-      base
-      base_quickcheck
-      core
-      core_kernel
-      expect_test_helpers_core
-      ppx_expect
-      ppx_here
-      ppx_jane
-      ppx_sexp_conv
-      ppx_sexp_message
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_quick_test = janePackage (
+    {
+      pname = "ppx_quick_test";
+      meta.description = "Spiritual equivalent of let%expect_test, but for property based tests";
+      propagatedBuildInputs = [
+        async
+        async_kernel
+        base
+        base_quickcheck
+        core
+        core_kernel
+        expect_test_helpers_core
+        ppx_expect
+        ppx_here
+        ppx_jane
+        ppx_sexp_conv
+        ppx_sexp_message
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-nSgi0MAmOWhk53x6U5Wmv/5zTxBiErWQqoT6ATBOv3w=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-Kxb0IJcosC4eYlUjEfZE9FhY8o1/gDHHLWD5Cby5hXY=";
+        }
+    )
+  );
 
   ppx_sexp_conv = janePackage (
     {
@@ -1711,17 +1759,29 @@ with self;
     )
   );
 
-  ppx_typed_fields = janePackage {
-    pname = "ppx_typed_fields";
-    hash = "sha256-aTPEBBc1zniZkEmzubGkU064bwGnefBOjVDqTdPm2w8=";
-    meta.description = "GADT-based field accessors and utilities";
-    propagatedBuildInputs = [
-      core
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_typed_fields = janePackage (
+    {
+      pname = "ppx_typed_fields";
+      meta.description = "GADT-based field accessors and utilities";
+      propagatedBuildInputs = [
+        core
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-M+UhZst98gRg6pVg828UZn8AEFK2a/KAzGkuUkWoBaI=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-aTPEBBc1zniZkEmzubGkU064bwGnefBOjVDqTdPm2w8=";
+        }
+    )
+  );
 
   ppx_typerep_conv = janePackage (
     {
@@ -2040,21 +2100,33 @@ with self;
     ];
   };
 
-  streamable = janePackage {
-    pname = "streamable";
-    hash = "sha256-FtrAX4nsacCO5HTVxwLgwwT8R2sASJ05qu4gT2ZVSDg=";
-    meta.description = "Collection of types suitable for incremental serialization";
-    propagatedBuildInputs = [
-      async_kernel
-      async_rpc_kernel
-      base
-      core
-      core_kernel
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  streamable = janePackage (
+    {
+      pname = "streamable";
+      meta.description = "Collection of types suitable for incremental serialization";
+      propagatedBuildInputs = [
+        async_kernel
+        async_rpc_kernel
+        base
+        core
+        core_kernel
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-3d7tByQCOfA44wSBKbHXDvyomenWVaEDMHujlK++n8Y=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-FtrAX4nsacCO5HTVxwLgwwT8R2sASJ05qu4gT2ZVSDg=";
+        }
+    )
+  );
 
   textutils = janePackage {
     pname = "textutils";

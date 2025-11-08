@@ -49,8 +49,8 @@ let
   idrName = "idris2-${idris2.version}";
   libSuffix = "lib/${idrName}";
   libDirs = libs: (lib.makeSearchPath libSuffix libs) + ":${idris2}/${idrName}";
-  supportDir = "${idris2}/${idrName}/lib";
-  drvAttrs = removeAttrs attrs [
+  supportDir = "${idris2.libidris2_support}/lib";
+  drvAttrs = builtins.removeAttrs attrs [
     "ipkgName"
     "idrisLibraries"
   ];

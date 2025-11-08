@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Quality Tetrahedral Mesh Generator and 3D Delaunay Triangulator";
     mainProgram = "tetgen";

@@ -39,6 +39,15 @@ stdenv.mkDerivation {
     done
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libwebcam/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace uvcdynctrl/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   doInstallCheck = true;
 
   meta = with lib; {

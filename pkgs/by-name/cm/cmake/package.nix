@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sp9vGXM6oiS3djUHoQikJ+1Ixojh+vIrKcROHDBUkoI=";
+    hash = "sha256-ZD8EGCt7oyOrMfUm94UTT7ecujGIqFIgbvBHP+4oKhU=";
   };
 
   patches = [
@@ -80,9 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   ++ [
-    # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11134
-    ./fix-curl-8.16.patch
-
     # Remove references to non‐Nix search paths.
     ./remove-impure-search-paths.patch
   ];

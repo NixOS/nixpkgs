@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
     # Multiple upstream commits squashed with adjustments, see header
     ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.useLLVM [
+
     ./musl-llvm.patch
   ];
 

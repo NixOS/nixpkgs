@@ -1,59 +1,25 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
-  buildGoModule,
   bun,
   fetchFromGitHub,
+  fzf,
   makeBinaryWrapper,
   models-dev,
   nix-update-script,
+  ripgrep,
   testers,
   writableTmpDirAsHomeHook,
 }:
 
-let
-  bun-target = {
-    "aarch64-darwin" = "bun-darwin-arm64";
-    "aarch64-linux" = "bun-linux-arm64";
-    "x86_64-darwin" = "bun-darwin-x64";
-    "x86_64-linux" = "bun-linux-x64";
-  };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.15.8";
+  version = "1.0.35";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6brfh6yTFGnhUo9kZ5VAcC1whhMPJYYwVIT7j6g+wkw=";
-  };
-
-  tui = buildGoModule {
-    pname = "opencode-tui";
-    inherit (finalAttrs) version src;
-
-    modRoot = "packages/tui";
-
-    vendorHash = "sha256-g3+2q7yRaM6BgIs5oIXz/u7B84ZMMjnxXpvFpqDePU4=";
-
-    subPackages = [ "cmd/opencode" ];
-
-    env.CGO_ENABLED = 0;
-
-    ldflags = [
-      "-s"
-      "-X=main.Version=${finalAttrs.version}"
-    ];
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm755 $GOPATH/bin/opencode $out/bin/tui
-
-      runHook postInstall
-    '';
+    hash = "sha256-0IFlFWMPu9ynrpu/bYJK2xOgZc+lCSQOSV2WfD0KY3w=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -77,16 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      # NOTE: Disabling post-install scripts with `--ignore-scripts` to avoid
-      # shebang issues
-      # NOTE: `--linker=hoisted` temporarily disables Bun's isolated installs,
-      # which became the default in Bun 1.3.0.
-      # See: https://bun.com/blog/bun-v1.3#isolated-installs-are-now-the-default-for-workspaces
-      # This workaround is required because the 'yargs' dependency is currently
-      # missing when building opencode. Remove this flag once upstream is
-      # compatible with Bun 1.3.0.
+      # NOTE: Without `--linker=hoisted` the necessary platform specific packages are not created, i.e. `@parcel/watcher-<os>-<arch>` and `@opentui/core-<os>-<arch>`
       bun install \
-        --filter=opencode \
+        --filter=./packages/opencode \
         --force \
         --frozen-lockfile \
         --ignore-scripts \
@@ -106,17 +65,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-EfH8fBgP0zsKVu26BxFq1NCwWLG6vlOhDD/WQ7152hA=";
-        aarch64-linux = "sha256-Bwwe9PTYwEJvTLhB2+6yzC4pB2/1J/JGI8S1TSrdOuM=";
-        x86_64-darwin = "sha256-TBSBpuPE+V7oanEMW6F8PvCZSLqIokibsyO1NtbLQnM=";
-        aarch64-darwin = "sha256-+wUulok3OdJ0YewuyOkv5zbiC+3QzhokfT3aCdL5akk=";
-      }
-      .${stdenv.hostPlatform.system};
+    outputHash = (lib.importJSON ./hashes.json).node_modules.${stdenvNoCC.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -128,31 +80,39 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
+    # NOTE: Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
     # `_api.json` from the file bundled with `bun build`.
     ./local-models-dev.patch
+    # NOTE: Skip npm pack commands in build.ts since packages are already in node_modules
+    ./skip-npm-pack.patch
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
+    cd packages/opencode
+    cp -R ${finalAttrs.node_modules}/. .
+
+    chmod -R u+w ./node_modules
+    # Make symlinks absolute to avoid issues with bun build
+    rm ./node_modules/@opencode-ai/script
+    ln -s $(pwd)/../../packages/script ./node_modules/@opencode-ai/script
+    rm -f ./node_modules/@opencode-ai/sdk
+    ln -s $(pwd)/../../packages/sdk/js ./node_modules/@opencode-ai/sdk
+    rm -f ./node_modules/@opencode-ai/plugin
+    ln -s $(pwd)/../../packages/plugin ./node_modules/@opencode-ai/plugin
 
     runHook postConfigure
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_VERSION = finalAttrs.version;
+  env.OPENCODE_CHANNEL = "stable";
 
   buildPhase = ''
     runHook preBuild
 
-    bun build \
-      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
-      --define OPENCODE_VERSION="'${finalAttrs.version}'" \
-      --compile \
-      --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
-      --outfile=opencode \
-      ./packages/opencode/src/index.ts \
+    bun run ./script/build.ts --single
 
     runHook postBuild
   '';
@@ -162,18 +122,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 opencode $out/bin/opencode
+    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
 
     runHook postInstall
   '';
 
-  # Execution of commands using bash-tool fail on linux with
-  # Error [ERR_DLOPEN_FAILED]: libstdc++.so.6: cannot open shared object file: No such
-  # file or directory
-  # Thus, we add libstdc++.so.6 manually to LD_LIBRARY_PATH
-  postFixup = ''
+  postInstall = ''
     wrapProgram $out/bin/opencode \
-      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fzf
+          ripgrep
+        ]
+      }
   '';
 
   passthru = {
@@ -184,8 +145,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "tui"
         "--subpackage"
         "node_modules"
       ];
@@ -202,10 +161,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      zestsystem
-      delafthi
-    ];
     mainProgram = "opencode";
   };
 })

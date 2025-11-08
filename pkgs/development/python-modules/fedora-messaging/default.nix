@@ -1,8 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   blinker,
   click,
   crochet,
@@ -13,6 +18,8 @@
   service-identity,
   tomli,
   twisted,
+
+  # tests
   pytest-mock,
   pytest-twisted,
   pytestCheckHook,
@@ -54,6 +61,18 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit" ];
+
+  disabledTests = [
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_no_conf"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: module 'errno' has no attribute 'EREMOTEIO'. Did you mean: 'EREMOTE'?
+    "test_publish_rejected_message"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for sending AMQP messages with JSON schema in Fedora infrastructure";

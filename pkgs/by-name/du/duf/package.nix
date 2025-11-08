@@ -35,7 +35,6 @@ buildGoModule (finalAttrs: {
     description = "Disk Usage/Free Utility";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       penguwin
       sigmasquadron
     ];

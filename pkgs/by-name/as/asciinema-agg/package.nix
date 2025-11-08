@@ -2,29 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agg";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "agg";
-    rev = "v${version}";
-    hash = "sha256-FjAf/rhyxsm4LHoko4QRA9t5e+qKIgO2kSd48Zmf224=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6UenPE6mmmvliaIuGdQj/FrlmoJvmBJgfo0hW+uRaxM=";
   };
 
   strictDeps = true;
 
-  cargoHash = "sha256-CeXcpSD/6qPzA8nrSyC3oDFBpjFYNfDPySQxSOZPlgc=";
+  cargoHash = "sha256-VpbjvrMhzS1zrcMNWBjTLda6o3ea2cwpnEDUouwyp8w=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
     homepage = "https://github.com/asciinema/agg";
-    changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/asciinema/agg/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "agg";
   };
-}
+})

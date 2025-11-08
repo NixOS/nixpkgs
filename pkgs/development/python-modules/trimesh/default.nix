@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.8.3";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-ywLbXOE3qO3+hrqy/+cVGZA4V202eHaMUnn3Wz1iNLI=";
+    hash = "sha256-HOSmV55RRZkIk1YppWfYvSm0hURSKUsDeeWtVBrH7Rs=";
   };
 
   build-system = [ setuptools ];

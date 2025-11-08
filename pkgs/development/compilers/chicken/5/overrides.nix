@@ -31,7 +31,7 @@ in
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
-  botan = addToBuildInputsWithPkgConfig pkgs.botan2;
+  botan = broken;
   cairo =
     old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
@@ -98,7 +98,6 @@ in
       ] old
     )
     // (addToBuildInputs pkgs.libglut old);
-  iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   inotify =
@@ -306,6 +305,8 @@ in
 
   # mark broken darwin
 
+  # The last successful Darwin Hydra build was in 2024
+  iconv = brokenOnDarwin;
   # fatal error: 'mqueue.h' file not found
   posix-mq = brokenOnDarwin;
   # Undefined symbols for architecture arm64: "_pthread_setschedprio"

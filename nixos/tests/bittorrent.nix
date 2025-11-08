@@ -6,12 +6,12 @@
 # which only works if the first client successfully uses the UPnP-IGD
 # protocol to poke a hole in the NAT.
 
-{ pkgs, ... }:
+{ lib, hostPkgs, ... }:
 
 let
 
   # Some random file to serve.
-  file = pkgs.hello.src;
+  file = hostPkgs.hello.src;
 
   internalRouterAddress = "192.168.3.1";
   internalClient1Address = "192.168.3.2";
@@ -23,7 +23,6 @@ let
   transmissionConfig =
     { pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.transmission_3 ];
       services.transmission = {
         enable = true;
         settings = {
@@ -37,7 +36,7 @@ in
 
 {
   name = "bittorrent";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [
       rob
       bobvanderlinden

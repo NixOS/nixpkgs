@@ -8,6 +8,11 @@
   perl,
   pkg-config,
   vpnc-scripts,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gtk3,
 }:
 
 rustPlatform.buildRustPackage {
@@ -32,6 +37,11 @@ rustPlatform.buildRustPackage {
     openconnect
     openssl
     glib-networking
+    glib
+    pango
+    cairo
+    atk
+    gtk3
   ];
 
   preConfigure = ''

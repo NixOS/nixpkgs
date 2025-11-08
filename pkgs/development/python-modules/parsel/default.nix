@@ -42,6 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parsel" ];
 
+  disabledTests = [
+    # asserts on the exact output format of an error message
+    "test_set_xpathfunc"
+  ];
+
   meta = with lib; {
     description = "Python library to extract data from HTML and XML using XPath and CSS selectors";
     homepage = "https://github.com/scrapy/parsel";

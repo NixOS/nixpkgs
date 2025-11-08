@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nghttp3";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://github.com/ngtcp2/nghttp3/releases/download/v${finalAttrs.version}/nghttp3-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-AAKlyoVtsFmqbcac9zL7sA2aHnPteISPXUjyYh8gyoo=";
+    hash = "sha256-KFl4NTevIT1npc5Cd923nIlBrUXtv6XM3VLZz0/6Qi0=";
   };
 
   outputs = [
@@ -23,16 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    if stdenv.hostPlatform.isStatic then
-      [
-        (lib.cmakeBool "ENABLE_SHARED_LIB" false)
-        (lib.cmakeBool "ENABLE_STATIC_LIB" true)
-      ]
-    else
-      [
-        (lib.cmakeBool "ENABLE_STATIC_LIB" false)
-      ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
+  ];
 
   doCheck = true;
 

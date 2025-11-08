@@ -63,7 +63,7 @@
   tinysparql,
   localsearch,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   wayland-scanner,
   libepoxy,
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     tinysparql
     localsearch # for search locations dialog
-    udisks2
+    udisks
     upower
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base

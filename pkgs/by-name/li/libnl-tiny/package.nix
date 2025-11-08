@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation {
   pname = "libnl-tiny";
-  version = "0-unstable-2025-03-19";
+  version = "0-unstable-2025-10-20";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libnl-tiny.git";
-    rev = "c0df580adbd4d555ecc1962dbe88e91d75b67a4e";
-    hash = "sha256-j5oIEbWqVWd7rNpCMm9+WZwud43uTGeHG81lmzQOoeY=";
+    rev = "c69fb5ef80b9780fe9add345052aef9ccb5d51f4";
+    hash = "sha256-QH4w++kekejvvgTye6djs0jYzcNsxfrE3XCBed+Oizo=";
   };
 
   nativeBuildInputs = [

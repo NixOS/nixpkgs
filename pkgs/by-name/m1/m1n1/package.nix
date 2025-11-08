@@ -7,18 +7,43 @@
   python3Packages,
   nix-update-script,
   nixos-icons,
+  buildPackages,
   customLogo ? "${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png",
+  withChainloading ? false,
 }:
+
+let
+  stdenvOpts = {
+    targetPlatform.system = "aarch64-none-elf";
+    targetPlatform.rust.rustcTarget = "${stdenv.hostPlatform.parsed.cpu.name}-unknown-none-softfloat";
+    targetPlatform.rust.rustcTargetSpec = "${stdenv.hostPlatform.parsed.cpu.name}-unknown-none-softfloat";
+  };
+  rust = buildPackages.rust.override {
+    stdenv = lib.recursiveUpdate buildPackages.stdenv stdenvOpts;
+  };
+  rustPackages = rust.packages.stable.overrideScope (
+    f: p: {
+      rustc-unwrapped = p.rustc-unwrapped.override {
+        stdenv = lib.recursiveUpdate p.rustc-unwrapped.stdenv stdenvOpts;
+      };
+    }
+  );
+  rustPlatform = buildPackages.makeRustPlatform rustPackages;
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J1PZVaEdI6gx/qzsoVW1ehRQ/ZDKzdC1NgIGgBqxQ+0=";
+    hash = "sha256-rxop5r+EVXnp1OVkGT6MUwcl6yNTJxJSJuruZiaou7g=";
+    fetchSubmodules = true;
   };
+
+  cargoVendorDir = ".";
 
   postPatch = lib.optionalString (customLogo != null) ''
     magick ${customLogo} -resize 128x128 data/custom_128.png
@@ -27,6 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     imagemagick
+  ]
+  ++ lib.optionals withChainloading [
+    rustPackages.rustc
+    rustPackages.cargo
+    rustPlatform.cargoSetupHook
   ];
 
   postConfigure = ''
@@ -40,8 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
     "RELEASE=1"
-    (lib.optionalString (customLogo != null) "LOGO=custom")
-  ];
+  ]
+  ++ lib.optional (customLogo != null) "LOGO=custom"
+  ++ lib.optional withChainloading "CHAINLOADING=1";
 
   enableParallelBuilding = true;
 
