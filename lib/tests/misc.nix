@@ -160,6 +160,87 @@ runTests {
 
   # CUSTOMIZATION
 
+  testExtendDerivationMultiOutputs = {
+    expr =
+      let
+        condition = true;
+        passthru = {
+          name = "example";
+          version = "1.0";
+          meta = {
+            description = "Fake derivation that's an input for the unit test";
+          };
+        };
+        drv = derivation {
+          name = "example-1.0";
+          system = "fictional64-portable";
+          builder = "/foo";
+          outputs = [
+            "out"
+            "lib"
+          ];
+        };
+        example = lib.extendDerivation condition passthru drv;
+        inherit (builtins) addErrorContext;
+        forBaseAndOutputs =
+          f:
+          # This pattern doesn't add context to != true case, but that's ok.
+          assert addErrorContext "while checking example itself" (f example == true);
+          assert addErrorContext "while checking example.out" (f example.out == true);
+          assert addErrorContext "while checking example.out.out" (f example.out.out == true);
+          assert addErrorContext "while checking example.out.lib" (f example.out.lib == true);
+          assert addErrorContext "while checking example.lib" (f example.lib == true);
+          assert addErrorContext "while checking example.lib.out" (f example.lib.out == true);
+          assert addErrorContext "while checking example.lib.lib" (f example.lib.lib == true);
+          true;
+      in
+      assert forBaseAndOutputs (
+        p:
+        assert p.type == "derivation";
+        assert p.system == "fictional64-portable";
+        assert p.name == "example";
+        assert p.version == "1.0";
+        assert lib.isString p.outPath;
+        assert lib.isString p.drvPath;
+        assert p.all == example.all;
+        assert
+          p.outputs == [
+            "out"
+            "lib"
+          ];
+        assert p.meta.description == "Fake derivation that's an input for the unit test";
+        true
+      );
+
+      assert lib.strings.hasSuffix "example-1.0" example.outPath;
+      assert lib.strings.hasSuffix "example-1.0-lib" example.lib.outPath;
+      assert example.outputName == "out";
+      assert example ? outputSpecified == false;
+
+      assert example ? out;
+      assert example.out.outputName == "out";
+      assert example.out.outputSpecified == true;
+
+      assert example ? lib;
+      assert example.lib.outputName == "lib";
+      assert example.lib.outputSpecified == true;
+
+      assert example ? all;
+      assert lib.isList example.all;
+      assert lib.length example.all == 2;
+      assert lib.elem example.out example.all;
+      assert lib.elem example.lib example.all;
+
+      assert example.out.outPath != example.lib.outPath;
+      assert example.out.drvPath == example.drvPath;
+      assert example.lib.drvPath == example.drvPath;
+
+      # TODO: test overrideAttrs propagation to outputs
+
+      true;
+    expected = true;
+  };
+
   testFunctionArgsMakeOverridable = {
     expr = functionArgs (
       makeOverridable (
