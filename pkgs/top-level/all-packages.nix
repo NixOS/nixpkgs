@@ -3982,8 +3982,6 @@ with pkgs;
     openssl = openssl.override { withZlib = true; };
   };
 
-  stacer = libsForQt5.callPackage ../tools/system/stacer { };
-
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
