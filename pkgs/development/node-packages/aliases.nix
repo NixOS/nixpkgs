@@ -139,6 +139,7 @@ mapAliases {
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
+  elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
   emojione = throw "emojione was archived and abandoned upstream, so it has been removed"; # Added 2025-11-06
   escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28

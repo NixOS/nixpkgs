@@ -31,7 +31,6 @@
 , "diff2html-cli"
 , "dotenv-vault"
 , "elasticdump"
-, "elm-oracle"
 , "emoj"
 , "esy"
 , "fast-cli"

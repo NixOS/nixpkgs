@@ -36487,24 +36487,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  elm-oracle = nodeEnv.buildNodePackage {
-    name = "elm-oracle";
-    packageName = "elm-oracle";
-    version = "1.1.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/elm-oracle/-/elm-oracle-1.1.1.tgz";
-      sha512 = "DUtF7aAlrrgijSRB4tGMgx6qp1NAVJpUGL4cjret1f57DEf41s+iPLPHxEkPbLrIdYjtEBzvRP8mMph37quqmQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Query for information about values in elm source files";
-      homepage = "https://github.com/ElmCast/elm-oracle#readme";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   emoj = nodeEnv.buildNodePackage {
     name = "emoj";
     packageName = "emoj";
