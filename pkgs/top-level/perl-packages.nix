@@ -38219,10 +38219,10 @@ with self;
 
   X11XCB = buildPerlPackage {
     pname = "X11-XCB";
-    version = "0.20";
+    version = "0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZH/ZHMYLOVE/X11-XCB-0.20.tar.gz";
-      hash = "sha256-rVY5Yd4gIlVOdZHvXLjZY0ngxzdxIYXkeFBViMZ6L9I=";
+      url = "mirror://cpan/authors/id/Z/ZH/ZHMYLOVE/X11-XCB-0.24.tar.gz";
+      hash = "sha256-eIUZZzpDxHUecwYaiCG2WPyV8G1cGcnx3rtgX7ILoEU=";
     };
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
