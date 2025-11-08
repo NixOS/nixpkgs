@@ -204,6 +204,7 @@ mapAliases {
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
+  mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   meat = throw "meat was removed because it was abandoned upstream."; # Added 2025-10-20
   inherit (pkgs) mermaid-cli; # added 2023-10-01
