@@ -703,6 +703,7 @@ mapAliases {
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
   hobbes = throw "hobbes has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-20
+  hop = throw "'hop' has been removed due to lack of maintenance"; # Added 2025-11-08
   hostPlatform = warnAlias "'hostPlatform' has been renamed to/replaced by 'stdenv.hostPlatform'" stdenv.hostPlatform; # Converted to warning 2025-10-28
   hpmyroom = throw "hpmyroom has been removed because it has been marked as broken since May 2024."; # Added 2025-10-11
   hpp-fcl = throw "'hpp-fcl' has been renamed to/replaced by 'coal'"; # Converted to throw 2025-10-27
