@@ -1,0 +1,79 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b1bd0189b..3fb7abffb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -66,6 +66,7 @@ enable_testing()
+ 
+ option(USE_SHARED_CMARK   "Use your installed copy of cmark" off)
+ option(USE_SHARED_CURL    "Use your installed copy of curl" off)
++option(USE_SHARED_FMT     "Use your installed copy of fmt" off)
+ option(USE_SHARED_GIFLIB  "Use your installed copy of giflib" off)
+ option(USE_SHARED_JPEGLIB "Use your installed copy of jpeglib" off)
+ option(USE_SHARED_ZLIB    "Use your installed copy of zlib" off)
+@@ -185,6 +186,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_PROFILE "${CMAKE_BINARY_DIR}/bin")
+ set(SOURCE_DATA_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/data)
+ set(CMARK_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmark)
+ set(CURL_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/curl)
++set(FMT_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt)
+ set(GIFLIB_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/third_party/giflib)
+ set(LIBJPEG_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/jpeg)
+ set(LIBPNG_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/third_party/libpng)
+@@ -225,6 +227,16 @@ if(NOT USE_SHARED_CURL)
+   set(CURL_STATICLIB ON BOOL)
+ endif()
+ 
++# fmt
++if(USE_SHARED_FMT)
++  find_package(FMT REQUIRED)
++  set(FMT_LIBRARIES fmt::fmt)
++else()
++  set(FMT_FOUND)
++  set(FMT_LIBRARIES fmt)
++  # No need to include extra directories, actually
++endif()
++
+ # zlib
+ if(USE_SHARED_ZLIB)
+   find_package(ZLIB REQUIRED)
+diff --git a/src/app/CMakeLists.txt b/src/app/CMakeLists.txt
+index 9c67c0268..b19a3e412 100644
+--- a/src/app/CMakeLists.txt
++++ b/src/app/CMakeLists.txt
+@@ -754,7 +754,7 @@ target_link_libraries(app-lib
+   ${ZLIB_LIBRARIES}
+   json11
+   archive_static
+-  fmt
++  ${FMT_LIBRARIES}
+   tinyexpr
+   qoi)
+ 
+diff --git a/src/dio/CMakeLists.txt b/src/dio/CMakeLists.txt
+index 55cb24de5..b253dca0b 100644
+--- a/src/dio/CMakeLists.txt
++++ b/src/dio/CMakeLists.txt
+@@ -16,7 +16,7 @@ endif()
+ 
+ target_link_libraries(dio-lib
+   ${ZLIB_LIBRARIES}
+-  fmt
++  ${FMT_LIBRARIES}
+   flic-lib
+   laf-base
+   fixmath-lib
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 9d09a98c8..1973b134b 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -117,7 +117,10 @@ if(NOT USE_SHARED_HARFBUZZ AND NOT LAF_BACKEND STREQUAL "skia")
+ endif()
+ 
+ add_subdirectory(simpleini)
+-add_subdirectory(fmt)
++
++if(NOT USE_SHARED_FMT)
++  add_subdirectory(fmt)
++endif()
+ 
+ # Add cmark without tests
+ if(NOT USE_SHARED_CMARK)

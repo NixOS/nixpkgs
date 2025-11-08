@@ -1,0 +1,35 @@
+commit 47245c3fd30dc326fedd7cdae444ddcf0fd97490
+Author: holborn <holborn@users.sourceforge.net>
+Date:   Tue Apr 19 15:02:26 2011 +0100
+
+            Fix FL path
+    
+    	modified:   src/global.h
+    	modified:   src/process.C
+
+diff --git a/src/global.h b/src/global.h
+index fc74b06..3e33da9 100644
+--- a/src/global.h
++++ b/src/global.h
+@@ -176,7 +176,7 @@ return y;
+ #include <X11/xpm.h>
+ #include <jack/jack.h>
+ #include <jack/midiport.h>
+-#include <Fl/Fl_Preferences.H>
++#include <FL/Fl_Preferences.H>
+ #include "FPreset.h"
+ #include "Reverb.h"
+ #include "Chorus.h"
+diff --git a/src/process.C b/src/process.C
+index 51bbc65..c993ff8 100644
+--- a/src/process.C
++++ b/src/process.C
+@@ -28,7 +28,7 @@
+ #include <fcntl.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+-#include <Fl/Fl_Preferences.H>
++#include <FL/Fl_Preferences.H>
+ #include "global.h"
+ 
+ int Pexitprogram, preset;

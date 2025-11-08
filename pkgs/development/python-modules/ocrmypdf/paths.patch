@@ -1,0 +1,119 @@
+diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
+index eaa48117..30201d97 100644
+--- a/src/ocrmypdf/_exec/ghostscript.py
++++ b/src/ocrmypdf/_exec/ghostscript.py
+@@ -31,7 +31,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
+     ]
+ )
+ # Ghostscript executable - gswin32c is not supported
+-GS = 'gswin64c' if os.name == 'nt' else 'gs'
++GS = '@gs@'
+ 
+ 
+ log = logging.getLogger(__name__)
+diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
+index 1c6dd5fe..b689a091 100644
+--- a/src/ocrmypdf/_exec/jbig2enc.py
++++ b/src/ocrmypdf/_exec/jbig2enc.py
+@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
+ 
+ def version() -> Version:
+     try:
+-        version = get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*')
++        version = get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*')
+     except CalledProcessError as e:
+         # TeX Live for Windows provides an incompatible jbig2.EXE which may
+         # be on the PATH.
+@@ -33,7 +33,7 @@ def available():
+ 
+ def convert_group(cwd, infiles, out_prefix, threshold):
+     args = [
+-        'jbig2',
++        '@jbig2@',
+         '-b',
+         out_prefix,
+         '--symbol-mode',  # symbol mode (lossy)
+@@ -50,7 +50,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
+ 
+ 
+ def convert_single(cwd, infile, outfile, threshold):
+-    args = ['jbig2', '--pdf', '-t', str(threshold), infile]
++    args = ['@jbig2@', '--pdf', '-t', str(threshold), infile]
+     with open(outfile, 'wb') as fstdout:
+         proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
+     proc.check_returncode()
+diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
+index 5b8600d0..fcad771b 100644
+--- a/src/ocrmypdf/_exec/pngquant.py
++++ b/src/ocrmypdf/_exec/pngquant.py
+@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
+ 
+ 
+ def version() -> Version:
+-    return Version(get_version('pngquant', regex=r'(\d+(\.\d+)*).*'))
++    return Version(get_version('@pngquant@', regex=r'(\d+(\.\d+)*).*'))
+ 
+ 
+ def available():
+@@ -37,7 +37,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
+     """
+     with open(input_file, 'rb') as input_stream:
+         args = [
+-            'pngquant',
++            '@pngquant@',
+             '--force',
+             '--skip-if-larger',
+             '--quality',
+diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
+index 102bdab8..bfef4400 100644
+--- a/src/ocrmypdf/_exec/tesseract.py
++++ b/src/ocrmypdf/_exec/tesseract.py
+@@ -95,7 +95,7 @@ class TesseractVersion(Version):
+ 
+ 
+ def version() -> Version:
+-    return TesseractVersion(get_version('tesseract', regex=r'tesseract\s(.+)'))
++    return TesseractVersion(get_version('@tesseract@', regex=r'tesseract\s(.+)'))
+ 
+ 
+ def has_thresholding() -> bool:
+@@ -113,7 +113,7 @@ def get_languages() -> set[str]:
+         msg += output
+         return msg
+ 
+-    args_tess = ['tesseract', '--list-langs']
++    args_tess = ['@tesseract@', '--list-langs']
+     try:
+         proc = run(
+             args_tess,
+@@ -135,7 +135,7 @@ def get_languages() -> set[str]:
+ 
+ 
+ def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
+-    args = ['tesseract']
++    args = ['@tesseract@']
+     if langs:
+         args.extend(['-l', '+'.join(langs)])
+     if engine_mode is not None:
+diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
+index a5a92f4c..6cf56eb3 100644
+--- a/src/ocrmypdf/_exec/unpaper.py
++++ b/src/ocrmypdf/_exec/unpaper.py
+@@ -48,7 +48,7 @@ class UnpaperImageTooLargeError(Exception):
+ 
+ 
+ def version() -> Version:
+-    return Version(get_version('unpaper', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
++    return Version(get_version('@unpaper@', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
+ 
+ 
+ @contextmanager
+@@ -70,7 +70,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+ def run_unpaper(
+     input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
+ ) -> None:
+-    args_unpaper = ['unpaper', '-v', '--dpi', str(round(dpi, 6))] + mode_args
++    args_unpaper = ['@unpaper@', '-v', '--dpi', str(round(dpi, 6))] + mode_args
+ 
+     with _setup_unpaper_io(input_file) as (input_png, output_pnm, tmpdir):
+         # To prevent any shenanigans from accepting arbitrary parameters in

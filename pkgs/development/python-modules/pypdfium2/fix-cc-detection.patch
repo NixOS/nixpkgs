@@ -1,0 +1,25 @@
+diff --git a/src/ctypesgen/__main__.py b/src/ctypesgen/__main__.py
+index 23ee014..2d0cfc1 100644
+--- a/src/ctypesgen/__main__.py
++++ b/src/ctypesgen/__main__.py
+@@ -89,17 +89,9 @@ def main_impl(args, cmd_str):
+         assert _is_relative_to(args.output, args.linkage_anchor)
+     
+     if args.cpp:
+-        assert shutil.which(args.cpp[0]), f"Given pre-processor {args.cpp[0]!r} is not available."
+-    else:
+-        if shutil.which("gcc"):
+-            args.cpp = ["gcc", "-E"]
+-        elif shutil.which("cpp"):
+-            args.cpp = ["cpp"]
+-        elif shutil.which("clang"):
+-            args.cpp = ["clang", "-E"]
+-        else:
+-            raise RuntimeError("C pre-processor auto-detection failed: neither gcc nor clang available.")
+-    
++        print("cpp argument ignored for nix build")
++    args.cpp = ["@cc@", "-E"]
++ 
+     # Important: must not use +=, this would mutate the original object, which is problematic when default=[] is used and ctypesgen called repeatedly from within python
+     args.compile_libdirs = args.compile_libdirs + args.universal_libdirs
+     args.runtime_libdirs = args.runtime_libdirs + args.universal_libdirs

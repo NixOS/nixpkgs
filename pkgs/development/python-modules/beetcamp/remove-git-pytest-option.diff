@@ -1,0 +1,98 @@
+The test suite has support for comparing results against a base revision of the
+repository.
+
+This requires that we run the tests from a Git checkout of the `beetcamp` repo,
+which we do not do. We don't want to compare against a base revision, so we
+just remove the option entirely.
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 04d81f66f0..018d9e3c0c 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -9,7 +9,6 @@
+ 
+ import pytest
+ from beets.autotag.hooks import AlbumInfo, TrackInfo
+-from git import Repo
+ from rich_tables.diff import pretty_diff
+ from rich_tables.utils import make_console
+ 
+@@ -17,10 +16,8 @@
+ from beetsplug.bandcamp.helpers import Helpers
+ 
+ if TYPE_CHECKING:
+-    from _pytest.config import Config
+     from _pytest.config.argparsing import Parser
+     from _pytest.fixtures import SubRequest
+-    from _pytest.terminal import TerminalReporter
+     from rich.console import Console
+ 
+ 
+@@ -29,28 +26,6 @@
+ 
+ 
+ def pytest_addoption(parser: Parser) -> None:
+-    newest_folders = sorted(
+-        (p for p in Path("lib_tests").glob("*") if p.is_dir()),
+-        key=lambda p: p.stat().st_ctime,
+-        reverse=True,
+-    )
+-    all_names = [f.name for f in newest_folders]
+-    names = [n for n in all_names if n != "dev"]
+-    names_set = set(names)
+-
+-    base_name = ""
+-    for commit in Repo(".").iter_commits(paths=["./beetsplug"]):
+-        short_commit = str(commit)[:8]
+-        if short_commit in names_set:
+-            base_name = short_commit
+-            break
+-
+-    parser.addoption(
+-        "--base",
+-        choices=all_names,
+-        default=base_name or "dev",
+-        help="base directory / comparing against",
+-    )
+     parser.addoption(
+         "--target",
+         default="dev",
+@@ -64,16 +39,6 @@
+     )
+ 
+ 
+-def pytest_terminal_summary(
+-    terminalreporter: TerminalReporter,
+-    exitstatus: int,  # noqa: ARG001
+-    config: Config,
+-) -> None:
+-    base = config.getoption("base")
+-    target = config.getoption("target")
+-    terminalreporter.write(f"--- Compared {target} against {base} ---\n")
+-
+-
+ def pytest_assertrepr_compare(op: str, left: Any, right: Any):  # noqa: ARG001
+     """Pretty print the difference between dict objects."""
+     actual, expected = left, right
+diff --git a/tests/test_lib.py b/tests/test_lib.py
+index 665d5aa61d..0a81e42b24 100644
+--- a/tests/test_lib.py
++++ b/tests/test_lib.py
+@@ -19,7 +19,6 @@
+ 
+ import pytest
+ from filelock import FileLock
+-from git import Repo
+ from rich import box
+ from rich.console import Group
+ from rich.markup import escape
+@@ -273,9 +272,6 @@
+             return
+ 
+         sections = [("Failed", summary["failed"], "red")]
+-        with suppress(TypeError):
+-            if Repo(pytestconfig.rootpath).active_branch.name == "dev":
+-                sections.append(("Fixed", summary["fixed"], "green"))
+ 
+         columns = []
+         for name, all_changes, color in sections:

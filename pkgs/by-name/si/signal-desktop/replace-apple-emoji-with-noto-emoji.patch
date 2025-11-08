@@ -1,0 +1,145 @@
+diff --git a/ACKNOWLEDGMENTS.md b/ACKNOWLEDGMENTS.md
+index 273a9e097..ffb5b6eb6 100644
+--- a/ACKNOWLEDGMENTS.md
++++ b/ACKNOWLEDGMENTS.md
+@@ -3667,30 +3667,6 @@ Signal Desktop makes use of the following open source projects.
+     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     SOFTWARE.
+ 
+-## emoji-datasource-apple
+-
+-    The MIT License (MIT)
+-
+-    Copyright (c) 2013 Cal Henderson
+-
+-    Permission is hereby granted, free of charge, to any person obtaining a copy
+-    of this software and associated documentation files (the "Software"), to deal
+-    in the Software without restriction, including without limitation the rights
+-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-    copies of the Software, and to permit persons to whom the Software is
+-    furnished to do so, subject to the following conditions:
+-
+-    The above copyright notice and this permission notice shall be included in all
+-    copies or substantial portions of the Software.
+-
+-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-    SOFTWARE.
+-
+ ## emoji-regex
+ 
+     Copyright Mathias Bynens <https://mathiasbynens.be/>
+diff --git a/app/protocol_filter.node.ts b/app/protocol_filter.node.ts
+index 483d1c4e4..66609d9e9 100644
+--- a/app/protocol_filter.node.ts
++++ b/app/protocol_filter.node.ts
+@@ -62,6 +62,7 @@ function _createFileHandler({
+   const allowedRoots = [
+     userDataPath,
+     installPath,
++    "@noto-emoji-pngs@",
+     getAvatarsPath(userDataPath),
+     getBadgesPath(userDataPath),
+     getDraftPath(userDataPath),
+diff --git a/package.json b/package.json
+index 31399e645..05fc46b8b 100644
+--- a/package.json
++++ b/package.json
+@@ -156,7 +156,6 @@
+     "dashdash": "2.0.0",
+     "direction": "1.0.4",
+     "emoji-datasource": "16.0.0",
+-    "emoji-datasource-apple": "16.0.0",
+     "emoji-regex": "10.4.0",
+     "encoding": "0.1.13",
+     "fabric": "4.6.0",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 223557f67..2250b619d 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -200,9 +200,6 @@ importers:
+       emoji-datasource:
+         specifier: 16.0.0
+         version: 16.0.0
+-      emoji-datasource-apple:
+-        specifier: 16.0.0
+-        version: 16.0.0
+       emoji-regex:
+         specifier: 10.4.0
+         version: 10.4.0
+@@ -5835,9 +5832,6 @@ packages:
+     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
+     engines: {node: '>=12'}
+ 
+-  emoji-datasource-apple@16.0.0:
+-    resolution: {integrity: sha512-dVYjsK0FnCry9F+PBtnivhG2K0xdwlmqYaSgiUtztUdAGPYiHYhZcVKvNBqC791g2qyEcFNTBO6utg4eQ3uLTw==}
+-
+   emoji-datasource@16.0.0:
+     resolution: {integrity: sha512-/qHKqK5Nr3+8zhgO6kHmF43Fm5C8HNn0AaFRIpgw8HF3+uF0Vfc8jgLI1ZQS5ba1vBzksS8NBCjHejwLb2D/Sg==}
+ 
+@@ -17062,8 +17056,6 @@ snapshots:
+ 
+   emittery@0.13.1: {}
+ 
+-  emoji-datasource-apple@16.0.0: {}
+-
+   emoji-datasource@16.0.0: {}
+ 
+   emoji-regex@10.4.0: {}
+diff --git a/stylesheets/components/fun/FunEmoji.scss b/stylesheets/components/fun/FunEmoji.scss
+index 1cc4bb43c..a6444101a 100644
+--- a/stylesheets/components/fun/FunEmoji.scss
++++ b/stylesheets/components/fun/FunEmoji.scss
+@@ -5,19 +5,9 @@
+ $emoji-sprite-sheet-grid-item-count: 62;
+ 
+ @mixin emoji-sprite($sheet, $margin, $scale) {
+-  $size: calc($sheet * 1px * $scale);
+-  $margin-start: calc($margin * $scale);
+-  $margin-end: calc($margin * $scale);
+-  $size-outer: calc($size + $margin-start + $margin-end);
+-  $image: url('../images/emoji-sheet-#{$sheet}.webp');
+-  background-image: $image;
+-  background-size: calc($size-outer * $emoji-sprite-sheet-grid-item-count);
+-  background-position-x: calc(
+-    var(--fun-emoji-sheet-x) * ($size-outer * -1) + ($margin-start * -1)
+-  );
+-  background-position-y: calc(
+-    var(--fun-emoji-sheet-y) * ($size-outer * -1) + ($margin-start * -1)
+-  );
++  background-image: var(--fun-emoji-jumbo-image);
++  background-size: contain;
++  background-position: center;
+   background-repeat: no-repeat;
+ }
+ 
+diff --git a/ts/components/fun/FunEmoji.dom.tsx b/ts/components/fun/FunEmoji.dom.tsx
+index ea031e9a8..3d760a43e 100644
+--- a/ts/components/fun/FunEmoji.dom.tsx
++++ b/ts/components/fun/FunEmoji.dom.tsx
+@@ -20,13 +20,14 @@ function getEmojiJumboBackground(
+   emoji: EmojiVariantData,
+   size: number | undefined
+ ): string | null {
+-  if (size != null && size < MIN_JUMBOMOJI_SIZE) {
+-    return null;
+-  }
+-  if (KNOWN_JUMBOMOJI.has(emoji.value)) {
+-    return `url(emoji://jumbo?emoji=${encodeURIComponent(emoji.value)})`;
+-  }
+-  return null;
++  const emojiToNotoName = (emoji: string): string =>
++    `emoji_u${
++      [...emoji]
++        .filter(c => c != "\ufe0f")
++        .map(c => c.codePointAt(0)?.toString(16).padStart(4, "0"))
++        .join("_")
++    }.png`;
++  return `url(file://@noto-emoji-pngs@/${emojiToNotoName(emoji.value)})`;
+ }
+ 
+ export type FunStaticEmojiSize =

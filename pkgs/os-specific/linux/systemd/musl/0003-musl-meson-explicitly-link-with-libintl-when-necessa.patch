@@ -1,0 +1,56 @@
+From bf4cb5aeeef23c5f12e6d2258bb8f3d12059f59f Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sat, 6 Sep 2025 16:25:41 +0900
+Subject: [PATCH 03/30] musl: meson: explicitly link with libintl when
+ necessary
+
+On some musl based distributions provides dgettext() by libintl.so.
+Hence, we need to add dependency in that case.
+---
+ meson.build          | 17 +++++++++++++++++
+ src/home/meson.build |  1 +
+ 2 files changed, 18 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 06be36409f..054752c339 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1002,6 +1002,23 @@ libm = cc.find_library('m')
+ libdl = cc.find_library('dl')
+ libcap = dependency('libcap')
+ 
++# On some distributions that uses musl (e.g. Alpine), libintl.h may be provided by gettext rather than musl.
++# In that case, we need to explicitly link with libintl.so.
++if get_option('libc') == 'musl'
++        if cc.has_function('dgettext', prefix : '''#include <libintl.h>''', args : '-D_GNU_SOURCE')
++                libintl = []
++        else
++                libintl = cc.find_library('intl')
++                if not cc.has_function('dgettext', prefix : '''#include <libintl.h>''', args : '-D_GNU_SOURCE',
++                                       dependencies : libintl)
++                        error('dgettext() not found.')
++                endif
++        endif
++else
++        # When building with glibc, we assume that libintl.h is provided by glibc.
++        libintl = []
++endif
++
+ # On some architectures, libatomic is required. But on some installations,
+ # it is found, but actual linking fails. So let's try to use it opportunistically.
+ # If it is installed, but not needed, it will be dropped because of --as-needed.
+diff --git a/src/home/meson.build b/src/home/meson.build
+index 1937e6f56c..3305334707 100644
+--- a/src/home/meson.build
++++ b/src/home/meson.build
+@@ -115,6 +115,7 @@ modules += [
+                 'sources' : pam_systemd_home_sources,
+                 'dependencies' : [
+                         libcrypt,
++                        libintl,
+                         libpam_misc,
+                         libpam,
+                         threads,
+-- 
+2.51.0
+

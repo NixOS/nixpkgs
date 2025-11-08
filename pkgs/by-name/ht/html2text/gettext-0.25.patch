@@ -1,0 +1,29 @@
+diff --git a/Makefile.am b/Makefile.am
+index af28077..e746147 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -13,6 +13,8 @@
+ AUTOMAKE_OPTIONS = foreign
+ ACLOCAL_AMFLAGS = -I m4
+ 
++SUBDIRS =
++
+ AM_YFLAGS = -d -Wno-yacc
+ 
+ bin_PROGRAMS = html2text
+diff --git a/configure.ac b/configure.ac
+index 999c6fe..30c2536 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,8 +15,11 @@
+ 
+ AC_PREREQ([2.71])
+ AC_INIT([html2text], [2.3.0], [BUG-REPORT-ADDRESS])
++AC_CONFIG_MACRO_DIRS([m4])
+ AM_INIT_AUTOMAKE
+ AM_MAINTAINER_MODE([disable])
++AM_GNU_GETTEXT_VERSION([0.20])
++AM_GNU_GETTEXT([external])
+ AM_ICONV
+ #AC_CONFIG_SRCDIR([html.h])
+ #AC_CONFIG_HEADERS([config.h])

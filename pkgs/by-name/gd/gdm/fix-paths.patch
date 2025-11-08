@@ -1,0 +1,93 @@
+diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
+--- a/daemon/gdm-local-display-factory.c
++++ b/daemon/gdm-local-display-factory.c
+@@ -245,9 +245,9 @@ struct GdmDisplayServerConfiguration {
+         const char *session_type;
+ } display_server_configuration[] = {
+ #ifdef ENABLE_WAYLAND_SUPPORT
+-        { "wayland", GDM_KEY_WAYLAND_ENABLE, "/usr/bin/Xwayland", "wayland" },
++        { "wayland", GDM_KEY_WAYLAND_ENABLE, "@xwayland@/bin/Xwayland", "wayland" },
+ #endif
+ #ifdef ENABLE_X11_SUPPORT
+-        { "xorg", GDM_KEY_XORG_ENABLE, "/usr/bin/Xorg", "x11" },
++        { "xorg", GDM_KEY_XORG_ENABLE, "@xorgserver@/bin/Xorg", "x11" },
+ #endif
+         { NULL, NULL, NULL },
+ };
+diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
+index fc5aef6ac..c61e0046b 100644
+--- a/daemon/gdm-manager.c
++++ b/daemon/gdm-manager.c
+@@ -151,7 +151,7 @@ plymouth_is_running (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_sync ("plymouth --ping",
++        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth --ping",
+                                          NULL, NULL, &status, &error);
+         if (! res) {
+                 g_debug ("Could not ping plymouth: %s", error->message);
+@@ -169,7 +169,7 @@ plymouth_prepare_for_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_sync ("plymouth deactivate",
++        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth deactivate",
+                                          NULL, NULL, NULL, &error);
+         if (! res) {
+                 g_warning ("Could not deactivate plymouth: %s", error->message);
+@@ -184,7 +184,7 @@ plymouth_quit_with_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_async ("plymouth quit --retain-splash", &error);
++        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit --retain-splash", &error);
+         if (! res) {
+                 g_warning ("Could not quit plymouth: %s", error->message);
+                 g_error_free (error);
+@@ -200,7 +200,7 @@ plymouth_quit_without_transition (void)
+         GError  *error;
+ 
+         error = NULL;
+-        res = g_spawn_command_line_async ("plymouth quit", &error);
++        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit", &error);
+         if (! res) {
+                 g_warning ("Could not quit plymouth: %s", error->message);
+                 g_error_free (error);
+diff --git a/daemon/gdm-session.c b/daemon/gdm-session.c
+index a4c4b2dcf..67416b204 100644
+--- a/daemon/gdm-session.c
++++ b/daemon/gdm-session.c
+@@ -3193,16 +3193,16 @@ gdm_session_start_session (GdmSession *self,
+                  */
+                 if (run_launcher) {
+                         if (is_x11) {
+-                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"dbus-run-session -- %s\"",
++                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
+                                                            register_session ? "--register-session " : "",
+                                                            self->selected_program);
+                         } else {
+-                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"dbus-run-session -- %s\"",
++                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
+                                                            register_session ? "--register-session " : "",
+                                                            self->selected_program);
+                         }
+                 } else {
+-                        program = g_strdup_printf ("dbus-run-session -- %s",
++                        program = g_strdup_printf ("@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s",
+                                                    self->selected_program);
+                 }
+         }
+diff --git a/data/gdm.service.in b/data/gdm.service.in
+index 17e8a8de8..afc709778 100644
+--- a/data/gdm.service.in
++++ b/data/gdm.service.in
+@@ -26,7 +26,7 @@ Restart=always
+ IgnoreSIGPIPE=no
+ BusName=org.gnome.DisplayManager
+ EnvironmentFile=-${LANG_CONFIG_FILE}
+-ExecReload=/bin/kill -SIGHUP $MAINPID
++ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
+ KeyringMode=shared
+ 
+ [Install]

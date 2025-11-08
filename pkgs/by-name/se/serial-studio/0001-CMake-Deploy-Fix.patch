@@ -1,0 +1,45 @@
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index e69150cd..c4ce7975 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -257,16 +257,16 @@ elseif(APPLE)
+   MACOSX_BUNDLE_INFO_PLIST ${INFO_MACOSX}
+  )
+ elseif(UNIX)
+- install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION /usr/bin)
++ install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
+ 
+  install(
+   FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.png
+-  DESTINATION /usr/share/pixmaps
++  DESTINATION share/pixmaps
+  )
+ 
+ install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
+- DESTINATION /usr/share/applications
++ DESTINATION share/applications
+ )
+ endif()
+ 
+@@ -289,17 +289,6 @@ elseif(WIN32)
+  set(deploy_tool_options_arg --no-compiler-runtime -force-openssl --release)
+ endif()
+ 
+-qt_generate_deploy_qml_app_script(
+- TARGET ${PROJECT_EXECUTABLE}
+- OUTPUT_SCRIPT deploy_script
+- MACOS_BUNDLE_POST_BUILD
+- NO_UNSUPPORTED_PLATFORM_ERROR
+- DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+- DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+-)
+-
+-install(SCRIPT ${deploy_script})
+-
+ #-------------------------------------------------------------------------------
+ # Packaging
+ #-------------------------------------------------------------------------------
+-- 
+2.47.2
+

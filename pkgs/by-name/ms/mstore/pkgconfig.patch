@@ -1,0 +1,13 @@
+diff --git a/config/template.pc b/config/template.pc
+index 800947d..d388699 100644
+--- a/config/template.pc
++++ b/config/template.pc
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@

@@ -1,0 +1,22 @@
+From d0382de78c43c47b8ae3326d979cbbd028b66735 Mon Sep 17 00:00:00 2001
+From: Tim Schumacher <timschumi@gmx.de>
+Date: Fri, 13 Jun 2025 00:29:46 +0200
+Subject: [PATCH] Install the macOS bundle to the install prefix
+
+---
+ heimdall-frontend/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/heimdall-frontend/CMakeLists.txt b/heimdall-frontend/CMakeLists.txt
+index 6ccb9b1..6fa3054 100644
+--- a/heimdall-frontend/CMakeLists.txt
++++ b/heimdall-frontend/CMakeLists.txt
+@@ -83,4 +83,4 @@ target_link_libraries(heimdall-frontend z)
+ install (TARGETS heimdall-frontend
+         RUNTIME    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+         LIBRARY    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        BUNDLE DESTINATION /Applications)
++        BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/Applications)
+-- 
+2.49.0
+

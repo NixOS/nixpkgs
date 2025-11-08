@@ -1,0 +1,50 @@
+Empty the pg_config system information view. This view keeps references to
+several -dev outputs, which we want to avoid to keep closure size down.
+
+The alternative to this patch would be to nuke references across the board,
+but this will also affect the output of the pg_config utility. By emptying
+the view only, we keep the pg_config binary intact. It resides in the -dev
+output, so it's fine to have all those references there.
+
+---
+--- a/src/backend/utils/misc/pg_config.c
++++ b/src/backend/utils/misc/pg_config.c
+@@ -69,16 +69,6 @@ pg_config(PG_FUNCTION_ARGS)
+ 	/* initialize our tuplestore */
+ 	tupstore = tuplestore_begin_heap(true, false, work_mem);
+ 
+-	configdata = get_configdata(my_exec_path, &configdata_len);
+-	for (i = 0; i < configdata_len; i++)
+-	{
+-		values[0] = configdata[i].name;
+-		values[1] = configdata[i].setting;
+-
+-		tuple = BuildTupleFromCStrings(attinmeta, values);
+-		tuplestore_puttuple(tupstore, tuple);
+-	}
+-
+ 	/*
+ 	 * no longer need the tuple descriptor reference created by
+ 	 * TupleDescGetAttInMetadata()
+--- a/src/test/regress/expected/sysviews.out
++++ b/src/test/regress/expected/sysviews.out
+@@ -20,7 +20,7 @@ select count(*) >= 0 as ok from pg_available_extensions;
+ (1 row)
+ 
+ -- At introduction, pg_config had 23 entries; it may grow
+-select count(*) > 20 as ok from pg_config;
++select count(*) = 0 as ok from pg_config;
+  ok 
+ ----
+  t
+--- a/src/test/regress/sql/sysviews.sql
++++ b/src/test/regress/sql/sysviews.sql
+@@ -13,7 +13,7 @@ select count(*) >= 0 as ok from pg_available_extension_versions;
+ select count(*) >= 0 as ok from pg_available_extensions;
+ 
+ -- At introduction, pg_config had 23 entries; it may grow
+-select count(*) > 20 as ok from pg_config;
++select count(*) = 0 as ok from pg_config;
+ 
+ -- We expect no cursors in this test; see also portals.sql
+ select count(*) = 0 as ok from pg_cursors;

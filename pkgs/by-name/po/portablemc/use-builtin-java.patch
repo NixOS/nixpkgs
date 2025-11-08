@@ -1,0 +1,47 @@
+diff --git a/portablemc/standard.py b/portablemc/standard.py
+index f59c55d..0f017e1 100644
+--- a/portablemc/standard.py
++++ b/portablemc/standard.py
+@@ -843,6 +843,8 @@ class Version:
+         if jvm_major_version is not None and not isinstance(jvm_major_version, int):
+             raise ValueError("metadata: /javaVersion/majorVersion must be an integer")
+ 
++        return self._resolve_builtin_jvm(watcher, JvmNotFoundError.UNSUPPORTED_ARCH, jvm_major_version)
++
+         if platform.system() == "Linux" and platform.libc_ver()[0] != "glibc":
+             return self._resolve_builtin_jvm(watcher, JvmNotFoundError.UNSUPPORTED_LIBC, jvm_major_version)
+ 
+@@ -926,31 +928,10 @@ class Version:
+         builtin_path = shutil.which(jvm_bin_filename)
+         if builtin_path is None:
+             raise JvmNotFoundError(reason)
+-        
+-        try:
+-            
+-            # Get version of the JVM.
+-            process = Popen([builtin_path, "-version"], bufsize=1, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+-            stdout, _stderr = process.communicate(timeout=1)
+-
+-            version_start = stdout.index(f"1.{major_version}" if major_version <= 8 else str(major_version))
+-            version = None
+-            
+-            # Parse version by getting all character that are numeric or '.'.
+-            for i, ch in enumerate(stdout[version_start:]):
+-                if not ch.isnumeric() and ch not in (".", "_"):
+-                    version = stdout[version_start:i]
+-                    break
+-            
+-            if version is None:
+-                raise ValueError()
+-
+-        except (TimeoutExpired, ValueError):
+-            raise JvmNotFoundError(JvmNotFoundError.BUILTIN_INVALID_VERSION)
+ 
+         self._jvm_path = Path(builtin_path)
+-        self._jvm_version = version
+-        watcher.handle(JvmLoadedEvent(version, JvmLoadedEvent.BUILTIN))
++        self._jvm_version = "nixpkgs"
++        watcher.handle(JvmLoadedEvent("nixpkgs", JvmLoadedEvent.BUILTIN))
+ 
+     def _download(self, watcher: Watcher) -> None:
+         

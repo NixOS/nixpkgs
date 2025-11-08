@@ -1,0 +1,23 @@
+diff --git a/linux/rust.cmake b/linux/rust.cmake
+index a96586c..f9b8677 100644
+--- a/linux/rust.cmake
++++ b/linux/rust.cmake
+@@ -2,17 +2,7 @@
+ # many dependencies we would need to install Corrosion on the system.
+ # See instructions on https://github.com/AndrewGaspar/corrosion#cmake-install
+ # Once done, uncomment this line:
+-# find_package(Corrosion REQUIRED)
+-
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-    Corrosion
+-    GIT_REPOSITORY https://github.com/AndrewGaspar/corrosion.git
+-    GIT_TAG origin/master # Optionally specify a version tag or branch here
+-)
+-
+-FetchContent_MakeAvailable(Corrosion)
++find_package(Corrosion REQUIRED)
+ 
+ corrosion_import_crate(MANIFEST_PATH ../intiface-engine-flutter-bridge/Cargo.toml)
+ 

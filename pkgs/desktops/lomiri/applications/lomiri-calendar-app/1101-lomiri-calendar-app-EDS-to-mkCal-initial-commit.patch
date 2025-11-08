@@ -1,0 +1,301 @@
+From fe4c377c08ecc7fa09e0a9407c17afcb63325822 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Tue, 29 Oct 2024 16:11:47 +0100
+Subject: [PATCH] EDS -> mkCal Initial commit
+
+---
+ debian/control                    |  7 ++++---
+ src/qml/AgendaView.qml            |  2 +-
+ src/qml/CalendarChoicePopup.qml   | 24 +++++++++++++++---------
+ src/qml/EventActions.qml          | 23 +++++++++++++++++------
+ src/qml/EventDetails.qml          |  2 +-
+ src/qml/EventListModel.qml        | 21 +++++++++------------
+ src/qml/ExportPageCommon.qml      |  2 +-
+ src/qml/TimeLineBaseComponent.qml |  2 +-
+ src/qml/calendar.qml              |  2 +-
+ 9 files changed, 50 insertions(+), 35 deletions(-)
+
+diff --git a/debian/control b/debian/control
+index 1f4fe4d5..5f8a603f 100644
+--- a/debian/control
++++ b/debian/control
+@@ -11,6 +11,8 @@ Build-Depends: cmake,
+                qml-module-qtquick2,
+                qml-module-qttest,
+                qml-module-lomiri-components,
++               qml-module-buteo-profiles,
++               qt5-default,
+                qtdeclarative5-dev,
+                qtdeclarative5-dev-tools,
+ Standards-Version: 4.7.0
+@@ -29,10 +31,9 @@ Depends: ${misc:Depends},
+          qml-module-lomiri-components,
+          qml-module-lomiri-onlineaccounts-client,
+          qml-module-sso-onlineaccounts,
+-         qtcontact5-galera,
+-         qml-module-lomiri-syncmonitor | qml-module-lomiri-syncmonitor0.1,
+-         qtorganizer5-eds,
++         qml-module-buteo-profiles,
+          ubuntu-mobile-icons | suru-icon-theme,
++         qtorganizer-mkcal,
+ Description: Calendar application
+  The Calendar application devices lets you organise your life your way by
+  month, week or daily diary.
+diff --git a/src/qml/AgendaView.qml b/src/qml/AgendaView.qml
+index 08d7bd21..5996cbee 100644
+--- a/src/qml/AgendaView.qml
++++ b/src/qml/AgendaView.qml
+@@ -35,7 +35,7 @@ PageWithBottomEdge {
+ 
+     function hasEnabledCalendars() {
+         var enabled_calendars = eventListModel.getCollections().filter( function( item ) {
+-            return item.extendedMetaData( "collection-selected" );
++            return item.extendedMetaData( "visible" );
+         } );
+ 
+         return !!enabled_calendars.length;
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 39416e5c..5d29ef86 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -20,7 +20,8 @@ import QtQuick 2.4
+ import QtOrganizer 5.0
+ import Lomiri.Components 1.3
+ import Lomiri.Content 1.3
+-import Lomiri.SyncMonitor 0.1
++//import Lomiri.SyncMonitor 0.1
++import Buteo 0.1
+ import Lomiri.Components.Popups 1.3
+ import SSO.OnlineAccounts 0.1
+ 
+@@ -59,17 +60,22 @@ Page {
+             // TRANSLATORS: Please translate this string  to 15 characters only.
+             // Currently ,there is no way we can increase width of action menu currently.
+             text: enabled ? i18n.tr("Sync") : i18n.tr("Syncing")
+-            onTriggered: syncMonitor.sync(["calendar"])
+-            enabled: (syncMonitor.state !== "syncing")
++            onTriggered: buteoSync.startSyncByCategory("calendar")
++            enabled: (!buteoSync.synchronizing)
+             visible: !networkError
+         }
+         flickable: flickable
+     }
+ 
+-    SyncMonitor {
+-        id: syncMonitor
++    ButeoSync {
++        id: buteoSync
+     }
+ 
++
++   // SyncMonitor {
++   //     id: syncMonitor
++   // }
++
+     Flickable {
+         id: flickable
+ 
+@@ -162,10 +168,10 @@ Page {
+                                 id: checkBox
+                                 objectName: "checkBox"
+                                 SlotsLayout.position: SlotsLayout.Last
+-                                checked: modelData.extendedMetaData("collection-selected")
++                                checked: modelData.extendedMetaData("visible")
+                                 enabled: !calendarChoicePage.isInEditMode
+                                 onCheckedChanged: {
+-                                    if (!checkBox.checked && modelData.extendedMetaData("collection-readonly") === false) {
++                                    if (!checkBox.checked && modelData.extendedMetaData("readOnly") === false) {
+                                         var collections = calendarChoicePage.model.getWritableAndSelectedCollections();
+                                         if (collections.length == 1) {
+                                             PopupUtils.open(singleWritableDialogComponent);
+@@ -174,8 +180,8 @@ Page {
+                                         }
+                                     }
+ 
+-                                    if (modelData.extendedMetaData("collection-selected") !== checkBox.checked) {
+-                                        modelData.setExtendedMetaData("collection-selected",checkBox.checked)
++                                    if (modelData.extendedMetaData("visible") !== checkBox.checked) {
++                                        modelData.setExtendedMetaData("visible",checkBox.checked)
+                                         var collection = calendarChoicePage.model.collection(modelData.collectionId);
+                                         calendarChoicePage.model.saveCollection(collection);
+                                     }
+diff --git a/src/qml/EventActions.qml b/src/qml/EventActions.qml
+index 30617065..d583eb1a 100644
+--- a/src/qml/EventActions.qml
++++ b/src/qml/EventActions.qml
+@@ -18,7 +18,8 @@
+ 
+ import QtQuick 2.4
+ import Lomiri.Components 1.3
+-import Lomiri.SyncMonitor 0.1
++//import Lomiri.SyncMonitor 0.1
++import Buteo.Profiles 0.1
+ import Lomiri.Components.Popups 1.3
+ import Qt.labs.settings 1.0
+ 
+@@ -29,7 +30,7 @@ Item {
+     property alias syncCalendarAction: _syncCalendarAction
+     property alias settingsAction: _settingsAction
+     property Settings settings
+-    readonly property bool syncInProgress: (syncMonitor.state !== "") && (syncMonitor.state === "syncing")
++    readonly property bool syncInProgress: buteoSync.synchronizing
+ 
+     onSyncInProgressChanged: {
+ 
+@@ -77,11 +78,20 @@ Item {
+         // TRANSLATORS: Please translate this string  to 15 characters only.
+         // Currently ,there is no way we can increase width of action menu currently.
+         text: i18n.tr("Sync")
+-        onTriggered: syncMonitor.sync(["calendar"])
+-        enabled: syncMonitor.enabledServices ? syncMonitor.serviceIsEnabled("calendar") : false
+-        visible: syncMonitor.enabledServices ? true : false
++        onTriggered: buteoSync.synchronize()
++        enabled: buteoSync.profiles.length > 0 ? true: false
++        visible: buteoSync.serviceAvailable ? true : false
+     }
+ 
++    SyncManager {
++        id: buteoSync
++        filterHidden: true
++        filterBy.key: "category"
++        filterBy.value: "calendar"
++    }
++
++
++/*
+     SyncMonitor {
+         id: syncMonitor
+         onSyncError: {
+@@ -94,6 +104,7 @@ Item {
+             }
+         }
+     }
++    */
+ 
+     Action{
+         id: _showCalendarAction
+@@ -125,7 +136,7 @@ Item {
+                 target: _syncCalendarAction
+                 iconSource: "../assets/sync-cancel.svg"
+                 text: i18n.tr("Syncing")
+-                onTriggered: syncMonitor.cancel(["calendar"])
++                //onTriggered: syncMonitor.cancel(["calendar"])
+             }
+         },
+         State {
+diff --git a/src/qml/EventDetails.qml b/src/qml/EventDetails.qml
+index e8b5dcfb..63377c5d 100644
+--- a/src/qml/EventDetails.qml
++++ b/src/qml/EventDetails.qml
+@@ -49,7 +49,7 @@ Page {
+                 text: i18n.tr("Edit");
+                 objectName: "edit"
+                 iconName: "edit";
+-                enabled: !collection.extendedMetaData("collection-readonly")
++                enabled: !collection.extendedMetaData("readOnly")
+                 shortcut: "Ctrl+E"
+                 onTriggered: {
+                     if( event.itemType === Type.EventOccurrence ) {
+diff --git a/src/qml/EventListModel.qml b/src/qml/EventListModel.qml
+index 7e3b28af..8e9c958a 100644
+--- a/src/qml/EventListModel.qml
++++ b/src/qml/EventListModel.qml
+@@ -22,7 +22,7 @@ import "dateExt.js" as DateExt
+ 
+ OrganizerModel {
+     id: eventModel
+-    manager:"eds"
++    manager:"mkcal"
+ 
+     readonly property bool appIsActive: (Qt.application.state === Qt.ApplicationActive)
+     property bool active: false
+@@ -84,7 +84,7 @@ OrganizerModel {
+         if (!collection)
+             return false
+ 
+-        return collection.extendedMetaData("collection-readonly") === true ||
++        return collection.extendedMetaData("readOnly") === true ||
+                collection.extendedMetaData("collection-sync-readonly") === true
+     }
+ 
+@@ -93,14 +93,12 @@ OrganizerModel {
+         var collections = eventModel.collections;
+         for(var i = 0 ; i < collections.length ; ++i) {
+             var cal = collections[i];
+-            if( cal.extendedMetaData("collection-type") === "Calendar" ) {
+-                // Handle the special QtContactBirthdays calendar from lomiri-abook2cal-syncd
+-                if (cal.name === "QtContactBirthdays") {
+-                    cal.name = i18n.tr("Birthdays & Anniversaries")
+-                }
+-
+-                cals.push(cal);
++            // Handle the special QtContactBirthdays calendar from lomiri-abook2cal-syncd
++            if (cal.name === "QtContactBirthdays") {
++                cal.name = i18n.tr("Birthdays & Anniversaries")
+             }
++
++            cals.push(cal);
+         }
+         cals.sort(eventModel._sortCollections)
+         return cals;
+@@ -111,8 +109,7 @@ OrganizerModel {
+         var collections = eventModel.collections;
+         for(var i = 0 ; i < collections.length ; ++i) {
+             var cal = collections[i];
+-            if( cal.extendedMetaData("collection-type") === "Calendar" &&
+-                    cal.extendedMetaData("collection-selected") === true &&
++            if( cal.extendedMetaData("visible") === true &&
+                     !collectionIsReadOnly(cal)) {
+                 cals.push(cal);
+             }
+@@ -128,7 +125,7 @@ OrganizerModel {
+         var firstSelectedCollection = null
+         for(var i = 0 ; i < cals.length ; ++i) {
+             var cal = cals[i]
+-            if (cal.extendedMetaData("collection-selected") === true) {
++            if (cal.extendedMetaData("visible") === true) {
+                 if (!firstSelectedCollection) {
+                     firstSelectedCollection = cal
+                 }
+diff --git a/src/qml/ExportPageCommon.qml b/src/qml/ExportPageCommon.qml
+index 0a1f2f34..88310560 100644
+--- a/src/qml/ExportPageCommon.qml
++++ b/src/qml/ExportPageCommon.qml
+@@ -151,7 +151,7 @@ Page {
+ 
+     OrganizerModel{
+         id: organizerExporter
+-        manager:"eds"
++        manager:"mkcal"
+         autoUpdate: true
+ 
+         onItemCountChanged: {
+diff --git a/src/qml/TimeLineBaseComponent.qml b/src/qml/TimeLineBaseComponent.qml
+index 519300df..7e8a364b 100644
+--- a/src/qml/TimeLineBaseComponent.qml
++++ b/src/qml/TimeLineBaseComponent.qml
+@@ -193,7 +193,7 @@ Item {
+         id: mainModel
+         objectName: "timeLineBaseEventListModel:" + root.objectName
+ 
+-        manager:"eds"
++        manager:"mkcal"
+         startPeriod: startDay.midnight().utcEarliest();
+         endPeriod: type == ViewType.ViewTypeWeek ? startDay.addDays(6).endOfDay().utcLatest(): startDay.endOfDay().utcLatest()
+ 
+diff --git a/src/qml/calendar.qml b/src/qml/calendar.qml
+index 6238a0f5..2b6e6cfd 100644
+--- a/src/qml/calendar.qml
++++ b/src/qml/calendar.qml
+@@ -251,7 +251,7 @@ MainView {
+             var collections = eventModel.getCollections();
+             for(var i=0; i < collections.length ; ++i) {
+                 var collection = collections[i]
+-                if(collection.extendedMetaData("collection-selected") === true) {
++                if(collection.extendedMetaData("visible") === true) {
+                     collectionIds.push(collection.collectionId);
+                 }
+             }
+-- 
+GitLab
+

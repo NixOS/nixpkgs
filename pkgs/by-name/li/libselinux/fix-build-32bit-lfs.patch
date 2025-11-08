@@ -1,0 +1,41 @@
+diff --git libselinux/include/selinux/selinux.h libselinux/include/selinux/selinux.h
+index f3cf5a209..f64896b7a 100644
+--- libselinux/include/selinux/selinux.h
++++ libselinux/include/selinux/selinux.h
+@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
+    with the same inode (e.g. due to multiple hard links).  If so, then
+    use the latter of the two specifications based on their order in the 
+    file contexts configuration.  Return the used specification index. */
+-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
++#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
+ #define matchpathcon_filespec_add matchpathcon_filespec_add64
+ #endif
+ extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
+diff --git libselinux/src/matchpathcon.c libselinux/src/matchpathcon.c
+index 51f0e4ff9..ab7c3090a 100644
+--- libselinux/src/matchpathcon.c
++++ libselinux/src/matchpathcon.c
+@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
+ 	return -1;
+ }
+ 
+-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
++#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
+ /* alias defined in the public header but we undefine it here */
+ #undef matchpathcon_filespec_add
+ 
+@@ -280,9 +280,13 @@ int matchpathcon_filespec_add(unsigned long ino, int specind,
+ {
+ 	return matchpathcon_filespec_add64(ino, specind, file);
+ }
++#elif (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || defined(__INO_T_MATCHES_INO64_T)
++
++static_assert(sizeof(uint64_t) == sizeof(ino_t), "inode size mismatch");
++
+ #else
+ 
+-static_assert(sizeof(unsigned long) == sizeof(ino_t), "inode size mismatch");
++static_assert(sizeof(uint32_t) == sizeof(ino_t), "inode size mismatch");
+ 
+ #endif
+ 

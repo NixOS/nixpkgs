@@ -1,0 +1,13 @@
+[package]
+name = "im_using_workspaces"
+version = { workspace = true }
+publish = false
+readme.workspace = true
+keywords = [
+    "workspace",
+    "other_thing",
+    "third_thing",
+]
+
+[dependencies]
+bar = "1.0.0"

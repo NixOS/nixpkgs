@@ -1,0 +1,20 @@
+diff --git a/configure.ac b/configure.ac
+index 4d443c1..42c3568 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -31,13 +31,8 @@ AC_CONFIG_FILES([include/libhsts.h])
+ #
+ # Gettext
+ #
+-m4_ifdef([AM_GNU_GETTEXT], [
+-  AM_GNU_GETTEXT([external],[need-ngettext])
+-])
+-m4_ifdef([AM_GNU_GETTEXT_VERSION], [
+-#do not indent here
+-AM_GNU_GETTEXT_VERSION([0.18.2])
+-])
++AM_GNU_GETTEXT([external],[need-ngettext])
++AM_GNU_GETTEXT_VERSION([0.19.8])
+ 
+ #
+ # check for doxygen and pandoc

@@ -1,0 +1,24 @@
+From 580bd3f0fea7ddc913329537070ab08fd3bf6033 Mon Sep 17 00:00:00 2001
+From: matthiasdotsh <git@matthias.sh>
+Date: Mon, 26 May 2025 11:22:01 +0200
+Subject: [PATCH] Fix build for gcc >=14
+
+---
+ src/include/fst/fst.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/include/fst/fst.h b/src/include/fst/fst.h
+index 20e6bb3..2cb1364 100644
+--- a/src/include/fst/fst.h
++++ b/src/include/fst/fst.h
+@@ -652,8 +652,8 @@ class FstImpl {
+   FstImpl &operator=(const FstImpl<Arc> &impl) {
+     properties_ = impl.properties_;
+     type_ = impl.type_;
+-    isymbols_ = impl.isymbols_ ? impl.isymbols_->Copy() : nullptr;
+-    osymbols_ = impl.osymbols_ ? impl.osymbols_->Copy() : nullptr;
++    isymbols_ = impl.isymbols_ ? std::unique_ptr<fst::SymbolTable>(impl.isymbols_->Copy()) : nullptr;
++    osymbols_ = impl.osymbols_ ? std::unique_ptr<fst::SymbolTable>(impl.osymbols_->Copy()) : nullptr;
+     return *this;
+   }
+
