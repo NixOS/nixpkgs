@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
+  tcl,
   zlib,
   readline,
   ncurses,
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-o9tYehuS7l3awvZrPttBsm+chnJ1eC1Gw6CIl31qWxg=";
+    url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
+    hash = "sha256-t7TcBg82BTkC+2WzRLu+1ZLmSyKRomrAb+d+7Al4UOk=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    tcl
   ];
   buildInputs = [
     zlib
@@ -74,10 +76,13 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
+    "--with-tcl=${lib.getLib tcl}/lib"
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
