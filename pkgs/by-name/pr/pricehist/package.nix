@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pricehist";
-  version = "1.4.7";
+  version = "1.4.14";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
     tag = version;
-    hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
+    hash = "sha256-BnyoSYVjs2odnOzSpvgMF860PDkz7tPNnM0s3Fep5G0=";
   };
 
   dependencies = with python3Packages; [
@@ -33,10 +33,16 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'lxml = "^5.1.0"' 'lxml = "^6.0.0"'
+  '';
+
   meta = {
     description = "Command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = lib.licenses.mit;
     mainProgram = "pricehist";
+    maintainers = with lib.maintainers; [ nikitawootten ];
   };
 }
