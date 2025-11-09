@@ -1215,6 +1215,10 @@ assertNoAdditions {
     dependencies = [ self.leap-nvim ];
   };
 
+  floaterm = super.floaterm.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
     # Optional dap integration
     checkInputs = [ self.nvim-dap ];
