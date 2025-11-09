@@ -43,12 +43,12 @@ rec {
     }
   );
 
-  nixpkgs = removeAttrs (removeMaintainers (
+  nixpkgs = removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
     }
-  )) [ "unstable" ];
+  );
 
   tested =
     let
@@ -190,6 +190,8 @@ rec {
         (onFullSupported "nixpkgs.jdk")
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
+          # Include all release-critical jobs from nixpkgs-unstable channel
+          "nixpkgs.unstable"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]
