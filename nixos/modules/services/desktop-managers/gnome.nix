@@ -232,7 +232,7 @@ in
 
     environment.gnome.excludePackages = mkOption {
       default = [ ];
-      example = literalExpression "[ pkgs.totem ]";
+      example = literalExpression "[ pkgs.showtime ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -465,10 +465,11 @@ in
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
+        pkgs.papers
         pkgs.gnome-connections
+        pkgs.showtime
         pkgs.simple-scan
         pkgs.snapshot
-        pkgs.totem
         pkgs.yelp
       ] config.environment.gnome.excludePackages;
 
@@ -476,7 +477,6 @@ in
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
-      programs.evince.enable = notExcluded pkgs.evince;
       programs.file-roller.enable = notExcluded pkgs.file-roller;
       programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
