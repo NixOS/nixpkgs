@@ -152,6 +152,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       getchoo
       aleksana
+      Gliczy
     ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
