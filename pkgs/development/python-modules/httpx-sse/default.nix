@@ -9,6 +9,7 @@
   setuptools-scm,
   setuptools,
   sse-starlette,
+  starlette,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     sse-starlette
+    starlette
   ];
 
   meta = with lib; {
