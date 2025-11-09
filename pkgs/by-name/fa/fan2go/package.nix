@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "fan2go";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
     tag = version;
-    hash = "sha256-mLypuOGjYrXFf3BGCDggEDk1+PVx2CgsxAjZQ7uiSW0=";
+    hash = "sha256-CHBJhG10RD5rQW1SFk7ffV9M4t6LtJR6xQrw47KQzC0=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -22,11 +22,9 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-IJJTolpOtstVov8MNel6EOJqv1oCkTOTiPyW42ElQjc=";
+  vendorHash = "sha256-BSZwvD9psXtSmoUPBxMVuvbcpqDSpFEKVskJo05e4fo=";
 
   buildInputs = [ lm_sensors ];
-
-  patches = [ ./lazy-binding.patch ];
 
   postConfigure = ''
     substituteInPlace vendor/github.com/md14454/gosensors/gosensors.go \
@@ -41,7 +39,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    make build GIT_REV="$(cat GIT_REV)"
+    make build-no-nvml GIT_REV="$(cat GIT_REV)"
 
     dir="$GOPATH/bin"
     mkdir -p "$dir"
