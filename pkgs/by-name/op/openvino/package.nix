@@ -78,10 +78,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
       hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
     })
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
   ];
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "python"
   ];
 
@@ -174,9 +178,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $python
-    mv $out/python/* $python/
-    rmdir $out/python
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
   '';
 
   postFixup = ''
@@ -184,6 +187,10 @@ stdenv.mkDerivation rec {
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addDriverRunpath "$lib"
     done
+
+    substituteInPlace $dev/lib/pkgconfig/openvino.pc \
+      --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="}
   '';
 
   meta = with lib; {
