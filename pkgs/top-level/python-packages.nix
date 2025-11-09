@@ -138,6 +138,10 @@ self: super: with self; {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  agent-client-protocol-python-sdk =
+    callPackage ../development/python-modules/agent-client-protocol-python-sdk
+      { };
+
   agent-py = callPackage ../development/python-modules/agent-py { };
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
@@ -7976,6 +7980,8 @@ self: super: with self; {
   kornia = callPackage ../development/python-modules/kornia { };
 
   kornia-rs = callPackage ../development/python-modules/kornia-rs { };
+
+  kosong = callPackage ../development/python-modules/kosong { };
 
   kotsu = callPackage ../development/python-modules/kotsu { };
 
@@ -16210,6 +16216,8 @@ self: super: with self; {
 
   ripe-atlas-sagan = callPackage ../development/python-modules/ripe-atlas-sagan { };
 
+  ripgrepy = callPackage ../development/python-modules/ripgrepy { };
+
   riprova = callPackage ../development/python-modules/riprova { };
 
   ripser = callPackage ../development/python-modules/ripser { };
@@ -17916,6 +17924,8 @@ self: super: with self; {
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
+
+  streamingjson = callPackage ../development/python-modules/streamingjson { };
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
