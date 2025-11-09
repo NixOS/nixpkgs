@@ -5116,8 +5116,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.31.0";
-          hash = "sha256-97dQeCFm2i5uRF45k1tVMWiXNh5xBw3MVYM8MSIeDFE=";
+          version = "1.32.0";
+          hash = "sha256-qZYtCjqWoqE2qjrJN70ws9/w0FncLCWqTeVX/B66CmQ=";
         };
         meta = {
           license = lib.licenses.mit;
