@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     tzlocal
     click
     six
+    vobject
   ];
 
   nativeCheckInputs = [
