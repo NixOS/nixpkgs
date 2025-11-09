@@ -1,10 +1,12 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
   cmake,
   ninja,
+  core,
+  core-amqp,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-messaging-eventhubs";
@@ -34,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    azure-sdk-for-cpp.core
-    azure-sdk-for-cpp.core-amqp
+    core
+    core-amqp
   ];
 
   env = {
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Event Hubs Client Package for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/eventhubs/azure-messaging-eventhubs/CHANGELOG.md";

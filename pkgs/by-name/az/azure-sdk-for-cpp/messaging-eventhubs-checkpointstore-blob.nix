@@ -1,10 +1,13 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
   cmake,
   ninja,
+  core,
+  messaging-eventhubs,
+  storage-blobs,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-messaging-eventhubs-checkpointstore-blob";
@@ -34,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    azure-sdk-for-cpp.core
-    azure-sdk-for-cpp.messaging-eventhubs
-    azure-sdk-for-cpp.storage-blobs
+    core
+    messaging-eventhubs
+    storage-blobs
   ];
 
   env = {
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Event Hubs Blob Storage Checkpoint Store for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob/CHANGELOG.md";

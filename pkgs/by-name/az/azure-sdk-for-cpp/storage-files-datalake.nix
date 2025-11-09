@@ -1,10 +1,12 @@
 {
   stdenv,
-  azure-sdk-for-cpp,
+  fetchFromGitHub,
   cmake,
   ninja,
-  fetchFromGitHub,
+  storage-blobs,
+  storage-common,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-storage-files-datalake";
@@ -34,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    azure-sdk-for-cpp.storage-blobs
-    azure-sdk-for-cpp.storage-common
+    storage-blobs
+    storage-common
   ];
 
   env = {
@@ -61,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Storage Files Data Lake Client Library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/storage/azure-storage-files-datalake/CHANGELOG.md";
