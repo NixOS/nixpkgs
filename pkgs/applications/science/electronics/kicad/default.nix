@@ -326,7 +326,7 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ korken89 ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "kicad";
