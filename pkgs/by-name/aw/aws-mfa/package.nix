@@ -1,13 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
-  setuptools,
-  boto3,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "aws-mfa";
   version = "0.0.12";
   pyproject = true;
@@ -28,11 +26,11 @@ buildPythonApplication rec {
     })
   ];
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     boto3
   ];
 

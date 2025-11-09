@@ -1,15 +1,13 @@
 {
   lib,
   fetchFromGitLab,
-  buildPythonApplication,
-  dbus-python,
-  pygobject3,
+  python3Packages,
   systemd,
   wirelesstools,
   wrapGAppsNoGuiHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "networkd-notify";
   version = "unstable-2022-11-29";
   # There is no setup.py, just a single Python script.
@@ -26,7 +24,7 @@ buildPythonApplication rec {
     wrapGAppsNoGuiHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     dbus-python
     pygobject3
   ];

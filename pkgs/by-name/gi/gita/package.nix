@@ -1,13 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pyyaml,
-  setuptools,
   installShellFiles,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "0.16.6.1";
   format = "setuptools";
   pname = "gita";
@@ -19,7 +17,7 @@ buildPythonApplication rec {
     owner = "nosarthur";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     pyyaml
     setuptools
   ];
