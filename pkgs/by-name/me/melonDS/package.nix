@@ -38,8 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Vnrg+6fSnzQKy+3ZU6LKSkkgc04H9KPsE/M2Iu9Wudw=";
   };
 
-  patches = [ ./fix-build-qt-6.10.patch ];
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
