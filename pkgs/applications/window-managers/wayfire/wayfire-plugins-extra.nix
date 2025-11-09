@@ -8,23 +8,30 @@
   wayfire,
   wayland-scanner,
   wf-config,
+  boost,
+  libdrm,
   libevdev,
   libinput,
   libxkbcommon,
-  nlohmann_json,
+  vulkan-headers,
   xcbutilwm,
   gtkmm3,
+  withFiltersPlugin ? true,
+  withFocusRequestPlugin ? true,
+  withPixdecorPlugin ? true,
+  withWayfireShadowsPlugin ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TukDomxqfrM45+C7azfO8jVaqk3E5irdphH8U5IYItg=";
+    hash = "sha256-C5dgs81R4XuPjIm7sj1Mtu4IMIRBEYU6izg2olymeVI=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -37,19 +44,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     wayfire
     wf-config
+    boost
+    libdrm
     libevdev
     libinput
     libxkbcommon
-    nlohmann_json
+    vulkan-headers
     xcbutilwm
     gtkmm3
   ];
 
   mesonFlags = [
-    # plugins in submodule, packaged individually
-    (lib.mesonBool "enable_windecor" false)
-    (lib.mesonBool "enable_wayfire_shadows" false)
-    (lib.mesonBool "enable_focus_request" false)
+    (lib.mesonBool "enable_filters" withFiltersPlugin)
+    (lib.mesonBool "enable_focus_request" withFocusRequestPlugin)
+    (lib.mesonBool "enable_pixdecor" withPixdecorPlugin)
+    (lib.mesonBool "enable_wayfire_shadows" withWayfireShadowsPlugin)
   ];
 
   env = {
