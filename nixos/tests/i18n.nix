@@ -38,6 +38,21 @@
         };
       };
     };
+    Csimple = {
+      i18n = {
+        defaultLocale = "C";
+      };
+    };
+    CnonDefault = {
+      i18n = {
+        defaultLocale = "en_US.UTF-8";
+        extraLocaleSettings = {
+          LC_COLLATE = "C";
+          LC_MESSAGES = "C";
+          LC_TIME = "C";
+        };
+      };
+    };
   };
   testScript = { nodes, ... }: "";
 }
