@@ -78,6 +78,8 @@ in
     maintainers = with lib.maintainers; [ toastal ];
   };
 
+  # not using a `client` since it’s easiest to test with acme.test pointing at
+  # localhost for these machines
   nodes = {
     server_modern = mkH2OServer "modern";
     server_intermediate = mkH2OServer "intermediate";
@@ -99,6 +101,8 @@ in
       curl_max_tls1_2 ="curl -v --tlsv1.0 --tls-max 1.2 'https://${domain}:{port}/'"
       curl_max_tls1_2_intermediate_cipher ="curl -v --tlsv1.0 --tls-max 1.2 --ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256' 'https://${domain}:{port}/'"
       curl_max_tls1_2_old_cipher ="curl -v --tlsv1.0 --tls-max 1.2 --ciphers 'ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256' 'https://${domain}:{port}/'"
+
+      start_all()
 
       server_modern.wait_for_unit("h2o.service")
       server_modern.wait_for_open_port(${modernPortStr})

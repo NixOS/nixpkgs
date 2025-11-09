@@ -14,7 +14,7 @@ in
 
   nodes = {
     server =
-      { pkgs, ... }:
+      { pkgs, config, ... }:
       {
         services.h2o = {
           enable = true;
@@ -41,9 +41,17 @@ in
           };
         };
 
-        networking.extraHosts = ''
-          127.0.0.1 ${domain}
-        '';
+        networking.firewall.allowedTCPPorts = [
+          config.services.h2o.settings.listen
+        ];
+      };
+
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.curl
+        ];
       };
   };
 
@@ -52,14 +60,17 @@ in
     let
       inherit (nodes) server;
       portStr = builtins.toString server.services.h2o.settings.listen;
+      origin = "http://server:${portStr}";
     in
     # python
     ''
+      start_all()
+
       server.wait_for_unit("h2o.service")
       server.wait_for_open_port(${portStr})
 
-      assert "${sawatdi_chao_lok}" in server.succeed("curl --fail-with-body http://${domain}:${portStr}/hello_world")
+      assert "${sawatdi_chao_lok}" in client.succeed("curl --fail-with-body ${origin}/hello_world")
 
-      assert "FILE_HANDLER" in server.succeed("curl --fail-with-body http://${domain}:${portStr}/file_handler")
+      assert "FILE_HANDLER" in client.succeed("curl --fail-with-body ${origin}/file_handler")
     '';
 }
