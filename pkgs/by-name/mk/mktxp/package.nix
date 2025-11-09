@@ -6,7 +6,7 @@
   which,
 }:
 let
-  version = "1.2.14";
+  version = "1.2.15";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-4+0aw/r71FcVrxASco3AkYzi7zbFeiEkJB7acGdb1FQ=";
+    hash = "sha256-I3V1P3/+60oLz7jscLPBWgD/V2myG0cz7X6srVQ4BO0=";
   };
 
   nativeBuildInputs = with python3Packages; [
