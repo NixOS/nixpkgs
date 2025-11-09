@@ -77,6 +77,9 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestMarks = [
