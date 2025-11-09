@@ -39,4 +39,7 @@ self: super: {
   unix = null;
   xhtml = null;
   Win32 = null;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
 }
