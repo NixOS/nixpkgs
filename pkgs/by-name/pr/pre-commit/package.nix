@@ -26,14 +26,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-vypzvO00pic5F7c3D3ABBMXLrBSEB9n6og3EsBLZNCs=";
+    hash = "sha256-gKbfhTZtQTokNt/KbsYWY2h9UqUnJ7QjL/0k7qgquro=";
   };
 
   patches = [
