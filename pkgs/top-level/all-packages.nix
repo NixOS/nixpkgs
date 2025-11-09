@@ -3650,10 +3650,6 @@ with pkgs;
     llvm = llvm_19;
   };
 
-  ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
-
-  ossec-server = callPackage ../tools/security/ossec/server.nix { };
-
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
   };
@@ -10332,9 +10328,6 @@ with pkgs;
 
   inherit
     ({
-      zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
-        configFile = "user";
-      };
       zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
         configFile = "user";
       };
@@ -10342,7 +10335,6 @@ with pkgs;
         configFile = "user";
       };
     })
-    zfs_2_2
     zfs_2_3
     zfs_unstable
     ;

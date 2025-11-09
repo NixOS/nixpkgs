@@ -818,7 +818,10 @@ in
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
   kubernetes = handleTestOn [ "x86_64-linux" ] ./kubernetes { };
-  kubo = import ./kubo { inherit runTest; };
+  kubo = import ./kubo {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
@@ -963,7 +966,10 @@ in
   mopidy = runTest ./mopidy.nix;
   morph-browser = runTest ./morph-browser.nix;
   mosquitto = runTest ./mosquitto.nix;
-  movim = import ./web-apps/movim { inherit runTest; };
+  movim = import ./web-apps/movim {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
