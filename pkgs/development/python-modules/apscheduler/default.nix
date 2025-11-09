@@ -69,10 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apscheduler" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/agronholm/apscheduler/releases/tag/${src.tag}";
     description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
