@@ -1087,6 +1087,7 @@ let
       zlib.dev
       zstd.dev
     ];
+    EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
       zlib.dev
