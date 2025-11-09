@@ -1,0 +1,25 @@
+diff --git a/configure.in b/configure.in
+index 6ebf3b2..5c85682 100644
+--- a/configure.in
++++ b/configure.in
+@@ -198,6 +198,7 @@ if test "$HAVEMETHOD" = "no"; then
+         AC_TRY_RUN(
+         #include <dlfcn.h>
+         #include <stdio.h>
++        #include <stdlib.h>
+     
+         int
+         main(int argc, char **argv)
+diff --git a/xdr.c b/xdr.c
+index ed8bf5b..a20bbd9 100644
+--- a/xdr.c
++++ b/xdr.c
+@@ -103,7 +103,7 @@ xdr_msg(XDR *xdrs, struct msg *msg)
+ {
+ 	X(xdr_short(xdrs, &msg->status));
+ 	X(xdr_union(xdrs, (int *)&msg->type, (char *)&msg->data,
+-	      xdr_msg_discrim, _xdr_void));
++	      xdr_msg_discrim, (xdrproc_t)_xdr_void));
+ 
+ 	return (TRUE);
+ }
