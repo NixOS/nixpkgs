@@ -1282,6 +1282,7 @@ let
       zlib.dev
     ];
     GrafGen = [ pkgs.zlib ];
+    SLmetrics = [ pkgs.zlib.dev ];
     tidypopgen = [ pkgs.zlib.dev ];
     tikzDevice = with pkgs; [
       which
