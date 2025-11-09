@@ -40,15 +40,11 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  disabled = pythonOlder "3.4.0";
-
-  meta = with lib; {
+  meta = {
     description = "C++ implementation of 3mf loading with SIP python bindings";
     homepage = "https://github.com/Ultimaker/libSavitar";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      orivej
-    ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }
