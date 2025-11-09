@@ -2779,8 +2779,6 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
-  ggshield = callPackage ../tools/security/ggshield { };
-
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
