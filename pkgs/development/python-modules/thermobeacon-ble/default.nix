@@ -7,22 +7,19 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
-  version = "0.10.0";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermobeacon-ble";
     tag = "v${version}";
-    hash = "sha256-+WQWb1D1Rw5KE4fvu55WYF2YsQY48MWtPA26G5MB6aY=";
+    hash = "sha256-ij8g1bq9xmHLSHf2O69H6laK+KsEmW7E+hXv52/iJkY=";
   };
 
   build-system = [ poetry-core ];
