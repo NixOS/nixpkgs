@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [ systemd ];
+  dependencies = with python3Packages; [ systemd-python ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
