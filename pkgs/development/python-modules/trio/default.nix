@@ -63,13 +63,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     astor
-    jedi
     pyopenssl
     pytestCheckHook
     pytest-trio'
     pyyaml
     trustme
-  ];
+  ]
+  # jedi has no compatibility with python 3.14 yet
+  # https://github.com/davidhalter/jedi/issues/2064
+  ++ lib.optional (pythonOlder "3.14") jedi;
 
   preCheck = ''
     export HOME=$TMPDIR
