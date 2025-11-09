@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.34";
+  version = "0.6.36";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-crjBVR0ZXUYck4pyLNb1IO9IoQ6MFBnCKEBsi0/JXCI=";
+    hash = "sha256-7+KFMmiJZB14kUtkKxTLZrZ2bA2MR1qA/cx7GX+FnUw=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-ofw/leDcfrc+Bp93s9BkB3WFs8qQgiWUag7gvdPJdlo=";
+    npmDepsHash = "sha256-CEjWmDcHHr0PeltETi5uIdoQ2C2Twmg+gDBZT5myo/E=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -212,7 +212,6 @@ python3Packages.buildPythonApplication rec {
       pymilvus
       pymongo
       qdrant-client
-      tencentcloud-sdk-python
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;
