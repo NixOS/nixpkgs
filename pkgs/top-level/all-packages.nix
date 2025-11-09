@@ -12924,9 +12924,7 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
-  wayfire = callPackage ../applications/window-managers/wayfire/default.nix {
-    wlroots = wlroots_0_17;
-  };
+  wayfire = callPackage ../applications/window-managers/wayfire/default.nix { };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
   wayfirePlugins = recurseIntoAttrs (
