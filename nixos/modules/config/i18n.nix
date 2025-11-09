@@ -7,13 +7,15 @@
 let
   sanitizeUTF8Capitalization =
     lang: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] lang);
-  aggregatedLocales = [
+  aggregatedLocales = lib.optionals (config.i18n.defaultLocale != "C") [
     "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
   ]
   ++ lib.pipe config.i18n.extraLocaleSettings [
     # See description of extraLocaleSettings for why is this ignored here.
     (x: lib.removeAttrs x [ "LANGUAGE" ])
     (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
+    # C locales are always installed
+    (lib.filterAttrs (n: v: v != "C"))
     (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
   ]
   ++ (map sanitizeUTF8Capitalization (
@@ -111,6 +113,9 @@ in
         description = ''
           Per each {option}`i18n.extraLocaleSettings`, choose the character set
           to use for it. Essentially defaults to UTF-8 for all of them.
+
+          Note that for a locale category that uses the `C` locale, setting a
+          character set to it via this setting is ignored.
         '';
       };
 
