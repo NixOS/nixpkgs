@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     ++ [
       jedi
       jedi-language-server
-      pybind11
     ];
 
   buildPhase = ''
