@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcm";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wcm";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oaaEtyu/9XVhFTkmD7WjScMycpKf+M7oPyQatbY23Vo=";
+    hash = "sha256-O4BYwb+GOMZIn3I2B/WMJ5tUZlaegvwBuyNK9l/gxvQ=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libxml2
     libxkbcommon
-  ];
-
-  mesonFlags = [
-    "-Denable_wdisplays=false"
   ];
 
   meta = {
