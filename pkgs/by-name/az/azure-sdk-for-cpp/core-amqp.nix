@@ -1,10 +1,14 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
   cmake,
   ninja,
+  core,
+  c-shared-utility,
+  macro-utils-c,
+  umock-c,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-core-amqp";
@@ -34,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    azure-sdk-for-cpp.core
-    azure-sdk-for-cpp.c-shared-utility
-    azure-sdk-for-cpp.macro-utils-c
-    azure-sdk-for-cpp.umock-c
+    core
+    c-shared-utility
+    macro-utils-c
+    umock-c
   ];
 
   env = {
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure SDK AMQP Library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/core/azure-core-amqp/CHANGELOG.md";

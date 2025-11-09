@@ -1,12 +1,13 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
   cmake,
   ninja,
+  core,
   openssl,
   libxml2,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-data-tables";
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     libxml2
   ];
-  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
+  propagatedBuildInputs = [ core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Tables client library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/tables/azure-data-tables/CHANGELOG.md";

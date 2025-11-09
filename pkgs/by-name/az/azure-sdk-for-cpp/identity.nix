@@ -1,7 +1,8 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
+  core,
+  meta,
   cmake,
   ninja,
   openssl,
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ openssl ];
-  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
+  propagatedBuildInputs = [ core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Identity client library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/identity/azure-identity/CHANGELOG.md";

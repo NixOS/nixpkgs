@@ -1,10 +1,11 @@
 {
   stdenv,
   fetchFromGitHub,
-  azure-sdk-for-cpp,
   cmake,
   ninja,
+  core,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-keyvault-administration";
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
+  propagatedBuildInputs = [ core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure Security KeyVault Administration client library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/keyvault/azure-security-keyvault-administration/CHANGELOG.md";
