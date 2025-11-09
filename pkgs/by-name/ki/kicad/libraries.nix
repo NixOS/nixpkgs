@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   libSrc,
+  compressStep,
   stepreduce,
   parallel,
   zip,
@@ -27,9 +28,9 @@ let
 
       postInstall =
         lib.optionalString (name == "packages3d") ''
-          find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+          find $out -type f -name '*.step' | parallel 'stepreduce {} {} ${lib.optionalString compressStep "&& zip -9 {.}.stpZ {} && rm {}"}'
         ''
-        + lib.optionalString (name == "footprints") ''
+        + lib.optionalString ((name == "footprints") && compressStep) ''
           grep -rl '\.step' $out | xargs sed -i 's/\.step/.stpZ/g'
         '';
 
