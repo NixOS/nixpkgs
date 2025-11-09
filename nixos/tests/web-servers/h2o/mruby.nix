@@ -3,8 +3,6 @@
 let
   domain = "h2o.local";
 
-  port = 8080;
-
   sawatdi_chao_lok = "สวัสดีชาวโลก";
 in
 {
@@ -22,7 +20,7 @@ in
           enable = true;
           package = pkgs.h2o.override { withMruby = true; };
           settings = {
-            listen = port;
+            listen = 8080;
             hosts = {
               "${domain}" = {
                 paths = {
@@ -50,8 +48,10 @@ in
   };
 
   testScript =
+    { nodes, ... }:
     let
-      portStr = builtins.toString port;
+      inherit (nodes) server;
+      portStr = builtins.toString server.services.h2o.settings.listen;
     in
     # python
     ''

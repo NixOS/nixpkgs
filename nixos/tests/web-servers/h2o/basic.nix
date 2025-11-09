@@ -8,11 +8,6 @@ let
     TLS = "acme.test";
   };
 
-  port = {
-    HTTP = 8080;
-    TLS = 8443;
-  };
-
   sawatdi_chao_lok = "สวัสดีชาวโลก";
 
   hello_world_txt = hostPkgs.writeTextFile {
@@ -41,7 +36,7 @@ in
 
   nodes = {
     server =
-      { pkgs, ... }:
+      { pkgs, config, ... }:
       {
         environment.systemPackages = [
           pkgs.curl
@@ -49,8 +44,8 @@ in
 
         services.h2o = {
           enable = true;
-          defaultHTTPListenPort = port.HTTP;
-          defaultTLSListenPort = port.TLS;
+          defaultHTTPListenPort = 8080;
+          defaultTLSListenPort = 8443;
           hosts = {
             "${domain.HTTP}" = {
               settings = {
@@ -107,12 +102,12 @@ in
 
         networking = {
           firewall = {
-            allowedTCPPorts = with port; [
-              HTTP
-              TLS
+            allowedTCPPorts = with config.services.h2o; [
+              defaultHTTPListenPort
+              defaultTLSListenPort
             ];
-            allowedUDPPorts = with port; [
-              TLS
+            allowedUDPPorts = with config.services.h2o; [
+              defaultTLSListenPort
             ];
           };
           extraHosts = ''
@@ -123,9 +118,11 @@ in
       };
   };
   testScript =
+    { nodes, ... }:
     let
-      portStrHTTP = builtins.toString port.HTTP;
-      portStrTLS = builtins.toString port.TLS;
+      inherit (nodes) server;
+      portStrHTTP = builtins.toString server.services.h2o.defaultHTTPListenPort;
+      portStrTLS = builtins.toString server.services.h2o.defaultTLSListenPort;
     in
     # python
     ''
