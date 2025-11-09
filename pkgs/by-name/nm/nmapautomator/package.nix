@@ -1,0 +1,94 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+  nix-update-script,
+  makeBinaryWrapper,
+  withFullDeps ? false,
+  # Needed Dependencies
+  nmap,
+  coreutils,
+  gawk,
+  # Optional Dependencies
+  smtp-user-enum,
+  dnsrecon,
+  bind,
+  sslscan,
+  nikto,
+  ffuf,
+  joomscan,
+  smbmap,
+  enum4linux,
+  wpscan,
+  samba,
+  openldap,
+  net-snmp,
+  snmpcheck,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nmapautomator";
+  version = "0-unstable-2021-04-10";
+
+  src = fetchFromGitHub {
+    owner = "21y4d";
+    repo = "nmapAutomator";
+    rev = "c5e15de8429c78aa5923010145dfac0996aba9e1";
+    hash = "sha256-HwBvhFvGVY5q0C62XjNalQUaX7y24B1Vt8UqAIHp8/g=";
+  };
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  buildInputs = [
+    nmap
+    coreutils
+    gawk
+  ]
+  ++ lib.optionals withFullDeps [
+    smtp-user-enum
+    dnsrecon
+    bind.dnsutils
+    bind.host
+    sslscan
+    nikto
+    ffuf
+    joomscan
+    smbmap
+    enum4linux
+    wpscan
+    samba
+    openldap
+    net-snmp
+    snmpcheck
+  ];
+  # TODO
+  # Package and add odat and droopescan
+
+  postPatch = ''
+    substituteInPlace nmapAutomator.sh \
+      --replace-fail  '/usr/share/nmap/scripts/vulners.nse' \
+                  '"${nmap}/share/nmap/scripts/vulners.nse"'
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm 555 nmapAutomator.sh $out/bin/nmapAutomator
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/nmapAutomator \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+
+  meta = {
+    description = "Nmap script to automate the process of enumeration & recon";
+    homepage = "https://github.com/21y4d/nmapAutomator";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ letgamer ];
+    mainProgram = "nmapAutomator";
+  };
+})
