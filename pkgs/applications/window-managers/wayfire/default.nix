@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "3D Wayland compositor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      teatwig
       wucke13
       wineee
     ];

@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for managing configuration files, written for Wayfire";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      teatwig
       wucke13
       wineee
     ];

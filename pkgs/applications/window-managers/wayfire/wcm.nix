@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wayfire Config Manager";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      teatwig
       wucke13
       wineee
     ];
