@@ -7,6 +7,7 @@
   autoreconfHook,
   aclSupport ? stdenv.hostPlatform.isLinux,
   acl,
+  coreutils,
   nixosTests,
 }:
 
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
+
+  preCheck = ''
+    sed -i 's#/bin/date#${lib.getExe' coreutils "date"}#' test/*.sh
+    # Skip this test because it depends on a working root user, which we don't have in the sandbox
+    # Exiting with 77 signals that the test is skipped, and we only place it on line 2 because the shebang is on line 1
+    sed -i '2iexit 77' test/test-0110.sh
+  '';
+  doCheck = true;
 
   passthru.tests = {
     nixos-logrotate = nixosTests.logrotate;

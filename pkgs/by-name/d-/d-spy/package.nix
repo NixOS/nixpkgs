@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "d-spy";
-  version = "49.1";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-spy/${lib.versions.major finalAttrs.version}/d-spy-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4m4YEg5k1FG2HyAs+qORNienAxwqlUrs85HIPYPQnYo=";
+    hash = "sha256-uBT/J9goqrzacvLGLxtB1iA190PQb9mn48XJhsSHmmk=";
   };
 
   nativeBuildInputs = [
