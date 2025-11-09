@@ -588,7 +588,7 @@
   adamperkowski = {
     name = "Adam Perkowski";
     email = "me@adamperkowski.dev";
-    matrix = "@xx0a_q:matrix.org";
+    matrix = "@adam:matrix.system72.dev";
     github = "adamperkowski";
     githubId = 75480869;
     keys = [
