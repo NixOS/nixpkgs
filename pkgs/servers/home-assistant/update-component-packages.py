@@ -63,6 +63,17 @@ EXTRA_COMPONENT_DEPS = {
     ],
 }
 
+# Some requirments are not listed in the manifest files, e.g. because we use a
+# different version of a package.
+EXTRA_COMPONENT_REQS = {
+    "caldav": [
+        # python3Packages.caldav used to depend on vobject, but we ship a newer
+        # version which no longer does
+        "vobject==0",
+    ],
+}
+
+
 # Sometimes we have unstable versions for libraries that are not
 # well-maintained. This allows us to mark our weird version as newer
 # than a certain wanted version
@@ -127,6 +138,8 @@ def parse_components(version: str = "master"):
 # Recursively get the requirements of a component and its dependencies
 def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
     requirements = set(components[component].get("requirements", []))
+    if extra_reqs := EXTRA_COMPONENT_REQS.get(component):
+        requirements.update(extra_reqs)
     deps = components[component].get("dependencies", [])
     deps.extend(components[component].get("after_dependencies", []))
     processed.add(component)
