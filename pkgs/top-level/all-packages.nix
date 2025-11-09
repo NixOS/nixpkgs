@@ -1202,8 +1202,6 @@ with pkgs;
 
   cgit-pink = callPackage ../applications/version-management/cgit/pink.nix { };
 
-  commitlint = nodePackages."@commitlint/cli";
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
