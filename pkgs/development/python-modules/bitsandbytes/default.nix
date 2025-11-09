@@ -4,6 +4,7 @@
   symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   cmake,
 
@@ -191,6 +192,10 @@ buildPythonPackage {
       rocmPackages
       brokenConditions # To help debug when a package is broken due to CUDA support
       ;
+
+    updateScript = gitUpdater {
+      ignoredVersions = "continuous-release.*";
+    };
   };
 
   meta = {
