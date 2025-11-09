@@ -1,0 +1,76 @@
+diff --git a/tests/e2e/test_basic_e2e.py b/tests/e2e/test_basic_e2e.py
+index a092002..401b94a 100644
+--- a/tests/e2e/test_basic_e2e.py
++++ b/tests/e2e/test_basic_e2e.py
+@@ -30,9 +30,7 @@ def _collect_stdout(process: subprocess.Popen[str]) -> list[str]:
+ 
+ def _run_print_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--print",
+         "--yolo",
+         "--input-format",
+@@ -62,9 +60,7 @@ def _run_print_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tupl
+ 
+ def _run_shell_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--yolo",
+         "--prompt",
+         user_prompt,
+@@ -143,9 +139,7 @@ def _run_wire_mode(
+     config_path: Path, work_dir: Path, user_prompt: str
+ ) -> tuple[int, dict[str, object], list[dict[str, object]]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--wire",
+         "--yolo",
+         "--config-file",
+diff --git a/tests/e2e/test_media_e2e.py b/tests/e2e/test_media_e2e.py
+index 317105e..5d8b490 100644
+--- a/tests/e2e/test_media_e2e.py
++++ b/tests/e2e/test_media_e2e.py
+@@ -126,9 +126,7 @@ def _run_print_mode(
+     config_path: Path, work_dir: Path, messages: list[dict[str, object]]
+ ) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--print",
+         "--yolo",
+         "--input-format",
+@@ -245,9 +243,7 @@ def test_scripted_echo_media_e2e(temp_work_dir: KaosPath, tmp_path: Path, mode:
+         assert _content_has_text(parsed_contents[1], "The video appears to be a short clip.")
+     elif mode == "wire":
+         cmd = [
+-            "uv",
+-            "run",
+-            "kimi",
++            "@KIMI_CLI@",
+             "--wire",
+             "--yolo",
+             "--config-file",
+diff --git a/tests_e2e/wire_helpers.py b/tests_e2e/wire_helpers.py
+index 51ef94e..a758d95 100644
+--- a/tests_e2e/wire_helpers.py
++++ b/tests_e2e/wire_helpers.py
+@@ -509,7 +509,7 @@ def base_command() -> list[str]:
+     override = os.getenv(WIRE_COMMAND_ENV)
+     if override is not None:
+         override = override.strip()
+-    parts = shlex.split(override, posix=os.name != "nt") if override else ["uv", "run", "kimi"]
++    parts = shlex.split(override, posix=os.name != "nt") if override else ["@KIMI_CLI@"]
+     return [part for part in parts if part != "--wire"]
+ 
+ 
