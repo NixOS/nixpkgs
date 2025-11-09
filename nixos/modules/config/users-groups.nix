@@ -11,6 +11,7 @@ let
     any
     attrNames
     attrValues
+    boolToString
     concatMap
     concatMapStringsSep
     concatStrings
@@ -43,6 +44,7 @@ let
     stringLength
     trace
     types
+    versionOlder
     xor
     ;
 
@@ -128,6 +130,10 @@ let
   '';
 
   userOpts =
+    let
+      # Pass state version through despite config being overwritten in the inner module
+      inherit (config.system) stateVersion;
+    in
     { name, config, ... }:
     {
 
@@ -455,16 +461,22 @@ let
         };
 
         linger = mkOption {
-          type = types.bool;
-          default = false;
+          type = types.nullOr types.bool;
+          example = true;
+          default = if versionOlder stateVersion "26.11" then false else null;
+          defaultText = literalExpression "if lib.versionOlder config.system.stateVersion \"25.11\" then false else null";
           description = ''
-            Whether to enable lingering for this user. If true, systemd user
-            units will start at boot, rather than starting at login and stopping
-            at logout. This is the declarative equivalent of running
-            `loginctl enable-linger` for this user.
+            Whether to enable or disable lingering for this user.  Without
+            lingering, user units will not be started until the user logs in,
+            and may be stopped on logout depending on the settings in
+            `logind.conf`.
 
-            If false, user units will not be started until the user logs in, and
-            may be stopped on logout depending on the settings in `logind.conf`.
+            By default, NixOS will not manage lingering, new users will default
+            to not lingering, and you can change the linger setting using
+            `loginctl enable-linger` or `loginctl disable-linger`.  Setting
+            this option to `true` or `false` is the declarative equivalent of
+            running `loginctl enable-linger` or `loginctl disable-linger`
+            respectively.
           '';
         };
       };
@@ -708,6 +720,13 @@ in
       '';
     };
 
+    users.manageLingering = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to manage whether users linger or not.";
+      example = false;
+    };
+
     users.users = mkOption {
       default = { };
       type = with types; attrsOf (submodule userOpts);
@@ -892,16 +911,17 @@ in
         else
           ""; # keep around for backwards compatibility
 
-      systemd.services.linger-users = {
+      systemd.services.linger-users = lib.mkIf cfg.manageLingering {
         wantedBy = [ "multi-user.target" ];
         after = [ "systemd-logind.service" ];
         requires = [ "systemd-logind.service" ];
 
         script =
           let
-            userPartition = lib.lists.partition (u: u.linger) (builtins.attrValues cfg.users);
-            lingeringUserNames = map (u: u.name) userPartition.right;
-            nonLingeringUserNames = map (u: u.name) userPartition.wrong;
+            lingeringUsers = filterAttrs (n: v: v.linger == true) cfg.users;
+            nonLingeringUsers = filterAttrs (n: v: v.linger == false) cfg.users;
+            lingeringUserNames = mapAttrsToList (n: v: v.name) lingeringUsers;
+            nonLingeringUserNames = mapAttrsToList (n: v: v.name) nonLingeringUsers;
           in
           ''
             ${lib.strings.toShellVars { inherit lingeringUserNames nonLingeringUserNames; }}
@@ -1178,6 +1198,22 @@ in
                 for this user with:
                 users.users.${user.name}.group = "${user.name}";
                 users.groups.${user.name} = {};
+              '';
+            }
+            {
+              assertion = user.linger != null -> cfg.manageLingering;
+              message = ''
+                users.manageLingering is set to false, but
+                users.users.${user.name}.linger is configured.
+
+                If you want NixOS to manage whether user accounts linger or
+                not, you must set users.manageLingering to true.  This is the
+                default setting.
+
+                If you do not want NixOS to manage whether user accounts linger
+                or not, you must set users.users.${user.name}.linger to null.
+                This is the default setting provided system.stateVersion is at
+                least "25.11".
               '';
             }
           ]
