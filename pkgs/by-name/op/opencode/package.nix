@@ -87,6 +87,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./skip-npm-pack.patch
   ];
 
+  postPatch = ''
+    # don't require a specifc bun version
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail "if (process.versions.bun !== expectedBunVersion)" "if (false)"
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
