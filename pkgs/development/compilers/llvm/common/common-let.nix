@@ -12,14 +12,15 @@ rec {
   llvm_meta = {
     license =
       with lib.licenses;
-      [ ncsa ]
-      ++
-        # Contributions after June 1st, 2024 are only licensed under asl20 and
-        # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
-        lib.optionals (lib.versionAtLeast release_version "19") [
-          asl20
-          llvm-exception
-        ];
+      # Contributions after June 1st, 2024 are only licensed under asl20 and
+      # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
+      if lib.versionAtLeast release_version "19" then
+        AND [
+          ncsa
+          (WITH asl20 llvm-exception)
+        ]
+      else
+        ncsa;
     teams = [ lib.teams.llvm ];
 
     # See llvm/cmake/config-ix.cmake.
