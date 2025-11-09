@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  doCheck = true;
 
   passthru = {
     tests = {
