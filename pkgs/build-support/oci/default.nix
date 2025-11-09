@@ -8,8 +8,7 @@
   runCommand,
   nixosTests,
 }:
-
-rec {
+let
   /*
     toOCIImage is a generic conversion tool for converting Docker-style tarballs
     into OCI images (directories or tarballs).
@@ -23,48 +22,51 @@ rec {
       - `directory`: The output will be an OCI directory.
       - `tarball`: The output will be a tarball of an OCI directory.
   */
-  toOCIImage =
-    lib.extendMkDerivation {
-      constructDrv = stdenvNoCC.mkDerivation;
-      excludeDrvArgNames = [ "docker-tarball" "name" "outputFormat" ];
-      extendDrvArgs =
-        finalAttrs:
-        { docker-tarball
-        , name ? null
-        , outputFormat ? "directory"
-        ,
-        }@args:
-        let
-          outputName =
-            if name != null then
-              name
-            else if lib.hasAttr "name" docker-tarball then
-              "${lib.strings.removeSuffix ".tar.gz" docker-tarball.name}-oci"
-            else
-              throw "The `name` argument attribute must be provided if the `docker-tarball` input does not have a `name` attribute";
+  toOCIImage = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+    excludeDrvArgNames = [
+      "docker-tarball"
+      "name"
+      "outputFormat"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        docker-tarball,
+        name ? null,
+        outputFormat ? "directory",
+      }:
+      let
+        outputName =
+          if name != null then
+            name
+          else if lib.hasAttr "name" docker-tarball then
+            "${lib.strings.removeSuffix ".tar.gz" docker-tarball.name}-oci"
+          else
+            throw "The `name` argument attribute must be provided if the `docker-tarball` input does not have a `name` attribute";
 
-          skopeoOutputFormats = {
-            directory = "oci";
-            tarball = "oci-archive";
-          };
-          skopeoOutputFormat =
-            skopeoOutputFormats."${outputFormat}"
-              or (throw "`outputFormat` must be one of: ${lib.concatStringsSep ", " (lib.attrNames skopeoOutputFormats)}");
-        in
-        stdenvNoCC.mkDerivation {
-          name = outputName;
-          src = docker-tarball;
-          dontUnpack = true;
-          nativeBuildInputs = [ skopeo ];
-          buildPhase = ''
-            runHook preBuild
-
-            skopeo copy docker-archive:$src ${skopeoOutputFormat}:$out --insecure-policy --tmpdir .
-
-            runHook postBuild
-          '';
+        skopeoOutputFormats = {
+          directory = "oci";
+          tarball = "oci-archive";
         };
-    };
+        skopeoOutputFormat =
+          skopeoOutputFormats."${outputFormat}"
+            or (throw "`outputFormat` must be one of: ${lib.concatStringsSep ", " (lib.attrNames skopeoOutputFormats)}");
+      in
+      stdenvNoCC.mkDerivation {
+        name = outputName;
+        src = docker-tarball;
+        dontUnpack = true;
+        nativeBuildInputs = [ skopeo ];
+        buildPhase = ''
+          runHook preBuild
+
+          skopeo copy docker-archive:$src ${skopeoOutputFormat}:$out --insecure-policy --tmpdir .
+
+          runHook postBuild
+        '';
+      };
+  };
 
   # Convenience bindings for drop-in compatibility with `dockerTools`.
   mkDockerToolsDropin =
@@ -78,7 +80,8 @@ rec {
       }
       // (args.extraOCIArgs or { })
     );
-
+in
+{
   buildImage = mkDockerToolsDropin "buildImage";
   buildLayeredImage = mkDockerToolsDropin "buildLayeredImage";
 
