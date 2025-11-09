@@ -5,6 +5,7 @@
   fetchFromGitHub,
   maven,
   makeWrapper,
+  nix-update-script,
 }:
 
 let
@@ -47,8 +48,11 @@ let
       runHook postInstall
     '';
 
-    passthru.tests.example = callPackage ./example.nix {
-      openapi-generator-cli = this;
+    passthru = {
+      updateScript = nix-update-script { };
+      tests.example = callPackage ./example.nix {
+        openapi-generator-cli = this;
+      };
     };
 
     meta = {
