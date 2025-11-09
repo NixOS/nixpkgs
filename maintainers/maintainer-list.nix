@@ -1853,6 +1853,12 @@
     githubId = 4194320;
     name = "Anton Schirg";
   };
+  anttiharju = {
+    email = "antti@harju.io";
+    github = "anttiharju";
+    githubId = 61745723;
+    name = "Antti Harju";
+  };
   anugrahn1 = {
     email = "pnanugrah@gmail.com";
     github = "anugrahn1";
