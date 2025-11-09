@@ -22525,6 +22525,12 @@
     github = "rotaerk";
     githubId = 17690823;
   };
+  roverp = {
+    name = "Yaroslav Gulevsky";
+    github = "Roverp1";
+    githubId = 149878979;
+    email = "yar.zubaha@proton.me";
+  };
   rowanG077 = {
     email = "goemansrowan@gmail.com";
     github = "rowanG077";
