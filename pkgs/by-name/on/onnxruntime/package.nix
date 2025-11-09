@@ -228,6 +228,10 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
   ]
+  ++ lib.optionals (effectiveStdenv.cc.isClang || rocmSupport) [
+    # Disable -Werror from COMPILE_WARNING_AS_ERROR target property
+    "--compile-no-warning-as-error"
+  ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
@@ -238,8 +242,6 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ]
   ++ lib.optionals rocmSupport [
-    # Werror combines with rocprim header issues to cause errors (warp size const deprecation)
-    "--compile-no-warning-as-error"
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (
       builtins.concatStringsSep ";" rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     ))
@@ -249,25 +251,21 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
   ];
 
-  env =
-    lib.optionalAttrs effectiveStdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error";
-    }
-    // lib.optionalAttrs rocmSupport {
-      MIOPEN_PATH = rocmPackages.miopen;
-      # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
-      # fatal error: 'rocrand/rocrand.h' file not found
-      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
-        rocmPackages.hipblas
-        rocmPackages.hipcub
-        rocmPackages.hiprand
-        rocmPackages.hipsparse
-        rocmPackages.rocblas
-        rocmPackages.rocprim
-        rocmPackages.rocrand
-        rocmPackages.rocthrust
-      ];
-    };
+  env = lib.optionalAttrs rocmSupport {
+    MIOPEN_PATH = rocmPackages.miopen;
+    # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
+    # fatal error: 'rocrand/rocrand.h' file not found
+    HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+      rocmPackages.hipblas
+      rocmPackages.hipcub
+      rocmPackages.hiprand
+      rocmPackages.hipsparse
+      rocmPackages.rocblas
+      rocmPackages.rocprim
+      rocmPackages.rocrand
+      rocmPackages.rocthrust
+    ];
+  };
 
   doCheck =
     !(
