@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  jdk25,
+  zulu25,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
@@ -13,7 +13,7 @@
 }:
 
 let
-  jdk = jdk25.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
