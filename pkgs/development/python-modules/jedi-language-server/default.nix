@@ -19,6 +19,7 @@
   pytestCheckHook,
   pyhamcrest,
   python-lsp-jsonrpc,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,11 +52,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pyhamcrest
     python-lsp-jsonrpc
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    HOME="$(mktemp -d)"
-  '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/pappasam/jedi-language-server/issues/313
