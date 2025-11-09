@@ -60,6 +60,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
+    "av"
     "numpy"
     "pandas"
     "pyannote-audio"
