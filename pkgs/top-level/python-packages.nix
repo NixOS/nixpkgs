@@ -3872,6 +3872,8 @@ self: super: with self; {
 
   django-anymail = callPackage ../development/python-modules/django-anymail { };
 
+  django-amenities = callPackage ../development/python-modules/django-amenities { };
+
   django-app-helper = callPackage ../development/python-modules/django-app-helper { };
 
   django-appconf = callPackage ../development/python-modules/django-appconf { };
