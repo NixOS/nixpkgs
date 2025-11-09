@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.40.0";
+  version = "1.44.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${version}";
-    hash = "sha256-Y42MBRyjPljUAGTwhH2FS8drUAceuJse8Qd1GbctWQs=";
+    hash = "sha256-PHCrUzZmpjZMAfKinBYahhwQFjByaIQ/2udSqoGMmdU=";
   };
 
   pythonRelaxDeps = true;
@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   build-system = with python3.pkgs; [ pdm-backend ];
 
   dependencies = with python3.pkgs; [
-    appdirs
     charset-normalizer
     click
     cryptography
@@ -37,6 +36,8 @@ python3.pkgs.buildPythonApplication rec {
     requests
     rich
     truststore
+    typing-extensions
+    urllib3
   ];
 
   nativeCheckInputs = [
@@ -49,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-mock
     pytest-voluptuous
     pytestCheckHook
-    snapshottest
+    syrupy
     vcrpy
   ]);
 

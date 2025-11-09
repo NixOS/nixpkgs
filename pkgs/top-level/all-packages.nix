@@ -2779,9 +2779,7 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
-  ggshield = callPackage ../tools/security/ggshield {
-    python3 = python311;
-  };
+  ggshield = callPackage ../tools/security/ggshield { };
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
