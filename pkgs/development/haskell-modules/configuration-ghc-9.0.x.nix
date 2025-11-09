@@ -7,6 +7,7 @@ self: super: {
   binary = null;
   bytestring = null;
   Cabal = null;
+  Cabal-syntax = null;
   containers = null;
   deepseq = null;
   directory = null;
@@ -29,6 +30,7 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  system-cxx-std-lib = null;
   template-haskell = null;
   terminfo = null;
   text = null;
