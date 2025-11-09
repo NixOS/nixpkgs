@@ -21,6 +21,7 @@ let
         deprecated
         redistributable
         ;
+      type = "simple";
     }
     // optionalAttrs (attrs ? spdxId) {
       inherit spdxId;
