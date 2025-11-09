@@ -133,16 +133,16 @@ let
 in
 stdenv.mkDerivation {
   pname = "wemeet";
-  version = "3.26.10.400";
+  version = "3.26.10.401";
 
   src = selectSystem {
     x86_64-linux = fetchurl {
-      url = "https://updatecdn.meeting.qq.com/cos/9cfd93b10ee81b2fc3ad26357f27ed13/TencentMeeting_0300000000_3.26.10.400_x86_64_default.publish.officialwebsite.deb";
-      hash = "sha256-7gN40mkAD/0/k0E+bBNfiMcY+YtIaLWycFoI+hhrjgc=";
+      url = "https://updatecdn.meeting.qq.com/cos/72e0e0023e1d1e6d4123fba28821aea1/TencentMeeting_0300000000_3.26.10.401_x86_64_default.publish.officialwebsite.deb";
+      hash = "sha256-cPN7ApIJwO+RvpgT7r9mUMbLmgD3xxhJAVh3Pi/mrK8=";
     };
     aarch64-linux = fetchurl {
-      url = "https://updatecdn.meeting.qq.com/cos/e5f447f30343e27c49438db8d035ae23/TencentMeeting_0300000000_3.26.10.400_arm64_default.publish.officialwebsite.deb";
-      hash = "sha256-ShxcDwwBThwe2YKNy/5+HmYcnnodPhrMaOwkw3gTq0E=";
+      url = "https://updatecdn.meeting.qq.com/cos/c06d6bc4a3370dbfb2f43bbc6ff8969e/TencentMeeting_0300000000_3.26.10.401_arm64_default.publish.officialwebsite.deb";
+      hash = "sha256-W50E1bmqJLPDU7FY0qNKPlh1z8A9Ez1Gc+NrHQhBwgI=";
     };
   };
 
