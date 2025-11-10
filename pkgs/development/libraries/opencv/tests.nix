@@ -83,7 +83,7 @@ runCommand "opencv4-tests"
 
     testRunner = optionalString (!isDarwin) "${getExe xvfb-run} -a ";
 
-    requiredSystemFeatures = optionals cudaSupport [ "cuda" ];
+    requiredSystemFeatures = [ "big-parallel" ] ++ optionals cudaSupport [ "cuda" ];
   }
   ''
     set -euo pipefail
