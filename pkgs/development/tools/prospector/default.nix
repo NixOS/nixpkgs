@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "prospector";
+    tag = "v${version}";
     hash = "sha256-94JGKX91d2kul+KMYohga9KCOj6RN/YKpD8e4nWSOOM=";
   };
 
