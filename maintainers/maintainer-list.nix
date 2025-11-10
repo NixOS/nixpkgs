@@ -19180,6 +19180,11 @@
     email = "nyu@nyuku.ru";
     githubId = 97425873;
   };
+  nyxar77 = {
+    name = "nyxar77";
+    github = "nyxar77";
+    githubId = 153492661;
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
