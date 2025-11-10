@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   networkx,
-  pythonOlder,
   setuptools,
   tqdm,
   z3-solver,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "model-checker";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "model_checker";
