@@ -13185,8 +13185,6 @@ with pkgs;
   steam-run = steam.run;
   steam-run-free = steam.run-free;
 
-  steamback = python3.pkgs.callPackage ../tools/games/steamback { };
-
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     steam-run = steam-run-free;
     inherit winetricks yad;
