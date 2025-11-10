@@ -12,6 +12,7 @@
   mpi,
   blas,
   lapack,
+  scalapack,
   python3,
   tcsh,
   automake,
@@ -81,6 +82,7 @@ stdenv.mkDerivation rec {
     openssh
     blas
     lapack
+    scalapack
     python3
   ];
   propagatedBuildInputs = [ mpi ];
@@ -139,6 +141,9 @@ stdenv.mkDerivation rec {
     export BLASOPT="-L${blas}/lib -lblas"
     export LAPACK_LIB="-L${lapack}/lib -llapack"
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
+    export USE_SCALAPACK="y"
+    export SCALAPACK="-L${scalapack}/lib -lscalapack"
+    export SCALAPACK_SIZE="4"
 
     # extra TCE related options
     export MRCC_METHODS="y"
