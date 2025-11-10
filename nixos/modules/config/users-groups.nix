@@ -130,10 +130,6 @@ let
   '';
 
   userOpts =
-    let
-      # Pass state version through despite config being overwritten in the inner module
-      inherit (config.system) stateVersion;
-    in
     { name, config, ... }:
     {
 
@@ -463,8 +459,7 @@ let
         linger = mkOption {
           type = types.nullOr types.bool;
           example = true;
-          default = if versionOlder stateVersion "26.11" then false else null;
-          defaultText = literalExpression "if lib.versionOlder config.system.stateVersion \"25.11\" then false else null";
+          default = null;
           description = ''
             Whether to enable or disable lingering for this user.  Without
             lingering, user units will not be started until the user logs in,
@@ -472,8 +467,8 @@ let
             `logind.conf`.
 
             By default, NixOS will not manage lingering, new users will default
-            to not lingering, and you can change the linger setting using
-            `loginctl enable-linger` or `loginctl disable-linger`.  Setting
+            to not lingering, and lingering can be configured imperatively using
+            `loginctl enable-linger` or `loginctl disable-linger`. Setting
             this option to `true` or `false` is the declarative equivalent of
             running `loginctl enable-linger` or `loginctl disable-linger`
             respectively.
