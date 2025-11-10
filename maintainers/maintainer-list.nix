@@ -9959,6 +9959,12 @@
     githubId = 1162118;
     name = "Harald Gliebe";
   };
+  hajoha = {
+    email = "hajoha@bar0.foo";
+    github = "hajoha";
+    githubId = 9853102;
+    name = "Johann Hackler";
+  };
   hakan-demirli = {
     email = "ehdemirli@proton.me";
     github = "hakan-demirli";
