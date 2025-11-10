@@ -5,7 +5,7 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation {
   pname = "alacritty-theme";
   version = "0-unstable-2025-08-18";
 
@@ -17,14 +17,11 @@ stdenvNoCC.mkDerivation (self: {
     sparseCheckout = [ "themes" ];
   };
 
-  dontConfigure = true;
-  dontBuild = true;
   preferLocalBuild = true;
 
-  sourceRoot = "${self.src.name}/themes";
   installPhase = ''
     runHook preInstall
-    install -Dt $out/share/alacritty-theme *.toml
+    install -Dt $out/share/alacritty-theme themes/*.toml
     runHook postInstall
   '';
 
@@ -39,4 +36,4 @@ stdenvNoCC.mkDerivation (self: {
     maintainers = [ maintainers.nicoo ];
     platforms = platforms.all;
   };
-})
+}
