@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/share/alacritty-theme themes/*.toml
+    install -Dm644 -t $out/share/alacritty-theme themes/*.toml
     runHook postInstall
   '';
 
