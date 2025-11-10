@@ -20,7 +20,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Tautulli";
-    repo = pname;
+    repo = "Tautulli";
     tag = "v${version}";
     sha256 = "sha256-nqSqWRst+gx9aZ2Ko+/tKzpQX7wuU4Bn3vLR5F87aJA=";
   };
