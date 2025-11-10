@@ -48,6 +48,8 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
