@@ -15,7 +15,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-wtkixHexsJNKsLnnlHssh0IzxwWYMPKDcaf/D0zUNKk=";
   };
 
-  vendorHash = "sha256-/bf1rvoG1N6GNqisBwMqY05qhTsy7gMeWXarXgElU/M=";
+  vendorHash = "sha256-t+WDM68unR2zk+iWTry7fBSbxGoUfj3ENgmWIyh4PxA=";
 
   meta = {
     changelog = "https://github.com/deployphp/deployer/releases/tag/v${finalAttrs.version}";
