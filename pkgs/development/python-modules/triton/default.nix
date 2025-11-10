@@ -1,36 +1,49 @@
 {
   lib,
-  addDriverRunpath,
-  buildPythonPackage,
-  cmake,
+  stdenv,
   config,
-  cudaPackages,
+  buildPythonPackage,
   fetchFromGitHub,
-  filelock,
-  gtest,
-  libxml2,
+
+  # patches
+  replaceVars,
+  addDriverRunpath,
+  cudaPackages,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
   lit,
   llvm,
+  writableTmpDirAsHomeHook,
+
+  # buildInputs
+  gtest,
+  libxml2,
   ncurses,
-  ninja,
   pybind11,
+  zlib,
+
+  # dependencies
+  filelock,
+
+  # passthru
   python,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  stdenv,
-  replaceVars,
-  setuptools,
   torchWithRocm,
-  zlib,
-  cudaSupport ? config.cudaSupport,
   runCommand,
-  rocmPackages,
   triton,
+  rocmPackages,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -38,7 +51,7 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-78s9ke6UV7Tnx3yCr0QZcVDqQELR4XoGgJY7olNJmjk=";
+    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
   };
 
   patches = [
@@ -49,8 +62,6 @@ buildPythonPackage rec {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
-    # Upstream PR: https://github.com/triton-lang/triton/pull/7959
-    ./0005-amd-search-env-paths.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
@@ -88,13 +99,6 @@ buildPythonPackage rec {
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-    ''
-    # Don't use FHS path for ROCm LLD
-    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
-    + ''
-      substituteInPlace third_party/amd/backend/compiler.py \
-        --replace-fail 'lld = Path("/opt/rocm/llvm/bin/ld.lld")' \
-        "import os;lld = Path(os.getenv('HIP_PATH', '/opt/rocm/')"' + "/llvm/bin/ld.lld")'
     '';
 
   build-system = [ setuptools ];
@@ -116,6 +120,11 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+
+    # `find_package` is called with `NO_DEFAULT_PATH`
+    # https://cmake.org/cmake/help/latest/command/find_package.html
+    # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
   ];
 
   buildInputs = [
