@@ -4,6 +4,7 @@
   python3Packages,
   nix-update-script,
   fetchpatch2,
+  callPackage,
 }:
 
 let
@@ -53,6 +54,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "passhole" ];
   pyproject = true;
   build-system = [ setuptools ];
+
+  passthru.tests.basicFunctionality = callPackage ./test.nix { };
 
   passthru.updateScript = nix-update-script { };
   meta = with lib; {
