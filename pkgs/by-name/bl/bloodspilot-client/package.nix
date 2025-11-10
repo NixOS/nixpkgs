@@ -41,10 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bloodspilot-client-sdl";
     homepage = "http://bloodspilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
 })

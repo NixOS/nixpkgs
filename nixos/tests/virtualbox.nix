@@ -426,8 +426,6 @@ let
             enable = true;
           }
           // vboxHostConfig;
-
-          nixpkgs.config.allowUnfree = config.virtualisation.virtualbox.host.enableExtensionPack;
         };
 
       testScript = ''

@@ -588,7 +588,7 @@
   adamperkowski = {
     name = "Adam Perkowski";
     email = "me@adamperkowski.dev";
-    matrix = "@xx0a_q:matrix.org";
+    matrix = "@adam:matrix.system72.dev";
     github = "adamperkowski";
     githubId = 75480869;
     keys = [
@@ -1156,10 +1156,11 @@
     name = "Alexandru Nechita";
   };
   alexandrutocar = {
-    email = "at@myquiet.place";
+    email = "alexandru.tocar@outlook.com";
     github = "alexandrutocar";
     githubId = 65486851;
     name = "Alexandru Tocar";
+    keys = [ { fingerprint = "B617 DD24 3AB0 2E3F 2E67  DBFD 1305 2A85 D7A4 2AA4"; } ];
   };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
@@ -1190,6 +1191,12 @@
     github = "alexfmpe";
     githubId = 2335822;
     name = "Alexandre Esteves";
+  };
+  alexland7219 = {
+    email = "alexland7219@gmail.com";
+    github = "alexland7219";
+    githubId = 58669111;
+    name = "Alexandre Ros";
   };
   alexnabokikh = {
     email = "nabokikh@duck.com";
@@ -10840,12 +10847,6 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
-  iedame = {
-    email = "git@ieda.me";
-    github = "iedame";
-    githubId = 60272;
-    name = "Rafael Ieda";
-  };
   if-loop69420 = {
     github = "if-loop69420";
     githubId = 81078181;
@@ -12602,7 +12603,7 @@
     name = "Ioannis Koutras";
   };
   jolars = {
-    email = "jolars@posteo.com";
+    email = "johan@jolars.co";
     matrix = "@jola:mozilla.org";
     github = "jolars";
     githubId = 13087841;
@@ -23961,6 +23962,7 @@
     githubId = 49711232;
     github = "ShyAssassin";
     email = "ShyAssassin@assassin.dev";
+    keys = [ { fingerprint = "370E 8296 12AF D0E1 9A1A  88F6 AA81 2447 4716 E56D"; } ];
   };
   shyim = {
     email = "s.sayakci@gmail.com";
@@ -28910,6 +28912,16 @@
     githubId = 41458459;
     name = "Zexin Yuan";
     keys = [ { fingerprint = "FE16 B281 90EF 6C3F F661  6441 C2DD 1916 FE47 1BE2"; } ];
+  };
+  zacharyarnaise = {
+    name = "Zachary Arnaise";
+    github = "zacharyarnaise";
+    githubId = 121795280;
+    keys = [
+      {
+        fingerprint = "5C1A 2BE8 C6B4 AFC0 DE82  73E9 B1F3 94D8 D460 C3B2";
+      }
+    ];
   };
   zacharyweiss = {
     name = "Zachary Weiss";

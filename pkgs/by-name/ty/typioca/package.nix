@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/bloznelis/typioca";
     changelog = "https://github.com/bloznelis/typioca/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     mainProgram = "typioca";
   };
 })
