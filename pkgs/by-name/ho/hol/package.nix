@@ -26,7 +26,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";

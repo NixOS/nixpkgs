@@ -46,10 +46,9 @@ let
     fi
   '';
 in
-symlinkJoin rec {
+symlinkJoin {
   pname = replaceStrings [ "-unwrapped" ] [ "" ] sway.pname;
   inherit (sway) version;
-  name = "${pname}-${version}";
 
   paths = (optional withBaseWrapper baseWrapper) ++ [ sway ];
 
