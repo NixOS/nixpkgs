@@ -108,6 +108,12 @@ customStdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/hyprwm/Hyprland/commit/522edc87126a48f3ce4891747b6a92a22385b1e7.patch";
       hash = "sha256-0BAlAVW5isa8gd833PjZdqO/uEpDqdTlu0iZbLP4U9s=";
     })
+
+    # NOTE: fixes regression for layer-shell-qt. should be removed with the next release.
+    (fetchpatch {
+      url = "https://github.com/hyprwm/Hyprland/commit/0bd11d5eb941b8038f0723135768d84aa5512b4a.patch";
+      hash = "sha256-yY5OsihAzm5cVLg8smGc4i/RIimUDwuZ1RUGqOlfV+Q=";
+    })
   ];
 
   postPatch = ''
