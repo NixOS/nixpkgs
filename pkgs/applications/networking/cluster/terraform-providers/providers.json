@@ -1,12 +1,12 @@
 {
   "1password_onepassword": {
-    "hash": "sha256-u2nSzEKD0o/e0AzeHdKQj3+h7mAt6r5cxaKsPn6nRGo=",
+    "hash": "sha256-4wEKPTBt9F8N9jPk/PUu+ewrCJ8IztU9CblfJxA7h1k=",
     "homepage": "https://registry.terraform.io/providers/1Password/onepassword",
     "owner": "1Password",
     "repo": "terraform-provider-onepassword",
-    "rev": "v2.1.2",
+    "rev": "v2.2.0",
     "spdx": "MIT",
-    "vendorHash": null
+    "vendorHash": "sha256-n01cHzyG9FvxCb92sFccKY1h7Pa0zmi+CUxSYHM5Elc="
   },
   "a10networks_thunder": {
     "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
