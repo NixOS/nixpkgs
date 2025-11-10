@@ -5,12 +5,6 @@
 # early and make bisection less painful.
 
 {
-  nixpkgs ? {
-    outPath = (import ../../lib).cleanSource ../..;
-    revCount = 1234;
-    shortRev = "abcdef";
-    revision = "0000000000000000000000000000000000000000";
-  },
   # The platform doubles for which we build Nixpkgs.
   supportedSystems ? [
     "x86_64-linux"
