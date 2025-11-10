@@ -11,7 +11,7 @@
   expat,
   gettext,
   perl,
-  guile,
+  guile_2_0,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libX11
     gmp
-    guile
+    guile_2_0
     libjpeg
     libpng
     expat
