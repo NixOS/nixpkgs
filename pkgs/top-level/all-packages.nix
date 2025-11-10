@@ -6910,20 +6910,6 @@ with pkgs;
     else
       callPackage ../os-specific/linux/bionic-prebuilt { };
 
-  inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost177
-    boost178
-    boost179
-    boost180
-    boost181
-    boost182
-    boost183
-    boost186
-    boost187
-    boost188
-    boost189
-    ;
-
   boost = boost187;
 
   botanEsdm = botan3.override { withEsdm = true; };
