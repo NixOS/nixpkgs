@@ -20471,6 +20471,8 @@ self: super: with self; {
 
   xsdata = callPackage ../development/python-modules/xsdata { };
 
+  xsdata-pydantic = callPackage ../development/python-modules/xsdata-pydantic { };
+
   xstatic = callPackage ../development/python-modules/xstatic { };
 
   xstatic-asciinema-player = callPackage ../development/python-modules/xstatic-asciinema-player { };
