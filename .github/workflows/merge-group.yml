@@ -61,7 +61,7 @@ jobs:
       # cherry-picks; formality right now, but unused
       pull-requests: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -71,7 +71,7 @@ jobs:
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -86,7 +86,7 @@ jobs:
       # compare
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -98,7 +98,7 @@ jobs:
     needs: [prepare]
     uses: ./.github/workflows/build.yml
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
