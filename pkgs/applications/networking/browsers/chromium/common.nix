@@ -686,10 +686,6 @@ let
             '${glibc}/share/locale/'
 
       ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
-      ''
       + ''
         # Allow to put extensions into the system-path.
         sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
