@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-KvcGvMsASgEKTerhh/lSPjQoXYDMBvbaPSdc6f5p7wc=";
   };
 
@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-python_prefix=${placeholder "python"}"
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoconf-archive
@@ -103,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
+    changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.tag}/NEWS.rst";
     description = "Library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
     license = with lib.licenses; [
