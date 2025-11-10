@@ -3814,6 +3814,12 @@
     github = "britter";
     githubId = 1327662;
   };
+  brittonr = {
+    name = "Britton Robitzsch";
+    email = "b@robitzs.ch";
+    github = "brittonr";
+    githubId = 4730485;
+  };
   brodes = {
     email = "me@brod.es";
     github = "brhoades";
