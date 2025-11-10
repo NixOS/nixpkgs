@@ -178,7 +178,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
     (lib.cmakeBool "SDL_DEPS_SHARED" false)
-  ];
+  ]
+  ++
+    lib.optionals
+      (
+        stdenv.hostPlatform.isUnix
+        && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
+        && !(x11Support || waylandSupport)
+      )
+      [
+        (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" true)
+      ];
 
   doCheck = true;
 
