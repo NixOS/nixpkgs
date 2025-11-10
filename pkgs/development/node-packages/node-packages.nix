@@ -14079,15 +14079,6 @@ let
         sha512 = "lR4MXjGNgkJc7tkQ97kb2nuEMnNCyU//XYVH0MKTGcXEiSudQ5MKGKen3C5QubYy0vmq+JGitUg92uuywGEwIA==";
       };
     };
-    "json-refs-3.0.15" = {
-      name = "json-refs";
-      packageName = "json-refs";
-      version = "3.0.15";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/json-refs/-/json-refs-3.0.15.tgz";
-        sha512 = "0vOQd9eLNBL18EGl5yYaO44GhixmImes2wiYn9Z3sag3QnehWrYWlB9AFtMxCL2Bj3fyxgDYkxGFEU/chlYssw==";
-      };
-    };
     "json-schema-0.2.2" = {
       name = "json-schema";
       packageName = "json-schema";
@@ -34193,92 +34184,6 @@ in
       description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source ";
       homepage = "https://github.com/mathjax/MathJax#readme";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  multi-file-swagger = nodeEnv.buildNodePackage {
-    name = "multi-file-swagger";
-    packageName = "multi-file-swagger";
-    version = "2.3.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/multi-file-swagger/-/multi-file-swagger-2.3.0.tgz";
-      sha512 = "kiGLOSzovuYddOePdYicu/jkIjvlNgvq/bP/0C0+oiPBIuiJWLS1vXPvnU2OowRQPi/Hxnp0HuRI5/7s7qu8Qg==";
-    };
-    dependencies = [
-      sources."argparse-1.0.10"
-      sources."asap-2.0.6"
-      sources."asynckit-0.4.0"
-      sources."call-bind-apply-helpers-1.0.2"
-      sources."call-bound-1.0.4"
-      sources."combined-stream-1.0.8"
-      sources."commander-2.20.3"
-      sources."component-emitter-1.3.1"
-      sources."cookiejar-2.1.4"
-      sources."debug-4.4.0"
-      sources."delayed-stream-1.0.0"
-      sources."dezalgo-1.0.4"
-      sources."dunder-proto-1.0.1"
-      sources."es-define-property-1.0.1"
-      sources."es-errors-1.3.0"
-      sources."es-object-atoms-1.1.1"
-      sources."es-set-tostringtag-2.1.0"
-      sources."esprima-4.0.1"
-      sources."fast-safe-stringify-2.1.1"
-      sources."form-data-4.0.2"
-      sources."formidable-2.1.2"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.3.0"
-      sources."get-proto-1.0.1"
-      sources."gopd-1.2.0"
-      sources."graphlib-2.1.8"
-      sources."has-symbols-1.1.0"
-      sources."has-tostringtag-1.0.2"
-      sources."hasown-2.0.2"
-      sources."hexoid-1.0.0"
-      sources."inherits-2.0.4"
-      sources."js-yaml-3.14.1"
-      (
-        sources."json-refs-3.0.15"
-        // {
-          dependencies = [
-            sources."commander-4.1.1"
-          ];
-        }
-      )
-      sources."lodash-4.17.21"
-      sources."math-intrinsics-1.1.0"
-      sources."methods-1.1.2"
-      sources."mime-2.6.0"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."ms-2.1.3"
-      sources."native-promise-only-0.8.1"
-      sources."object-inspect-1.13.4"
-      sources."once-1.4.0"
-      sources."path-loader-1.0.12"
-      sources."punycode-2.3.1"
-      sources."qs-6.14.0"
-      sources."readable-stream-3.6.2"
-      sources."safe-buffer-5.2.1"
-      sources."semver-7.7.1"
-      sources."side-channel-1.1.0"
-      sources."side-channel-list-1.0.0"
-      sources."side-channel-map-1.0.1"
-      sources."side-channel-weakmap-1.0.2"
-      sources."slash-3.0.0"
-      sources."sprintf-js-1.0.3"
-      sources."string_decoder-1.3.0"
-      sources."superagent-7.1.6"
-      sources."uri-js-4.4.1"
-      sources."util-deprecate-1.0.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Multi-file Swagger example";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

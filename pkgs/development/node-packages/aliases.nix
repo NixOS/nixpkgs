@@ -227,6 +227,7 @@ mapAliases {
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
   inherit (pkgs) mocha; # Added 2025-11-04
+  multi-file-swagger = throw "'multi-file-swagger' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   neovim = pkgs.neovim-node-client; # added 2024-11-13

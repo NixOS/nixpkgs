@@ -41,7 +41,6 @@
 , "livedown"
 , "madoko"
 , "mathjax"
-, "multi-file-swagger"
 , "nijs"
 , "node-gyp-build"
 , "node2nix"
