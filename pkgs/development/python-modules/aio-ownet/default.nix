@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aio-ownet";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "aio-ownet";
     tag = "v${version}";
-    hash = "sha256-XaulcBrFLu8YsfaYQsZfUBHnw0H5qX6itdgsiW89Ca4=";
+    hash = "sha256-KgQasltfoffVjCDX9s98qnZrv+VLiEffLi9FnUD5vXc=";
   };
 
   build-system = [ poetry-core ];
