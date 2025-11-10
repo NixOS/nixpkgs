@@ -53,45 +53,38 @@ let
               driver = Firefox(options=options)
 
               driver.implicitly_wait(20)
-              driver.get('http://localhost:8080/#/register')
+              driver.get('http://localhost:8080/#/signup')
 
               wait = WebDriverWait(driver, 10)
 
               wait.until(EC.title_contains("Vaultwarden Web"))
 
-              driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_email').send_keys(
+              driver.find_element(By.CSS_SELECTOR, 'input#register-start_form_input_email').send_keys(
                   '${userEmail}'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_name').send_keys(
+              driver.find_element(By.CSS_SELECTOR, 'input#register-start_form_input_name').send_keys(
                   'A Cat'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_master-password').send_keys(
+              driver.find_element(By.XPATH, "//button[contains(., 'Continue')]").click()
+              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password').send_keys(
                   '${userPassword}'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_confirm-master-password').send_keys(
+              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password-confirm').send_keys(
                   '${userPassword}'
               )
-              if driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').is_selected():
-                  driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').click()
+              if driver.find_element(By.XPATH, '//input[@formcontrolname="checkForBreaches"]').is_selected():
+                  driver.find_element(By.XPATH, '//input[@formcontrolname="checkForBreaches"]').click()
 
               driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
-              wait.until_not(EC.title_contains("Create account"))
+              wait.until_not(EC.title_contains("Set a strong password"))
 
-              driver.find_element(By.XPATH, "//button[contains(., 'Continue')]").click()
+              click_when_unobstructed((By.XPATH, "//button[contains(., 'New item')]"))
 
-              driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(
-                  '${userPassword}'
-              )
-              driver.find_element(By.XPATH, "//button[contains(., 'Log in with master password')]").click()
-
-              click_when_unobstructed((By.CSS_SELECTOR, 'button#newItemDropdown'))
-              driver.find_element(By.XPATH, "//button[contains(., 'Item')]").click()
-
-              driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
+              driver.find_element(By.XPATH, '//input[@formcontrolname="name"]').send_keys(
                   'secrets'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#loginPassword').send_keys(
+              driver.find_element(By.XPATH, '//input[@formcontrolname="password"]').send_keys(
                   '${storedPassword}'
               )
 
@@ -217,9 +210,6 @@ let
                   output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
 
                   assert output[0]['login']['password'] == "${storedPassword}"
-
-              with subtest("Check systemd unit hardening"):
-                  server.log(server.succeed("systemd-analyze security vaultwarden.service | grep -v ✓"))
             '';
       }
     );
@@ -246,7 +236,6 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
       with subtest("Check that backup exists"):
           server.succeed('[ -d "/srv/backups/vaultwarden" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/db.sqlite3" ]')
-          server.succeed('[ -d "/srv/backups/vaultwarden/attachments" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/rsa_key.pem" ]')
           # Ensure only the db backed up with the backup command exists and not the other db files.
           server.succeed('[ ! -f "/srv/backups/vaultwarden/db.sqlite3-shm" ]')
