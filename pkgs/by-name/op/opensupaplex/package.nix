@@ -9,6 +9,7 @@
   opensupaplex,
   SDL2,
   SDL2_mixer,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -29,10 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
   };
 
+  patches = [
+    ./reproducible-build.patch
+    ./darwin.patch
+  ];
+
   nativeBuildInputs = [
     SDL2 # For "sdl2-config"
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
+
   buildInputs = [ SDL2_mixer ];
 
   enableParallelBuilding = true;
@@ -82,13 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Strip only the main binary, not the data files which would corrupt them.
+  stripExclude = [ "lib/opensupaplex/*" ];
+
   meta = {
     description = "Decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${finalAttrs.version}.txt";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = lib.platforms.linux; # Many more are supported upstream, but only linux is tested.
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "opensupaplex";
   };
 })
