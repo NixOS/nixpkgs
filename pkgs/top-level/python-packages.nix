@@ -6314,8 +6314,6 @@ self: super: with self; {
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
-  gpy = callPackage ../development/python-modules/gpy { };
-
   gpytorch = callPackage ../development/python-modules/gpytorch { };
 
   gql = callPackage ../development/python-modules/gql { };
