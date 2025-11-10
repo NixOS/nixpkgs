@@ -40,6 +40,7 @@ jobs:
           persist-credentials: false
           path: trusted
           sparse-checkout: |
+            .github/actions
             ci/supportedVersions.nix
 
       - name: Check out the PR at the test merge commit
@@ -52,7 +53,10 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: ./.github/actions/install-nix
+        with:
+          cachix-name: ${{ vars.CACHIX_NAME }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Load supported versions
         id: versions
@@ -91,6 +95,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Check out the PR at merged and target commits
         uses: ./.github/actions/checkout
         with:
@@ -98,15 +103,10 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
-
-      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        uses: ./.github/actions/install-nix
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-          pushFilter: '(-source|-single-chunk)$'
+          cachix-name: ${{ vars.CACHIX_NAME }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
         env:
@@ -172,6 +172,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Check out the PR at the target commit
         uses: ./.github/actions/checkout
         with:
@@ -186,7 +187,10 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: ./.github/actions/install-nix
+        with:
+          cachix-name: ${{ vars.CACHIX_NAME }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Combine all output paths and eval stats
         run: |
@@ -343,13 +347,17 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Checkout the merge commit
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: ./.github/actions/install-nix
+        with:
+          cachix-name: ${{ vars.CACHIX_NAME }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Run misc eval tasks in parallel
         run: |
