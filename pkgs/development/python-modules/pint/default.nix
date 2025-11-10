@@ -21,6 +21,7 @@
   numpy,
   matplotlib,
   uncertainties,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,13 +61,10 @@ buildPythonPackage rec {
     pytest-subtests
     pytest-benchmark
     matplotlib
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
