@@ -102,12 +102,10 @@ in
       systemd.services.lmsd = {
         enable = true;
         wantedBy = [ "multi-user.target" ];
-        script = ''
-          ${pkgs.lms}/bin/lms ${generateConfig "lms.conf" cfg.settings}
-        '';
         serviceConfig = {
           User = config.users.users.lms.name;
           Group = config.users.groups.lms.name;
+          ExecStart = lib.mkForce "${pkgs.lms}/bin/lms ${generateConfig "lms.conf" cfg.settings}";
         };
       };
       networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
