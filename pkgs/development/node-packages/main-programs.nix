@@ -13,7 +13,6 @@
   fkill-cli = "fkill";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  jsonlint = "jsonlint";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";

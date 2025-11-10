@@ -36,7 +36,6 @@
 , "jsdoc"
 , "json"
 , "json-refs"
-, "jsonlint"
 , "lcov-result-merger"
 , "live-server"
 , "livedown"

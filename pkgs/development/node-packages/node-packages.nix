@@ -3513,15 +3513,6 @@ let
         sha512 = "/6JGNTkedAaGCxxWPHLHLzPAv+bJdPK1X4BvdQFfjpUUu8ccwWf5reGRxGf/vPRfly24dspufAwMWkgALW3gbw==";
       };
     };
-    "JSV-4.0.2" = {
-      name = "JSV";
-      packageName = "JSV";
-      version = "4.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/JSV/-/JSV-4.0.2.tgz";
-        sha512 = "ZJ6wx9xaKJ3yFUhq5/sk82PJMuUyLk277I8mQeyDgCTjGdjWJIvPfaU5LIXaMuaN2UO1X3kZH4+lgphublZUHw==";
-      };
-    };
     "abbrev-1.1.1" = {
       name = "abbrev";
       packageName = "abbrev";
@@ -3916,15 +3907,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.1.0.tgz";
         sha512 = "7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA==";
-      };
-    };
-    "ansi-styles-1.0.0" = {
-      name = "ansi-styles";
-      packageName = "ansi-styles";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ansi-styles/-/ansi-styles-1.0.0.tgz";
-        sha512 = "3iF4FIKdxaVYT3JqQuY3Wat/T2t7TRbbQ94Fu50ZUCbLy4TFbTzr90NOHQodQkNqmeEGCw8WbeP78WNi6SKYUA==";
       };
     };
     "ansi-styles-2.2.1" = {
@@ -6004,15 +5986,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/centra/-/centra-2.7.0.tgz";
         sha512 = "PbFMgMSrmgx6uxCdm57RUos9Tc3fclMvhLSATYN39XsDV29B89zZ3KA89jmY0vwSGazyU+uerqwa6t+KaodPcg==";
-      };
-    };
-    "chalk-0.4.0" = {
-      name = "chalk";
-      packageName = "chalk";
-      version = "0.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/chalk/-/chalk-0.4.0.tgz";
-        sha512 = "sQfYDlfv2DGVtjdoQqxS0cEZDroyG8h6TamA6rvxwlrU5BaSLDx9xhatBYl2pxZ7gmpNaPFVwBtdGdu5rQ+tYQ==";
       };
     };
     "chalk-1.1.3" = {
@@ -11593,15 +11566,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/has-binary2/-/has-binary2-1.0.3.tgz";
         sha512 = "G1LWKhDSvhGeAQ8mPVQlqNcOB2sJdwATtZKl2pDKKHfpf/rYj24lkinxf69blJbnsvtqqNU+L3SL50vzZhXOnw==";
-      };
-    };
-    "has-color-0.1.7" = {
-      name = "has-color";
-      packageName = "has-color";
-      version = "0.1.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/has-color/-/has-color-0.1.7.tgz";
-        sha512 = "kaNz5OTAYYmt646Hkqw50/qyxP2vFnTVu5AQ1Zmk22Kk5+4Qx6BpO8+u7IKsML5fOsFk0ZT0AcCJNYwcvaLBvw==";
       };
     };
     "has-cors-1.1.0" = {
@@ -17877,15 +17841,6 @@ let
         sha512 = "TkCET/3rr9mUuRp+CpO7qfgT++aAxfDRaalQhwPFzI9BY/2rCDn6OfpZOVggi1AXfTPpfkTrg5f5WQx5G1uLxA==";
       };
     };
-    "nomnom-1.8.1" = {
-      name = "nomnom";
-      packageName = "nomnom";
-      version = "1.8.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/nomnom/-/nomnom-1.8.1.tgz";
-        sha512 = "5s0JxqhDx9/rksG2BTMVN1enjWSvPidpoSgViZU4ZXULyTe+7jxcCRLB6f42Z0l1xYJpleCBtSyY6Lwg3uu5CQ==";
-      };
-    };
     "nopt-2.0.0" = {
       name = "nopt";
       packageName = "nopt";
@@ -23871,15 +23826,6 @@ let
         sha512 = "IwfBptatlO+QCJUo19AqvrPNqlVMpW9YEL2LIVY+Rpv2qsjCGxaDLNRgeGsQWJhfItebuJhsGSLjaBbNSQ+ieg==";
       };
     };
-    "strip-ansi-0.1.1" = {
-      name = "strip-ansi";
-      packageName = "strip-ansi";
-      version = "0.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/strip-ansi/-/strip-ansi-0.1.1.tgz";
-        sha512 = "behete+3uqxecWlDAm5lmskaSaISA+ThQ4oNNBDTBJt0x2ppR6IPqfZNuj6BLaLJ/Sji4TPZlcRyOis8wXQTLg==";
-      };
-    };
     "strip-ansi-3.0.1" = {
       name = "strip-ansi";
       packageName = "strip-ansi";
@@ -25210,15 +25156,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/underscore/-/underscore-1.13.7.tgz";
         sha512 = "GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==";
-      };
-    };
-    "underscore-1.6.0" = {
-      name = "underscore";
-      packageName = "underscore";
-      version = "1.6.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz";
-        sha512 = "z4o1fvKUojIWh9XuaVLUDdf86RQiq13AC1dmHbTpoyuu+bquHms76v16CjycCbec87J7z0k//SiQVk0sMdFmpQ==";
       };
     };
     "underscore-1.8.3" = {
@@ -33477,32 +33414,6 @@ in
       description = "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03)";
       homepage = "https://github.com/whitlockjc/json-refs";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  jsonlint = nodeEnv.buildNodePackage {
-    name = "jsonlint";
-    packageName = "jsonlint";
-    version = "1.6.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/jsonlint/-/jsonlint-1.6.3.tgz";
-      sha512 = "jMVTMzP+7gU/IyC6hvKyWpUU8tmTkK5b3BPNuMI9U8Sit+YAWLlZwB6Y6YrdCxfg2kNz05p3XY3Bmm4m26Nv3A==";
-    };
-    dependencies = [
-      sources."JSV-4.0.2"
-      sources."ansi-styles-1.0.0"
-      sources."chalk-0.4.0"
-      sources."has-color-0.1.7"
-      sources."nomnom-1.8.1"
-      sources."strip-ansi-0.1.1"
-      sources."underscore-1.6.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Validate JSON";
-      homepage = "http://zaach.github.com/jsonlint/";
     };
     production = true;
     bypassCache = true;

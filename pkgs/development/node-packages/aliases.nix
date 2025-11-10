@@ -200,6 +200,7 @@ mapAliases {
   inherit (pkgs) js-beautify; # Added 2025-11-06
   inherit (pkgs) jshint; # Added 2025-11-06
   inherit (pkgs) json-diff; # Added 2025-11-07
+  jsonlint = throw "'jsonlint' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
   inherit (pkgs) json-server; # Added 2025-11-06
   joplin = pkgs.joplin-cli; # Added 2025-11-02
