@@ -32,8 +32,6 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
-  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
   version = "2.20.0";
   pyproject = true;
 

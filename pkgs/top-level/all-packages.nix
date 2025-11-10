@@ -6029,8 +6029,7 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
-  ansible = ansible_2_19;
-  ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_18 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.18.8";
