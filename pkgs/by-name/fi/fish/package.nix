@@ -7,7 +7,6 @@
   glibcLocales,
   gnused,
   gnugrep,
-  groff,
   gawk,
   man-db,
   ninja,
@@ -152,13 +151,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.1.2";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-oNRC1NWYE0LEK2a/7nHtlmp20f8hn/1FZgaySqzwSbg=";
+    hash = "sha256-t5whU+byERJ+nDLigJ5IznvEg3MUsVqhpGdWFzF+T4Q=";
   };
 
   env = {
@@ -169,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-7mYWCHH6DBWTIJV8GPRjjf6QulwlYjwv0slablDvBF8=";
+    hash = "sha256-4pDbD7hetN7wGdPr2csgVWsqtYKMj6jpYm7zBKra+bU=";
   };
 
   patches = [
@@ -192,13 +191,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fix FHS paths in tests
   postPatch = ''
-    substituteInPlace src/builtins/tests/test_tests.rs \
+    substituteInPlace src/builtins/test.rs \
       --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-    substituteInPlace src/highlight/tests.rs \
+    substituteInPlace src/highlight/highlight.rs \
       --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
       --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
-      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
+      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"'
+
+    substituteInPlace src/highlight/file_tester.rs \
       --replace-fail '/usr' '/'
 
     substituteInPlace tests/checks/cd.fish \
@@ -296,7 +297,6 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     gnugrep
     gnused
-    groff
     gettext
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
@@ -341,9 +341,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace "$out/share/fish/functions/grep.fish" \
       --replace-fail "command grep" "command ${lib.getExe gnugrep}"
-
-    substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
-      --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
 
     substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
       --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
