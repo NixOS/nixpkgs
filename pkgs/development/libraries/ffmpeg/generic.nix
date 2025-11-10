@@ -413,7 +413,8 @@ assert
   -> buildAvcodec && buildAvfilter && buildAvformat && (buildSwresample || buildAvresample);
 assert
   buildFfplay
-  -> buildAvcodec && buildAvformat && buildSwscale && (buildSwresample || buildAvresample);
+  ->
+    buildAvcodec && buildAvformat && buildSwscale && (buildSwresample || buildAvresample) && withSdl2;
 assert buildFfprobe -> buildAvcodec && buildAvformat;
 # Library dependencies
 assert buildAvcodec -> buildAvutil; # configure flag since 0.6
