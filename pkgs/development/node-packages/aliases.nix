@@ -284,6 +284,7 @@ mapAliases {
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
+  inherit (pkgs) svelte-check; # Added 2025-11-10
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   inherit (pkgs) svgo; # added 2025-08-24
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
