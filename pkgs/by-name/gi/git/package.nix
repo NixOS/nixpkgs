@@ -49,7 +49,7 @@
   withSsh ? false,
   sysctl,
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
-  doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
+  doInstallCheck ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isCygwin, # extremely slow on darwin and cygwin
   tests,
   rustSupport ? false,
   cargo,
