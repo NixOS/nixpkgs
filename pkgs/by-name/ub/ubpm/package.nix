@@ -20,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  preConfigure = ''
-    cd ./sources/
-  '';
+  sourceRoot = "${finalAttrs.src.name}/sources";
 
   postFixup = ''
     wrapQtApp $out/bin/ubpm
@@ -46,12 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/LazyT/ubpm";
+    changelog = "https://codeberg.org/LazyT/ubpm/releases/tag/${finalAttrs.version}";
     description = "Universal Blood Pressure Manager";
     mainProgram = "ubpm";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kurnevsky ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kurnevsky ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
