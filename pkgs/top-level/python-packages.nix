@@ -9555,6 +9555,8 @@ self: super: with self; {
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
 
+  mkdocs-literate-nav = callPackage ../development/python-modules/mkdocs-literate-nav { };
+
   mkdocs-macros-plugin = callPackage ../development/python-modules/mkdocs-macros-plugin { };
 
   mkdocs-macros-test = callPackage ../development/python-modules/mkdocs-macros-test { };
