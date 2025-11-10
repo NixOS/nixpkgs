@@ -29,9 +29,11 @@ let
 
   inherit (release-lib)
     all
+    linux
     mapTestOn
     ;
 in
 mapTestOn {
   stdenv = all;
+  cargo = linux;
 }
