@@ -957,6 +957,24 @@ in
               Only has an effect in Nextcloud 23 and later.
             '';
           };
+          enabledPreviewProviders = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [
+              "OC\\Preview\\PNG"
+              "OC\\Preview\\JPEG"
+              "OC\\Preview\\GIF"
+              "OC\\Preview\\BMP"
+              "OC\\Preview\\XBitmap"
+              "OC\\Preview\\Krita"
+              "OC\\Preview\\WebP"
+              "OC\\Preview\\MarkDown"
+              "OC\\Preview\\TXT"
+              "OC\\Preview\\OpenDocument"
+            ];
+            description = ''
+              The preview providers that should be explicitly enabled.
+            '';
+          };
         };
       };
       default = { };
@@ -1026,6 +1044,8 @@ in
         The value can be customized for `nextcloud-cron.service` using this option.
       '';
     };
+
+    imaginary.enable = lib.mkEnableOption "Imaginary";
   };
 
   config = lib.mkIf cfg.enable (
@@ -1462,6 +1482,20 @@ in
                 port = 0;
               };
             })
+            # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews
+            (lib.mkIf cfg.imaginary.enable {
+              preview_imaginary_url = "http://${config.services.imaginary.address}:${toString config.services.imaginary.port}";
+
+              # Imaginary replaces a few of the built-in providers, so the default value has to be adjusted.
+              enabledPreviewProviders = lib.mkDefault [
+                "OC\\Preview\\Imaginary"
+                "OC\\Preview\\ImaginaryPDF"
+                "OC\\Preview\\Krita"
+                "OC\\Preview\\MarkDown"
+                "OC\\Preview\\TXT"
+                "OC\\Preview\\OpenDocument"
+              ];
+            })
           ];
         };
 
@@ -1593,6 +1627,13 @@ in
               rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
             ''}
           '';
+        };
+
+        services.imaginary = lib.mkIf cfg.imaginary.enable {
+          enable = true;
+          # add -return-size flag recommend by Nextcloud
+          # https://github.com/h2non/imaginary/pull/382
+          settings.return-size = true;
         };
       }
     ]
