@@ -383,6 +383,7 @@ stdenv.mkDerivation (finalAttrs: {
       winter
       sigmasquadron
       rvdp
+      lonerOrz
     ];
     mainProgram = "fish";
   };
