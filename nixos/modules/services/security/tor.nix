@@ -205,6 +205,16 @@ let
     type = with lib.types; listOf str;
     default = [ ];
   };
+  optionPortForwarding = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Attempt UPnP and NAT-PMP forwarding for the DirPort and ORPort.";
+  };
+  optionPortForwardingHelper = lib.mkOption {
+    type = lib.types.str;
+    default = "tor-fw-helper";
+    description = "If PortForwarding is set, allows to overwrite the used helper.";
+  };
   optionORPort =
     optionName:
     lib.mkOption {
@@ -1063,6 +1073,8 @@ in
           options.PerConnBWBurst = optionBandwidth "PerConnBWBurst";
           options.PerConnBWRate = optionBandwidth "PerConnBWRate";
           options.PidFile = optionPath "PidFile";
+          options.PortForwarding = optionBool "PortForwarding";
+          options.PortForwardingHelper = optionString "PortForwardingHelper";
           options.ProtocolWarnings = optionBool "ProtocolWarnings";
           options.PublishHidServDescriptors = optionBool "PublishHidServDescriptors";
           options.PublishServerDescriptor = lib.mkOption {
@@ -1264,6 +1276,8 @@ in
         # by some hosting providers...
         DirPort = lib.mkForce [ ];
         ORPort = lib.mkForce [ ];
+        PortForwarding = lib.mkForce false;
+        PortForwardingHelper = lib.mkForce "tor-fw-helper";
         PublishServerDescriptor = lib.mkForce false;
       })
       (lib.mkIf (!cfg.client.enable) {
