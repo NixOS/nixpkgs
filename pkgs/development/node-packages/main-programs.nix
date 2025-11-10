@@ -6,7 +6,6 @@
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   aws-cdk = "cdk";
-  cdk8s-cli = "cdk8s";
   clipboard-cli = "clipboard";
   cpy-cli = "cpy";
   fast-cli = "fast";

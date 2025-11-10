@@ -11,7 +11,6 @@
 , "awesome-lint"
 , "browserify"
 , "browser-sync"
-, "cdk8s-cli"
 , "clipboard-cli"
 , "coc-go"
 , "coc-ltex"
