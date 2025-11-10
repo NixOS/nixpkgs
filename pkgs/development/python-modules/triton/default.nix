@@ -194,135 +194,116 @@ buildPythonPackage rec {
     "triton.language"
   ];
 
-  passthru.gpuCheck = stdenv.mkDerivation {
-    pname = "triton-pytest";
-    inherit (triton) version src;
+  passthru = {
+    gpuCheck = stdenv.mkDerivation {
+      pname = "triton-pytest";
+      inherit (triton) version src;
 
-    requiredSystemFeatures = [ "cuda" ];
+      requiredSystemFeatures = [ "cuda" ];
 
-    nativeBuildInputs = [
-      (python.withPackages (ps: [
-        ps.scipy
-        ps.torchWithCuda
-        ps.triton-cuda
-      ]))
-    ];
+      nativeBuildInputs = [
+        (python.withPackages (ps: [
+          ps.scipy
+          ps.torchWithCuda
+          ps.triton-cuda
+        ]))
+      ];
 
-    dontBuild = true;
-    nativeCheckInputs = [
-      pytestCheckHook
-      writableTmpDirAsHomeHook
-    ];
+      dontBuild = true;
+      nativeCheckInputs = [
+        pytestCheckHook
+        writableTmpDirAsHomeHook
+      ];
 
-    doCheck = true;
+      doCheck = true;
 
-    preCheck = ''
-      cd python/test/unit
-    '';
-    checkPhase = "pytestCheckPhase";
+      preCheck = ''
+        cd python/test/unit
+      '';
+      checkPhase = "pytestCheckPhase";
 
-    installPhase = "touch $out";
-  };
+      installPhase = "touch $out";
+    };
 
-  passthru.tests = {
-    # Ultimately, torch is our test suite:
-    inherit torchWithRocm;
+    tests = {
+      # Ultimately, torch is our test suite:
+      inherit torchWithRocm;
 
-    # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
-    rocm-libamdhip64-path =
-      runCommand "triton-rocm-libamdhip64-path-test"
-        {
-          buildInputs = [
-            triton
-            python
-            rocmPackages.clr
-          ];
-        }
-        ''
-          python -c "
-          import os
-          import triton
-          path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
-          print(f'libamdhip64 path: {path}')
-          assert os.path.exists(path)
-          " && touch $out
-        '';
+      # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
+      rocm-libamdhip64-path =
+        runCommand "triton-rocm-libamdhip64-path-test"
+          {
+            buildInputs = [
+              triton
+              python
+              rocmPackages.clr
+            ];
+          }
+          ''
+            python -c "
+            import os
+            import triton
+            path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
+            print(f'libamdhip64 path: {path}')
+            assert os.path.exists(path)
+            " && touch $out
+          '';
 
-    # Test that path_to_rocm_lld works when ROCm is available at runtime
-    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
-    rocm-lld-path =
-      runCommand "triton-rocm-lld-test"
-        {
-          buildInputs = [
-            triton
-            python
-            rocmPackages.clr
-          ];
-        }
-        ''
-          python -c "
-          import os
-          import triton
-          path = triton.backends.backends['amd'].compiler.path_to_rocm_lld()
-          print(f'ROCm LLD path: {path}')
-          assert os.path.exists(path)
-          " && touch $out
-        '';
+      # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
+      # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
+      axpy-cuda =
+        cudaPackages.writeGpuTestPython
+          {
+            libraries = ps: [
+              ps.triton
+              ps.torch-no-triton
+            ];
+          }
+          ''
+            # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
 
-    # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
-    # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
-    axpy-cuda =
-      cudaPackages.writeGpuTestPython
-        {
-          libraries = ps: [
-            ps.triton
-            ps.torch-no-triton
-          ];
-        }
-        ''
-          # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+            import triton
+            import triton.language as tl
+            import torch
+            import os
 
-          import triton
-          import triton.language as tl
-          import torch
-          import os
+            @triton.jit
+            def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
+              pid = tl.program_id(axis=0)
+              block_start = pid * BLOCK_SIZE
+              offsets = block_start + tl.arange(0, BLOCK_SIZE)
+              mask = offsets < n
+              x = tl.load(x_ptr + offsets, mask=mask)
+              y = tl.load(y_ptr + offsets, mask=mask)
+              output = a * x + y
+              tl.store(out + offsets, output, mask=mask)
 
-          @triton.jit
-          def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
-            pid = tl.program_id(axis=0)
-            block_start = pid * BLOCK_SIZE
-            offsets = block_start + tl.arange(0, BLOCK_SIZE)
-            mask = offsets < n
-            x = tl.load(x_ptr + offsets, mask=mask)
-            y = tl.load(y_ptr + offsets, mask=mask)
-            output = a * x + y
-            tl.store(out + offsets, output, mask=mask)
+            def axpy(a, x, y):
+              output = torch.empty_like(x)
+              assert x.is_cuda and y.is_cuda and output.is_cuda
+              n_elements = output.numel()
 
-          def axpy(a, x, y):
-            output = torch.empty_like(x)
-            assert x.is_cuda and y.is_cuda and output.is_cuda
-            n_elements = output.numel()
+              def grid(meta):
+                return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
 
-            def grid(meta):
-              return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
+              axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
+              return output
 
-            axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
-            return output
-
-          if __name__ == "__main__":
-            if os.environ.get("HOME", None) == "/homeless-shelter":
-              os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
-            if "CC" not in os.environ:
-              os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
-            torch.manual_seed(0)
-            size = 12345
-            x = torch.rand(size, device='cuda')
-            y = torch.rand(size, device='cuda')
-            output_torch = 3.14 * x + y
-            output_triton = axpy(3.14, x, y)
-            assert output_torch.sub(output_triton).abs().max().item() < 1e-6
-            print("Triton axpy: OK")
-        '';
+            if __name__ == "__main__":
+              if os.environ.get("HOME", None) == "/homeless-shelter":
+                os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
+              if "CC" not in os.environ:
+                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+              torch.manual_seed(0)
+              size = 12345
+              x = torch.rand(size, device='cuda')
+              y = torch.rand(size, device='cuda')
+              output_torch = 3.14 * x + y
+              output_triton = axpy(3.14, x, y)
+              assert output_torch.sub(output_triton).abs().max().item() < 1e-6
+              print("Triton axpy: OK")
+          '';
+    };
   };
 
   meta = {
