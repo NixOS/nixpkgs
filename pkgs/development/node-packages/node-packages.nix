@@ -6663,15 +6663,6 @@ let
         sha512 = "GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==";
       };
     };
-    "commander-4.1.1" = {
-      name = "commander";
-      packageName = "commander";
-      version = "4.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz";
-        sha512 = "NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==";
-      };
-    };
     "commander-7.2.0" = {
       name = "commander";
       packageName = "commander";
@@ -6994,15 +6985,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cookie/-/cookie-0.7.2.tgz";
         sha512 = "yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==";
-      };
-    };
-    "cookiejar-2.1.4" = {
-      name = "cookiejar";
-      packageName = "cookiejar";
-      version = "2.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cookiejar/-/cookiejar-2.1.4.tgz";
-        sha512 = "LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==";
       };
     };
     "copy-descriptor-0.1.1" = {
@@ -10227,15 +10209,6 @@ let
         sha512 = "KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==";
       };
     };
-    "formidable-2.1.2" = {
-      name = "formidable";
-      packageName = "formidable";
-      version = "2.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/formidable/-/formidable-2.1.2.tgz";
-        sha512 = "CM3GuJ57US06mlpQ47YcunuUZ9jpm8Vx+P2CGt2j7HpgkKZO/DJYQ0Bobim8G6PFQmK5lOqOOdUXboU+h73A4g==";
-      };
-    };
     "fragment-cache-0.2.1" = {
       name = "fragment-cache";
       packageName = "fragment-cache";
@@ -10983,15 +10956,6 @@ let
         sha512 = "WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==";
       };
     };
-    "graphlib-2.1.8" = {
-      name = "graphlib";
-      packageName = "graphlib";
-      version = "2.1.8";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graphlib/-/graphlib-2.1.8.tgz";
-        sha512 = "jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==";
-      };
-    };
     "graphology-0.25.4" = {
       name = "graphology";
       packageName = "graphology";
@@ -11377,15 +11341,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/help-me/-/help-me-3.0.0.tgz";
         sha512 = "hx73jClhyk910sidBB7ERlnhMlFsJJIBqSVMFDwPN8o2v9nmp5KgLq1Xz1Bf1fCMMZ6mPrX159iG0VLy/fPMtQ==";
-      };
-    };
-    "hexoid-1.0.0" = {
-      name = "hexoid";
-      packageName = "hexoid";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/hexoid/-/hexoid-1.0.0.tgz";
-        sha512 = "QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==";
       };
     };
     "highlight-es-1.0.3" = {
@@ -15492,15 +15447,6 @@ let
         sha512 = "tmj4CKZJVQd/ZuN9hnYD8HBAs/3RdDdqUeJG9RbVYlEZLuPYK4EW+EekMqLsCV4w1HastX+Pk2Ov87OQmeo01A==";
       };
     };
-    "methods-1.1.2" = {
-      name = "methods";
-      packageName = "methods";
-      version = "1.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/methods/-/methods-1.1.2.tgz";
-        sha512 = "iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==";
-      };
-    };
     "micro-9.3.5-canary.3" = {
       name = "micro";
       packageName = "micro";
@@ -16705,15 +16651,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/napi-build-utils/-/napi-build-utils-2.0.0.tgz";
         sha512 = "GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==";
-      };
-    };
-    "native-promise-only-0.8.1" = {
-      name = "native-promise-only";
-      packageName = "native-promise-only";
-      version = "0.8.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/native-promise-only/-/native-promise-only-0.8.1.tgz";
-        sha512 = "zkVhZUA3y8mbz652WrL5x0fB0ehrBkulWT3TomAQ9iDtyXZvzKeEA6GPxAItBYeNYl5yngKRX612qHOhvMkDeg==";
       };
     };
     "natural-compare-1.4.0" = {
@@ -18532,15 +18469,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/path-key/-/path-key-4.0.0.tgz";
         sha512 = "haREypq7xkM7ErfgIyA0z+Bj4AGKlMSdlQE2jvJo6huWD1EdkKYV+G/T4nq0YEF2vgTT8kqMFKo1uHn950r4SQ==";
-      };
-    };
-    "path-loader-1.0.12" = {
-      name = "path-loader";
-      packageName = "path-loader";
-      version = "1.0.12";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/path-loader/-/path-loader-1.0.12.tgz";
-        sha512 = "n7oDG8B+k/p818uweWrOixY9/Dsr89o2TkCm6tOTex3fpdo2+BFDgR+KpB37mGKBRsBAlR8CIJMFN0OEy/7hIQ==";
       };
     };
     "path-match-1.2.4" = {
@@ -23068,15 +22996,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/subarg/-/subarg-1.0.0.tgz";
         sha512 = "RIrIdRY0X1xojthNcVtgT9sjpOGagEUKpZdgBUi054OEPFo282yg+zE+t1Rj3+RqKq2xStL7uUHhY+AjbC4BXg==";
-      };
-    };
-    "superagent-7.1.6" = {
-      name = "superagent";
-      packageName = "superagent";
-      version = "7.1.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/superagent/-/superagent-7.1.6.tgz";
-        sha512 = "gZkVCQR1gy/oUXr+kxJMLDjla434KmSOKbx5iGD30Ql+AkJQ/YlPKECJy2nhqOsHLjGHzoDTXNSjhnvWhzKk7g==";
       };
     };
     "supports-color-2.0.0" = {
@@ -32300,85 +32219,6 @@ in
     meta = {
       description = "a 'json' command for massaging and processing JSON on the command line";
       homepage = "https://github.com/trentm/json#readme";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  json-refs = nodeEnv.buildNodePackage {
-    name = "json-refs";
-    packageName = "json-refs";
-    version = "3.0.15";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/json-refs/-/json-refs-3.0.15.tgz";
-      sha512 = "0vOQd9eLNBL18EGl5yYaO44GhixmImes2wiYn9Z3sag3QnehWrYWlB9AFtMxCL2Bj3fyxgDYkxGFEU/chlYssw==";
-    };
-    dependencies = [
-      sources."argparse-1.0.10"
-      sources."asap-2.0.6"
-      sources."asynckit-0.4.0"
-      sources."call-bind-apply-helpers-1.0.2"
-      sources."call-bound-1.0.4"
-      sources."combined-stream-1.0.8"
-      sources."commander-4.1.1"
-      sources."component-emitter-1.3.1"
-      sources."cookiejar-2.1.4"
-      sources."debug-4.4.0"
-      sources."delayed-stream-1.0.0"
-      sources."dezalgo-1.0.4"
-      sources."dunder-proto-1.0.1"
-      sources."es-define-property-1.0.1"
-      sources."es-errors-1.3.0"
-      sources."es-object-atoms-1.1.1"
-      sources."es-set-tostringtag-2.1.0"
-      sources."esprima-4.0.1"
-      sources."fast-safe-stringify-2.1.1"
-      sources."form-data-4.0.2"
-      sources."formidable-2.1.2"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.3.0"
-      sources."get-proto-1.0.1"
-      sources."gopd-1.2.0"
-      sources."graphlib-2.1.8"
-      sources."has-symbols-1.1.0"
-      sources."has-tostringtag-1.0.2"
-      sources."hasown-2.0.2"
-      sources."hexoid-1.0.0"
-      sources."inherits-2.0.4"
-      sources."js-yaml-3.14.1"
-      sources."lodash-4.17.21"
-      sources."math-intrinsics-1.1.0"
-      sources."methods-1.1.2"
-      sources."mime-2.6.0"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."ms-2.1.3"
-      sources."native-promise-only-0.8.1"
-      sources."object-inspect-1.13.4"
-      sources."once-1.4.0"
-      sources."path-loader-1.0.12"
-      sources."punycode-2.3.1"
-      sources."qs-6.14.0"
-      sources."readable-stream-3.6.2"
-      sources."safe-buffer-5.2.1"
-      sources."semver-7.7.1"
-      sources."side-channel-1.1.0"
-      sources."side-channel-list-1.0.0"
-      sources."side-channel-map-1.0.1"
-      sources."side-channel-weakmap-1.0.2"
-      sources."slash-3.0.0"
-      sources."sprintf-js-1.0.3"
-      sources."string_decoder-1.3.0"
-      sources."superagent-7.1.6"
-      sources."uri-js-4.4.1"
-      sources."util-deprecate-1.0.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03)";
-      homepage = "https://github.com/whitlockjc/json-refs";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

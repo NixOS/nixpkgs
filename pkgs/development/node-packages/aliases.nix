@@ -202,6 +202,7 @@ mapAliases {
   inherit (pkgs) json-diff; # Added 2025-11-07
   jsonlint = throw "'jsonlint' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
+  json-refs = throw "'json-refs' has been removed because it is unmaintained and has several known vulnerable dependencies"; # Added 2025-11-10
   inherit (pkgs) json-server; # Added 2025-11-06
   joplin = pkgs.joplin-cli; # Added 2025-11-02
   inherit (pkgs) kaput-cli; # added 2024-12-03

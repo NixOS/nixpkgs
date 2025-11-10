@@ -35,7 +35,6 @@
 , "js-yaml"
 , "jsdoc"
 , "json"
-, "json-refs"
 , "lcov-result-merger"
 , "live-server"
 , "madoko"
