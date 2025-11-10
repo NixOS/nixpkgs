@@ -494,6 +494,7 @@ let
       rustc
     ];
     devEMF = with pkgs; [ xorg.libXft.dev ];
+    DEploid = [ pkgs.zlib.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
       gsl
