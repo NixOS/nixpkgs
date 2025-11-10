@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile.in \
-      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
+      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib" \
+      --replace-fail 'libfAPPLgrid_la_LIBADD =' 'libfAPPLgrid_la_LIBADD = $(FRTLLIB)' \
+      --replace-fail '$(CXXLINK) -rpath $(libdir) $(libfAPPLgrid_la_OBJECTS) $(libfAPPLgrid_la_LIBADD) $(LIBS)' \
+                     '$(CXXLINK) -rpath $(libdir) $(libfAPPLgrid_la_OBJECTS) $(libfAPPLgrid_la_LIBADD) $(LIBS) -Wl,-undefined,dynamic_lookup'
   '');
 
   enableParallelBuilding = false; # broken
