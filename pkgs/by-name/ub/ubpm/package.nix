@@ -3,28 +3,22 @@
   lib,
   fetchFromGitea,
   libsForQt5,
-  fetchpatch,
+  udev,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubpm";
-  version = "1.10.0";
+  version = "1.13.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "LazyT";
     repo = "ubpm";
     rev = finalAttrs.version;
-    hash = "sha256-BUUn1WyLT7nm4I+2SpO1ZtIf8isGDy8Za15SiO7sXL8=";
+    hash = "sha256-lS9SVWTk7Obr3g9YsqJcEL+4dxzTQ+Z98C3lFEsn3Tw=";
+    fetchSubmodules = true;
   };
-
-  patches = [
-    # fixes qmake for nix
-    (fetchpatch {
-      url = "https://codeberg.org/LazyT/ubpm/commit/f18841d6473cab9aa2a9d4c02392b8e103245ef6.diff";
-      hash = "sha256-lgXWu8PUUCt66btj6hVgOFXz3U1BJM3ataSo1MpHkfU=";
-    })
-  ];
 
   preConfigure = ''
     cd ./sources/
@@ -38,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qmake
     libsForQt5.qttools
     libsForQt5.wrapQtAppsHook
+    pkg-config
   ];
 
   # *.so plugins are being wrapped automatically which breaks them
@@ -48,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtserialport
     libsForQt5.qtconnectivity
     libsForQt5.qtcharts
+    udev
   ];
 
   meta = {
