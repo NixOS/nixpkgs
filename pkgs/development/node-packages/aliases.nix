@@ -249,6 +249,7 @@ mapAliases {
   parcel-bundler = self.parcel; # added 2023-09-04
   parsoid = throw "The Javascript version of Parsoid has been deprecated by upstream and no longer works with modern MediaWiki versions"; # Added 2025-11-04
   inherit (pkgs) patch-package; # added 2024-06-29
+  inherit (pkgs) peerflix-server; # Added 2025-11-10
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
