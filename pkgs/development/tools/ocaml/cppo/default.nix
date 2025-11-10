@@ -49,8 +49,7 @@ else
   in
 
   stdenv.mkDerivation {
-
-    name = "${pname}-${version}";
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "mjambon";
