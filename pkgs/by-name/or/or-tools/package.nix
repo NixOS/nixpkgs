@@ -32,11 +32,11 @@ let
   # protobuf. Do not un-pin these, even if you're upgrading them to
   # what might happen to be the latest version at the current moment;
   # future upgrades *will* break the build.
-  abseil-cpp = abseil-cpp_202505;
-  protobuf = protobuf_31.override { inherit abseil-cpp; };
-  python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
+  abseil-cpp' = abseil-cpp_202505;
+  protobuf' = protobuf_31.override { abseil-cpp = abseil-cpp'; };
+  python-protobuf' = python3.pkgs.protobuf5.override { protobuf = protobuf'; };
 
-  pybind11 = callPackage ./pybind11-2.13.6.nix {
+  pybind11' = callPackage ./pybind11-2.13.6.nix {
     inherit (python3.pkgs)
       buildPythonPackage
       cmake
@@ -48,19 +48,20 @@ let
       ;
     python = python3;
   };
-  pybind11-abseil = python3.pkgs.pybind11-abseil.override {
-    inherit abseil-cpp pybind11;
+  pybind11-abseil' = python3.pkgs.pybind11-abseil.override {
+    pybind11 = pybind11';
+    abseil-cpp = abseil-cpp';
   };
-  pybind11-protobuf = callPackage ./pybind11-protobuf.nix {
+  pybind11-protobuf' = callPackage ./pybind11-protobuf.nix {
     inherit (python3.pkgs) buildPythonPackage;
-    inherit pybind11;
+    pybind11 = pybind11';
   };
   # re2 must also use the same abseil version, else these two versions will conflict during linking
-  _re2 = re2.override { inherit abseil-cpp; };
+  re2' = re2.override { abseil-cpp = abseil-cpp'; };
 
   # 77a28070b9c4c83995ac6bbfa9544722ff3342ce renamed the scip cmake target(s) differently
   # to what upstream still calls it. Apply this patch to scipopt-scip.
-  _scipopt-scip = scipopt-scip.overrideAttrs (old: {
+  scipopt-scip' = scipopt-scip.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
       ./scip.patch
@@ -74,7 +75,7 @@ let
 
   # local revert of 58daf511687f191829238fc7f571e08dc9dedf56,
   # working around https://github.com/google/or-tools/issues/4911
-  _highs = highs.overrideAttrs (old: rec {
+  highs' = highs.overrideAttrs (old: rec {
     version = "1.10.0";
     src = fetchFromGitHub {
       owner = "ERGO-Code";
@@ -177,37 +178,37 @@ stdenv.mkDerivation (finalAttrs: {
     mypy
   ]);
   buildInputs = [
-    abseil-cpp
+    abseil-cpp'
     bzip2
     cbc
     eigen
     glpk
     gbenchmark
     gtest
-    _highs
+    highs'
     python3.pkgs.absl-py
-    pybind11
-    pybind11-abseil
-    pybind11-protobuf
+    pybind11'
+    pybind11-abseil'
+    pybind11-protobuf'
     python3.pkgs.pytest
     python3.pkgs.scipy
     python3.pkgs.setuptools
     python3.pkgs.wheel
-    _re2
+    re2'
     zlib
   ];
   propagatedBuildInputs = [
-    abseil-cpp
-    _highs
-    protobuf
-    python-protobuf
+    abseil-cpp'
+    highs'
+    protobuf'
+    python-protobuf'
     python3.pkgs.immutabledict
     python3.pkgs.numpy
     python3.pkgs.pandas
   ]
   ++ lib.optionals withScip [
     # Needed for downstream cmake consumers to not need to set SCIP_ROOT explicitly
-    _scipopt-scip
+    scipopt-scip'
   ];
 
   nativeCheckInputs = [
