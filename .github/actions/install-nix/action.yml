@@ -15,8 +15,13 @@ runs:
   steps:
     - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
       with:
-        # Sandbox is disabled on MacOS by default.
-        extra_nix_config: sandbox = true
+        extra_nix_config: |
+          # Filesets access the local path via fetchGit.
+          allowed-uris = git+file://${{ github.workspace }} https://github.com
+          nix-path = workspace=${{ github.workspace }} store=/nix/store
+          restrict-eval = true
+          # Sandbox is disabled on MacOS by default.
+          sandbox = true
 
     - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
       with:

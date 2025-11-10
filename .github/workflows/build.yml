@@ -67,7 +67,7 @@ jobs:
           cachix-name: ${{ vars.CACHIX_NAME }}
           cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - run: nix-env --install -f nixpkgs/trusted-pinned -A nix-build-uncached
+      - run: nix-env --option restrict-eval false --install -f nixpkgs/trusted-pinned -A nix-build-uncached
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
