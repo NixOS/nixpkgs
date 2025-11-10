@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/10/debian/patches/port-for-apache2.4.patch";
-      sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
+      url = "https://sources.debian.org/data/main/m/mod-dnssd/0.6-5/debian/patches/port-for-apache2.4.patch";
+      hash = "sha256-jWWzZDpZdveXlLpo7pN0tMQZkjYUbpz/DRjm6T6pCzY=";
     })
   ];
 
