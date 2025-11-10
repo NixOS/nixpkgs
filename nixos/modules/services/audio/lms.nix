@@ -105,7 +105,10 @@ in
         serviceConfig = {
           User = config.users.users.lms.name;
           Group = config.users.groups.lms.name;
-          ExecStart = lib.mkForce "${pkgs.lms}/bin/lms ${generateConfig "lms.conf" cfg.settings}";
+          ExecStart = [
+            ""
+            "${pkgs.lms}/bin/lms ${generateConfig "lms.conf" cfg.settings}"
+          ];
         };
       };
       networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
