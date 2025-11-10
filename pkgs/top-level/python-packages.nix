@@ -4784,6 +4784,8 @@ self: super: with self; {
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
+  entsoe-apy = callPackage ../development/python-modules/entsoe-apy { };
+
   enturclient = callPackage ../development/python-modules/enturclient { };
 
   env-canada = callPackage ../development/python-modules/env-canada { };
