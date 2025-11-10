@@ -1,4 +1,9 @@
-{ callPackage, fetchpatch2 }:
+{
+  callPackage,
+  fetchpatch2,
+  lib,
+  stdenv,
+}:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -68,6 +73,16 @@ in
       hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
       patches = [
         ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Backport a fix to cli/trampolines/trampolines_aarch64.S
+        # https://github.com/JuliaLang/julia/pull/54634
+        (fetchpatch2 {
+          url = "https://github.com/JuliaLang/julia/commit/c954935b9050b462c2763e78327e75bf6d389d75.patch";
+          hash = "sha256-YXfVlq9H8H0GL2tv52e10KHoI9fIO3szK1zNe/zYqaQ=";
+        })
+
+        ./patches/1.9/0001-patch-options-for-codesign.patch
       ];
     }) { }
   );
