@@ -1,6 +1,6 @@
 {
   alsa-lib,
-  apple-sdk_13,
+  apple-sdk_14,
   cmake,
   copyDesktopItems,
   curl,
@@ -123,7 +123,7 @@ let
       libjack2
       libpulseaudio
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ apple-sdk_13 ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin [ apple-sdk_14 ];
 
     cmakeFlags = [
       (lib.cmakeBool "RTAUDIO_API_ALSA" stdenv.hostPlatform.isLinux)
@@ -277,7 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     zenity
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_14 ];
 
   enableParallelBuilding = true;
 

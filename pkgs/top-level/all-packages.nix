@@ -2758,10 +2758,6 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
-  ggshield = callPackage ../tools/security/ggshield {
-    python3 = python311;
-  };
-
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
@@ -7644,8 +7640,6 @@ with pkgs;
   libcec = callPackage ../development/libraries/libcec { };
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
-
-  libcef = callPackage ../development/libraries/libcef { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 

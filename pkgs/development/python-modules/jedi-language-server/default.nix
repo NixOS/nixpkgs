@@ -11,19 +11,20 @@
   # dependencies
   docstring-to-markdown,
   jedi,
-  lsprotocol,
-  pydantic,
-  pygls,
+  lsprotocol_2025,
+  cattrs,
+  pygls_2,
 
   # tests
   pytestCheckHook,
   pyhamcrest,
   python-lsp-jsonrpc,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.45.1";
+  version = "0.46.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = "jedi-language-server";
     tag = "v${version}";
-    hash = "sha256-uO7+ui9FEeMF4sC/jI91px5wEWecvfJApogFMfwpPEs=";
+    hash = "sha256-8B/FYktdWtZvB8Us6zQ3gvx1MxJTzP2xyj1VhnM+Viw=";
   };
 
   build-system = [
@@ -42,20 +43,17 @@ buildPythonPackage rec {
   dependencies = [
     docstring-to-markdown
     jedi
-    lsprotocol
-    pydantic
-    pygls
+    lsprotocol_2025
+    cattrs
+    pygls_2
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
     python-lsp-jsonrpc
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    HOME="$(mktemp -d)"
-  '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/pappasam/jedi-language-server/issues/313
