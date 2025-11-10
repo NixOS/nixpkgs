@@ -15,12 +15,12 @@
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat";
-  version = "2025.6.6";
+  version = "2025.9.26";
   src = fetchFromGitHub {
     owner = "kieraneglin";
     repo = "pinchflat";
     rev = "v${version}";
-    hash = "sha256-5hHueaA0QGTDr4wViZMBpBFhPnl8uAaxy72LMHgZdWU=";
+    hash = "sha256-45lw/48WTlfwTMWsCryNY3g3W9Ff31vMvw0W9znAJGk=";
 
   };
 
