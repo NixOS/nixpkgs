@@ -23,16 +23,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.10.9";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "phiresky";
     repo = "ripgrep-all";
     rev = "v${version}";
-    hash = "sha256-r/+u76Qxat6U0Hb3Xh31K/F0dNSPzteFzoE69NNCerI=";
+    hash = "sha256-fDSetB2UGzth+3KkCKsXUHj3y08RSfQ2nCKDa8OurW4=";
   };
 
-  cargoHash = "sha256-nTCqqTFt87snzOXkjablaX9ZMGu/s88ZnUVr5uYrzPs=";
+  cargoHash = "sha256-v+lLCI2ti/xL8hcGkm/xDDN9qk0G9MgtijE8xYnhC68=";
 
   # override debug=true set in Cargo.toml upstream
   RUSTFLAGS = "-C debuginfo=none";
