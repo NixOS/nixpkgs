@@ -91,9 +91,8 @@
   lib,
   options,
   transformOptions ? lib.id, # function for additional transformations of the options
-  documentType ? "appendix",
-  # TODO deprecate "appendix" in favor of "none"
-  #      and/or rename function to moduleOptionDoc for clean slate
+  documentType ? null,
+  # TODO  rename function to moduleOptionDoc for clean slate
 
   # If you include more than one option list into a document, you need to
   # provide different ids.
@@ -108,9 +107,10 @@
   # instead of printing warnings for eg options with missing descriptions (which may be lost
   # by nix build unless -L is given), emit errors instead and fail the build
   warningsAreErrors ? true,
-}:
+}@args:
 
-let
+lib.warnIf (args ? documentType)
+(let
   rawOpts = lib.optionAttrSetToDocList options;
   transformedOpts = map transformOptions rawOpts;
   filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
@@ -246,4 +246,4 @@ rec {
           echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
           echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
       '';
-}
+})
