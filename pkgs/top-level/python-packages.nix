@@ -3074,6 +3074,8 @@ self: super: with self; {
 
   copykitten = callPackage ../development/python-modules/copykitten { };
 
+  coq-tools = callPackage ../development/python-modules/coq-tools { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   corallium = callPackage ../development/python-modules/corallium { };
@@ -17660,8 +17662,6 @@ self: super: with self; {
   sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
-
-  sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
 
   sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
 

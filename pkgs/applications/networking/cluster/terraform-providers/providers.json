@@ -1,12 +1,12 @@
 {
   "1password_onepassword": {
-    "hash": "sha256-u2nSzEKD0o/e0AzeHdKQj3+h7mAt6r5cxaKsPn6nRGo=",
+    "hash": "sha256-4wEKPTBt9F8N9jPk/PUu+ewrCJ8IztU9CblfJxA7h1k=",
     "homepage": "https://registry.terraform.io/providers/1Password/onepassword",
     "owner": "1Password",
     "repo": "terraform-provider-onepassword",
-    "rev": "v2.1.2",
+    "rev": "v2.2.0",
     "spdx": "MIT",
-    "vendorHash": null
+    "vendorHash": "sha256-n01cHzyG9FvxCb92sFccKY1h7Pa0zmi+CUxSYHM5Elc="
   },
   "a10networks_thunder": {
     "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
@@ -805,11 +805,11 @@
     "vendorHash": "sha256-OZG8EA8xtskbLZgHzWm865wjnhRCsWdNepNMHfdtkyw="
   },
   "kislerdm_neon": {
-    "hash": "sha256-O7VYLD1qyH5oXv02OxrhQW+J1VysiHwbwW+Fzq4VKkE=",
+    "hash": "sha256-4icz/nGHIP2nzGbP4iGuPVbn8OC+u13qBSwYbyFLCto=",
     "homepage": "https://registry.terraform.io/providers/kislerdm/neon",
     "owner": "kislerdm",
     "repo": "terraform-provider-neon",
-    "rev": "v0.11.0",
+    "rev": "v0.12.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-7mJ+BX7laBKsr4DX1keMXnGi79CZp8M1jD0COQ1lcmU="
   },
@@ -985,13 +985,13 @@
     "vendorHash": null
   },
   "nutanix_nutanix": {
-    "hash": "sha256-nk5wdbAzgBJ6gyYSXZAiNdjx/XQ6XldAMsjb8yv+y7w=",
+    "hash": "sha256-NhVgZCscSyM6O/d4BYokGz9FQ2fSuN2/kw8iZhzzBQY=",
     "homepage": "https://registry.terraform.io/providers/nutanix/nutanix",
     "owner": "nutanix",
     "repo": "terraform-provider-nutanix",
-    "rev": "v2.3.1",
+    "rev": "v2.3.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ByB1ztK2/1pTFeO34eXVyQSSbe35qqoCeWe6MPZN7vY="
+    "vendorHash": "sha256-CZo/GLUwmq/TxRDQr2h49rqENB24Zt4M7k5t7epXHuE="
   },
   "oboukili_argocd": {
     "hash": "sha256-3a/g1SbgeMWFMNTY/sYrItyE1rRimdNro8nu9wPTf6M=",
@@ -1048,11 +1048,11 @@
     "vendorHash": null
   },
   "oracle_oci": {
-    "hash": "sha256-R+Khf/BCDaFf1ExD3+zUIEoL/egRw0ube83cP3opO/I=",
+    "hash": "sha256-Pp2eOcz1LQv2Ft2oiwW+7dypDO1PuRE0I7Wcr2E/G4w=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.24.0",
+    "rev": "v7.25.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
