@@ -12,6 +12,9 @@ on:
       mergedSha:
         required: true
         type: string
+      targetSha:
+        required: true
+        type: string
     secrets:
       CACHIX_AUTH_TOKEN:
         required: true
@@ -55,6 +58,7 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
       - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
         with:
@@ -69,7 +73,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           pushFilter: '(-source$|-nixpkgs-tarball-)'
 
-      - run: nix-env --install -f nixpkgs/untrusted-pinned -A nix-build-uncached
+      - run: nix-env --install -f nixpkgs/trusted-pinned -A nix-build-uncached
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
