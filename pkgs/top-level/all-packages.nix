@@ -3631,9 +3631,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  p7zip = callPackage ../tools/archivers/p7zip { };
-  p7zip-rar = p7zip.override { enableUnfree = true; };
-
   packagekit = callPackage ../tools/package-management/packagekit { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
