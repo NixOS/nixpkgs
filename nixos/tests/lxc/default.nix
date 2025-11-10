@@ -6,11 +6,18 @@ import ../make-test-python.nix (
       configuration = {
         # Building documentation makes the test unnecessarily take a longer time:
         documentation.enable = lib.mkForce false;
+        documentation.nixos.enable = lib.mkForce false;
+        # including a channel forces images to be rebuilt on any changes
+        system.installer.channel.enable = lib.mkForce false;
       };
     };
 
-    lxc-image-metadata = releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system};
-    lxc-image-rootfs = releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system};
+    lxc-image-metadata =
+      releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
+      + "/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+    lxc-image-rootfs =
+      releases.containerTarball.${pkgs.stdenv.hostPlatform.system}
+      + "/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
 
   in
   {
@@ -109,7 +116,7 @@ import ../make-test-python.nix (
       machine.execute("su -- alice -c 'cp /etc/lxc/default.conf ~/.config/lxc/'")
       machine.execute("su -- alice -c 'cp /etc/lxc/lxc.conf ~/.config/lxc/'")
 
-      machine.succeed("su -- alice -c 'lxc-create -t local -n test -- --metadata ${lxc-image-metadata}/*/*.tar.xz --fstree ${lxc-image-rootfs}/*/*.tar.xz'")
+      machine.succeed("su -- alice -c 'lxc-create -t local -n test -- --metadata ${lxc-image-metadata} --fstree ${lxc-image-rootfs}'")
       machine.succeed("su -- alice -c 'lxc-start test'")
       machine.succeed("su -- alice -c 'lxc-stop test'")
 
