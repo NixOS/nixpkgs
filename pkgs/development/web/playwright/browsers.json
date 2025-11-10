@@ -2,19 +2,19 @@
   "comment": "This file is kept up to date via update.sh",
   "browsers": {
     "chromium": {
-      "revision": "1181",
-      "browserVersion": "139.0.7258.5"
+      "revision": "1187",
+      "browserVersion": "140.0.7339.16"
     },
     "chromium-headless-shell": {
-      "revision": "1181",
-      "browserVersion": "139.0.7258.5"
+      "revision": "1187",
+      "browserVersion": "140.0.7339.16"
     },
     "firefox": {
-      "revision": "1489",
-      "browserVersion": "140.0.2"
+      "revision": "1490",
+      "browserVersion": "141.0"
     },
     "webkit": {
-      "revision": "2191",
+      "revision": "2203",
       "revisionOverrides": {
         "debian11-x64": "2105",
         "debian11-arm64": "2105",

@@ -5,19 +5,18 @@
   playwright-driver,
   playwright-test,
 }:
-
 buildNpmPackage rec {
   pname = "playwright-mcp";
-  version = "0.0.34";
+  version = "0.0.35";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
     tag = "v${version}";
-    hash = "sha256-SGSzX41D9nOTsGiU16tRFXgarWgePRsNWIcEnNGH0lQ=";
+    hash = "sha256-bF/F4dP2ri09AlQLItQwQxDAQybY2fXft4ccxSKijt8=";
   };
 
-  npmDepsHash = "sha256-+6HmuR1Z5cJkoZq/vsFq6wNsYpZeDS42wwmh3hEgJhM=";
+  npmDepsHash = "sha256-xSQCs6rJlUrdS8c580mo1/VjpcDxwHor0pdstB9VQEo=";
 
   postInstall = ''
     rm -r $out/lib/node_modules/@playwright/mcp/node_modules/playwright
@@ -26,7 +25,9 @@ buildNpmPackage rec {
     ln -s ${playwright-test}/lib/node_modules/playwright-core $out/lib/node_modules/@playwright/mcp/node_modules/playwright-core
 
     wrapProgram $out/bin/mcp-server-playwright \
-      --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}
+      --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \
+      --set-default PLAYWRIGHT_MCP_BROWSER chromium \
+      --run 'if [ -z "$PLAYWRIGHT_MCP_USER_DATA_DIR" ]; then PLAYWRIGHT_MCP_USER_DATA_DIR="$(mktemp -d -t mcp-pw-XXXXXX)"; export PLAYWRIGHT_MCP_USER_DATA_DIR; trap "rm -rf \"$PLAYWRIGHT_MCP_USER_DATA_DIR\"" EXIT; fi'
   '';
 
   passthru = {
