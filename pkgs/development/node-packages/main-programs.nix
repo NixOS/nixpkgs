@@ -6,7 +6,6 @@
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   aws-cdk = "cdk";
-  cdk8s-cli = "cdk8s";
   clipboard-cli = "clipboard";
   cpy-cli = "cpy";
   fast-cli = "fast";
@@ -14,7 +13,6 @@
   fkill-cli = "fkill";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  jsonlint = "jsonlint";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
