@@ -78,6 +78,7 @@ buildGoModule rec {
       jsierles
       techknowlogick
       RaghavSood
+      SchahinRohani
     ];
     mainProgram = "flyctl";
   };
