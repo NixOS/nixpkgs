@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "runit";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
-    sha256 = "sha256-le9NKGi5eMcXn+R5AeXFeOEc8nPSkr1iCL06fMsCkpA=";
+    sha256 = "sha256-GQ4RwfgHK1Q7tr1ThQVVxFjW4wbVPfP8EjLTAMPiG1E=";
   };
 
   patches = [
