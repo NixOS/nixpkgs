@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "dxx-rebirth";
-  version = "0.60.0-beta2-unstable-2025-05-24";
+  version = "0.60.0-beta2-unstable-2025-11-08";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "7a84b3f307ac6f72fd440e55b149d7c2c942dfaf";
-    hash = "sha256-b3rMitf2kw8y0EXwxeKKB8bqzCUaIaMQmpV1gtdcLis=";
+    rev = "3eb1c46ce18d3ad30f3f3c3037ff0c9b00dbbd0c";
+    hash = "sha256-5kP3WA4wkXQzTJidy6kKV55wqI/a3OOJLKFwSnr5vbs=";
   };
 
   nativeBuildInputs = [
