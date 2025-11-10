@@ -249,4 +249,5 @@ in
     aspnetcore
     ;
 
+  packages = lib.recurseIntoAttrs (lib.genAttrs' packages (p: lib.nameValuePair p.pname p));
 }
