@@ -4,6 +4,7 @@
   stdenv,
   callPackages,
   runCommand,
+  linkFarm,
   cctools,
 }:
 
@@ -205,6 +206,7 @@ lib.fix (self: {
       packageLock ? importJSON (npmRoot + "/package-lock.json"),
       nodejs,
       derivationArgs ? { },
+      packageSourceOverrides ? { },
     }:
     stdenv.mkDerivation (
       {
@@ -214,7 +216,12 @@ lib.fix (self: {
         dontUnpack = true;
 
         npmDeps = self.importNpmLock {
-          inherit npmRoot package packageLock;
+          inherit
+            npmRoot
+            package
+            packageLock
+            packageSourceOverrides
+            ;
         };
 
         package = toJSON package;
