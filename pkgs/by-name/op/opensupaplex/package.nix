@@ -18,15 +18,15 @@ let
     sha256 = "sha256-nKeSBUGjSulbEP7xxc6smsfCRjyc/xsLykH0o3Rq5wo=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensupaplex";
   version = "7.1.2";
 
   src = fetchFromGitHub {
     owner = "sergiou87";
     repo = "open-supaplex";
-    rev = "v${version}";
-    sha256 = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
   };
 
   nativeBuildInputs = [
@@ -66,18 +66,17 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion {
     package = opensupaplex;
     command = "opensupaplex --help";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   desktopItems = [
     (makeDesktopItem {
       name = "opensupaplex";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       icon = "open-supaplex";
       desktopName = "OpenSupaplex";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
-        "Application"
         "Game"
       ];
     })
@@ -86,10 +85,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
-    changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${version}.txt";
+    changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${finalAttrs.version}.txt";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matteopacini ];
     platforms = lib.platforms.linux; # Many more are supported upstream, but only linux is tested.
     mainProgram = "opensupaplex";
   };
-}
+})
