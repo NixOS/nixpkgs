@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     }"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "A focused launcher for your desktop — native, fast, extensible";
     homepage = "https://github.com/vicinaehq/vicinae";
