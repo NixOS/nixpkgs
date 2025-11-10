@@ -5633,6 +5633,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gdscript-extended-lsp-nvim = buildVimPlugin {
+    pname = "gdscript-extended-lsp.nvim";
+    version = "2025-10-28";
+    src = fetchFromGitHub {
+      owner = "Teatek";
+      repo = "gdscript-extended-lsp.nvim";
+      rev = "27eab5f4979b759368a7760d6955fb93f147e97e";
+      sha256 = "1jilxsz49w720ai41zksvap6bsib347bz9xh0x8b0izcpmsdjc80";
+    };
+    meta.homepage = "https://github.com/Teatek/gdscript-extended-lsp.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gen-nvim = buildVimPlugin {
     pname = "gen.nvim";
     version = "2025-05-03";
