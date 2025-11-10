@@ -281,7 +281,7 @@ let
             lib.escapeShellArg (builtins.toJSON (if cleanedConfig ? gui then cleanedConfig.gui else { }))
           })
           echo $initial_guiConfig \
-            | ${jq} --rawfile data ${lib.escapeShellArg cfg.apiKeyFile} '.apiKey = $data' \
+            | ${jq} --rawfile data ${lib.escapeShellArg cfg.apiKeyFile} '.apiKey = ($data | trim)' \
             | curl --json @- -X PUT ${curlAddressArgs "/rest/config/gui"}
         ''
       )
