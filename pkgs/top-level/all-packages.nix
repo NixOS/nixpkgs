@@ -6030,16 +6030,6 @@ with pkgs;
   anybadge = with python3Packages; toPythonApplication anybadge;
 
   ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_17 = python3Packages.toPythonApplication (
-    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.17.8";
-      src = fetchPypi {
-        pname = "ansible_core";
-        inherit version;
-        hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
-      };
-    })
-  );
   ansible_2_16 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.16.14";
