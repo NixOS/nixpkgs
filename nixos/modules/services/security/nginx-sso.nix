@@ -75,16 +75,8 @@ in
         '';
         LoadCredential = secretsReplacement.credentials;
         Restart = "always";
-        User = "nginx-sso";
-        Group = "nginx-sso";
+        DynamicUser = true;
       };
     };
-
-    users.users.nginx-sso = {
-      isSystemUser = true;
-      group = "nginx-sso";
-    };
-
-    users.groups.nginx-sso = { };
   };
 }
