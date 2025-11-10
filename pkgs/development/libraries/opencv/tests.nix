@@ -49,7 +49,7 @@ runCommand "opencv4-tests"
     inherit runAccuracyTests;
 
     accuracyTestNames = [
-      "calib3d"
+      # "calib3d" # reached a month of CPU time without completing
       "core"
       "features2d"
       "flann"
@@ -69,7 +69,7 @@ runCommand "opencv4-tests"
     inherit runPerformanceTests;
 
     performanceTestNames = [
-      "calib3d"
+      # "calib3d" # reached a month of CPU time without completing
       "core"
       "features2d"
       "imgcodecs"
