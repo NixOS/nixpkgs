@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       dotlambda
       lilacious
+      cholli
     ];
     teams = [ lib.teams.gnome-circle ];
   };
