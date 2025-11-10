@@ -1299,6 +1299,7 @@
   ./services/networking/oidentd.nix
   ./services/networking/oink.nix
   ./services/networking/onedrive.nix
+  ./services/networking/opencloud-oidc-webfinger-proxy.nix
   ./services/networking/openconnect.nix
   ./services/networking/opengfw.nix
   ./services/networking/openvpn.nix
