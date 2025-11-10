@@ -11,7 +11,6 @@
   setuptools,
   tomli-w,
   trove-classifiers,
-  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-l5WTjKa+A66QfWLmrjCQq7ZrSaeuylGIRZr8jsiYq+A=";
   };
 
+  patches = [
+    # The venv fixture is only used in integration tests (through the python
+    # fixture) but we don't run those.
+    ./remove-venv-fixture.patch
+  ];
+
   nativeCheckInputs = [
     build
     gitMinimal
@@ -35,7 +40,6 @@ buildPythonPackage rec {
     setuptools
     tomli-w
     trove-classifiers
-    virtualenv
   ];
 
   disabledTests = [

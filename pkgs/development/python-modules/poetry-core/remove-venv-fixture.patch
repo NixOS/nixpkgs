@@ -1,0 +1,34 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 5ab1331..7b23117 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
+ from typing import Callable
+ 
+ import pytest
+-import virtualenv
+ 
+ from poetry.core.factory import Factory
+ from poetry.core.utils._compat import WINDOWS
+@@ -88,21 +87,6 @@ def temporary_directory() -> Iterator[Path]:
+         yield Path(tmp)
+ 
+ 
+-@pytest.fixture
+-def venv(temporary_directory: Path) -> Path:
+-    venv_dir = temporary_directory / ".venv"
+-    virtualenv.cli_run(
+-        [
+-            "--no-download",
+-            "--no-periodic-update",
+-            "--python",
+-            sys.executable,
+-            venv_dir.as_posix(),
+-        ]
+-    )
+-    return venv_dir
+-
+-
+ @pytest.fixture
+ def python(venv: Path) -> str:
+     return venv.joinpath("Scripts/Python.exe" if WINDOWS else "bin/python").as_posix()
