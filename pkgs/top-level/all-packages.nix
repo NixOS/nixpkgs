@@ -6910,7 +6910,7 @@ with pkgs;
     else
       callPackage ../os-specific/linux/bionic-prebuilt { };
 
-  boost = boost187;
+  boost = boost189;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
