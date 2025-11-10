@@ -27,6 +27,14 @@ buildPythonPackage rec {
     hash = "sha256-AfkrWuqpFS71Zrh5NsamzxMitKCsqPF50F9zTDdDhRg=";
   };
 
+  # See https://github.com/speediedan/finetuning-scheduler/pull/21
+  postPatch = ''
+    substituteInPlace src/finetuning_scheduler/strategy_adapters/base.py \
+      --replace-fail \
+        "from lightning.fabric.utilities.types import ReduceLROnPlateau" \
+        "from torch.optim.lr_scheduler import ReduceLROnPlateau"
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
