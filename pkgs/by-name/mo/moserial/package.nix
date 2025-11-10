@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   autoreconfHook,
+  wrapGAppsHook3,
   intltool,
   itstool,
   pkg-config,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     vala
+    wrapGAppsHook3
   ];
 
   buildInputs = [

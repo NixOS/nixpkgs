@@ -81,9 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       hpnd
       cronyx
-      # there is another unknown license at the end but it seems free
-      # also see this issue https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/issues/527
-      free
+      hyphenBulgarian
     ];
     maintainers = [ ];
     platforms = lib.platforms.unix;

@@ -45,17 +45,39 @@ llvmStdenv.mkDerivation (finalAttrs: {
     name = "clickhouse-${tag}.tar.gz";
     inherit hash;
     postFetch = ''
-      # delete files that make the source too big
-      rm -rf $out/contrib/llvm-project/llvm/test
-      rm -rf $out/contrib/llvm-project/clang/test
-      rm -rf $out/contrib/croaring/benchmarks
+      # Delete files that make the source too big
+      rm -rf $out/contrib/arrow/docs/
+      rm -rf $out/contrib/arrow/testing/
+      rm -rf $out/contrib/aws/generated/protocol-tests/
+      rm -rf $out/contrib/aws/generated/smoke-tests/
+      rm -rf $out/contrib/aws/generated/tests/
+      rm -rf $out/contrib/aws/tools/
+      rm -rf $out/contrib/cld2/internal/test_shuffle_1000_48_666.utf8.gz
+      rm -rf $out/contrib/croaring/benchmarks/
+      rm -rf $out/contrib/boost/doc/
+      rm -rf $out/contrib/boost/libs/*/bench/
+      rm -rf $out/contrib/boost/libs/*/example/
+      rm -rf $out/contrib/boost/libs/*/doc/
+      rm -rf $out/contrib/boost/libs/*/test/
+      rm -rf $out/contrib/google-cloud-cpp/ci/abi-dumps/
+      rm -rf $out/contrib/icu/icu4c/source/test/
+      rm -rf $out/contrib/icu/icu4j/main/core/src/test/
+      rm -rf $out/contrib/icu/icu4j/perf-tests/
+      rm -rf $out/contrib/llvm-project/*/docs/
+      rm -rf $out/contrib/llvm-project/*/test/
+      rm -rf $out/contrib/llvm-project/*/unittests/
+      rm -rf $out/contrib/postgres/doc/
+
+      # As long as we're not running tests, remove test files
+      rm -rf $out/tests/
 
       # fix case insensitivity on macos https://github.com/NixOS/nixpkgs/issues/39308
       rm -rf $out/contrib/sysroot/linux-*
       rm -rf $out/contrib/liburing/man
 
-      # compress to not exceed the 2GB output limit
-      # try to make a deterministic tarball
+      # Compress to not exceed the 2GB output limit
+      echo "Creating deterministic source tarball..."
+
       tar -I 'gzip -n' \
         --sort=name \
         --mtime=1970-01-01 \
@@ -63,6 +85,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
         --numeric-owner --mode=go=rX,u+rw,a-s \
         --transform='s@^@source/@S' \
         -cf temp  -C "$out" .
+
+      echo "Finished creating deterministic source tarball!"
+
       rm -r "$out"
       mv temp "$out"
     '';

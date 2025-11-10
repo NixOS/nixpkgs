@@ -49,10 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cutemaze";
     homepage = "https://gottcode.org/cutemaze/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      dotlambda
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
   };
 })

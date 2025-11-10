@@ -155,7 +155,6 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
-      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

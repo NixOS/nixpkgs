@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "GUI for Legendary, an Epic Games Launcher open source alternative";
     homepage = "https://github.com/RareDevs/Rare";
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "rare";
