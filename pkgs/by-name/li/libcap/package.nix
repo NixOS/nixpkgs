@@ -3,6 +3,7 @@
   lib,
   buildPackages,
   fetchurl,
+  fetchpatch,
   runtimeShell,
   pkgsBuildHost,
   usePam ? !isStatic,
@@ -73,6 +74,13 @@ stdenv.mkDerivation rec {
     "LIBCSTATIC=yes"
   ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/libs/libcap/libcap.git/patch/?id=d628b3bfe40338d4efff6b0ae50f250a0eb884c7";
+      hash = "sha256-Eiv/BOJZkduL+hOEJd8K1LQd9wvOeCKchE2GaLcerVc=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh
 
@@ -86,11 +94,6 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
-  ''
-  + lib.optionalString withGo ''
-    # disable cross compilation for artifacts which are run as part of the build
-    substituteInPlace go/Makefile \
-      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
