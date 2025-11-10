@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-dBI7ax7ljmCrE7ymcMa/B9uMtLyRTC42unrKBJ9QYQg=";
+    hash = "sha256-JIWdI9NwZVQzMV7BxJyvuIORo7u4eyM1JcvR8A/Q8x8=";
   };
 
   build-system = [
