@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "orgparse";
-  version = "0.4.20250520";
+  version = "0.4.20251020";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karlicoss";
     repo = "orgparse";
     tag = "v${version}";
-    hash = "sha256-y3mkGCZvikbmymgvPOWq4GLxoFmslXGm/cxR2PZ6DRM=";
+    hash = "sha256-RJ+1HVI9OgbylBxdEztpQ4v0MG0PUFqXlFfe0vsDaTg=";
   };
 
   build-system = [
