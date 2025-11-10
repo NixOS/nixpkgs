@@ -2,13 +2,7 @@
   stdenv,
   lib,
   fetchFromGitea,
-  qmake,
-  qttools,
-  qtbase,
-  qtserialport,
-  qtconnectivity,
-  qtcharts,
-  wrapQtAppsHook,
+  libsForQt5,
   fetchpatch,
 }:
 
@@ -41,19 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   # *.so plugins are being wrapped automatically which breaks them
   dontWrapQtApps = true;
 
   buildInputs = [
-    qtbase
-    qtserialport
-    qtconnectivity
-    qtcharts
+    libsForQt5.qtbase
+    libsForQt5.qtserialport
+    libsForQt5.qtconnectivity
+    libsForQt5.qtcharts
   ];
 
   meta = {
