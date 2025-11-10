@@ -11583,6 +11583,8 @@ self: super: with self; {
 
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
+  openfisca-core = callPackage ../development/python-modules/openfisca-core { };
+
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
