@@ -8,7 +8,7 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
+      CACHIX_AUTH_TOKEN_GHA:
         required: true
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
@@ -64,7 +64,7 @@ jobs:
       # cherry-picks
       pull-requests: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
@@ -76,7 +76,7 @@ jobs:
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -89,7 +89,7 @@ jobs:
       # compare
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -114,7 +114,7 @@ jobs:
     needs: [prepare]
     uses: ./.github/workflows/build.yml
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}

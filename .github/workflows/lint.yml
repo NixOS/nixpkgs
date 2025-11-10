@@ -10,7 +10,7 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
+      CACHIX_AUTH_TOKEN_GHA:
         required: true
 
 permissions: {}
@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix doesn't work well,
       # because the cache is invalidated on every commit - treefmt checks every file.
@@ -78,7 +78,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Parse all nix files
         run: |
@@ -104,7 +104,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Running nixpkgs-vet
         env:

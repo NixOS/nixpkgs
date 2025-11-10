@@ -14,7 +14,7 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
+      CACHIX_AUTH_TOKEN_GHA:
         required: true
 
 permissions: {}
@@ -40,7 +40,7 @@ jobs:
     name: Lint
     uses: ./.github/workflows/lint.yml
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
       targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
@@ -55,7 +55,7 @@ jobs:
       # compare
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}

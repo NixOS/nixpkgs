@@ -16,7 +16,7 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
+      CACHIX_AUTH_TOKEN_GHA:
         required: true
 
 permissions: {}
@@ -65,7 +65,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - run: nix-env --option restrict-eval false --install -f nixpkgs/trusted-pinned -A nix-build-uncached
 

@@ -19,7 +19,7 @@ on:
         default: false
         type: boolean
     secrets:
-      CACHIX_AUTH_TOKEN:
+      CACHIX_AUTH_TOKEN_GHA:
         required: true
 
 permissions: {}
@@ -56,7 +56,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Load supported versions
         id: versions
@@ -106,7 +106,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
         env:
@@ -190,7 +190,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Combine all output paths and eval stats
         run: |
@@ -357,7 +357,7 @@ jobs:
         uses: ./.github/actions/install-nix
         with:
           cachix-name: ${{ vars.CACHIX_NAME }}
-          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
 
       - name: Run misc eval tasks in parallel
         run: |

@@ -4,7 +4,7 @@ description: 'Install and configure Nix and setup Cachix.'
 
 inputs:
   cachix-name:
-    description: "Name of the cache on cachix to use. Defaults to nixpkgs-ci. Can be set in forks to allow pushing."
+    description: "Name of the cache on cachix to use. Defaults to nixpkgs-gha. Can be set in forks to allow pushing."
     required: true
   cachix-token:
     description: "Cachix Auth Token to allow pushing."
@@ -25,8 +25,8 @@ runs:
 
     - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
       with:
-        # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-        name: ${{ inputs.cachix-name || 'nixpkgs-ci' }}
-        extraPullNames: nixpkgs-ci
+        # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+        name: ${{ inputs.cachix-name || 'nixpkgs-gha' }}
+        extraPullNames: nixpkgs-gha
         authToken: ${{ inputs.cachix-token }}
         pushFilter: '(-source$|-nixpkgs-tarball-|-single-chunk)'
