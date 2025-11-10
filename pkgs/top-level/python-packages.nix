@@ -18341,6 +18341,8 @@ self: super: with self; {
 
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 
+  systemrdl-compiler = callPackage ../development/python-modules/systemrdl-compiler { };
+
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   t61codec = callPackage ../development/python-modules/t61codec { };
