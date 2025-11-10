@@ -350,12 +350,10 @@ rec {
         ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
       + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
-        )
+        lib.concatMapAttrsStringSep "" (name: value: ''
+          ${lib.toShellVar name value}
+          export ${name}
+        '') runtimeEnv
       )
       + lib.optionalString (runtimeInputs != [ ]) ''
 
