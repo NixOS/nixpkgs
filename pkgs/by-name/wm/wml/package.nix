@@ -1,92 +1,86 @@
 {
+  cmake,
+  fetchFromGitHub,
   lib,
-  fetchurl,
-  perlPackages,
-  ncurses,
   lynx,
-  makeWrapper,
+  makeBinaryWrapper,
+  ncurses,
+  pcre,
+  perl,
+  perlPackages,
+  stdenv,
 }:
-
-perlPackages.buildPerlPackage {
+let
+  shlomif-cmake-modules = fetchFromGitHub {
+    owner = "shlomif";
+    repo = "shlomif-cmake-modules";
+    rev = "2fa3e9be1a1df74ad0e10f0264bfa60e1e3a755c";
+    hash = "sha256-MNGpegbZRwfD8A3VHVNYrDULauLST3Nt18/3Ht6mpZw=";
+  };
+  perlDeps = with perlPackages; [
+    BitVector
+    CarpAlways
+    ClassXSAccessor
+    FileWhich
+    GD
+    ImageSize
+    ListMoreUtils
+    PathTiny
+    TermReadKey
+  ];
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "wml";
-  version = "2.0.11";
+  version = "2.32.0";
 
-  src = fetchurl {
-    url = "http://thewml.org/distrib/wml-2.0.11.tar.gz";
-    sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
+  src = fetchFromGitHub {
+    owner = "thewml";
+    repo = "website-meta-language";
+    tag = "releases/wml-${finalAttrs.version}";
+    hash = "sha256-9ZiMGm0W2qS/7nL8NsmGBsuB5sNJvWuJaxE7CTdWo6s=";
   };
 
-  setOutputFlags = false;
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  # Getting lots of Non-ASCII character errors from pod2man.
-  # Inserting =encoding utf8 before the first =head occurrence.
-  # Wasn't able to fix mp4h.
-  preConfigure = ''
-    touch Makefile.PL
-    for i in wml_backend/p6_asubst/asubst.src wml_aux/freetable/freetable.src wml_docs/*.pod wml_include/des/*.src wml_include/fmt/*.src; do
-      sed -i '0,/^=head/{s/^=head/=encoding utf8\n=head/}' $i
-    done
-    sed -i 's/ doc / /g' wml_backend/p2_mp4h/Makefile.in
-    sed -i '/p2_mp4h\/doc/d' Makefile.in
+  # https://github.com/thewml/website-meta-language/commit/727806494dcb9d334ffb324aedbf6076e4796299
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'CMAKE_MINIMUM_REQUIRED(VERSION 3.0)' 'CMAKE_MINIMUM_REQUIRED(VERSION 3.15)'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with perlPackages; [
-    perl
-    TermReadKey
-    GD
-    BitVector
-    ncurses
+  nativeBuildInputs = [
+    cmake
     lynx
-    ImageSize
+    makeBinaryWrapper
   ];
 
-  patches = [
-    ./redhat-with-thr.patch
-    ./dynaloader.patch
-    ./no_bitvector.patch
+  buildInputs = perlDeps ++ [
+    ncurses
+    pcre
+    perl
   ];
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: iselect_browse.o:(.bss+0x2020): multiple definition of `Line'; iselect_main.o:(.bss+0x100000): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-
-  hardeningDisable = [ "format" ];
-
-  postPatch = ''
-    substituteInPlace wml_frontend/wml.src \
-      --replace "File::PathConvert::realpath" "Cwd::realpath" \
-      --replace "File::PathConvert::abs2rel" "File::Spec->abs2rel" \
-      --replace "File::PathConvert" "File::Spec"
-
-    for i in wml_include/des/imgbg.src wml_include/des/imgdot.src; do
-      substituteInPlace $i \
-        --replace "WML::GD" "GD"
-    done
-
-    rm wml_test/t/11-wmk.t
+  preConfigure = ''
+    ln -s ${shlomif-cmake-modules}/shlomif-cmake-modules/Shlomif_Common.cmake cmake/
   '';
 
   preFixup = ''
-    wrapProgram $out/bin/wml \
-      --set PERL5LIB ${
-        with perlPackages;
-        makePerlPath [
-          BitVector
-          TermReadKey
-          ImageSize
-        ]
-      }
+    rm $out/bin/wmu
+
+    for f in $(find $out/bin/ -type f -executable); do
+      wrapProgram "$f" \
+        --set PERL5LIB ${perlPackages.makePerlPath perlDeps}
+    done
   '';
 
-  enableParallelBuilding = false;
-
-  installTargets = [ "install" ];
-
-  meta = with lib; {
+  meta = {
+    description = "Offline HTML preprocessor";
     homepage = "https://www.shlomifish.org/open-source/projects/website-meta-language/";
-    description = "Off-line HTML generation toolkit for Unix";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    downloadPage = "https://github.com/thewml/website-meta-language/releases";
+    changelog = "https://github.com/thewml/website-meta-language/blob/${finalAttrs.src.tag}/src/ChangeLog";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ prince213 ];
+    mainProgram = "wml";
+    platforms = lib.platforms.linux;
   };
-}
+})
