@@ -38,6 +38,7 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/msbuild-structured-log-viewer.png
+    install -Dm444 ${./mimetype.xml} $out/share/mime/packages/binlog.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
@@ -56,6 +57,9 @@ buildDotnetModule (finalAttrs: {
     icon = "msbuild-structured-log-viewer";
     exec = finalAttrs.meta.mainProgram;
     categories = [ "Development" ];
+    mimeTypes = [
+      "application/x-binlog"
+    ];
   };
 
   passthru.updateScript = nix-update-script { };
