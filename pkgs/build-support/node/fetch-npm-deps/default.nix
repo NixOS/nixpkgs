@@ -242,12 +242,16 @@
         buildPhase = ''
           runHook preBuild
 
-          if [[ ! -e package-lock.json ]]; then
+          if [[ -f npm-shrinkwrap.json ]]; then
+            local -r srcLockfile="npm-shrinkwrap.json"
+          elif [[ -f package-lock.json ]]; then
+            local -r srcLockfile="package-lock.json"
+          else
             echo
-            echo "ERROR: The package-lock.json file does not exist!"
+            echo "ERROR: No lock file!"
             echo
-            echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
-            echo "when packages are updated on npm."
+            echo "package-lock.json or npm-shrinkwrap.json is required to make sure"
+            echo "that npmDepsHash doesn't change when packages are updated on npm."
             echo
             echo "Hint: You can copy a vendored package-lock.json file via postPatch."
             echo
@@ -255,7 +259,7 @@
             exit 1
           fi
 
-          prefetch-npm-deps package-lock.json $out
+          prefetch-npm-deps $srcLockfile $out
 
           runHook postBuild
         '';
