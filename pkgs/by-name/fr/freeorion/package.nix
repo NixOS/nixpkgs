@@ -89,6 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
     ];
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
   };
 })

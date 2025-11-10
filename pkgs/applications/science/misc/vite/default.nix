@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "http://vite.gforge.inria.fr/";
     license = lib.licenses.cecill20;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
