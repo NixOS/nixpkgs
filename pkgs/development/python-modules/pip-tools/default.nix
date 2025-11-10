@@ -4,8 +4,7 @@
   buildPythonPackage,
   build,
   click,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   pep517,
   pip,
   pytest-xdist,
@@ -20,32 +19,21 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.4.1";
+  version = "7.5.1-unstable-2025-11-08";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "pip-tools";
+    rev = "785ed5e30f4c86c24141898553a356402b142adf";
+    hash = "sha256-2mYUjLqrpN/sjR79t/ZIfpvVXAgpk/tpZWFcT/6e7uk=";
   };
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
-
-    # Backport click 8.2 + 8.3 compatibility from 7.5.1
-    # We can't update to 7.5.1 because of https://github.com/jazzband/pip-tools/issues/2231,
-    # which breaks home-assisstant-chip-wheels.
-    (fetchpatch {
-      url = "https://github.com/jazzband/pip-tools/commit/c7f128e7c533033c2436b52c972eee521fe3890c.diff";
-      excludes = [ "pyproject.toml" ];
-      hash = "sha256-cIFAE/VKyyDWVQktPtPPuxY85DtTvH6pK539WD2cDn4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/jazzband/pip-tools/commit/816ee196c543be53ddba0ea33fb4c7e84217b3b3.diff";
-      hash = "sha256-3GTUNWoy/AmpWv7NUCWIZ+coxb1vUgg6CZhwh6FehZo=";
-    })
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "7.5.1";
 
   build-system = [ setuptools-scm ];
 
@@ -80,6 +68,7 @@ buildPythonPackage rec {
     "test_bad_setup_file"
     # Assertion error
     "test_compile_recursive_extras"
+    "test_compile_build_targets_setuptools_no_wheel_dep"
     "test_combine_different_extras_of_the_same_package"
     "test_diff_should_not_uninstall"
     "test_cli_compile_all_extras_with_multiple_packages"
