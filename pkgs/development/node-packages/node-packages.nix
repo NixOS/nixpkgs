@@ -37012,24 +37012,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  tiddlywiki = nodeEnv.buildNodePackage {
-    name = "tiddlywiki";
-    packageName = "tiddlywiki";
-    version = "5.3.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/tiddlywiki/-/tiddlywiki-5.3.6.tgz";
-      sha512 = "RfWt+Bo/UsTdzP5N4nEInjaJjgAzylUMf21hE4FL5v65c3x054+A+3g3sgW1m68lTJbTbiiqSZ6q6BEIZMwhSQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "a non-linear personal web notebook";
-      homepage = "https://github.com/TiddlyWiki/TiddlyWiki5#readme";
-      license = "BSD";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   tsun = nodeEnv.buildNodePackage {
     name = "tsun";
     packageName = "tsun";

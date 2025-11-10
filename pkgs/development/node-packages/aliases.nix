@@ -348,6 +348,7 @@ mapAliases {
   thelounge-theme-zenburn-monospace = throw "thelounge-theme-zenburn-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   thelounge-theme-zenburn-sourcecodepro = throw "thelounge-theme-zenburn-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
+  inherit (pkgs) tiddlywiki; # Added 2025-11-10
   triton = pkgs.triton; # Added 2023-05-06
   ts-node = throw "'ts-node' was removed because it is unmaintained, and since NodeJS 22.6.0+, experimental TypeScript support is built-in to NodeJS."; # Added 2025-11-07
   typescript = pkgs.typescript; # Added 2023-06-21
