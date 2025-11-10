@@ -3066,6 +3066,8 @@ self: super: with self; {
 
   copykitten = callPackage ../development/python-modules/copykitten { };
 
+  coq-tools = callPackage ../development/python-modules/coq-tools { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   corallium = callPackage ../development/python-modules/corallium { };
