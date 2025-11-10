@@ -11872,6 +11872,8 @@ self: super: with self; {
 
   peakrdl = callPackage ../development/python-modules/peakrdl { };
 
+  peakrdl-ipxact = callPackage ../development/python-modules/peakrdl-ipxact { };
+
   peakrdl-regblock = callPackage ../development/python-modules/peakrdl-regblock { };
 
   peakutils = callPackage ../development/python-modules/peakutils { };
