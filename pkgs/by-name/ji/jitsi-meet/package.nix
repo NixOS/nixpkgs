@@ -1,50 +1,26 @@
 {
   lib,
   stdenv,
+  fetchurl,
   nixosTests,
-
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-
-  libarchive,
-  nodejs,
-
   olm,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "jitsi-meet";
-  version = "1.0.8792";
+  version = "1.0.8043";
 
-  src = fetchFromGitHub {
-    owner = "jitsi";
-    repo = "jitsi-meet";
-    tag = lib.last (lib.splitVersion finalAttrs.version);
-    hash = "sha256-K4Xrse1kpNqlUChbQnAjP5lRCRuDfJKiN/022tCmMVQ=";
+  src = fetchurl {
+    url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
+    sha256 = "XJlfCMQXnHjfHQhK916RXsdPzrU2U2IaOMiXIHL1sCI=";
   };
 
-  env = {
-    makeFlags = "source-package";
-    makeCacheWritable = true;
-    npmDeps = fetchNpmDeps {
-      inherit (finalAttrs) src;
-      hash = "sha256-2NPfr3gskHz9zSGs//uzyCCuE+CZ295hhitDPlS9xuY=";
-    };
-  };
+  dontBuild = true;
 
-  nativeBuildInputs = [
-    libarchive
-    nodejs
-    npmHooks.npmConfigHook
-  ];
-
-  # yes, the only way in the build system is to generate a tarball and extract
-  # it immediately after
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    bsdtar -xf jitsi-meet.tar.bz2 -C $out --strip-components 1
+    mkdir $out
+    mv * $out/
     runHook postInstall
   '';
 
@@ -55,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Secure, Simple and Scalable Video Conferences";
     longDescription = ''
       Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses Jitsi Videobridge
       to provide high quality, secure and scalable video conferences.
     '';
     homepage = "https://github.com/jitsi/jitsi-meet";
-    license = lib.licenses.asl20;
-    teams = [ lib.teams.jitsi ];
-    inherit (nodejs.meta) platforms;
+    license = licenses.asl20;
+    teams = [ teams.jitsi ];
+    platforms = platforms.all;
     inherit (olm.meta) knownVulnerabilities;
   };
-})
+}
