@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   websockets,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
   version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "abmantis";
@@ -49,7 +46,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Whirlpool 6th Sense appliances";
     homepage = "https://github.com/abmantis/whirlpool-sixth-sense/";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/abmantis/whirlpool-sixth-sense/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
