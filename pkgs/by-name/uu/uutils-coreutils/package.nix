@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4C4i3oHw9WHwuq9DOufRvc/tOdwqHmYF/gUr2VkRmwM=";
   };
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "uutils-coreutils-${finalAttrs.version}";
