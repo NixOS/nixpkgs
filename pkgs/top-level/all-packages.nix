@@ -1759,9 +1759,6 @@ with pkgs;
     hash = "sha256-YjIZlWOAc1SzvLWs6z3BNlAvAixrDvdDmHqD9m/uWlw=";
   };
 
-  buildah = callPackage ../development/tools/buildah/wrapper.nix { };
-  buildah-unwrapped = callPackage ../development/tools/buildah { };
-
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
