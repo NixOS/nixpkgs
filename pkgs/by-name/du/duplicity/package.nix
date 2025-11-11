@@ -22,14 +22,14 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.5.1";
+    version = "3.0.6";
     format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-fL4rvXcLKfEXuy5LKpFjFu+P3be7/T342+BgeO/dfp8=";
+      hash = "sha256-aLYpB09FHocguh//2vd1MFYYhpJelgT9vW9qoOnpR+Q=";
     };
 
     patches = [
