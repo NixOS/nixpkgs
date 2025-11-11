@@ -111,7 +111,6 @@ runTest (
     };
 
     test-helpers.init = ''
-      minio.start()
       minio.wait_for_open_port(9000)
       minio.wait_for_unit("nginx.service")
       minio.wait_for_open_port(443)
