@@ -225,6 +225,11 @@ let
       mailConfig =
         let
           m = c.mail;
+
+          # Split fromAddress into local part and optional domain
+          parts = lib.splitString "@" (m.fromAddress or "");
+          local = builtins.elemAt parts 0;
+          domain = if lib.length parts > 1 then builtins.elemAt parts 1 else null;
         in
         lib.optionalString (m.mode != null) ''
           'mail_smtpmode' => '${m.mode}',
@@ -239,8 +244,8 @@ let
               m.passFile != null
             ) "'mail_smtppassword' => nix_read_secret('mail_password'),"}
           ''}
-          ${lib.optionalString (m.fromAddress != null) "'mail_from_address' => '${m.fromAddress}',"}
-          ${lib.optionalString (m.domain != null) "'mail_domain' => '${m.domain}',"}
+          ${lib.optionalString (m.fromAddress != null) "'mail_from_address' => '${local}',"}
+          ${lib.optionalString (domain != null) "'mail_domain' => '${domain}',"}
         '';
       showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != { };
       renderedAppStoreSetting =
@@ -751,16 +756,8 @@ in
           default = null;
           example = "nextcloud@example.com";
           description = ''
-            Default "From" address for outgoing emails.
-          '';
-        };
-        domain = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          example = "example.com";
-          description = ''
-            The default domain name used for the sender address is the hostname where your Nextcloud installation is served.
-            If you have a different mail domain name you can override this behavior here.
+            Default "From" address used for outgoing emails.
+            Set either the local part (e.g. `nextcloud`) or the full address (e.g. `nextcloud@example.com`).
           '';
         };
       };
@@ -1261,6 +1258,17 @@ in
             assertion = cfg.config.adminpassFile == null -> cfg.config.adminuser == null;
             message = ''
               If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
+            '';
+          }
+          {
+            assertion =
+              cfg.config.mail.fromAddress == null
+              || (builtins.length (lib.splitString "@" cfg.config.mail.fromAddress)) <= 2;
+            message = ''
+              The option `services.nextcloud.mail.fromAddress` must contain
+              at most one "@" character. Example valid values:
+                - nextcloud
+                - nextcloud@example.com
             '';
           }
         ];
