@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # cocom does $(DESTDIR)/$(libdir) which results in //nix/store/...
   # on cygwin this is interpreted as a network path.
-  installFlags = lib.optionalString stdenv.buildPlatform.isCygwin "DESTDIR=/.";
+  ${if stdenv.buildPlatform.isCygwin then "installFlags" else null} =
+    lib.optionalString stdenv.buildPlatform.isCygwin "DESTDIR=/.";
 
   autoreconfFlags = "REGEX";
 
