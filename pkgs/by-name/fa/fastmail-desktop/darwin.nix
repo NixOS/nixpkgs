@@ -5,6 +5,7 @@
   passthru,
   meta,
   stdenvNoCC,
+  unzip,
 }:
 stdenvNoCC.mkDerivation {
   inherit
@@ -14,6 +15,9 @@ stdenvNoCC.mkDerivation {
     passthru
     meta
     ;
+
+  sourceRoot = ".";
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/Applications

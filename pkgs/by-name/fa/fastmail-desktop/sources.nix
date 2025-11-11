@@ -4,10 +4,9 @@
 {
   aarch64-darwin = {
     version = "1.0.3";
-    src = fetchzip {
+    src = fetchurl {
       url = "https://dl.fastmailcdn.com/desktop/production/mac/arm64/Fastmail-1.0.3-arm64-mac.zip";
       hash = "sha512-lqJj0tTwOJx1jzzXtlKOOduUEtSgVHpQCM5WkbXjmOh2OejLRcdJ1Y9CxvZJGSPBGWrErKzytMOB8QmJ1BkIdw==";
-      stripRoot = false;
     };
   };
   x86_64-linux = {
