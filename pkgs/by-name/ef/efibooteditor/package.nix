@@ -39,12 +39,25 @@ stdenv.mkDerivation (finalAttrs: {
         'sh -c "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY efibooteditor"'
   '';
 
-  env.BUILD_VERSION = "v${finalAttrs.version}";
+  env = {
+    LANG = "C.UTF8";
+    BUILD_VERSION = "v${finalAttrs.version}";
+  };
+
   cmakeBuildType = "MinSizeRel";
   cmakeFlags = [ "-DQT_VERSION_MAJOR=6" ];
 
   postInstall = ''
     install -Dm644 $src/LICENSE.txt $out/share/licenses/efibooteditor/LICENSE
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    ctest --output-on-failure
+
+    runHook postCheck
   '';
 
   meta = {
