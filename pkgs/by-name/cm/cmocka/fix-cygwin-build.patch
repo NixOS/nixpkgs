@@ -1,0 +1,59 @@
+diff --git a/cmake/Modules/AddCMockaTest.cmake b/cmake/Modules/AddCMockaTest.cmake
+index 12fbd79..c619639 100644
+--- a/cmake/Modules/AddCMockaTest.cmake
++++ b/cmake/Modules/AddCMockaTest.cmake
+@@ -123,17 +123,21 @@ function(ADD_CMOCKA_TEST_ENVIRONMENT _TARGET_NAME)
+     if (WIN32 OR CYGWIN OR MINGW OR MSVC)
+         file(TO_NATIVE_PATH "${cmocka-library_BINARY_DIR}" CMOCKA_DLL_PATH)
+ 
+-        if (TARGET_SYSTEM_EMULATOR)
+-            set(DLL_PATH_ENV "WINEPATH=${CMOCKA_DLL_PATH};$ENV{WINEPATH}")
++        if (CYGWIN)
++            set(DLL_PATH_ENV "PATH=${CMOCKA_DLL_PATH}:$ENV{PATH}")
+         else()
+-            set(DLL_PATH_ENV "PATH=${CMOCKA_DLL_PATH}\\${CMAKE_BUILD_TYPE};$ENV{PATH}")
++            if (TARGET_SYSTEM_EMULATOR)
++                set(DLL_PATH_ENV "WINEPATH=${CMOCKA_DLL_PATH};$ENV{WINEPATH}")
++            else()
++                set(DLL_PATH_ENV "PATH=${CMOCKA_DLL_PATH}\\${CMAKE_BUILD_TYPE};$ENV{PATH}")
++            endif()
++            #
++            # IMPORTANT NOTE: The set_tests_properties(), below, internally
++            # stores its name/value pairs with a semicolon delimiter.
++            # because of this we must protect the semicolons in the path
++            #
++            string(REPLACE ";" "\\;" DLL_PATH_ENV "${DLL_PATH_ENV}")
+         endif()
+-        #
+-        # IMPORTANT NOTE: The set_tests_properties(), below, internally
+-        # stores its name/value pairs with a semicolon delimiter.
+-        # because of this we must protect the semicolons in the path
+-        #
+-        string(REPLACE ";" "\\;" DLL_PATH_ENV "${DLL_PATH_ENV}")
+ 
+         set_tests_properties(${_TARGET_NAME}
+                              PROPERTIES
+diff --git a/example/mock/chef_wrap/CMakeLists.txt b/example/mock/chef_wrap/CMakeLists.txt
+index 205ccd4..0b8b98d 100644
+--- a/example/mock/chef_wrap/CMakeLists.txt
++++ b/example/mock/chef_wrap/CMakeLists.txt
+@@ -15,6 +15,4 @@ set_target_properties(waiter_test_wrap
+         PROPERTIES
+         LINK_FLAGS  "-Wl,--wrap=chef_cook"
+ )
+-if (WIN32 OR MINGW OR CYGWIN)
+-    set_tests_properties(waiter_test_wrap PROPERTIES ENVIRONMENT "PATH=${DLL_PATH_ENV}")
+-endif (WIN32 OR MINGW OR CYGWIN)
++add_cmocka_test_environment(waiter_test_wrap)
+diff --git a/example/mock/uptime/CMakeLists.txt b/example/mock/uptime/CMakeLists.txt
+index 967185f..8e047e3 100644
+--- a/example/mock/uptime/CMakeLists.txt
++++ b/example/mock/uptime/CMakeLists.txt
+@@ -13,6 +13,7 @@ add_cmocka_test(test_uptime
+                 SOURCES test_uptime.c
+                 COMPILE_OPTIONS ${DEFAULT_C_COMPILE_FLAGS}
+                 LINK_LIBRARIES cmocka::cmocka)
++add_cmocka_test_environment(test_uptime)
+ set_property(TARGET
+                  test_uptime
+              PROPERTY
