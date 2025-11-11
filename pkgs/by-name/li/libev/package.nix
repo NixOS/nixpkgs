@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional static "LDFLAGS=-static";
 
+  makeFlags = lib.optionals (stdenv.hostPlatform.isCygwin) [ "LDFLAGS=-no-undefined" ];
+
   meta = {
     description = "High-performance event loop/event model with lots of features";
     maintainers = [ lib.maintainers.raskin ];
