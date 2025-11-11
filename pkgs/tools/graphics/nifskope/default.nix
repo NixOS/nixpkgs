@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./mime-types.patch ];
+
   buildInputs = [
     qtbase
     qttools
@@ -43,13 +45,14 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     d=$out/share/nifskope
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $d/{shaders,lang}
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/mime/packages $d/{shaders,lang}
     cp release/NifSkope $out/bin/
     cp ./res/nifskope.png $out/share/pixmaps/
     cp release/{nif.xml,kfm.xml,style.qss} $d/
     cp res/shaders/* $d/shaders/
     cp ./res/lang/*.ts ./res/lang/*.tm $d/lang/
     cp ./install/linux-install/nifskope.desktop $out/share/applications
+    cp ./install/linux-install/*.xml $out/share/mime/packages
 
     substituteInPlace $out/share/applications/nifskope.desktop \
       --replace 'Exec=nifskope' "Exec=$out/bin/NifSkope" \
