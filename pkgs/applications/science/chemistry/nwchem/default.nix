@@ -13,6 +13,7 @@
   blas,
   lapack,
   scalapack,
+  libxc,
   python3,
   tcsh,
   automake,
@@ -36,12 +37,6 @@ let
   dftd3Src = fetchurl {
     url = "https://www.chemie.uni-bonn.de/grimme/software/dft-d3/dftd3.tgz";
     hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
-  };
-
-  versionLibxc = "6.1.0";
-  libxcSrc = fetchurl {
-    url = "https://gitlab.com/libxc/libxc/-/archive/${versionLibxc}/libxc-${versionLibxc}.tar.gz";
-    hash = "sha256-9ZN0X6R+v7ndxGeqr9wvoSdfDXJQxpLOl2E4mpDdjq8=";
   };
 
   plumedSrc = fetchFromGitHub {
@@ -83,6 +78,7 @@ stdenv.mkDerivation rec {
     blas
     lapack
     scalapack
+    libxc
     python3
   ];
   propagatedBuildInputs = [ mpi ];
@@ -99,7 +95,6 @@ stdenv.mkDerivation rec {
 
     # Provide tarball in expected location
     ln -s ${dftd3Src} source/src/nwpw/nwpwlib/nwpwxc/dftd3.tgz
-    ln -s ${libxcSrc} source/src/libext/libxc/libxc-${versionLibxc}.tar.gz
   '';
 
   postPatch = ''
@@ -144,6 +139,10 @@ stdenv.mkDerivation rec {
     export USE_SCALAPACK="y"
     export SCALAPACK="-L${scalapack}/lib -lscalapack"
     export SCALAPACK_SIZE="4"
+
+    export LIBXC_INCLUDE="${lib.getDev libxc}/include"
+    export LIBXC_MODDIR="${lib.getDev libxc}/include"
+    export LIBXC_LIB="${lib.getLib libxc}/lib"
 
     # extra TCE related options
     export MRCC_METHODS="y"
