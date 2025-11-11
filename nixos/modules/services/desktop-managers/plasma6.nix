@@ -526,9 +526,8 @@ in
             ktrip
             kweather
             plasma-dialer
-            # TODO: should be packaged independently, see https://plasma-mobile.org/info/
-            # plasma-phonebook
-            # plasma-settings
+            plasma-phonebook
+            plasma-settings
             qmlkonsole
             spacebar
           ]

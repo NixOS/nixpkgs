@@ -97,6 +97,9 @@ let
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
+
+        plasma-phonebook = self.callPackage ./mobile/plasma-phonebook.nix { };
+        plasma-settings = self.callPackage ./mobile/plasma-settings.nix { };
       }
     );
 in
