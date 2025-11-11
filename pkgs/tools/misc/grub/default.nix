@@ -505,6 +505,24 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=348cd416a3574348f4255bf2b04ec95938990997";
       hash = "sha256-WBLYQxv8si2tvdPAvbm0/4NNqYWBMJpFV4GC0HhN/kE=";
     })
+    # Required to apply the GCC-15 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_1.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=bba7dd7363402157034e9c94ee3d9ea82e37861d";
+      hash = "sha256-KO9rE/9xRkIGi/Y6jv1gVPiAJZUejwaUW6kIWthPUhw=";
+    })
+    # Required to apply the GCC-11 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=db506b3b83640ab166a782e1ca47c47836afddcd";
+      hash = "sha256-4ucCu+9OZ8NoicLF9hCgUpX4xgJk4Gzu6F3P4zl9J3U=";
+    })
+    # Required to build grub 2.12 with GCC 15
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_1_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac1512b872af8567b408518a7efa01607a0219ae";
+      hash = "sha256-deyp6Yatlgv86bYMt7WcWhKg8J6StDPUEy4UPHqJYIc=";
+    })
   ];
 
   postPatch =
