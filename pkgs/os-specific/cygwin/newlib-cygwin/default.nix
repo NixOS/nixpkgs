@@ -138,6 +138,9 @@ in
           perl
         ];
 
+        # -lintl from gettext breaks link on cygwin
+        dontAddExtraLibs = stdenv.buildPlatform.isCygwin;
+
         buildInputs = [ w32api ];
 
         makeFlags = [
