@@ -25,8 +25,9 @@
   conf ? null,
   removeReferencesTo,
   testers,
-  providers ? [ ],
+  providers ? [ ], # Each provider in the format { name = "provider-name"; package = <drv>; }
   autoloadProviders ? false,
+  extraINIConfig ? null, # Extra INI config in the format { section_name = { key = "value"}; }
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -311,24 +312,42 @@ let
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         ''
 
+        # Replace the config's default provider section with the providers we wish
+        # to automatically load
+        + lib.optionalString autoloadProviders ''
+          sed -i '/^[[:space:]]*#/!s|\[provider_sect\]|${
+            let
+              config-provider-attrset = lib.foldl' (acc: elem: acc // elem) { } (
+                map (provider: { "${provider.name}" = "${provider.name}_sect"; }) providers
+              );
+            in
+            lib.escape [ "\n" ] (lib.generators.toINI { } { provider_sect = config-provider-attrset; })
+          }|' $etc/etc/ssl/openssl.cnf
+
+          # Activate the default provider
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
         + lib.concatStringsSep "\n" (
           map
             (provider: ''
-              cp --no-preserve=mode ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+              cp ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
 
-              ${lib.optionalString (autoloadProviders) ''
-                sed -i '/^[[:space:]]*#/!s/\[provider_sect\]/[provider_sect]\n${provider.name} = ${provider.name}_sect/g' $etc/etc/ssl/openssl.cnf
-                echo -e "\n[${provider.name}_sect]" >> $etc/etc/ssl/openssl.cnf
-                echo "activate = 1" >> $etc/etc/ssl/openssl.cnf
+              ${lib.optionalString autoloadProviders ''
+                echo '${
+                  lib.generators.toINI { } {
+                    "${provider.name}_sect" = {
+                      activate = 1;
+                    };
+                  }
+                }' >> $etc/etc/ssl/openssl.cnf
               ''}
             '')
 
             providers
         )
-
-        + lib.optionalString (autoloadProviders) ''
-          # The default provider needs loading when there are other providers loaded by default
-          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        + lib.optionalString (extraINIConfig != null) ''
+          echo '${lib.generators.toINI { } extraINIConfig}' >> $etc/etc/ssl/openssl.cnf
         '';
 
       allowedImpureDLLs = [ "CRYPT32.dll" ];
