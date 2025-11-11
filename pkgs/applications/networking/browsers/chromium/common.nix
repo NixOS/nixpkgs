@@ -96,8 +96,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 buildFun:
@@ -370,7 +370,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -427,7 +427,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -685,10 +685,6 @@ let
             '/usr/share/locale/' \
             '${glibc}/share/locale/'
 
-      ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
       ''
       + ''
         # Allow to put extensions into the system-path.
