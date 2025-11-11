@@ -66,6 +66,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   pythonRelaxDeps = [
+    "av"
     "datasets"
     "draccus"
     "gymnasium"

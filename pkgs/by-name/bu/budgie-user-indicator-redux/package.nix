@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-user-indicator-redux";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "EbonJaeger";
     repo = "budgie-user-indicator-redux";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-X9b4H4PnrYGb/T7Sg9iXQeNDLoO1l0VCdbOCGUAgwC4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZvT114F0g+3zpskyb4Bn6grAXHWtMqRqb9MzfF0WLQ8=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas2
     sassc
   ];
-
-  postPatch = ''
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
-    substituteInPlace meson.build \
-      --replace-fail "dependency('libpeas-1.0', version: '>= 1.26.0')" "dependency('libpeas-2')"
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

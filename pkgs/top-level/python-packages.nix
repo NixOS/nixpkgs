@@ -3074,6 +3074,8 @@ self: super: with self; {
 
   copykitten = callPackage ../development/python-modules/copykitten { };
 
+  coq-tools = callPackage ../development/python-modules/coq-tools { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   corallium = callPackage ../development/python-modules/corallium { };
@@ -17661,8 +17663,6 @@ self: super: with self; {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
-  sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
-
   sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
 
   sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 { };
@@ -18145,7 +18145,9 @@ self: super: with self; {
 
   systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
 
-  systemd = callPackage ../development/python-modules/systemd { inherit (pkgs) systemd; };
+  systemd-python = callPackage ../development/python-modules/systemd-python {
+    inherit (pkgs) systemd;
+  };
 
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 

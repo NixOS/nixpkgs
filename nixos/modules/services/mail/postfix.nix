@@ -522,6 +522,7 @@ in
                 nullOr (oneOf [
                   bool
                   int
+                  path
                   str
                   (listOf str)
                 ])

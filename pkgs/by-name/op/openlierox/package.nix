@@ -82,10 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://openlierox.net";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "openlierox";
-    maintainers = with lib.maintainers; [
-      tomasajt
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux;
   };
 })

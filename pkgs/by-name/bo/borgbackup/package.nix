@@ -153,7 +153,6 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       dotlambda
       globin
-      iedame
     ];
   };
 }

@@ -33,11 +33,13 @@ let
 in
 
 mapAliases {
+  "@antfu/ni" = pkgs.ni; # Added 2025-11-08
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@babel/cli" =
     throw "@babel/cli was removed because upstream highly suggests installing it in your project instead of globally."; # Added 2025-11-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@commitlint/cli" = pkgs.commitlint; # Added 2025-11-08
   "@commitlint/config-conventional" =
     throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
@@ -64,6 +66,7 @@ mapAliases {
   "@webassemblyjs/wasm-text-gen-1.11.1" = pkgs.wasm-text-gen; # Added 2025-11-06
   "@webassemblyjs/wast-refmt-1.11.1" = pkgs.wast-refmt; # Added 2025-11-06
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
+  "@yaegassy/coc-nginx" = pkgs.coc-nginx; # Added 2025-11-08
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
@@ -79,6 +82,7 @@ mapAliases {
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
+  inherit (pkgs) cdk8s-cli; # Added 2025-11-10
   inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) coc-clangd; # added 2024-06-29
@@ -127,10 +131,12 @@ mapAliases {
   inherit (pkgs) coc-wxml; # Added 2025-11-05
   inherit (pkgs) coc-yaml; # Added 2025-11-05
   inherit (pkgs) coc-yank; # Added 2025-11-05
+  inherit (pkgs) code-theme-converter; # Added 2025-11-08
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
+  inherit (pkgs) conventional-changelog-cli; # Added 2025-11-08
   copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
   create-cycle-app = throw "create-cycle-app has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01
@@ -140,6 +146,7 @@ mapAliases {
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
+  inherit (pkgs) diff2html-cli; # Added 2025-11-08
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
@@ -192,16 +199,22 @@ mapAliases {
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   inherit (pkgs) js-beautify; # Added 2025-11-06
   inherit (pkgs) jshint; # Added 2025-11-06
+  inherit (pkgs) json-diff; # Added 2025-11-07
+  jsonlint = throw "'jsonlint' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
+  json-refs = throw "'json-refs' has been removed because it is unmaintained and has several known vulnerable dependencies"; # Added 2025-11-10
   inherit (pkgs) json-server; # Added 2025-11-06
   joplin = pkgs.joplin-cli; # Added 2025-11-02
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
+  inherit (pkgs) katex; # Added 2025-11-08
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
+  livedown = throw "'livedown' has been removed because it was unmaintained"; # Added 2025-11-10
+  inherit (pkgs) localtunnel; # Added 2025-11-08
   lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   lua-fmt = throw "'lua-fmt' has been removed because it has critical bugs that break formatting"; # Added 2025-11-07
   inherit (pkgs) lv_font_conv; # added 2024-06-28
@@ -216,6 +229,7 @@ mapAliases {
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
   inherit (pkgs) mocha; # Added 2025-11-04
+  multi-file-swagger = throw "'multi-file-swagger' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   neovim = pkgs.neovim-node-client; # added 2024-11-13
@@ -231,12 +245,14 @@ mapAliases {
   }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   npm-merge-driver = throw "'npm-merge-driver' has been removed, since the upstream repo was archived on Aug 11, 2021"; # Added 2025-11-07
+  inherit (pkgs) nrm; # Added 2025-11-08
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23
   parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
   parcel-bundler = self.parcel; # added 2023-09-04
   parsoid = throw "The Javascript version of Parsoid has been deprecated by upstream and no longer works with modern MediaWiki versions"; # Added 2025-11-04
   inherit (pkgs) patch-package; # added 2024-06-29
+  inherit (pkgs) peerflix-server; # Added 2025-11-10
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
@@ -272,6 +288,7 @@ mapAliases {
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
+  inherit (pkgs) svelte-check; # Added 2025-11-10
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   inherit (pkgs) svgo; # added 2025-08-24
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
@@ -335,6 +352,7 @@ mapAliases {
   thelounge-theme-zenburn-monospace = throw "thelounge-theme-zenburn-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   thelounge-theme-zenburn-sourcecodepro = throw "thelounge-theme-zenburn-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
+  inherit (pkgs) tiddlywiki; # Added 2025-11-10
   triton = pkgs.triton; # Added 2023-05-06
   ts-node = throw "'ts-node' was removed because it is unmaintained, and since NodeJS 22.6.0+, experimental TypeScript support is built-in to NodeJS."; # Added 2025-11-07
   typescript = pkgs.typescript; # Added 2023-06-21

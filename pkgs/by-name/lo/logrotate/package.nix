@@ -33,8 +33,12 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     sed -i 's#/bin/date#${lib.getExe' coreutils "date"}#' test/*.sh
-    # Skip this test because it depends on a working root user, which we don't have in the sandbox
-    # Exiting with 77 signals that the test is skipped, and we only place it on line 2 because the shebang is on line 1
+    # Exiting with 77 signals that a test is skipped, and we only place it on line 2 because the shebang is on line 1
+    # Does not work on certain filesystems due to incorrect sparse file detection.
+    # Upstream issue: https://github.com/logrotate/logrotate/issues/682
+    sed -i '2iexit 77' test/test-0062.sh
+    sed -i '2iexit 77' test/test-0063.sh
+    # Depends on a working root user, which we don't have in the sandbox
     sed -i '2iexit 77' test/test-0110.sh
   '';
   doCheck = true;

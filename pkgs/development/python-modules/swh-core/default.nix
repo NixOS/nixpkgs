@@ -31,7 +31,7 @@
   pytz,
   requests-mock,
   swh-model,
-  systemd,
+  systemd-python,
   tqdm,
   types-deprecated,
   types-psycopg2,
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     pytz
     requests-mock
     swh-model
-    systemd
+    systemd-python
     tqdm
     types-deprecated
     types-psycopg2

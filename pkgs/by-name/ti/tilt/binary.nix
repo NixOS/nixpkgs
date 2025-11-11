@@ -42,6 +42,9 @@ buildGoModule rec {
     mainProgram = "tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anton-dessiatov ];
+    maintainers = with lib.maintainers; [
+      anton-dessiatov
+      zacharyarnaise
+    ];
   };
 }
