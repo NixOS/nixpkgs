@@ -19,8 +19,10 @@ on:
         default: false
         type: boolean
     secrets:
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
       CACHIX_AUTH_TOKEN:
-        required: true
+        required: false
 
 permissions: {}
 
