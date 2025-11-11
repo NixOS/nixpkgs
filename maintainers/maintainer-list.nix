@@ -11828,6 +11828,13 @@
     name = "Jeffrey C. Ollie";
     keys = [ { fingerprint = "A8CF 5B72 ABC3 9A17 3FEA  620E 6F86 035A 6D97 044E"; } ];
   };
+  jcorbalan = {
+    email = "jcorbalan@mailbox.org";
+    github = "jcorbalanm";
+    githubId = 187110985;
+    name = "Julio Corbalán Moreno";
+    keys = [ { fingerprint = "EA6C 6CFC F9DF 839E 954D  899B CED6 C3ED 3A50 85E7"; } ];
+  };
   jcouyang = {
     email = "oyanglulu@gmail.com";
     github = "jcouyang";
