@@ -95,6 +95,7 @@ buildGoModule (finalAttrs: {
       fkautz
       jk
       mjm
+      arianvp
     ];
   };
 })
