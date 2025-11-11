@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sources";
 
+  qmakeFlags = [
+    "DEFINES+=DISTRIBUTION"
+    "DEFINES+=UPDATE_HIDE"
+    "DEFINES+=UPDATE_DISABLE"
+  ];
+
   postFixup = ''
     wrapQtApp $out/bin/ubpm
   '';
@@ -36,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # *.so plugins are being wrapped automatically which breaks them
   dontWrapQtApps = true;
-  
+
   buildInputs = [
     qt6.qtbase
     qt6.qtserialport
