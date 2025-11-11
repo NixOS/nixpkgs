@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "asciidoctorj";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchzip {
     url = "mirror://maven/org/asciidoctor/asciidoctorj/${finalAttrs.version}/asciidoctorj-${finalAttrs.version}-bin.zip";
-    hash = "sha256-F4tmpdNS0PIoLpqV9gifJf2iQ/kX+cp3EssRyhzyOUw=";
+    hash = "sha256-LzmROgzHnUZaK6uKxMUoM9/3q1wmBDlU0THfOOdUgcY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
