@@ -19593,6 +19593,12 @@
     githubId = 7820716;
     name = "orthros";
   };
+  orvitpng = {
+    name = "Carter Davis";
+    email = "carterd1016@gmail.com";
+    githubId = 55005263;
+    keys = [ { fingerprint = "8745 5F03 93C6 45FA 5E22  8CCE 8885 4F72 6DDF 8373"; } ];
+  };
   orzklv = {
     email = "sakhib@orzklv.uz";
     github = "orzklv";
