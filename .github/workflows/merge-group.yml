@@ -23,6 +23,7 @@ jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
     outputs:
+      baseBranch: ${{ steps.prepare.outputs.base }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
@@ -40,6 +41,15 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
+            const { classify } = require('./ci/supportedBranches.js')
+            const baseBranch = (
+              context.payload.merge_group?.base_ref ??
+              context.payload.pull_request.base.ref
+            ).replace(/^refs\/heads\//, '')
+            const baseClassification = classify(baseBranch)
+            core.setOutput('base', baseClassification)
+            core.info('base classification:', baseClassification)
+
             core.setOutput('mergedSha', context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA)
             core.info(`mergedSha: ${context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA}`)
             core.setOutput('targetSha', context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA)
@@ -72,6 +82,18 @@ jobs:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+
+  build:
+    name: Build
+    needs: [prepare]
+    uses: ./.github/workflows/build.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      artifact-prefix: ${{ inputs.artifact-prefix }}
+      baseBranch: ${{ needs.prepare.outputs.baseBranch }}
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.
