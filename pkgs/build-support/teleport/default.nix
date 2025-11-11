@@ -75,7 +75,7 @@ let
 
     pnpmDeps = pnpm_10.fetchDeps {
       inherit src pname version;
-      fetcherVersion = 1;
+      fetcherVersion = 2;
       hash = pnpmHash;
     };
 
