@@ -237,7 +237,7 @@ async function handleMerge({
   async function merge() {
     if (dry) {
       core.info(`Merging #${pull_number}... (dry)`)
-      return 'Merge completed (dry)'
+      return ['Merge completed (dry)']
     }
 
     // Using GraphQL mutations instead of the REST /merge endpoint, because the latter

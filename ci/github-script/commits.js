@@ -18,9 +18,9 @@
  * @property {Object} commit - Commit details
  * @property {string} commit.message - Commit message
  * @property {Object} commit.author - Commit author
- * @property {string} commit.author.name - Author name
- * @property {string} commit.author.email - Author email
- * @property {string} commit.author.date - Author date
+ * @property {string} [commit.author.name] - Author name (optional in API)
+ * @property {string} [commit.author.email] - Author email (optional in API)
+ * @property {string} [commit.author.date] - Author date (optional in API)
  */
 
 /**
@@ -231,10 +231,16 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     )
 
     // Log all results without truncation, with better highlighting and all whitespace changes to the job log.
-    results.forEach(({ sha, commit, severity, message, colored_diff }) => {
+    results.forEach((result) => {
+      const { sha, commit, severity, message } = result
+      const colored_diff = /** @type {DiffResult} */ (result).colored_diff
       core.startGroup(`Commit ${sha}`)
-      core.info(`Author: ${commit.author.name} ${commit.author.email}`)
-      core.info(`Date: ${new Date(commit.author.date)}`)
+      core.info(
+        `Author: ${commit.author?.name ?? 'unknown'} ${commit.author?.email ?? 'unknown'}`,
+      )
+      core.info(
+        `Date: ${commit.author?.date ? new Date(commit.author.date) : 'unknown'}`,
+      )
       switch (severity) {
         case 'error':
           core.error(message)
@@ -254,7 +260,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      await dismissReviews({ github, context, dry })
+      await dismissReviews({ github, context, core, dry })
       return
     }
 
@@ -316,7 +322,9 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
       true,
     )
 
-    results.forEach(({ severity, message, diff }) => {
+    results.forEach((result) => {
+      const { severity, message } = result
+      const diff = /** @type {DiffResult} */ (result).diff
       if (severity === 'info') return
 
       // The docs for markdown alerts only show examples with markdown blockquote syntax, like this:
@@ -346,7 +354,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
         // that's too long. We think this is unlikely to happen, and so don't deal with it explicitly.
         const truncated = []
         let total_length = 0
-        for (line of diff) {
+        for (const line of diff) {
           total_length += line.length
           if (total_length > 10000) {
             truncated.push('', '[...truncated...]')

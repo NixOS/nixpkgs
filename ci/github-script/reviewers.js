@@ -83,7 +83,11 @@ async function handleReviewers({
   log('reviewers - teams', Array.from(teams).join(', '))
 
   const team_members = new Set(
-    (await Promise.all(Array.from(teams, getTeamMembers)))
+    (
+      await Promise.all(
+        Array.from(teams).map((team_slug) => getTeamMembers(team_slug)),
+      )
+    )
       .flat(1)
       .map(({ login }) => login),
   )

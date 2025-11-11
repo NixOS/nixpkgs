@@ -1,3 +1,39 @@
+/**
+ * Artifact returned by GitHub REST API (includes digest field missing from Octokit types)
+ * @typedef {Object} GitHubArtifact
+ * @property {number} id - Artifact ID
+ * @property {string} node_id - Node ID
+ * @property {string} name - Artifact name
+ * @property {number} size_in_bytes - Size in bytes
+ * @property {string} url - API URL
+ * @property {string} archive_download_url - Download URL
+ * @property {boolean} expired - Whether artifact has expired
+ * @property {string} created_at - Creation timestamp
+ * @property {string} expires_at - Expiration timestamp
+ * @property {string} updated_at - Last update timestamp
+ * @property {string} [digest] - SHA-256 digest (format: "sha256:hash")
+ */
+
+/**
+ * @typedef {Object} BotContext
+ * @property {any} github - GitHub API client
+ * @property {any} context - GitHub Actions context
+ * @property {any} core - GitHub Actions core utilities
+ * @property {boolean} dry - Whether to run in dry-run mode
+ */
+
+/**
+ * @typedef {Object} ItemContext
+ * @property {any} item - Issue or pull request object
+ * @property {Object} stats - Statistics object
+ * @property {any[]} [events] - Timeline events
+ */
+
+/**
+ * Main bot script to handle labeling, merge requests, and reviewer assignments
+ * @param {BotContext} params - Bot context parameters
+ * @returns {Promise<void>}
+ */
 module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
@@ -39,6 +75,7 @@ module.exports = async ({ github, context, core, dry }) => {
       ).data.workflow_runs[0]
       if (!run) continue
 
+      /** @type {GitHubArtifact} */
       const artifact = (
         await github.rest.actions.listWorkflowRunArtifacts({
           ...context.repo,
@@ -53,6 +90,7 @@ module.exports = async ({ github, context, core, dry }) => {
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
+          workflowRunId: run.id,
         },
         path: path.resolve(path.join('branches', branch)),
         expectedHash: artifact.digest,
@@ -106,7 +144,7 @@ module.exports = async ({ github, context, core, dry }) => {
       // permissions to access the members endpoint below. Thus, we're pretending to have
       // no members. This is OK; because this is only for the Test workflow, not for
       // real use.
-      return []
+      return Promise.resolve([])
     }
 
     if (!members[team_slug]) {
@@ -237,7 +275,7 @@ module.exports = async ({ github, context, core, dry }) => {
     // This is intentionally less than the time that Eval takes, so that the label job
     // running after Eval can indeed label the PR as conflicted if that is the case.
     const merge_commit_sha_valid =
-      Date.now() - new Date(pull_request.created_at) > 3 * 60 * 1000
+      Date.now() - new Date(pull_request.created_at).getTime() > 3 * 60 * 1000
 
     const prLabels = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
@@ -309,6 +347,7 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     }
 
+    /** @type {GitHubArtifact} */
     const artifact =
       run_id &&
       (
@@ -335,6 +374,7 @@ module.exports = async ({ github, context, core, dry }) => {
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
+          workflowRunId: run_id,
         },
         path: path.resolve(pull_number.toString()),
         expectedHash: artifact.digest,
@@ -524,14 +564,20 @@ module.exports = async ({ github, context, core, dry }) => {
               'unmarked_as_duplicate',
             ].includes(event),
           )
-          .map(
-            ({ created_at, updated_at, committer, submitted_at }) =>
-              new Date(
-                updated_at ?? created_at ?? submitted_at ?? committer.date,
-              ),
-          )
+          .map((event) => {
+            // Timeline events are a union type; we access properties that may not exist on all types
+            // Safe because of fallback chain ending in 0
+            const anyEvent = /** @type {any} */ (event)
+            return new Date(
+              anyEvent.updated_at ??
+                anyEvent.created_at ??
+                anyEvent.submitted_at ??
+                anyEvent.committer?.date ??
+                0,
+            )
+          })
           // Reverse sort by date value. The default sort() sorts by string representation, which is bad for dates.
-          .sort((a, b) => b - a)
+          .sort((a, b) => b.getTime() - a.getTime())
           .at(0) ?? item.created_at,
       )
       log('latest_event_at', latest_event_at.toISOString())
@@ -635,6 +681,7 @@ module.exports = async ({ github, context, core, dry }) => {
       if (lastRun) {
         // The cursor to iterate through the full list of issues and pull requests
         // is passed between jobs as an artifact.
+        /** @type {GitHubArtifact} */
         const artifact = (
           await github.rest.actions.listWorkflowRunArtifacts({
             ...context.repo,
@@ -654,6 +701,7 @@ module.exports = async ({ github, context, core, dry }) => {
                 repositoryName: context.repo.repo,
                 repositoryOwner: context.repo.owner,
                 token: core.getInput('github-token'),
+                workflowRunId: lastRun.id,
               },
               expectedHash: artifact.digest,
             },
