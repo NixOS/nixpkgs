@@ -6,15 +6,15 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mod_mbtiles";
   version = "unstable-2022-05-25";
 
   src = fetchFromGitHub {
     owner = "systemed";
-    repo = pname;
+    repo = "mod_mbtiles";
     rev = "f9d12a9581820630dd923c3c90aa8dcdcf65cb87";
-    sha256 = "sha256-wOoLSNLgh0YXHUFn7WfUkQXpyWsgCrVZlMg55rvi9q4=";
+    hash = "sha256-wOoLSNLgh0YXHUFn7WfUkQXpyWsgCrVZlMg55rvi9q4=";
   };
 
   buildInputs = [
