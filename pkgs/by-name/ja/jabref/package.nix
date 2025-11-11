@@ -8,28 +8,25 @@
   unzip,
   xdg-utils,
   gtk3,
-  jdk21,
+  jdk25,
   openjfx25,
-  gradle_8,
+  gradle_9,
   python3,
 }:
 let
-  jdk = jdk21.override {
-    enableJavaFX = true;
-    openjfx_jdk = openjfx25;
-  };
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
+  jdk = jdk25;
+  openjfx = openjfx25;
+  gradle = gradle_9;
 in
 stdenv.mkDerivation rec {
-  version = "5.13";
+  version = "5.15";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
+    hash = "sha256-tM9o68ah1Nvjcul6A5bVzGecrymql19ynX2fuFqzhk0=";
     fetchSubmodules = true;
   };
 
@@ -55,12 +52,21 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Disable update check
     substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
-      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+      --replace-fail 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
         'VERSION_CHECK_ENABLED, Boolean.FALSE'
 
     # Find OpenOffice/LibreOffice binary
     substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
-      --replace '/usr' '/run/current-system/sw'
+      --replace-fail '/usr' '/run/current-system/sw'
+
+    substituteInPlace build.gradle settings.gradle \
+      --replace-fail 'jitpack-SNAPSHOT' '33f60fd812'
+    substituteInPlace build.gradle \
+      --replace-fail 'baseDir' 'baseDirectory' \
+      --replace-fail 'com.tobiasdiez:easybind:2.2.1-SNAPSHOT' 'org.jabref:easybind:2.3.0' \
+      --replace-fail '22.0.1' '25' \
+      --replace-fail 'VERSION_21' 'VERSION_25' \
+      --replace-fail 'JavaLanguageVersion.of(21)' 'JavaLanguageVersion.of(25)'
   '';
 
   nativeBuildInputs = [
@@ -114,13 +120,19 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e 's/"//g' -e "s|\$APP_HOME|$out|g")
     rm $out/bin/*
 
     # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
     makeWrapper ${jdk}/bin/java $out/bin/JabRef \
       "''${gappsWrapperArgs[@]}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \
+      --add-flags "-Djava.library.path=${openjfx}/modules_libs/javafx.graphics:${openjfx}/modules_libs/javafx.media:$out/lib/ \
+        --patch-module org.jabref=$out/share/java/jabref/resources/main" \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          xdg-utils
+        ]
+      } \
       --add-flags "$DEFAULT_JVM_OPTS"
 
     # lowercase alias (for convenience and required for browser extensions)
