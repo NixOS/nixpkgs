@@ -48,14 +48,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.3-unstable-2025-09-13";
+  version = "10.9.4";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
-    rev = "68d5136613fa1b15d39cc67ada3085590ec162ae";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-xqN06CGS4xyUwnJCsLplYzKtO/V8hDmb6UNJu/nhQHs=";
+    hash = "sha256-e1kkmzSYX8TwiY0IIZYIK/FgMbZ/8PqkUn8pk3CcXHU=";
   };
 
   outputs = [
@@ -147,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-1.0"
-      "budgie-raven-plugin-1.0"
+      "budgie-2.0"
+      "budgie-raven-plugin-2.0"
       "budgie-theme-1.0"
     ];
   };
