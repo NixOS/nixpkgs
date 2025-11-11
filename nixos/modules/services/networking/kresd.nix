@@ -66,9 +66,10 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Whether to enable knot-resolver domain name server.
+        Whether to enable knot-resolver (version 5) domain name server.
         DNSSEC validation is turned on by default.
         You can run `kresd-cli 1` and give commands interactively to kresd@1.service.
+        If you want to user knot-resolver 6, please use services.knot-resolver.
       '';
     };
     package = lib.mkPackageOption pkgs "knot-resolver_5" {
@@ -134,6 +135,9 @@ in
 
   ###### implementation
   config = lib.mkIf cfg.enable {
+    assertions = lib.optionals (lib.versions.major cfg.package.version > 5) [
+      "services.kresd only works with knot-resolver 5. Please use services.knot-resolver for knot-resolver 6 and newer."
+    ];
     environment = {
       etc."knot-resolver/kresd.conf".source = configFile; # not required
       systemPackages = [
