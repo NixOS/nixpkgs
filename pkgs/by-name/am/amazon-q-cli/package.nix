@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.19.3";
+  version = "1.19.4";
 
   passthru.updateScript = nix-update-script { };
 
@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "aws";
     repo = "amazon-q-developer-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mIrRSvneeXjlLQoXNCxg5ApdBvHkf+FUoo5ILPkv5tA=";
+    hash = "sha256-r5aqlhPwrWRyOKY86E7pKV3Gb7Pnwid+RoT9Gt1DS8Q=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  cargoHash = "sha256-ge+ghdRup0ZH8CV6JEr+rOvXf7yZ9EqW2+Via+FF+Us=";
+  cargoHash = "sha256-s18m3yRJDoDDB8l3HJ0SMLLLmzAs5dZYvopHTG4MbSc=";
 
   cargoBuildFlags = [
     "-p"
