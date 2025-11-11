@@ -150,6 +150,7 @@ let
       maintainers = [
         maintainers.vcunat # upstream developer
       ];
+      teams = [ teams.flyingcircus ];
       mainProgram = "kresd";
     };
   });
