@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       muscaln
       anas
+      numinit
     ];
     platforms = lib.platforms.linux;
     mainProgram = "qdl";
