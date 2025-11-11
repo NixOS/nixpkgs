@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "wild";
+  pname = "wild-unwrapped";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
 
-    tests = callPackage ./adapterTest.nix { wild = finalAttrs.finalPackage; };
+    tests = callPackage ./adapterTest.nix { wild-unwrapped = finalAttrs.finalPackage; };
   };
 
   meta = {
