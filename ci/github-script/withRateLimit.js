@@ -1,7 +1,11 @@
 /**
+ * @typedef {ReturnType<typeof import('@actions/github').getOctokit>} GitHubClient
+ */
+
+/**
  * @typedef {Object} RateLimitConfig
- * @property {any} github - GitHub API client
- * @property {any} core - GitHub Actions core utilities
+ * @property {GitHubClient} github - GitHub API client (Octokit instance)
+ * @property {typeof import('@actions/core')} core - GitHub Actions core utilities
  * @property {number} [maxConcurrent=1] - Maximum number of concurrent requests
  */
 

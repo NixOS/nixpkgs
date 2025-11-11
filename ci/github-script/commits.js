@@ -1,8 +1,13 @@
 /**
+ * @typedef {import('@actions/github/lib/context').Context} GitHubContext
+ * @typedef {ReturnType<typeof import('@actions/github').getOctokit>} GitHubClient
+ */
+
+/**
  * @typedef {Object} CommitsContext
- * @property {any} github - GitHub API client
- * @property {any} context - GitHub Actions context
- * @property {any} core - GitHub Actions core utilities
+ * @property {GitHubClient} github - GitHub API client (Octokit instance)
+ * @property {GitHubContext} context - GitHub Actions context
+ * @property {typeof import('@actions/core')} core - GitHub Actions core utilities
  * @property {boolean} dry - Whether to run in dry-run mode
  * @property {boolean} cherryPicks - Whether to check cherry-picks
  */
