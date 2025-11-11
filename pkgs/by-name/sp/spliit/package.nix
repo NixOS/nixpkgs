@@ -8,22 +8,22 @@
   nixosTests,
 }:
 
-buildNpmPackage {
+buildNpmPackage rec {
   pname = "spliit";
-  version = "1.19.0-pre";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "spliit-app";
     repo = "spliit";
-    rev = "fca040a44db2990adc67c039ef5d103328c9bd64";
-    hash = "sha256-aTl2j4p1p7IQZyaWFxxkAmVjHIDU07FDzKJ7A/t/ZtU=";
+    tag = version;
+    hash = "sha256-lIfP3Ybos0j6bTS4rDLSK/QeTUR3IRJxCeMaCjzu9l8=";
   };
 
   preBuild = ''
     prisma generate
   '';
 
-  npmDepsHash = "sha256-YxR3wQ5LDsmiVJgrX4KzeFXJuJBh9/w69UVYEeswTe0=";
+  npmDepsHash = "sha256-RbUC92Ik0T9Tfe103srPkmZ5Ji5gNAmfxmkAB1WnL90=";
 
   buildInputs = [
     openssl
