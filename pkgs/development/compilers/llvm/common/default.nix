@@ -278,7 +278,7 @@ makeScopeWithSplicing' {
 
       bintoolsNoLibc = wrapBintoolsWith {
         bintools = self.bintools-unwrapped;
-        libc = targetPackages.preLibcHeaders;
+        libc = targetPackages.preLibcHeaders or pkgs.preLibcHeaders;
       };
 
       bintools = wrapBintoolsWith {
