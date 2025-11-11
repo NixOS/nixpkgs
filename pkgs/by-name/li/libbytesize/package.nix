@@ -9,6 +9,7 @@
   gtk-doc,
   libxslt,
   mpfr,
+  nix-update-script,
   pcre2,
   pkg-config,
   python3Packages,
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "bytesize" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
