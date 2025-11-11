@@ -145,9 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
     nix-fetchers-tests.tests.run
     nix-flake-tests.tests.run
 
-    # Make sure the functional tests have passed
-    nix-functional-tests
   ]
+  # Make sure the functional tests have passed
+  ++ lib.optional (!stdenv.buildPlatform.isCygwin) nix-functional-tests
   ++
     lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       [
