@@ -2203,7 +2203,9 @@ self: super: with self; {
 
   brother-ql = callPackage ../development/python-modules/brother-ql { };
 
-  brotli = callPackage ../development/python-modules/brotli { };
+  brotli = callPackage ../development/python-modules/brotli {
+    inherit (pkgs) brotli;
+  };
 
   brotli-asgi = callPackage ../development/python-modules/brotli-asgi { };
 
