@@ -98,18 +98,16 @@ python3Packages.buildPythonApplication rec {
       ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
     ];
 
-  # Requires network
-  doCheck = false;
-
-  postInstall = ''
+  checkPhase = ''
     # Check for "unsupported" string in yt-dlp -v output.
     output=$($out/bin/yt-dlp -v 2>&1 || true)
     if echo $output | grep -q "unsupported"; then
       echo "ERROR: Found \"unsupported\" string in yt-dlp -v output."
       exit 1
     fi
-  ''
-  + ''
+  '';
+
+  postInstall = ''
     installManPage yt-dlp.1
 
     installShellCompletion \
