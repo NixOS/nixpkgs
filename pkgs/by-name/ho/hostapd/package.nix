@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
     CONFIG_ACS=y
     CONFIG_WNM=y
     CONFIG_MBO=y
+    CONFIG_WPA_CLI_EDIT=y
 
     CONFIG_IEEE80211R=y
     CONFIG_IEEE80211W=y
