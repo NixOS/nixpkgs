@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio # found by PKG_CHECK_MODULES
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS
@@ -94,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.soundtracker.org/";
     downloadPage = "https://sourceforge.net/projects/soundtracker/files/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 })
