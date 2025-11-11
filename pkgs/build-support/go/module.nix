@@ -24,8 +24,8 @@ lib.extendMkDerivation {
       modRoot ? "./",
 
       # The SRI hash of the vendored dependencies.
-      # If `vendorHash` is `null`, no dependencies are fetched and
-      # the build relies on the vendor folder within the source.
+      # If `null`, it means the project either has no external dependencies
+      # or the vendored dependencies are already present in the source tree.
       vendorHash ? throw (
         if args ? vendorSha256 then
           "buildGoModule: Expect vendorHash instead of vendorSha256"

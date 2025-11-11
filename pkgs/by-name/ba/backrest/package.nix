@@ -14,13 +14,13 @@
 }:
 let
   pname = "backrest";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-3lAWViC9K34R8la/z57kjGJmMmletGd8pJ1dDt+BeKQ=";
+    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -64,7 +64,7 @@ buildGoModule {
       internal/resticinstaller/resticinstaller.go
   '';
 
-  vendorHash = "sha256-oycV8JAJQF/PNc7mmYGzkZbpG8pMwxThmuys9e0+hcc=";
+  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
 
   nativeBuildInputs = [
     gzip
@@ -93,6 +93,7 @@ buildGoModule {
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBackup" # relies on ionice
         "TestCancelBackup"
+        "TestFirstRun" # e2e test requires networking
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -118,7 +119,7 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

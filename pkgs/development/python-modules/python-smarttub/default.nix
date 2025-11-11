@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.44";
+  version = "0.0.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdz";
     repo = "python-smarttub";
     tag = "v${version}";
-    hash = "sha256-ozOnCJXv99gne59HQEdQfCKZe8HhK2q9vShMuBlSWE8=";
+    hash = "sha256-r9Ww3isCbgKSWkQPKWzLagPK8+OFeb+zr8Wydft0jJU=";
   };
 
   build-system = [

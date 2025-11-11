@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "0.14.7";
+  version = "0.15.3";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     tag = "v${version}";
-    hash = "sha256-+YcVTn/jcEbaqTycMCYn6B0z2HsvgrCY1gHnkRajwSs=";
+    hash = "sha256-GHyfIVUSX7evP3LaHZClD1RjZ6somYcMNBFdkaZL7lg=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -28,7 +28,7 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-1MUmAWkeYUEL6WZGq1Jg5W2uKa2xj0oZbGlIbvZWT1E=";
+    npmDepsHash = "sha256-5bXEC48m3FbtmLwVYYvEdMV3qWA7KNEKVxkMZ94qEpA=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp -r ${web}/share/openobserve-ui web/dist
   '';
 
-  cargoHash = "sha256-vfc6B+Uc8RXQD8vGC1yV9w5YAefkYJMpCH2frqjrSWk=";
+  cargoHash = "sha256-j/bx4qoWcSh2/yJ9evnzSfyUd0tLAk4M310A89k4wy8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -95,10 +95,13 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
-    # test_export_operator unit test panics when run on the 0.14.7 release
-    # see this issue for more details : https://github.com/NixOS/nixpkgs/issues/447106
-    "--skip=tests::test_export_operator"
-    "--skip=service::organization::tests::test_organization"
+    "--skip=tests::test_setup_logs"
+    "--skip=handler::http::router::middlewares::compress::Compress"
+    # Tests are not threadsafe. Most likely can only run one test at a time,
+    # due to altering shared database state.
+    # This option already in upstream code: https://github.com/openobserve/openobserve/pull/7084
+    # Also see: https://github.com/NixOS/nixpkgs/pull/457421
+    "--test-threads=1"
   ];
 
   passthru.updateScript = gitUpdater {

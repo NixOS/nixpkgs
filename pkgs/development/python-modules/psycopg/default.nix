@@ -199,6 +199,8 @@ buildPythonPackage rec {
     "test_connect_error_multi_hosts_each_message_preserved"
     # Flaky, fails intermittently
     "test_break_attempts"
+    # ConnectionResetError: [Errno 104] Connection reset by peer
+    "test_wait_r"
   ];
 
   disabledTestPaths = [

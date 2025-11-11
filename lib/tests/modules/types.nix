@@ -15,6 +15,7 @@ in
 {
   options = {
     pathInStore = mkOption { type = types.lazyAttrsOf types.pathInStore; };
+    externalPath = mkOption { type = types.lazyAttrsOf types.externalPath; };
     assertions = mkOption { };
   };
   config = {
@@ -26,6 +27,13 @@ in
     pathInStore.bad3 = "${storeDir}/";
     pathInStore.bad4 = "${storeDir}/.links"; # technically true, but not reasonable
     pathInStore.bad5 = "/foo/bar";
+    externalPath.bad1 = "${storeDir}/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv";
+    externalPath.bad2 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15";
+    externalPath.bad3 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash";
+    externalPath.bad4 = "";
+    externalPath.bad5 = "./foo/bar";
+    externalPath.ok1 = "/foo/bar";
+    externalPath.ok2 = "/";
 
     assertions =
       with lib.types;

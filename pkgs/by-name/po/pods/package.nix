@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/marhkb/pods";
     changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "pods";
   };

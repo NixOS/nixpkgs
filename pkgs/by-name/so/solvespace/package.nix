@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -24,7 +23,6 @@
   libspnav,
   libthai,
   libxkbcommon,
-  mimalloc,
   pangomm,
   pcre,
   util-linuxMinimal, # provides libmount
@@ -34,22 +32,15 @@
 
 stdenv.mkDerivation rec {
   pname = "solvespace";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
     rev = "v${version}";
-    hash = "sha256-sSDht8pBrOG1YpsWfC/CLTTWh2cI5pn2PXGH900Z0yA=";
+    hash = "sha256-+ZSAC7wDOaN51RjbSAqaQOp10JzxSME3g0ln4VdkwcA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/solvespace/files/solvespace-3.1-use-system-mimalloc.patch";
-      hash = "sha256-XEeh6vb4fYsTmAro1ZR/8NyFl+Y+S+m/Lx+tA7o2omM=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +67,6 @@ stdenv.mkDerivation rec {
     libspnav
     libthai
     libxkbcommon
-    mimalloc
     pangomm
     pcre
     util-linuxMinimal

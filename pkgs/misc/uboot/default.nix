@@ -34,10 +34,10 @@
 }@pkgs:
 
 let
-  defaultVersion = "2025.07";
+  defaultVersion = "2025.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-D5M/bFpCaJW/MG6T5qxTxghw5LVM2lbZUhG+yZ5jvsc=";
+    hash = "sha256-tPAyhI5WzI8hOtWfkTLAhNu7YyvCkXbQJOWCIODv30o=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -313,9 +313,6 @@ in
     '';
   };
 
-  # Flashing instructions:
-  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
-  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
   ubootLibreTechCC =
     let
       firmwareImagePkg = fetchFromGitHub {
@@ -330,6 +327,15 @@ in
       defconfig = "libretech-cc_defconfig";
       extraMeta = {
         broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        longDescription = ''
+          Boot loader for the Libre Computer AML-S905X-CC.
+
+          Flashing instructions:
+          ```sh
+          dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
+          dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
+          ```
+        '';
         platforms = [ "aarch64-linux" ];
       };
       filesToInstall = [ "u-boot.bin" ];
@@ -415,10 +421,6 @@ in
     ];
   };
 
-  # Flashing instructions:
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
-  # dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
   ubootOdroidC2 =
     let
       firmwareBlobs = fetchFromGitHub {
@@ -431,7 +433,19 @@ in
     in
     buildUBoot {
       defconfig = "odroid-c2_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        longDescription = ''
+          Boot loader for the Hardkernel ODROID-C2.
+
+          Flashing instructions:
+          ```sh
+          dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
+          dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
+          dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
+          ```
+        '';
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [
         "u-boot.bin"
         "u-boot.gxbb"
@@ -774,13 +788,17 @@ in
     ];
   };
 
-  # A special build with much lower memory frequency (666 vs 1600 MT/s) which
-  # makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
-  # on that revision is marginal and not unconditionally stable at the specified
-  # frequency. If your ROCK64 is unstable you can try this u-boot variant to
-  # see if it works better for you. The only disadvantage is lowered memory
-  # bandwidth.
   ubootRock64v2 = buildUBoot {
+    extraMeta.longDescription = ''
+      Boot loader for the Pine64 Rock64 V2.
+
+      A special build with much lower memory frequency (666 vs 1600 MT/s) which
+      makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
+      on that revision is marginal and not unconditionally stable at the specified
+      frequency. If your ROCK64 is unstable you can try this u-boot variant to
+      see if it works better for you. The only disadvantage is lowered memory
+      bandwidth.
+    '';
     prePatch = ''
       substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
         --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
@@ -864,8 +882,15 @@ in
     extraConfig = ''
       CONFIG_CMD_SETEXPR=y
     '';
-    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
-    # sf probe; sf update $loadaddr 0 80000
+    extraMeta.longDescription = ''
+      Boot loader for the CompuLab CM-FX6.
+
+      Flashing instructions:
+      ```
+      sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+      sf probe; sf update $loadaddr 0 80000
+      ```
+    '';
   };
 
   ubootVisionFive2 = buildUBoot {

@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.30.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-+Nzli2SDzG+CBNSZ5z2mAuucS2a3WS7HqtUJs2JxIbo=";
+    hash = "sha256-1stUmm7rtNB2z2srOzDvQ9QaGsS0CySBOHt118vmJoM=";
   };
 
-  cargoHash = "sha256-QjWBuI3hZkDNqyCNfFpz6qvZUYHEKRQZ4gbZGxkMaiw=";
+  cargoHash = "sha256-Il5PVJHoNdifqUcXxKR+j+Lgga0kIsl7IJp9oGanZ+c=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
       mistydemeo
     ];

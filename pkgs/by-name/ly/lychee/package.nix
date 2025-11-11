@@ -7,7 +7,6 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
-  git,
   openssl,
   testers,
 }:
@@ -23,16 +22,23 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    rev = "lychee-v${version}";
-    hash = "sha256-zV3EVFFYU9fR5gXPTyYudE8rgAW3eDjOF3sTJMuXzh4=";
-    leaveDotGit = true; # used by lychee to determine latest commit date at build time
+    tag = "lychee-v${version}";
+    leaveDotGit = true;
+    postFetch = ''
+      GIT_DATE=$(git -C $out/.git show -s --format=%cs)
+      substituteInPlace $out/lychee-bin/build.rs \
+        --replace-fail \
+          '("cargo:rustc-env=GIT_DATE={}", git_date())' \
+          '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
+      rm -rf $out/.git
+    '';
+    hash = "sha256-Nt7LsnQkWQS0f2/lS8WNYkI+XbKUSHQ6bNf9FNjfk7A=";
   };
 
   cargoHash = "sha256-1sqFjNil6KktpqrsXXgt3xtOz7eFQc2skkFHqmTMDg4=";
 
   nativeBuildInputs = [
     pkg-config
-    git
     installShellFiles
   ];
 

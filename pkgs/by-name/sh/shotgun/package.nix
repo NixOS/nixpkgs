@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neXromancers/shotgun";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [
-      figsoda
       lumi
     ];
     platforms = platforms.linux;

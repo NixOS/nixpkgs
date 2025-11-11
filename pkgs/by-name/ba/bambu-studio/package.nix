@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.02.02.56";
+  version = "02.03.01.51";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vg+sEIztFBfzROl2surRd4l/afZ+tGMtG65m3kDIPAY=";
+    hash = "sha256-SnWOTFymTVHzYqraMzohOrpM0UuLW+PRfZBqkFASEWs=";
   };
 
   nativeBuildInputs = [
@@ -117,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
+    # Don't link cereal
+    ./patches/no-cereal.patch
+    # Cmake 4 support
+    ./patches/cmake.patch
   ];
 
   doCheck = true;

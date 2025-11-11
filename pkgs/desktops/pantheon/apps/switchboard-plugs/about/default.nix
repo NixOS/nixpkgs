@@ -19,7 +19,7 @@
   packagekit,
   polkit,
   switchboard,
-  udisks2,
+  udisks,
   fwupd,
   appstream,
   elementary-settings-daemon,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     packagekit
     polkit
     switchboard
-    udisks2
+    udisks
   ];
 
   passthru = {

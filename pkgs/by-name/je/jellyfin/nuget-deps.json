@@ -1346,8 +1346,8 @@
   },
   {
     "pname": "z440.atl.core",
-    "version": "7.5.0",
-    "hash": "sha256-denTZd9A4zV2Plg7PtRf6bc1gzXzxgTWPp1bs1NShwA="
+    "version": "7.6.0",
+    "hash": "sha256-J5wLcYuVNETDwrokDGWM5qcKGO4xyJFjJRe2F/v7OxA="
   },
   {
     "pname": "zlib.net-mutliplatform",

@@ -34,7 +34,7 @@ let
       stripRoot = false;
     };
 
-  version = "3.6.0";
+  version = "3.6.1";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-XBtRjAiBvSMRFwdW1RZK2ZQnxwhzdjfK5O6SZrHUZ7w=";
+    hash = "sha256-9b31UPJzmsGCXmCAIb+8XMEjKnvFIEO0MozWluHYbZA=";
   };
 
   # Needs tox

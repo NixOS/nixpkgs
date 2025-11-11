@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpufetch";
-  version = "1.06";
+  version = "1.07";
 
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "cpufetch";
     rev = "v${version}";
-    sha256 = "sha256-sE3i2rw8W362BExFEImjw/t17qX8D4/0Ty8jG63bjbk=";
+    sha256 = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
   };
 
   nativeBuildInputs = [

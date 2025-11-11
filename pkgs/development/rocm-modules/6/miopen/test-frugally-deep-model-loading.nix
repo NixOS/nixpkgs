@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Test that frugally-deep can load MIOpen model files";
-    maintainers = with lib.teams; [ rocm ];
+    teams = with lib.teams; [ rocm ];
     platforms = lib.platforms.linux;
   };
 }

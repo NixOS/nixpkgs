@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       ma27
-      figsoda
     ];
     mainProgram = "eva";
   };

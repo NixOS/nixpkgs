@@ -16,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "3.2.0";
+  version = "3.4.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-X+VOcgOFcdb29VfJCfD1xBEqY/1qbfwViS/N9PsT2y8=";
+    hash = "sha256-rroljEJ0xXW15iKmW6C64+h8epNB6XJzKtylA/wKyWQ=";
   };
 
   build-system = [ setuptools ];

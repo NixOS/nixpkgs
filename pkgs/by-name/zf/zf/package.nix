@@ -66,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
       mmlb
     ];
     mainProgram = "zf";

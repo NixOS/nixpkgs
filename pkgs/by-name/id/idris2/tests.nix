@@ -149,9 +149,9 @@ in
     transformBuildIdrisOutput = pkg: pkg.library { withSource = false; };
     expectedTree = ''
       `-- lib
-          `-- idris2-0.7.0
+          `-- idris2-${idris2.version}
               `-- pkg-0
-                  |-- 2023090800
+                  |-- 2025081600
                   |   |-- Main.ttc
                   |   `-- Main.ttm
                   `-- pkg.ipkg
@@ -186,9 +186,9 @@ in
     transformBuildIdrisOutput = pkg: pkg.library { withSource = true; };
     expectedTree = ''
       `-- lib
-          `-- idris2-0.7.0
+          `-- idris2-${idris2.version}
               `-- pkg-0
-                  |-- 2023090800
+                  |-- 2025081600
                   |   |-- Main.ttc
                   |   `-- Main.ttm
                   |-- Main.idr
@@ -224,9 +224,9 @@ in
     transformBuildIdrisOutput = pkg: pkg.library'.withSource;
     expectedTree = ''
       `-- lib
-          `-- idris2-0.7.0
+          `-- idris2-${idris2.version}
               `-- pkg-0
-                  |-- 2023090800
+                  |-- 2025081600
                   |   |-- Main.ttc
                   |   `-- Main.ttm
                   |-- Main.idr

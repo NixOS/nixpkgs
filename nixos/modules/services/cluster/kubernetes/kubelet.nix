@@ -362,7 +362,6 @@ in
         '';
         serviceConfig = {
           Slice = "kubernetes.slice";
-          CPUAccounting = true;
           MemoryAccounting = true;
           Restart = "on-failure";
           RestartSec = "1000ms";

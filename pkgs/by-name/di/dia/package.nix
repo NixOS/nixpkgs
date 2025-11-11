@@ -1,14 +1,16 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  appstream-glib,
+  appstream,
   dblatex,
   desktop-file-utils,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  fetchFromGitLab,
+  gdk-pixbuf,
   graphene,
-  gtk3,
   gtk-mac-integration-gtk3,
-  intltool,
+  gtk3,
   libxml2,
   libxslt,
   meson,
@@ -17,62 +19,91 @@
   poppler,
   python3,
   wrapGAppsHook3,
-  # Building with docs are still failing in unstable-2023-09-28
-  withDocs ? false,
 }:
 
+let
+  xpm-pixbuf = stdenv.mkDerivation {
+    pname = "xpm-pixbuf";
+    version = "0-unstable-2024-05-24";
+
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "ZanderBrown";
+      repo = "xpm-pixbuf";
+      rev = "d290a0c846687b22d2a8c5aaec83a6689f30e1c3";
+      hash = "sha256-LU6nKe7IIecF/3wwhlwR1hyABBvfwvujVW5zJJSzkqo=";
+    };
+
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+    ];
+
+    buildInputs = [ gdk-pixbuf ];
+
+    meta = {
+      license = lib.licenses.lgpl21;
+      homepage = "https://gitlab.gnome.org/ZanderBrown/xpm-pixbuf";
+    };
+  };
+in
 stdenv.mkDerivation {
   pname = "dia";
-  version = "unstable-2023-09-28";
+  version = "unstable-2025-10-26";
 
   src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "dia";
-    domain = "gitlab.gnome.org";
-    rev = "bd551bb2558dcc89bc0bf7b4dd85b38cd85ad322";
-    hash = "sha256-U+8TUE1ULt6MNxnvw9kFjCAVBecUy2Sarof6H9+kR7Q=";
+    rev = "efdf829e8afdbbeb371820932769e35415ebe886";
+    hash = "sha256-VFFU5iJnVJdZ2tkNszZ2ooBD+GiCL6MqanzpEWIJerk=";
   };
 
-  # Required for the PDF plugin
-  CXXFLAGS = "-std=c++20";
-
-  preConfigure = ''
-    patchShebangs .
+  postPatch = ''
+    # Fix build with poppler 25.10.0
+    substituteInPlace plug-ins/pdf/pdf-import.cpp \
+      --replace-fail 's->getLength();' 's->size();'
   '';
+
+  strictDeps = true;
+
+  dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
+    appstream
+    dblatex
+    dblatex.tex
+    desktop-file-utils
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    libxml2 # xmllint
+    libxslt
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     graphene
     gtk3
-    (libxml2.override { zlibSupport = true; })
+    libxml2
+    libxslt
     python3
     poppler
-  ]
-  ++ lib.optionals withDocs [
-    libxslt
+    xpm-pixbuf
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration-gtk3
   ];
 
-  nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
-    intltool
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
-  ]
-  ++ lib.optionals withDocs [
-    dblatex
-  ];
-
   meta = with lib; {
     description = "Gnome Diagram drawing software";
     mainProgram = "dia";
-    homepage = "http://live.gnome.org/Dia";
+    homepage = "https://wiki.gnome.org/Apps/Dia";
     maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

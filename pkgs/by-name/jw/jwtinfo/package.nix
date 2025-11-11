@@ -5,7 +5,7 @@
 }:
 let
   pname = "jwtinfo";
-  version = "0.6.0";
+  version = "0.6.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
     owner = "lmammino";
     repo = "jwtinfo";
     rev = "v${version}";
-    hash = "sha256-d88RL3Ii2/akIyxmKMEBqILRuaSP2v/RZ5zuWrwyYkc=";
+    hash = "sha256-o2SbPTnYSqsjpTl1Z8uSZZLeHx4lxunwDdig4UuVFKg=";
   };
 
-  cargoHash = "sha256-5lSGVr5iMk4Zai2HNTSXOeJXyXPRAWNEyJeZxMrAMUg=";
+  cargoHash = "sha256-v5kJ+XznzewkmC3qo1e2xMLc1fS8gYYNd/9+IDFkbvw=";
 
   meta = {
     description = "Command-line tool to get information about JWTs";

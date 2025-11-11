@@ -6,7 +6,6 @@
   targetPackages,
   stdenv,
   pkgs,
-  recurseIntoAttrs,
   # This is the default binutils, but with *this* version of LLD rather
   # than the default LLVM version's, if LLD is the choice. We use these for
   # the `useLLVM` bootstrapping below.
@@ -28,9 +27,9 @@ let
     "20.1.8".officialRelease.sha256 = "sha256-ysyB/EYxi2qE9fD5x/F2zI4vjn8UDoo1Z9ukiIrjFGw=";
     "21.1.2".officialRelease.sha256 = "sha256-SgZdBL0ivfv6/4EqmPQ+I57qT2t6i/rqnm20+T1BsFY=";
     "22.0.0-git".gitRelease = {
-      rev = "aed12c33ade9ea48f1a596cd98fde958803a17a7";
-      rev-version = "22.0.0-unstable-2025-10-27";
-      sha256 = "sha256-RnY+2/t4cGdjzh5sSsUPxOZ7xo4oUu4MkGSyOFBsk1s=";
+      rev = "f734cebc396bfb0a3523d205071764f689432ab4";
+      rev-version = "22.0.0-unstable-2025-11-09";
+      sha256 = "sha256-YMLjygfO/r5wP/pI+XBfIGgpGo6c7HOl0IV8uJbDSFI=";
     };
   }
   // llvmVersions;
@@ -56,7 +55,7 @@ let
         args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
     in
     lib.nameValuePair attrName (
-      recurseIntoAttrs (
+      lib.recurseIntoAttrs (
         callPackage ./common (
           {
             inherit (stdenvAdapters) overrideCC;

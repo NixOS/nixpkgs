@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivify";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "jannis-baum";
     repo = "Vivify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n2l0+CFQ7EXnTZXr+JO7NE1OVSzpphs6lUgHfjebX4M=";
+    hash = "sha256-LQX7HBTWDR43aMqJrogL9rDFL5qRF0Xzw/O35Uq7R3g=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

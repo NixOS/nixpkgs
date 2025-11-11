@@ -57,8 +57,9 @@ jobs:
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 
-            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
-              * Even as a non-committer, if you find that it is not acceptable, leave a comment.
+            **Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).**
+
+            Even as a non-committer, if you find that it is not acceptable, leave a comment.
 
       - name: Log current API rate limits
         env:

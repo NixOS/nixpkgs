@@ -354,6 +354,60 @@ self: super: {
 }
 ```
 
+You can add a custom PostgreSQL extension to an environment by calling `postgresqlPackages.callPackage` on the derivation.
+In addition to the correct `postgresql` package, `callPackage` will provide additional functions to build those extensions:
+
+- `postgresqlBuildExtension`, extending `mkDerivation` for C and SQL extensions.
+- `buildPgrxExtension`, extending `mkDerivation` for pgrx (Rust) extensions.
+- `postgresqlTestExtension`, a helper to test these extensions on a PostgreSQL instance.
+
+We can define our extension as such:
+
+```nix
+# my-extension.nix
+{
+  postgresql,
+  postgresqlBuildExtension,
+  # other regular mkDerivation arguments
+  fetchFromGitHub,
+}:
+postgresqlBuildExtension (finalAttrs: {
+  pname = "myext";
+  # ...
+  src = fetchFromGitHub {
+    # ...
+  };
+  meta = {
+    platforms = postgresql.meta.platforms;
+    # other meta properties
+  };
+})
+```
+
+We can then build it with `callPackage`, for instance in a NixOS config:
+
+```nix
+{
+  services.postgresql.extensions =
+    ps: with ps; [
+      pg_repack
+      postgis
+      (ps.callPackage ./my-extension.nix { })
+    ];
+}
+```
+Or to include it in a shell environment:
+
+```nix
+{
+  postgresql_custom = self.postgresql_17.withPackages (ps: [
+    ps.pg_repack
+    ps.postgis
+    (ps.callPackage ./my-extension.nix { })
+  ]);
+}
+```
+
 ## Procedural Languages {#module-services-postgres-pls}
 
 PostgreSQL ships the additional procedural languages PL/Perl, PL/Python and PL/Tcl as extensions.

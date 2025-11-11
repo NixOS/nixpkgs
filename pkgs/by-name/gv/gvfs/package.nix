@@ -11,7 +11,7 @@
   glib,
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
-  udisks2,
+  udisks,
   libgcrypt,
   libcap,
   polkit,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals udevSupport [
     libgudev
-    udisks2
+    udisks
     fuse3
     libcdio
     samba

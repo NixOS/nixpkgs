@@ -80,7 +80,7 @@
 }:
 
 let
-  version = "1.4.27";
+  version = "1.4.28";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -130,7 +130,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-B1slcxNIqT6+xRQkTTCXFjUyFfiBv5En+gYY6lAJJuU=";
+    hash = "sha256-9hxAsTy3e9BDWhJCB5N2RaEFIO0Lc6FK2XKgJC78VUg=";
   };
 in
 buildPythonPackage {

@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   graphviz,
-  igraph,
+  igraph_0, # https://github.com/emsec/hal/issues/623
   llvmPackages,
   ninja,
   nlohmann_json,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtsvg
     boost
     rapidjson
-    igraph
+    igraph_0
     nlohmann_json
     spdlog
     graphviz

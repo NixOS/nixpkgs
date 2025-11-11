@@ -60,7 +60,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       mig4ng
     ];
     mainProgram = "shaq";

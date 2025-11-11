@@ -42,5 +42,6 @@ buildGo124Module rec {
       cyberus
     ];
     platforms = platforms.unix;
+    mainProgram = "registry";
   };
 }

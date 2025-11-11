@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2lfy33Qx0AjKDfwwRn7hjaz7mPQsr7MRB9v75qshGjM=";
+    hash = "sha256-XBkb8CbfAXBwOO9JkExpsy8HxtbZo3/fnU6cReuSETI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,8 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libX11;
-
-  cmakeFlags = [ "-DCOIN_USE_CPACK=OFF" ];
 
   meta = with lib; {
     homepage = "https://github.com/coin3d/coin";

@@ -279,8 +279,6 @@ extendMkDerivation {
       ]
       ++ nativeBuildInputs;
 
-      propagatedBuildInputs = [ setupCudaHook ] ++ propagatedBuildInputs;
-
       buildInputs = [
         # autoPatchelfHook will search for a libstdc++ and we're giving it
         # one that is compatible with the rest of nixpkgs, even when
@@ -375,10 +373,6 @@ extendMkDerivation {
         # a package is missing and is required for the build -- that should go in platformAssertions,
         # because attempts to access attributes on the package will cause evaluation errors.
         brokenAssertions = [
-          {
-            message = "CUDA support is enabled by config.cudaSupport";
-            assertion = config.cudaSupport;
-          }
           {
             message = "lib output precedes static output";
             assertion =

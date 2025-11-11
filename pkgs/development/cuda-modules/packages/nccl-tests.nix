@@ -20,7 +20,7 @@
 let
   inherit (_cuda.lib) _mkMetaBroken;
   inherit (lib) licenses maintainers teams;
-  inherit (lib.attrsets) getBin;
+  inherit (lib.attrsets) getBin getInclude getLib;
   inherit (lib.lists) optionals;
 in
 backendStdenv.mkDerivation (finalAttrs: {
@@ -30,27 +30,21 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl-tests";
-  version = "2.14.1";
+  version = "2.17.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OgffbW9Vx/sm1I1tpaPGdAhIpV4jbB4hJa9UcEAWkdE=";
+    hash = "sha256-F7F8UcBCX7nsuCNCzWHNY12QFtmYV10Jf785P39SHkM=";
   };
 
   postPatch = ''
-    nixLog "patching $PWD/src/Makefile to remove NVIDIA's ccbin declaration"
-    substituteInPlace ./src/Makefile \
+    nixLog "patching $PWD/src/common.mk to remove NVIDIA's ccbin declaration"
+    substituteInPlace ./src/common.mk \
       --replace-fail \
         '-ccbin $(CXX)' \
         ""
-
-    nixLog "patching $PWD/src/Makefile to replace -std=c++11 with -std=c++14"
-    substituteInPlace ./src/Makefile \
-      --replace-fail \
-        '-std=c++11' \
-        '-std=c++14'
   '';
 
   nativeBuildInputs = [
@@ -65,12 +59,15 @@ backendStdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals mpiSupport [ mpi ];
 
+  # NOTE: CUDA_HOME is expected to have the bin directory
+  # TODO: This won't work with cross-compilation since cuda_nvcc will come from hostPackages by default (aka pkgs).
   makeFlags = [
-    # NOTE: CUDA_HOME is expected to have the bin directory
-    # TODO: This won't work with cross-compilation since cuda_nvcc will come from hostPackages by default (aka pkgs).
+    "CXXSTD=-std=c++17"
     "CUDA_HOME=${getBin cuda_nvcc}"
-    "NCCL_HOME=${nccl}"
+    "CUDA_INC=${getInclude cuda_cudart}/include"
+    "CUDA_LIB=${getLib cuda_cudart}/lib"
     "NVCC_GENCODE=${flags.gencodeString}"
+    "PREFIX=$(out)"
   ]
   ++ optionals mpiSupport [ "MPI=1" ];
 

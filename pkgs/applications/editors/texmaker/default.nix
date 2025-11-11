@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
   };
 
+  patches = [
+    # Check if the patch can be removed next release
+    ./fix-build-with-qt-6-10.patch
+  ];
+
   buildInputs = [
     poppler
     qtbase

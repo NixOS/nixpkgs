@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fsspec/universal_pathlib";
     changelog = "https://github.com/fsspec/universal_pathlib/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

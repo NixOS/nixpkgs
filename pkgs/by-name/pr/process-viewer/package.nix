@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "Process viewer GUI in rust";
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "process_viewer";
   };
 }

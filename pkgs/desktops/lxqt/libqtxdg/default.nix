@@ -2,14 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   qtbase,
   qtsvg,
   lxqt-build-tools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "4.2.0",
+  version ? "4.3.0",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,20 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-        "4.2.0" = "sha256-TSyVYlWsmB/6gxJo+CjROBQaWsmYZAwkM8BwiWP+XBI=";
+        "4.3.0" = "sha256-aec+NjKkaH8dI0cFVxGehdRGO2aH6BD+aix+IvD+2LI=";
       }
       ."${finalAttrs.version}";
   };
-
-  patches = lib.optionals (finalAttrs.version == "4.2.0") [
-    # fix build against Qt >= 6.10 (https://github.com/lxqt/libqtxdg/pull/313)
-    # TODO: drop when upgrading beyond version 4.2.0
-    (fetchpatch {
-      name = "cmake-fix-build-with-Qt-6.10.patch";
-      url = "https://github.com/lxqt/libqtxdg/commit/b01a024921acdfd5b0e97d5fda2933c726826e99.patch";
-      hash = "sha256-njpn6pU9BHlfYfkw/jEwh8w3Wo1F8MlRU8iQB+Tz2zU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

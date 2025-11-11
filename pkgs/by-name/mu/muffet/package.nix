@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/raviqqe/muffet";
     changelog = "https://github.com/raviqqe/muffet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "muffet";
   };
 })

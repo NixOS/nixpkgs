@@ -32,7 +32,7 @@
   minizip-ng,
   openal,
   pugixml,
-  SDL2,
+  sdl3,
   sfml,
   xxHash,
   xz,
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     qt6.qtbase
     qt6.qtsvg
-    SDL2
+    sdl3
     sfml
     xxHash
     xz
@@ -161,16 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-    # https://bugs.dolphin-emu.org/issues/11807
-    # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   doInstallCheck = true;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+      install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Only gets installed automatically if the standalone executable is used

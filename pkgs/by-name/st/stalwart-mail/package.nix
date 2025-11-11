@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KH68lFF1eqYZiI5AjzDRX6Z21MQ9At4jH6x9jsQzejE=";
+    hash = "sha256-Wsk4n6jLOAFhxYb5Hw8XvQem0xccGGoD729nRz3bRF0=";
   };
 
-  cargoHash = "sha256-pjmAIC7g8SbMxZvTgaXH8GrRPhITDjC5psJpfT+vV6M=";
+  cargoHash = "sha256-LFXpv8/rHQwzdKEyS4VplQSwFUnZrgv0qDIhZUOGfpo=";
 
   depsBuildBuild = [
     pkg-config

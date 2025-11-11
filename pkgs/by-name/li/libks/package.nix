@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
-    rev = "v${version}";
-    sha256 = "sha256-fiBemt71UJgN0RryGmGiK7sob1xbdmSOArEGt5Pg5YM=";
+    tag = "v${version}";
+    hash = "sha256-cBNNCOm+NcIvozN4Z4XnZWBBqq0LVELVqXubQB4JMTU=";
   };
 
   patches = [
@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/telephony/5ced7ea4fc9bd746273d564bf3c102f253d2182e/libs/libks/patches/01-find-libm.patch";
       sha256 = "1hyrsdxg69d08qzvf3mbrx2363lw52jcybw8i3ynzqcl228gcg8a";
     })
-
-    # Remove when https://github.com/signalwire/libks/pull/246 merged & in release
-    ./1001-tests-testhash.c-Properly-request-shutdown-of-test2-threads.patch
   ];
 
   dontUseCmakeBuildDir = true;
@@ -72,7 +69,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];

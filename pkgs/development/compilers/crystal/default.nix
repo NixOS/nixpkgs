@@ -325,5 +325,13 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_16;
+  crystal_1_18 = generic {
+    version = "1.18.2";
+    sha256 = "sha256-bwKs9bwD1WfS95DSxVY5AjT5Q61jOsfAH897tmiurng=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_21;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_18;
 }

@@ -9,21 +9,24 @@
 }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "7.2.0";
+  version = "7.7.5";
 
   src = fetchFromGitHub {
-    owner = "99designs";
+    owner = "ByteNess";
     repo = "aws-vault";
     rev = "v${version}";
-    hash = "sha256-Qs4vxFgehWQYYECBGBSU8YI/BHLwOQUO5wBlNEUzD7c=";
+    hash = "sha256-K91GNyvtjDO6UMU9cC+TbUdMWdXrPlKLU8u5cbEMdRA=";
   };
 
-  vendorHash = "sha256-4bJKDEZlO0DzEzTQ7m+SQuzhe+wKmL6wLueqgSz/46s=";
+  proxyVendor = true;
+  vendorHash = "sha256-3AL3vjKqzjrzgPrLLwIgWpn1hRB6soTMbaRly/fvziA=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
   ];
+
+  env.CGO_ENABLED = "0";
 
   postInstall = ''
     # make xdg-open overrideable at runtime
@@ -55,8 +58,11 @@ buildGoModule rec {
   meta = with lib; {
     description = "Vault for securely storing and accessing AWS credentials in development environments";
     mainProgram = "aws-vault";
-    homepage = "https://github.com/99designs/aws-vault";
+    homepage = "https://github.com/ByteNess/aws-vault";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [
+      zimbatm
+      er0k
+    ];
   };
 }

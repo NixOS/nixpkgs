@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       turbomack
       matthiasbeyer
     ];

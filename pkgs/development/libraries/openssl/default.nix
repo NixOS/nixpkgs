@@ -239,7 +239,10 @@ let
         # the code above, inhibiting `./Configure` from adding the
         # conflicting flags.
         "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
-      ];
+      ]
+      # tests are not being installed, it makes no sense
+      # to build them if check is disabled, e.g. on cross.
+      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
 
       makeFlags = [
         "MANDIR=$(man)/share/man"
@@ -422,6 +425,9 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./3.5/fix-mingw-linking.patch
     ];
 
     withDocs = true;

@@ -3,6 +3,9 @@ name: Build
 on:
   workflow_call:
     inputs:
+      artifact-prefix:
+        required: true
+        type: string
       baseBranch:
         required: true
         type: string
@@ -53,7 +56,7 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
         with:
           # Sandbox is disabled on MacOS by default.
           extra_nix_config: sandbox = true
@@ -100,5 +103,5 @@ jobs:
           contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: nixos-manual-${{ matrix.name }}
+          name: ${{ inputs.artifact-prefix }}nixos-manual-${{ matrix.name }}
           path: nixos-manual

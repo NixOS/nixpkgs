@@ -8,12 +8,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-10-25";
+  version = "0-unstable-2025-11-06";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "6aaec4681f415cd7c87519b4acd61720525cdda1";
-    hash = "sha256-77PoCq072udYDsplW1ENQbw/8lQqXrEiPFh2e/oAqVw=";
+    rev = "db75a6d97efdd7a3f73cc2c0ebc3f362ebce608c";
+    hash = "sha256-pl6Ra7QPmM15ndl/skxE+XTqWP9oD2olcs+EQFW0U/0=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -37,18 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-       # NOTE: Starting with Bun 1.3.0, isolated builds became the default
-       # behavior. In isolated builds, each package receives its own
-       # `.node_modules` subdirectory containing only the dependencies
-       # explicitly declared in that package's `package.json`. Since our build
-       # process copies only the root-level `.node_modules` directory, we must
-       # use `--linker=hoisted` to consolidate all dependencies there. Without
-       # this flag, we would need to copy every individual `.node_modules`
-       # subdirectory from each package.
        bun install \
+         --filter=./packages/web \
          --force \
          --frozen-lockfile \
-         --linker=hoisted \
+         --ignore-scripts \
          --no-progress \
          --production
 
@@ -58,23 +51,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      # Copy node_modules directories
+      while IFS= read -r dir; do
+        rel="''${dir#./}"
+        dest="$out/$rel"
+        mkdir -p "$(dirname "$dest")"
+        cp -R "$dir" "$dest"
+      done < <(find . -type d -name node_modules -prune)
 
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-        aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-        x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-        aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-      }
-      .${stdenvNoCC.hostPlatform.system};
+    outputHash = "sha256-otke/XlxVafkgtM3wDMU+/GBBgrbD32+3E+Wyue8+U8=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -84,20 +75,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
+    cp -R ${finalAttrs.node_modules}/. .
 
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    patchShebangs packages/web/script/build.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
     cd packages/web
-    bun run build
+    bun run ./script/build.ts
 
     runHook postBuild
   '';

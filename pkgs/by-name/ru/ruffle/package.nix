@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.2.0-nightly-2025-10-24";
+  version = "0.2.0-nightly-2025-11-09";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0.2.0-" finalAttrs.version;
-    hash = "sha256-zp+2kILsWkRVDX5q7rCI294VCOz8C3PleDPgED3n+LM=";
+    hash = "sha256-InOLycAjM1w1G+6yvPK5Je+X/EE5/wpeyJ5JAbB7YzU=";
   };
 
   postPatch =
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                        "OpenH264Version(${major}, ${minor}, ${patch})"
     '';
 
-  cargoHash = "sha256-Eo9wLL/Xj/mWto3cRSxAv5dMf+jLOUUk5wCd8voQEeQ=";
+  cargoHash = "sha256-GV9tXroySDCA6JWxa2Zgxp0R/Xy9ZPVoYZW2GEow7Tk=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =

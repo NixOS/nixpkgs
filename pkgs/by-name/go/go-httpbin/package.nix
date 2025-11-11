@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-httpbin";
-  version = "2.18.3";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "mccutchen";
     repo = "go-httpbin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ixEbmppQ+4Udc5ytV4YPOpOT/iEbhjQIYGoOGL0dIw8=";
+    hash = "sha256-agElHziDwv2MGwTUKPsyDMVlTNNkuSZp4OAR2/zbW1U=";
   };
 
   vendorHash = null;

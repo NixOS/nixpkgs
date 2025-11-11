@@ -11,12 +11,12 @@ let
     in
     {
       # Compiler version & repo
-      idris2-version = "0.7.0";
+      idris2-version = "0.8.0";
       idris2-src = fetchFromGitHub {
         owner = "idris-lang";
         repo = "Idris2";
         rev = "v${self.idris2-version}";
-        hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
+        hash = "sha256-MvFNSPpgONSTjACH3HGWEiNgz9aAeBPmyQwFe21+fe0=";
       };
       # Prelude libraries
       mkPrelude = callPackage ./mkPrelude.nix { }; # Build helper

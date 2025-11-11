@@ -31,4 +31,7 @@ mkKdeDerivation rec {
     corrosion
     qcoro
   ];
+
+  # FIXME: work around Qt 6.10 cmake API changes
+  cmakeFlags = [ "-DQT_FIND_PRIVATE_MODULES=1" ];
 }

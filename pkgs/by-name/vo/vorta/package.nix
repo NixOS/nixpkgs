@@ -100,10 +100,7 @@ python3Packages.buildPythonApplication rec {
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      ma27
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ ma27 ];
     platforms = lib.platforms.linux;
     mainProgram = "vorta";
   };

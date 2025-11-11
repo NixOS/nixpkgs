@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     tag = "v${version}";
-    hash = "sha256-B3AN0VqMhQoqqPjUf/JTWYdyVQVXt+QsBbqsooDsuDE=";
+    hash = "sha256-PEkxEKet0nrowWJ4J3AqqqdecO4zSbTampz/Dx0QD2s=";
   };
 
   build-system = [ hatchling ];

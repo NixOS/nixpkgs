@@ -1,10 +1,14 @@
 { pkgs }:
-
-with pkgs;
-
+let
+  inherit (pkgs)
+    stdenv
+    callPackage
+    config
+    lib
+    ;
+in
 {
-  inherit (pkgs) openjfx17 openjfx21 openjfx23;
-
+  inherit (pkgs) openjfx17 openjfx21 openjfx25;
   compiler = lib.recurseIntoAttrs (
     let
       # merge meta.platforms of both packages so that dependent packages and hydra build them
@@ -48,7 +52,6 @@ with pkgs;
       openjdk11 = mkOpenjdk "11";
       openjdk17 = mkOpenjdk "17";
       openjdk21 = mkOpenjdk "21";
-      openjdk23 = mkOpenjdk "23";
       openjdk25 = mkOpenjdk "25";
 
       # Legacy aliases
@@ -56,7 +59,7 @@ with pkgs;
       openjdk11-bootstrap = temurin-bin.jdk-11;
       openjdk17-bootstrap = temurin-bin.jdk-17;
 
-      temurin-bin = recurseIntoAttrs (
+      temurin-bin = lib.recurseIntoAttrs (
         let
           temurinLinux = import ../development/compilers/temurin-bin/jdk-linux.nix {
             inherit (pkgs) lib callPackage stdenv;
@@ -68,7 +71,7 @@ with pkgs;
         lib.mapAttrs (name: drv: mkLinuxDarwin drv temurinDarwin.${name}) temurinLinux
       );
 
-      semeru-bin = recurseIntoAttrs (
+      semeru-bin = lib.recurseIntoAttrs (
         let
           semeruLinux = import ../development/compilers/semeru-bin/jdk-linux.nix {
             inherit (pkgs) lib callPackage;

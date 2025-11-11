@@ -3,7 +3,6 @@
   callPackage,
   stdenv,
   stdenvAdapters,
-  recurseIntoAttrs,
   gccVersions ? { },
   patchesFn ? lib.id,
   buildPackages,
@@ -44,7 +43,7 @@ let
         args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
     in
     lib.nameValuePair attrName (
-      recurseIntoAttrs (
+      lib.recurseIntoAttrs (
         callPackage ./common (
           {
             inherit (stdenvAdapters) overrideCC;
