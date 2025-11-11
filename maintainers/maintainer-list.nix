@@ -20600,6 +20600,13 @@
     github = "plamper";
     githubId = 59016721;
   };
+  PlasmaPower = {
+    name = "Lee Bousfield";
+    github = "PlasmaPower";
+    githubId = 6006498;
+    email = "ljbousfield+nix@gmail.com";
+    matrix = "@plasmapower:matrix.org";
+  };
   plchldr = {
     email = "mail@oddco.de";
     github = "plchldr";
