@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "bscalc";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.PlasmaPower ];
     platforms = lib.platforms.linux;
   };
 })
