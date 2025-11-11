@@ -9233,10 +9233,6 @@ with pkgs;
   kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
 
-  knot-resolver = callPackage ../servers/dns/knot-resolver {
-    systemd = systemdMinimal; # in closure already anyway
-  };
-
   leafnode = callPackage ../servers/news/leafnode { };
 
   leafnode1 = callPackage ../servers/news/leafnode/1.nix { };

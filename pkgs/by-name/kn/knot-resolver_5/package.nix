@@ -15,7 +15,7 @@
   gnutls,
   lmdb,
   jemalloc,
-  systemd,
+  systemdMinimal,
   libcap_ng,
   dns-root-data,
   nghttp2, # optionals, in principle
@@ -34,7 +34,7 @@ let
   lua = luajitPackages;
 
   unwrapped = stdenv.mkDerivation rec {
-    pname = "knot-resolver";
+    pname = "knot-resolver_5";
     version = "5.7.6";
 
     src = fetchurl {
@@ -96,7 +96,7 @@ let
     ## the rest are optional dependencies
     ++ optionals stdenv.hostPlatform.isLinux [
       # lib
-      systemd
+      systemdMinimal
       libcap_ng
     ]
     ++ [
