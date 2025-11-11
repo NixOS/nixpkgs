@@ -7,19 +7,22 @@
   pkg-config,
   pytest,
   python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "systemd";
+  pname = "systemd-python";
   version = "235";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "python-systemd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pkg-config ];
 
