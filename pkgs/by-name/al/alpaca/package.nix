@@ -31,14 +31,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.2.2";
+  version = "8.3.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-i1qNLV+oKkZlS/v8jfJJc67lJBuW6j2Uz93vb1StD6g=";
+    hash = "sha256-X3kITzZBcpN3kYDiT2PTu9UvuWQ/XSq3tVYYMa1btnY=";
   };
 
   nativeBuildInputs = [
