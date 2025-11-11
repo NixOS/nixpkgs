@@ -8,15 +8,18 @@
   bash,
 }:
 
-buildGoModule rec {
+let
+  version = "0.11.1";
+in
+buildGoModule {
   pname = "soft-serve";
-  version = "0.11.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
     rev = "v${version}";
-    hash = "sha256-qwUPRIOUFCsTuwRxFXSbGd3vwIwb8mEPlCX0em8OBBU=";
+    hash = "sha256-rWLjir4BqeLgwTGpumIoZ+No3bJyqeyrrNJ8da1Ivhg=";
   };
 
   vendorHash = "sha256-DBgVcbt2kejtEJSajJh6vS4feT3Lwm+KqUOks55iWIc=";
