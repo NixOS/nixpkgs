@@ -51,7 +51,10 @@ buildGoModule rec {
   meta = {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with lib.maintainers; [ sigma ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      sigma
+    ];
     # Apache 2.0 because we use only build "oss"
     license = lib.licenses.asl20;
     mainProgram = "dgraph";
