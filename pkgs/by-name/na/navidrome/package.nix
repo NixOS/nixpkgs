@@ -1,10 +1,11 @@
 {
-  buildGo124Module,
+  buildGoModule,
+  go,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
-  nodejs,
+  nodejs_24,
   npmHooks,
   pkg-config,
   stdenv,
@@ -16,30 +17,30 @@
   ffmpegSupport ? true,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.58.0";
+  version = "0.58.5";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
-    rev = "v${version}";
-    hash = "sha256-MwFACp2RKXz6zTzjknC5nKzaTEG1NWtvYggRZRiX5t0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bb6Ak8coEhN4ny79WgZ4DqzjqLbCr1FW/a3w2gfls2M=";
   };
 
-  vendorHash = "sha256-CrZqVhvDYemnaCuveOXySqHZhW+nrgzdxaiJRuZfSaI=";
+  vendorHash = "sha256-axtXNcduTCmi08kjmGCCgokvHR+uIdpZtnLCSFUIoM4=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/ui";
-    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    hash = "sha256-X6H3laLaWsI0aqFKIE7IDdWqYuTScI7gcRbcB4wPsKA=";
   };
 
   nativeBuildInputs = [
     buildPackages.makeWrapper
-    nodejs
+    nodejs_24
     npmHooks.npmConfigHook
     pkg-config
   ];
@@ -55,14 +56,17 @@ buildGo124Module rec {
   ];
 
   ldflags = [
-    "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
-    "-X github.com/navidrome/navidrome/consts.gitTag=v${version}"
+    "-X github.com/navidrome/navidrome/consts.gitSha=${finalAttrs.src.rev}"
+    "-X github.com/navidrome/navidrome/consts.gitTag=v${finalAttrs.version}"
   ];
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
 
   postPatch = ''
     patchShebangs ui/bin/update-workbox.sh
+
+    # Allow older go versions
+    sed -i go.mod -e 's/^go .*/go ${finalAttrs.passthru.go.version}/'
   '';
 
   preBuild = ''
@@ -97,4 +101,4 @@ buildGo124Module rec {
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
