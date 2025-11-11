@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     owner = "Oughie";
     repo = "clock-rs";
     tag = "v${version}";
-    sha256 = "sha256-sSofMZThR025O2J4PnOMWVEuBt/+oZ01yDAQAijca0A=";
+    sha256 = "sha256-cyqfpmSkAZMLKYEHOXHDoIZJSpMLR/Rft/+o7FGqNOQ=";
   };
 
-  cargoHash = "sha256-7gpD7aAma9Ye7sxqm1wGekcovXxdd11XOMf7fKWZrcA=";
+  cargoHash = "sha256-oOFuNik7z8G2Ig8D8YL0zmnW4abE8aDZbG2ulpGdb7s=";
 
   meta = {
     description = "Modern, digital clock that effortlessly runs in your terminal";
