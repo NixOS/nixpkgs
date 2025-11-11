@@ -84,8 +84,6 @@ jobs:
     permissions:
       pull-requests: write
       statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: mg-
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -102,7 +100,6 @@ jobs:
       pull-requests: write
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: pr-
