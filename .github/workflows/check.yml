@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       baseBranch:
-        required: true
+        required: false
         type: string
       headBranch:
-        required: true
+        required: false
         type: string
       mergedSha:
         required: true
@@ -27,6 +27,7 @@ defaults:
 
 jobs:
   commits:
+    if: inputs.baseBranch && inputs.headBranch
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
