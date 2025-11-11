@@ -5,44 +5,26 @@
   qmake,
   qtbase,
   qttools,
-  replaceVars,
   libGLU,
-  zlib,
   wrapQtAppsHook,
-  fetchpatch,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nifskope";
-  version = "2.0.dev7";
+  version = "2.0.dev11-20251031";
 
   src = fetchFromGitHub {
-    owner = "niftools";
+    owner = "fo76utils";
     repo = "nifskope";
-    rev = "47b788d26ae0fa12e60e8e7a4f0fa945a510c7b2"; # `v${version}` doesn't work with submodules
-    hash = "sha256-8TNXDSZ3okeMtuGEHpKOnKyY/Z/w4auG5kjgmUexF/M=";
+    rev = "v${version}";
+    hash = "sha256-m8M4Hqvoza5JfAsbDIETVP4CS8gPd/Wxna0Sg9I4Gok=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    ./external-lib-paths.patch
-    ./zlib.patch
-    (replaceVars ./qttools-bins.patch {
-      qttools = "${qttools.dev}/bin";
-    })
-    (fetchpatch {
-      name = "qt512-build-fix.patch";
-      url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
-      sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
-    })
-  ]
-  ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
 
   buildInputs = [
     qtbase
     qttools
     libGLU
-    zlib
   ];
   nativeBuildInputs = [
     qmake
@@ -65,7 +47,7 @@ stdenv.mkDerivation {
     cp release/NifSkope $out/bin/
     cp ./res/nifskope.png $out/share/pixmaps/
     cp release/{nif.xml,kfm.xml,style.qss} $d/
-    cp res/shaders/*.frag res/shaders/*.prog res/shaders/*.vert $d/shaders/
+    cp res/shaders/* $d/shaders/
     cp ./res/lang/*.ts ./res/lang/*.tm $d/lang/
     cp ./install/linux-install/nifskope.desktop $out/share/applications
 
@@ -79,7 +61,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/niftools/nifskope";
+    homepage = "https://github.com/fo76utils/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
     platforms = platforms.linux;
