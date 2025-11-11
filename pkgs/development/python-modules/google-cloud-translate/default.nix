@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.22.0";
+  version = "3.23.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;
-    hash = "sha256-yaDlK4VG8AlkBiifa+dB+Q6kGhTAWpjpbSkr/vGsfnM=";
+    hash = "sha256-KKMSMN6AoP74etT8Y+o32Sbuhln3LVW51wnpCPATlag=";
   };
 
   build-system = [ setuptools ];
