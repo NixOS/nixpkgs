@@ -6805,17 +6805,17 @@ with pkgs;
 
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
-  wild-wrapped =
+  wild =
     let
       ldWrapper = ../build-support/bintools-wrapper/ld-wrapper.sh;
     in
     wrapBintoolsWith {
-      bintools = wild;
+      bintools = wild-unwrapped;
       extraBuildCommands = ''
-        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
       '';
     };
 

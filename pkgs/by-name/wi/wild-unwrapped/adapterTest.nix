@@ -7,7 +7,7 @@
   runCommandCC,
   makeBinaryWrapper,
   gcc,
-  wild,
+  wild-unwrapped,
   binutils-unwrapped-all-targets,
   clang,
   lld,
@@ -91,7 +91,7 @@ let
     '';
 in
 {
-  testWild = wild.overrideAttrs {
+  testWild = wild-unwrapped.overrideAttrs {
     pname = "wild-tests";
     doCheck = true;
     doInstallCheck = false;
