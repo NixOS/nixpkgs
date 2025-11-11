@@ -27,7 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-g96Z1SdFGMq7WFI6x+UtmAHPZF0C+tHUOjNhmK2ld8I=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AM_PATH_XML2(2.6.0, [], AC_MSG_ERROR(Fatal error: Need libxml2 >= 2.6.0))' \
+          'PKG_CHECK_MODULES([XML], [libxml-2.0 >= 2.6.0])' \
+      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS' \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin binutils don't support D option for ar
     # ALSA macros are missing on Darwin, causing error
     substituteInPlace configure.ac \
@@ -60,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
     audiofile
     goocanvas
-    libxml2
+    libxml2 # found by PKG_CHECK_MODULES
     libsndfile
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
