@@ -9,24 +9,20 @@
 }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "7.7.5";
+  version = "7.6.5";
 
   src = fetchFromGitHub {
     owner = "ByteNess";
     repo = "aws-vault";
     rev = "v${version}";
-    hash = "sha256-K91GNyvtjDO6UMU9cC+TbUdMWdXrPlKLU8u5cbEMdRA=";
+    hash = "sha256-2Z3gh4F29v04pV5hz4XEn1GZFLjXMBnbBghGKczoCBk=";
   };
 
-  proxyVendor = true;
-  vendorHash = "sha256-3AL3vjKqzjrzgPrLLwIgWpn1hRB6soTMbaRly/fvziA=";
-
+  vendorHash = "sha256-nzeNwiNiDXBO9fwMVlc09Ulj/SPzxV+vrMb70PB5N+8=";
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
   ];
-
-  env.CGO_ENABLED = "0";
 
   postInstall = ''
     # make xdg-open overrideable at runtime
