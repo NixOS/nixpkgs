@@ -886,31 +886,45 @@ in
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2023-10-24";
+    version = "unstable-2025-09-24";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "d62b6865c0e7c956ad1f0396823a6f34cf7452a7";
-      hash = "sha256-hVkSQYvBXrkXbKc98V9hwwvFp6z7/mX1K4N3N9j4NN4=";
+      rev = "05af76daa2487575b93a4f604693b00969f19c2f";
+      hash = "sha256-ay7z0MkeDCpxdwNTKFrkxi/hUE7a5K7P7oFhfn94aLA=";
     };
+
+    # NOTE: not patching calls to copyq as these would introduce a fixed dependency
     postInstall = ''
-      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
-      find $target -type f -print0 | xargs -0 sed -i -e 's|sed |${pkgs.gnused}/bin/sed |g'
-      find $target -type f -print0 | xargs -0 sed -i -e 's|tput |${pkgs.ncurses}/bin/tput |g'
+      # always called with arguments
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bawk\b |${pkgs.gawk}/bin/awk |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bfzf\b |${pkgs.fzf}/bin/fzf |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bkill\b |${pkgs.coreutils}/bin/kill |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bps\b |${pkgs.unixtools.ps}/bin/ps |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bpstree\b |${pkgs.pstree}/bin/pstree |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bsed\b |${pkgs.gnused}/bin/sed |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\btop\b |${pkgs.unixtools.top}/bin/top |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\btput\b |${pkgs.ncurses}/bin/tput |g'
+
+      # called as single commands in sub-shells
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\buname\b|${pkgs.coreutils}/bin/uname|g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|\bwhoami\b|${pkgs.coreutils}/bin/whoami|g'
     '';
     meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
       longDescription = ''
         Features:
-        * Manage sessions (attach, detach*, rename, kill*).
-        * Manage windows (switch, link, move, swap, rename, kill*).
-        * Manage panes (switch, break, join*, swap, layout, kill*, resize).
-        * Multiple selection (support for actions marked by *).
+        * Manage sessions (switch, new, rename, detach, kill).
+        * Manage windows (switch, link, move, swap, rename, kill).
+        * Manage panes (switch, break, join, swap, layout, kill, resize).
         * Search commands and append to command prompt.
         * Search key bindings and execute.
-        * User menu.
-        * Popup window support.
+        * Search clipboard history and paste to current window.
+        * Process management (top, pstree, terminate, kill, interrupt, continue, stop, quit, hangup).
+        * User menu (run custom commands).
+        * Preview sessions, windows and panes.
+        * Multiple selection.
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
