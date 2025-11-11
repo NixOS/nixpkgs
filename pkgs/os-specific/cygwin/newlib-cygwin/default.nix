@@ -139,7 +139,8 @@ in
         ];
 
         # -lintl from gettext breaks link on cygwin
-        dontAddExtraLibs = stdenv.buildPlatform.isCygwin;
+        ${if stdenv.buildPlatform.isCygwin then "dontAddExtraLibs" else null} =
+          stdenv.buildPlatform.isCygwin;
 
         buildInputs = [ w32api ];
 
