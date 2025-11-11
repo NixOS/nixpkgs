@@ -16396,6 +16396,12 @@
     githubId = 65052855;
     name = "maxicode";
   };
+  maximiliancf = {
+    email = "maximiliancf.dev@icloud.com";
+    github = "MaximilianCF";
+    githubId = 92341177;
+    name = "Maximilian Canez Fernandes";
+  };
   maximsmol = {
     email = "maximsmol@gmail.com";
     github = "maximsmol";
