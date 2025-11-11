@@ -13,6 +13,7 @@ buildGoModule (finalAttrs: {
     "out"
     "agent"
     "server"
+    "oidc"
   ];
 
   src = fetchFromGitHub {
@@ -37,6 +38,7 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
+    "support/oidc-discovery-provider"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -58,29 +60,27 @@ buildGoModule (finalAttrs: {
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
-    mkdir -vp $agent/bin $server/bin
+    mkdir -vp $agent/bin $server/bin $oidc/bin
     mv -v $out/bin/spire-agent $agent/bin/
     mv -v $out/bin/spire-server $server/bin/
+    mv -v $out/bin/oidc-discovery-provider $oidc/bin/
 
     ln -vs $agent/bin/spire-agent $out/bin/spire-agent
     ln -vs $server/bin/spire-server $out/bin/spire-server
+    ln -vs $oidc/bin/oidc-discovery-provider $out/bin/oidc-discovery-provider
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/spire-agent -h
-    if [ "$($out/bin/spire-agent --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-agent version does not match"
-      exit 1
-    fi
-
-    $out/bin/spire-server -h
-    if [ "$($out/bin/spire-server --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-server version does not match"
-      exit 1
-    fi
+    for bin in $out/bin/*; do
+      $bin -h
+      if [ "$($bin --version 2>&1)" != "${finalAttrs.version}" ]; then
+        echo "$bin version does not match"
+        exit 1
+      fi
+    done
 
     runHook postInstallCheck
   '';
