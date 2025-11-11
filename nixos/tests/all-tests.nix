@@ -597,6 +597,7 @@ in
   freetube = discoverTests (import ./freetube.nix);
   freshrss = import ./freshrss { inherit runTest; };
   frigate = runTest ./frigate.nix;
+  froide-food = runTest ./web-apps/froide-food.nix;
   froide-govplan = runTest ./web-apps/froide-govplan.nix;
   frp = runTest ./frp.nix;
   frr = runTest ./frr.nix;
