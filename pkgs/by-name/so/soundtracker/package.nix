@@ -12,6 +12,7 @@
   goocanvas, # graphical envelope editing
   libxml2,
   libsndfile,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2 # found by PKG_CHECK_MODULES
     libsndfile
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # found by AM_PATH_ALSA
+    libpulseaudio # found by PKG_CHECK_MODULES
+  ];
 
   meta = with lib; {
     description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
