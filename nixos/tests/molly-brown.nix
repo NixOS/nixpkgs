@@ -14,6 +14,7 @@ in
       let
         inherit (config.networking) hostName;
         cfg = config.services.molly-brown;
+        openssl = pkgs.lib.getExe pkgs.openssl;
       in
       {
 
@@ -47,22 +48,25 @@ in
 
         services.molly-brown = {
           enable = true;
-          docBase = "/tmp/docs";
-          certPath = "/tmp/cert.pem";
-          keyPath = "/tmp/key.pem";
+          docBase = "/var/lib/molly-brown/docs";
+          certPath = "/var/lib/molly-brown/cert.pem";
+          keyPath = "/var/lib/molly-brown/key.pem";
         };
 
-        systemd.services.molly-brown.preStart = ''
-          ${pkgs.openssl}/bin/openssl genrsa -out "/tmp/key.pem"
-          ${pkgs.openssl}/bin/openssl req -new \
-            -subj "/CN=${config.networking.hostName}" \
-            -key "/tmp/key.pem" -out /tmp/request.pem
-          ${pkgs.openssl}/bin/openssl x509 -req -days 3650 \
-            -in /tmp/request.pem -signkey "/tmp/key.pem" -out "/tmp/cert.pem"
+        systemd.services.molly-brown = {
+          serviceConfig.StateDirectory = "molly-brown";
+          preStart = ''
+            ${openssl} genrsa -out "$STATE_DIRECTORY/key.pem"
+            ${openssl} req -new \
+              -subj "/CN=${hostName}" \
+              -key "$STATE_DIRECTORY/key.pem" -out "$STATE_DIRECTORY/request.pem"
+            ${openssl} x509 -req -days 3650 \
+              -in "$STATE_DIRECTORY/request.pem" -signkey "$STATE_DIRECTORY/key.pem" -out "$STATE_DIRECTORY/cert.pem"
 
-          mkdir -p "${cfg.settings.DocBase}"
-          echo "${testString}" > "${cfg.settings.DocBase}/test.gmi"
-        '';
+            mkdir -p "${cfg.settings.DocBase}"
+            echo "${testString}" > "${cfg.settings.DocBase}/test.gmi"
+          '';
+        };
       };
   };
   testScript = ''
