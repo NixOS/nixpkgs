@@ -4,7 +4,7 @@
   installShellFiles,
   python3,
   rustPlatform,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -12,16 +12,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.0.1";
 
   src = fetchFromGitHub {
-    name = "asciinema-source-${finalAttrs.version}";
     owner = "asciinema";
     repo = "asciinema";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jWRq/LeDdCETiOMkWr9EIWztb14IYGCSo05QPw5HZZk=";
   };
 
   cargoHash = "sha256-bGhShwH4BxE3O4/B8KSK1o7IXNDBmGuVt4kx5s8W/go=";
 
   env.ASCIINEMA_GEN_DIR = "gendir";
+
+  strictDeps = true;
 
   nativeCheckInputs = [ python3 ];
   nativeBuildInputs = [ installShellFiles ];
@@ -34,14 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh gendir/completion/_asciinema
   '';
 
-  strictDeps = true;
-
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "asciinema --version";
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://asciinema.org/";
