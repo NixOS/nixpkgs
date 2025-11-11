@@ -9,14 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-color-monitor";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-color-monitor";
     tag = finalAttrs.version;
-    hash = "sha256-TwsEIOgQjj1wza7i8nne63oBM3FB6GmMjCq8/PuiWHs=";
+    hash = "sha256-1QB9iV5We1LQ/pj7KEHThUL6RTlO/qXPM5Op8O0RzUQ=";
   };
+
+  # Remove after https://github.com/norihiro/obs-color/monitor/pull/124 is released
+  patches = [ ./obs-color-monitor.diff ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -38,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/norihiro/obs-color-monitor";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ hlad ];
+    maintainers = with lib.maintainers; [
+      hlad
+      jonhermansen
+    ];
   };
 })
