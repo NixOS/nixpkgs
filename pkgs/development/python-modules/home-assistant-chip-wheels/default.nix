@@ -18,7 +18,6 @@
   glib,
   gn,
   googleapis-common-protos,
-  google-cloud-storage,
   ipython,
   jinja2,
   json5,
@@ -222,7 +221,6 @@ stdenv.mkDerivation rec {
         debugpy
         diskcache
         googleapis-common-protos
-        google-cloud-storage
         ipython
         jinja2
         json5
