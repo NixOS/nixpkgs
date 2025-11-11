@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soundtracker";
-  version = "1.0.5";
+  version = "1.0.5.1";
 
   src = fetchzip {
     # Past releases get moved to the "old releases" directory.
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
     url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
-    hash = "sha256-g96Z1SdFGMq7WFI6x+UtmAHPZF0C+tHUOjNhmK2ld8I=";
+    hash = "sha256-pvBCPPu8jBq9CFbSlKewEI+3t092zmtq+pbNLeJWU/8=";
   };
 
   postPatch = ''
