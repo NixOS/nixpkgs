@@ -1,5 +1,43 @@
 const { classify } = require('../supportedBranches.js')
 
+/**
+ * @typedef {Object} ChecklistParams
+ * @property {Set<number>} committers - Set of committer user IDs
+ * @property {any[]} events - Timeline events for the PR
+ * @property {any[]} files - Files changed in the PR
+ * @property {any} pull_request - Pull request object
+ * @property {Function} log - Logging function
+ * @property {Record<string, number[]>} maintainers - Package maintainers map
+ * @property {any} [user] - User to check eligibility for
+ * @property {boolean} [userIsMaintainer] - Whether user is a maintainer
+ */
+
+/**
+ * @typedef {Object} ChecklistResult
+ * @property {Object} checklist - Checklist of requirements
+ * @property {Set<number>} eligible - Set of eligible user IDs
+ * @property {boolean} result - Whether all requirements are met
+ */
+
+/**
+ * @typedef {Object} MergeContext
+ * @property {any} github - GitHub API client
+ * @property {any} context - GitHub Actions context
+ * @property {any} core - GitHub Actions core utilities
+ * @property {Function} log - Logging function
+ * @property {boolean} dry - Whether to run in dry-run mode
+ * @property {any} pull_request - Pull request object
+ * @property {any[]} events - Timeline events
+ * @property {Record<string, number[]>} maintainers - Package maintainers map
+ * @property {Function} getTeamMembers - Function to get team members
+ * @property {Function} getUser - Function to get user by ID
+ */
+
+/**
+ * Run the merge eligibility checklist for a pull request
+ * @param {ChecklistParams} params - Checklist parameters
+ * @returns {ChecklistResult}
+ */
 function runChecklist({
   committers,
   events,
@@ -85,9 +123,14 @@ function runChecklist({
   }
 }
 
-// The merge command must be on a separate line and not within codeblocks or html comments.
-// Codeblocks can have any number of ` larger than 3 to open/close. We only look at code
-// blocks that are not indented, because the later regex wouldn't match those anyway.
+/**
+ * Check if a comment body contains a merge command
+ * The merge command must be on a separate line and not within codeblocks or html comments.
+ * Codeblocks can have any number of ` larger than 3 to open/close. We only look at code
+ * blocks that are not indented, because the later regex wouldn't match those anyway.
+ * @param {string|null|undefined} body - Comment body to check
+ * @returns {RegExpMatchArray|null} Match result if merge command found
+ */
 function hasMergeCommand(body) {
   return (body ?? '')
     .replace(/<!--.*?-->/gms, '')
@@ -95,6 +138,15 @@ function hasMergeCommand(body) {
     .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/m)
 }
 
+/**
+ * Handle a merge command in a comment by adding a reaction
+ * @param {Object} params - Parameters
+ * @param {any} params.github - GitHub API client
+ * @param {string} params.body - Comment body
+ * @param {string} params.node_id - Comment node ID
+ * @param {string} params.reaction - Reaction to add
+ * @returns {Promise<void>}
+ */
 async function handleMergeComment({ github, body, node_id, reaction }) {
   if (!hasMergeCommand(body)) return
 
@@ -110,6 +162,11 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
+/**
+ * Handle merge requests for a pull request
+ * @param {MergeContext} params - Merge context parameters
+ * @returns {Promise<boolean>} Whether the PR is eligible for the merge bot
+ */
 async function handleMerge({
   github,
   context,
@@ -168,6 +225,10 @@ async function handleMerge({
         )),
   )
 
+  /**
+   * Merge the pull request using merge queue or auto-merge
+   * @returns {Promise<string[]>} Status messages
+   */
   async function merge() {
     if (dry) {
       core.info(`Merging #${pull_number}... (dry)`)
@@ -227,6 +288,11 @@ async function handleMerge({
   for (const comment of comments) {
     log('comment', comment.node_id)
 
+    /**
+     * Add a reaction to a comment
+     * @param {string} reaction - Reaction type
+     * @returns {Promise<void>}
+     */
     async function react(reaction) {
       if (dry) {
         core.info(`Reaction ${reaction} on ${comment.node_id} (dry)`)
@@ -241,6 +307,11 @@ async function handleMerge({
       })
     }
 
+    /**
+     * Check if a user is a maintainer
+     * @param {string} username - GitHub username
+     * @returns {Promise<boolean>} Whether the user is a maintainer
+     */
     async function isMaintainer(username) {
       try {
         return (

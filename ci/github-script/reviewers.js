@@ -1,3 +1,23 @@
+/**
+ * @typedef {Object} ReviewersContext
+ * @property {any} github - GitHub API client
+ * @property {any} context - GitHub Actions context
+ * @property {any} core - GitHub Actions core utilities
+ * @property {Function} log - Logging function
+ * @property {boolean} dry - Whether to run in dry-run mode
+ * @property {any} pull_request - Pull request object
+ * @property {any[]} reviews - Existing reviews
+ * @property {number[]} maintainers - Array of maintainer user IDs
+ * @property {string[]} owners - Array of owner handles (users or teams)
+ * @property {Function} getTeamMembers - Function to get team members
+ * @property {Function} getUser - Function to get user by ID
+ */
+
+/**
+ * Handle reviewer assignments for a pull request
+ * @param {ReviewersContext} params - Reviewers context parameters
+ * @returns {Promise<boolean>} Whether "needs: reviewers" label should be set
+ */
 async function handleReviewers({
   github,
   context,

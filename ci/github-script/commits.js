@@ -1,3 +1,49 @@
+/**
+ * @typedef {Object} CommitsContext
+ * @property {any} github - GitHub API client
+ * @property {any} context - GitHub Actions context
+ * @property {any} core - GitHub Actions core utilities
+ * @property {boolean} dry - Whether to run in dry-run mode
+ * @property {boolean} cherryPicks - Whether to check cherry-picks
+ */
+
+/**
+ * @typedef {Object} Commit
+ * @property {string} sha - Commit SHA
+ * @property {Object} commit - Commit details
+ * @property {string} commit.message - Commit message
+ * @property {Object} commit.author - Commit author
+ * @property {string} commit.author.name - Author name
+ * @property {string} commit.author.email - Author email
+ * @property {string} commit.author.date - Author date
+ */
+
+/**
+ * @typedef {Object} ExtractResult
+ * @property {string} sha - Commit SHA
+ * @property {Object} commit - Commit details
+ * @property {string} [severity] - Severity level (error, warning, info, important)
+ * @property {string} [message] - Result message
+ * @property {string} [type] - Result type
+ * @property {string} [original_sha] - Original commit SHA for cherry-picks
+ */
+
+/**
+ * @typedef {Object} DiffResult
+ * @property {string} sha - Commit SHA
+ * @property {Object} commit - Commit details
+ * @property {string} [severity] - Severity level
+ * @property {string} message - Result message
+ * @property {string[]} [diff] - Diff lines
+ * @property {string} [colored_diff] - Colored diff output
+ * @property {string} [type] - Result type
+ */
+
+/**
+ * Main script to check cherry-pick commits in a pull request
+ * @param {CommitsContext} params - Script parameters
+ * @returns {Promise<void>}
+ */
 module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { execFileSync } = require('node:child_process')
   const { classify } = require('../supportedBranches.js')
@@ -21,6 +67,11 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
         '?pr=' +
         pull_number
 
+    /**
+     * Extract cherry-pick information from a commit
+     * @param {Commit} params - Commit to extract from
+     * @returns {Promise<ExtractResult>}
+     */
     async function extract({ sha, commit }) {
       const noCherryPick = Array.from(
         commit.message.matchAll(/^Not-cherry-picked-because: (.*)$/gm),
@@ -88,6 +139,11 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
       }
     }
 
+    /**
+     * Compare a commit with its cherry-picked original
+     * @param {ExtractResult} params - Extract result with original SHA
+     * @returns {DiffResult}
+     */
     function diff({ sha, commit, original_sha }) {
       const diff = execFileSync('git', [
         '-C',

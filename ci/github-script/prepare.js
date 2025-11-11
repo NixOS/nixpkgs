@@ -1,6 +1,37 @@
 const { classify } = require('../supportedBranches.js')
 const { postReview } = require('./reviews.js')
 
+/**
+ * @typedef {Object} PrepareContext
+ * @property {any} github - GitHub API client
+ * @property {any} context - GitHub Actions context
+ * @property {any} core - GitHub Actions core utilities
+ * @property {boolean} dry - Whether to run in dry-run mode
+ */
+
+/**
+ * @typedef {Object} BranchClassification
+ * @property {string} branch - Branch name
+ * @property {string[]} type - Branch type(s)
+ * @property {boolean} [stable] - Whether branch is stable
+ * @property {string} [version] - Branch version
+ * @property {number} order - Branch priority order
+ */
+
+/**
+ * @typedef {Object} MergeBaseResult
+ * @property {string} branch - Branch name
+ * @property {number} order - Branch priority order
+ * @property {string} version - Branch version
+ * @property {number} commits - Number of commits
+ * @property {string} sha - Merge base SHA
+ */
+
+/**
+ * Prepare a pull request for CI checks by validating branches and computing merge bases
+ * @param {PrepareContext} params - Script parameters
+ * @returns {Promise<void>}
+ */
 module.exports = async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
 
@@ -85,6 +116,11 @@ module.exports = async ({ github, context, core, dry }) => {
         .filter(({ stable, type }) => type.includes('primary') && stable)
         .sort((a, b) => b.version.localeCompare(a.version))
 
+      /**
+       * Calculate the merge base between a branch and the PR head
+       * @param {BranchClassification} params - Branch classification
+       * @returns {Promise<MergeBaseResult>}
+       */
       async function mergeBase({ branch, order, version }) {
         const { data } = await github.rest.repos.compareCommitsWithBasehead({
           ...context.repo,

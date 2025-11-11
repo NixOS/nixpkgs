@@ -1,6 +1,34 @@
+/**
+ * @typedef {Object} RateLimitConfig
+ * @property {any} github - GitHub API client
+ * @property {any} core - GitHub Actions core utilities
+ * @property {number} [maxConcurrent=1] - Maximum number of concurrent requests
+ */
+
+/**
+ * @typedef {Object} Stats
+ * @property {number} issues - Number of issues processed
+ * @property {number} prs - Number of pull requests processed
+ * @property {number} requests - Number of API requests made
+ * @property {number} artifacts - Number of artifacts downloaded
+ */
+
+/**
+ * @callback RateLimitCallback
+ * @param {Stats} stats - Statistics object for tracking API usage
+ * @returns {Promise<void>}
+ */
+
+/**
+ * Wraps GitHub API requests with rate limiting and throttling
+ * @param {RateLimitConfig} config - Rate limiting configuration
+ * @param {RateLimitCallback} callback - Callback function to execute with rate limiting
+ * @returns {Promise<void>}
+ */
 module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
   const Bottleneck = require('bottleneck')
 
+  /** @type {Stats} */
   const stats = {
     issues: 0,
     prs: 0,
@@ -33,6 +61,10 @@ module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
     else return allLimits.schedule(request.bind(null, options))
   })
 
+  /**
+   * Update the rate limit reservoir based on remaining GitHub API requests
+   * @returns {Promise<void>}
+   */
   async function updateReservoir() {
     let response
     try {
