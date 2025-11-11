@@ -85,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "django-bootstrap3"
+    "django-compressor"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
