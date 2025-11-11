@@ -9,6 +9,7 @@
 
   # dependencies
   filelock,
+  freeze-core,
   packaging,
   tomli,
 
@@ -19,23 +20,30 @@
   dmgbuild,
 
   # tests
-  ensureNewerSourcesForZipFilesHook,
+  backports-zstd,
+  numpy,
+  pillow,
   pytest-mock,
   pytestCheckHook,
+  pytz,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  tzdata,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "8.3.0";
+  version = "8.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelotduarte";
     repo = "cx_Freeze";
     tag = version;
-    hash = "sha256-PhUzHSn9IqUcb11D0kRT8zhmZ/KusTBDpAempiDN4Rc=";
+    hash = "sha256-wGsI1Z5bcpmxnJLvgorzWxosh5+xtDZsK1YWvt7tggc=";
   };
 
   patches = [
@@ -46,7 +54,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=77.0.3,<=80.4.0" "setuptools>=77.0.3"
+      --replace-fail "setuptools>=78.1.1,<81" "setuptools>=78.1.1"
   '';
 
   build-system = [
@@ -60,8 +68,9 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "patchelf" ];
 
   dependencies = [
-    distutils
+    #distutils
     filelock
+    freeze-core
     packaging
     setuptools
   ]
@@ -84,21 +93,34 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    numpy
+    pillow
     pytest-mock
     pytestCheckHook
+    pytz
+    scikit-image
+    scikit-learn
+    scipy
+    tzdata
     writableTmpDirAsHomeHook
     versionCheckHook
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf cx_Freeze
   '';
 
+  disabledTestPaths = [
+    "samples"
+  ];
+
   disabledTests = [
     # Require internet access
     "test_bdist_appimage_download_appimagetool"
+    "test_bdist_appimage_download_runtime"
     "test_bdist_appimage_target_name"
     "test_bdist_appimage_target_name_and_version"
     "test_bdist_appimage_target_name_and_version_none"
