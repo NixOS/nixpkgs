@@ -44,7 +44,7 @@ in
           };
           N8N_PORT = lib.mkOption {
             type = with lib.types; coercedTo port toString str;
-            default = 5678;
+            default = "5678";
             description = "The HTTP port n8n runs on.";
           };
           N8N_USER_FOLDER = lib.mkOption {
@@ -59,16 +59,16 @@ in
             readOnly = true;
           };
           N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
-            default = false;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
+            default = "false";
             description = ''
               Whether to share selected, anonymous telemetry with n8n.
               Note that if you set this to false, you can't enable Ask AI in the Code node.
             '';
           };
           N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
-            default = false;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
+            default = "false";
             description = ''
               When enabled, n8n sends notifications of new versions and security updates.
             '';
