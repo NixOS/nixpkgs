@@ -45,7 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
   # https://github.com/NixOS/nixpkgs/issues/213623
-  doCheck = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck =
+    !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    # cygwin tests fail to link
+    && !stdenv.hostPlatform.isCygwin;
 
   nativeCheckInputs = [ cmocka ];
 
