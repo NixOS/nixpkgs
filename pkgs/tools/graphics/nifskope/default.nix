@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/fo76utils/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sandwoodjones ];
     platforms = platforms.linux;
     license = licenses.bsd3;
     mainProgram = "NifSkope";
