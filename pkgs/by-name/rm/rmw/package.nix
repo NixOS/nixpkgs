@@ -5,19 +5,20 @@
   meson,
   ninja,
   pkg-config,
+  canfigger,
   ncurses,
   gettext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rmw";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
     tag = "v${version}";
-    hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
+    hash = "sha256-/bE9fFjn3mPfUbtsB6bXfQAxUtbtuZiT4pevi5RCQA4=";
     fetchSubmodules = true;
   };
 
@@ -28,14 +29,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    canfigger
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
-
-  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
-  mesonFlags = [
-    "-Dcanfigger:b_sanitize=none"
-  ];
 
   meta = {
     description = "Trashcan/ recycle bin utility for the command line";
