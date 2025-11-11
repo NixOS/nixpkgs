@@ -26,8 +26,8 @@ buildNpmPackage rec {
 
     wrapProgram $out/bin/mcp-server-playwright \
       --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \
-      --set PLAYWRIGHT_MCP_BROWSER chromium \
-      --run "export PLAYWRIGHT_MCP_USER_DATA_DIR=\$(mktemp -d)"
+      --set-default PLAYWRIGHT_MCP_BROWSER chromium \
+      --run 'if [ -z "$PLAYWRIGHT_MCP_USER_DATA_DIR" ]; then PLAYWRIGHT_MCP_USER_DATA_DIR="$(mktemp -d -t mcp-pw-XXXXXX)"; export PLAYWRIGHT_MCP_USER_DATA_DIR; trap "rm -rf \"$PLAYWRIGHT_MCP_USER_DATA_DIR\"" EXIT; fi'
   '';
 
   passthru = {
