@@ -50,13 +50,13 @@ else if localSystem.isLinux then
   stagesLinux
 else if localSystem.isDarwin then
   stagesDarwin
+else if localSystem.isCygwin then
+  (import ./cygwin args)
 # misc special cases
 else
   {
     # switch
     x86_64-solaris = stagesNix;
-    i686-cygwin = stagesNative;
-    x86_64-cygwin = stagesNative;
     x86_64-freebsd = stagesFreeBSD;
   }
   .${localSystem.system} or stagesNative
