@@ -2944,7 +2944,7 @@ with haskellLib;
       substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
     ''
     + (drv.postPatch or "");
-  }) (super.pdftotext.override { poppler-cpp = pkgs.poppler; });
+  }) super.pdftotext;
 
   # QuickCheck <2.15
   # https://github.com/google/proto-lens/issues/403
