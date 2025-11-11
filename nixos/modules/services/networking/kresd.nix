@@ -71,8 +71,8 @@ in
         You can run `kresd-cli 1` and give commands interactively to kresd@1.service.
       '';
     };
-    package = lib.mkPackageOption pkgs "knot-resolver" {
-      example = "knot-resolver.override { extraFeatures = true; }";
+    package = lib.mkPackageOption pkgs "knot-resolver_5" {
+      example = "knot-resolver_5.override { extraFeatures = true; }";
     };
     extraConfig = lib.mkOption {
       type = lib.types.lines;
