@@ -33,12 +33,12 @@ let
   inherit (lib) optional optionals optionalString;
   lua = luajitPackages;
 
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_5";
     version = "5.7.6";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
+      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
       sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
     };
 
@@ -69,7 +69,7 @@ let
       done
     ''
     # some tests have issues with network sandboxing, apparently
-    + optionalString doInstallCheck ''
+    + optionalString finalAttrs.doInstallCheck ''
       echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
       sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
         tests/config/doh2.test.lua modules/http/http_doh.test.lua
@@ -116,8 +116,8 @@ let
       "-Dmalloc=jemalloc"
       "--default-library=static" # not used by anyone
     ]
-    ++ optional doInstallCheck "-Dunit_tests=enabled"
-    ++ optional doInstallCheck "-Dconfig_tests=enabled"
+    ++ optional finalAttrs.doInstallCheck "-Dunit_tests=enabled"
+    ++ optional finalAttrs.doInstallCheck "-Dconfig_tests=enabled"
     ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
     ;
@@ -153,7 +153,7 @@ let
       ];
       mainProgram = "kresd";
     };
-  };
+  });
 
   wrapped-full =
     runCommand unwrapped.name
