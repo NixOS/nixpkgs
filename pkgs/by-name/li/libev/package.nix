@@ -5,7 +5,8 @@
   fetchpatch,
   updateAutotoolsGnuConfigScriptsHook,
   # Note: -static hasn’t work on darwin
-  static ? with stdenv.hostPlatform; isStatic && !isDarwin,
+  # cygwin requires libtool -no-undefined for shared
+  static ? with stdenv.hostPlatform; (isStatic && !isDarwin) || isCygwin,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
