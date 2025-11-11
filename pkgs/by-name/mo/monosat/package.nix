@@ -16,25 +16,17 @@
 let
   boolToCmake = x: if x then "ON" else "OFF";
 
-  rev = "1.8.0";
-  sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
+  rev = "fa810d432ae24b6abd5612725c3bf7c0871c07d2";
+  sha256 = "sha256-zf8cL/vGTvns6o8ZgwI9N9bNb67yq633kj32W5DQuV4=";
 
   pname = "monosat";
-  version = rev;
+  version = "1.8.0-unstable-2025-03-21";
 
   src = fetchFromGitHub {
     owner = "sambayless";
     repo = "monosat";
     inherit rev sha256;
   };
-
-  patches = [
-    # Python 3.8 compatibility
-    (fetchpatch {
-      url = "https://github.com/sambayless/monosat/commit/a5079711d0df0451f9840f3a41248e56dbb03967.patch";
-      sha256 = "1p2y0jw8hb9c90nbffhn86k1dxd6f6hk5v70dfmpzka3y6g1ksal";
-    })
-  ];
 
   # source behind __linux__ check assumes system is also x86 and
   # tries to disable x86/x87-specific extended precision mode
@@ -46,7 +38,7 @@ let
 
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
-    inherit src patches;
+    inherit src;
     postPatch = commonPostPatch + ''
       substituteInPlace CMakeLists.txt \
         --replace-fail "cmake_minimum_required(VERSION 3.02)" "cmake_minimum_required(VERSION 3.10)"
@@ -96,7 +88,6 @@ let
         pname
         version
         src
-        patches
         ;
 
       propagatedBuildInputs = [
