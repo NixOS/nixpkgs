@@ -56,6 +56,19 @@ jobs:
             core.info(`targetSha: ${context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA}`)
             core.setOutput('systems', require('./ci/supportedSystems.json'))
 
+  check:
+    name: Check
+    needs: [prepare]
+    uses: ./.github/workflows/check.yml
+    permissions:
+      # cherry-picks; formality right now, but unused
+      pull-requests: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
   lint:
     name: Lint
     needs: [prepare]
