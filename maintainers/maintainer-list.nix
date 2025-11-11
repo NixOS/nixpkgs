@@ -16138,6 +16138,12 @@
     githubId = 43853194;
     name = "Matheus Vieira";
   };
+  mathematicaster = {
+    email = "chris@mathematicaster.org";
+    github = "the-mathematicaster";
+    githubId = 99217745;
+    name = "Chris Wells";
+  };
   mathiassven = {
     email = "github@mathiassven.com";
     github = "MathiasSven";
