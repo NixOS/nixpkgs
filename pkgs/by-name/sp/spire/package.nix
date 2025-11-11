@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  openssl,
 }:
 
 buildGoModule (finalAttrs: {
@@ -21,7 +22,11 @@ buildGoModule (finalAttrs: {
     sha256 = "sha256-iZMeD5ZwWKjY9mfuXgEgh+QLotmv28T8xBgpKoQTgxw=";
   };
 
-  vendorHash = "sha256-tho3Qm9uHiiSNFmBZGZFgxhAKD4HKWsIUmiqkWlToQk=";
+  # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
+  proxyVendor = true;
+  vendorHash = "sha256-nslLp/NjzsN1hSMMga67T6tMGLiqBNYQMt4Kjtwyvoc=";
+
+  buildInputs = [ openssl ];
 
   ldflags = [
     "-s"
@@ -32,12 +37,6 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
-  ];
-
-  excludedPackages = [
-    # ensure these files aren't evaluated, see preCheck
-    "test/tmpsimulator"
-    "pkg/agent/plugin/nodeattestor/tpmdevid"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -53,10 +52,6 @@ buildGoModule (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
-    # remove test files which reference github.com/google/go-tpm-tools/simulator
-    # since it requires cgo and some missing header files
-    rm -rf test/tpmsimulator pkg/server/plugin/nodeattestor/tpmdevid/devid_test.go
-
     # unset to run all tests
     unset subPackages
   '';
