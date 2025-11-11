@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "reactivex";
-  version = "4.0.4";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ReactiveX";
     repo = "RxPY";
     tag = "v${version}";
-    hash = "sha256-W1qYNbYV6Roz1GJtP/vpoPD6KigWaaQOWe1R5DZHlUw=";
+    hash = "sha256-napPfp72gqy43UmkPu1/erhjmJbZypHZQikmjIFVBqA=";
   };
 
   nativeBuildInputs = [ poetry-core ];
