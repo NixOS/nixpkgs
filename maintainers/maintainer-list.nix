@@ -13314,6 +13314,13 @@
     githubId = 34152449;
     name = "Karl Hallsby";
   };
+  karpfediem = {
+    name = "Karpfen";
+    github = "karpfediem";
+    githubId = 11753414;
+    email = "nixos@karpfen.dev";
+    matrix = "@karpfen:matrix.org";
+  };
   kashw2 = {
     email = "supra4keanu@hotmail.com";
     github = "kashw2";
