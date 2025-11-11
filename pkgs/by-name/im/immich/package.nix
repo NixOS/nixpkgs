@@ -34,7 +34,6 @@
 }:
 let
   pnpm = pnpm_10;
-  version = "2.2.3";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -103,53 +102,24 @@ let
         unzip ./cities500.zip -d $out/
         echo "${date}" > $out/geodata-date.txt
       '';
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "immich";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OoToTRDPXWOa7d1j1xvkZt+vKWBX4eHDiIsFs3bIlvw=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     pname = "immich";
-    inherit version src;
+    inherit (finalAttrs) version src;
     fetcherVersion = 2;
     hash = "sha256-igkO0ID0/9uPtFAXL2v5bcFbCpZK2lcYEctWBKtFKdU=";
   };
-
-  web = stdenv.mkDerivation {
-    pname = "immich-web";
-    inherit version src pnpmDeps;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpm
-      pnpm.configHook
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter @immich/sdk build
-      pnpm --filter immich-web build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cd web
-      cp -r build $out
-
-      runHook postInstall
-    '';
-  };
-in
-stdenv.mkDerivation {
-  pname = "immich";
-  inherit version src pnpmDeps;
 
   postPatch = ''
     # pg_dumpall fails without database root access
@@ -219,7 +189,7 @@ stdenv.mkDerivation {
     \) -exec rm -r {} +
 
     mkdir -p "$packageOut/build"
-    ln -s '${web}' "$packageOut/build/www"
+    ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
@@ -248,18 +218,47 @@ stdenv.mkDerivation {
       inherit (nixosTests) immich immich-vectorchord-migration;
     };
 
-    machine-learning = immich-machine-learning;
+    machine-learning = immich-machine-learning.override {
+      immich = finalAttrs.finalPackage;
+    };
+
+    web = stdenv.mkDerivation {
+      pname = "immich-web";
+      inherit (finalAttrs) version src pnpmDeps;
+
+      nativeBuildInputs = [
+        nodejs
+        pnpm
+        pnpm.configHook
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pnpm --filter @immich/sdk build
+        pnpm --filter immich-web build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cd web
+        cp -r build $out
+
+        runHook postInstall
+      '';
+    };
 
     inherit
-      src
-      web
       geodata
       pnpm
       ;
   };
 
   meta = {
-    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
+    changelog = "https://github.com/immich-app/immich/releases/tag/${finalAttrs.src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = with lib.licenses; [
@@ -275,4 +274,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
-}
+})
