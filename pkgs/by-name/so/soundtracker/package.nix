@@ -13,6 +13,7 @@
   libxml2,
   libsndfile,
   libpulseaudio,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,14 +57,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    SDL # AM_PATH_SDL
+    glib # glib-genmarshal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # AM_PATH_ALSA
   ];
 
   buildInputs = [
     gtk2
-    SDL
+    SDL # found by AM_PATH_SDL
     jack2
     audiofile
     goocanvas
