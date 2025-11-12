@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pytest-httpbin,
   pytestCheckHook,
   pythonOlder,
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-F2ORrQQl7d4WgMWyBzjqPcf7lCUgpI0pk0SAUJhrOlA=";
   };
+
+  patches = [
+    (fetchpatch {
+      # python 3.14 compat
+      url = "https://github.com/kevin1024/vcrpy/commit/558c7fc625e66775da11ee406001f300e6188fb2.patch";
+      hash = "sha256-keShvz8zwqkenEtQ+NAnGKwSLYGbtXfpfMP8Zje2p+o=";
+    })
+  ];
 
   propagatedBuildInputs = [
     pyyaml
