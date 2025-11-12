@@ -1160,6 +1160,7 @@ let
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
+    SpatialOmicsOverlay = [ pkgs.bftools ];
     stpphawkes = [ pkgs.gsl ];
     registr = with pkgs; [
       icu.dev
