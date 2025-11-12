@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalPackage: {
       --replace-fail "-flto" "" \
       --replace-fail "out/" "$out/" \
       --replace-fail "ln -f" "ln -sf"
+    substituteInPlace src/bin/zfs-tpm-list.cpp \
+      --replace-fail "none     = -1," "none     = (char)-1,"
   '';
 
   dontInstall = true;
