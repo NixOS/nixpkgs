@@ -83,7 +83,7 @@ buildGoModule (finalAttrs: {
       jk
     ];
 
-    # Background for this clarification: https://github.com/NixOS/nixpkgs/pull/354002/files#r2021031543
+    # Background for this clarification: https://github.com/NixOS/nixpkgs/pull/354002#discussion_r2021031543
     platforms = [
       "x86_64-linux"
       "i686-linux"
