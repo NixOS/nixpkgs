@@ -202,6 +202,85 @@ runTests {
     };
   };
 
+  testOverridePreserveFunctionMetadata =
+    let
+      toCallableAttrs = f: setFunctionArgs f (functionArgs f);
+      constructDefinition =
+        {
+          a ? 3,
+        }:
+        toCallableAttrs (
+          {
+            b ? 5,
+          }:
+          {
+            inherit a b;
+          }
+        )
+        // {
+          inherit a;
+          c = 7;
+        };
+      construct0 = makeOverridable constructDefinition { };
+      construct1 = makeOverridable construct0;
+      construct0p = construct0.override { a = 11; };
+      construct1p = construct1.override { a = 11; };
+    in
+    {
+      expr = {
+        construct-metadata = {
+          inherit (construct1) a c;
+        };
+        construct-overridden-metadata = {
+          v = construct0p.a;
+          inherit (construct1p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = mapAttrs (_: f: (f { }) ? override) {
+            inherit construct1 construct1p;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit ((construct1p { }).override { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct1p { b = 13; }) a b;
+            };
+            v = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+          };
+        };
+      };
+      expected = {
+        construct-metadata = {
+          inherit (construct0) a c;
+        };
+        construct-overridden-metadata = {
+          v = 11;
+          inherit (construct0p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = {
+            construct1 = true;
+            construct1p = true;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            v = {
+              a = 11;
+              b = 13;
+            };
+          };
+        };
+      };
+    };
+
   testCallPackageWithOverridePreservesArguments =
     let
       f =
