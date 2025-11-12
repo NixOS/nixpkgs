@@ -247,6 +247,9 @@ in
       microhs-0_14_21_0 = callPackage ../development/compilers/microhs/0.14.21.0.nix {
         microhs-boot = bb.compiler.microhs-0_14_18_0;
       };
+
+      microhs-0_14 = compiler.microhs-0_14_21_0;
+      microhs = compiler.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
@@ -390,6 +393,9 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
+
+      microhs-0_14 = packages.microhs-0_14_21_0;
+      microhs = packages.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
