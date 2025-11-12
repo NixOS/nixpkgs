@@ -37,10 +37,19 @@
   systemd,
   udev,
   xmlto,
+  # Needed for cockpit-machines plugin
+  libosinfo,
+  osinfo-db,
   # Enables lightweight NixOS branding, replacing the default Cockpit icons
   withBranding ? true,
   nixos-icons,
 }:
+
+let
+  python = python3Packages.python.withPackages (ps: [
+    ps.pygobject3
+  ]);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
@@ -161,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # replace reference to system python interpreter, used for e.g. sosreport
     substituteInPlace pkg/lib/python.ts \
-      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
+      --replace-fail /usr/libexec/platform-python ${python.interpreter}
   '';
 
   configureFlags = [
@@ -191,7 +200,16 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+        --prefix PATH : ${lib.makeBinPath [ python ]} \
+        --prefix GI_TYPELIB_PATH : ${
+          lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ libosinfo ]
+        } \
+        --prefix XDG_DATA_DIRS : ${
+          lib.makeSearchPath "share" [
+            libosinfo
+            osinfo-db
+          ]
+        }
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue
