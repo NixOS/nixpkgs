@@ -6,7 +6,6 @@
 }:
 
 let
-
   cfge = config.environment;
 
   cfg = config.programs.fish;
@@ -54,13 +53,9 @@ let
     } "babelfish < ${path} > $out;";
 
 in
-
 {
-
   options = {
-
     programs.fish = {
-
       enable = lib.mkOption {
         default = false;
         description = ''
@@ -161,13 +156,10 @@ in
         '';
         type = lib.types.lines;
       };
-
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
