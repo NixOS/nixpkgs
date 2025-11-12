@@ -429,8 +429,6 @@ let
           libcxx = prevStage.llvmPackages.libcxx or null;
           runtimeShell = shell;
           propagateDoc = false;
-          nativeTools = false;
-          nativeLibc = false;
           cc = prevStage.llvmPackages.clang-unwrapped;
           isClang = true;
           extraPackages = lib.optionals hascxx [
@@ -450,8 +448,6 @@ let
             runtimeShell = shell;
             bintools = (prevStage.llvmPackages or { }).bintools-unwrapped or prevStage.binutils-unwrapped;
             propagateDoc = false;
-            nativeTools = false;
-            nativeLibc = false;
           };
         };
         overrides = overrides prevStage;

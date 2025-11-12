@@ -25,7 +25,7 @@ in
 
 res: pkgs: super:
 
-with pkgs;
+with pkgs.__splicedPackages;
 
 {
   # A module system style type tag
@@ -4549,6 +4549,7 @@ with pkgs;
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
     let
+      binutilsNoLibc = pkgsHostTarget.binutilsNoLibc;
       libc1 = binutilsNoLibc.libc;
     in
     (wrapCCWith {
@@ -5366,10 +5367,7 @@ with pkgs;
     callPackage ../build-support/cc-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
-          nativePrefix = stdenv.cc.nativePrefix or "";
-          noLibc = !self.nativeLibc && (self.libc == null);
+          noLibc = self.libc == null;
 
           isGNU = cc.isGNU or false;
           isClang = cc.isClang or false;
@@ -5405,11 +5403,7 @@ with pkgs;
     callPackage ../build-support/bintools-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
-          nativePrefix = stdenv.cc.nativePrefix or "";
-
-          noLibc = (self.libc == null);
+          noLibc = self.libc == null;
 
           inherit bintools libc;
         }
