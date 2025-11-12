@@ -63,6 +63,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontCheckForBrokenSymlinks = true;
+
   passthru.tests.version = testers.testVersion {
     package = shadcn;
     command = "shadcn --version";
