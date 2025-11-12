@@ -1884,6 +1884,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    ironseed = old.ironseed.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     rshift = old.rshift.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
