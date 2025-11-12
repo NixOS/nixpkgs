@@ -8,8 +8,6 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
 
@@ -63,8 +61,6 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
@@ -75,8 +71,6 @@ jobs:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -88,8 +82,6 @@ jobs:
     permissions:
       # compare
       statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -113,12 +105,11 @@ jobs:
     name: Build
     needs: [prepare]
     uses: ./.github/workflows/build.yml
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block merging a PR.
