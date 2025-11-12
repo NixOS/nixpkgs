@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   nix-update-script,
 }:
 
@@ -63,7 +63,7 @@ buildGoModule rec {
     "cmd/webhook-server"
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   passthru = {
     updateScript = nix-update-script {
