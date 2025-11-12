@@ -13195,8 +13195,6 @@ with pkgs;
     lua = lua5_2;
   };
 
-  tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
-
   teeworlds-server = teeworlds.override { buildClient = false; };
 
   tengine = callPackage ../servers/http/tengine {

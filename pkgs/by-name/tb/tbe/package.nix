@@ -1,23 +1,20 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  qttools,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tbe";
   version = "0.9.3.1";
 
   src = fetchFromGitHub {
     owner = "kaa-ching";
     repo = "tbe";
-    tag = "v${version}";
-    sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UnvFr/ofk6CgtBv6ua8XjZAWScFGfeNx+is5Q8Zl4qk=";
   };
 
   postPatch = ''
@@ -34,10 +31,13 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ (with libsForQt5; [
     qttools
     wrapQtAppsHook
-  ];
-  buildInputs = [
+  ]);
+
+  buildInputs = with libsForQt5; [
     qtbase
     qtsvg
   ];
@@ -50,12 +50,12 @@ mkDerivation rec {
     cp -r ../usr/share $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Physics-based game vaguely similar to Incredible Machine";
     mainProgram = "tbe";
     homepage = "http://the-butterfly-effect.org/";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
-}
+})
