@@ -9,6 +9,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   extraPackages ? [ ],
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -65,6 +66,12 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+    };
+  };
 
   meta = {
     homepage = "https://github.com/containerd/nerdctl/";
