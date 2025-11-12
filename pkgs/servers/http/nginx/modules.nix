@@ -111,14 +111,12 @@ let
         openssl
         cargo
         rustPlatform.bindgenHook
-        #rustPlatform.cargoSetupHook
-        #rustPlatform.maturinBuildHook
         rustc
         pkg-config
       ];
 
       meta = with lib; {
-        description = "An NGINX module with the implementation of the automatic certificate management (ACMEv2) protocol";
+        description = "Implementation of the automatic certificate management (ACMEv2) protocol";
         homepage = "https://github.com/nginx/nginx-acme";
         license = with licenses; [ asl20 ];
         maintainers = with maintainers; [ nyanloutre ];
