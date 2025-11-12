@@ -202,8 +202,6 @@ let
           else
             (lib.makeOverridable (import ../../build-support/cc-wrapper) {
               name = "${name}-gcc-wrapper";
-              nativeTools = false;
-              nativeLibc = false;
               expand-response-params = lib.optionalString (
                 prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null"
               ) prevStage.expand-response-params;
@@ -290,8 +288,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gcc-unwrapped = bootstrapTools;
         binutils = import ../../build-support/bintools-wrapper {
           name = "bootstrap-stage0-binutils-wrapper";
-          nativeTools = false;
-          nativeLibc = false;
           expand-response-params = "";
           inherit lib;
           inherit (self)
@@ -709,8 +705,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gnumake = super.gnumake.override { inBootstrap = true; };
 
         gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
-          nativeTools = false;
-          nativeLibc = false;
           isGNU = true;
           inherit (prevStage) expand-response-params;
           cc = prevStage.gcc-unwrapped;

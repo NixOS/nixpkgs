@@ -28,10 +28,7 @@
         null
     else
       lib.getLib libc,
-  nativeTools,
   noLibc ? false,
-  nativeLibc,
-  nativePrefix ? "",
   propagateDoc ? bintools != null && bintools ? man,
   extraPackages ? [ ],
   extraBuildCommands ? "",
@@ -76,10 +73,7 @@
 }:
 
 assert propagateDoc -> bintools ? man;
-assert nativeTools -> !propagateDoc && nativePrefix != "";
-assert !nativeTools -> bintools != null && coreutils != null && gnugrep != null;
-assert !(nativeLibc && noLibc);
-assert (noLibc || nativeLibc) == (libc == null);
+assert noLibc == (libc == null);
 
 let
   inherit (lib)
@@ -114,9 +108,9 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  bintools_bin = optionalString (!nativeTools) (getBin bintools);
-  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
+  bintools_bin = getBin bintools;
+  # The wrapper scripts use 'cat' and 'grep', so we need coreutils.
+  coreutils_bin = getBin coreutils;
 
   # See description in cc-wrapper.
   suffixSalt =
@@ -191,9 +185,6 @@ stdenvNoCC.mkDerivation {
     inherit
       bintools
       libc
-      nativeTools
-      nativeLibc
-      nativePrefix
       isGNU
       isLLVM
       ;
@@ -234,27 +225,11 @@ stdenvNoCC.mkDerivation {
     }
   ''
 
-  + (
-    if nativeTools then
-      ''
-        echo ${nativePrefix} > $out/nix-support/orig-bintools
+  + ''
+    echo $bintools_bin > $out/nix-support/orig-bintools
 
-        ldPath="${nativePrefix}/bin"
-      ''
-    else
-      ''
-        echo $bintools_bin > $out/nix-support/orig-bintools
-
-        ldPath="${bintools_bin}/bin"
-      ''
-
-      # Solaris needs an additional ld wrapper.
-      + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
-        ldPath="${nativePrefix}/bin"
-        exec="$ldPath/${targetPrefix}ld"
-        wrap ld-solaris ${./ld-solaris-wrapper.sh}
-      ''
-  )
+    ldPath="${bintools_bin}/bin"
+  ''
 
   # If we are asked to wrap `gas` and this bintools has it,
   # then symlink it (`as` will be symlinked next).
@@ -358,7 +333,7 @@ stdenvNoCC.mkDerivation {
     # Propagate the underling unwrapped bintools so that if you
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
-    + optionalString (!nativeTools) ''
+    + ''
       printWords ${bintools_bin} ${
         optionalString (libc != null) libc_bin
       } > $out/nix-support/propagated-user-env-packages
@@ -465,9 +440,9 @@ stdenvNoCC.mkDerivation {
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = (getBin runtimeShell + runtimeShell.shellPath or "");
-    gnugrep_bin = optionalString (!nativeTools) gnugrep;
-    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
-    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
+    gnugrep_bin = gnugrep;
+    rm = lib.getExe' coreutils "rm";
+    mktemp = lib.getExe' coreutils "mktemp";
     wrapperName = "BINTOOLS_WRAPPER";
     inherit
       dynamicLinker

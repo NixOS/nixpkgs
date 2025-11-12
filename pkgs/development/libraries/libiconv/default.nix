@@ -34,13 +34,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString
-      (
-        (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc
-      )
-      ''
-        sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
-      ''
+    lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) ''
+      sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
+    ''
     + lib.optionalString (!enableShared) ''
       sed -i -e '/preload/d' Makefile.in
     ''

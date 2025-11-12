@@ -5366,10 +5366,7 @@ with pkgs;
     callPackage ../build-support/cc-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
-          nativePrefix = stdenv.cc.nativePrefix or "";
-          noLibc = !self.nativeLibc && (self.libc == null);
+          noLibc = self.libc == null;
 
           isGNU = cc.isGNU or false;
           isClang = cc.isClang or false;
@@ -5405,11 +5402,7 @@ with pkgs;
     callPackage ../build-support/bintools-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
-          nativePrefix = stdenv.cc.nativePrefix or "";
-
-          noLibc = (self.libc == null);
+          noLibc = self.libc == null;
 
           inherit bintools libc;
         }
