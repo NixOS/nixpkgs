@@ -12921,6 +12921,8 @@ self: super: with self; {
 
   pycrdt = callPackage ../development/python-modules/pycrdt { };
 
+  pycrdt-store = callPackage ../development/python-modules/pycrdt-store { };
+
   pycrdt-websocket = callPackage ../development/python-modules/pycrdt-websocket { };
 
   pycritty = callPackage ../development/python-modules/pycritty { };
