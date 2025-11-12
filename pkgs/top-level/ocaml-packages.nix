@@ -1102,8 +1102,6 @@ let
 
         lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
-        lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
-
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
         lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
