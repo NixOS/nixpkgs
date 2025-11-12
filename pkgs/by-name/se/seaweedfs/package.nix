@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-h8pyjC/hbKfvt4hEKuq0v5osLMWNU+6mYqFGqsZFqXs=";
   };
 
