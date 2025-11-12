@@ -166,8 +166,8 @@ in
       "sha256-VhY/EqSIDSN6u2D87oA8HtTEZqkUzcJPlE+hHIg68Sw=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.40.54"
-      "sha256-iIQwIdK4dqKCDwxmeL7mzX/LZFKztIv59LzNuqHc3BU=";
+    buildMypyBoto3Package "batch" "1.40.71"
+      "sha256-VS6UEnTCK3zZ5dcm731jKSK73hCL8SoNnOTE1z/w0tc=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.40.54"
