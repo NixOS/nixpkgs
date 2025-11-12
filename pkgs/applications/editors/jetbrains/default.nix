@@ -45,7 +45,7 @@ let
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0-source;
 
   package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
