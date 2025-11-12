@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
-  version = "1.0.2";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "einarhauks";
     repo = "tesla-wall-connector";
     rev = version;
-    hash = "sha256-GblKXWV9h37E3bxNsx17hEe0uDm8ahzJUx8wiE+Vc38=";
+    hash = "sha256-3jj3LU0xRIC6U5DmitkTNjejvSZJWguTS/TeotOD8oc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
