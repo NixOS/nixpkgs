@@ -706,6 +706,11 @@ with lib.maintainers;
     shortName = "NGI";
   };
 
+  nim = {
+    github = "nim";
+    enableFeatureFreezePing = true;
+  };
+
   # same as https://github.com/orgs/NixOS/teams/nix-team
   nix = {
     members = [
