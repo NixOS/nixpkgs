@@ -4337,6 +4337,12 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+  cboecking = {
+    email = "chuck@chuboe.com";
+    github = "cboecking";
+    githubId = 16024854;
+    name = "Chuck Boecking";
+  };
   cbrewster = {
     email = "cbrewster@hey.com";
     github = "cbrewster";
