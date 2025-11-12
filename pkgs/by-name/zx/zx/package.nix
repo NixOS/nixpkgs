@@ -1,46 +1,27 @@
 {
   lib,
   buildNpmPackage,
-  buildGoModule,
   fetchFromGitHub,
-  esbuild,
   versionCheckHook,
   nix-update-script,
 }:
 
-let
-  esbuild' = esbuild.override {
-    buildGoModule =
-      args:
-      buildGoModule (
-        args
-        // rec {
-          version = "0.25.3";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            tag = "v${version}";
-            hash = "sha256-YYwvz6TCLAtVHsmXLGC+L/CQVAy5qSFU6JS1o5O5Zkg=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      );
-  };
-in
 buildNpmPackage (finalAttrs: {
   pname = "zx";
-  version = "8.5.4";
+  version = "8.8.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     tag = finalAttrs.version;
-    hash = "sha256-328I8SgBIeTCNFH3Ahm9Zb1OCxwGuhWE/iWmDHElbsA=";
+    hash = "sha256-TB4TDGvrMqJgLGm2E3wGLg/uJv3YmbAuxTuZGerj7vM=";
   };
 
-  npmDepsHash = "sha256-R0pCoITmLQBj0T1iIXXN4clpEKDn9wkG5Ke0AedgnlQ=";
+  npmDepsHash = "sha256-yr4oPr4tTFfl+uUc2RJnVkmzSVHrw2adzWuZ+R2bQaU=";
 
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  npmFlags = [ "--legacy-peer-deps" ];
+
+  dontNpmBuild = true;
 
   doInstallCheck = true;
 
@@ -53,7 +34,10 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/google/zx";
     changelog = "https://github.com/google/zx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jlbribeiro ];
+    maintainers = with lib.maintainers; [
+      jlbribeiro
+      f64u
+    ];
     mainProgram = "zx";
   };
 })
