@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-VkfHRo4k8g9/QYG4r79fXf1NXorVdpUKUgVrbV2ELMU=";
   };
 
+  patches = [
+    # https://github.com/hamcrest/PyHamcrest/pull/270
+    ./python314-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
