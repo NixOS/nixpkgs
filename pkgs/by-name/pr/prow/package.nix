@@ -65,6 +65,10 @@ buildGoModule rec {
 
   nativeCheckInputs = [ gitMinimal ];
 
+  # Workaround for: panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  # ref: https://github.com/NixOS/nix/pull/1646
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [ "--version=branch" ];
