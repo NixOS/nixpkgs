@@ -1112,6 +1112,7 @@ let
     clustermq = [ pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
+    milorGWAS = [ pkgs.zlib.dev ];
     pliman = with pkgs; [
       fftw.dev
       libpng.dev
