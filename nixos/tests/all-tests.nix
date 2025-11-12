@@ -1011,6 +1011,7 @@ in
     defaults.services.ncps.cache.dataPath = "/path/to/ncps";
   };
   ndppd = runTest ./ndppd.nix;
+  nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
   nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
