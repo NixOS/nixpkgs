@@ -1149,6 +1149,7 @@ let
       bzip2.dev
       xz.dev
       libdeflate
+      zstd.dev
     ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
