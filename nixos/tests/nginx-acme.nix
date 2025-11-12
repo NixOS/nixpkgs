@@ -50,9 +50,8 @@ let
         '';
         virtualHosts."${fqdn}" =
           let
-            testroot = pkgs.runCommand "testroot" { } ''
-              mkdir -p $out
-              echo "<html><body>Hello World!</body></html>" > $out/index.html
+            testroot = pkgs.writeText "index.html" ''
+              <html><body>Hello World!</body></html>
             '';
           in
           {
