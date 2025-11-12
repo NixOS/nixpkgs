@@ -6,6 +6,8 @@
 }:
 
 let
+  inherit (lib) types;
+
   cfg = config.services.nebula-lighthouse-service;
   settingsFormat = pkgs.formats.yaml { };
 in
@@ -13,6 +15,14 @@ in
 
   options.services.nebula-lighthouse-service = {
     enable = lib.mkEnableOption "nebula-lighthouse-service";
+    user = lib.mkOption {
+      type = types.str;
+      default = "nebula-lighthouse";
+      description = ''
+        The user and group to run nebula-lighthouse-service as.
+      '';
+      example = "nebula-lighthouse";
+    };
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
@@ -50,8 +60,16 @@ in
         Restart = "always";
         ExecStart = "${pkgs.nebula-lighthouse-service}/bin/nebula-lighthouse-service";
         StateDirectory = "nebula-lighthouse-service";
+        User = cfg.user;
+        Group = cfg.user;
       };
     };
+    users.users.${cfg.user} = {
+      group = cfg.user;
+      description = "nebula-lighthouse-service user";
+      isSystemUser = true;
+    };
+    users.groups.${cfg.user} = { };
   };
   meta.maintainers = with lib.maintainers; [
     bloominstrong
