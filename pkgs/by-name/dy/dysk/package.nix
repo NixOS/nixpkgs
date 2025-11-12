@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       koral
+      osbm
     ];
     mainProgram = "dysk";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
