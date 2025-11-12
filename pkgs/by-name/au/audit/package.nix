@@ -117,8 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "audit" ];
 
-  enableParallelChecking = false;
-  doCheck = true;
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion --bash init.d/audit.bash_completion
@@ -156,6 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
       static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       audit = nixosTests.audit;
+      # Broken on a hardened kernel
+      package = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        pname = previousAttrs.pname + "-test";
+        doCheck = true;
+      });
     };
   };
 

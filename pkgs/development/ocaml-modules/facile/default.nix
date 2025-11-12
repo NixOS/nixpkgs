@@ -3,8 +3,8 @@
   fetchurl,
   fetchpatch,
   buildDunePackage,
+  ocaml,
   stdlib-shims,
-
 }:
 
 buildDunePackage (finalAttrs: {
@@ -30,5 +30,6 @@ buildDunePackage (finalAttrs: {
     homepage = "http://opti.recherche.enac.fr/facile/";
     license = lib.licenses.lgpl21Plus;
     description = "Functional Constraint Library";
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 })

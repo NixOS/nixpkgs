@@ -62,6 +62,13 @@ rustPlatform.buildRustPackage.override
     # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
     RUSTC_BOOTSTRAP = 1;
 
+    RUSTFLAGS =
+      if stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu" then
+        # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+        "-Clinker-features=-lld -Clink-self-contained=-linker"
+      else
+        null;
+
     postInstall = ''
       wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
 

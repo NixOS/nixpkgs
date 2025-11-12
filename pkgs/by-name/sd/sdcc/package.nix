@@ -104,10 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  # ${src}/support/cpp/gcc/Makefile.in states:
-  # We don't want to compile the compilers with -fPIE, it make PCH fail.
-  hardeningDisable = [ "pie" ];
-
   meta = {
     homepage = "https://sdcc.sourceforge.net/";
     description = "Small Device C Compiler";

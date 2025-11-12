@@ -328,15 +328,6 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    ++
-      lib.optionals
-        (
-          (lib.versionAtLeast version "141.0.2" && lib.versionOlder version "145.0")
-          || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
-        )
-        [
-          ./142-relax-apple-sdk.patch
-        ]
     ++ extraPatches;
 
   postPatch = ''

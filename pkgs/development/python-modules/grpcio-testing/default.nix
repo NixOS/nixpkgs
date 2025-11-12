@@ -13,7 +13,7 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.75.1";
+  version = "1.76.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;
-    hash = "sha256-RUF4XosbetXbFVEyGsFE3WOM/z0fsC+St9ZRHFhLmKg=";
+    hash = "sha256-loQmPvqyo9xRFBeDOx5qB1hZfic6Ibbb8XwXAizvfCQ=";
   };
 
   postPatch = ''

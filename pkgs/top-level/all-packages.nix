@@ -2517,6 +2517,7 @@ with pkgs;
       pslSupport = true;
       zstdSupport = true;
       http3Support = true;
+      c-aresSupport = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;
@@ -3433,7 +3434,7 @@ with pkgs;
   };
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_3;
+  netbox = netbox_4_4;
 
   netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
     withDpi = false;
@@ -3555,10 +3556,6 @@ with pkgs;
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh { });
 
   openssh = opensshPackages.openssh.override {
-    etcDir = "/etc/ssh";
-  };
-
-  openssh_10_2 = opensshPackages.openssh_10_2.override {
     etcDir = "/etc/ssh";
   };
 
@@ -5221,15 +5218,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_89 = callPackage ../development/compilers/rust/1_89.nix { };
-  rust = rust_1_89;
+  rust_1_90 = callPackage ../development/compilers/rust/1_90.nix { };
+  rust = rust_1_90;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_89 = rust_1_89.packages.stable;
-  rustPackages = rustPackages_1_89;
+  rustPackages_1_90 = rust_1_90.packages.stable;
+  rustPackages = rustPackages_1_90;
 
   inherit (rustPackages)
     cargo
@@ -7025,9 +7022,6 @@ with pkgs;
 
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
-  # TODO: Fix references and add justStaticExecutables https://github.com/NixOS/nixpkgs/issues/318013
-  emanote = haskellPackages.emanote;
-
   enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
   enchant = enchant2;
 
@@ -7107,7 +7101,7 @@ with pkgs;
     fmt_12
     ;
 
-  fmt = fmt_11;
+  fmt = fmt_12;
 
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
@@ -8239,7 +8233,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_32;
+  protobuf = protobuf_33;
 
   inherit
     ({
@@ -8731,9 +8725,6 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
 
-  apple-sdk_11 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "11"; };
-  apple-sdk_12 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "12"; };
-  apple-sdk_13 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "13"; };
   apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
   apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
   apple-sdk_26 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "26"; };
@@ -8901,14 +8892,6 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.5"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_5_7 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.7"; };
     faslExt = "fasl";
@@ -8917,7 +8900,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_7;
+  sbcl_2_5_9 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.9"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_5_9;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -10178,6 +10169,12 @@ with pkgs;
     withVmspawn = false;
     withQrencode = false;
     withLibarchive = false;
+    withVConsole = false;
+    # withKmod = false; # breaks udevCheckHook of bcache-tools
+    withFirstboot = false;
+    withKexectools = false;
+    withLibseccomp = false;
+    withNspawn = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
@@ -11735,8 +11732,6 @@ with pkgs;
   p4v = qt6Packages.callPackage ../applications/version-management/p4v { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
-
-  pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
 
   pijuice = with python3Packages; toPythonApplication pijuice;
 
