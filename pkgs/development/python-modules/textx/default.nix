@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = version;
+      tag = version;
       hash = "sha256-2ZRu7aDDiq+EUjqYI7CxzsmPNXGmWc7DI4ocVZbj3gM=";
     };
 
@@ -58,6 +58,7 @@ let
     };
 
     meta = with lib; {
+      changelog = "https://github.com/textX/textX/blob/${src.tag}/CHANGELOG.md";
       description = "Domain-specific languages and parsers in Python";
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
