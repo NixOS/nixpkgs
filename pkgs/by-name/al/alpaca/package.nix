@@ -21,6 +21,8 @@
   webkitgtk_6_0,
   pipewire,
   glib-networking,
+  bash,
+  fetchpatch,
 }:
 
 let
@@ -41,6 +43,19 @@ pythonPackages.buildPythonApplication rec {
     tag = version;
     hash = "sha256-X3kITzZBcpN3kYDiT2PTu9UvuWQ/XSq3tVYYMa1btnY=";
   };
+
+  # TODO: remove in the next release
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Jeffser/Alpaca/pull/1043.patch";
+      hash = "sha256-y0NiT0FvyB/fKvi+5E0hSzDs1Ds2ydqRO1My83bnmYY=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace src/widgets/activities/terminal.py \
+      --replace-fail "['bash', '-c', ';\n'.join(self.prepare_script())]," "['${bash}/bin/bash', '-c', ';\n'.join(self.prepare_script())],"
+  '';
 
   nativeBuildInputs = [
     appstream
