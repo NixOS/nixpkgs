@@ -64,13 +64,7 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/nerdctl --help
-    runHook postInstallCheck
-  '';
 
   meta = {
     homepage = "https://github.com/containerd/nerdctl/";
