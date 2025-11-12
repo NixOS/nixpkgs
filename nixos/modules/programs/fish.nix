@@ -259,7 +259,6 @@ in
               name = "fish_patched-completion-generator";
               srcs = [
                 "${cfg.package}/share/fish/tools/create_manpage_completions.py"
-                "${cfg.package}/share/fish/tools/deroff.py"
               ];
               unpackCmd = "cp $curSrc $(basename $curSrc)";
               sourceRoot = ".";
