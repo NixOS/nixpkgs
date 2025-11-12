@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "nerdctl";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M3np4NfzEfMt4ii7Fdbdt+y1K7lSTWrqA9Bl+zpzxog=";
   };
 
