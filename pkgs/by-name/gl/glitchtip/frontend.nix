@@ -9,18 +9,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WKh5w6AVyKhkGvGsy2Wv4Z01UaKTctDSfEhOek2Y84w=";
+    hash = "sha256-aqGgaVjJogG3mDooQVpR59SR0HDuMPfKuB1i0Z/AMs8=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-G2DZhHfTWi0qCAMs+IP7T2XEecBwTX12Dk3O0pD8ZJw=";
+    hash = "sha256-urho5XwUJL7m8/xxv9EvH0MxQIW5TG7nOBSIa77RhJc=";
   };
 
   postPatch = ''
