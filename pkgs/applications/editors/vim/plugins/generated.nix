@@ -5854,6 +5854,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gitportal-nvim = buildVimPlugin {
+    pname = "gitportal.nvim";
+    version = "2025-11-11";
+    src = fetchFromGitHub {
+      owner = "trevorhauter";
+      repo = "gitportal.nvim";
+      rev = "3abb1b87a48a8c07f042eb8c570dfe325ebf8702";
+      sha256 = "04f8yls7498v8ccs472zl1phr1c5p5nf37r05dpv4kr1wqlkmdq4";
+    };
+    meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gitv = buildVimPlugin {
     pname = "gitv";
     version = "2019-08-22";
