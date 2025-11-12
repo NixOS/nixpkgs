@@ -2,7 +2,7 @@
 let
 
   # We'll need to be able to trade cert files between nodes via scp.
-  inherit (import ./ssh-keys.nix pkgs)
+  inherit (import ../ssh-keys.nix pkgs)
     snakeOilPrivateKey
     snakeOilPublicKey
     ;
