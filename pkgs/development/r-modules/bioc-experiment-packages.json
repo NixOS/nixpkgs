@@ -1241,8 +1241,8 @@
     },
     "TCGAbiolinksGUI_data": {
       "name": "TCGAbiolinksGUI.data",
-      "version": "1.29.0",
-      "sha256": "1raa542lr269jr568qkh9wpragsrvgmvgimmn7dnzm1kzbrf1p2x",
+      "version": "1.30.0",
+      "sha256": "0pb16qz7a3dn89bibg9l2jnyb5xr7h5ndj5s31nskx2y5fwxrxf3",
       "depends": []
     },
     "TCGAcrcmRNA": {
