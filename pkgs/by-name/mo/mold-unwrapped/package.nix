@@ -15,7 +15,7 @@
   clangStdenv,
   gccStdenv,
   hello,
-  mold,
+  mold-unwrapped,
   mold-wrapped,
   runCommandCC,
   testers,
@@ -25,7 +25,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "mold";
+  pname = "mold-unwrapped";
   version = "2.40.4";
 
   src = fetchFromGitHub {
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
           '';
       in
       {
-        version = testers.testVersion { package = mold; };
+        version = testers.testVersion { package = mold-unwrapped; };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (

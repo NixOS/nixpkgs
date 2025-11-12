@@ -9,7 +9,7 @@
   libglvnd,
   libxkbcommon,
   makeWrapper,
-  mold,
+  mold-wrapped,
   nix-update-script,
   pkg-config,
   rustPlatform,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    mold
+    mold-wrapped
     pkg-config
   ];
 

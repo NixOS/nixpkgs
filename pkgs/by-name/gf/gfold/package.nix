@@ -4,7 +4,7 @@
   lib,
   rustPlatform,
   testers,
-  mold,
+  mold-wrapped,
   nix-update-script,
 }:
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pbIE8QXY8lYsDGdmGVsOPesVTaHRjDBSd7ihQhN2XrI=";
 
-  nativeBuildInputs = [ mold ];
+  nativeBuildInputs = [ mold-wrapped ];
 
   passthru = {
     updateScript = nix-update-script { };

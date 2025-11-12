@@ -21,7 +21,7 @@
   libxkbcommon,
   libXrandr,
   makeWrapper,
-  mold,
+  mold-wrapped,
   pango,
   pkg-config,
   python3,
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     harfbuzz
-    mold
+    mold-wrapped
     pango
     shaderc
     zlib
