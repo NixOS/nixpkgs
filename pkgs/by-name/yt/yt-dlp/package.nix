@@ -4,11 +4,13 @@
   fetchFromGitHub,
   ffmpeg-headless,
   rtmpdump,
+  deno,
   atomicparsley,
   pandoc,
   installShellFiles,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
+  javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   nix-update-script,
@@ -80,14 +82,15 @@ python3Packages.buildPythonApplication rec {
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
+  # - deno: required for full YouTube support (since 2025.11.12)
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
       packagesToBinPath =
-        [ ]
-        ++ lib.optional atomicparsleySupport atomicparsley
+        lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg-headless
+        ++ lib.optional javascriptSupport deno
         ++ lib.optional rtmpSupport rtmpdump;
     in
     lib.optionals (packagesToBinPath != [ ]) [
