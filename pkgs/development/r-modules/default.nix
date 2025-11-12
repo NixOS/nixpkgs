@@ -1090,6 +1090,7 @@ let
     ];
     EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
+    islify = [ pkgs.bftools ];
     knowYourCG = with pkgs; [
       zlib.dev
       ncurses.dev
