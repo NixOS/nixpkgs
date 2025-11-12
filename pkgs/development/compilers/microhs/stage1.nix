@@ -9,6 +9,12 @@ stdenv.mkDerivation (
   finalAttrs:
   let
     args' = args finalAttrs;
+
+    backcompatPatch =
+      v:
+      lib.optional (
+        lib.versionAtLeast args'.version v && lib.versionOlder microhs-boot.version v
+      ) patches/backcompat-${v}.patch;
   in
   args'
   // {
@@ -16,12 +22,8 @@ stdenv.mkDerivation (
     patches =
       (args'.patches or [ ])
       ++ lib.optional microhs-boot.isHugs patches/simple-unicode.patch
-      ++
-        lib.optionals
-          (lib.versionAtLeast args'.version "0.14.20.0" && lib.versionOlder microhs-boot.version "0.14.20.0")
-          [
-            patches/backcompat-0.14.20.0.patch
-          ];
+      ++ backcompatPatch "0.14.20.0"
+      ++ backcompatPatch "0.14.21.0";
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
     installTargets = [ "oldinstall" ];

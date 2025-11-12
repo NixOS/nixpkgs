@@ -1,0 +1,12 @@
+diff --git a/src/MicroHs/Translate.hs b/src/MicroHs/Translate.hs
+index 3a290ecd..1465cb5a 100644
+--- a/src/MicroHs/Translate.hs
++++ b/src/MicroHs/Translate.hs
+@@ -180,7 +180,6 @@ primTable = [
+   ("A.size", _primitive "A.size"),
+   ("A.read", _primitive "A.read"),
+   ("A.write", _primitive "A.write"),
+-  ("A.trunc", _primitive "A.trunc"),
+   ("A.==", _primitive "A.=="),
+   ("bs++", _primitive "bs++"),
+   ("bs++.", _primitive "bs++."),

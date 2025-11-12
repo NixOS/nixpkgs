@@ -9,6 +9,7 @@
   microhs,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +22,14 @@ stdenv.mkDerivation {
     inherit rev hash;
   };
 
-  patches = [ patches/nixpkgs-compat.patch ];
+  patches = [
+    (fetchpatch {
+      name = "magichash-parse.patch";
+      url = "https://github.com/augustss/MicroCabal/commit/c4e9fa6b4a62300f5230f6ec4ac47746b16775b6.patch";
+      hash = "sha256-MpLNgwOryBJTAasYkglmuY6mMLPZ9gRRINp1kQdj2uo=";
+    })
+    patches/nixpkgs-compat.patch
+  ];
 
   makeFlags = [
     "MHS=${microhs}/bin/mhs"
