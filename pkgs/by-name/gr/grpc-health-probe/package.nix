@@ -2,6 +2,7 @@
   buildGoModule,
   lib,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -25,6 +26,11 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-9NDSkfHUa6xfLByjtuDMir2UM5flaKhD6jZDa71D+0w=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "command-line tool to perform health-checks for gRPC applications";
