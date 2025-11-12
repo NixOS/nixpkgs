@@ -30,7 +30,7 @@ let
         appendHttpConfig = ''
           acme_issuer default {
             uri         https://${nodes.acme.test-support.acme.caDomain}/dir;
-            state_path  /var/cache/nginx/acme;
+            state_path  /var/lib/nginx/acme;
             accept_terms_of_service;
             challenge ${challenge};
           }
@@ -76,6 +76,7 @@ let
             '';
           };
       };
+      systemd.services.nginx.serviceConfig.StateDirectory = "nginx";
     };
 in
 {
