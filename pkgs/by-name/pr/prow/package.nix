@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   git,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -63,6 +64,12 @@ buildGoModule rec {
   ];
 
   nativeCheckInputs = [ git ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+  };
 
   meta = {
     description = "Kubernetes based CI/CD system developed to serve the Kubernetes community";
