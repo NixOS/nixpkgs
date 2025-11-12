@@ -27,6 +27,14 @@ let
 
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
+  indentFishFile =
+    name: text:
+    pkgs.runCommand name {
+      nativeBuildInputs = [ cfg.package ];
+      inherit text;
+      passAsFile = [ "text" ];
+    } "fish_indent < $textPath > $out";
+
   sourceEnv =
     file:
     if cfg.useBabelfish then
@@ -182,16 +190,16 @@ in
       })
 
       {
-        etc."fish/nixos-env-preinit.fish".text =
+        etc."fish/nixos-env-preinit.fish".source =
           if cfg.useBabelfish then
-            ''
+            indentFishFile "nixos-env-preinit.fish" ''
               # source the NixOS environment config
               if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
                 source /etc/fish/setEnvironment.fish
               end
             ''
           else
-            ''
+            indentFishFile "nixos-env-preinit.fish" ''
               # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
               # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
               set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
@@ -207,7 +215,7 @@ in
       }
 
       {
-        etc."fish/config.fish".text = ''
+        etc."fish/config.fish".source = indentFishFile "config.fish" ''
           # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
           # if we haven't sourced the general config, do it
