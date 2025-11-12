@@ -893,8 +893,8 @@ in
       "sha256-uluvMcbKZz3KA0V7KMEGbRr9CVYIPDhGTTY5oJHjHic=";
 
   mypy-boto3-medical-imaging =
-    buildMypyBoto3Package "medical-imaging" "1.40.54"
-      "sha256-pDcksj0s3L+AKKXDe9fmcYxDdQDa5uVdbtJLGSvW0X0=";
+    buildMypyBoto3Package "medical-imaging" "1.40.71"
+      "sha256-+hrKUqp4c6sQj3aaT/MXPHsBC2r/chOeWwcCMPjvW+k=";
 
   mypy-boto3-memorydb =
     buildMypyBoto3Package "memorydb" "1.40.54"
