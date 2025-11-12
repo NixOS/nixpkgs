@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "3.97";
+  version = "4.00";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
