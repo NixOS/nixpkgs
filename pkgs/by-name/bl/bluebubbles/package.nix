@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   flutter329,
   fetchFromGitHub,
   autoPatchelfHook,
@@ -22,6 +23,8 @@ flutter329.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  customSourceBuilders.objectbox_flutter_libs = callPackage ./objectbox_flutter_libs.nix { };
 
   gitHashes = {
     desktop_webview_auth = "sha256-n3lvYFUzm/1sCwQBJ3Ovup4Mq7lqGJ17ktk3TJrHhKE=";
