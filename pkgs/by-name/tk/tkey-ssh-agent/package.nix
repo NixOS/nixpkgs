@@ -47,6 +47,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "SSH Agent for TKey, the flexible open hardware/software USB security key";
     homepage = "https://tillitis.se/app/tkey-ssh-agent/";
+    changelog = "https://github.com/tillitis/tkey-ssh-agent/releases/tag/v${version}";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bbigras ];
     mainProgram = "tkey-ssh-agent";
