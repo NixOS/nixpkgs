@@ -24,6 +24,11 @@ buildGoModule rec {
     "cmd/tkey-ssh-agent"
   ];
 
+  ldflags = [
+    "-w"
+    "-X main.version=${version}"
+  ];
+
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
