@@ -304,7 +304,6 @@ buildFHSEnv {
     license = licenses.unfree;
     maintainers = with maintainers; [
       amarshall
-      jshcmpbll
       orivej
       XBagon
     ];

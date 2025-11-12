@@ -889,7 +889,7 @@ in
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
-  lxc = handleTest ./lxc { };
+  lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;
@@ -1011,7 +1011,8 @@ in
     defaults.services.ncps.cache.dataPath = "/path/to/ncps";
   };
   ndppd = runTest ./ndppd.nix;
-  nebula = runTest ./nebula.nix;
+  nebula.connectivity = runTest ./nebula/connectivity.nix;
+  nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;

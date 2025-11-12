@@ -13,6 +13,7 @@ let
       makeBinaryWrapper,
       symlinkJoin,
       writeText,
+      acl,
       autoconf,
       automake,
       bison,
@@ -248,6 +249,7 @@ let
 
             # Enable sapis
             ++ lib.optionals pearSupport [ libxml2.dev ]
+            ++ lib.optionals (fpmSupport && stdenv.hostPlatform.isLinux) [ acl ]
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -268,7 +270,10 @@ let
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
-            ++ lib.optional fpmSupport "--enable-fpm"
+            ++ lib.optionals fpmSupport [
+              "--enable-fpm"
+              (lib.withFeature stdenv.hostPlatform.isLinux "fpm-acl")
+            ]
             ++ lib.optionals pearSupport [
               "--with-pear"
               "--enable-xml"

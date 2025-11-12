@@ -3626,9 +3626,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  p7zip = callPackage ../tools/archivers/p7zip { };
-  p7zip-rar = p7zip.override { enableUnfree = true; };
-
   packagekit = callPackage ../tools/package-management/packagekit { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -5015,11 +5012,9 @@ with pkgs;
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
-    julia_19-bin
     julia_110-bin
     julia_111-bin
     julia_112-bin
-    julia_19
     julia_110
     julia_111
     julia_112
@@ -6802,17 +6797,17 @@ with pkgs;
 
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
-  wild-wrapped =
+  wild =
     let
       ldWrapper = ../build-support/bintools-wrapper/ld-wrapper.sh;
     in
     wrapBintoolsWith {
-      bintools = wild;
+      bintools = wild-unwrapped;
       extraBuildCommands = ''
-        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
       '';
     };
 
@@ -13194,8 +13189,6 @@ with pkgs;
   the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
     lua = lua5_2;
   };
-
-  tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
   teeworlds-server = teeworlds.override { buildClient = false; };
 

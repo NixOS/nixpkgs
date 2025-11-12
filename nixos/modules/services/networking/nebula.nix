@@ -9,7 +9,53 @@ let
   cfg = config.services.nebula;
   enabledNetworks = lib.filterAttrs (n: v: v.enable) cfg.networks;
 
+  genSettings =
+    netName: netCfg:
+    lib.recursiveUpdate {
+      pki = {
+        ca = netCfg.ca;
+        cert = netCfg.cert;
+        key = netCfg.key;
+      };
+      static_host_map = netCfg.staticHostMap;
+      lighthouse = {
+        am_lighthouse = netCfg.isLighthouse;
+        hosts = netCfg.lighthouses;
+        serve_dns = netCfg.lighthouse.dns.enable;
+        dns.host = netCfg.lighthouse.dns.host;
+        dns.port = netCfg.lighthouse.dns.port;
+      };
+      relay = {
+        am_relay = netCfg.isRelay;
+        relays = netCfg.relays;
+        use_relays = true;
+      };
+      listen = {
+        host = netCfg.listen.host;
+        port = resolveFinalPort netCfg;
+      };
+      tun = {
+        disabled = netCfg.tun.disable;
+        dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
+      };
+      firewall = {
+        inbound = netCfg.firewall.inbound;
+        outbound = netCfg.firewall.outbound;
+      };
+    } netCfg.settings;
   format = pkgs.formats.yaml { };
+
+  genConfigFile =
+    netName: settings:
+    format.generate "nebula-config-${netName}.yml" (
+      lib.warnIf
+        ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
+        ''
+          Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
+          You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
+        ''
+        settings
+    );
 
   nameToId = netName: "nebula-${netName}";
 
@@ -58,6 +104,16 @@ in
                 ];
                 description = "Path or reference to the host key.";
                 example = "/etc/nebula/host.key";
+              };
+
+              enableReload = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Enable automatic config reload on config change.
+                  This setting is not enabled by default as nix cannot determine if the config change is reloadable.
+                  Please refer to the [config reference](https://nebula.defined.net/docs/config/) for documentation on reloadable changes.
+                '';
               };
 
               staticHostMap = lib.mkOption {
@@ -212,47 +268,13 @@ in
         netName: netCfg:
         let
           networkId = nameToId netName;
-          settings = lib.recursiveUpdate {
-            pki = {
-              ca = netCfg.ca;
-              cert = netCfg.cert;
-              key = netCfg.key;
-            };
-            static_host_map = netCfg.staticHostMap;
-            lighthouse = {
-              am_lighthouse = netCfg.isLighthouse;
-              hosts = netCfg.lighthouses;
-              serve_dns = netCfg.lighthouse.dns.enable;
-              dns.host = netCfg.lighthouse.dns.host;
-              dns.port = netCfg.lighthouse.dns.port;
-            };
-            relay = {
-              am_relay = netCfg.isRelay;
-              relays = netCfg.relays;
-              use_relays = true;
-            };
-            listen = {
-              host = netCfg.listen.host;
-              port = resolveFinalPort netCfg;
-            };
-            tun = {
-              disabled = netCfg.tun.disable;
-              dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
-            };
-            firewall = {
-              inbound = netCfg.firewall.inbound;
-              outbound = netCfg.firewall.outbound;
-            };
-          } netCfg.settings;
-          configFile = format.generate "nebula-config-${netName}.yml" (
-            lib.warnIf
-              ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
-              ''
-                Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
-                You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
-              ''
-              settings
-          );
+          settings = genSettings netName netCfg;
+          generatedConfigFile = genConfigFile netName settings;
+          configFile =
+            if ((lib.versionAtLeast config.system.stateVersion "25.11") || netCfg.enableReload) then
+              "/etc/nebula/${netName}.yml"
+            else
+              generatedConfigFile;
           capabilities =
             let
               nebulaPort = if !settings.tun.disabled then settings.listen.port else 0;
@@ -278,6 +300,8 @@ in
             ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
+            restartTriggers = lib.optional (!netCfg.enableReload) generatedConfigFile;
+            reloadTriggers = lib.optional netCfg.enableReload generatedConfigFile;
             serviceConfig = {
               Type = "notify";
               Restart = "always";
@@ -311,6 +335,22 @@ in
           };
         }
       ) enabledNetworks
+    );
+
+    environment.etc = lib.mkMerge (
+      lib.mapAttrsToList
+        (netName: netCfg: {
+          "nebula/${netName}.yml" = {
+            source = genConfigFile netName (genSettings netName netCfg);
+            mode = "0440";
+            user = nameToId netName;
+          };
+        })
+        (
+          lib.filterAttrs (
+            _: netCfg: netCfg.enableReload || (lib.versionAtLeast config.system.stateVersion "25.11")
+          ) enabledNetworks
+        )
     );
 
     # Open the chosen ports for UDP.

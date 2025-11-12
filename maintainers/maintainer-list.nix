@@ -13314,6 +13314,13 @@
     githubId = 34152449;
     name = "Karl Hallsby";
   };
+  karpfediem = {
+    name = "Karpfen";
+    github = "karpfediem";
+    githubId = 11753414;
+    email = "nixos@karpfen.dev";
+    matrix = "@karpfen:matrix.org";
+  };
   kashw2 = {
     email = "supra4keanu@hotmail.com";
     github = "kashw2";
@@ -16388,6 +16395,12 @@
     github = "maxicode2";
     githubId = 65052855;
     name = "maxicode";
+  };
+  maximiliancf = {
+    email = "maximiliancf.dev@icloud.com";
+    github = "MaximilianCF";
+    githubId = 92341177;
+    name = "Maximilian Canez Fernandes";
   };
   maximsmol = {
     email = "maximsmol@gmail.com";
@@ -27733,6 +27746,11 @@
     github = "Vuks69";
     githubId = 51289041;
     name = "Vuks";
+  };
+  vv01f = {
+    github = "vv01f";
+    githubId = 3034896;
+    name = "Wolf";
   };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";

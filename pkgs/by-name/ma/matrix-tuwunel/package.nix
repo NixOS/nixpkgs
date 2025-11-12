@@ -87,16 +87,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZKq8ypDU1MkWORHFQhieDSUOqOzBcfqIQ40amyc1ls=";
+    hash = "sha256-EmIBhSxYD52BzwewcIL53e3/7GLY+5nccmAYGf1LPqI=";
   };
 
-  cargoHash = "sha256-x+LhpwDytwH/NzKWqAuRRbX77OZ2JGaYSaQxqinf81Q=";
+  cargoHash = "sha256-aVMJr216gkYpanCee6UhNGINAi/EZ0V5m0WaTYpQJcY=";
 
   nativeBuildInputs = [
     pkg-config

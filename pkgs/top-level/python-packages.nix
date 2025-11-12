@@ -9562,6 +9562,8 @@ self: super: with self; {
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
 
+  mkdocs-literate-nav = callPackage ../development/python-modules/mkdocs-literate-nav { };
+
   mkdocs-macros-plugin = callPackage ../development/python-modules/mkdocs-macros-plugin { };
 
   mkdocs-macros-test = callPackage ../development/python-modules/mkdocs-macros-test { };
@@ -9585,6 +9587,8 @@ self: super: with self; {
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
+
+  mkdocs-section-index = callPackage ../development/python-modules/mkdocs-section-index { };
 
   mkdocs-simple-blog = callPackage ../development/python-modules/mkdocs-simple-blog { };
 
@@ -19996,6 +20000,8 @@ self: super: with self; {
   };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vmas = callPackage ../development/python-modules/vmas { };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
