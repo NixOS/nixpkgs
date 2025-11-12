@@ -110,6 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       cloudripper
       thardin
+      yzx9
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
