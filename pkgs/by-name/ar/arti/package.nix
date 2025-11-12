@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-uBt4A9ORjJccnmzHxwoVHguvox7jOKqdrc6JdrvSrzk=";
+    hash = "sha256-4Vx5ATVdE8AoMWjDKKkwGOFVOwI0Qhyfr8MiAo+7MNw=";
   };
 
-  cargoHash = "sha256-XkdkCCHY+xLc1haFvqpwNsPgs6rh4AAGxMofrIwFFk0=";
+  cargoHash = "sha256-x1Pws9XbvwZqxJTJmPHQd6qbNLgkHxCK3YIZbRylk2M=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # problematic test that hangs the build
-    "--skip=reload_cfg::test::watch_multiple"
+    "--skip=reload_cfg::test::watch_single_file"
   ];
 
   nativeInstallCheckInputs = [
