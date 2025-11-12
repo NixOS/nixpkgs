@@ -12088,6 +12088,7 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/rke2 { })
     rke2_1_31
     rke2_1_32
+    rke2_1_34
     rke2_stable
     rke2_latest
     ;
