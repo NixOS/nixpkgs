@@ -6657,6 +6657,8 @@ self: super: with self; {
 
   hebg = callPackage ../development/python-modules/hebg { };
 
+  helion = callPackage ../development/python-modules/helion { };
+
   help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
@@ -7147,6 +7149,8 @@ self: super: with self; {
   in-n-out = callPackage ../development/python-modules/in-n-out { };
 
   in-place = callPackage ../development/python-modules/in-place { };
+
+  in-toto-attestation = callPackage ../development/python-modules/in-toto-attestation { };
 
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
@@ -7812,6 +7816,8 @@ self: super: with self; {
   kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
+
+  kagglehub = callPackage ../development/python-modules/kagglehub { };
 
   kahip = toPythonModule (
     pkgs.kahip.override {
@@ -9683,6 +9689,8 @@ self: super: with self; {
 
   model-checker = callPackage ../development/python-modules/model-checker { };
 
+  model-signing = callPackage ../development/python-modules/model-signing { };
+
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };
@@ -11155,6 +11163,8 @@ self: super: with self; {
 
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
+  opentelemetry-distro = callPackage ../development/python-modules/opentelemetry-distro { };
+
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
@@ -11237,6 +11247,10 @@ self: super: with self; {
 
   opentelemetry-instrumentation-sqlalchemy =
     callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy
+      { };
+
+  opentelemetry-instrumentation-urllib3 =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-urllib3
       { };
 
   opentelemetry-instrumentation-wsgi =
@@ -12778,8 +12792,6 @@ self: super: with self; {
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
   pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
-
-  pybind11-protobuf = callPackage ../development/python-modules/pybind11-protobuf { };
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
 
@@ -15440,6 +15452,8 @@ self: super: with self; {
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
   pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
+
+  pytorch-tokenizers = callPackage ../development/python-modules/pytorch-tokenizers { };
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
@@ -18763,6 +18777,8 @@ self: super: with self; {
 
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
+  torchdata = callPackage ../development/python-modules/torchdata { };
+
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
   torcheval = callPackage ../development/python-modules/torcheval { };
@@ -18786,8 +18802,6 @@ self: super: with self; {
   torchsummary = callPackage ../development/python-modules/torchsummary { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
-
-  torchtnt-nightly = callPackage ../development/python-modules/torchtnt-nightly { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
@@ -19846,6 +19860,8 @@ self: super: with self; {
   usort = callPackage ../development/python-modules/usort { };
 
   utils = callPackage ../development/python-modules/utils { };
+
+  utitools = callPackage ../development/python-modules/utitools { };
 
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 

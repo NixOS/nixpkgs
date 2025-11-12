@@ -311,6 +311,7 @@ mapAliases {
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
+  pybind11-protobuf = throw "'pybind11-protobuf' was only used by or-tools, and with some overrides, so vendored in there until it's used in other places."; # Converted to throw 2025-11-06
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
@@ -459,6 +460,7 @@ mapAliases {
   TheanoWithCuda = throw "'TheanoWithCuda' has been renamed to/replaced by 'theanoWithCuda'"; # Converted to throw 2025-10-29
   TheanoWithoutCuda = throw "'TheanoWithoutCuda' has been renamed to/replaced by 'theanoWithoutCuda'"; # Converted to throw 2025-10-29
   tikzplotlib = throw "tikzplotlib was removed because it is incompatible with recent versions of matplotlib and webcolors"; # added 2025-11-11
+  torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11

@@ -5464,19 +5464,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  fruzzy = buildVimPlugin {
-    pname = "fruzzy";
-    version = "2020-08-31";
-    src = fetchFromGitHub {
-      owner = "raghur";
-      repo = "fruzzy";
-      rev = "4cdfee7b828a5cace22bfd93cf23fee0b2b233c4";
-      sha256 = "1dmxz283ypz1klcmdf4jk699aifr3dywkh9y8v8v8vyflampqwwp";
-    };
-    meta.homepage = "https://github.com/raghur/fruzzy/";
-    meta.hydraPlatforms = [ ];
-  };
-
   fugit2-nvim = buildVimPlugin {
     pname = "fugit2.nvim";
     version = "2025-09-02";

@@ -63,22 +63,21 @@ rustPlatform.buildRustPackage rec {
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
   libs =
     let
-      libs =
-        lib.optionals stdenv.hostPlatform.isLinux [
-          cups
-          ffmpeg
-          libglvnd
-          libnotify
-          libpulseaudio
-          libva
-          libgbm
-          pciutils
-          pipewire
-          udev
-          xorg.libXScrnSaver
-        ]
-        ++ gtk_modules
-        ++ extraLibs;
+      libs = [
+        cups
+        ffmpeg
+        libglvnd
+        libnotify
+        libpulseaudio
+        libva
+        libgbm
+        pciutils
+        pipewire
+        udev
+        xorg.libXScrnSaver
+      ]
+      ++ gtk_modules
+      ++ extraLibs;
     in
     lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 

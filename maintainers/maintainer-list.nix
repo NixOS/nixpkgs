@@ -16743,6 +16743,12 @@
     github = "merrkry";
     githubId = 124278440;
   };
+  messemar = {
+    email = "martin.messer@cyberus-technology.de";
+    name = "messemar";
+    github = "messemar";
+    githubId = 22659757;
+  };
   metalmatze = {
     email = "matthias.loibl@polarsignals.com";
     name = "Matthias Loibl";
@@ -24989,6 +24995,14 @@
     github = "stites";
     githubId = 1694705;
     name = "Sam Stites";
+  };
+  storopoli = {
+    email = "jose@storopoli.com";
+    github = "storopoli";
+    githubId = 43353831;
+    name = "Jose Storopoli";
+    keys = [ { fingerprint = "B8C0 1A87 C046 33C9 F6CD  0DA2 1BD3 8BE8 D065 3A7A"; } ];
+    matrix = "@jose:storopoli.com";
   };
   strager = {
     email = "strager.nds@gmail.com";

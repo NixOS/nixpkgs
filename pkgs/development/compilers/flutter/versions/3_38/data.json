@@ -6,12 +6,12 @@
   "channel": "beta",
   "engineHashes": {
     "aarch64-linux": {
-      "aarch64-linux": "sha256-rcZdEXo2L388X02qSR/EnvRb/rTSsJjw4E4y0wFzUmk=",
-      "x86_64-linux": "sha256-rcZdEXo2L388X02qSR/EnvRb/rTSsJjw4E4y0wFzUmk="
+      "aarch64-linux": "sha256-73qdqK1oa+pB8/ruG3DbZ+KHXlGx7oXwiklSXoJFtBU=",
+      "x86_64-linux": "sha256-73qdqK1oa+pB8/ruG3DbZ+KHXlGx7oXwiklSXoJFtBU="
     },
     "x86_64-linux": {
-      "aarch64-linux": "sha256-lfhAF16MxDVeHjqfFE5FsRCTuxdiM9j254gd3/7Ylrc=",
-      "x86_64-linux": "sha256-lfhAF16MxDVeHjqfFE5FsRCTuxdiM9j254gd3/7Ylrc="
+      "aarch64-linux": "sha256-WVJB2cjvV1h5GSJ3Y+uFpdZPjFca/XS1am/ctQrZi+g=",
+      "x86_64-linux": "sha256-WVJB2cjvV1h5GSJ3Y+uFpdZPjFca/XS1am/ctQrZi+g="
     }
   },
   "dartVersion": "3.10.0-290.1.beta",
