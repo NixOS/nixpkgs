@@ -243,7 +243,7 @@ let
           };
           description = ''
             Override default chart values via Nix expressions. This is equivalent to setting
-            values in a `values.yaml` file.
+            values in a {file}`values.yaml` file.
 
             WARNING: The values (including secrets!) specified here are exposed unencrypted
             in the world-readable nix store.
