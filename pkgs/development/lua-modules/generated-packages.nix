@@ -4991,25 +4991,25 @@ final: prev: {
       buildLuarocksPackage,
       fetchFromGitHub,
       fetchurl,
-      lua,
+      luaOlder,
       plenary-nvim,
     }:
     buildLuarocksPackage {
       pname = "telescope.nvim";
-      version = "scm-1";
+      version = "0.1.9-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/telescope.nvim-scm-1.rockspec";
-          sha256 = "07mjkv1nv9b3ifxk2bbpbhvp0awblyklyz6aaqw418x4gm4q1g35";
+          url = "mirror://luarocks/telescope.nvim-0.1.9-1.rockspec";
+          sha256 = "sha256-FyphN6M4vOOxsA0Z4GrEGqfdE2EKGLL0LgLoOuzgvc0=";
         }).outPath;
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "0294ae3eafe662c438addb8692d9c98ef73a983e";
-        hash = "sha256-9u2S9Tn1ZhB6JTm8k34FcFV4ex4FL4eAn5InGrWPgD0=";
+        tag = "v0.1.9";
+        hash = "sha256-xYHyojNJjG/ipt8jKWrTWV3+7Dpx9oNDEleZY7Likdg=";
       };
 
-      disabled = lua.luaversion != "5.1";
+      disabled = luaOlder "5.1";
       propagatedBuildInputs = [ plenary-nvim ];
 
       meta = {
