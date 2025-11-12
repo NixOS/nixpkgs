@@ -1,13 +1,13 @@
 {
   lib,
   python3Packages,
+  atomicparsley,
+  deno,
   fetchFromGitHub,
   ffmpeg-headless,
-  rtmpdump,
-  deno,
-  atomicparsley,
-  pandoc,
   installShellFiles,
+  pandoc,
+  rtmpdump,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
   javascriptSupport ? true,
@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
       requests
       urllib3
       websockets
+      yt-dlp-ejs # keep pinned version in sync!
     ];
     curl-cffi = [ python3Packages.curl-cffi ];
     secretstorage = with python3Packages; [
@@ -114,11 +115,13 @@ python3Packages.buildPythonApplication rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
-    description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    description = "Feature-rich command-line audio/video downloader";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     license = lib.licenses.unlicense;
     longDescription = ''

@@ -20658,6 +20658,8 @@ self: super: with self; {
 
   yt-dlp-dearrow = callPackage ../development/python-modules/yt-dlp-dearrow { };
 
+  yt-dlp-ejs = callPackage ../development/python-modules/yt-dlp-ejs { };
+
   yt-dlp-light = toPythonModule (pkgs.yt-dlp-light.override { python3Packages = self; });
 
   yte = callPackage ../development/python-modules/yte { };
