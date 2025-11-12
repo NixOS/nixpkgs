@@ -44,7 +44,8 @@ buildGoModule (finalAttrs: {
       "-X ${t}.Revision=<unknown>"
     ];
 
-  subPackages = [ "cmd/nerdctl" ];
+  # Workaround for: main module ... does not contain package ...
+  excludedPackages = [ "mod/tigron" ];
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
