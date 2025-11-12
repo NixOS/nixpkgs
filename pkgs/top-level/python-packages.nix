@@ -18756,6 +18756,8 @@ self: super: with self; {
 
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
+  torchdata = callPackage ../development/python-modules/torchdata { };
+
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
   torcheval = callPackage ../development/python-modules/torcheval { };
