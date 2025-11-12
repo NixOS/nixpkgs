@@ -1138,6 +1138,7 @@ let
       zlib.dev
     ];
     gpg = [ pkgs.gpgme ];
+    mutscan = [ pkgs.zlib.dev ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
