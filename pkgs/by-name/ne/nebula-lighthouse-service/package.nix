@@ -4,6 +4,7 @@
   python3Packages,
   nebula,
   nixosTests,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'uvicorn==0.35.0' 'uvicorn' \
       --replace-fail 'python-multipart==0.0.20' 'python-multipart'
   '';
+
   build-system = with python3Packages; [
     setuptools
     wheel
@@ -50,8 +52,14 @@ python3Packages.buildPythonApplication rec {
     nebula-lighthouse-service = nixosTests.nebula-lighthouse-service;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Public Nebula VPN Lighthouse Service, you can use it in case you don’t have a publicly accessible server to run your own Nebula Lighthouse";
+    description = "Public Nebula VPN Lighthouse Service";
+    longDescription = ''
+      In case you don't have a publicly accessible server to run your own Nebula VPN lighthouse,
+      you can use a public nebula-lighthouse-service instance without passing traffic through it.
+    '';
     homepage = "https://github.com/manuels/nebula-lighthouse-service";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;

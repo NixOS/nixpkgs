@@ -12,19 +12,19 @@ in
 {
 
   options.services.nebula-lighthouse-service = {
-    enable = lib.mkEnableOption ''If enabled, NixOS will enable a systemd unit for nebula-lighthouse-service'';
+    enable = lib.mkEnableOption "nebula-lighthouse-service";
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
       description = ''
         Configuration for nebula-lighthouse-service.
       '';
-      example = ''
+      example = {
         max-port = 65535;
         min-port = 49152;
         "webserver.ip" = "127.0.0.1";
         "webserver.port" = 8080;
-      '';
+      };
     };
   };
 
