@@ -168,7 +168,15 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
-    "--with-default-session-path=${placeholder "out"}/bin:/etc/cockpit/bin:${util-linux}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+    "--with-default-session-path=${
+      lib.makeBinPath [
+        (placeholder "out")
+        "/etc/cockpit"
+        util-linux
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ]
+    }"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
@@ -192,8 +200,15 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages} \
-        --prefix XDG_DATA_DIRS : /etc/cockpit/share # Cockpit apps will be stored at /etc/cockpit/share/cockpit/ (managed by Cockpit nixos service)
+        --prefix PYTHONPATH : ${
+          lib.makeSearchPath python3Packages.python.sitePackages [
+            "$out"
+            python3Packages.pygobject3
+            "/etc/cockpit"
+          ]
+        } \
+        --prefix GI_TYPELIB_PATH : "/etc/cockpit/lib/girepository-1.0" \
+        --prefix XDG_DATA_DIRS : "/etc/cockpit/share"
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue
