@@ -5,6 +5,7 @@
   gitUpdater,
   testers,
   tkey-ssh-agent,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -37,6 +38,11 @@ buildGoModule rec {
       };
     };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "SSH Agent for TKey, the flexible open hardware/software USB security key";
