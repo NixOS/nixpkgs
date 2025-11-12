@@ -62,17 +62,7 @@ let
   # Fixed output derivation hash is identical for all derivations: the empty
   # directory.
   fetchtorrentWithHash =
-    args:
-    fetchtorrent (
-      {
-        hash = builtins.convertHash {
-          hash = emptyDirectory.outputHash;
-          toHashFormat = "sri";
-          hashAlgo = emptyDirectory.outputHashAlgo;
-        };
-      }
-      // args
-    );
+    args: fetchtorrent ({ hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo="; } // args);
 in
 # Seems almost but not quite worth using lib.mapCartesianProduct...
 builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {
