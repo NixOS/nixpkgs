@@ -20,6 +20,7 @@
   libportal,
   webkitgtk_6_0,
   pipewire,
+  glib-networking,
 }:
 
 let
@@ -60,6 +61,7 @@ pythonPackages.buildPythonApplication rec {
     libportal
     webkitgtk_6_0
     pipewire # pipewiresrc
+    glib-networking
   ];
 
   dependencies =
