@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
-    hash = "sha256-KgGfJfxHOfpwVVo/OcbOjiO5pbxoDE1MiyKqUwsqfIg=";
+    hash = "sha256-A5qCTOCmKt/a1DTKVOC/WwuLCqOYI5pGhAGo/Y4C/FY=";
   };
 
   sourceRoot = "${src.name}/libs/experimental";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
+    pdm-backend
   ];
 
   pythonRelaxDeps = [
