@@ -15,6 +15,15 @@ buildGoModule rec {
     hash = "sha256-/7Xxti2QOClWRo6EwHRb369+x/NeT6LHhDDyIJSHv00=";
   };
 
+  tags = [
+    "netgo"
+  ];
+
+  ldflags = [
+    "-w"
+    "-X main.versionTag=${version}"
+  ];
+
   vendorHash = "sha256-9NDSkfHUa6xfLByjtuDMir2UM5flaKhD6jZDa71D+0w=";
 
   meta = with lib; {
