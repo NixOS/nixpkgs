@@ -15434,6 +15434,8 @@ self: super: with self; {
 
   pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
 
+  pytorch-tokenizers = callPackage ../development/python-modules/pytorch-tokenizers { };
+
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
   pytorchviz = callPackage ../development/python-modules/pytorchviz { };
