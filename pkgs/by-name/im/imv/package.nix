@@ -87,7 +87,7 @@ assert builtins.all (
   b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
 ) withBackends;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imv";
   version = "5.0.0";
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~exec64";
     repo = "imv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sOlWSv1GqdYzooTvcJjXxJI3pwWWJnlUpbGZgUAFYm0=";
   };
 
@@ -141,16 +141,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line image viewer for tiling window managers";
     homepage = "https://sr.ht/~exec64/imv/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       markus1189
     ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "imv";
   };
-}
+})
