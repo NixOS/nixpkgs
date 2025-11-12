@@ -13,7 +13,15 @@ stdenv.mkDerivation (
   args'
   // {
     pname = "microhs-stage1";
-    patches = (args'.patches or [ ]) ++ lib.optional microhs-boot.isHugs patches/simple-unicode.patch;
+    patches =
+      (args'.patches or [ ])
+      ++ lib.optional microhs-boot.isHugs patches/simple-unicode.patch
+      ++
+        lib.optionals
+          (lib.versionAtLeast args'.version "0.14.20.0" && lib.versionOlder microhs-boot.version "0.14.20.0")
+          [
+            patches/backcompat-0.14.20.0.patch
+          ];
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
     installTargets = [ "oldinstall" ];
