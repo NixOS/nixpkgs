@@ -1133,6 +1133,10 @@ let
       proj.dev
       sqlite.dev
     ];
+    GeoFIS = with pkgs; [
+      mpfr.dev
+      gmp.dev
+    ];
     mitoClone2 = with pkgs; [
       xz.dev
       bzip2.dev
