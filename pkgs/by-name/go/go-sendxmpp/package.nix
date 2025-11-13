@@ -4,6 +4,7 @@
   lib,
   nix-update-script,
   testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,6 +27,12 @@ buildGoModule (finalAttrs: {
     };
     updateScript = nix-update-script { };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Tool to send messages or files to an XMPP contact or MUC";
