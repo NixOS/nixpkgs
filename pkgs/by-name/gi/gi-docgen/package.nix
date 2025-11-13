@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2025.4";
+  version = "2025.5";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
-    hash = "sha256-Zshl1Fn+vfteQHiojfBhg2IMPpH3JtHcYI2I7jYFUm4=";
+    hash = "sha256-JXmjP/h7Yi0Q0QLJG30OzlBjQLcONNu2UiFj4WyQrKM=";
   };
 
   depsBuildBuild = [
