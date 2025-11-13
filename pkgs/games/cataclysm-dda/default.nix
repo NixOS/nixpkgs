@@ -9,19 +9,19 @@ lib.makeScope newScope (
     inherit (self) callPackage;
   in
   {
-    dark-days-ahead = {
-      tiles = self.attachPkgs self.pkgs (self.darkDaysAhead.curses.overrideAttrs { hasTiles = false; });
+    dark-days-ahead =
+      self.attachPkgs self.pkgs (callPackage ./dda/stable.nix { })
+      // (lib.optionalAttrs config.allowAliases {
+        tiles = lib.warnOnInstantiate "'cataclysm.dark-days-ahead.tiles' is now accessed with the helper 'cataclysm.dark-days-ahead.withTiles'" self.dark-days-ahead.withTiles;
+        curses = lib.warnOnInstantiate "'cataclysm.dark-days-ahead.curses ' is now named 'cataclysm.dark-days-ahead'" self.dark-days-ahead;
+      });
 
-      curses = self.attachPkgs self.pkgs (callPackage ./dda/git.nix { });
-    };
-
-    dark-days-ahead-unstable = {
-      tiles = self.attachPkgs self.pkgs (
-        self.darkDaysAheadUnstable.curses.overrideAttrs { hasTiles = false; }
-      );
-
-      curses = self.attachPkgs self.pkgs (callPackage ./dda/git.nix { });
-    };
+    dark-days-ahead-unstable =
+      self.attachPkgs self.pkgs (callPackage ./dda/git.nix { })
+      // (lib.optionalAttrs config.allowAliases {
+        tiles = lib.warnOnInstantiate "'cataclysm.dark-days-ahead-unstable.tiles' is now accessed with the helper 'cataclysm.dark-days-ahead-unstable.withTiles'" self.dark-days-ahead-unstable.withTiles;
+        curses = lib.warnOnInstantiate "'cataclysm.dark-days-ahead-unstable.curses ' is now named 'cataclysm.dark-days-ahead-unstable'" self.dark-days-ahead-unstable;
+      });
 
     mkCataclysm = callPackage ./mkCataclysm.nix { };
     pkgs = callPackage ./pkgs { };
