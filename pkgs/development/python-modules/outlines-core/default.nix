@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "outlines-core";
-  version = "0.2.11";
+  version = "0.2.13";
 
   pyproject = true;
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "dottxt-ai";
     repo = "outlines-core";
     tag = version;
-    hash = "sha256-lLMTHFytJT2MhnzT0RlRCaSBPijA81fjxUqx4IGfVo8=";
+    hash = "sha256-mfw/cOLZPRcL3HWmrm/SyA0zDCPWr5F19EWIUdNu9jM=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
