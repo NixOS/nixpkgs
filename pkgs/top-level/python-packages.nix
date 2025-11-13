@@ -11878,6 +11878,8 @@ self: super: with self; {
 
   peakrdl-regblock = callPackage ../development/python-modules/peakrdl-regblock { };
 
+  peakrdl-rust = callPackage ../development/python-modules/peakrdl-rust { };
+
   peakutils = callPackage ../development/python-modules/peakutils { };
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
