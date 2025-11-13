@@ -1,20 +1,24 @@
-{ lib, newScope }:
+{
+  lib,
+  config,
+  newScope,
+}:
 lib.makeScope newScope (
   self:
   let
     inherit (self) callPackage;
   in
   {
-    stable = {
+    dark-days-ahead = {
       tiles = callPackage ./dda/stable.nix { };
 
-      curses = self.stable.tiles.override { tiles = false; };
+      curses = self.darkDaysAhead.tiles.override { tiles = false; };
     };
 
-    git = {
+    dark-days-ahead-unstable = {
       tiles = callPackage ./dda/git.nix { };
 
-      curses = self.git.tiles.override { tiles = false; };
+      curses = self.darkDaysAheadUnstable.tiles.override { tiles = false; };
     };
 
     pkgs = callPackage ./pkgs { };
@@ -60,5 +64,13 @@ lib.makeScope newScope (
         });
       in
       new;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    stable = lib.mapAttrs (
+      _: lib.warn "'cataclysm.stable' has been renamed to 'cataclysm.dark-days-ahead'"
+    ) self.dark-days-ahead;
+    git = lib.mapAttrs (
+      _: lib.warn "'cataclysm.git' has been renamed to 'cataclysm.dark-days-ahead-unstable'"
+    ) self.dark-days-ahead-unstable;
   }
 )
