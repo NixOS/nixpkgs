@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "nethsm";
-  version = "1.4.1";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nethsm-sdk-py";
     tag = "v${version}";
-    hash = "sha256-guW3KKIrRKSw8TsvPMTPJUyzISBNUoBqsGBWuv7Nf7M=";
+    hash = "sha256-wqnyI6QmsBfQW7NbJrk92Ufw0+IFmc8/0ZsUp5XswYw=";
   };
 
   pythonRelaxDeps = true;
