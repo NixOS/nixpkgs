@@ -10,9 +10,9 @@ lib.makeScope newScope (
   in
   {
     dark-days-ahead = {
-      tiles = callPackage ./dda/stable.nix { };
+      tiles = self.attachPkgs self.pkgs (self.darkDaysAhead.curses.overrideAttrs { hasTiles = false; });
 
-      curses = self.darkDaysAhead.tiles.override { tiles = false; };
+      curses = self.attachPkgs self.pkgs (callPackage ./dda/git.nix { });
     };
 
     dark-days-ahead-unstable = {
