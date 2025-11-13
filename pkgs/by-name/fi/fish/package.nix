@@ -240,6 +240,36 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
     # This test seems to consistently fail on aarch64 and darwin
     rm tests/checks/cd.fish
+  ''
+  + ''
+    substituteInPlace share/functions/grep.fish \
+      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
+
+    substituteInPlace share/completions/{sudo.fish,doas.fish} \
+      --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
+  ''
+  + lib.optionalString usePython ''
+    cat > share/functions/__fish_anypython.fish <<EOF
+    # localization: skip(private)
+    function __fish_anypython
+        echo ${python3.interpreter}
+        return 0
+    end
+    EOF
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for cur in share/functions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+    for cur in share/completions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+  ''
+  + ''
+    tee -a share/__fish_build_paths.fish.in < ${fishPreInitHooks}
   '';
 
   outputs = [
@@ -338,37 +368,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall = ''
-    substituteInPlace "$out/share/fish/functions/grep.fish" \
-      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
-
-    substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
-      --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
-  ''
-  + lib.optionalString usePython ''
-    cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
-    function __fish_anypython
-        echo ${python3.interpreter}
-        return 0
-    end
-    EOF
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for cur in $out/share/fish/functions/*.fish; do
-      substituteInPlace "$cur" \
-        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-    done
-    for cur in $out/share/fish/completions/*.fish; do
-      substituteInPlace "$cur" \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-    done
-  ''
-  + lib.optionalString useOperatingSystemEtc ''
+  postInstall = lib.optionalString useOperatingSystemEtc ''
     tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
-  ''
-  + ''
-    tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
   '';
 
   meta = {
