@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyxnat";
-  version = "1.6.3";
+  version = "1.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pyxnat";
     repo = "pyxnat";
     tag = version;
-    hash = "sha256-peyQQ1fc+0O1I9LztYSgk2VBC17Y3UlOZGR2WSYKVTk=";
+    hash = "sha256-Dhidc5KOzx/S0sr4D7Oc8lvSDT0y8bGDNTAJy/6n8mA=";
   };
 
   build-system = [ setuptools ];
