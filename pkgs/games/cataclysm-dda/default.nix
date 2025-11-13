@@ -4,13 +4,13 @@ let
   callPackage = newScope self;
 
   stable = rec {
-    tiles = callPackage ./stable.nix { };
+    tiles = callPackage ./dda/stable.nix { };
 
     curses = tiles.override { tiles = false; };
   };
 
   git = rec {
-    tiles = callPackage ./git.nix { };
+    tiles = callPackage ./dda/git.nix { };
 
     curses = tiles.override { tiles = false; };
   };
