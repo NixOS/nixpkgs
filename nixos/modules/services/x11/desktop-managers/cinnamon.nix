@@ -211,6 +211,7 @@ in
             mint-x-icons
             mint-y-icons
             xapp # provides some xapp-* icons
+            xapp-symbolic-icons
           ] config.environment.cinnamon.excludePackages
         );
 
