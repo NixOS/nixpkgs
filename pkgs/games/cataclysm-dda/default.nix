@@ -1,41 +1,29 @@
-{ newScope }:
+{ lib, newScope }:
+lib.makeScope newScope (
+  self:
+  let
+    inherit (self) callPackage;
+  in
+  {
+    stable = {
+      tiles = callPackage ./dda/stable.nix { };
 
-let
-  callPackage = newScope self;
+      curses = self.stable.tiles.override { tiles = false; };
+    };
 
-  stable = rec {
-    tiles = callPackage ./dda/stable.nix { };
+    git = {
+      tiles = callPackage ./dda/git.nix { };
 
-    curses = tiles.override { tiles = false; };
-  };
+      curses = self.git.tiles.override { tiles = false; };
+    };
 
-  git = rec {
-    tiles = callPackage ./dda/git.nix { };
-
-    curses = tiles.override { tiles = false; };
-  };
-
-  lib = callPackage ./lib.nix { };
-
-  pkgs = callPackage ./pkgs { };
-
-  self = {
-    inherit
-      callPackage
-      stable
-      git
-      ;
-
-    inherit (lib)
+    inherit (callPackage ./lib.nix { })
       buildMod
       buildSoundPack
       buildTileSet
       wrapCDDA
       attachPkgs
       ;
-
-    inherit pkgs;
-  };
-in
-
-self
+    pkgs = callPackage ./pkgs { };
+  }
+)
