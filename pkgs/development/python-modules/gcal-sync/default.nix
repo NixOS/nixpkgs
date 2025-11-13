@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "8.0.0";
+  version = "9.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";
     tag = version;
-    hash = "sha256-+L34vKV7xCD+Jj47WrQufzLZddPhhKWaSMo1UQKeHRY=";
+    hash = "sha256-17w9ozdgMEZ9wpypWZtf3AqZDW/9XYb/oiO/7yO1MsM=";
   };
 
   build-system = [ setuptools ];
