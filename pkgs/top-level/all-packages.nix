@@ -1835,6 +1835,7 @@ with pkgs;
     inteltool
     amdfwtool
     acpidump-all
+    intelp2m
     coreboot-utils
     ;
 
