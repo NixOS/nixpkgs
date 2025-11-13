@@ -20,8 +20,8 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-qee3ifDDR1U23VZAu0gj1CPPaDrSQfwfrKte1OUZPlE=";
 
   dashboard = buildNpmPackage {
-    inherit (finalAttrs) src;
-    name = "dashboard";
+    inherit (finalAttrs) src version;
+    pname = "adguardhome-dashboard";
     postPatch = ''
       cd client
     '';
