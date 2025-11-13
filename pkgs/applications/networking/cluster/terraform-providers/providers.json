@@ -36,13 +36,13 @@
     "vendorHash": "sha256-8cChWCS8yV69djpoeElLgaorpbHY2Jg04WKY3e+pvsg="
   },
   "akamai_akamai": {
-    "hash": "sha256-gz4yhT9Vge1Q0KPQ16+EU/25xK5Ac1OsbL0aJ8wJxVc=",
+    "hash": "sha256-HjrBPaLYeJ8/9gmdn+BGHtu5dmyT5MeTsIBgzS0X0gY=",
     "homepage": "https://registry.terraform.io/providers/akamai/akamai",
     "owner": "akamai",
     "repo": "terraform-provider-akamai",
-    "rev": "v9.1.0",
+    "rev": "v9.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2dGMtSLIiBuhZt4XmcBGfkghU4kCsMsiRFWKMbdmSB8="
+    "vendorHash": "sha256-weHY7ZV3HaFBYlDNhwAYN9vDItkI+wtk9UNlM0uuwfY="
   },
   "aliyun_alicloud": {
     "hash": "sha256-4dj49kVEPPFfd8N86L5czVOpdCkE4H7OKnIzZY8pMv4=",
