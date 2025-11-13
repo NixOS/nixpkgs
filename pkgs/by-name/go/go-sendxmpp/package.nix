@@ -3,7 +3,6 @@
   fetchFromGitLab,
   lib,
   nix-update-script,
-  testers,
   versionCheckHook,
 }:
 
@@ -22,9 +21,6 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-fnaOgc8RPDQnxTWOLQx1kw0+qj1iaff+UkjnoJYdEG4=";
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     updateScript = nix-update-script { };
   };
 
