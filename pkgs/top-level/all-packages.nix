@@ -12662,10 +12662,6 @@ with pkgs;
 
   cataclysmPackages = recurseIntoAttrs (callPackage ../games/cataclysm-dda { });
 
-  cataclysm-dda = cataclysmPackages.stable.tiles;
-
-  cataclysm-dda-git = cataclysmPackages.git.tiles;
-
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
   };
