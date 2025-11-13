@@ -1835,6 +1835,7 @@ with pkgs;
     inteltool
     amdfwtool
     acpidump-all
+    intelp2m
     coreboot-utils
     ;
 
@@ -1899,7 +1900,6 @@ with pkgs;
 
   inherit (ocamlPackages) dot-merlin-reader;
 
-  inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
   dvc = with python3.pkgs; toPythonApplication dvc;
@@ -12104,6 +12104,7 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/rke2 { })
     rke2_1_31
     rke2_1_32
+    rke2_1_33
     rke2_1_34
     rke2_stable
     rke2_latest
