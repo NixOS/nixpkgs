@@ -133,6 +133,12 @@ lib.extendMkDerivation {
       passthru = {
         isTiles = finalAttrs.hasTiles;
         isCurses = !finalAttrs.hasTiles;
+
+        # Creates a derivation with tiles enabled
+        withTiles = finalAttrs.finalPackage.overrideAttrs (old: {
+          pname = old.pname + "-tiles";
+          hasTiles = true;
+        });
       }
       // passthru;
 
