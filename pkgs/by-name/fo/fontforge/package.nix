@@ -23,6 +23,7 @@
   libspiro,
   withGTK ? false,
   gtk3,
+  gtkmm3,
   withGUI ? withGTK,
   withPython ? true,
   withExtras ? true,
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSpiro [ libspiro ]
   ++ lib.optionals withGUI [
     gtk3
+    gtkmm3
     cairo
     pango
   ];
