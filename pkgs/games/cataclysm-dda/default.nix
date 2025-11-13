@@ -26,6 +26,7 @@ lib.makeScope newScope (
 
     # Forks
     bright-nights = callPackage ./bn { };
+    the-last-generation = callPackage ./tlg { };
 
     # Utilities
     mkCataclysm = callPackage ./mkCataclysm.nix { };
