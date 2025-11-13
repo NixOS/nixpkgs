@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  pkgs,
+  wrapCDDA,
   callPackage,
   runtimeShell,
   cmake,
@@ -15,7 +17,6 @@
   libX11,
   freetype,
   zlib,
-  pkgs,
 }:
 
 lib.extendMkDerivation {
@@ -139,6 +140,9 @@ lib.extendMkDerivation {
           pname = old.pname + "-tiles";
           hasTiles = true;
         });
+
+        inherit pkgs;
+        withMod = wrapCDDA finalAttrs.finalPackage;
       }
       // passthru;
 
