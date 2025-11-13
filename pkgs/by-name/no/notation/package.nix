@@ -3,10 +3,11 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
 
   stdenv,
   buildPackages,
+
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -53,10 +54,11 @@ buildGoModule (finalAttrs: {
         --zsh <(${exe} completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "notation version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "CLI tool to sign and verify OCI artifacts and container images";
