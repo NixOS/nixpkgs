@@ -12,6 +12,7 @@
   cacert,
   prefetch-npm-deps,
   fetchNpmDeps,
+  config,
 }:
 
 {
@@ -68,6 +69,7 @@
             hash,
             forceGitDeps ? false,
             forceEmptyCache ? false,
+            npmRegistryOverridesString ? "{}",
           }:
           testers.invalidateFetcherByDrvHash fetchNpmDeps {
             inherit
@@ -75,6 +77,7 @@
               hash
               forceGitDeps
               forceEmptyCache
+              npmRegistryOverridesString
               ;
 
             src = makeTestSrc { inherit name src; };
@@ -175,6 +178,23 @@
 
           hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
         };
+
+        # Test that npmRegistryOverrides work
+        npmRegistryOverrides = makeTest {
+          name = "npm-registry-overrides";
+
+          src = fetchurl {
+            url = "https://cyberchaos.dev/yuka/trainsearch/-/raw/e3cba6427e8ecfd843d0f697251ddaf5e53c2327/package-lock.json";
+            postFetch = "sed -i 's/registry.npmjs.org/broken.link/' $out";
+            hash = "sha256-Qo24ei1d9Ql4zCLjQJ04zVgS4qhBUpew9NZrhrsBds4=";
+          };
+
+          npmRegistryOverridesString = builtins.toJSON {
+            "broken.link" = "https://registry.npmjs.org";
+          };
+
+          hash = "sha256-QGObVDd9qVtf/U78+ayP6RHVWsU+HXhg70BFblQ1PZs=";
+        };
       };
 
     meta = with lib; {
@@ -192,6 +212,9 @@
       forceGitDeps ? false,
       forceEmptyCache ? false,
       nativeBuildInputs ? [ ],
+      # A string with a JSON attrset specifying registry mirrors, for example
+      #   {"registry.example.org": "my-mirror.local/registry.example.org"}
+      npmRegistryOverridesString ? config.npmRegistryOverridesString,
       ...
     }@args:
     let
@@ -219,12 +242,16 @@
         buildPhase = ''
           runHook preBuild
 
-          if [[ ! -e package-lock.json ]]; then
+          if [[ -f npm-shrinkwrap.json ]]; then
+            local -r srcLockfile="npm-shrinkwrap.json"
+          elif [[ -f package-lock.json ]]; then
+            local -r srcLockfile="package-lock.json"
+          else
             echo
-            echo "ERROR: The package-lock.json file does not exist!"
+            echo "ERROR: No lock file!"
             echo
-            echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
-            echo "when packages are updated on npm."
+            echo "package-lock.json or npm-shrinkwrap.json is required to make sure"
+            echo "that npmDepsHash doesn't change when packages are updated on npm."
             echo
             echo "Hint: You can copy a vendored package-lock.json file via postPatch."
             echo
@@ -232,7 +259,7 @@
             exit 1
           fi
 
-          prefetch-npm-deps package-lock.json $out
+          prefetch-npm-deps $srcLockfile $out
 
           runHook postBuild
         '';
@@ -242,6 +269,8 @@
         # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
         # `{ "registry.example.com": "example-registry-bearer-token", ... }`
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+
+        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
 
         SSL_CERT_FILE =
           if

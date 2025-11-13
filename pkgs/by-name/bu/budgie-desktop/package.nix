@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   accountsservice,
   alsa-lib,
   budgie-screensaver,
@@ -10,6 +9,7 @@
   glib,
   gnome-desktop,
   gnome-settings-daemon,
+  gobject-introspection,
   graphene,
   gst_all_1,
   gtk-doc,
@@ -19,10 +19,12 @@
   libcanberra-gtk3,
   libgee,
   libGL,
+  libgudev,
   libnotify,
-  libpeas,
+  libpeas2,
   libpulseaudio,
   libuuid,
+  libwacom,
   libwnck,
   magpie,
   libgbm,
@@ -35,6 +37,7 @@
   polkit,
   sassc,
   testers,
+  udev,
   upower,
   vala,
   validatePkgConfig,
@@ -45,14 +48,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.2";
+  version = "10.9.4";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
+    hash = "sha256-e1kkmzSYX8TwiY0IIZYIK/FgMbZ/8PqkUn8pk3CcXHU=";
   };
 
   outputs = [
@@ -63,31 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
-
-    # Adapt to libxfce4windowing v4.19.8
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/627
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
-      hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
-    })
-
-    # Resolve vala 0.56.18 compact class inheritance removal
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/679
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/46c83b1265b4230668da472d9ef6926941678418.patch";
-      hash = "sha256-qnA8iBEctZbE86qIPudI1vMbgFy4xDWrxxej517ORws=";
-    })
-
-    # Add override for overlay-key to prevent crash with mutter-common v48-rc
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/683
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/c24091bb424abe99ebcdd33eedd37068f735ad2a.patch";
-      hash = "sha256-4WEkscftOGZmzH7imMTmcTDPH6eHMeEhgto+R5NNlh0=";
-    })
   ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    gobject-introspection
     gtk-doc
     intltool
     meson
@@ -115,21 +98,30 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     libgee
     libGL
+    libgudev
     libnotify
     libpulseaudio
     libuuid
+    libwacom
     libwnck
     magpie
     libgbm
     polkit
     sassc
+    udev
     upower
     xfce.libxfce4windowing
   ];
 
   propagatedBuildInputs = [
     # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
-    libpeas
+    libpeas2
+  ];
+
+  mesonFlags = [
+    # FIXME: The meson option name is confusing
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/739#discussion_r2359421711
+    "-Dbsd-libexecdir=${gnome-settings-daemon}/libexec"
   ];
 
   passthru = {
@@ -155,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-1.0"
-      "budgie-raven-plugin-1.0"
+      "budgie-2.0"
+      "budgie-raven-plugin-2.0"
       "budgie-theme-1.0"
     ];
   };

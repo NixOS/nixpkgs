@@ -6,6 +6,8 @@
   nss,
   p11-kit,
   opensc,
+  softhsm,
+  kryoptic,
   gnutls,
   expect,
   which,
@@ -44,10 +46,11 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
   nativeCheckInputs = [
     p11-kit.bin
     opensc
+    softhsm
+    kryoptic
     nss.tools
     gnutls
     openssl.bin
@@ -56,8 +59,16 @@ stdenv.mkDerivation rec {
     pkcs11ProviderPython3
   ];
 
+  env = {
+    KRYOPTIC = "${lib.getLib kryoptic}/lib";
+  };
+
+  # Fix a typo in the Kryoptic test (remove this in v1.2).
   postPatch = ''
     patchShebangs --build .
+    substituteInPlace tests/kryoptic-init.sh \
+      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}" \
+      --replace-fail "libkryoptic_pkcs11so" libkryoptic_pkcs11.so
   '';
 
   preInstall = ''

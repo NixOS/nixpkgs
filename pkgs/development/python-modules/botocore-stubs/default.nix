@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "botocore-stubs";
-  version = "1.40.69";
+  version = "1.40.70";
   pyproject = true;
 
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit version;
-    hash = "sha256-MdG7mlFA35uoPW1NZraJmHZyeYUN5Q4oyq3jFSRLCng=";
+    hash = "sha256-N/lQi+ixzNMBAuNrlzSvfu//q7sBKiQO+hG9BOHMnN4=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -28,20 +28,20 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.11.1";
+  version = "16.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    rev = "v${version}";
+    tag = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-EPGAM7hRmhKTk4NZz529yC0j5uJjB2Q/00tU1sjx1Zw=";
+    hash = "sha256-1KaSUitQG/c49s7X17+4x29lRM9mvA8F1EX/2I7dE0E=";
   };
 
   patches = [
@@ -83,33 +83,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ocrmypdf" ];
 
-  disabledTests = [
-    # Broken by Python 3.13.4 change
-    # https://github.com/python/cpython/commit/8e923f36596370aedfdfb12251447bface41317a
-    # https://github.com/ocrmypdf/OCRmyPDF/blob/9f6e5a48ada5df7006a8c68b84e2aeae61943d8b/src/ocrmypdf/_exec/ghostscript.py#L66
-    "TestDuplicateFilter"
-
-    "test_masks"
-    "test_content_preservation"
-  ];
-
   postInstall = ''
     installShellCompletion --cmd ocrmypdf \
       --bash misc/completion/ocrmypdf.bash \
       --fish misc/completion/ocrmypdf.fish
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.md";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.tag}/docs/release_notes.md";
     mainProgram = "ocrmypdf";
   };
 }

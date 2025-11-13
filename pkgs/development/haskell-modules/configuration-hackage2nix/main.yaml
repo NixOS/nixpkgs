@@ -27,8 +27,6 @@
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
-  # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
-  - hiedb < 0.7
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
   - hnix-store-core < 0.7
@@ -40,11 +38,15 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  - microlens-pro < 0.2.0.4
+  # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
+  # this no longer works with later versions.
+  - pandoc-crossref == 0.3.21
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
-  - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - ansi-wl-pprint >= 0.6 && < 0.7      # 2025-07-07: used by gren <= 0.5.4
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - Cabal == 3.10.*
@@ -52,8 +54,6 @@ extra-packages:
   - Cabal == 3.14.*
   - Cabal == 3.16.*                     # version required for cabal-install and other packages
   - cabal-add == 0.1                    # 2025-09-09: Only needed for hls 2.11 can be removed once we are past it.
-  - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
-  - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.0
   - Cabal-syntax == 3.10.*
   - Cabal-syntax == 3.12.*
   - Cabal-syntax == 3.14.*
@@ -62,22 +62,17 @@ extra-packages:
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
-  - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
-  - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
   - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
-  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 8.10, 9.0
-  - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.2, 9.4
+  - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
+  - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
-  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
-  - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.2, 9.4
+  - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.4
   - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
-  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
-  - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.2, 9.4
+  - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.4
   - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
-  - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
   - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
@@ -92,31 +87,21 @@ extra-packages:
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - hpack == 0.38.1                     # 2025-09-18: to match exact version upstream stack-3.7.1 uses
-  - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0
   - language-javascript == 0.7.0.0      # required by purescript
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
-  - ormolu == 0.5.2.0                   # 2023-08-08: preserve for ghc 9.0
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
-  - os-string == 1.*                    # 2025-07-30: dummy package we need for pre os-string GHCs
   - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
-  - primitive-unlifted == 0.1.3.1       # 2024-03-16: preserve for ghc 9.2
-  - retrie < 1.2.0.0                    # 2022-12-30: preserve for ghc < 9.2
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
-  - stylish-haskell == 0.14.4.0         # 2022-09-19: preserve for ghc 9.0
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
-  - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be built with GHC < 9.2)
   - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
   - text-builder < 1                    # 2025-08-27: Needed for building postgrest
   - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
-  - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
-  - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
-  - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no
@@ -143,14 +128,12 @@ package-maintainers:
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
-    - ghcjs-dom-hello
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
-    - jsaddle-hello
     - jsaddle-warp
     - jsaddle-wkwebview
     - json-sop
@@ -380,6 +363,11 @@ package-maintainers:
     - amazonka
     - libssh2
     - sitemap
+    - ihp-openai
+    - ihp
+    - ihp-ide
+    - ihp-migrate
+    - ihp-postgresql-simple-extra
   ncfavier:
     - Agda
     - agda2hs
@@ -697,7 +685,6 @@ unsupported-platforms:
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
-  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
   follow-file:                                  [ platforms.darwin ]
@@ -934,7 +921,9 @@ dont-distribute-packages:
   - yices-painless
 
   # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-hello
   - jsaddle-webkit2gtk
+  - ghcjs-dom-hello
   - gi-javascriptcore4
   - gi-soup2
   - gi-webkit2

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.59.0";
+  version = "4.60.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-f3iedVwwh98XkFzPJ/+XZ2n4pcDXDoPlQki+neGVuXE=";
+    hash = "sha256-h/JRItD5IHlhNSamxRxk/dvyAKUFayzxHvlW7v4N1s8=";
   };
 
   build-system = [

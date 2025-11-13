@@ -3,7 +3,6 @@
   callPackage,
   fetchurl,
   bash,
-  bintools,
   symlinkJoin,
   darwin,
   clang,
@@ -18,6 +17,7 @@
   fetchgit,
   llvmPackages,
   patchelf,
+  gn,
   openbox,
   xorg,
   libglvnd,
@@ -72,7 +72,7 @@ let
     rev = swiftshaderRev;
 
     postFetch = ''
-      rm -rf $out/third_party/llvm-project
+      rm --recursive --force $out/third_party/llvm-project
     '';
   };
 
@@ -148,7 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
+    "-O2"
     "-Wno-error"
+    "-Wno-absolute-value"
+    "-Wno-implicit-float-conversion"
   ]
   ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
@@ -182,8 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
   ];
 
-  patchtools = [ "flutter/third_party/gn/gn" ];
-
   dontPatch = true;
 
   env.patchgit = toString [
@@ -193,16 +194,16 @@ stdenv.mkDerivation (finalAttrs: {
     "flutter/third_party/skia"
   ];
 
-  sourceRoot = if lib.versionAtLeast flutterVersion "3.38" then "${src.name}/engine" else src.name;
-
   postUnpack =
     lib.optionalString (lib.versionAtLeast flutterVersion "3.38") ''
-      chmod --recursive +w ${src.name}
-      echo '#!${lib.getExe bash}' > ${src.name}/bin/internal/content_aware_hash.sh
-      echo 'echo 1111111111111111111111111111111111111111' >> ${src.name}/bin/internal/content_aware_hash.sh
+      chmod +w .
+      mkdir --parents bin/internal
+      echo '#!${lib.getExe bash}' > bin/internal/content_aware_hash.sh
+      echo 'echo 1111111111111111111111111111111111111111' >> bin/internal/content_aware_hash.sh
+      chmod +x bin/internal/content_aware_hash.sh
     ''
     + ''
-      pushd ${finalAttrs.sourceRoot}
+      pushd ${finalAttrs.src.name}
 
       cp ${
         fetchurl {
@@ -225,11 +226,8 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir --parents src/${dartPath}/tools/sdks
       ln --symbolic ${dart} src/${dartPath}/tools/sdks/dart-sdk
 
-      ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
-        for patchtool in ''${patchtools[@]}; do
-          patchelf src/$patchtool --set-interpreter ${bintools.dynamicLinker}
-        done
-      ''}
+      mkdir --parents src/flutter/third_party/gn/
+      ln --symbolic --force ${lib.getExe gn} src/flutter/third_party/gn/gn
 
       for dir in ''${patchgit[@]}; do
         pushd src/$dir
@@ -244,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       dart src/${dartPath}/tools/generate_package_config.dart
       echo "${dartSdkVersion}" >src/${dartPath}/sdk/version
-
+      python3 src/flutter/third_party/dart/tools/generate_sdk_version_file.py
       rm --recursive --force src/third_party/angle/.git
       python3 src/flutter/tools/pub_get_offline.py
 
@@ -269,6 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-prebuilt-dart-sdk"
     "--embedder-for-target"
     "--no-goma"
+    "--no-dart-version-git-info"
   ]
   ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
     "--linux"
@@ -294,8 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
       --target-sysroot ${finalAttrs.toolchain} \
       --target-dir ${outName} \
       --target-triple ${stdenv.targetPlatform.config} \
-      --enable-fontconfig \
-      --no-prebuilt-dart-sdk
+      --enable-fontconfig
 
     runHook postConfigure
   '';
@@ -332,7 +330,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    rm -rf $out/out/${outName}/{obj,exe.unstripped,lib.unstripped,zip_archives}
+    rm --recursive --force $out/out/${outName}/{obj,exe.unstripped,lib.unstripped,zip_archives}
     rm $out/out/${outName}/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
     find $out/out/${outName} -name '*_unittests' -delete
     find $out/out/${outName} -name '*_benchmarks' -delete

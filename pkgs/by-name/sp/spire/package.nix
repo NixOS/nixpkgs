@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  openssl,
 }:
 
 buildGoModule (finalAttrs: {
@@ -12,6 +13,7 @@ buildGoModule (finalAttrs: {
     "out"
     "agent"
     "server"
+    "oidc"
   ];
 
   src = fetchFromGitHub {
@@ -21,7 +23,11 @@ buildGoModule (finalAttrs: {
     sha256 = "sha256-iZMeD5ZwWKjY9mfuXgEgh+QLotmv28T8xBgpKoQTgxw=";
   };
 
-  vendorHash = "sha256-tho3Qm9uHiiSNFmBZGZFgxhAKD4HKWsIUmiqkWlToQk=";
+  # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
+  proxyVendor = true;
+  vendorHash = "sha256-nslLp/NjzsN1hSMMga67T6tMGLiqBNYQMt4Kjtwyvoc=";
+
+  buildInputs = [ openssl ];
 
   ldflags = [
     "-s"
@@ -32,12 +38,7 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
-  ];
-
-  excludedPackages = [
-    # ensure these files aren't evaluated, see preCheck
-    "test/tmpsimulator"
-    "pkg/agent/plugin/nodeattestor/tpmdevid"
+    "support/oidc-discovery-provider"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -53,39 +54,33 @@ buildGoModule (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
-    # remove test files which reference github.com/google/go-tpm-tools/simulator
-    # since it requires cgo and some missing header files
-    rm -rf test/tpmsimulator pkg/server/plugin/nodeattestor/tpmdevid/devid_test.go
-
     # unset to run all tests
     unset subPackages
   '';
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
-    mkdir -vp $agent/bin $server/bin
+    mkdir -vp $agent/bin $server/bin $oidc/bin
     mv -v $out/bin/spire-agent $agent/bin/
     mv -v $out/bin/spire-server $server/bin/
+    mv -v $out/bin/oidc-discovery-provider $oidc/bin/
 
     ln -vs $agent/bin/spire-agent $out/bin/spire-agent
     ln -vs $server/bin/spire-server $out/bin/spire-server
+    ln -vs $oidc/bin/oidc-discovery-provider $out/bin/oidc-discovery-provider
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/spire-agent -h
-    if [ "$($out/bin/spire-agent --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-agent version does not match"
-      exit 1
-    fi
-
-    $out/bin/spire-server -h
-    if [ "$($out/bin/spire-server --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-server version does not match"
-      exit 1
-    fi
+    for bin in $out/bin/*; do
+      $bin -h
+      if [ "$($bin --version 2>&1)" != "${finalAttrs.version}" ]; then
+        echo "$bin version does not match"
+        exit 1
+      fi
+    done
 
     runHook postInstallCheck
   '';
@@ -100,6 +95,7 @@ buildGoModule (finalAttrs: {
       fkautz
       jk
       mjm
+      arianvp
     ];
   };
 })

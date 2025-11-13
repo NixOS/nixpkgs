@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk_14,
   buildNpmPackage,
   cargo,
   copyDesktopItems,
@@ -128,10 +127,6 @@ buildNpmPackage' rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     darwin.autoSignDarwinBinariesHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   preBuild = ''

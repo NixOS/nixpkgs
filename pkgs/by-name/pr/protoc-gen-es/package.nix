@@ -56,5 +56,6 @@ buildNpmPackage rec {
       felschr
       jtszalay
     ];
+    mainProgram = "protoc-gen-es";
   };
 }

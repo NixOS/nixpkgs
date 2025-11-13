@@ -11,7 +11,7 @@
   writeText,
 
   ## various stuff that can be plugged in
-  ffmpeg,
+  ffmpeg_7,
   xorg,
   alsa-lib,
   libpulseaudio,
@@ -93,7 +93,7 @@ let
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
         )
         ++ lib.optional pipewireSupport pipewire
-        ++ lib.optional ffmpegSupport ffmpeg
+        ++ lib.optional ffmpegSupport ffmpeg_7
         ++ lib.optional gssSupport libkrb5
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) (

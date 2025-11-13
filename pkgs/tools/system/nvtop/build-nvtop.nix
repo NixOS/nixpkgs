@@ -9,7 +9,6 @@
   ncurses,
   testers,
   udev,
-  apple-sdk_12,
   addDriverRunpath,
   amd ? false,
   intel ? false,
@@ -77,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
-  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
   ++ lib.optional nvidia cudatoolkit
   ++ lib.optional needDrm libdrm;
 

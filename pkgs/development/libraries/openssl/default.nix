@@ -260,6 +260,8 @@ let
         patchShebangs util
       '';
 
+      __darwinAllowLocalNetworking = true;
+
       postInstall =
         (
           if static then

@@ -12,19 +12,19 @@ let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "kilo-code-${finalAttrs.version}.vsix";
     pname = "kilo-code-vsix";
-    version = "4.91.0";
+    version = "4.118.0";
 
     src = fetchFromGitHub {
       owner = "Kilo-Org";
       repo = "kilocode";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dUVPCTxfLcsVfy2FqdZMN8grysALUOTiTl4TXM1BcDs=";
+      hash = "sha256-k5dDgNUbOd+aOzPeub7P/uWDCeWO0ffyDaGtu2M87Wg=";
     };
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-4LB2KY+Ksr8BQYoHrz3VNr81++zcrWN+USg3bBfr/FU=";
+      hash = "sha256-YeCrmTPOeBfsSAMMv11ipHM8AgLzcy/sOW/Jg8H5H+w=";
     };
 
     nativeBuildInputs = [

@@ -2,8 +2,10 @@
   lib,
   symlinkJoin,
   backendStdenv,
+  cudaAtLeast,
   cudaMajorMinorVersion,
   cuda_cccl ? null,
+  cuda_crt ? null,
   cuda_cudart ? null,
   cuda_cuobjdump ? null,
   cuda_cupti ? null,
@@ -53,6 +55,9 @@ let
     libcusolver
     libcusparse
     libnpp
+  ]
+  ++ lib.optionals (cudaAtLeast "13") [
+    cuda_crt
   ];
 
   # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:

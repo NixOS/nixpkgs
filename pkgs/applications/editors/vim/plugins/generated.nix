@@ -5464,19 +5464,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  fruzzy = buildVimPlugin {
-    pname = "fruzzy";
-    version = "2020-08-31";
-    src = fetchFromGitHub {
-      owner = "raghur";
-      repo = "fruzzy";
-      rev = "4cdfee7b828a5cace22bfd93cf23fee0b2b233c4";
-      sha256 = "1dmxz283ypz1klcmdf4jk699aifr3dywkh9y8v8v8vyflampqwwp";
-    };
-    meta.homepage = "https://github.com/raghur/fruzzy/";
-    meta.hydraPlatforms = [ ];
-  };
-
   fugit2-nvim = buildVimPlugin {
     pname = "fugit2.nvim";
     version = "2025-09-02";
@@ -5851,6 +5838,19 @@ final: prev: {
       sha256 = "000gg83j6fcx6iwp39m3dljfpg0f5vna8pkvwp1b13jf4hjyzcff";
     };
     meta.homepage = "https://github.com/ruifm/gitlinker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  gitportal-nvim = buildVimPlugin {
+    pname = "gitportal.nvim";
+    version = "2025-11-11";
+    src = fetchFromGitHub {
+      owner = "trevorhauter";
+      repo = "gitportal.nvim";
+      rev = "3abb1b87a48a8c07f042eb8c570dfe325ebf8702";
+      sha256 = "04f8yls7498v8ccs472zl1phr1c5p5nf37r05dpv4kr1wqlkmdq4";
+    };
+    meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

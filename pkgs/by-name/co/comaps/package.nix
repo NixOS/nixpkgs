@@ -36,14 +36,14 @@ let
 in
 organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
-  version = "2025.11.01-7";
+  version = "2025.11.07-2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";
-    hash = "sha256-qmIL8VIjHYivFCR5lAYY55aeQgsYsvzBwpSVxc74EC8=";
+    hash = "sha256-m1YOA24Avoia6YMXKcsuCdPwzxdn7Qc3kZLXGsWjTbs=";
     fetchSubmodules = true;
   };
 

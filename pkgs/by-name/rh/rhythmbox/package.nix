@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
     sha256 = "5CKRoY33oh/+azUr9z8F1+KYu04FvOWWf5jujO5ECPE=";
   };
 
+  postPatch = ''
+    # We backported girepository-2.0 support to libpeas 1.36
+    substituteInPlace meson.build \
+      --replace-fail "and libpeas.version() > '1.36'" ""
+  '';
+
   nativeBuildInputs = [
     pkg-config
     meson

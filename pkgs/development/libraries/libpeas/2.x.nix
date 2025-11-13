@@ -15,7 +15,7 @@
   glib,
   lua5_1,
   python3,
-  spidermonkey_128,
+  spidermonkey_140,
   gnome,
 }:
 
@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.7";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-HpqdaXYdIQnv9bfBHYyWtIZ8z6yiuSHt7UlAEZJ2nsk=";
+    hash = "sha256-wohyM/CEpp+r/H+gFA1BBJGGPXBQr7KGd/mlU7JYCtk=";
   };
 
   patches = [
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     luaEnv
     python3
     python3.pkgs.pygobject3
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   propagatedBuildInputs = [
     # Required by libpeas-2.pc
-    gobject-introspection
+    glib
   ];
 
   mesonFlags = [

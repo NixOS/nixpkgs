@@ -9,6 +9,7 @@
   gtk-doc,
   libxslt,
   mpfr,
+  nix-update-script,
   pcre2,
   pkg-config,
   python3Packages,
@@ -67,12 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "bytesize" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
     description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "bscalc";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.PlasmaPower ];
     platforms = lib.platforms.linux;
   };
 })

@@ -171,6 +171,7 @@ python.pkgs.buildPythonApplication rec {
     "django-cors-headers"
     "drf-spectacular-sidecar"
     "filelock"
+    "ocrmypdf"
     "redis"
   ];
 

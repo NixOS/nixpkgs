@@ -7,6 +7,7 @@
   installShellFiles,
   lima,
   makeWrapper,
+  procps,
   qemu,
   testers,
   colima,
@@ -42,6 +43,14 @@ buildGoModule rec {
   excludedPackages = "gvproxy";
 
   env.CGO_ENABLED = 1;
+
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace cmd/daemon/daemon.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+
+    substituteInPlace daemon/process/vmnet/vmnet.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+  '';
 
   preConfigure = ''
     ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
