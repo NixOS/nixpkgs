@@ -11,6 +11,7 @@ let
     "kvantum"
     "lazygit"
     "lxqt"
+    "palette"
     "plymouth"
     "qt5ct"
     "refind"
@@ -142,6 +143,14 @@ let
       repo = "lxqt";
       rev = "38cf86b3e499e0c0928a102c9c030e5dc6b79255";
       hash = "sha256-3TuUkOwk6BSc7BnLnTowGAkSlNTOtGTRlEcjJ6MNJ5g=";
+    };
+
+    palette = fetchFromGitHub {
+      name = "palette";
+      owner = "catppuccin";
+      repo = "palette";
+      rev = "0df7db6fe201b437d91e7288fa22807bb0e44701";
+      hash = "sha256-R52Q1FVAclvBk7xNgj/Jl+GPCIbORNf6YbJ1nxH3Gzs=";
     };
 
     plymouth = fetchFromGitHub {
@@ -286,6 +295,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "lxqt" themeList) ''
       mkdir -p "$out/share/lxqt/themes/catppuccin-${variant}"
       cp -r "${sources.lxqt}/src/catppuccin-${variant}/"* "$out/share/lxqt/themes/catppuccin-${variant}"
+
+    ''
+    + lib.optionalString (lib.elem "palette" themeList) ''
+      mkdir -p "$out/palette"
+      cp "${sources.palette}/palette.json" "$out/palette"
 
     ''
     + lib.optionalString (lib.elem "plymouth" themeList) ''
