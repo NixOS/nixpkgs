@@ -32,6 +32,9 @@ buildGoModule (finalAttrs: {
     "./test/e2e"
   ];
 
+  # tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
   ldflags = [
     "-s"
     "-w"
