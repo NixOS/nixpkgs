@@ -33244,7 +33244,8 @@ with self;
 
     # The t/integration/preload.t test is broken on riscv64
     # https://github.com/Test-More/Test2-Harness/issues/290
-    doCheck = !stdenv.hostPlatform.isRiscV;
+    # There seems to be a similar failure on cygwin
+    doCheck = !stdenv.hostPlatform.isRiscV && !stdenv.buildPlatform.isCygwin;
 
     propagatedBuildInputs = [
       DataUUID
