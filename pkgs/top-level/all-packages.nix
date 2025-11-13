@@ -12070,14 +12070,10 @@ with pkgs;
 
   cataclysmPackages = recurseIntoAttrs (callPackage ../games/cataclysm-dda { });
 
-  cataclysm-dda = cataclysmPackages.stable.tiles;
-
-  cataclysm-dda-git = cataclysmPackages.git.tiles;
-
   construoBase = construo.override {
     withLibGL = false;
     withLibGLU = false;
-    withLibglut = false;
+    withLibglut = true;
   };
 
   crawlTiles = callPackage ../by-name/cr/crawl/package.nix {
