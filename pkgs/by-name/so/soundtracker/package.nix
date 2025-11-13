@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac \
       --replace-fail 'AM_PATH_XML2(2.6.0, [], AC_MSG_ERROR(Fatal error: Need libxml2 >= 2.6.0))' \
           'PKG_CHECK_MODULES([XML], [libxml-2.0 >= 2.6.0])' \
-      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS' \
+      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin binutils don't support D option for ar
