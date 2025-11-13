@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  love,
+  love_0_10,
   lua,
   makeWrapper,
   makeDesktopItem,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     lua
-    love
+    love_0_10
   ];
 
   dontUnpack = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     cp -v ${src} $out/share/games/lovegames/duckmarines.love
 
-    makeWrapper ${love}/bin/love $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
+    makeWrapper ${love_0_10}/bin/love $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
 
     chmod +x $out/bin/duckmarines
     mkdir -p $out/share/applications
