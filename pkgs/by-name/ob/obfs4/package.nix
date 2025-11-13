@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
     maintainers = with lib.maintainers; [ thoughtpolice ];
     mainProgram = "lyrebird";
-    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/blob/lyrebird-${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       bsd2
       bsd3
