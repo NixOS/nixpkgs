@@ -35,6 +35,7 @@ let
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
+      (case (range "8.20" "9.1") "2.5.0")
       (case (range "8.20" "9.1") "2.4.0")
       (case (range "8.19" "9.0") "2.3.0")
       (case (range "8.17" "8.20") "2.2.0")
@@ -56,6 +57,7 @@ let
       (case (range "8.5" "8.7") "1.6.4")
     ] null;
   release = {
+    "2.5.0".sha256 = "sha256-M/6IP4WhTQ4j2Bc8nXBXjSjWO08QzNIYI+a2owfOh+8=";
     "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256 = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";

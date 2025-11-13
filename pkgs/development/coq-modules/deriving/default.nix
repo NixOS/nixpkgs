@@ -26,7 +26,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version ssreflect.version ]
       [
-        (case (range "8.17" "9.1") (range "2.0.0" "2.4.0") "0.2.2")
+        (case (range "8.17" "9.1") (range "2.0.0" "2.5.0") "0.2.2")
         (case (range "8.17" "9.0") (range "2.0.0" "2.3.0") "0.2.1")
         (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "0.2.0")
         (case (range "8.11" "8.20") (isLe "2.0.0") "0.1.1")
