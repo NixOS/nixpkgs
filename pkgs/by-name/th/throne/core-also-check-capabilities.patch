@@ -1,23 +1,22 @@
 diff --git a/server.go b/server.go
-index c2a6be0..8aeca1c 100644
+index e2f2ab3..f81812f 100644
 --- a/server.go
 +++ b/server.go
-@@ -11,6 +11,7 @@ import (
+@@ -16,6 +16,7 @@ import (
  	E "github.com/sagernet/sing/common/exceptions"
  	"github.com/sagernet/sing/common/metadata"
  	"github.com/sagernet/sing/service"
 +	"golang.org/x/sys/unix"
  	"log"
- 	"nekobox_core/gen"
- 	"nekobox_core/internal/boxbox"
-@@ -359,13 +360,25 @@ func (s *server) CompileGeoSiteToSrs(ctx context.Context, in *gen.CompileGeoSite
+ 	"os"
+ 	"runtime"
+@@ -349,12 +350,25 @@ func (s *server) CompileGeoSiteToSrs(in *gen.CompileGeoSiteToSrsRequest, out *ge
  }
  
- func (s *server) IsPrivileged(ctx context.Context, _ *gen.EmptyReq) (*gen.IsPrivilegedResponse, error) {
+ func (s *server) IsPrivileged(in *gen.EmptyReq, out *gen.IsPrivilegedResponse) error {
 -	if runtime.GOOS == "windows" {
--		return &gen.IsPrivilegedResponse{
--			HasPrivilege: false,
--		}, nil
+-		out.HasPrivilege = To(false)
+-		return nil
 +	ret := false
 +	if runtime.GOOS == "windows" || os.Geteuid() == 0 {
 +		ret = true
@@ -36,8 +35,8 @@ index c2a6be0..8aeca1c 100644
 +		}
  	}
  
--	return &gen.IsPrivilegedResponse{HasPrivilege: os.Geteuid() == 0}, nil
-+	return &gen.IsPrivilegedResponse{HasPrivilege: ret}, nil
+-	out.HasPrivilege = To(os.Geteuid() == 0)
++	out.HasPrivilege = To(ret)
+ 	return nil
  }
  
- func (s *server) SpeedTest(ctx context.Context, in *gen.SpeedTestRequest) (*gen.SpeedTestResponse, error) {
