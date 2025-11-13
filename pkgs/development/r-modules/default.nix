@@ -609,6 +609,10 @@ let
       libpng.dev
     ];
     iBMQ = [ pkgs.gsl ];
+    iscream = with pkgs; [
+      pkg-config
+      which
+    ];
     jack = [ pkgs.pkg-config ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
@@ -1179,6 +1183,11 @@ let
     chebpol = [ pkgs.pkg-config ];
     baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
+    iscream = with pkgs; [
+      bzip2.dev
+      xz.dev
+      zlib.dev
+    ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
@@ -3003,6 +3012,18 @@ let
         patchShebangs configure
       '';
     });
+
+    iscream = let
+      # https://huishenlab.github.io/iscream/articles/htslib.html
+      htslib-deflate = pkgs.htslib.overrideAttrs (attrs: {
+        buildInputs = attrs.buildInputs ++ [ pkgs.libdeflate ];
+      });
+    in
+    old.iscream.overrideAttrs (attrs: {
+      # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
+      propagatedBuildInputs = builtins.filter (el: el != pkgs.rPackages.Rhtslib ) attrs.propagatedBuildInputs ++ [ htslib-deflate];
+    });
+
 
     torch = old.torch.overrideAttrs (attrs: {
       preConfigure = ''
