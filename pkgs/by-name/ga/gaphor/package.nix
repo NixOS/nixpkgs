@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gaphor";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
     tag = version;
-    hash = "sha256-0xivimpYM1gwOO2QrovYiJPNUfuGclr+F/WyHLNl+jw=";
+    hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
   };
 
   pythonRelaxDeps = [
@@ -106,7 +106,6 @@ python3Packages.buildPythonApplication rec {
     "gaphor/diagram/tools/tests"
     "gaphor/plugins/console/tests"
     "gaphor/ui/tests"
-    "gaphor/plugins/errorreports/tests" # Removed in next version
     "gaphor/tests/test_application.py"
     "tests/*"
   ];
