@@ -1,45 +1,41 @@
 {
   lib,
-  callPackage,
   fetchFromGitHub,
-  pkgs,
-  attachPkgs,
-  tiles ? true,
-  debug ? false,
-  useXdgDir ? false,
-  version ? "2024-12-11",
-  rev ? "b871679a2d54dbc6bf3e6566033fadd2dc651592",
-  sha256 ? "sha256-t9R0QPky7zvjgGMq4kV8DdQFToJ/qngbJCw+8FlQztM=",
+  mkCataclysm,
 }:
 
-let
-  common = callPackage ./../common.nix {
-    inherit tiles debug useXdgDir;
+mkCataclysm (finalAttrs: {
+  pname = "cataclysm-dda-git";
+  version = "2025-11-07-1337";
+
+  src = fetchFromGitHub {
+    owner = "CleverRaven";
+    repo = "Cataclysm-DDA";
+    tag = "cdda-experimental-${finalAttrs.version}";
+    hash = "sha256-EnVN2OwWn8eWGaB/nYWxclKfU2H56plgQH32YNE6Xm4=";
   };
 
-  self = common.overrideAttrs (common: rec {
-    pname = common.pname + "-git";
-    inherit version;
+  patches = [
+    ./locale-path-git.patch
+  ];
+  postPatch = ''
+    patchShebangs lang/compile_mo.sh
 
-    src = fetchFromGitHub {
-      owner = "CleverRaven";
-      repo = "Cataclysm-DDA";
-      inherit rev sha256;
-    };
+    # Werror causes builds to fail on newer compilers
+    substituteInPlace CMakeLists.txt Makefile \
+      --replace-fail "-Werror" ""
 
-    patches = [
-      # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-git.patch
-    ];
+    # The CMake build doesn't work without the git binary,
+    # so just hardcode the version in regardless.
+    substituteInPlace src/version.cpp \
+      --replace-fail "return VERSION" 'return "${finalAttrs.version}"'
+  '';
 
-    makeFlags = common.makeFlags ++ [
-      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
-    ];
+  makeFlags = [
+    "VERSION=${finalAttrs.version}"
+  ];
 
-    meta = common.meta // {
-      maintainers = with lib.maintainers; common.meta.maintainers ++ [ rardiol ];
-    };
-  });
-in
-
-attachPkgs pkgs self
+  meta = {
+    maintainers = with lib.maintainers; [ rardiol ];
+  };
+})

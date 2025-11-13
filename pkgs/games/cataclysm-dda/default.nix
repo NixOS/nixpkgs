@@ -16,9 +16,11 @@ lib.makeScope newScope (
     };
 
     dark-days-ahead-unstable = {
-      tiles = callPackage ./dda/git.nix { };
+      tiles = self.attachPkgs self.pkgs (
+        self.darkDaysAheadUnstable.curses.overrideAttrs { hasTiles = false; }
+      );
 
-      curses = self.darkDaysAheadUnstable.tiles.override { tiles = false; };
+      curses = self.attachPkgs self.pkgs (callPackage ./dda/git.nix { });
     };
 
     mkCataclysm = callPackage ./mkCataclysm.nix { };
