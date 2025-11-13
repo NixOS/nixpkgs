@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "6.0.2";
+  version = "6.1.2";
 in
 buildPecl {
   inherit version;
@@ -19,7 +19,7 @@ buildPecl {
     owner = "swoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-mCJj0vLpJinxK/EfPq+CeVWnoxouqClOKYbrgj7GNDc=";
+    hash = "sha256-pXiMOwRj/Z/vj7z/g1Lqek4heSPq/V8vtggFZTtEoEI=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
