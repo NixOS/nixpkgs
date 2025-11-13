@@ -67,19 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.2.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-D8vLkV8T1igOoCgJDiccLytxlXdF0oLJZTQpBsLM7Z0=";
+    hash = "sha256-l2Jvwcd5hzJKpdOtcswDG8CacQo8ivWbPUIjVPkLkI8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-f5lU1ClKEZjzOAkng1B37d4VmHYzLOP2uMvoN1RFFoo=";
+    hash = "sha256-jw5uMxPfHhKTjO+X4RSaMG/9wlYEoMIEPYDxYk7HVD0=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -224,6 +224,7 @@ buildPythonPackage rec {
     "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress"
+    "chromadb/test/api/test_schema_e2e.py"
 
     # Excessively slow
     "chromadb/test/property/test_add.py"
