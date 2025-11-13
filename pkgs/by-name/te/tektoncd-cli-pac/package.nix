@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tektoncd-cli-pac";
-  version = "0.39.0";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "openshift-pipelines";
     repo = "pipelines-as-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-39jVFnLEUQHakVcSkrjrTRANp6D8FAoy+kIGi/QL5gk=";
+    hash = "sha256-rLz/vwvGF6WDc9gsjCSNsb8E7hpssAJ9D6EdDs7S1ck=";
   };
 
   vendorHash = null;
