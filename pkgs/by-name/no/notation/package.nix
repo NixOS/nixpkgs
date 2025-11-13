@@ -52,6 +52,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
+      vdemeester
     ];
     mainProgram = "notation";
   };
