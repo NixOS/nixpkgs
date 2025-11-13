@@ -772,7 +772,7 @@ with pkgs;
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
-  ociTools = callPackage ../build-support/oci-tools { };
+  ociTools = callPackage ../build-support/oci { };
 
   inherit (callPackages ../build-support/setup-hooks/patch-rc-path-hooks { })
     patchRcPathBash
