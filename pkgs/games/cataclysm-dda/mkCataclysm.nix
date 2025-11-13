@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  pkgs,
   wrapCDDA,
   callPackage,
   runtimeShell,
@@ -141,8 +140,13 @@ lib.extendMkDerivation {
           hasTiles = true;
         });
 
-        inherit pkgs;
-        withMod = wrapCDDA finalAttrs.finalPackage;
+        # User provides a selector predicate to filter the cataclysm mods
+        withMods =
+          selector:
+          callPackage ./wrapper.nix {
+            inherit selector;
+            unwrapped = finalAttrs.finalPackage;
+          };
       }
       // passthru;
 
