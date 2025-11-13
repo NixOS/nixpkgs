@@ -23,16 +23,6 @@ lib.makeScope newScope (
 
     pkgs = callPackage ./pkgs { };
 
-    buildMod = callPackage ./builder.nix {
-      type = "mod";
-    };
-    buildSoundPack = callPackage ./builder.nix {
-      type = "soundpack";
-    };
-
-    buildTileSet = callPackage ./builder.nix {
-      type = "tileset";
-    };
     wrapCDDA = callPackage ./wrapper.nix { };
 
     # Required to fix `pkgs` and `withMods` attrs after applying `overrideAttrs`.
@@ -66,6 +56,9 @@ lib.makeScope newScope (
       new;
   }
   // lib.optionalAttrs config.allowAliases {
+    buildMod = lib.warn "'cataclysm.buildMod' has been moved to 'cataclysm.pkgs.buildMod'" self.pkgs.buildMod;
+    buildSoundPack = lib.warn "'cataclysm.buildSoundPack' has been moved to 'cataclysm.pkgs.buildSoundPack'" self.pkgs.buildSoundPack;
+    buildTileSet = lib.warn "'cataclysm.buildTileSet' has been moved to 'cataclysm.pkgs.buildTileSet'" self.pkgs.buildTileSet;
     stable = lib.mapAttrs (
       _: lib.warn "'cataclysm.stable' has been renamed to 'cataclysm.dark-days-ahead'"
     ) self.dark-days-ahead;
