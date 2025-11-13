@@ -10,14 +10,14 @@ lib.makeScope newScope (
   in
   {
     buildMod = callPackage ./mkAsset.nix {
-      type = "mod";
+      assetType = "mod";
     };
     buildSoundPack = callPackage ./mkAsset.nix {
-      type = "soundpack";
+      assetType = "soundpack";
     };
 
     buildTileSet = callPackage ./mkAsset.nix {
-      type = "tileset";
+      assetType = "tileset";
     };
 
     mod = { };
