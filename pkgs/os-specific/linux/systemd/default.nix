@@ -108,10 +108,10 @@
   withFido2 ? true,
   withFirstboot ? true,
   withGcrypt ? true,
-  withHomed ? !stdenv.hostPlatform.isMusl,
+  withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
-  withImportd ? !stdenv.hostPlatform.isMusl,
+  withImportd ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -143,9 +143,9 @@
   withPasswordQuality ? true,
   withPCRE2 ? true,
   withPolkit ? true,
-  withPortabled ? !stdenv.hostPlatform.isMusl,
+  withPortabled ? true,
   withQrencode ? true,
-  withRemote ? !stdenv.hostPlatform.isMusl,
+  withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
   withSysusers ? true,
@@ -156,7 +156,7 @@
   # adds python to closure which is too much by default
   withUkify ? false,
   withUserDb ? true,
-  withUtmp ? !stdenv.hostPlatform.isMusl,
+  withUtmp ? true,
   withVmspawn ? true,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
