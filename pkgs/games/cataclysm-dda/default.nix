@@ -9,6 +9,7 @@ lib.makeScope newScope (
     inherit (self) callPackage;
   in
   {
+    # Main game
     dark-days-ahead =
       (callPackage ./dda/stable.nix { })
       // (lib.optionalAttrs config.allowAliases {
@@ -23,10 +24,13 @@ lib.makeScope newScope (
         curses = lib.warnOnInstantiate "'cataclysm.dark-days-ahead-unstable.curses ' is now named 'cataclysm.dark-days-ahead-unstable'" self.dark-days-ahead-unstable;
       });
 
-    mkCataclysm = callPackage ./mkCataclysm.nix { };
-    pkgs = callPackage ./pkgs { };
+    # Forks
+    bright-nights = callPackage ./bn { };
 
+    # Utilities
+    mkCataclysm = callPackage ./mkCataclysm.nix { };
     wrapCDDA = _: throw "'cataclysm.wrapCDDA' should be accessed via 'cataclysm.$GAME.withMods'";
+    pkgs = callPackage ./pkgs { };
   }
   // lib.optionalAttrs config.allowAliases {
     buildMod = lib.warn "'cataclysm.buildMod' has been moved to 'cataclysm.pkgs.buildMod'" self.pkgs.buildMod;
