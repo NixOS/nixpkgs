@@ -25,7 +25,9 @@ buildGoModule (finalAttrs: {
   ];
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
-  excludedPackages = [ "./test" ];
+  excludedPackages = [
+    "./test/e2e"
+  ];
 
   ldflags = [
     "-s"
