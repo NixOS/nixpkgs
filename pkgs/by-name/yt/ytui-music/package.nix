@@ -10,14 +10,14 @@
   makeBinaryWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytui-music";
   version = "2.0.0-rc1";
 
   src = fetchFromGitHub {
     owner = "sudipghimire533";
     repo = "ytui-music";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f/23PVk4bpUCvcQ25iNI/UVXqiPBzPKWq6OohVF41p8=";
   };
 
@@ -59,11 +59,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Youtube client in terminal for music";
     homepage = "https://github.com/sudipghimire533/ytui-music";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "ytui_music";
   };
-}
+})
