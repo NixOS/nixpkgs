@@ -2,7 +2,7 @@
   lib,
   stdenv,
   testers,
-  fetchgit,
+  fetchFromGitHub,
   fetchpatch,
   replaceVars,
 
@@ -241,9 +241,10 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  src = fetchgit {
-    url = "https://xenbits.xenproject.org/git-http/xen.git";
-    rev = "08f043965a7b1047aabd6d81da6b031465f2d797";
+  src = fetchFromGitHub {
+    owner = "xen-project";
+    repo = "xen";
+    tag = "RELEASE-4.20.1";
     hash = "sha256-a4dIJBY5aeznXPoI8nSipMgimmww7ejoQ1GE28Gq13o=";
   };
 
