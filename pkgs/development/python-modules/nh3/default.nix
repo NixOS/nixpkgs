@@ -9,12 +9,12 @@
 }:
 let
   pname = "nh3";
-  version = "0.2.21";
+  version = "0.3.2";
   src = fetchFromGitHub {
     owner = "messense";
     repo = "nh3";
     rev = "v${version}";
-    hash = "sha256-DskjcKjdz1HmKzmA568zRCjh4UK1/LBD5cSIu7Rfwok=";
+    hash = "sha256-2D8ZLmVRA+SuMqeUsSXyY+0zlgqp7TSRyQuJMjmRVFk=";
   };
 in
 buildPythonPackage {
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-1Ytca/GiHidR8JOcz+DydN6N/iguLchbP8Wnrd/0NTk=";
+    hash = "sha256-dN6zdwMGh8stgDuGiO+T/ZZ3/3P9Wu/gUw5gHJ1pPGA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
