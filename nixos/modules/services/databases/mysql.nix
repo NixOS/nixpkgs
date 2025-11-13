@@ -111,6 +111,7 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
+        default = "/var/lib/mysql";
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
