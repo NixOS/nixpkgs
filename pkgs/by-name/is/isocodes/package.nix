@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iso-codes";
-  version = "4.18.0";
+  version = "4.19.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
-    hash = "sha256-UR9nv0tRqnfxfEWtv/UzJCtQ8eNw/kmlcGtjQZAvrIc=";
+    hash = "sha256-SxQ6iR/rfRu2TkT+PvJT7za6EYXR0SnBQlM43G5G4n0=";
   };
 
   nativeBuildInputs = [
