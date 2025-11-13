@@ -25,7 +25,7 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls_2
+    mbedtls
     miniupnpc
     minizip-ng
     openal
