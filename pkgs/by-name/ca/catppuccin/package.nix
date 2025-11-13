@@ -313,15 +313,15 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       cp "${sources.qt5ct}/themes/catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
 
     ''
-    + lib.optionalString (lib.elem "rofi" themeList) ''
-      mkdir -p "$out/rofi"
-      cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
-
-    ''
     + lib.optionalString (lib.elem "refind" themeList) ''
       mkdir -p "$out/refind/assets"
       cp "${sources.refind}/${variant}.conf" "$out/refind"
       cp -r "${sources.refind}/assets/${variant}" "$out/refind/assets"
+
+    ''
+    + lib.optionalString (lib.elem "rofi" themeList) ''
+      mkdir -p "$out/rofi"
+      cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
 
     ''
     + lib.optionalString (lib.elem "starship" themeList) ''
