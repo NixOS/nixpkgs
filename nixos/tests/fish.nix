@@ -24,5 +24,7 @@
       machine.succeed(
           "fish -ic 'echo $fish_complete_path' | grep -q '/share/fish/vendor_completions.d /etc/fish/generated_completions /root/.cache/fish/generated_completions$'"
       )
+      machine.wait_for_file("/etc/fish/config.fish")
+      config = machine.succeed("fish_indent -c /etc/fish/config.fish")
     '';
 }

@@ -7,6 +7,7 @@
   libnest2d,
   sip4,
   clipper,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,14 @@ buildPythonPackage rec {
     libnest2d
     sip4
     clipper
+    distutils
   ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
+
+  strictDeps = true;
 
   CLIPPER_PATH = "${clipper.out}";
 

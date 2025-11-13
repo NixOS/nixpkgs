@@ -1,8 +1,6 @@
 import ./generic.nix {
   version = "17.7";
-  # TODO: Move back to tag, when they appear upstream:
-  # rev = "refs/tags/REL_17_7";
-  rev = "fbb530a3dff569222bea7098ad4de3d8bde97740";
+  rev = "refs/tags/REL_17_7";
   hash = "sha256-W+505LAeiO5ln7wBhxZLv/p3GxiJp8MFfCGVDyvHREg=";
   muslPatches = {
     dont-use-locale-a = {

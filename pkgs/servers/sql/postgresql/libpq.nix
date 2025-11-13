@@ -46,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    # TODO: Move back to tag, when they appear upstream:
-    # rev = "refs/tags/REL_18_1";
-    rev = "4b324845ba5d24682b9b3708a769f00d160afbd7";
+    rev = "refs/tags/REL_18_1";
     hash = "sha256-cZA2hWtr5RwsUrRWkvl/yvUzFPSfdtpyAKGXfrVUr0g=";
   };
 
