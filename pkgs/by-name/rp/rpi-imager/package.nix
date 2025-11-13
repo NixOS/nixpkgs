@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KRGxweYxo3qDg8LSGOs8QZQT9hdxVGk1aLoIIFjg6Rw=";
+    hash = "sha256-NVQAux39JH997u+jR5Irjm479/0WgW9jWWpCQRE5rgg=";
   };
 
   patches = [ ./remove-vendoring.patch ];
