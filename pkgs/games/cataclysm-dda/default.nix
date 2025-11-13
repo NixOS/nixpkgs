@@ -21,6 +21,7 @@ lib.makeScope newScope (
       curses = self.darkDaysAheadUnstable.tiles.override { tiles = false; };
     };
 
+    mkCataclysm = callPackage ./mkCataclysm.nix { };
     pkgs = callPackage ./pkgs { };
 
     wrapCDDA = callPackage ./wrapper.nix { };
