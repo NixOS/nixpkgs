@@ -61,13 +61,13 @@ buildGoModule (finalAttrs: {
       multiple pluggable transports.
     '';
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    mainProgram = "lyrebird";
     changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/blob/lyrebird-${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       bsd2
       bsd3
       gpl3
     ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    mainProgram = "lyrebird";
   };
 })
