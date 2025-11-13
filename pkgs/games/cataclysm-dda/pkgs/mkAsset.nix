@@ -1,68 +1,53 @@
 {
-  stdenvNoCC,
   lib,
-  type,
+  stdenvNoCC,
+  assetType,
 }:
 
-assert lib.elem type [
+assert lib.elem assetType [
   "mod"
   "soundpack"
   "tileset"
 ];
 
-{
-  modName,
-  version,
-  src,
-  ...
-}@args:
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-stdenvNoCC.mkDerivation (
-  args
-  // rec {
-    pname = args.pname or "cataclysm-dda-${type}-${modName}";
+  excludeDrvArgNames = [
+    "modName"
+  ];
 
-    modRoot = args.modRoot or ".";
+  extendDrvArgs =
+    finalAttrs:
+    {
+      modName,
+      version,
+      src,
+      ...
+    }@args:
+    {
+      pname = args.pname or "cataclysm-${assetType}-${modName}";
 
-    configurePhase =
-      args.configurePhase or ''
-        runHook preConfigure
-        runHook postConfigure
-      '';
+      modRoot = args.modRoot or ".";
 
-    buildPhase =
-      args.buildPhase or ''
-        runHook preBuild
-        runHook postBuild
-      '';
+      installPhase =
+        let
+          baseDir =
+            {
+              mod = "mods";
+              soundpack = "sound";
+              tileset = "gfx";
+            }
+            .${assetType};
+        in
+        args.installPhase or ''
+          runHook preInstall
 
-    checkPhase =
-      args.checkPhase or ''
-        runHook preCheck
-        runHook postCheck
-      '';
+          destdir="$out/share/cataclysm-dda/${baseDir}"
+          mkdir -p "$destdir"
+          cp -R "${finalAttrs.modRoot}" "$destdir/${modName}"
 
-    installPhase =
-      let
-        baseDir =
-          {
-            mod = "mods";
-            soundpack = "sound";
-            tileset = "gfx";
-          }
-          .${type};
-      in
-      args.installPhase or ''
-        runHook preInstall
-        destdir="$out/share/cataclysm-dda/${baseDir}"
-        mkdir -p "$destdir"
-        cp -R "${modRoot}" "$destdir/${modName}"
-        runHook postInstall
-      '';
-
-    passthru = {
-      forTiles = true;
-      forCurses = type == "mod";
+          runHook postInstall
+        '';
     };
-  }
-)
+}
