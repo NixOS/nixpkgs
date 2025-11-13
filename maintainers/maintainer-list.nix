@@ -8842,6 +8842,12 @@
     githubId = 13279982;
     name = "freezeboy";
   };
+  Freikugel = {
+    name = "Freikugel";
+    github = "bingbongboink";
+    githubId = 87834830;
+    email = "lmsmallidge@hotmail.com";
+  };
   frenetic00 = {
     github = "frenetic00";
     githubId = 50942055;
