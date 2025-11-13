@@ -33,6 +33,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tool to send messages or files to an XMPP contact or MUC";
     homepage = "https://salsa.debian.org/mdosch/go-sendxmpp";
+    changelog = "https://salsa.debian.org/mdosch/go-sendxmpp/-/releases/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       jpds
