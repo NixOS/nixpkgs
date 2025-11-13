@@ -4,6 +4,7 @@
   fetchFromGitLab,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -41,6 +42,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^lyrebird-(\\d+\\.\\d+\\.\\d+)$" ];
+  };
 
   meta = {
     description = "Circumvents censorship by transforming Tor traffic between clients and bridges";
