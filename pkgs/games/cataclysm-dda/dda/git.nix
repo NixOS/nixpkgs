@@ -13,7 +13,7 @@
 }:
 
 let
-  common = callPackage ./common.nix {
+  common = callPackage ./../common.nix {
     inherit tiles debug useXdgDir;
   };
 
