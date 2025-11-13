@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-L35VSQdIbKGGsBPU2Sj/MoYohy1ZibgZ+7NVa3yNjH8=";
 
   postInstall = ''
-    install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install --mode=444 -D contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';
