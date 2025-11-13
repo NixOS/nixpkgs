@@ -3,8 +3,6 @@
   fetchFromGitHub,
   buildGoModule,
   gitUpdater,
-  testers,
-  tkey-ssh-agent,
   versionCheckHook,
 }:
 
@@ -32,11 +30,6 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
-    tests = {
-      tkey-ssh-agent-version = testers.testVersion {
-        package = tkey-ssh-agent;
-      };
-    };
   };
 
   nativeInstallCheckInputs = [
