@@ -23,7 +23,6 @@
   versionCheckHook,
   wrapGAppsHook4,
   zig_0_14,
-
   # Usually you would override `zig.hook` with this, but we do that internally
   # since upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
@@ -46,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     "shell_integration"
     "terminfo"
     "vim"
+    "systemd"
+    "dbus_1"
+    "desktop"
+    "metainfo"
   ];
 
   src = fetchFromGitHub {
@@ -144,6 +147,20 @@ stdenv.mkDerivation (finalAttrs: {
 
 
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+
+    # Move xdg files to their own outputs
+    if [ -d "$out/share/systemd" ]; then
+      moveToOutput share/systemd $systemd
+    fi
+    if [ -d "$out/share/dbus-1" ]; then
+      moveToOutput share/dbus-1 $dbus_1
+    fi
+    if [ -d "$out/share/applications" ]; then
+      moveToOutput share/applications $desktop
+    fi
+    if [ -d "$out/share/metainfo" ]; then
+      moveToOutput share/metainfo $metainfo
+    fi
   '';
 
   nativeInstallCheckInputs = [
