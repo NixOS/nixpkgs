@@ -8,7 +8,7 @@
 let
   cfg = config.services.nginx.sso;
   format = pkgs.formats.yaml { };
-  configPath = "/var/lib/nginx-sso/config.yaml";
+  configPath = "/run/nginx-sso/config.yaml";
   secretsReplacement = utils.genJqSecretsReplacement {
     loadCredential = true;
   } cfg.configuration configPath;
@@ -60,14 +60,11 @@ in
       description = "Nginx SSO Backend";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      preStart = secretsReplacement.script;
       serviceConfig = {
         StateDirectory = "nginx-sso";
         WorkingDirectory = "/var/lib/nginx-sso";
-        ExecStartPre = pkgs.writeShellScript "merge-nginx-sso-config" ''
-          rm -f '${configPath}'
-          # Relies on YAML being a superset of JSON
-          ${secretsReplacement.script}
-        '';
+        RuntimeDirectory = "nginx-sso";
         ExecStart = ''
           ${lib.getExe cfg.package} \
             --config ${configPath} \
