@@ -39,6 +39,12 @@ in
       description = "Port the OnlyOffice document server should listen on.";
     };
 
+    allowLocalConnections = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "If true, allows clients with LAN-range IPs to access your instance.";
+    };
+
     examplePort = lib.mkOption {
       type = lib.types.port;
       default = null;
@@ -272,7 +278,7 @@ in
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
 
-            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
+           # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
             chmod g+x /var/lib/onlyoffice/documentserver
 
             cp /run/onlyoffice/config/default.json{,.orig}
@@ -280,6 +286,10 @@ in
             # for a mapping of environment variables from the docker container to json options see
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
             jq '
+           # Allow local-range IPs to connect
+            ${lib.optionalString (cfg.allowLocalConnections) ''
+              .services.CoAuthoring."request-filtering-agent".allowPrivateIPAddress = true |
+            ''}
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
               .services.CoAuthoring.sql.dbName = "${cfg.postgresName}" |
