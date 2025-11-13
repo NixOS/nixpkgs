@@ -242,43 +242,43 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     ''
     + lib.optionalString (lib.elem "alacritty" themeList) ''
       mkdir -p "$out/alacritty"
-      cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
+      cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty"
 
     ''
     + lib.optionalString (lib.elem "bat" themeList) ''
       mkdir -p "$out/bat"
-      cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
+      cp "${sources.bat}/themes/Catppuccin $capitalizedVariant.tmTheme" "$out/bat"
 
     ''
     + lib.optionalString (lib.elem "btop" themeList) ''
       mkdir -p "$out/btop"
-      cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop/"
+      cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop"
 
     ''
     + lib.optionalString (lib.elem "bottom" themeList) ''
       mkdir -p "$out/bottom"
-      cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+      cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom"
 
     ''
     + lib.optionalString (lib.elem "element" themeList) ''
       mkdir -p "$out/element"
-      cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
+      cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element"
 
     ''
     + lib.optionalString (lib.elem "grub" themeList) ''
       mkdir -p "$out/grub"
-      cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme/"* "$out/grub/"
+      cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme"/* "$out/grub"
 
     ''
     + lib.optionalString (lib.elem "hyprland" themeList) ''
       mkdir -p "$out/hyprland"
-      cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
+      cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland"
 
     ''
     + lib.optionalString (lib.elem "k9s" themeList) ''
       mkdir -p "$out/k9s"
-      cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
-      cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
+      cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s"
+      cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s"
 
     ''
     + lib.optionalString (lib.elem "kvantum" themeList) ''
@@ -287,14 +287,14 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
 
     ''
     + lib.optionalString (lib.elem "lazygit" themeList) ''
-      mkdir -p "$out/lazygit/"{themes,themes-mergable}
-      cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
-      cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
+      mkdir -p "$out/lazygit"/themes{,-mergable}
+      cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes"
+      cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable"
 
     ''
     + lib.optionalString (lib.elem "lxqt" themeList) ''
       mkdir -p "$out/share/lxqt/themes/catppuccin-${variant}"
-      cp -r "${sources.lxqt}/src/catppuccin-${variant}/"* "$out/share/lxqt/themes/catppuccin-${variant}"
+      cp -r "${sources.lxqt}/src/catppuccin-${variant}"/* "$out/share/lxqt/themes/catppuccin-${variant}"
 
     ''
     + lib.optionalString (lib.elem "palette" themeList) ''
@@ -304,8 +304,8 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     ''
     + lib.optionalString (lib.elem "plymouth" themeList) ''
       mkdir -p "$out/share/plymouth/themes/catppuccin-${variant}"
-      cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
-      sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+      cp "${sources.plymouth}/themes/catppuccin-${variant}"/* "$out/share/plymouth/themes/catppuccin-${variant}"
+      sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' "$out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth"
 
     ''
     + lib.optionalString (lib.elem "qt5ct" themeList) ''
