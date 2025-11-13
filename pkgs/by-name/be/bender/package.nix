@@ -10,16 +10,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bender";
-  version = "0.28.2";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "pulp-platform";
     repo = "bender";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OJWYhs5QmfUC1I5OkEJAeLTpklEQyQ6024wmhv1sSnA=";
+    hash = "sha256-RVVMQJpuNmGDJju7JXTyrBtqmiAp+e8a9+0mFSHMGJA=";
   };
 
-  cargoHash = "sha256-nZ2gchifWSmDlVJIsPcvrnUxzhyXYoA1kE9f2pZDJzs=";
+  cargoHash = "sha256-VbLMSyy6PMP4aPMZg1EQMd7yrVWN9MRlRTIc3oP33HE=";
 
   nativeCheckInputs = [ gitMinimal ];
   postCheck = ''
