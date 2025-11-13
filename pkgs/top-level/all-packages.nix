@@ -2872,8 +2872,10 @@ with pkgs;
   inherit
     ({
       graylog-6_1 = callPackage ../tools/misc/graylog/6.1.nix { };
+      graylog-7_0 = callPackage ../tools/misc/graylog/7.0.nix { };
     })
     graylog-6_1
+    graylog-7_0
     ;
 
   graylogPlugins = recurseIntoAttrs (
