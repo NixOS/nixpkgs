@@ -1,50 +1,33 @@
 {
   lib,
   symlinkJoin,
-  makeWrapper,
+  makeBinaryWrapper,
+  # Unwrapped Cataclysm game
+  unwrapped,
+  # Selector predicate function
+  # Attrs Pkgs -> List Pkgs
+  selector,
+  # The Cataclysm mod packages, not the Nixpkgs set.
+  pkgs,
 }:
-
-unwrapped:
-
-pkgsSpec:
-
 let
-  mods = if lib.isFunction pkgsSpec then pkgsSpec unwrapped.pkgs else pkgsSpec;
+  mods = if lib.isFunction selector then selector pkgs else selector;
 in
+symlinkJoin {
+  name = unwrapped.pname + "-with-mods-" + unwrapped.version;
 
-if builtins.length mods == 0 then
-  unwrapped
-else
-  symlinkJoin {
-    name = unwrapped.name + "-with-mods";
+  paths = [ unwrapped ] ++ mods;
 
-    paths = [ unwrapped ] ++ mods;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
-    nativeBuildInputs = [ makeWrapper ];
+  postBuild = ''
+    wrapProgram "$out/bin/${unwrapped.meta.mainProgram}" \
+      --add-flags "--basepath $out"
+  '';
 
-    postBuild = ''
-      if [ -x $out/bin/cataclysm ]; then
-          wrapProgram $out/bin/cataclysm \
-              --add-flags "--datadir $out/share/cataclysm-dda/"
-      fi
-      if [ -x $out/bin/cataclysm-tiles ]; then
-          wrapProgram $out/bin/cataclysm-tiles \
-              --add-flags "--datadir $out/share/cataclysm-dda/"
-      fi
-
-      # Launch the wrapped program
-      replaceProgram() {
-          cp "$1" "''${1}.bk"
-          unlink "$1"
-          mv "''${1}.bk" "$1"
-          sed -i "$1" -e "s,${builtins.storeDir}/.\+\(/bin/cataclysm-tiles\),$out\1,"
-      }
-      for script in "$out/share/applications/cataclysm-dda.desktop" \
-                    "$out/Applications/Cataclysm.app/Contents/MacOS/Cataclysm.sh"
-      do
-          if [ -e "$script" ]; then
-              replaceProgram "$script"
-          fi
-      done
-    '';
-  }
+  # Remove position so that the derivation position is
+  # correct
+  meta = builtins.removeAttrs unwrapped.meta [ "position" ];
+}

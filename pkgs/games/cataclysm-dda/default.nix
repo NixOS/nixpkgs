@@ -26,7 +26,7 @@ lib.makeScope newScope (
     mkCataclysm = callPackage ./mkCataclysm.nix { };
     pkgs = callPackage ./pkgs { };
 
-    wrapCDDA = callPackage ./wrapper.nix { };
+    wrapCDDA = _: throw "'cataclysm.wrapCDDA' should be accessed via 'cataclysm.$GAME.withMods'";
   }
   // lib.optionalAttrs config.allowAliases {
     buildMod = lib.warn "'cataclysm.buildMod' has been moved to 'cataclysm.pkgs.buildMod'" self.pkgs.buildMod;
