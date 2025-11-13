@@ -464,8 +464,6 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_1 = callPackage ../development/tools/ocaml/dune/1.nix { };
-
         dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
         dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
