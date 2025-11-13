@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pywbem/nocasedict";
     changelog = "https://github.com/pywbem/nocasedict/blob/${version}/docs/changes.rst";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }
