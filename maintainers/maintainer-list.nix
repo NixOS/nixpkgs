@@ -13535,6 +13535,12 @@
     name = "kgtkr";
     keys = [ { fingerprint = "B30D BE93 81E0 3D5D F301 88C8 1F6E B951 9F57 3241"; } ];
   };
+  Kh05ifr4nD = {
+    email = "meandSSH0219@gmail.com";
+    github = "Kh05ifr4nD";
+    githubId = 108247735;
+    name = "Kh05ifr4nD";
+  };
   khaneliman = {
     email = "khaneliman12@gmail.com";
     github = "khaneliman";
