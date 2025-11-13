@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     ln -s $out/share/man/man1/{lyrebird,obfs4proxy}.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Circumvents censorship by transforming Tor traffic between clients and bridges";
     longDescription = ''
       Obfs4proxy is a tool that attempts to circumvent censorship by
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
       multiple pluggable transports.
     '';
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     mainProgram = "lyrebird";
     changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${finalAttrs.src.rev}/ChangeLog";
     license = with lib.licenses; [
