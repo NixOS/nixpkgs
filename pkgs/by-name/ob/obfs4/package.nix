@@ -67,7 +67,10 @@ buildGoModule (finalAttrs: {
       bsd3
       gpl3
     ];
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      defelo
+    ];
     mainProgram = "lyrebird";
   };
 })
