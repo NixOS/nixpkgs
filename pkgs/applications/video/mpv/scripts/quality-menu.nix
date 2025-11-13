@@ -19,6 +19,7 @@ buildLua rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   extraScriptsToCopy = lib.optional oscSupport "quality-menu-osc.lua";
+  extraScriptsToLoad = lib.optional oscSupport "quality-menu-osc.lua";
 
   meta = with lib; {
     description = "Userscript for MPV that allows you to change youtube video quality (ytdl-format) on the fly";

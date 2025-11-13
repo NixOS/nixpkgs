@@ -9,6 +9,7 @@ buildLua (finalAttrs: {
 
   scriptPath = "osc_tethys.lua";
   extraScriptsToCopy = [ "mpv_thumbnail_script_server.lua" ];
+  extraScriptsToLoad = [ "mpv_thumbnail_script_server.lua" ];
 
   src = fetchFromGitHub {
     owner = "Zren";
