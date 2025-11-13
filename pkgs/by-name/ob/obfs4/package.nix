@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,6 +26,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X main.lyrebirdVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/lyrebird" ];
@@ -35,6 +37,10 @@ buildGoModule (finalAttrs: {
     installManPage doc/lyrebird.1
     ln -s $out/share/man/man1/{lyrebird,obfs4proxy}.1
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Circumvents censorship by transforming Tor traffic between clients and bridges";
