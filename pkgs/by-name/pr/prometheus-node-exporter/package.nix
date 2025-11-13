@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -35,6 +36,11 @@ buildGoModule rec {
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Prometheus exporter for machine metrics";
