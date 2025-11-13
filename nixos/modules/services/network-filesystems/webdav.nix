@@ -80,17 +80,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.users = lib.mkIf (cfg.user == "webdav") {
-      webdav = {
-        description = "WebDAV daemon user";
-        group = cfg.group;
-        uid = config.ids.uids.webdav;
-      };
+    users.users."${cfg.user}" = {
+      description = "WebDAV daemon user";
+      group = cfg.group;
+      uid = config.ids.uids."${cfg.user}";
     };
 
-    users.groups = lib.mkIf (cfg.group == "webdav") {
-      webdav.gid = config.ids.gids.webdav;
-    };
+    users.groups."${cfg.group}".gid = config.ids.gids."${cfg.group}";
 
     systemd.services.webdav = {
       description = "WebDAV server";
