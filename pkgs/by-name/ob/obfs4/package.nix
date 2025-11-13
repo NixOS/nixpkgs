@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     # We don't use pname = lyrebird and we use the old obfs4 name as the first
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
-    rev = "lyrebird-${finalAttrs.version}";
+    tag = "lyrebird-${finalAttrs.version}";
     hash = "sha256-aPALWvngC/BVQO73yUAykHvEb6T0DZcGMowXINDqhpQ=";
   };
 
