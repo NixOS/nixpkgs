@@ -1413,6 +1413,8 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  kitty-themes = recurseIntoAttrs (callPackage ../by-name/ki/kitty-themes/package.nix { });
+
   mlterm-wayland = mlterm.override {
     enableX11 = false;
   };
