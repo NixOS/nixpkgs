@@ -3,8 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  testers,
-  prometheus-pushgateway,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -32,10 +31,12 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests.prometheus) pushgateway;
-    version = testers.testVersion {
-      package = prometheus-pushgateway;
-    };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
