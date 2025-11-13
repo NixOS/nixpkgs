@@ -23,7 +23,7 @@ buildLua rec {
   dontBuild = false;
 
   scriptPath = "mpv_thumbnail_script_client_osc.lua";
-  extraScripts = [ "mpv_thumbnail_script_server.lua" ];
+  extraScriptsToCopy = [ "mpv_thumbnail_script_server.lua" ];
   passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
 
   meta = {
