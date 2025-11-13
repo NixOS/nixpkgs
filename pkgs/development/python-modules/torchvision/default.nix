@@ -28,7 +28,7 @@ let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
   pname = "torchvision";
-  version = "0.24.0";
+  version = "0.24.1";
 in
 buildPythonPackage {
   format = "setuptools";
@@ -40,7 +40,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     tag = "v${version}";
-    hash = "sha256-EyA/d2fAdK2arMBqNtDwKtpaKb171zqEnYFrqAFQr+g=";
+    hash = "sha256-ddJWD2xjoNAuyZIaZD7ctcuSQZ9lSUGExWCq1W5prI8=";
   };
 
   nativeBuildInputs = [
