@@ -7,16 +7,16 @@
 }:
 buildNpmPackage rec {
   pname = "playwright-mcp";
-  version = "0.0.35";
+  version = "0.0.41";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
     tag = "v${version}";
-    hash = "sha256-bF/F4dP2ri09AlQLItQwQxDAQybY2fXft4ccxSKijt8=";
+    hash = "sha256-OoTAYd1/hedR0k/3b83YOPaOviLWv1Y3pffNoeSf2g4=";
   };
 
-  npmDepsHash = "sha256-xSQCs6rJlUrdS8c580mo1/VjpcDxwHor0pdstB9VQEo=";
+  npmDepsHash = "sha256-xgOPlCnlRXJZAZRM4xZ7SYSA5lsPglSewXxY19TbD/A=";
 
   postInstall = ''
     rm -r $out/lib/node_modules/@playwright/mcp/node_modules/playwright
@@ -29,6 +29,8 @@ buildNpmPackage rec {
       --set-default PLAYWRIGHT_MCP_BROWSER chromium \
       --run 'if [ -z "$PLAYWRIGHT_MCP_USER_DATA_DIR" ]; then PLAYWRIGHT_MCP_USER_DATA_DIR="$(mktemp -d -t mcp-pw-XXXXXX)"; export PLAYWRIGHT_MCP_USER_DATA_DIR; trap "rm -rf \"$PLAYWRIGHT_MCP_USER_DATA_DIR\"" EXIT; fi'
   '';
+
+  dontNpmBuild = true;
 
   passthru = {
     # Package and playwright driver versions are tightly coupled.
