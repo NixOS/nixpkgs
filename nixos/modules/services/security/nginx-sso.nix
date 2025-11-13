@@ -9,6 +9,9 @@ let
   cfg = config.services.nginx.sso;
   format = pkgs.formats.yaml { };
   configPath = "/var/lib/nginx-sso/config.yaml";
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.configuration configPath;
 in
 {
   options.services.nginx.sso = {
@@ -47,7 +50,7 @@ in
         Options containing secret data should be set to an attribute set
         with the singleton attribute `_secret` - a string value set to the path
         to the file containing the secret value which should be used in the
-        configuration. This file must be readable by `nginx-sso`.
+        configuration.
       '';
     };
   };
@@ -63,24 +66,17 @@ in
         ExecStartPre = pkgs.writeShellScript "merge-nginx-sso-config" ''
           rm -f '${configPath}'
           # Relies on YAML being a superset of JSON
-          ${utils.genJqSecretsReplacementSnippet cfg.configuration configPath}
+          ${secretsReplacement.script}
         '';
         ExecStart = ''
           ${lib.getExe cfg.package} \
             --config ${configPath} \
             --frontend-dir ${lib.getBin cfg.package}/share/frontend
         '';
+        LoadCredential = secretsReplacement.credentials;
         Restart = "always";
-        User = "nginx-sso";
-        Group = "nginx-sso";
+        DynamicUser = true;
       };
     };
-
-    users.users.nginx-sso = {
-      isSystemUser = true;
-      group = "nginx-sso";
-    };
-
-    users.groups.nginx-sso = { };
   };
 }
