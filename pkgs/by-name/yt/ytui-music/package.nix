@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::inspect_server_list"
   ];
 
+  patches = [
+    # This patch comes from https://github.com/sudipghimire533/ytui-music/pull/57, which was unmerged.
+    ./fix-implicit-autoref-errors-in-ui-mod-rs-for-rust-1-80-plus.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     makeBinaryWrapper
