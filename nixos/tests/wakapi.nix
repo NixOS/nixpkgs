@@ -3,44 +3,56 @@
   name = "Wakapi";
 
   nodes = {
-    wakapiPsql = {
-      services.wakapi = {
-        enable = true;
-        settings = {
-          server.port = 3000; # upstream default, set explicitly in case upstream changes it
-          db = {
-            dialect = "postgres"; # `createLocally` only supports postgres
-            host = "/run/postgresql";
-            port = 5432; # service will fail if port is not set
-            name = "wakapi";
-            user = "wakapi";
+    wakapiPsql =
+      { pkgs, ... }:
+      {
+        services.wakapi = {
+          enable = true;
+          settings = {
+            server.port = 3000; # upstream default, set explicitly in case upstream changes it
+            db = {
+              dialect = "postgres"; # `createLocally` only supports postgres
+              host = "/run/postgresql";
+              port = 5432; # service will fail if port is not set
+              name = "wakapi";
+              user = "wakapi";
+            };
           };
+
+          # Automatically create our database
+          database.createLocally = true; # only works with Postgresql for now
+
+          # Created with `cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1`
+          # In production you should use sops-nix, agenix or something alike.
+          environmentFiles = [
+            (pkgs.writeText "env" ''
+              WAKAPI_PASSWORD_SALT=NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI
+            '')
+          ];
         };
-
-        # Automatically create our database
-        database.createLocally = true; # only works with Postgresql for now
-
-        # Created with `cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1`
-        # Prefer passwordSaltFile in production.
-        passwordSalt = "NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI";
       };
-    };
 
-    wakapiSqlite = {
-      services.wakapi = {
-        enable = true;
-        settings = {
-          server.port = 3001;
-          db = {
-            dialect = "sqlite3";
-            name = "wakapi";
-            user = "wakapi";
+    wakapiSqlite =
+      { pkgs, ... }:
+      {
+        services.wakapi = {
+          enable = true;
+          settings = {
+            server.port = 3001;
+            db = {
+              dialect = "sqlite3";
+              name = "wakapi";
+              user = "wakapi";
+            };
           };
-        };
 
-        passwordSalt = "NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI";
+          environmentFiles = [
+            (pkgs.writeText "env" ''
+              WAKAPI_PASSWORD_SALT=NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI
+            '')
+          ];
+        };
       };
-    };
   };
 
   # Test that service works under both postgresql and sqlite3
