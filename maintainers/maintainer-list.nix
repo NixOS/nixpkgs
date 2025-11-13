@@ -17262,6 +17262,12 @@
     githubId = 24192522;
     name = "MithicSpirit";
   };
+  MiyakoMeow = {
+    email = "miyakomeowaqwq@gmail.com";
+    github = "MiyakoMeow";
+    githubId = 110924386;
+    name = "MiyakoMeow";
+  };
   miyu = {
     email = "miyu@allthingslinux.org";
     github = "fndov";
