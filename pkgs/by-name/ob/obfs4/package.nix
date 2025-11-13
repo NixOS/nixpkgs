@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "obfs4";
   version = "0.4.0";
 
@@ -16,7 +16,7 @@ buildGoModule rec {
     # We don't use pname = lyrebird and we use the old obfs4 name as the first
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
-    rev = "lyrebird-${version}";
+    rev = "lyrebird-${finalAttrs.version}";
     hash = "sha256-aPALWvngC/BVQO73yUAykHvEb6T0DZcGMowXINDqhpQ=";
   };
 
@@ -52,11 +52,11 @@ buildGoModule rec {
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
     maintainers = with maintainers; [ thoughtpolice ];
     mainProgram = "lyrebird";
-    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${src.rev}/ChangeLog";
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${finalAttrs.src.rev}/ChangeLog";
     license = with lib.licenses; [
       bsd2
       bsd3
       gpl3
     ];
   };
-}
+})
