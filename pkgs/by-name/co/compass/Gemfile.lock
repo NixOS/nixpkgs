@@ -14,10 +14,10 @@ GEM
       sass (>= 3.3.0, < 3.5)
     compass-import-once (1.0.5)
       sass (>= 3.2, < 3.5)
-    ffi (1.15.4)
-    multi_json (1.15.0)
-    rb-fsevent (0.11.0)
-    rb-inotify (0.10.1)
+    ffi (1.17.2)
+    multi_json (1.17.0)
+    rb-fsevent (0.11.2)
+    rb-inotify (0.11.1)
       ffi (~> 1.0)
     sass (3.4.25)
 
@@ -28,4 +28,4 @@ DEPENDENCIES
   compass
 
 BUNDLED WITH
-   2.4.22
+   2.7.2
