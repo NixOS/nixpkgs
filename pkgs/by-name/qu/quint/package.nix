@@ -18,8 +18,8 @@
 }:
 
 let
-  version = "0.29.0";
-  apalacheVersion = "0.50.3";
+  version = "0.29.1";
+  apalacheVersion = "0.51.1";
   evaluatorVersion = "0.3.0";
 
   metaCommon = {
@@ -34,7 +34,7 @@ let
     owner = "informalsystems";
     repo = "quint";
     tag = "v${version}";
-    hash = "sha256-q2pahCsNNJEVivRBijFw5YUCWDzLAtZSYRgxaaROTLo=";
+    hash = "sha256-lnvtyL4GKOyKdBDC5vevx5LgaiB7xTkfuN1rRTxKyv4=";
   };
 
   # Build the Quint CLI from source
@@ -46,7 +46,7 @@ let
 
     sourceRoot = "${src.name}/quint";
 
-    npmDepsHash = "sha256-wbjktm7A1ey25rWbtBD5uvD1mM9vbwBhGIX5ECzJThI=";
+    npmDepsHash = "sha256-CBwovC7PTdjJHwL9lKRlJbl8rNjd9J3hVBFJz24+cbw=";
 
     npmBuildScript = "compile";
 
@@ -88,7 +88,7 @@ let
   # Download Apalache. It runs on the JVM, so no need to build it from source.
   apalacheDist = fetchzip {
     url = "https://github.com/apalache-mc/apalache/releases/download/v${apalacheVersion}/apalache.tgz";
-    hash = "sha256-pePoXbuJq1UNt0yY/Is3jFHtvvX3r/yjOoqG4clsgBw=";
+    hash = "sha256-xYQQH9XxPwf3+YmjiRs7XlW49LdHrEnMeuvd16Ir0B4=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
