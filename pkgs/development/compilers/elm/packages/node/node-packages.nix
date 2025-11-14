@@ -3045,15 +3045,6 @@ let
         sha512 = "W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==";
       };
     };
-    "compare-versions-3.6.0" = {
-      name = "compare-versions";
-      packageName = "compare-versions";
-      version = "3.6.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/compare-versions/-/compare-versions-3.6.0.tgz";
-        sha512 = "W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==";
-      };
-    };
     "component-emitter-1.3.1" = {
       name = "component-emitter";
       packageName = "component-emitter";
@@ -6951,15 +6942,6 @@ let
         sha512 = "dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==";
       };
     };
-    "klaw-2.1.1" = {
-      name = "klaw";
-      packageName = "klaw";
-      version = "2.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/klaw/-/klaw-2.1.1.tgz";
-        sha512 = "kuInGWCNc98b1ghOqBJfqPOvAKn9HHgm+SdluR5VNfdA7rs7uNsuXGy7CCqsP6pFKPpUoCH4s9o00GEj9xONHg==";
-      };
-    };
     "kleur-4.1.5" = {
       name = "kleur";
       packageName = "kleur";
@@ -10218,24 +10200,6 @@ let
         sha512 = "RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==";
       };
     };
-    "semver-regex-3.1.4" = {
-      name = "semver-regex";
-      packageName = "semver-regex";
-      version = "3.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/semver-regex/-/semver-regex-3.1.4.tgz";
-        sha512 = "6IiqeZNgq01qGf0TId0t3NvKzSvUsjcpdEO3AQNeIjR6A2+ckTnQlDpl4qu1bjRv0RzN3FP9hzFmws3lKqRWkA==";
-      };
-    };
-    "semver-sort-1.0.0" = {
-      name = "semver-sort";
-      packageName = "semver-sort";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/semver-sort/-/semver-sort-1.0.0.tgz";
-        sha512 = "JicVlQKz/C//4BiPmbHEDou6HihXxo5xqB/8Hm9FaLJ6HHkRRvYgCECq4u/z0XF8kyJQ/KAZt++A/kYz/oOSSg==";
-      };
-    };
     "send-0.19.0" = {
       name = "send";
       packageName = "send";
@@ -12588,54 +12552,6 @@ let
   };
 in
 {
-  elm-xref = nodeEnv.buildNodePackage {
-    name = "elm-xref";
-    packageName = "elm-xref";
-    version = "4.1.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/elm-xref/-/elm-xref-4.1.1.tgz";
-      sha512 = "1Cl3pZ8Z8Nd0VIu6277C4l4IMjDJEZuX1jkGZX/YZGdCQvGd1v0pB20NKi+U8YbfyjzaereAHah2eL3eXamn6w==";
-    };
-    dependencies = [
-      sources."bluebird-3.7.2"
-      sources."compare-versions-3.6.0"
-      sources."core-util-is-1.0.3"
-      sources."fs-extra-6.0.1"
-      sources."graceful-fs-4.2.11"
-      sources."inherits-2.0.4"
-      sources."isarray-1.0.0"
-      sources."jsonfile-4.0.0"
-      sources."klaw-2.1.1"
-      sources."minimist-1.2.8"
-      sources."process-nextick-args-2.0.1"
-      sources."readable-stream-2.3.8"
-      sources."safe-buffer-5.1.2"
-      sources."semver-6.3.1"
-      sources."semver-regex-3.1.4"
-      (
-        sources."semver-sort-1.0.0"
-        // {
-          dependencies = [
-            sources."semver-5.7.2"
-          ];
-        }
-      )
-      sources."string_decoder-1.1.1"
-      sources."through2-2.0.5"
-      sources."universalify-0.1.2"
-      sources."util-deprecate-1.0.2"
-      sources."xtend-4.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Cross referencing tool for Elm - find usages and unused code";
-      homepage = "https://github.com/zwilias/elm-xref#readme";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   create-elm-app = nodeEnv.buildNodePackage {
     name = "create-elm-app";
     packageName = "create-elm-app";
