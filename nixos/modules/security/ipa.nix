@@ -84,6 +84,12 @@ in
         description = "Whether to cache credentials.";
       };
 
+      useAsTimeserver = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to add the IPA server to the timeserver.";
+      };
+
       ipaHostname = lib.mkOption {
         type = lib.types.str;
         example = "myworkstation.example.com";
@@ -287,7 +293,7 @@ in
       };
     };
 
-    networking.timeServers = lib.singleton cfg.server;
+    networking.timeServers = lib.optional cfg.useAsTimeserver cfg.server;
 
     security.pki.certificateFiles = lib.singleton cfg.certificate;
   };
