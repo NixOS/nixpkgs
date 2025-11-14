@@ -30,7 +30,6 @@
 , "node-gyp-build"
 , "node2nix"
 , "np"
-, "poor-mans-t-sql-formatter-cli"
 , "postcss"
 , "prebuild-install"
 , "pscid"

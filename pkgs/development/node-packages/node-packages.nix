@@ -5961,15 +5961,6 @@ let
         sha512 = "yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==";
       };
     };
-    "commander-2.11.0" = {
-      name = "commander";
-      packageName = "commander";
-      version = "2.11.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-2.11.0.tgz";
-        sha512 = "b0553uYA5YAEGgyYIGYROzKQ7X5RAqedkfjiZxwi0kL1g3bOaBNNZfYkzt/CL0umgD5wc9Jec2FbB98CjkMRvQ==";
-      };
-    };
     "commander-2.20.3" = {
       name = "commander";
       packageName = "commander";
@@ -8805,15 +8796,6 @@ let
         sha512 = "XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==";
       };
     };
-    "file-or-stdin-1.0.2" = {
-      name = "file-or-stdin";
-      packageName = "file-or-stdin";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/file-or-stdin/-/file-or-stdin-1.0.2.tgz";
-        sha512 = "WhYlIPdaYeE6/Pow1Js4QwRQBVXRoRWCZxPLL/YrzUwsZHT8fZuBxP8zZHawLQ8HxwORumP+CoRVuUxkAJD0dw==";
-      };
-    };
     "file-type-16.5.4" = {
       name = "file-type";
       packageName = "file-type";
@@ -9334,15 +9316,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz";
         sha512 = "sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g==";
-      };
-    };
-    "get-stdin-5.0.1" = {
-      name = "get-stdin";
-      packageName = "get-stdin";
-      version = "5.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/get-stdin/-/get-stdin-5.0.1.tgz";
-        sha512 = "jZV7n6jGE3Gt7fgSTJoz91Ak5MuTLwMwkoYdjxuJ/AmjIsE1UC03y/IWkZCQGEvVNS9qoRNwy5BCqxImv0FVeA==";
       };
     };
     "get-stdin-9.0.0" = {
@@ -16795,15 +16768,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/pony-cause/-/pony-cause-1.1.1.tgz";
         sha512 = "PxkIc/2ZpLiEzQXu5YRDOUgBlfGYBY8156HY5ZcRAwwonMk5W/MrJP2LLkG/hF7GEQzaHo2aS7ho6ZLCOvf+6g==";
-      };
-    };
-    "poor-mans-t-sql-formatter-1.6.10" = {
-      name = "poor-mans-t-sql-formatter";
-      packageName = "poor-mans-t-sql-formatter";
-      version = "1.6.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/poor-mans-t-sql-formatter/-/poor-mans-t-sql-formatter-1.6.10.tgz";
-        sha512 = "HmfV88y4tmtR9JsLzdtNwJea+cQdGt+ozeDWdlxHbCiPcoG+/iSAnJ1mEAYdOqITgCoFIT67o3VdY684Ed3FWA==";
       };
     };
     "portscanner-2.2.0" = {
@@ -29274,34 +29238,6 @@ in
       description = "A better `npm publish`";
       homepage = "https://github.com/sindresorhus/np#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  poor-mans-t-sql-formatter-cli = nodeEnv.buildNodePackage {
-    name = "poor-mans-t-sql-formatter-cli";
-    packageName = "poor-mans-t-sql-formatter-cli";
-    version = "1.6.10";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/poor-mans-t-sql-formatter-cli/-/poor-mans-t-sql-formatter-cli-1.6.10.tgz";
-      sha512 = "wzQfv0EUEHOUpINF1sj7m4C6lTgjwWz3eMdEpwnwlD3e487IFA0W2gFk82802ECmpSc/ee4ZlQ1aIl4Lne4FxQ==";
-    };
-    dependencies = [
-      sources."commander-2.11.0"
-      sources."file-or-stdin-1.0.2"
-      sources."get-stdin-5.0.1"
-      sources."graceful-fs-4.2.11"
-      sources."inspect-with-kind-1.0.5"
-      sources."kind-of-6.0.3"
-      sources."poor-mans-t-sql-formatter-1.6.10"
-      sources."strip-bom-3.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "T-SQL formatting utility in JS, transpiled from the C# library of the same name";
-      homepage = "https://github.com/TaoK/poor-mans-t-sql-formatter-npm-cli#readme";
-      license = "AGPL-3.0";
     };
     production = true;
     bypassCache = true;
