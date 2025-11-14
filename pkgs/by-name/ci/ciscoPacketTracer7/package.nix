@@ -23,6 +23,7 @@
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
+  libsForQt5,
   packetTracerSource ? null,
 }:
 
@@ -145,5 +146,12 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      ''
+        Cisco Packet Tracer 7 ships with qt5 qtwebengine.
+
+        ${lib.head libsForQt5.qtwebengine.meta.knownVulnerabilities}
+      ''
+    ];
   };
 }
