@@ -5159,10 +5159,8 @@ with pkgs;
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
   nim = nim2;
-  nim1 = nim-1_0;
   nim2 = nim-2_2;
   nim-unwrapped = nim-unwrapped-2_2;
-  nim-unwrapped-1 = nim-unwrapped-1_0;
   nim-unwrapped-2 = nim-unwrapped-2_2;
 
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };

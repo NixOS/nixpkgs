@@ -31,7 +31,6 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
-  nim1,
   nodejs,
   openscad,
   openssh,
