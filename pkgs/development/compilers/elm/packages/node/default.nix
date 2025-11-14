@@ -110,8 +110,4 @@ with elmLib;
   };
 
   elm-land = pkgs.elm-land; # Alias
-
-  elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ old.nodejs.pkgs.node-gyp-build ];
-  });
 }

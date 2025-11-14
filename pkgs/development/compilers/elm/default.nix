@@ -55,6 +55,8 @@ lib.makeScope pkgs.newScope (
         inherit (self) elm;
       };
 
+      elm-doc-preview = callPackage ./packages/elm-doc-preview { };
+
       elm-json = callPackage ./packages/elm-json { };
 
       elm-review = callPackage ./packages/elm-review { };
