@@ -8,13 +8,13 @@
 # rtl8189fs is a branch of the rtl8189es driver
 rtl8189es.overrideAttrs (drv: rec {
   name = "rtl8189fs-${kernel.version}-${version}";
-  version = "2025-05-04";
+  version = "2025-09-26";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "06e89edce6817616d963414825dccf87094a7e54";
-    sha256 = "sha256-W+gBpK17PmF8BdmBoUHPX7hZoSNOyGe3W1NypR8bc6A=";
+    rev = "876e627a5b6a8021700391b4249a4a31edfebe5c";
+    hash = "sha256-3v40I09TDGWdpllS3WfshPkXbT5Q2pWMTalHLUlU3lU=";
   };
 
   meta = with lib; {
