@@ -12,6 +12,7 @@
   binaryen,
   dart-sass,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -67,7 +68,10 @@ rustPlatform.buildRustPackage rec {
     cp -rf resources/*.ts $out/resources
   '';
 
-  passthru.tests = { inherit (nixosTests) tuliprox; };
+  passthru = {
+    tests = { inherit (nixosTests) tuliprox; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Flexible IPTV playlist processor & proxy in Rust";
