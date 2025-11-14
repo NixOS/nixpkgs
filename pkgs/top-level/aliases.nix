@@ -1343,8 +1343,6 @@ mapAliases {
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
-  redocly-cli = throw "'redocly-cli' has been renamed to/replaced by 'redocly'"; # Converted to throw 2025-10-27
-  redpanda = throw "'redpanda' has been renamed to/replaced by 'redpanda-client'"; # Converted to throw 2025-10-27
   remotebox = throw "remotebox has been removed because it was unmaintained and broken for a long time"; # Added 2025-09-11
   responsively-app = throw "'responsively-app' has been removed due to lack of maintainance upstream."; # Added 2025-06-25
   retroarchBare = throw "'retroarchBare' has been renamed to/replaced by 'retroarch-bare'"; # Converted to throw 2025-10-27

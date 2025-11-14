@@ -1529,6 +1529,13 @@
     githubId = 754494;
     name = "Anders Asheim Hennum";
   };
+  anderscs = {
+    email = "anders@sorby.xyz";
+    github = "anderssorby";
+    githubId = 6331075;
+    matrix = "@anders:sorby.xyz";
+    name = "Anders C. Sørby";
+  };
   andershus = {
     email = "anders.husebo@eviny.no";
     github = "andershus";
