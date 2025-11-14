@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytui-music";
-  version = "0-unstable-2025-03-03";
+  version = "2.0.0-rc1";
 
   src = fetchFromGitHub {
     owner = "sudipghimire533";
     repo = "ytui-music";
-    rev = "b90293d226f6fc27835372f145e55d385112768b";
-    hash = "sha256-pRD8ySpkJz8o7DURXG8DmBsbZV9MqVlMN63gAjYl4vc=";
+    rev = "d505c018fa4b093dbd76aaadcccec289b071a989";
+    hash = "sha256-f/23PVk4bpUCvcQ25iNI/UVXqiPBzPKWq6OohVF41p8=";
   };
 
   cargoHash = "sha256-zwlg4BDHCM+KALjP929upaDpgy1mXEz5PYaVw+BhRp0=";
@@ -65,9 +65,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (unstableGitUpdater {
-        # Since a suitable formatted tag isn't available, using branch is a better way.
-        # ref: https://github.com/NixOS/nixpkgs/issues/258033#issuecomment-1741070349
-        hardcodeZeroVersion = true;
+        tagFormat = "v[0-9]*";
+        tagPrefix = "v";
 
         # * "main" branch is newer than "latest" branch
         # * "main" branch is newer than "main" tag
