@@ -29348,27 +29348,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  ttf2eot = nodeEnv.buildNodePackage {
-    name = "ttf2eot";
-    packageName = "ttf2eot";
-    version = "3.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/ttf2eot/-/ttf2eot-3.1.0.tgz";
-      sha512 = "aHTbcYosNHVqb2Qtt9Xfta77ae/5y0VfdwNLUS6sGBeGr22cX2JDMo/i5h3uuOf+FAD3akYOr17+fYd5NK8aXw==";
-    };
-    dependencies = [
-      sources."argparse-2.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Convert TTF font to EOT";
-      homepage = "https://github.com/fontello/ttf2eot#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   vega-cli = nodeEnv.buildNodePackage {
     name = "vega-cli";
     packageName = "vega-cli";

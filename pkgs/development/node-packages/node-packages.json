@@ -40,7 +40,6 @@
 , "sass"
 , "semver"
 , "sloc"
-, "ttf2eot"
 , "vega-cli"
 , "vercel"
 , "wavedrom-cli"
