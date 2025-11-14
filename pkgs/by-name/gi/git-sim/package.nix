@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  python312,
+  python3,
 
   # Override Python packages using
   # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
@@ -17,7 +17,7 @@ let
     })
   ];
 
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
