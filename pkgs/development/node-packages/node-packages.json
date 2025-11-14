@@ -13,7 +13,6 @@
 , "clipboard-cli"
 , "coc-go"
 , "coc-tsserver"
-, "coc-ultisnips"
 , "cpy-cli"
 , "dhcp"
 , "dotenv-vault"

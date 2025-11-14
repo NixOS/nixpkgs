@@ -29614,24 +29614,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-ultisnips = nodeEnv.buildNodePackage {
-    name = "coc-ultisnips";
-    packageName = "coc-ultisnips";
-    version = "1.2.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-ultisnips/-/coc-ultisnips-1.2.4.tgz";
-      sha512 = "QDl3FYwrv9D4uAQNwS9NsMx757zyu9JSWEoFJi0YUAa3pDc2TrTXa15zmWGeHfn/qDiUTxjVqzJ8GhB8vBo7Ew==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "ultisnips source for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-sources#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   cpy-cli = nodeEnv.buildNodePackage {
     name = "cpy-cli";
     packageName = "cpy-cli";

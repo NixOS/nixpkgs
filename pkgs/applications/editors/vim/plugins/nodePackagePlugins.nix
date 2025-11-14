@@ -8,7 +8,6 @@ let
   nodePackageNames = [
     "coc-go"
     "coc-tsserver"
-    "coc-ultisnips"
   ];
 in
 lib.genAttrs nodePackageNames (
