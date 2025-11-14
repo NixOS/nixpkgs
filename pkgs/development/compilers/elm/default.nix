@@ -73,6 +73,8 @@ lib.makeScope pkgs.newScope (
 
       elm-test = callPackage ./packages/elm-test { };
 
+      elm-upgrade = callPackage ./packages/elm-upgrade { };
+
       lamdera = callPackage ./packages/lamdera { };
     }
   )
