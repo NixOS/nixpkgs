@@ -16,31 +16,20 @@
   optipng,
   imagemagick,
   withCrashReporter ? !stdenv.hostPlatform.isDarwin,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
+  libsForQt5 ? null,
   curl ? null,
   gdb ? null,
 }:
 
-let
-  inherit (lib)
-    licenses
-    maintainers
-    optionals
-    optionalString
-    platforms
-    ;
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arx-libertatis";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = version;
-    sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
+    tag = finalAttrs.version;
+    hash = "sha256-GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +38,7 @@ stdenv.mkDerivation rec {
     imagemagick
     optipng
   ]
-  ++ optionals withCrashReporter [ wrapQtAppsHook ];
+  ++ lib.optionals withCrashReporter [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [
     zlib
@@ -61,11 +50,11 @@ stdenv.mkDerivation rec {
     SDL2
     libepoxy
   ]
-  ++ optionals withCrashReporter [
-    qtbase
+  ++ lib.optionals withCrashReporter [
+    libsForQt5.qtbase
     curl
   ]
-  ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -80,7 +69,7 @@ stdenv.mkDerivation rec {
       ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
       $out/share/games/arx/misc/dejavusansmono.ttf
   ''
-  + optionalString withCrashReporter ''
+  + lib.optionalString withCrashReporter ''
     wrapQtApp "$out/libexec/arxcrashreporter"
   '';
 
@@ -92,9 +81,9 @@ stdenv.mkDerivation rec {
       developed by Arkane Studios.
     '';
     homepage = "https://arx-libertatis.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 
-}
+})
