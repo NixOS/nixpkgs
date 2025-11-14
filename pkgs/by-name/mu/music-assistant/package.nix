@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  ffmpeg-headless,
+  ffmpeg_7-headless,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -59,8 +59,8 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     (replaceVars ./ffmpeg.patch {
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
-      ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+      ffmpeg = "${lib.getBin ffmpeg_7-headless}/bin/ffmpeg";
+      ffprobe = "${lib.getBin ffmpeg_7-headless}/bin/ffprobe";
     })
 
     # Look up librespot from PATH at runtime
