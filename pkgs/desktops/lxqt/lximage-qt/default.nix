@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lximage-qt";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lximage-qt";
     rev = version;
-    hash = "sha256-4j/5z+kePFXubYXAbIaWYVU+plJv1xEpHHI1IXqbQog=";
+    hash = "sha256-RJKXcaZJe5gyDubdglOmzmJ9XCH0gAW4fc7OR3anCoU=";
   };
 
   nativeBuildInputs = [

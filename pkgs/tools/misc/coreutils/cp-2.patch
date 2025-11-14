@@ -1,0 +1,68 @@
+(NB: we drop the NEWS change to avoid conflicts)
+
+From 64b8fdb5b4767e0f833486507c3eae46ed1b40f8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Thu, 30 Oct 2025 13:02:48 +0000
+Subject: [PATCH] copy: don't avoid copy-offload upon SEEK_HOLE indicating
+ non-sparse
+
+* src/copy-file-data.c (infer_scantype): Fall back to a plain copy
+if SEEK_HOLE indicates non-sparse, as zero copy avoids copy offload.
+This was seen with transparently compressed files on OpenZFS.
+* tests/cp/sparse-perf.sh: Add a test case even though it might
+only trigger on compressed file systems that don't support reflink.
+* NEWS: Mention the bug fix.
+Addresses https://github.com/coreutils/coreutils/issues/122
+---
+ NEWS                    |  8 ++++++++
+ src/copy-file-data.c    | 11 +++++++++--
+ tests/cp/sparse-perf.sh | 10 ++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/src/copy-file-data.c b/src/copy-file-data.c
+index 9eb6f47244f0a62c2f4934c7663794fd4dcf21bf..8fd25fee9201eda7bd0a8caf01f02821a3390448 100644
+--- a/src/copy-file-data.c
++++ b/src/copy-file-data.c
+@@ -481,12 +481,19 @@ infer_scantype (int fd, struct stat const *sb, off_t pos,
+           if (scan_inference->hole_start < sb->st_size)
+             return LSEEK_SCANTYPE;
+ 
+-          /* Though the file likely has holes, SEEK_DATA and SEEK_HOLE
++          /* Though the file may have holes, SEEK_DATA and SEEK_HOLE
+              didn't find any.  This can happen with file systems like
+              circa-2025 squashfs that support SEEK_HOLE only trivially.
+-             Fall back on ZERO_SCANTYPE.  */
++             This can also happen due to transparent file compression,
++             which can also indicate fewer than the usual number of blocks.  */
++
+           if (lseek (fd, pos, SEEK_SET) < 0)
+             return ERROR_SCANTYPE;
++
++          /* we prefer to return PLAIN_SCANTYPE here so that copy offload
++             continues to be used.  Falling through to ZERO_SCANTYPE would be
++             less performant in the compressed file case.  */
++          return PLAIN_SCANTYPE;
+         }
+     }
+   else if (pos < scan_inference->ext_start || errno == ENXIO)
+diff --git a/tests/cp/sparse-perf.sh b/tests/cp/sparse-perf.sh
+index 5a283c1fe65816a36342d9f583c1ed787947bf10..5ee984c527d7d8b6395d4193fcf81804b1135b8a 100755
+--- a/tests/cp/sparse-perf.sh
++++ b/tests/cp/sparse-perf.sh
+@@ -35,6 +35,16 @@ cmp $other_partition_sparse k2 || fail=1
+ grep ': avoided' cp.out && { cat cp.out; fail=1; }
+ 
+ 
++# Create a large-non-sparse-but-compressible file
++# Ensure we don't avoid copy offload which we saw with
++# transparent compression on OpenZFS at least
++# (as that triggers our sparse heuristic).
++mls='might-look-sparse'
++yes | head -n1M > "$mls" || framework_failure_
++cp --debug "$mls" "$mls.cp" >cp.out || fail=1
++cmp "$mls" "$mls.cp" || fail=1
++grep ': avoided' cp.out && { cat cp.out; fail=1; }
++
+ 
+ # Create a large-but-sparse file on the current partition.
+ # We disable relinking below, thus verifying SEEK_HOLE support

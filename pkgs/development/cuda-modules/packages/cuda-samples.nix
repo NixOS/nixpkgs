@@ -1,8 +1,10 @@
 {
+  autoAddDriverRunpath,
   backendStdenv,
   _cuda,
   cmake,
   cuda_cccl,
+  cuda_culibos,
   cuda_cudart,
   cuda_nvcc,
   cuda_nvrtc,
@@ -29,7 +31,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "cuda-samples";
-  version = "12.8";
+  version = if cudaAtLeast "13" then "13.0" else "12.8";
 
   # We should be able to use samples from the latest version of CUDA
   # on most of the CUDA package sets we have.
@@ -38,10 +40,17 @@ backendStdenv.mkDerivation (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-samples";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ba0Fi0v/sQ+1iJ4mslgyIAE+oK5KO0lMoTQCC91vpiA=";
+    hash = lib.getAttr finalAttrs.version {
+      "13.0" = "sha256-bOcAE/OzOI6MWTh+bFZfq1en6Yawu+HI8W+xK+XaCqg=";
+      "12.8" = "sha256-Ba0Fi0v/sQ+1iJ4mslgyIAE+oK5KO0lMoTQCC91vpiA=";
+    };
   };
 
   prePatch =
+    let
+      samplesAtLeast = lib.versionAtLeast finalAttrs.version;
+      samplesOlder = lib.versionOlder finalAttrs.version;
+    in
     # https://github.com/NVIDIA/cuda-samples/issues/333
     ''
       nixLog "removing sample 0_Introduction/UnifiedMemoryStreams which requires OpenMP support for CUDA"
@@ -52,7 +61,7 @@ backendStdenv.mkDerivation (finalAttrs: {
           '# add_subdirectory(UnifiedMemoryStreams)'
     ''
     # This sample tries to use a relative path, which doesn't work for our splayed installation.
-    + ''
+    + lib.optionalString (samplesOlder "13") ''
       nixLog "patching sample 0_Introduction/matrixMul_nvrtc"
       substituteInPlace \
         "$NIX_BUILD_TOP/$sourceRoot/Samples/0_Introduction/matrixMul_nvrtc/CMakeLists.txt" \
@@ -64,6 +73,20 @@ backendStdenv.mkDerivation (finalAttrs: {
           "${lib.getOutput "include" cuda_cccl}/include/nv" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/cuda" \
+          "${lib.getOutput "include" cuda_cccl}/include/cuda"
+    ''
+    + lib.optionalString (samplesAtLeast "13") ''
+      nixLog "patching sample 0_Introduction/matrixMul_nvrtc"
+      substituteInPlace \
+        "$NIX_BUILD_TOP/$sourceRoot/Samples/0_Introduction/matrixMul_nvrtc/CMakeLists.txt" \
+        --replace-fail \
+          "\''${CUDA_INCLUDE_DIR}/cooperative_groups" \
+          "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
+        --replace-fail \
+          "\''${CUDA_INCLUDE_DIR}/cccl/nv" \
+          "${lib.getOutput "include" cuda_cccl}/include/nv" \
+        --replace-fail \
+          "\''${CUDA_INCLUDE_DIR}/cccl/cuda" \
           "${lib.getOutput "include" cuda_cccl}/include/cuda"
     ''
     # These three samples give undefined references, like
@@ -108,7 +131,7 @@ backendStdenv.mkDerivation (finalAttrs: {
           "add_subdirectory(jitLto)" \
           "# add_subdirectory(jitLto)"
     ''
-    + lib.optionalString (cudaAtLeast "12.4") ''
+    + lib.optionalString (samplesOlder "13") ''
       nixLog "patching sample 4_CUDA_Libraries/jitLto to use correct path to libnvJitLink.so"
       substituteInPlace \
         "$NIX_BUILD_TOP/$sourceRoot/Samples/4_CUDA_Libraries/jitLto/CMakeLists.txt" \
@@ -154,6 +177,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
+    autoAddDriverRunpath
     cmake
     cuda_nvcc
   ];
@@ -172,7 +196,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     libnpp
     libnvjitlink
     libnvjpeg
-  ];
+  ]
+  ++ lib.optionals (cudaAtLeast "13") [ cuda_culibos ];
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)

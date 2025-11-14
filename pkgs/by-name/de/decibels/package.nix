@@ -17,11 +17,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decibels";
-  version = "48.0";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/decibels/${lib.versions.major finalAttrs.version}/decibels-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IpsRqSYxR7y4w+If8NSvZZ+yYmL4rs5Uetz4xl4DH3Q=";
+    hash = "sha256-KbebouKWfmkUHjnwrSxnfjj+P/ufug+lx1MflNP2c8o=";
   };
 
   nativeBuildInputs = [

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sectools";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "sectools";
     tag = version;
-    hash = "sha256-P0ixL6zdEcvL7KKbr1LcJyd8mqPZrwklspJmZ/KokEA=";
+    hash = "sha256-iZV7FFfzvirHj4Q2HZQPQTcMIQ7mpc4zQYWAnFwf+q8=";
   };
 
   build-system = [ setuptools ];

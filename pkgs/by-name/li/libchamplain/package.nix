@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libchamplain";
+      attrPath = "libchamplain_libsoup3";
       versionPolicy = "odd-unstable";
     };
   };
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    teams = [
+    teams = lib.optionals withLibsoup3 [
       teams.gnome
       teams.pantheon
     ];

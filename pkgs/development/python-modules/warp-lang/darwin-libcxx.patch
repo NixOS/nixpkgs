@@ -18,20 +18,3 @@ index 2218ff13..53786017 100644
          if cu_path:
              cu_out = cu_path + ".o"
  
-diff --git a/warp/native/crt.h b/warp/native/crt.h
-index 47ef9983..89ae289b 100644
---- a/warp/native/crt.h
-+++ b/warp/native/crt.h
-@@ -65,6 +65,12 @@ extern "C" WP_API int _wp_isinf(double);
- #include <float.h>
- #include <string.h>
- 
-+#undef isfinite
-+#undef isinf
-+#undef isnan
-+
-+#include <cmath>
-+
- #else
- 
- // These definitions are taken from Jitify: https://github.com/NVIDIA/jitify

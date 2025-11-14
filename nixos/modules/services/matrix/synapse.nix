@@ -3,6 +3,7 @@
   lib,
   options,
   pkgs,
+  utils,
   ...
 }:
 
@@ -1297,6 +1298,15 @@ in
           '';
         };
 
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--no-secrets-in-config" ];
+          description = ''
+            Extra command lines argument that are passed to synapse and workers.
+          '';
+        };
+
         extraConfigFiles = mkOption {
           type = types.listOf types.path;
           default = [ ];
@@ -1541,7 +1551,8 @@ in
                         ]
                         ++ cfg.extraConfigFiles
                       )}
-                      --keys-directory ${cfg.dataDir}
+                      --keys-directory ${cfg.dataDir} \
+                      ${utils.escapeSystemdExecArgs cfg.extraArgs}
                   '';
                 };
               }
@@ -1574,7 +1585,8 @@ in
                   ${concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
                     [ configFile ] ++ cfg.extraConfigFiles
                   )}
-                  --keys-directory ${cfg.dataDir}
+                  --keys-directory ${cfg.dataDir} \
+                  ${utils.escapeSystemdExecArgs cfg.extraArgs}
               '';
             };
           }

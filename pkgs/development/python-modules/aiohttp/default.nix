@@ -6,6 +6,7 @@
   replaceVars,
   isPy310,
   isPyPy,
+  pythonOlder,
 
   # build-system
   cython,
@@ -20,6 +21,7 @@
   aiosignal,
   async-timeout,
   attrs,
+  backports-zstd,
   frozenlist,
   multidict,
   propcache,
@@ -49,19 +51,15 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.15";
+  version = "3.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-nVDGSbzjCdyJFCsHq8kJigNA4vGs4Pg1Vyyvw+gKg2w=";
+    hash = "sha256-LqYGrrWgSZazk0hjQvTFwqtU/PtMEaPi+m1Ya8Ds+pU=";
   };
-
-  patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
-    ./remove-isal.patch
-  ];
 
   postPatch = ''
     rm -r vendor
@@ -92,17 +90,20 @@ buildPythonPackage rec {
   dependencies = [
     aiohappyeyeballs
     aiosignal
-    async-timeout
     attrs
     frozenlist
     multidict
     propcache
     yarl
   ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ]
   ++ optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
+    backports-zstd
     (if isPyPy then brotlicffi else brotli)
   ];
 
@@ -130,6 +131,7 @@ buildPythonPackage rec {
     "test_requote_redirect_url_default"
     "test_tcp_connector_ssl_shutdown_timeout_nonzero_passed"
     "test_tcp_connector_ssl_shutdown_timeout_zero_not_passed"
+    "test_invalid_idna"
     # don't run benchmarks
     "test_import_time"
     # racy

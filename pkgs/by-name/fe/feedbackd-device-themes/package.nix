@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd-device-themes";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "agx";
     repo = "feedbackd-device-themes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zRFp+857x5KpjjMLrIx/Ygfk4YtvlA9NLBG7HdTbPYw=";
+    hash = "sha256-1qenmOTk2ZkPNhOHMcTf2sv5LjcPUjdwLGMv8Iuahvw=";
   };
 
   nativeBuildInputs = [

@@ -5,7 +5,6 @@
   fetchPypi,
   packaging,
   tomli,
-  coverage,
   pytestCheckHook,
   build,
   hatchling,
@@ -27,6 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-uRrX1z5z0hIg5pVA8gIT8rcpofmzXATp4Tfq8o0iFNo=";
   };
 
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace-fail "ignore:.*No source for code:coverage.exceptions.CoverageWarning" ""
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [
@@ -35,7 +39,6 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
-    coverage
     pytestCheckHook
     build
     hatchling

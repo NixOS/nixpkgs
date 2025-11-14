@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pcmanfm-qt";
     rev = version;
-    hash = "sha256-mYjbOb9c7Qc3qhVYt1EHy50YOVguLnwg0NJg2zBgwOM=";
+    hash = "sha256-Pv3N/JfUbLyCBpnmnEHL7i2du1q8vSKxTR1uIEsEe/U=";
   };
 
   nativeBuildInputs = [

@@ -1502,9 +1502,6 @@ let
       metricProvider = {
         services.sabnzbd.enable = true;
 
-        # unrar is required for sabnzbd
-        nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "unrar" ];
-
         # extract the generated api key before starting
         systemd.services.sabnzbd-apikey = {
           requires = [ "sabnzbd.service" ];

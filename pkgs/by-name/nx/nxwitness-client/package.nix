@@ -75,6 +75,10 @@ let
       dpkg
     ];
 
+    autoPatchelfIgnoreMissingDeps = [
+      "libQt6WaylandEglClientHwIntegration.so.6"
+    ];
+
     dontUnpack = true;
     dontWrapQtApps = true;
 

@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h6pgg89gvxl8gw7wmkabyqqrzad5pxyv5lsmn1fl4ir8lcc5q2l";
   };
 
+  patches = [ ./cmake-minimum-required.patch ];
+
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.qtsvg

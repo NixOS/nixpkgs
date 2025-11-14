@@ -43,12 +43,12 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- It also accepts a `duneVersion` parameter (valid values are `"1"`, `"2"`, and
-  `"3"`). The recommended practice is to set it only if you don't want the default
-  value and/or it depends on something else like package version. You might see
-  a not-supported argument `useDune2`. The behavior was `useDune2 = true;` =>
-  `duneVersion = "2";` and `useDune2 = false;` => `duneVersion = "1";`. It was
-  used at the time when dune3 didn't exist.
+- It also accepts a `duneVersion` parameter (valid values are `"2"`, and
+  `"3"`). The recommended practice is to set it only if you don't want the
+  default value and/or it depends on something else like package version. You
+  might see a not-supported argument `useDune2`. The behavior was `useDune2 =
+  true;` => `duneVersion = "2";` and `useDune2 = false;` => `duneVersion =
+  "1";`. It was used at the time when dune3 didn't exist.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is

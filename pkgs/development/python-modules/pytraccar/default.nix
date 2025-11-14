@@ -6,15 +6,12 @@
   poetry-core,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytraccar";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -23,12 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-DtxZCvLuvQpbu/1lIXz2BVbACt5Q1N2txVMyqwd4d9A=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  # https://github.com/ludeeus/pytraccar/issues/31
-  doCheck = lib.versionOlder aiohttp.version "3.9.0";
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytestCheckHook

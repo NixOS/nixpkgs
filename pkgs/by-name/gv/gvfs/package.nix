@@ -11,7 +11,7 @@
   glib,
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
-  udisks2,
+  udisks,
   libgcrypt,
   libcap,
   polkit,
@@ -49,11 +49,11 @@
 assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.57.2";
+  version = "1.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8Wvvjsof1sEX6F2wEdIekVZpeQ1VhnNJxfGykSmelYU=";
+    hash = "sha256-3ZvjaHPQ/LMJ64mo0nR3DOV2KHYoos8RG9OH4cNPGC8=";
   };
 
   patches = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals udevSupport [
     libgudev
-    udisks2
+    udisks
     fuse3
     libcdio
     samba

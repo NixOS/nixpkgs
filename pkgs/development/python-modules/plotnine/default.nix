@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools-scm,
@@ -24,25 +23,17 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     tag = "v${version}";
-    hash = "sha256-HhsJE5XoQjkIVExsfikTBArh9uq8ob4g2O0byYOsOh8=";
+    hash = "sha256-vYrfA7x/64VHHbcgpvQZ1kyHM0jTS9Cx9a8NzVgs4og=";
   };
 
   build-system = [ setuptools-scm ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-composition-error-messages.patch";
-      url = "https://github.com/has2k1/plotnine/commit/097192de42d690c227b26ae7638accac0db14589.patch";
-      hash = "sha256-wxfJ36QH0PYdotgqrdE9sKAzKpcIYw7I8uNGhC6J0Gg=";
-    })
-  ];
 
   dependencies = [
     matplotlib

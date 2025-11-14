@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   ffmpeg-headless,
@@ -9,16 +10,24 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpegthumbnailer";
-  version = "unstable-2024-01-04";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = "1b5a77983240bcf00a4ef7702c07bcd8f4e5f97c";
-    hash = "sha256-7SPRQMPgdvP7J3HCf7F1eXxZjUH5vCYZ9UOwTUFMLp0=";
+    tag = finalAttrs.version;
+    hash = "sha256-1hVPtCPwfovCtA6aagViUJkYTCFuiFkOqGEqMHIoZe8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "ffmpeg-8-fix.patch";
+      url = "https://github.com/dirkvdb/ffmpegthumbnailer/commit/df789ec326ae0f2c619f91c8f2fc8b5e45b50a70.patch";
+      hash = "sha256-PArrcKuaWWA6/H59MbdC36B57GSvvp5sHz24QLTBZYw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,4 +69,4 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     mainProgram = "ffmpegthumbnailer";
   };
-}
+})

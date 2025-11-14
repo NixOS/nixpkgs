@@ -6,7 +6,6 @@
   attr,
   autoreconfHook,
   bzip2,
-  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -32,28 +31,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
+    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
   };
-
-  patches = [
-    # https://github.com/libarchive/libarchive/pull/2689
-    # Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
-      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
-    })
-    # Fix the tests on Darwin when `$TMPDIR` does not end with a slash
-    # and its parent directory is not writable by the build user, as on
-    # Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
-    # <https://github.com/libarchive/libarchive/pull/2708>
-    ./fix-darwin-tmpdir-handling.patch
-  ];
 
   outputs = [
     "out"

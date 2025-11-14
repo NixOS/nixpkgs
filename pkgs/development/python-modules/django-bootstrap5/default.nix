@@ -4,6 +4,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
+  fetchpatch2,
   jinja2,
   pillow,
   pytest-django,
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-aqP2IkAkZsw5vbQxhiy9L3giSgb0seub9gsxPTajiXo=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/zostera/django-bootstrap5/commit/d1d54f5fc8041d2781189321402b4f3937f77913.patch?full_index=1";
+      hash = "sha256-cFOY+pu2TAZXpAipSIQh1nPPC0ipfncvpObcH667+ac=";
+    })
+  ];
 
   build-system = [ uv-build ];
 

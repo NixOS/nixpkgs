@@ -96,14 +96,14 @@ in
   libraryFrameworkDepends ? [ ],
   executableFrameworkDepends ? [ ],
   homepage ? "https://hackage.haskell.org/package/${pname}",
-  platforms ? with lib.platforms; all, # GHC can cross-compile
+  platforms ? lib.platforms.all, # GHC can cross-compile
   badPlatforms ? lib.platforms.none,
   hydraPlatforms ? null,
   hyperlinkSource ? true,
   isExecutable ? false,
   isLibrary ? !isExecutable,
   jailbreak ? false,
-  license,
+  license ? null,
   enableParallelBuilding ? true,
   maintainers ? null,
   teams ? null,
@@ -184,6 +184,11 @@ in
   # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
   # or its source doc/languages-frameworks/haskell.section.md
   disallowGhcReference ? false,
+  # By default we convert the `.cabal` file to Unix line endings to work around
+  # Hackage converting them to DOS line endings when revised, see
+  # <https://github.com/haskell/hackage-server/issues/316>.
+  # Pass `true` to disable this behavior.
+  dontConvertCabalFileToUnix ? false,
   # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -603,12 +608,18 @@ lib.fix (
           echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
           cp ${newCabalFile} ${pname}.cabal
         ''
-        + prePatch;
+        + prePatch
+        + "\n"
+        # cabal2nix-generated expressions run hpack not until prePatch to create
+        # the .cabal file (if necessary)
+        + lib.optionalString (!dontConvertCabalFileToUnix) ''
+          sed -i -e 's/\r$//' *.cabal
+        '';
 
       postPatch =
         optionalString jailbreak ''
           echo "Run jailbreak-cabal to lift version restrictions on build inputs."
-          ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+          ${jailbreak-cabal}/bin/jailbreak-cabal *.cabal
         ''
         + postPatch;
 
@@ -730,13 +741,7 @@ lib.fix (
       # package specifies `hardeningDisable`.
       hardeningDisable =
         lib.optionals (args ? hardeningDisable) hardeningDisable
-        ++ lib.optional (ghc.isHaLVM or false) "all"
-        # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
-        # because by default Nix adds `-pie` to the linker flags: this
-        # conflicts with the `-r` and `-no-pie` flags added by GHC (see
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
-        # changes the default Nix behavior regarding adding "hardening" flags.
-        ++ lib.optional enableStaticLibraries "pie";
+        ++ lib.optional (ghc.isHaLVM or false) "all";
 
       configurePhase = ''
         runHook preConfigure
@@ -1031,10 +1036,11 @@ lib.fix (
       };
 
       meta = {
-        inherit homepage license platforms;
+        inherit homepage platforms;
       }
       // optionalAttrs (args ? broken) { inherit broken; }
       // optionalAttrs (args ? description) { inherit description; }
+      // optionalAttrs (args ? license) { inherit license; }
       // optionalAttrs (args ? maintainers) { inherit maintainers; }
       // optionalAttrs (args ? teams) { inherit teams; }
       // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }

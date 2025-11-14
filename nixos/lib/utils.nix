@@ -229,13 +229,35 @@ let
       listToAttrs (flatten (recurse "." item));
 
     /*
-      Takes an attrset and a file path and generates a bash snippet that
+      Takes some options, an attrset and a file path and generates a bash snippet that
       outputs a JSON file at the file path with all instances of
 
       { _secret = "/path/to/secret" }
 
       in the attrset replaced with the contents of the file
       "/path/to/secret" in the output JSON.
+
+      The first argument exposes the following options:
+
+      - attr: The name of the secret attribute that will be processed, defaults to "_secret"
+      - loadCredential: A boolean determining whether the script should load secrets directly (false)
+        or load them from $CREDENTIALS_DIRECTORY (true). In the latter case the output attribute set
+        will contain a .credentials attribute with the necessary credential list that can be passed
+        to systemd's `LoadCredential=` option.
+
+      The output of this utility is an attribute set containing the main script and optionally
+      a list of credentials:
+
+      {
+        # The main script
+        script = "...";
+
+        # If the loadCredential option was set:
+        credentials = [
+          "secret1:/path/to/secret1"
+          #...
+        ];
+      }
 
       When a configuration option accepts an attrset that is finally
       converted to JSON, this makes it possible to let the user define
@@ -245,7 +267,7 @@ let
         If the file "/path/to/secret" contains the string
         "topsecretpassword1234",
 
-        genJqSecretsReplacementSnippet {
+        genJqSecretsReplacement { } {
           example = [
             {
               irrelevant = "not interesting";
@@ -293,7 +315,7 @@ let
           { "b": "topsecretpassword5678" }
         ]
 
-        genJqSecretsReplacementSnippet {
+        genJqSecretsReplacement { } {
           example = [
             {
               irrelevant = "not interesting";
@@ -330,12 +352,12 @@ let
           ]
         }
     */
-    genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
-
-    # Like genJqSecretsReplacementSnippet, but allows the name of the
-    # attr which identifies the secret to be changed.
-    genJqSecretsReplacementSnippet' =
-      attr: set: output:
+    genJqSecretsReplacement =
+      {
+        attr ? "_secret",
+        loadCredential ? false,
+      }:
+      set: output:
       let
         secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
         # Set default option values
@@ -347,38 +369,115 @@ let
           // set
         ) secretsRaw;
         stringOrDefault = str: def: if str == "" then def else str;
-      in
-      ''
-        if [[ -h '${output}' ]]; then
-          rm '${output}'
-        fi
 
-        inherit_errexit_enabled=0
-        shopt -pq inherit_errexit && inherit_errexit_enabled=1
-        shopt -s inherit_errexit
-      ''
-      + concatStringsSep "\n" (
-        imap1 (index: name: ''
-          secret${toString index}=$(<'${secrets.${name}.${attr}}')
-          export secret${toString index}
-        '') (attrNames secrets)
-      )
-      + "\n"
-      + "${pkgs.jq}/bin/jq >'${output}' "
-      + escapeShellArg (
-        stringOrDefault (concatStringsSep " | " (
+        # Sanitize path to create a valid credential tag (same as in genLoadCredentialForJqSecretsReplacementSnippet)
+        sanitizePath =
+          path: lib.stringAsChars (c: if builtins.match "[a-zA-Z0-9_.#=!-]" c != null then c else "_") path;
+
+        # Generate credential tag for a given index and path
+        credentialTag = index: path: "${toString index}_${sanitizePath (secrets.${path}.${attr})}";
+
+        credentialPath =
+          index: name:
+          if loadCredential then
+            ''"$CREDENTIALS_DIRECTORY/${credentialTag index name}"''
+          else
+            "'${secrets.${name}.${attr}}'";
+      in
+      {
+        script = ''
+          if [[ -h '${output}' ]]; then
+            rm '${output}'
+          fi
+
+          inherit_errexit_enabled=0
+          shopt -pq inherit_errexit && inherit_errexit_enabled=1
+          shopt -s inherit_errexit
+        ''
+        + concatStringsSep "\n" (
           imap1 (
             index: name:
-            ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
-          ) (attrNames secrets)
-        )) "."
-      )
-      + ''
-         <<'EOF'
-        ${toJSON set}
-        EOF
-        (( ! inherit_errexit_enabled )) && shopt -u inherit_errexit
-      '';
+            # We keep variable assignment and export separated to avoid masking the return code of the file access.
+            # With `set -e` this will now fail if a file doesn't exist.
+            ''
+              secret${toString index}=$(<${credentialPath index name})
+              export secret${toString index}
+            '') (attrNames secrets)
+        )
+        + "\n"
+        + "${pkgs.jq}/bin/jq >'${output}' "
+        + escapeShellArg (
+          stringOrDefault (concatStringsSep " | " (
+            imap1 (
+              index: name:
+              ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
+            ) (attrNames secrets)
+          )) "."
+        )
+        + ''
+           <<'EOF'
+          ${toJSON set}
+          EOF
+          (( ! inherit_errexit_enabled )) && shopt -u inherit_errexit
+        '';
+
+        /*
+          Generates a list of systemd LoadCredential entries if loadCredential was set,
+          otherwise returns null.
+
+          The tag is sanitized to only contain characters a-zA-Z0-9_-.#=! and prefixed
+          with an index to ensure uniqueness.
+
+          Example:
+            genLoadCredentialForJqSecretsReplacementSnippet { } {
+              example = {
+                secret1 = { _secret = "/path/to/secret"; };
+                secret2 = { _secret = "/another/secret"; };
+              };
+            }
+            -> [ "0_path_to_secret:/path/to/secret" "1_another_secret:/another/secret" ]
+        */
+        credentials =
+          if loadCredential then
+            imap1 (
+              index: path:
+              "${toString index}_${sanitizePath (secretsRaw.${path}.${attr})}:${secretsRaw.${path}.${attr}}"
+            ) (attrNames secretsRaw)
+          else
+            null;
+      };
+
+    /*
+      A convenience function around `genJqSecretsReplacement` without any additional
+      settings that returns just the script that does the secret replacing. Make sure
+      to have a look at `genJqSecretsReplacement` first to decide whether you need
+      the additional functionality.
+
+      Example:
+        If the file "/path/to/secret" contains the string
+        "topsecretpassword1234",
+
+        genJqSecretsReplacementSnippet {
+          example = [
+            {
+              irrelevant = "not interesting";
+            }
+            {
+              ignored = "ignored attr";
+              relevant = {
+                secret = {
+                  _secret = "/path/to/secret";
+                };
+              };
+            }
+          ];
+        } "/path/to/output.json"
+
+        will return a set of bash commands that replaces the secret values
+        in the given attrset with values from the respective files and saves the result
+        as a JSON file.
+    */
+    genJqSecretsReplacementSnippet = set: output: (genJqSecretsReplacement { } set output).script;
 
     /*
       Remove packages of packagesToRemove from packages, based on their names.

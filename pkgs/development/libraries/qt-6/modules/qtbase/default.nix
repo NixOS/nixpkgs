@@ -292,9 +292,6 @@ stdenv.mkDerivation rec {
     # When this variable is not set, cmake tries to execute xcodebuild
     # to query the version.
     "-DQT_INTERNAL_XCODE_VERSION=0.1"
-    # This should be removed once https://github.com/NixOS/nixpkgs/pull/455592 makes it to master
-    # as it will become redundant.
-    "-DCMAKE_FIND_FRAMEWORK=FIRST"
   ]
   ++ lib.optionals isCrossBuild [
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"

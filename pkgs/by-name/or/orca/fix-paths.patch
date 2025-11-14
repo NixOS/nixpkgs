@@ -1,18 +1,18 @@
 diff --git a/src/orca/ax_utilities_application.py b/src/orca/ax_utilities_application.py
-index 60c172f78..e8dadf76d 100644
+index dbaca2e48..80f2640d4 100644
 --- a/src/orca/ax_utilities_application.py
 +++ b/src/orca/ax_utilities_application.py
-@@ -189,7 +189,7 @@ class AXUtilitiesApplication:
+@@ -188,7 +188,7 @@ class AXUtilitiesApplication:
  
          pid = AXUtilitiesApplication.get_process_id(app)
          try:
 -            state = subprocess.getoutput(f"cat /proc/{pid}/status | grep State")
 +            state = subprocess.getoutput(f"@cat@ /proc/{pid}/status | @grep@ State")
              state = state.split()[1]
-         except Exception as error:
+         except (GLib.GError, IndexError) as error:
              tokens = [f"AXUtilitiesApplication: Exception checking state of pid {pid}: {error}"]
 diff --git a/src/orca/debugging_tools_manager.py b/src/orca/debugging_tools_manager.py
-index 740f1a690..85f74d2dc 100644
+index b4abce719..cff5a78a6 100644
 --- a/src/orca/debugging_tools_manager.py
 +++ b/src/orca/debugging_tools_manager.py
 @@ -243,7 +243,7 @@ class DebuggingToolsManager:
@@ -21,22 +21,22 @@ index 740f1a690..85f74d2dc 100644
              try:
 -                cmdline = subprocess.getoutput(f"cat /proc/{pid}/cmdline")
 +                cmdline = subprocess.getoutput(f"@cat@ /proc/{pid}/cmdline")
-             except Exception as error:
+             except subprocess.SubprocessError as error:
                  cmdline = f"EXCEPTION: {error}"
              else:
 diff --git a/src/orca/orca_bin.py.in b/src/orca/orca_bin.py.in
-index 6cb4c7772..903b344f0 100755
+index 3fc845dc3..a82947911 100755
 --- a/src/orca/orca_bin.py.in
 +++ b/src/orca/orca_bin.py.in
-@@ -186,7 +186,7 @@ def inGraphicalDesktop():
- def otherOrcas():
+@@ -238,7 +238,7 @@ def in_graphical_desktop() -> bool:
+ def other_orcas() -> list[int]:
      """Returns the pid of any other instances of Orca owned by this user."""
  
--    openFile = subprocess.Popen('pgrep -u %s -x orca' % os.getuid(),
-+    openFile = subprocess.Popen('@pgrep@ -u %s -x orca' % os.getuid(),
-                                 shell=True,
-                                 stdout=subprocess.PIPE).stdout
-     pids = openFile.read()
+-    with subprocess.Popen(f"pgrep -u {os.getuid()} -x orca",
++    with subprocess.Popen(f"@pgrep@ -u {os.getuid()} -x orca",
+                           shell=True,
+                           stdout=subprocess.PIPE) as proc:
+         pids = proc.stdout.read() if proc.stdout else b""
 diff --git a/src/orca/orca_modifier_manager.py b/src/orca/orca_modifier_manager.py
 index 3407be009..452297a3f 100644
 --- a/src/orca/orca_modifier_manager.py

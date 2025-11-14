@@ -20,6 +20,9 @@
   gtk2,
   python3,
   game-music-emu,
+  copyDesktopItems,
+  makeDesktopItem,
+  imagemagick,
   serverOnly ? false,
 }:
 
@@ -72,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
     python3
+    copyDesktopItems
+    imagemagick
   ];
 
   preConfigure = ''
@@ -93,8 +98,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zandronum";
+      desktopName = "Zandronum";
+      exec = "zandronum";
+      icon = "zandronum";
+      mimeTypes = [ "application/x-doom-wad" ];
+      categories = [ "Game" ];
+      comment = finalAttrs.meta.description;
+    })
+  ];
+
   # Won't work well without C or en_US. Setting LANG might not be enough if the user is making use of LC_* so wrap with LC_ALL instead
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib/zandronum
     cp zandronum${suffix} \
@@ -104,6 +123,16 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
     wrapProgram $out/bin/zandronum${suffix} \
       --set LC_ALL="C"
+
+    # Upstream only provides an icon file for Windows.
+    # This converts the .ico file to PNGs, which are used by the desktop file.
+    for size in 16 24 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      magick $src/src/win32/zandronum.ico -background none -resize "$size"x"$size" -flatten \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/zandronum.png
+    done;
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString (!serverOnly) ''

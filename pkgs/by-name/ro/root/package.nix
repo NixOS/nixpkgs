@@ -50,7 +50,7 @@
   xrootd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "root";
   version = "6.36.04";
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
+    url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
     hash = "sha256-zGNn2PVjxtSco0wJ0LU8sPQaUo22+GrxEf12dEzaRZY=";
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     nlohmann_json # link interface of target "ROOT::ROOTEve"
   ];
   buildInputs = [
-    clang
+    finalAttrs.clang
     davix
     fftw
     ftgl
@@ -163,8 +163,8 @@ stdenv.mkDerivation rec {
       '';
 
   cmakeFlags = [
-    "-DCLAD_SOURCE_DIR=${clad_src}"
-    "-DClang_DIR=${clang}/lib/cmake/clang"
+    "-DCLAD_SOURCE_DIR=${finalAttrs.clad_src}"
+    "-DClang_DIR=${finalAttrs.clang}/lib/cmake/clang"
     "-Dbuiltin_clang=OFF"
     "-Dbuiltin_llvm=OFF"
     "-Dfail-on-missing=ON"
@@ -260,4 +260,4 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.lgpl21;
   };
-}
+})

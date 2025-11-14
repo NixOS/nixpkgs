@@ -44,8 +44,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    patchelf
     unzip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    patchelf
   ];
   buildInputs = [
     poco
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     libpng
     pngpp
     libwebp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
   ];
   strictDeps = true;
@@ -63,7 +67,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
-    make -C craftos2-lua linux
+    make -C craftos2-lua ${if stdenv.hostPlatform.isDarwin then "macosx" else "linux"}
   '';
 
   buildPhase = ''
@@ -83,21 +87,29 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/share/craftos $out/include
     DESTDIR=$out/bin make install
-    cp ./craftos2-lua/src/liblua.so $out/lib
-    patchelf --replace-needed craftos2-lua/src/liblua.so liblua.so $out/bin/craftos
+    cp ./craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod +w $out/bin/craftos
+      install_name_tool -change liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/bin/craftos
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --replace-needed craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/bin/craftos
+    ''}
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
 
-    mkdir -p resources/linux-icons
-    unzip resources/linux-icons.zip -d resources/linux-icons
-    for dim in 16 24 32 48 64 96 128 256 1024; do
-      dir="$out/share/icons/hicolor/$dimx$dim/apps"
-      mkdir -p "$dir"
-      cp "resources/linux-icons/$dim.png" "$dir/craftos.png"
-    done
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p resources/linux-icons
+      unzip resources/linux-icons.zip -d resources/linux-icons
+      for dim in 16 24 32 48 64 96 128 256 1024; do
+        dir="$out/share/icons/hicolor/$dimx$dim/apps"
+        mkdir -p "$dir"
+        cp "resources/linux-icons/$dim.png" "$dir/craftos.png"
+      done
 
-    mkdir -p $out/share/applications
-    cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
+      mkdir -p $out/share/applications
+      cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
+    ''}
   '';
 
   passthru.tests = {
@@ -112,7 +124,7 @@ stdenv.mkDerivation rec {
       mit
       free
     ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [
       siraben
       tomodachi94

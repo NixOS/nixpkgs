@@ -22,7 +22,7 @@
   linuxPackages,
   live-chart,
   pciutils,
-  udisks2,
+  udisks,
   wingpanel,
   nix-update-script,
 }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     linuxPackages.nvidia_x11.settings.libXNVCtrl
     live-chart
     pciutils
-    udisks2
+    udisks
     wingpanel
   ];
 

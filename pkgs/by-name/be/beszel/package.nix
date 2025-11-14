@@ -80,6 +80,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bot-wxt1221
       arunoruto
+      BonusPlay
     ];
     license = lib.licenses.mit;
   };

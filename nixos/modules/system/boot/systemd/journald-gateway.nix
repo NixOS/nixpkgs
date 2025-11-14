@@ -75,7 +75,7 @@ in
     };
 
     system = lib.mkOption {
-      default = true;
+      default = false;
       type = lib.types.bool;
       description = ''
         Serve entries from system services and the kernel.
@@ -85,7 +85,7 @@ in
     };
 
     user = lib.mkOption {
-      default = true;
+      default = false;
       type = lib.types.bool;
       description = ''
         Serve entries from services for the current user.

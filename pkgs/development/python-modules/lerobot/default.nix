@@ -66,6 +66,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   pythonRelaxDeps = [
+    "av"
     "datasets"
     "draccus"
     "gymnasium"
@@ -148,6 +149,11 @@ buildPythonPackage rec {
     #  Regex: "Can't instantiate abstract class NonCallableStep with abstract method __call_"
     #  Input: "Can't instantiate abstract class NonCallableStep without an implementation for abstract method '__call__'"
     "test_construction_rejects_step_without_call"
+  ];
+
+  disabledTestPaths = [
+    # Sometimes hang forever on some CPU models
+    "tests/policies/test_sac_policy.py"
   ];
 
   meta = {

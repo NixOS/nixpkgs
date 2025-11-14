@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   libdbusmenu-lxqt,
   libfm-qt,
@@ -17,24 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-qtplugin";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-qtplugin";
     tag = finalAttrs.version;
-    hash = "sha256-qXadz9JBk4TURAWj6ByP/lGV1u0Z6rNJ/VraBh5zY+Q=";
+    hash = "sha256-3rY9VpZKnl1E3ma1ioiKECpazeymQYVuXrLXhRL407o=";
   };
-
-  patches = [
-    # fix build against Qt >= 6.10 (https://github.com/lxqt/lxqt-qtplugin/pull/100)
-    # TODO: drop when upgrading beyond version 2.2.0
-    (fetchpatch {
-      name = "cmake-fix-build-with-Qt-6.10.patch";
-      url = "https://github.com/lxqt/lxqt-qtplugin/commit/90473945206dbf21816a00dfba27426a5b5a9e25.patch";
-      hash = "sha256-cCghOJHsveR5IYisEFv3h8WreRDi0kuyj/2YBD+ATsc=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

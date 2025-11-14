@@ -13,34 +13,39 @@
   libvpx,
   libyuv,
   zlib,
-  makeWrapper,
+  makeBinaryWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ringracers";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "KartKrewDev";
     repo = "RingRacers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X2rSwZOEHtnSJBpu+Xf2vkxGUAZSNSXi6GCuGlM6jhY=";
+    hash = "sha256-iMbrbZCarMebP+ruu1JH4kwks6rR9A9CMquDUnMCUhU=";
   };
 
   assets = fetchzip {
     name = "${finalAttrs.pname}-${finalAttrs.version}-assets";
     url = "https://github.com/KartKrewDev/RingRacers/releases/download/v${finalAttrs.version}/Dr.Robotnik.s-Ring-Racers-v${finalAttrs.version}-Assets.zip";
-    hash = "sha256-sHeI1E6uNF0gBNd1e1AU/JT9wyZdkCQgYLiMPZqXAVc=";
+    hash = "sha256-vL3Ceu6/tIOl/+TJFjntCksDdjpgLc1aNHvSx6x8/90=";
     stripRoot = false;
   };
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
     nasm
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
+    pkg-config
   ];
 
   buildInputs = [
@@ -73,33 +78,43 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      runHook preInstall
 
-    install -Dm644 ../srb2.png $out/share/icons/hicolor/256x256/apps/ringracers.png
-    install -Dm755 bin/ringracers $out/bin/ringracers
+      install -Dm644 ../srb2.png $out/share/icons/hicolor/256x256/apps/ringracers.png
+      install -Dm755 bin/ringracers $out/bin/ringracers
 
-    wrapProgram $out/bin/ringracers \
-      --set RINGRACERSWADDIR "${finalAttrs.assets}"
+      wrapProgram $out/bin/ringracers \
+        --set RINGRACERSWADDIR "${finalAttrs.assets}"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      runHook preInstall
 
-  postPatch = ''
-    substituteInPlace src/acs/vm/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
-  '';
+      mkdir -p $out/Applications
+      cp -r bin/ringracers.app $out/Applications/
 
-  meta = with lib; {
+      wrapProgram $out/Applications/ringracers.app/Contents/MacOS/ringracers \
+        --set RINGRACERSWADDIR "${finalAttrs.assets}"
+
+      mkdir -p $out/bin
+      cat << EOF > "$out/bin/ringracers"
+      #!${stdenv.shell}
+      open -na "$out/Applications/ringracers.app" --args "\$@"
+      EOF
+      chmod +x $out/bin/ringracers
+
+      runHook postInstall
+    '';
+
+  meta = {
     description = "Kart racing video game based on Sonic Robo Blast 2 (SRB2), itself based on a modified version of Doom Legacy";
     homepage = "https://kartkrew.org";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      donovanglover
-      thehans255
-      iedame
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "ringracers";
   };
 })

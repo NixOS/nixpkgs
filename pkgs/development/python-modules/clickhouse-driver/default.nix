@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.2.9";
+  version = "0.2.10";
   format = "setuptools";
 
   # pypi source doesn't contain tests
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
     rev = version;
-    hash = "sha256-PixzW9NJ87xAG/Rm/MedKS7CZTWw3wIQMiG/G65IvhY=";
+    hash = "sha256-veFkmXAp8b6/Npt7f1EhMfM9OKlLugKtlXS+zMHWAro=";
   };
 
   nativeBuildInputs = [

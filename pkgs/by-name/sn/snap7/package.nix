@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://snap7.sourceforge.net/";
     description = "Step7 Open Source Ethernet Communication Suite";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch2,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -35,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.9.2";
+  version = "3.10.1";
 
   outputs = [
     "out"
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-FM4DkCQTXhgQIrzOSxqtLgA3fdnH2BK5g5HM/HVtrY4=";
+    hash = "sha256-Wn8+eJ22ZxpVDtYoDtT2CmC+p3No2pK+aNx9jX4jAmU=";
   };
 
   strictDeps = true;
@@ -111,14 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   doCheck = true;
-
-  patches = [
-    (fetchpatch2 {
-      name = "make-dbus-dep-optional.patch";
-      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/31b5a793cd40cdce032e0f7d7c3ef7841c6e3691.patch?full_index=1";
-      hash = "sha256-YoWJEa2bFIjZdPW9pJ3iHTxi0dvveYDjKaDokcIvnj8=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs \

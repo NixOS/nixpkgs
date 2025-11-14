@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-pkcs11";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danni";
     repo = "python-pkcs11";
     tag = "v${version}";
-    sha256 = "sha256-8KLc/jNpYAsuRaiRVD9m5rQWW6u1EG1yf9fwwXRk4Qc=";
+    sha256 = "sha256-3OfX7PlVyH8X8oJs0DpmZp0xbWzdahVXOvgnKwCDrPo=";
   };
 
   build-system = [

@@ -5,7 +5,6 @@
   ninja,
   gettext,
   fetchurl,
-  fetchpatch,
   pkg-config,
   wrapGAppsHook3,
   itstool,
@@ -29,28 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  version = "40.1";
+  version = "40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
-    hash = "sha256-BaBvsGbpgC9fJKtnsNL3FFGGY2O6Pjn593X9SadYe78=";
+    hash = "sha256-siERvAaVa+81mqzx1u3h5So1sADIgROTZjL4rGztzmc=";
   };
-
-  patches = [
-    # Fix build with meson 0.61
-    # data/appdata/meson.build:3:5: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-notes/-/commit/994af76ce5144062d55d141129bf6bf5fab002ee.patch";
-      hash = "sha256-z7dPOLZzaqvdqUIDy6+V3dKossRbG0EDjBu2oJCF6b4=";
-    })
-
-    # build: Depend on webkit2gtk-4.1
-    # https://gitlab.gnome.org/GNOME/gnome-notes/-/merge_requests/200
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-notes/-/commit/0791507873c96d0463cd0c83108415541f854edd.patch";
-      hash = "sha256-TwCi9sDudeiOjrH2VevAynxvy/WTmwB2HrWqhviPg8o=";
-    })
-  ];
 
   doCheck = true;
 

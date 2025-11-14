@@ -6,7 +6,6 @@
   legacy-cgi,
   lxml-html-clean,
   pytestCheckHook,
-  pythonAtLeast,
   requests,
   setuptools,
   six,
@@ -28,11 +27,11 @@ buildPythonPackage rec {
 
   dependencies = [
     cachecontrol
+    legacy-cgi
     lxml-html-clean
     requests
     six
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

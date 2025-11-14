@@ -18,6 +18,22 @@ use std::{
 use url::Url;
 
 pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
+    let url_ = url.clone();
+    let mut url = url.clone();
+    // Respect NIX_NPM_REGISTRY_OVERRIDES environment variable, which should be a JSON mapping in the shape of:
+    // `{ "registry.example.com": "my-registry.local", ... }`
+    if let Some(host) = url.host_str() {
+        if let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES") {
+            if let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors) {
+                if let Some(mirror) = mirrors.get(host).and_then(serde_json::Value::as_str) {
+                    let mirror_url = Url::parse(mirror)?;
+                    url.set_path(&(mirror_url.path().to_owned() + url.path()));
+                    url.set_host(Some(mirror_url.host_str().expect(format!("Mirror URL without host part: {mirror_url}").as_str())))?;
+                    eprintln!("Replaced URL {url_} with {url}");
+                }
+            }
+        }
+    }
     let mut request = Request::get(url.as_str()).redirect_policy(RedirectPolicy::Limit(10));
 
     // Respect SSL_CERT_FILE if environment variable exists

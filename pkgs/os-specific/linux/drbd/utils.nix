@@ -15,6 +15,7 @@
   systemd,
   keyutils,
   udevCheckHook,
+  gettext,
 
   # drbd-utils are compiled twice, once with forOCF = true to extract
   # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.32.0";
+  version = "9.33.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    hash = "sha256-szOM7jSbXEZZ4p1P73W6tK9Put0+wOZar+cUiUNC6M0=";
+    hash = "sha256-Ij/gfQtkbpkbM7qepBRo+aZvkDVi59p2bdD8a06jPbk=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +41,13 @@ stdenv.mkDerivation rec {
     asciidoctor
     keyutils
     udevCheckHook
+    gettext
   ];
 
   buildInputs = [
     perl
     perlPackages.Po4a
+    gettext
   ];
 
   configureFlags = [
@@ -98,20 +101,6 @@ stdenv.mkDerivation rec {
     patch_docbook45 documentation/v9/drbdsetup.xml.in
     patch_docbook45 documentation/v84/drbdsetup.xml
     patch_docbook45 documentation/v84/drbd.conf.xml
-    # The ja documentation is disabled because:
-    # make[1]: Entering directory '/build/drbd-utils-9.16.0/documentation/ja/v84'
-    # /nix/store/wyx2nn2pjcn50lc95c6qgsgm606rn0x2-perl5.32.1-po4a-0.62/bin/po4a-translate -f docbook -M utf-8 -L utf-8 -keep 0 -m ../../v84/drbdsetup.xml -p drbdsetup.xml.po -l drbdsetup.xml
-    # Use of uninitialized value $args[1] in sprintf at /nix/store/wyx2nn2pjcn50lc95c6qgsgm606rn0x2-perl5.32.1-po4a-0.62/lib/perl5/site_perl/Locale/Po4a/Common.pm line 134.
-    # Invalid po file drbdsetup.xml.po:
-    substituteInPlace Makefile.in \
-      --replace 'DOC_DIRS    := documentation/v9 documentation/ja/v9' \
-                'DOC_DIRS    := documentation/v9' \
-      --replace 'DOC_DIRS    += documentation/v84 documentation/ja/v84' \
-                'DOC_DIRS    += documentation/v84' \
-      --replace '$(MAKE) -C documentation/ja/v9 doc' \
-                "" \
-      --replace '$(MAKE) -C documentation/ja/v84 doc' \
-                ""
     substituteInPlace user/v9/drbdtool_common.c \
       --replace 'add_component_to_path("/lib/drbd");' \
                 'add_component_to_path("${placeholder "out"}/lib/drbd");'
@@ -139,7 +128,7 @@ stdenv.mkDerivation rec {
     ];
     longDescription = ''
       DRBD is a software-based, shared-nothing, replicated storage solution
-      mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
+      mirroring the content of block devices (hard disks, partitions, logical volumes etc.) between hosts.
     '';
   };
 }

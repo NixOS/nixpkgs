@@ -656,10 +656,6 @@ in
 
         zenpower = callPackage ../os-specific/linux/zenpower { };
 
-        zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
-          configFile = "kernel";
-          inherit pkgs kernel;
-        };
         zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
           configFile = "kernel";
           inherit pkgs kernel;

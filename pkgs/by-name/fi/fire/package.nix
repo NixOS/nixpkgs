@@ -4,7 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   runCommand,
-  unstableGitUpdater,
+  gitUpdater,
   catch2_3,
   cmake,
   fontconfig,
@@ -78,14 +78,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fire";
-  version = "1.5.0b-unstable-2025-09-20";
+  # 1.5.0b is considered a beta release of 1.5.0, but gitUpdater identifies 1.5.0b as the newer version
+  # Sanity checked manually. Drop this once running the updateScript doesn't produce a downgrade.
+  # nixpkgs-update: no auto update
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jerryuhoo";
     repo = "Fire";
-    rev = "34a424a4fc50984213b6e98e3aaae3dcb8e960c4";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZTsZ/J5aeyjg4pxhjjIkgoTB5sSg2jpeKAp/uc4V+aQ=";
+    hash = "sha256-i8viPGErCuLSuRWstDtLwQ3XBz9gfiHin7Zvvq8l3kA=";
   };
 
   postPatch =
@@ -162,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --add-rpath ${lib.makeLibraryPath x11Libs} $out/bin/Fire
   '';
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Multi-band distortion plugin by Wings";

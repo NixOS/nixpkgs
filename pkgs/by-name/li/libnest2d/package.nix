@@ -25,6 +25,9 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace {,examples/}CMakeLists.txt \
       --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+
   '';
 
   propagatedBuildInputs = [

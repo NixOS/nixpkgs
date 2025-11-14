@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningEnable = [ "pie" ];
-
   nativeBuildInputs = [
     autoreconfHook
     w3m

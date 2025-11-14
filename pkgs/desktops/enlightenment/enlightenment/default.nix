@@ -14,7 +14,7 @@
   libexif,
   pam,
   xkeyboard_config,
-  udisks2,
+  udisks,
   waylandSupport ? false,
   wayland-protocols,
   xwayland,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libexif
     pam
     xkeyboard_config
-    udisks2 # for removable storage mounting/unmounting
+    udisks # for removable storage mounting/unmounting
   ]
   ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
   ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection

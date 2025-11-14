@@ -1,8 +1,8 @@
-{ callPackage
-, flutterPackages
-, lib
-, symlinkJoin
-,
+{
+  callPackage,
+  flutterPackages,
+  lib,
+  symlinkJoin,
 }:
 let
   nixpkgsRoot = "@nixpkgs_root@";
@@ -25,25 +25,20 @@ let
     "aarch64-darwin"
   ];
 
-  derivations =
-    lib.foldl'
-      (
-        acc: flutterPlatform:
-          acc
-          ++ (map
-            (systemPlatform:
-              callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/artifacts/fetch-artifacts.nix" {
-                flutter = flutterPackages."v${flutterCompactVersion}";
-                inherit flutterPlatform;
-                inherit systemPlatform;
-                hash = lib.fakeSha256;
-              })
-            systemPlatforms)
-      ) [ ]
-      flutterPlatforms;
+  derivations = lib.foldl' (
+    acc: flutterPlatform:
+    acc
+    ++ (map (
+      systemPlatform:
+      callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/artifacts/fetch-artifacts.nix" {
+        flutter = flutterPackages."v${flutterCompactVersion}";
+        inherit flutterPlatform systemPlatform;
+        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      }
+    ) systemPlatforms)
+  ) [ ] flutterPlatforms;
 in
 symlinkJoin {
   name = "evaluate-derivations";
   paths = derivations;
 }
-

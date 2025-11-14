@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitbeaker-cli";
-  version = "43.7.0";
+  version = "43.8.0";
 
   src = fetchFromGitHub {
     owner = "jdalrymple";
     repo = "gitbeaker";
     tag = finalAttrs.version;
-    hash = "sha256-3g8VNOCyXxDg2xpLA66L57ASMhf0kWUp0a7a7FZouF8=";
+    hash = "sha256-EVxDUEuxCnMiqqsKFs9JpRVJ86d9hW22K4a4we8eoJA=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-RwQ/Xi/BKZv6+tpIIZU9U9PZJXq3baZVEv3UNKyQ18o=";
+    hash = "sha256-WTxUoRPooea4CqpKnnrmvoWXoglCivVet+bUh0YG7gU=";
   };
 
   buildPhase = ''

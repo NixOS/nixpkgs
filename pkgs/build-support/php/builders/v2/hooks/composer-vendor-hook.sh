@@ -10,9 +10,9 @@ declare -g composerNoPlugins
 declare -g composerNoScripts
 
 declare -ga composerFlags=()
-[[ -n "$composerNoDev" ]] && composerFlags+=(--no-dev)
-[[ -n "$composerNoPlugins" ]] && composerFlags+=(--no-plugins)
-[[ -n "$composerNoScripts" ]] && composerFlags+=(--no-scripts)
+[[ -n "${composerNoDev-}" ]] && composerFlags+=(--no-dev)
+[[ -n "${composerNoPlugins-}" ]] && composerFlags+=(--no-plugins)
+[[ -n "${composerNoScripts-}" ]] && composerFlags+=(--no-scripts)
 
 preConfigureHooks+=(composerVendorConfigureHook)
 preBuildHooks+=(composerVendorBuildHook)

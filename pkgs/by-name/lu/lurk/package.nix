@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lurk";
   version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = "lurk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5riwosaT7QjRFnIFRAcyLul7i1g8OpHyUuuJNOROTF0=";
   };
 
@@ -23,12 +23,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/jakwai01/lurk/releases/tag/v${version}";
+    changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";
     description = "Simple and pretty alternative to strace";
     homepage = "https://github.com/jakwai01/lurk";
     license = lib.licenses.agpl3Only;
     mainProgram = "lurk";
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      gepbird
     ];
     platforms = [
       "i686-linux"
@@ -36,4 +37,4 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})

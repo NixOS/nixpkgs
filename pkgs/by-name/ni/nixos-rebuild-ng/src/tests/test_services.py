@@ -19,7 +19,14 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    s.reexec(argv, args, {"build": True}, {"flake": True})
+    grouped_nix_args = n.models.GroupedNixArgs(
+        build_flags={"build": True},
+        common_flags={"common": True},
+        copy_flags={"copy": True},
+        flake_build_flags={"flake_build": True},
+        flake_common_flags={"flake_common": True},
+    )
+    s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_has_calls(
         [
             call(
@@ -34,7 +41,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
 
     mock_build.return_value = Path("/path/new")
 
-    s.reexec(argv, args, {}, {})
+    s.reexec(argv, args, grouped_nix_args)
     # exec in the new version successfully
     mock_execve.assert_called_once_with(
         Path("/path/new/bin/nixos-rebuild-ng"),
@@ -45,7 +52,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_execve.reset_mock()
     mock_execve.side_effect = [OSError("BOOM"), None]
 
-    s.reexec(argv, args, {}, {})
+    s.reexec(argv, args, grouped_nix_args)
     # exec in the previous version if the new version fails
     mock_execve.assert_any_call(
         Path("/path/bin/nixos-rebuild-ng"),
@@ -65,18 +72,25 @@ def test_reexec_flake(
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    s.reexec(argv, args, {"build": True}, {"flake": True})
+    grouped_nix_args = n.models.GroupedNixArgs(
+        build_flags={"build": True},
+        common_flags={"common": True},
+        copy_flags={"copy": True},
+        flake_build_flags={"flake_build": True},
+        flake_common_flags={"flake_common": True},
+    )
+    s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_called_once_with(
         s.NIXOS_REBUILD_ATTR,
         n.models.Flake(ANY, ANY),
-        {"flake": True, "no_link": True},
+        {"flake_build": True, "no_link": True},
     )
     # do not exec if there is no new version
     mock_execve.assert_not_called()
 
     mock_build.return_value = Path("/path/new")
 
-    s.reexec(argv, args, {}, {})
+    s.reexec(argv, args, grouped_nix_args)
     # exec in the new version successfully
     mock_execve.assert_called_once_with(
         Path("/path/new/bin/nixos-rebuild-ng"),
@@ -87,7 +101,7 @@ def test_reexec_flake(
     mock_execve.reset_mock()
     mock_execve.side_effect = [OSError("BOOM"), None]
 
-    s.reexec(argv, args, {}, {})
+    s.reexec(argv, args, grouped_nix_args)
     # exec in the previous version if the new version fails
     mock_execve.assert_any_call(
         Path("/path/bin/nixos-rebuild-ng"),
@@ -104,6 +118,13 @@ def test_reexec_skip_if_already_reexec(mock_build: Mock, mock_execve: Mock) -> N
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
 
-    s.reexec(argv, args, {"build": True}, {"flake": True})
+    grouped_nix_args = n.models.GroupedNixArgs(
+        build_flags={"build": True},
+        common_flags={"common": True},
+        copy_flags={"copy": True},
+        flake_build_flags={"flake_build": True},
+        flake_common_flags={"flake_common": True},
+    )
+    s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_not_called()
     mock_execve.assert_not_called()

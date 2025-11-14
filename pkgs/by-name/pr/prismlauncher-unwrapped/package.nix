@@ -74,8 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional gamemodeSupport gamemode;
 
-  hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];
-
   cmakeFlags = [
     # downstream branding
     (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "nixpkgs")

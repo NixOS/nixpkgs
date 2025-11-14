@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-decorator";
-  version = "5.2.0.20250324";
+  version = "5.2.0.20251101";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_decorator";
     inherit version;
-    hash = "sha256-j71ysNrcVhduSOUYfedE52/kW8yRolh0uqdWYkEhVdM=";
+    hash = "sha256-Eg4r9HkuyKR2U9scs4DHqstoYqeXwUkKkQqswhVIKGw=";
   };
 
   build-system = [ setuptools ];

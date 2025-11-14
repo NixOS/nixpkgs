@@ -1,31 +1,36 @@
 {
-  beautifulsoup4,
-  boto3,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  beautifulsoup4,
+  boto3,
+  botocore,
   lxml,
   packaging,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   scramp,
+
+  # test
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.1.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.1.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     tag = "v${version}";
-    hash = "sha256-q8TQYiPmm3w9Bh4+gvVW5XAa4FZ3+/MZqZL0RCgl77E=";
+    hash = "sha256-x0VhICEtZZz4Q7btCl7nP0D+YHPIKqbEUWnrEekJpt0=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest
@@ -33,15 +38,20 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     boto3
+    botocore
     lxml
     packaging
     pytz
     requests
     scramp
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -50,6 +60,18 @@ buildPythonPackage rec {
 
   # integration tests require a Redshift cluster
   enabledTestPaths = [ "test/unit" ];
+
+  disabledTests = [
+    # AttributeError: 'itertools._tee' object has no attribute 'status_code'
+    # This is due to a broken pytest_mock.
+    # TODO Remove once pytest-mock 3.15.1 lands.
+    "test_form_based_authentication_uses_user_set_login_to_rp"
+    "test_form_based_authentication_payload_is_correct"
+    "test_form_based_authentication_login_fails_should_fail"
+    "test_azure_oauth_based_authentication_payload_is_correct"
+    "test_okta_authentication_payload_is_correct"
+    "test_set_cluster_identifier_calls_describe_custom_domain_associations"
+  ];
 
   __darwinAllowLocalNetworking = true; # required for tests
 

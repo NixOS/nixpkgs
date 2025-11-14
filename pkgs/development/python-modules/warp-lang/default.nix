@@ -1,14 +1,13 @@
 {
-  _cuda,
   autoAddDriverRunpath,
   buildPythonPackage,
   config,
   cudaPackages,
+  callPackage,
   fetchFromGitHub,
-  fetchurl,
   jax,
   lib,
-  llvmPackages,
+  llvmPackages, # TODO: use llvm 21 in 1.10, see python-packages.nix
   numpy,
   pkgsBuildHost,
   python,
@@ -33,100 +32,16 @@
   # libmathdxSupport ? cudaSupport && stdenv.hostPlatform.isLinux,
   libmathdxSupport ? cudaSupport,
 }@args:
+
 assert libmathdxSupport -> cudaSupport;
+
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.9.0";
+  version = "1.9.1";
 
-  libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
-    # NOTE: The version used should match the version Warp requires:
-    # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
-    pname = "libmathdx";
-    version = "0.2.3";
-
-    outputs = [
-      "out"
-      "static"
-    ];
-
-    src =
-      let
-        baseURL = "https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx";
-        cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
-        cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.zip
-        name = lib.concatStringsSep "-" [
-          finalAttrs.pname
-          "Linux"
-          effectiveStdenv.hostPlatform.parsed.cpu.name
-          finalAttrs.version
-          "cuda${cudaVersion}"
-        ];
-
-        # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
-        hashes = {
-          "12" = {
-            aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
-            x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
-          };
-          "13" = {
-            aarch64-linux = "sha256-TetJbMts8tpmj5PV4+jpnUHMcooDrXUEKL3aGWqilKI=";
-            x86_64-linux = "sha256-wLJLbRpQWa6QEm8ibm1gxt3mXvkWvu0vEzpnqTIvE1M=";
-          };
-        };
-      in
-      lib.mapNullable (
-        hash:
-        fetchurl {
-          inherit hash name;
-          url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
-        }
-      ) (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
-
-    dontUnpack = true;
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p "$out"
-      tar -xzf "$src" -C "$out"
-
-      mkdir -p "$static"
-      moveToOutput "lib/libmathdx_static.a" "$static"
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Library used to integrate cuBLASDx and cuFFTDx into Warp";
-      homepage = "https://developer.nvidia.com/cublasdx-downloads";
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = with lib.licenses; [
-        # By downloading and using the software, you agree to fully
-        # comply with the terms and conditions of the NVIDIA Software
-        # License Agreement.
-        _cuda.lib.licenses.math_sdk_sla
-
-        # Some of the libmathdx routines were written by or derived
-        # from code written by Meta Platforms, Inc. and affiliates and
-        # are subject to the BSD License.
-        bsd3
-
-        # Some of the libmathdx routines were written by or derived from
-        # code written by Victor Zverovich and are subject to the following
-        # license:
-        mit
-      ];
-      platforms = [
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
-      maintainers = with lib.maintainers; [ yzx9 ];
-    };
-  });
+  libmathdx = callPackage ./libmathdx.nix { };
 in
 buildPythonPackage {
   pname = "warp-lang";
@@ -144,44 +59,54 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-OEg2mUsEdRKhgx0fIraqme4moKNh1RSdN7/yCT1V5+g=";
+    hash = "sha256-Atp3WyxQ7GYwWLmQIUgoPULyVlNjduh4/9CBixNWFwc=";
   };
 
-  patches =
-    lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      (replaceVars ./darwin-libcxx.patch {
-        LIBCXX_DEV = llvmPackages.libcxx.dev;
-        LIBCXX_LIB = llvmPackages.libcxx;
-      })
-      ./darwin-single-target.patch
-    ]
-    ++ lib.optionals standaloneSupport [
-      (replaceVars ./standalone-llvm.patch {
-        LLVM_DEV = llvmPackages.llvm.dev;
-        LLVM_LIB = llvmPackages.llvm.lib;
-        LIBCLANG_DEV = llvmPackages.libclang.dev;
-        LIBCLANG_LIB = llvmPackages.libclang.lib;
-      })
-      ./standalone-cxx11-abi.patch
-    ];
+  patches = [
+    ./cxx11-abi.patch
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    (replaceVars ./darwin-libcxx.patch {
+      LIBCXX_DEV = llvmPackages.libcxx.dev;
+      LIBCXX_LIB = llvmPackages.libcxx;
+    })
+
+    ./darwin-single-target.patch
+  ]
+  ++ lib.optionals (effectiveStdenv.cc.isClang || standaloneSupport) [
+    (replaceVars ./clang-path.patch {
+      CLANG = "${effectiveStdenv.cc}/bin/cc";
+    })
+
+    (replaceVars ./clang-libs.patch {
+      LLVM_DEV = llvmPackages.llvm.dev;
+      LIBCLANG_DEV = llvmPackages.libclang.dev;
+    })
+  ]
+  ++ lib.optionals standaloneSupport [
+    (replaceVars ./llvm-libs.patch {
+      LLVM_LIB = llvmPackages.llvm.lib;
+      LIBCLANG_LIB = llvmPackages.libclang.lib;
+    })
+  ];
 
   postPatch =
     # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
     lib.optionalString cudaSupport ''
       nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
       substituteInPlace "$PWD/warp/build_dll.py" \
-          --replace-fail \
-            '*gencode_opts,' \
-            '${
-              lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
-            },' \
-          --replace-fail \
-            '*clang_arch_flags,' \
-            '${
-              lib.concatMapStringsSep ", " (
-                realArch: ''"--cuda-gpu-arch=${realArch}"''
-              ) cudaPackages.flags.realArches
-            },'
+        --replace-fail \
+          '*gencode_opts,' \
+          '${
+            lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
+          },' \
+        --replace-fail \
+          '*clang_arch_flags,' \
+          '${
+            lib.concatMapStringsSep ", " (
+              realArch: ''"--cuda-gpu-arch=${realArch}"''
+            ) cudaPackages.flags.realArches
+          },'
     ''
     # Patch build_dll.py to use dynamic libraries rather than static ones.
     # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
@@ -232,11 +157,10 @@ buildPythonPackage {
     numpy
   ];
 
-  # NOTE: While normally we wouldn't include autoAddDriverRunpath for packages built from source, since Warp
-  # will be loading GPU drivers at runtime, we need to inject the path to our video drivers.
   nativeBuildInputs = lib.optionals cudaSupport [
+    # NOTE: While normally we wouldn't include autoAddDriverRunpath for packages built from source, since Warp
+    # will be loading GPU drivers at runtime, we need to inject the path to our video drivers.
     autoAddDriverRunpath
-    cudaPackages.cuda_nvcc
   ];
 
   buildInputs =
@@ -246,7 +170,7 @@ buildPythonPackage {
       llvmPackages.libcxx
     ]
     ++ lib.optionals cudaSupport [
-      (lib.getOutput "static" cudaPackages.cuda_nvcc) # dependency on nvptxcompiler_static; no dynamic version available
+      (lib.getStatic cudaPackages.cuda_nvcc) # dependency on nvptxcompiler_static; no dynamic version available
       cudaPackages.cuda_cccl
       cudaPackages.cuda_cudart
       cudaPackages.cuda_nvcc

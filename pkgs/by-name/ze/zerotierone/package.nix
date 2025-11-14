@@ -12,18 +12,20 @@
   rustc,
   zlib,
   libiconv,
-  fetchpatch,
+  # enableUnfree enables building the zerotier controller, which is subject to
+  # a source-available license that permits non-commercial use
+  enableUnfree ? false,
 }:
 
 let
   pname = "zerotierone";
-  version = "1.14.2";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     tag = version;
-    hash = "sha256-D+7/ja5uYzH1iNd+Ti3k+dWOf5GvN4U+GuVBA9gxtTc=";
+    hash = "sha256-bFfRz695sbdZJd5DIfF7j8lbEqWHSaIqHq/AfXZgZ4s=";
   };
 
 in
@@ -33,23 +35,13 @@ stdenv.mkDerivation {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${src.name}/rustybits";
-    hash = "sha256-CSpm4zBWKhcrM/KXGU6/51NSQ6hzpT44D2J+QETBtpQ=";
-
-    # REMOVEME when https://github.com/NixOS/nixpkgs/pull/300532 is merged
-    postBuild = ''
-      pushd $out/git/730aadcc02767ae630e88f8f8c788a85d6bc81e6
-      patch --verbose -p1 <${./0001-rustfsm-remove-unsupported-lints.workspace.patch}
-      popd
-    '';
+    hash = "sha256-u3gqETbn4I+mtUeSkSym4s+qhA3eDb4Qaq7bl58M+AY=";
   };
 
   patches = [
     ./0001-darwin-disable-link-time-optimization.patch
     # https://github.com/zerotier/ZeroTierOne/pull/2435
-    (fetchpatch {
-      url = "https://github.com/zerotier/ZeroTierOne/commit/8f56d484b681ea30cd28e19cab34499acfa6e64d.patch";
-      hash = "sha256-UplkX2O4o8XKKTlR3ZsSG9E0y5gVhAagyepqwyGEYmA=";
-    })
+    ./0002-Support-single-arch-builds-on-macOS.patch
   ];
 
   postPatch = ''
@@ -112,9 +104,12 @@ stdenv.mkDerivation {
   buildFlags = [
     "all"
     "selftest"
-  ];
+  ]
+  ++ lib.optional enableUnfree "ZT_NONFREE=1";
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # darwin: disabled due to a test which fails to bind to 127.0.0.1 in a sandbox.
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
+
   checkPhase = ''
     runHook preCheck
     ./zerotier-selftest
@@ -147,7 +142,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
-    license = licenses.bsl11;
+    license = if enableUnfree then licenses.unfree else licenses.mpl20;
     maintainers = with maintainers; [
       sjmackenzie
       zimbatm

@@ -42,10 +42,7 @@ stdenv.mkDerivation {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      pSub
-      iedame
-    ];
+    maintainers = with maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

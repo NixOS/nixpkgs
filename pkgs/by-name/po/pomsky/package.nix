@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pomsky";
-  version = "0.11";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
     repo = "pomsky";
     rev = "v${version}";
-    hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
+    hash = "sha256-0rLY0WZj8p9D834SqHogV77GLHLesyPPxMGszDmkB9U=";
   };
 
-  cargoHash = "sha256-/tJwJ/xF5a2NEP5A/3swq75wCk9qxgbp7ilH1PqcWJY=";
+  cargoHash = "sha256-zUK8v96/jHaprrfbym23X7e/ZRoDwfNyDt+GIcd7BmY=";
 
   nativeBuildInputs = [
     pkg-config

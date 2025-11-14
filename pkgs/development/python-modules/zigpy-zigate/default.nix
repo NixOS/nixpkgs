@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.13.3";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
     tag = version;
-    hash = "sha256-reOt0bPPkKDKeu8CESJtLDEmpkOmgopXk65BqBlBIhY=";
+    hash = "sha256-pVDqb2/7Pe9zvhNNTVQfl5EphEjOPdJwvCIoTdZm7S0=";
   };
 
   postPatch = ''
@@ -45,11 +45,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "zigpy_zigate" ];
-
-  disabledTestPaths = [
-    # Fails in sandbox
-    "tests/test_application.py "
-  ];
 
   meta = with lib; {
     description = "Library which communicates with ZiGate radios for zigpy";

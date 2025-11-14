@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kibi";
-  version = "0.3.0";
+  version = "0.3.1";
 
-  cargoHash = "sha256-gXkwqmmFGNEJY7an3KWlRuLL5WuCH4P0n7BrLNsZ9/A=";
+  cargoHash = "sha256-IF7pcatGJDcwTmBziB8hVWJkleoV+pXXRQnbYfQtBJE=";
 
   src = fetchFromGitHub {
     owner = "ilai-deutel";
     repo = "kibi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6uDpTQ97eNgM1lCiYPWS5QPxMNcPF3Ix14VaGiTY4Kc=";
+    hash = "sha256-EXobpuVob4RD37LK0RlpCGXACfemm+e+JczYYPNDhrc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

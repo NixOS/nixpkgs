@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   autoPatchelfHook,
   buildPythonPackage,
   fetchFromGitHub,
@@ -45,6 +46,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # elftools.common.exceptions.ELFError: Magic number does not match
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Alternative Python library for openWakeWord";
     homepage = "https://github.com/rhasspy/pyopen-wakeword";
     changelog = "https://github.com/rhasspy/pyopen-wakeword/blob/${src.tag}/CHANGELOG.md";

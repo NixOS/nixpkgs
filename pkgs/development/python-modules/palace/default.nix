@@ -26,7 +26,8 @@ buildPythonPackage rec {
   # Nix uses Release CMake configuration instead of what is assumed by palace.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE
+      --replace-fail IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   build-system = [

@@ -15,7 +15,7 @@ $SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 my $out = $ENV{"out"};
 my $extraPrefix = $ENV{"extraPrefix"};
 
-my @pathsToLink = split ' ', $ENV{"pathsToLink"};
+my @pathsToLink = @{decode_json $ENV{"pathsToLinkJSON"}};
 
 sub isInPathsToLink($path) {
     $path = "/" if $path eq "";

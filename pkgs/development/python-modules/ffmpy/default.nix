@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
   uv-build,
   pytestCheckHook,

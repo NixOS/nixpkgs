@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7fPoH6I8Okz8Oby45MIDdKBkbPgUPsaXd6XS3r3cRO8=";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";
     mainProgram = "regex-cli";
@@ -23,6 +26,6 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

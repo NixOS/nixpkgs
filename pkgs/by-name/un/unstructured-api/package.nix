@@ -101,7 +101,7 @@ let
       pypdfium2
       python-dateutil
       python-docx
-      # python-iso639
+      python-iso639
       python-magic
       python-multipart
       # python-oxmsg

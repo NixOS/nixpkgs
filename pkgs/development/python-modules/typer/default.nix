@@ -16,7 +16,6 @@
   shellingham,
 
   # tests
-  coverage,
   pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -37,6 +36,13 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-mMsOEI4FpLkLkpjxjnUdmKdWD65Zx3Z1+L+XsS79k44=";
   };
+
+  postPatch = ''
+    for f in $(find tests -type f -print); do
+      # replace `sys.executable -m coverage run` with `sys.executable`
+      sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+    done
+  '';
 
   env.TIANGOLO_BUILD_PACKAGE = package;
 
@@ -60,7 +66,6 @@ buildPythonPackage rec {
   doCheck = package == "typer"; # tests expect standard dependencies
 
   nativeCheckInputs = [
-    coverage # execs coverage in tests
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook

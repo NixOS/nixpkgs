@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -9,10 +10,9 @@ let
   format = pkgs.formats.json { };
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
-
-  # convert a Nix attribute path to jq object identifier-index:
-  # https://jqlang.org/manual/#object-identifier-index
-  attrPathToIndex = attrPath: "." + lib.concatStringsSep "." attrPath;
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.settings "/run/immich/config.json";
 
   commonServiceConfig = {
     Type = "simple";
@@ -55,6 +55,22 @@ let
     if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "secretSettings"
+      ]
+      ''
+        `secretSettings` has been deprecated as secrets can now be specified
+        directly in `settings`. To do so, set `_secret` of the desired
+        attribute to a file path, for example:
+          `services.immich.settings.oauth.clientSecret._secret = "/path/to/secret/file";`
+      ''
+    )
+  ];
+
   options.services.immich = {
     enable = mkEnableOption "Immich";
     package = lib.mkPackageOption pkgs "immich" { };
@@ -128,6 +144,7 @@ in
         <https://my.immich.app/admin/system-settings> for
         options and defaults.
         Setting it to `null` allows configuring Immich in the web interface.
+        You can load secret values from a file in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
       '';
       type = types.nullOr (
         types.submodule {
@@ -149,27 +166,6 @@ in
           };
         }
       );
-    };
-
-    secretSettings = mkOption {
-      default = { };
-      description = ''
-        Secrets to to be added to the JSON file generated from {option}`settings`, read from files.
-      '';
-      example = lib.literalExpression ''
-        {
-          notifications.smtp.transport.password = "/path/to/secret";
-          oauth.clientSecret = "/path/to/other/secret";
-        }
-      '';
-      type =
-        let
-          inherit (types) attrsOf either path;
-          recursiveType = either (attrsOf recursiveType) path // {
-            description = "nested " + (attrsOf path).description;
-          };
-        in
-        recursiveType;
     };
 
     machine-learning = {
@@ -424,24 +420,10 @@ in
         postgresqlPackage
       ];
 
-      preStart = mkIf (cfg.settings != null) (
-        ''
-          cat '${format.generate "immich-config.json" cfg.settings}' > /run/immich/config.json
-        ''
-        + lib.concatStrings (
-          lib.mapAttrsToListRecursive (attrPath: _: ''
-            tmp="$(mktemp)"
-            ${lib.getExe pkgs.jq} --rawfile secret "$CREDENTIALS_DIRECTORY/${attrPathToIndex attrPath}" \
-              '${attrPathToIndex attrPath} = ($secret | rtrimstr("\n"))' /run/immich/config.json > "$tmp"
-            mv "$tmp" /run/immich/config.json
-          '') cfg.secretSettings
-        )
-      );
+      preStart = mkIf (cfg.settings != null) secretsReplacement.script;
 
       serviceConfig = commonServiceConfig // {
-        LoadCredential = lib.mapAttrsToListRecursive (
-          attrPath: file: "${attrPathToIndex attrPath}:${file}"
-        ) cfg.secretSettings;
+        LoadCredential = secretsReplacement.credentials;
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";
@@ -464,7 +446,7 @@ in
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
+        ExecStart = lib.getExe cfg.package.machine-learning;
         Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;

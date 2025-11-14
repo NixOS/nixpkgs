@@ -9,7 +9,7 @@ let
   vteInitSnippet = ''
     # Show current working directory in VTE terminals window title.
     # Supports both bash and zsh, requires interactive shell.
-    . ${pkgs.vte.override { gtkVersion = null; }}/etc/profile.d/vte.sh
+    . ${pkgs.vte-gtk4}/etc/profile.d/vte.sh
   '';
 
 in

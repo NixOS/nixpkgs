@@ -43,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.84.0";
+  version = "1.86.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lFtX2n7CYuXCZrieCR0UvoAMxCQnfYKgKHK315SoR3k=";
+    hash = "sha256-kg0aP87ercMqz/lcLiA7MZA53UtKCN0aLf0oPRnAua4=";
   };
 
   patches = [
@@ -67,10 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./absolute_shlib_path.patch {
       inherit nixStoreDir;
     })
-
-    # Fix getter heuristics regression
-    # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/529
-    ./0001-scanner-Prefer-some-getters-over-others.patch
   ]
   ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.

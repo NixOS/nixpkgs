@@ -121,6 +121,20 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/mpv-player/mpv/commit/26b29fba02a2782f68e2906f837d21201fc6f1b9.patch";
       hash = "sha256-ANNoTtIJBARHbm5IgrE0eEZyzmNhOnbVgve7iqCBzQg=";
     })
+    # clipboard-wayland: prevent reading from hung up fd:
+    #   https://github.com/mpv-player/mpv/pull/16140
+    (fetchpatch {
+      name = "clipboard-wayland-prevent-hung-up-fd.patch";
+      url = "https://github.com/mpv-player/mpv/commit/d20ded876d27497d3fe6a9494add8106b507a45c.patch";
+      hash = "sha256-sll4BpeVW6OA+/vbH7ZfIh0/vePfPEX87vzUu/GCj44=";
+    })
+    # clipboard-wayland: read already sent data when the fd is hung up:
+    #   https://github.com/mpv-player/mpv/pull/16236
+    (fetchpatch {
+      name = "clipboard-wayland-read-sent-data-on-hangup.patch";
+      url = "https://github.com/mpv-player/mpv/commit/896b3400f3cad286533dbb9cc3658ce18ed9966c.patch";
+      hash = "sha256-GU0VdYC/Q0RCS/I2h4gBVNhScDLSAB2KxN3Ca6CGBMM=";
+    })
   ];
 
   postPatch = lib.concatStringsSep "\n" [

@@ -34,6 +34,7 @@ let
     toList
     isList
     elem
+    unique
     ;
 
   inherit (lib.meta)
@@ -667,8 +668,9 @@ let
       # Maintainers should be inclusive of teams.
       # Note that there may be external consumers of this API (repology, for instance) -
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
-      maintainers =
-        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+      maintainers = unique (
+        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ]
+      );
 
       identifiers =
         let
@@ -677,7 +679,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs ? pname then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
             #version = null;
             #update = null;
             edition = "*";

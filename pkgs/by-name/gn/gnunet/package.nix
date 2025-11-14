@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnunet";
-  version = "0.25.1";
+  version = "0.25.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ITNsFs1X+R+dX9U1lILZFRp83w1jlvi2GCjBfMxmj1w=";
+    hash = "sha256-6rdvw105OrFfrbY0T4Q1JcFlYZQAc1qm3eCWb2omwuY=";
   };
 
   enableParallelBuilding = true;
@@ -94,12 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
       xargs sed -i -e "s|/tmp|$TMPDIR|g"
-
-    # fix error: conflicting types for `GNUNET_TESTING_cmd_{exec,finish}`
-    for name in exec finish; do
-      substituteInPlace src/lib/testing/testing_api_cmd_$name.c \
-        --replace-fail 'const struct GNUNET_TESTING_Command' 'struct GNUNET_TESTING_Command'
-    done
   '';
 
   # unfortunately, there's still a few failures with impure tests

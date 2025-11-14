@@ -2716,6 +2716,20 @@
     "LicenseRef-KFQF-Accepted-GPL",
     "LicenseRef-Qt-Commercial"
   ],
+  "plasma-keyboard": [
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "FSFAP",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "GPL-3.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-GPL",
+    "LicenseRef-KDE-Accepted-LGPL"
+  ],
   "plasma-mobile": [
     "Apache-2.0",
     "BSD-2-Clause",

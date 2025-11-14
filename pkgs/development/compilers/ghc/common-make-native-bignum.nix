@@ -14,14 +14,12 @@
 
   # build-tools
   bootPkgs,
-  autoconf,
-  automake,
+  autoreconfHook,
   coreutils,
   fetchpatch,
   fetchurl,
   perl,
   python3,
-  m4,
   sphinx,
   xattr,
   autoSignDarwinBinariesHook,
@@ -134,7 +132,7 @@ let
     # program is built (which we generally always want to have a complete GHC install)
     # and whether it is run on the GHC sources to generate hyperlinked source code
     # (which is impossible for cross-compilation); see:
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/20077 krank:ignore-line
     # This implies that currently a cross-compiled GHC will never have a `haddock`
     # program, so it can never generate haddocks for any packages.
     # If this is solved in the future, we'd like to unconditionally
@@ -292,8 +290,8 @@ stdenv.mkDerivation (
     patches = [
       # Determine size of time related types using hsc2hs instead of assuming CLong.
       # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
-      # https://github.com/haskell/ghcup-hs/issues/1107
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+      # https://github.com/haskell/ghcup-hs/issues/1107   krank:ignore-line
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25095 krank:ignore-line
       # Note that in normal situations this shouldn't be the case since nixpkgs
       # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
       (fetchpatch {
@@ -304,7 +302,7 @@ stdenv.mkDerivation (
         extraPrefix = "libraries/unix/";
       })
 
-      # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+      # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129 krank:ignore-line
       ./docs-sphinx-7.patch
 
       # Correctly record libnuma's library and include directories in the
@@ -328,7 +326,7 @@ stdenv.mkDerivation (
     # the solution is to backport those changes from GHC 9.6 that skip the intermediate
     # assembly step.
     #
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589 krank:ignore-line
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
     ++ [
       # Need to use this patch so the next one applies, passes file location info to the cc phase
@@ -369,7 +367,7 @@ stdenv.mkDerivation (
 
     # Fixes stack overrun in rts which crashes an process whenever
     # freeHaskellFunPtr is called with nixpkgs' hardening flags.
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/25485 krank:ignore-line
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
     # TODO: patch doesn't apply for < 9.4, but may still be necessary?
     ++ [
@@ -386,9 +384,11 @@ stdenv.mkDerivation (
       #
       # These cause problems as they're not eliminated by GHC's dead code
       # elimination on aarch64-darwin. (see
-      # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+      # https://github.com/NixOS/nixpkgs/issues/140774 for details). krank:ignore-line
       ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-    ];
+    ]
+
+    ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     postPatch = "patchShebangs .";
 
@@ -444,7 +444,6 @@ stdenv.mkDerivation (
       export AR_STAGE0="$AR_FOR_BUILD"
 
       echo -n "${buildMK}" > mk/build.mk
-      sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
     # Haddock and sphinx need a working locale
     + lib.optionalString (enableDocs || enableHaddockProgram) (
@@ -479,8 +478,7 @@ stdenv.mkDerivation (
       grep linux-musl llvm-targets | sed 's/^/  /'
 
       echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
+      for x in aclocal.m4; do
         substituteInPlace $x \
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
@@ -547,10 +545,8 @@ stdenv.mkDerivation (
     dontAddExtraLibs = true;
 
     nativeBuildInputs = [
+      autoreconfHook
       perl
-      autoconf
-      automake
-      m4
       python3
       bootPkgs.alex
       bootPkgs.happy
@@ -600,14 +596,8 @@ stdenv.mkDerivation (
 
     checkTarget = "test";
 
-    # GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     hardeningDisable = [
       "format"
-      "pie"
     ];
 
     # big-parallel allows us to build with more than 2 cores on
@@ -683,8 +673,6 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
 
   }

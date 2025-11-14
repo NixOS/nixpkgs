@@ -14233,10 +14233,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.66";
+    version = "1.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-GOkdcI+Ah6JvvL+zsKYe0UcdKks855jecwTzBIGkZ+k=";
+      hash = "sha256-uqip/AS5o4+nh77gAWvNTMMwHMmi8KbDeBGaNdre6zA=";
     };
     buildInputs = [
       DateManip
@@ -33293,12 +33293,12 @@ with self;
     };
   };
 
-  Test2Harness = buildPerlPackage {
+  Test2Harness = buildPerlPackage rec {
     pname = "Test2-Harness";
-    version = "1.000155";
+    version = "1.000161";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000155.tar.gz";
-      hash = "sha256-Hvi/euDKALaHu24RXzq4yVBI5ICsmuUylzabxpSkc4s=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-${version}.tar.gz";
+      hash = "sha256-SXO3mx7tUwVxXuc9itySNtp5XH1AkNg7FQ6hMc1ltBQ=";
     };
 
     checkPhase = ''
@@ -33324,6 +33324,7 @@ with self;
       gotofile
     ];
     meta = {
+      changelog = "https://github.com/Test-More/Test2-Harness/blob/v${version}/Changes";
       description = "New and improved test harness with better Test2 integration";
       license = with lib.licenses; [
         artistic1

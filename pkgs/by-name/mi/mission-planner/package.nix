@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.3.82";
+  version = "1.3.83";
 
   src = fetchurl {
     url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
-    sha256 = "sha256-554fFDxHMo4jV3yrPdGgDYQ6XeW+TWdVIIkGQIBdrCQ=";
+    sha256 = "sha256-/zaU96kDjK91ZUUEndeu9049DY/jWG6HqogQRXBN1vk=";
   };
 
   nativeBuildInputs = [
@@ -71,8 +71,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
-
   meta = with lib; {
     description = "ArduPilot ground station";
     mainProgram = "mission-planner";
@@ -82,6 +80,7 @@ stdenv.mkDerivation rec {
       Plane, Copter and Rover targets.
     '';
     homepage = "https://ardupilot.org/planner/";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.all;

@@ -2,17 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   buildPythonPackage,
   python,
-  pythonOlder,
   pytestCheckHook,
   assertpy,
+  chardet,
+  freezegun,
   mock,
   path,
   pyhamcrest,
   pytest-html,
   colorama,
+  cucumber-expressions,
   cucumber-tag-expressions,
   parse,
   parse-type,
@@ -22,41 +23,34 @@
 
 buildPythonPackage rec {
   pname = "behave";
-  version = "1.2.7.dev5";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "behave";
     repo = "behave";
-    rev = "v${version}";
-    hash = "sha256-G1o0a57MRczwjGLl/tEYC+yx3nxpk6+E58RvR9kVJpA=";
+    tag = "v${version}";
+    hash = "sha256-sHsnBeyl0UJ0f7WcTUc+FhUxATh84RPxVE3TqGYosrs=";
   };
-
-  patches = [
-    # fix tests: https://github.com/behave/behave/pull/1214
-    (fetchpatch2 {
-      url = "https://github.com/behave/behave/pull/1214/commits/98b63a2524eff50ce1dc7360a46462a6f673c5ea.patch?full_index=1";
-      hash = "sha256-MwODEm6vhg/H8ksp5XBBP5Uhu2dhB5B1T6Owkxpy3v0=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
     assertpy
+    chardet
+    freezegun
     mock
     path
     pyhamcrest
     pytest-html
   ];
 
-  doCheck = pythonOlder "3.12";
-
   pythonImportsCheck = [ "behave" ];
 
   dependencies = [
     colorama
+    cucumber-expressions
     cucumber-tag-expressions
     parse
     parse-type
@@ -80,7 +74,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/behave/behave/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/behave/behave/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/behave/behave";
     description = "Behaviour-driven development, Python style";
     mainProgram = "behave";

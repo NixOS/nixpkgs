@@ -1,7 +1,7 @@
 {
   version,
   hash,
-  patches,
+  patches ? [ ],
 }:
 
 {
@@ -20,6 +20,33 @@
   zlib,
   buildPackages,
 }:
+
+let
+  skip_tests = [
+    # test flaky on ofborg
+    "channels"
+    # test flaky
+    "read"
+    "NetworkOptions"
+    "REPL"
+    "ccall"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "1.11") [
+    "loading"
+    "cmdlineargs"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "1.12") [
+    "Distributed"
+    # test flaky because of our RPATH patching
+    # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
+    "Compiler/codegen"
+    "precompile"
+    "compileall"
+  ]
+  ++ lib.optionals (lib.versionOlder version "1.12") [
+    "compiler/codegen" # older versions' test was in lowercase
+  ];
+in
 
 stdenv.mkDerivation rec {
   pname = "julia";
@@ -93,13 +120,23 @@ stdenv.mkDerivation rec {
   # tests are flaky for aarch64-linux on hydra
   doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
 
-  installCheckTarget = "testall";
-
   preInstallCheck = ''
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
     export HOME=$(mktemp -d)
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    # Command lifted from `test/Makefile`.
+    $out/bin/julia \
+      --check-bounds=yes \
+      --startup-file=no \
+      --depwarn=error \
+      $out/share/julia/test/runtests.jl \
+      --skip internet_required ${toString skip_tests}
+    runHook postInstallCheck
   '';
 
   dontStrip = true;
@@ -122,6 +159,7 @@ stdenv.mkDerivation rec {
       nickcao
       joshniemela
       thomasjm
+      taranarmo
     ];
     platforms = [
       "x86_64-linux"

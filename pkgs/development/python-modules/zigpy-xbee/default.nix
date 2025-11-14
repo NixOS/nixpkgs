@@ -2,51 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     tag = version;
-    hash = "sha256-Ep7pP2vcH9YpSrGPVDi3nc+WkQgBVS+NLmoQU0o0aQQ=";
+    hash = "sha256-ALwhl9WUDkv0POufF/G/rZrn+ITbMdh6y86lShy6ZTg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyserial
-    pyserial-asyncio
+  dependencies = [
     zigpy
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # fixed in https://github.com/zigpy/zigpy-xbee/commit/f85233fc28ae01c08267965e99a29e43b00e1561
-    "test_shutdown"
   ];
 
   meta = with lib; {

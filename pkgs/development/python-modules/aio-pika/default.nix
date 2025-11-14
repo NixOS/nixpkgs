@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.5.6";
+  version = "9.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     tag = version;
-    hash = "sha256-VpZgAAAt9d0NxSgTGnyBg5fu5GcT3Tg0qOieX7KqmyM=";
+    hash = "sha256-0jVxgU+r/d2n4YO5/YAZrZUWDCAlZldBshCGpcEV/sQ=";
   };
 
   build-system = [ poetry-core ];

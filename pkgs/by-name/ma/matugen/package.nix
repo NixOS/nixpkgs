@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matugen";
-  version = "2.4.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
     tag = "v${version}";
-    hash = "sha256-+UibbVz5CTisKMms/5VXGe39FYr56qzaEtX4TWQPkjk=";
+    hash = "sha256-2VcdnUjIOEMQ87K5wv+Pbgko94PLygp1nrEYcVHk1v4=";
   };
 
-  cargoHash = "sha256-ZCH8ka740X/yRbn4Mbno63jZifPMEaDABsftS3juDTo=";
+  cargoHash = "sha256-HBAsCrD/njZUYkjcaUaTS7xMwfUWLpDXkpIPWSdCvqo=";
 
   meta = {
     description = "Material you color generation tool";

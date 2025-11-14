@@ -9,7 +9,6 @@
   xcbuild,
   python3,
   ninja,
-  apple-sdk_14,
   darwinMinVersionHook,
   git,
   cpio,
@@ -191,11 +190,7 @@ stdenv.mkDerivation {
     glib
     alsa-lib
     pulseaudio
-  ])
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-    (darwinMinVersionHook "12.3")
-  ];
+  ]);
 
   preConfigure = ''
     echo "generate_location_tags = true" >> build/config/gclient_args.gni
@@ -234,7 +229,7 @@ stdenv.mkDerivation {
     "is_clang=false"
   ])
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-    ''mac_deployment_target="12.3"''
+    ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
     "rtc_enable_symbol_export=true"
     "rtc_enable_objc_symbol_export=true"
     "rtc_include_dav1d_in_internal_decoder_factory=true"

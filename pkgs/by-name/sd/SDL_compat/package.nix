@@ -4,6 +4,7 @@
   cmake,
   darwin,
   fetchFromGitHub,
+  fetchpatch2,
   libGLU,
   libiconv,
   libX11,
@@ -84,10 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
   '';
 
-  # The setup hook scans paths of buildInputs to find SDL related packages and
-  # adds their include and library paths to environment variables. The sdl-config
-  # is patched to use these variables to produce correct flags for compiler.
-  patches = [ ./find-headers.patch ];
+  patches = [
+    # The setup hook scans paths of buildInputs to find SDL related packages and
+    # adds their include and library paths to environment variables. The sdl-config
+    # is patched to use these variables to produce correct flags for compiler.
+    ./find-headers.patch
+
+    # https://github.com/libsdl-org/sdl12-compat/issues/382
+    (fetchpatch2 {
+      url = "https://github.com/libsdl-org/sdl12-compat/commit/bef8f7412dd44edc4f7e14dc35d3b20399e25496.patch?full_index=1";
+      hash = "sha256-5kJawjmA8C3uH3OIXHmqQjnIRtoTJtXmm3iLxG3e1qc=";
+    })
+  ];
   setupHook = ./setup-hook.sh;
 
   passthru.tests = {

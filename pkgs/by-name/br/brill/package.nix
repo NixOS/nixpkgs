@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "4.000.073";
 
   src = fetchzip {
-    url = "https://brill.com/fileasset/The_Brill_Typeface_Package_v_4_0.zip";
+    url = "https://web.archive.org/web/20250719162541/https://brill.com/fileasset/The_Brill_Typeface_Package_v_4_0.zip";
     hash = "sha256-ugmEIkeBzD/4C9wkVfbctEtnzI8Kw+YD6KGcbk4BAf4=";
     stripRoot = false;
   };

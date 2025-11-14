@@ -60,6 +60,10 @@ flutter329.buildFlutterApplication rec {
   ++ mpv-unwrapped.buildInputs
   ++ libplacebo.buildInputs;
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=nontrivial-memcall"
+  ];
+
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })

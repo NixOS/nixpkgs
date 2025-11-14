@@ -15,7 +15,7 @@
   python,
   rpm,
   sphinx,
-  systemd,
+  systemd-python,
 }:
 
 let
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     libcomps
     libdnf
     rpm
-    systemd
+    systemd-python
   ];
 
   cmakeFlags = [

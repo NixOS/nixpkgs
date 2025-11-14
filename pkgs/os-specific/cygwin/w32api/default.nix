@@ -39,7 +39,7 @@
         license
         ;
       platforms = lib.platforms.unix ++ lib.platforms.windows;
-      teams = [ lib.maintainers.corngood ];
+      maintainers = [ lib.maintainers.corngood ];
     };
   }
   // (

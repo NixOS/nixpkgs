@@ -32,10 +32,7 @@ appimageTools.wrapType2 {
     license = licenses.unfree; # no license listed
     mainProgram = "fflogs";
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      keysmashes
-      iedame
-    ];
+    maintainers = with maintainers; [ keysmashes ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

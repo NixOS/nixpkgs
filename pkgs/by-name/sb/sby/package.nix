@@ -6,7 +6,6 @@
   python3,
   yosys,
   yices,
-  boolector,
   z3,
   aiger,
   btor2tools,
@@ -19,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.57";
+  version = "0.58";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vhgLP2twPPGsey5lzmt/zUFme4GjIdWgRyWoCHxLxRU=";
+    hash = "sha256-msQ+aqdp8i5KMLUABYU6vA5VBkI6G3zF06RrQzfJucY=";
   };
 
   postPatch = ''
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
       --replace-fail '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
-      --replace-fail ', "btormc"'             ', "${lib.getExe' boolector "btormc"}"' \
       --replace-fail ', "aigbmc"'             ', "${lib.getExe' aiger "aigbmc"}"'
 
     substituteInPlace sbysrc/sby_core.py \
@@ -73,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     python3.pkgs.xmlschema
     yosys
-    boolector
     yices
     z3
     aiger

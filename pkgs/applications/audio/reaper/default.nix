@@ -127,6 +127,10 @@ stdenv.mkDerivation rec {
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 

@@ -1,5 +1,5 @@
 diff --git a/scwx-qt/tools/generate_versions.py b/scwx-qt/tools/generate_versions.py
-index c6c94020..3fcdcf08 100644
+index c6c94020..000f6e6e 100644
 --- a/scwx-qt/tools/generate_versions.py
 +++ b/scwx-qt/tools/generate_versions.py
 @@ -1,6 +1,5 @@
@@ -9,7 +9,7 @@ index c6c94020..3fcdcf08 100644
  import json
  import os
  import pathlib
-@@ -110,27 +109,22 @@ def ParseArguments():
+@@ -110,27 +109,23 @@ def ParseArguments():
                          required = True)
      return parser.parse_args()
  
@@ -25,7 +25,7 @@ index c6c94020..3fcdcf08 100644
      print("Collecting version info")
  
      versionInfo = VersionInfo()
--
+ 
 -    repo = git.Repo(args.gitRepo_, search_parent_directories = True)
 -
 -    commitString = str(repo.head.commit)[:10]
@@ -43,7 +43,7 @@ index c6c94020..3fcdcf08 100644
 -    versionInfo.copyrightYear_ = copyrightYear
 -    versionInfo.resourceDir_   = resourceDir
 +    versionInfo.commitString_  = "@rev@"
-+    versionInfo.copyrightYear_ = GetYearFromLicense(args.gitRepo_ / 'LICENSE.txt')
++    versionInfo.copyrightYear_ = GetYearFromLicense(args.gitRepo_ / "LICENSE.txt")
 +    versionInfo.resourceDir_   = str(args.gitRepo_).replace("\\", "\\\\")
      versionInfo.versionString_ = args.version_
  

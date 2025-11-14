@@ -2,20 +2,22 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
+  alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "qcheck-core";
-  version = "0.25";
-
-  minimalOCamlVersion = "4.08";
+  version = "0.27";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "qcheck";
-    tag = "v${version}";
-    hash = "sha256-Z89jJ21zm89wb9m5HthnbHdnE9iXLyaH9k8S+FAWkKQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UfBfFVSvDeVPUakj2GQCRy5G5IZBxrgdceYtj+VAYbg=";
   };
+
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Core qcheck library";
@@ -24,4 +26,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

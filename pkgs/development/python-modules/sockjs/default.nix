@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Sockjs server";
     homepage = "https://github.com/aio-libs/sockjs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

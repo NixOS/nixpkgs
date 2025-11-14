@@ -1,22 +1,6 @@
 import ./make-test-python.nix (
-  { lib, ... }@args:
+  { lib, pkgs, ... }@args:
   let
-    pkgs = args.pkgs.extend (
-      self: super: {
-        stdenv = super.stdenv.override {
-          config = super.config // {
-            allowUnfreePredicate =
-              pkg:
-              builtins.elem (lib.getName pkg) [
-                "vscode"
-                "vscode-with-extensions"
-                "vscode-extension-ms-vscode-remote-remote-ssh"
-              ];
-          };
-        };
-      }
-    );
-
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
     inherit (pkgs.vscode.passthru) rev vscodeServer;

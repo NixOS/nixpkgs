@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # Threading tests need to be linked against pthread
+    # See: https://github.com/libffi/libffi/pull/944
+    ./freebsd-tsan-pthread.patch
   ];
 
   strictDeps = true;

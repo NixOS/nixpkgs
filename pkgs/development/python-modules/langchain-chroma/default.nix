@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   chromadb,
@@ -22,21 +22,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.6";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-HxoxxOgiDC/rf4hCA6uQBPmK11/fqddc5d4nMpIFxEw=";
+    hash = "sha256-fKFcl4NiNaypJGoV8bDrH7MwnsXNtnm7Hkxp/+SLc2c=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
-  patches = [ ./001-async-test.patch ];
-
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -57,11 +55,6 @@ buildPythonPackage rec {
     langchain-tests
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Bad integration test, not used or vetted by the langchain team
-    "test_chroma_update_document"
   ];
 
   passthru = {

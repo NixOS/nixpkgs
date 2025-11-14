@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   anthropic,
@@ -12,6 +12,7 @@
   pydantic,
 
   # tests
+  langchain,
   langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
@@ -22,19 +23,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-anthropic";
-  version = "0.3.18";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${version}";
-    hash = "sha256-ZedCz4FyKowhxLVpHrBsmGKHkMCA5yW7ui6LI0QGQ44=";
+    hash = "sha256-3kW5w98t5F199k14MoCY2dZGrC/HdBzKuRpM37EY3LQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/anthropic";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     anthropic
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    langchain
     langchain-tests
     pytest-asyncio
     pytestCheckHook

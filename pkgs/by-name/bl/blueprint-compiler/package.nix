@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "jwestman";
+    owner = "GNOME";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
     hash = "sha256-3vAFkP/psM/IsFtzVOIVSU77Z+RV4d3N70U7ggrDqfo=";
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Markup language for GTK user interface files";
     mainProgram = "blueprint-compiler";
-    homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
+    homepage = "https://gitlab.gnome.org/GNOME/blueprint-compiler";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [
       benediktbroich

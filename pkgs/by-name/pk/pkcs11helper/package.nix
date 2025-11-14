@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pkcs11-helper";
-  version = "1.30.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "pkcs11-helper";
     rev = "${pname}-${version}";
-    hash = "sha256-FP3y/YHsPPqey4QfxIiC4QjruuK1K2Bg+2QL2gXDT+k=";
+    hash = "sha256-0U3HK/6JmdNwus9fs6g86YrTAFVjgK/o7dQb69A5zlU=";
   };
 
   nativeBuildInputs = [

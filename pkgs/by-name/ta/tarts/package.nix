@@ -3,18 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tarts";
-  version = "0.1.16-unstable-2025-05-04";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "oiwn";
     repo = "tarts";
-    rev = "8560a63dda8e5ffd5fdd96a1f7687f8f12d36022";
-    hash = "sha256-d06FL0khcI2LUMbrUo3tmQn97pNFIVefPWlxWFSUJ+E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-whkDHgxrHkmYX6hji+z8mc964lQxllaidV8clJhvDqw=";
   };
 
-  cargoHash = "sha256-DLIBVl7CzhEYjAnkJmLHSlUoXCNos8YPHfSz9rs99/8=";
+  cargoHash = "sha256-IZyjwbx7V0kPkmD9r8qrqp4nrJg8g6tepw5bvWlLZBE=";
 
   meta = {
     description = "Screen saves and visual effects for your terminal";
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage {
     maintainers = [ lib.maintainers.da157 ];
     mainProgram = "tarts";
   };
-}
+})

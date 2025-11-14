@@ -33,12 +33,7 @@ in
     enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        }
-      );
+      type = lib.types.nullOr lib.types.externalPath;
       default = null;
       description = ''
         Admin password file.
@@ -46,12 +41,7 @@ in
     };
 
     databasePasswordFile = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        }
-      );
+      type = lib.types.nullOr lib.types.externalPath;
       default = null;
       description = ''
         Database password file.

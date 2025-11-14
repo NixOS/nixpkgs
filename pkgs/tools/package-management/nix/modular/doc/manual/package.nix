@@ -10,6 +10,7 @@
   jq,
   python3,
   rsync,
+  json-schema-for-humans,
   nix-cli,
 
   # Configuration Options
@@ -39,6 +40,9 @@ mkMesonDerivation (finalAttrs: {
     jq
     python3
     rsync
+  ]
+  ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") [
+    json-schema-for-humans
   ];
 
   nativeBuildInputs = finalAttrs.passthru.externalNativeBuildInputs ++ [

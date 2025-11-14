@@ -25,6 +25,10 @@
   buildTests ? true,
   llvmTargetsToBuild ? [ "NATIVE" ], # "NATIVE" resolves into x86 or aarch64 depending on stdenv
   llvmProjectsToBuild ? [
+    # Required for building triton>=3.5.0
+    # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
+    "lld"
+
     "llvm"
     "mlir"
   ],
@@ -64,7 +68,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "21.0.0-unstable-2025-06-10"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "22.0.0-unstable-2025-07-15"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   outputs = [
     "out"
@@ -80,8 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "8957e64a20fc7f4277565c6cfe3e555c119783ce";
-    hash = "sha256-ljdwHPLGZv72RBPBg5rs7pZczsB+WJhdCeHJxoi4gJQ=";
+    rev = "7d5de3033187c8a3bb4d2e322f5462cdaf49808f";
+    hash = "sha256-ayW6sOZGvP3SBjfmpXvYQJrPOAElY0MEHPFvj2fq+bM=";
   };
 
   nativeBuildInputs = [

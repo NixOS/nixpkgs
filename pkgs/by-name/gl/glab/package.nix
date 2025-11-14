@@ -83,7 +83,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://gitlab.com/gitlab-org/cli";
     changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      freezeboy
       luftmensch-luftmensch
       anthonyroussel
     ];

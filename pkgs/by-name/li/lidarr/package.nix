@@ -25,16 +25,16 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      x64-linux_hash = "sha256-LeJBed6Zo2+r6ZdgBTkcg+3ORoohvDpx37gOOorg9wY=";
-      arm64-linux_hash = "sha256-eS4MccKhISJBc68lhrYwbESV0FcqtAI/b4ojfQO/9m8=";
-      x64-osx_hash = "sha256-l3hi+X91DQNmGZKNJ4Y/DkB7ohu0/HTTnhSInIBiPlo=";
-      arm64-osx_hash = "sha256-ehZJZKxEiupLyBZCgz2subtD7BICXjAqIdnOnh+OMe4=";
+      x64-linux_hash = "sha256-Cji5hYEDvatOU0ExpggDWJEWSEXZTSpMGKm7Z5d44kc=";
+      arm64-linux_hash = "sha256-RWVlTnOENQ+/H6Mmkcim+Lu5tJvMBB26v/to4q61P40=";
+      x64-osx_hash = "sha256-rXUqzv6L0WJAoiQVm9UcG1OwCU8B2HmkiTOerZL19W4=";
+      arm64-osx_hash = "sha256-S23cPgEiqkeNW/J1kvI1QXZeYfrzb1GrD6YVFBKwm6M=";
     }
     ."${arch}-${os}_hash";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lidarr";
-  version = "2.14.5.4836";
+  version = "3.0.1.4866";
 
   src = fetchurl {
     inherit hash;

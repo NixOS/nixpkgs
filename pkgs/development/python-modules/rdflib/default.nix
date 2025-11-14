@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # builds
@@ -38,6 +39,12 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
   };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/RDFLib/rdflib/commit/0ab817f86b5733c9a3b4ede7ef065b8d79e53fc5.diff";
+      hash = "sha256-+yWzQ3MyH0wihgiQRMMXV/FpG8WlXaIBhpsDF4e3rbY=";
+    })
+  ];
 
   build-system = [ poetry-core ];
 
@@ -66,8 +73,6 @@ buildPythonPackage rec {
     # requires network access
     "rdflib/__init__.py::rdflib"
     "test/jsonld/test_onedotone.py::test_suite"
-    # https://github.com/RDFLib/rdflib/issues/3274
-    "test/test_sparql/test_translate_algebra.py::test_roundtrip"
   ];
 
   disabledTests = [

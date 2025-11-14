@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-applets";
-  version = "3.56.0";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-applets/${lib.versions.majorMinor finalAttrs.version}/gnome-applets-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+heu3JVa3ZgaouQ7TAcTU/aGu9HuwdcXqJCnNTIK0XE=";
+    hash = "sha256-5h7bcTRNzV2qbnF137snSnWL6LWEUnc1abs1ZFuFojg=";
   };
 
   nativeBuildInputs = [

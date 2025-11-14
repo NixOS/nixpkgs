@@ -30,10 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://mountainduck.io";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
-      emilytrau
-      iedame
-    ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })

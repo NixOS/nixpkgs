@@ -134,5 +134,6 @@ param.stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = !(params ? ${lib.versions.majorMinor ocaml.version});
   };
 }

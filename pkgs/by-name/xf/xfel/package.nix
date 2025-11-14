@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "xboot";
     repo = "xfel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Io2qOIeGovDpbxSlmqtGMrGMxUjMu/e1304euTEtJc=";
+    hash = "sha256-3eWVIPfUpa8ZJjce2F6eLdLttmoBI47VQ0IheSSgGmU=";
   };
 
   postPatch = ''

@@ -18,14 +18,14 @@ let
 in
 flutter332.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.8-beta";
+  version = "4.4.10";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-3it1tf/Gj8RBF+Htei4LHrXTJACHR4O2kmPPg3SqNfo=";
+    hash = "sha256-JzDFzopXNurkOtdheiQZJ5aBQWu7YZumiHs2RghGeVc=";
   };
 
   sourceRoot = "${src.name}/mobile/apps/auth";
@@ -114,7 +114,6 @@ flutter332.buildFlutterApplication rec {
       schnow265
       zi3m5f
       gepbird
-      iedame
     ];
     mainProgram = "enteauth";
     platforms = [

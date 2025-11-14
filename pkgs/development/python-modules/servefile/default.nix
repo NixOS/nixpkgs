@@ -5,7 +5,6 @@
   lib,
   pyopenssl,
   pytestCheckHook,
-  pythonAtLeast,
   requests,
 }:
 
@@ -22,9 +21,9 @@ buildPythonPackage rec {
   };
 
   dependencies = [
+    legacy-cgi
     pyopenssl
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

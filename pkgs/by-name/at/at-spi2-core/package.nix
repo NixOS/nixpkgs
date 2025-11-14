@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -12,6 +13,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gsettings-desktop-schemas,
   makeWrapper,
+  python3,
   dbus,
   glib,
   dconf,
@@ -27,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.56.2";
+  version = "2.58.0";
 
   outputs = [
     "out"
@@ -37,8 +39,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-4bHJg2qJR4UvdEDDLiMXkjTHa9mM2cxAAfN2QF+LeDs=";
+    hash = "sha256-390zANong6IZaf+t4oiYF/t8GQak75JJfrpllps9q1o=";
   };
+
+  # TODO apply unconditionally on rebuild
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "timersub.patch";
+      url = "https://github.com/GNOME/at-spi2-core/commit/02108ea1b96db0189b2d4a9eceb843e1f13b7bdf.diff";
+      hash = "sha256-pVBhawfRnJoXmovl9CAmzh+YWJkbvlOVrCs8XanjP00=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib
@@ -46,6 +57,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     makeWrapper
+    python3
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection

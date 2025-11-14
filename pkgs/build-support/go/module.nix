@@ -250,6 +250,9 @@ lib.extendMkDerivation {
             export GOPATH="$TMPDIR/go"
             export GOPROXY=off
             export GOSUMDB=off
+            if [ -f "$NIX_CC_FOR_TARGET/nix-support/dynamic-linker" ]; then
+              export GO_LDSO=$(cat $NIX_CC_FOR_TARGET/nix-support/dynamic-linker)
+            fi
             cd "$modRoot"
           ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
@@ -266,13 +269,6 @@ lib.extendMkDerivation {
             }
           ''
           + ''
-
-            # currently pie is only enabled by default in pkgsMusl
-            # this will respect the `hardening{Disable,Enable}` flags if set
-            if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-              export GOFLAGS="-buildmode=pie $GOFLAGS"
-            fi
-
             runHook postConfigure
           ''
         );

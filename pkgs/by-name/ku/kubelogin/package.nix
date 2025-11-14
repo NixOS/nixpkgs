@@ -19,6 +19,10 @@ buildGoModule rec {
     sha256 = "sha256-n9YkfK8QhGG4aGlU/SBtv59d05in1B8/mrsK4bDbjWo=";
   };
 
+  patches = [
+    ./disable-nix-incompatible-test.patch
+  ];
+
   vendorHash = "sha256-0tZ96t2Yeghe8xvEL9vjBS/gEUUIhyy61olqOlLD6q8=";
 
   ldflags = [

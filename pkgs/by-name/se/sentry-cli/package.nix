@@ -12,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "2.57.0";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    hash = "sha256-VcWIeWLWQpEDJhF0f95S9sQ0yC1NJqisOmEONINtKeA=";
+    hash = "sha256-8fz8bSQxqylTQ7mD/QbQ6gc8qlEdx/SDCjaB3uqFnGA=";
   };
   doCheck = false;
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
 
-  cargoHash = "sha256-S+A6v4rva8c7QuWP/5dRzUtJDdWryb8Jmu2J4JurNMM=";
+  cargoHash = "sha256-3I0uKHpD4SpSeLSIAEjBxxAFfyS4WIvb76x7QAy53HM=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \

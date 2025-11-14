@@ -11,16 +11,17 @@
   libGL,
   libpng,
   lunasvg,
+  nativefiledialog-extended,
   nlohmann_json,
   plutovg,
   xorg,
   zlib,
-  nativeFileDialog ? null,
   python3Packages ? null,
-  enableNFD ? false,
+  enableNFD ? true,
   enablePython ? false,
   enableTests ? false,
   enableExamples ? false,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "darbyjohnston";
     repo = "feather-tk";
     tag = finalAttrs.version;
-    fetchSubmodules = true;
     hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
   };
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libGL
   ]
-  ++ lib.optionals (enableNFD && nativeFileDialog != null) [
-    nativeFileDialog
+  ++ lib.optionals enableNFD [
+    nativefiledialog-extended
   ]
   ++ lib.optionals (enableNFD && stdenv.isLinux) [
     gtk3
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "feather_tk_UI_LIB" true)
     (lib.cmakeFeature "feather_tk_API" "GL_4_1")
     (lib.cmakeBool "feather_tk_nfd" enableNFD)
@@ -93,5 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    badPlatforms = [
+      # Broken on darwin with latest SDK, see https://github.com/darbyjohnston/feather-tk/issues/1
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })

@@ -106,10 +106,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Flight simulator";
-    maintainers = with lib.maintainers; [
-      raskin
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = lib.licenses.gpl2Plus;

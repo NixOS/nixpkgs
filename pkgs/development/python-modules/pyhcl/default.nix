@@ -1,25 +1,23 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   lib,
 
   # pythonPackages
-  coverage,
-  pytest,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhcl";
   version = "0.4.5";
-  format = "setuptools";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "virtuald";
     repo = "pyhcl";
-    rev = version;
-    sha256 = "sha256-vF40xEahs98G0lIC6XIl3eJHIuai2xTAeshUjiKN/BY=";
+    tag = version;
+    hash = "sha256-vF40xEahs98G0lIC6XIl3eJHIuai2xTAeshUjiKN/BY=";
   };
 
   # https://github.com/virtuald/pyhcl/blob/51a7524b68fe21e175e157b8af931016d7a357ad/setup.py#L64
@@ -27,15 +25,11 @@ buildPythonPackage rec {
     echo '__version__ = "${version}"' > ./src/hcl/version.py
   '';
 
-  nativeCheckInputs = [
-    coverage
-    pytest
-  ];
+  build-system = [ setuptools ];
 
-  # https://github.com/virtuald/pyhcl/blob/51a7524b68fe21e175e157b8af931016d7a357ad/tests/run_tests.sh#L4
-  checkPhase = ''
-    coverage run --source hcl -m pytest tests
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "HCL is a configuration language. pyhcl is a python parser for it";

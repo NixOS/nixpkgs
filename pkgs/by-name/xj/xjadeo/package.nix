@@ -15,15 +15,15 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xjadeo";
-  version = "0.8.14";
+  version = "0.8.14-unstable-2025-09-30";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
-    rev = "v${version}";
-    sha256 = "sha256-GTg0W3D0BRSxsmeVsB4On3MfwncScEGFJGVJK7wflCM=";
+    rev = "88dbd570148f05956ce9dcc49d4957250d516c7c";
+    hash = "sha256-SFP1uYaPEN9eqB4xaN6V17OGQrOF4ZyBM8NiZ+tSuYY=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     portmidi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X Jack Video Monitor";
     longDescription = ''
       Xjadeo is a software video player that displays a video-clip in sync with
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
       synchronizing movie frames with external events.
     '';
     homepage = "https://xjadeo.sourceforge.net";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mitchmindtree ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mitchmindtree ];
   };
 }

@@ -27,7 +27,7 @@ buildNpmPackage rec {
       --replace-fail '/commit/' '/tree/'
   '';
 
-  npmDepsHash = "sha256-hlCZqeMkqLgtRpN1+zKhcNK4ECSC4q8XPxzL6jVziqQ=";
+  npmDepsHash = "sha256-nILKXXFOp+Ix6gYpCgcKpAPiLAV9sgMqZ+oTfWZhSIs=";
 
   npmPackFlags = [ "--ignore-scripts" ];
 

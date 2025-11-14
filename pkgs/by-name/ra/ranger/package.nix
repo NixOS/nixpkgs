@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.3-unstable-2025-10-12";
+  version = "1.9.3-unstable-2025-11-05";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "6d5e0d8dc4cc5ddf53211e19f48c5b5e9ee47b18";
-    hash = "sha256-gGJPa2k90BF28EB5cPnY0yn0YblJkhn105V2JQQv+xA=";
+    rev = "f28690ef42778eb7982e2b309a2cc8d99f682eb4";
+    hash = "sha256-ZmUHHFth1jvMsyJ8XWRbLjoJnowRPZivFTim1VLh8hc=";
   };
 
   LC_ALL = "en_US.UTF-8";
