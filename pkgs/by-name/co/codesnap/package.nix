@@ -9,19 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codesnap";
-  version = "0.12.10";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "codesnap-rs";
     repo = "codesnap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BIdqSEsQIV5Z2mYMgoW0gtBaMNxhEsAbZbs/KDJEK4E=";
+    hash = "sha256-baTIxqfxxoHl7h81pboFlze5m/EMiEx9YOMfV0UPESI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  cargoHash = "sha256-bi5vvUDMI4WxIpv0sHESmLg3vwAIbNQ11pbJDuSe8z4=";
 
-  cargoHash = "sha256-xenMTuCy3ABEBddH759m0AgMJUlsS0eFj473Y6qjzkY=";
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "-p"
@@ -29,11 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
