@@ -36,11 +36,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8821cu driver";
     homepage = "https://github.com/morrownr/8821cu-20210916";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.contrun ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ contrun ];
   };
 }
