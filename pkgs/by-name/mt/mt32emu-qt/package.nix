@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withJack libjack2;
 
   cmakeFlags = [
-    "-Dmt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING=OFF"
-    "-Dmunt_WITH_MT32EMU_QT=ON"
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=OFF"
+    (lib.cmakeBool "mt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING" false)
+    (lib.cmakeBool "munt_WITH_MT32EMU_QT" true)
+    (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" false)
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
