@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.7.16";
+  version = "0.7.17";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "G-Two";
     repo = "subarulink";
     tag = "v${version}";
-    hash = "sha256-IrQlqvYZwQ9o7eBgmjOTA9leETgvC2Ek6ccsul2CTX0=";
+    hash = "sha256-vmMvKDZV8jChLehgdSGWQdxWVylnKU2BWXSiG9zI/to=";
   };
 
   build-system = [ setuptools ];
