@@ -1,10 +1,10 @@
 {
   stdenv,
   lib,
-  buildPackages,
   fetchurl,
   fetchpatch,
   runtimeShell,
+  pkgsBuildBuild,
   pkgsBuildHost,
   usePam ? !isStatic,
   pam ? null,
@@ -46,10 +46,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional usePam "pam";
 
   depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
-
-  nativeBuildInputs = lib.optionals withGo [
+    pkgsBuildBuild.stdenv.cc
+  ]
+  ++ lib.optionals withGo [
     go
   ];
 
@@ -111,7 +110,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   disallowedReferences = lib.optionals withGo [
-    pkgsBuildHost.go
+    pkgsBuildBuild.go
   ];
 
   passthru.tests = {
