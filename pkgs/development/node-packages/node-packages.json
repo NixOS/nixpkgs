@@ -21,7 +21,6 @@
 , "fast-cli"
 , "fauna-shell"
 , "fkill-cli"
-, "forever"
 , "grunt-cli"
 , "gulp-cli"
 , "he"
