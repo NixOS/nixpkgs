@@ -377,11 +377,13 @@ rec {
 
   drools = buildEclipseUpdateSite rec {
     name = "drools-${version}";
-    version = "7.17.0.Final";
+    version = "7.47.0.Final";
+
+    srcUrl = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
 
     src = fetchzip {
-      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
-      hash = "sha512-dWTS72R2VRgGnG6JafMwZ+wd+1e13pil0SAz2HDMXUmtgYa9iLLtma3SjcDJeWdOoblzWHRu7Ihblx3+Ogb2sQ==";
+      url = srcUrl;
+      sha512 = "1s9vnbap7mxfmjya0p7xsa2rjcpm5n15yfiqwv540jdyjf08fmy1pxj7q7g5z1z55a4yzcy7akgdc959j24k727709acafs6y0zy308";
       postFetch = ''
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
@@ -389,6 +391,26 @@ rec {
         rmdir sources;
         mv binaries/org.drools.updatesite/* .;
         rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    #the plugin's preferences must be configured to point to this
+    #recommended mechanism to make it available is by setting
+    #environment.etc.droolsruntime.source = eclipses.plugins.drools.runtime;
+    #in configuration.nix
+    runtime = fetchzip {
+      url = srcUrl;
+      sha512 = "34fq2yxlcrmgxdcclz4nmk8kkwkr7az61bh00avayxaiqny1fzcya1cbw0vn5wrbkxrz2j50ykp1ihfmwqgyg13057ia8fcrj19n6wi";
+      postFetch = ''
+        chmod go-w $out;
+
+        #runtime is comingled with update site, separate it out as above
+        cd $out;
+        find . -type f -not -path ./binaries/\* -exec rm {} \;
+        rm -rf binaries/org.drools.updatesite;
+        rmdir sources;
+        mv binaries/* .;
+        rmdir binaries;
       '';
     };
 
@@ -563,6 +585,25 @@ rec {
     };
   };
 
+  mat = buildEclipseUpdateSite rec {
+    name = "mat-${version}";
+    version = "1.9.1";
+    date = "201908260659";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/mat/${version}/MemoryAnalyzer-${version}.${date}.zip";
+      sha256 = "03wjrv9k4c0g0fm0nypmrfl83k3qqk6z9k01qzy2q26a6qiyzlvb";
+    };
+
+    meta = with lib; {
+      homepage = "https://www.eclipse.org/mat/";
+      description = "The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption";
+      license = licenses.epl10;
+      platforms = platforms.all;
+    };
+  };
+
   rustdt = buildEclipseUpdateSite rec {
     name = "rustdt-${version}";
     version = "0.6.2";
@@ -602,6 +643,29 @@ rec {
       description = "Scala IDE for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
+  sonarlint = buildEclipseUpdateSite rec {
+    name = "sonarlint-${version}";
+    version = "7.0.0.37874";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://binaries.sonarsource.com/SonarLint-for-Eclipse/releases/org.sonarlint.eclipse.site-${version}.zip";
+      sha256 = "sha256:193k30452200ps85wplgpc1x61fknh6xh165ryq7chl48g6f1ajz";
+      postFetch = ''
+        #update site includes source, which we don't care about
+        cd $out
+        find . -name \*source_\* -exec rm -v {} \;
+      '';
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/SonarSource/sonarlint-eclipse";
+      description = "SonarLint is a Free and Open Source IDE extension that identifies and helps you fix quality and security issues as you code";
+      license = licenses.lgpl3;
       platforms = platforms.all;
     };
   };
