@@ -96,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
       cc-by-sa-30
     ];
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      baduhai
+    ];
     platforms = lib.platforms.linux;
   };
 })
