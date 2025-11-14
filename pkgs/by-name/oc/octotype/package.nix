@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 modes/default.toml $out/share/octotype/modes/default.toml
     install -Dm644 modes/perfectionism.toml $out/share/octotype/modes/perfectionism.toml
-    install -Dm644 modes/wordcount.toml $out/share/octotype/modes/wordcount.toml
+    install -Dm644 modes/wordcount.toml $out/share/octotype/modes/wordrace.toml
 
     mkdir -p $out/share/octotype/sources
     substitute sources/random.toml $out/share/octotype/sources/random.toml \
