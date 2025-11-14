@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytui-music";
-  version = "2.0.0-rc1";
+  version = "2.0.0-rc1-unstable-2025-03-03";
 
   src = fetchFromGitHub {
     owner = "sudipghimire533";
     repo = "ytui-music";
-    rev = "d505c018fa4b093dbd76aaadcccec289b071a989";
-    hash = "sha256-f/23PVk4bpUCvcQ25iNI/UVXqiPBzPKWq6OohVF41p8=";
+    rev = "b90293d226f6fc27835372f145e55d385112768b";
+    hash = "sha256-pRD8ySpkJz8o7DURXG8DmBsbZV9MqVlMN63gAjYl4vc=";
   };
 
   cargoHash = "sha256-zwlg4BDHCM+KALjP929upaDpgy1mXEz5PYaVw+BhRp0=";
