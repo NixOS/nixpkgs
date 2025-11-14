@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "polyfactory";
-  version = "2.22.3";
+  version = "2.22.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "polyfactory";
     tag = "v${version}";
-    hash = "sha256-/LHGUQsYwEPBHWSyzaX0gUrqNm2cvWGraxMhWWvMkBc=";
+    hash = "sha256-yX71aWRubQ4kjYmhNIKLHG+F+oLh6OHN71xfJcmRaT4=";
   };
 
   build-system = [ hatchling ];
