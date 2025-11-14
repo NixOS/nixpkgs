@@ -146,6 +146,10 @@ let
             \"PATH=/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin\"
 
           substituteInPlace ./config/zfs-build.m4 \
+            --replace-fail "bashcompletiondir=/usr/share/bash-completion/completions" \
+              "bashcompletiondir=$out/share/bash-completion/completions"
+
+          substituteInPlace ./config/zfs-build.m4 \
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
         ''
