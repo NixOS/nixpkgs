@@ -3109,7 +3109,7 @@ with haskellLib;
       ]
     ) super)
     what4
-    what4_1_7
+    what4_1_7_1_0
     ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
@@ -3171,29 +3171,15 @@ with haskellLib;
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);
 
-  crucible =
-    lib.pipe
-      (super.crucible.override {
-        what4 = self.what4_1_7;
-      })
-      [
-        # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
-        (warnAfterVersion "0.7.2")
-        doJailbreak
-
-        # Prevent clashes with now exported Prelude.foldl'
-        (appendPatch (
-          pkgs.fetchpatch {
-            name = "base-4.20-foldl'.patch";
-            url = "https://github.com/GaloisInc/crucible/commit/10f372e4b0389dd3966e04163dcd67d71e651709.patch";
-            relative = "crucible";
-            sha256 = "sha256-frxTs5SB1ENjH+X0lIlQ8k6pDIDOANylrqIOQpEtObU=";
-          }
-        ))
-      ];
+  # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
+  crucible = doJailbreak (
+    super.crucible.override {
+      what4 = self.what4_1_7_1_0;
+    }
+  );
 
   crucible-llvm = super.crucible-llvm.override {
-    what4 = self.what4_1_7;
+    what4 = self.what4_1_7_1_0;
   };
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
