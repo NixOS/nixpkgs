@@ -169,7 +169,7 @@ let
         "aarch64-linux"
       ];
       sourceProvenance = [ sourceTypes.binaryNativeCode ];
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ raboof ];
     };
   };
 in
