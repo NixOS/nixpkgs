@@ -1,0 +1,25 @@
+From 96ec13b49ee2fcb2869f87b1f9e8c6cfc92275df Mon Sep 17 00:00:00 2001
+From: Tom van Dijk <18gatenmaker6@gmail.com>
+Date: Fri, 14 Nov 2025 18:55:40 +0100
+Subject: [PATCH] rust 2024 fixes
+
+---
+ src/main.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main.rs b/src/main.rs
+index 127f649..5ef526e 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -103,7 +103,7 @@ fn main() {
+         }
+     } else {
+         // Set `RUST_BACKTRACE` so we get a better backtrace for reporting.
+-        env::set_var("RUST_BACKTRACE", "1");
++        unsafe { env::set_var("RUST_BACKTRACE", "1"); }
+ 
+         // Run the command and get the stderr, checking for a backtrace.
+         let mut args = vec!["run-gui"];
+-- 
+2.51.0
+
