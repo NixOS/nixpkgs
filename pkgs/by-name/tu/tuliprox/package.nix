@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuliprox";
-  version = "3.1.7";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "euzu";
     repo = "tuliprox";
     tag = "v${version}";
-    hash = "sha256-uqPdXMc5ZlFtB6LclJe6jLTZ2ClXpXEz6r4TkfFuX0A=";
+    hash = "sha256-G+bVKBAxviyJShq2BG4vjMiTzHhoYaiP6FXrSWeTvkU=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
 
-  cargoHash = "sha256-bVnfSQ3dzT+Efic1+QVFFUc3iy+b7dS6xil1aE41fZQ=";
+  cargoHash = "sha256-bDQ4pDDTINTgotTen1/SxOZBmkUmbmmwmR4/nSoSf/A=";
 
   cargoBuildFlags = "--package tuliprox";
 
