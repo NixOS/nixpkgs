@@ -1,4 +1,13 @@
 {
+  "cataclysm-mkCataclysm": [
+    "index.html#cataclysm-mkCataclysm"
+  ],
+  "cataclysm-mkCataclysm-example": [
+    "index.html#cataclysm-mkCataclysm-example"
+  ],
+  "cataclysm-mkCataclysm-inputs": [
+    "index.html#cataclysm-mkCataclysm-inputs"
+  ],
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
@@ -4481,9 +4490,7 @@
     "index.html#cataclysm-dark-days-ahead"
   ],
   "how-to-install-cataclysm-dda": [
-    "index.html#how-to-install-cataclysm-dda"
-  ],
-  "important-note-for-overriding-packages": [
+    "index.html#how-to-install-cataclysm-dda",
     "index.html#important-note-for-overriding-packages"
   ],
   "customizing-with-mods": [
