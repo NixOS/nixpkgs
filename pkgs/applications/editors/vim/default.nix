@@ -78,20 +78,26 @@ stdenv.mkDerivation {
     substituteInPlace src/which.sh --replace '$PATH' '$HOST_PATH'
   '';
 
-  postInstall = ''
-    ln -s $out/bin/vim $out/bin/vi
-    mkdir -p $out/share/vim
-    cp "${vimrc}" $out/share/vim/vimrc
+  postInstall =
+    let
+      exeSuffix = stdenv.hostPlatform.extensions.executable;
+    in
+    ''
+      ln -s $out/bin/vim${exeSuffix} $out/bin/vi
+      mkdir -p $out/share/vim
+      cp "${vimrc}" $out/share/vim/vimrc
 
-    # Prevent bugs in the upstream makefile from silently failing and missing outputs.
-    # Some of those are build-time requirements for other packages.
-    for tool in ex xxd vi view vimdiff; do
-      if [ ! -e "$out/bin/$tool" ]; then
-        echo "ERROR: install phase did not install '$tool'."
-        exit 1
-      fi
-    done
-  '';
+      # Prevent bugs in the upstream makefile from silently failing and missing outputs.
+      # Some of those are build-time requirements for other packages.
+      for tool in ex xxd${exeSuffix} vi view vimdiff; do
+        if [ ! -e "$out/bin/$tool" ]; then
+          echo "ERROR: install phase did not install '$tool'."
+          exit 1
+        fi
+      done
+    '';
+
+  allowedImpureDLLs = [ "USER32.dll" ];
 
   __impureHostDeps = [ "/dev/ptmx" ];
 }
