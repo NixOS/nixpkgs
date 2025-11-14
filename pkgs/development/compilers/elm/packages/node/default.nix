@@ -43,18 +43,6 @@ with elmLib;
       };
   };
 
-  elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
-    meta =
-      with lib;
-      nodePkgs."elm-optimize-level-2".meta
-      // {
-        description = "Second level of optimization for the Javascript that the Elm Compiler produces";
-        homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.turbomack ];
-      };
-  };
-
   elm-pages = import ./elm-pages {
     inherit
       nodePkgs

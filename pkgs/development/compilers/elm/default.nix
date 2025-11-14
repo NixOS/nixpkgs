@@ -65,6 +65,8 @@ lib.makeScope pkgs.newScope (
 
       elm-live = callPackage ./packages/elm-live { };
 
+      elm-optimize-level-2 = callPackage ./packages/elm-optimize-level-2 { };
+
       elm-review = callPackage ./packages/elm-review { };
 
       elm-spa = callPackage ./packages/elm-spa { };

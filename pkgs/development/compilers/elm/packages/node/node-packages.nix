@@ -1182,15 +1182,6 @@ let
         sha512 = "sdWoUajOB1cd0A8cRRQ1cfyWNbmFKLAqBB89Y8x5iYyG/mkJHc0YUH8pdWBy2omi9qtCpiIgGjuwO0dQST2l5w==";
       };
     };
-    "@types/jest-27.5.2" = {
-      name = "_at_types_slash_jest";
-      packageName = "@types/jest";
-      version = "27.5.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/jest/-/jest-27.5.2.tgz";
-        sha512 = "mpT8LJJ4CMeeahobofYWIjFo0xonRS/HfxnVEPMPFSQdGUt1uHCnoPT7Zhb+sjDU2wz0oKV0OLUR0WzrHNgfeA==";
-      };
-    };
     "@types/json-schema-7.0.15" = {
       name = "_at_types_slash_json-schema";
       packageName = "@types/json-schema";
@@ -1684,15 +1675,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz";
         sha512 = "zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==";
-      };
-    };
-    "ansi-styles-5.2.0" = {
-      name = "ansi-styles";
-      packageName = "ansi-styles";
-      version = "5.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz";
-        sha512 = "Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==";
       };
     };
     "ansi-styles-6.2.1" = {
@@ -3009,15 +2991,6 @@ let
         sha512 = "NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==";
       };
     };
-    "commander-6.2.1" = {
-      name = "commander";
-      packageName = "commander";
-      version = "6.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-6.2.1.tgz";
-        sha512 = "U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==";
-      };
-    };
     "commander-9.5.0" = {
       name = "commander";
       packageName = "commander";
@@ -3826,15 +3799,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/devcert/-/devcert-1.2.2.tgz";
         sha512 = "UsLqvtJGPiGwsIZnJINUnFYaWgK7CroreGRndWHZkRD58tPFr3pVbbSyHR8lbh41+azR4jKvuNZ+eCoBZGA5kA==";
-      };
-    };
-    "diff-sequences-27.5.1" = {
-      name = "diff-sequences";
-      packageName = "diff-sequences";
-      version = "27.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/diff-sequences/-/diff-sequences-27.5.1.tgz";
-        sha512 = "k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==";
       };
     };
     "diffie-hellman-5.0.3" = {
@@ -6690,33 +6654,6 @@ let
         sha512 = "zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==";
       };
     };
-    "jest-diff-27.5.1" = {
-      name = "jest-diff";
-      packageName = "jest-diff";
-      version = "27.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jest-diff/-/jest-diff-27.5.1.tgz";
-        sha512 = "m0NvkX55LDt9T4mctTEgnZk3fmEg3NRYutvMPWM/0iPnkFj2wIeF45O1718cMSOFO1vINkqmxqD8vE37uTEbqw==";
-      };
-    };
-    "jest-get-type-27.5.1" = {
-      name = "jest-get-type";
-      packageName = "jest-get-type";
-      version = "27.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jest-get-type/-/jest-get-type-27.5.1.tgz";
-        sha512 = "2KY95ksYSaK7DMBWQn6dQz3kqAf3BB64y2udeG+hv4KfSOb9qwcYQstTJc1KCbsix+wLZWZYN8t7nwX3GOBLRw==";
-      };
-    };
-    "jest-matcher-utils-27.5.1" = {
-      name = "jest-matcher-utils";
-      packageName = "jest-matcher-utils";
-      version = "27.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jest-matcher-utils/-/jest-matcher-utils-27.5.1.tgz";
-        sha512 = "z2uTx/T6LBaCoNWNFWwChLBKYxTMcGBRjAt+2SbP929/Fflb9aa5LGma654Rz8z9HLxsrUaYzxE9T/EFIL/PAw==";
-      };
-    };
     "jiti-2.4.2" = {
       name = "jiti";
       packageName = "jiti";
@@ -9183,15 +9120,6 @@ let
         sha512 = "EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==";
       };
     };
-    "pretty-format-27.5.1" = {
-      name = "pretty-format";
-      packageName = "pretty-format";
-      version = "27.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/pretty-format/-/pretty-format-27.5.1.tgz";
-        sha512 = "Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==";
-      };
-    };
     "proc-log-5.0.0" = {
       name = "proc-log";
       packageName = "proc-log";
@@ -9496,15 +9424,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-5.1.6.tgz";
         sha512 = "X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==";
-      };
-    };
-    "react-is-17.0.2" = {
-      name = "react-is";
-      packageName = "react-is";
-      version = "17.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz";
-        sha512 = "w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==";
       };
     };
     "read-1.0.7" = {
@@ -11424,15 +11343,6 @@ let
         sha512 = "il+Cv80yVHFBwokQSfd4bldvr1Md951DpgAGfmhydt04L+YzHgubm2tQ7zueWDcGENKHq0ZvGFR/hjvNXilHEg==";
       };
     };
-    "ts-union-2.3.0" = {
-      name = "ts-union";
-      packageName = "ts-union";
-      version = "2.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ts-union/-/ts-union-2.3.0.tgz";
-        sha512 = "OP+W9WoYvGlOMjc90D6nYz60jU1zQlXAg3VBtuSoMDejY94PaORkya9HtHjaaqqwA4I5/hN38fmKK0nSWj7jPg==";
-      };
-    };
     "tslib-1.14.1" = {
       name = "tslib";
       packageName = "tslib";
@@ -11548,15 +11458,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz";
         sha512 = "/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==";
-      };
-    };
-    "typescript-4.9.5" = {
-      name = "typescript";
-      packageName = "typescript";
-      version = "4.9.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz";
-        sha512 = "1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==";
       };
     };
     "uglify-es-3.3.10" = {
@@ -15097,77 +14998,6 @@ in
       description = "Elm apps with zero configuration";
       homepage = "https://github.com/halfzebra/create-elm-app#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  elm-optimize-level-2 = nodeEnv.buildNodePackage {
-    name = "elm-optimize-level-2";
-    packageName = "elm-optimize-level-2";
-    version = "0.3.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/elm-optimize-level-2/-/elm-optimize-level-2-0.3.5.tgz";
-      sha512 = "t1xl8zR9UBspdmEMuLBE/qTLP+Ew3L4PzKLhSY/PsO21HU3jZ1ULmKxDtZmJPVG4ciqsY1JSl/GFbaSdQ1sX9Q==";
-    };
-    dependencies = [
-      sources."@types/jest-27.5.2"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-5.2.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.12"
-      (
-        sources."chalk-4.1.2"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-          ];
-        }
-      )
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-6.2.1"
-      sources."concat-map-0.0.1"
-      sources."cross-spawn-6.0.5"
-      sources."diff-sequences-27.5.1"
-      sources."find-elm-dependencies-2.0.4"
-      sources."firstline-1.3.1"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."has-flag-4.0.0"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."isexe-2.0.0"
-      sources."jest-diff-27.5.1"
-      sources."jest-get-type-27.5.1"
-      sources."jest-matcher-utils-27.5.1"
-      sources."lodash-4.17.21"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."nice-try-1.0.5"
-      sources."node-elm-compiler-5.0.6"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-key-2.0.1"
-      sources."pretty-format-27.5.1"
-      sources."react-is-17.0.2"
-      sources."rimraf-2.6.3"
-      sources."semver-5.7.2"
-      sources."shebang-command-1.2.0"
-      sources."shebang-regex-1.0.0"
-      sources."supports-color-7.2.0"
-      sources."temp-0.9.4"
-      sources."ts-union-2.3.0"
-      sources."typescript-4.9.5"
-      sources."which-1.3.1"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A second level of optimization for the Javascript that the Elm Compiler produces.";
-      homepage = "https://github.com/mdgriffith/elm-optimize-level-2#readme";
-      license = "BSD-3-Clause";
     };
     production = true;
     bypassCache = true;

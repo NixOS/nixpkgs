@@ -1,7 +1,1 @@
-[
-  "create-elm-app",
-  "elm-optimize-level-2",
-  "elm-pages",
-  "elm-git-install",
-  "@dillonkearns/elm-graphql"
-]
+["create-elm-app", "elm-pages", "elm-git-install", "@dillonkearns/elm-graphql"]
