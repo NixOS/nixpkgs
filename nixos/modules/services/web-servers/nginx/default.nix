@@ -1089,7 +1089,7 @@ in
                   example = "1:2:2";
                   description = ''
                     The levels parameter defines structure of subdirectories in cache: from
-                    1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                    1 to 3, each level accepts values 1 or 2. Can be used any combination of
                     1 and 2 in these formats: x, x:x and x:x:x.
                   '';
                 };
