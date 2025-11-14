@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  azure-sdk-for-cpp,
+  macro-utils-c,
 }:
 stdenv.mkDerivation {
   pname = "azure-umock-c";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     cmake
     ninja
   ];
-  buildInputs = [ azure-sdk-for-cpp.pkgs.macro-utils-c ];
+  buildInputs = [ macro-utils-c ];
 
   cmakeFlags = [
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
