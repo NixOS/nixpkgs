@@ -59,18 +59,6 @@ with elmLib;
       };
   };
 
-  elm-language-server = nodePkgs."@elm-tooling/elm-language-server" // {
-    meta =
-      with lib;
-      nodePkgs."@elm-tooling/elm-language-server".meta
-      // {
-        description = "Language server implementation for Elm";
-        homepage = "https://github.com/elm-tooling/elm-language-server";
-        license = licenses.mit;
-        maintainers = [ maintainers.turbomack ];
-      };
-  };
-
   elm-spa = nodePkgs."elm-spa".overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
       makeWrapper

@@ -1,6 +1,5 @@
 [
   "elm-analyse",
-  "@elm-tooling/elm-language-server",
   "elm-live",
   "elm-spa",
   "elm-upgrade",
