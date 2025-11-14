@@ -61,6 +61,8 @@ lib.makeScope pkgs.newScope (
 
       elm-git-install = callPackage ./packages/elm-git-install { };
 
+      elm-graphql = callPackage ./packages/elm-graphql { };
+
       elm-json = callPackage ./packages/elm-json { };
 
       elm-language-server = callPackage ./packages/elm-language-server { };

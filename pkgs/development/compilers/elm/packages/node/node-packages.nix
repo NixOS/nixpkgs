@@ -3261,24 +3261,6 @@ let
         sha512 = "MJG9liiZ+ogc4TzUwuvbER1JRdgvUFSB5+VR/g5h82fGaIRWMWddtKBHi7/sVhfjQZ6SehlyhvQYrcYkaUIpLg==";
       };
     };
-    "cross-fetch-3.2.0" = {
-      name = "cross-fetch";
-      packageName = "cross-fetch";
-      version = "3.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.2.0.tgz";
-        sha512 = "Q+xVJLoGOeIMXZmbUK4HYk+69cQH6LudR0Vu/pRm2YlU/hDV9CiS0gKUMaWY5f2NeUH9C1nV3bsTlCo0FsTV1Q==";
-      };
-    };
-    "cross-spawn-5.1.0" = {
-      name = "cross-spawn";
-      packageName = "cross-spawn";
-      version = "5.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cross-spawn/-/cross-spawn-5.1.0.tgz";
-        sha512 = "pTgQJ5KC0d2hcY8eyL1IzlBPYjTkyH72XRZPnLyKus2mBfNjQs3klqbJU2VILqZryAZUt9JOb3h/mWMy23/f5A==";
-      };
-    };
     "cross-spawn-6.0.5" = {
       name = "cross-spawn";
       packageName = "cross-spawn";
@@ -4143,15 +4125,6 @@ let
         sha512 = "Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg==";
       };
     };
-    "encoding-0.1.13" = {
-      name = "encoding";
-      packageName = "encoding";
-      version = "0.1.13";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/encoding/-/encoding-0.1.13.tgz";
-        sha512 = "ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==";
-      };
-    };
     "end-of-stream-1.4.4" = {
       name = "end-of-stream";
       packageName = "end-of-stream";
@@ -4521,15 +4494,6 @@ let
         sha512 = "Nmb6QXkELsuBr24CJSkilo6UHHgbekK5UiZgfE6UHD3Eb27YC6oD+bhcT+tJ6cl8dmsgdQxnWlcry8ksBIBLpw==";
       };
     };
-    "extract-files-9.0.0" = {
-      name = "extract-files";
-      packageName = "extract-files";
-      version = "9.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/extract-files/-/extract-files-9.0.0.tgz";
-        sha512 = "CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==";
-      };
-    };
     "extsprintf-1.3.0" = {
       name = "extsprintf";
       packageName = "extsprintf";
@@ -4843,15 +4807,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/form-data/-/form-data-2.3.3.tgz";
         sha512 = "1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==";
-      };
-    };
-    "form-data-3.0.3" = {
-      name = "form-data";
-      packageName = "form-data";
-      version = "3.0.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/form-data/-/form-data-3.0.3.tgz";
-        sha512 = "q5YBMeWy6E2Un0nMGWMgI65MAKtaylxfNJGJxpGh45YDciZB4epbWpaAfImil6CPAPTYB4sh0URQNDRIZG5F2w==";
       };
     };
     "forwarded-0.2.0" = {
@@ -5266,24 +5221,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz";
         sha512 = "RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==";
-      };
-    };
-    "graphql-16.11.0" = {
-      name = "graphql";
-      packageName = "graphql";
-      version = "16.11.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graphql/-/graphql-16.11.0.tgz";
-        sha512 = "mS1lbMsxgQj6hge1XZ6p7GPhbrtFwUFYi3wRzXAC/FmYnyXMTvvI3td3rjmQ2u8ewXueaSvRPWaEcgVVOT9Jnw==";
-      };
-    };
-    "graphql-request-3.7.0" = {
-      name = "graphql-request";
-      packageName = "graphql-request";
-      version = "3.7.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graphql-request/-/graphql-request-3.7.0.tgz";
-        sha512 = "dw5PxHCgBneN2DDNqpWu8QkbbJ07oOziy8z+bK/TAXufsOLaETuVO4GkXrbs0WjhdKhBMN3BkpN/RIvUHkmNUQ==";
       };
     };
     "gray-matter-4.0.3" = {
@@ -7732,15 +7669,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/node-elm-compiler/-/node-elm-compiler-5.0.6.tgz";
         sha512 = "DWTRQR8b54rvschcZRREdsz7K84lnS8A6YJu8du3QLQ8f204SJbyTaA6NzYYbfUG97OTRKRv/0KZl82cTfpLhA==";
-      };
-    };
-    "node-fetch-2.7.0" = {
-      name = "node-fetch";
-      packageName = "node-fetch";
-      version = "2.7.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz";
-        sha512 = "c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==";
       };
     };
     "node-forge-0.10.0" = {
@@ -11289,15 +11217,6 @@ let
         sha512 = "nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==";
       };
     };
-    "tr46-0.0.3" = {
-      name = "tr46";
-      packageName = "tr46";
-      version = "0.0.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz";
-        sha512 = "N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==";
-      };
-    };
     "tree-dump-1.0.3" = {
       name = "tree-dump";
       packageName = "tree-dump";
@@ -11856,15 +11775,6 @@ let
         sha512 = "O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==";
       };
     };
-    "webidl-conversions-3.0.1" = {
-      name = "webidl-conversions";
-      packageName = "webidl-conversions";
-      version = "3.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz";
-        sha512 = "2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==";
-      };
-    };
     "webpack-4.44.2" = {
       name = "webpack";
       packageName = "webpack";
@@ -11953,15 +11863,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-3.5.0.tgz";
         sha512 = "jXkLtsR42xhXg7akoDKvKWE40eJeI+2KZqcp2h3NsOrRnDvtWX36KcKl30dy+hxECivdk2BVUHVNrPtoMBUx6A==";
-      };
-    };
-    "whatwg-url-5.0.0" = {
-      name = "whatwg-url";
-      packageName = "whatwg-url";
-      version = "5.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz";
-        sha512 = "saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==";
       };
     };
     "which-1.3.1" = {
@@ -15615,76 +15516,6 @@ in
     meta = {
       description = "Hybrid Elm framework with full-stack and static routes.";
       homepage = "https://elm-pages.com";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@dillonkearns/elm-graphql" = nodeEnv.buildNodePackage {
-    name = "_at_dillonkearns_slash_elm-graphql";
-    packageName = "@dillonkearns/elm-graphql";
-    version = "4.3.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@dillonkearns/elm-graphql/-/elm-graphql-4.3.1.tgz";
-      sha512 = "De5PhJpuv2sqcglfhxLp4iB2Zxha6ejbhvajHeziE8ZZRsVXBcoDdh+aScWOQR0GR/t5cF4iGgNf6a5aPO9faA==";
-    };
-    dependencies = [
-      sources."asynckit-0.4.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.12"
-      sources."call-bind-apply-helpers-1.0.2"
-      sources."combined-stream-1.0.8"
-      sources."concat-map-0.0.1"
-      sources."cross-fetch-3.2.0"
-      sources."cross-spawn-5.1.0"
-      sources."delayed-stream-1.0.0"
-      sources."dunder-proto-1.0.1"
-      sources."encoding-0.1.13"
-      sources."es-define-property-1.0.1"
-      sources."es-errors-1.3.0"
-      sources."es-object-atoms-1.1.1"
-      sources."es-set-tostringtag-2.1.0"
-      sources."extract-files-9.0.0"
-      sources."form-data-3.0.3"
-      sources."fs.realpath-1.0.0"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.3.0"
-      sources."get-proto-1.0.1"
-      sources."glob-7.2.3"
-      sources."gopd-1.2.0"
-      sources."graphql-16.11.0"
-      sources."graphql-request-3.7.0"
-      sources."has-symbols-1.1.0"
-      sources."has-tostringtag-1.0.2"
-      sources."hasown-2.0.2"
-      sources."iconv-lite-0.6.3"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."isexe-2.0.0"
-      sources."lru-cache-4.1.5"
-      sources."math-intrinsics-1.1.0"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."minimatch-3.1.2"
-      sources."node-fetch-2.7.0"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."pseudomap-1.0.2"
-      sources."safer-buffer-2.1.2"
-      sources."shebang-command-1.2.0"
-      sources."shebang-regex-1.0.0"
-      sources."tr46-0.0.3"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-      sources."which-1.3.1"
-      sources."wrappy-1.0.2"
-      sources."yallist-2.1.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "[![Build Status](https://github.com/dillonkearns/elm-graphql/workflows/CI/badge.svg)](https://github.com/dillonkearns/elm-graphql/actions?query=branch%3Amaster) [![Elm package](https://img.shields.io/elm-package/v/dillonkearns/elm-graphql.svg)](https://pa";
-      homepage = "https://github.com/dillonkearns/elm-graphql#readme";
       license = "BSD-3-Clause";
     };
     production = true;
