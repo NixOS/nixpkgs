@@ -25,7 +25,6 @@
 , "gulp-cli"
 , "js-yaml"
 , "jsdoc"
-, "json"
 , "lcov-result-merger"
 , "live-server"
 , "madoko"

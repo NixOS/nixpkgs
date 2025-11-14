@@ -30568,23 +30568,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  json = nodeEnv.buildNodePackage {
-    name = "json";
-    packageName = "json";
-    version = "11.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/json/-/json-11.0.0.tgz";
-      sha512 = "N/ITv3Yw9Za8cGxuQqSqrq6RHnlaHWZkAFavcfpH/R52522c26EbihMxnY7A1chxfXJ4d+cEFIsyTgfi9GihrA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "a 'json' command for massaging and processing JSON on the command line";
-      homepage = "https://github.com/trentm/json#readme";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   lcov-result-merger = nodeEnv.buildNodePackage {
     name = "lcov-result-merger";
     packageName = "lcov-result-merger";

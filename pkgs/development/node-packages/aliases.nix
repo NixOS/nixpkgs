@@ -207,6 +207,7 @@ mapAliases {
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   inherit (pkgs) js-beautify; # Added 2025-11-06
   inherit (pkgs) jshint; # Added 2025-11-06
+  json = throw "'json' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) json-diff; # Added 2025-11-07
   jsonlint = throw "'jsonlint' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   inherit (pkgs) jsonplaceholder; # Added 2025-11-04
