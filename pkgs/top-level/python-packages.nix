@@ -15071,6 +15071,8 @@ self: super: with self; {
 
   python-jsonpath = callPackage ../development/python-modules/python-jsonpath { };
 
+  python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
+
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
   python-kadmin-rs = callPackage ../development/python-modules/python-kadmin-rs { };
