@@ -23,7 +23,6 @@
 , "fkill-cli"
 , "grunt-cli"
 , "gulp-cli"
-, "imapnotify"
 , "js-yaml"
 , "jsdoc"
 , "json"

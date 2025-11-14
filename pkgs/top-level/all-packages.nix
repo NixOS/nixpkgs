@@ -11397,8 +11397,6 @@ with pkgs;
     }
   );
 
-  inherit (nodePackages) imapnotify;
-
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   inkscape = callPackage ../applications/graphics/inkscape {
