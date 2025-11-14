@@ -67,7 +67,6 @@ buildPythonPackage {
   ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-libcxx.patch {
-      LIBCXX_DEV = llvmPackages.libcxx.dev;
       LIBCXX_LIB = llvmPackages.libcxx;
     })
 
