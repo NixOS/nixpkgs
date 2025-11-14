@@ -37,7 +37,6 @@
 , "purescript-language-server"
 , "purescript-psa"
 , "purs-tidy"
-, "purty"
 , "sass"
 , "semver"
 , "sloc"

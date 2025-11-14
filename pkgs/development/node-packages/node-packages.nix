@@ -29838,24 +29838,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  purty = nodeEnv.buildNodePackage {
-    name = "purty";
-    packageName = "purty";
-    version = "7.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/purty/-/purty-7.0.0.tgz";
-      sha512 = "gHHghPEjRY39GUJ8KnOMRfPArJILGCXwEhX6BmEdNiLgZuCjLLBLyawGiKFjYMfy8H5Dsk5NbgwIGslrPrernA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "PureScript pretty printer";
-      homepage = "https://gitlab.com/joneshf/purty#README";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   sass = nodeEnv.buildNodePackage {
     name = "sass";
     packageName = "sass";
