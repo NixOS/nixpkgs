@@ -1,14 +1,10 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3 nix-prefetch-git
+#! nix-shell -i python3 --packages python3 nix-prefetch-git
 
+import argparse
 import json
 import subprocess
-import sys
 from pathlib import Path
-
-THIS_FOLDER = Path(__file__).parent.resolve()
-PUBSPEC_LOCK = THIS_FOLDER / "pubspec.lock.json"
-GIT_HASHES = THIS_FOLDER / "gitHashes.json"
 
 
 def fetch_git_hash(url: str, rev: str) -> str:
@@ -22,14 +18,18 @@ def fetch_git_hash(url: str, rev: str) -> str:
 
 
 def main() -> None:
-    if not PUBSPEC_LOCK.exists():
-        sys.exit(1)
-    try:
-        data = json.loads(PUBSPEC_LOCK.read_text())
-    except json.JSONDecodeError:
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-i",
+        "--input",
+        type=Path,
+        default=Path(__file__).parent.resolve() / "pubspec.lock.json",
+    )
+    parser.add_argument("-o", "--output", type=Path, default=None)
+    args = parser.parse_args()
+    output_file: Path | None = args.output
     output: dict[str, str] = {}
-    for name, info in data.get("packages", {}).items():
+    for name, info in json.loads(args.input.read_text()).get("packages", {}).items():
         if info.get("source") != "git":
             continue
         desc = info.get("description")
@@ -39,12 +39,12 @@ def main() -> None:
         rev = desc.get("resolved-ref")
         if not (isinstance(url, str) and isinstance(rev, str)):
             continue
-        try:
-            package_hash = fetch_git_hash(url, rev)
-        except subprocess.CalledProcessError:
-            continue
-        output[name] = package_hash
-    GIT_HASHES.write_text(json.dumps(output, indent=2) + "\n")
+        output[name] = fetch_git_hash(url, rev)
+    output_json = json.dumps(output, indent=2, sort_keys=True) + "\n"
+    if output_file:
+        output_file.write_text(output_json)
+    else:
+        print(output_json, end="")
 
 
 if __name__ == "__main__":
