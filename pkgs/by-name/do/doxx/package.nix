@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm $out/bin/generate_test_docs
   '';
 
-  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
