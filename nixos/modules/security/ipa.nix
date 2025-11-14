@@ -141,7 +141,7 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      krb5Full
+      krb5
       freeipa
     ];
 
