@@ -3738,15 +3738,6 @@ let
         sha512 = "8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==";
       };
     };
-    "amdefine-1.0.1" = {
-      name = "amdefine";
-      packageName = "amdefine";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz";
-        sha512 = "S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==";
-      };
-    };
     "ansi-0.3.1" = {
       name = "ansi";
       packageName = "ansi";
@@ -19389,15 +19380,6 @@ let
         sha512 = "uuoJ1hU/k6M0779t3VMVIYpb2VMJk05cehCaABFhXaibcbvfgR8wKiozLjVFSzJPmQMRqIcO0HMyTFqfV09V6Q==";
       };
     };
-    "requirejs-2.3.7" = {
-      name = "requirejs";
-      packageName = "requirejs";
-      version = "2.3.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.7.tgz";
-        sha512 = "DouTG8T1WanGok6Qjg2SXuCMzszOo0eHeH9hDZ5Y4x8Je+9JB38HdTLT4/VA8OaUhBa0JPVHJ0pyBkM1z+pDsw==";
-      };
-    };
     "requires-port-1.0.0" = {
       name = "requires-port";
       packageName = "requires-port";
@@ -29735,40 +29717,6 @@ in
       description = "Merges multiple lcov results into one";
       homepage = "https://github.com/mweibel/lcov-result-merger";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  madoko = nodeEnv.buildNodePackage {
-    name = "madoko";
-    packageName = "madoko";
-    version = "1.2.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/madoko/-/madoko-1.2.3.tgz";
-      sha512 = "ZcLE8T+KRVkbYigQQeOazhWrb8XGMZCvKZlhiuheOujekDTrpnLWGGW5JqM6fflU6tWHyzECEa7xLQ6f/9o/Hg==";
-    };
-    dependencies = [
-      sources."amdefine-1.0.1"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."concat-map-0.0.1"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."minimatch-3.1.2"
-      sources."mkdirp-0.3.5"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."requirejs-2.3.7"
-      sources."rimraf-3.0.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Madoko is a fast scholarly Markdown processor written in Koka";
-      homepage = "http://madoko.codeplex.com";
     };
     production = true;
     bypassCache = true;

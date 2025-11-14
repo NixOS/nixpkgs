@@ -26,7 +26,6 @@
 , "js-yaml"
 , "jsdoc"
 , "lcov-result-merger"
-, "madoko"
 , "mathjax"
 , "nijs"
 , "node-gyp-build"
