@@ -7618,8 +7618,6 @@ self: super: with self; {
 
   jsonfeed = callPackage ../development/python-modules/jsonfeed { };
 
-  jsonfield = callPackage ../development/python-modules/jsonfield { };
-
   jsonformatter = callPackage ../development/python-modules/jsonformatter { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
