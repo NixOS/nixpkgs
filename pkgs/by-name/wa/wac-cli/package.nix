@@ -6,8 +6,9 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  name = "wac-cli";
+  pname = "wac-cli";
   version = "0.7.0";
+
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wac";
