@@ -20,7 +20,6 @@ with elmLib;
     elm-live
     elm-upgrade
     elm-xref
-    elm-analyse
     elm-git-install
     ;
 
