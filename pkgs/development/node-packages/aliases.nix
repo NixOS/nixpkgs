@@ -231,7 +231,7 @@ mapAliases {
   inherit (pkgs) mocha; # Added 2025-11-04
   multi-file-swagger = throw "'multi-file-swagger' has been removed because it is unmaintained upstream"; # Added 2025-11-10
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
-  inherit (pkgs) near-cli; # added 2023-09-09
+  near-cli = throw "'near-cli' has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neovim = pkgs.neovim-node-client; # added 2024-11-13
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
