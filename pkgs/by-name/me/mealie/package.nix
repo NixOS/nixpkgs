@@ -128,16 +128,6 @@ pythonpkgs.buildPythonApplication rec {
     "test_pg_connection_url_encode_password"
   ];
 
-  disabledTestPaths = [
-    # KeyError: 'alembic_version'
-    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
-    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
-    # sqlite3.OperationalError: no such table
-    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
-    "tests/unit_tests/test_ingredient_parser.py"
-    "tests/unit_tests/test_security.py"
-  ];
-
   passthru = {
     updateScript = nix-update-script { };
     tests = {
