@@ -294,6 +294,7 @@ mapAliases {
   inherit (pkgs) serve; # added 2025-08-27
   inherit (pkgs) serverless; # Added 2023-11-29
   shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
+  smartdc = throw "'smartdc' was removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) snyk; # Added 2023-08-30
   "socket.io" = throw "socket.io was removed because it provides no executable"; # added 2025-03-23
   speed-test = throw "'speed-test' has been removed because it was broken"; # Added 2025-11-07
