@@ -1,9 +1,25 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   buildNpmPackage,
   fetchFromGitHub,
   stdenv,
+  babel,
+  beancount,
+  beangulp,
+  beanquery,
+  cheroot,
+  click,
+  flask,
+  flask-babel,
+  jinja2,
+  markdown2,
+  ply,
+  pytestCheckHook,
+  setuptools-scm,
+  simplejson,
+  watchfiles,
+  werkzeug,
 }:
 let
   src = buildNpmPackage (finalAttrs: {
@@ -32,7 +48,7 @@ let
     '';
   });
 in
-python3Packages.buildPythonApplication {
+buildPythonPackage {
   pname = "fava";
   inherit (src) version;
   pyproject = true;
@@ -46,9 +62,9 @@ python3Packages.buildPythonApplication {
       --replace-fail '"fava"' '"${placeholder "out"}/bin/fava"'
   '';
 
-  build-system = [ python3Packages.setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     babel
     beancount
     beangulp
@@ -65,7 +81,9 @@ python3Packages.buildPythonApplication {
     watchfiles
   ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "fava" ];
 
   # tests/test_cli.py
   __darwinAllowLocalNetworking = true;
@@ -75,7 +93,7 @@ python3Packages.buildPythonApplication {
 
   env = {
     # Disable some tests when building with beancount2
-    SNAPSHOT_IGNORE = lib.versions.major python3Packages.beancount.version == "2";
+    SNAPSHOT_IGNORE = lib.versions.major beancount.version == "2";
   };
 
   meta = {
