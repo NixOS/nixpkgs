@@ -774,6 +774,7 @@ rec {
           # On Darwin, the debug symbols are in a separate directory.
           "./bin/test_binary1.dSYM/Contents/Info.plist"
           "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+          "./bin/test_binary1.dSYM/Contents/Resources/Relocations/${stdenv.hostPlatform.rust.platform.arch}/test_binary1.yml"
         ];
       };
 

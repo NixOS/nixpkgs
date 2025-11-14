@@ -2203,7 +2203,9 @@ self: super: with self; {
 
   brother-ql = callPackage ../development/python-modules/brother-ql { };
 
-  brotli = callPackage ../development/python-modules/brotli { };
+  brotli = callPackage ../development/python-modules/brotli {
+    inherit (pkgs) brotli;
+  };
 
   brotli-asgi = callPackage ../development/python-modules/brotli-asgi { };
 
@@ -18096,11 +18098,11 @@ self: super: with self; {
 
   swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
 
-  swh-perfecthash = callPackage ../development/python-modules/swh-perfecthash { };
-
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
 
   swh-scheduler = callPackage ../development/python-modules/swh-scheduler { };
+
+  swh-shard = callPackage ../development/python-modules/swh-shard { };
 
   swh-storage = callPackage ../development/python-modules/swh-storage { };
 

@@ -5218,15 +5218,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_90 = callPackage ../development/compilers/rust/1_90.nix { };
-  rust = rust_1_90;
+  rust_1_91 = callPackage ../development/compilers/rust/1_91.nix { };
+  rust = rust_1_91;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_90 = rust_1_90.packages.stable;
-  rustPackages = rustPackages_1_90;
+  rustPackages_1_91 = rust_1_91.packages.stable;
+  rustPackages = rustPackages_1_91;
 
   inherit (rustPackages)
     cargo
@@ -8169,7 +8169,6 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
-    libressl_4_0
     libressl_4_1
     libressl_4_2
     ;
@@ -8892,23 +8891,25 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_7 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.7"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
+
   sbcl_2_5_9 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.9"; };
+
     faslExt = "fasl";
     flags = [
       "--dynamic-space-size"
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_9;
+  sbcl_2_5_10 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.10"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_5_10;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 

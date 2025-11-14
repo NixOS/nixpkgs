@@ -9,15 +9,12 @@
   buildPackages,
   pkgsBuildTarget,
   targetPackages,
-  testers,
-  skopeo,
   buildGo124Module,
+  callPackage,
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo124Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -195,14 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap skopeoTest;
-    tests = {
-      skopeo = testers.testVersion { package = skopeoTest; };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "go version";
-        version = "go${finalAttrs.version}";
-      };
+    inherit goBootstrap;
+    tests = callPackage ./tests.nix {
+      go = finalAttrs.finalPackage;
+      buildGoModule = buildGo124Module;
     };
   };
 
