@@ -209,7 +209,7 @@ stdenv.mkDerivation rec {
 
     # Bazel tries to run "/bin/true" to test if linux-sandbox works.
     (replaceVars ./patches/linux_sandbox.patch {
-        binTrue = "${coreutils}/bin/true";
+      binTrue = "${coreutils}/bin/true";
     })
 
     # Provide default JRE for Bazel process by setting --server_javabase=
@@ -260,7 +260,7 @@ stdenv.mkDerivation rec {
     # on branch/tag information which we don't have with tarball releases.
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
-    export EMBED_LABEL="${version}- (@non-git)"
+    export EMBED_LABEL="${version}"
 
     echo "Stage 1 - Running bazel bootstrap script"
     # Note: can't use lib.escapeShellArgs here because it will escape arguments
