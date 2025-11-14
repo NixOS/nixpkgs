@@ -4701,15 +4701,6 @@ let
         sha512 = "V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==";
       };
     };
-    "bcrypto-5.4.0" = {
-      name = "bcrypto";
-      packageName = "bcrypto";
-      version = "5.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bcrypto/-/bcrypto-5.4.0.tgz";
-        sha512 = "KDX2CR29o6ZoqpQndcCxFZAtYA1jDMnXU3jmCfzP44g++Cu7AHHtZN/JbrN/MXAg9SLvtQ8XISG+eVD9zH1+Jg==";
-      };
-    };
     "bencode-0.7.0" = {
       name = "bencode";
       packageName = "bencode";
@@ -4753,15 +4744,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/better-path-resolve/-/better-path-resolve-1.0.0.tgz";
         sha512 = "pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==";
-      };
-    };
-    "bfile-0.2.3" = {
-      name = "bfile";
-      packageName = "bfile";
-      version = "0.2.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bfile/-/bfile-0.2.3.tgz";
-        sha512 = "BhbmCLqDC+u8rPSeB/I8bRC8luQoUt+wD326CECXYXtE5GyTWL/q/OkNp58aH7XEREguEItvqM18s9vXLvg6fw==";
       };
     };
     "big-integer-1.6.52" = {
@@ -5151,15 +5133,6 @@ let
         sha512 = "Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==";
       };
     };
-    "brq-0.1.10" = {
-      name = "brq";
-      packageName = "brq";
-      version = "0.1.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/brq/-/brq-0.1.10.tgz";
-        sha512 = "iil4TtQWw9Wb2G+mEP0iHqM8Q16mHINJzR5wHTsfKZTtcOVoEGj6yX3ed7yLQ92KR4QO9KjlrlO7/Y7766i7Tw==";
-      };
-    };
     "bs-recipes-1.3.4" = {
       name = "bs-recipes";
       packageName = "bs-recipes";
@@ -5167,15 +5140,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/bs-recipes/-/bs-recipes-1.3.4.tgz";
         sha512 = "BXvDkqhDNxXEjeGM8LFkSbR+jzmP/CYpCiVKYn+soB1dDldeU15EBNDkwVXndKuX35wnNUaPd0qSoQEAkmQtMw==";
-      };
-    };
-    "bsert-0.0.13" = {
-      name = "bsert";
-      packageName = "bsert";
-      version = "0.0.13";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bsert/-/bsert-0.0.13.tgz";
-        sha512 = "gYzSj8I2lDTKvl4aRSYs2CZIpeJugq7RjGhLRG+Jl//gEW5B2u1MKB6exVCL09FqYj6JRQAAgRwQHMOWvr7A8A==";
       };
     };
     "btoa-1.2.1" = {
@@ -5356,15 +5320,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/bufferutil/-/bufferutil-4.0.9.tgz";
         sha512 = "WDtdLmJvAuNNPzByAYpRo2rF1Mmradw6gvWsQKf63476DDXmomT9zUiGypLcG4ibIM67vhAj8jJRdbmEws2Aqw==";
-      };
-    };
-    "bufio-1.0.7" = {
-      name = "bufio";
-      packageName = "bufio";
-      version = "1.0.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bufio/-/bufio-1.0.7.tgz";
-        sha512 = "bd1dDQhiC+bEbEfg56IdBv7faWa6OipMs/AFFFvtFnB3wAYjlwQpQRZ0pm6ZkgtfL0pILRXhKxOiQj6UzoMR7A==";
       };
     };
     "builtin-modules-3.1.0" = {
@@ -10623,15 +10578,6 @@ let
         sha512 = "eWv1ds/zAlz+M1ioHsyKJomfY7jbDDPpwSkv14KQj89bycx1nvK5/2Cj/T9g7kzJcX5Bc7Yv22FjfBZS/jl94A==";
       };
     };
-    "goosig-0.10.0" = {
-      name = "goosig";
-      packageName = "goosig";
-      version = "0.10.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/goosig/-/goosig-0.10.0.tgz";
-        sha512 = "+BVVLfxmawAmGVjjJpXzu5LNcFIOfgXgP7kWEyc3qu/xn9RMqbPbNfYDdHBZKfZkDMIO7Q4vD790iNYQAXhoFA==";
-      };
-    };
     "gopd-1.2.0" = {
       name = "gopd";
       packageName = "gopd";
@@ -13798,15 +13744,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/load-yaml-file/-/load-yaml-file-0.2.0.tgz";
         sha512 = "OfCBkGEw4nN6JLtgRidPX6QxjBQGQf72q3si2uvqyFEMbycSFFHwAZeXx6cJgFM9wmLrf9zBwCP3Ivqa+LLZPw==";
-      };
-    };
-    "loady-0.0.5" = {
-      name = "loady";
-      packageName = "loady";
-      version = "0.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/loady/-/loady-0.0.5.tgz";
-        sha512 = "uxKD2HIj042/HBx77NBcmEPsD+hxCgAtjEWlYNScuUjIsh/62Uyu39GOR68TBR68v+jqDL9zfftCWoUo4y03sQ==";
       };
     };
     "locate-path-5.0.0" = {
@@ -30690,33 +30627,6 @@ in
     meta = {
       description = "Command line interface for gulp";
       homepage = "https://gulpjs.com";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  hs-airdrop = nodeEnv.buildNodePackage {
-    name = "hs-airdrop";
-    packageName = "hs-airdrop";
-    version = "0.10.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/hs-airdrop/-/hs-airdrop-0.10.0.tgz";
-      sha512 = "z3H9va3XyqvEG7K6ldUhX47n3TNMtzB9oA/z04SCVwJFk9s6WPbI6Tqkuv4U9obkXtMlwTjVWd5pDO+HZYpzWA==";
-    };
-    dependencies = [
-      sources."bcrypto-5.4.0"
-      sources."bfile-0.2.3"
-      sources."brq-0.1.10"
-      sources."bsert-0.0.13"
-      sources."bufio-1.0.7"
-      sources."goosig-0.10.0"
-      sources."loady-0.0.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Handshake airdrop redemption";
-      homepage = "https://github.com/handshake-org/hs-airdrop";
       license = "MIT";
     };
     production = true;

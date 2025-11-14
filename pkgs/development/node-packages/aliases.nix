@@ -187,6 +187,7 @@ mapAliases {
   gtop = pkgs.gtop; # added 2023-07-31
   gulp = self.gulp-cli; # Added 2025-11-04
   he = throw "'he' has been removed because it was unmaintained upstream"; # Added 2025-11-14
+  hs-airdrop = throw "'hs-airdrop' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   hs-client = pkgs.hsd; # added 2023-08-20
   inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
