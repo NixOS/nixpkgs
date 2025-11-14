@@ -95,8 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ]
-  ++ testDeps;
+  ];
+
+  checkInputs = testDeps;
 
   propagatedBuildInputs = [
     glib
@@ -110,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
