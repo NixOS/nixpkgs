@@ -27,7 +27,6 @@
 , "fkill-cli"
 , "forever"
 , "grunt-cli"
-, "makam"
 , "gulp-cli"
 , "he"
 , "hs-airdrop"

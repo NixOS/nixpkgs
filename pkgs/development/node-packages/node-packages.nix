@@ -31909,24 +31909,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  makam = nodeEnv.buildNodePackage {
-    name = "makam";
-    packageName = "makam";
-    version = "0.7.40";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/makam/-/makam-0.7.40.tgz";
-      sha512 = "EfuAPhLvKuN2ruOqyDpG8epeaDzAKg/6K5BgaDMaivJ9+DC84eI7PsluBYe01cuEJGaOoQCtO2mGKwMy7o2DNw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "The Makam metalanguage -- a tool for rapid language prototyping";
-      homepage = "http://astampoulis.github.io/makam/";
-      license = "GPL-3.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   gulp-cli = nodeEnv.buildNodePackage {
     name = "gulp-cli";
     packageName = "gulp-cli";

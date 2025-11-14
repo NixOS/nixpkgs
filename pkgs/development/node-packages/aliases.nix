@@ -218,6 +218,7 @@ mapAliases {
   lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   lua-fmt = throw "'lua-fmt' has been removed because it has critical bugs that break formatting"; # Added 2025-11-07
   inherit (pkgs) lv_font_conv; # added 2024-06-28
+  makam = throw "'makam' has been removed because it is unmaintained upstream"; # Added 2025-11-14
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29

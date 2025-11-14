@@ -51,14 +51,6 @@ final: prev: {
     '';
   };
 
-  makam = prev.makam.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postFixup = ''
-      wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${lib.optionalString stdenv.hostPlatform.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
-    '';
-  };
-
   node2nix = prev.node2nix.override {
     # Get latest commit for misc fixes
     src = fetchFromGitHub {
