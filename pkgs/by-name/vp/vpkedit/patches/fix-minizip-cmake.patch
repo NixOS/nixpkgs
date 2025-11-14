@@ -1,0 +1,13 @@
+--- a/ext/shared/sourcepp/ext/minizip-ng/CMakeLists.txt
++++ b/ext/shared/sourcepp/ext/minizip-ng/CMakeLists.txt
+@@ -257,10 +257,6 @@
+         set(PC_PRIVATE_LIBS "${PC_PRIVATE_LIBS} -lbz2")
+     elseif(MZ_FETCH_LIBS)
+         clone_repo(bzip2 https://gitlab.com/bzip2/bzip2.git master)
+-        set(BZ_VERSION "1.1.0")
+-        configure_file (
+-            ${BZIP2_SOURCE_DIR}/bz_version.h.in
+-            ${BZIP2_SOURCE_DIR}/bz_version.h)
+ 
+         # BZip2 repository does not support cmake so we have to create
+         # the bzip2 library ourselves
