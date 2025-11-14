@@ -63,6 +63,11 @@ buildPythonPackage rec {
     # Failed assertions
     "test_bad_pinning_fingerprint_changed"
     "test_bad_pinning_url_changed"
+    # Bcrypt 72-byte limit exceeded
+    # https://github.com/ProtonVPN/python-proton-core/pull/10
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
   ];
 
   meta = {
