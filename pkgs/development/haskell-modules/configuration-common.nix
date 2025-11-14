@@ -3317,25 +3317,6 @@ with haskellLib;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
 
-  # 2025-10-12: gi-gtk was renamed to gi-gtk3
-  # https://github.com/haskell-gi/haskell-gi/issues/478
-  gi-gtk-hs =
-    appendPatches
-      [
-        (pkgs.fetchpatch {
-          name = "gi-gtk-hs-use-gtk3.patch";
-          url = "https://github.com/haskell-gi/haskell-gi/commit/e2ed85835499f70e119f050a2f37f22481f93886.patch";
-          sha256 = "sha256-MzxXtBNBbJJaNwTOrq/CYqK4yGfS4Yk5fQ38ihFcclA=";
-          relative = "gi-gtk-hs";
-        })
-      ]
-      (
-        super.gi-gtk-hs.override {
-          gi-gdk = self.gi-gdk3;
-          gi-gtk = self.gi-gtk3;
-        }
-      );
-
   # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
   # checks in a cryptography related package.
   botan-low = overrideCabal (drv: {
