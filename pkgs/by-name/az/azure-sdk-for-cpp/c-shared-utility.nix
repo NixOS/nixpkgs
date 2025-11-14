@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   apple-sdk,
-  azure-sdk-for-cpp,
+  macro-utils-c,
+  umock-c,
   cmake,
   ninja,
   pkg-config,
@@ -38,8 +39,8 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    azure-sdk-for-cpp.pkgs.macro-utils-c
-    azure-sdk-for-cpp.pkgs.umock-c
+    macro-utils-c
+    umock-c
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk;
   propagatedBuildInputs = [ curl ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) openssl;

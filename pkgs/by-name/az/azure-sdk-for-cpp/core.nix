@@ -1,12 +1,12 @@
 {
   stdenv,
-  azure-sdk-for-cpp,
   fetchFromGitHub,
   cmake,
   ninja,
   curl,
   libxml2,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-core";
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = (
-    azure-sdk-for-cpp.meta
+    meta
     // {
       description = "Azure SDK Core Library for C++";
       changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/core/azure-core/CHANGELOG.md";
