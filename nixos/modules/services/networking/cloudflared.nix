@@ -282,6 +282,31 @@ in
                   "*.anotherone.com" = "http://localhost:80";
                 };
               };
+
+              edgeIPVersion = lib.mkOption {
+                type =
+                  with lib.types;
+                  nullOr (enum [
+                    "4"
+                    "6"
+                    "auto"
+                  ]);
+                description = ''
+                  Specifies the IP address version (IPv4 or IPv6) used to
+                  establish a connection between `cloudflared` and the
+                  Cloudflare global network.
+
+                  The value `auto` relies on the host operating system to
+                  determine which IP version to select. The first IP version
+                  returned from the DNS resolution of the region lookup will be
+                  used as the primary set. In dual IPv6 and IPv4 network setups,
+                  `cloudflared` will separate the IP versions into two address
+                  sets that will be used to fallback in connectivity failure
+                  scenarios.
+                '';
+                default = null;
+                example = "auto";
+              };
             };
           }
         )
@@ -372,7 +397,11 @@ in
           ]
           ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile}${
+            lib.optionalString (
+              tunnel.edgeIPVersion != null
+            ) " --edge-ip-version=${lib.escapeShellArg tunnel.edgeIPVersion}"
+          } --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
