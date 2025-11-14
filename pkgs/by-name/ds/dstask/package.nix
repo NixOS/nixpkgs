@@ -9,7 +9,7 @@
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.27";
+  version = "1.0";
 
   nativeBuildInputs = [
     installShellFiles
