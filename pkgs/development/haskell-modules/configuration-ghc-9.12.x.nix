@@ -72,7 +72,7 @@ with haskellLib;
   # Hand pick versions that are compatible with ghc 9.12 and base 4.21
   #
 
-  extensions = doDistribute self.extensions_0_1_0_3;
+  extensions = doDistribute self.extensions_0_1_1_0;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
 
   #

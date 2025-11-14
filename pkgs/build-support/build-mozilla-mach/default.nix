@@ -98,6 +98,7 @@ in
   # Darwin
   apple-sdk_14,
   apple-sdk_15,
+  apple-sdk_26,
   cups,
   rsync, # used when preparing .app directory
 
@@ -327,15 +328,6 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    ++
-      lib.optionals
-        (
-          lib.versionAtLeast version "141.0.2"
-          || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
-        )
-        [
-          ./142-relax-apple-sdk.patch
-        ]
     ++ extraPatches;
 
   postPatch = ''
@@ -466,6 +458,7 @@ buildStdenv.mkDerivation {
       (
         stdenv.hostPlatform.isDarwin
         && lib.versionAtLeast version "143"
+        && lib.versionOlder version "145"
         && lib.versionOlder apple-sdk_15.version "15.4"
       )
       ''
@@ -556,7 +549,14 @@ buildStdenv.mkDerivation {
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
+    (
+      if lib.versionAtLeast version "145" then
+        apple-sdk_26
+      else if lib.versionAtLeast version "138" then
+        apple-sdk_15
+      else
+        apple-sdk_14
+    )
     cups
   ]
   ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (

@@ -9,7 +9,7 @@
   python3,
   makeWrapper,
   # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
-  electron_36,
+  electron_37,
   vulkan-helper,
   gogdl,
   nile,
@@ -21,7 +21,7 @@ let
   legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
   comet-gog = comet-gog_heroic;
-  electron = electron_36;
+  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -119,12 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit epic-integration legendary;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iedame ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
     # It may also work on other Linux targets, but all the game stores only
     # support x86 Linux, so it would require extra hacking to run games via QEMU

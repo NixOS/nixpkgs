@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.11.0";
+  version = "2025.11.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -991,7 +991,8 @@
       ];
     "compit" =
       ps: with ps; [
-      ]; # missing inputs: compit-inext-api
+        compit-inext-api
+      ];
     "concord232" =
       ps: with ps; [
         concord232
@@ -7168,6 +7169,7 @@
     "comfoconnect"
     "command_line"
     "compensation"
+    "compit"
     "config"
     "configurator"
     "control4"

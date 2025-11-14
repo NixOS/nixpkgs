@@ -69,7 +69,9 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
+    "proxmoxer": "2.2.0",
     "pybluez": "0.22",
+    "pyps4-2ndscreen": "1.3.1",
 }
 
 

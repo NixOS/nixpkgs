@@ -65,6 +65,18 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
+  postPatch = ''
+    # Switch to girepository-2.0
+    substituteInPlace src/main.c \
+      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
+      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
+
+    substituteInPlace src/xviewer-plugin-engine.c \
+      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
+      --replace-fail "g_irepository_get_default" "gi_repository_dup_default" \
+      --replace-fail "g_irepository_require" "gi_repository_require"
+  '';
+
   meta = with lib; {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";

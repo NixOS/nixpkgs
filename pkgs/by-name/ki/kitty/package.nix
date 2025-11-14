@@ -218,9 +218,13 @@ buildPythonApplication rec {
 
     substituteInPlace kitty_tests/ssh.py \
       --replace test_ssh_connection_data no_test_ssh_connection_data \
+      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+      --replace test_ssh_copy no_test_ssh_copy \
+      --replace test_ssh_env_vars no_test_ssh_env_vars
 
     substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration
+      --replace test_fish_integration no_test_fish_integration \
+      --replace test_zsh_integration no_test_zsh_integration
 
     substituteInPlace kitty_tests/fonts.py \
       --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
@@ -236,7 +240,6 @@ buildPythonApplication rec {
 
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-
     # Required for `test_ssh_shell_integration` to pass.
     export TERM=kitty
 

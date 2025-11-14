@@ -3,7 +3,6 @@
   bc,
   fetchurl,
   getopt,
-  ksh,
   pkgsMusl ? { },
   stdenv,
   tzdata,
@@ -39,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
   ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a

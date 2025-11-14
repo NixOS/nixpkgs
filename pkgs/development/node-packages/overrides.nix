@@ -33,10 +33,6 @@ final: prev: {
     '';
   };
 
-  "@electron-forge/cli" = prev."@electron-forge/cli".override {
-    buildInputs = [ final.node-gyp-build ];
-  };
-
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
@@ -117,14 +113,6 @@ final: prev: {
 
   rush = prev."@microsoft/rush".override {
     name = "rush";
-  };
-
-  ts-node = prev.ts-node.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/ts-node" \
-      --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
-    '';
   };
 
   tsun = prev.tsun.override {

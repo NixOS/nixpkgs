@@ -673,7 +673,10 @@ in
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
-  h2o = import ./web-servers/h2o { inherit runTest; };
+  h2o = import ./web-servers/h2o {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   hadoop = import ./hadoop {
     inherit handleTestOn;
     package = pkgs.hadoop;
@@ -743,13 +746,14 @@ in
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   incron = runTest ./incron.nix;
-  incus = recurseIntoAttrs (
-    handleTest ./incus {
-      lts = false;
-      inherit system pkgs;
-    }
-  );
-  incus-lts = recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
+  incus = import ./incus {
+    inherit runTestOn;
+    package = pkgs.incus;
+  };
+  incus-lts = import ./incus {
+    inherit runTestOn;
+    package = pkgs.incus-lts;
+  };
   influxdb = runTest ./influxdb.nix;
   influxdb2 = runTest ./influxdb2.nix;
   initrd-luks-empty-passphrase = runTest ./initrd-luks-empty-passphrase.nix;
@@ -814,7 +818,10 @@ in
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
   kubernetes = handleTestOn [ "x86_64-linux" ] ./kubernetes { };
-  kubo = import ./kubo { inherit runTest; };
+  kubo = import ./kubo {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
@@ -959,7 +966,10 @@ in
   mopidy = runTest ./mopidy.nix;
   morph-browser = runTest ./morph-browser.nix;
   mosquitto = runTest ./mosquitto.nix;
-  movim = import ./web-apps/movim { inherit runTest; };
+  movim = import ./web-apps/movim {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
@@ -1007,6 +1017,7 @@ in
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
+  netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netdata = runTest ./netdata.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   networking.networkmanager = handleTest ./networking/networkmanager.nix { };
@@ -1294,7 +1305,6 @@ in
   quake3 = runTest ./quake3.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
-  quorum = runTest ./quorum.nix;
   rabbitmq = runTest ./rabbitmq.nix;
   radarr = runTest ./radarr.nix;
   radicale = runTest ./radicale.nix;

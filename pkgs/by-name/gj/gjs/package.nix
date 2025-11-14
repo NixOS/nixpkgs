@@ -11,7 +11,7 @@
   gtk4,
   atk,
   gobject-introspection,
-  spidermonkey_128,
+  spidermonkey_140,
   pango,
   cairo,
   readline,
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.84.2";
+  version = "1.86.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NRQu3zRXBWNjACkew6fVg/FJaf8/rg/zD0qVseZ0AWY=";
+    hash = "sha256-Y0SPeleATUwqjQx/XpDiJNBNTrLVYBQsB2xlqO2gB5k=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   nativeCheckInputs = [

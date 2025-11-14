@@ -5,14 +5,14 @@
   gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "glitter";
   version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "milo123459";
     repo = "glitter";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dImQLC7owPf2EB5COO5vjN3a6k7gJ88D2hMSUW2/wn4=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git wrapper that allows you to compress multiple commands into one";
     homepage = "https://github.com/milo123459/glitter";
-    changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
+    changelog = "https://github.com/Milo123459/glitter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "glitter";
   };
-}
+})

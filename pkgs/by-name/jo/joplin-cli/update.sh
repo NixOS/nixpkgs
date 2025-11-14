@@ -13,14 +13,10 @@ fi
 
 nix-update "$UPDATE_NIX_PNAME" --version "$NEW_VERSION" || true
 
-HOME=$(mktemp -d)
-export HOME
-
-src=$(nix-build --no-link "$PWD" -A "$UPDATE_NIX_PNAME.src")
 WORKDIR=$(mktemp -d)
 
-cp --recursive --no-preserve=mode "$src/*" "$WORKDIR"
-pushd "$WORKDIR"
+git clone "https://github.com/laurent22/joplin" -b "v$NEW_VERSION" "$WORKDIR/src"
+pushd "$WORKDIR/src"
 yarn-berry-fetcher missing-hashes yarn.lock >"$PACKAGE_DIR/missing-hashes.json"
 popd
 rm -rf "$WORKDIR"

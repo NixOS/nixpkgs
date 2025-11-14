@@ -27,20 +27,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      name = "musl-endian.patch";
-      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
-      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
-    })
-    (fetchurl {
-      name = "musl-basename.patch";
-      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
-      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
-    })
-  ]
-  # Temporarily gated to keep rebuild counts under control.
-  # The proper fix (targeted to staging) is done in https://github.com/NixOS/nixpkgs/pull/451397
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchurl {
       name = "musl-redefinition.patch";
       url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
       hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";

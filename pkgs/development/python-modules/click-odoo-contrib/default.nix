@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
-  version = "1.22";
+  version = "1.23";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
     inherit version;
-    hash = "sha256-L0Slv0ExVsnlMH23FX06aAEYMqzQEAc4mrKb96TtjRY=";
+    hash = "sha256-ep4aBJpc94qLIBaGdD0F1fkQmPA4qtG0ql3W+wbPmkE=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

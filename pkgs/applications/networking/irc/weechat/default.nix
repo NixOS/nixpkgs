@@ -158,8 +158,6 @@ stdenv.mkDerivation rec {
   ++ lib.concatMap (p: p.buildInputs) enabledPlugins
   ++ extraBuildInputs;
 
-  hardeningEnable = [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
     # Fix '_res_9_init: undefined symbol' error

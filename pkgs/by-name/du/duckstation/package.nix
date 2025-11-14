@@ -64,13 +64,13 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = "0.1-9787-unstable-2025-10-13";
+    version = pkgSources.duckstation.version;
 
     src = fetchFromGitHub {
       owner = "stenzek";
       repo = "duckstation";
-      rev = "8f0c9dd171210dfd7f06223a393e2565abbaabf3";
-      hash = "sha256-CzHWdY0RaGBB6CY3PzHHHbq3/Mbf6WtUm6Dizr0IW6I=";
+      tag = "v${finalAttrs.version}";
+      hash = pkgSources.duckstation.hash_linux;
     };
 
     # TODO: Remove once this is fixed upstream.

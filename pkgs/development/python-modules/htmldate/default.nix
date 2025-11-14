@@ -1,6 +1,5 @@
 {
   lib,
-  backports-datetime-fromisoformat,
   buildPythonPackage,
   charset-normalizer,
   dateparser,
@@ -9,23 +8,20 @@
   lxml,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
     tag = "v${version}";
-    hash = "sha256-9uFf/sx0AZdlvizU65H87hbtwDKf8Ykm67bKM9Oq//s=";
+    hash = "sha256-ZSHQgj6zXmLdqDQWGnh2l70iXzdohsxdAIQGDSBufIA=";
   };
 
   build-system = [ setuptools ];
@@ -45,13 +41,11 @@ buildPythonPackage rec {
       faust-cchardet
       urllib3
     ]
-    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
     ++ urllib3.optional-dependencies.brotli;
     all = [
       faust-cchardet
       urllib3
     ]
-    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
     ++ urllib3.optional-dependencies.brotli;
   };
 

@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchgit,
+  gitUpdater,
   setuptools-scm,
   pdfium-binaries,
   numpy,
@@ -132,6 +133,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pypdfium2"
   ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      allowedVersions = "^[.0-9]+$";
+    };
+  };
 
   meta = {
     changelog = "https://github.com/pypdfium2-team/pypdfium2/releases/tag/${version}";

@@ -12,9 +12,6 @@ on:
         required: true
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
-      OWNER_APP_PRIVATE_KEY:
-        # The Test workflow should not actually request reviews from owners.
-        required: false
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}

@@ -97,6 +97,12 @@ effectiveStdenv.mkDerivation rec {
       url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
       hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
     })
+    # Handle missing default logger when cpuinfo initialization fails in the build sandbox
+    # TODO: Remove on next release
+    # https://github.com/microsoft/onnxruntime/issues/10038
+    # https://github.com/microsoft/onnxruntime/pull/15661
+    # https://github.com/microsoft/onnxruntime/pull/20509
+    ./cpuinfo-logging.patch
   ]
   ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.

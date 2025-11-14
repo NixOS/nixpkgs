@@ -182,8 +182,6 @@ in
       no_analytics = lib.mkDefault true;
     };
 
-    services.meilisearch.package = lib.mkDefault pkgs.meilisearch;
-
     # used to restore dumps
     environment.systemPackages = [ cfg.package ];
 

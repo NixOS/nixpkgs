@@ -3,28 +3,24 @@
   stdenv,
   nix-update-script,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar64";
-  version = "1.32.263";
+  version = "1.32.265";
 
   src = fetchFromGitHub {
     owner = "drmortalwombat";
     repo = "oscar64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g8HUJcoI7fBmypPO79QYiOdhIYh1/sctSaEC8RLaM+s=";
+    hash = "sha256-nPwebydRFHoIWp2sbfPaudKj/sPZRKamYdIuSVZ9dcc=";
   };
 
-  # FIXME: can be removed whenever the version is bumped.
   patches = [
-    (fetchpatch {
-      url = "https://github.com/drmortalwombat/oscar64/commit/3b0f954144e36903fd396c099714722f9fa2430a.patch";
-      hash = "sha256-6S7Gx9pZSNBHxX9uyS0zApe263dUo5DGviEczpP1FpQ=";
-    })
-    (fetchpatch {
-      url = "https://github.com/drmortalwombat/oscar64/commit/744f496f0f71fae098063a1f3ed71722d31f7b1a.patch";
-      hash = "sha256-84UBgVuKN7HMdkQfWUXMCfQSNqAe2QQ2yiifEN1JuOU=";
+    (fetchpatch2 {
+      name = "fix-make-install.patch";
+      url = "https://github.com/drmortalwombat/oscar64/commit/af9e06a467be07422bc87058bebdef79e0a94ea1.patch?full_index=1";
+      hash = "sha256-YsbdYi+dwLQSGOT8krJsFqJxS0EpIiQqavQpH0nl7S0=";
     })
   ];
 
@@ -55,7 +51,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.nekowinston ];
     mainProgram = "oscar64";
     platforms = lib.platforms.unix;
-    # FIXME: enable aarch64-linux for the next version.
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })

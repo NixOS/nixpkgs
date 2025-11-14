@@ -15,11 +15,13 @@ let
       case = case: out: { inherit case out; };
     in
     lib.switch coq.coq-version [
+      (case "9.1" "1.4-9.1")
       (case "9.0" "1.4-9.0.1")
     ] null;
   release = {
     "1.4-9.0".sha256 = "sha256-5QecDAMkvgfDPZ7/jDfnOgcE+Eb1LTAozP7nz6nkuxg=";
     "1.4-9.0.1".sha256 = "sha256-zMUd2A6EG0LYK3L9ABQvS/Et4MDpSmf3Pxd9+IPNYkI=";
+    "1.4-9.1".sha256 = "sha256-v6jFvUavIzyb/e6ytAaZjxQLFM9uW9TDUB77yRO74eE=";
   };
   releaseRev = v: "v${v}";
 

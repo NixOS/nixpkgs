@@ -314,6 +314,14 @@ assertNoAdditions {
     };
   });
 
+  blink-cmp-env = super.blink-cmp-env.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-yanky = super.blink-cmp-yanky.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
@@ -1205,6 +1213,10 @@ assertNoAdditions {
 
   flit-nvim = super.flit-nvim.overrideAttrs {
     dependencies = [ self.leap-nvim ];
+  };
+
+  floaterm = super.floaterm.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
   };
 
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
@@ -3195,6 +3207,11 @@ assertNoAdditions {
       "snacks.debug"
       "snacks.dim"
       "snacks.explorer.init"
+      "snacks.gh.actions"
+      "snacks.gh.buf"
+      "snacks.gh.init"
+      "snacks.gh.render"
+      "snacks.gh.render.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -3207,6 +3224,8 @@ assertNoAdditions {
       "snacks.picker.actions"
       "snacks.picker.config.highlights"
       "snacks.picker.core.list"
+      "snacks.picker.source.gh"
+      "snacks.picker.util.diff"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"

@@ -210,7 +210,7 @@ module.exports = async ({ github, context, core, dry }) => {
       }
     }
 
-    // Check for any human reviews other than GitHub actions and other GitHub apps.
+    // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
     // Accounts could be deleted as well, so don't count them.
     const reviews = (
       await github.paginate(github.rest.pulls.listReviews, {
@@ -218,7 +218,11 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
       })
     ).filter(
-      (r) => r.user && !r.user.login.endsWith('[bot]') && r.user.type !== 'Bot',
+      (r) =>
+        r.user &&
+        !r.user.login.endsWith('[bot]') &&
+        r.user.type !== 'Bot' &&
+        r.user.id !== pull_request.user?.id,
     )
 
     const approvals = new Set(
@@ -576,7 +580,10 @@ module.exports = async ({ github, context, core, dry }) => {
 
   // Controls level of parallelism. Applies to both the number of concurrent requests
   // as well as the number of concurrent workers going through the list of PRs.
-  const maxConcurrent = 20
+  // We'll only boost concurrency when we're running many PRs in parallel on a schedule,
+  // but not for single PRs. This avoids things going wild, when we accidentally make
+  // too many API requests on treewides.
+  const maxConcurrent = context.payload.pull_request ? 1 : 20
 
   await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
