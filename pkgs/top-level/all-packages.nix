@@ -12983,8 +12983,6 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
-
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
   inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
