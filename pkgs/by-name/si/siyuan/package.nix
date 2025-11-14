@@ -12,6 +12,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
@@ -138,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
