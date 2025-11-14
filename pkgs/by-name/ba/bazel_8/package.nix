@@ -206,6 +206,11 @@ stdenv.mkDerivation rec {
       usrBinEnv = "${coreutils}/bin/env";
     })
 
+    # Bazel tries to run "/bin/true" to test if linux-sandbox works.
+    (replaceVars ./patches/linux_sandbox.patch {
+      binTrue = "${coreutils}/bin/true";
+    })
+
     # Provide default JRE for Bazel process by setting --server_javabase=
     # in a new default system bazelrc file
     (replaceVars ./patches/bazel_rc.patch {
