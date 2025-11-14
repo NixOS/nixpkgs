@@ -13,7 +13,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "ytui-music";
   version = "2.0.0-rc1-unstable-2025-03-03";
 
@@ -92,4 +92,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # This issue may be related to: https://github.com/NixOS/nixpkgs/issues/394972
     # broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}
