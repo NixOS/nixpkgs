@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netboot.xyz-efi";
-  version = "2.0.88";
+  version = "2.0.89";
 
   src = fetchurl {
     url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${finalAttrs.version}/netboot.xyz.efi";
-    hash = "sha256-ipbZJ0mPCuwzb/TDtXXUBTuWOcSsKGAJ1GEGIgB2G7E=";
+    hash = "sha256-rmMU/OTOh7zId+zwQCXHt2SJyBAtLNfCOZhDyrkBKjw=";
   };
 
   dontUnpack = true;
