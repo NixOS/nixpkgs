@@ -343,4 +343,6 @@ in
 
     users.groups.onlyoffice = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ raboof ];
 }
