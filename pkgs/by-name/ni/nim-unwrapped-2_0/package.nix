@@ -1,7 +1,7 @@
 {
   lib,
   fetchurl,
-  nim-unwrapped-1,
+  stdenv,
   nim-unwrapped-2_2,
 }:
 
@@ -18,10 +18,10 @@ nim-unwrapped-2_2.overrideAttrs (
         builtins.elem (baseNameOf p) [
           "NIM_CONFIG_DIR.patch"
           "nixbuild.patch"
-          "extra-mangling.patch"
+          "extra-mangling.patch" # Mangle store paths of modules to prevent runtime dependence.
           "openssl.patch"
         ]
-      ) (nim-unwrapped-1.patches ++ nim-unwrapped-2_2.patches)
+      ) (lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch ++ nim-unwrapped-2_2.patches)
     );
   }
 )

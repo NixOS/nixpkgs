@@ -3,7 +3,6 @@
   buildPackages,
   callPackage,
   stdenv,
-  nim1,
   nim2,
   nim_builder,
   defaultNimVersion ? 2,
@@ -115,12 +114,7 @@ let
           ...
         }:
         (
-          if requiredNimVersion == 1 then
-            {
-              depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-              nativeBuildInputs = [ nim1 ] ++ nativeBuildInputs;
-            }
-          else if requiredNimVersion == 2 then
+          if requiredNimVersion == 2 then
             {
               depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
               nativeBuildInputs = [ nim2 ] ++ nativeBuildInputs;
