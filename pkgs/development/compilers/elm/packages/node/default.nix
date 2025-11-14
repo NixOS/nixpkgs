@@ -17,7 +17,6 @@ with self;
 with elmLib;
 {
   inherit (nodePkgs)
-    elm-live
     elm-upgrade
     elm-xref
     elm-git-install

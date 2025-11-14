@@ -63,6 +63,8 @@ lib.makeScope pkgs.newScope (
 
       elm-language-server = callPackage ./packages/elm-language-server { };
 
+      elm-live = callPackage ./packages/elm-live { };
+
       elm-review = callPackage ./packages/elm-review { };
 
       elm-test-rs = callPackage ./packages/elm-test-rs { };
