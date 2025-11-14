@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -12,6 +12,7 @@
   django,
   django-filter,
   django-modelcluster,
+  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
@@ -31,15 +32,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "7.1.1";
+  version = "7.2";
   pyproject = true;
 
-  # The GitHub source requires some assets to be compiled, which in turn
-  # requires fixing the upstream package lock. We need to use the PyPI release
-  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-e90eWww0VDeYXAHwp/YKYX5114jzfH2DlVj05qElGvk=";
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = "wagtail";
+    tag = "v${version}";
+    hash = "sha256-o/4jn32ffR3BPVNwtFKJ6PowXYi7SpjBqghdeZIl5tM=";
   };
 
   build-system = [
@@ -54,6 +54,7 @@ buildPythonPackage rec {
     django
     django-filter
     django-modelcluster
+    django-modelsearch
     django-taggit
     django-tasks
     django-treebeard
