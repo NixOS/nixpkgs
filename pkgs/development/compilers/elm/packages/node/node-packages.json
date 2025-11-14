@@ -4,7 +4,6 @@
   "@elm-tooling/elm-language-server",
   "elm-live",
   "elm-spa",
-  "elm-test",
   "elm-upgrade",
   "elm-verify-examples",
   "elm-xref",
