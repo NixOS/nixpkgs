@@ -59,6 +59,8 @@ lib.makeScope pkgs.newScope (
 
       elm-doc-preview = callPackage ./packages/elm-doc-preview { };
 
+      elm-git-install = callPackage ./packages/elm-git-install { };
+
       elm-json = callPackage ./packages/elm-json { };
 
       elm-language-server = callPackage ./packages/elm-language-server { };

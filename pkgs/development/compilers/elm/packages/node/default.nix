@@ -16,10 +16,6 @@ in
 with self;
 with elmLib;
 {
-  inherit (nodePkgs)
-    elm-git-install
-    ;
-
   create-elm-app = patchNpmElm nodePkgs.create-elm-app // {
     meta =
       with lib;

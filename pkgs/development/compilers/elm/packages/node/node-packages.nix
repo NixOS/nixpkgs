@@ -984,24 +984,6 @@ let
         sha512 = "sw/RMbehRhN68WRtcKCpQOPfnH6lLP4GJfqzi3iYej8tnzpZUDr6UkZYJjcjjC0FWEJOJbyM3PTIwxucUmDG2A==";
       };
     };
-    "@kwsites/file-exists-1.1.1" = {
-      name = "_at_kwsites_slash_file-exists";
-      packageName = "@kwsites/file-exists";
-      version = "1.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@kwsites/file-exists/-/file-exists-1.1.1.tgz";
-        sha512 = "m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==";
-      };
-    };
-    "@kwsites/promise-deferred-1.1.1" = {
-      name = "_at_kwsites_slash_promise-deferred";
-      packageName = "@kwsites/promise-deferred";
-      version = "1.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@kwsites/promise-deferred/-/promise-deferred-1.1.1.tgz";
-        sha512 = "GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==";
-      };
-    };
     "@mrmlnc/readdir-enhanced-2.2.1" = {
       name = "_at_mrmlnc_slash_readdir-enhanced";
       packageName = "@mrmlnc/readdir-enhanced";
@@ -5131,15 +5113,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/getpass/-/getpass-0.1.7.tgz";
         sha512 = "0fzj9JxOLfJ+XGLhR8ze3unN0KZCgZwiSSDz168VERjK8Wl8kVSdcu2kspd4s4wtAa1y/qrVRiAA0WclVsu0ng==";
-      };
-    };
-    "git-clone-able-0.1.2" = {
-      name = "git-clone-able";
-      packageName = "git-clone-able";
-      version = "0.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/git-clone-able/-/git-clone-able-0.1.2.tgz";
-        sha512 = "0pcXixfRCfLXdkwC/FJxiYEg5sYnbqYqtMmtXRzlKrStI9tLev7G/PDuFH2GmySJQ3ix5YUPRN/OJEuFD827EA==";
       };
     };
     "glob-10.4.5" = {
@@ -10344,15 +10317,6 @@ let
         sha512 = "bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==";
       };
     };
-    "simple-git-3.28.0" = {
-      name = "simple-git";
-      packageName = "simple-git";
-      version = "3.28.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/simple-git/-/simple-git-3.28.0.tgz";
-        sha512 = "Rs/vQRwsn1ILH1oBUy8NucJlXmnnLeLCfcvbSehkPzbv3wwoFWIdtfd6Ndo6ZPhlPsCZ60CPI4rxurnwAa+a2w==";
-      };
-    };
     "simple-swizzle-0.2.2" = {
       name = "simple-swizzle";
       packageName = "simple-swizzle";
@@ -11656,15 +11620,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/upath/-/upath-1.2.0.tgz";
         sha512 = "aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==";
-      };
-    };
-    "upath-2.0.1" = {
-      name = "upath";
-      packageName = "upath";
-      version = "2.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/upath/-/upath-2.0.1.tgz";
-        sha512 = "1uEe95xksV1O0CYKXo8vQvN1JEbtJp7lb7C5U9HMsIp6IVwntkH/oNUzyVNQSd4S1sYk2FpSSW44FqMc8qee5w==";
       };
     };
     "update-browserslist-db-1.1.3" = {
@@ -15660,34 +15615,6 @@ in
     meta = {
       description = "Hybrid Elm framework with full-stack and static routes.";
       homepage = "https://elm-pages.com";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  elm-git-install = nodeEnv.buildNodePackage {
-    name = "elm-git-install";
-    packageName = "elm-git-install";
-    version = "0.1.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/elm-git-install/-/elm-git-install-0.1.4.tgz";
-      sha512 = "XQ0Jl0RruUpcB4thmX0wnTPhB3fup9klyLmWyYOj0oUcpGlNXWr65cNbEMypxguL7sljU4MRMpItQMxeczgGwg==";
-    };
-    dependencies = [
-      sources."@kwsites/file-exists-1.1.1"
-      sources."@kwsites/promise-deferred-1.1.1"
-      sources."debug-4.4.1"
-      sources."git-clone-able-0.1.2"
-      sources."ms-2.1.3"
-      sources."semver-7.7.2"
-      sources."simple-git-3.28.0"
-      sources."upath-2.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A tool for installing private Elm packages from any git url.";
-      homepage = "https://github.com/robinheghan/elm-git-install#readme";
       license = "BSD-3-Clause";
     };
     production = true;
