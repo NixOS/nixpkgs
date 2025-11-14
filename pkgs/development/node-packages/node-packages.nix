@@ -3108,15 +3108,6 @@ let
         sha512 = "I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==";
       };
     };
-    "@types/node-6.14.13" = {
-      name = "_at_types_slash_node";
-      packageName = "@types/node";
-      version = "6.14.13";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-6.14.13.tgz";
-        sha512 = "J1F0XJ/9zxlZel5ZlbeSuHW2OpabrUAqpFuC2sm2I3by8sERQ8+KCjNKUcq8QHuzpGMWiJpo9ZxeHrqrP2KzQw==";
-      };
-    };
     "@types/normalize-package-data-2.4.4" = {
       name = "_at_types_slash_normalize-package-data";
       packageName = "@types/normalize-package-data";
@@ -3709,15 +3700,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz";
         sha512 = "8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==";
-      };
-    };
-    "ansi-0.3.1" = {
-      name = "ansi";
-      packageName = "ansi";
-      version = "0.3.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ansi/-/ansi-0.3.1.tgz";
-        sha512 = "iFY7JCgHbepc0b82yLaw4IMortylNb6wG4kL+4R0C3iv6i+RHGHux/yUX5BTiRvSX/shMnngjR1YyNMnXEFh5A==";
       };
     };
     "ansi-align-3.0.1" = {
@@ -7111,15 +7093,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/dezalgo/-/dezalgo-1.0.4.tgz";
         sha512 = "rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==";
-      };
-    };
-    "diff-3.5.0" = {
-      name = "diff";
-      packageName = "diff";
-      version = "3.5.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/diff/-/diff-3.5.0.tgz";
-        sha512 = "A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==";
       };
     };
     "diff-4.0.2" = {
@@ -14673,15 +14646,6 @@ let
         sha512 = "73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==";
       };
     };
-    "node-color-readline-1.0.1" = {
-      name = "node-color-readline";
-      packageName = "node-color-readline";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/node-color-readline/-/node-color-readline-1.0.1.tgz";
-        sha512 = "h66cRVEWnPQFxh5Y1hk9MNs6jvlB26CjT727ZztkIkPN+eyRI2c9powQrBJ9pty2Kj7IBySDnYHig7QElmU4Pg==";
-      };
-    };
     "node-emoji-1.11.0" = {
       name = "node-emoji";
       packageName = "node-emoji";
@@ -20107,15 +20071,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/taskkill/-/taskkill-5.0.0.tgz";
         sha512 = "+HRtZ40Vc+6YfCDWCeAsixwxJgMbPY4HHuTgzPYH3JXvqHWUlsCfy+ylXlAKhFNcuLp4xVeWeFBUhDk+7KYUvQ==";
-      };
-    };
-    "temp-0.8.4" = {
-      name = "temp";
-      packageName = "temp";
-      version = "0.8.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/temp/-/temp-0.8.4.tgz";
-        sha512 = "s0ZZzd0BzYv5tLSptZooSjK8oj6C+c19p7Vqta9+6NPOf7r+fxq0cJe6/oN4LTC79sy5NY8ucOJNgwsKCSbfqg==";
       };
     };
     "temp-0.9.4" = {
@@ -29387,56 +29342,6 @@ in
     meta = {
       description = "sloc is a simple tool to count SLOC (source lines of code)";
       homepage = "https://github.com/flosse/sloc#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  tsun = nodeEnv.buildNodePackage {
-    name = "tsun";
-    packageName = "tsun";
-    version = "0.5.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/tsun/-/tsun-0.5.1.tgz";
-      sha512 = "AK60MDwV2lbafn6bt6sV8dw8UjnWh3yo6bUp9rEGRm4ExbyaZQxN3fnsl3VAtug3/DYXw2Gxp6NQpIpev63koA==";
-    };
-    dependencies = [
-      sources."@types/node-6.14.13"
-      sources."ansi-0.3.1"
-      sources."ansi-regex-2.1.1"
-      sources."ansi-styles-2.2.1"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."chalk-1.1.3"
-      sources."colors-1.4.0"
-      sources."concat-map-0.0.1"
-      sources."diff-3.5.0"
-      sources."escape-string-regexp-1.0.5"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."has-ansi-2.0.0"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."minimatch-3.1.2"
-      sources."minimist-0.0.10"
-      sources."node-color-readline-1.0.1"
-      sources."once-1.4.0"
-      sources."optimist-0.6.1"
-      sources."path-is-absolute-1.0.1"
-      sources."rimraf-2.6.3"
-      sources."strip-ansi-3.0.1"
-      sources."supports-color-2.0.0"
-      sources."temp-0.8.4"
-      sources."tslib-1.14.1"
-      sources."typescript-5.8.2"
-      sources."wordwrap-0.0.3"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "TSUN: a repl for TypeScript Upgraded Node";
-      homepage = "https://github.com/HerringtonDarkholme/typescript-repl";
       license = "MIT";
     };
     production = true;

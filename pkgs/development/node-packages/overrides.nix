@@ -107,14 +107,6 @@ final: prev: {
     name = "rush";
   };
 
-  tsun = prev.tsun.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/tsun" \
-      --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
-    '';
-  };
-
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [

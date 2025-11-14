@@ -372,6 +372,7 @@ mapAliases {
   inherit (pkgs) tiddlywiki; # Added 2025-11-10
   triton = pkgs.triton; # Added 2023-05-06
   ts-node = throw "'ts-node' was removed because it is unmaintained, and since NodeJS 22.6.0+, experimental TypeScript support is built-in to NodeJS."; # Added 2025-11-07
+  tsun = throw "'tsun' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   typescript = pkgs.typescript; # Added 2023-06-21
   inherit (pkgs) typescript-language-server; # added 2024-02-27
   inherit (pkgs) uglify-js; # added 2024-06-15
