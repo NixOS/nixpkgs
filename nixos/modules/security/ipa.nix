@@ -146,16 +146,19 @@ in
     ];
 
     environment.etc = {
-      "ipa/default.conf".text = ''
-        [global]
-        basedn = ${cfg.basedn}
-        realm = ${cfg.realm}
-        domain = ${cfg.domain}
-        server = ${cfg.server}
-        host = ${cfg.ipaHostname}
-        xmlrpc_uri = https://${cfg.server}/ipa/xml
-        enable_ra = True
-      '';
+      "ipa/default.conf".text = lib.generators.toINI { } {
+        global = {
+          inherit (cfg)
+            basedn
+            realm
+            domain
+            server
+            ;
+          host = cfg.ipaHostname;
+          xmlrpc_uri = "https://${cfg.server}/ipa/xml";
+          enable_ra = "True";
+        };
+      };
 
       "ipa/nssdb".source = nssDb;
 
