@@ -1,12 +1,12 @@
 {
   stdenv,
   fetchFromGitHub,
-  core,
-  meta,
   cmake,
   ninja,
   openssl,
+  core,
   nix-update-script,
+  meta,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-identity";
