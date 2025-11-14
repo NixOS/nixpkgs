@@ -128,10 +128,6 @@ lib.makeOverridable (
           server admins start using the new version?
         */
 
-        assert nonConeMode -> (sparseCheckout != [ ]);
-        assert fetchTags -> leaveDotGit;
-        assert rootDir != "" -> !leaveDotGit;
-
         if builtins.isString sparseCheckout then
           # Changed to throw on 2023-06-04
           throw
@@ -154,14 +150,15 @@ lib.makeOverridable (
             inherit outputHash outputHashAlgo;
             outputHashMode = "recursive";
 
-            # git-sparse-checkout(1) says:
-            # > When the --stdin option is provided, the directories or patterns are read
-            # > from standard in as a newline-delimited list instead of from the arguments.
-            sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
+            sparseCheckout =
+              assert nonConeMode -> (sparseCheckout != [ ]);
+              # git-sparse-checkout(1) says:
+              # > When the --stdin option is provided, the directories or patterns are read
+              # > from standard in as a newline-delimited list instead of from the arguments.
+              builtins.concatStringsSep "\n" sparseCheckout;
 
             inherit
               url
-              leaveDotGit
               fetchLFS
               fetchSubmodules
               deepClone
@@ -173,6 +170,10 @@ lib.makeOverridable (
               rootDir
               gitConfigFile
               ;
+            leaveDotGit =
+              assert fetchTags -> leaveDotGit;
+              assert rootDir != "" -> !leaveDotGit;
+              leaveDotGit;
             inherit tag;
             revCustom = rev;
             rev = getRevWithTag {
