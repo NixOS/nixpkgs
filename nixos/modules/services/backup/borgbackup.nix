@@ -89,19 +89,24 @@ let
           ${cfg.postInit}
         fi
       ''
-      + ''
-        (
-          set -o pipefail
-          ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
-          borgWrapper create "''${extraArgs[@]}" \
-            --compression ${cfg.compression} \
-            --exclude-from ${mkExcludeFile cfg} \
-            --patterns-from ${mkPatternsFile cfg} \
-            "''${extraCreateArgs[@]}" \
-            "::$archiveName$archiveSuffix" \
-            ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
-        )
-      ''
+      + (
+        let
+          import-tar = cfg.createCommand == "import-tar";
+        in
+        ''
+          (
+            set -o pipefail
+            ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
+            borgWrapper ${lib.escapeShellArg cfg.createCommand} "''${extraArgs[@]}" \
+              --compression ${cfg.compression} \
+              ${lib.optionalString (!import-tar) "--exclude-from ${mkExcludeFile cfg}"} \
+              ${lib.optionalString (!import-tar) "--patterns-from ${mkPatternsFile cfg}"} \
+              "''${extraCreateArgs[@]}" \
+              "::$archiveName$archiveSuffix" \
+              ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
+          )
+        ''
+      )
       + lib.optionalString cfg.appendFailedSuffix ''
         borgWrapper rename "''${extraArgs[@]}" \
           "::$archiveName$archiveSuffix" "$archiveName"
@@ -310,6 +315,23 @@ let
     '';
   };
 
+  mkCreateCommandImportTarDumpCommandAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || cfg.dumpCommand != null;
+    message = ''
+      Option borgbackup.jobs.${name}.dumpCommand is required when createCommand
+      is set to "import-tar".
+    '';
+  };
+
+  mkCreateCommandImportTarExclusionsAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || (cfg.exclude == [ ] && cfg.patterns == [ ]);
+    message = ''
+      Options borgbackup.jobs.${name}.exclude and
+      borgbackup.jobs.${name}.patterns have no effect when createCommand is set
+      to "import-tar".
+    '';
+  };
+
   mkRemovableDeviceAssertions = name: cfg: {
     assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
     message = ''
@@ -377,6 +399,25 @@ in
         { name, config, ... }:
         {
           options = {
+            createCommand = lib.mkOption {
+              type = lib.types.enum [
+                "create"
+                "import-tar"
+              ];
+              description = ''
+                Borg command to use for archive creation. The default (`create`)
+                creates a regular Borg archive.
+
+                Use `import-tar` to instead read a tar archive stream from
+                {option}`dumpCommand` output and import its contents into the
+                repository.
+
+                `import-tar` can not be used together with {option}`exclude` or
+                {option}`patterns`.
+              '';
+              default = "create";
+              example = "import-tar";
+            };
 
             paths = lib.mkOption {
               type = with lib.types; nullOr (coercedTo str lib.singleton (listOf str));
@@ -556,6 +597,9 @@ in
               description = ''
                 Exclude paths matching any of the given patterns. See
                 {command}`borg help patterns` for pattern syntax.
+
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -571,6 +615,9 @@ in
                 matching patterns is used, so if an include pattern (prefix `+`)
                 matches before an exclude pattern (prefix `-`), the file is
                 backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
+
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -888,6 +935,8 @@ in
         lib.mapAttrsToList mkPassAssertion jobs
         ++ lib.mapAttrsToList mkKeysAssertion repos
         ++ lib.mapAttrsToList mkSourceAssertions jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarDumpCommandAssertion jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarExclusionsAssertion jobs
         ++ lib.mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       systemd.tmpfiles.settings = lib.mapAttrs' mkTmpfiles jobs;
