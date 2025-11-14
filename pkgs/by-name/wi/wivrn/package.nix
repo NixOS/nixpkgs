@@ -53,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.9";
+  version = "25.11.1";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XP0bpXgtira2QIlS0fNEteNP48WnEjBYFM1Xmt2sm5I=";
+    hash = "sha256-pEKMeRdI9UhdZ+NksRBcF7yPC7Ys2haE+B4PPGQ4beE=";
   };
 
   monado = applyPatches {
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "7a4018e2d89151e60e562fac79eba90ca7a328d8";
-      hash = "sha256-DPIvJb23bK7SDjZr9mK0Wt6Zbo3Ari3Ar8TtPe5QgKY=";
+      rev = "06e62fc7d9c5cbcbc43405bb86dfde3bf01ce043";
+      hash = "sha256-0ALB9eLY4NAUqNOYZMwpvYnLxVpHsQDJc1er8Txdezs=";
     };
 
     postPatch = ''
@@ -89,15 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
       return 1
     fi
   '';
-
-  patches = [
-    # See https://github.com/WiVRn/WiVRn/pull/557
-    (fetchpatch {
-      name = "wivrn-fix-qt6.10-build.patch";
-      url = "https://github.com/WiVRn/WiVRn/commit/2204fdd39682cfc052556d58fdb9404dd8ecf63f.patch?full_index=1";
-      hash = "sha256-05MLfJNCznBt6eaggUfSk1jaNDB2/eou6CfexUkIHZE=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
