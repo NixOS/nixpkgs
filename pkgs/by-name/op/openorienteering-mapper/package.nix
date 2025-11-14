@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   clipper,
   cmake,
   cups,
@@ -11,43 +10,24 @@
   ninja,
   proj,
   qt5,
+  xcbuild,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
-    rev = "v${version}";
-    hash = "sha256-BQbryRV5diBkOtva9sYuLD8yo3IwFqrkz3qC+C6eEfE=";
+    tag = "v${version}";
+    hash = "sha256-JfjQe7t3F/9/ik7b+6UUbsYIcpkSDxHBgnbQEYyDTMI=";
   };
 
-  patches = [
-    # https://github.com/OpenOrienteering/mapper/pull/1907
-    (fetchpatch {
-      url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
-      hash = "sha256-pQzw2EfVay+0GOtIbh1KJOkILcj5LRMzmMYy9q+abK4=";
-    })
-    # https://github.com/OpenOrienteering/mapper/pull/2337
-    (fetchpatch {
-      url = "https://github.com/OpenOrienteering/mapper/commit/d1f214ee2abf140ae3615a2995f08c19ad81418a.patch";
-      hash = "sha256-eJZpHdFPW7A69aazI+WRSK9N87d4A6x973hMYTHdw5I=";
-    })
-    # https://github.com/OpenOrienteering/mapper/pull/2227
-    (fetchpatch {
-      url = "https://github.com/OpenOrienteering/mapper/commit/fa694d74f2840d7f18976d7f35debcb99bd173eb.patch";
-      hash = "sha256-GVlNeIFiCG7anPsJR2nDCbgXEeUEAUvTcSaJ53Q/eV4=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "find_package(ClangTidy" "#find_package(ClangTidy"
     substituteInPlace packaging/custom_install.cmake.in \
-      --replace "fixup_bundle_portable(" "#fixup_bundle_portable("
+      --replace-fail "fixup_bundle_portable(" "#fixup_bundle_portable("
   '';
 
   nativeBuildInputs = [
@@ -56,6 +36,9 @@ stdenv.mkDerivation rec {
     ninja
     qt5.qttools
     qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild # for plutil
   ];
 
   buildInputs = [
@@ -88,13 +71,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "Mapper_PACKAGE_GDAL" false)
   ];
 
-  postInstall =
-    with stdenv;
-    lib.optionalString isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv $out/Mapper.app $out/Applications
-      ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/Mapper
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/Mapper.app $out/Applications
+    ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/Mapper
+  '';
 
   meta = {
     homepage = "https://www.openorienteering.org/apps/mapper/";
