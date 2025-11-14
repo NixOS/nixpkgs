@@ -21,18 +21,6 @@ with elmLib;
     elm-git-install
     ;
 
-  elm-verify-examples = nodePkgs.elm-verify-examples // {
-    meta =
-      with lib;
-      nodePkgs.elm-verify-examples.meta
-      // {
-        description = "Verify examples in your docs";
-        homepage = "https://github.com/stoeffel/elm-verify-examples";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.turbomack ];
-      };
-  };
-
   create-elm-app = patchNpmElm nodePkgs.create-elm-app // {
     meta =
       with lib;

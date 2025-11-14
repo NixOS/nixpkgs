@@ -2829,15 +2829,6 @@ let
         sha512 = "PYeGSEmmHM6zvoef2w8TPzlrnNpXIjTipYK780YswmIP9vjxmd6Y2a3CB2Ks6/AU8NHjZugXvo8w3oWM2qnwXA==";
       };
     };
-    "cliui-8.0.1" = {
-      name = "cliui";
-      packageName = "cliui";
-      version = "8.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cliui/-/cliui-8.0.1.tgz";
-        sha512 = "BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==";
-      };
-    };
     "coa-2.0.2" = {
       name = "coa";
       packageName = "coa";
@@ -9966,15 +9957,6 @@ let
         sha512 = "uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==";
       };
     };
-    "rimraf-5.0.10" = {
-      name = "rimraf";
-      packageName = "rimraf";
-      version = "5.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/rimraf/-/rimraf-5.0.10.tgz";
-        sha512 = "l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==";
-      };
-    };
     "ripemd160-2.0.2" = {
       name = "ripemd160";
       packageName = "ripemd160";
@@ -12423,15 +12405,6 @@ let
         sha512 = "QC1/iN/2/RPVJ5jYK8BGttj5z83LmSKmvbvrXPNCLZSEb32KKVDJDl/MOt2N01qU2H/FkzEa9PKto1BqDjtd7Q==";
       };
     };
-    "wrap-ansi-7.0.0" = {
-      name = "wrap-ansi";
-      packageName = "wrap-ansi";
-      version = "7.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz";
-        sha512 = "YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==";
-      };
-    };
     "wrap-ansi-8.1.0" = {
       name = "wrap-ansi";
       packageName = "wrap-ansi";
@@ -12522,15 +12495,6 @@ let
         sha512 = "JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==";
       };
     };
-    "y18n-5.0.8" = {
-      name = "y18n";
-      packageName = "y18n";
-      version = "5.0.8";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz";
-        sha512 = "0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==";
-      };
-    };
     "yallist-2.1.2" = {
       name = "yallist";
       packageName = "yallist";
@@ -12594,15 +12558,6 @@ let
         sha512 = "AX3Zw5iPruN5ie6xGRIDgqkT+ZhnRlZMLMHAs8tg7nRruy2Nb+i5o9bwghAogtM08q1dpr2LVoS8KSTMYpWXUw==";
       };
     };
-    "yargs-17.7.2" = {
-      name = "yargs";
-      packageName = "yargs";
-      version = "17.7.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/yargs/-/yargs-17.7.2.tgz";
-        sha512 = "7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==";
-      };
-    };
     "yargs-6.6.0" = {
       name = "yargs";
       packageName = "yargs";
@@ -12621,15 +12576,6 @@ let
         sha512 = "3lbsNRf/j+A4QuSZfDRA7HRSfWrzO0YjqTJd5kjAq37Zep1CEgaYmrH9Q3GwPiB9cHyd1Y1UwggGhJGoxipbzg==";
       };
     };
-    "yargs-parser-21.1.1" = {
-      name = "yargs-parser";
-      packageName = "yargs-parser";
-      version = "21.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz";
-        sha512 = "tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==";
-      };
-    };
     "yargs-parser-4.2.1" = {
       name = "yargs-parser";
       packageName = "yargs-parser";
@@ -12642,122 +12588,6 @@ let
   };
 in
 {
-  elm-verify-examples = nodeEnv.buildNodePackage {
-    name = "elm-verify-examples";
-    packageName = "elm-verify-examples";
-    version = "6.0.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/elm-verify-examples/-/elm-verify-examples-6.0.3.tgz";
-      sha512 = "VgZpUwYik+d7u9ZDLhbTEMN/MIE7qJ9OQRtreGmwE9ehr+JSJvnKcpZwGILIHjiNWjZqarx4d6vA2OtLZm48AA==";
-    };
-    dependencies = [
-      sources."@isaacs/cliui-8.0.2"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-2.0.2"
-      sources."chalk-4.1.2"
-      (
-        sources."cliui-8.0.1"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-            sources."wrap-ansi-7.0.0"
-          ];
-        }
-      )
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."cross-spawn-7.0.6"
-      sources."eastasianwidth-0.2.0"
-      sources."emoji-regex-9.2.2"
-      sources."escalade-3.2.0"
-      sources."foreground-child-3.3.1"
-      sources."fs-extra-11.3.0"
-      sources."get-caller-file-2.0.5"
-      sources."glob-10.4.5"
-      sources."graceful-fs-4.2.11"
-      sources."has-flag-4.0.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."isexe-2.0.0"
-      sources."jackspeak-3.4.3"
-      sources."jsonfile-6.1.0"
-      sources."lru-cache-10.4.3"
-      sources."minimatch-9.0.5"
-      sources."minipass-7.1.2"
-      sources."mkdirp-3.0.1"
-      sources."package-json-from-dist-1.0.1"
-      sources."path-key-3.1.1"
-      sources."path-scurry-1.11.1"
-      sources."require-directory-2.1.1"
-      sources."rimraf-5.0.10"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-5.1.2"
-      (
-        sources."string-width-cjs-4.2.3"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      (
-        sources."strip-ansi-7.1.0"
-        // {
-          dependencies = [
-            sources."ansi-regex-6.1.0"
-          ];
-        }
-      )
-      sources."strip-ansi-cjs-6.0.1"
-      sources."supports-color-7.2.0"
-      sources."universalify-2.0.1"
-      sources."which-2.0.2"
-      (
-        sources."wrap-ansi-8.1.0"
-        // {
-          dependencies = [
-            sources."ansi-styles-6.2.1"
-          ];
-        }
-      )
-      (
-        sources."wrap-ansi-cjs-7.0.0"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      sources."y18n-5.0.8"
-      (
-        sources."yargs-17.7.2"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      sources."yargs-parser-21.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Verify examples in Elm doc-comments";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   elm-xref = nodeEnv.buildNodePackage {
     name = "elm-xref";
     packageName = "elm-xref";
