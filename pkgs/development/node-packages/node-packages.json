@@ -26,7 +26,6 @@
 , "js-yaml"
 , "jsdoc"
 , "lcov-result-merger"
-, "live-server"
 , "madoko"
 , "mathjax"
 , "nijs"

@@ -223,6 +223,7 @@ mapAliases {
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
   livedown = throw "'livedown' has been removed because it was unmaintained"; # Added 2025-11-10
+  live-server = throw "'live-server' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) localtunnel; # Added 2025-11-08
   lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   lua-fmt = throw "'lua-fmt' has been removed because it has critical bugs that break formatting"; # Added 2025-11-07
