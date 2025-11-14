@@ -46,9 +46,8 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-  ];
-
-  nativeBuildInputs = lib.optionals withGo [
+  ]
+  ++ lib.optionals withGo [
     go
   ];
 
@@ -108,7 +107,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   disallowedReferences = lib.optionals withGo [
-    pkgsBuildHost.go
+    buildPackages.go
   ];
 
   passthru.tests = {
