@@ -27,7 +27,6 @@
 , "jsdoc"
 , "lcov-result-merger"
 , "mathjax"
-, "nijs"
 , "node-gyp-build"
 , "node2nix"
 , "np"
