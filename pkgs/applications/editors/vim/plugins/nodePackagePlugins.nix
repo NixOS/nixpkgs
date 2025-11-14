@@ -7,7 +7,6 @@ final: prev:
 let
   nodePackageNames = [
     "coc-go"
-    "coc-ltex"
     "coc-tsserver"
     "coc-ultisnips"
   ];

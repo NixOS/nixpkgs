@@ -4431,24 +4431,6 @@ let
         sha512 = "OAtM6mexGteNKdU29wcUfRW+VuBr94A3hx9h9yzBnPaQAbKoW1ORd68XM4CCAOpdL5wlNFgO29hsY1TKv2vAKw==";
       };
     };
-    "async-0.9.2" = {
-      name = "async";
-      packageName = "async";
-      version = "0.9.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-0.9.2.tgz";
-        sha512 = "l6ToIJIotphWahxxHyzK9bnLR6kM4jJIIgLShZeqLY7iboHoGkdgFl7W2/Ivi4SkMJYGKqW8vSuk0uKUj6qsSw==";
-      };
-    };
-    "async-1.0.0" = {
-      name = "async";
-      packageName = "async";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-1.0.0.tgz";
-        sha512 = "5mO7DX4CbJzp9zjaFXusQQ4tzKJARjNB1Ih1pVBi8wkbmXy/xzIDgEMXxWePLzt2OdFwaxfneIlT1nCiXubrPQ==";
-      };
-    };
     "async-1.5.2" = {
       name = "async";
       packageName = "async";
@@ -24078,15 +24060,6 @@ let
         sha512 = "GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==";
       };
     };
-    "underscore-1.8.3" = {
-      name = "underscore";
-      packageName = "underscore";
-      version = "1.8.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz";
-        sha512 = "5WsVTFcH1ut/kkhAaHf4PVgI8c7++GiVcpCGxPouI6ZVjsqPnSDf8h/8HtVqc0t4fzRXwnMK70EcZeAs3PIddg==";
-      };
-    };
     "undici-5.28.4" = {
       name = "undici";
       packageName = "undici";
@@ -25876,15 +25849,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/winston/-/winston-0.8.3.tgz";
         sha512 = "fPoamsHq8leJ62D1M9V/f15mjQ1UHe4+7j1wpAT3fqgA5JqhJkk4aIfPEjfMTI9x6ZTjaLOpMAjluLtmgO5b6g==";
-      };
-    };
-    "winston-1.0.2" = {
-      name = "winston";
-      packageName = "winston";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/winston/-/winston-1.0.2.tgz";
-        sha512 = "BLxJH3KCgJ2paj2xKYTQLpxdKr9URPDDDLJnRVcbud7izT+m8Xzt5Rod6mnNgEcfT0fRvhEy2Cj3cEnnQpa6qA==";
       };
     };
     "winston-3.17.0" = {
@@ -28552,62 +28516,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  audiosprite = nodeEnv.buildNodePackage {
-    name = "audiosprite";
-    packageName = "audiosprite";
-    version = "0.7.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/audiosprite/-/audiosprite-0.7.2.tgz";
-      sha512 = "9Z6UwUuv4To5nUQNRIw5/Q3qA7HYm0ANzoW5EDGPEsU2oIRVgmIlLlm9YZfpPKoeUxt54vMStl2/762189VmJw==";
-    };
-    dependencies = [
-      sources."async-0.9.2"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."colors-1.0.3"
-      sources."concat-map-0.0.1"
-      sources."cycle-1.0.3"
-      sources."eyes-0.1.8"
-      sources."glob-6.0.4"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."isstream-0.1.2"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."once-1.4.0"
-      (
-        sources."optimist-0.6.1"
-        // {
-          dependencies = [
-            sources."minimist-0.0.10"
-          ];
-        }
-      )
-      sources."path-is-absolute-1.0.1"
-      sources."pkginfo-0.3.1"
-      sources."stack-trace-0.0.10"
-      sources."underscore-1.8.3"
-      (
-        sources."winston-1.0.2"
-        // {
-          dependencies = [
-            sources."async-1.0.0"
-          ];
-        }
-      )
-      sources."wordwrap-0.0.3"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Concat small audio files into single file and export in many formats";
-      homepage = "https://github.com/tonistiigi/audiosprite#readme";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   aws-cdk = nodeEnv.buildNodePackage {
     name = "aws-cdk";
     packageName = "aws-cdk";
@@ -29680,24 +29588,6 @@ in
       description = "gopls extension for coc";
       homepage = "https://github.com/josa42/coc-go#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-ltex = nodeEnv.buildNodePackage {
-    name = "coc-ltex";
-    packageName = "coc-ltex";
-    version = "13.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-ltex/-/coc-ltex-13.1.0.tgz";
-      sha512 = "SnwfsF5dnU0T12bSe9sq2rdR/EoAqK4MxVljQM58YXpQKTps/HsCD6kiprk8oK/VMH8KaDwEEcxf2pVXq6yECQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Grammar/spell checker using LanguageTool with support for LaTeX, Markdown, and others";
-      homepage = "https://valentjn.github.io/ltex";
-      license = "MPL-2.0";
     };
     production = true;
     bypassCache = true;

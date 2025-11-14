@@ -68,6 +68,7 @@ mapAliases {
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@yaegassy/coc-nginx" = pkgs.coc-nginx; # Added 2025-11-08
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
+  audiosprite = throw "'audiosprite' has been removed because it was abandoned upstream"; # Added 2025-11-14
   inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
@@ -103,6 +104,7 @@ mapAliases {
   inherit (pkgs) coc-jest; # Added 2025-11-05
   inherit (pkgs) coc-json; # Added 2025-11-05
   inherit (pkgs) coc-lists; # Added 2025-11-05
+  coc-ltex = throw "'coc-ltex' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) coc-markdownlint; # Added 2025-11-05
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   inherit (pkgs) coc-pairs; # added 2025-11-05
