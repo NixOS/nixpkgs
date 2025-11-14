@@ -14,7 +14,6 @@
 , "coc-go"
 , "coc-tsserver"
 , "cpy-cli"
-, "dhcp"
 , "dotenv-vault"
 , "elasticdump"
 , "emoj"

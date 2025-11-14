@@ -29679,27 +29679,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  dhcp = nodeEnv.buildNodePackage {
-    name = "dhcp";
-    packageName = "dhcp";
-    version = "0.2.20";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/dhcp/-/dhcp-0.2.20.tgz";
-      sha512 = "SfKVTg5qqe5aXSrSAXABM1yJl3OjekhSg6ryJyLjK1015waNj9fmMq8SrHI6qWuICtiprfYbh/f55giBJcC9Ag==";
-    };
-    dependencies = [
-      sources."minimist-1.2.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A DHCP server written in JavaScript";
-      homepage = "https://github.com/infusion/node-dhcp";
-      license = "MIT OR GPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   dotenv-vault = nodeEnv.buildNodePackage {
     name = "dotenv-vault";
     packageName = "dotenv-vault";
