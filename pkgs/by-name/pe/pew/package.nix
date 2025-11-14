@@ -37,6 +37,5 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "pew";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
   };
 }

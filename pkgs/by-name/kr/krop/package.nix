@@ -49,7 +49,6 @@ python3Packages.buildPythonApplication rec {
       interface.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.linux;
     mainProgram = "krop";
   };

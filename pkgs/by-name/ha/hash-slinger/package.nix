@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     description = "Various tools to generate special DNS records";
     homepage = "https://github.com/letoams/hash-slinger";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
   };
 }
