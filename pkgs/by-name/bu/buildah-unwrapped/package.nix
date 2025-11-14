@@ -12,6 +12,7 @@
   libapparmor,
   libselinux,
   libseccomp,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
@@ -72,8 +73,12 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
   versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Tool which facilitates building OCI images";
