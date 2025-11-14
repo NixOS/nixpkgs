@@ -38,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   cmakeFlags = [
     (lib.cmakeBool "TOML11_BUILD_TOML_TESTS" finalAttrs.finalPackage.doCheck)
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin (
+    lib.cmakeFeature "CMAKE_CXX_FLAGS" "-D_POSIX_C_SOURCE=200809L"
+  );
+
   checkInputs = [
     doctest
     nlohmann_json
