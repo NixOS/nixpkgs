@@ -67,6 +67,8 @@ lib.makeScope pkgs.newScope (
 
       elm-review = callPackage ./packages/elm-review { };
 
+      elm-spa = callPackage ./packages/elm-spa { };
+
       elm-test-rs = callPackage ./packages/elm-test-rs { };
 
       elm-test = callPackage ./packages/elm-test { };
