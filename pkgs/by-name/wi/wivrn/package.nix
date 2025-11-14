@@ -90,6 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  postPatch = ''
+    # FFmpeg dropped the FF_PROFILE_* aliases, so switch to the AV_PROFILE_* names.
+    substituteInPlace server/encoder/ffmpeg/video_encoder_va.cpp \
+      --replace FF_PROFILE_H264_CONSTRAINED_BASELINE AV_PROFILE_H264_CONSTRAINED_BASELINE \
+      --replace FF_PROFILE_HEVC_MAIN_10 AV_PROFILE_HEVC_MAIN_10 \
+      --replace FF_PROFILE_HEVC_MAIN AV_PROFILE_HEVC_MAIN \
+      --replace FF_PROFILE_AV1_MAIN AV_PROFILE_AV1_MAIN
+  '';
+
   nativeBuildInputs = [
     cmake
     git
