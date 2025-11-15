@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "parsimonious";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-goFgDaGA7IrjVCekq097gr/sHj0eUvgMtg6oK5USUBw=";
+    hash = "sha256-4IA3fZiVe+7AU1gNOK5U/N98Rw+3hnC6S/i1+dXK0qk=";
   };
 
   propagatedBuildInputs = [ regex ];
