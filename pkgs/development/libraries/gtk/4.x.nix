@@ -40,7 +40,8 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   libGL,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkanSupport ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin,
+  moltenvk,
   shaderc,
   vulkan-loader,
   vulkan-headers,
@@ -127,6 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-headers
+  ]
+  ++ lib.optionals (vulkanSupport && stdenv.hostPlatform.isLinux) [
     libdrm
   ]
   ++ [
@@ -176,6 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-loader
+  ]
+  ++ lib.optionals (vulkanSupport && stdenv.hostPlatform.isDarwin) [
+    moltenvk
   ]
   ++ [
     # Required for GSettings schemas at runtime.
