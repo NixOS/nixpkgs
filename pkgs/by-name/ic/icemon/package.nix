@@ -12,7 +12,7 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icemon";
   version = "3.3-unstable-2025-05-15";
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Icecream GUI Monitor";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/icecc/icemon";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "icemon";
   };
-}
+})
