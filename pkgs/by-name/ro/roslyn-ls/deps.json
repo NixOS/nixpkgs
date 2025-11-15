@@ -37,9 +37,9 @@
   },
   {
     "pname": "Microsoft.Build",
-    "version": "17.3.4",
-    "hash": "sha256-LHtjk4vxeVSLzAKAcG8BN+S20d2sUR2DAOsSXLNIy5U=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.build/17.3.4/microsoft.build.17.3.4.nupkg"
+    "version": "17.11.31",
+    "hash": "sha256-NBn5hn85Q9dG1q09joq0pJsxsZ1m5DBQVJu+Mlx4EGE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build/17.11.31/microsoft.build.17.11.31.nupkg"
   },
   {
     "pname": "Microsoft.Build.Framework",
@@ -54,28 +54,22 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.build.framework/17.15.0-preview-25353-11/microsoft.build.framework.17.15.0-preview-25353-11.nupkg"
   },
   {
-    "pname": "Microsoft.Build.Framework",
-    "version": "17.3.4",
-    "hash": "sha256-p2JG7pMBGfDVP6sOzBOqOkImZmwotlGvfS+8BjjVYf8=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.build.framework/17.3.4/microsoft.build.framework.17.3.4.nupkg"
-  },
-  {
     "pname": "Microsoft.Build.Locator",
-    "version": "1.8.1",
-    "hash": "sha256-q1oZLwPGO+Q/btm3jUzNo37eBziDD/MOXE3LsUSVeA4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.locator/1.8.1/microsoft.build.locator.1.8.1.nupkg"
+    "version": "1.10.2",
+    "hash": "sha256-f/GyCcjeSgT0cD/icTtMDClyyTQOJD5AXNWERIBDPfA=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.locator/1.10.2/microsoft.build.locator.1.10.2.nupkg"
   },
   {
     "pname": "Microsoft.Build.Tasks.Core",
-    "version": "17.3.4",
-    "hash": "sha256-0RA95pD6zHBf1lgYyrrAuEuNeGwuCgGxNdhEJ0cJUCs=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.build.tasks.core/17.3.4/microsoft.build.tasks.core.17.3.4.nupkg"
+    "version": "17.11.31",
+    "hash": "sha256-5G9ZuP/6XNmR++YyBpQuBKqNsF2FXxz+537TtVWCik8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.tasks.core/17.11.31/microsoft.build.tasks.core.17.11.31.nupkg"
   },
   {
     "pname": "Microsoft.Build.Utilities.Core",
-    "version": "17.3.4",
-    "hash": "sha256-SfZxr5xDANnDnC1HCUgho2H9MnF6n51cM47Rrf07fWw=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.build.utilities.core/17.3.4/microsoft.build.utilities.core.17.3.4.nupkg"
+    "version": "17.11.31",
+    "hash": "sha256-AQN2Qi4WbguyZitJR8FTYzq9k0LDyzETFpTA9aQZ4Gw=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.utilities.core/17.11.31/microsoft.build.utilities.core.17.11.31.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
@@ -133,15 +127,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "11.0.0-beta.25504.3",
-    "hash": "sha256-UkkFqvq5HLl5EY4nhY4x1FvKj7QVlgC1yz25Juv9cOE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25504.3/microsoft.dotnet.arcade.sdk.11.0.0-beta.25504.3.nupkg"
+    "version": "11.0.0-beta.25531.1",
+    "hash": "sha256-3zAA42msNPkvWe29bOeC44zjJyaFRU+M2+jBti/JTP4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25531.1/microsoft.dotnet.arcade.sdk.11.0.0-beta.25531.1.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "11.0.0-beta.25504.3",
-    "hash": "sha256-L4iPZRQHMW+YGda7op4orP87OyuXY5+QlpE/EmMoKd4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25504.3/microsoft.dotnet.xlifftasks.11.0.0-beta.25504.3.nupkg"
+    "version": "11.0.0-beta.25531.1",
+    "hash": "sha256-6Ko4aKbQZskfE2B6xg6RZjEd51at6/Pk1OvMRfP6qWQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25531.1/microsoft.dotnet.xlifftasks.11.0.0-beta.25531.1.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -511,9 +505,9 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "2.0.0-rc.1.25502.108",
-    "hash": "sha256-O1uciBJ6ig7JWzj/U7N40om77qtBt3fnBkbKSDGJkEU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-rc.1.25502.108/system.commandline.2.0.0-rc.1.25502.108.nupkg"
+    "version": "2.0.0-rc.1.25515.110",
+    "hash": "sha256-kkWn8IJRJjafkB1WSuE0kA0gyce3eGcikK3gKUlEH3g=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-rc.1.25515.110/system.commandline.2.0.0-rc.1.25515.110.nupkg"
   },
   {
     "pname": "System.ComponentModel.Composition",

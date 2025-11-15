@@ -1208,6 +1208,8 @@ self: super: with self; {
 
   av = callPackage ../development/python-modules/av { };
 
+  av_13 = callPackage ../development/python-modules/av_13 { };
+
   avahi = toPythonModule (
     pkgs.avahi.override {
       inherit python;
@@ -4085,6 +4087,8 @@ self: super: with self; {
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
 
+  django-modelsearch = callPackage ../development/python-modules/django-modelsearch { };
+
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
@@ -5357,6 +5361,8 @@ self: super: with self; {
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
+
+  flash-attn = callPackage ../development/python-modules/flash-attn { };
 
   flashinfer = callPackage ../development/python-modules/flashinfer { };
 

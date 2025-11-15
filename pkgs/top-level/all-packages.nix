@@ -6703,8 +6703,6 @@ with pkgs;
   sbt-with-scala-native = callPackage ../development/tools/build-managers/sbt/scala-native.nix { };
   simpleBuildTool = sbt;
 
-  scss-lint = callPackage ../development/tools/scss-lint { };
-
   shake =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (
@@ -10736,6 +10734,7 @@ with pkgs;
 
   cmus = callPackage ../applications/audio/cmus {
     libjack = libjack2;
+    ffmpeg = ffmpeg_7;
   };
 
   cni = callPackage ../applications/networking/cluster/cni { };
@@ -11155,14 +11154,6 @@ with pkgs;
   );
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix { };
-
-  manim = python3Packages.toPythonApplication python3Packages.manim;
-
-  manim-slides =
-    (python3Packages.toPythonApplication python3Packages.manim-slides).overridePythonAttrs
-      (oldAttrs: {
-        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.pyqt6-full;
-      });
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
@@ -12936,11 +12927,6 @@ with pkgs;
 
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
-  asc = callPackage ../games/asc {
-    lua = lua5_1;
-    physfs = physfs_2;
-  };
-
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
     inherit (python3Packages) beancount beangulp;
   };
@@ -13387,8 +13373,6 @@ with pkgs;
     redshift
     gammastep
     ;
-
-  redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
   ### SCIENCE/CHEMISTY
 

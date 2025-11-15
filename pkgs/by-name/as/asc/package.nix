@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "ValHaris";
     repo = "asc-hq";
     rev = "fa3bca082a5cea2b35812349f99b877f0113aef0";
-    sha256 = "atamYCN2mOqxV6auToTeWdpKuFfC+GLfLdRsfT0ouwQ=";
+    hash = "sha256-atamYCN2mOqxV6auToTeWdpKuFfC+GLfLdRsfT0ouwQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     libsigcxx
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn based strategy game";
 
     longDescription = ''
@@ -78,9 +78,9 @@ stdenv.mkDerivation {
 
     homepage = "https://www.asc-hq.org/";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }
