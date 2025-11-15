@@ -7,6 +7,10 @@
 
 let
   cfg = config.services.onlyoffice;
+  defaultNginxNonceFileContent = "set $secure_link_secret \"mynonce\";";
+  defaultNginxNonceFile = pkgs.writeText "onlyoffice-nonce-nginx.conf" ''
+    ${defaultNginxNonceFileContent}
+  '';
 in
 {
   options.services.onlyoffice = {
@@ -18,6 +22,22 @@ in
       type = lib.types.str;
       default = "localhost";
       description = "FQDN for the OnlyOffice instance.";
+    };
+
+    securityNonceFile = lib.mkOption {
+      type = lib.types.str;
+      default = "${defaultNginxNonceFile}";
+      defaultText = lib.literalExpression ''
+        (pkgs.writeText "onlyoffice-nonce-nginx.conf" \'\'
+          ${defaultNginxNonceFileContent}
+        \'\').outPath;
+      '';
+      description = ''
+        Path to a file that contains a secret to sign web requests.
+        This file should set a 'secure_link_secret' nginx variable,
+        and ideally be managed by a
+        [secret managing scheme](https://wiki.nixos.org/wiki/Comparison_of_secret_managing_schemes).
+      '';
     };
 
     jwtSecretFile = lib.mkOption {
@@ -83,6 +103,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = [
+      (lib.optionalString (cfg.securityNonceFile == "${defaultNginxNonceFile}") ''
+        Please set `options.services.onlyoffice.securityNonceFile`
+        to avoid an (albeit unlikely) information disclosure issue.
+      '')
+    ];
     services = {
       nginx = {
         enable = lib.mkDefault true;
@@ -147,7 +173,7 @@ in
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
               add_header Content-Disposition "attachment; filename*=UTF-8''$arg_filename";
 
-              set $secure_link_secret verysecretstring;
+              include ${cfg.securityNonceFile};
               secure_link $arg_md5,$arg_expires;
               secure_link_md5 "$secure_link_expires$uri$secure_link_secret";
 
@@ -279,7 +305,9 @@ in
 
             # for a mapping of environment variables from the docker container to json options see
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
+            FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+              .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
               .services.CoAuthoring.sql.dbName = "${cfg.postgresName}" |
