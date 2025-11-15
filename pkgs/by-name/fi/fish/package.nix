@@ -352,7 +352,6 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "fish_run_tests";
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
-    export PATH=${testPython}/bin:$PATH
   '';
 
   nativeInstallCheckInputs = [
