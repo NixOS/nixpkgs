@@ -18,6 +18,7 @@ let
   inherit (pkgs.lib)
     isAttrs
     isFunction
+    genAttrs
     mapAttrs
     elem
     recurseIntoAttrs
@@ -1103,6 +1104,13 @@ in
     imports = [ ./nixos-rebuild-target-host.nix ];
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixpkgs-xdg = genAttrs [ "config" "overlays" ] (
+    feature:
+    runTest {
+      imports = [ ./nixpkgs-xdg.nix ];
+      _module.args = { inherit feature; };
+    }
+  );
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
