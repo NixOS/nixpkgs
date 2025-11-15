@@ -15,7 +15,7 @@
   go-md2man,
   nixosTests,
   python3,
-  makeWrapper,
+  makeBinaryWrapper,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -107,7 +107,7 @@ buildGoModule rec {
     pkg-config
     go-md2man
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     python3
   ];
 
