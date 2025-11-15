@@ -4931,7 +4931,9 @@ with pkgs;
     mlton20130715
     mlton20180207Binary
     mlton20180207
+    mlton20210117Binary
     mlton20210117
+    mlton20241230Binary
     mlton20241230
     mltonHEAD
     ;
