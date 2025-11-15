@@ -31,15 +31,15 @@ let
     hash = "sha256-M+3ywDd1kyo6U/9o7fpsqYIPuulf8fDe3a4mjJKEN2U=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-cloud-cpp";
   version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
-    rev = "v${version}";
-    sha256 = "sha256-2OnzObCTmB6E4Ut0blmL7CRAJJ9EKl6eSVdfuPS4B2Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2OnzObCTmB6E4Ut0blmL7CRAJJ9EKl6eSVdfuPS4B2Y=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       ];
       ldLibraryPathName = "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH";
     in
-    lib.optionalString doInstallCheck (
+    lib.optionalString finalAttrs.doInstallCheck (
       lib.optionalString (!staticOnly) ''
         export ${ldLibraryPathName}=${lib.concatStringsSep ":" additionalLibraryPaths}
       ''
@@ -114,32 +114,33 @@ stdenv.mkDerivation rec {
       runHook postInstallCheck
     '';
 
-  nativeInstallCheckInputs = lib.optionals doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals finalAttrs.doInstallCheck [
     gbenchmark
     gtest
   ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!staticOnly))
     # unconditionally build tests to catch linker errors as early as possible
     # this adds a good chunk of time to the build
-    "-DBUILD_TESTING:BOOL=ON"
-    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+    (lib.cmakeBool "BUILD_TESTING" true)
+    (lib.cmakeBool "GOOGLE_CLOUD_CPP_ENABLE_EXAMPLES" false)
   ]
   ++ lib.optionals (apis != [ "*" ]) [
-    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
+    (lib.cmakeFeature "GOOGLE_CLOUD_CPP_ENABLE" (lib.concatStringsSep ";" apis))
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
+    (lib.cmakeFeature "GOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE" "${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin")
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
-    license = with licenses; [ asl20 ];
+  meta = {
+    license = with lib.licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
+    changelog = "https://github.com/googleapis/google-cloud-cpp/blob/v${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})
