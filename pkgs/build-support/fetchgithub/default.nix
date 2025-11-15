@@ -68,7 +68,7 @@ lib.makeOverridable (
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
     useFetchGit =
       fetchSubmodules
-      || (leaveDotGit == true)
+      || lib.defaultTo false leaveDotGit == true
       || deepClone
       || forceFetchGit
       || fetchLFS
@@ -122,6 +122,7 @@ lib.makeOverridable (
               rev
               deepClone
               fetchSubmodules
+              leaveDotGit
               sparseCheckout
               fetchLFS
               ;
@@ -135,7 +136,6 @@ lib.makeOverridable (
                 ;
             };
           }
-          // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
           let
             revWithTag = finalAttrs.rev;
