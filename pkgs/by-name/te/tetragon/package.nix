@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
-    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments";
+    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
   };
 
   buildPhase = ''

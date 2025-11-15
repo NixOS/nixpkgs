@@ -77,6 +77,5 @@ stdenv.mkDerivation {
     '';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ j03 ];
   };
 }

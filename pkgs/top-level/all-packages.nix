@@ -8175,6 +8175,22 @@ with pkgs;
 
   openssl = openssl_3_6;
 
+  openssl_oqs = openssl.override {
+    providers = [
+      {
+        name = "oqsprovider";
+        package = pkgs.oqs-provider;
+      }
+    ];
+    autoloadProviders = true;
+
+    extraINIConfig = {
+      tls_system_default = {
+        Groups = "X25519MLKEM768:X25519:P-256:X448:P-521:ffdhe2048:ffdhe3072";
+      };
+    };
+  };
+
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
@@ -11397,8 +11413,6 @@ with pkgs;
       ghostscriptSupport = true;
     }
   );
-
-  inherit (nodePackages) imapnotify;
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 

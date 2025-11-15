@@ -186,6 +186,7 @@ mapAliases {
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
+  gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29
   groestlcoin_hash = throw "'groestlcoin_hash' has been renamed to/replaced by 'groestlcoin-hash'"; # Converted to throw 2025-10-29
@@ -217,6 +218,7 @@ mapAliases {
   jinja2_pluralize = throw "'jinja2_pluralize' has been renamed to/replaced by 'jinja2-pluralize'"; # Converted to throw 2025-10-29
   jinja2_time = throw "'jinja2_time' has been renamed to/replaced by 'jinja2-time'"; # Converted to throw 2025-10-29
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
+  jsonfield = throw "'jsonfield' has been removed as it was broken and deprecated upstream. Consider using Django's native `JSONField` instead."; # Added 2025-11-08
   jsonpath_rw = throw "'jsonpath_rw' has been renamed to/replaced by 'jsonpath-rw'"; # Converted to throw 2025-10-29
   jupyter-server-ydoc = throw "'jupyter-server-ydoc' has been renamed to/replaced by 'jupyter-collaboration'"; # Converted to throw 2025-10-29
   jupyter_client = throw "'jupyter_client' has been renamed to/replaced by 'jupyter-client'"; # Converted to throw 2025-10-29
@@ -286,6 +288,7 @@ mapAliases {
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
+  paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29

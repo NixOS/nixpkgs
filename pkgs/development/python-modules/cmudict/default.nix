@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "cmudict";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I8ORTIVGX2p9JtLYl0+jQd17ySTR/6UBtBQGuTaSPbE=";
+    hash = "sha256-IhZd73NPGpwZHKFowGbX6lgsi42nkNo+g0TpZeJkfbg=";
   };
 
   build-system = [

@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/fix-config-and-i18n-paths.patch
     ./patches/fix-installer-cmake.patch
     ./patches/fix-miniz-cmake-dirs.patch
+    ./patches/fix-qquaternion-include.patch
   ];
 
   postInstall = ''

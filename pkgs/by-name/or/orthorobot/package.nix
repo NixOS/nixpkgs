@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Recharge the robot";
     mainProgram = "orthorobot";
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.linux;
     license = lib.licenses.wtfpl;
     downloadPage = "https://stabyourself.net/orthorobot/";

@@ -47,6 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
   ];
 
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
+    cp -r Zeal.app $out/Applications
+    ln -s $out/Applications/Zeal.app/Contents/MacOS/Zeal $out/bin/zeal
+
+    runHook postInstall
+  '';
+
   meta = {
     description = "Simple offline API documentation browser";
     longDescription = ''

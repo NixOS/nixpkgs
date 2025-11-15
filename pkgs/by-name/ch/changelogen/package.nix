@@ -5,6 +5,7 @@
   nodejs,
   pnpm_10,
   npmHooks,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -41,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontNpmPrune = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Beautiful Changelogs using Conventional Commits";

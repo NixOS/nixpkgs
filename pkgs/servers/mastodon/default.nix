@@ -82,8 +82,6 @@ stdenv.mkDerivation rec {
         -exec brotli --best --keep {} ';'
       find public/packs -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg)' \
         -exec brotli --best --keep {} ';'
-      find public/packs/emoji -maxdepth 1 -type f -name '*.json' \
-        -exec gzip --best --keep --force {} ';'
       gzip --best --keep public/packs/sw.js
 
       runHook postBuild
