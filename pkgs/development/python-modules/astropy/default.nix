@@ -43,10 +43,12 @@
   uncompresspy,
 
   # testing
+  hypothesis,
   pytestCheckHook,
   pytest-xdist,
   pytest-astropy-header,
-  pytest-astropy,
+  pytest-doctestplus,
+  pytest-remotedata,
   threadpoolctl,
 
 }:
@@ -123,11 +125,16 @@ buildPythonPackage rec {
   });
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     pytest-xdist
     pytest-astropy-header
-    pytest-astropy
+    pytest-doctestplus
+    pytest-remotedata
     threadpoolctl
+    # FIXME remove in 7.2.0
+    # see https://github.com/astropy/astropy/pull/18882
+    uncompresspy
   ]
   ++ optional-dependencies.recommended;
 
