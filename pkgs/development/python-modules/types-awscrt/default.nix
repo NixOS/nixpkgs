@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "types-awscrt";
   version = "0.28.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "types_awscrt";
@@ -22,6 +19,9 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "awscrt-stubs" ];
+
+  # Module has no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Type annotations and code completion for awscrt";
