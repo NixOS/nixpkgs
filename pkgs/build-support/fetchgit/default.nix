@@ -66,7 +66,8 @@ lib.makeOverridable (
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
-          leaveDotGit ? deepClone || fetchTags,
+          # When null, will default to: `deepClone || fetchTags`
+          leaveDotGit ? null,
           outputHash ? lib.fakeHash,
           outputHashAlgo ? null,
           fetchSubmodules ? true,
@@ -171,9 +172,12 @@ lib.makeOverridable (
               gitConfigFile
               ;
             leaveDotGit =
-              assert fetchTags -> leaveDotGit;
-              assert rootDir != "" -> !leaveDotGit;
-              leaveDotGit;
+              if leaveDotGit != null then
+                assert fetchTags -> leaveDotGit;
+                assert rootDir != "" -> !leaveDotGit;
+                leaveDotGit
+              else
+                deepClone || fetchTags;
             inherit tag;
             revCustom = rev;
             rev = getRevWithTag {
