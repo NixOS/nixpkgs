@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "StereoKit";
     repo = "StereoKit";
-    rev = "2e200e1f8e1fed1d3cd0d0d98d92acd047cd22db";
-    hash = "sha256-Rq809UOowY0TFyDrCv99YdTIgIoYVh8UKgB4adgU39Y=";
+    rev = "17b6319f05f0acd0b19da2bb526b7002a4c00c13";
+    hash = "sha256-GKWh5xl6uIvEBTSEiObZ+K7GuuGFGwNp8R1oFpX/VNs=";
   };
 
   postPatch = ''
