@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
     "-DSLANG_INCLUDE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+
+    # slang doesn't use C++20 modules; module scanning breaks with clang-scan-deps on macOS
+    "-DCMAKE_CXX_SCAN_FOR_MODULES=OFF"
   ];
 
   nativeBuildInputs = [
@@ -63,6 +66,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ sharzy ];
     mainProgram = "slang";
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
