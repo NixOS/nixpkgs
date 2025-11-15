@@ -353,6 +353,7 @@ print OUT <<EOF;
   font-cronyx-cyrillic,
   font-cursor-misc,
   font-daewoo-misc,
+  font-dec-misc,
   font-encodings,
   font-isas-misc,
   font-micro-misc,
@@ -560,6 +561,7 @@ self: with self; {
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontcursormisc = font-cursor-misc;
   fontdaewoomisc = font-daewoo-misc;
+  fontdecmisc = font-dec-misc;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
