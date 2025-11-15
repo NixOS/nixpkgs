@@ -1,24 +1,24 @@
-diff --git a/pdsadmin.sh b/pdsadmin.sh
-index 913d2b4..b09c20c 100644
---- a/pdsadmin.sh
-+++ b/pdsadmin.sh
+diff --git i/pdsadmin.sh w/pdsadmin.sh
+index 505ada3..afc3265 100644
+--- i/pdsadmin.sh
++++ w/pdsadmin.sh
 @@ -15,16 +15,11 @@ if [[ "${EUID}" -ne 0 ]]; then
    exit 1
  fi
- 
+
 -# Download the script, if it exists.
 -SCRIPT_URL="${PDSADMIN_BASE_URL}/${COMMAND}.sh"
 -SCRIPT_FILE="$(mktemp /tmp/pdsadmin.${COMMAND}.XXXXXX)"
 +SCRIPT_FILE="NIXPKGS_PDSADMIN_ROOT/lib/pds/${COMMAND}.sh"
- 
+
 -if ! curl --fail --silent --show-error --location --output "${SCRIPT_FILE}" "${SCRIPT_URL}"; then
 +if ! [ -f "${SCRIPT_FILE}" ]; then
    echo "ERROR: ${COMMAND} not found"
    exit 2
  fi
- 
+
 -chmod +x "${SCRIPT_FILE}"
 -if "${SCRIPT_FILE}" "$@"; then
--  rm --force "${SCRIPT_FILE}"
+-  rm -f "${SCRIPT_FILE}"
 -fi
 +"${SCRIPT_FILE}" "$@"
