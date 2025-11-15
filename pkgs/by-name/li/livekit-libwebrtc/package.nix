@@ -1,7 +1,7 @@
 {
   stdenv,
   clang,
-  callPackage,
+  gclient2nix,
   lib,
   gn,
   fetchurl,
@@ -29,11 +29,8 @@
   libxslt,
   minizip,
   ffmpeg_6,
-  writeShellScript,
 }:
 let
-  sources = callPackage ./sources.nix { };
-
   platformMap = {
     "x86_64" = "x64";
     "i686" = "x86";
@@ -69,13 +66,13 @@ let
       ffmpeg_6
       ;
   };
-  gclient2nix = python3.pkgs.callPackage ./gclient2nix.nix { };
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
   version = "125-unstable-2025-03-24";
 
-  src = "${sources}/src";
+  gclientDeps = gclient2nix.importGclientDeps ./sources.json;
+  sourceRoot = "src";
 
   patches = [
     # Adds missing dependencies to generated LICENSE
@@ -173,6 +170,7 @@ stdenv.mkDerivation {
       ) gnSystemLibraries
     ))
     ++ [
+      gclient2nix.gclientUnpackHook
       gn
       (python3.withPackages (ps: [ ps.setuptools ]))
       ninja
@@ -295,11 +293,7 @@ stdenv.mkDerivation {
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
   '';
 
-  passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''
-    set -eou pipefail
-    cd pkgs/by-name/li/livekit-libwebrtc
-    ${lib.getExe gclient2nix} --main-source-path src https://github.com/webrtc-sdk/webrtc.git m114_release
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "WebRTC library used by livekit";
