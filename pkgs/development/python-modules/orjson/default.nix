@@ -42,6 +42,11 @@ buildPythonPackage rec {
     hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
 
+  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # fix architecture checks in build.rs to fix build for riscv
+    ./cross-arch-compat.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-y6FmK1RR1DAswVoTlnl19CmoYXAco1dY7lpV/KTypzE=";

@@ -3899,6 +3899,8 @@ self: super: with self; {
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
+  django-agnocomplete = callPackage ../development/python-modules/django-agnocomplete { };
+
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django-annoying = callPackage ../development/python-modules/django-annoying { };
@@ -4136,6 +4138,8 @@ self: super: with self; {
   django-postgresql-netfields =
     callPackage ../development/python-modules/django-postgresql-netfields
       { };
+
+  django-probes = callPackage ../development/python-modules/django-probes { };
 
   django-prometheus = callPackage ../development/python-modules/django-prometheus { };
 
@@ -4684,6 +4688,8 @@ self: super: with self; {
   ed25519-blake2b = callPackage ../development/python-modules/ed25519-blake2b { };
 
   edalize = callPackage ../development/python-modules/edalize { };
+
+  edge-tts = callPackage ../development/python-modules/edge-tts { };
 
   editables = callPackage ../development/python-modules/editables { };
 
@@ -6324,8 +6330,6 @@ self: super: with self; {
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
-  gpy = callPackage ../development/python-modules/gpy { };
-
   gpytorch = callPackage ../development/python-modules/gpytorch { };
 
   gql = callPackage ../development/python-modules/gql { };
@@ -6658,6 +6662,8 @@ self: super: with self; {
   heatzypy = callPackage ../development/python-modules/heatzypy { };
 
   hebg = callPackage ../development/python-modules/hebg { };
+
+  helion = callPackage ../development/python-modules/helion { };
 
   help2man = callPackage ../development/python-modules/help2man { };
 
@@ -7150,6 +7156,8 @@ self: super: with self; {
 
   in-place = callPackage ../development/python-modules/in-place { };
 
+  in-toto-attestation = callPackage ../development/python-modules/in-toto-attestation { };
+
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
@@ -7616,8 +7624,6 @@ self: super: with self; {
 
   jsonfeed = callPackage ../development/python-modules/jsonfeed { };
 
-  jsonfield = callPackage ../development/python-modules/jsonfield { };
-
   jsonformatter = callPackage ../development/python-modules/jsonformatter { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
@@ -7814,6 +7820,8 @@ self: super: with self; {
   kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
+
+  kagglehub = callPackage ../development/python-modules/kagglehub { };
 
   kahip = toPythonModule (
     pkgs.kahip.override {
@@ -9564,6 +9572,8 @@ self: super: with self; {
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
 
+  mkdocs-literate-nav = callPackage ../development/python-modules/mkdocs-literate-nav { };
+
   mkdocs-macros-plugin = callPackage ../development/python-modules/mkdocs-macros-plugin { };
 
   mkdocs-macros-test = callPackage ../development/python-modules/mkdocs-macros-test { };
@@ -9587,6 +9597,8 @@ self: super: with self; {
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
+
+  mkdocs-section-index = callPackage ../development/python-modules/mkdocs-section-index { };
 
   mkdocs-simple-blog = callPackage ../development/python-modules/mkdocs-simple-blog { };
 
@@ -9680,6 +9692,8 @@ self: super: with self; {
   model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   model-checker = callPackage ../development/python-modules/model-checker { };
+
+  model-signing = callPackage ../development/python-modules/model-signing { };
 
   modelcif = callPackage ../development/python-modules/modelcif { };
 
@@ -11153,6 +11167,8 @@ self: super: with self; {
 
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
+  opentelemetry-distro = callPackage ../development/python-modules/opentelemetry-distro { };
+
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
@@ -11235,6 +11251,10 @@ self: super: with self; {
 
   opentelemetry-instrumentation-sqlalchemy =
     callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy
+      { };
+
+  opentelemetry-instrumentation-urllib3 =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-urllib3
       { };
 
   opentelemetry-instrumentation-wsgi =
@@ -11563,8 +11583,6 @@ self: super: with self; {
   parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
-
-  paramz = callPackage ../development/python-modules/paramz { };
 
   paranoid-crypto = callPackage ../development/python-modules/paranoid-crypto { };
 
@@ -12776,8 +12794,6 @@ self: super: with self; {
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
   pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
-
-  pybind11-protobuf = callPackage ../development/python-modules/pybind11-protobuf { };
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
 
@@ -15057,8 +15073,6 @@ self: super: with self; {
 
   python-jsonpath = callPackage ../development/python-modules/python-jsonpath { };
 
-  python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
-
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
   python-kadmin-rs = callPackage ../development/python-modules/python-kadmin-rs { };
@@ -15438,6 +15452,8 @@ self: super: with self; {
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
   pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
+
+  pytorch-tokenizers = callPackage ../development/python-modules/pytorch-tokenizers { };
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
@@ -18568,8 +18584,6 @@ self: super: with self; {
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
-  tikzplotlib = callPackage ../development/python-modules/tikzplotlib { };
-
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
   tilequant = callPackage ../development/python-modules/tilequant { };
@@ -18688,6 +18702,8 @@ self: super: with self; {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
+  togrill-bluetooth = callPackage ../development/python-modules/togrill-bluetooth { };
+
   token-bucket = callPackage ../development/python-modules/token-bucket { };
 
   tokenize-rt = callPackage ../development/python-modules/tokenize-rt { };
@@ -18763,6 +18779,8 @@ self: super: with self; {
 
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
+  torchdata = callPackage ../development/python-modules/torchdata { };
+
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
   torcheval = callPackage ../development/python-modules/torcheval { };
@@ -18786,8 +18804,6 @@ self: super: with self; {
   torchsummary = callPackage ../development/python-modules/torchsummary { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
-
-  torchtnt-nightly = callPackage ../development/python-modules/torchtnt-nightly { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
@@ -19847,6 +19863,8 @@ self: super: with self; {
 
   utils = callPackage ../development/python-modules/utils { };
 
+  utitools = callPackage ../development/python-modules/utitools { };
+
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uv = callPackage ../development/python-modules/uv { inherit (pkgs) uv; };
@@ -19998,6 +20016,8 @@ self: super: with self; {
   };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vmas = callPackage ../development/python-modules/vmas { };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 

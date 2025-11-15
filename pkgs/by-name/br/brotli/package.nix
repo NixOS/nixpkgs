@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"

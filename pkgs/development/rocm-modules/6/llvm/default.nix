@@ -212,13 +212,6 @@ let
         echo 'export CC=clang' >> $out/nix-support/setup-hook
         echo 'export CXX=clang++' >> $out/nix-support/setup-hook
       '';
-  # Removes patches which either aren't desired, or don't apply against ROCm LLVM
-  removeInapplicablePatches =
-    x:
-    (
-      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x))
-      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (baseNameOf x))
-    );
   tablegenUsage = x: !(lib.strings.hasInfix "llvm-tblgen" x);
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -354,88 +347,77 @@ overrideLlvmPackagesRocm (s: {
     (s.prev.clang-unwrapped.override {
       enableClangToolsExtra = false;
     }).overrideAttrs
-      (
-        old:
-        let
-          filteredPatches = builtins.filter (x: !(removeInapplicablePatches x)) old.patches;
-        in
-        {
-          passthru = old.passthru // {
-            inherit gcc-prefix;
-          };
-          patches = [
-            (fetchpatch {
-              # [PATCH] [clang] Install scan-build-py into plain "lib" directory
-              # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
-              hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
-              url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
-              relative = "clang";
-            })
-          ]
-          ++ filteredPatches
-          ++ [
-            # Never add FHS include paths
-            ./clang-bodge-ignore-systemwide-incls.diff
-            # Prevents builds timing out if a single compiler invocation is very slow but
-            # per-arch jobs are completing by ensuring there's terminal output
-            ./clang-log-jobs.diff
-            ./opt-offload-compress-on-by-default.patch
-            ./perf-shorten-gcclib-include-paths.patch
-            (fetchpatch {
-              # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
-              url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
-              relative = "clang";
-            })
-            # FIXME: Temporarily kept for rebuild avoidance
-            # Should be dropped in followup and we no longer need to filter out the original application
-            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${s.final.libllvm.lib}/lib";
-            })
+      (old: {
+        passthru = old.passthru // {
+          inherit gcc-prefix;
+        };
+        patches = [
+          (fetchpatch {
+            # [PATCH] [clang] Install scan-build-py into plain "lib" directory
+            # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
+            hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
+            url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
+            relative = "clang";
+          })
+        ]
+        ++ old.patches
+        ++ [
+          # Never add FHS include paths
+          ./clang-bodge-ignore-systemwide-incls.diff
+          # Prevents builds timing out if a single compiler invocation is very slow but
+          # per-arch jobs are completing by ensuring there's terminal output
+          ./clang-log-jobs.diff
+          ./opt-offload-compress-on-by-default.patch
+          ./perf-shorten-gcclib-include-paths.patch
+          (fetchpatch {
+            # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
+            sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+            url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+            relative = "clang";
+          })
+        ];
+        hardeningDisable = [ "all" ];
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          removeReferencesTo
+        ];
+        buildInputs = old.buildInputs ++ [
+          zstd
+          zlib
+        ];
+        env = (old.env or { }) // {
+          NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
+        };
+        dontStrip = profilableStdenv;
+        # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+        disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+        # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
+        __structuredAttrs = true;
+        # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
+        cmakeFlags =
+          # TODO: Remove in followup, tblgen now works correctly but would rebuild
+          (builtins.filter tablegenUsage old.cmakeFlags)
+          ++ commonCmakeFlags
+          ++ lib.optionals (!withLibcxx) [
+            # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
+            # Expected to be fully removed eventually
+            "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
+            "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
           ];
-          hardeningDisable = [ "all" ];
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            removeReferencesTo
-          ];
-          buildInputs = old.buildInputs ++ [
-            zstd
-            zlib
-          ];
-          env = (old.env or { }) // {
-            NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
-          };
-          dontStrip = profilableStdenv;
-          # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-          disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-          # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
-          __structuredAttrs = true;
-          # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
-          cmakeFlags =
-            # TODO: Remove in followup, tblgen now works correctly but would rebuild
-            (builtins.filter tablegenUsage old.cmakeFlags)
-            ++ commonCmakeFlags
-            ++ lib.optionals (!withLibcxx) [
-              # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
-              # Expected to be fully removed eventually
-              "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
-              "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-            ];
-          preFixup = ''
-            ${toString old.preFixup or ""}
-            moveToOutput "lib/lib*.a" "$dev"
-            moveToOutput "lib/cmake" "$dev"
-            mkdir -p $dev/lib/clang/
-            ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
-            sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
-          '';
-          postFixup = ''
-            ${toString old.postFixup or ""}
-            find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
-            find $dev -type f -exec remove-references-to -t ${refsToRemove} {} +
-          '';
-          meta = old.meta // llvmMeta;
-        }
-      )
+        preFixup = ''
+          ${toString old.preFixup or ""}
+          moveToOutput "lib/lib*.a" "$dev"
+          moveToOutput "lib/cmake" "$dev"
+          mkdir -p $dev/lib/clang/
+          ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
+          sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
+        '';
+        postFixup = ''
+          ${toString old.postFixup or ""}
+          find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
+          find $dev -type f -exec remove-references-to -t ${refsToRemove} {} +
+        '';
+        meta = old.meta // llvmMeta;
+      })
   );
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order

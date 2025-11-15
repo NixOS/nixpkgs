@@ -27,10 +27,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.tar.gz",
-      "version": "2025.2.2",
-      "sha256": "32cdc6178f4046b3056c50184fd5157eef0658875a6ff17c64eb451d1fb0f4fb",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.2.2.tar.gz",
-      "build_number": "252.27397.107"
+      "version": "2025.2.3",
+      "sha256": "1e4bc499da1ce8c63e8a4526159c20ef8a797315dc6d3ab4c8eb109f323faba6",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.2.3.tar.gz",
+      "build_number": "252.27397.129"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -100,10 +100,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "cd428f7d6db5055cd2594c3d1ef91241843d263cb6301369d3121a847ffb6589",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.2.4.tar.gz",
-      "build_number": "252.27397.121"
+      "version": "2025.3",
+      "sha256": "bf7be76634ec70dc33008505a08dcc024d4d7ec2bf0e4ace8a71f219d2f40706",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.tar.gz",
+      "build_number": "253.28294.88"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -116,10 +116,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "3da078b5e68bac2283c0dd60fe3ff17d6025d92d6237bc6fab74f1f35ff6fbe5",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.tar.gz",
-      "build_number": "252.27397.120"
+      "version": "2025.2.4.1",
+      "sha256": "a51a62af4801f7f4caf8586dde0354d06f6bc351660b75feff554e756874cb37",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.1.tar.gz",
+      "build_number": "252.27397.133"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -166,10 +166,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.tar.gz",
-      "version": "2025.2.2",
-      "sha256": "6881781e1020272cf3ceb4e50da66e24cbc4f35535e568131353cbfbd9d81968",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.2.2-aarch64.tar.gz",
-      "build_number": "252.27397.107"
+      "version": "2025.2.3",
+      "sha256": "4bebb406617b4179791d4b6560dc50355760773ef37f6ce9f27bd0d1fd638750",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.2.3-aarch64.tar.gz",
+      "build_number": "252.27397.129"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -239,10 +239,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "75c38a2bd94e31200fc4e3a6cfad83b35c65d36c9d61b9a7b208e3ec82f8c81a",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.2.4-aarch64.tar.gz",
-      "build_number": "252.27397.121"
+      "version": "2025.3",
+      "sha256": "bce1eed1a6fac3cc0850fc2b38ef557e1c51872c4b619a86ce36d002f6cbcbcb",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3-aarch64.tar.gz",
+      "build_number": "253.28294.88"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -255,10 +255,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "03052ead61bd13eaa616d1126add5b6b6fa9dbc6ef591109b358005d5b630606",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4-aarch64.tar.gz",
-      "build_number": "252.27397.120"
+      "version": "2025.2.4.1",
+      "sha256": "83d868b92b79907dc42d9e4aacc2a2aae3f9838d392c5a7593487bf4cbb8c641",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.1-aarch64.tar.gz",
+      "build_number": "252.27397.133"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -305,10 +305,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.dmg",
-      "version": "2025.2.2",
-      "sha256": "9573f0450a6eb1877bf53705533c886962ea5985c83c7a2ef642cea796b8eae0",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.2.2.dmg",
-      "build_number": "252.27397.107"
+      "version": "2025.2.3",
+      "sha256": "7d1a60c4367a1e1bd43aec494177c4c30744cb5bf904a3c71d2a3d13439a7b12",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.2.3.dmg",
+      "build_number": "252.27397.129"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -378,10 +378,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.dmg",
-      "version": "2025.2.4",
-      "sha256": "f8cabc370393b6be2bd244413fd5692714c02e11cf24eb9c32438367d2895750",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.2.4.dmg",
-      "build_number": "252.27397.121"
+      "version": "2025.3",
+      "sha256": "add7e6e67b9f2588979782d86a7ff680a263ef41cd13664ed703975a6498976e",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.dmg",
+      "build_number": "253.28294.88"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -394,10 +394,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2025.2.4",
-      "sha256": "71f0735c546b659d4d1ed9ce58411848146ac0216b4b971583ce682311e9e075",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.dmg",
-      "build_number": "252.27397.120"
+      "version": "2025.2.4.1",
+      "sha256": "ec6faaaf119306c8b102b63492a530d8a1cf62f63c6f082543408c5c94e704bf",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.1.dmg",
+      "build_number": "252.27397.133"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -444,10 +444,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg",
-      "version": "2025.2.2",
-      "sha256": "a2a9cc1c0c515399206568e66add7693718918cef58fc16025effde3d768371b",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.2.2-aarch64.dmg",
-      "build_number": "252.27397.107"
+      "version": "2025.2.3",
+      "sha256": "ad8a2d8403c7d44f66d0905ab6d28a3e888e78b9cc140725e7ca744257c6ce58",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.2.3-aarch64.dmg",
+      "build_number": "252.27397.129"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -517,10 +517,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.dmg",
-      "version": "2025.2.4",
-      "sha256": "e6bd0a07f5922c05c73d9170bbaa2219534fa8e5350b99f37c6a4bc9eb7c0870",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.2.4-aarch64.dmg",
-      "build_number": "252.27397.121"
+      "version": "2025.3",
+      "sha256": "033f8dad94b9fec826ba9bd87025dfe668ef6d063a5cb49e7d33f7122ec2885e",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3-aarch64.dmg",
+      "build_number": "253.28294.88"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -533,10 +533,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2025.2.4",
-      "sha256": "8bad55d714d388c115c0d35c297eb5bdb140bc024b2bf602efc8d07a3327cad9",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4-aarch64.dmg",
-      "build_number": "252.27397.120"
+      "version": "2025.2.4.1",
+      "sha256": "0d4fe97c97c4cc66ec2d5a06fccc664557cae181cdf59177c9b24bff29ad5848",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2025.2.4.1-aarch64.dmg",
+      "build_number": "252.27397.133"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",

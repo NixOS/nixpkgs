@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     description = "Set of extra lv2 plugins from the guitarix project";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

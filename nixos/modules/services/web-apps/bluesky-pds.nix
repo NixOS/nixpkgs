@@ -73,7 +73,7 @@ in
 
           PDS_BLOB_UPLOAD_LIMIT = mkOption {
             type = types.str;
-            default = "52428800";
+            default = "104857600";
             description = "Size limit of uploaded blobs in bytes";
           };
 

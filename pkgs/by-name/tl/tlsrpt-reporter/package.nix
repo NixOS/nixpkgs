@@ -32,6 +32,8 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/sys4/tlsrpt-reporter/commit/32d00c13508dd7f9695b77e253e88c88dc838fbd.patch";
       hash = "sha256-RUNF86RkTu6DLv6/7eaY//fFB8kGzmZxQ70kdNpLxj8=";
     })
+    # https://github.com/sys4/tlsrpt-reporter/pull/48
+    ./logging.patch
   ];
 
   nativeBuildInputs = [

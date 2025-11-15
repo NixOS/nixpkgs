@@ -226,6 +226,18 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
+  ctrl-os = {
+    # Existing members may approve additions.
+    members = [
+      blitz
+      messemar
+      flyfloh
+    ];
+
+    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
+    shortName = "CTRL-OS";
+  };
+
   cuda = {
     github = "cuda-maintainers";
   };
@@ -234,7 +246,6 @@ with lib.maintainers;
     # Verify additions by approval of an already existing member of the team.
     members = [
       xanderio
-      blitz
       snu
       e1mo
     ];
@@ -620,7 +631,6 @@ with lib.maintainers;
   mate = {
     members = [
       bobby285271
-      j03
       romildo
     ];
     scope = "Maintain Mate desktop environment and related packages.";
@@ -704,6 +714,11 @@ with lib.maintainers;
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
+  };
+
+  nim = {
+    github = "nim";
+    enableFeatureFreezePing = true;
   };
 
   # same as https://github.com/orgs/NixOS/teams/nix-team

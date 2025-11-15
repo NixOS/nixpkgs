@@ -186,6 +186,7 @@ mapAliases {
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
+  gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29
   groestlcoin_hash = throw "'groestlcoin_hash' has been renamed to/replaced by 'groestlcoin-hash'"; # Converted to throw 2025-10-29
@@ -217,6 +218,7 @@ mapAliases {
   jinja2_pluralize = throw "'jinja2_pluralize' has been renamed to/replaced by 'jinja2-pluralize'"; # Converted to throw 2025-10-29
   jinja2_time = throw "'jinja2_time' has been renamed to/replaced by 'jinja2-time'"; # Converted to throw 2025-10-29
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
+  jsonfield = throw "'jsonfield' has been removed as it was broken and deprecated upstream. Consider using Django's native `JSONField` instead."; # Added 2025-11-08
   jsonpath_rw = throw "'jsonpath_rw' has been renamed to/replaced by 'jsonpath-rw'"; # Converted to throw 2025-10-29
   jupyter-server-ydoc = throw "'jupyter-server-ydoc' has been renamed to/replaced by 'jupyter-collaboration'"; # Converted to throw 2025-10-29
   jupyter_client = throw "'jupyter_client' has been renamed to/replaced by 'jupyter-client'"; # Converted to throw 2025-10-29
@@ -286,6 +288,7 @@ mapAliases {
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
+  paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29
@@ -311,6 +314,7 @@ mapAliases {
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
+  pybind11-protobuf = throw "'pybind11-protobuf' was only used by or-tools, and with some overrides, so vendored in there until it's used in other places."; # Converted to throw 2025-11-06
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
@@ -366,6 +370,7 @@ mapAliases {
   python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-ethtool = throw "'python-ethtool' has been renamed to/replaced by 'ethtool'"; # Converted to throw 2025-10-29
   python-igraph = throw "'python-igraph' has been renamed to/replaced by 'igraph'"; # Converted to throw 2025-10-29
+  python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
   python-Levenshtein = throw "'python-Levenshtein' has been renamed to/replaced by 'levenshtein'"; # Converted to throw 2025-10-29
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
@@ -459,6 +464,8 @@ mapAliases {
   Theano = throw "'Theano' has been renamed to/replaced by 'theano'"; # Converted to throw 2025-10-29
   TheanoWithCuda = throw "'TheanoWithCuda' has been renamed to/replaced by 'theanoWithCuda'"; # Converted to throw 2025-10-29
   TheanoWithoutCuda = throw "'TheanoWithoutCuda' has been renamed to/replaced by 'theanoWithoutCuda'"; # Converted to throw 2025-10-29
+  tikzplotlib = throw "tikzplotlib was removed because it is incompatible with recent versions of matplotlib and webcolors"; # added 2025-11-11
+  torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11

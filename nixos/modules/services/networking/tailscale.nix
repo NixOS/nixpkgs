@@ -213,7 +213,7 @@ in
             if [[ "$state" != "$lastState" ]]; then
               # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
               case "$state" in
-                NeedsLogin)
+                NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
                   tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
@@ -226,8 +226,8 @@ in
                   echo "Waiting for Tailscale State = Running or systemd timeout"
                   ;;
               esac
+              echo "State = $state"
             fi
-            echo "State = $state"
             lastState="$state"
             sleep .5
           done
@@ -235,7 +235,10 @@ in
     };
 
     systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
-      after = [ "tailscaled.service" ];
+      after = [
+        "tailscaled.service"
+        "tailscaled-autoconnect.service"
+      ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

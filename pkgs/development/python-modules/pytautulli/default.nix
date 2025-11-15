@@ -6,15 +6,13 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytautulli";
   version = "23.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -32,9 +30,15 @@ buildPythonPackage rec {
     # yarl 1.9.4 requires ports to be ints
     substituteInPlace pytautulli/models/host_configuration.py \
       --replace-fail "str(self.port)" "int(self.port)"
+
+    # https://github.com/ludeeus/pytautulli/pull/44
+    substituteInPlace pytautulli/decorator.py \
+      --replace-fail "import async_timeout" ""
   '';
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

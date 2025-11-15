@@ -1835,6 +1835,7 @@ with pkgs;
     inteltool
     amdfwtool
     acpidump-all
+    intelp2m
     coreboot-utils
     ;
 
@@ -1899,7 +1900,6 @@ with pkgs;
 
   inherit (ocamlPackages) dot-merlin-reader;
 
-  inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
   dvc = with python3.pkgs; toPythonApplication dvc;
@@ -3626,9 +3626,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  p7zip = callPackage ../tools/archivers/p7zip { };
-  p7zip-rar = p7zip.override { enableUnfree = true; };
-
   packagekit = callPackage ../tools/package-management/packagekit { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -5015,11 +5012,9 @@ with pkgs;
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
-    julia_19-bin
     julia_110-bin
     julia_111-bin
     julia_112-bin
-    julia_19
     julia_110
     julia_111
     julia_112
@@ -6802,17 +6797,17 @@ with pkgs;
 
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
-  wild-wrapped =
+  wild =
     let
       ldWrapper = ../build-support/bintools-wrapper/ld-wrapper.sh;
     in
     wrapBintoolsWith {
-      bintools = wild;
+      bintools = wild-unwrapped;
       extraBuildCommands = ''
-        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild}
+        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
       '';
     };
 
@@ -8180,6 +8175,22 @@ with pkgs;
 
   openssl = openssl_3_6;
 
+  openssl_oqs = openssl.override {
+    providers = [
+      {
+        name = "oqsprovider";
+        package = pkgs.oqs-provider;
+      }
+    ];
+    autoloadProviders = true;
+
+    extraINIConfig = {
+      tls_system_default = {
+        Groups = "X25519MLKEM768:X25519:P-256:X448:P-521:ffdhe2048:ffdhe3072";
+      };
+    };
+  };
+
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
@@ -9211,19 +9222,35 @@ with pkgs;
 
   jetty = jetty_12;
 
-  kanidm_1_5 = callPackage ../servers/kanidm/1_5.nix {
-    kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
-  };
-  kanidm_1_6 = callPackage ../servers/kanidm/1_6.nix {
-    kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
-  };
-  kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
-    kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
-  };
+  inherit
+    ({
+      kanidm_1_5 = callPackage ../servers/kanidm/1_5.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
+      };
+      kanidm_1_6 = callPackage ../servers/kanidm/1_6.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
+      };
+      kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
+      };
+      kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
+      };
 
-  kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
-  kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
-  kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
+    })
+    kanidm_1_5
+    kanidm_1_6
+    kanidm_1_7
+    kanidm_1_8
+    kanidmWithSecretProvisioning_1_5
+    kanidmWithSecretProvisioning_1_6
+    kanidmWithSecretProvisioning_1_7
+    kanidmWithSecretProvisioning_1_8
+    ;
 
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
@@ -11387,8 +11414,6 @@ with pkgs;
     }
   );
 
-  inherit (nodePackages) imapnotify;
-
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   inkscape = callPackage ../applications/graphics/inkscape {
@@ -12092,9 +12117,10 @@ with pkgs;
       callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_30
     rke2_1_31
     rke2_1_32
+    rke2_1_33
+    rke2_1_34
     rke2_stable
     rke2_latest
     ;
@@ -13195,8 +13221,6 @@ with pkgs;
   the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
     lua = lua5_2;
   };
-
-  tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
   teeworlds-server = teeworlds.override { buildClient = false; };
 

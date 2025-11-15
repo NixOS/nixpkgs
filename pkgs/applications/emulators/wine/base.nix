@@ -188,6 +188,9 @@ stdenv.mkDerivation (
             libgbm
           ]
         )
+        ++ lib.optionals ffmpegSupport [
+          pkgs.ffmpeg-headless
+        ]
       )
     );
 

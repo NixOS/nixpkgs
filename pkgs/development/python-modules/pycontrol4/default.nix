@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "pycontrol4";
   version = "1.5.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   pyproject = true;
 
@@ -24,6 +24,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-r90v9vy8avvEbNKrzZgYtDS5Z5hV66Fd9fF9XJ4r7B4=";
   };
+
+  patches = [
+    # https://github.com/lawtancool/pyControl4/pull/47
+    ./asyncio-timeout.patch
+  ];
 
   build-system = [ setuptools ];
 

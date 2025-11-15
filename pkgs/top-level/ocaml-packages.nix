@@ -464,8 +464,6 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_1 = callPackage ../development/tools/ocaml/dune/1.nix { };
-
         dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
         dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
@@ -1102,8 +1100,6 @@ let
 
         lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
-        lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
-
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
         lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
@@ -1357,8 +1353,6 @@ let
         nice_parser = callPackage ../development/ocaml-modules/nice_parser { };
 
         ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
-
-        nonstd = callPackage ../development/ocaml-modules/nonstd { };
 
         note = callPackage ../development/ocaml-modules/note { };
 

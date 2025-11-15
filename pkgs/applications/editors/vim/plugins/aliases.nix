@@ -78,6 +78,7 @@ mapAliases (
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
     fugitive = vim-fugitive;
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
+    fruzzy = throw "vimPlugins.fruzzy did not update since 2019-10-28 and uses EOL version of Nim"; # Added 2025-11-12
     fzfWrapper = fzf-wrapper;
     ghc-mod-vim = ghcmod-vim;
     ghcmod = ghcmod-vim;

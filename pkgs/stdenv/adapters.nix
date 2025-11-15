@@ -345,7 +345,7 @@ rec {
         cc = prev.cc.override {
           bintools = prev.cc.bintools.override {
             extraBuildCommands = ''
-              ln -fs ${pkgs.buildPackages.wild-wrapped}/bin/* "$out/bin"
+              ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
             '';
           };
         };

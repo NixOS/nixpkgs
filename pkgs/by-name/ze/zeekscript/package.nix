@@ -2,18 +2,19 @@
   lib,
   python3,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.3.2-unstable-2025-09-29";
+  version = "1.3.2-unstable-2025-11-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "zeekscript";
-    rev = "f0fa5746633a709759a94695fcc81b43feb8e2d9";
-    hash = "sha256-g4Iv9xw6Owuqi+UudRzWatK09mjNDWdp0cBvH7iuV+U=";
+    rev = "7f3d41b495cc87ee0db5cc90ccd0f5c9a23487df";
+    hash = "sha256-IpoDSLPDF2p/Yuijb3xtvs1zivtYrKny/pY5dRL56QA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -34,6 +35,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "zeekscript"
   ];
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Zeek script formatter and analyzer";
