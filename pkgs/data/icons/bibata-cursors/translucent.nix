@@ -15,6 +15,10 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
 
+  patches = [
+    ./0001-fix-broken-symlinks.patch
+  ];
+
   installPhase = ''
     install -dm 0755 $out/share/icons
     cp -pr Bibata_* $out/share/icons/
