@@ -14,19 +14,19 @@ let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "vscode-icons-${finalAttrs.version}.zip";
     pname = "vscode-icons-vsix";
-    version = "12.14.0";
+    version = "12.15.0";
 
     src = fetchFromGitHub {
       owner = "vscode-icons";
       repo = "vscode-icons";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-uxGKgqAllwW3MG89mvZ/M6So+vtpHVUDLCnVHKYfMOA=";
+      hash = "sha256-HYMXcmK2cW01PsjwMr+SGq94oFWEXvdny6IFnXMBdKA=";
     };
 
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-npm-deps";
       inherit (finalAttrs) src;
-      hash = "sha256-QLla/7hBIi7REhix+cXscdDHy+wzVXItQypeU+NUHQo=";
+      hash = "sha256-3Jt9JKbu5QxZynbkgQX/So3PWeJDdxIU5TVM4nfvgcQ=";
     };
 
     nativeBuildInputs = [
