@@ -355,6 +355,7 @@ print OUT <<EOF;
   font-daewoo-misc,
   font-dec-misc,
   font-encodings,
+  font-ibm-type1,
   font-isas-misc,
   font-micro-misc,
   font-misc-cyrillic,
@@ -562,6 +563,7 @@ self: with self; {
   fontcursormisc = font-cursor-misc;
   fontdaewoomisc = font-daewoo-misc;
   fontdecmisc = font-dec-misc;
+  fontibmtype1 = font-ibm-type1;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;

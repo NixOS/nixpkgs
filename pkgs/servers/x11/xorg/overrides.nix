@@ -793,11 +793,6 @@ self: super:
 # mark some packages as unfree
 // (
   let
-    # unfree but redistributable
-    redist = [
-      "fontibmtype1"
-    ];
-
     # unfree, possibly not redistributable
     unfree = [
       # unclear license, "permission to use"?
@@ -815,8 +810,7 @@ self: super:
       f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
 
   in
-  mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
-  // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
+  mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
 )
 
 # deprecate some packages
