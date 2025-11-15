@@ -101,16 +101,9 @@ mkDerivation rec {
 
   # Post-install fixup for macOS bundle
   postInstall = lib.optionalString stdenv.isDarwin ''
-        mkdir -p $out/Applications
-        cp -r release/apmplanner2.app $out/Applications/
-
-        # Create a wrapper script in bin for nix run
-        mkdir -p $out/bin
-        cat > $out/bin/apmplanner2 <<EOF
-    #!/bin/sh
-    exec "$out/Applications/apmplanner2.app/Contents/MacOS/apmplanner2" "\$@"
-    EOF
-        chmod +x $out/bin/apmplanner2
+    mkdir -p $out/{Applications,bin}
+    cp -r release/apmplanner2.app $out/Applications
+    ln -s $out/Applications/apmplanner2.app/Contents/MacOS/apmplanner2 $out/bin/apmplanner2
   '';
 
   # this ugly hack is necessary, as `bin/apmplanner2` needs the contents of `share/APMPlanner2` inside of `bin/`
