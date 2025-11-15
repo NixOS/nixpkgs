@@ -1,19 +1,18 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  mkDerivation,
-  qtbase,
   cmake,
   extra-cmake-modules,
   icecream,
   libcap_ng,
+  libsForQt5,
   lzo,
   zstd,
   libarchive,
-  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "icemon";
   version = "3.3";
 
@@ -27,11 +26,11 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     icecream
-    qtbase
+    libsForQt5.qtbase
     libcap_ng
     lzo
     zstd
