@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ ramkromberg ];
     platforms = platforms.unix;
+    mainProgram = "vis";
   };
 }
