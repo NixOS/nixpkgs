@@ -206,7 +206,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      robwalt
     ];
     mainProgram = "rerun";
   };
