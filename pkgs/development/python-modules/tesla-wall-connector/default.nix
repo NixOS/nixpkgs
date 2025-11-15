@@ -9,20 +9,17 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
   version = "1.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "einarhauks";
     repo = "tesla-wall-connector";
-    rev = version;
+    tag = version;
     hash = "sha256-3jj3LU0xRIC6U5DmitkTNjejvSZJWguTS/TeotOD8oc=";
   };
 
@@ -40,9 +37,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     backoff
   ];
@@ -55,10 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tesla_wall_connector" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/einarhauks/tesla-wall-connector/releases/tag/${src.tag}";
     description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
