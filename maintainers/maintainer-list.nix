@@ -20245,6 +20245,12 @@
     githubId = 7420227;
     name = "Peter Tri Ho";
   };
+  petertrotman = {
+    email = "petertrotman@gmail.com";
+    github = "petertrotman";
+    githubId = 8298307;
+    name = "Peter Trotman";
+  };
   peterwilli = {
     email = "peter@codebuffet.co";
     github = "peterwilli";
