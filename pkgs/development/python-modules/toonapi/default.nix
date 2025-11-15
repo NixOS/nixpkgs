@@ -4,16 +4,14 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "toonapi";
   version = "0.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -22,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-RaN9ppqJbTik1/vNX0/YLoBawrqjyQWU6+FLTspIxug=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     backoff
     yarl
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the Quby ToonAPI";
     homepage = "https://github.com/frenck/python-toonapi";
-    changelog = "https://github.com/frenck/python-toonapi/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/frenck/python-toonapi/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
