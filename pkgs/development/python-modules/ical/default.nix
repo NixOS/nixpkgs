@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "ical";
     tag = version;
-    hash = "sha256-0qIS6fJsiJoM5FCvwhKoLUqRYQ0TelrtNMKkgtZ8UIU=";
+    hash = "sha256-n7aZM/HDBMl+SistDHCdWiPTJM/o2zF1nwVgvm0rMk4=";
   };
 
   build-system = [ setuptools ];
