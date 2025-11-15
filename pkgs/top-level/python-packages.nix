@@ -5356,6 +5356,8 @@ self: super: with self; {
 
   flasgger = callPackage ../development/python-modules/flasgger { };
 
+  flash-attn = callPackage ../development/python-modules/flash-attn { };
+
   flashinfer = callPackage ../development/python-modules/flashinfer { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
