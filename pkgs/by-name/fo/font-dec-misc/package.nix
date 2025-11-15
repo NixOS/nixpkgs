@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  pkg-config,
-  fontutil,
   bdftopcf,
   mkfontscale,
   writeScript,
@@ -20,14 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    pkg-config
     bdftopcf
     mkfontscale
   ];
-
-  buildInputs = [ fontutil ];
-
-  configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''

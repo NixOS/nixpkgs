@@ -18,8 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ mkfontscale ];
 
-  configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell

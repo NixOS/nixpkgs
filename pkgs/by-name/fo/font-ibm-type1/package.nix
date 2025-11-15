@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  pkg-config,
-  fontutil,
   mkfontscale,
   writeScript,
 }:
@@ -18,14 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    mkfontscale
-  ];
-
-  buildInputs = [ fontutil ];
-
-  configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+  nativeBuildInputs = [ mkfontscale ];
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
