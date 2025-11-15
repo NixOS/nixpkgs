@@ -357,6 +357,7 @@ print OUT <<EOF;
   font-encodings,
   font-ibm-type1,
   font-isas-misc,
+  font-jis-misc,
   font-micro-misc,
   font-misc-cyrillic,
   font-misc-ethiopic,
@@ -565,6 +566,7 @@ self: with self; {
   fontdecmisc = font-dec-misc;
   fontibmtype1 = font-ibm-type1;
   fontisasmisc = font-isas-misc;
+  fontjismisc = font-jis-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
   fontmiscethiopic = font-misc-ethiopic;

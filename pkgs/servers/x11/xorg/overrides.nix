@@ -790,29 +790,6 @@ self: super:
   xwd = addMainProgram super.xwd { };
 }
 
-# mark some packages as unfree
-// (
-  let
-    # unfree, possibly not redistributable
-    unfree = [
-      # unclear license, "permission to use"?
-      "fontjismisc"
-    ];
-
-    setLicense =
-      license: name:
-      super.${name}.overrideAttrs (attrs: {
-        meta = attrs.meta // {
-          inherit license;
-        };
-      });
-    mapNamesToAttrs =
-      f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
-
-  in
-  mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
-)
-
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
