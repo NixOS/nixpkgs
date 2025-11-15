@@ -14,17 +14,7 @@
   glibcLocalesUtf8,
 }:
 
-lib.extendMkDerivation {
-  constructDrv = fetchurl;
-
-  excludeDrvArgNames = [
-    "extraPostFetch"
-
-    # Pass via derivationArgs
-    "extension"
-    "stripRoot"
-  ];
-
+let
   extendDrvArgs =
     finalAttrs:
     {
@@ -122,4 +112,25 @@ lib.extendMkDerivation {
           ;
       };
     };
+in
+lib.extendMkDerivation {
+  constructDrv = fetchurl;
+
+  excludeDrvArgNames = [
+    "extraPostFetch"
+
+    # Pass via derivationArgs
+    "extension"
+    "stripRoot"
+  ];
+
+  inherit extendDrvArgs;
+}
+// {
+  expectDrvArgs = lib.zipAttrsWith (_: lib.any lib.id) [
+    (lib.mapAttrs (n: _: true)
+      (extendDrvArgs { } (lib.functionArgs extendDrvArgs // { derivationArgs = { }; })).derivationArgs
+    )
+    fetchurl.expectDrvArgs
+  ];
 }
