@@ -11,7 +11,6 @@
   libpng,
   libtiff,
   zlib,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     zlib
-  ]
-  # error: 'to_chars' is unavailable: introduced in macOS 13.3
-  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
+  ];
 
   meta = {
     description = "Fully color managed PDF generation library";
