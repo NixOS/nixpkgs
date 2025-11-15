@@ -109,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ispc/ispc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      aristid
       thoughtpolice
       athas
       alexfmpe

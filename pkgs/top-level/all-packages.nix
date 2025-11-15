@@ -6703,8 +6703,6 @@ with pkgs;
   sbt-with-scala-native = callPackage ../development/tools/build-managers/sbt/scala-native.nix { };
   simpleBuildTool = sbt;
 
-  scss-lint = callPackage ../development/tools/scss-lint { };
-
   shake =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (
@@ -10735,6 +10733,7 @@ with pkgs;
 
   cmus = callPackage ../applications/audio/cmus {
     libjack = libjack2;
+    ffmpeg = ffmpeg_7;
   };
 
   cni = callPackage ../applications/networking/cluster/cni { };
@@ -13373,8 +13372,6 @@ with pkgs;
     redshift
     gammastep
     ;
-
-  redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
   ### SCIENCE/CHEMISTY
 
