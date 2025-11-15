@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  writeScript,
 
   # build-system
   hatchling,
@@ -27,7 +28,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "dbt-common";
   version = "1.28.0-unstable-2025-08-14";
   pyproject = true;
@@ -79,6 +80,27 @@ buildPythonPackage {
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
+
+  passthru.updateScript = writeScript "update-dbt-common" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git common-updater-scripts perl
+
+    tmpdir="$(mktemp -d)"
+    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+
+    pushd "$tmpdir"
+
+    newVersionNumber=$(perl -pe 's/version = "([\d.]+)"/$1/' dbt_common/__about__.py | tr -d '\n')
+    newRevision=$(git show -s --pretty='format:%H')
+    newDate=$(git show -s --pretty='format:%cs')
+    newVersion="$newVersionNumber-unstable-$newDate"
+    popd
+
+    rm -rf "$tmpdir"
+    update-source-version --rev="$newRevision" "python3Packages.dbt-common" "$newVersion"
+    perl -pe 's/^(.*version = ")([\d\.]+)(.*)$/''${1}'"''${newVersion}"'";/' \
+      -i 'pkgs/development/python-modules/dbt-common/default.nix'
+  '';
 
   meta = {
     description = "Shared common utilities for dbt-core and adapter implementations use";
