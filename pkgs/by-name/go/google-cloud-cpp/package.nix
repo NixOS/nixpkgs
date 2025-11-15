@@ -14,32 +14,32 @@
   nlohmann_json,
   openssl,
   pkg-config,
-  protobuf_31,
+  protobuf,
   pkgsBuildHost,
-  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
+  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v2.43.0/cmake/GoogleCloudCppFeatures.cmake#L24
   apis ? [ "*" ],
   staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
-  googleapisRev = "f01a17a560b4fbc888fd552c978f4e1f8614100b";
+  googleapisRev = "2193a2bfcecb92b92aad7a4d81baa428cafd7dfd";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-eJA3KM/CZMKTR3l6omPJkxqIBt75mSNsxHnoC+1T4gw=";
+    hash = "sha256-M+3ywDd1kyo6U/9o7fpsqYIPuulf8fDe3a4mjJKEN2U=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "2.38.0";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-TF3MLBmjUbKJkZVcaPXbagXrAs3eEhlNQBjYQf0VtT8=";
+    sha256 = "sha256-2OnzObCTmB6E4Ut0blmL7CRAJJ9EKl6eSVdfuPS4B2Y=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     grpc
     nlohmann_json
     openssl
-    protobuf_31
+    protobuf
     gbenchmark
     gtest
   ];
