@@ -6328,8 +6328,6 @@ self: super: with self; {
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
-  gpy = callPackage ../development/python-modules/gpy { };
-
   gpytorch = callPackage ../development/python-modules/gpytorch { };
 
   gql = callPackage ../development/python-modules/gql { };
@@ -11583,8 +11581,6 @@ self: super: with self; {
   parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
-
-  paramz = callPackage ../development/python-modules/paramz { };
 
   paranoid-crypto = callPackage ../development/python-modules/paranoid-crypto { };
 
