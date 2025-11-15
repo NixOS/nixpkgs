@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   libsForQt5,
 }:
 
@@ -16,7 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+UR8Tk20StplyNqPDNxR0HfjAzAru4r+WtVsW81LR9c=";
   };
 
-  patches = [ ./fix-paths.patch ];
+  patches = [
+    ./fix-paths.patch
+    (fetchpatch {
+      # fix X > Y > Z comparison logic (which causes a compile error on darwin)
+      name = "fix-comparison.patch";
+      url = "https://github.com/parisolab/mathmod/commit/ddf9239f10fb0e07603297c06a23b7adeae8e323.patch";
+      hash = "sha256-jB9y3xPwlcQYRQTnqcePjAZGycC1BpWhkT1GhgVJims=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace MathMod.pro \
