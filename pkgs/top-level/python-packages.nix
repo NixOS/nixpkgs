@@ -1208,6 +1208,8 @@ self: super: with self; {
 
   av = callPackage ../development/python-modules/av { };
 
+  av_13 = callPackage ../development/python-modules/av_13 { };
+
   avahi = toPythonModule (
     pkgs.avahi.override {
       inherit python;
@@ -4083,6 +4085,8 @@ self: super: with self; {
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
 
+  django-modelsearch = callPackage ../development/python-modules/django-modelsearch { };
+
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
@@ -5356,6 +5360,8 @@ self: super: with self; {
 
   flasgger = callPackage ../development/python-modules/flasgger { };
 
+  flash-attn = callPackage ../development/python-modules/flash-attn { };
+
   flashinfer = callPackage ../development/python-modules/flashinfer { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
@@ -6327,8 +6333,6 @@ self: super: with self; {
   gpustat = callPackage ../development/python-modules/gpustat { };
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
-
-  gpy = callPackage ../development/python-modules/gpy { };
 
   gpytorch = callPackage ../development/python-modules/gpytorch { };
 
@@ -11583,8 +11587,6 @@ self: super: with self; {
   parametrize-from-file = callPackage ../development/python-modules/parametrize-from-file { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
-
-  paramz = callPackage ../development/python-modules/paramz { };
 
   paranoid-crypto = callPackage ../development/python-modules/paranoid-crypto { };
 
@@ -18703,6 +18705,8 @@ self: super: with self; {
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+
+  togrill-bluetooth = callPackage ../development/python-modules/togrill-bluetooth { };
 
   token-bucket = callPackage ../development/python-modules/token-bucket { };
 

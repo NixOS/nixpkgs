@@ -1,27 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  dj-database-url,
-  django,
-  django-rq,
-  fetchFromGitHub,
+
+  # build-system
   flit-core,
-  freezegun,
-  google-cloud-translate,
+
+  # dependencies
+  django,
   polib,
-  python,
-  pythonOlder,
   typing-extensions,
   wagtail,
   wagtail-modeladmin,
+
+  # optional-dependencies
+  google-cloud-translate,
+
+  # tests
+  dj-database-url,
+  django-rq,
+  fetchFromGitHub,
+  freezegun,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
   version = "1.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
@@ -34,11 +39,15 @@ buildPythonPackage rec {
 
   dependencies = [
     django
-    wagtail
     polib
     typing-extensions
+    wagtail
     wagtail-modeladmin
   ];
+
+  optional-dependencies = {
+    google = [ google-cloud-translate ];
+  };
 
   nativeCheckInputs = [
     dj-database-url
@@ -47,21 +56,22 @@ buildPythonPackage rec {
     google-cloud-translate
   ];
 
-  optional-dependencies = {
-    google = [ google-cloud-translate ];
-  };
-
   checkPhase = ''
+    runHook preCheck
+
     # test_translate_html fails with later Beautifulsoup releases
     rm wagtail_localize/machine_translators/tests/test_dummy_translator.py
+
     ${python.interpreter} testmanage.py test
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translation plugin for Wagtail CMS";
     homepage = "https://github.com/wagtail/wagtail-localize";
     changelog = "https://github.com/wagtail/wagtail-localize/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

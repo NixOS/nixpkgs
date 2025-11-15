@@ -35,21 +35,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDOE2VXStPx4POQoSxoQbLwdBmt3LuMPxSZ8ZshE7Fc=";
+    hash = "sha256-zKcdI2sMqAp9o4Z/HMnKmu9ajOrhgFm+BgtJArMxfSw=";
     fetchSubmodules = true;
+
+    # darwin/linux hash mismatch in rawler submodule
+    # Same fix as is used in dnglab packaging
+    postFetch = ''
+      rm -rf $out/src-tauri/rawler/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
+    '';
   };
 
-  cargoHash = "sha256-+7CK2KxUMQ56CBVVb2esM+9ntJ7SzpVb2OmQ3mM5vNU=";
+  cargoHash = "sha256-yhx4rb8Fsm7xUQka/zKXP8ObS35o/SFOAXoglqtuQVY=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-QaPGXb26pDQLBJfYZoWt3jDeCdwameGkBvrTzhRMxYs=";
+    hash = "sha256-w806JHqy2ZLFcfYVm09VKnLd7BpLI1houfMYbY3sHe0=";
   };
 
   nativeBuildInputs = [

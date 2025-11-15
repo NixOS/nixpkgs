@@ -6245,7 +6245,8 @@
         dbus-fast
         habluetooth
         pyserial
-      ]; # missing inputs: togrill-bluetooth
+        togrill-bluetooth
+      ];
     "tolo" =
       ps: with ps; [
         tololib
@@ -7928,6 +7929,7 @@
     "tod"
     "todo"
     "todoist"
+    "togrill"
     "tolo"
     "tomato"
     "tomorrowio"

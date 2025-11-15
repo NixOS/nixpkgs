@@ -2,7 +2,6 @@
 {
   name = "containers-physical_interfaces";
   meta = {
-    maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
   nodes = {

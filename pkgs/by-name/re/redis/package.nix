@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      berdario
       globin
     ];
     mainProgram = "redis-cli";

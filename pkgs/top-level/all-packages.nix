@@ -5427,16 +5427,12 @@ with pkgs;
       zulu11 = callPackage ../development/compilers/zulu/11.nix { };
       zulu17 = callPackage ../development/compilers/zulu/17.nix { };
       zulu21 = callPackage ../development/compilers/zulu/21.nix { };
-      zulu23 = callPackage ../development/compilers/zulu/23.nix { };
-      zulu24 = callPackage ../development/compilers/zulu/24.nix { };
       zulu25 = callPackage ../development/compilers/zulu/25.nix { };
     })
     zulu8
     zulu11
     zulu17
     zulu21
-    zulu23
-    zulu24
     zulu25
     ;
   zulu = zulu21;
@@ -11159,14 +11155,6 @@ with pkgs;
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix { };
 
-  manim = python3Packages.toPythonApplication python3Packages.manim;
-
-  manim-slides =
-    (python3Packages.toPythonApplication python3Packages.manim-slides).overridePythonAttrs
-      (oldAttrs: {
-        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.pyqt6-full;
-      });
-
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
@@ -12938,11 +12926,6 @@ with pkgs;
   };
 
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
-
-  asc = callPackage ../games/asc {
-    lua = lua5_1;
-    physfs = physfs_2;
-  };
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
     inherit (python3Packages) beancount beangulp;

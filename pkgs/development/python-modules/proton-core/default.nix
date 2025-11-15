@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "proton-core";
-  version = "0.4.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
     tag = "v${version}";
-    hash = "sha256-EZsPw2kPgY42MQxrXt7yAtCNSmSNN5AYxx7SllwsbvA=";
+    hash = "sha256-ZT/LkppzeEDGs9aOCx561fA1EgAShPCnMs8c05mgF0k=";
   };
 
   build-system = [ setuptools ];
@@ -58,11 +58,17 @@ buildPythonPackage rec {
     # No working transports found
     "test_auto_works_on_prod"
     "test_ping"
+    "test_raw_ping"
     "test_successful"
     "test_without_pinning"
     # Failed assertions
     "test_bad_pinning_fingerprint_changed"
     "test_bad_pinning_url_changed"
+    # Bcrypt 72-byte limit exceeded
+    # https://github.com/ProtonVPN/python-proton-core/pull/10
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
   ];
 
   meta = {

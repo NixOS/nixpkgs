@@ -91,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       animation to different video formats such as mpeg or avi.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.leenaars ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "qstopmotion";
   };

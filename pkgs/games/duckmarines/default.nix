@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Duck-themed action puzzle video game";
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     hydraPlatforms = [ ];
     license = licenses.free;
