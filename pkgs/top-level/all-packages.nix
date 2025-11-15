@@ -11143,8 +11143,6 @@ with pkgs;
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix { };
 
-  manim = python3Packages.toPythonApplication python3Packages.manim;
-
   manim-slides =
     (python3Packages.toPythonApplication python3Packages.manim-slides).overridePythonAttrs
       (oldAttrs: {
