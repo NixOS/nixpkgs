@@ -31,6 +31,7 @@
   font-misc-cyrillic,
   font-misc-ethiopic,
   font-misc-meltho,
+  font-misc-misc,
   font-mutt-misc,
   font-schumacher-misc,
   font-screen-cyrillic,
@@ -241,6 +242,7 @@ self: with self; {
   fontmisccyrillic = font-misc-cyrillic;
   fontmiscethiopic = font-misc-ethiopic;
   fontmiscmeltho = font-misc-meltho;
+  fontmiscmisc = font-misc-misc;
   fontmuttmisc = font-mutt-misc;
   fontschumachermisc = font-schumacher-misc;
   fontscreencyrillic = font-screen-cyrillic;
@@ -388,47 +390,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontmiscmisc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-misc-misc";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz";
-        sha256 = "1vcgc6lbc53fqaz8alhxcb6f231hhvj9hn2nkzg1mclbymhy7avr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];

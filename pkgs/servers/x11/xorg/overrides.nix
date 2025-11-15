@@ -122,14 +122,6 @@ self: super:
     };
   });
 
-  fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
-    postInstall = ''
-      ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
-      test -f $ALIASFILE
-      cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
-    '';
-  });
-
   fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
     meta = attrs.meta // {
       license = lib.licenses.mit;
