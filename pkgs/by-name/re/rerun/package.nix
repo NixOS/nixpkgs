@@ -205,6 +205,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      GaetanLepage
       SomeoneSerge
     ];
     mainProgram = "rerun";
