@@ -8508,6 +8508,11 @@
     githubId = 52276064;
     name = "figboy9";
   };
+  filiptrplan = {
+    github = "filiptrplan";
+    githubId = 8643457;
+    name = "Filip Trplan";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
