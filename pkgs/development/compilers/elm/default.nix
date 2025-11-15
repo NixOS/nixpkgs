@@ -23,19 +23,7 @@ let
       ;
   };
 
-  # Patched, originally npm-downloaded, packages
-  patchedNodePkgs = import ./packages/node {
-    inherit
-      pkgs
-      lib
-      nodejs
-      makeWrapper
-      ;
-  };
-
-  assembleScope =
-    self: basics:
-    (hs98Pkgs self).elmPkgs // (hs96Pkgs self).elmPkgs // (patchedNodePkgs self) // basics;
+  assembleScope = self: basics: (hs98Pkgs self).elmPkgs // (hs96Pkgs self).elmPkgs // basics;
 in
 lib.makeScope pkgs.newScope (
   self:
@@ -44,12 +32,6 @@ lib.makeScope pkgs.newScope (
     {
       inherit fetchElmDeps nodejs;
 
-      /*
-        Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
-
-        * Packages which depend on npm installation of elm can be patched using
-          `patchNpmElm` function defined in `packages/lib.nix`.
-      */
       elmLib = import ./lib {
         inherit lib;
         inherit (pkgs) writeScriptBin stdenv;
@@ -90,6 +72,7 @@ lib.makeScope pkgs.newScope (
     }
     // lib.optionalAttrs config.allowAliases {
       create-elm-app = throw "'elmPackages.create-elm-app' has not had a release since December 2020, so it was removed."; # Added 2025-11-15
+      elm-pages = throw "'elmPackages.elm-pages' has been removed, as it was broken in nixpkgs and was not maintained."; # Added 2025-11-15
     }
   )
 )
