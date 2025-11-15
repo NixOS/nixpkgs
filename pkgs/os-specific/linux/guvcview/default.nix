@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guvcview";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-0q3HznYpYehTw+FrURutYVBEktEvPi634w2kovet5a8=";
+    hash = "sha256-ahsTSLmeedqVeg2eI3OVpUdXoJ234MCAn2wwZotp2js=";
   };
 
   nativeBuildInputs = [
