@@ -800,9 +800,6 @@ self: super:
 
     # unfree, possibly not redistributable
     unfree = [
-      # no license, just a copyright notice
-      "fontdaewoomisc"
-
       # unclear license, "permission to use"?
       "fontjismisc"
     ];

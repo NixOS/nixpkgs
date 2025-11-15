@@ -21,6 +21,7 @@
   font-bitstream-type1,
   font-cronyx-cyrillic,
   font-cursor-misc,
+  font-daewoo-misc,
   font-encodings,
   font-isas-misc,
   font-micro-misc,
@@ -227,6 +228,7 @@ self: with self; {
   fontbitstreamtype1 = font-bitstream-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontcursormisc = font-cursor-misc;
+  fontdaewoomisc = font-daewoo-misc;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
@@ -378,46 +380,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontdaewoomisc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-daewoo-misc";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-daewoo-misc-1.0.4.tar.xz";
-        sha256 = "0cagg963v94paq1l9l7g5kyv7df8q31b4zcbhv5rh07kr0yqng7n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];

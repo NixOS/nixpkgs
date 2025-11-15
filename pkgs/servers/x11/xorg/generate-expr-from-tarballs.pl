@@ -352,6 +352,7 @@ print OUT <<EOF;
   font-bitstream-type1,
   font-cronyx-cyrillic,
   font-cursor-misc,
+  font-daewoo-misc,
   font-encodings,
   font-isas-misc,
   font-micro-misc,
@@ -558,6 +559,7 @@ self: with self; {
   fontbitstreamtype1 = font-bitstream-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontcursormisc = font-cursor-misc;
+  fontdaewoomisc = font-daewoo-misc;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
