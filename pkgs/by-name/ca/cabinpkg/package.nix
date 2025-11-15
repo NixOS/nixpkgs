@@ -5,7 +5,7 @@
   onetbb,
   libgit2,
   curl,
-  fmt,
+  fmt_11,
   nlohmann_json,
   pkg-config,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgit2
-    fmt
+    fmt_11
     onetbb
     nlohmann_json
     curl

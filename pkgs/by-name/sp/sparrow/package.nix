@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
-  zulu24,
+  zulu25,
   gtk3,
   gsettings-desktop-schemas,
   writeScript,
@@ -27,7 +27,7 @@ let
   pname = "sparrow";
   version = "2.2.3";
 
-  openjdk = zulu24.override { enableJavaFX = true; };
+  openjdk = zulu25.override { enableJavaFX = true; };
 
   sparrowArch =
     {
