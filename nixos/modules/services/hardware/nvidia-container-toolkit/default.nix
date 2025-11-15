@@ -232,12 +232,8 @@
                 containerPath = pkgs.addDriverRunpath.driverLink;
               }
               {
-                hostPath = "${lib.getLib nvidia-driver}/etc";
-                containerPath = "${lib.getLib nvidia-driver}/etc";
-              }
-              {
-                hostPath = "${lib.getLib nvidia-driver}/share";
-                containerPath = "${lib.getLib nvidia-driver}/share";
+                hostPath = "${lib.getLib nvidia-driver}";
+                containerPath = "${lib.getLib nvidia-driver}";
               }
               {
                 hostPath = "${lib.getLib pkgs.glibc}/lib";
