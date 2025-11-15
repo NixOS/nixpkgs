@@ -1,1 +1,3 @@
-["create-elm-app", "elm-pages"]
+[
+  "elm-pages"
+]
