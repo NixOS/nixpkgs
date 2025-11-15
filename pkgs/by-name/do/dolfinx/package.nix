@@ -12,7 +12,6 @@
   kahip,
   adios2,
   python3Packages,
-  darwinMinVersionHook,
   catch2_3,
   withParmetis ? false,
 }:
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     dolfinxPackages.kahip
     dolfinxPackages.scotch
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3")
   ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [
