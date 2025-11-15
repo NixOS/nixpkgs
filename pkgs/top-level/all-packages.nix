@@ -13372,8 +13372,6 @@ with pkgs;
     gammastep
     ;
 
-  redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
-
   ### SCIENCE/CHEMISTY
 
   avogadrolibs = libsForQt5.callPackage ../development/libraries/science/chemistry/avogadrolibs { };
