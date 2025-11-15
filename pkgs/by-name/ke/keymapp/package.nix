@@ -3,14 +3,6 @@
   lib,
   fetchurl,
   callPackage,
-  autoPatchelfHook,
-  wrapGAppsHook4,
-  libusb1,
-  libsoup_3,
-  webkitgtk_4_1,
-  makeDesktopItem,
-  copyDesktopItems,
-  undmg,
 }:
 let
   pname = "keymapp";
@@ -55,7 +47,6 @@ if stdenv.hostPlatform.isDarwin then
       version
       src
       meta
-      undmg
       ;
   }
 else
@@ -65,12 +56,5 @@ else
       version
       src
       meta
-      libusb1
-      libsoup_3
-      webkitgtk_4_1
-      autoPatchelfHook
-      wrapGAppsHook4
-      copyDesktopItems
-      makeDesktopItem
       ;
   }
