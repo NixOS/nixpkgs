@@ -6,31 +6,31 @@
   extra-cmake-modules,
   icecream,
   libcap_ng,
-  libsForQt5,
   lzo,
+  qt6,
   zstd,
   libarchive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "icemon";
-  version = "3.3";
+  version = "3.3-unstable-2025-05-15";
 
   src = fetchFromGitHub {
     owner = "icecc";
     repo = "icemon";
-    rev = "v${version}";
-    sha256 = "09jnipr67dhawbxfn69yh7mmjrkylgiqmd0gmc2limd3z15d7pgc";
+    rev = "d0969453c7d4467e22dcff0f218b31e81136afbe";
+    hash = "sha256-jN374J8PytnZgVEUSZ6DakmPmi411ABJffzuZ5CodJ8=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     icecream
-    libsForQt5.qtbase
+    qt6.qtbase
     libcap_ng
     lzo
     zstd
