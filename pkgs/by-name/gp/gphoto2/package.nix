@@ -13,15 +13,15 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gphoto2";
   version = "2.5.32";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
-    rev = "v${version}";
-    sha256 = "sha256-9Tn6CBxZpzPnlyiBYdpQGViT3NEcup6AXT7Z0DqI/vA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Tn6CBxZpzPnlyiBYdpQGViT3NEcup6AXT7Z0DqI/vA=";
   };
 
   nativeBuildInputs = [
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jcumming ];
     mainProgram = "gphoto2";
   };
-}
+})
