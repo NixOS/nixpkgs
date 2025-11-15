@@ -226,7 +226,6 @@ in
             gnome-menus
             adwaita-icon-theme
             gtk3.out # for gtk-launch program
-            onboard
             sound-theme-freedesktop
             xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ])
