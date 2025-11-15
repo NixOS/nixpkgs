@@ -5,7 +5,6 @@
   fetchFromGitHub,
   haversine,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";
@@ -25,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-KtndXsNvmjSGwqfKqkGAimHbapIC3I0yi4JuDh6cMzs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     haversine
     xmltodict
     requests
@@ -42,7 +39,7 @@ buildPythonPackage rec {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
     changelog = "https://github.com/exxamalte/python-georss-client/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
