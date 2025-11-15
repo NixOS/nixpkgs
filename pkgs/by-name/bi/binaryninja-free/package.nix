@@ -20,11 +20,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "5.1.8104";
+  version = "5.2.8614";
 
   src = fetchurl {
     url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-s7lRvQhegW/bgZc6XnAowTl1ZZPIN0/BJe+u3p9qHsE=";
+    hash = "sha256-Z7hI0WTOseEgM/opZLxSGCnHYXiliEWksA1FpICLRPQ=";
   };
 
   icon = fetchurl {
@@ -66,12 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilrenderutil
     xcbutilwm
   ];
-
-  preFixup = ''
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    mkdir -p "$out/lib"
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
-  '';
 
   installPhase = ''
     runHook preInstall
