@@ -2446,6 +2446,14 @@ with haskellLib;
     pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
   ) super.crypton;
 
+  # Test failures on at least ppc64
+  # https://github.com/kazu-yamamoto/crypton-certificate/issues/25
+  # Likely related to the issues in crypton
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton-x509-validation = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton-x509-validation;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
