@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     homepage = "https://helpwire.app";
     license = licenses.unfreeRedistributable;
     mainProgram = "helpwire-operator";
-    platforms = platforms.unix;
+    platforms = [
+      "x86_64-linux"
+    ];
     inherit version;
   };
   src = fetchurl {
