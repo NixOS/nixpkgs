@@ -37,10 +37,7 @@ let
     ./no-sys-dirs.patch
   ]
   ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./cpp-precomp.patch
-    ./sw_vers.patch
-  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./cpp-precomp.patch
   ++ lib.optional crossCompiling ./cross.patch;
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
