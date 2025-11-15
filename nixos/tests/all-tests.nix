@@ -18,6 +18,7 @@ let
   inherit (pkgs.lib)
     isAttrs
     isFunction
+    genAttrs
     mapAttrs
     elem
     recurseIntoAttrs
@@ -1126,6 +1127,13 @@ in
   nixpkgs-config-allow-unfree-packages-and-predicate =
     pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix
       { };
+  nixpkgs-xdg = genAttrs [ "config" "overlays" ] (
+    feature:
+    runTest {
+      imports = [ ./nixpkgs-xdg.nix ];
+      _module.args = { inherit feature; };
+    }
+  );
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nohang = runTest ./nohang.nix;
