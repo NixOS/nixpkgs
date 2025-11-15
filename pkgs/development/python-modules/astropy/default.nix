@@ -40,6 +40,7 @@
   bottleneck,
   fsspec,
   s3fs,
+  uncompresspy,
 
   # testing
   pytestCheckHook,
@@ -112,6 +113,7 @@ buildPythonPackage rec {
       bottleneck
       fsspec
       s3fs
+      uncompresspy
     ]
     ++ self.recommended
     ++ self.ipython
