@@ -6,7 +6,7 @@
   pkg-config,
   python3,
   freetype,
-  glfw,
+  SDL2,
   gtk3,
   libGL,
   libpng,
@@ -26,14 +26,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather-tk";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "darbyjohnston";
     repo = "feather-tk";
     tag = finalAttrs.version;
-    hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
+    hash = "sha256-QcFeC8+SrDRUh6Ctl7+u4YeWhXIxW4ks/aWH3UtppAA=";
   };
+
+  postPatch = ''
+    substituteInPlace lib/ftk/GL/CMakeLists.txt \
+      --replace-fail "SDL2::SDL2-static" "SDL2::SDL2"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -43,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     freetype
-    glfw
+    SDL2
     lunasvg
     plutovg
     nlohmann_json
@@ -70,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "feather_tk_PYTHON" enablePython)
     (lib.cmakeBool "feather_tk_TESTS" enableTests)
     (lib.cmakeBool "feather_tk_EXAMPLES" enableExamples)
+    (lib.cmakeBool "feather_tk_SDL2" true)
+    (lib.cmakeBool "feather_tk_SDL3" false)
     (lib.cmakeFeature "feather_tk_BUILD" "default")
   ];
 
