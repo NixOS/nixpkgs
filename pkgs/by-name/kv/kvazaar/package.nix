@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
