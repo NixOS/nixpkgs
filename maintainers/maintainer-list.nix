@@ -14745,6 +14745,18 @@
     matrix = "@libjared:matrix.org";
     name = "Jared Perry";
   };
+  liferooter = {
+    name = "Gleb Smirnov";
+    github = "liferooter";
+    githubId = 54807745;
+    email = "glebsmirnov0708@gmail.com";
+    matrix = "@liferooter:vanutp.dev";
+    keys = [
+      {
+        fingerprint = "B793 3BBD DE3F 524F 69BD  CEAB FF5A EB4C 68AC 0F8D";
+      }
+    ];
+  };
   liff = {
     email = "liff@iki.fi";
     github = "liff";

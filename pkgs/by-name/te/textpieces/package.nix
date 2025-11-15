@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textpieces";
-  version = "4.2.0";
+  version = "4.3.1";
 
   src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-JFHDPzVRD3HZI9+TBCe92xTcuIPAF/iD8hIiYPgetLc=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-BUhcPnvi6cuhaYYNZV9pvOLH/cIV3t7ncpG55fBjqwo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-SMNyPo0y8376wjuZVyu3jMjfPgddEMrqCPvUzsYa0xc=";
+    hash = "sha256-bJKhakxHBhhqvgrFwEgaSNDI7cDaYQ+2SW/gSZzRvK0=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       zendo
+      liferooter
     ];
     teams = [ lib.teams.gnome-circle ];
   };
