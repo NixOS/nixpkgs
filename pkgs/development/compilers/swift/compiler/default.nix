@@ -347,6 +347,7 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i $TMPDIR/swift-separate-lib.patch
 
     patch -p1 -d llvm-project/llvm -i ${./patches/llvm-module-cache.patch}
+    patch -p1 -d llvm-project/llvm -i ${./patches/llvm-type-traits-include.patch}
 
     for lldbPatch in ${
       lib.escapeShellArgs [

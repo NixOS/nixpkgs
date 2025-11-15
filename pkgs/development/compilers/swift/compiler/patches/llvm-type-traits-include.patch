@@ -1,0 +1,19 @@
+Fix missing #include <type_traits> for compatibility with Clang 21
+
+The LLVM headers bundled with Swift 5.10.1 are missing an explicit include
+of <type_traits>, which causes compilation failures with newer Clang versions
+(e.g., Clang 21.1.2) that are stricter about implicit includes.
+
+This patch adds the missing include to fix the build error:
+  error: missing '#include <type_traits>'; 'is_class' must be defined before it is used
+
+--- a/include/llvm/Support/type_traits.h
++++ b/include/llvm/Support/type_traits.h
+@@ -15,6 +15,7 @@
+ #define LLVM_SUPPORT_TYPE_TRAITS_H
+
+ #include "llvm/Support/Compiler.h"
++#include <type_traits>
+ #include <utility>
+
+ namespace llvm {
