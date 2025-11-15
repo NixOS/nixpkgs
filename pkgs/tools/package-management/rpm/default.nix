@@ -19,7 +19,6 @@
   sqlite,
   zstd,
   libcap,
-  darwinMinVersionHook,
   openssl,
   #, libselinux
   rpm-sequoia,
