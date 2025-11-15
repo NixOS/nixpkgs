@@ -53,6 +53,8 @@ buildPythonPackage rec {
     "test_empty_response"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "aiomodernforms" ];
 
   meta = with lib; {
