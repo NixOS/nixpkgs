@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ds-analysis-lib";
-  version = "6.0.0b3";
+  version = "6.0.0b5";
   pyproject = true;
 
   # pypi because library is embedded into another project's repo
   src = fetchPypi {
     inherit version;
     pname = "ds_analysis_lib";
-    hash = "sha256-XZZzAxQJk65Xoq6z2OadlHUN0REYTjKmSvwz17tvVqc=";
+    hash = "sha256-T5954GjycGMn4cz4YZltGEYUShjPGJa2W3UqVBM9n8w=";
   };
 
   build-system = [ setuptools ];
