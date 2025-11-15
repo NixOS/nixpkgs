@@ -17,6 +17,7 @@ let
     elemAt
     extendDerivation
     filter
+    filterAttrs
     findFirst
     getDev
     head
@@ -715,8 +716,12 @@ let
               ];
           }
           // (
+            let
+              attrsOutputChecks = makeOutputChecks attrs;
+              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
+            in
             if !__structuredAttrs then
-              makeOutputChecks attrs
+              attrsOutputChecks
             else
               {
                 outputChecks = builtins.listToAttrs (
@@ -725,7 +730,7 @@ let
                     value =
                       let
                         raw = zipAttrsWith (_: builtins.concatLists) [
-                          (makeOutputChecks attrs)
+                          attrsOutputChecksFiltered
                           (makeOutputChecks attrs.outputChecks.${name} or { })
                         ];
                       in
