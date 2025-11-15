@@ -21,7 +21,6 @@
   zstd,
   libiberty,
   libunwind,
-  darwinMinVersionHook,
 
   boost,
   fmt,
@@ -77,9 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     libiberty
     libunwind
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
