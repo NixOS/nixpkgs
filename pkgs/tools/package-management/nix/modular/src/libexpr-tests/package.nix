@@ -43,7 +43,7 @@ mkMesonExecutable (finalAttrs: {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
           }
           (
-            lib.optionalString stdenv.hostPlatform.isWindows ''
+            lib.optionalString (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) ''
               export HOME="$PWD/home-dir"
               mkdir -p "$HOME"
             ''
