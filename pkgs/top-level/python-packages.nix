@@ -1208,6 +1208,8 @@ self: super: with self; {
 
   av = callPackage ../development/python-modules/av { };
 
+  av_13 = callPackage ../development/python-modules/av_13 { };
+
   avahi = toPythonModule (
     pkgs.avahi.override {
       inherit python;
