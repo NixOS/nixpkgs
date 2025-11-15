@@ -35,11 +35,6 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
-in
-
-lib.makeOverridable (
-  lib.extendMkDerivation {
-    constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
       # Additional stdenv.mkDerivation arguments from derived fetchers.
@@ -229,6 +224,13 @@ lib.makeOverridable (
           // passthru;
         }
       );
+in
+
+lib.makeOverridable (
+  lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    inherit excludeDrvArgNames extendDrvArgs;
 
     # No ellipsis.
     inheritFunctionArgs = false;
@@ -236,4 +238,12 @@ lib.makeOverridable (
 )
 // {
   inherit getRevWithTag;
+  expectDrvArgs =
+    let
+      faRaw = lib.functionArgs (extendDrvArgs { });
+    in
+    lib.zipAttrsWith (_: lib.any lib.id) [
+      (lib.mapAttrs (_: v: !v) (removeAttrs faRaw excludeDrvArgNames))
+      (lib.mapAttrs (_: _: true) (extendDrvArgs { } (faRaw // { derivationArgs = { }; })))
+    ];
 }
