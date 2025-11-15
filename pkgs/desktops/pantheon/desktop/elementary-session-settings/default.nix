@@ -31,13 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mdfmCzR9ikXDlDc7FeOITsdbPbz+G66jUrl1BobY+g8=";
   };
 
-  /*
-    This allows `elementary-session-settings` to not use gnome-keyring's ssh capabilities anymore, as they have been
-    moved to gcr upstream, in an effort to modularize gnome-keyring.
-
-    More info can be found here: https://gitlab.gnome.org/GNOME/gnome-keyring/-/merge_requests/60
-  */
-  patches = [ ./no-gnome-keyring-ssh-autostart.patch ];
+  patches = [
+    # See https://github.com/elementary/session-settings/issues/88 for gnome-keyring.
+    # See https://github.com/elementary/session-settings/issues/82 for onboard.
+    ./no-autostart.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
