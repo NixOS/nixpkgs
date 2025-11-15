@@ -26,6 +26,7 @@
   valgrind,
   asciidoc,
   installShellFiles,
+  makeWrapper,
   rpm,
   system-sendmail,
   gnome2,
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     cmake
     asciidoc
     doxygen
+    makeWrapper
     rpm
     swig
     util-linux
@@ -141,6 +143,13 @@ stdenv.mkDerivation rec {
     make install
     installManPage $out/share/man8/*.8
     rm -rf $out/share/man8
+  '';
+
+  postFixup = ''
+    # Set plugin directory to discover the SCE plugin.
+    # openscap calls dlopen with this as the directory prefix.
+    wrapProgram $out/bin/oscap \
+      --set OSCAP_CHECK_ENGINE_PLUGIN_DIR $out/lib
   '';
 
   meta = {
