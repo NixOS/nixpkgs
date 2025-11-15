@@ -8,11 +8,13 @@
   # Docs cause an immense increase in build time, up to 2 additional hours
   withDocs ? false,
   ghostscript,
-  withGUI ? false,
+
+  # GUI tools aren't ported to non-MS platforms, building them usually just wastes time
+  withGUI ? stdenv.hostPlatform.isWindows,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "${passthru.prettyName}-unwrapped";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "${finalAttrs.passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
   version = "0-unstable-2025-11-15";
 
@@ -26,10 +28,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs *.sh
 
-    for dateSource in bld/wipfc/configure; do
-      substituteInPlace $dateSource \
-        --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
-    done
+    substituteInPlace bld/wipfc/configure \
+      --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
 
     substituteInPlace bld/watcom/h/banner.h \
       --replace-fail '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
@@ -54,13 +54,20 @@ stdenv.mkDerivation rec {
     runHook preConfigure
 
     export OWROOT=$(realpath $PWD)
-    export OWTOOLS=${if stdenv.cc.isClang then "CLANG" else "GCC"}
+    export OWTOOLS=${
+      if stdenv.cc.isClang then
+        "CLANG"
+      else if stdenv.cc.isGNU then
+        "GCC"
+      else
+        throw "Don't know what compiler ID to use for ${stdenv.cc.name} in open-watcom-v2 build"
+    }
     export OWDOCBUILD=${if withDocs then "1" else "0"}
-    export OWGHOSTSCRIPTPATH=${lib.optionalString withDocs "${ghostscript}/bin"}
+    export OWGHOSTSCRIPTPATH=${lib.optionalString withDocs "${lib.makeBinPath [ ghostscript ]}"}
     export OWGUINOBUILD=${if withGUI then "0" else "1"}
     export OWNOBUILD=
     export OWDISTRBUILD=0
-    export OWDOSBOX=${dosbox}/bin/dosbox
+    export OWDOSBOX=${lib.getExe dosbox}
     export OWVERBOSE=0
     export OWRELROOT=$out
 
@@ -97,7 +104,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "V2 fork of the Open Watcom suite of compilers and tools";
     longDescription = ''
       A fork of Open Watcom: A C/C++/Fortran compiler and assembler suite
@@ -128,13 +135,13 @@ stdenv.mkDerivation rec {
       https://github.com/open-watcom/open-watcom-v2/wiki/Open-Watcom-Documentation
     '';
     homepage = "https://open-watcom.github.io";
-    license = licenses.watcom;
-    platforms = with platforms; windows ++ unix;
-    badPlatforms = platforms.riscv ++ [
+    license = lib.licenses.watcom;
+    platforms = with lib.platforms; windows ++ unix;
+    badPlatforms = lib.platforms.riscv ++ [
       "powerpc64-linux"
       "powerpc64le-linux"
       "mips64el-linux"
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})
