@@ -38,6 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.llms.openai" ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail ">=1.81.0,<2" ""
+  '';
+
   meta = with lib; {
     description = "LlamaIndex LLMS Integration for OpenAI";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/llms/llama-index-llms-openai";
