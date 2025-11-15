@@ -13,7 +13,6 @@
   zstd,
   gflags,
   libevent,
-  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -57,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     gflags
     libevent
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
