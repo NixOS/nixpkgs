@@ -21,15 +21,17 @@ buildPythonPackage rec {
 
   dependencies = [ nltk ];
 
-  doCheck = true;
-
   pythonImportsCheck = [ "textblob" ];
 
-  meta = with lib; {
+  # Test process requires network access to download wordnet
+  # Error: 'wordnet not found' 'Attempted to load corpora/wordnet'
+  # nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     changelog = "https://github.com/sloria/TextBlob/releases/tag/${version}";
     description = "Simplified Text processing";
     homepage = "https://textblob.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ idlip ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ idlip ];
   };
 }
