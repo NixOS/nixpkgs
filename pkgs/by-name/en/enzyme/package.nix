@@ -23,8 +23,8 @@ llvmPackages.stdenv.mkDerivation rec {
   llvm = llvmPackages.llvm;
   clang = llvmPackages.clang-unwrapped;
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake
     git
     llvm
     clang
