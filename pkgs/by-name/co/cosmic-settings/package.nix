@@ -11,6 +11,7 @@
   libinput,
   fontconfig,
   freetype,
+  isocodes,
   pipewire,
   pulseaudio,
   udev,
@@ -73,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     libcosmicAppWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPathOutput "bin" "share" [ isocodes ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
