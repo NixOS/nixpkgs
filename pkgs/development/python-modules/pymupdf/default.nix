@@ -73,11 +73,14 @@ buildPythonPackage rec {
     unset LD
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     libclang
     swig
-    psutil
     setuptools
+  ];
+
+  dependencies = [
+    mupdf-cxx-lib
   ];
 
   buildInputs = [
@@ -88,8 +91,6 @@ buildPythonPackage rec {
     libjpeg_turbo
     gumbo
   ];
-
-  propagatedBuildInputs = [ mupdf-cxx-lib ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
@@ -110,11 +111,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  checkInputs = [
     fonttools
     pillow
+    psutil
     pymupdf-fonts
   ];
 
