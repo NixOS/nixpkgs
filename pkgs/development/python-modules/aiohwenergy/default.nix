@@ -18,6 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-WfkwIxyDzLNzhWNWST/V3iN9Bhu2oXDwGiA5UXCq5ho=";
   };
 
+  postPatch = ''
+    # Replace async_timeout with asyncio.timeout
+    substituteInPlace aiohwenergy/hwenergy.py \
+      --replace-fail "async_timeout" "asyncio"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
