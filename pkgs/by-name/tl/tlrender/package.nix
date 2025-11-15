@@ -22,6 +22,7 @@
   nlohmann_json,
   opencolorio,
   openexr,
+  openimageio,
   openssl,
   opentimelineio,
   openusd,
@@ -44,6 +45,7 @@
   enableOpenexr ? true,
   enableFfmpeg ? true,
   enableUsd ? false,
+  enableOiio ? true,
 
   # build options
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -53,19 +55,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlrender";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "darbyjohnston";
     repo = "tlRender";
     tag = finalAttrs.version;
-    hash = "sha256-TxiDZtMvNmrV1FKXZnekCZHnr/eCWZlsP6VJRnaoWg4=";
+    hash = "sha256-QKISrGc72Bb139LNLtrhAs8FQbFLRp0iEJw7TMxSuPk=";
   };
-
-  patches = [
-    # Minizip-ng 4 support: https://github.com/darbyjohnston/tlRender/pull/145
-    ./minizip-ng-4.patch
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -74,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace lib/tlCore/CMakeLists.txt \
       --replace-fail "SDL2::SDL2-static" "SDL2::SDL2" \
       --replace-fail "SDL3::SDL3-static" "SDL3::SDL3" \
-
-    substituteInPlace lib/tlIO/CMakeLists.txt \
-      --replace-fail \
-        "list(APPEND LIBRARIES_PRIVATE libjpeg-turbo::turbojpeg-static)" \
-        "list(APPEND LIBRARIES_PRIVATE libjpeg-turbo::jpeg libjpeg-turbo::turbojpeg)"
   '';
 
   nativeBuildInputs = [
@@ -99,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     openssl # required by minizip-ng
     opentimelineio
+    openimageio
     plutovg # required by feather-tk -> lunasvg
     xz # libLZMA, required by minizip-ng
     zlib # required by minizip-ng
@@ -106,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableNet [ nasm ]
   ++ lib.optionals enableOcio [ opencolorio ]
+  ++ lib.optionals enableOiio [ openimageio ]
   ++ lib.optionals enableSdl2 [ SDL2 ]
   ++ lib.optionals enableSdl3 [ sdl3 ]
   ++ lib.optionals enableJpeg [ libjpeg ]
@@ -118,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "TLRENDER_NET" enableNet)
     (lib.cmakeBool "TLRENDER_OCIO" enableOcio)
+    (lib.cmakeBool "TLRENDER_OIIO" enableOiio)
     (lib.cmakeBool "TLRENDER_SDL2" enableSdl2)
     (lib.cmakeBool "TLRENDER_SDL3" enableSdl3)
     (lib.cmakeBool "TLRENDER_JPEG" enableJpeg)
