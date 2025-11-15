@@ -10733,6 +10733,7 @@ with pkgs;
 
   cmus = callPackage ../applications/audio/cmus {
     libjack = libjack2;
+    ffmpeg = ffmpeg_7;
   };
 
   cni = callPackage ../applications/networking/cluster/cni { };
