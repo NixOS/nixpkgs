@@ -106,6 +106,10 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION ''${PERL_VENDORARCH}" "DESTINATION ''${SWIG_PERL_DIR}"
     substituteInPlace src/common/oscap_pcre.c \
       --replace-fail "#include <pcre2.h>" "#include <${pcre2.dev}/include/pcre2.h>"
+
+    # Patch SCE engine to not hardcode FHS paths, allowing it to use the transient environment's PATH
+    substituteInPlace src/SCE/sce_engine.c \
+      --replace-fail 'env_values[0] = "PATH=/bin:/sbin:/usr/bin:/usr/local/bin:/usr/sbin";' 'env_values[0] = "_PATCHED_OUT_DUMMY_VAR=patched-out";'
   '';
 
   cmakeFlags = [
