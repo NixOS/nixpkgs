@@ -1,50 +1,74 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchgit,
+  autoconf,
+  automake,
+  pkg-config,
+  libtool,
+  perl,
+  universal-ctags,
+  groff,
   ncurses,
-  db,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvi";
-  version = "1.81.6";
+  version = "1.81.6-unstable-2024-12-28";
 
-  src = fetchurl {
-    url = "https://deb.debian.org/debian/pool/main/n/nvi/nvi_${version}.orig.tar.gz";
-    sha256 = "13cp9iz017bk6ryi05jn7drbv7a5dyr201zqd3r4r8srj644ihwb";
+  src = fetchgit {
+    url = "https://repo.or.cz/nvi.git";
+    rev = "957906b0e3bcc0f795cf8c6b7313fcc4ec338784";
+    hash = "sha256-aOLP1xb54oZZFrFG/fzdTCvQFQBaxfi2X0i4Zqd2NpI=";
   };
 
-  patches = [
-    # Fix runtime error with modern versions of db.
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-03-db4.patch";
-      sha256 = "1vpnly3dcldwl8gwl0jrh5yh0vhgbdhsh6xn7lnwhrawlvk6d55y";
-    })
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # This is taken from https://github.com/macports/macports-ports/tree/master/editors/nvi/files
+    # patch-common_key.h.diff, patch-dist_port.h.in.diff and part of patch-includes.diff
+    # Fixing issues:
+    # 1. isblank clash with macOS sdk _ctypes.h
+    # 2. memcpy redefined
+    # 3. missing some headers
+    ./darwin.patch
+  ];
 
-    # Fix build with Glibc.
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-20-glibc_has_grantpt.patch";
-      sha256 = "1ypqj263wh53m5rgiag5c4gy1rksj2waginny1lcj34n72p2dsml";
-    })
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    libtool
+    perl
+    universal-ctags
+    groff
   ];
 
   buildInputs = [
     ncurses
-    db
   ];
 
-  preConfigure = ''
-    cd build.unix
+  postPatch = ''
+    substituteInPlace dist/distrib \
+      --replace-fail "'\`git describe\` '('\$date')" "${finalAttrs.version}"
   '';
-  configureScript = "../dist/configure";
-  configureFlags = [ "vi_cv_path_preserve=/tmp" ];
 
-  meta = with lib; {
+  preConfigure = ''
+    cd dist
+    patchShebangs --build distrib
+    ./distrib
+  '';
+
+  configureFlags = [
+    "vi_cv_path_preserve=/tmp"
+  ];
+
+  enableParallelBuilding = true;
+
+  meta = {
     description = "Berkeley Vi Editor";
-    license = licenses.free;
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin
+    homepage = "https://repo.or.cz/nvi.git";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    mainProgram = "vi";
+    maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

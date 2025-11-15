@@ -1,0 +1,87 @@
+This is taken from https://github.com/macports/macports-ports/tree/master/editors/nvi/files
+patch-common_key.h.diff, patch-dist_port.h.in.diff and part of patch-includes.diff
+
+diff --git a/common/key.h b/common/key.h
+index db9acbd..cca7565 100644
+--- a/common/key.h
++++ b/common/key.h
+@@ -207,19 +207,6 @@ extern KEYLIST keylist[];
+ 	(KEYS_WAITING(sp) &&						\
+ 	    FL_ISSET((sp)->wp->i_event[(sp)->wp->i_next].e_flags, CH_MAPPED))
+ 
+-/*
+- * Ex/vi commands are generally separated by whitespace characters.  We
+- * can't use the standard isspace(3) macro because it returns true for
+- * characters like ^K in the ASCII character set.  The 4.4BSD isblank(3)
+- * macro does exactly what we want, but it's not portable yet.
+- *
+- * XXX
+- * Note side effect, ch is evaluated multiple times.
+- */
+-#ifndef isblank
+-#define	isblank(ch)	((ch) == ' ' || (ch) == '\t')
+-#endif
+-
+ /* The "standard" tab width, for displaying things to users. */
+ #define	STANDARD_TAB	6
+ 
+diff --git a/common/util.c b/common/util.c
+index 999eaaf..ffb9262 100644
+--- a/common/util.c
++++ b/common/util.c
+@@ -17,6 +17,7 @@ static const char sccsid[] = "$Id: util.c,v 10.22 2001/06/25 15:19:12 skimo Exp
+ #include <sys/queue.h>
+ 
+ #include <bitstring.h>
++#include <ctype.h>
+ #include <errno.h>
+ #include <limits.h>
+ #include <stdio.h>
+diff --git a/dist/port.h.in b/dist/port.h.in
+index 08342b0..67c4a23 100644
+--- a/dist/port.h.in
++++ b/dist/port.h.in
+@@ -39,7 +39,7 @@
+ #define	gettimeofday(tv, tz)	gettimeofday(tv)
+ #endif
+ 
+-/* 
++/*
+  * XXX
+  * If we don't have mmap, we fake it with read and write, but we'll
+  * still need the header information.
+@@ -184,10 +184,6 @@
+ #endif
+ #endif
+ 
+-#ifndef HAVE_MEMCPY
+-#define memcpy memmove
+-#endif
+-
+ #ifdef NEED_FPRINTF_PROTO
+ extern  int     fprintf( FILE *, const char *, ... );
+ #endif
+diff --git a/ex/ex_shell.c b/ex/ex_shell.c
+index 00ce137..9681677 100644
+--- a/ex/ex_shell.c
++++ b/ex/ex_shell.c
+@@ -18,6 +18,7 @@ static const char sccsid[] = "$Id: ex_shell.c,v 10.42 2003/11/05 17:11:54 skimo
+ #include <sys/wait.h>
+ 
+ #include <bitstring.h>
++#include <ctype.h>
+ #include <errno.h>
+ #include <limits.h>
+ #include <signal.h>
+diff --git a/vi/v_match.c b/vi/v_match.c
+index 2cbebd7..dd282a9 100644
+--- a/vi/v_match.c
++++ b/vi/v_match.c
+@@ -18,6 +18,7 @@ static const char sccsid[] = "$Id: v_match.c,v 10.10 2001/06/25 15:19:32 skimo E
+ #include <sys/time.h>
+ 
+ #include <bitstring.h>
++#include <ctype.h>
+ #include <limits.h>
+ #include <stdio.h>
+ #include <string.h>
