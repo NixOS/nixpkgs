@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.0.17";
+  version = "1.0.18";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UhFHT8cSrdjhSqjj4qFzn5UvfPOLPwrBh1ytL2gFhzU=";
+    hash = "sha256-RkTY7gDcKbkNUKl7NJDX3Ac/I+dRG1Gj8rRHynbbxUU=";
   };
 
-  cargoHash = "sha256-yQM2zx1IzGjegwLK4epsluWl8m5RSP3jB00Lpd8+TLE=";
+  cargoHash = "sha256-tuZhqDT1xMP+Pufwz6SBt44qNzHuGzcU9QmVNIg2zS0=";
 
   nativeBuildInputs = [
     pkg-config
