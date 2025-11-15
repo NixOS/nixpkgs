@@ -38,6 +38,10 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg ]})
   '';
 
+  postPatch = ''
+    sed -ie 's/requires = \["uv_build[^"]*"]/requires = ["uv_build"]/' pyproject.toml
+  '';
+
   pythonImportsCheck = [ "yutto" ];
 
   meta = with lib; {
