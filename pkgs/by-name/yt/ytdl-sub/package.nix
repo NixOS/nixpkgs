@@ -1,7 +1,7 @@
 {
   python3Packages,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   lib,
   versionCheckHook,
 }:
@@ -38,8 +38,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg "ffmpeg"}"
-    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
+    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
+    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
   ];
 
   nativeCheckInputs = [
@@ -49,8 +49,8 @@ python3Packages.buildPythonApplication rec {
   versionCheckProgramArg = "--version";
 
   env = {
-    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
-    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg_7 "ffprobe"}";
   };
 
   disabledTests = [
