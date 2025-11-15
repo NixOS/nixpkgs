@@ -2088,12 +2088,6 @@
     githubId = 8049011;
     name = "Arik Grahl";
   };
-  aristid = {
-    email = "aristidb@gmail.com";
-    github = "aristidb";
-    githubId = 30712;
-    name = "Aristid Breitkreuz";
-  };
   ariutta = {
     email = "anders.riutta@gmail.com";
     github = "ariutta";
