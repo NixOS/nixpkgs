@@ -147,6 +147,7 @@ let
       test $fenv_status -eq 0
     end # fenv
   '';
+  testPython = python3.withPackages (ps: [ ps.pexpect ]);
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -317,6 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs ./build_tools/git_version_gen.sh
     patchShebangs ./tests/test_driver.py
+    substituteInPlace ./tests/test_driver.py --replace-warn '"python3",' '"${testPython}/bin/python3",'
   ''
   + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     export CMAKE_PREFIX_PATH=
@@ -336,7 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     coreutils
     glibcLocales
-    (python3.withPackages (ps: [ ps.pexpect ]))
+    testPython
     procps
     sphinx
   ]
@@ -350,6 +352,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "fish_run_tests";
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
+    export PATH=${testPython}/bin:$PATH
   '';
 
   nativeInstallCheckInputs = [
