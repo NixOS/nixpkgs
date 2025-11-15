@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  asciidoc,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    asciidoc
     cmake
     extra-cmake-modules
     qt6.wrapQtAppsHook
