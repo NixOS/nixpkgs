@@ -361,6 +361,7 @@ print OUT <<EOF;
   font-micro-misc,
   font-misc-cyrillic,
   font-misc-ethiopic,
+  font-misc-meltho,
   font-mutt-misc,
   font-schumacher-misc,
   font-screen-cyrillic,
@@ -570,6 +571,7 @@ self: with self; {
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
   fontmiscethiopic = font-misc-ethiopic;
+  fontmiscmeltho = font-misc-meltho;
   fontmuttmisc = font-mutt-misc;
   fontschumachermisc = font-schumacher-misc;
   fontscreencyrillic = font-screen-cyrillic;
