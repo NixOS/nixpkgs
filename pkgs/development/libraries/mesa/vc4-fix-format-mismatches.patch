@@ -1,0 +1,26 @@
+From 6c7bc6976255217a2e0f45b2fdd32467ebbb6a4e Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 29 Oct 2025 22:52:14 +0100
+Subject: [PATCH] vc4: Fix printing of get_tiling.modifier
+
+The Linux kernel's __u64 isn't always implemented as a long long, and there's no nice define for printing it like with uint64_t.
+---
+ src/gallium/drivers/vc4/vc4_resource.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gallium/drivers/vc4/vc4_resource.c b/src/gallium/drivers/vc4/vc4_resource.c
+index ff28cea00c2..769f7fcdf85 100644
+--- a/src/gallium/drivers/vc4/vc4_resource.c
++++ b/src/gallium/drivers/vc4/vc4_resource.c
+@@ -692,7 +692,7 @@ vc4_resource_from_handle(struct pipe_screen *pscreen,
+         } else if (whandle->modifier != get_tiling.modifier) {
+                 fprintf(stderr,
+                         "Modifier 0x%llx vs. tiling (0x%llx) mismatch\n",
+-                        (long long)whandle->modifier, get_tiling.modifier);
++                        (long long)whandle->modifier, (long long)get_tiling.modifier);
+                 goto fail;
+         }
+ 
+-- 
+2.51.0
+
