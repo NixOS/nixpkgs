@@ -145,13 +145,13 @@ rec {
     version = "1.3.5.201612301822";
 
     srcFeature = fetchurl {
-      url = "https://mihnita.github.io/ansi-econsole/install/features/net.mihai-nita.ansicon_${version}.jar";
-      sha256 = "086ylxpsrlpbvwv5mw7v6b44j63cwzgi8apg2mq058ydr5ak6hxs";
+      url = "https://github.com/mihnita/ansi-econsole/raw/refs/heads/main/AnsiConSitePublished/features/net.mihai-nita.ansicon_${version}.jar";
+      hash = "sha256-o9hnMuZeohU+AKS+ueU8dWS9HomrnqaKpWYMG5vMeJs=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://mihnita.github.io/ansi-econsole/install/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
-      sha256 = "1j42l0xxzs89shqkyn91lb0gia10mifzy0i73c3n7gj7sv2ddbjq";
+      url = "https://github.com/mihnita/ansi-econsole/raw/refs/heads/main/AnsiConSitePublished/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
+      hash = "sha256-WK7WxNZHvmMHGycC/12sIKj4wKIhWT8x1Anp3zuggsg=";
     };
 
     meta = with lib; {
