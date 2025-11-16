@@ -2454,6 +2454,12 @@ with haskellLib;
     pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
   ) super.crypton-x509-validation;
 
+  # Likely fallout from the crypton issues
+  # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
+  tls = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.tls;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
