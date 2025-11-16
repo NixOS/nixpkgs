@@ -12,13 +12,14 @@ in
     enable = lib.mkEnableOption "RobloxAPID daemon";
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.robloxapid;
+      default = null;
+      defaultText = lib.literalExpression "pkgs.robloxapid";
       description = "RobloxAPID package to run.";
     };
     configFile = lib.mkOption {
       type = lib.types.path;
       default = "/etc/robloxapid/config.json";
-      description = lib.mdDoc ''
+      description = ''
         Path to the `config.json` file for RobloxAPID.
 
         Since this configuration contains secrets (passwords, API keys), it is
