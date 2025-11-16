@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoAddDriverRunpath,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
@@ -26,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
+  env = {
+    BTM_GENERATE = true;
+  };
+
   postInstall = ''
     installManPage target/tmp/bottom/manpage/btm.1
     installShellCompletion \
@@ -35,17 +40,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
   '';
 
-  preCheck = ''
-    HOME=$(mktemp -d)
-  '';
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/btm";
-
-  BTM_GENERATE = true;
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
