@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "robloxapid";
   version = "0.0.16";
 
