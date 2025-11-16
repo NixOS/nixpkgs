@@ -566,24 +566,6 @@ rec {
     };
   };
 
-  scala = buildEclipseUpdateSite rec {
-    name = "scala-${version}";
-    version = "4.4.1.201605041056";
-
-    src = fetchzip {
-      url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/base-20160504-1321.zip";
-      sha256 = "13xgx2rwlll0l4bs0g6gyvrx5gcc0125vzn501fdj0wv2fqxn5lw";
-    };
-
-    meta = with lib; {
-      homepage = "http://scala-ide.org/";
-      description = "Scala IDE for Eclipse";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.bsd3;
-      platforms = platforms.all;
-    };
-  };
-
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
     version = "3.1.11";
@@ -697,4 +679,5 @@ rec {
   ivyderv = throw "eclipses.plugins.inyderv has been removed due to being archived upstream.";
   ivy = throw "eclipses.plugins.ivy has been removed due to being archived upstream.";
   ivyant = throw "eclipses.plugins.ivyant has been removed due to being archived upstream.";
+  scala = throw "eclipses.plugins.scala has been removed due to being deprecated upstream.";
 }
