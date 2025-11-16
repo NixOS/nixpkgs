@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "airtouch5py";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "danzel";
@@ -46,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "airtouch5py" ];
 
   meta = with lib; {
-    changelog = "https://github.com/danzel/airtouch5py/releases/tag/${version}";
+    changelog = "https://github.com/danzel/airtouch5py/releases/tag/${src.tag}";
     description = "Python client for the airtouch 5";
     homepage = "https://github.com/danzel/airtouch5py";
     license = licenses.asl20;
