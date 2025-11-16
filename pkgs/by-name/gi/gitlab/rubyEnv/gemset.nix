@@ -2973,10 +2973,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "12r3g7fb7wbhykmjn1n6b0jiyb26bma0x89wcm8ac4phz8aqhm6j";
+      sha256 = "1ihbyibcfsf9wcww2xw94808j20xixrc1ni0c47s8mfnhf9dsmwf";
       type = "gem";
     };
-    version = "0.0.36";
+    version = "0.0.38";
   };
   gitlab-grape-openapi = {
     dependencies = [
@@ -6040,10 +6040,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0dzq3k5hmqlav2mwf7bc10mr1mlmlnpin498g7jhbhpdpa324s6n";
+      sha256 = "0v0grpg9gi59zr3imxy1745k9rp3dd095mkir8gvxi69blhh2kkz";
       type = "gem";
     };
-    version = "3.3.1";
+    version = "3.3.2";
   };
   openssl-signature_algorithm = {
     dependencies = [ "openssl" ];
@@ -7080,10 +7080,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0kvz20sxih8f976ry45b6c8srkh4km0cw4ilc5ynlmyk2nkywkya";
+      sha256 = "0w3iq14y3ldjq29qv2ll7y1dj7adxl9p9m0312h30ll4li3k9nl5";
       type = "gem";
     };
-    version = "2.2.18";
+    version = "2.2.20";
   };
   rack-accept = {
     dependencies = [ "rack" ];
@@ -8659,10 +8659,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "00izmp202y48qvmvwrh5x56cc5ivbjhgkkkjklvqmqzj9pik4r9c";
+      sha256 = "1iaxj8lfcl5cfr4qa64mcapqw4qprf4bvrdjfhhwlrf96am3hzvd";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "3.1.0";
   };
   simplecov-html = {
     groups = [
@@ -10097,9 +10097,9 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "119ypabas886gd0n9kiid3q41w76gz60s8qmiak6pljpkd56ps5j";
+      sha256 = "10cpfdswql21vildiin0q7drg5zfzf2sahnk9hv3nyzzjqwj2bdx";
       type = "gem";
     };
-    version = "2.7.3";
+    version = "2.6.18";
   };
 }

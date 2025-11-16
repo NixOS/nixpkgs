@@ -162,8 +162,8 @@ in
   };
 
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
     extraBuildInputs = [
       lcms2
     ];
