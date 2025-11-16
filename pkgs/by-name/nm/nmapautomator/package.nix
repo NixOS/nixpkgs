@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeBinaryWrapper,
+  dirb,
+  metasploit,
   nix-update-script,
   withFullDeps ? false,
 
@@ -73,7 +75,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace nmapAutomator.sh \
-      --replace-fail '/usr/share/nmap/' '${nmap}/share/nmap/'
+      --replace-fail '/usr/share/nmap/' '${nmap}/share/nmap/' \
+      --replace-fail '/usr/share/wordlists/dirb/' '${dirb}/share/dirb/wordlists/' \
+      --replace-fail '/usr/share/wordlists/metasploit/' '${metasploit.src}/data/wordlists/'
   '';
 
   installPhase = ''
