@@ -11,18 +11,18 @@
   asio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hidviz";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "hidviz";
     repo = "hidviz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ThDDQ3FN+cLCbdQCrC5zhL4dgg2zAbRWvtei7+qmQg8=";
   };
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
     substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})
