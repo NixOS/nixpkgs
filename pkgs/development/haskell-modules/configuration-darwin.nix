@@ -355,8 +355,6 @@ self: super:
     gtk-traymanager = markBroken super.gtk-traymanager;
     pipes-zlib = markBroken super.pipes-zlib;
     pthread = markBroken super.pthread;
-    # 2025-11-07: Broken since 2018 - https://github.com/NixOS/nixpkgs/pull/459465
-    system-linux-proc = markBroken super.system-linux-proc;
     # 2025-11-07: Broken since 2021 - https://github.com/NixOS/nixpkgs/pull/459465
     gerrit = markBroken super.gerrit;
     # 2025-11-07: Broken since 2023 - https://github.com/NixOS/nixpkgs/pull/459465
