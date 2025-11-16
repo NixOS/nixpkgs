@@ -22210,6 +22210,7 @@
     email = "ritishdas116@outlook.com";
     name = "Ritish";
     github = "ritishDas";
+    githubId = 142479626;
   };
   rixed = {
     email = "rixed-github@happyleptic.org";
