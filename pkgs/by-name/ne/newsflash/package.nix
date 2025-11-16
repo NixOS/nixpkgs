@@ -22,7 +22,7 @@
   glib-networking,
   librsvg,
   gst_all_1,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -94,9 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
   # For https://gitlab.com/news-flash/news_flash_gtk/-/blob/8e5fc4acf5ca6be5b8cd616466a17e7a273f9dda/src/meson.build#L47
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v.";
-    ignoredVersions = "(alpha|beta|rc)";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v.(\\d+\\.\\d+\\.\\d+)$"
+    ];
   };
 
   meta = {
