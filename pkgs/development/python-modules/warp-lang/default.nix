@@ -67,7 +67,6 @@ buildPythonPackage {
   ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-libcxx.patch {
-      LIBCXX_DEV = llvmPackages.libcxx.dev;
       LIBCXX_LIB = llvmPackages.libcxx;
     })
 
@@ -224,22 +223,24 @@ buildPythonPackage {
     inherit libmathdx;
 
     # Scripts which provide test packages and implement test logic.
-    testers.unit-tests = writeShellApplication {
-      name = "warp-lang-unit-tests";
-      runtimeInputs = [
+    testers.unit-tests =
+      let
         # Use the references from args
-        (python.withPackages (_: [
+        python' = python.withPackages (_: [
           warp-lang
           jax
           torch
-        ]))
+        ]);
         # Disable paddlepaddle interop tests: malloc(): unaligned tcache chunk detected
         #  (paddlepaddle.override { inherit cudaSupport; })
-      ];
-      text = ''
-        python3 -m warp.tests
-      '';
-    };
+      in
+      writeShellApplication {
+        name = "warp-lang-unit-tests";
+        runtimeInputs = [ python' ];
+        text = ''
+          ${python'}/bin/python3 -m warp.tests
+        '';
+      };
 
     # Tests run within the Nix sandbox.
     tests =

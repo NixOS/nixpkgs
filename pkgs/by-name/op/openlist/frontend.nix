@@ -10,18 +10,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openlist-frontend";
-  version = "4.1.6";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList-Frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XvlnsBq3LtOs7uOl505uXjADukgKOl7JYYtJHmbD1lY=";
+    hash = "sha256-eJMBtskpTSptsXmQo70rfyEvRTt63L7VIWUFFgf/EQE=";
   };
 
   i18n = fetchzip {
     url = "https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v${finalAttrs.version}/i18n.tar.gz";
-    hash = "sha256-oSWkOouUpWWM7d8TilFKHur5rbC+6AM0OUHxG/LZJRg=";
+    hash = "sha256-pLBuK4Lt2TGuIb8Y7f77OdR6VkYgVZG6zCXS17e8+8k=";
     stripRoot = false;
   };
 
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-1TCgJIBh3KEBTau5EG+oreCrFSZovmQgPpuZ3IcruCc=";
+    hash = "sha256-kd3mBYlJ8ui0kawujQQalZnLsFh5ck9e3xLj7r6TxkE=";
   };
 
   buildPhase = ''

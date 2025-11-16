@@ -90,15 +90,7 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
-      ''
-      # This test will fail if the error strings between the build libc and host
-      # libc mismatch, e.g. when cross-compiling from glibc to musl
-      +
-        lib.optionalString
-          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
-          ''
-            rm test/recipes/02-test_errstr.t
-          '';
+      '';
 
       outputs = [
         "bin"
@@ -194,6 +186,11 @@ let
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
+      # Tell build system it's cross environment. This allows to skip tests
+      # that would fail when libc is different. Otherwise, run the tests.
+      ++ lib.optional (
+        !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
+      ) "--cross-compile-prefix=${lib.getBin stdenv.cc}/bin/"
       ++ lib.optionals withCryptodev [
         "-DHAVE_CRYPTODEV"
         "-DUSE_CRYPTODEV_DIGESTS"
