@@ -5804,6 +5804,11 @@
     githubId = 97746;
     name = "Raphael Das Gupta";
   };
+  ritishDas = {
+    email = "ritishdas116@outlook.com";
+    name = "Ritish";
+    github = "ritishDas";
+  };
   das_j = {
     email = "janne@hess.ooo";
     matrix = "@janne.hess:helsinki-systems.de";
