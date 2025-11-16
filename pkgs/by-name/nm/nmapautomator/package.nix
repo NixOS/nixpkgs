@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkgs,
-  nix-update-script,
   makeBinaryWrapper,
+  nix-update-script,
   withFullDeps ? false,
-  # Needed Dependencies
+
+  # required dependencies
   nmap,
   coreutils,
   gawk,
-  # Optional Dependencies
+
+  # optional dependencies
   smtp-user-enum,
   dnsrecon,
   bind,
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
+  runtimeDeps = [
     nmap
     coreutils
     gawk
@@ -62,8 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     net-snmp
     snmpcheck
   ];
-  # TODO
-  # Package and add odat and droopescan
+  # TODO: Package and add odat and droopescan
 
   postPatch = ''
     substituteInPlace nmapAutomator.sh \
@@ -73,13 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm 555 nmapAutomator.sh $out/bin/nmapAutomator
-    runHook postInstall
-  '';
 
-  postInstall = ''
+    install -Dm 555 nmapAutomator.sh $out/bin/nmapAutomator
     wrapProgram $out/bin/nmapAutomator \
-      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
