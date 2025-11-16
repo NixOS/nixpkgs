@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   telegram-desktop,
   alsa-lib,
@@ -15,13 +14,13 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.1.83";
+    version = "1.1.84";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       tag = "v${version}";
-      hash = "sha256-gx+JKmf0bVgVCoIsI6dyAL9aELJm9oJD68cEBjfkI+A=";
+      hash = "sha256-CtDCrgKZpaTdR+Eh9H1uq7EmO0SFIgHKlW/zeeWBaCM=";
       fetchSubmodules = true;
     };
 
@@ -43,7 +42,7 @@ telegram-desktop.override {
       homepage = "https://github.com/TDesktop-x64/tdesktop";
       changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
       maintainers = with lib.maintainers; [ clot27 ];
-      mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+      mainProgram = "Telegram";
     };
   });
 }
