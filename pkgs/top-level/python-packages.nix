@@ -8576,8 +8576,6 @@ self: super: with self; {
 
   line-profiler = callPackage ../development/python-modules/line-profiler { };
 
-  linear-garage-door = callPackage ../development/python-modules/linear-garage-door { };
-
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
   linearmodels = callPackage ../development/python-modules/linearmodels { };
