@@ -1480,6 +1480,8 @@ with pkgs;
 
   angie-console-light = callPackage ../servers/http/angie/console-light.nix { };
 
+  aplwrap = callPackage ../applications/editors/aplwrap { };
+
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
