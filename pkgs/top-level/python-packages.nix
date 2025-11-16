@@ -4763,6 +4763,8 @@ self: super: with self; {
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
 
+  elkoep-aio-mqtt = callPackage ../development/python-modules/elkoep-aio-mqtt { };
+
   elmax = callPackage ../development/python-modules/elmax { };
 
   elmax-api = callPackage ../development/python-modules/elmax-api { };
