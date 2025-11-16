@@ -133,7 +133,7 @@ patchShebangs() {
                 sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
 
                 # Make original file writable if it is read-only
-                local restoreReadOnly
+                local restoreReadOnly=
                 if [[ ! -w "$f" ]]; then
                     chmod u+w "$f"
                     restoreReadOnly=true
