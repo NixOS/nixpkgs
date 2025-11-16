@@ -1125,6 +1125,7 @@ let
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
     milorGWAS = [ pkgs.zlib.dev ];
+    minimaxALT = [ pkgs.gsl.dev ];
     pliman = with pkgs; [
       fftw.dev
       libpng.dev
