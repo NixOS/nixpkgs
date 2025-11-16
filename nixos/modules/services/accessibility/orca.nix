@@ -21,6 +21,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
+    systemd.user.services.orca.wantedBy = [ "graphical-session.target" ];
     services.speechd.enable = true;
   };
 }

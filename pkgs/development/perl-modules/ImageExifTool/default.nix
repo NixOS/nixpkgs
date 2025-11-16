@@ -3,7 +3,11 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
-  testers,
+  versionCheckHook,
+  ArchiveZip,
+  CompressRawLzma,
+  IOCompress,
+  IOCompressBrotli,
 }:
 
 buildPerlPackage rec {
@@ -20,6 +24,17 @@ buildPerlPackage rec {
   postPatch = ''
     patchShebangs exiftool
   '';
+
+  propagatedBuildInputs = [
+    ArchiveZip
+    CompressRawLzma
+    IOCompress
+    IOCompressBrotli
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-ver";
 
   passthru = {
     updateScript = gitUpdater { };

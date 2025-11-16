@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bluetui";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "bluetui";
     rev = "v${version}";
-    hash = "sha256-qryBx0Lezg98FzfAFZR6+j7byJTW7hMbGmKIQMkciec=";
+    hash = "sha256-8X1kr0GPY/DqGZb1hJ52OkmgtYk0giwTeoqWTN0ZEbI=";
   };
 
-  cargoHash = "sha256-CijMGqsfyoUV8TSy1dWUR//PCySgkxKGuhUMHp4Tn48=";
+  cargoHash = "sha256-CQFjauJ/y7XWZob/8gRQszKjBbkSdIt5l5OlSKVKoMw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     description = "TUI for managing bluetooth on Linux";
     homepage = "https://github.com/pythops/bluetui";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      matthiasbeyer
+    ];
     mainProgram = "bluetui";
     platforms = lib.platforms.linux;
   };

@@ -83,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swaylock-plugin";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ picnoir ];
+    maintainers = with lib.maintainers; [
+      picnoir
+      matthiasbeyer
+    ];
   };
 })

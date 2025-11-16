@@ -17344,6 +17344,8 @@ with self;
     };
   };
 
+  IOCompressBrotli = callPackage ../development/perl-modules/IOCompressBrotli { };
+
   IODigest = buildPerlPackage {
     pname = "IO-Digest";
     version = "0.11";
