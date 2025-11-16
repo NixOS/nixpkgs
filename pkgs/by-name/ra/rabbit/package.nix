@@ -21,11 +21,17 @@ let
             hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
           };
 
-          # There are 2 tests that are failing, disabling the tests for now.
-          # - test_csr_polynomial_expansion_index_overflow[csr_array-False-True-2-65535]
-          # - test_csr_polynomial_expansion_index_overflow[csr_array-False-True-3-2344]
+          postPatch = ''
+            substituteInPlace pyproject.toml \
+              --replace-fail "numpy>=2" "numpy" 
+
+            substituteInPlace meson.build --replace-fail \
+              "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
+              "'${version}',"
+          '';
           doCheck = false;
         });
+
     };
     self = python3;
   };
@@ -46,6 +52,11 @@ python3'.pkgs.buildPythonApplication {
     tag = version;
     hash = "sha256-icf42vqYPNH1v1wEv/MpqScqMUr/qDlcGoW9kPY2R6s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "pandas==2.2.3" "pandas" 
+  '';
 
   pythonRelaxDeps = [
     "joblib"
