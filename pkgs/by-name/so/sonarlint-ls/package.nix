@@ -49,7 +49,7 @@ maven.buildMavenPackage rec {
 
     makeWrapper ${jre_headless}/bin/java $out/bin/sonarlint-ls \
       --add-flags "-jar $out/share/sonarlint-ls.jar" \
-      --add-flags "-analyzers $(ls -1 $out/share/plugins | tr '\n' ' ')"
+      --add-flags "-analyzers $(find $out/share/plugins/ -type f -name '*.jar' | sort | tr '\n' ' ')"
 
     runHook postInstall
   '';
