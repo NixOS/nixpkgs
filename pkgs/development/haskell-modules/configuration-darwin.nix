@@ -351,7 +351,6 @@ self: super:
     hamid = markBroken super.hamid;
     # 2025-11-07: Broken since 2016 - https://github.com/NixOS/nixpkgs/pull/459465
     huckleberry = markBroken super.huckleberry;
-    log = markBroken super.log;
     # 2025-11-07: Broken since 2017 - https://github.com/NixOS/nixpkgs/pull/459465
     gtk-traymanager = markBroken super.gtk-traymanager;
     pipes-zlib = markBroken super.pipes-zlib;
@@ -367,12 +366,12 @@ self: super:
     HsHTSLib = markBroken super.HsHTSLib;
     zlib-bytes = markBroken super.zlib-bytes;
     # 2025-11-07: Broken since 2024 - https://github.com/NixOS/nixpkgs/pull/459465
+    # https://github.com/msakai/bytestring-encoding/issues/15
     bytestring-encoding = markBroken super.bytestring-encoding;
     duckdb-haskell = markBroken super.duckdb-haskell;
     freetype2 = markBroken super.freetype2;
     memzero = markBroken super.memzero;
     rawfilepath = markBroken super.rawfilepath;
-    reform-blaze = markBroken super.reform-blaze;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
