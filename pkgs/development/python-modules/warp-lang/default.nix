@@ -62,91 +62,94 @@ buildPythonPackage {
     hash = "sha256-Atp3WyxQ7GYwWLmQIUgoPULyVlNjduh4/9CBixNWFwc=";
   };
 
-  patches = [
-    ./cxx11-abi.patch
-  ]
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    (replaceVars ./darwin-libcxx.patch {
-      LIBCXX_LIB = llvmPackages.libcxx;
-    })
+  patches =
+    lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+      ./darwin-single-target.patch
+    ]
+    ++ lib.optionals standaloneSupport [
+      (replaceVars ./dynamic-link.patch {
+        LLVM_LIB = llvmPackages.llvm.lib;
+        LIBCLANG_LIB = llvmPackages.libclang.lib;
+      })
+    ];
 
-    ./darwin-single-target.patch
-  ]
-  ++ lib.optionals (effectiveStdenv.cc.isClang || standaloneSupport) [
-    (replaceVars ./clang-path.patch {
-      CLANG = "${effectiveStdenv.cc}/bin/cc";
-    })
+  postPatch = ''
+    nixLog "patching $PWD/build_llvm.py to remove pre-C++11 ABI flag"
+    substituteInPlace "$PWD/build_llvm.py" \
+      --replace-fail \
+        '"-D", f"CMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 {abi_version}",  # The pre-C++11 ABI is still the default on the CentOS 7 toolchain' \
+        ""
 
-    (replaceVars ./clang-libs.patch {
-      LLVM_DEV = llvmPackages.llvm.dev;
-      LIBCLANG_DEV = llvmPackages.libclang.dev;
-    })
-  ]
-  ++ lib.optionals standaloneSupport [
-    (replaceVars ./llvm-libs.patch {
-      LLVM_LIB = llvmPackages.llvm.lib;
-      LIBCLANG_LIB = llvmPackages.libclang.lib;
-    })
-  ];
+    substituteInPlace "$PWD/warp/build_dll.py" \
+      --replace-fail " -D_GLIBCXX_USE_CXX11_ABI=0" ""
+  ''
+  + lib.optionalString effectiveStdenv.hostPlatform.isDarwin (
+    ''
+      nixLog "patching $PWD/warp/build_dll.py to link against libc++"
+      substituteInPlace "$PWD/warp/build_dll.py" \
+        --replace-fail 'ld_inputs = []' "ld_inputs = ['-L\"${llvmPackages.libcxx}/lib\" -lc++']"
+    ''
+    # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
+    + ''
+      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on darwin"
+      substituteInPlace "$PWD/warp/tests/test_codegen.py" \
+        --replace-fail 'places=5' 'places=4'
+    ''
+  )
+  + lib.optionalString effectiveStdenv.cc.isClang ''
+    substituteInPlace "$PWD/warp/build_dll.py" \
+      --replace-fail "clang++" "${effectiveStdenv.cc}/bin/cc"
+  ''
+  + lib.optionalString standaloneSupport ''
+    substituteInPlace "$PWD/warp/build_dll.py" \
+      --replace-fail \
+        '-I"{warp_home_path.parent}/external/llvm-project/out/install/{mode}-{arch}/include"' \
+        '-I"${llvmPackages.llvm.dev}/include"' \
+      --replace-fail \
+        '-I"{warp_home_path.parent}/_build/host-deps/llvm-project/release-{arch}/include"' \
+        '-I"${llvmPackages.libclang.dev}/include"' \
 
-  postPatch =
-    # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
-    lib.optionalString cudaSupport ''
+  ''
+  # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
+  + lib.optionalString cudaSupport (
+    let
+      gencodeOpts = lib.concatMapStringsSep ", " (
+        gencodeString: ''"${gencodeString}"''
+      ) cudaPackages.flags.gencode;
+
+      clangArchFlags = lib.concatMapStringsSep ", " (
+        realArch: ''"--cuda-gpu-arch=${realArch}"''
+      ) cudaPackages.flags.realArches;
+    in
+    ''
       nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
       substituteInPlace "$PWD/warp/build_dll.py" \
-        --replace-fail \
-          '*gencode_opts,' \
-          '${
-            lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
-          },' \
-        --replace-fail \
-          '*clang_arch_flags,' \
-          '${
-            lib.concatMapStringsSep ", " (
-              realArch: ''"--cuda-gpu-arch=${realArch}"''
-            ) cudaPackages.flags.realArches
-          },'
+        --replace-fail '*gencode_opts,' '${gencodeOpts},' \
+        --replace-fail '*clang_arch_flags,' '${clangArchFlags},'
     ''
     # Patch build_dll.py to use dynamic libraries rather than static ones.
     # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
-    + lib.optionalString cudaSupport ''
+    + ''
       nixLog "patching $PWD/warp/build_dll.py to use dynamic libraries"
       substituteInPlace "$PWD/warp/build_dll.py" \
-        --replace-fail \
-          '-lcudart_static' \
-          '-lcudart' \
-        --replace-fail \
-          '-lnvrtc_static' \
-          '-lnvrtc' \
-        --replace-fail \
-          '-lnvrtc-builtins_static' \
-          '-lnvrtc-builtins' \
-        --replace-fail \
-          '-lnvJitLink_static' \
-          '-lnvJitLink' \
-        --replace-fail \
-          '-lmathdx_static' \
-          '-lmathdx'
+        --replace-fail '-lcudart_static' '-lcudart' \
+        --replace-fail '-lnvrtc_static' '-lnvrtc' \
+        --replace-fail '-lnvrtc-builtins_static' '-lnvrtc-builtins' \
+        --replace-fail '-lnvJitLink_static' '-lnvJitLink' \
+        --replace-fail '-lmathdx_static' '-lmathdx'
     ''
-    # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
-    + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
-      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on darwin"
-      substituteInPlace "$PWD/warp/tests/test_codegen.py" \
-        --replace-fail \
-          'places=5' \
-          'places=4'
-    ''
-    # These tests fail on CPU and CUDA.
-    + ''
-      nixLog "patching $PWD/warp/tests/test_reload.py to disable broken tests"
-      substituteInPlace "$PWD/warp/tests/test_reload.py" \
-        --replace-fail \
-          'add_function_test(TestReload, "test_reload", test_reload, devices=devices)' \
-          "" \
-        --replace-fail \
-          'add_function_test(TestReload, "test_reload_references", test_reload_references, devices=get_test_devices("basic"))' \
-          ""
-    '';
+  )
+  # These tests fail on CPU and CUDA.
+  + ''
+    nixLog "patching $PWD/warp/tests/test_reload.py to disable broken tests"
+    substituteInPlace "$PWD/warp/tests/test_reload.py" \
+      --replace-fail \
+        'add_function_test(TestReload, "test_reload", test_reload, devices=devices)' \
+        "" \
+      --replace-fail \
+        'add_function_test(TestReload, "test_reload_references", test_reload_references, devices=get_test_devices("basic"))' \
+        ""
+  '';
 
   build-system = [
     setuptools
