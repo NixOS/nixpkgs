@@ -16,14 +16,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "4.0.1";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-31fxfId6jkkNDX2PT14WtgIQsaAiPG0xc0J38jDFvs8=";
+    hash = "sha256-Lh9rilpdx+njikVDftFAeA5HWgWQwgfnzocT/nSO2NU=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -76,8 +76,6 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/adjustor/core/acpi.py \
       --replace-fail '"modprobe"' '"${lib.getExe' kmod "modprobe"}"'
-    substituteInPlace src/adjustor/fuse/utils.py \
-      --replace-fail 'f"mount' 'f"${lib.getExe' util-linux "mount"}'
   '';
 
   build-system = with python3Packages; [
