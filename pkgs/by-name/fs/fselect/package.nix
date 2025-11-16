@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      matthiasbeyer
+    ];
     mainProgram = "fselect";
   };
 }
