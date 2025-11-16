@@ -19593,6 +19593,8 @@ self: super: with self; {
 
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
 
+  types-webencodings = callPackage ../development/python-modules/types-webencodings { };
+
   types-xxhash = callPackage ../development/python-modules/types-xxhash { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
