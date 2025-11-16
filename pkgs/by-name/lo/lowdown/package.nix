@@ -97,9 +97,8 @@ stdenv.mkDerivation rec {
       rm "$lib/lib/liblowdown.so"
     '';
 
-  doInstallCheck = true;
-
-  installCheckPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin || !enableDarwinSandbox) ''
+  doInstallCheck = !stdenv.hostPlatform.isDarwin || !enableDarwinSandbox;
+  installCheckPhase = ''
     runHook preInstallCheck
 
     echo '# TEST' > test.md
