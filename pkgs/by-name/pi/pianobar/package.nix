@@ -6,7 +6,7 @@
   libao,
   json_c,
   libgcrypt,
-  ffmpeg,
+  ffmpeg_7,
   curl,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     libao
     json_c
     libgcrypt
-    ffmpeg
+    ffmpeg_7
     curl
   ];
 
@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit; # expat version
     mainProgram = "pianobar";
+    maintainers = with lib.maintainers; [ S0AndS0 ];
   };
 })
