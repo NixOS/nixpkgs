@@ -88,6 +88,12 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "module-services-umap": [
+    "index.html#module-services-umap"
+  ],
+  "module-services-umap-basic-usage": [
+    "index.html#module-services-umap-basic-usage"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
