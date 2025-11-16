@@ -12,7 +12,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "swt";
   version = "4.34";
-  fullVersion = "${finalAttrs.version}-202411201800";
+  fullVersion = "R-${finalAttrs.version}-202411201800";
 
   hardeningDisable = [ "format" ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     assert srcMetadata != null;
     fetchzip {
-      url = "https://archive.eclipse.org/eclipse/downloads/drops4/R-${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
+      url = "https://archive.eclipse.org/eclipse/downloads/drops4/${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
       inherit (srcMetadata) hash;
       stripRoot = false;
       postFetch = ''
