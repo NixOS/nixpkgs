@@ -4,7 +4,6 @@
   fetchFromGitHub,
   garth,
   pdm-backend,
-  pythonOlder,
   requests,
   withings-sync,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "garminconnect";
   version = "0.2.34";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
