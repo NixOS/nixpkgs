@@ -4,18 +4,20 @@
   fetchFromGitHub,
   lib,
   pyobjc-core,
+  pyobjc-framework-Cocoa,
   setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "pyobjc-framework-Cocoa";
+  pname = "pyobjc-framework-libdispatch";
   pyproject = true;
 
   inherit (pyobjc-core) version src;
 
   patches = pyobjc-core.patches or [ ];
 
-  sourceRoot = "${src.name}/pyobjc-framework-Cocoa";
+  sourceRoot = "${src.name}/pyobjc-framework-libdispatch";
 
   build-system = [ setuptools ];
 
@@ -25,6 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     darwin.DarwinTools # sw_vers
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
   ];
 
   # See https://github.com/ronaldoussoren/pyobjc/pull/641. Unfortunately, we
@@ -37,7 +43,10 @@ buildPythonPackage rec {
       --replace-fail "/usr/bin/xcrun" "xcrun"
   '';
 
-  dependencies = [ pyobjc-core ];
+  dependencies = [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${darwin.libffi.dev}/include"
@@ -45,18 +54,15 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "Cocoa"
-    "CoreFoundation"
-    "Foundation"
-    "AppKit"
-    "PyObjCTools"
+    "dispatch"
+    "libdispatch"
   ];
 
   meta = {
-    description = "PyObjC wrappers for the Cocoa frameworks on macOS";
-    homepage = "https://github.com/ronaldoussoren/pyobjc/tree/main/pyobjc-framework-Cocoa";
+    description = "PyObjC wrappers for the libdispatch framework on macOS";
+    homepage = "https://github.com/ronaldoussoren/pyobjc/tree/main/pyobjc-framework-libdispatch";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }
