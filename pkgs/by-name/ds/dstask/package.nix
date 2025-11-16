@@ -21,9 +21,9 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "naggie";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-bepG8QuOJnV2j1AWNSmfExx+Kpg0TIIhhuS54kftbQc=";
+    repo = "dstask";
+    tag = version;
+    hash = "sha256-bepG8QuOJnV2j1AWNSmfExx+Kpg0TIIhhuS54kftbQc=";
   };
 
   vendorHash = "sha256-/0ZCqL2dXgeeYlcBmkIOGcB+XJ0J2mSV5xOQJT3Dy9k=";
