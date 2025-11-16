@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
       --zsh target/tmp/bottom/completion/_btm
 
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
+    install -Dm644 assets/icons/bottom.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preCheck = ''
