@@ -38,7 +38,7 @@ buildGoModule rec {
   ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
-  tags = lib.optionals waylandSupport [ "wayland" ];
+  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
 
   buildInputs = [
     libglvnd
