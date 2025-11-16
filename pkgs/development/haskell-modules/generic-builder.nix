@@ -806,6 +806,7 @@ lib.fix (
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
             ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
+            --haddock-option=--no-tmp-comp-dir \
             ${lib.concatStringsSep " " haddockFlags}
         ''}
         runHook postHaddock
