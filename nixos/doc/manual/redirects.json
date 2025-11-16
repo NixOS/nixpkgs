@@ -196,6 +196,15 @@
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
+  "module-services-umap": [
+    "index.html#module-services-umap"
+  ],
+  "module-services-umap-basic-usage": [
+    "index.html#module-services-umap-basic-usage"
+  ],
+  "module-services-umap-pictograms": [
+    "index.html#module-services-umap-pictograms"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],

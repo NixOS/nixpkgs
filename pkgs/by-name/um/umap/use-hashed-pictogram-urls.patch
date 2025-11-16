@@ -1,0 +1,24 @@
+Serve pictogram collections through the staticfiles storage so their URLs
+carry the content hash (cache busting), instead of building the URL by hand
+from STATIC_URL. Without this the icons are referenced by their unhashed name
+and never get cache-busted.
+
+--- a/umap/utils.py
++++ b/umap/utils.py
+@@ -10,6 +10,7 @@
+
+ from django.conf import settings
+ from django.contrib.staticfiles import finders
++from django.contrib.staticfiles.storage import staticfiles_storage
+ from django.core.serializers.json import DjangoJSONEncoder
+ from django.core.validators import URLValidator, ValidationError
+ from django.urls import URLPattern, URLResolver, get_resolver, reverse
+@@ -229,7 +230,7 @@
+                     categories[path.name].append(
+                         {
+                             "name": subpath.stem,
+-                            "src": f"{settings.STATIC_URL}{src}",
++                            "src": staticfiles_storage.url(str(src)),
+                         }
+                     )
+         pictograms[name] = {
