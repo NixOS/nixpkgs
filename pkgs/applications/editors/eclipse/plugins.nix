@@ -4,6 +4,7 @@
   fetchurl,
   fetchzip,
   unzip,
+  config,
 }:
 
 rec {
@@ -711,104 +712,11 @@ rec {
       maintainers = [ maintainers.romildo ];
     };
   };
-
-  ivyde = buildEclipsePlugin rec {
-    name = "ivyde-${version}";
-    version = "2.2.0.final-201311091524-RELEASE";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
-      hash = "sha256-iKe7oOPjy6th0HmKt6NXexOHN60EDpQe1r+n6K+uoyw=";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
-      hash = "sha256-lhwFwdMDwCIUrQjdWfe5ZSutCIsKtZSBT6FWthUipdk=";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Plugin which integrates Apache Ivy's dependency management";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivyderv = buildEclipsePlugin rec {
-    name = "ivyderv-${version}";
-    version = "2.2.0.final-201311091524-RELEASE";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
-      hash = "sha256-PSH5NtE7hN2hHoHUhVK1CLkHN7YSDdTTqBP7711X4rU=";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
-      hash = "sha256-qjTvn1j7viSfzLkWnYjyS9Pj2ExqsiFGLzot3+oB0Tw=";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Graph viewer of the resolved dependencies";
-      longDescription = ''
-        Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
-        it requires additional plugins to be installed (Zest).
-      '';
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivy = buildEclipsePlugin rec {
-    name = "ivy-${version}";
-    version = "2.5.0.final_20191020104435";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
-      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
-      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/index.html";
-      description = "Popular dependency manager focusing on flexibility and simplicity";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
-
-  ivyant = buildEclipsePlugin rec {
-    name = "ivyant-${version}";
-    version = "2.5.0.final_20191020104435";
-
-    srcFeature = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
-      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
-      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
-    };
-
-    meta = with lib; {
-      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "Ant Tasks integrated into Eclipse's Ant runtime";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
-    };
-  };
+}
+// lib.optionalAttrs config.allowAliases {
+  # Added 2025-11-16
+  ivyde = throw "eclipses.plugins.ivyde has been removed due to being archived upstream.";
+  ivyderv = throw "eclipses.plugins.inyderv has been removed due to being archived upstream.";
+  ivy = throw "eclipses.plugins.ivy has been removed due to being archived upstream.";
+  ivyant = throw "eclipses.plugins.ivyant has been removed due to being archived upstream.";
 }
