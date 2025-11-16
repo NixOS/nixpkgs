@@ -73,7 +73,8 @@ lib.makeOverridable (
           fetchSubmodules ? true,
           deepClone ? false,
           branchName ? null,
-          sparseCheckout ? lib.optional (rootDir != "") rootDir,
+          # When null, will default to: `lib.optional (rootdir != "") rootdir`
+          sparseCheckout ? null,
           # When null, will default to: `rootDir != ""`
           nonConeMode ? null,
           nativeBuildInputs ? [ ],
@@ -152,7 +153,7 @@ lib.makeOverridable (
             inherit outputHash outputHashAlgo;
             outputHashMode = "recursive";
 
-            inherit sparseCheckout;
+            sparseCheckout = lib.defaultTo (lib.optional (rootDir != "") rootDir) sparseCheckout;
             sparseCheckoutText =
               assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
               # git-sparse-checkout(1) says:
