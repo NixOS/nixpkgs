@@ -14039,6 +14039,8 @@ self: super: with self; {
 
   pypytools = callPackage ../development/python-modules/pypytools { };
 
+  pyqodeng-angr = callPackage ../development/python-modules/pyqodeng-angr { };
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
