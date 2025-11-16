@@ -12,16 +12,16 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_16_0;
 
   pname = "pgx_ulid";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "pksunkara";
     repo = "pgx_ulid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjPTCJTeT1HQt8huDHBHs0DAHpmseMHeSaQhpPV6qdo=";
+    hash = "sha256-7zOAjQPdwaDwAz2Es5KX3HstTwY6wKNuB9b+xnnXNP0=";
   };
 
-  cargoHash = "sha256-LRfn/TO/bBEvvzY9m6C8Lb0qdUStQD3oAzjDovS6H1s=";
+  cargoHash = "sha256-4YuTOCE142BDDteB9ZQdxzI8EUXN+jRZfy1eq64qHtg=";
 
   postInstall = ''
     # Upstream renames the extension when packaging
