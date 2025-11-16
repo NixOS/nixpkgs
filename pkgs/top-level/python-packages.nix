@@ -14687,6 +14687,8 @@ self: super: with self; {
 
   pytest-freezer = callPackage ../development/python-modules/pytest-freezer { };
 
+  pytest-gitconfig = callPackage ../development/python-modules/pytest-gitconfig { };
+
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
   pytest-grpc = callPackage ../development/python-modules/pytest-grpc { };
