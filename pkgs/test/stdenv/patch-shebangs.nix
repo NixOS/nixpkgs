@@ -154,19 +154,30 @@ let
             . ${../../stdenv/generic/setup.sh}
             . ${../../build-support/setup-hooks/patch-shebangs.sh}
             mkdir -p $out/bin
-            echo "#!/bin/bash" > $out/bin/test
-            echo "echo -n hello" >> $out/bin/test
-            chmod 555 $out/bin/test
-            original_perms=$(stat -c %a $out/bin/test)
-            patchShebangs $out/bin/test
-            new_perms=$(stat -c %a $out/bin/test)
-            if ! [ "$original_perms" = "$new_perms" ]; then
-              echo "Permissions changed from $original_perms to $new_perms"
-              exit 1
-            fi
+            for mode in 555 575 755 775
+            do
+              target=$out/bin/test-$mode
+              echo "#!/bin/bash" > "$target"
+              echo "echo -n hello" >> "$target"
+              chmod $mode "$target"
+              if ! [ "$(stat -c %a "$target")" = "$mode" ]; then
+                echo "chmod didn't set up test permissions as expected"
+                exit 1
+              fi
+              original_perms=$(stat -c %a "$target")
+              patchShebangs "$target"
+              new_perms=$(stat -c %a "$target")
+              if ! [ "$original_perms" = "$new_perms" ]; then
+                echo "Permissions changed from $original_perms to $new_perms"
+                exit 1
+              fi
+            done
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        # This tests that any of the test files have this line, when we should
+        # really be testing all of them. But it's a little redundant with other
+        # tests anyway.
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test-* > /dev/null";
       })
       // {
         meta = { };
