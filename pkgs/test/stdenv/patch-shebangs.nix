@@ -154,21 +154,28 @@ let
             . ${../../stdenv/generic/setup.sh}
             . ${../../build-support/setup-hooks/patch-shebangs.sh}
             mkdir -p $out/bin
-            for mode in 555 575 755 775
+            modes=(555 575 755 775 777)
+            for mode in "''${modes[@]}"
             do
               target=$out/bin/test-$mode
               echo "#!/bin/bash" > "$target"
               echo "echo -n hello" >> "$target"
               chmod $mode "$target"
-              if ! [ "$(stat -c %a "$target")" = "$mode" ]; then
+              if ! [ "$mode" = "$(stat -c %a "$target")" ]; then
                 echo "chmod didn't set up test permissions as expected"
                 exit 1
               fi
-              original_perms=$(stat -c %a "$target")
-              patchShebangs "$target"
+            done
+            # This is structured as two loops + one patchShebangs so that at
+            # least one test exercises patchShebangs on multiple scripts in one
+            # invocation.
+            patchShebangs $out/bin
+            for mode in "''${modes[@]}"
+            do
+              target=$out/bin/test-$mode
               new_perms=$(stat -c %a "$target")
-              if ! [ "$original_perms" = "$new_perms" ]; then
-                echo "Permissions changed from $original_perms to $new_perms"
+              if ! [ "$mode" = "$new_perms" ]; then
+                echo "Permissions changed from $mode to $new_perms"
                 exit 1
               fi
             done
