@@ -1,10 +1,10 @@
 {
     "src": {
         "args": {
-            "hash": "sha256-LUncFGXaYVUrBdWD1Xx3MZe5GzmjJuJtDebAMb8jass=",
+            "hash": "sha256-zSWjPxcrvLpi+zaJ+GReG3YsjPKqxBdkKfe8Gj/O0dA=",
             "owner": "webrtc-sdk",
             "repo": "webrtc",
-            "rev": "7ec4c03bff7f7ce117dc9100f081d031d946d995"
+            "rev": "db3ba7af86dd6d48174ed35387d11c0794f1a21b"
         },
         "fetcher": "fetchFromGitHub"
     },
@@ -51,8 +51,8 @@
     },
     "src/third_party/boringssl/src": {
         "args": {
-            "hash": "sha256-baa6L6h1zVBHen/YFVtF+9fhYWC4ZGbMUSO8L1VNFjw=",
-            "rev": "f94f3ed3965ea033001fb9ae006084eee408b861",
+            "hash": "sha256-Ln6rnbn2hwszst24E/6EpP2C3Scoppe7wvVKFtxuPjQ=",
+            "rev": "12391e648d3c6f04a718721568cc89208b780654",
             "url": "https://boringssl.googlesource.com/boringssl.git"
         },
         "fetcher": "fetchFromGitiles"
