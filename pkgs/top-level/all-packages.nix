@@ -6568,12 +6568,6 @@ with pkgs;
     _7zz = _7zz-rar;
   };
 
-  nwjs = callPackage ../development/tools/nwjs { };
-
-  nwjs-sdk = callPackage ../development/tools/nwjs {
-    sdk = true;
-  };
-
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
   openai = with python3Packages; toPythonApplication openai;
