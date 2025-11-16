@@ -26,19 +26,15 @@
 }:
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.5";
+  version = "0.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-0e1pJzoszTW8n+uFJlEeYstvHf4v+I2Is7oEHJ1qV7o=";
+    hash = "sha256-mWjuXfH0u3MCG9RpmDin0buXyLPofXgEllzF5M8y6Jo=";
   };
-
-  patches = [
-    ./dont-use-uv-in-tests.patch
-  ];
 
   build-system = [
     hatchling
