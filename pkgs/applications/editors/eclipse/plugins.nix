@@ -630,13 +630,13 @@ rec {
     version = "6.9.13.201609291640";
 
     srcFeature = fetchurl {
-      url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "02wzcysl7ga3wnvnwp6asl8d77wgc547c5qqawixw94lw6fn1a15";
+      url = "https://github.com/testng-team/testng-eclipse-update-site/raw/refs/heads/main/updatesites/${version}/features/org.testng.eclipse_${version}.jar";
+      hash = "sha256-JahgneGUJN4jVxgXdkhhj5/TENXKXG635UO9Q7Vnnws=";
     };
 
     srcPlugin = fetchurl {
-      url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "1j4zw6392q3q6z3pcy803k3g0p220gk1x19fs99p0rmmdz83lc8d";
+      url = "https://github.com/testng-team/testng-eclipse-update-site/raw/refs/heads/main/updatesites/${version}/plugins/org.testng.eclipse_${version}.jar";
+      hash = "sha256-DTE60G+1ZnBT0i6FHuYDQlzwxhwAeXbHN3hgkYbhn8g=";
     };
 
     meta = with lib; {
