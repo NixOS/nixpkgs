@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "cocotb-bus";
-  version = "unstable-2025-11-03";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
