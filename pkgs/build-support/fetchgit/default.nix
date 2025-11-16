@@ -131,11 +131,6 @@ lib.makeOverridable (
           server admins start using the new version?
         */
 
-        if builtins.isString sparseCheckout then
-          # Changed to throw on 2023-06-04
-          throw
-            "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
-        else
           derivationArgs
           // {
             inherit name;
@@ -155,11 +150,15 @@ lib.makeOverridable (
 
             sparseCheckout = lib.defaultTo (lib.optional (rootDir != "") rootDir) sparseCheckout;
             sparseCheckoutText =
+              # Changed to throw on 2023-06-04
+              assert (
+                lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+              );
               assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
               # git-sparse-checkout(1) says:
               # > When the --stdin option is provided, the directories or patterns are read
               # > from standard in as a newline-delimited list instead of from the arguments.
-              builtins.concatStringsSep "\n" sparseCheckout;
+              builtins.concatStringsSep "\n" finalAttrs.sparseCheckout;
 
             inherit
               url
