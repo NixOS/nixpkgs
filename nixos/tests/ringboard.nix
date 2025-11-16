@@ -6,7 +6,7 @@
 }:
 {
   name = "ringboard";
-  meta = { inherit (pkgs.ringboard.meta) maintainers; };
+  meta.maintainers = pkgs.ringboard.meta.maintainers ++ (with lib.maintainers; [ h7x4 ]);
 
   nodes.machine = {
     imports = [
