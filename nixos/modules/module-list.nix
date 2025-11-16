@@ -1273,6 +1273,7 @@
   ./services/networking/netbird.nix
   ./services/networking/netbird/server.nix
   ./services/networking/netclient.nix
+  ./services/networking/netfoil.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/newt.nix
