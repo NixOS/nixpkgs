@@ -17,11 +17,13 @@
     test-support.displayManager.auto.user = "alice";
 
     services.xserver.displayManager.sessionCommands = ''
-      '${lib.getExe pkgs.gedit}' &
+      '${lib.getExe pkgs.gedit}' my_document &
     '';
 
     services.ringboard.x11.enable = true;
   };
+
+  enableOCR = true;
 
   testScript =
     { nodes, ... }:
@@ -31,7 +33,8 @@
     ''
       @polling_condition
       def gedit_running():
-        machine.succeed("pgrep gedit")
+        "Check that gedit is running and visible to the user"
+        machine.wait_for_text("my_document")
 
       with subtest("Wait for service startup"):
         machine.wait_for_unit("graphical.target")
