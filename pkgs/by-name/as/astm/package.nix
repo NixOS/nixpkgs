@@ -1,6 +1,5 @@
 {
   stdenv,
-  gcc,
   lib,
   nlohmann_json,
   fetchFromGitHub,
@@ -12,17 +11,17 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "ritishDas";
-    rev = "master";
+    rev = "ff213b8e42f793ef67821ad9834c07293946c475";
     repo = "astm";
     hash = "sha256-ZBg2MHAD5CVzaG4kwO447I78x/ZZKoJw/6ZFYp5EW9w=";
   };
 
-  nativeBuildInputs = [ gcc ];
+  nativeBuildInputs = [ stdenv.cc ];
   buildInputs = [ nlohmann_json ];
 
   buildPhase = ''
-    mkdir -p build
-    g++ -std=c++17 -O2 astm.cpp -o build/astm
+      mkdir -p build
+    $CXX -std=c++17 -O2 astm.cpp -o build/astm
   '';
 
   installPhase = ''
