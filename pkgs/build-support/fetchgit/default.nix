@@ -74,7 +74,8 @@ lib.makeOverridable (
           deepClone ? false,
           branchName ? null,
           sparseCheckout ? lib.optional (rootDir != "") rootDir,
-          nonConeMode ? rootDir != "",
+          # When null, will default to: `rootDir != ""`
+          nonConeMode ? null,
           nativeBuildInputs ? [ ],
           # Shell code executed before the file has been fetched.  This, in
           # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
@@ -164,7 +165,6 @@ lib.makeOverridable (
               fetchSubmodules
               deepClone
               branchName
-              nonConeMode
               preFetch
               postFetch
               fetchTags
@@ -178,6 +178,7 @@ lib.makeOverridable (
                 leaveDotGit
               else
                 deepClone || fetchTags;
+            nonConeMode = lib.defaultTo (rootDir != "") nonConeMode;
             inherit tag;
             revCustom = rev;
             rev = getRevWithTag {
