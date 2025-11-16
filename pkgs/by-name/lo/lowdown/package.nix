@@ -11,6 +11,7 @@
   enableDarwinSandbox ? true,
   # for passthru.tests
   nix,
+  lowdown-unsandboxed,
 }:
 
 stdenv.mkDerivation rec {
@@ -111,8 +112,8 @@ stdenv.mkDerivation rec {
   checkTarget = "regress";
 
   passthru.tests = {
-    # most important consumer in nixpkgs
-    inherit nix;
+    # most important consumers in nixpkgs
+    inherit nix lowdown-unsandboxed;
   };
 
   meta = with lib; {
