@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   ncurses,
   db,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +19,18 @@ stdenv.mkDerivation rec {
 
   patches =
     # Apply patches from debian package
-    map fetchurl (import ./debian-patches.nix);
+    (map fetchurl (import ./debian-patches.nix))
+    ++
+      # Also select patches from macports
+      # They don't interfere with Linux build
+      # https://github.com/macports/macports-ports/tree/master/editors/nvi/files
+      (map fetchpatch (import ./macports-patches.nix));
 
   buildInputs = [
     ncurses
     db
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preConfigure = ''
     cd build.unix
@@ -34,6 +42,8 @@ stdenv.mkDerivation rec {
     "vi_cv_path_preserve=/tmp"
     "--enable-widechar"
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
   meta = {
     description = "Berkeley Vi Editor";
@@ -53,6 +63,5 @@ stdenv.mkDerivation rec {
       suominen
       aleksana
     ];
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin
   };
 }
