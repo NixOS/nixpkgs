@@ -135,7 +135,7 @@ patchShebangs() {
                 # Make original file writable if it is read-only
                 local restoreReadOnly
                 if [[ ! -w "$f" ]]; then
-                    chmod +w "$f"
+                    chmod u+w "$f"
                     restoreReadOnly=true
                 fi
 
@@ -144,7 +144,7 @@ patchShebangs() {
                 cat "$tmpFile" > "$f"
                 rm "$tmpFile"
                 if [[ -n "${restoreReadOnly:-}" ]]; then
-                    chmod -w "$f"
+                    chmod u-w "$f"
                 fi
 
                 touch --date "$timestamp" "$f"
