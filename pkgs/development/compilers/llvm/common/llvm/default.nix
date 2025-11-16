@@ -218,6 +218,20 @@ stdenv.mkDerivation (
               hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
               stripLen = 1;
             }
+          )
+      ++
+        lib.optional (lib.versionAtLeast release_version "21")
+          # Broken logic removing necessary operations on aarch64:
+          # https://github.com/llvm/llvm-project/pull/167526
+          #
+          # It broke firefox when built with 21+:
+          # https://github.com/NixOS/nixpkgs/issues/453372
+          (
+            fetchpatch {
+              url = "https://github.com/llvm/llvm-project/commit/a314b3b401b5f9e6218d863bfcc29393e1b6f447.patch";
+              hash = "sha256-gYvtkY+f/HNk6KjOmqSBrMEu5ewRrxJK1s93/LEMTtI=";
+              stripLen = 1;
+            }
           );
 
     nativeBuildInputs = [
