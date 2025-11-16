@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-voHql8ETnrUMef14LYduKI+0LpdnCFsvpt8B6M/ZNmc=";
   };
 
@@ -58,9 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     # CPM requires git to download the dependencies. We don't allow CPM to download the dependencies, and remove the git dependency
     ./no-git.patch
   ]
-  ++ (lib.optional (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11"
-  ) ./dont-use-the-uniformtypeidentifiers-framework.patch);
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11")
+      [
+        ./dont-use-the-uniformtypeidentifiers-framework.patch
+      ];
 
   postUnpack =
     # Copy the CPM source cache to a directory where cpm expects it
@@ -68,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $sourceRoot/cpm_source_cache
       cp -r --no-preserve=mode ${cpmSourceCache}/. $sourceRoot/cpm_source_cache
     ''
-   # Darwin's sandbox requires explicit write permissions for CPM to manage the cache
+    # Darwin's sandbox requires explicit write permissions for CPM to manage the cache
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       chmod -R u+w $sourceRoot/cpm_source_cache
     ''
@@ -90,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     freetype
-    onetbb
     libffi
+    onetbb
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withGtkFileSelector) [ gtk3 ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !withGtkFileSelector) [ dbus ]
@@ -105,9 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DDOWNLOAD_CAPSTONE=off"
-    "-DTRACY_STATIC=off"
-    "-DCPM_SOURCE_CACHE=/build/source/cpm_source_cache"
+    (lib.cmakeBool "DOWNLOAD_CAPSTONE" false)
+    (lib.cmakeBool "TRACY_STATIC" false)
+    (lib.cmakeFeature "CPM_SOURCE_CACHE" (lib.traceVal "/build/source/cpm_source_cache"))
   ]
   ++ lib.optional (stdenv.hostPlatform.isLinux && withGtkFileSelector) "-DGTK_FILESELECTOR=ON"
   ++ lib.optional (stdenv.hostPlatform.isLinux && !withWayland) "-DLEGACY=on";
@@ -166,4 +169,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ lib.optionals (!withWayland) platforms.darwin;
   };
-}
+})
