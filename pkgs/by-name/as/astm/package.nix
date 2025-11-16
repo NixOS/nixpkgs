@@ -3,6 +3,7 @@
   lib,
   nlohmann_json,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,21 +17,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZBg2MHAD5CVzaG4kwO447I78x/ZZKoJw/6ZFYp5EW9w=";
   };
 
-  nativeBuildInputs = [ stdenv.cc ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
   buildInputs = [ nlohmann_json ];
 
   buildPhase = ''
-      mkdir -p build
-    $CXX -std=c++17 -O2 astm.cpp -o build/astm
+    runHook preBuild
+    $CXX -std=c++17 -O2 astm.cpp -o astm
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m755 build/astm $out/bin/
+    runHook preInstall
 
-    mkdir -p $out/share/bash-completion/completions
-    install -m644 completions/astm.bash \
-      $out/share/bash-completion/completions/astm
+    install -Dm755 astm $out/bin/astm
+
+    # recommended helper for completions
+    installShellCompletion \
+      --bash completions/astm.bash
+
+    runHook postInstall
   '';
 
   meta = {
