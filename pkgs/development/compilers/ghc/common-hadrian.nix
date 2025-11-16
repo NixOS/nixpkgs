@@ -244,6 +244,13 @@
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
       ]
+      ++ lib.optionals (lib.versionOlder version "9.12.1") [
+        (fetchpatch {
+          name = "ghc-ppc-support-elf-v2-on-powerpc64-big-endian.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/ead75532c9dc915bfa9ebaef0ef5d148e793cc0a.patch";
+          hash = "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
+        })
+      ]
       # Fix build with gcc15
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
