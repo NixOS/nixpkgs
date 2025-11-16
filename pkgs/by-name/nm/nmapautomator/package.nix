@@ -73,8 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace nmapAutomator.sh \
-      --replace-fail  '/usr/share/nmap/scripts/vulners.nse' \
-                  '"${nmap}/share/nmap/scripts/vulners.nse"'
+      --replace-fail '/usr/share/nmap/' '${nmap}/share/nmap/'
   '';
 
   installPhase = ''
