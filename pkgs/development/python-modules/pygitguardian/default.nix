@@ -6,7 +6,6 @@
   marshmallow,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pygitguardian";
   version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
