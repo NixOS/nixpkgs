@@ -452,6 +452,7 @@ let
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
+    blosc = [ pkgs.pkg-config ];
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
     cpp11qpdf = with pkgs; [
@@ -1088,6 +1089,7 @@ let
       zlib.dev
       zstd.dev
     ];
+    blosc = [ pkgs.c-blosc ];
     EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
