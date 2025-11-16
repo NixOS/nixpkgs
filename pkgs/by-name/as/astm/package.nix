@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "astm";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "ritishDas";
-    rev = "ff213b8e42f793ef67821ad9834c07293946c475";
     repo = "astm";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZBg2MHAD5CVzaG4kwO447I78x/ZZKoJw/6ZFYp5EW9w=";
   };
 
@@ -34,10 +34,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Asset Manager (astm)";
+    description = "Asset Manager (astm) is a asset manager to store components in your device kinda like a mini personal shadcn/ui.";
     homepage = "https://github.com/ritishDas/astm";
     license = lib.licenses.mit; # or whatever applies
     maintainers = with lib.maintainers; [ ritishDas ];
     platforms = lib.platforms.linux;
   };
-}
+})
