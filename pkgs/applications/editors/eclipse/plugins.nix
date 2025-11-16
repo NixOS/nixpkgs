@@ -256,29 +256,6 @@ rec {
     };
   };
 
-  bytecode-outline = buildEclipsePlugin rec {
-    name = "bytecode-outline-${version}";
-    version = "1.0.1.202006062100";
-
-    srcFeature = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/org.eclipse.jdt.bcoview.feature_${version}.jar";
-      sha256 = "0zbcph72lgv8cb5n4phcl3qsybc5q5yviwbv8yjv4v12m4l15wpk";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/org.eclipse.jdt.bcoview_${version}.jar";
-      sha256 = "1bx860k4haqcnhy8825kn4df0pyzd680qbnvjmxfrlxrqhr66fbb";
-    };
-
-    meta = with lib; {
-      homepage = "https://github.com/iloveeclipse/plugins";
-      description = "Shows disassembled bytecode of current java editor or class file";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.bsd2;
-      platforms = platforms.all;
-    };
-  };
-
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://github.com/eclipse-cdt/cdt/releases
@@ -715,6 +692,7 @@ rec {
 }
 // lib.optionalAttrs config.allowAliases {
   # Added 2025-11-16
+  bytecode-outline = throw "eclipses.plugins.bytecode-outline has been removed due to being removed upstream.";
   ivyde = throw "eclipses.plugins.ivyde has been removed due to being archived upstream.";
   ivyderv = throw "eclipses.plugins.inyderv has been removed due to being archived upstream.";
   ivy = throw "eclipses.plugins.ivy has been removed due to being archived upstream.";
