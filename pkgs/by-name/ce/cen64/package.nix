@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cen64";
-  version = "0.3-unstable-2025-10-24";
+  version = "0.3-unstable-2025-10-26";
 
   src = fetchFromGitHub {
     owner = "n64dev";
