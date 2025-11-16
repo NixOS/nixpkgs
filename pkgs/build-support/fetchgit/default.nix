@@ -154,10 +154,11 @@ lib.makeOverridable (
             inherit outputHash outputHashAlgo;
             outputHashMode = "recursive";
 
+            inherit sparseCheckout;
             # git-sparse-checkout(1) says:
             # > When the --stdin option is provided, the directories or patterns are read
             # > from standard in as a newline-delimited list instead of from the arguments.
-            sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
+            sparseCheckoutText = builtins.concatStringsSep "\n" sparseCheckout;
 
             inherit
               url
