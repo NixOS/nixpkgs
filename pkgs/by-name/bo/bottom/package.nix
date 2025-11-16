@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bottom";
   version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = "bottom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7rVvKAqK8hqICnSr/Ax9ndsIZAdTaUyOAoVZ13W5BJs=";
   };
 
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ClementTsang/bottom/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     license = lib.licenses.mit;
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
       gepbird
     ];
   };
-}
+})
