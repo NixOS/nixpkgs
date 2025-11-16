@@ -39,7 +39,7 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.9.1";
+  version = "1.10.0";
 
   libmathdx = callPackage ./libmathdx.nix { };
 in
@@ -59,19 +59,15 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-Atp3WyxQ7GYwWLmQIUgoPULyVlNjduh4/9CBixNWFwc=";
+    hash = "sha256-9OEyYdVq+/SzxHfNT+sa/YeBKklaUfpKUiJZuiuzxhQ=";
   };
 
-  patches =
-    lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      ./darwin-single-target.patch
-    ]
-    ++ lib.optionals standaloneSupport [
-      (replaceVars ./dynamic-link.patch {
-        LLVM_LIB = llvmPackages.llvm.lib;
-        LIBCLANG_LIB = llvmPackages.libclang.lib;
-      })
-    ];
+  patches = lib.optionals standaloneSupport [
+    (replaceVars ./dynamic-link.patch {
+      LLVM_LIB = llvmPackages.llvm.lib;
+      LIBCLANG_LIB = llvmPackages.libclang.lib;
+    })
+  ];
 
   postPatch = ''
     nixLog "patching $PWD/build_llvm.py to remove pre-C++11 ABI flag"
@@ -80,13 +76,14 @@ buildPythonPackage {
         '"-D", f"CMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 {abi_version}",  # The pre-C++11 ABI is still the default on the CentOS 7 toolchain' \
         ""
 
-    substituteInPlace "$PWD/warp/build_dll.py" \
+    substituteInPlace "$PWD/warp/_src/build_dll.py" \
       --replace-fail " -D_GLIBCXX_USE_CXX11_ABI=0" ""
   ''
   + lib.optionalString effectiveStdenv.hostPlatform.isDarwin (
     ''
-      nixLog "patching $PWD/warp/build_dll.py to link against libc++"
-      substituteInPlace "$PWD/warp/build_dll.py" \
+      nixLog "patching $PWD/warp/_src/build_dll.py to remove macOS target flag and link against libc++"
+      substituteInPlace "$PWD/warp/_src/build_dll.py" \
+        --replace-fail "--target={arch}-apple-macos11" "" \
         --replace-fail 'ld_inputs = []' "ld_inputs = ['-L\"${llvmPackages.libcxx}/lib\" -lc++']"
     ''
     # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
@@ -97,11 +94,11 @@ buildPythonPackage {
     ''
   )
   + lib.optionalString effectiveStdenv.cc.isClang ''
-    substituteInPlace "$PWD/warp/build_dll.py" \
+    substituteInPlace "$PWD/warp/_src/build_dll.py" \
       --replace-fail "clang++" "${effectiveStdenv.cc}/bin/cc"
   ''
   + lib.optionalString standaloneSupport ''
-    substituteInPlace "$PWD/warp/build_dll.py" \
+    substituteInPlace "$PWD/warp/_src/build_dll.py" \
       --replace-fail \
         '-I"{warp_home_path.parent}/external/llvm-project/out/install/{mode}-{arch}/include"' \
         '-I"${llvmPackages.llvm.dev}/include"' \
@@ -122,16 +119,16 @@ buildPythonPackage {
       ) cudaPackages.flags.realArches;
     in
     ''
-      nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
-      substituteInPlace "$PWD/warp/build_dll.py" \
+      nixLog "patching $PWD/warp/_src/build_dll.py to use our gencode flags"
+      substituteInPlace "$PWD/warp/_src/build_dll.py" \
         --replace-fail '*gencode_opts,' '${gencodeOpts},' \
         --replace-fail '*clang_arch_flags,' '${clangArchFlags},'
     ''
     # Patch build_dll.py to use dynamic libraries rather than static ones.
     # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
     + ''
-      nixLog "patching $PWD/warp/build_dll.py to use dynamic libraries"
-      substituteInPlace "$PWD/warp/build_dll.py" \
+      nixLog "patching $PWD/warp/_srsc/build_dll.py to use dynamic libraries"
+      substituteInPlace "$PWD/warp/_src/build_dll.py" \
         --replace-fail '-lcudart_static' '-lcudart' \
         --replace-fail '-lnvrtc_static' '-lnvrtc' \
         --replace-fail '-lnvrtc-builtins_static' '-lnvrtc-builtins' \
@@ -321,7 +318,7 @@ buildPythonPackage {
     homepage = "https://github.com/NVIDIA/warp";
     changelog = "https://github.com/NVIDIA/warp/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [ yzx9 ];
   };
 }
