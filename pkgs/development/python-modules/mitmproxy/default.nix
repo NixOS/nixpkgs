@@ -18,6 +18,7 @@
   ldap3,
   mitmproxy-rs,
   msgpack,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -146,6 +147,10 @@ buildPythonPackage rec {
   dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
+
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
 
   meta = with lib; {
     description = "Man-in-the-middle proxy";
