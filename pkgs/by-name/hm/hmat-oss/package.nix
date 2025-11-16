@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
+  # Accelerate marks old CBLAS symbols deprecated, triggering -Werror.
+  #   error: 'cblas_saxpy' is deprecated: first deprecated in macOS 13.3 - An updated CBLAS interface supporting ILP64 is available.  Please compile with -DACCELERATE_NEW_LAPACK to access the new headers and -DACCELERATE_LAPACK_ILP64 for ILP64 support. [-Werror,-Wdeprecated-declarations]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=deprecated-declarations";
+
   enableParallelBuilding = true;
 
   meta = {
