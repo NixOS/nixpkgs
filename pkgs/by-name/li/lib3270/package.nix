@@ -1,45 +1,46 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gettext,
-  openssl,
   curl,
+  fetchFromGitHub,
+  gettext,
   meson,
   ninja,
+  openssl,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib3270";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "lib3270";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-AGS7RkMeVKe2Ed5Aj3oHdbiGMoYGmq2Wlkcd4wSm4J8=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [
+    curl
     gettext
     openssl
-    curl
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "TN3270 client Library";
     homepage = "https://github.com/PerryWerneck/lib3270";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    changelog = "https://github.com/PerryWerneck/lib3270/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vifino ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
