@@ -10,6 +10,7 @@
   liberation_ttf_v1,
   writeScript,
   xorg,
+  nixosTests,
 }:
 
 let
@@ -72,6 +73,7 @@ let
     dontStrip = true;
 
     passthru = {
+      tests = nixosTests.onlyoffice;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 
