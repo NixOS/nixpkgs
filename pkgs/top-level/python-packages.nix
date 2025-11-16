@@ -11800,6 +11800,8 @@ self: super: with self; {
 
   pendulum = callPackage ../development/python-modules/pendulum { };
 
+  pentapy = callPackage ../development/python-modules/pentapy { };
+
   pep440 = callPackage ../development/python-modules/pep440 { };
 
   pep517 = callPackage ../development/python-modules/pep517 { };
