@@ -19697,6 +19697,8 @@ self: super: with self; {
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
+  uncompresspy = callPackage ../development/python-modules/uncompresspy { };
+
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
   undefined = callPackage ../development/python-modules/undefined { };
