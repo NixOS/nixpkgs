@@ -5206,6 +5206,8 @@ self: super: with self; {
 
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
 
+  fava = callPackage ../development/python-modules/fava { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
