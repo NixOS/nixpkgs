@@ -514,6 +514,6 @@ stdenv.mkDerivation rec {
     ];
     # build deadlocks intermittently on rosetta
     # https://github.com/dotnet/runtime/issues/111628
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
+    broken = stdenv.hostPlatform.system == "aarch64-darwin";
   };
 }
