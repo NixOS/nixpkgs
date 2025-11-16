@@ -54,9 +54,9 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/test.py" ];
 
   meta = {
+    homepage = "https://github.com/stef/liboprf/tree/master/python";
     inherit (liboprf.meta)
       description
-      homepage
       changelog
       license
       teams
