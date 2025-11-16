@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   nebula3-python,
-  hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-nebula";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_nebula";
     inherit version;
-    hash = "sha256-BzArWYZIY1SRl1q48wAdAy+mWoId+lNbcsw9LQmmw7Q=";
+    hash = "sha256-XTW6XrAbWx8DZgoEoOL2rP2WNuQqQO+hcCWpQSj98ks=";
   };
 
   build-system = [ hatchling ];
