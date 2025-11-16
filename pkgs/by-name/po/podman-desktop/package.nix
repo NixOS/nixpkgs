@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
   electron_38,
   nodejs,
@@ -77,14 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     pnpmConfigHook
     pnpm_10
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-    makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
