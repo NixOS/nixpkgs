@@ -104,7 +104,6 @@ rec {
   nix-prefetch-hg = mkPrefetchScript {
     tool = "hg";
     src = ../../../build-support/fetchhg/nix-prefetch-hg;
-    runtimeShell = bash;
     deps = [
       mercurial
     ];
