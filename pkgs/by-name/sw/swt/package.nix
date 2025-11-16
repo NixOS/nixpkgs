@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     assert srcMetadata != null;
     fetchzip {
-      url = "https://archive.eclipse.org/eclipse/downloads/drops4/${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
+      url = "https://download.eclipse.org/eclipse/downloads/drops4/${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
       inherit (srcMetadata) hash;
       stripRoot = false;
       postFetch = ''
