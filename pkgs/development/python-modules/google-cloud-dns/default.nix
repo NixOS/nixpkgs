@@ -6,7 +6,6 @@
   google-cloud-core,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "google-cloud-dns";
   version = "0.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_dns";
