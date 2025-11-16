@@ -7,6 +7,9 @@
   fetchFromGitHub,
   glibc,
   harfbuzz,
+  libheif,
+  x265,
+  libde265,
   icu,
   jdk,
   lib,
@@ -28,7 +31,7 @@ let
   fixIcu = writeScript "fix-icu.sh" ''
     substituteInPlace \
       $BUILDRT/Common/3dParty/icu/icu.pri \
-      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
+      --replace-fail "ICU_MAJOR_VER = 74" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
 
     mkdir $BUILDRT/Common/3dParty/icu/linux_64
     ln -s ${icu}/lib $BUILDRT/Common/3dParty/icu/linux_64/build
@@ -46,6 +49,13 @@ let
     rev = "be6df458d4540eee375c513958dcb862a391cdd1";
     hash = "sha256-SYJFLtrg8raGyr3zQIEzZDjHDmMmt+K0po3viipZW5c=";
   };
+  # see core/Common/3dParty/html/fetch.py
+  gumbo-parser-src = fetchFromGitHub {
+    owner = "google";
+    repo = "gumbo-parser";
+    rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
+    hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
+  };
   # see build_tools scripts/core_common/modules/googletest.py
   googletest-src = fetchFromGitHub {
     owner = "google";
@@ -61,12 +71,33 @@ let
     rev = "73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd";
     hash = "sha256-WIHpSkOwHkhMvEKxOlgf6gsPs9T3xkzguD8ONXARf1U=";
   };
-  # see core/Common/3dParty/html/fetch.py
-  gumbo-parser-src = fetchFromGitHub {
-    owner = "google";
-    repo = "gumbo-parser";
-    rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
-    hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
+  # core/Common/3dParty/md/fetch.py
+  md4c-src = fetchFromGitHub {
+    owner = "mity";
+    repo = "md4c";
+    rev = "481fbfbdf72daab2912380d62bb5f2187d438408";
+    hash = "sha256-zhInM3R0CJUqnzh6wRxMwlUdErovplbZQ5IwXe9XzZ4=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  glm-src = fetchFromGitHub {
+    owner = "g-truc";
+    repo = "glm";
+    rev = "33b4a621a697a305bc3a7610d290677b96beb181";
+    hash = "sha256-wwGI17vlQzL/x1O0ANr5+KgU1ETnATpLw3njpKfjnKQ=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  mdds-src = fetchFromGitHub {
+    owner = "kohei-us";
+    repo = "mdds";
+    rev = "0783158939c6ce4b0b1b89e345ab983ccb0f0ad0";
+    hash = "sha256-HMGMxMRO6SadisUjZ0ZNBGQqksNDFkEh3yaQGet9rc0=";
+  };
+  # core/Common/3dParty/apple/fetch.py
+  librevenge-src = fetchFromGitHub {
+    owner = "DistroTech";
+    repo = "librevenge";
+    rev = "becd044b519ab83893ad6398e3cbb499a7f0aaf4";
+    hash = "sha256-2YRxuMYzKvvQHiwXH08VX6GRkdXnY7q05SL05Vbn0Vs=";
   };
   # core/Common/3dParty/apple/fetch.py
   libodfgen-src = fetchFromGitHub {
@@ -75,31 +106,7 @@ let
     rev = "8ef8c171ebe3c5daebdce80ee422cf7bb96aa3bc";
     hash = "sha256-Bv/smZFmZn4PEAcOlXD2Z4k96CK7A7YGDHFDsqZpuiE=";
   };
-  # core/Common/3dParty/md/fetch.py
-  md4c-src = fetchFromGitHub {
-    owner = "mity";
-    repo = "md4c";
-    rev = "481fbfbdf72daab2912380d62bb5f2187d438408";
-    hash = "sha256-zhInM3R0CJUqnzh6wRxMwlUdErovplbZQ5IwXe9XzZ4=";
-  };
-  mdds-src = fetchFromGitHub {
-    owner = "kohei-us";
-    repo = "mdds";
-    rev = "0783158939c6ce4b0b1b89e345ab983ccb0f0ad0";
-    hash = "sha256-HMGMxMRO6SadisUjZ0ZNBGQqksNDFkEh3yaQGet9rc0=";
-  };
-  glm-src = fetchFromGitHub {
-    owner = "g-truc";
-    repo = "glm";
-    rev = "33b4a621a697a305bc3a7610d290677b96beb181";
-    hash = "sha256-wwGI17vlQzL/x1O0ANr5+KgU1ETnATpLw3njpKfjnKQ=";
-  };
-  librevenge-src = fetchFromGitHub {
-    owner = "DistroTech";
-    repo = "librevenge";
-    rev = "becd044b519ab83893ad6398e3cbb499a7f0aaf4";
-    hash = "sha256-2YRxuMYzKvvQHiwXH08VX6GRkdXnY7q05SL05Vbn0Vs=";
-  };
+  # core/Common/3dParty/apple/fetch.py
   libetonyek-src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
@@ -110,14 +117,14 @@ let
   qmakeFlags = [ ];
   dontStrip = false;
 
-  # Revisions that correspond to onlyoffice-documentserver 9.0.2
-  core-rev = "bcc5f67ec89602fe41941f11c7f9eb801f2a3c89";
+  # Revisions that correspond to onlyoffice-documentserver 9.1.0
+  core-rev = "82e281cf6bf89498e4de6018423b36576706c2b6";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-KzY/5fwZfgdEYmPsNkV3AGGYw23mEAhtGfyko3sYeTo=";
+    hash = "sha256-LzbO2A29WxM0XTAO2LGTtg9omL0Pvoh+6+q3ux4i7do=";
   };
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-webapps";
@@ -128,8 +135,8 @@ let
       owner = "ONLYOFFICE";
       repo = "web-apps";
       # rev that the 'web-apps' submodule in documentserver points at
-      rev = "06bc5a77e9997c1766ba8088c255ba0b14e4fca3";
-      hash = "sha256-QSVCPnqL2mdK7irVCNna08dJAtrDVwe77k31Cof4L18=";
+      rev = "f63e9674a5d2d2e5a660ab726ec00a359fc3c750";
+      hash = "sha256-kKm6+phd6a7kP/kv6/v/FFgh96Kbs6h6jIjpFtRJgps=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -168,8 +175,8 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "649a4b57ba25a204cc7b31299652c0de8ff0e42c";
-      hash = "sha256-acKoLQemAyFGCrVRsUUbl/iAQsh/ouSW+fX/hLgT3x8=";
+      rev = "d169f841a7e9e46368c36236dd5820e3e10d4a98";
+      hash = "sha256-GQwzz3P49sWjCxh41zyuUs5MyMjBQXaMKzxUUTHq0UE=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -206,7 +213,7 @@ let
   dictionaries = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "dictionaries";
-    tag = "v9.0.3.7";
+    rev = "d3223bbb777883db66ac3cd249f71c6ebdc992c7";
     hash = "sha256-7hvztNYnYjyOl3ynGP0vqtx9jLPp09XVDNIow1RYuWM=";
   };
   buildCoreComponent =
@@ -337,9 +344,21 @@ let
     buildInputs = [
       unicodeConverter
       kernel
+      libheif.lib
+      x265
+      libde265
     ];
     preConfigure = ''
       ln -s ${katana-parser-src} $BUILDRT/Common/3dParty/html/katana-parser
+
+      mkdir -p $BUILDRT/Common/3dParty/heif/libheif/libheif
+      ln -s ${libheif.dev}/include $BUILDRT/Common/3dParty/heif/libheif/libheif/api
+      mkdir -p $BUILDRT/Common/3dParty/heif/libheif/build/linux_64/release
+      ln -s ${libheif.lib}/lib $BUILDRT/Common/3dParty/heif/libheif/build/linux_64/release/libheif
+      mkdir -p $BUILDRT/Common/3dParty/heif/x265_git/build/linux_64
+      ln -s ${x265}/lib $BUILDRT/Common/3dParty/heif/x265_git/build/linux_64/release
+      mkdir -p $BUILDRT/Common/3dParty/heif/libde265/build/linux_64/release
+      ln -s ${libde265}/lib $BUILDRT/Common/3dParty/heif/libde265/build/linux_64/release/libde265
 
       # Common/3dParty/harfbuzz/make.py
       cat >$BUILDRT/Common/3dParty/harfbuzz/harfbuzz.pri <<EOL
@@ -491,6 +510,9 @@ let
       unicodeConverter
       cryptopp
       network
+    ];
+    patches = [
+      ./pdffile-limits-include.patch
     ];
   };
   djvufile = buildCoreComponent "DjVuFile" {
@@ -676,6 +698,7 @@ let
       unicodeConverter
       kernel
       graphics
+      libheif.lib
     ];
     qmakeFlags = qmakeFlags ++ icuQmakeFlags;
     preConfigure = ''
@@ -715,7 +738,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
   # x2t is not 'directly' versioned, so we version it after the version
   # of documentserver it's pulled into as a submodule
-  version = "9.0.2";
+  version = "9.1.0";
 
   buildInputs = [
     unicodeConverter
