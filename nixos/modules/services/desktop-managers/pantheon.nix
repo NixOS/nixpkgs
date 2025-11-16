@@ -207,7 +207,6 @@ in
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [
-          elementary-bluetooth-daemon
           elementary-session-settings
           elementary-settings-daemon
           gala
@@ -242,6 +241,7 @@ in
             elementary-shortcut-overlay
 
             # Services
+            elementary-bluetooth-daemon
             elementary-capnet-assist
             elementary-notifications
             pantheon-agent-geoclue2
