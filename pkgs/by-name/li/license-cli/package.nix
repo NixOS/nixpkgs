@@ -5,6 +5,7 @@
   installShellFiles,
   scdoc,
   makeWrapper,
+  nix-update-script,
 
   # Script dependencies.
   fzf,
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage rec {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://git.sr.ht/~zethra/license";
