@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "bcrypt"
+    "brotli"
     "cryptography"
     "flask"
     "h2"
