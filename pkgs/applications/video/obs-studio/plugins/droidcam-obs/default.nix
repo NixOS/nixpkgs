@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   obs-studio,
-  ffmpeg,
+  ffmpeg_7,
   libjpeg,
   libimobiledevice,
   libusbmuxd,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusbmuxd
     libplist
     obs-studio
-    ffmpeg
+    ffmpeg_7
   ];
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
     "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
     "LIBOBS_INCLUDES=${obs-studio}/include/obs"
-    "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
+    "FFMPEG_INCLUDES=${lib.getLib ffmpeg_7}"
     "LIBUSBMUXD=libusbmuxd-2.0"
     "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];

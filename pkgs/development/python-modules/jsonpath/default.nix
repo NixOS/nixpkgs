@@ -3,20 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath";
   version = "0.82.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2H7yvLze1o7pa8NMGAm2lFfs7JsMTdRxZYoSvTkQAtE=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/test*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "XPath for JSON";
-    homepage = "https://github.com/json-path/JsonPath";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    homepage = "https://www.ultimate.com/phil/python/#jsonpath";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

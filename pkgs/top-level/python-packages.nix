@@ -2569,6 +2569,8 @@ self: super: with self; {
 
   chat-downloader = callPackage ../development/python-modules/chat-downloader { };
 
+  chatlas = callPackage ../development/python-modules/chatlas { };
+
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
   checkdmarc = callPackage ../development/python-modules/checkdmarc { };
@@ -16929,6 +16931,8 @@ self: super: with self; {
 
   shiny = callPackage ../development/python-modules/shiny { };
 
+  shinychat = callPackage ../development/python-modules/shinychat { };
+
   shippinglabel = callPackage ../development/python-modules/shippinglabel { };
 
   shiv = callPackage ../development/python-modules/shiv { };
@@ -19698,6 +19702,8 @@ self: super: with self; {
   unasync = callPackage ../development/python-modules/unasync { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
+
+  uncompresspy = callPackage ../development/python-modules/uncompresspy { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
