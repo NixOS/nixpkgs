@@ -20,8 +20,8 @@
   libXxf86vm,
   glib,
   alsa-lib,
-  ffmpeg,
-  ffmpeg-headless,
+  ffmpeg_7,
+  ffmpeg_7-headless,
 
   writeText,
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     libXxf86vm
     glib
     alsa-lib
-    (if atLeast21 then ffmpeg else ffmpeg-headless)
+    (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)
   ];
 
   mitmCache = gradle_openjfx.fetchDeps {
