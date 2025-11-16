@@ -19,9 +19,11 @@
   narwhals,
   orjson,
   packaging,
+  platformdirs,
   prompt-toolkit,
   python-multipart,
   questionary,
+  shinychat,
   starlette,
   typing-extensions,
   uvicorn,
@@ -43,18 +45,19 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${version}";
-    hash = "sha256-SsMZ+aiGFtP6roTiuBZWnHqPso3ZiWLgBToaTLiC2ko=";
+    hash = "sha256-zRKfSY0rE+jzwYUcrRTIFW3OVmavhMDbAQEpry46zCI=";
   };
 
   build-system = [
@@ -73,10 +76,12 @@ buildPythonPackage rec {
     narwhals
     orjson
     packaging
+    platformdirs
     prompt-toolkit
     python-multipart
     questionary
     setuptools
+    shinychat
     starlette
     typing-extensions
     uvicorn
@@ -120,6 +125,8 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Build fast, beautiful web applications in Python";
