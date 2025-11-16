@@ -2,32 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  which,
   pkg-config,
   gtk3,
   lib3270,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libv3270";
-  version = "5.4";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "libv3270";
     rev = version;
-    hash = "sha256-Z3FvxPa1pfeECxfB5ZL6gwhkbTKFpfO3D/zLVLF+uiI=";
+    hash = "sha256-Cn/to1/7mH1Ygjcx12mMf52PTcz4smy/+bwWH1mbT9s=";
   };
 
   nativeBuildInputs = [
-    which
     pkg-config
-    autoconf
-    automake
-    libtool
+    meson
+    ninja
   ];
 
   buildInputs = [
@@ -40,12 +36,6 @@ stdenv.mkDerivation rec {
     for f in $(find . -type f -iname "*.c"); do
       sed -i -e "s@lib3270_build_data_filename(@g_build_filename(\"$out/share/pw3270\", @" "$f"
     done
-  '';
-
-  preConfigure = ''
-    mkdir -p scripts
-    touch scripts/config.rpath
-    NOCONFIGURE=1 sh ./autogen.sh
   '';
 
   enableParallelBuilding = true;
