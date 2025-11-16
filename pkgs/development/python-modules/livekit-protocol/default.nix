@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "livekit-protocol";
-  version = "1.0.8";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "protocol-v${version}";
-    hash = "sha256-3RdUvxGOopgakwkoWc+IMW2QUZuZLF908KtFo1f0Nqo=";
+    hash = "sha256-u89KM1Lio1gELIzwhmBJFCf1c29cfGu0WsMf8Vvsi8M=";
   };
 
   pypaBuildFlags = [ "livekit-protocol" ];

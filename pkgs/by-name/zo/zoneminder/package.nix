@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   cmake,
   makeWrapper,
@@ -83,17 +84,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.35";
+  version = "1.36.36";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
+    hash = "sha256-q+LpM8JSjcroGa04CqQ7PUU/WvZ9YCVhGOhwBAhOFY0=";
     fetchSubmodules = true;
   };
 
   patches = [
+    # Fix building against FFmpeg 8.0
+    # https://github.com/ZoneMinder/zoneminder/pull/4466
+    (fetchpatch {
+      url = "https://github.com/peat-psuwit/zoneminder/commit/15241687e9ccd97d7866cc7245324472ff6c7f0e.patch";
+      hash = "sha256-DXeoYOMI3Hcpwshg6wiBxaoTPOswLVV3Weq3Mh5Vaw0=";
+    })
+
     ./default-to-http-1dot1.patch
     ./0001-Don-t-use-file-timestamp-in-cache-filename.patch
   ];

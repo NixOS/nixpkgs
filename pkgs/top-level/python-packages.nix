@@ -3451,6 +3451,8 @@ self: super: with self; {
 
   dataclasses-serialization = callPackage ../development/python-modules/dataclasses-serialization { };
 
+  dataconf = callPackage ../development/python-modules/dataconf { };
+
   datadiff = callPackage ../development/python-modules/datadiff { };
 
   datadog = callPackage ../development/python-modules/datadog { };
@@ -5207,6 +5209,8 @@ self: super: with self; {
   );
 
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
+
+  fava = callPackage ../development/python-modules/fava { };
 
   favicon = callPackage ../development/python-modules/favicon { };
 
@@ -8577,8 +8581,6 @@ self: super: with self; {
   limnoria = callPackage ../development/python-modules/limnoria { };
 
   line-profiler = callPackage ../development/python-modules/line-profiler { };
-
-  linear-garage-door = callPackage ../development/python-modules/linear-garage-door { };
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
@@ -12928,6 +12930,8 @@ self: super: with self; {
   pycrc = callPackage ../development/python-modules/pycrc { };
 
   pycrdt = callPackage ../development/python-modules/pycrdt { };
+
+  pycrdt-store = callPackage ../development/python-modules/pycrdt-store { };
 
   pycrdt-websocket = callPackage ../development/python-modules/pycrdt-websocket { };
 
@@ -19542,6 +19546,8 @@ self: super: with self; {
   types-markupsafe = callPackage ../development/python-modules/types-markupsafe { };
 
   types-mock = callPackage ../development/python-modules/types-mock { };
+
+  types-mysqlclient = callPackage ../development/python-modules/types-mysqlclient { };
 
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 
