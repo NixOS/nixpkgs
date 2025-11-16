@@ -1,0 +1,23 @@
+From 529d91ee67e709ac29fba1a234ef6f42c736bc1e Mon Sep 17 00:00:00 2001
+From: coolGi <me@coolgi.dev>
+Date: Sun, 26 Oct 2025 17:09:48 +1030
+Subject: [PATCH] disable auto updating
+
+---
+ src/Baballonia/LocalSettings.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Baballonia/LocalSettings.json b/src/Baballonia/LocalSettings.json
+index 309e53e..e4caee5 100644
+--- a/src/Baballonia/LocalSettings.json
++++ b/src/Baballonia/LocalSettings.json
+@@ -370,6 +370,6 @@
+   "AppSettings_OneEuroSpeedCutoff": 1,
+   "AppSettings_SteamVRAutoStart": false,
+   "AppSettings_UseGPU": true,
+-  "AppSettings_CheckForUpdates": true,
++  "AppSettings_CheckForUpdates": false,
+   "AppSettings_LogLevel": "Information"
+ }
+-- 
+2.51.0
