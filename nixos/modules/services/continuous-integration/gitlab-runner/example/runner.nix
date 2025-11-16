@@ -267,11 +267,10 @@ in
   # Common OCI container which should run.
   virtualisation.oci-containers = {
     backend = "podman";
-    containers =
-      {
-        nix-daemon-container = nixDaemonContainer;
-      }
-      //
+    containers = {
+      nix-daemon-container = nixDaemonContainer;
+    }
+    //
       # Workaround to add the job images to the registry.
       lib.concatMapAttrs (name: image: {
         "${name}-container" = {
