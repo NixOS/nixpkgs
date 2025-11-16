@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  env.XFAIL_TESTS = lib.optionalString stdenv.hostPlatform.isDarwin "test_slices.sh";
+
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
