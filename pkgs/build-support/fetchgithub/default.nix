@@ -4,8 +4,40 @@
   fetchgit,
   fetchzip,
 }:
+let
+  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # The attribute value is their default values.
+  # As fetchFromGitHub prefers fetchzip for hash stability,
+  # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
+  useFetchGitArgsDefault = {
+    deepClone = false;
+    fetchSubmodules = false; # This differs from fetchgit's default
+    fetchLFS = false;
+    forceFetchGit = false;
+    leaveDotGit = null;
+    rootDir = "";
+    sparseCheckout = null;
+  };
+  useFetchGitArgsDefaultNullable = {
+    leaveDotGit = false;
+    sparseCheckout = [ ];
+  };
 
-lib.makeOverridable (
+  useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
+
+  # useFetchGitArgsWD to exclude from automatic passing.
+  # Other useFetchGitArgsWD will pass down to fetchgit.
+  excludeUseFetchGitArgNames = [
+    "forceFetchGit"
+  ];
+
+  faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
+
+  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
+
+  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+in
+decorate (
   {
     owner,
     repo,
@@ -13,16 +45,7 @@ lib.makeOverridable (
     rev ? null,
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
-    # `fetchFromGitHub` defaults to use `fetchzip` for better hash stability.
-    # We default not to fetch submodules, which is contrary to `fetchgit`'s default.
-    fetchSubmodules ? false,
-    leaveDotGit ? null,
-    deepClone ? false,
     private ? false,
-    forceFetchGit ? false,
-    fetchLFS ? false,
-    rootDir ? "",
-    sparseCheckout ? null,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
@@ -37,6 +60,16 @@ lib.makeOverridable (
   );
 
   let
+    useFetchGit = useFetchGitArgsWDNonNull != useFetchGitargsDefaultNonNull;
+
+    useFetchGitArgs = lib.intersectAttrs useFetchGitArgsDefault args;
+    useFetchGitArgsWD = useFetchGitArgsDefault // useFetchGitArgs;
+    useFetchGitArgsWDPassing = removeAttrs useFetchGitArgsWD excludeUseFetchGitArgNames;
+    useFetchGitArgsWDNonNull =
+      useFetchGitArgsWD
+      // lib.mapAttrs (
+        name: nonNullDefault: lib.defaultTo nonNullDefault useFetchGitArgsWD.${name}
+      ) useFetchGitArgsDefaultNullable;
 
     position = (
       if args.meta.description or null != null then
@@ -56,26 +89,19 @@ lib.makeOverridable (
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args [
-      "owner"
-      "repo"
-      "tag"
-      "rev"
-      "fetchSubmodules"
-      "forceFetchGit"
-      "private"
-      "githubBase"
-      "varPrefix"
-    ];
+    passthruAttrs = removeAttrs args (
+      [
+        "owner"
+        "repo"
+        "tag"
+        "rev"
+        "private"
+        "githubBase"
+        "varPrefix"
+      ]
+      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
+    );
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    useFetchGit =
-      fetchSubmodules
-      || lib.defaultTo false leaveDotGit == true
-      || deepClone
-      || forceFetchGit
-      || fetchLFS
-      || (rootDir != "")
-      || lib.defaultTo [ ] sparseCheckout != [ ];
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
     fetcher =
@@ -118,16 +144,9 @@ lib.makeOverridable (
       passthruAttrs
       // (
         if useFetchGit then
-          {
-            inherit
-              tag
-              rev
-              deepClone
-              fetchSubmodules
-              leaveDotGit
-              sparseCheckout
-              fetchLFS
-              ;
+          useFetchGitArgsWDPassing
+          // {
+            inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
             derivationArgs = {
