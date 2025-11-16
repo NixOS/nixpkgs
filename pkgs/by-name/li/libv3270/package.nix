@@ -9,14 +9,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libv3270";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "libv3270";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Cn/to1/7mH1Ygjcx12mMf52PTcz4smy/+bwWH1mbT9s=";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "3270 Virtual Terminal for GTK";
     homepage = "https://github.com/PerryWerneck/libv3270";
     changelog = "https://github.com/PerryWerneck/libv3270/blob/master/CHANGELOG";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vifino ];
   };
-}
+})
