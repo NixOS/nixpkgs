@@ -7634,6 +7634,12 @@
     githubId = 18535642;
     name = "Emily";
   };
+  emilycares = {
+    email = "emilydoescare@gmail.com";
+    github = "emilycares";
+    githubId = 23267682;
+    name = "Emily Meier";
+  };
   emilylange = {
     email = "nix@emilylange.de";
     github = "emilylange";
