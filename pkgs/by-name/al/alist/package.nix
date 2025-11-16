@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alist";
-  version = "3.54.0";
+  version = "3.55.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WHQbUIIGcmgEtI5MzfPs+nwAxIsDtm/M5pLXNfcjTb0=";
+    hash = "sha256-/psFL/dCG82y1uWEcg45JG6S7+MD0avqU/HjrR+vklA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -87,10 +87,10 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
-    webVersion = "3.53.0";
+    webVersion = "3.55.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
-      hash = "sha256-kBAlvykCq7YLbSdSYag1sAds7bNp7C0gq/lo2CXIiyo=";
+      hash = "sha256-v0o4G2mzd63sShJZRjijIFAUB+ocvF4jspxf841lZ8U=";
     };
   };
 
