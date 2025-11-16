@@ -10,6 +10,9 @@
   nmap,
   coreutils,
   gawk,
+  gnugrep,
+  gnused,
+  findutils,
 
   # optional dependencies
   smtp-user-enum,
@@ -45,6 +48,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nmap
     coreutils
     gawk
+    gnugrep
+    gnused
+    findutils
   ]
   ++ lib.optionals withFullDeps [
     smtp-user-enum
