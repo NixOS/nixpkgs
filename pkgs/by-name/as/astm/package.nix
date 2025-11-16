@@ -1,8 +1,9 @@
-{ stdenv
-, gcc
-, lib
-, nlohmann_json
-, fetchFromGitHub,
+{
+  stdenv,
+  gcc,
+  lib,
+  nlohmann_json,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
@@ -11,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "ritishDas";
-   rev = "master";
+    rev = "master";
     repo = "astm";
     hash = "sha256-ZBg2MHAD5CVzaG4kwO447I78x/ZZKoJw/6ZFYp5EW9w=";
   };

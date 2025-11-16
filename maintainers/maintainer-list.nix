@@ -5804,11 +5804,6 @@
     githubId = 97746;
     name = "Raphael Das Gupta";
   };
-  ritishDas = {
-    email = "ritishdas116@outlook.com";
-    name = "Ritish";
-    github = "ritishDas";
-  };
   das_j = {
     email = "janne@hess.ooo";
     matrix = "@janne.hess:helsinki-systems.de";
@@ -22210,6 +22205,11 @@
     keys = [
       { fingerprint = "66FF 6099 7B04 845F F4C0  CB4F EB6F C9F9 FC96 4257"; }
     ];
+  };
+  ritishDas = {
+    email = "ritishdas116@outlook.com";
+    name = "Ritish";
+    github = "ritishDas";
   };
   rixed = {
     email = "rixed-github@happyleptic.org";
