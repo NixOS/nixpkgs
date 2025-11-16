@@ -1,3 +1,15 @@
+# This test runs a gitlab-runner and performs the following tests in
+# two machines `gitlab` and `gitlab-runner`:
+# - Create runners in the `gitlab` machine for all runners in `./runner`.
+# - Inject the runner tokens into the `gitlab-runner.service` (machine `gitlab-runner`)
+#   which runs all executors:
+#     - Shell Executor in `./runner/shell-executor`.
+# - Start the `gitlab-runner.service`.
+# - Check that all runners in `gitlab` are `active`.
+#
+# Run with
+# [nixpkgs]$ nix-build -A nixosTests.gitlab.runner
+
 {
   pkgs,
   lib,
@@ -16,17 +28,20 @@ in
 
   nodes = {
     gitlab-runner =
-      { ... }:
+      { config, lib, ... }:
       {
         # Define the Gitlab Runner.
         services.gitlab-runner = {
           enable = true;
 
-          services.nix-runner = {
-            description = "NixOS Shell Executor";
-            authenticationTokenConfigFile = runnerTokenFile;
-            executor = "shell";
+          services.shell-executor = import ./runner/shell-executor.nix {
+            inherit config lib runnerTokenFile;
           };
+
+          # TODO: Add here the container executor (podman, nixDaemon etc)
+          # services.container-executor = import ./runner/container-executor.nix {
+          #   inherit config lib runnerTokenFile;
+          # };
 
           settings = {
             log_level = "info";
@@ -49,7 +64,6 @@ in
 
         virtualisation.memorySize = 6144;
         virtualisation.cores = 4;
-        # virtualisation.useNixStoreImage = true;
 
         systemd.services.gitlab.serviceConfig.Restart = lib.mkForce "no";
         systemd.services.gitlab-workhorse.serviceConfig.Restart = lib.mkForce "no";
