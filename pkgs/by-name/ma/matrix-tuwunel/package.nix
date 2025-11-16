@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  rustc-unwrapped,
   fetchFromGitHub,
   pkg-config,
   libredirect,
@@ -19,6 +20,7 @@
   liburing,
   nixosTests,
   writeTextFile,
+  removeReferencesTo,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -101,6 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    removeReferencesTo
   ];
 
   buildInputs = [
@@ -157,6 +160,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
     '';
   doCheck = true;
+
+  postInstall = ''
+    # fix rustc leaking into the runtime closure (it writes crate compilation commands into the executable)
+    remove-references-to -t ${rustc-unwrapped} $out/bin/tuwunel
+  '';
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
