@@ -3,6 +3,8 @@
   python3,
   fetchFromGitHub,
   fetchPypi,
+  testers,
+  rabbit,
 }:
 
 let
@@ -85,6 +87,12 @@ python3'.pkgs.buildPythonApplication {
   ];
 
   pythonImportsCheck = [ "rabbit" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = rabbit;
+    command = "rabbit --help";
+    version = "RABBIT is an Activity Based Bot Identification Tool";
+  };
 
   meta = {
     description = "Tool for identifying bot accounts based on their recent GitHub event history";
