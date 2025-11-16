@@ -13,6 +13,8 @@ lib.makeOverridable (
     rev ? null,
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
+    # `fetchFromGitHub` defaults to use `fetchzip` for better hash stability.
+    # We default not to fetch submodules, which is contrary to `fetchgit`'s default.
     fetchSubmodules ? false,
     leaveDotGit ? null,
     deepClone ? false,
