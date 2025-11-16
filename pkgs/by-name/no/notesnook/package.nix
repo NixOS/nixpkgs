@@ -52,6 +52,7 @@ let
     maintainers = with lib.maintainers; [
       cig0
       j0lol
+      keysmashes
     ];
     platforms = [
       "x86_64-linux"
