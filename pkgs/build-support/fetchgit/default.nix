@@ -131,103 +131,103 @@ lib.makeOverridable (
           server admins start using the new version?
         */
 
-          derivationArgs
-          // {
-            inherit name;
+        derivationArgs
+        // {
+          inherit name;
 
-            builder = ./builder.sh;
-            fetcher = ./nix-prefetch-git;
+          builder = ./builder.sh;
+          fetcher = ./nix-prefetch-git;
 
-            nativeBuildInputs = [
-              git
-              cacert
-            ]
-            ++ lib.optionals fetchLFS [ git-lfs ]
-            ++ nativeBuildInputs;
+          nativeBuildInputs = [
+            git
+            cacert
+          ]
+          ++ lib.optionals fetchLFS [ git-lfs ]
+          ++ nativeBuildInputs;
 
-            inherit outputHash outputHashAlgo;
-            outputHashMode = "recursive";
+          inherit outputHash outputHashAlgo;
+          outputHashMode = "recursive";
 
-            sparseCheckout = lib.defaultTo (lib.optional (rootDir != "") rootDir) sparseCheckout;
-            sparseCheckoutText =
-              # Changed to throw on 2023-06-04
-              assert (
-                lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
-              );
-              assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
-              # git-sparse-checkout(1) says:
-              # > When the --stdin option is provided, the directories or patterns are read
-              # > from standard in as a newline-delimited list instead of from the arguments.
-              builtins.concatStringsSep "\n" finalAttrs.sparseCheckout;
+          sparseCheckout = lib.defaultTo (lib.optional (rootDir != "") rootDir) sparseCheckout;
+          sparseCheckoutText =
+            # Changed to throw on 2023-06-04
+            assert (
+              lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+            );
+            assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
+            # git-sparse-checkout(1) says:
+            # > When the --stdin option is provided, the directories or patterns are read
+            # > from standard in as a newline-delimited list instead of from the arguments.
+            builtins.concatStringsSep "\n" finalAttrs.sparseCheckout;
 
-            inherit
-              url
-              fetchLFS
-              fetchSubmodules
-              deepClone
-              branchName
-              preFetch
-              postFetch
-              fetchTags
-              rootDir
-              gitConfigFile
-              ;
-            leaveDotGit =
-              if leaveDotGit != null then
-                assert fetchTags -> leaveDotGit;
-                assert rootDir != "" -> !leaveDotGit;
-                leaveDotGit
-              else
-                deepClone || fetchTags;
-            nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
-            inherit tag;
-            revCustom = rev;
-            rev = getRevWithTag {
-              inherit (finalAttrs) tag;
-              rev = finalAttrs.revCustom;
-            };
+          inherit
+            url
+            fetchLFS
+            fetchSubmodules
+            deepClone
+            branchName
+            preFetch
+            postFetch
+            fetchTags
+            rootDir
+            gitConfigFile
+            ;
+          leaveDotGit =
+            if leaveDotGit != null then
+              assert fetchTags -> leaveDotGit;
+              assert rootDir != "" -> !leaveDotGit;
+              leaveDotGit
+            else
+              deepClone || fetchTags;
+          nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+          inherit tag;
+          revCustom = rev;
+          rev = getRevWithTag {
+            inherit (finalAttrs) tag;
+            rev = finalAttrs.revCustom;
+          };
 
-            postHook =
-              if netrcPhase == null then
-                null
-              else
-                ''
-                  ${netrcPhase}
-                  # required that git uses the netrc file
-                  mv {,.}netrc
-                  export NETRC=$PWD/.netrc
-                  export HOME=$PWD
-                '';
+          postHook =
+            if netrcPhase == null then
+              null
+            else
+              ''
+                ${netrcPhase}
+                # required that git uses the netrc file
+                mv {,.}netrc
+                export NETRC=$PWD/.netrc
+                export HOME=$PWD
+              '';
 
-            impureEnvVars =
-              lib.fetchers.proxyImpureEnvVars
-              ++ netrcImpureEnvVars
-              ++ [
-                "GIT_PROXY_COMMAND"
-                "NIX_GIT_SSL_CAINFO"
-                "SOCKS_SERVER"
+          impureEnvVars =
+            lib.fetchers.proxyImpureEnvVars
+            ++ netrcImpureEnvVars
+            ++ [
+              "GIT_PROXY_COMMAND"
+              "NIX_GIT_SSL_CAINFO"
+              "SOCKS_SERVER"
 
-                # This is a parameter intended to be set by setup hooks or preFetch
-                # scripts that want per-URL control over HTTP proxies used by Git
-                # (if per-URL control isn't needed, `http_proxy` etc. will
-                # suffice). It must be a whitespace-separated (with backslash as an
-                # escape character) list of pairs like this:
-                #
-                #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
-                #
-                # where the URLs are as documented in the `git-config` manual page
-                # under `http.<url>.*`, and the proxies are as documented on the
-                # same page under `http.proxy`.
-                "FETCHGIT_HTTP_PROXIES"
-              ];
+              # This is a parameter intended to be set by setup hooks or preFetch
+              # scripts that want per-URL control over HTTP proxies used by Git
+              # (if per-URL control isn't needed, `http_proxy` etc. will
+              # suffice). It must be a whitespace-separated (with backslash as an
+              # escape character) list of pairs like this:
+              #
+              #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+              #
+              # where the URLs are as documented in the `git-config` manual page
+              # under `http.<url>.*`, and the proxies are as documented on the
+              # same page under `http.proxy`.
+              "FETCHGIT_HTTP_PROXIES"
+            ];
 
-            inherit preferLocalBuild meta allowedRequisites;
+          inherit preferLocalBuild meta allowedRequisites;
 
-            passthru = {
-              gitRepoUrl = url;
-            }
-            // passthru;
+          passthru = {
+            gitRepoUrl = url;
           }
+          // passthru;
+        }
       );
 
     # No ellipsis.
