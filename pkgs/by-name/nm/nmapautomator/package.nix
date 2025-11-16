@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
@@ -28,7 +28,7 @@
   snmpcheck,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nmapautomator";
   version = "0-unstable-2021-04-10";
 
