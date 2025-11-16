@@ -22,7 +22,7 @@ lib.makeOverridable (
     forceFetchGit ? false,
     fetchLFS ? false,
     rootDir ? "",
-    sparseCheckout ? lib.optional (rootDir != "") rootDir,
+    sparseCheckout ? null,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
@@ -75,7 +75,7 @@ lib.makeOverridable (
       || forceFetchGit
       || fetchLFS
       || (rootDir != "")
-      || (sparseCheckout != [ ]);
+      || lib.defaultTo [ ] sparseCheckout != [ ];
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
     fetcher =
