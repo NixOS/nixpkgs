@@ -21,5 +21,5 @@
     Takes an arbitrary derivation and says whether it is an agda library package
     *  that is not marked as broken.
   */
-  isUnbrokenAgdaPackage = pkg: pkg.isAgdaDerivation or false && !pkg.meta.broken;
+  isUnbrokenAgdaPackage = pkg: lib.isAttrs pkg && pkg.isAgdaDerivation or false && !pkg.meta.broken;
 }
