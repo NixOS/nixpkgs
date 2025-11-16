@@ -208,7 +208,6 @@ in
       environment.systemPackages =
         (with pkgs.pantheon; [
           elementary-session-settings
-          elementary-settings-daemon
           gala
           gnome-settings-daemon
           (switchboard-with-plugs.override {
@@ -244,6 +243,7 @@ in
             elementary-bluetooth-daemon
             elementary-capnet-assist
             elementary-notifications
+            elementary-settings-daemon
             pantheon-agent-geoclue2
             pantheon-agent-polkit
           ])
@@ -258,14 +258,16 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-      ]
-      ++ (with pkgs.pantheon; [
-        elementary-files
-        elementary-settings-daemon
-        xdg-desktop-portal-pantheon
-      ]);
+      xdg.portal.extraPortals = utils.removePackagesByName (
+        [
+          pkgs.xdg-desktop-portal-gtk
+        ]
+        ++ (with pkgs.pantheon; [
+          elementary-files
+          elementary-settings-daemon
+          xdg-desktop-portal-pantheon
+        ])
+      ) config.environment.pantheon.excludePackages;
 
       xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 
