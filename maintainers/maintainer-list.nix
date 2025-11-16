@@ -16209,12 +16209,6 @@
     githubId = 91502660;
     name = "Matthew LeVan";
   };
-  matthewbauer = {
-    email = "mjbauer95@gmail.com";
-    github = "matthewbauer";
-    githubId = 19036;
-    name = "Matthew Bauer";
-  };
   matthewcroughan = {
     email = "matt@croughan.sh";
     github = "MatthewCroughan";
