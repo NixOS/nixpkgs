@@ -2800,6 +2800,8 @@ let
         };
       };
 
+      leanprover.lean4 = callPackage ./leanprover.lean4 { };
+
       leonardssh.vscord = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscord";
