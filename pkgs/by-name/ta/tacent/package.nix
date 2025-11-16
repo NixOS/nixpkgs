@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    # Marked broken 2025-11-14 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "C++ library providing linear algebra and various utility functions";
     longDescription = ''
       A C++ library implementing linear algebra, text and file IO, UTF-N conversions,

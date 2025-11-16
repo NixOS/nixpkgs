@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage rec {
   LIBGIT2_NO_VENDOR = 1;
 
   meta = with lib; {
+    # Marked broken 2025-11-14 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Open source terminal based version of Typeracer written in rust";
     homepage = "https://gitlab.com/ttyperacer/terminal-typeracer";
     license = licenses.gpl3Plus;
