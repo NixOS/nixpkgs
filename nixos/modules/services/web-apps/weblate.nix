@@ -96,7 +96,7 @@ let
   + lib.optionalString cfg.smtp.enable ''
     EMAIL_HOST = "${cfg.smtp.host}"
     EMAIL_USE_TLS = True
-    EMAIL_PORT = ${builtins.toString cfg.smtp.port}
+    EMAIL_PORT = ${toString cfg.smtp.port}
     SERVER_EMAIL = "${cfg.smtp.from}"
     DEFAULT_FROM_EMAIL = "${cfg.smtp.from}"
   ''

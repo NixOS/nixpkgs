@@ -105,7 +105,7 @@ in
         Type = "simple";
         ExecStart =
           let
-            f = x: name: lib.optional (x != null) "--${name}=${builtins.toString x}";
+            f = x: name: lib.optional (x != null) "--${name}=${toString x}";
           in
           lib.concatStringsSep " " (
             [
