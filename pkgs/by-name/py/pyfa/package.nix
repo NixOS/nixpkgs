@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gsettings-desktop-schemas,
   adwaita-icon-theme,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gdk-pixbuf,
   makeDesktopItem,
   copyDesktopItems,
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
-    wrapGAppsHook3
+    wrapGAppsHook4
     copyDesktopItems
   ];
 
