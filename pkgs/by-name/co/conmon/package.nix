@@ -6,7 +6,7 @@
   glib,
   glibc,
   libseccomp,
-  systemd,
+  systemdMinimal,
   nixosTests,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     libseccomp
-    systemd
+    systemdMinimal
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
     glibc
