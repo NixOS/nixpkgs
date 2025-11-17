@@ -91,7 +91,7 @@
           machineWithTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
           machineWithTranscoding.succeed(api_get("/Startup/FirstUser"))
           machineWithTranscoding.succeed(api_post("/Startup/Complete"))
-          
+
           auth_result_str = machineWithTranscoding.succeed(
               api_post("/Users/AuthenticateByName", "${payloads.auth}")
           )
@@ -105,37 +105,37 @@
           # Verify hardware acceleration settings via dashboard API
           encoding_config_str = machineWithTranscoding.succeed(dashboard_api_get("/System/Configuration/encoding"))
           encoding_config = json.loads(encoding_config_str)
-          
+
           # Verify hardware acceleration type
           if encoding_config.get("HardwareAccelerationType") != "vaapi":
               raise Exception(f"Expected HardwareAccelerationType=vaapi, got {encoding_config.get('HardwareAccelerationType')}")
-          
+
           # Verify thread count
           if encoding_config.get("EncodingThreadCount") != 4:
               raise Exception(f"Expected EncodingThreadCount=4, got {encoding_config.get('EncodingThreadCount')}")
-          
+
           # Verify tone mapping is disabled
           if encoding_config.get("EnableTonemapping") != False:
               raise Exception(f"Expected EnableTonemapping=False, got {encoding_config.get('EnableTonemapping')}")
-          
+
           # Verify hardware encoding is enabled
           if encoding_config.get("EnableHardwareEncoding") != True:
               raise Exception(f"Expected EnableHardwareEncoding=True, got {encoding_config.get('EnableHardwareEncoding')}")
-          
+
           # Verify hardware decoding codecs
           expected_decoding_codecs = ["h264", "hevc"]
           actual_decoding_codecs = encoding_config.get("HardwareDecodingCodecs", [])
           if not all(codec in actual_decoding_codecs for codec in expected_decoding_codecs):
               raise Exception(f"Expected decoding codecs {expected_decoding_codecs}, got {actual_decoding_codecs}")
-          
+
           # Verify hardware encoding codecs
           if encoding_config.get("AllowHevcEncoding") != True:
               raise Exception(f"Expected AllowHevcEncoding=True, got {encoding_config.get('AllowHevcEncoding')}")
-          
+
           # Verify CRF values
           if encoding_config.get("H264Crf") != 23:
               raise Exception(f"Expected H264Crf=23, got {encoding_config.get('H264Crf')}")
-          
+
           if encoding_config.get("H265Crf") != 28:
               raise Exception(f"Expected H265Crf=28, got {encoding_config.get('H265Crf')}")
 
