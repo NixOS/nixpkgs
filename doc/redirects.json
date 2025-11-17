@@ -362,6 +362,11 @@
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities",
+    "index.html#maven-mvn2nix",
+    "index.html#buildmaven-with-nixosmvn2nix-maven-plugin"
+  ],
   "sec-nrfutil": [
     "index.html#sec-nrfutil"
   ],
@@ -3665,14 +3670,9 @@
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"
   ],
-  "maven-mvn2nix": [
-    "index.html#maven-mvn2nix"
-  ],
-  "solving-for-dependencies": [
+  "maven-solving-for-dependencies": [
+    "index.html#maven-solving-for-dependencies",
     "index.html#solving-for-dependencies"
-  ],
-  "buildmaven-with-nixosmvn2nix-maven-plugin": [
-    "index.html#buildmaven-with-nixosmvn2nix-maven-plugin"
   ],
   "double-invocation": [
     "index.html#double-invocation"
