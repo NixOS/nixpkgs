@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.0.9";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t93yRd9TrtGZogjpSy0Bse0cM5BFyMaSxFYQFZZyvPM=";
+    hash = "sha256-qfDqatv2OieVcgSzEW+ISbAwNyDTsWTynaxIR3lz1Uo=";
   };
 
   patches = [
