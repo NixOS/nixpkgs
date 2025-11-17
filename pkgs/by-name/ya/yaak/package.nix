@@ -27,21 +27,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.6.1";
+  version = "2025.8.1";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3sEq7VpzaIMbkvHQTQLf3NRbAJjtpOJpirdcA7y2FIE=";
+    hash = "sha256-6sH5mXu75VMAtguUugozPghWRaeSTFI75KBhnERGyo0=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-zz9wlJ3yQ3oTyCFrAV7vD1xENLW+vmf2Pzly4yYas/g=";
+    hash = "sha256-vDIsD8TMjysqN/OFvNVez2qOwCCl55S2ix4jz3tXSWk=";
   };
 
-  cargoHash = "sha256-CMx7vTSGeQMXpXeH4LIOKEb29CfKXQV+r8tSYdmW5U4=";
+  cargoHash = "sha256-mhQo5p1iBn7hGGiUu1e3RZ8CAtNvdk/gPw/wj8XqGmQ=";
 
   cargoRoot = "src-tauri";
 
@@ -78,8 +78,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
-    substituteInPlace src-tauri/tauri.commercial.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+    substituteInPlace src-tauri/tauri.release.conf.json \
+      --replace-fail '"updater",' "" \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
@@ -107,7 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   tauriBuildFlags = [
     "--config"
-    "./src-tauri/tauri.commercial.conf.json"
+    "./src-tauri/tauri.release.conf.json"
   ];
 
   # Permission denied (os error 13)
