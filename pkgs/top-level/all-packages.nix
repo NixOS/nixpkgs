@@ -13494,6 +13494,11 @@ with pkgs;
 
   p4est-dbg = p4est.override { debug = true; };
 
+  scalapack-ilp64 = scalapack.override {
+    blas = blas-ilp64;
+    lapack = lapack-ilp64;
+  };
+
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
