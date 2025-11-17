@@ -9,6 +9,7 @@
   # Switching this on enables aggressive dynamic switching between backends after `<pkg>.overrideAttrs` by default,
   # and also enable manual specifying useFetchGit via `overrideAttrs`.
   enableUseFetchGitFinal ? false,
+  expectDrvArgsExtra ? { },
 }:
 let
   accumulateConstructorMetadata =
@@ -47,6 +48,21 @@ let
           removeAttrs args constructDrv.excludeDrvArgNames // constructDrv.extendDrvArgs finalAttrs args;
       }
     );
+
+  expectDrvArgs = lib.zipAttrsWith (_: lib.any lib.id) [
+    expectDrvArgsExtra
+    {
+      repo = true;
+      rev = true;
+      tag = true;
+      useFetchGit = true;
+    }
+    faUseFetchGit
+    (lib.zipAttrsWith (_: lib.all lib.id) [
+      fetchgit.expectDrvArgs
+      fetchzip.expectDrvArgs
+    ])
+  ];
 
   # Here defines fetchFromGitHub arguments that determines useFetchGit,
   # The attribute value is their default values.
@@ -214,7 +230,6 @@ lib.extendMkDerivation {
         useFetchGitFinal = if enableUseFetchGitFinal then finalAttrs.useFetchGit else useFetchGitCurrent;
         newDerivationArgsChosen =
           if useFetchGitFinal then fetchgitDerivationArgs else fetchzipDerivationArgs;
-        newDerivationArgsMixed = fetchgitDerivationArgs // fetchzipDerivationArgs;
         faForbidden = removeAttrs (
           if useFetchGitCurrent then faFetchZipSpecific else faFetchGitSpecific
         ) excludeDrvArgNamesShared;
@@ -253,7 +268,7 @@ lib.extendMkDerivation {
               fetchgitDerivationArgs.${n}
             else
               newDerivationArgsChosen.${n} or null
-          ) newDerivationArgsMixed
+          ) expectDrvArgs
           // lib.overrideExisting (lib.getAttrs excludeUseFetchGitArgNames useFetchGitArgsDefault) args
           // {
             useFetchGit =
@@ -280,4 +295,7 @@ lib.extendMkDerivation {
             previousAttrs.rev;
       }
     );
+}
+// {
+  inherit expectDrvArgs;
 }

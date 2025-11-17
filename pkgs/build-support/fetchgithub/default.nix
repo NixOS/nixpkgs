@@ -14,6 +14,10 @@ lib.makeOverridable (
           }
         else
           previousArgs.fetchzip;
+      expectDrvArgsExtra = {
+        githubBase = true;
+        owner = true;
+      };
     });
 
     excludeDrvArgNames = [
