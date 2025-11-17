@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Asset Manager (astm) is a asset manager to store components in your device kinda like a mini personal shadcn/ui.";
     homepage = "https://github.com/ritishDas/astm";
-    license = lib.licenses.mit; # or whatever applies
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ritishDas ];
     platforms = lib.platforms.linux;
   };
