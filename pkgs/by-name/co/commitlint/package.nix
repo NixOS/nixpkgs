@@ -34,9 +34,33 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pkgs=("config-validator" "rules" "parse" "is-ignored" "lint"
-          "resolve-extends" "execute-rule" "load" "read" "types" "cli")
+    # Remove test files to avoid dependency on commitlint test packages
+    rm -rf @commitlint/**/*.test.{js,ts}
+
+    # See https://github.com/conventional-changelog/commitlint/blob/20.1.0/Dockerfile.ci
+    # Excludes `config-nx-scopes` which is a plain JavaScript package
+    pkgs=(
+      "config-validator"
+      "rules"
+      "parse"
+      "is-ignored"
+      "lint"
+      "resolve-extends"
+      "execute-rule"
+      "load"
+      "read"
+      "types"
+      "cli"
+      "config-conventional"
+      "config-pnpm-scopes"
+      "ensure"
+      "format"
+      "message"
+      "to-lines"
+      "top-level"
+    )
     for p in "''${pkgs[@]}" ; do
+      echo "Building package: @commitlint/$p"
       cd @commitlint/$p/
       yarn run --offline tsc --build --force
       cd ../..
