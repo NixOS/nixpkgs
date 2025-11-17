@@ -232,8 +232,8 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
       ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-          --replace kAudioObjectPropertyElement{Main,Master} \
-          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+          --replace-fail kAudioObjectPropertyElement{Main,Master} \
+          --replace-fail kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
       ''
     +
       lib.optionalString
