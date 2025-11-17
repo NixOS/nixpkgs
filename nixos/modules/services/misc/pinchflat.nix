@@ -129,7 +129,7 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.selfhosted || !builtins.isNull cfg.secretsFile;
+        assertion = cfg.selfhosted || !isNull cfg.secretsFile;
         message = "Either `selfhosted` must be true, or a `secretsFile` must be configured.";
       }
     ];
@@ -146,7 +146,7 @@ in
 
         StateDirectory = baseNameOf stateDir;
         Environment = [
-          "PORT=${builtins.toString cfg.port}"
+          "PORT=${toString cfg.port}"
           "MEDIA_PATH=${cfg.mediaDir}"
           "CONFIG_PATH=${stateDir}"
           "DATABASE_PATH=${stateDir}/db/pinchflat.db"
@@ -160,7 +160,7 @@ in
         ]
         ++ optional cfg.selfhosted [ "RUN_CONTEXT=selfhosted" ]
         ++ optional (!isNull config.time.timeZone) "TZ=${config.time.timeZone}"
-        ++ attrValues (mapAttrs (name: value: name + "=" + builtins.toString value) cfg.extraConfig);
+        ++ attrValues (mapAttrs (name: value: name + "=" + toString value) cfg.extraConfig);
         EnvironmentFile = optional (cfg.secretsFile != null) cfg.secretsFile;
         ExecStartPre = "${lib.getExe' cfg.package "migrate"}";
         ExecStart = "${getExe cfg.package} start";

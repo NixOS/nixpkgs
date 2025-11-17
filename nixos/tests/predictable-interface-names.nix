@@ -22,7 +22,7 @@ let
   };
 in
 pkgs.lib.listToAttrs (
-  builtins.map (
+  map (
     {
       predictable,
       withNetworkd,

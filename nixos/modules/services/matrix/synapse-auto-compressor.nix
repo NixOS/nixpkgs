@@ -136,7 +136,7 @@ in
           "-n"
           cfg.settings.chunks_to_compress
           "-l"
-          (lib.concatStringsSep "," (builtins.map builtins.toString cfg.settings.levels))
+          (lib.concatStringsSep "," (map toString cfg.settings.levels))
         ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

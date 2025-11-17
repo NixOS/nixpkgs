@@ -54,7 +54,7 @@ in
     environment.systemPackages = [ pkgs.spaceFM ];
 
     environment.etc."spacefm/spacefm.conf".text = lib.concatStrings (
-      lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings
+      lib.mapAttrsToList (n: v: "${n}=${toString v}\n") cfg.settings
     );
   };
 }
