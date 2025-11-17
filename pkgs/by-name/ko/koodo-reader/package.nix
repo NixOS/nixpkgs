@@ -15,6 +15,8 @@
   xcbuild,
 
   electron_37,
+
+  nix-update-script,
 }:
 
 let
@@ -133,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
