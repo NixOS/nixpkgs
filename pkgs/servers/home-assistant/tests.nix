@@ -121,7 +121,7 @@ lib.listToAttrs (
     component:
     lib.nameValuePair component (
       home-assistant.overridePythonAttrs (old: {
-        pname = "homeassistant-test-${component}";
+        pname = "homeassistant-test-${component}-rebuild";
         pyproject = null;
         format = "other";
 
@@ -145,6 +145,10 @@ lib.listToAttrs (
           broken = lib.elem component [ ];
           # upstream only tests on Linux, so do we.
           platforms = lib.platforms.linux;
+          # There is no need for Hydra to build component tests since we notice
+          # any failures when updating Home Assistant. They are still built by
+          # nixpkgs-review.
+          hydraPlatforms = [ ];
         };
       })
     )
