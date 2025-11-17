@@ -17,7 +17,7 @@
   npmConfigHook = makeSetupHook {
     name = "npm-config-hook";
     substitutions = {
-      nodeSrc = srcOnly nodejs;
+      nodeSrc = nodejs;
       nodeGyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
       npmArch = stdenv.targetPlatform.node.arch;
       npmPlatform = stdenv.targetPlatform.node.platform;
