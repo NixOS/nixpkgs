@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchzip {
     extension = "zip";
     name = "WhatsApp.app";
-    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=relbranch";
+    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=master&is_buck=true";
     hash = "sha256-LYjPMiXLD1U5ZNt/acBagrV2RS7U/OGMJ06mUFBluSQ=";
   };
 
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=relbranch&configuration=Release")
+      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
       version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
       update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
     '';
