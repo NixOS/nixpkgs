@@ -9,6 +9,7 @@
   pytestCheckHook,
   ffmpeg,
   procps,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Run an ffmpeg command with progress";
