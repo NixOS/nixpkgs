@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meowpdf";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "monoamine11231";
     repo = "meowpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2/hg0zXgnJwvQv5WcRc36x1StXVLkl81EmujGj87PKM=";
+    hash = "sha256-RwhzPaqV7N6K5fO2ptBgZ2jRifZexpSvh+hJN0seIPc=";
   };
 
   cargoHash = "sha256-OH+0Pxb4QcRkjT2cOi9GJa5jss1DaMKUzVSmiwyIoAg=";
