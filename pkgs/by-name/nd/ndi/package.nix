@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "armv7l-linux"
     ];
+    maintainers = with maintainers; [ ChaosAttractor ];
     hydraPlatforms = [ ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
