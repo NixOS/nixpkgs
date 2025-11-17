@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   copyDesktopItems,
-  electron_38,
+  electron_39,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
@@ -21,12 +21,12 @@
 }:
 
 let
-  electron = electron_38;
+  electron = electron_39;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.22.1";
+  version = "1.23.1";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -59,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+YM1fiY2bH5nY1L/xWjMbWe5lH1LfyKW47OzCROB3nE=";
+    hash = "sha256-08boCPsuT09OileZUWhB8awXWHrlJzoER2Bx0WXeOHU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-2Cja6CQxjOlxjhsjGQ5C9a/C/2RfzKdvtRCKO7VztwQ=";
+    hash = "sha256-+TAO3L0dLZqzJ+S3kXQKkjVq7BSBBsdx3SgYNevxVfI=";
   };
 
   patches = [
