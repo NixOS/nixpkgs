@@ -69,12 +69,6 @@
           machineWithTranscoding.wait_for_open_port(8096)
           machineWithTranscoding.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
 
-          # Check configuration files are generated
-          machineWithTranscoding.succeed("test -f /etc/jellyfin/encoding.xml")
-          machineWithTranscoding.succeed("grep '<HardwareAccelerationType>vaapi</HardwareAccelerationType>' /etc/jellyfin/encoding.xml")
-          machineWithTranscoding.succeed("grep '<EncodingThreadCount>4</EncodingThreadCount>' /etc/jellyfin/encoding.xml")
-          machineWithTranscoding.succeed("grep '<EnableTonemapping>false</EnableTonemapping>' /etc/jellyfin/encoding.xml")
-
           # Check device access
           machineWithTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
 

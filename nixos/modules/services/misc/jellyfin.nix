@@ -362,7 +362,6 @@ in
           WorkingDirectory = cfg.dataDir;
           ExecStart = "${getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
           ExecStartPre = lib.optionals cfg.hardwareAcceleration.enable [
-            "${pkgs.coreutils}/bin/mkdir -p ${cfg.configDir}"
             "${pkgs.coreutils}/bin/cp /etc/jellyfin/encoding.xml ${cfg.configDir}/encoding.xml"
           ];
           Restart = "on-failure";
