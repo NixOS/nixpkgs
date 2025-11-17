@@ -149,15 +149,19 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       systemd.services.rauc = {
-        description = "RAUC A/B update service";
+        description = "RAUC Update Service";
+        documentation = [ "https://rauc.readthedocs.io" ];
         wants = [ "basic.target" ];
         wantedBy = [ "multi-user.target" ];
         after = [
           "dbus.service"
         ];
         serviceConfig = {
-          Type = "simple";
-          ExecStart = "${lib.getExe cfg.package} --conf=${configFile} service";
+          Type = "dbus";
+          BusName = "de.pengutronix.rauc";
+          ExecStart = "${lib.getExe cfg.package} --conf=${configFile} --mount=/run/rauc/mnt service";
+          RuntimeDirectory = "rauc/mnt";
+          MountFlags = "slave";
           StateDirectory = baseNameOf cfg.dataDir;
           WorkingDirectory = cfg.dataDir;
         };
@@ -174,6 +178,7 @@ in
     (mkIf (cfg.enable && cfg.mark-good.enable) {
       systemd.services.rauc-mark-good = {
         description = "RAUC Good-marking service";
+        documentation = [ "https://rauc.readthedocs.io" ];
         wantedBy = [ "multi-user.target" ];
         after = [
           "rauc.service"
