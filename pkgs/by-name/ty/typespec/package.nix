@@ -16,13 +16,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typespec";
     tag = "typespec-stable@${finalAttrs.version}";
-    hash = "sha256-huyEQA+XhlGVxnxUzQH1aIZUE4EbCN6HakitzuDyR18=";
+    hash = "sha256-Y1Ij2o0SmR/5UnhgDKZcHTjRdSym+yVa5xDn9w7MAyM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 2;
-    hash = "sha256-ztig1B10cQQy+4XKZjwwlCxGenwcU+C28TfTWHqZ59Y=";
+    hash = "sha256-mceyG5vSkOOiBZ1KJJhsRON7qSd0efTZXtKw3m4W5NA=";
   };
 
   postPatch = ''
