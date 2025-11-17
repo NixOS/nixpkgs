@@ -33,6 +33,20 @@ stdenv.mkDerivation {
     # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
     # Multiple upstream commits squashed with adjustments, see header
     ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # nl_langinfo is no longer thread safe on macOS 26.x+. (POSIX doesn't require it.)
+    #
+    # gnulib worked around the issue for macOS in:
+    # https://github.com/coreutils/gnulib/commit/8ebd5a9aa7e24dce4ac2fd4f5074b43b00759d54
+    #
+    # We do not need to backport the gnulib fix for GNU grep because GNU grep
+    # is not multi-threaded. See: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=20768
+    # Instead, we simply disable the relevant test that fails due to the issue.
+    #
+    # We can re-enable the test case once GNU grep updates their gnulib submodule to
+    # include the above commit.
+    ./darwin-disable-test-nl_langinfo-mt.patch
   ];
 
   # Some gnulib tests fail
