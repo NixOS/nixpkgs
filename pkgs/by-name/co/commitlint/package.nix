@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
           "resolve-extends" "execute-rule" "load" "read" "types" "cli")
     for p in "''${pkgs[@]}" ; do
       cd @commitlint/$p/
-      yarn run tsc --build --force
+      yarn run --offline tsc --build --force
       cd ../..
     done
 
