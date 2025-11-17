@@ -9,6 +9,9 @@ let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
     axis = getComponentDeps "deconz";
+    emulated_hue = [
+      defusedxml
+    ];
     homeassistant_connect_zbt2 = getComponentDeps "zha";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     govee_ble = [
@@ -29,6 +32,9 @@ let
     raspberry_pi = [
       rpi-bad-power
     ];
+    rss_feed_template = [
+      defusedxml
+    ];
     shelly = [
       pyswitchbot
     ];
@@ -42,9 +48,7 @@ let
     xiaomi_miio = [
       arrow
     ];
-    zeroconf = [
-      aioshelly
-    ];
+    zeroconf = getComponentDeps "shelly";
     zha = [
       pydeconz
     ];
