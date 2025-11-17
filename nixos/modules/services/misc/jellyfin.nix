@@ -276,45 +276,55 @@ in
         let
           boolStr = b: if b then "true" else "false";
           # XML escape function for special characters
-          escapeXML = str: builtins.replaceStrings
-            ["&" "<" ">" "\"" "'"]
-            ["&amp;" "&lt;" "&gt;" "&quot;" "&apos;"]
-            str;
+          escapeXML =
+            str:
+            builtins.replaceStrings [ "&" "<" ">" "\"" "'" ] [ "&amp;" "&lt;" "&gt;" "&quot;" "&apos;" ] str;
           devicePath =
-            if cfg.hardwareAcceleration.devices != [ ]
-            then escapeXML (lib.head cfg.hardwareAcceleration.devices)
-            else "";
-          filteredDecodingCodecs = builtins.filter
-            (c: c != "hevcRExt10bit" && c != "hevcRExt12bit")
-            cfg.transcoding.hardwareDecodingCodecs;
-        in {
-        text = ''
-          <?xml version="1.0" encoding="utf-8"?>
-          <EncodingOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-            <HardwareAccelerationType>${cfg.hardwareAcceleration.type}</HardwareAccelerationType>
-            ${lib.optionalString (cfg.hardwareAcceleration.type == "vaapi" && devicePath != "") "<VaapiDevice>${devicePath}</VaapiDevice>"}
-            ${lib.optionalString (cfg.hardwareAcceleration.type == "qsv" && devicePath != "") "<OpenclDevice>${devicePath}</OpenclDevice>"}
-            <EncodingThreadCount>${if cfg.transcoding.threadCount != null then toString cfg.transcoding.threadCount else "-1"}</EncodingThreadCount>
-            <EnableThrottling>${boolStr cfg.transcoding.throttleTranscoding}</EnableThrottling>
-            <EnableTonemapping>${boolStr cfg.transcoding.enableToneMapping}</EnableTonemapping>
-            <EnableSubtitleExtraction>${boolStr cfg.transcoding.enableSubtitleExtraction}</EnableSubtitleExtraction>
-            <H264Crf>${toString cfg.transcoding.h264Crf}</H264Crf>
-            <H265Crf>${toString cfg.transcoding.h265Crf}</H265Crf>
-            <EnableHardwareEncoding>${boolStr cfg.transcoding.enableHardwareEncoding}</EnableHardwareEncoding>
-            <AllowHevcEncoding>${boolStr (builtins.elem "hevc" cfg.transcoding.hardwareEncodingCodecs)}</AllowHevcEncoding>
-            <AllowAv1Encoding>${boolStr (builtins.elem "av1" cfg.transcoding.hardwareEncodingCodecs)}</AllowAv1Encoding>
-            <EnableIntelLowPowerH264HwEncoder>${boolStr cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerH264HwEncoder>
-            <EnableIntelLowPowerHevcHwEncoder>${boolStr cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerHevcHwEncoder>
-            <EnableDecodingColorDepth10HevcRext>${boolStr (builtins.elem "hevcRExt10bit" cfg.transcoding.hardwareDecodingCodecs)}</EnableDecodingColorDepth10HevcRext>
-            <EnableDecodingColorDepth12HevcRext>${boolStr (builtins.elem "hevcRExt12bit" cfg.transcoding.hardwareDecodingCodecs)}</EnableDecodingColorDepth12HevcRext>
-            <HardwareDecodingCodecs>
-              ${lib.optionalString (filteredDecodingCodecs != [])
-                (lib.concatMapStringsSep "\n      " (codec: "<string>${escapeXML codec}</string>") filteredDecodingCodecs)}
-            </HardwareDecodingCodecs>
-          </EncodingOptions>
-        '';
-        mode = "0644";
-      };
+            if cfg.hardwareAcceleration.devices != [ ] then
+              escapeXML (lib.head cfg.hardwareAcceleration.devices)
+            else
+              "";
+          filteredDecodingCodecs = builtins.filter (
+            c: c != "hevcRExt10bit" && c != "hevcRExt12bit"
+          ) cfg.transcoding.hardwareDecodingCodecs;
+        in
+        {
+          text = ''
+            <?xml version="1.0" encoding="utf-8"?>
+            <EncodingOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+              <HardwareAccelerationType>${cfg.hardwareAcceleration.type}</HardwareAccelerationType>
+              ${lib.optionalString (
+                cfg.hardwareAcceleration.type == "vaapi" && devicePath != ""
+              ) "<VaapiDevice>${devicePath}</VaapiDevice>"}
+              ${lib.optionalString (
+                cfg.hardwareAcceleration.type == "qsv" && devicePath != ""
+              ) "<OpenclDevice>${devicePath}</OpenclDevice>"}
+              <EncodingThreadCount>${
+                if cfg.transcoding.threadCount != null then toString cfg.transcoding.threadCount else "-1"
+              }</EncodingThreadCount>
+              <EnableThrottling>${boolStr cfg.transcoding.throttleTranscoding}</EnableThrottling>
+              <EnableTonemapping>${boolStr cfg.transcoding.enableToneMapping}</EnableTonemapping>
+              <EnableSubtitleExtraction>${boolStr cfg.transcoding.enableSubtitleExtraction}</EnableSubtitleExtraction>
+              <H264Crf>${toString cfg.transcoding.h264Crf}</H264Crf>
+              <H265Crf>${toString cfg.transcoding.h265Crf}</H265Crf>
+              <EnableHardwareEncoding>${boolStr cfg.transcoding.enableHardwareEncoding}</EnableHardwareEncoding>
+              <AllowHevcEncoding>${boolStr (builtins.elem "hevc" cfg.transcoding.hardwareEncodingCodecs)}</AllowHevcEncoding>
+              <AllowAv1Encoding>${boolStr (builtins.elem "av1" cfg.transcoding.hardwareEncodingCodecs)}</AllowAv1Encoding>
+              <EnableIntelLowPowerH264HwEncoder>${boolStr cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerH264HwEncoder>
+              <EnableIntelLowPowerHevcHwEncoder>${boolStr cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerHevcHwEncoder>
+              <EnableDecodingColorDepth10HevcRext>${boolStr (builtins.elem "hevcRExt10bit" cfg.transcoding.hardwareDecodingCodecs)}</EnableDecodingColorDepth10HevcRext>
+              <EnableDecodingColorDepth12HevcRext>${boolStr (builtins.elem "hevcRExt12bit" cfg.transcoding.hardwareDecodingCodecs)}</EnableDecodingColorDepth12HevcRext>
+              <HardwareDecodingCodecs>
+                ${lib.optionalString (filteredDecodingCodecs != [ ]) (
+                  lib.concatMapStringsSep "\n      " (
+                    codec: "<string>${escapeXML codec}</string>"
+                  ) filteredDecodingCodecs
+                )}
+              </HardwareDecodingCodecs>
+            </EncodingOptions>
+          '';
+          mode = "0644";
+        };
     };
 
     systemd = {
