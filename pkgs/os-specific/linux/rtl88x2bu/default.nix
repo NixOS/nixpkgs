@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ otavio ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }
