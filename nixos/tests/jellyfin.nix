@@ -24,8 +24,14 @@
           enableToneMapping = false;
           threadCount = 4;
           enableHardwareEncoding = true;
-          hardwareDecodingCodecs = [ "h264" "hevc" ];
-          hardwareEncodingCodecs = [ "h264" "hevc" ];
+          hardwareDecodingCodecs = [
+            "h264"
+            "hevc"
+          ];
+          hardwareEncodingCodecs = [
+            "h264"
+            "hevc"
+          ];
         };
       };
       environment.systemPackages = with pkgs; [ ffmpeg ];
@@ -84,6 +90,74 @@
               return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'X-Emby-Authorization:{auth_header}'"
           else:
               return f"curl --fail -X post 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+
+      # Test dashboard-based configuration verification
+      with subtest("Dashboard configuration verification"):
+          # Login to get admin token for dashboard API calls
+          machineWithTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
+          machineWithTranscoding.succeed(api_get("/Startup/FirstUser"))
+          machineWithTranscoding.succeed(api_post("/Startup/Complete"))
+          
+          auth_result_str = machineWithTranscoding.succeed(
+              api_post("/Users/AuthenticateByName", "${payloads.auth}")
+          )
+          auth_result = json.loads(auth_result_str)
+          auth_token = auth_result["AccessToken"]
+          dashboard_auth_header = f'MediaBrowser Client="NixOS Dashboard Tests", DeviceId="dashboard-test", Device="Test Device", Version="1.0", Token={auth_token}'
+
+          def dashboard_api_get(path):
+              return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{dashboard_auth_header}'"
+
+          # Verify hardware acceleration settings via dashboard API
+          encoding_config_str = machineWithTranscoding.succeed(dashboard_api_get("/System/Configuration/encoding"))
+          encoding_config = json.loads(encoding_config_str)
+          
+          # Verify hardware acceleration type
+          if encoding_config.get("HardwareAccelerationType") != "vaapi":
+              raise Exception(f"Expected HardwareAccelerationType=vaapi, got {encoding_config.get('HardwareAccelerationType')}")
+          
+          # Verify thread count
+          if encoding_config.get("EncodingThreadCount") != 4:
+              raise Exception(f"Expected EncodingThreadCount=4, got {encoding_config.get('EncodingThreadCount')}")
+          
+          # Verify tone mapping is disabled
+          if encoding_config.get("EnableTonemapping") != False:
+              raise Exception(f"Expected EnableTonemapping=False, got {encoding_config.get('EnableTonemapping')}")
+          
+          # Verify hardware encoding is enabled
+          if encoding_config.get("EnableHardwareEncoding") != True:
+              raise Exception(f"Expected EnableHardwareEncoding=True, got {encoding_config.get('EnableHardwareEncoding')}")
+          
+          # Verify hardware decoding codecs
+          expected_decoding_codecs = ["h264", "hevc"]
+          actual_decoding_codecs = encoding_config.get("HardwareDecodingCodecs", [])
+          if not all(codec in actual_decoding_codecs for codec in expected_decoding_codecs):
+              raise Exception(f"Expected decoding codecs {expected_decoding_codecs}, got {actual_decoding_codecs}")
+          
+          # Verify hardware encoding codecs
+          if encoding_config.get("AllowHevcEncoding") != True:
+              raise Exception(f"Expected AllowHevcEncoding=True, got {encoding_config.get('AllowHevcEncoding')}")
+          
+          # Verify CRF values
+          if encoding_config.get("H264Crf") != 23:
+              raise Exception(f"Expected H264Crf=23, got {encoding_config.get('H264Crf')}")
+          
+          if encoding_config.get("H265Crf") != 28:
+              raise Exception(f"Expected H265Crf=28, got {encoding_config.get('H265Crf')}")
+
+          # Verify subtitle extraction setting
+          if encoding_config.get("EnableSubtitleExtraction") != True:
+              raise Exception(f"Expected EnableSubtitleExtraction=True, got {encoding_config.get('EnableSubtitleExtraction')}")
+
+          # Verify segment deletion setting
+          if encoding_config.get("EnableSegmentDeletion") != True:
+              raise Exception(f"Expected EnableSegmentDeletion=True, got {encoding_config.get('EnableSegmentDeletion')}")
+
+          # Verify throttling is disabled
+          if encoding_config.get("EnableThrottling") != False:
+              raise Exception(f"Expected EnableThrottling=False, got {encoding_config.get('EnableThrottling')}")
+
+          print("All dashboard configuration values verified successfully!")
 
 
       with machine.nested("Wizard completes"):
