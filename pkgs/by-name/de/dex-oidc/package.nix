@@ -7,14 +7,14 @@
   dex-oidc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dex";
   version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = "dex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wpy7pZBpqAaPjWbnsqtnE+65a58IGg0pyp4CEUnmmc4=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${src.rev}"
+    "-X main.version=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
@@ -40,7 +40,7 @@ buildGoModule rec {
     version = testers.testVersion {
       package = dex-oidc;
       command = "dex version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -54,4 +54,4 @@ buildGoModule rec {
     ];
     mainProgram = "dex";
   };
-}
+})
