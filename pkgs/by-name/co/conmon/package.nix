@@ -8,6 +8,7 @@
   libseccomp,
   systemdMinimal,
   nixosTests,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/containers/conmon/releases/tag/${finalAttrs.src.tag}";
