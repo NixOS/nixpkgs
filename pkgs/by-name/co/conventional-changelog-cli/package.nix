@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/conventional-changelog-v${finalAttrs.version}";
+    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/${finalAttrs.src.tag}";
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;
