@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conmon";
   version = "2.1.13";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "conmon";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XsVWcJsUc0Fkn7qGRJDG5xrQAsJr6KN7zMy3AtPuMTo=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # manpage requires building the vendored go-md2man
   makeFlags = [
     "bin/conmon"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ];
 
   installPhase = ''
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/containers/conmon/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/containers/conmon";
     description = "OCI container runtime monitor";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "conmon";
   };
-}
+})
