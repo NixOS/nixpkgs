@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bip32";
-  version = "3.4";
+  version = "5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "darosior";
     repo = "python-bip32";
     rev = version;
-    hash = "sha256-o8UKR17XDWp1wTWYeDL0DJY+D11YI4mg0UuGEAPkHxE=";
+    hash = "sha256-QO1gS9bx/eQPaLuB1ZNZuXj4DmeO4/La2hG9NCXjd+4=";
   };
 
   pythonRelaxDeps = [ "coincurve" ];
