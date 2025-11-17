@@ -11957,6 +11957,8 @@ self: super: with self; {
 
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
+  pillow-jpegxl-plugin = callPackage ../development/python-modules/pillow-jpegxl-plugin { };
+
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
 
   pillowfight = callPackage ../development/python-modules/pillowfight { };
