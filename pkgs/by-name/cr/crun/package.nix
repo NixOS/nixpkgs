@@ -38,14 +38,14 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
   version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-WBAwyDODMrUDlgonRbxaNQ+aN8K6YicY2JVArXDJem8=";
     fetchSubmodules = true;
   };
@@ -68,13 +68,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  NIX_LDFLAGS = "-lcriu";
+  env = {
+    NIX_LDFLAGS = "-lcriu";
+  };
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
   postPatch = ''
-    echo ${version} > .tarball-version
-    echo '#define GIT_VERSION "${src.rev}"' > git-version.h
+    echo ${finalAttrs.version} > .tarball-version
+    echo '#define GIT_VERSION "${finalAttrs.src.tag}"' > git-version.h
 
     ${lib.concatMapStringsSep "\n" (
       e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
@@ -86,7 +88,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = {
-    changelog = "https://github.com/containers/crun/releases/tag/${version}";
+    changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
     license = lib.licenses.gpl2Plus;
@@ -94,4 +96,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.podman ];
     mainProgram = "crun";
   };
-}
+})
