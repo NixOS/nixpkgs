@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   pnpm,
+  makeBinaryWrapper,
   nix-update-script,
 }:
 
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
+    makeBinaryWrapper
   ];
 
   buildPhase = ''
@@ -43,9 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/conventional-changelog/
     mkdir $out/bin
     mv * $out/lib/node_modules/conventional-changelog/
-    chmod +x $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js
-    ln -s $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js $out/bin/conventional-changelog
-    patchShebangs $out/bin/conventional-changelog
+
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/conventional-changelog \
+      --add-flags "$out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js" \
+      --set NODE_PATH "$out/lib/node_modules/conventional-changelog/node_modules"
 
     runHook postInstall
   '';
