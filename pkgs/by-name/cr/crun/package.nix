@@ -8,7 +8,7 @@
   libcap,
   libseccomp,
   python3,
-  systemd,
+  systemdMinimal,
   yajl,
   nixosTests,
   criu,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     criu
     libcap
     libseccomp
-    systemd
+    systemdMinimal
     yajl
   ];
 
