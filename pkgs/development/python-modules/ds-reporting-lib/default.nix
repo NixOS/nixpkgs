@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ds-reporting-lib";
-  version = "6.0.0b3";
+  version = "6.0.0b5";
   pyproject = true;
 
   # pypi because library is embedded into another project's repo
   src = fetchPypi {
     inherit version;
     pname = "ds_reporting_lib";
-    hash = "sha256-0C/UgAM7VIWEjuRq1ZCTL5CjJ6OK+0/Yw+AN4j7jj6E=";
+    hash = "sha256-hxjNRUOorjjbuJkFpscTN3VB5NJywLZ6Ux+dB1Q1FyU=";
   };
 
   build-system = [ setuptools ];
