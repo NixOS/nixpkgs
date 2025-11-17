@@ -11,8 +11,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swt";
-  version = "4.34";
-  fullVersion = "R-${finalAttrs.version}-202411201800";
+  # NOTE: In case you wish to override, don't override version, override
+  # `fullVersion`.
+  version = builtins.elemAt (lib.splitString "-" finalAttrs.fullVersion) 1;
+  fullVersion = "R-4.34-202411201800";
 
   hardeningDisable = [ "format" ];
 
