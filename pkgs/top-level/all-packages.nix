@@ -519,6 +519,7 @@ with pkgs;
         protobuf = protobuf_25.override {
           abseil-cpp = abseil-cpp_202407;
         };
+        stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
       };
     })
     mysql-shell_8
@@ -530,6 +531,7 @@ with pkgs;
     protobuf = protobuf_25.override {
       abseil-cpp = abseil-cpp_202407;
     };
+    stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
   };
 
   # this is used by most `fetch*` functions
@@ -7328,11 +7330,7 @@ with pkgs;
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
-  gst_all_1 = recurseIntoAttrs (
-    callPackage ../development/libraries/gstreamer {
-      callPackage = newScope gst_all_1;
-    }
-  );
+  gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 
   gnutls = callPackage ../development/libraries/gnutls {
     util-linux = util-linuxMinimal; # break the cyclic dependency
@@ -12771,6 +12769,7 @@ with pkgs;
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
     ffmpegSupport = false;
+    javascriptSupport = false;
     rtmpSupport = false;
   };
 
@@ -13327,6 +13326,7 @@ with pkgs;
     gnome46Extensions
     gnome47Extensions
     gnome48Extensions
+    gnome49Extensions
     ;
 
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
