@@ -161,9 +161,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   doCheck = true;
 
+  # tuwunel writes crate compilation commands into the executable,
+  # leading to Nix picking up rustc & gcc as runtime dependencies
+  # https://github.com/matrix-construct/tuwunel/blob/728085bd1b5f7bfd7d3f87108eaa4b4d4d51f3e6/src/core/info/rustc.rs#L20
+  # https://github.com/matrix-construct/tuwunel/blob/728085bd1b5f7bfd7d3f87108eaa4b4d4d51f3e6/src/macros/mod.rs#L42
+  # this bloats the closure by ~1.8GB -> we want to remove these paths (doesn't break any functionality)
   postInstall = ''
-    # fix rustc leaking into the runtime closure (it writes crate compilation commands into the executable)
-    remove-references-to -t ${rustc-unwrapped} $out/bin/tuwunel
+    remove-references-to    \
+      -t ${rustc-unwrapped} \
+      -t ${stdenv.cc}       \
+      $out/bin/tuwunel
   '';
 
   passthru = {
