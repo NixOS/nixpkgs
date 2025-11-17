@@ -104,11 +104,11 @@ in
       };
 
       music_directory = lib.mkOption {
-        type = with lib.types; either path (strMatching "(http|https|nfs|smb)://.+");
+        type = with lib.types; either path (strMatching "([a-z]+)://.+");
         default = "${cfg.dataDir}/music";
         defaultText = lib.literalExpression ''"''${dataDir}/music"'';
         description = ''
-          The directory or NFS/SMB network share where MPD reads music from. If left
+          The directory or URI where MPD reads music from. If left
           as the default value this directory will automatically be created before
           the MPD server starts, otherwise the sysadmin is responsible for ensuring
           the directory exists with appropriate ownership and permissions.
