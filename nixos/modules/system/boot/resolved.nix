@@ -10,9 +10,9 @@ let
     assertInt
     assertOnlyFields
     assertValueOneOf
-    attrsToSection
     boolValues
     checkUnitConfig
+    settingsToSections
     ;
   inherit (utils.systemdUtils.unitOptions)
     unitOption
@@ -23,6 +23,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkOptionDefault
     mkOrder
     mkRenamedOptionModule
     optionalAttrs
@@ -32,21 +33,6 @@ let
   cfg = config.services.resolved;
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
-
-  resolvedConf = ''
-    [Resolve]
-    ${attrsToSection (
-      {
-        DNS = config.networking.nameservers;
-        Domains = config.networking.search;
-        LLMNR = true;
-        DNSSEC = false;
-        DNSOverTLS = false;
-      }
-      // cfg.settings
-    )}
-  ''
-  + cfg.extraConfig;
 
   check.resolved = checkUnitConfig "Resolve" [
     (assertOnlyFields [
@@ -83,6 +69,7 @@ let
     (assertInt "StaleRetentionSec")
   ];
 
+  resolvedConf = (settingsToSections cfg.settings) + cfg.extraConfig;
 in
 {
   imports = [
@@ -96,6 +83,7 @@ in
         "services"
         "resolved"
         "settings"
+        "Resolve"
         "FallbackDNS"
       ]
     )
@@ -109,6 +97,7 @@ in
         "services"
         "resolved"
         "settings"
+        "Resolve"
         "Domains"
       ]
     )
@@ -122,6 +111,7 @@ in
         "services"
         "resolved"
         "settings"
+        "Resolve"
         "LLMNR"
       ]
     )
@@ -135,6 +125,7 @@ in
         "services"
         "resolved"
         "settings"
+        "Resolve"
         "DNSSEC"
       ]
     )
@@ -148,6 +139,7 @@ in
         "services"
         "resolved"
         "settings"
+        "Resolve"
         "DNSOverTLS"
       ]
     )
@@ -164,23 +156,22 @@ in
           Search for `services.resolved` to see all options.
         '';
       };
-      settings = mkOption {
-        default = { };
-        # We set the dafults using an attribute set merge in the conf generation, so that all defaults are not lost when one value is changed.
+      settings.Resolve = mkOption {
+        description = ''
+          Settings option for systemd-resolved.
+          See {manpage}`resolved.conf(5)` for all available options.
+        '';
+        # Remember to keep this in sync to the actual settings at the bottom of the page.
         defaultText = literalExpression ''
           {
             DNS = config.networking.nameservers;
+            DNSOverTLS = false;
+            DNSSEC = false;
             Domains = config.networking.search;
             LLMNR = true;
-            DNSSEC = false;
-            DNSOverTLS = false;
           }
         '';
-        example = { };
         type = types.addCheck (types.attrsOf unitOption) check.resolved;
-        description = ''
-          Each attribute in this set specifies an option in the `[Resolve]` section of the service configuration. See {manpage}`resolved.conf(5)` for details.
-        '';
       };
 
       extraConfig = mkOption {
@@ -212,6 +203,15 @@ in
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
       ];
+
+      # If updating any of these attrs, also update the defaultText above.
+      services.resolved.settings.Resolve = {
+        DNS = config.networking.nameservers;
+        DNSOverTLS = mkOptionDefault false;
+        DNSSEC = mkOptionDefault false;
+        Domains = mkOptionDefault config.networking.search;
+        LLMNR = mkOptionDefault true;
+      };
 
       users.users.systemd-resolve.group = "systemd-resolve";
 
