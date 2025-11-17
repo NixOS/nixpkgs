@@ -1,0 +1,13 @@
+diff --git a/linphone-app/CMakeLists.txt b/linphone-app/CMakeLists.txt
+index d40842fa2..112d45711 100644
+--- a/linphone-app/CMakeLists.txt
++++ b/linphone-app/CMakeLists.txt
+@@ -54,7 +54,6 @@ include(CheckCXXCompilerFlag)
+ 
+ 
+ set(TARGET_NAME linphone-qt)
+-set(LINPHONE_QML_DIR "WORK/qml_files/ui")
+ set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS true)
+ set(CMAKE_CXX_STANDARD 14)
+ 
+

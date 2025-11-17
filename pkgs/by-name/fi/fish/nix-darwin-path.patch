@@ -1,0 +1,12 @@
+diff --git a/share/config.fish b/share/config.fish
+index 73148ac25..1964e30be 100644
+--- a/share/config.fish
++++ b/share/config.fish
+@@ -175,6 +175,7 @@ and __fish_set_locale
+ #
+ if status --is-login
+     if command -sq /usr/libexec/path_helper
++        and not set -q __NIX_DARWIN_SET_ENVIRONMENT_DONE
+         __fish_macos_set_env PATH /etc/paths '/etc/paths.d'
+         if test -n "$MANPATH"
+             __fish_macos_set_env MANPATH /etc/manpaths '/etc/manpaths.d'

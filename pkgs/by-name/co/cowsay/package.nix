@@ -1,0 +1,58 @@
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
+  perl,
+  stdenv,
+  testers,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cowsay";
+  version = "3.8.4";
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "cowsay-org";
+    repo = "cowsay";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-m3Rndw0rnTBLhs15KqokzIOWuYl6aoPqEu2MHWpXRCs=";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ perl ];
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/cowsay \
+      --suffix COWPATH : $out/share/cowsay/cows
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "cowsay --version";
+    };
+  };
+
+  meta = {
+    description = "Program which generates ASCII pictures of a cow with a message";
+    homepage = "https://cowsay.diamonds";
+    changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      rob
+      anthonyroussel
+    ];
+    mainProgram = "cowsay";
+  };
+})

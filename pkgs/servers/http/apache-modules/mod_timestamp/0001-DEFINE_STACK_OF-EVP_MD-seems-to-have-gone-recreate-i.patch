@@ -1,0 +1,41 @@
+From 5f9d4458f05c5d9f4b416de867fd9327aba865d5 Mon Sep 17 00:00:00 2001
+From: Dirk-Willem van Gulik <dirkx@redwax.eu>
+Date: Fri, 21 Jan 2022 21:53:49 +0100
+Subject: [PATCH] DEFINE_STACK_OF(EVP_MD) seems to have gone; recreate it. And
+ quell a warning.
+
+---
+ mod_timestamp.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/mod_timestamp.c b/mod_timestamp.c
+index 289d50a..54af7c8 100644
+--- a/mod_timestamp.c
++++ b/mod_timestamp.c
+@@ -41,6 +41,14 @@
+ 
+ #include "mod_ca.h"
+ 
++#ifndef sk_EVP_MD_free
++/* Recent versions of OpenSSL seem to no longer define 
++ * a stack of EVP_MD's. 
++ */
++#include <openssl/safestack.h>
++DEFINE_STACK_OF(EVP_MD)
++#endif
++
+ #define DEFAULT_TIMESTAMP_SIZE 128*1024
+ 
+ module AP_MODULE_DECLARE_DATA timestamp_module;
+@@ -360,7 +368,7 @@ static const char *add_timestamp_digest(cmd_parms *cmd, void *dconf,
+         return apr_psprintf(cmd->pool,
+                 "'%s' could not be recognised as a valid digest.", arg);
+     }
+-    if (!sk_EVP_MD_push(conf->digests, digest)) {
++    if (!sk_EVP_MD_push(conf->digests, (EVP_MD *)digest)) {
+         return apr_psprintf(cmd->pool,
+                 "'%s' could not be added as a valid digest.", arg);
+     }
+-- 
+2.49.0
+

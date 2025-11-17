@@ -1,0 +1,31 @@
+diff --git a/r128gain/__init__.py b/r128gain/__init__.py
+index 79a5cbd..d8f13ba 100755
+--- a/r128gain/__init__.py
++++ b/r128gain/__init__.py
+@@ -86,7 +86,7 @@ def get_ffmpeg_lib_versions(ffmpeg_path: Optional[str] = None) -> Dict[str, int]
+     Example: 0x3040100 for FFmpeg 3.4.1
+     """
+     r = collections.OrderedDict()
+-    cmd = (ffmpeg_path or "ffmpeg", "-version")
++    cmd = (ffmpeg_path or "@ffmpeg@/bin/ffmpeg", "-version")
+     output_str = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, universal_newlines=True).stdout
+     output_lines = output_str.splitlines()
+     lib_version_regex = re.compile(r"^\s*(lib[a-z]+)\s+([0-9]+).\s*([0-9]+).\s*([0-9]+)\s+")
+@@ -194,7 +194,7 @@ def get_r128_loudness(  # noqa: C901
+         ffmpeg.output(*output_streams, os.devnull, **additional_ffmpeg_args, f="null").global_args(
+             "-hide_banner", "-nostats"
+         ),
+-        cmd=ffmpeg_path or "ffmpeg",
++        cmd=ffmpeg_path or "@ffmpeg@/bin/ffmpeg",
+     )
+ 
+     # run
+@@ -885,7 +885,7 @@ def cl_main() -> None:
+     arg_parser.add_argument(
+         "-f",
+         "--ffmpeg-path",
+-        default=shutil.which("ffmpeg"),
++        default="@ffmpeg@/bin/ffmpeg",
+         help="""Full file path of ffmpeg executable (only needed if not in PATH).
+                 If not specified, autodetect""",
+     )

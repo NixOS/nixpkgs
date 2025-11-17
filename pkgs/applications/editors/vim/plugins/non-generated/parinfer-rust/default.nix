@@ -1,0 +1,1 @@
+{ parinfer-rust }: parinfer-rust

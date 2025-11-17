@@ -1,0 +1,71 @@
+diff --git a/samba/filepropertiesplugin/authhelper.cpp b/samba/filepropertiesplugin/authhelper.cpp
+index 6cbbd90..ae1d696 100644
+--- a/samba/filepropertiesplugin/authhelper.cpp
++++ b/samba/filepropertiesplugin/authhelper.cpp
+@@ -49,7 +49,7 @@ ActionReply AuthHelper::isuserknown(const QVariantMap &args)
+     }
+ 
+     QProcess p;
+-    const auto program = QStringLiteral("pdbedit");
++    const auto program = QStringLiteral("@samba@/bin/pdbedit");
+     const auto arguments = QStringList({QStringLiteral("--debuglevel=0"), QStringLiteral("--user"), username });
+     p.setProgram(program);
+     p.setArguments(arguments);
+@@ -88,7 +88,7 @@ ActionReply AuthHelper::createuser(const QVariantMap &args)
+     }
+ 
+     QProcess p;
+-    p.setProgram(QStringLiteral("smbpasswd"));
++    p.setProgram(QStringLiteral("@samba@/bin/smbpasswd"));
+     p.setArguments({
+         QStringLiteral("-L"), /* local mode */
+         QStringLiteral("-s"), /* read from stdin */
+@@ -152,7 +152,7 @@ ActionReply AuthHelper::addtogroup(const QVariantMap &args)
+         QStringLiteral("-m"),
+         QStringLiteral("{%1}").arg(user.value()) });
+ #elif defined(Q_OS_LINUX) || defined(Q_OS_HURD)
+-    p.setProgram(QStringLiteral("/usr/sbin/usermod"));
++    p.setProgram(QStringLiteral("@usermod@"));
+     p.setArguments({
+         QStringLiteral("--append"),
+         QStringLiteral("--groups"),
+diff --git a/samba/filepropertiesplugin/groupmanager.cpp b/samba/filepropertiesplugin/groupmanager.cpp
+index a2ba851..d54f6ce 100644
+--- a/samba/filepropertiesplugin/groupmanager.cpp
++++ b/samba/filepropertiesplugin/groupmanager.cpp
+@@ -18,7 +18,7 @@ GroupManager::GroupManager(QObject *parent)
+ {
+     metaObject()->invokeMethod(this, [this] {
+         auto proc = new QProcess;
+-        proc->setProgram(QStringLiteral("testparm"));
++        proc->setProgram(QStringLiteral("@samba@/bin/testparm"));
+         proc->setArguments({QStringLiteral("--debuglevel=0"),
+                             QStringLiteral("--suppress-prompt"),
+                             QStringLiteral("--verbose"),
+diff --git a/samba/filepropertiesplugin/sambausershareplugin.cpp b/samba/filepropertiesplugin/sambausershareplugin.cpp
+index 4f6642e..86ea121 100644
+--- a/samba/filepropertiesplugin/sambausershareplugin.cpp
++++ b/samba/filepropertiesplugin/sambausershareplugin.cpp
+@@ -112,7 +112,8 @@ SambaUserSharePlugin::SambaUserSharePlugin(QObject *parent)
+ bool SambaUserSharePlugin::isSambaInstalled()
+ {
+     return QFile::exists(QStringLiteral("/usr/sbin/smbd"))
+-        || QFile::exists(QStringLiteral("/usr/local/sbin/smbd"));
++        || QFile::exists(QStringLiteral("/usr/local/sbin/smbd"))
++        || QFile::exists(QStringLiteral("/run/current-system/sw/bin/smbd"));
+ }
+ 
+ void SambaUserSharePlugin::showSambaStatus()
+diff --git a/samba/filepropertiesplugin/usermanager.cpp b/samba/filepropertiesplugin/usermanager.cpp
+index 29238ce..ff20fcb 100644
+--- a/samba/filepropertiesplugin/usermanager.cpp
++++ b/samba/filepropertiesplugin/usermanager.cpp
+@@ -138,7 +138,7 @@ bool UserManager::canManageSamba() const
+ void UserManager::load()
+ {
+     auto proc = new QProcess(this);
+-    proc->setProgram(QStringLiteral("testparm"));
++    proc->setProgram(QStringLiteral("@samba@/bin/testparm"));
+     proc->setArguments({
+         QStringLiteral("--debuglevel=0"),
+         QStringLiteral("--suppress-prompt"),

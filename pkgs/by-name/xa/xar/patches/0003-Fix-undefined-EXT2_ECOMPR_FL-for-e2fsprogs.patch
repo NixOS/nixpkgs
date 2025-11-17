@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 18:25:48 +0300
+Subject: [PATCH 03/19] Fix undefined EXT2_ECOMPR_FL for e2fsprogs
+
+See https://github.com/mackyle/xar/issues/10
+---
+ xar/lib/ext2.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/xar/lib/ext2.c b/xar/lib/ext2.c
+index 767891a..2380846 100644
+--- a/xar/lib/ext2.c
++++ b/xar/lib/ext2.c
+@@ -139,8 +139,10 @@ int xar_ext2attr_archive(xar_t x, xar_file_t f, const char* file, const char *bu
+ 	if(! (flags & ~EXT2_NOCOMPR_FL) )
+ 		x_addprop(f, "NoCompBlock");
+ #endif
++#ifdef EXT2_ECOMPR_FL
+ 	if(! (flags & ~EXT2_ECOMPR_FL) )
+ 		x_addprop(f, "CompError");
++#endif
+ 	if(! (flags & ~EXT2_BTREE_FL) )
+ 		x_addprop(f, "BTree");
+ 	if(! (flags & ~EXT2_INDEX_FL) )
+@@ -225,8 +227,10 @@ int xar_ext2attr_extract(xar_t x, xar_file_t f, const char* file, char *buffer,
+ 	if( e2prop_get(f, "NoCompBlock", (char **)&tmp) == 0 )
+ 		flags |= EXT2_NOCOMPR_FL ;
+ #endif
++#ifdef EXT2_ECOMPR_FL
+ 	if( e2prop_get(f, "CompError", (char **)&tmp) == 0 )
+ 		flags |= EXT2_ECOMPR_FL ;
++#endif
+ 	if( e2prop_get(f, "BTree", (char **)&tmp) == 0 )
+ 		flags |= EXT2_BTREE_FL ;
+ 	if( e2prop_get(f, "HashIndexed", (char **)&tmp) == 0 )
+-- 
+2.44.1
+

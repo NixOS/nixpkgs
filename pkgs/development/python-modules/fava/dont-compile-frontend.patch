@@ -1,0 +1,11 @@
+--- a/_build_backend.py
++++ b/_build_backend.py
+@@ -87,7 +87,7 @@
+ 
+ def _build_fava() -> None:
+     """Run the build steps for Fava."""
+-    _compile_frontend()
++    # _compile_frontend()
+     _compile_translations()
+ 
+ 

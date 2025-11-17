@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/erochest/tree-sitter-factor",
+  "rev": "554d8b705df61864eb41a0ecf3741e94eb9f0c54",
+  "date": "2025-01-11T21:45:26-05:00",
+  "path": "/nix/store/yvyrq221kqwjq19hw6lf8xzxj6z080d8-tree-sitter-factor",
+  "sha256": "14yciinyczi7h8dny0cgk5ghlfwjlgz1zqndwrk260n1994k5bb7",
+  "hash": "sha256-Z60ySUrBAiNm5s3iH/6jkjsKX5mPAW8bgid+5m2MzJM=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

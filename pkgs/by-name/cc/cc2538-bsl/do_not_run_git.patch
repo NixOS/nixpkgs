@@ -1,0 +1,22 @@
+diff --git a/cc2538_bsl/cc2538_bsl.py b/cc2538_bsl/cc2538_bsl.py
+index b62ea64..f38d872 100755
+--- a/cc2538_bsl/cc2538_bsl.py
++++ b/cc2538_bsl/cc2538_bsl.py
+@@ -1050,16 +1050,7 @@ def parse_page_address_range(device, pg_range):
+ 
+ 
+ def version():
+-    # Get the version using "git describe".
+-    try:
+-        p = Popen(['git', 'describe', '--tags', '--match', '[0-9]*'],
+-                  stdout=PIPE, stderr=PIPE)
+-        p.stderr.close()
+-        line = p.stdout.readlines()[0]
+-        return line.decode('utf-8').strip()
+-    except:
+-        # We're not in a git repo, or git failed, use fixed version string.
+-        return __version__
++    return __version__
+ 
+ 
+ def cli_setup():

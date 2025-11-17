@@ -1,0 +1,37 @@
+commit 111bb8d98b4ff1897c36ff23806c492e9a313457
+Author: Will Dillon <william@housedillon.com>
+Date:   Mon Aug 11 13:58:40 2025 -0700
+
+    Update CMAKE version
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea0dfa6..9f1bcb3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,7 +20,7 @@
+ #
+ #top level cmake project for ubertooth lib + tools
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ project(ubertooth_all)
+ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules
+ 	CACHE STRING "CMake module path")
+diff --git a/misc/CMakeLists.txt b/misc/CMakeLists.txt
+index f728056..4336fb0 100644
+--- a/misc/CMakeLists.txt
++++ b/misc/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ add_subdirectory(udev)
+diff --git a/misc/udev/CMakeLists.txt b/misc/udev/CMakeLists.txt
+index a7d4ed0..f7dcaf8 100644
+--- a/misc/udev/CMakeLists.txt
++++ b/misc/udev/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+     SET(SYSTEM_IS_LINUX TRUE)

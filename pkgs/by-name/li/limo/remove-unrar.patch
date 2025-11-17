@@ -1,0 +1,42 @@
+diff --git a/src/core/installer.cpp b/src/core/installer.cpp
+index ea384a8..aab8be0 100644
+--- a/src/core/installer.cpp
++++ b/src/core/installer.cpp
+@@ -7,7 +7,6 @@
+ #include <ranges>
+ #include <regex>
+ #define _UNIX
+-#include <dll.hpp>
+ 
+ namespace sfs = std::filesystem;
+ namespace pu = path_utils;
+@@ -35,6 +34,8 @@ void Installer::extract(const sfs::path& source_path,
+   }
+   catch(CompressionError& error)
+   {
++    throw error;
++    /*
+     std::string extension = source_path.extension().string();
+     std::transform(extension.begin(),
+                    extension.end(),
+@@ -48,6 +49,7 @@ void Installer::extract(const sfs::path& source_path,
+     }
+     else
+       throw error;
++    */
+   }
+   for(const auto& dir_entry : sfs::recursive_directory_iterator(dest_path))
+   {
+@@ -428,6 +430,7 @@ void Installer::extractWithProgress(const sfs::path& source_path,
+   sfs::current_path(working_dir);
+ }
+ 
++/*
+ void Installer::extractRarArchive(const sfs::path& source_path, const sfs::path& dest_path)
+ {
+   log(Log::LOG_DEBUG, "Using fallback rar extraction");
+@@ -459,3 +462,4 @@ void Installer::extractRarArchive(const sfs::path& source_path, const sfs::path&
+     throw CompressionError("Failed to extract RAR archive.");
+   RARCloseArchive(hArcData);
+ }
++*/

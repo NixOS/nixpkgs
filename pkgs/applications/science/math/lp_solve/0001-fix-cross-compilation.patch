@@ -1,0 +1,53 @@
+diff --git a/lp_solve/ccc b/lp_solve/ccc
+index bd5a938..7fe0427 100644
+--- a/lp_solve/ccc
++++ b/lp_solve/ccc
+@@ -1,6 +1,6 @@
+ :
+ src='../lp_MDO.c ../shared/commonlib.c ../colamd/colamd.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c lp_solve.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
+-c=cc
++c=$CC
+ 
+ MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+ 
+@@ -10,7 +10,7 @@ echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+ echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+ echo 'main(){printf("ux%d", (int) (sizeof(void *)*8));}'>>"$MYTMP"/platform.c
+ $c "$MYTMP"/platform.c -o "$MYTMP"/platform
+-PLATFORM=`"$MYTMP"/platform`
++PLATFORM=`@emulator@ "$MYTMP"/platform`
+ rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+ 
+ mkdir bin bin/$PLATFORM >/dev/null 2>&1
+diff --git a/lpsolve55/ccc b/lpsolve55/ccc
+index 999f5f6..ff69b17 100644
+--- a/lpsolve55/ccc
++++ b/lpsolve55/ccc
+@@ -1,6 +1,6 @@
+ :
+ src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
+-c=cc
++c=$CC
+ 
+ MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+ 
+@@ -10,7 +10,7 @@ echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+ echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+ echo 'main(){printf("ux%d", (int) (sizeof(void *)*8));}'>>"$MYTMP"/platform.c
+ $c "$MYTMP"/platform.c -o "$MYTMP"/platform
+-PLATFORM=`"$MYTMP"/platform`
++PLATFORM=`@emulator@ "$MYTMP"/platform`
+ rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+ 
+ mkdir bin bin/$PLATFORM >/dev/null 2>&1
+@@ -42,8 +42,8 @@ fi
+ opts='-O3'
+ 
+ $c -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def $NOISNAN -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
+-ar rv bin/$PLATFORM/liblpsolve55.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+-ranlib bin/$PLATFORM/liblpsolve55.a
++$AR rv bin/$PLATFORM/liblpsolve55.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
++$RANLIB bin/$PLATFORM/liblpsolve55.a
+ 
+ if [ "$so" != "" ]
+ then

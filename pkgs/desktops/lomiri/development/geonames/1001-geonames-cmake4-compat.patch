@@ -1,0 +1,37 @@
+From 3dea0cc91b579de5e2c9db811f2e9e34079d3733 Mon Sep 17 00:00:00 2001
+From: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+Date: Mon, 1 Sep 2025 13:22:26 +0200
+Subject: [PATCH] {CMakeLists.txt,cmake/GtkDocScanGObjWrapper.cmake}: Bump
+ cmake_minimum_required() to version 3.10.
+
+---
+ CMakeLists.txt                    | 2 +-
+ cmake/GtkDocScanGObjWrapper.cmake | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5fbff8a..e7b863e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.10)
+ project(geonames VERSION 0.3.1 LANGUAGES C)
+ 
+ include(GNUInstallDirs)
+diff --git a/cmake/GtkDocScanGObjWrapper.cmake b/cmake/GtkDocScanGObjWrapper.cmake
+index b187ebb..b026ed0 100644
+--- a/cmake/GtkDocScanGObjWrapper.cmake
++++ b/cmake/GtkDocScanGObjWrapper.cmake
+@@ -20,7 +20,7 @@
+ 
+ # This is needed for find_package(PkgConfig) to work correctly --
+ # CMAKE_MINIMUM_REQUIRED_VERSION needs to be defined.
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ if(NOT APPLE)
+     # We use pkg-config to find glib et al
+-- 
+GitLab
+

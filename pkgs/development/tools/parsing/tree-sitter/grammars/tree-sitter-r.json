@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/r-lib/tree-sitter-r",
+  "rev": "e9944e9801595ad484f49be492daf0c4c81547ef",
+  "date": "2025-06-05T15:17:25-04:00",
+  "path": "/nix/store/qdqwb87naqr211y5zps16abnv97a3430-tree-sitter-r",
+  "sha256": "15g5bkndhqv8vbiakl1vvsarl4kcqz3k9fc9hgnn899ghla8nh2a",
+  "hash": "sha256-SkCLFIUvJWTtg4m5NMfHbBKald470Kni2mhj2Oxc5ZU=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

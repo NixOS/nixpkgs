@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e1298ba..1af7d0a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,7 @@ set(KF_MIN_VERSION "5.68.0")
+ project("WallpaperEngineKde")
+ 
+ 
++add_definitions(-DQML_LIB="${QML_LIB}")
+ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ if(NOT OpenGL_GL_PREFERENCE)
+diff --git a/plugin/contents/pyext.py b/plugin/contents/pyext.py
+old mode 100644
+new mode 100755
+diff --git a/plugin/contents/ui/Pyext.qml b/plugin/contents/ui/Pyext.qml
+index 1a48f5e..7db2480 100644
+--- a/plugin/contents/ui/Pyext.qml
++++ b/plugin/contents/ui/Pyext.qml
+@@ -15,7 +15,8 @@ Item {
+             "[ -f /usr/share/$EXT ] && WKD=/usr/share/$EXT",
+             "[ -f \"$HOME/.local/share/$EXT\" ] && WKD=\"$HOME/.local/share/$EXT\"",
+             "[ -f \"$XDG_DATA_HOME/$EXT\" ] && WKD=\"$XDG_DATA_HOME/$EXT\"", 
+-            `exec python3 "$WKD" "${ws_server.url}"`
++            "[ -f \"NIX_STORE_PACKAGE_PATH/share/$EXT\" ] && WKD=\"NIX_STORE_PACKAGE_PATH/share/$EXT\"",
++            `"$WKD" "${ws_server.url}"`
+         ].join("\n");
+         return sh;
+     }
+diff --git a/src/plugin.cpp b/src/plugin.cpp
+index 4bc817e..a98cb4a 100644
+--- a/src/plugin.cpp
++++ b/src/plugin.cpp
+@@ -14,6 +14,18 @@ class Port : public QQmlExtensionPlugin {
+     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
+ 
+ public:
++    void initializeEngine(QQmlEngine *engine, const char *uri) override {
++        if (strcmp(uri, "com.github.catsout.wallpaperEngineKde") != 0) return;
++        if (!engine) return;
++
++        QString pathList = QML_LIB;
++        QStringList paths = pathList.split(':', Qt::SkipEmptyParts);
++        for (const QString &path : paths) {
++            engine->addImportPath(path);
++        }
++
++        QQmlExtensionPlugin::initializeEngine(engine, uri);
++    }
+     void registerTypes(const char* uri) override {
+         if (strcmp(uri, "com.github.catsout.wallpaperEngineKde") != 0) return;
+         qmlRegisterType<wekde::PluginInfo>(uri, WPVer[0], WPVer[1], "PluginInfo");

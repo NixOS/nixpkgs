@@ -1,0 +1,65 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  tailscale,
+  gtk4,
+  gobject-introspection,
+  libadwaita,
+}:
+
+buildGoModule rec {
+  pname = "trayscale";
+  version = "0.18.3";
+
+  src = fetchFromGitHub {
+    owner = "DeedleFake";
+    repo = "trayscale";
+    tag = "v${version}";
+    hash = "sha256-rk4JfK0wBvWLis9XvaZuwAoMyLfoySt3SHLJChYl0SE=";
+  };
+
+  vendorHash = "sha256-8Um5Ps1EEVShJEeCRkGE3pJi2/5PxgEVNqq3JsKdivA=";
+
+  subPackages = [ "cmd/trayscale" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=deedles.dev/trayscale/internal/metadata.version=${version}"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    wrapGAppsHook4
+  ];
+  buildInputs = [
+    gtk4
+    libadwaita
+  ];
+
+  # there are no actual tests, and it takes 20 minutes to rebuild
+  doCheck = false;
+
+  postInstall = ''
+    sh ./dist.sh install $out
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${tailscale}/bin")
+  '';
+
+  meta = {
+    changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${src.rev}";
+    description = "Unofficial GUI wrapper around the Tailscale CLI client";
+    homepage = "https://github.com/DeedleFake/trayscale";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    mainProgram = "trayscale";
+    platforms = lib.platforms.unix;
+  };
+}

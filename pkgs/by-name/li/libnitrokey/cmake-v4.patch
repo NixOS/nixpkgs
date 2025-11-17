@@ -1,0 +1,22 @@
+From 12661e59111d3cf1e5b27d59b54810edc1997d27 Mon Sep 17 00:00:00 2001
+From: Skoh <101289702+SkohTV@users.noreply.github.com>
+Date: Thu, 9 Oct 2025 18:09:25 -0400
+Subject: [PATCH] Increase `cmake_minimum_required`: 3.1 -> 3.10
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 246923d..14e1151 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,7 +3,7 @@ IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+ ENDIF()
+ 
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.1...3.10)
+ IF (UNIX)
+     OPTION(ADD_ASAN "Use ASAN to show memory issues" FALSE)
+     OPTION(ADD_TSAN "Use TSAN to show thread issues" FALSE)

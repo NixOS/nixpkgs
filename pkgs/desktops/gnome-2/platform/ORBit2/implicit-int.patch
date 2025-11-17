@@ -1,0 +1,122 @@
+Fix:
+
+error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+--- a/configure	2024-09-30 16:47:50.000000000 -0500
++++ b/configure	2024-09-30 16:53:58.000000000 -0500
+@@ -12346,7 +12346,7 @@
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+  #include <stdio.h>
+-             main ()
++             int main(void)
+              {
+                return 0;
+              }
+@@ -12387,7 +12387,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_octet s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12434,7 +12434,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_boolean s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12481,7 +12481,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_char s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12528,7 +12528,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_wchar s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12575,7 +12575,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_short s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12622,7 +12622,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_long s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12669,7 +12669,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_long_long s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12716,7 +12716,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_float s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12763,7 +12763,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_double s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12810,7 +12810,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_long_double s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12857,7 +12857,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_struct s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);
+@@ -12904,7 +12904,7 @@
+ 			typedef struct {char s1;} CORBA_struct;
+ 			typedef void *CORBA_pointer;
+ 			struct test {char s1; CORBA_pointer s2;};
+-			main()
++			int main(void)
+ 			{
+ 			FILE *f=fopen("conftestval", "w");
+ 			if (!f) exit(1);

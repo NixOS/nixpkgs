@@ -1,0 +1,21 @@
+diff --git a/configure.ac.in b/configure.ac.in
+index 7932c16..1778d38 100644
+--- a/configure.ac.in
++++ b/configure.ac.in
+@@ -24,6 +24,7 @@ AC_COPYRIGHT([Copyright (C) 2014
+ AC_INIT([xfce4-i3-workspaces-plugin], [plugin_version], [https://github.com/denesb/xfce4-i3-workspaces-plugin/issues], [xfce4-i3-workspaces-plugin])
+ AC_PREREQ([2.50])
+ AC_REVISION([xfce4_panel_version_build])
++AC_CONFIG_MACRO_DIRS([m4])
+ 
+ dnl ***************************
+ dnl *** Initialize automake ***
+@@ -31,6 +32,8 @@ dnl ***************************
+ AM_INIT_AUTOMAKE([1.8 no-dist-gzip dist-bzip2 tar-ustar])
+ AM_CONFIG_HEADER([config.h])
+ AM_MAINTAINER_MODE()
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ 
+ dnl **************************

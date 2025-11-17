@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+gem 'taskjuggler'
+gem 'webrick'
+gem 'base64'
+gem 'drb'

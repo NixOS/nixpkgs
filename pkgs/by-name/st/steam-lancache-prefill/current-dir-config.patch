@@ -1,0 +1,13 @@
+diff --git a/SteamPrefill/Settings/AppConfig.cs b/SteamPrefill/Settings/AppConfig.cs
+index 05215f9..394b13f 100644
+--- a/SteamPrefill/Settings/AppConfig.cs
++++ b/SteamPrefill/Settings/AppConfig.cs
+@@ -36,7 +36,7 @@ namespace SteamPrefill.Settings
+         /// <summary>
+         /// Contains user configuration.  Should not be deleted, doing so will reset the app back to defaults.
+         /// </summary>
+-        private static readonly string ConfigDir = Path.Combine(AppContext.BaseDirectory, "Config");
++        private static readonly string ConfigDir = Path.Combine(Directory.GetCurrentDirectory(), "Config");
+ 
+         #region Serialization file paths
+ 

@@ -1,0 +1,12 @@
+diff --git a/app/cmd/server.go b/app/cmd/server.go
+index fcfbeec2..71f01c9d 100644
+--- a/app/cmd/server.go
++++ b/app/cmd/server.go
+@@ -46,7 +46,6 @@ func RunServer() int {
+ 		})
+ 	}
+ 
+-	copyEtcFiles(ctx)
+ 	startJobs(ctx)
+ 
+ 	e := routes(web.New())

@@ -1,0 +1,38 @@
+From 03010a0716f509b448c84a35bc2723a6f08e0c09 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Wed, 23 Jul 2025 10:24:14 +0900
+Subject: [PATCH 02/30] musl: meson: do not use libcrypt/libxcrypt
+
+Otherwise, when both glibc and musl are installed, libxcrypt or glibc's
+libcrypt may be picked even when we are building systemd with musl.
+Let's not use libcrypt/libxcrypt in that case.
+---
+ meson.build | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index bea62f0eb6..06be36409f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1013,10 +1013,14 @@ else
+         libatomic = []
+ endif
+ 
+-libcrypt = dependency('libcrypt', 'libxcrypt', required : false)
+-if not libcrypt.found()
+-        # fallback to use find_library() if libcrypt is provided by glibc, e.g. for LibreELEC.
+-        libcrypt = cc.find_library('crypt')
++if get_option('libc') == 'musl'
++        libcrypt = []
++else
++        libcrypt = dependency('libcrypt', 'libxcrypt', required : false)
++        if not libcrypt.found()
++                # fallback to use find_library() if libcrypt is provided by glibc, e.g. for LibreELEC.
++                libcrypt = cc.find_library('crypt')
++        endif
+ endif
+ 
+ foreach func : [
+-- 
+2.51.0
+

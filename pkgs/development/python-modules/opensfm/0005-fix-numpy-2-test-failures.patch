@@ -1,0 +1,239 @@
+diff --git a/opensfm/exif.py b/opensfm/exif.py
+--- a/opensfm/exif.py
++++ b/opensfm/exif.py
+@@ -509,7 +509,7 @@ class EXIF:
+                     )
+                 )
+ 
+-            if np.all(ypr) is not None:
++            if np.all(ypr != None):
+                 ypr = np.radians(ypr)
+ 
+                 # Convert YPR --> OPK
+diff --git a/opensfm/transformations.py b/opensfm/transformations.py
+--- a/opensfm/transformations.py
++++ b/opensfm/transformations.py
+@@ -232,7 +232,7 @@ def translation_from_matrix(matrix: numpy.ndarray) -> numpy.ndarray:
+     True
+ 
+     """
+-    return numpy.array(matrix, copy=False)[:3, 3].copy()
++    return numpy.asarray(matrix)[:3, 3].copy()
+ 
+ 
+ def reflection_matrix(point: numpy.ndarray, normal: numpy.ndarray) -> numpy.ndarray:
+@@ -275,7 +275,7 @@ def reflection_from_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)
++    M = numpy.asarray(matrix, dtype=numpy.float64)
+     # normal: unit eigenvector corresponding to eigenvalue -1
+     w, V = numpy.linalg.eig(M[:3, :3])
+     i = numpy.where(abs(numpy.real(w) + 1.0) < 1e-8)[0]
+@@ -339,7 +339,7 @@ def rotation_matrix(
+     M[:3, :3] = R
+     if point is not None:
+         # rotation not around origin
+-        point = numpy.array(point[:3], dtype=numpy.float64, copy=False)
++        point = numpy.asarray(point[:3], dtype=numpy.float64)
+         M[:3, 3] = point - numpy.dot(R, point)
+     return M
+ 
+@@ -359,7 +359,7 @@ def rotation_from_matrix(
+     True
+ 
+     """
+-    R = numpy.array(matrix, dtype=numpy.float64, copy=False)
++    R = numpy.asarray(matrix, dtype=numpy.float64)
+     R33 = R[:3, :3]
+     # direction: unit eigenvector of R33 corresponding to eigenvalue of 1
+     w, W = numpy.linalg.eig(R33.T)
+@@ -444,7 +444,7 @@ def scale_from_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)
++    M = numpy.asarray(matrix, dtype=numpy.float64)
+     M33 = M[:3, :3]
+     factor = numpy.trace(M33) - 2.0
+     try:
+@@ -505,11 +505,11 @@ def projection_matrix(
+ 
+     """
+     M = numpy.identity(4)
+-    point = numpy.array(point[:3], dtype=numpy.float64, copy=False)
++    point = numpy.asarray(point[:3], dtype=numpy.float64)
+     normal = unit_vector(normal[:3])
+     if perspective is not None:
+         # perspective projection
+-        perspective = numpy.array(perspective[:3], dtype=numpy.float64, copy=False)
++        perspective = numpy.asarray(perspective[:3], dtype=numpy.float64)
+         M[0, 0] = M[1, 1] = M[2, 2] = numpy.dot(perspective - point, normal)
+         M[:3, :3] -= numpy.outer(perspective, normal)
+         if pseudo:
+@@ -522,7 +522,7 @@ def projection_matrix(
+         M[3, 3] = numpy.dot(perspective, normal)
+     elif direction is not None:
+         # parallel projection
+-        direction = numpy.array(direction[:3], dtype=numpy.float64, copy=False)
++        direction = numpy.asarray(direction[:3], dtype=numpy.float64)
+         scale = numpy.dot(direction, normal)
+         M[:3, :3] -= numpy.outer(direction, normal) / scale
+         M[:3, 3] = direction * (numpy.dot(point, normal) / scale)
+@@ -569,7 +569,7 @@ def projection_from_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)
++    M = numpy.asarray(matrix, dtype=numpy.float64)
+     M33 = M[:3, :3]
+     w, V = numpy.linalg.eig(M)
+     i = numpy.where(abs(numpy.real(w) - 1.0) < 1e-8)[0]
+@@ -726,7 +726,7 @@ def shear_from_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)
++    M = numpy.asarray(matrix, dtype=numpy.float64)
+     M33 = M[:3, :3]
+     # normal: cross independent eigenvectors corresponding to the eigenvalue 1
+     w, V = numpy.linalg.eig(M33)
+@@ -790,7 +790,7 @@ def decompose_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=True).T
++    M = numpy.asarray(matrix, dtype=numpy.float64, copy=True).T
+     if abs(M[3, 3]) < _EPS:
+         raise ValueError("M[3, 3] is zero")
+     M /= M[3, 3]
+@@ -982,8 +982,8 @@ def affine_matrix_from_points(
+     More examples in superimposition_matrix()
+ 
+     """
+-    v0 = numpy.array(v0, dtype=numpy.float64, copy=True)
+-    v1 = numpy.array(v1, dtype=numpy.float64, copy=True)
++    v0 = numpy.asarray(v0, dtype=numpy.float64, copy=True)
++    v1 = numpy.asarray(v1, dtype=numpy.float64, copy=True)
+ 
+     ndims = v0.shape[0]
+     if ndims < 2 or v0.shape[1] < ndims or v0.shape != v1.shape:
+@@ -1099,8 +1099,8 @@ def superimposition_matrix(
+     True
+ 
+     """
+-    v0 = numpy.array(v0, dtype=numpy.float64, copy=False)[:3]
+-    v1 = numpy.array(v1, dtype=numpy.float64, copy=False)[:3]
++    v0 = numpy.asarray(v0, dtype=numpy.float64)[:3]
++    v1 = numpy.asarray(v1, dtype=numpy.float64)[:3]
+     return affine_matrix_from_points(v0, v1, shear=False, scale=scale, usesvd=usesvd)
+ 
+ 
+@@ -1198,7 +1198,7 @@ def euler_from_matrix(
+     j = _NEXT_AXIS[i + parity]
+     k = _NEXT_AXIS[i - parity + 1]
+ 
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)[:3, :3]
++    M = numpy.asarray(matrix, dtype=numpy.float64)[:3, :3]
+     if repetition:
+         sy = math.sqrt(M[i, j] * M[i, j] + M[i, k] * M[i, k])
+         if sy > _EPS:
+@@ -1329,7 +1329,7 @@ def quaternion_matrix(quaternion: numpy.ndarray) -> numpy.ndarray:
+     True
+ 
+     """
+-    q = numpy.array(quaternion, dtype=numpy.float64, copy=True)
++    q = numpy.asarray(quaternion, dtype=numpy.float64, copy=True)
+     n = numpy.dot(q, q)
+     if n < _EPS:
+         return numpy.identity(4)
+@@ -1379,7 +1379,7 @@ def quaternion_from_matrix(
+     True
+ 
+     """
+-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)[:4, :4]
++    M = numpy.asarray(matrix, dtype=numpy.float64)[:4, :4]
+     if isprecise:
+         q = numpy.empty((4,))
+         t = numpy.trace(M)
+@@ -1460,7 +1460,7 @@ def quaternion_conjugate(quaternion: numpy.ndarray) -> numpy.ndarray:
+     True
+ 
+     """
+-    q = numpy.array(quaternion, dtype=numpy.float64, copy=True)
++    q = numpy.asarray(quaternion, dtype=numpy.float64, copy=True)
+     numpy.negative(q[1:], q[1:])
+     return q
+ 
+@@ -1474,7 +1474,7 @@ def quaternion_inverse(quaternion: numpy.ndarray) -> numpy.ndarray:
+     True
+ 
+     """
+-    q = numpy.array(quaternion, dtype=numpy.float64, copy=True)
++    q = numpy.asarray(quaternion, dtype=numpy.float64, copy=True)
+     numpy.negative(q[1:], q[1:])
+     return q / numpy.dot(q, q)
+ 
+@@ -1496,7 +1496,7 @@ def quaternion_imag(quaternion: numpy.ndarray) -> numpy.ndarray:
+     array([ 0.,  1.,  2.])
+ 
+     """
+-    return numpy.array(quaternion[1:4], dtype=numpy.float64, copy=True)
++    return numpy.asarray(quaternion[1:4], dtype=numpy.float64, copy=True)
+ 
+ 
+ def quaternion_slerp(
+@@ -1654,7 +1654,7 @@ def vector_norm(
+     1.0
+ 
+     """
+-    data = numpy.array(data, dtype=numpy.float64, copy=True)
++    data = numpy.asarray(data, dtype=numpy.float64, copy=True)
+     if out is None:
+         if data.ndim == 1:
+             return math.sqrt(numpy.dot(data, data))
+@@ -1697,13 +1697,13 @@ def unit_vector(
+ 
+     """
+     if out is None:
+-        data = numpy.array(data, dtype=numpy.float64, copy=True)
++        data = numpy.asarray(data, dtype=numpy.float64, copy=True)
+         if data.ndim == 1:
+             data /= math.sqrt(numpy.dot(data, data))
+             return data
+     else:
+         if out is not data:
+-            out[:] = numpy.array(data, copy=False)
++            out[:] = numpy.asarray(data)
+         data = out
+     length = numpy.atleast_1d(numpy.sum(data * data, axis))
+     numpy.sqrt(length, length)
+@@ -1777,8 +1777,8 @@ def angle_between_vectors(
+     True
+ 
+     """
+-    v0 = numpy.array(v0, dtype=numpy.float64, copy=False)
+-    v1 = numpy.array(v1, dtype=numpy.float64, copy=False)
++    v0 = numpy.asarray(v0, dtype=numpy.float64)
++    v1 = numpy.asarray(v1, dtype=numpy.float64)
+     dot = numpy.sum(v0 * v1, axis=axis)
+     dot /= vector_norm(v0, axis=axis) * vector_norm(v1, axis=axis)
+     dot = numpy.clip(dot, -1.0, 1.0)
+@@ -1826,9 +1826,9 @@ def is_same_transform(matrix0: numpy.ndarray, matrix1: numpy.ndarray) -> numpy.n
+     False
+ 
+     """
+-    matrix0 = numpy.array(matrix0, dtype=numpy.float64, copy=True)
++    matrix0 = numpy.asarray(matrix0, dtype=numpy.float64, copy=True)
+     matrix0 /= matrix0[3, 3]
+-    matrix1 = numpy.array(matrix1, dtype=numpy.float64, copy=True)
++    matrix1 = numpy.asarray(matrix1, dtype=numpy.float64, copy=True)
+     matrix1 /= matrix1[3, 3]
+     return numpy.allclose(matrix0, matrix1)
+ 
+@@ -1874,3 +1874,4 @@ if __name__ == "__main__":
+ 
+     numpy.set_printoptions(suppress=True, precision=5)
+     doctest.testmod()
++
