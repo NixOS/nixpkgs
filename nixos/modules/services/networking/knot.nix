@@ -61,6 +61,7 @@ let
           "remotes"
           "acl"
           "submission"
+          "dnskey-sync"
           "policy"
           "template"
           "zone"
