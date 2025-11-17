@@ -8,6 +8,7 @@
   rustPlatform,
   cargo,
   rustc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     corrosion
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Intelligent Chinese phonetic input method";
