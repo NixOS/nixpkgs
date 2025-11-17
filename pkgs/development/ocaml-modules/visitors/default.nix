@@ -5,7 +5,7 @@
   ppxlib,
   ppx_deriving,
   result,
-  version ? if lib.versionAtLeast ppxlib.version "0.36" then "20251010" else "20250212",
+  version ? if lib.versionAtLeast ppxlib.version "0.36" then "20251114" else "20250212",
 }:
 
 buildDunePackage {
@@ -22,7 +22,7 @@ buildDunePackage {
     hash =
       {
         "20250212" = "sha256-AFD4+vriwVGt6lzDyIDuIMadakcgB4j235yty5qqFgQ=";
-        "20251010" = "sha256-3CHXECMHf/UWtLvy7fiOaxx6EizRRtm9HpqRxcRjH3I=";
+        "20251114" = "sha256-u358m/JD+U0Oz6YOjxcNOzzswhvAsHxjTwGHTuWY2EI=";
       }
       ."${version}";
   };
