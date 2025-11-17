@@ -27,6 +27,10 @@ python3Packages.buildPythonApplication rec {
     poetry-core
   ];
 
+  pythonRelaxDeps = [
+    "lxml"
+  ];
+
   nativeCheckInputs = with python3Packages; [
     responses
     pytest-mock
