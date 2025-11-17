@@ -3,30 +3,27 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  uv-build,
   tqdm,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   ffmpeg,
   procps,
 }:
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "1.0.2";
+  version = "1.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "ffmpeg-progress-yield";
     tag = "v${version}";
-    hash = "sha256-tX4CioyhZvHNe5PItNwCF68ZQhs4fpG1ZrloGtei07I=";
+    hash = "sha256-L3q0Tyh0e1qBV13NRlFxjS/39uKfJWVeN/AGXH+Jss8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     tqdm
@@ -38,8 +35,6 @@ buildPythonPackage rec {
     ffmpeg
     procps
   ];
-
-  enabledTestPaths = [ "test/test.py" ];
 
   disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
     # cannot access /usr/bin/pgrep from the sandbox
