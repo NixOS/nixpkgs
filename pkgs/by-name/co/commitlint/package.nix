@@ -5,6 +5,7 @@
   fetchYarnDeps,
   yarnConfigHook,
   nodejs,
+  makeBinaryWrapper,
   nix-update-script,
 }:
 
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     nodejs
+    makeBinaryWrapper
   ];
 
   buildPhase = ''
@@ -50,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mkdir -p $out/lib/node_modules/@commitlint/root
     mv * $out/lib/node_modules/@commitlint/root/
-    ln -s $out/lib/node_modules/@commitlint/root/@commitlint/cli/cli.js $out/bin/commitlint
+
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/commitlint \
+      --add-flags "$out/lib/node_modules/@commitlint/root/@commitlint/cli/cli.js" \
+      --set NODE_PATH "$out/lib/node_modules/@commitlint/root/node_modules"
 
     runHook postInstall
   '';
