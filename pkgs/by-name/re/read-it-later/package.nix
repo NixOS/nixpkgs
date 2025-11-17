@@ -16,6 +16,7 @@
   libsoup_3,
   webkitgtk_6_0,
   sqlite,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
     webkitgtk_6_0
     sqlite
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple Wallabag client with basic features to manage articles";
