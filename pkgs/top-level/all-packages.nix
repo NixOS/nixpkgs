@@ -13388,6 +13388,7 @@ with pkgs;
   nwchem = callPackage ../applications/science/chemistry/nwchem {
     blas = blas-ilp64;
     lapack = lapack-ilp64;
+    scalapack = scalapack-ilp64;
   };
 
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
