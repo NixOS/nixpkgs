@@ -5,6 +5,7 @@
   nodejs,
   pnpm,
   makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -57,6 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/lib/node_modules/conventional-changelog/packages/*/package.json \
       --replace-warn '"exports": "./src/index.ts"' '"exports": "./dist/index.js"'
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
