@@ -5,16 +5,6 @@
     "hash": "sha256-0z4RpAt+WvydeCN0GJu4vsMfCxzxmoi+LTE6fQ51NZY="
   },
   {
-    "pname": "Microsoft.AspNetCore.JsonPatch",
-    "version": "8.0.0",
-    "hash": "sha256-X8lbEnCVHjMcp28ZPqwFTU3R75mFAHNFW0hE7rATBfw="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
-    "version": "8.0.0",
-    "hash": "sha256-4Ho979nHLi8NRtmeY3/cw0eSUno7gfQhUKwCYejDLIc="
-  },
-  {
     "pname": "Microsoft.AspNetCore.WebUtilities",
     "version": "8.0.0",
     "hash": "sha256-e4wqTJUgPfq6CfRwuXTw32K9vB+hOpSLxSZDpzv23Yg="
@@ -60,11 +50,6 @@
     "hash": "sha256-a3dAiPaVuky0wpcHmpTVtAQJNGZ2v91/oArA+dpJgj8="
   },
   {
-    "pname": "Microsoft.CSharp",
-    "version": "4.7.0",
-    "hash": "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="
-  },
-  {
     "pname": "Microsoft.Data.Sqlite",
     "version": "8.0.0",
     "hash": "sha256-0Q+1SxcHyNgkz4DUTJVaiteOQGydf2Uzk6y/R/rwwws="
@@ -73,11 +58,6 @@
     "pname": "Microsoft.Data.Sqlite.Core",
     "version": "8.0.0",
     "hash": "sha256-aew8/vRyzCc7MMNHziR8tsg66EFkJC+Snst3F+a3Ehc="
-  },
-  {
-    "pname": "Microsoft.Extensions.ApiDescription.Server",
-    "version": "6.0.5",
-    "hash": "sha256-RJjBWz+UHxkQE2s7CeGYdTZ218mCufrxl0eBykZdIt4="
   },
   {
     "pname": "Microsoft.Extensions.Caching.Abstractions",
@@ -235,11 +215,6 @@
     "hash": "sha256-0AqQ2gMS8iNlYkrD+BxtIg7cXMnr9xZHtKAuN4bjfaQ="
   },
   {
-    "pname": "Microsoft.OpenApi",
-    "version": "1.2.3",
-    "hash": "sha256-OafkxXKnDmLZo5tjifjycax0n0F/OnWQTEZCntBMYR0="
-  },
-  {
     "pname": "Microsoft.VisualStudio.Web.CodeGeneration.Contracts",
     "version": "2.0.2",
     "hash": "sha256-wfqv/WRzU6C805zcTsjv3sOK5vvBNDR2Nh0yYOXSRrs="
@@ -266,8 +241,8 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "7.0.27",
-    "hash": "sha256-LrCPSGrMwVOU2BdQxQD/HmhBFlASEtv8o7L8uOQyUWg="
+    "version": "8.0.14",
+    "hash": "sha256-Ut/0TdRutL5dljFhsUyrTISqyWe+rBuciKvC7ORBGqc="
   },
   {
     "pname": "NBitcoin.Secp256k1",
@@ -298,16 +273,6 @@
     "pname": "Newtonsoft.Json",
     "version": "13.0.1",
     "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
-  },
-  {
-    "pname": "Newtonsoft.Json",
-    "version": "13.0.3",
-    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
-  },
-  {
-    "pname": "Newtonsoft.Json.Bson",
-    "version": "1.0.2",
-    "hash": "sha256-ZUj6YFSMZp5CZtXiamw49eZmbp1iYBuNsIKNnjxcRzA="
   },
   {
     "pname": "NNostr.Client",
@@ -358,26 +323,6 @@
     "pname": "SQLitePCLRaw.provider.e_sqlite3",
     "version": "2.1.6",
     "hash": "sha256-zHc/YZsd72eXlI8ba1tv58HZWUIiyjJaxq2CCP1hQe8="
-  },
-  {
-    "pname": "Swashbuckle.AspNetCore",
-    "version": "6.5.0",
-    "hash": "sha256-thAX5M8OihCU5Pmht5FzQPR7K+gbia580KnI8i9kwUw="
-  },
-  {
-    "pname": "Swashbuckle.AspNetCore.Swagger",
-    "version": "6.5.0",
-    "hash": "sha256-bKJG6fhLBB5rKoVm0nc4PfecBtDg/r2G1hrZ6Izryug="
-  },
-  {
-    "pname": "Swashbuckle.AspNetCore.SwaggerGen",
-    "version": "6.5.0",
-    "hash": "sha256-A+n8r9bM8UU0ZpzS5pHqa/JOX+cY0jTbfTH7XfwbCUM="
-  },
-  {
-    "pname": "Swashbuckle.AspNetCore.SwaggerUI",
-    "version": "6.5.0",
-    "hash": "sha256-BxYBRvabFUIRkZ67YbUY6djxbLPtmPlAfREeFNg8HZ4="
   },
   {
     "pname": "System.AppContext",
