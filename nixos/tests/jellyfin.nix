@@ -24,6 +24,11 @@
           enableToneMapping = false;
           threadCount = 4;
           enableHardwareEncoding = true;
+          enableSubtitleExtraction = true;
+          deleteSegments = true;
+          h264Crf = 23;
+          h265Crf = 28;
+          throttleTranscoding = false;
           hardwareDecodingCodecs = [
             "h264"
             "hevc"
