@@ -47,8 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-Sdp6ZxUzK8T7zfrgevrLxhMh7SQfO+6mABBiFMLbgh0=";
+    hash = "sha256-H9UppMbN5vQUSr6PKvg3Dx5nGuG0Zm5KGLZ9NHXAj4Y=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
   nativeBuildInputs = [
@@ -77,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   # config.h with the correct values
   postPatch = ''
     echo ${finalAttrs.version} > .tarball-version
-    echo '#define GIT_VERSION "${finalAttrs.src.tag}"' > git-version.h
+    echo "#define GIT_VERSION \"$(cat COMMIT)\"" > git-version.h
 
     ${lib.concatMapStringsSep "\n" (
-      e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+      e: "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
   '';
 
