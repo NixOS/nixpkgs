@@ -1287,9 +1287,12 @@ let
           };
         };
         exporterTest = ''
-          wait_for_unit("phpfpm-php-fpm-exporter.service")
           wait_for_unit("prometheus-php-fpm-exporter.service")
-          succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+          succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 0'")
+
+          systemctl("start phpfpm-php-fpm-exporter.service")
+          wait_for_unit("phpfpm-php-fpm-exporter.service")
+          wait_until_succeeds("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
         '';
       };
 
@@ -1632,7 +1635,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+          metrics-file = "${pkgs.writeText "test.json" "{}"}";
         };
         exporterTest = ''
           wait_for_unit("prometheus-shelly-exporter.service")

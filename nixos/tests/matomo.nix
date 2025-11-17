@@ -22,7 +22,6 @@
   testScript = ''
     start_all()
     machine.wait_for_unit("mysql.service")
-    machine.wait_for_unit("phpfpm-matomo.service")
     machine.wait_for_unit("nginx.service")
 
     with subtest("matomo.js reachable via HTTP"):

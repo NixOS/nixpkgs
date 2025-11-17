@@ -55,10 +55,7 @@
   testScript = ''
     start_all()
 
-    machine1.wait_for_unit("postgresql.target")
-    machine1.wait_for_unit("davis-env-setup.service")
-    machine1.wait_for_unit("davis-db-migrate.service")
-    machine1.wait_for_unit("phpfpm-davis.service")
+    machine1.wait_for_unit("nginx.service")
 
     with subtest("welcome screen loads"):
         machine1.succeed(
@@ -76,8 +73,8 @@
         machine1.succeed(
           "[[ $(grep -i 'location: ' headers | cut -d: -f2- | xargs echo) == /dashboard* ]]"
         )
-    machine2.wait_for_unit("davis-env-setup.service")
-    machine2.wait_for_unit("davis-db-migrate.service")
+
+    machine2.systemctl("start phpfpm-davis.service")
     machine2.wait_for_unit("phpfpm-davis.service")
     r = machine2.succeed(
         "find /var/lib/davis/var/log"

@@ -69,8 +69,6 @@ in
 
     for machine in (${lib.concatStringsSep ", " (builtins.attrNames nodes)}):
         for site_name in site_names:
-            machine.wait_for_unit(f"phpfpm-drupal-{site_name}")
-
             with subtest("website returns welcome screen"):
                 assert "Choose language" in machine.succeed(f"curl -k -L {site_name}")
 
