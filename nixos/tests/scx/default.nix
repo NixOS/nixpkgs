@@ -11,6 +11,7 @@
     services.scx.enable = true;
 
     specialisation = {
+      beerland.configuration.services.scx.scheduler = "scx_beerland";
       bpfland.configuration.services.scx.scheduler = "scx_bpfland";
       cosmos.configuration.services.scx.scheduler = "scx_cosmos";
       flash.configuration.services.scx.scheduler = "scx_flash";
@@ -27,6 +28,7 @@
 
   testScript = ''
     specialisation = [
+      "beerland",
       "bpfland",
       "cosmos",
       "flash",
