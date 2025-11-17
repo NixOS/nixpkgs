@@ -1,22 +1,27 @@
 diff --git i/packages/opencode/script/build.ts w/packages/opencode/script/build.ts
-index 29706c09..584b00d4 100755
+index 502baed..f854e99 100755
 --- i/packages/opencode/script/build.ts
 +++ w/packages/opencode/script/build.ts
-@@ -39,15 +39,9 @@ for (const [os, arch] of targets) {
-   const name = `${pkg.name}-${os}-${arch}`
-   await $`mkdir -p dist/${name}/bin`
+@@ -77,14 +77,19 @@ const allTargets: {
+ ]
  
--  const opentui = `@opentui/core-${os === "windows" ? "win32" : os}-${arch.replace("-baseline", "")}`
--  await $`mkdir -p ../../node_modules/${opentui}`
--  await $`npm pack ${opentui}@${pkg.dependencies["@opentui/core"]}`.cwd(path.join(dir, "../../node_modules"))
--  await $`tar -xf ../../node_modules/${opentui.replace("@opentui/", "opentui-")}-*.tgz -C ../../node_modules/${opentui} --strip-components=1`
-+  // Skip npm pack - packages already installed in node_modules by Nix
+ const targets = singleFlag
+-  ? allTargets.filter((item) => item.os === process.platform && item.arch === process.arch)
++  ? allTargets.filter((item) =>
++      item.os === process.platform &&
++      item.arch === process.arch &&
++      item.avx2 !== false &&
++      item.abi === undefined
++    ).slice(0, 1)
+   : allTargets
  
--  const watcher = `@parcel/watcher-${os === "windows" ? "win32" : os}-${arch.replace("-baseline", "")}${os === "linux" ? "-glibc" : ""}`
--  await $`mkdir -p ../../node_modules/${watcher}`
--  await $`npm pack ${watcher}`.cwd(path.join(dir, "../../node_modules")).quiet()
--  await $`tar -xf ../../node_modules/${watcher.replace("@parcel/", "parcel-")}-*.tgz -C ../../node_modules/${watcher} --strip-components=1`
-+  // Skip npm pack - packages already installed in node_modules by Nix
+ await $`rm -rf dist`
  
-   const parserWorker = fs.realpathSync(path.resolve(dir, "./node_modules/@opentui/core/parser.worker.js"))
-   const workerPath = "./src/cli/cmd/tui/worker.ts"
+ const binaries: Record<string, string> = {}
+-await $`bun install --os="*" --cpu="*" @opentui/core@${pkg.dependencies["@opentui/core"]}`
+-await $`bun install --os="*" --cpu="*" @parcel/watcher@${pkg.dependencies["@parcel/watcher"]}`
++// Skip bun install - packages already installed in node_modules by Nix
++// Skip bun install - packages already installed in node_modules by Nix
+ for (const item of targets) {
+   const name = [
+     pkg.name,
