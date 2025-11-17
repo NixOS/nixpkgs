@@ -2729,8 +2729,9 @@
     "inels" =
       ps: with ps; [
         aiohasupervisor
+        elkoep-aio-mqtt
         paho-mqtt
-      ]; # missing inputs: elkoep-aio-mqtt
+      ];
     "influxdb" =
       ps: with ps; [
         influxdb
@@ -7425,6 +7426,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "inels"
     "influxdb"
     "inkbird"
     "input_boolean"
