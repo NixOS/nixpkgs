@@ -60,23 +60,30 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  checkPhase = ''
-    # Specify test targets
-    # https://catch2-temp.readthedocs.io/en/latest/command-line.html#specifying-which-tests-to-run
-    checkTarget=('~CatSystem INT archives')
+  checkPhase =
+    let
+      checkTarget = [
+        "~CatSystem INT archives"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [ "~Ivory WADY audio" ];
+    in
+    ''
+      # Specify test targets
+      # https://catch2-temp.readthedocs.io/en/latest/command-line.html#specifying-which-tests-to-run
+      checkTarget=(${lib.escapeShellArgs checkTarget})
 
-    runHook preCheck
+      runHook preCheck
 
-    local flagsArray=()
-    concatTo flagsArray checkFlags checkFlagsArray checkTarget
+      local flagsArray=()
+      concatTo flagsArray checkFlags checkFlagsArray checkTarget
 
-    pushd ..
-    echoCmd 'check flags' "''${flagsArray[@]}"
-    ./build/run_tests "''${flagsArray[@]}"
-    popd
+      pushd ..
+      echoCmd 'check flags' "''${flagsArray[@]}"
+      ./build/run_tests "''${flagsArray[@]}"
+      popd
 
-    runHook postCheck
-  '';
+      runHook postCheck
+    '';
 
   installPhase = ''
     runHook preInstall
