@@ -6,6 +6,7 @@
   yarnConfigHook,
   nodejs,
   makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -83,6 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
