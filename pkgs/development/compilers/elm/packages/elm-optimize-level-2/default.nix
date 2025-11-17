@@ -7,7 +7,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "elm-optimize-level-2";
-  version = "0.3.5-unstable-2022-04-05";
+  version = "0.3.4-unstable-2022-04-05";
 
   src = fetchFromGitHub {
     owner = "mdgriffith";
