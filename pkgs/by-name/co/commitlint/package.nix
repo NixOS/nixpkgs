@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o8AnIewSmg8vRjs8LU6QwRyl2hMQ2iK5W7WL137treU=";
   };
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/conventional-changelog/commitlint/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/conventional-changelog/commitlint/releases/tag/${finalAttrs.src.tag}";
     description = "Lint your commit messages";
     homepage = "https://commitlint.js.org/";
     license = lib.licenses.mit;
