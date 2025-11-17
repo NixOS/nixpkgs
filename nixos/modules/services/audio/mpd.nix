@@ -173,57 +173,57 @@ in
               (listOf (attrsOf atomType))
             ]);
           options = {
-      music_directory = lib.mkOption {
-        type = with lib.types; either path (strMatching "([a-z]+)://.+");
-        default = "${cfg.dataDir}/music";
-        defaultText = lib.literalExpression ''"''${dataDir}/music"'';
-        description = ''
-          The directory or URI where MPD reads music from. If left
-          as the default value this directory will automatically be created before
-          the MPD server starts, otherwise the sysadmin is responsible for ensuring
-          the directory exists with appropriate ownership and permissions.
-        '';
-      };
+            music_directory = lib.mkOption {
+              type = with lib.types; either path (strMatching "([a-z]+)://.+");
+              default = "${cfg.dataDir}/music";
+              defaultText = lib.literalExpression ''"''${dataDir}/music"'';
+              description = ''
+                The directory or URI where MPD reads music from. If left
+                as the default value this directory will automatically be created before
+                the MPD server starts, otherwise the sysadmin is responsible for ensuring
+                the directory exists with appropriate ownership and permissions.
+              '';
+            };
 
-      playlist_directory = lib.mkOption {
-        type = lib.types.path;
-        default = "${cfg.dataDir}/playlists";
-        defaultText = lib.literalExpression ''"''${dataDir}/playlists"'';
-        description = ''
-          The directory where MPD stores playlists. If left as the default value
-          this directory will automatically be created before the MPD server starts,
-          otherwise the sysadmin is responsible for ensuring the directory exists
-          with appropriate ownership and permissions.
-        '';
-      };
+            playlist_directory = lib.mkOption {
+              type = lib.types.path;
+              default = "${cfg.dataDir}/playlists";
+              defaultText = lib.literalExpression ''"''${dataDir}/playlists"'';
+              description = ''
+                The directory where MPD stores playlists. If left as the default value
+                this directory will automatically be created before the MPD server starts,
+                otherwise the sysadmin is responsible for ensuring the directory exists
+                with appropriate ownership and permissions.
+              '';
+            };
 
-      bind_to_address = lib.mkOption {
-        type = lib.types.str;
-        default = "127.0.0.1";
-        example = "any";
-        description = ''
-          The address for the daemon to listen on.
-          Use `any` to listen on all addresses.
-        '';
-      };
+            bind_to_address = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              example = "any";
+              description = ''
+                The address for the daemon to listen on.
+                Use `any` to listen on all addresses.
+              '';
+            };
 
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 6600;
-        description = ''
-          This setting is the TCP port that is desired for the daemon to get assigned
-          to.
-        '';
-      };
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 6600;
+              description = ''
+                This setting is the TCP port that is desired for the daemon to get assigned
+                to.
+              '';
+            };
 
-      db_file = lib.mkOption {
-        type = lib.types.path;
-        default = "${cfg.dataDir}/tag_cache";
-        defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
-        description = ''
-          The path to MPD's database.
-        '';
-      };
+            db_file = lib.mkOption {
+              type = lib.types.path;
+              default = "${cfg.dataDir}/tag_cache";
+              defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
+              description = ''
+                The path to MPD's database.
+              '';
+            };
           };
         };
         default = { };
