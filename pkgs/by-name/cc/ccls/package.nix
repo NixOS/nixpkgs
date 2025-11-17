@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccls";
-  version = "0.20241108";
+  version = "0.20250815.1";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3Wi8hsjFtFa0/HCZtli2omOskIlxV7FndbJv9MOWhMo=";
   };
 
   nativeBuildInputs = [
