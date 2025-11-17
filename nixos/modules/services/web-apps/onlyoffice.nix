@@ -330,6 +330,7 @@ in
           after = [
             "network.target"
             "postgresql.target"
+            "rabbitmq.service"
           ];
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
