@@ -12,6 +12,7 @@
   yajl,
   nixosTests,
   criu,
+  versionCheckHook,
 }:
 
 let
@@ -86,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
