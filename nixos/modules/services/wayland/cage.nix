@@ -5,63 +5,82 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    escapeShellArgs
+    literalExpression
+    maintainers
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.services.cage;
+  tty = "tty${toString cfg.tty}";
 in
 {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage = {
+    enable = mkEnableOption "cage kiosk service";
 
-  options.services.cage.user = mkOption {
-    type = types.str;
-    default = "demo";
-    description = ''
-      User to log-in as.
-    '';
-  };
-
-  options.services.cage.extraArguments = mkOption {
-    type = types.listOf types.str;
-    default = [ ];
-    defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
-    example = [ "-d" ];
-  };
-
-  options.services.cage.environment = mkOption {
-    type = types.attrsOf types.str;
-    default = { };
-    example = {
-      WLR_LIBINPUT_NO_DEVICES = "1";
+    user = mkOption {
+      type = types.str;
+      default = "demo";
+      description = ''
+        User to log-in as.
+      '';
     };
-    description = "Additional environment variables to pass to Cage.";
-  };
+    vt = mkOption {
+      type = types.int;
+      default = 1;
+      description = ''
+        The virtual console (tty) that cage should use. This option also disables getty on that tty.
+      '';
+    };
 
-  options.services.cage.program = mkOption {
-    type = types.path;
-    default = "${pkgs.xterm}/bin/xterm";
-    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
-      Program to run in cage.
-    '';
-  };
+    extraArguments = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      description = "Additional command line arguments to pass to Cage.";
+      example = [ "-d" ];
+    };
 
-  options.services.cage.package = mkPackageOption pkgs "cage" { };
+    environment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        WLR_LIBINPUT_NO_DEVICES = "1";
+      };
+      description = "Additional environment variables to pass to Cage.";
+    };
+
+    program = mkOption {
+      type = types.path;
+      default = "${pkgs.xterm}/bin/xterm";
+      defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+      description = ''
+        Program to run in cage.
+      '';
+    };
+
+    package = mkPackageOption pkgs "cage" { };
+  };
 
   config = mkIf cfg.enable {
 
     # The service is partially based off of the one provided in the
     # cage wiki at
     # https://github.com/Hjdskes/cage/wiki/Starting-Cage-on-boot-with-systemd.
-    systemd.services."cage-tty1" = {
+    systemd.services."cage-${tty}" = {
       enable = true;
       after = [
         "systemd-user-sessions.service"
         "plymouth-start.service"
         "plymouth-quit.service"
         "systemd-logind.service"
-        "getty@tty1.service"
+        "getty@${tty}.service"
       ];
       before = [ "graphical.target" ];
       wants = [
@@ -70,10 +89,10 @@ in
         "plymouth-quit.service"
       ];
       wantedBy = [ "graphical.target" ];
-      conflicts = [ "getty@tty1.service" ];
+      conflicts = [ "getty@${tty}.service" ];
 
       restartIfChanged = false;
-      unitConfig.ConditionPathExists = "/dev/tty1";
+      unitConfig.ConditionPathExists = "/dev/${tty}";
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/cage \
@@ -89,7 +108,7 @@ in
         UtmpIdentifier = "%n";
         UtmpMode = "user";
         # A virtual terminal is needed.
-        TTYPath = "/dev/tty1";
+        TTYPath = "/dev/${tty}";
         TTYReset = "yes";
         TTYVHangup = "yes";
         TTYVTDisallocate = "yes";
@@ -115,11 +134,14 @@ in
 
     hardware.graphics.enable = mkDefault true;
 
-    systemd.targets.graphical.wants = [ "cage-tty1.service" ];
+    systemd.targets.graphical.wants = [ "cage-${tty}.service" ];
 
     systemd.defaultUnit = "graphical.target";
+
+    # Prevent nixos-rebuild from killing cage by starting getty
+    systemd.services."autovt@${tty}".enable = false;
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = with maintainers; [ matthewbauer ];
 
 }
