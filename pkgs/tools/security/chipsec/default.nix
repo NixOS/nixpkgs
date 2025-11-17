@@ -11,27 +11,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.10.6";
-  format = "setuptools";
-
-  disabled = !stdenv.hostPlatform.isLinux;
+  version = "1.13.17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = version;
-    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+    tag = version;
+    hash = "sha256-8QiFIk9bq/yX26jw9aOd6wtt+WDUwfLBUVD5hL30RKE=";
   };
 
-  patches = lib.optionals withDriver [
-    ./ko-path.diff
-    ./compile-ko.diff
+  patches = [
+    ./log-path.diff
   ];
-
-  postPatch = ''
-    substituteInPlace tests/software/util.py \
-      --replace-fail "assertRegexpMatches" "assertRegex"
-  '';
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -43,31 +35,33 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
+  build-system = [ python3.pkgs.setuptools ];
+  dependencies = with python3.pkgs; [
+    brotli
+  ];
+
+  # Marker file preventing driver from being built
+  preBuild = lib.optionals (!withDriver) ''
+    touch README.NO_KERNEL_DRIVER
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];
 
-  preBuild = lib.optionalString withDriver ''
-    export CHIPSEC_BUILD_LIB=$(mktemp -d)
-    mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
-    appendToVar setupPyBuildFlags "--build-lib=$CHIPSEC_BUILD_LIB"
+  # Otherwise chipsec tries and fails import "tpm_cmd"
+  postInstall = ''
+    cp -R chipsec/library/tpm $out/${python3.pkgs.python.sitePackages}/chipsec/library/tpm
+  ''
+  # Allow the kernel module to be loaded manually
+  + lib.optionalString withDriver ''
+    pushd $out/${python3.pkgs.python.sitePackages}/chipsec/helper/linux/
+      xz -k chipsec.ko
+      install -Dm444 chipsec.ko.xz $out/lib/modules/${kernel.modDirVersion}/chipsec.ko.xz
+      rm chipsec.ko.xz
+    popd
   '';
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=dangling-pointer"
-  ];
-
-  preInstall = lib.optionalString withDriver ''
-    mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
-    mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
-      $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
-  '';
-
-  setupPyBuildFlags = lib.optionals (!withDriver) [
-    "--skip-driver"
-  ];
 
   pythonImportsCheck = [
     "chipsec"
@@ -88,8 +82,9 @@ python3.pkgs.buildPythonApplication rec {
       johnazoidberg
       erdnaxe
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
+    platforms = if withDriver then [ "x86_64-linux" ] else with lib.platforms; linux ++ darwin;
     # https://github.com/chipsec/chipsec/issues/1793
     broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
+    mainProgram = "chipsec_main";
   };
 }
