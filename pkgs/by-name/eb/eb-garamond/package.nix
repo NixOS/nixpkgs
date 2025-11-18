@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
-  ttfautohint,
+  ttfautohint-nox,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     (python3.withPackages (p: [ p.fontforge ]))
-    ttfautohint
+    ttfautohint-nox
   ];
 
   postPatch = ''
