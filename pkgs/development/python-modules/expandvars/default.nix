@@ -33,6 +33,5 @@ buildPythonPackage rec {
     description = "Expand system variables Unix style";
     homepage = "https://github.com/sayanarijit/expandvars";
     license = licenses.mit;
-    maintainers = with maintainers; [ geluk ];
   };
 }
