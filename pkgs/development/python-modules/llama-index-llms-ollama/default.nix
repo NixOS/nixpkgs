@@ -5,15 +5,12 @@
   hatchling,
   llama-index-core,
   ollama,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
