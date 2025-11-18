@@ -5,10 +5,7 @@ let
 in
 {
   name = "n8n";
-  meta.maintainers = with lib.maintainers; [
-    freezeboy
-    k900
-  ];
+  meta.maintainers = with lib.maintainers; [ k900 ];
 
   node.pkgsReadOnly = false;
 

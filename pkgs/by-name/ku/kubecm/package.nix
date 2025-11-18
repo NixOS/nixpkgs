@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kubecm";
-  version = "0.33.1";
+  version = "0.33.2";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
     rev = "v${version}";
-    hash = "sha256-ooVKXFFrDKrxbmR3MJvu2KJQ2PW3zzJ7Qm8ck9Fje8A=";
+    hash = "sha256-A5HEs2Kud/S7a/74Si/ayuiDIod9+WFBBvBRQgFwD0o=";
   };
 
   vendorHash = "sha256-HKHUN3vOhNl46T06pMUZIjcZMxDw/gkeimbs7kdmtdI=";

@@ -235,7 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      onny
       OPNA2608
     ];
     # Onle LE has valid graphics buffer formats

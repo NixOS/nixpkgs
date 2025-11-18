@@ -340,6 +340,7 @@ print OUT <<EOF;
   font-adobe-utopia-75dpi,
   font-adobe-utopia-type1,
   font-alias,
+  font-arabic-misc,
   font-bh-100dpi,
   font-bh-75dpi,
   font-bh-lucidatypewriter-100dpi,
@@ -350,11 +351,18 @@ print OUT <<EOF;
   font-bitstream-75dpi,
   font-bitstream-type1,
   font-cronyx-cyrillic,
+  font-cursor-misc,
+  font-daewoo-misc,
+  font-dec-misc,
   font-encodings,
+  font-ibm-type1,
   font-isas-misc,
+  font-jis-misc,
   font-micro-misc,
   font-misc-cyrillic,
   font-misc-ethiopic,
+  font-misc-meltho,
+  font-misc-misc,
   font-mutt-misc,
   font-schumacher-misc,
   font-screen-cyrillic,
@@ -544,6 +552,7 @@ self: with self; {
   fontadobeutopia75dpi = font-adobe-utopia-75dpi;
   fontadobeutopiatype1 = font-adobe-utopia-type1;
   fontalias = font-alias;
+  fontarabicmisc = font-arabic-misc;
   fontbh100dpi = font-bh-100dpi;
   fontbh75dpi = font-bh-75dpi;
   fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
@@ -554,10 +563,17 @@ self: with self; {
   fontbitstream75dpi = font-bitstream-75dpi;
   fontbitstreamtype1 = font-bitstream-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
+  fontcursormisc = font-cursor-misc;
+  fontdaewoomisc = font-daewoo-misc;
+  fontdecmisc = font-dec-misc;
+  fontibmtype1 = font-ibm-type1;
   fontisasmisc = font-isas-misc;
+  fontjismisc = font-jis-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
   fontmiscethiopic = font-misc-ethiopic;
+  fontmiscmeltho = font-misc-meltho;
+  fontmiscmisc = font-misc-misc;
   fontmuttmisc = font-mutt-misc;
   fontschumachermisc = font-schumacher-misc;
   fontscreencyrillic = font-screen-cyrillic;

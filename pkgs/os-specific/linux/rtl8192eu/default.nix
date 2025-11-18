@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64 || kernel.kernelAtLeast "6.17";
     maintainers = with maintainers; [ troydm ];
   };
 }

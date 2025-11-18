@@ -202,7 +202,6 @@ buildGoModule (finalAttrs: {
       justinas
       sigma
       tomberek
-      freezeboy
       techknowlogick
       juliusfreudenberger
     ];

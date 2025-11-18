@@ -123,16 +123,6 @@ lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/136112
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
-  }))
-
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
     nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [

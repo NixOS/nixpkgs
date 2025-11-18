@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   cmake,
   pkg-config,
   ninja,
+  go,
   python3,
   qtbase,
   qt5compat,
@@ -29,24 +29,30 @@
   elfutils,
   perf,
   callPackage,
+  buildGoModule,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
   pname = "qtcreator";
-  version = "17.0.2";
-
+  version = "18.0.0";
   src = fetchurl {
-    url = "mirror://qt/official_releases/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/qt-creator-opensource-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sOEY+fuJvnF2KLP5JRwpX6bfQfqLfYEhbi6tg1XlWhM=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-x3O3QRTR+8pmyBuPt5mJKCfn4VQkke1FmqrSeeAlOXM=";
   };
-
-  patches = [
-    # QmlDesigner: Compile fixes for Qt 6.10 private API changes
-    (fetchpatch {
-      url = "https://github.com/qt-creator/qt-creator/commit/5a4c700ccefc76c7c531c834734e6fefa14b5364.patch";
-      hash = "sha256-BnS0HOqP5b7ZsVtuRpCK+TtoJj0yhodDuVtp+C3btIA=";
-    })
-  ];
+  goModules =
+    (buildGoModule {
+      pname = "gocmdbridge";
+      version = "1.0.0";
+      inherit src;
+      vendorHash = "sha256-PUMQdVlf6evLjzs263SAecIA3aMuMbjIr1xEztiwmro=";
+      setSourceRoot = ''
+        sourceRoot=$(echo */src/libs/gocmdbridge/server)
+      '';
+    }).goModules;
+in
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
+  inherit src;
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     python3
     ninja
+    go
   ];
 
   buildInputs = [
@@ -96,7 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_QBS" false)
     (lib.cmakeBool "QTC_CLANG_BUILDMODE_MATCH" true)
     (lib.cmakeBool "CLANGTOOLING_LINK_CLANG_DYLIB" true)
+    (lib.cmakeBool "CMDBRIDGE_BUILD_VENDOR_MODE" true)
   ];
+
+  preConfigure = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    cp -r --reflink=auto ${goModules} src/libs/gocmdbridge/server/vendor
+  '';
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
@@ -134,4 +148,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "qtcreator";
   };
-})
+}

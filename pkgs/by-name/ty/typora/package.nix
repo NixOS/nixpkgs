@@ -22,7 +22,7 @@
 
 let
   pname = "typora";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src =
     fetchurl
@@ -32,14 +32,14 @@ let
             "https://download.typora.io/linux/typora_${version}_amd64.deb"
             "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
           ];
-          hash = "sha256-g5GB4hc1cphnOXcVV+YR+YULJOzWAslio3yXjW9MGOk=";
+          hash = "sha256-Ha+lI7JkCI/ISGAzb5MhDYTEsYZBhVw1H8lzHcz9JOs=";
         };
         aarch64-linux = {
           urls = [
             "https://download.typora.io/linux/typora_${version}_arm64.deb"
             "https://downloads.typoraio.cn/linux/typora_${version}_arm64.deb"
           ];
-          hash = "sha256-br9kn3P4Pzbef6u581YcX8c0uiB/c1pKqGogLX3sruw=";
+          hash = "sha256-qyyIH8jhjZnhzX1/FZno7dIDwANvuLHDL6TsMMD336Y=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");

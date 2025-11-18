@@ -26,8 +26,8 @@
     "linux-ppc64le" = "sha256-ZDMDwrP1zYlOI1hdbd3iZwKr59v/8CWj2sZ1RdosAiE=";
     "linux-riscv64" = "sha256-O2EvOnjwbNssB7FtbK44yFcXfkrh9HOsPs/HF+uD2m8=";
     "linux-s390x" = "sha256-BKeNDtuc9IkmV4GpuZcdsGc2F039KQeLdozxh7u+FDw=";
-    "mac-amd64" = "sha256-ZKBm8PbKjg4t0jIBPRKAv85L8eZOwJ1wBvh3cRSqHOI=";
-    "mac-arm64" = "sha256-AvjJp7JF05CetYDnwNJneAsotm1vBHWqB/vCdcIohoU=";
+    "macos-amd64" = "sha256-ZKBm8PbKjg4t0jIBPRKAv85L8eZOwJ1wBvh3cRSqHOI=";
+    "macos-arm64" = "sha256-AvjJp7JF05CetYDnwNJneAsotm1vBHWqB/vCdcIohoU=";
     "windows-386" = "sha256-AVLbWh+WtJKynFDS6IfhuvYudw4Ow9s6w2JyDWG/2CI=";
     "windows-amd64" = "sha256-puAQhiPGuwzkElWiBdTRGWOaUR2AIP7Qv9S3pwEY74E=";
     "windows-arm64" = "sha256-4wxOMG+zvkM7gjhAiQvvNqNS0AamKKJdaBM/+rRxgXk=";

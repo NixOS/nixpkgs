@@ -41,6 +41,6 @@ buildPythonPackage rec {
     mainProgram = "snap7-server";
     homepage = "https://github.com/gijzelaerr/python-snap7";
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

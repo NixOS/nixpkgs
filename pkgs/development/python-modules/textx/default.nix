@@ -12,14 +12,14 @@
 let
   textx = buildPythonPackage rec {
     pname = "textx";
-    version = "4.2.2";
+    version = "4.2.3";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = version;
-      hash = "sha256-AlFXaB+D03GAsXNd2GnFOLxo2g5BjWAu6K1/GsncwLw=";
+      tag = version;
+      hash = "sha256-2ZRu7aDDiq+EUjqYI7CxzsmPNXGmWc7DI4ocVZbj3gM=";
     };
 
     outputs = [
@@ -58,6 +58,7 @@ let
     };
 
     meta = with lib; {
+      changelog = "https://github.com/textX/textX/blob/${src.tag}/CHANGELOG.md";
       description = "Domain-specific languages and parsers in Python";
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";

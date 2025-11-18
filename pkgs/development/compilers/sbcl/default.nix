@@ -255,6 +255,11 @@ stdenv.mkDerivation (self: {
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
+  # Set minimum macOS version to 10.12 for x86_64-darwin to support clock_gettime()
+  env.SBCL_MACOSX_VERSION_MIN = lib.optionalString (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  ) "10.12";
+
   buildPhase = ''
     runHook preBuild
 

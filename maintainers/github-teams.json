@@ -241,11 +241,9 @@
       "mirkolenz": 5160954,
       "mstone": 412508,
       "n8henrie": 1234956,
-      "niklaskorz": 590517,
       "ofalvai": 1694986,
       "pasqui23": 6931743,
       "prusnak": 42201,
-      "pupbrained": 33522919,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -254,6 +252,7 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
+      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
@@ -665,6 +664,18 @@
     },
     "name": "neovim"
   },
+  "nim": {
+    "description": "Maintains the nim language and build tooling",
+    "id": 14913434,
+    "maintainers": {
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Eveeifyeve": 88671402,
+      "daylinmorgan": 47667941
+    },
+    "name": "nim"
+  },
   "nix-formatting": {
     "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
@@ -676,8 +687,7 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975,
-      "piegamesde": 14054505
+      "dasJ": 4971975
     },
     "name": "nix-formatting"
   },

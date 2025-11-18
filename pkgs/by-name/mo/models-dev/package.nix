@@ -8,12 +8,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-11-06";
+  version = "0-unstable-2025-11-14";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "db75a6d97efdd7a3f73cc2c0ebc3f362ebce608c";
-    hash = "sha256-pl6Ra7QPmM15ndl/skxE+XTqWP9oD2olcs+EQFW0U/0=";
+    rev = "83a038148a44242ab39430d41d88e862f782e796";
+    hash = "sha256-dRHnDRMVObcE26MrD8DCdkdMrxhHYIBF+ZGJTfsrxNs=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-otke/XlxVafkgtM3wDMU+/GBBgrbD32+3E+Wyue8+U8=";
+    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -99,7 +99,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--subpackage"
+      "node_modules"
+    ];
   };
 
   meta = {

@@ -7,7 +7,6 @@
   glibcLocales,
   gnused,
   gnugrep,
-  groff,
   gawk,
   man-db,
   ninja,
@@ -152,13 +151,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.1.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-oNRC1NWYE0LEK2a/7nHtlmp20f8hn/1FZgaySqzwSbg=";
+    hash = "sha256-BUtHMx44efWTiS6heCUqONxngLwUCBOoDQqxoCj189U=";
   };
 
   env = {
@@ -169,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-7mYWCHH6DBWTIJV8GPRjjf6QulwlYjwv0slablDvBF8=";
+    hash = "sha256-00Ch1EcX4cxMwvuDQLzTUIY7XkE3WX8bXBUA3yMRAMI=";
   };
 
   patches = [
@@ -192,13 +191,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fix FHS paths in tests
   postPatch = ''
-    substituteInPlace src/builtins/tests/test_tests.rs \
+    substituteInPlace src/builtins/test.rs \
       --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-    substituteInPlace src/highlight/tests.rs \
+    substituteInPlace src/highlight/highlight.rs \
       --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
       --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
-      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
+      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"'
+
+    substituteInPlace src/highlight/file_tester.rs \
       --replace-fail '/usr' '/'
 
     substituteInPlace tests/checks/cd.fish \
@@ -239,6 +240,36 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
     # This test seems to consistently fail on aarch64 and darwin
     rm tests/checks/cd.fish
+  ''
+  + ''
+    substituteInPlace share/functions/grep.fish \
+      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
+
+    substituteInPlace share/completions/{sudo.fish,doas.fish} \
+      --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
+  ''
+  + lib.optionalString usePython ''
+    cat > share/functions/__fish_anypython.fish <<EOF
+    # localization: skip(private)
+    function __fish_anypython
+        echo ${python3.interpreter}
+        return 0
+    end
+    EOF
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for cur in share/functions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+    for cur in share/completions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+  ''
+  + ''
+    tee -a share/__fish_build_paths.fish.in < ${fishPreInitHooks}
   '';
 
   outputs = [
@@ -296,12 +327,12 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     gnugrep
     gnused
-    groff
     gettext
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
-  doCheck = true;
+  # disable darwin pending https://github.com/NixOS/nixpkgs/pull/462090 getting through staging
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     coreutils
@@ -338,40 +369,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall = ''
-    substituteInPlace "$out/share/fish/functions/grep.fish" \
-      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
-
-    substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
-      --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
-
-    substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
-      --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
-  ''
-  + lib.optionalString usePython ''
-    cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
-    function __fish_anypython
-        echo ${python3.interpreter}
-        return 0
-    end
-    EOF
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for cur in $out/share/fish/functions/*.fish; do
-      substituteInPlace "$cur" \
-        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-    done
-    for cur in $out/share/fish/completions/*.fish; do
-      substituteInPlace "$cur" \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-    done
-  ''
-  + lib.optionalString useOperatingSystemEtc ''
+  postInstall = lib.optionalString useOperatingSystemEtc ''
     tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
-  ''
-  + ''
-    tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
   '';
 
   meta = {
@@ -386,6 +385,7 @@ stdenv.mkDerivation (finalAttrs: {
       winter
       sigmasquadron
       rvdp
+      lonerOrz
     ];
     mainProgram = "fish";
   };

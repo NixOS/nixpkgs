@@ -30,12 +30,20 @@ rustPlatform.buildRustPackage rec {
   #   inlined from 'OPENSSL_memcpy' at aws-lc/crypto/asn1/../internal.h
   #   inlined from 'aws_lc_0_22_0_i2c_ASN1_BIT_STRING' at aws-lc/crypto/asn1/a_bitstr.c
   # glibc/.../string_fortified.h: error: '__builtin_memcpy' specified bound exceeds maximum object size [-Werror=stringop-overflow=]
+  #
+  # For cpu-template-helper: patch build.rs to use stdenv's cc which ensures the correct compiler is used across all stdenv's.
+  #
+  # For seccompiler: fix hardcoded /usr/local/lib path to libseccomp.lib, this makes sure rustc can find seccomp across stdenv's(including pkgsStatic).
   postPatch = ''
     substituteInPlace $cargoDepsCopy/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
       --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
-  '';
 
-  buildInputs = [ libseccomp ];
+    substituteInPlace src/cpu-template-helper/build.rs \
+      --replace-warn '"gcc"' "\"$CC\""
+
+    substituteInPlace src/seccompiler/build.rs \
+      --replace-warn "/usr/local/lib" "${lib.getLib libseccomp}/lib"
+  '';
 
   nativeBuildInputs = [
     cmake

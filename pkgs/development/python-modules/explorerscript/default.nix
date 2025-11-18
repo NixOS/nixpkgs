@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "explorerscript";
     tag = version;
-    hash = "sha256-fh40HCU12AVA3cZ5xvRott+93qo8VzHFsbPzTkoV3x4=";
+    hash = "sha256-KjMPg3GfnEr2DtpHD/T3HKQWUM0WKTWKuv//3XXWShI=";
     # Include a pinned antlr4 fork used as a C++ library
     fetchSubmodules = true;
   };

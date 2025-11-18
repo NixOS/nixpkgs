@@ -91,7 +91,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/EnterpriseDB/barman/blob/${src.tag}/RELNOTES.md";
     mainProgram = "barman";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

@@ -14,6 +14,7 @@
   numpy,
   numexpr,
   packaging,
+  pkg-config,
   setuptools,
   sphinx,
   typing-extensions,
@@ -26,7 +27,7 @@
 buildPythonPackage rec {
   pname = "tables";
   version = "3.10.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -49,6 +50,10 @@ buildPythonPackage rec {
     cython
     setuptools
     sphinx
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
@@ -77,17 +82,21 @@ buildPythonPackage rec {
     substituteInPlace tables/__init__.py \
       --replace-fail 'find_library("blosc2")' '"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"'  '';
 
+  env = {
+    HDF5_DIR = lib.getDev hdf5;
+  };
+
   # Regenerate C code with Cython
   preBuild = ''
     make distclean
   '';
 
-  setupPyBuildFlags = [
-    "--hdf5=${lib.getDev hdf5}"
-    "--lzo=${lib.getDev lzo}"
-    "--bzip2=${lib.getDev bzip2}"
-    "--blosc=${lib.getDev c-blosc}"
-    "--blosc2=${lib.getDev blosc2.c-blosc2}"
+  pypaBuildFlags = [
+    "--config-setting=--build-option=--hdf5=${lib.getDev hdf5}"
+    "--config-setting=--build-option=--lzo=${lib.getDev lzo}"
+    "--config-setting=--build-option=--bzip2=${lib.getDev bzip2}"
+    "--config-setting=--build-option=--blosc=${lib.getDev c-blosc}"
+    "--config-setting=--build-option=--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
   nativeCheckInputs = [ pytest ];

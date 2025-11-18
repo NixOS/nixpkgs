@@ -1,5 +1,5 @@
 diff --git c/scripts/launch.sh w/scripts/launch.sh
-index d9c33952..8bc5c382 100755
+index 524f2294..bbea062d 100755
 --- c/scripts/launch.sh
 +++ w/scripts/launch.sh
 @@ -1,114 +1,4 @@
@@ -118,7 +118,7 @@ index d9c33952..8bc5c382 100755
  
  # In case that people want to tweak the path, which Elixir to use, or
  # whatever prior to launching the language server or the debug adapter, we
-@@ -127,29 +17,22 @@ fi
+@@ -127,12 +17,8 @@ fi
  # script so we can correctly configure the Erlang library path to
  # include the local .ez files, and then do what we were asked to do.
  
@@ -131,6 +131,9 @@ index d9c33952..8bc5c382 100755
 +SCRIPT=$(readlink -f "$0")
 +SCRIPTPATH=$(dirname "$SCRIPT")/../scripts
  
+ # Unset MIX_OS_DEPS_COMPILE_PARTITION_COUNT as it pollutes stdout
+ # breaking LSP protocol. See https://github.com/elixir-lsp/elixir-ls/issues/1195
+@@ -141,19 +27,16 @@ unset MIX_OS_DEPS_COMPILE_PARTITION_COUNT
  export MIX_ENV=prod
  # Mix.install prints to stdout and reads from stdin
  # we need to make sure it doesn't interfere with LSP/DAP

@@ -10,11 +10,14 @@
         enable = true;
         port = 8080;
         originalsPath = "/media/photos/";
-        passwordFile = pkgs.writeText "password" "secret";
+        passwordFile = "/etc/photoprism-password";
       };
-      environment.extraInit = ''
-        mkdir -p /media/photos
-      '';
+      environment = {
+        etc."photoprism-password".text = "secret";
+        extraInit = ''
+          mkdir -p /media/photos
+        '';
+      };
     };
 
   testScript = ''

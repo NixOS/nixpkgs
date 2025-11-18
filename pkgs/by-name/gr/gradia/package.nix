@@ -22,14 +22,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.9.0";
+  version = "1.11.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-iDldzS7LLJ/+CfKBpD50LW/YrZ2xb8aqZI9Bs1AOcCM=";
+    hash = "sha256-2PSpFmojAIyDNx5yYrLE3CjO/q5iBArmIRikxCGW1HM=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     pillow
+    pytesseract
   ];
 
   postInstall = ''

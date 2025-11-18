@@ -4,7 +4,6 @@
   cppo,
   dune-build-info,
   fetchurl,
-  fetchpatch,
   jq,
   lib,
   makeWrapper,
@@ -22,10 +21,15 @@
 let
   pname = "melange";
   versionHash =
-    if lib.versionAtLeast ocaml.version "5.3" then
+    if lib.versionAtLeast ocaml.version "5.4" then
       {
-        version = "5.1.0-53";
-        hash = "sha256-96rDDzul/v+Dc+IWTNtbOKWUV8rf7HS1ZMK2LQNcpKk=";
+        version = "6.0.0-54";
+        hash = "sha256-689OK37ObYhopfcaJ3AmkScGC4lCu3ZOTEM6N+Npvzs=";
+      }
+    else if lib.versionAtLeast ocaml.version "5.3" then
+      {
+        version = "6.0.0-53";
+        hash = "sha256-jPTQvV095BPB4EDepwGJTZ9sB/60VTO4YJTj2wI39jc=";
       }
     else if lib.versionAtLeast ocaml.version "5.2" then
       {
@@ -55,14 +59,6 @@ buildDunePackage {
     url = "https://github.com/melange-re/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     inherit hash;
   };
-  patches = lib.optional (lib.versionAtLeast ppxlib.version "0.36") (fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/melange-re/melange/pull/1352.patch";
-    hash = "sha256-PMf66nB743nzW4/xblHjNZFv1BS8xC9maD+eCDDUWAY=";
-    excludes = [
-      "*.opam"
-      "*.template"
-    ];
-  });
   nativeBuildInputs = [
     cppo
     makeWrapper

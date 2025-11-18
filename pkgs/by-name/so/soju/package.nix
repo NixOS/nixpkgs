@@ -9,14 +9,14 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-1kdaLmgikRbk/B+HGTMKnhqbTho4KmvDTuizhEE3DAw=";
+    hash = "sha256-kOV7EFRr+Ca9bQ1bdDMNf1FiiniIHDebsf5SpbJshsI=";
   };
 
   vendorHash = "sha256-NP4njea0hcklxWFoxPQqrvyWExeRP/TOzUJcamRnx+s=";

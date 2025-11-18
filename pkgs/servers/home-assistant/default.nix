@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   python313,
   replaceVars,
   ffmpeg-headless,
@@ -86,15 +87,7 @@ let
         ];
       });
 
-      av = (super.av.override { ffmpeg-headless = ffmpeg_7-headless; }).overridePythonAttrs rec {
-        version = "13.1.0";
-        src = fetchFromGitHub {
-          owner = "PyAV-Org";
-          repo = "PyAV";
-          tag = "v${version}";
-          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-        };
-      };
+      av = self.av_13;
 
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
@@ -270,6 +263,18 @@ let
         };
       };
 
+      # xmltodict>=1.0 not compatible with georss-client and aio-georss-client
+      # https://github.com/exxamalte/python-aio-georss-client/issues/63
+      xmltodict = super.xmltodict.overridePythonAttrs rec {
+        version = "0.15.1";
+        src = fetchFromGitHub {
+          owner = "martinblech";
+          repo = "xmltodict";
+          tag = "v${version}";
+          hash = "sha256-j3shoXjAoAWFd+7k+0w6eoNygS2wkbhDkIq7QG+TmSM=";
+        };
+      };
+
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -300,7 +305,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.1";
+  hassVersion = "2025.11.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -321,13 +326,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-39OY9lKlqnv3QdIdJ698cMTBrF41SxbqQfz6N32mD5s=";
+    hash = "sha256-o4rpdnO/TslJWRj7HwTyWOS0NBVOfAeDfWiYvlx/jhw=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-W9xuWfz9lCQXaPg+O313mzMxvBfY64CrU7vwNjra/3k=";
+    hash = "sha256-j10a2GSnFau6KYMpFrFCrCTqsmy/D5p6BwQMvlOEe+w=";
   };
 
   build-system = with python.pkgs; [
@@ -352,6 +357,12 @@ python.pkgs.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (fetchpatch {
+      # [2025.11.2] fix matter snapshots
+      url = "https://github.com/home-assistant/core/commit/04458e01be0748c3f6c980e126d5238d1ca915b6.patch";
+      hash = "sha256-gzc0KmSZhOfHVRhIVmOTFTJMI+pAX+8LcOit4JUypyA=";
     })
   ];
 
@@ -489,6 +500,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
+    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
   ];
 
   preCheck = ''

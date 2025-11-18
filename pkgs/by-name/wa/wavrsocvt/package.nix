@@ -36,7 +36,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://bricxcc.sourceforge.net/";
     license = licenses.mpl11;
-    maintainers = with maintainers; [ leenaars ];
     platforms = with platforms; linux;
   };
 }

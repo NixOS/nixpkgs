@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,14 +9,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kompose";
   version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kompose";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wS9YoYEsCALIJMxoVTS6EH6NiBfF+qkFIv7JALnVPgs=";
   };
 
@@ -33,11 +34,11 @@ buildGoModule rec {
 
   checkFlags = [ "-short" ];
 
-  postInstall = ''
-    for shell in bash zsh; do
-      $out/bin/kompose completion $shell > kompose.$shell
-      installShellCompletion kompose.$shell
-    done
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} completion bash) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completion zsh) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} completion fish)
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -49,10 +50,11 @@ buildGoModule rec {
     description = "Tool to help users who are familiar with docker-compose move to Kubernetes";
     mainProgram = "kompose";
     homepage = "https://kompose.io";
+    changelog = "https://github.com/kubernetes/kompose/releases/tag/${finalAttrs.src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       thpham
       vdemeester
     ];
   };
-}
+})

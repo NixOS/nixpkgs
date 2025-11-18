@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.18.2";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
     tag = version;
-    hash = "sha256-BdUNj7EJAbOs8Ff+IGbd7be+lRG6MQCIgNAi5oH9OgA=";
+    hash = "sha256-B+DFezICqYdfGfK90rsnetRt0dI1v6XEsuDL9Xd2QTc=";
   };
 
   build-system = [ pdm-backend ];

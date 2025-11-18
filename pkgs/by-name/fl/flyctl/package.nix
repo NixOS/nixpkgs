@@ -18,7 +18,7 @@ buildGoModule rec {
     repo = "flyctl";
     rev = "v${version}";
     leaveDotGit = true;
-    hash = "sha256-D1MSlg6oFmdyiEaq10DUwzADzleilFIQ22oQd8LGfRk=";
+    hash = "sha256-hzKKCwGTaz1MFQ1+F9piNBnaEDZJwJqoerR1c/uzSsQ=";
   };
 
   proxyVendor = true;

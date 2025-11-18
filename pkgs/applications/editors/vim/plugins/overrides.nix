@@ -1237,40 +1237,6 @@ assertNoAdditions {
     runtimeDeps = [ charm-freeze ];
   };
 
-  fruzzy =
-    let
-      # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
-      nimpy = fetchFromGitHub {
-        owner = "yglukhov";
-        repo = "nimpy";
-        rev = "4840d1e438985af759ddf0923e7a9250fd8ea0da";
-        sha256 = "0qqklvaajjqnlqm3rkk36pwwnn7x942mbca7nf2cvryh36yg4q5k";
-      };
-      binaryheap = fetchFromGitHub {
-        owner = "bluenote10";
-        repo = "nim-heap";
-        rev = "c38039309cb11391112571aa332df9c55f625b54";
-        sha256 = "05xdy13vm5n8dw2i366ppbznc4cfhq23rdcklisbaklz2jhdx352";
-      };
-    in
-    super.fruzzy.overrideAttrs (old: {
-      buildInputs = [ nim1 ];
-      patches = [
-        (replaceVars ./patches/fruzzy/get_version.patch {
-          inherit (old) version;
-        })
-      ];
-      configurePhase = ''
-        substituteInPlace Makefile \
-          --replace-fail \
-            "nim c" \
-            "nim c --nimcache:$TMP --path:${nimpy} --path:${binaryheap}"
-      '';
-      buildPhase = ''
-        make build
-      '';
-    });
-
   fugit2-nvim = super.fugit2-nvim.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
     checkInputs = [

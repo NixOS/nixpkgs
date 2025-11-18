@@ -4741,8 +4741,6 @@ runTests {
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
   };
 
-  # Tests for cross index utilities
-
   testRenameCrossIndexFrom = {
     expr = lib.renameCrossIndexFrom "pkgs" {
       pkgsBuildBuild = "dummy-build-build";
@@ -4819,4 +4817,31 @@ runTests {
     };
   };
 
+  testThrowTestFailuresEmpty = {
+    expr = lib.debug.throwTestFailures {
+      failures = [ ];
+    };
+
+    expected = null;
+  };
+
+  testThrowTestFailures = testingThrow (
+    lib.debug.throwTestFailures {
+      failures = [
+        {
+          name = "testDerivation";
+          expected = builtins.derivation {
+            name = "a";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+          result = builtins.derivation {
+            name = "b";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+        }
+      ];
+    }
+  );
 }

@@ -82,10 +82,9 @@ buildPythonPackage rec {
     # GetPrefPath for OrgName/AppName is None
     "test_SDL_GetPrefPath"
 
-    # TODO: Remove once sdl2-compat is updated to 2.32.56
-    "test_SDL_SetWindowDisplayMode"
-    "test_SDL_SetWindowFullscreen"
-    "test_SDL_GetPlatform"
+    # AssertionError:
+    # clip: Could not set clip rect SDL_Rect(x=2, y=2, w=0, h=0)
+    "test_SDL_GetSetClipRect"
   ];
 
   meta = {

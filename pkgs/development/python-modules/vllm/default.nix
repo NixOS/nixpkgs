@@ -34,7 +34,7 @@
   uvicorn,
   pydantic,
   aioprometheus,
-  pynvml,
+  nvidia-ml-py,
   openai,
   pyzmq,
   tiktoken,
@@ -314,6 +314,13 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # Remove vendored pynvml entirely
+    rm vllm/third_party/pynvml.py
+    substituteInPlace tests/utils.py \
+      --replace-fail "from vllm.third_party.pynvml import" "from pynvml import"
+    substituteInPlace vllm/utils/__init__.py \
+      --replace-fail "import vllm.third_party.pynvml" "import pynvml"
+
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
@@ -442,7 +449,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    pynvml
+    nvidia-ml-py
     flashinfer
   ];
 

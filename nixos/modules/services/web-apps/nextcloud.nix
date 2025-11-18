@@ -550,6 +550,7 @@ in
         "pm.min_spare_servers" = "6";
         "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
+        "pm.status_path" = "/status";
       };
       description = ''
         Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on

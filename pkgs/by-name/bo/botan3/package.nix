@@ -21,6 +21,9 @@
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   withTpm2 ? false,
   policy ? null,
+  # create additional "selftests" output and put botan-test binary together with
+  # test vectors there. Useful to perform initial botan self-tests before using it
+  exposeSelftests ? false,
 }@args:
 
 assert lib.assertOneOf "policy" policy [
@@ -52,7 +55,7 @@ let
       '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.9.0";
+  version = "3.10.0";
   pname = "botan";
 
   __structuredAttrs = true;
@@ -65,11 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "man"
+  ]
+  ++ lib.optionals exposeSelftests [
+    "selftests"
   ];
 
   src = fetchurl {
     url = "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jD8oS1jd1C6OQ+n6hqcSnYfqfD93aoDT2mPsIHIrCIM=";
+    hash = "sha256-/eGUI29tVDTxNuoKBif2zJ0mr4uW6fHhx9jILNkPTyQ=";
   };
 
   nativeBuildInputs = [
@@ -102,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildTargets = [
     "cli"
   ]
-  ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+  ++ lib.optionals (finalAttrs.finalPackage.doCheck || exposeSelftests) [ "tests" ]
   ++ lib.optionals static [ "static" ]
   ++ lib.optionals (!static) [ "shared" ];
 
@@ -156,10 +162,21 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  postInstall = ''
-    cd "$out"/lib/pkgconfig
-    ln -s botan-*.pc botan.pc || true
-  '';
+  postInstall =
+    lib.optionalString exposeSelftests ''
+      mkdir -p $selftests/bin
+      install -Dpm755 -D botan-test $selftests/bin/botan-test
+
+      # don't copy leading source folder structure
+      pushd src/tests/data &> /dev/null
+      find . -type d -exec install -d $selftests/test-data/{} \;
+      find . -type f -exec install -Dpm644 {} $selftests/test-data/{} \;
+      popd &> /dev/null
+    ''
+    + ''
+      cd "$out"/lib/pkgconfig
+      ln -s botan-*.pc botan.pc || true
+    '';
 
   doCheck = true;
 

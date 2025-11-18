@@ -1,8 +1,6 @@
 import ./generic.nix {
   version = "13.23";
-  # TODO: Move back to tag, when they appear upstream:
-  # rev = "refs/tags/REL_13_23";
-  rev = "89df812eb890814b105d871185935b580478e660";
+  rev = "refs/tags/REL_13_23";
   hash = "sha256-GSIHFSt2wzaI3HkA3yX/gZZF+LKwODHYislagdhQjmE=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {

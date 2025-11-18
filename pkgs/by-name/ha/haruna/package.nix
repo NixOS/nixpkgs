@@ -34,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.breeze
     kdePackages.qqc2-desktop-style
     yt-dlp
-
     ffmpeg-headless
     kdsingleapplication
     libass
@@ -49,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kxmlgui
     kdePackages.kdoctools
     kdePackages.mpvqt
+    kdePackages.kitemmodels
     qt6.qtbase
   ];
 
