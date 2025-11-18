@@ -15,14 +15,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pw3270";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "pw3270";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-thvurPyAsbcCRcanV6PwObO26LCmphdNrYYKhHDKnzE=";
   };
 
@@ -53,18 +53,19 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Schemas get installed to wrong directory.
     mkdir -p $out/share/glib-2.0
-    mv $out/share/gsettings-schemas/pw3270-${version}/glib-2.0/schemas $out/share/glib-2.0/
+    mv $out/share/gsettings-schemas/pw3270-${finalAttrs.version}/glib-2.0/schemas $out/share/glib-2.0/
     glib-compile-schemas $out/share/glib-2.0/schemas
     rm -rf $out/share/gsettings-schemas
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "3270 Emulator for gtk";
     homepage = "https://softwarepublico.gov.br/social/pw3270/";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    changelog = "https://github.com/PerryWerneck/pw3270/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vifino ];
     mainProgram = "pw3270";
   };
-}
+})
