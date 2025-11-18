@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ekey-bionyxpy";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "richardpolzer";
@@ -41,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/richardpolzer/ekey-bionyx-api";
     changelog = "https://github.com/richardpolzer/ekey-bionyx-api/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jamiemagee ];
   };
 }
