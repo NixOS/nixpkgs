@@ -481,22 +481,6 @@ module.exports = async ({ github, context, core, dry }) => {
         },
       )
 
-      if (item.pull_request || context.payload.pull_request) {
-        stats.prs++
-        Object.assign(
-          itemLabels,
-          await handlePullRequest({ item, stats, events }),
-        )
-      } else {
-        stats.issues++
-        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
-          // If this returns true, the issue was closed. In this case we return, to not
-          // label the issue anymore. Most importantly this avoids unlabeling stale issues
-          // which are closed via auto-close.
-          if (await handleAutoClose(item)) return
-        }
-      }
-
       const latest_event_at = new Date(
         events
           .filter(({ event }) =>
@@ -537,6 +521,29 @@ module.exports = async ({ github, context, core, dry }) => {
       log('latest_event_at', latest_event_at.toISOString())
 
       const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
+      const is_stale = latest_event_at < stale_at
+
+      if (item.pull_request || context.payload.pull_request) {
+        // No need to compute merge commits for stale PRs over and over again.
+        // This increases the repo size on GitHub's side unnecessarily and wastes
+        // a lot of API requests, too. Any relevant change will result in the
+        // stale status to change and thus pick up the PR again for labeling.
+        if (!is_stale) {
+          stats.prs++
+          Object.assign(
+            itemLabels,
+            await handlePullRequest({ item, stats, events }),
+          )
+        }
+      } else {
+        stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          // If this returns true, the issue was closed. In this case we return, to not
+          // label the issue anymore. Most importantly this avoids unlabeling stale issues
+          // which are closed via auto-close.
+          if (await handleAutoClose(item)) return
+        }
+      }
 
       // Create a map (Label -> Boolean) of all currently set labels.
       // Each label is set to True and can be disabled later.
@@ -550,8 +557,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       Object.assign(itemLabels, {
-        '2.status: stale':
-          !before['1.severity: security'] && latest_event_at < stale_at,
+        '2.status: stale': !before['1.severity: security'] && is_stale,
       })
 
       const after = Object.assign({}, before, itemLabels)
