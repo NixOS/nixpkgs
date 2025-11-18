@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "bfscripts";
-  version = "unstable-2025-06-27";
+  version = "3.9.7-1-unstable-2025-11-18";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "bfscripts";
-    rev = "ed8ede79fa002a2d83719a1bef6fbe0f7dcf37a4";
-    hash = "sha256-x+hpH6D5HTl39zD0vYj6wRFw881M4AcfM+ePcgXMst8=";
+    rev = "1bc9bdfc3196da25b5565f473e95d27ddecfbc9d";
+    hash = "sha256-db2jnPtYbSCwa8pwuu6z4Cho/TgVZvgPJaPnqcsmdSQ=";
   };
 
   buildInputs = [
