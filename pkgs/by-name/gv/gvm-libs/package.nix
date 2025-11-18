@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  cjson,
   cmake,
+  curl,
   doxygen,
   fetchFromGitHub,
   glib,
-  glib-networking,
   gnutls,
   gpgme,
   hiredis,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.11.0";
+  version = "22.31.1";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
     tag = "v${version}";
-    hash = "sha256-VYFAy6VVASNOBLs39qukePYr5pV0IR1qjztv+veNCVc=";
+    hash = "sha256-/2r5jPWqOb9KQyCW1ja9xV/RBQnsZCeJJHL2a6oH3bk=";
   };
 
   postPatch = ''
@@ -45,8 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cjson
+    curl
     glib
-    glib-networking
     gnutls
     gpgme
     hiredis
