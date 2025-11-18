@@ -8967,15 +8967,6 @@ let
         sha512 = "sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g==";
       };
     };
-    "get-stdin-9.0.0" = {
-      name = "get-stdin";
-      packageName = "get-stdin";
-      version = "9.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/get-stdin/-/get-stdin-9.0.0.tgz";
-        sha512 = "dVKBjfWisLAicarI2Sf+JuBE/DghV4UzNAVe9yhEJuzeREd3JhOTE9cUaJTeSa77fsbQUK3pcOpJfM59+VKZaA==";
-      };
-    };
     "get-stream-4.1.0" = {
       name = "get-stream";
       packageName = "get-stream";
@@ -24092,57 +24083,6 @@ in
       description = "Live CSS Reload & Browser Syncing";
       homepage = "https://browsersync.io/";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  clipboard-cli = nodeEnv.buildNodePackage {
-    name = "clipboard-cli";
-    packageName = "clipboard-cli";
-    version = "4.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/clipboard-cli/-/clipboard-cli-4.0.0.tgz";
-      sha512 = "rW5a4YsZJhkDYhN5o4Zm/KP/OyYy9lKIyeF59vYgJXzt3shM4z6/dVwv6DNzOS0N7YOpzNb4+7Nz03+mz6rpSQ==";
-    };
-    dependencies = [
-      sources."clipboardy-4.0.0"
-      sources."cross-spawn-7.0.6"
-      sources."execa-8.0.1"
-      sources."get-stdin-9.0.0"
-      sources."get-stream-8.0.1"
-      sources."human-signals-5.0.0"
-      sources."is-docker-3.0.0"
-      sources."is-inside-container-1.0.0"
-      sources."is-stream-3.0.0"
-      sources."is-wsl-3.1.0"
-      sources."is64bit-2.0.0"
-      sources."isexe-2.0.0"
-      sources."meow-12.1.1"
-      sources."merge-stream-2.0.0"
-      sources."mimic-fn-4.0.0"
-      (
-        sources."npm-run-path-5.3.0"
-        // {
-          dependencies = [
-            sources."path-key-4.0.0"
-          ];
-        }
-      )
-      sources."onetime-6.0.0"
-      sources."path-key-3.1.1"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."strip-final-newline-3.0.0"
-      sources."system-architecture-0.1.0"
-      sources."which-2.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Access the system clipboard (copy/paste)";
-      homepage = "https://github.com/sindresorhus/clipboard-cli#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

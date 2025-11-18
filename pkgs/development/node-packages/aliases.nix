@@ -87,6 +87,7 @@ mapAliases {
   inherit (pkgs) cdk8s-cli; # Added 2025-11-10
   inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  clipboard-cli = throw "'clipboard-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   inherit (pkgs) coc-clangd; # added 2024-06-29
   inherit (pkgs) coc-cmake; # Added 2025-11-05
   inherit (pkgs) coc-css; # added 2024-06-29
