@@ -9,7 +9,6 @@
 , "aws-cdk"
 , "browserify"
 , "browser-sync"
-, "clipboard-cli"
 , "coc-go"
 , "coc-tsserver"
 , "cpy-cli"
