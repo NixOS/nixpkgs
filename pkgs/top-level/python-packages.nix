@@ -4340,6 +4340,8 @@ self: super: with self; {
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
 
+  dnaio = callPackage ../development/python-modules/dnaio { };
+
   dncil = callPackage ../development/python-modules/dncil { };
 
   dnf-plugins-core = callPackage ../development/python-modules/dnf-plugins-core { };
