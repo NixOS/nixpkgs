@@ -57,13 +57,9 @@ let
     }:
     let
       ver = version;
-      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        !isCross
-        && (
-          stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
-        );
+        stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64);
       rubyDrv = lib.makeOverridable (
         {
           stdenv,
@@ -180,6 +176,13 @@ let
             libunwind
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
+
+          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+            # The ruby build system will use a bare `rust` command by default for its rust.
+            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+            # for cross-compilation output for the build target by default.
+            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+          };
 
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
