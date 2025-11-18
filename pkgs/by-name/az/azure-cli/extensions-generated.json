@@ -400,9 +400,9 @@
   },
   "dynatrace": {
     "pname": "dynatrace",
-    "version": "1.1.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dynatrace-1.1.1-py3-none-any.whl",
-    "hash": "sha256-uDqTcLrHCSrShT7CMl3GrMWLXjGGqvB2ofaLCrnyhvg=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dynatrace-2.0.0-py3-none-any.whl",
+    "hash": "sha256-gS+82UbXH2fh7TrIsAxDqyaeM0iMwebt4v0ImJIs07Y=",
     "description": "Microsoft Azure Command-Line Tools Dynatrace Extension"
   },
   "edgeorder": {
