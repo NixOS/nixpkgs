@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "typer"
     "instructor"
     "jinja2"
+    "openai"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];

@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
     substituteInPlace udev/90-roccat-kone.rules \
       --replace "/bin/sh" "${runtimeShell}" \
       --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-      --replace "/bin/echo" "${coreutils}/bin/echo"
+      --replace "/bin/echo" "${coreutils}/bin/echo" \
+      --replace '$' '$$' # fix bash variables interpreted as udev substitutions
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [

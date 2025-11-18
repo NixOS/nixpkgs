@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    description = "Modern & minimalistic load balancer for the Сloud era";
+    description = "Modern & minimalistic load balancer for the Cloud era";
     homepage = "https://gobetween.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomberek ];

@@ -41,10 +41,7 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      penguwin
-    ];
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "glow";
   };
 }

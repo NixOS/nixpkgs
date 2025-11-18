@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = [ maintainers.leenaars ];
     mainProgram = "kfcgi";
   };
 }

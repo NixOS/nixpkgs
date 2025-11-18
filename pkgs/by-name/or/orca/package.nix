@@ -104,6 +104,7 @@ python3.pkgs.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    substituteInPlace $out/lib/systemd/user/orca.service --replace-fail ExecStart=orca ExecStart=$out/bin/orca
   '';
 
   passthru = {

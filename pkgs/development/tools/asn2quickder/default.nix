@@ -50,6 +50,5 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/arpa2/quick-der";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

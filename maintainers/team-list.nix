@@ -631,7 +631,6 @@ with lib.maintainers;
   mate = {
     members = [
       bobby285271
-      j03
       romildo
     ];
     scope = "Maintain Mate desktop environment and related packages.";

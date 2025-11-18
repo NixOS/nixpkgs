@@ -48,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tonioo/sievelib";
     changelog = "https://github.com/tonioo/sievelib/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

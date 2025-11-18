@@ -42,7 +42,7 @@ The manpages must have a section suffix, and may optionally be compressed (with
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the manpage file has an undersirable name; e.g., it conflicts with
+  # Sometimes the manpage file has an undesirable name; e.g., it conflicts with
   # another software with an equal name. To install it with a different name,
   # the installed name must be provided before the path to the file.
   #

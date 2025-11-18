@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cutee";
     homepage = "https://www.codesink.org/cutee_unit_testing.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
   };
 }

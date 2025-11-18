@@ -53,7 +53,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ lib.licenses.mpl20 ];
     maintainers = with lib.maintainers; [
-      havvy
       Frostman
       matthiasbeyer
     ];

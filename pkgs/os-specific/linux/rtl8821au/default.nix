@@ -66,5 +66,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ plchldr ];
+    broken = kernel.kernelOlder "5.4" || kernel.kernelAtLeast "6.15";
   };
 }

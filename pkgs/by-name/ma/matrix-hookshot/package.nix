@@ -5,87 +5,86 @@
   fetchYarnDeps,
   makeWrapper,
   matrix-sdk-crypto-nodejs,
-  mkYarnPackage,
+  yarnConfigHook,
+  yarnInstallHook,
   cargo,
   rustPlatform,
   rustc,
   napi-rs-cli,
   pkg-config,
-  nodejs_24,
+  nodejs,
   openssl,
+  nix-update-script,
 }:
 
-let
-  data = lib.importJSON ./pin.json;
-in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = data.version;
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
-    rev = data.version;
-    hash = data.srcHash;
+    tag = finalAttrs.version;
+    hash = "sha256-jRLax1vqC0K3XvAWrH1J7nqtFioLr4n6Df9Kra/KKKU=";
   };
 
-  packageJSON = ./package.json;
-  nodejs = nodejs_24;
-
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarnHash;
+    inherit (finalAttrs) src;
+    hash = "sha256-bxSeaJyQojfqIl/X4pjG+QRATKYKjsQhTQ3JOY/HDFQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = data.cargoHash;
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-1eBiLZHGNJxXNCVavkKt0xckAD2cilOW2wNCtqJ8O4g=";
   };
 
-  packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" =
-      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
-  };
-
-  extraBuildInputs = [ openssl ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
+    yarnConfigHook
+    yarnInstallHook
     pkg-config
     cargo
     rustc
     napi-rs-cli
     makeWrapper
+    nodejs
   ];
+
+  preBuild = ''
+    # We want nixpkgs' version of this instead
+    rm -rf node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+  '';
 
   buildPhase = ''
     runHook preBuild
-    cd deps/${pname}
-    napi build --target ${stdenv.hostPlatform.rust.rustcTargetSpec} --dts ../src/libRs.d.ts --release ./lib
+
+    yarn run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
     yarn run build:app:fix-defs
     yarn run build:app
     yarn run build:web
-    cd ../..
+
     runHook postBuild
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs_24}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
-        "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" --add-flags \
+        "$out/lib/node_modules/matrix-hookshot/lib/App/BridgeApp.js"
   '';
 
-  postFixup = ''
-    # Scrub reference to rustc
-    rm $out/libexec/matrix-hookshot/deps/matrix-hookshot/target/.rustc_info.json
-  '';
+  passthru.updateScript = nix-update-script { };
 
-  doDist = false;
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/matrix-org/matrix-hookshot/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
+    homepage = "https://matrix-org.github.io/matrix-hookshot/";
     mainProgram = "matrix-hookshot";
-    maintainers = with maintainers; [ chvp ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
-}
+})

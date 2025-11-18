@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
-      kampfschlaefer
       ivan
     ];
     platforms = platforms.unix;

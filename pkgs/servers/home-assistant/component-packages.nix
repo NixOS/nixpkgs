@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.11.1";
+  version = "2025.11.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -2729,8 +2729,9 @@
     "inels" =
       ps: with ps; [
         aiohasupervisor
+        elkoep-aio-mqtt
         paho-mqtt
-      ]; # missing inputs: elkoep-aio-mqtt
+      ];
     "influxdb" =
       ps: with ps; [
         influxdb
@@ -6245,7 +6246,8 @@
         dbus-fast
         habluetooth
         pyserial
-      ]; # missing inputs: togrill-bluetooth
+        togrill-bluetooth
+      ];
     "tolo" =
       ps: with ps; [
         tololib
@@ -7424,6 +7426,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "inels"
     "influxdb"
     "inkbird"
     "input_boolean"
@@ -7928,6 +7931,7 @@
     "tod"
     "todo"
     "todoist"
+    "togrill"
     "tolo"
     "tomato"
     "tomorrowio"

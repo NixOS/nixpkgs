@@ -261,7 +261,8 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - nixos/modules/services/cluster/k3s/**/*
+              - nixos/modules/services/cluster/rancher/default.nix
+              - nixos/modules/services/cluster/rancher/k3s.nix
               - nixos/tests/k3s/**/*
               - pkgs/applications/networking/cluster/k3s/**/*
 

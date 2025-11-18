@@ -23,6 +23,8 @@
 
   makeDesktopItem,
   copyDesktopItems,
+
+  nix-update-script,
 }:
 let
   inherit (dotnetCorePackages) fetchNupkg;
@@ -42,13 +44,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "pixieditor";
-  version = "2.0.1.14";
+  version = "2.0.1.18";
 
   src = fetchFromGitHub {
     owner = "PixiEditor";
     repo = "PixiEditor";
     tag = finalAttrs.version;
-    hash = "sha256-wyqt5mpT4xmaTk7RidQOOZAgkgMfcKiz5/7Nle0/Tkg=";
+    hash = "sha256-mGgFr7K9/vs7g6yugmw2QR+PG2/itb048Su4AdkzBNc=";
     fetchSubmodules = true;
   };
 
@@ -160,6 +162,10 @@ buildDotnetModule (finalAttrs: {
   postFixup = ''
     mv $out/bin/PixiEditor.Desktop $out/bin/pixieditor
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Universal editor for all your 2D needs";

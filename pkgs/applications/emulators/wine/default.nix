@@ -42,6 +42,7 @@
   mingwSupport ? stdenv.hostPlatform.isDarwin,
   waylandSupport ? false,
   x11Support ? false,
+  ffmpegSupport ? false,
   embedInstallers ? false, # The Mono and Gecko MSI installers
   moltenvk, # Allow users to override MoltenVK easily
 }:
@@ -83,6 +84,7 @@ let
             vulkanSupport
             waylandSupport
             x11Support
+            ffmpegSupport
             xineramaSupport
             ;
         };
