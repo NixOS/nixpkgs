@@ -11,22 +11,26 @@ let
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
   package = cfg.package.override {
-    logDir = cfg.logDir;
-    dataDir = cfg.dataDir;
+    inherit (cfg) logDir dataDir;
   };
 
-  phpOptions = ''
-    log_errors = on
-    post_max_size = 100M
-    upload_max_filesize = 100M
-    memory_limit = ${toString cfg.settings.php_memory_limit}M
-    date.timezone = "${config.time.timeZone}"
-  '';
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+  };
+
+  defaultPHPSettings = {
+    log_errors = "on";
+    post_max_size = "100M";
+    upload_max_filesize = "100M";
+    memory_limit = "${toString cfg.settings.php_memory_limit}M";
+    "date.timezone" = config.time.timeZone;
+  };
+
   phpIni =
     pkgs.runCommand "php.ini"
       {
         inherit (package) phpPackage;
-        inherit phpOptions;
+        phpOptions = toKeyValue cfg.phpOptions;
         preferLocalBuild = true;
         passAsFile = [ "phpOptions" ];
       }
@@ -210,6 +214,51 @@ in
           Port of the `memcached` server.
         '';
       };
+    };
+
+    phpOptions = mkOption {
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+        ]);
+      defaultText = literalExpression (
+        generators.toPretty { } (
+          defaultPHPSettings
+          // {
+            "zend_extension" = lib.literalExpression "opcache";
+            "opcache.enable" = lib.literalExpression "1";
+            "opcache.memory_consumption" = lib.literalExpression "256";
+            "date.timezone" = lib.literalExpression "config.time.timeZone";
+            memory_limit = lib.literalExpression "\${toString cfg.settings.php_memory_limit}M";
+          }
+        )
+      );
+      description = ''
+        Options for PHP's php.ini file for librenms.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.librenms.phpOptions."opcache.enable" = 1;
+        }
+        ```
+
+        will override the `php.ini` option `opcache.enable` without discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` can be done like this:
+
+        ```nix
+        {
+          services.librenms.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
+      '';
     };
 
     poolConfig = mkOption {
@@ -399,6 +448,8 @@ in
 
     users.groups.${cfg.group} = { };
 
+    services.librenms.phpOptions = lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings;
+
     services.librenms.settings = {
       # basic configs
       "user" = cfg.user;
@@ -511,7 +562,7 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      inherit phpOptions;
+      phpOptions = toKeyValue cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;

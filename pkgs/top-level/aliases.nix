@@ -1568,6 +1568,7 @@ mapAliases {
   transmission_3-qt = throw "transmission_3-qt has been removed in favour of transmission_4-qt. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
   transmission_3_noSystemd = throw "transmission_3_noSystemd has been removed in favour of transmission_4. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
   treefmt2 = throw "'treefmt2' has been renamed to/replaced by 'treefmt'"; # Converted to throw 2025-10-27
+  tremor-language-server = throw "'tremor-language-server' has been removed because it is unmaintained"; # Added 2025-11-17
   trenchbroom = throw "trenchbroom was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   trezor_agent = throw "'trezor_agent' has been renamed to/replaced by 'trezor-agent'"; # Converted to throw 2025-10-27
   trilium-next-desktop = trilium-desktop; # Added 2025-08-30

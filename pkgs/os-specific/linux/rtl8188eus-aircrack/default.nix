@@ -39,6 +39,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
-    broken = (lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened;
+    broken =
+      ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened)
+      || kernel.kernelAtLeast "6.17";
   };
 }
