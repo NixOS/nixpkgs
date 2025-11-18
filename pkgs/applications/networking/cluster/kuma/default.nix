@@ -71,6 +71,5 @@ buildGoModule rec {
     homepage = "https://kuma.io/";
     changelog = "https://github.com/kumahq/kuma/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ zbioe ];
   };
 }
