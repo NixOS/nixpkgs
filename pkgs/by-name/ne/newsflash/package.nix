@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs build-aux/cargo.sh
+    patchShebangs --build build-aux/cargo.sh
     meson rewrite kwargs set project / version '${finalAttrs.version}'
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / 'news_flash_gtk'" \
