@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   wget,
+  gnugrep,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,6 +41,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
 
+    wrapProgram "$out/bin/${finalAttrs.meta.mainProgram}" \
+      --prefix PATH ":" ${lib.makeBinPath [ gnugrep ]}
+
     mkdir -p $out/share/distrobox
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
@@ -55,5 +59,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
+    mainProgram = "distrobox";
   };
 })
