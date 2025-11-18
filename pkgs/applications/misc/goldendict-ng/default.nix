@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation {
   pname = "goldendict-ng";
-  version = "25.05.0";
+  version = "25.10.2";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    tag = "v25.05.0-Release.2a2b0e16";
-    hash = "sha256-PBqkVac867xE4ZcvwTysAK6rQSoEZelKrV9USvFsaLk=";
+    tag = "v25.10.2-Release.673d1b90";
+    hash = "sha256-afzMUko09vGmQvu6sob8jYfVUvQECoUdAmIbLIoh1Dw=";
   };
 
   nativeBuildInputs = [
