@@ -170,6 +170,7 @@ mapAliases {
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
+  fkill-cli = throw "'fkill-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   fleek-cli = throw "'fleek-cli' was removed because the upstream source code repo has been deleted."; # Added 2025-11-07
   flood = pkgs.flood; # Added 2023-07-25
   forever = throw "'forever' has been removed because it was unmaintained upstream"; # Added 2025-11-14

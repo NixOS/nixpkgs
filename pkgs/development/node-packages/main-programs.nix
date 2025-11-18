@@ -7,7 +7,6 @@
   "@angular/cli" = "ng";
   aws-cdk = "cdk";
   fauna-shell = "fauna";
-  fkill-cli = "fkill";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   pulp = "pulp";

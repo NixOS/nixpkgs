@@ -15,7 +15,6 @@
 , "elasticdump"
 , "esy"
 , "fauna-shell"
-, "fkill-cli"
 , "grunt-cli"
 , "gulp-cli"
 , "js-yaml"
