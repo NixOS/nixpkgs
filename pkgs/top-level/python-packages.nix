@@ -1293,6 +1293,8 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-ai-documentintelligence
       { };
 
+  azure-ai-projects = callPackage ../development/python-modules/azure-ai-projects { };
+
   azure-ai-vision-imageanalysis =
     callPackage ../development/python-modules/azure-ai-vision-imageanalysis
       { };
