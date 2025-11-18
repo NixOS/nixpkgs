@@ -14158,12 +14158,6 @@
     github = "krzaczek";
     githubId = 5773701;
   };
-  KSJ2000 = {
-    email = "katsho123@outlook.com";
-    name = "KSJ2000";
-    github = "KSJ2000";
-    githubId = 184105270;
-  };
   ktechmidas = {
     email = "daniel@ktechmidas.net";
     github = "ktechmidas";
