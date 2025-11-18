@@ -9,6 +9,7 @@
   ninja,
   cmake,
   nix-update-script,
+  udev,
 }:
 
 let
@@ -37,7 +38,10 @@ stdenv.mkDerivation {
     scdoc
   ];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [
+    libusb1
+    udev
+  ];
 
   doInstallCheck = true;
 
