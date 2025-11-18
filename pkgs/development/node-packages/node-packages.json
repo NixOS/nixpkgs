@@ -7,7 +7,6 @@
 , "@tailwindcss/typography"
 , "alex"
 , "aws-cdk"
-, "awesome-lint"
 , "browserify"
 , "browser-sync"
 , "clipboard-cli"
