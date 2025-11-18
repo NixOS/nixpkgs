@@ -63,9 +63,12 @@ let
           "submission"
           "dnskey-sync"
           "policy"
+          "external"
+          # mod-* is above
           "template"
           "zone"
           "include"
+          "clear"
         ];
       secsCheck =
         let
