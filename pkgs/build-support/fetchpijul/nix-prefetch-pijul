@@ -128,10 +128,10 @@ cat <<EOF
 	"channel": $(json_escape "$channel"),
 EOF
 if [ -n "$change" ]; then cat <<EOF
-	"change": "$(json_escape "$change")",
+	"change": $(json_escape "$change"),
 EOF
 fi; cat <<EOF
-	"state": "$(json_escape "$state")",
+	"state": $(json_escape "$state"),
 	"path": "$final_path",
 	$(json_escape "$hash_algo"): $(json_escape "$hash"),
 	"hash": "$(nix-hash --to-sri --type "$hash_algo" "$hash")"
