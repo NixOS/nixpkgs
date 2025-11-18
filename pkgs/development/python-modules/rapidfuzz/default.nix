@@ -37,6 +37,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.1.6, <3.2.0" "Cython >=3.1.6"
+  '';
+
   build-system = [
     cmake
     cython
