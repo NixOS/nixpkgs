@@ -20589,6 +20589,8 @@ self: super: with self; {
 
   xonsh = callPackage ../by-name/xo/xonsh/unwrapped.nix { };
 
+  xopen = callPackage ../development/python-modules/xopen { };
+
   xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
 
   xpybutil = callPackage ../development/python-modules/xpybutil { };
