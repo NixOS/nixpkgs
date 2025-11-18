@@ -13,7 +13,6 @@
 , "coc-tsserver"
 , "dotenv-vault"
 , "elasticdump"
-, "emoj"
 , "esy"
 , "fast-cli"
 , "fauna-shell"
