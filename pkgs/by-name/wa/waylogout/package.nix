@@ -12,17 +12,18 @@
   cairo,
   gdk-pixbuf,
   scdoc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "waylogout";
-  version = "unstable-2023-06-09";
+  version = "0.3-unstable-2025-07-30";
 
   src = fetchFromGitHub {
     owner = "loserMcloser";
     repo = "waylogout";
-    rev = "f90e1b8b0f67a2694fafca7beb32828493f3f78e";
-    hash = "sha256-YQtX4t6q2NybuKU3lVcn5XhC0nXcPfEbcXbuFmDZOrw=";
+    rev = "e3ab4da6c7d883213b797153cd66d3dca8d3af62";
+    hash = "sha256-VpDPsIq8Si203mOlY1qNcczsLcK5T9SGBkc+TvVbdXE=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,10 @@ stdenv.mkDerivation {
     cairo
     gdk-pixbuf
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Graphical logout/suspend/reboot/shutdown dialog for wayland";
