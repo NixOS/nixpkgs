@@ -265,7 +265,8 @@ in
         ++ (with pkgs.pantheon; [
           elementary-files
           elementary-settings-daemon
-          xdg-desktop-portal-pantheon
+          # https://github.com/elementary/portals/issues/157
+          # xdg-desktop-portal-pantheon
         ])
       ) config.environment.pantheon.excludePackages;
 
