@@ -49,7 +49,12 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
-  patches = [ ] ++ extraPatches;
+  patches = [
+    # https://gitlab.gnome.org/GNOME/libxml2/-/merge_requests/349
+    # debian already uses this patch, despite it not being merged upstream
+    ./CVE-2025-12863.patch
+  ]
+  ++ extraPatches;
 
   strictDeps = true;
 
