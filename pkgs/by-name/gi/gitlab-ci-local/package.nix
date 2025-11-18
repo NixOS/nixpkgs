@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   lib,
@@ -31,6 +32,10 @@ buildNpmPackage rec {
     # remove cleanup which runs git commands
     substituteInPlace package.json \
       --replace-fail "npm run cleanup" "true"
+
+    # set a script name to avoid yargs using index.js as $0
+    substituteInPlace src/handler.ts src/index.ts \
+      --replace-fail 'yargs(process.argv.slice(2))' 'yargs(process.argv.slice(2)).scriptName("gitlab-ci-local")'
   '';
 
   postInstall = ''
@@ -41,6 +46,11 @@ buildNpmPackage rec {
           gitMinimal
         ]
       }"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gitlab-ci-local \
+      --bash <(SHELL=bash $out/bin/gitlab-ci-local --completion) \
+      --zsh <(SHELL=zsh $out/bin/gitlab-ci-local --completion)
   '';
 
   passthru = {

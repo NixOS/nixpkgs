@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     writableTmpDirAsHomeHook
     gitMinimal
   ];
@@ -31,13 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     clang
     go
     llvm
-    pkg-config
   ];
 
   env = {
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
-    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments";
+    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
   };
 
   buildPhase = ''

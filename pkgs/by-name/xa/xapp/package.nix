@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "3.0.1";
+  version = "3.2.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = "xapp";
     rev = version;
-    hash = "sha256-y7NRlRgITXtSpd0RMt6Am8loUNs734RlIobogqSVo9o=";
+    hash = "sha256-jO1FyJfAg/kZExAS6gT0u15ans8cDsXfBE5V+w2fQXU=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -95,6 +95,10 @@ stdenv.mkDerivation rec {
 
   # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
   env.PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
+
+  preFixup = ''
+    wrapGApp $out/lib/xapps/xapp-sn-watcher
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/xapp";

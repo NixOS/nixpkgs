@@ -18,6 +18,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gtk3 ];
 
+  buildPhase = ''
+    runHook preBuild
+    find . -xtype l -delete
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
 

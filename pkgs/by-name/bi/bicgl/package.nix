@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     "-DBICPL_DIR=${bicpl}/lib"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/${owner}/bicgl";
     description = "Brain Imaging Centre graphics library";

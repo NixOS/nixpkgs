@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
     "--with-urlsession" # for wxWebRequest

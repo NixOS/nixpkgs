@@ -293,6 +293,7 @@ let
           configfile
           modDirVersion
           ;
+        pos = builtins.unsafeGetAttrPos "version" args;
 
         config = {
           CONFIG_MODULES = "y";

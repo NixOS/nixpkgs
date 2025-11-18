@@ -5,7 +5,7 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   flac,
   freetype,
   gamemode,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     flac
     freetype
     libGL

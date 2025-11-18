@@ -86,6 +86,9 @@ let
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
           "chromadb/test/ef/test_multimodal_ef.py"
+
+          # sqlite3.OperationalError: no such table: migrations
+          "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
     };

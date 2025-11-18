@@ -1,63 +1,63 @@
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index 2137ae62..041cb87d 100644
+index 1039e96e..16f2c84a 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -14,7 +14,7 @@ set_property(DIRECTORY
+@@ -15,7 +15,7 @@ set_property(DIRECTORY
               units.cmake
               qt6ct.cmake)
  
 -include(aws-sdk-cpp.cmake)
 +find_package(AWSSDK CONFIG REQUIRED)
  include(date.cmake)
+ include(glad.cmake)
  include(hsluv-c.cmake)
- include(imgui.cmake)
 diff --git a/external/stb.cmake b/external/stb.cmake
-index 570af425..f9817226 100644
+index 570af425..f2e7b2c8 100644
 --- a/external/stb.cmake
 +++ b/external/stb.cmake
-@@ -1,4 +1,3 @@
+@@ -1,4 +1,4 @@
  cmake_minimum_required(VERSION 3.24)
  set(PROJECT_NAME scwx-stb)
-
+ 
 -set(STB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/stb PARENT_SCOPE)
 +# Nix: set STB_INCLUDE_DIR in cmake flags
 diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
-index 09ea6fe3..c20a2cb6 100644
+index 4833b9c2..641fc637 100644
 --- a/scwx-qt/scwx-qt.cmake
 +++ b/scwx-qt/scwx-qt.cmake
-@@ -11,14 +11,15 @@ set(CMAKE_AUTORCC ON)
- set(CMAKE_CXX_STANDARD 20)
- set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -13,14 +13,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ OPTION(SCWX_DISABLE_CONSOLE "Disables the Windows console in release mode" ON)
  
 -find_package(Boost)
-+find_package(Boost REQUIRED COMPONENTS json timer)
++find_package(Boost REQUIRED COMPONENTS json timer atomic)
  find_package(Fontconfig)
 -find_package(geographiclib)
 +find_package(GeographicLib)
  find_package(geos)
- find_package(GLEW)
  find_package(glm)
+ find_package(OpenGL)
  find_package(Python COMPONENTS Interpreter)
  find_package(SQLite3)
 +find_package(PNG)
  
  find_package(QT NAMES Qt6
               COMPONENTS Gui
-@@ -699,6 +700,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
-                                      imgui
+@@ -789,6 +790,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
                                       qt6ct-common
+                                      qt6ct-widgets
                                       SQLite::SQLite3
 +                                     PNG::PNG
                                       wxdata)
  
  target_link_libraries(supercell-wx PRIVATE scwx-qt
 diff --git a/wxdata/wxdata.cmake b/wxdata/wxdata.cmake
-index 94b0e3a7..a36c2c81 100644
+index 451efc13..86cbb42b 100644
 --- a/wxdata/wxdata.cmake
 +++ b/wxdata/wxdata.cmake
-@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.24)
+@@ -4,7 +4,8 @@ project(scwx-data)
  
- project(scwx-data)
+ include(CheckCXXSymbolExists)
  
 -find_package(Boost)
 +find_package(Boost REQUIRED COMPONENTS iostreams)

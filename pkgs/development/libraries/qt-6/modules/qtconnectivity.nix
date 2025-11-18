@@ -12,7 +12,10 @@
 qtModule {
   pname = "qtconnectivity";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    pcsclite
+    bluez
+  ];
   propagatedBuildInputs = [
     qtbase
     qtdeclarative

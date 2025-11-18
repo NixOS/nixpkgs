@@ -48,7 +48,6 @@ let
     maintainers = with maintainers; [
       sikmir
       soupglasses
-      iedame
     ];
     license = with licenses; [
       gpl3

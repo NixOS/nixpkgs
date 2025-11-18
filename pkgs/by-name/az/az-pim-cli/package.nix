@@ -59,7 +59,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/netr0m/az-pim-cli";
     changelog = "https://github.com/netr0m/az-pim-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "az-pim-cli";
   };
 })

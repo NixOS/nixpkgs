@@ -9,20 +9,19 @@
   fetchFromGitHub,
   numpy,
   packaging,
-  pytest-astropy,
+  pytest-astropy-header,
+  pytest-doctestplus,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "astropy";
@@ -47,16 +46,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-astropy
+    pytest-astropy-header
+    pytest-doctestplus
     pytestCheckHook
     scipy
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "asdf_astropy" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = with lib; {
     description = "Extension library for ASDF to provide support for Astropy";

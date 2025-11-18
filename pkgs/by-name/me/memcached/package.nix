@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     libevent
   ];
 
-  hardeningEnable = [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE = toString (
     [ "-Wno-error=deprecated-declarations" ] ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-error"
   );

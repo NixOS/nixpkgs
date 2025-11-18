@@ -4,23 +4,21 @@
   buildDartApplication,
 }:
 let
-  version = "7.1.1";
+  version = "7.3.0";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
     tag = "melos-v${version}";
-    hash = "sha256-i75fbo0lqDszo2pDtkWXQMt+3IoWsK7t05YU2IjqTmw=";
+    hash = "sha256-XTEhH8F54BoXJ1QNhUIZszHQoDwP0Za1LPQ6Dv9sR08=";
   };
 in
 buildDartApplication {
   pname = "melos";
   inherit version src;
 
-  sourceRoot = "${src.name}/packages/melos";
-
   patches = [
-    # This patch (created a melos 6.1.0) modify the method melos use to find path to the root of the projects.
-    # It is needed because when melos is in the nixstore, it break it and fail to find the projects root with melos.yaml
+    # Patch melos entrypoint to bypass cli_launcher which throws because it does not find melos in the "classic" folders eg : .dart_tool or pub cache.
+    # https://github.com/blaugold/cli_launcher/blob/dcdf11c42b77ddc8e38e7e2445c8cff9b55658ec/lib/cli_launcher.dart#L236
     ./add-generic-main.patch
   ];
 
@@ -28,12 +26,12 @@ buildDartApplication {
 
   # hard code the path to the melos templates
   preBuild = ''
-    substituteInPlace lib/src/common/utils.dart \
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
-    substituteInPlace lib/src/common/utils.dart \
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
     mkdir --parents $out
-    cp --recursive templates $out/
+    cp --recursive packages/melos/templates $out/
   '';
 
   meta = {

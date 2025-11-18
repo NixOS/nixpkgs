@@ -1181,6 +1181,14 @@ in
     '';
   });
 
+  telescope-nvim = prev.telescope-nvim.overrideAttrs {
+    # NOTE: Until luarocks rockspec is updated with changes from upstream repo
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail "'autoload'," ""
+    '';
+  };
+
   # aliases
   cjson = prev.lua-cjson;
 }

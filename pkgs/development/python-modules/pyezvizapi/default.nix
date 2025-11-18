@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  aiohttp,
   paho-mqtt,
   pandas,
   pycryptodome,
@@ -13,20 +12,19 @@
 
 buildPythonPackage rec {
   pname = "pyezvizapi";
-  version = "1.0.4.1";
+  version = "1.0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RenierM26";
     repo = "pyEzvizApi";
     tag = version;
-    hash = "sha256-BuGBEYoAZ8m5OUwzNUQC84lll5sP0BZq6bVRRCHsGcI=";
+    hash = "sha256-ReGGyB7qxiBK5zNQJP2oCzTF3IeQDu1ljM5IF7vZcXk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aiohttp
     paho-mqtt
     pandas
     pycryptodome

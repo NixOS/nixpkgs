@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
     mainProgram = "unused-features";

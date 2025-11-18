@@ -8,8 +8,8 @@
   ncurses,
   pkg-config,
   runCommand,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
@@ -17,17 +17,6 @@
   libutempter,
   withSixel ? true,
 }:
-
-let
-
-  bashCompletion = fetchFromGitHub {
-    owner = "imomaliev";
-    repo = "tmux-bash-completion";
-    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
-    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
-  };
-
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
@@ -55,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     libevent
   ]
-  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
   ++ lib.optionals withUtf8proc [ utf8proc ]
   ++ lib.optionals withUtempter [ libutempter ];
 
@@ -70,11 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
@@ -118,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
-      thammers
       fpletz
     ];
   };

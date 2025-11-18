@@ -19,7 +19,6 @@
   enableZstd ? true,
   zstd,
   nixosTests,
-  fakeroot,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,9 +57,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableOpenSSL openssl
   ++ lib.optional enableXXHash xxHash;
 
-  # fakeroot doesn't work well on darwin anymore, apparently
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
-
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")
     (lib.enableFeature enableOpenSSL "openssl")
@@ -94,7 +90,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
-      kampfschlaefer
       ivan
     ];
     platforms = platforms.unix;

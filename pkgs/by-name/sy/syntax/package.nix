@@ -18,6 +18,8 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-jZwbRGGg4tek6Jr+V7/SceJlsbIv7jFWQ+qa+fnChTw=";
 
+  dontCheckForBrokenSymlinks = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

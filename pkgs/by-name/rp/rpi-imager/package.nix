@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace debian/org.raspberrypi.rpi-imager.desktop \
       --replace-fail "/usr/bin/" ""
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
   '';
 
   preConfigure = ''

@@ -1,0 +1,32 @@
+From 231cc20195294c9774ab68f523dd06059f4b0a5c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Wed, 29 Oct 2025 23:41:55 +0000
+Subject: [PATCH] copy: avoid posix_fadvise bypassing copy offload behavior
+
+* src/copy-file-data.c (): pass 0 to posix_fadvise to indicate to EOF.
+coreutils 9.8 used OFF_T_MAX instead, which triggered OpenZFS 2.2.2
+at least to synchronously (decompress and) populate the page cache.
+Addresses https://github.com/coreutils/coreutils/issues/122
+---
+ src/copy-file-data.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/copy-file-data.c b/src/copy-file-data.c
+index 1eefd3071f58a54f725c96dfcd2fd352012398c5..9eb6f47244f0a62c2f4934c7663794fd4dcf21bf 100644
+--- a/src/copy-file-data.c
++++ b/src/copy-file-data.c
+@@ -536,9 +536,12 @@ copy_file_data (int ifd, struct stat const *ist, off_t ipos, char const *iname,
+                && scantype != PLAIN_SCANTYPE)));
+ 
+   /* Don't bother calling fadvise for small copies, as it is not
+-     likely to help performance and might even hurt it.  */
++     likely to help performance and might even hurt it.
++     Note it's important to use a 0 length to indicate the whole file
++     as OpenZFS 2.2.2 at least will otherwise synchronously
++     (decompress and) populate the cache when given a specific length.  */
+   if (IO_BUFSIZE < ibytes)
+-    fdadvise (ifd, ipos, ibytes <= OFF_T_MAX - ipos ? ibytes : 0,
++    fdadvise (ifd, ipos, ibytes < OFF_T_MAX - ipos ? ibytes : 0,
+               FADVISE_SEQUENTIAL);
+ 
+   /* If not making a sparse file, try to use a more-efficient

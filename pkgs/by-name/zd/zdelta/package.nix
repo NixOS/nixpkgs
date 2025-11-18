@@ -24,5 +24,7 @@ stdenv.mkDerivation {
     homepage = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/";
     platforms = platforms.all;
     license = licenses.zlib;
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

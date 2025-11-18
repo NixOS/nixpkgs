@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  utils,
   ...
 }:
 let
@@ -16,7 +17,6 @@ let
     ;
 
   cfg = config.services.actual;
-  configFile = formatType.generate "config.json" cfg.settings;
   dataDir = "/var/lib/actual";
 
   formatType = pkgs.formats.json { };
@@ -32,19 +32,12 @@ in
       description = "Whether to open the firewall for the specified port.";
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = ''
-        Environment file for specifying additional settings such as secrets.
-
-        See <https://actualbudget.org/docs/config/oauth-auth#environment-variables>.
-      '';
-    };
-
     settings = mkOption {
       default = { };
-      description = "Server settings, refer to [the documentation](https://actualbudget.org/docs/config/) for available options.";
+      description = ''
+        Server settings, refer to [the documentation](https://actualbudget.org/docs/config/) for available options.
+        You can specify secret values in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
+      '';
       type = types.submodule {
         freeformType = formatType.type;
 
@@ -78,15 +71,21 @@ in
       description = "Actual server, a local-first personal finance app";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment.ACTUAL_CONFIG_PATH = configFile;
+      environment.ACTUAL_CONFIG_PATH = "/run/actual/config.json";
+
+      preStart = ''
+        # Generate config including secret values.
+        ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/actual/config.json"}
+      '';
+
       serviceConfig = {
         ExecStart = getExe cfg.package;
         DynamicUser = true;
         User = "actual";
         Group = "actual";
         StateDirectory = "actual";
+        RuntimeDirectory = "actual";
         WorkingDirectory = dataDir;
-        EnvironmentFile = cfg.environmentFile;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;

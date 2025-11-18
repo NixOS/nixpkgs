@@ -258,7 +258,8 @@ symlinkJoin {
     longDescription = ''
       This package contains all the individual migrations in the bin directory.
       This is used by fs-repo-migrations and could also be used by Kubo itself
-      when starting it like this: ipfs daemon --migrate
+      when starting it like this: `ipfs daemon --migrate`
+      or when calling `ipfs repo migrate --to=16`.
     '';
   };
 }

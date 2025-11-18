@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.6.22";
+  version = "9.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = version;
-    hash = "sha256-64+9cIxMA0Kloe0XEycWxjz+ghkcWYc6DZ+LuJN/5Tc=";
+    hash = "sha256-lZ2GDB8Kb25GYVNZ+6vDbJVj7dYBVk3r6Lm3mRXVzc4=";
   };
 
   build-system = [
@@ -89,6 +89,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [
+      dandellion
+      jaysa68
+    ];
   };
 }

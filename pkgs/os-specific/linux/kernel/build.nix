@@ -51,6 +51,8 @@ lib.makeOverridable (
     version,
     # The kernel pname (should be set for variants)
     pname ? "linux",
+    # Position of the Linux build expression
+    pos ? null,
     # Additional kernel make flags
     extraMakeFlags ? [ ],
     # The name of the kernel module directory
@@ -197,7 +199,6 @@ lib.makeOverridable (
       "fortify"
       "stackprotector"
       "pic"
-      "pie"
     ];
 
     ${if isModular then "outputs" else null} = [
@@ -550,6 +551,8 @@ lib.makeOverridable (
     ];
 
     karch = stdenv.hostPlatform.linuxArch;
+
+    pos = lib.optionalDrvAttr (pos != null) pos;
 
     meta = {
       # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381

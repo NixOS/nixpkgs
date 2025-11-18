@@ -430,7 +430,7 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging-next` | `staging` | [`staging-nixos`](#test-driver-rebuild) |
+| branch | `master` | `staging-next` | `staging` | [`staging-nixos`][test-driver-rebuild] |
 | --- | --- | --- | --- | --- |
 | Used for development | ✔️ | ❌ | ✔️ | ✔️ |
 | Built by Hydra | ✔️ | ✔️ | ❌ | ❌ |
@@ -501,7 +501,7 @@ Please note that changes to the Linux kernel are an exception to this rule.
 These PRs go to `staging-nixos`, see [the next section for more context](#changes-rebuilding-all-tests).
 
 ### Changes rebuilding all NixOS tests
-[test-driver-rebuild]: #changes-rebuilding-all-tests
+[test-driver-rebuild]: #changes-rebuilding-all-nixos-tests
 
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.

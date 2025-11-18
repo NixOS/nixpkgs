@@ -1,0 +1,93 @@
+From f1fb82c739aebc6b37090f8ebf74d856129116d3 Mon Sep 17 00:00:00 2001
+From: Matteo Pacini <m+github@matteopacini.me>
+Date: Tue, 14 Oct 2025 22:03:27 +0100
+Subject: [PATCH] Backport MR 5531: Fix sincos detection with clang
+
+Add proper headers and -D_GNU_SOURCE to function checks to ensure
+functions like sincos are properly detected, especially with clang.
+
+Also fix gtkgears.c to avoid issues when sincos is in headers but
+not detected by the build system.
+
+Backport of https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5531
+adapted for GTK 3.24.49.
+---
+ meson.build      | 10 +++++++++-
+ tests/gtkgears.c | 22 ++++++++++++----------
+ 2 files changed, 21 insertions(+), 11 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 08337ec..92d7781 100644
+--- a/meson.build
++++ b/meson.build
+@@ -255,7 +255,15 @@ check_functions = [
+ ]
+ 
+ foreach func : check_functions
+-  if cc.has_function(func, dependencies: libm)
++  if cc.has_function(func,
++                     args: '-D_GNU_SOURCE',
++                     prefix:
++                       '#include <stdlib.h>\n' +
++                       '#include <unistd.h>\n' +
++                       '#include <sys/mman.h>\n' +
++                       '#include <fcntl.h>\n' +
++                       '#include <math.h>',
++                     dependencies: libm)
+     cdata.set('HAVE_' + func.underscorify().to_upper(), 1)
+   endif
+ endforeach
+diff --git a/tests/gtkgears.c b/tests/gtkgears.c
+index 062b611..ba7e196 100644
+--- a/tests/gtkgears.c
++++ b/tests/gtkgears.c
+@@ -48,14 +48,16 @@
+ #define VERTICES_PER_TOOTH 34
+ #define GEAR_VERTEX_STRIDE 6
+ 
+-#ifndef HAVE_SINCOS
+-static void
+-sincos (double x, double *_sin, double *_cos)
++static inline void
++_sincos (double x, double *_sin, double *_cos)
+ {
++#ifdef HAVE_SINCOS
++  sincos (x, _sin, _cos);
++#else
+   *_sin = sin (x);
+   *_cos = cos (x);
+-}
+ #endif
++}
+ 
+ /**
+  * Struct describing the vertices in triangle strip
+@@ -306,11 +308,11 @@ create_gear (GLfloat inner_radius,
+     struct point p[7];
+ 
+     /* Calculate needed sin/cos for varius angles */
+-    sincos(i * 2.0 * G_PI / teeth + da * 0, &s[0], &c[0]);
+-    sincos(i * 2.0 * M_PI / teeth + da * 1, &s[1], &c[1]);
+-    sincos(i * 2.0 * M_PI / teeth + da * 2, &s[2], &c[2]);
+-    sincos(i * 2.0 * M_PI / teeth + da * 3, &s[3], &c[3]);
+-    sincos(i * 2.0 * M_PI / teeth + da * 4, &s[4], &c[4]);
++    _sincos(i * 2.0 * G_PI / teeth + da * 0, &s[0], &c[0]);
++    _sincos(i * 2.0 * M_PI / teeth + da * 1, &s[1], &c[1]);
++    _sincos(i * 2.0 * M_PI / teeth + da * 2, &s[2], &c[2]);
++    _sincos(i * 2.0 * M_PI / teeth + da * 3, &s[3], &c[3]);
++    _sincos(i * 2.0 * M_PI / teeth + da * 4, &s[4], &c[4]);
+ 
+     GEAR_POINT(p[0], r2, 1);
+     GEAR_POINT(p[1], r2, 2);
+@@ -519,7 +521,7 @@ void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloa
+    identity(tmp);
+ 
+    deltaZ = zFar - zNear;
+-   sincos(radians, &sine, &cosine);
++   _sincos(radians, &sine, &cosine);
+ 
+    if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
+       return;
+-- 
+2.50.1 (Apple Git-155)
+

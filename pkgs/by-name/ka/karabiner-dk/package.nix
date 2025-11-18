@@ -12,14 +12,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karabiner-dk";
-  sourceVersion = "6.4.0";
+  sourceVersion = "6.5.0";
   version = lib.defaultTo finalAttrs.sourceVersion driver-version;
 
   src = fetchFromGitHub {
     owner = "pqrs-org";
     repo = "Karabiner-DriverKit-VirtualHIDDevice";
     tag = "v${finalAttrs.sourceVersion}";
-    hash = "sha256-NlzIb9srGVdYUOAOL8W9UJZVrf5IQOm6TVjm73epemM=";
+    hash = "sha256-/77FaQUiJXqS7szOb92n/czuBup+f29GwLjQ9OXPvC4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "karabiner-dk" ''
     NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/pqrs-org/Karabiner-DriverKit-VirtualHIDDevice/releases/latest $${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
-    ${lib.getExe' common-updater-scripts "update-source-version"} "karabiner-dk" "$NEW_VERSION" --ignore-same-version --version-key="sourceVersion";
+    ${lib.getExe' common-updater-scripts "update-source-version"} "karabiner-dk" "$NEW_VERSION" --system=aarch64-darwin --ignore-same-version --version-key="sourceVersion";
   '';
 
   meta = {

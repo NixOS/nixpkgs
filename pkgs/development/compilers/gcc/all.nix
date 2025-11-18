@@ -2,6 +2,8 @@
   lib,
   stdenv,
   pkgs,
+  overrideCC,
+  buildPackages,
   targetPackages,
   callPackage,
   isl_0_20,
@@ -61,7 +63,7 @@ let
                 )
                 && stdenv.cc.isGNU
               then
-                pkgs."gcc${majorVersion}Stdenv"
+                overrideCC stdenv buildPackages."gcc${majorVersion}"
               else
                 stdenv;
           }

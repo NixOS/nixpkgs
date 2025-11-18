@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "likwid";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://ftp.fau.de/pub/likwid/likwid-${version}.tar.gz";
-    hash = "sha256-V3OFFFXbukieLjc1kx5RVHN3zReWyYKlrIjQ8imcCBE=";
+    hash = "sha256-aIkk/gE0BwfCwxi3+GfuYPt1G5X0lUvILTofdqOhUFY=";
   };
 
   nativeBuildInputs = [ perl ];

@@ -281,9 +281,6 @@ let
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       baseline,
-      # Which maintainer should be considered the author?
-      # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
-      githubAuthorId ? "nixpkgs-ci",
       # What files have been touched? Defaults to none; use the expression below to calculate it.
       # ```
       # git diff --name-only --merge-base master HEAD \
@@ -307,7 +304,7 @@ let
       };
       comparisonReport = compare {
         combinedDir = combine { diffDir = diffs; };
-        inherit touchedFilesJson githubAuthorId;
+        inherit touchedFilesJson;
       };
     in
     comparisonReport;

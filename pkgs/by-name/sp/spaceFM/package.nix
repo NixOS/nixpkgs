@@ -16,7 +16,7 @@
   ifuseSupport ? false,
   ifuse ? null,
   lsof,
-  udisks2,
+  udisks,
 }:
 
 stdenv.mkDerivation rec {
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     ffmpegthumbnailer
     jmtpfs
     lsof
-    udisks2
+    udisks
   ]
   ++ (lib.optionals ifuseSupport [ ifuse ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist

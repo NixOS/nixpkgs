@@ -24,6 +24,5 @@ buildPythonPackage rec {
     mainProgram = "asn1ate";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

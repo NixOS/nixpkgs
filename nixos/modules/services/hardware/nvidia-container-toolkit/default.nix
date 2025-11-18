@@ -188,6 +188,10 @@
         ])
       ];
 
+      services.udev.extraRules = ''
+        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} restart nvidia-container-toolkit-cdi-generator.service'"
+      '';
+
       virtualisation = {
         containers.containersConf.settings = {
           engine = {
@@ -232,12 +236,8 @@
                 containerPath = pkgs.addDriverRunpath.driverLink;
               }
               {
-                hostPath = "${lib.getLib nvidia-driver}/etc";
-                containerPath = "${lib.getLib nvidia-driver}/etc";
-              }
-              {
-                hostPath = "${lib.getLib nvidia-driver}/share";
-                containerPath = "${lib.getLib nvidia-driver}/share";
+                hostPath = "${lib.getLib nvidia-driver}";
+                containerPath = "${lib.getLib nvidia-driver}";
               }
               {
                 hostPath = "${lib.getLib pkgs.glibc}/lib";
@@ -289,11 +289,52 @@
 
       systemd.services.nvidia-container-toolkit-cdi-generator = {
         description = "Container Device Interface (CDI) for Nvidia generator";
+        requiredBy = lib.mkMerge [
+          (lib.mkIf config.virtualisation.docker.enable [ "docker.service" ])
+          (lib.mkIf config.virtualisation.podman.enable [ "podman.service" ])
+        ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
         serviceConfig = {
           RuntimeDirectory = "cdi";
           RemainAfterExit = true;
+          ExecStartPre = pkgs.writeShellScript "wait-for-nvidia-devices" ''
+            set -eu
+
+            gpus_dir="/proc/driver/nvidia/gpus"
+            max_wait_seconds=60
+
+            if [ ! -d "$gpus_dir" ]; then
+              echo "wait-for-nvidia-devices: $gpus_dir does not exist; nothing to wait for."
+              exit 0
+            fi
+
+            gpu_count=$(find "$gpus_dir" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+
+            if [ "$gpu_count" -eq 0 ]; then
+              echo "wait-for-nvidia-devices: no GPU entries found in $gpus_dir; nothing to wait for."
+              exit 0
+            fi
+
+            echo "wait-for-nvidia-devices: expecting $gpu_count /dev/nvidiaN device node(s)."
+
+            elapsed=0
+            while true; do
+              dev_count=$(find /dev -mindepth 1 -maxdepth 1 -type c -regex '.*/nvidia[0-9]+' 2>/dev/null | wc -l | tr -d ' ')
+
+              if [ "$dev_count" -eq "$gpu_count" ]; then
+                echo "wait-for-nvidia-devices: found $dev_count matching device node(s)."
+                exit 0
+              fi
+
+              if [ "$elapsed" -ge "$max_wait_seconds" ]; then
+                echo "wait-for-nvidia-devices: timed out after $max_wait_seconds seconds; expected $gpu_count node(s) but found $dev_count." >&2
+                exit 1
+              fi
+
+              sleep 1
+              elapsed=$((elapsed + 1))
+            done
+          '';
           ExecStart =
             let
               script = pkgs.callPackage ./cdi-generate.nix {

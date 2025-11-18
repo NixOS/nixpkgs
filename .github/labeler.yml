@@ -1,4 +1,4 @@
-# This file is used by .github/workflows/labels.yml
+# This file is used by .github/workflows/bot.yml
 # This version uses `sync-labels: true`, meaning that a non-match will remove the label
 
 # keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
@@ -261,7 +261,8 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - nixos/modules/services/cluster/k3s/**/*
+              - nixos/modules/services/cluster/rancher/default.nix
+              - nixos/modules/services/cluster/rancher/k3s.nix
               - nixos/tests/k3s/**/*
               - pkgs/applications/networking/cluster/k3s/**/*
 

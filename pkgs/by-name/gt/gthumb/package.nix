@@ -6,7 +6,6 @@
   pkg-config,
   meson,
   ninja,
-  adwaita-icon-theme,
   exiv2,
   libheif,
   libjpeg,
@@ -22,8 +21,10 @@
   libX11,
   lcms2,
   bison,
+  brasero,
   flex,
   clutter-gtk,
+  colord,
   wrapGAppsHook3,
   shared-mime-info,
   python3,
@@ -33,12 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.7";
+  version = "3.12.8.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
+    sha256 = "sha256-JzYvwRylxYHzFoIjDJUCDlofzd9M/+vnVVeCjGF021s=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     bison
@@ -53,10 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    brasero
     clutter-gtk
+    colord
     exiv2
     glib
-    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -73,14 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     libX11
-  ];
-
-  mesonFlags = [
-    "-Dlibjxl=true"
-    # Depends on libsoup2.
-    # https://gitlab.gnome.org/GNOME/gthumb/-/issues/244
-    "-Dlibchamplain=false"
-    "-Dwebservices=false"
   ];
 
   postPatch = ''

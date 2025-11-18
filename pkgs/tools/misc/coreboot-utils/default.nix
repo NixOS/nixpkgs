@@ -9,6 +9,7 @@
   coreutils,
   acpica-tools,
   makeWrapper,
+  go,
   gnugrep,
   gnused,
   file,
@@ -181,6 +182,24 @@ let
             ]
           }
       '';
+    };
+    # buildGoModule for some reason does not generate a binary
+    intelp2m = generic {
+      pname = "intelp2m";
+      version = "2.5";
+      env = {
+        VERSION = "2.5-${version}";
+        GOCACHE = "/tmp/go-cache";
+      };
+      nativeBuildInputs = [ go ];
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 intelp2m $out/bin/intelp2m
+
+        runHook postInstall
+      '';
+      meta.description = "Convert the inteltool register dump to gpio.h with GPIO configuration for porting coreboot";
     };
   };
 

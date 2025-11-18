@@ -28,7 +28,7 @@
   mate-menus,
   mate-panel,
   mate-settings-daemon,
-  udisks2,
+  udisks,
   systemd,
   hicolor-icon-theme,
   wrapGAppsHook3,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     mate-menus
     mate-panel # for org.mate.panel schema, see m-c-c#678
     mate-settings-daemon
-    udisks2
+    udisks
     systemd
   ];
 

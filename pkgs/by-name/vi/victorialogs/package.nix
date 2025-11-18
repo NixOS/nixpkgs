@@ -20,6 +20,7 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
+  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [

@@ -26,7 +26,7 @@ buildGoModule {
     description = "Confetti in your TTY";
     homepage = "https://github.com/maaslalani/confetty";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "confetty";
   };
 }

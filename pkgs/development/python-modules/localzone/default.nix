@@ -30,6 +30,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localzone" ];
 
+  postPatch = ''
+    # Fix tests with dnspython 2.8.0
+    # https://github.com/ags-slc/localzone/pull/6
+    substituteInPlace tests/test_models.py \
+      --replace-fail 'raises((AttributeError, DNSSyntaxError))' 'raises((AttributeError, DNSSyntaxError, ValueError))'
+  '';
+
   meta = with lib; {
     description = "Simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   makeDesktopItem,
   copyDesktopItems,
   nixosTests,
@@ -16,7 +16,7 @@ let
   pname = "localsend";
   version = "1.17.0";
 
-  linux = flutter327.buildFlutterApplication rec {
+  linux = flutter329.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {

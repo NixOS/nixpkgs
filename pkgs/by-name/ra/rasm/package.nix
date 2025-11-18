@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rasm";
-  version = "2.3.9";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "EdouardBERGE";
     repo = "rasm";
     rev = "v${version}";
-    hash = "sha256-vTN9EmqfSZh8ecHlaSCi6qgsKtZBh8qr0vaqyiP5R9I=";
+    hash = "sha256-pRDfaQVqR7OVwSKh2dMU4QjEb5SGQ2eoG8g9aUJwrXU=";
   };
 
   # by default the EXEC variable contains `rasm.exe`

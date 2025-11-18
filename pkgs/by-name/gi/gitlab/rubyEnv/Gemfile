@@ -31,6 +31,9 @@ else
   gem 'rails', '~> 7.1.5.2', feature_category: :shared
 end
 
+# Pin Zeitwerk until https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9408 is fixed
+gem 'zeitwerk', '= 2.6.18', feature_category: :shared
+
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab', feature_category: :shared
 # This can be dropped after upgrading to Rails 7.2: https://github.com/rails/rails/pull/49674
 gem 'mutex_m', '~> 0.3', feature_category: :shared
@@ -271,7 +274,7 @@ gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdow
 gem 'rouge', '~> 4.6.1', feature_category: :shared
 gem 'truncato', '~> 0.7.13', feature_category: :team_planning
 gem 'nokogiri', '~> 1.18', feature_category: :shared
-gem 'gitlab-glfm-markdown', '~> 0.0.36', feature_category: :markdown
+gem 'gitlab-glfm-markdown', '~> 0.0.38', feature_category: :markdown
 gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
 gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
 
@@ -559,7 +562,7 @@ end
 group :development, :test, :coverage do
   gem 'simplecov', '~> 0.22', require: false, feature_category: :tooling
   gem 'simplecov-lcov', '~> 0.8.0', require: false, feature_category: :tooling
-  gem 'simplecov-cobertura', '~> 2.1.0', require: false, feature_category: :tooling
+  gem 'simplecov-cobertura', '~> 3.1.0', require: false, feature_category: :tooling
   gem 'undercover', '~> 0.7.0', require: false, feature_category: :tooling
 end
 

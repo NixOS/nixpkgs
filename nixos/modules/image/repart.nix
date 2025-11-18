@@ -384,8 +384,8 @@ in
               you're at version 9, you cannot increment this to 10.
             ''
             ++ lib.optional (partitionConfig.stripNixStorePrefix != "_mkMergedOptionModule") ''
-              The option definition `image.repart.paritions.${fileName}.stripNixStorePrefix`
-              has changed to `image.repart.paritions.${fileName}.nixStorePrefix` and now
+              The option definition `image.repart.partitions.${fileName}.stripNixStorePrefix`
+              has changed to `image.repart.partitions.${fileName}.nixStorePrefix` and now
               accepts the path to use as prefix directly. Use `nixStorePrefix = "/"` to
               achieve the same effect as setting `stripNixStorePrefix = true`.
             ''

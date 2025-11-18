@@ -19,8 +19,10 @@ on:
         default: false
         type: boolean
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
+      CACHIX_AUTH_TOKEN_GHA:
+        required: false
 
 permissions: {}
 
@@ -52,7 +54,7 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - name: Load supported versions
         id: versions
@@ -98,14 +100,14 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: '(-source|-single-chunk)$'
 
       - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
@@ -186,7 +188,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - name: Combine all output paths and eval stats
         run: |
@@ -202,7 +204,6 @@ jobs:
 
       - name: Compare against the target branch
         env:
-          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
           TARGET_SHA: ${{ inputs.mergedSha }}
         run: |
           git -C nixpkgs/trusted diff --name-only "$TARGET_SHA" \
@@ -212,7 +213,6 @@ jobs:
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
             --arg combinedDir ./combined \
             --arg touchedFilesJson ./touched-files.json \
-            --argstr githubAuthorId "$AUTHOR_ID" \
             --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
@@ -351,7 +351,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - name: Run misc eval tasks in parallel
         run: |

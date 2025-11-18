@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/reagento/dataclass-factory";
     changelog = "https://github.com/reagento/dataclass-factory/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

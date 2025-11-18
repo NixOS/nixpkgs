@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       cyounkins
-      figsoda
     ];
     mainProgram = "fclones";
   };

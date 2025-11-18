@@ -361,7 +361,6 @@ let
           packages =
             genAttrs
               [
-                "ghc94"
                 "ghc96"
                 "ghc98"
                 "ghc910"
@@ -394,9 +393,6 @@ let
           "x86_64-linux"
           "aarch64-linux"
         ];
-
-        # Fails CI in its current state
-        ocamlPackages = { };
 
         pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };

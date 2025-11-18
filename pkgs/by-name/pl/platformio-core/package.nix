@@ -79,6 +79,7 @@ buildPythonApplication rec {
     marshmallow
     pip
     pyelftools
+    pyparsing
     pyserial
     pyyaml
     requests

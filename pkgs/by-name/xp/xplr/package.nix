@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
       suryasr007
       pyrox0
       mimame
-      figsoda
     ];
   };
 }

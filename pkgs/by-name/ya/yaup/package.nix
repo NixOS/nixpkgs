@@ -30,6 +30,12 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Replace GNU ld's --export-dynamic with macOS linker equivalent
+    substituteInPlace src/Makefile.in \
+      --replace-fail '-Wl,--export-dynamic' '-Wl,-export_dynamic'
+  '';
+
   nativeBuildInputs = [
     intltool
     pkg-config
@@ -52,8 +58,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    # ld: unknown option: --export-dynamic
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "yaup";
   };
 }

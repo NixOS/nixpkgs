@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "qovery-cli";
-  version = "1.52.0";
+  version = "1.54.0";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m6NdZ4K0FAZvTloworoK3Lluu9ySCGfS4L216ImByb8=";
+    hash = "sha256-6z5s6bVzPYUHI3rBEddQT933Lj+hbcBK+safi5pHVO4=";
   };
 
-  vendorHash = "sha256-9rAAeJVKBndb4w3LNJLLBvkX5me/Y3GnA55SYGOxqi4=";
+  vendorHash = "sha256-1TprPzZb+Q9QcoGop6CAmnyqSU3dQ5CSAS0hsnQeWPw=";
 
   env.CGO_ENABLED = 0;
 

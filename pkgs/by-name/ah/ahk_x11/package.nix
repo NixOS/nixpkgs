@@ -20,7 +20,7 @@
 # NOTICE: AHK_X11 from this package does not support compiling scripts into portable executables.
 let
   pname = "ahk_x11";
-  version = "1.0.6";
+  version = "1.0.7";
 
   inherit (xorg)
     libXinerama
@@ -37,7 +37,7 @@ crystal.buildCrystalPackage {
     owner = "phil294";
     repo = "AHK_X11";
     tag = version;
-    hash = "sha256-t2fGUIG3T8azx22lFhFAkABHwkePv9uThhlH+fwDj8E=";
+    hash = "sha256-VuqLlRgNyF6/4aVq1sNlVjOMih0TdHXbr0CqhA4QT6Y=";
     fetchSubmodules = true;
   };
 

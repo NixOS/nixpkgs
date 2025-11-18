@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   pythonPath = python3.withPackages (ps: [
     ps.dbus-python
     ps.pygobject3
-    ps.systemd
+    ps.systemd-python
   ]);
 
   nativeBuildInputs = [

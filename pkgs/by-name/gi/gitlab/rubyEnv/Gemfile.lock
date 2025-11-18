@@ -759,7 +759,7 @@ GEM
       mime-types
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
-    gitlab-glfm-markdown (0.0.36)
+    gitlab-glfm-markdown (0.0.38)
       rb_sys (~> 0.9.109)
     gitlab-kas-grpc (18.5.0.pre.rc4)
       grpc (~> 1.0)
@@ -1335,7 +1335,7 @@ GEM
     opensearch-ruby (3.4.0)
       faraday (>= 1.0, < 3)
       multi_json (>= 1.0)
-    openssl (3.3.1)
+    openssl (3.3.2)
     openssl-signature_algorithm (1.3.0)
       openssl (> 2.0)
     opentelemetry-api (1.2.5)
@@ -1539,7 +1539,7 @@ GEM
     pyu-ruby-sasl (0.0.3.3)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.18)
+    rack (2.2.20)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (6.7.0)
@@ -1830,7 +1830,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (2.1.0)
+    simplecov-cobertura (3.1.0)
       rexml
       simplecov (~> 0.19)
     simplecov-html (0.12.3)
@@ -2071,7 +2071,7 @@ GEM
     yard (0.9.37)
     yard-solargraph (0.1.0)
       yard (~> 0.9)
-    zeitwerk (2.7.3)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   ruby
@@ -2182,7 +2182,7 @@ DEPENDENCIES
   gitlab-duo-workflow-service-client (~> 0.4)!
   gitlab-experiment (~> 1.0.0)
   gitlab-fog-azure-rm (~> 2.4.0)
-  gitlab-glfm-markdown (~> 0.0.36)
+  gitlab-glfm-markdown (~> 0.0.38)
   gitlab-grape-openapi!
   gitlab-housekeeper!
   gitlab-http!
@@ -2404,7 +2404,7 @@ DEPENDENCIES
   sigdump (~> 0.2.4)
   simple_po_parser (~> 1.1.6)
   simplecov (~> 0.22)
-  simplecov-cobertura (~> 2.1.0)
+  simplecov-cobertura (~> 3.1.0)
   simplecov-lcov (~> 0.8.0)
   slack-messenger (~> 2.3.5)
   snowplow-tracker (~> 0.8.0)
@@ -2450,6 +2450,7 @@ DEPENDENCIES
   wikicloth (= 0.8.1)
   yajl-ruby (~> 1.4.3)
   yard (~> 0.9)
+  zeitwerk (= 2.6.18)
 
 BUNDLED WITH
    2.7.2

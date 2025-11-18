@@ -58,7 +58,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       lovesegfault
     ];
     mainProgram = "kalker";

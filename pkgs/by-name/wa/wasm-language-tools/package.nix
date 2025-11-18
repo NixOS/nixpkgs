@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-language-tools";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "wasm-language-tools";
     tag = "v${version}";
-    hash = "sha256-b6wZjOCgBTy1/nbouXoA/yHNsMul/tTPN5xcZAHqeDE=";
+    hash = "sha256-6lZBDBjqHIMLMrWsnFeGuaGZDe3LKyBbbMbyvS3i29M=";
   };
 
-  cargoHash = "sha256-307g1c98G+TaUcYxiC/FcEqPQqbFr6j7yFKiE+nvLmM=";
+  cargoHash = "sha256-npVrDGvTqKk9NkMiuWnSJRFEWfG9pGA7LEUrorNJ978=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/wat_server";

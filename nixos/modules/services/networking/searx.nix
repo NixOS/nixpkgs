@@ -13,7 +13,9 @@ let
 
   cfg = config.services.searx;
 
-  settingsFile = pkgs.writeText "settings.yml" (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "settings.yml" (
+    builtins.toJSON (builtins.removeAttrs cfg.settings [ "redis" ])
+  );
 
   faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
@@ -79,12 +81,22 @@ in
       };
 
       settings = mkOption {
-        type = types.submodule {
-          freeformType = settingType;
-          imports = [
-            (mkRenamedOptionModule [ "redis" ] [ "valkey" ])
-          ];
-        };
+        type = types.submodule (
+          { config, ... }:
+          {
+            options = {
+              valkey = lib.mkOption {
+                internal = true;
+                default = { };
+              };
+            };
+            config.valkey = lib.mkIf (config ? redis) (
+              lib.warn "Obsolete option `services.searx.settings.redis' is used. It was renamed to `services.searx.settings.valkey'" config.redis
+            );
+
+            freeformType = settingType;
+          }
+        );
         default = { };
         example = literalExpression ''
           {
@@ -287,7 +299,9 @@ in
               ]
             )) "s"
           }://${cfg.domain}/";
-          valkey.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+          valkey = lib.mkIf cfg.redisCreateLocally {
+            url = "unix://${config.services.redis.servers.searx.unixSocket}";
+          };
         };
       };
 

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-error-reporting";
     tag = "v${version}";
-    hash = "sha256-V97V3WbsChc93nqhCOh34O/hn8fqLMwR4/DcHmc9vdU=";
+    hash = "sha256-THTzoiwF34/detu3HkpcSufb5MwbUeB0giS3i4BB2C0=";
   };
 
   build-system = [ setuptools ];

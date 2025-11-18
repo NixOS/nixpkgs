@@ -39,13 +39,6 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_RANLIB=$(command -v $RANLIB)"
     prependToVar cmakeFlags "-DCMAKE_STRIP=$(command -v $STRIP)"
 
-    # on macOS we want to prefer Unix-style headers to Frameworks
-    # because we usually do not package the framework
-    prependToVar cmakeFlags "-DCMAKE_FIND_FRAMEWORK=LAST"
-
-    # correctly detect our clang compiler
-    prependToVar cmakeFlags "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
-
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
     # basename as the install name, which means that, on Darwin, they

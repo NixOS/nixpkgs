@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   click,
@@ -38,30 +39,20 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.10.0";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-xPgMhydsFmwg0kyl3Lst1N+CsbbnsWdPOtkZ8BMPDR8=";
+    hash = "sha256-cU4w4dqJQ3ew+fRyD7Lc4URNfW738kKqls6k6j65pIo=";
   };
 
-  postPatch = ''
-    # versioneer hack to set version of GitHub package
-    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
-
-    substituteInPlace setup.py \
-      --replace-fail "import versioneer" "" \
-      --replace-fail "version=versioneer.get_version()," "version='${version}'," \
-      --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
-
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "versioneer[toml]==0.29"' ""
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     click

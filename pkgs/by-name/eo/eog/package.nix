@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   gettext,
@@ -51,6 +52,12 @@ stdenv.mkDerivation rec {
     # We patch gobject-introspection to hardcode absolute paths but
     # our Meson patch will only pass the info when install_dir is absolute as well.
     ./fix-gir-lib-path.patch
+
+    # Switch to girepository-2.0
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/eog/raw/939eee56e5b72b02a8c0f4f867431cf6426adb9e/f/libpeas1_pygobject352.patch";
+      hash = "sha256-5QIkxxUvGKzb0cMCIcfuu7FX9XuY+RrKNunSvRDEDRc=";
+    })
   ];
 
   nativeBuildInputs = [

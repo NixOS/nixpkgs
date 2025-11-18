@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
+    pkg-config
     libGL
     cairo
     glib
@@ -50,7 +51,6 @@ stdenv.mkDerivation {
   buildInputs = [
     meson
     ninja
-    pkg-config
     scdoc
   ];
 

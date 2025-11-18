@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "2.2.11";
+  version = "2.2.12";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gwww";
     repo = "elkm1";
     tag = version;
-    hash = "sha256-wi115LppK628EBw3AFeQHNnLv51dcfaZZi5R6S9+WJE=";
+    hash = "sha256-66Yen8QZAIKzMePFzxOgeprTIMKj3fanicMCBeqhyO4=";
   };
 
   build-system = [ hatchling ];

@@ -2,8 +2,6 @@
   stdenv,
   lib,
   gnused,
-  apple-sdk_13,
-  darwinMinVersionHook,
   rustPlatform,
   karabiner-dk,
   fetchFromGitHub,
@@ -29,14 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
-  ];
-
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     (writeShellScriptBin "sw_vers" ''
-      echo 'ProductVersion: 13.0'
+      echo 'ProductVersion: ${stdenv.hostPlatform.darwinMinVersion}'
     '')
   ];
 

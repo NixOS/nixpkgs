@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  system,
   snapshotPath,
   autoPatchelfHook,
   python3,
@@ -125,7 +124,7 @@ let
     };
 
   # Filter out dependencies not supported by current system
-  filterForSystem = builtins.filter (drv: builtins.elem system drv.meta.platforms);
+  filterForSystem = builtins.filter (drv: lib.meta.availableOn stdenv.hostPlatform drv);
 
   # Make a google-cloud-sdk component
   mkComponent =

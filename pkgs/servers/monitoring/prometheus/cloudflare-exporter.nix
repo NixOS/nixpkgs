@@ -2,20 +2,30 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "cloudflare-exporter";
-  version = "0.0.16";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    rev = version;
     owner = "lablabs";
     repo = pname;
-    sha256 = "sha256-7cyHAN4VQWfWMdlFbZvHL38nIEeC1z/vpCDR5R2pOAw=";
+    tag = "cloudflare-exporter-${version}";
+    sha256 = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
   };
 
-  vendorHash = "sha256-c1drgbzoA5AlbB0K+E8kuJnyShgUg7spPQKAAwxCr6M=";
+  vendorHash = "sha256-v8qw4Cofw0vOrEg5oo9YtRabXMrjpQ+tI4l+A43JllA=";
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "cloudflare-exporter-(.*)"
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Prometheus Cloudflare Exporter";

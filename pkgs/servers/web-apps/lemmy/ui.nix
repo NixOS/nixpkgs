@@ -11,7 +11,6 @@
 
 let
   pinData = lib.importJSON ./pin.json;
-
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -23,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     with finalAttrs;
     fetchFromGitHub {
       owner = "LemmyNet";
-      repo = pname;
+      repo = "lemmy-ui";
       rev = version;
       fetchSubmodules = true;
       hash = pinData.uiHash;
@@ -79,15 +78,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.py;
-  passthru.tests.lemmy-ui = nixosTests.lemmy;
-  passthru.commit_sha = finalAttrs.src.rev;
+  passthru = {
+    updateScript = ./update.py;
+    tests.lemmy-ui = nixosTests.lemmy;
+    commit_sha = finalAttrs.src.rev;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo

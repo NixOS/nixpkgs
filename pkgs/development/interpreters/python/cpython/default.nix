@@ -584,9 +584,6 @@ stdenv.mkDerivation (finalAttrs: {
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
 
-  # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
-  hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];
-
   setupHook = python-setup-hook sitePackages;
 
   postInstall =

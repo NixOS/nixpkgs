@@ -34,7 +34,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.9.0";
+  version = "2.9.1";
 in
 buildPythonPackage {
   inherit version;

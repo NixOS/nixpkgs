@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       yuka
-      iedame
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;

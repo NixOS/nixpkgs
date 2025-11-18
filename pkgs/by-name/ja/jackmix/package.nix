@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kampfschlaefer ];
     platforms = platforms.linux;
   };
 })

@@ -9,7 +9,7 @@
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.145.0";
+  version = "1.147.0";
 
   vendorHash = null;
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     tag = "v${version}";
-    hash = "sha256-JeIpx+i1JDVfJqCKTZMTJ7rDMGO4yA/eR56C3qr08zg=";
+    hash = "sha256-Z7oI35JYM4kVYAu9rspOgj6Cec9R7toUoMxgogkkYzk=";
   };
 
   meta = {

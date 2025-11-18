@@ -31,7 +31,7 @@
   pytest-postgresql,
   requests-mock,
   requests-toolbelt,
-  systemd,
+  systemd-python,
   types-python-dateutil,
   types-pyyaml,
   types-requests,
@@ -96,7 +96,7 @@ buildPythonPackage rec {
     pytest-postgresql
     requests-mock
     requests-toolbelt
-    systemd
+    systemd-python
     types-python-dateutil
     types-pyyaml
     types-requests

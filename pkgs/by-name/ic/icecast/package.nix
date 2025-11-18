@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     libopus
   ];
 
-  hardeningEnable = [ "pie" ];
-
   meta = {
     description = "Server software for streaming multimedia";
     mainProgram = "icecast";

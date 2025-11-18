@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "argos";
-  version = "unstable-2025-03-27";
+  version = "unstable-2025-09-25";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    rev = "13264042ae8b8a6f9f4778c623780e38e5d1cd89";
-    hash = "sha256-PMMpTaihMHj1FmnjJoZqAhDYVd263M1OZAC+OAnaZEg=";
+    rev = "c0dc23880e52a2f78b7a5c35b5b3781d5b1366f7";
+    hash = "sha256-A/ugbKxnUJdoMN724ECtRm0QWwCVopmbltt+fUKBp7E=";
   };
 
   installPhase = ''

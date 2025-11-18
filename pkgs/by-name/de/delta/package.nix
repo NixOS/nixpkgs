@@ -65,7 +65,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
-      figsoda
     ];
     mainProgram = "delta";
   };

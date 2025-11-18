@@ -70,7 +70,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/andirsun/Slacky";
     changelog = "https://github.com/andirsun/Slacky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ awwpotato ];
+    maintainers = with lib.maintainers; [ da157 ];
     platforms = lib.platforms.linux;
     mainProgram = "slacky";
   };

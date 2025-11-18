@@ -7,6 +7,7 @@
   nv-codec-headers-12,
   fetchFromGitHub,
   fetchpatch2,
+  fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -68,19 +69,33 @@
 let
   inherit (lib) optional optionals;
 
-  cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "138.0.17";
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
-    gitRevision = "ac9b751";
-    chromiumVersion = "138.0.7204.97";
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
-        x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+  cef = cef-binary.overrideAttrs (
+    oldAttrs:
+    let
+      version = "6533";
+      revision = "6";
+    in
+    {
+      inherit version;
+
+      src = fetchurl {
+        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_linux_${
+          selectSystem {
+            aarch64-linux = "aarch64";
+            x86_64-linux = "x86_64";
+          }
+        }_v${revision}.tar.xz";
+        hash = selectSystem {
+          aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
+          x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+        };
+      };
+    }
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";

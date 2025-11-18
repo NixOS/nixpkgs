@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   buildPythonPackage,
   rerun,
   python,
@@ -36,9 +37,10 @@ buildPythonPackage {
     ;
 
   nativeBuildInputs = [
+    pkgs.protobuf # for protoc
+    rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rerun
   ];
 
   dependencies = [
@@ -79,8 +81,8 @@ buildPythonPackage {
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
 
-    # ConnectionError: Connection error: transport error
-    "rerun_py/tests/unit/test_datafusion_tables.py"
+    # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
+    "rerun_py/tests/e2e_redap_tests"
   ];
 
   meta = {

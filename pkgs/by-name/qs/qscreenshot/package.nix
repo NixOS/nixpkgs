@@ -40,5 +40,7 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
+    # last successful hydra build on darwin was in 2019
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

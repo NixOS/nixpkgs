@@ -148,10 +148,9 @@ in
         machine.wait_for_text("Albums")
         machine.succeed("xdotool mousemove 25 45 click 1") # Open categories
         machine.sleep(2)
-        machine.wait_for_text("Tracks")
         machine.succeed("xdotool mousemove 25 240 click 1") # Switch to Tracks category
         machine.sleep(2)
-        machine.wait_for_text("${musicFileName}") # the test file
+        machine.wait_for_text("Tracks") # Written in larger text now, easier for OCR
         machine.screenshot("lomiri-music_listing")
 
         # Ensure pause colours isn't present already
@@ -180,8 +179,9 @@ in
 
         machine.screenshot("lomiri-music_paused")
 
-        # Lastly, check if generated cover image got extracted properly
+        # Lastly, check if song details like title & generated cover image got extracted properly
         # if not, indicates an issue with mediascanner / lomiri-thumbnailer
+        machine.wait_for_text("${musicFileName}")
         machine.wait_for_text("${ocrContent}")
 
     machine.succeed("pkill -f lomiri-music-app")

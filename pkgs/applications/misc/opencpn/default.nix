@@ -58,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
 
+  patches = [
+    # https://github.com/OpenCPN/OpenCPN/pull/4900
+    ./fix-clang20.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';

@@ -65,8 +65,7 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g1["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.common_flags) == [
         "--option",
         "foo1",
         "bar1",
@@ -74,7 +73,13 @@ def test_parse_args() -> None:
         "foo2",
         "bar2",
     ]
-    assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.flake_common_flags) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
         "--update-input",
         "input1",
         "--update-input",
@@ -112,13 +117,15 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g2["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.common_flags) == [
         "-vvv",
         "--quiet",
         "--quiet",
     ]
-    assert nr.utils.dict_to_flags(vars(g2["common_build_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.build_flags) == [
+        "-vvv",
+        "--quiet",
+        "--quiet",
         "--include",
         "include1",
         "--include",
@@ -178,8 +185,8 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                     "<nixpkgs/nixos>",
                     "--attr",
                     "config.system.build.toplevel",
-                    "-vvv",
                     "--no-out-link",
+                    "-vvv",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -217,6 +224,49 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                         }
                     }
                 ),
+            ),
+        ]
+    )
+
+
+# https://github.com/NixOS/nixpkgs/issues/437872
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        return CompletedProcess([], 0, str(config_path))
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--no-build-output",
+        ]
+    )
+
+    assert mock_run.call_count == 1
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "--print-out-paths",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
         ]
     )
@@ -392,11 +442,11 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
                     "-v",
                     "--option",
                     "narinfo-cache-negative-ttl",
                     "1200",
-                    "--no-link",
                 ],
                 check=True,
                 stdout=PIPE,

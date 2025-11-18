@@ -7,7 +7,7 @@
   cmake,
   cmakerc,
   curl,
-  fmt,
+  fmt_11,
   git,
   gzip,
   meson,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmakerc
-    fmt
+    fmt_11
   ];
 
   patches = [

@@ -222,16 +222,7 @@ let
     main = importVariant "main.nix";
     help = importVariant "help.nix";
     translations = importVariant "translations.nix";
-    deps = (importVariant "deps.nix") ++ [
-      # TODO: Why is this needed?
-      rec {
-        name = "unowinreg.dll";
-        url = "https://dev-www.libreoffice.org/extern/${md5name}";
-        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-        md5 = "185d60944ea767075d27247c3162b3bc";
-        md5name = "${md5}-${name}";
-      }
-    ];
+    deps = importVariant "deps.nix";
   };
   srcs = {
     third_party = map (
@@ -617,9 +608,6 @@ stdenv.mkDerivation (finalAttrs: {
     # cannot find headers, no idea why
     "--without-system-boost"
 
-    "--with-system-rhino"
-    "--with-rhino-jar=${rhino}/share/java/js.jar"
-
     "--without-system-java-websocket"
   ]
   ++ optionals kdeIntegration [
@@ -627,6 +615,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-qt6"
   ]
   ++ optionals withJava [
+    "--with-system-rhino"
+    "--with-rhino-jar=${rhino}/share/java/js.jar"
+
     "--with-system-beanshell"
     "--with-ant-home=${ant.home}"
     "--with-beanshell-jar=${bsh}"

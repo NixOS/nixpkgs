@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andrewrk/poop";
     changelog = "https://github.com/andrewrk/poop/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "poop";
   };

@@ -71,7 +71,10 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/tcgoetz/GarminDB/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      matthiasbeyer
+    ];
     mainProgram = "garmindb";
   };
 }

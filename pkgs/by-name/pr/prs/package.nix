@@ -9,16 +9,19 @@
   gpgme,
   gtk3,
   stdenv,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prs";
   version = "0.5.4";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RWquV2apUazgGiwzTc0cMzKNItJOBZDSRMp13k+mhS0=";
   };
 
@@ -29,6 +32,11 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix following error on darwin sandbox mode:
+    # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
+    writableTmpDirAsHomeHook
   ];
 
   cargoBuildFlags = [
@@ -48,10 +56,18 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Secure, fast & convenient password manager CLI using GPG and git to sync";
     homepage = "https://gitlab.com/timvisee/prs";
-    changelog = "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/timvisee/prs/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       lgpl3Only # lib
       gpl3Only # everything else
@@ -59,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "prs";
   };
-}
+})

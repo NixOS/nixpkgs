@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
   };
 
+  pythonRelaxDeps = [ "lxml" ];
+
   dependencies = with python3Packages; [
     requests
     lxml

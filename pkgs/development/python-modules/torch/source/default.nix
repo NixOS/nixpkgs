@@ -42,7 +42,6 @@
   removeReferencesTo,
 
   # Build inputs
-  apple-sdk_13,
   openssl,
   numactl,
   llvmPackages,
@@ -521,6 +520,9 @@ buildPythonPackage.override { inherit stdenv; } rec {
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+    # Broken HIP flag setup, fails to compile due to not finding rocthrust
+    # Only supports gfx942 so let's turn it off for now
+    USE_FBGEMM_GENAI = setBool false;
   };
 
   nativeBuildInputs = [
@@ -579,9 +581,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-  ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [
@@ -760,6 +759,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      LunNova # esp. for ROCm
       teh
       thoughtpolice
       tscholak

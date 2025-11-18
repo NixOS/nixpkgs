@@ -209,7 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [
     "format"
-    "pie"
   ];
 
   configurePlatforms = [

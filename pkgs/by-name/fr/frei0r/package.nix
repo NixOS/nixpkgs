@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${version}";
-    hash = "sha256-95d1aXfCq4mPccY8VKmO7jkX57li6OVSwtfIf9459n4=";
+    hash = "sha256-JEQndfQOcSARGIPtMwteUqWqTLPEMcpF2F/xD1PsDEU=";
   };
 
   nativeBuildInputs = [

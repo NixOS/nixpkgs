@@ -32,10 +32,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/arduino/arduino-ide/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     mainProgram = "arduino-ide";
-    maintainers = with lib.maintainers; [
-      clerie
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ clerie ];
     platforms = [ "x86_64-linux" ];
   };
 }

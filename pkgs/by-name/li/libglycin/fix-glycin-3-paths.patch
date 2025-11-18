@@ -1,0 +1,13 @@
+diff --git a/vendor/glycin/src/sandbox.rs b/vendor/glycin/src/sandbox.rs
+index 90cd5f6..17a6469 100644
+--- a/vendor/glycin/src/sandbox.rs
++++ b/vendor/glycin/src/sandbox.rs
+@@ -251,7 +251,7 @@ impl Sandbox {
+     }
+ 
+     async fn bwrap_command(&self, seccomp_memfd: &Memfd) -> Result<Command, Error> {
+-        let mut command = Command::new("bwrap");
++        let mut command = Command::new("@bwrap@");
+ 
+         command.args([
+             "--unshare-all",

@@ -82,6 +82,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         server_admin_bind_path = socket_path;
         server_config_path = "/etc/kanidm/server.toml";
         server_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.8") {
+        resolver_service_account_token_path = "/etc/kanidm/token";
       };
     in
     ''

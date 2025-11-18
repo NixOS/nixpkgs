@@ -10,7 +10,7 @@
   openal,
   pkg-config,
   yaml-cpp,
-  fmt,
+  fmt_11,
   xorg,
 }:
 let
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     libzip
     openal
     yaml-cpp
-    fmt
+    fmt_11
     xorg.libX11
   ];
 

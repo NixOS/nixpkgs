@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "dinish";
-  version = "4.006";
+  version = "4.007";
 
   src = fetchzip {
     url = "https://github.com/playbeing/dinish/releases/download/v${version}/dinish-ttf.zip";
     stripRoot = false;
-    hash = "sha256-IWguCiDSeQ+f/saNoyk2pUF/k0pEiFweXinoqOEVWEI=";
+    hash = "sha256-u/AYA9/8piZ6hz4XD3uSruOM0deeXQ5Gb0N/8rlDiP0=";
   };
 
   installPhase = ''

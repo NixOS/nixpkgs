@@ -140,6 +140,8 @@ in
 
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
+  pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
+
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
   makeScopeWithSplicing' = lib.makeScopeWithSplicing' {
