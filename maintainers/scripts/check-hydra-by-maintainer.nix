@@ -1,4 +1,8 @@
-{ maintainer }:
+{
+  maintainer, # --argstr
+  short ? false, # use --arg short true
+  extra ? "", # --argstr
+}:
 let
   pkgs = import ./../../default.nix {
     config.allowAliases = false;
@@ -30,7 +34,7 @@ let
       ) set
     ));
 
-  packages = packagesWith (
+  packages = builtins.trace "evaluating list of packages for maintainer: ${maintainer}" packagesWith (
     name: pkg:
     (
       if builtins.hasAttr "meta" pkg && builtins.hasAttr "maintainers" pkg.meta then
@@ -46,23 +50,45 @@ let
   ) (name: name) "" pkgs;
 
 in
-pkgs.stdenv.mkDerivation {
-  name = "nixpkgs-update-script";
+pkgs.stdenvNoCC.mkDerivation {
+  name = "check-hydra-by-maintainer";
   buildInputs = [ pkgs.hydra-check ];
   buildCommand = ''
     echo ""
     echo "----------------------------------------------------------------"
     echo ""
-    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer SuperSandro2000"
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname"
+    echo ""
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname --arg short true"
+    echo ""
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname --argstr extra \"--json\""
     echo ""
     echo "----------------------------------------------------------------"
     exit 1
   '';
-  shellHook = ''
-    unset shellHook # do not contaminate nested shells
-    echo "Please stand by"
-    echo nix-shell -p hydra-check --run "hydra-check ${builtins.concatStringsSep " " packages}"
-    nix-shell -p hydra-check --run "hydra-check ${builtins.concatStringsSep " " packages}"
-    exit $?
-  '';
+  shellHook =
+    let
+      # trying to only add spaces as necessary for optional args
+      # with optStr don't need spaces between nix templating
+      optStr = cond: string: lib.optionalString cond "${string} ";
+      args = [
+        "hydra-check"
+      ]
+      ++ (lib.optional short "--short")
+      ++ (lib.optional (extra != "") extra)
+      ++ (map lib.escapeShellArg packages);
+      command = lib.concatStringsSep " " args;
+    in
+    ''
+      # if user presses ctrl-c during run
+      # pass on ctrl-c to fully quit rather than exiting to nix-shell
+      function ctrl_c() {
+        exit 130
+      }
+      trap ctrl_c INT
+      echo "Please stand by"
+      echo "${command}"
+      ${command}
+      exit $?
+    '';
 }
