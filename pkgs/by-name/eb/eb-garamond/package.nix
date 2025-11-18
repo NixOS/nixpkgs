@@ -5,14 +5,14 @@
   python3,
   ttfautohint-nox,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eb-garamond";
   version = "0.016";
 
   src = fetchFromGitHub {
     owner = "georgd";
     repo = "EB-Garamond";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
 
@@ -42,15 +42,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bengsparks
       relrod
       rycee
     ];
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
-}
+})
