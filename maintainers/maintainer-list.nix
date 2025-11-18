@@ -29368,12 +29368,6 @@
     githubId = 6067895;
     name = "Al Zohali";
   };
-  zokrezyl = {
-    email = "zokrezyl@gmail.com";
-    github = "zokrezyl";
-    githubId = 51886259;
-    name = "Zokre Zyl";
-  };
   zookatron = {
     email = "tim@zookatron.com";
     github = "zookatron";
