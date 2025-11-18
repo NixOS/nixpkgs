@@ -11,6 +11,7 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
+    mkPackageOption
     mkOption
     getExe
     types
@@ -21,6 +22,8 @@ in
 {
   options.services.docuum = {
     enable = mkEnableOption "docuum daemon";
+
+    package = mkPackageOption pkgs "docuum" { };
 
     threshold = mkOption {
       description = "Threshold for deletion in bytes, like `10 GB`, `10 GiB`, `10GB` or percentage-based thresholds like `50%`";
@@ -72,7 +75,7 @@ in
         SupplementaryGroups = [ "docker" ];
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe pkgs.docuum)
+            (getExe cfg.package)
             "--threshold"
             cfg.threshold
             "--deletion-chunk-size"
