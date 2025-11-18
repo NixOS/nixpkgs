@@ -772,6 +772,7 @@ mapAliases {
   kodiPlain = throw "'kodiPlain' has been renamed to/replaced by 'kodi'"; # Converted to throw 2025-10-27
   kodiPlainWayland = throw "'kodiPlainWayland' has been renamed to/replaced by 'kodi-wayland'"; # Converted to throw 2025-10-27
   kodiPlugins = throw "'kodiPlugins' has been renamed to/replaced by 'kodiPackages'"; # Converted to throw 2025-10-27
+  kotatogram-desktop = throw "'kotatogram-desktop' has been removed due to lack of maintenance upstream and using outdated libraries. Consider using '_64gram', 'materialgram' or 'ayugram-desktop' instead"; # Added 2025-11-18
   krb5Full = throw "'krb5Full' has been renamed to/replaced by 'krb5'"; # Converted to throw 2025-10-27
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30

@@ -11456,10 +11456,6 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
-  kotatogram-desktop =
-    callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
-      { };
-
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
