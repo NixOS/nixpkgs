@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.16-unstable-2025-10-10";
+  version = "0.0.16-unstable-2025-11-16";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
-    rev = "a0cf22ac6d1f5c8972bf53671ba174767d2adcd5";
-    hash = "sha256-xFvO8ZuJQ5luCDOTPHtVeb1+3VvIKSwjt2TqkxBIY58=";
+    rev = "cdc16393aeb4be37889f7b82233974ab3eede0f3";
+    hash = "sha256-nfEW1kbiImMXHQxryQyKiFL3/xo8xe8V5dalQAGfLXQ=";
   };
 
   vendorHash = "sha256-SrQahSHO5ZIkcLR3BR5CR5BTStW1pH1Ij1Eql0b3tuU=";
@@ -38,6 +38,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "-version";
 
   passthru = {
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
     tests.service = nixosTests.go-csp-collector;
   };
