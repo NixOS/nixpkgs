@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.15.0";
+  version = "0.15.4";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-gtbG+KuVKiSwHPP4Mcpe2uK1twJGsyIzpdqoiJiPVzc=";
+    hash = "sha256-X4QXDZYtTY0LO9OiE9F99DBvit79Tsz/4zhfVHPQxSE=";
   };
 
   dontUnpack = true;

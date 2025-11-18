@@ -22,6 +22,7 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
     systemd.user.services.orca.wantedBy = [ "graphical-session.target" ];
+    services.gnome.at-spi2-core.enable = true;
     services.speechd.enable = true;
   };
 }
