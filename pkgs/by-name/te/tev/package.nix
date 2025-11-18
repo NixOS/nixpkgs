@@ -86,6 +86,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tom94 ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
   };
 }

@@ -1818,6 +1818,7 @@
     ],
     "kdenetwork-filesharing": [
       "extra-cmake-modules",
+      "kauth",
       "kcompletion",
       "kcoreaddons",
       "ki18n",
@@ -2252,6 +2253,7 @@
       "kguiaddons",
       "ki18n",
       "kirigami",
+      "kirigami-addons",
       "kwidgetsaddons",
       "kwindowsystem",
       "prison",
@@ -2660,7 +2662,6 @@
       "ki18n",
       "kio",
       "libkexiv2",
-      "phonon",
       "plasma-activities",
       "plasma-activities-stats",
       "qcoro",
@@ -2753,16 +2754,6 @@
       "ki18n",
       "kirigami",
       "kirigami-addons"
-    ],
-    "kiss": [
-      "extra-cmake-modules",
-      "kconfig",
-      "kcoreaddons",
-      "ki18n",
-      "kpackage",
-      "libkscreen",
-      "plasma-desktop",
-      "plasma-workspace"
     ],
     "kitemmodels": [
       "extra-cmake-modules"
@@ -3417,11 +3408,6 @@
       "kparts",
       "kwindowsystem",
       "kxmlgui"
-    ],
-    "kontainer": [
-      "extra-cmake-modules",
-      "ki18n",
-      "kio"
     ],
     "kontrast": [
       "extra-cmake-modules",
@@ -5579,6 +5565,16 @@
       "kirigami-addons",
       "kitemmodels"
     ],
+    "plasma-setup": [
+      "extra-cmake-modules",
+      "kconfig",
+      "kcoreaddons",
+      "ki18n",
+      "kpackage",
+      "libkscreen",
+      "plasma-desktop",
+      "plasma-workspace"
+    ],
     "plasma-systemmonitor": [
       "attica",
       "extra-cmake-modules",
@@ -5698,7 +5694,6 @@
       "kstatusnotifieritem",
       "ktexteditor",
       "ktextwidgets",
-      "kunitconversion",
       "kuserfeedback",
       "kwallet",
       "kwayland",
@@ -6269,6 +6264,7 @@
     ],
     "systemsettings": [
       "extra-cmake-modules",
+      "kauth",
       "kcmutils",
       "kcolorscheme",
       "kconfig",
@@ -6282,7 +6278,6 @@
       "kirigami",
       "kitemmodels",
       "kitemviews",
-      "knotifications",
       "krunner",
       "kservice",
       "kwidgetsaddons",
@@ -6515,5 +6510,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "4fa0d47e"
+  "version": "0bb9fa37"
 }

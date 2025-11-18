@@ -5,6 +5,7 @@
   lzop,
   nix-update-script,
   rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,5 +32,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "3cpio";
+    # broken due to signature mismatch in libc crate on darwin:
+    # https://github.com/rust-lang/libc/issues/4360
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

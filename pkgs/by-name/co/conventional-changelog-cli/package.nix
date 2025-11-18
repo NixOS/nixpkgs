@@ -55,7 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '"exports": "./src/index.ts"' '"exports": "./dist/index.js"'
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "conventional-changelog-v(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/conventional-changelog-v${finalAttrs.version}";

@@ -5,6 +5,7 @@
   python,
   buildPythonPackage,
   cargo,
+  pypaInstallHook,
   rustPlatform,
 }:
 
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   cargoBuildType = "release";
   nativeBuildInputs = [
     cargo
+    pypaInstallHook
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
   ];
@@ -45,14 +47,10 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    # manually install the python binding
-    mkdir -p $out/${python.sitePackages}/proton/vpn/
-    cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python.sitePackages}/proton/vpn/local_agent.so
-
-    runHook postInstall
+  postBuild = ''
+    ${python.interpreter} scripts/build_wheel.py
+    mkdir -p ./dist
+    cp ./target/*.whl ./dist
   '';
 
   pythonImportsCheck = [ "proton.vpn.local_agent" ];
@@ -62,6 +60,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-local-agent";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

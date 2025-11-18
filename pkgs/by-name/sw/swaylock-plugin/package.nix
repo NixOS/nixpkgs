@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock-plugin";
-  version = "1.8.3";
+  version = "1.8.4";
   src = fetchFromGitHub {
     owner = "mstoeckl";
     repo = "swaylock-plugin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j2MTmk2hS7yUFo/OMQpYxG03HxxTxpbzbnl6na3jjzY=";
+    hash = "sha256-UoBLEO7KaYihN/Suw9LjMXeV5sKxCULlJFynvuwwplM=";
   };
 
   strictDeps = true;
@@ -83,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swaylock-plugin";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ picnoir ];
+    maintainers = with lib.maintainers; [
+      picnoir
+      matthiasbeyer
+    ];
   };
 })

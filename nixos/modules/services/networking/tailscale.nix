@@ -226,8 +226,8 @@ in
                   echo "Waiting for Tailscale State = Running or systemd timeout"
                   ;;
               esac
+              echo "State = $state"
             fi
-            echo "State = $state"
             lastState="$state"
             sleep .5
           done

@@ -142,7 +142,7 @@ in
               else
                 "inet:${cfg.settings.server.address}";
           in
-          [ "socketmap:${address}:${if config.services.tlsrpt.enable then "QUERYwithTLSRPT" else "QUERY"}" ];
+          [ "socketmap:${address}:QUERYwithTLSRPT" ];
       };
 
       systemd.services.postfix = {

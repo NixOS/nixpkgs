@@ -2,7 +2,7 @@
   lib,
   stdenv,
   testers,
-  fetchgit,
+  fetchFromGitHub,
   fetchpatch,
   replaceVars,
 
@@ -173,7 +173,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.1";
+  version = "4.20.2";
 
   # This attribute can be overriden to correct the file paths in
   # `passthru` when building an unstable Xen.
@@ -191,46 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
       hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
     })
-
-    # XSA 472
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-1.patch";
-      hash = "sha256-6k/X7KFno9uBG0mUtJxl7TMavaRs2Xlj9JlW9ai6p0k=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-2.patch";
-      hash = "sha256-BisdztU9Wa5nIGmHo4IikqYPHdEhBehHaNqj1IuBe6I=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-3.patch";
-      hash = "sha256-rikOofQeuLNMBkdQS3xzmwh7BlgMOTMSsQcAOEzNOso=";
-    })
-
-    # XSA 473
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa473-1.patch";
-      hash = "sha256-594tTalWcGJSLj3++4QB/ADkHH1qJNrdvg7FG6kOuB8=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa473-2.patch";
-      hash = "sha256-tGuIGxJFBXbckIruSUeTyrM6GabdIj6Pr3cVxeDvNNY=";
-    })
-
-    # XSA 475
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa475-1.patch";
-      hash = "sha256-Bzvtr12g+7+M9jY9Nt2jd41CwYTL+h2fuwzJFsxroio=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa475-2.patch";
-      hash = "sha256-7MKtDAJpihpfcBK+hyBFGCP6gHWs2cdgTks8B439b2s=";
-    })
-
-    # XSA 476
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa476-4.20.patch";
-      hash = "sha256-nZUHcMr9RpQqrazG+RtTw+/s1gzqN1D565RuQjuALTQ=";
-    })
   ];
 
   outputs = [
@@ -241,10 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  src = fetchgit {
-    url = "https://xenbits.xenproject.org/git-http/xen.git";
-    rev = "08f043965a7b1047aabd6d81da6b031465f2d797";
-    hash = "sha256-a4dIJBY5aeznXPoI8nSipMgimmww7ejoQ1GE28Gq13o=";
+  src = fetchFromGitHub {
+    owner = "xen-project";
+    repo = "xen";
+    tag = "RELEASE-4.20.2";
+    hash = "sha256-ZDPjsEAEH5bW0156MVvOKUeqg+mwdce0GFdUTBH39Qc=";
   };
 
   strictDeps = true;

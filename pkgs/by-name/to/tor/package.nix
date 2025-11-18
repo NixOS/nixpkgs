@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
+      --replace-fail 'command -v torsocks' 'true' \
       --replace-fail 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
 
     patchShebangs ./scripts/maint/checkShellScripts.sh

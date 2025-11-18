@@ -48,7 +48,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with lib.maintainers; [
-      leenaars
       minijackson
     ];
   };

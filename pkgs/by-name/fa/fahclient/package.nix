@@ -98,7 +98,7 @@ buildFHSEnv {
     homepage = "https://foldingathome.org/";
     license = lib.licenses.gpl3;
     mainProgram = "fah-client";
-    maintainers = [ lib.maintainers.zimbatm ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
 }

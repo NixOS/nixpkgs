@@ -27,16 +27,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.11.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0pDJp/sWFn16HlWU+OYk0K9kIbNohC8NckZywinBRH8=";
+    hash = "sha256-61MFtAhz7yq2wStNWDIlBo+OubBVor0NnpOAX8nQ8K0=";
   };
 
-  cargoHash = "sha256-bspPOgMEnSjICJWIicrD7B+APuUvlVZFarpwzzdLwPc=";
+  cargoHash = "sha256-YR/QUEE+EbwytiL0xkCr/EYE0O2/B/KmuLaF6TA7N6I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -110,6 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       cloudripper
       thardin
+      brittonr
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

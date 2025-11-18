@@ -19,12 +19,9 @@
   typing-extensions,
 
   # tests
-  google-re2,
-  nbval,
   parameterized,
   pillow,
   pytestCheckHook,
-  tabulate,
   writableTmpDirAsHomeHook,
 }:
 
@@ -63,13 +60,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    google-re2
-    ml-dtypes
-    nbval
     parameterized
     pillow
     pytestCheckHook
-    tabulate
     writableTmpDirAsHomeHook
   ];
 

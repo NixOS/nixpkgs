@@ -209,7 +209,6 @@
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
   ./programs/feedbackd.nix
-  ./programs/file-roller.nix
   ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
@@ -475,7 +474,6 @@
   ./services/cluster/corosync/default.nix
   ./services/cluster/druid/default.nix
   ./services/cluster/hadoop/default.nix
-  ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addon-manager.nix
   ./services/cluster/kubernetes/addons/dns.nix
   ./services/cluster/kubernetes/apiserver.nix
@@ -488,7 +486,7 @@
   ./services/cluster/kubernetes/scheduler.nix
   ./services/cluster/pacemaker/default.nix
   ./services/cluster/patroni/default.nix
-  ./services/cluster/rke2/default.nix
+  ./services/cluster/rancher/default.nix
   ./services/cluster/spark/default.nix
   ./services/cluster/temporal/default.nix
   ./services/computing/boinc/client.nix
@@ -680,6 +678,7 @@
   ./services/hardware/powerstation.nix
   ./services/hardware/rasdaemon.nix
   ./services/hardware/ratbagd.nix
+  ./services/hardware/rauc.nix
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/sane_extra_backends/brscan5.nix

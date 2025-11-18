@@ -188,6 +188,9 @@ stdenv.mkDerivation (
             libgbm
           ]
         )
+        ++ lib.optionals ffmpegSupport [
+          pkgs.ffmpeg-headless
+        ]
       )
     );
 
@@ -206,7 +209,7 @@ stdenv.mkDerivation (
     # LD_LIBRARY_PATH.
     NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
-        map (x: "${lib.getLib x}/lib") [ stdenv.cc.cc ]
+        map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
         ++ lib.optionals supportFlags.pulseaudioSupport (
           map (x: "${lib.getLib x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ]))

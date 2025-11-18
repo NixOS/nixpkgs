@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "pyproject";
 
   src = fetchFromGitLab {
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "packaging";
     repo = "apkg";
     tag = "v${version}";
-    hash = "sha256-rFcHgNaZBTKO0tU7O8fz2eOD731sLHWxhh0x5mMo9uw=";
+    hash = "sha256-YiuJVwwLnka2KUh0xNPkcBuMSQHMyMzgoipiDzZvDI4=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -31,8 +31,9 @@ python3Packages.buildPythonApplication rec {
     distro # current distro detection
     jinja2 # templating
     packaging # version parsing
+    pyyaml # YAML for serialization
     requests # HTTP for humans™
-    toml # config files
+    toml # TOML for config files
   ];
 
   nativeBuildInputs = with python3Packages; [

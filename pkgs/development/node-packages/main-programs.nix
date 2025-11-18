@@ -13,11 +13,9 @@
   fkill-cli = "fkill";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  poor-mans-t-sql-formatter-cli = "sqlformat";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
-  purty = "purty";
   pscid = "pscid";
 }

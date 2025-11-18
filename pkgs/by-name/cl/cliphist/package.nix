@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -25,6 +26,8 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  buildInputs = [ bash ];
 
   meta = with lib; {
     description = "Wayland clipboard manager";

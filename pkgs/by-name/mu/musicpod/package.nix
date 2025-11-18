@@ -1,10 +1,11 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   alsa-lib,
   mpv-unwrapped,
   libass,
+  libnotify,
   pulseaudio,
   musicpod,
   runCommand,
@@ -13,15 +14,15 @@
   gitUpdater,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${version}";
-    hash = "sha256-fwESbZxin1R/xcnI321k8a60vBeU8VFvBRqGITSe92s=";
+    hash = "sha256-AUggxf6qveyLiEhXeA9orVzy03bl6eBHHEh15zZQ0wE=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ flutter332.buildFlutterApplication rec {
     alsa-lib
     mpv-unwrapped
     libass
+    libnotify
   ];
 
   runtimeDependencies = [ pulseaudio ];
