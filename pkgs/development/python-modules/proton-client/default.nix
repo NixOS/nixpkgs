@@ -46,7 +46,7 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    #ValueError: Invalid modulus
+    # ValueError: Invalid modulus
     "test_modulus_verification"
 
     # ValueError: password cannot be longer than 72 bytes
@@ -60,11 +60,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "proton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
