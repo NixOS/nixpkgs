@@ -1321,6 +1321,12 @@
     githubId = 5892756;
     name = "Alec Snyder";
   };
+  allout58 = {
+    email = "jamesthollowell@gmail.com";
+    github = "allout58";
+    githubId = 2939703;
+    name = "James Hollowell";
+  };
   allusive = {
     email = "jasper@allusive.dev";
     name = "Allusive";
@@ -7128,6 +7134,13 @@
     name = "Diogo Correia";
     github = "dvcorreia";
     githubId = 20357938;
+  };
+  dvdznf = {
+    name = "David Zanfir";
+    github = "Dvd-Znf";
+    githubId = 101937630;
+    email = "email@dvdznf.xyz";
+    matrix = "@dvdznf:gitter.im";
   };
   dvn0 = {
     email = "git@dvn.me";
