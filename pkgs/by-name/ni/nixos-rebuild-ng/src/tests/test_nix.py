@@ -679,11 +679,14 @@ def test_set_profile(mock_run: Mock) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper_bg, n), autospec=True)
 def test_switch_to_configuration_without_systemd_run(
-    mock_run: Any, monkeypatch: MonkeyPatch
+    mock_run_bg: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+
+    mock_run_bg.return_value = Mock()
     mock_run.return_value = CompletedProcess([], 1)
 
     with monkeypatch.context() as mp:
@@ -743,11 +746,14 @@ def test_switch_to_configuration_without_systemd_run(
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper_bg, n), autospec=True)
 def test_switch_to_configuration_with_systemd_run(
-    mock_run: Mock, monkeypatch: MonkeyPatch
+    mock_run_bg: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+
+    mock_run_bg.return_value = Mock()
     mock_run.return_value = CompletedProcess([], 0)
 
     with monkeypatch.context() as mp:
@@ -763,7 +769,7 @@ def test_switch_to_configuration_with_systemd_run(
         )
     mock_run.assert_called_with(
         [
-            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            *n.SYSTEMD_RUN_CMD_PREFIX,
             profile_path / "bin/switch-to-configuration",
             "switch",
         ],
@@ -788,7 +794,7 @@ def test_switch_to_configuration_with_systemd_run(
         )
     mock_run.assert_called_with(
         [
-            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            *n.SYSTEMD_RUN_CMD_PREFIX,
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],

@@ -139,7 +139,10 @@ def test_parse_args() -> None:
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_nix_boot(
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     (nixpkgs_path / ".git").mkdir(parents=True)
     config_path = tmp_path / "test"
@@ -155,6 +158,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
@@ -210,7 +214,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
             ),
             call(
                 [
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "boot",
                 ],
@@ -232,13 +236,15 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
 # https://github.com/NixOS/nixpkgs/issues/437872
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_nix_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         return CompletedProcess([], 0, str(config_path))
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -274,7 +280,8 @@ def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_nix_build_vm(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -284,6 +291,7 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -323,9 +331,14 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_nix_build_image_flake(
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
+
+    mock_popen.return_value = Mock()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix" and "eval" in args:
@@ -402,7 +415,10 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_nix_switch_flake(
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -412,6 +428,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -472,7 +489,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "sudo",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
@@ -497,11 +514,13 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
+@patch("subprocess.Popen", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_build_target_host(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
+    mock_popen: Mock,
     mock_run: Mock,
     tmp_path: Path,
 ) -> None:
@@ -524,6 +543,7 @@ def test_execute_nix_switch_build_target_host(
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
     mock_uuid4.return_value = uuid.UUID(int=0)
 
@@ -696,7 +716,7 @@ def test_execute_nix_switch_build_target_host(
                     "sudo",
                     "env",
                     "NIXOS_INSTALL_BOOTLOADER=0",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -713,9 +733,11 @@ def test_execute_nix_switch_build_target_host(
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
+@patch("subprocess.Popen", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_target_host(
     mock_cleanup_ssh: Mock,
+    mock_popen: Mock,
     mock_run: Mock,
     tmp_path: Path,
 ) -> None:
@@ -728,6 +750,7 @@ def test_execute_nix_switch_flake_target_host(
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -803,7 +826,7 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "env",
                     "NIXOS_INSTALL_BOOTLOADER=0",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -820,9 +843,11 @@ def test_execute_nix_switch_flake_target_host(
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
+@patch("subprocess.Popen", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_build_host(
     mock_cleanup_ssh: Mock,
+    mock_popen: Mock,
     mock_run: Mock,
     tmp_path: Path,
 ) -> None:
@@ -837,6 +862,7 @@ def test_execute_nix_switch_flake_build_host(
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -918,7 +944,7 @@ def test_execute_nix_switch_flake_build_host(
             ),
             call(
                 [
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    *nr.nix.SYSTEMD_RUN_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
@@ -930,7 +956,10 @@ def test_execute_nix_switch_flake_build_host(
 
 
 @patch("subprocess.run", autospec=True)
-def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_switch_rollback(
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     (nixpkgs_path / ".git").mkdir(parents=True)
 
@@ -944,6 +973,7 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -1007,9 +1037,11 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch("subprocess.run", autospec=True)
-def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_build(mock_popen: Mock, mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
+    mock_popen.return_value = Mock()
     mock_run.side_effect = [
         # nixos_build_flake
         CompletedProcess([], 0, str(config_path)),
@@ -1036,11 +1068,13 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch("subprocess.run", autospec=True)
+@patch("subprocess.Popen", autospec=True)
 def test_execute_build_dry_run_build_and_target_remote(
-    mock_run: Mock, tmp_path: Path
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
 ) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
+    mock_popen.return_value = Mock()
     mock_run.side_effect = [
         CompletedProcess([], 0, str(config_path)),
         CompletedProcess([], 0),
@@ -1104,7 +1138,10 @@ def test_execute_build_dry_run_build_and_target_remote(
 
 
 @patch("subprocess.run", autospec=True)
-def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
+@patch("subprocess.Popen", autospec=True)
+def test_execute_test_flake(
+    mock_popen: Mock, mock_run: Mock, tmp_path: Path
+) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -1116,6 +1153,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(
@@ -1154,11 +1192,13 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch("subprocess.run", autospec=True)
+@patch("subprocess.Popen", autospec=True)
 @patch("pathlib.Path.exists", autospec=True, return_value=True)
 @patch("pathlib.Path.mkdir", autospec=True)
 def test_execute_test_rollback(
     mock_path_mkdir: Mock,
     mock_path_exists: Mock,
+    mock_popen: Mock,
     mock_run: Mock,
 ) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
@@ -1177,6 +1217,7 @@ def test_execute_test_rollback(
         else:
             return CompletedProcess([], 0)
 
+    mock_popen.return_value = Mock()
     mock_run.side_effect = run_side_effect
 
     nr.execute(

@@ -102,16 +102,12 @@ def cleanup_ssh() -> None:
 atexit.register(cleanup_ssh)
 
 
-def run_wrapper(
+def _build_run_args(
     args: Args,
-    *,
-    check: bool = True,
-    extra_env: dict[str, str] | None = None,
-    remote: Remote | None = None,
-    sudo: bool = False,
-    **kwargs: Unpack[RunKwargs],
-) -> subprocess.CompletedProcess[str]:
-    "Wrapper around `subprocess.run` that supports extra functionality."
+    extra_env: dict[str, str] | None,
+    remote: Remote | None,
+    sudo: bool,
+) -> tuple[Args, dict[str, str] | None, str | None]:
     env = None
     process_input = None
     run_args = args
@@ -143,6 +139,58 @@ def run_wrapper(
             env = os.environ | extra_env
         if sudo:
             run_args = ["sudo", *run_args]
+
+    return (run_args, env, process_input)
+
+
+def run_wrapper_bg(
+    args: Args,
+    extra_env: dict[str, str] | None = None,
+    remote: Remote | None = None,
+    sudo: bool = False,
+) -> subprocess.Popen[str]:
+    "Wrapper around `subprocess.Popen` that supports extra functionality."
+    (run_args, env, process_input) = _build_run_args(args, extra_env, remote, sudo)
+
+    logger.debug(
+        "calling Popen with args=%r",
+        run_args,
+    )
+
+    if process_input:
+        stdin = subprocess.PIPE
+    else:
+        stdin = None
+
+    r = subprocess.Popen(
+        run_args,
+        env=env,
+        stdin=stdin,
+        # Hope nobody is using NixOS with non-UTF8 encodings, but
+        # "surrogateescape" should still work in those systems.
+        text=True,
+        errors="surrogateescape",
+    )
+
+    if r.stdin and process_input:
+        r.stdin.write(process_input)
+        r.stdin.write("\n")
+        r.stdin.close()
+
+    return r
+
+
+def run_wrapper(
+    args: Args,
+    *,
+    check: bool = True,
+    extra_env: dict[str, str] | None = None,
+    remote: Remote | None = None,
+    sudo: bool = False,
+    **kwargs: Unpack[RunKwargs],
+) -> subprocess.CompletedProcess[str]:
+    "Wrapper around `subprocess.run` that supports extra functionality."
+    (run_args, env, process_input) = _build_run_args(args, extra_env, remote, sudo)
 
     logger.debug(
         "calling run with args=%r, kwargs=%r, extra_env=%r",
