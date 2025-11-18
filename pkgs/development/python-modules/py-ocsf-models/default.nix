@@ -7,15 +7,12 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-ocsf-models";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
