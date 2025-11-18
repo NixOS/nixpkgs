@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ohme";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dan-r";
@@ -33,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with the Ohme API";
     homepage = "https://github.com/dan-r/ohmepy";
-    changelog = "https://github.com/dan-r/ohmepy/releases/tag/v${version}";
+    changelog = "https://github.com/dan-r/ohmepy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
