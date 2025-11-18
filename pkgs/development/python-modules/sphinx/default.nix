@@ -33,7 +33,6 @@
   # check phase
   defusedxml,
   filelock,
-  html5lib,
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
