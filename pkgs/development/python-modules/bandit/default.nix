@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   gitpython,
   pbr,
   pyyaml,
@@ -15,16 +14,14 @@ buildPythonPackage rec {
   version = "1.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-bbr9GlHiduBlQE8GmA1iS60UI0Ta6sOwhRIfz9EXt88=";
   };
 
-  nativeBuildInputs = [ pbr ];
+  build-system = [ pbr ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gitpython
     pyyaml
     rich
@@ -32,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   # Framework is Tox, tox performs 'pip install' inside the virtual-env
-  #   and this requires Network Connectivity
+  # and this requires Network Connectivity
   doCheck = false;
 
   pythonImportsCheck = [ "bandit" ];
