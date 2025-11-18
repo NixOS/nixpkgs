@@ -456,9 +456,9 @@
   },
   "fleet": {
     "pname": "fleet",
-    "version": "1.8.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.8.1-py3-none-any.whl",
-    "hash": "sha256-842zQA4Jk0dp8jMCro5lut4Ro5u7ny1sp095uqXyR9k=",
+    "version": "1.8.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.8.2-py3-none-any.whl",
+    "hash": "sha256-3YRF7R7NB8zPonNcgv4Cfs3gk55pgTAbeo1tGOH6fsA=",
     "description": "Microsoft Azure Command-Line Tools Fleet Extension"
   },
   "fluid-relay": {
