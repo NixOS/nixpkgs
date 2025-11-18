@@ -1,45 +1,36 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
-  buildOasisPackage,
-  ounit,
-  tcs-lib,
+  buildDunePackage,
   extlib,
   ocaml-sat-solvers,
+  tcs-lib,
 }:
 
-buildOasisPackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pgsolver";
-  version = "4.1";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "tcsprojects";
     repo = "pgsolver";
-    rev = "v${version}";
-    sha256 = "16skrn8qql9djpray25xv66rjgfl20js5wqnxyq1763nmyizyj8a";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VQWXvZXfGHCfzz46aARyFXO/xlJ/7s39HFIfisEamXw=";
   };
 
-  # Compatibility with ocaml-sat-solvers 0.8
-  patches = fetchpatch {
-    url = "https://github.com/tcsprojects/pgsolver/commit/e57a4fc5c8050b8d4ada5583a6c65ecf8cd65141.patch";
-    hash = "sha256-QFKxWByptnCl1SfleNASyXmKM2gkh1OE66L8PAZX+TU=";
-    includes = [
-      "src/solvers/*.ml"
-      "src/tools/*.ml"
-    ];
-  };
-
-  # Compatibility with tcs-lib ≥ 0.6
-  postPatch = ''
-    substituteInPlace _oasis --replace-fail TCSLib tcs-lib
+  # upstream missing `public_names` within `executables` stanza
+  # adding this back to automatically install binaries
+  patchPhase = ''
+    runHook prePatch
+    sed -i '/^ (names /{ p; s/names/public_names/ }' src/apps/pgsolver/dune
+    sed -i '/^ (names /{ p; s/names/public_names/ }' src/apps/tools/dune
+    runHook postPatch
   '';
 
-  buildInputs = [ ounit ];
   propagatedBuildInputs = [
     extlib
-    tcs-lib
     ocaml-sat-solvers
+    tcs-lib
   ];
 
   meta = {
@@ -47,6 +38,6 @@ buildOasisPackage rec {
     homepage = "https://github.com/tcsprojects/pgsolver";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];
-    mainProgram = "pgsolver-bin";
+    mainProgram = "pgsolver";
   };
-}
+})
