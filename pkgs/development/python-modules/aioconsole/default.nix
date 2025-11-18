@@ -59,7 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ catern ];
     mainProgram = "apython";
   };
 }
