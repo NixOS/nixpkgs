@@ -17,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.14.1";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-p+Z2c+PBNdjfaRjZErWwWgihzuddV14PgTHE3NVNHs8=";
+    hash = "sha256-DOXeZaD21Qsum4brBlMSFcBAUbNEOgCXc6AqEboP1e4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.1.6, <3.2.0" "Cython >=3.1.6"
+  '';
 
   build-system = [
     cmake

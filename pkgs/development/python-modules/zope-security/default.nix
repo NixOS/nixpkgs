@@ -19,22 +19,25 @@
 
 buildPythonPackage rec {
   pname = "zope-security";
-  version = "7.3";
+  version = "8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.security";
     tag = version;
-    hash = "sha256-p+9pCcBsCJY/V6vraVZHMr5VwYHFe217AbRVoSnDphs=";
+    hash = "sha256-qik1tuH0w0W21Md6YXc5csCbMrFifxaJvGgi2nB4FrI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    zope-proxy
+  ];
 
   dependencies = [
     zope-component

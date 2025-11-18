@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools-scm,
   setuptools,
   python,
@@ -60,6 +61,11 @@ buildPythonPackage {
 
   # jaraco-path depends ob pyobjc
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    #  AssertionError: assert '(?s:foo[^/]*)\\z' == '(?s:foo[^/]*)\\Z'
+    "test_glob_to_re"
+  ];
 
   meta = {
     description = "Distutils as found in cpython";
