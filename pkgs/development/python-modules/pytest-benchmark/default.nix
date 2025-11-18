@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "5.2.0";
+  version = "5.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "pytest-benchmark";
     tag = "v${version}";
-    hash = "sha256-BM17nrJfoOHkl7hOeY/VdoH5oEQP6EJWeNXa5x8/5UM=";
+    hash = "sha256-qjgP9H3WUYFm1xamOqhGk5YJQv94QfyJvrRoltHJHHc=";
   };
 
   build-system = [ setuptools ];
@@ -72,10 +72,6 @@ buildPythonPackage rec {
       "test_regression_checks"
       "test_regression_checks_inf"
       "test_rendering"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # argparse usage changes mismatches test artifact
-      "test_help"
     ];
 
   meta = {
