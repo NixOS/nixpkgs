@@ -471,6 +471,12 @@ let
       '';
     };
 
+    failRustAudit = mkOption {
+      description = "Fail builds if cargoAuditHook for a package detects an error";
+      type = types.bool;
+      default = false;
+    };
+
     problems = (import ../stdenv/generic/problems.nix { inherit lib; }).configOptions;
   };
 
