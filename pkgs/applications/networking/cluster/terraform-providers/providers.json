@@ -489,13 +489,13 @@
     "vendorHash": "sha256-MYVkNvJ+rbwGw0htClIbmxk3YX2OK/ZO/QOTyMRFiug="
   },
   "hashicorp_aws": {
-    "hash": "sha256-YxN5bk0Us+LZlNMzt1/eh5I2gV77S/J+wt82WIGZvZU=",
+    "hash": "sha256-d0WNES9Z1aDd9BkHYrr4PFrFP+aYubgT9DrQBkAU/Xk=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.20.0",
+    "rev": "v6.21.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-mTK19nqRGR7H45oUHgSC56KrAEJFIu/EocqBjY70fDY="
+    "vendorHash": "sha256-UdXgrCr2aYuDkQGhN4NGOU/kFTQhCRaAABHyJ+6/lrg="
   },
   "hashicorp_awscc": {
     "hash": "sha256-TpSNJZN+V1uCHrJZs9R6W7SEwqYpcZwq69LxGCPIFIM=",
@@ -606,13 +606,13 @@
     "vendorHash": "sha256-LeMFN4pOJotTTqakEbVelHSTEb4p7CQIuKzeuX3SZUM="
   },
   "hashicorp_local": {
-    "hash": "sha256-JXGBZglJwUbclTzsHap8QaQnkjw6rRIsSPL+lpLLLBE=",
+    "hash": "sha256-Mdy4g8i26JeYd7MDZth5WRvKVWM7xpgd5/JHG9+Yqs0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/local",
     "owner": "hashicorp",
     "repo": "terraform-provider-local",
-    "rev": "v2.5.3",
+    "rev": "v2.6.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-AlvcjfvyBwGawUqzba66qF97qoCUMVybKmIrf3jFyi8="
+    "vendorHash": "sha256-MDhCYXJe8x7AEqQwVn+Ot3jI1i5l4AJB0KEoiHXplCc="
   },
   "hashicorp_nomad": {
     "hash": "sha256-+lWAVb9ffyTfnkR3qZzgggRVjizdrgQ96Tj/K4ngZWQ=",
@@ -741,11 +741,11 @@
     "vendorHash": null
   },
   "integrations_github": {
-    "hash": "sha256-LNjHD4TFJiO8CMl3B891bxNss6b85iwOEHemlbRiSBU=",
+    "hash": "sha256-nQeuHl1S+iyTFKUwFQFIYTUYixxJt+ds12oaEiG1KOc=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v6.8.0",
+    "rev": "v6.8.3",
     "spdx": "MIT",
     "vendorHash": null
   },
