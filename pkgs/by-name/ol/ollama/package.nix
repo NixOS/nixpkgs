@@ -136,16 +136,16 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.9";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D61jCyOUYXyPgztgEAFHd2oL5IXsO5TnE2AGEHOnows=";
+    hash = "sha256-o6jjn9VyLRwD1wFoUv8nNwf5QC6TOVipmMrcHtikNjI=";
   };
 
-  vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
+  vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
 
   env =
     lib.optionalAttrs enableRocm {
@@ -228,12 +228,8 @@ goBuild (finalAttrs: {
   '';
 
   postFixup =
-    # the app doesn't appear functional at the moment, so hide it
-    ''
-      mv "$out/bin/app" "$out/bin/.ollama-app"
-    ''
     # expose runtime libraries necessary to use the gpu
-    + lib.optionalString (enableRocm || enableCuda) ''
+    lib.optionalString (enableRocm || enableCuda) ''
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 

@@ -2768,6 +2768,12 @@
     githubId = 333807;
     name = "Pascal Bach";
   };
+  backtail = {
+    name = "Max Genson";
+    email = "mail@maxgenson.de";
+    github = "backtail";
+    githubId = 95583524;
+  };
   backuitist = {
     email = "biethb@gmail.com";
     github = "backuitist";
@@ -6695,6 +6701,11 @@
     github = "DMills27";
     githubId = 5251658;
     name = "Dominic Mills";
+  };
+  dmitriiStepanidenko = {
+    github = "dmitriiStepanidenko";
+    githubId = 93157285;
+    name = "Dmitrii Stepanidenko";
   };
   DmitryTsygankov = {
     email = "dmitry.tsygankov@gmail.com";

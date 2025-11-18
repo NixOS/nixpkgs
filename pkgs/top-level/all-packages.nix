@@ -13384,6 +13384,7 @@ with pkgs;
   nwchem = callPackage ../applications/science/chemistry/nwchem {
     blas = blas-ilp64;
     lapack = lapack-ilp64;
+    scalapack = scalapack-ilp64;
   };
 
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
@@ -13489,6 +13490,11 @@ with pkgs;
   p4est-sc-dbg = p4est-sc.override { debug = true; };
 
   p4est-dbg = p4est.override { debug = true; };
+
+  scalapack-ilp64 = scalapack.override {
+    blas = blas-ilp64;
+    lapack = lapack-ilp64;
+  };
 
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
