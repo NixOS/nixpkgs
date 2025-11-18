@@ -10,14 +10,14 @@ SOURCES_JSON="${SCRIPT_DIR}/sources.json"
 
 echo "Fetching latest release information..."
 page=$(curl -fsSL --compressed "https://antigravity.google/download/linux")
-script_name=$(printf '%s\n' "$page" | grep -o 'main-[a-zA-Z0-9]*\.js' | head -n 1)
+script_name=$(printf '%s\n' "$page" | grep -o 'main-[a-zA-Z0-9]*\.js' | head -n1)
 js_content=$(curl -fsSL --compressed "https://antigravity.google/$script_name")
 
 # Extract Linux x86_64 URL
 linux_x86_64_url=$(
   printf '%s\n' "$js_content" \
     | grep -o 'https://[^"]*/linux-x64/Antigravity.tar.gz' \
-    | head -n 1
+    | head -n1
 )
 
 # Extract version and check for update
@@ -27,7 +27,7 @@ version=$(
 )
 echo "Version: $version"
 
-current_version=$(sed -n 's/.*version = "\(.*\)".*/\1/p' "$PACKAGE_NIX" | head -n1)
+current_version=$(grep -oP '^\s*version = "\K[^"]+' "$PACKAGE_NIX" | head -n1)
 if [[ "$version" == "$current_version" ]]; then
   echo "Antigravity is already up-to-date"
   exit 0
@@ -40,8 +40,8 @@ darwin_aarch64_url="${linux_x86_64_url/linux-x64\/Antigravity.tar.gz/darwin-arm\
 
 echo "Prefetching x86_64-linux from $linux_x86_64_url..."
 prefetch_output=$(nix-prefetch-url --print-path "$linux_x86_64_url")
-linux_x86_64_hash_base32=$(echo "$prefetch_output" | head -n 1)
-archive_path=$(echo "$prefetch_output" | tail -n 1)
+linux_x86_64_hash_base32=$(echo "$prefetch_output" | head -n1)
+archive_path=$(echo "$prefetch_output" | tail -n1)
 echo "path is '$archive_path'" >&2
 linux_x86_64_hash=$(nix-hash --type sha256 --to-sri "$linux_x86_64_hash_base32")
 
