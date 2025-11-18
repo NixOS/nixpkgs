@@ -25,12 +25,14 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper
+from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper, run_wrapper_bg
+from .process import Args as ProcessArgs
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
-SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
+SYSTEMD_RUN_UNIT_PREFIX: Final = "nixos-rebuild-switch-to-configuration"
+SYSTEMD_RUN_CMD_PREFIX: Final = [
     "systemd-run",
     "-E",
     # Will be set to new value early in switch-to-configuration script,
@@ -41,11 +43,10 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "-E",
     "NIXOS_NO_CHECK",
     "--collect",
+    "--wait",
     "--no-ask-password",
-    "--pipe",
     "--quiet",
     "--service-type=exec",
-    "--unit=nixos-rebuild-switch-to-configuration",
 ]
 logger: Final = logging.getLogger(__name__)
 
@@ -663,6 +664,78 @@ def set_profile(
     )
 
 
+def _has_systemd(target_host: Remote | None) -> bool:
+    r = run_wrapper(
+        ["test", "-d", "/run/systemd/system"],
+        remote=target_host,
+        check=False,
+    )
+    return r.returncode == 0
+
+
+def _run_action(
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
+    path_to_config: Path,
+    install_bootloader: bool,
+    target_host: Remote | None,
+    sudo: bool,
+    prefix: ProcessArgs | None = None,
+) -> None:
+    cmd: ProcessArgs = [path_to_config / "bin/switch-to-configuration", str(action)]
+    if prefix:
+        cmd = [*prefix, *cmd]
+
+    run_wrapper(
+        cmd,
+        env={
+            "LOCALE_ARCHIVE": PRESERVE_ENV,
+            "NIXOS_NO_CHECK": PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
+        },
+        remote=target_host,
+        sudo=sudo,
+    )
+
+
+def _run_action_with_systemd(
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
+    path_to_config: Path,
+    install_bootloader: bool,
+    target_host: Remote | None,
+    sudo: bool,
+) -> None:
+    unique_unit_name = SYSTEMD_RUN_UNIT_PREFIX + "-" + uuid.uuid4().hex[:8]
+    journalctl = run_wrapper_bg(
+        [
+            "journalctl",
+            "-f",
+            f"--unit={unique_unit_name}",
+            "--output=cat",
+        ],
+        remote=target_host,
+        sudo=sudo,
+    )
+
+    try:
+        _run_action(
+            action,
+            path_to_config,
+            install_bootloader,
+            target_host,
+            sudo,
+            prefix=[*SYSTEMD_RUN_CMD_PREFIX, f"--unit={unique_unit_name}"],
+        )
+    except KeyboardInterrupt:
+        run_wrapper(
+            ["systemctl", "stop", unique_unit_name],
+            remote=target_host,
+            sudo=sudo,
+        )
+        raise
+    finally:
+        journalctl.terminate()
+
+
 def switch_to_configuration(
     path_to_config: Path,
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
@@ -686,29 +759,26 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NixOSRebuildError(f"specialisation not found: {specialisation}")
 
-    r = run_wrapper(
-        ["test", "-d", "/run/systemd/system"],
-        remote=target_host,
-        check=False,
-    )
-    cmd = SWITCH_TO_CONFIGURATION_CMD_PREFIX
-    if r.returncode:
+    if _has_systemd(target_host):
+        _run_action_with_systemd(
+            action,
+            path_to_config,
+            install_bootloader,
+            target_host,
+            sudo,
+        )
+    else:
         logger.debug(
             "skipping systemd-run to switch configuration since systemd is "
             "not working in target host"
         )
-        cmd = []
-
-    run_wrapper(
-        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
-        env={
-            "LOCALE_ARCHIVE": PRESERVE_ENV,
-            "NIXOS_NO_CHECK": PRESERVE_ENV,
-            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
-        },
-        remote=target_host,
-        sudo=sudo,
-    )
+        _run_action(
+            action,
+            path_to_config,
+            install_bootloader,
+            target_host,
+            sudo,
+        )
 
 
 def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
