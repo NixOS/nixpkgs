@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  writeScript,
   writeShellScriptBin,
   gradio,
 
@@ -351,27 +352,47 @@ buildPythonPackage rec {
 
   # Cyclic dependencies are fun!
   # This is gradio without gradio-client and gradio-pdf
-  passthru.sans-reverse-dependencies =
-    (gradio.override (old: {
-      gradio-client = null;
-      gradio-pdf = null;
-    })).overridePythonAttrs
-      (old: {
-        pname = old.pname + "-sans-reverse-dependencies";
-        pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
-        doInstallCheck = false;
-        doCheck = false;
-        preCheck = "";
-        postInstall = ''
-          shopt -s globstar
-          for f in $out/**/*.py; do
-            cp $f "$f"i
-          done
-          shopt -u globstar
-        '';
-        pythonImportsCheck = null;
-        dontCheckRuntimeDeps = true;
-      });
+  passthru = {
+    sans-reverse-dependencies =
+      (gradio.override (old: {
+        gradio-client = null;
+        gradio-pdf = null;
+      })).overridePythonAttrs
+        (old: {
+          pname = old.pname + "-sans-reverse-dependencies";
+          pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          doInstallCheck = false;
+          doCheck = false;
+          preCheck = "";
+          postInstall = ''
+            shopt -s globstar
+            for f in $out/**/*.py; do
+              cp $f "$f"i
+            done
+            shopt -u globstar
+          '';
+          pythonImportsCheck = null;
+          dontCheckRuntimeDeps = true;
+        });
+
+    # We can't use gitUpdater, because we need to update the pnpm hash.
+    # And we can't just use nix-update-script, because it often does not fetch
+    # enough tags for the ones we're looking for to show up.
+    updateScript = writeScript "update-python3Packages.gradio" ''
+      #! /usr/bin/env nix-shell
+      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update
+
+      tag=$(list-git-tags \
+            | grep "^gradio@" \
+            | sed -e "s,^gradio@,," \
+            | grep -v -E -e ".*-(beta|dev).*" \
+            | sort --reverse --version-sort \
+            | head -n 1 \
+            | tr -d '\n' \
+           )
+      nix-update --version="$tag"
+    '';
+  };
 
   meta = {
     homepage = "https://www.gradio.app/";
