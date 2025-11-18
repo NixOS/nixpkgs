@@ -5,11 +5,12 @@
   autoreconfHook,
   pkg-config,
   check,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "wwcd";
-  version = "unstable-2022-02-05";
+  version = "0-unstable-2022-02-05";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
@@ -25,6 +26,10 @@ stdenv.mkDerivation {
   ];
 
   autoreconfFlags = [ "-if" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "What would cron do? Read crontab entries from stdin and print time of next execution(s)";
