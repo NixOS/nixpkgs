@@ -23,7 +23,6 @@
 , "mathjax"
 , "node-gyp-build"
 , "node2nix"
-, "np"
 , "postcss"
 , "prebuild-install"
 , "pscid"

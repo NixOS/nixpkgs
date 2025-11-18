@@ -257,6 +257,7 @@ mapAliases {
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
+  np = throw "'np' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   npm = pkgs.nodejs.overrideAttrs (old: {
     meta = old.meta // {
       mainProgram = "npm";
