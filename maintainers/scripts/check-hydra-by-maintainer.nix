@@ -71,7 +71,13 @@ pkgs.stdenvNoCC.mkDerivation {
       # trying to only add spaces as necessary for optional args
       # with optStr don't need spaces between nix templating
       optStr = cond: string: lib.optionalString cond "${string} ";
-      command = "hydra-check ${optStr short "--short"}${optStr (extra != "") extra}${lib.escapeShellArgs packages}";
+      args = [
+        "hydra-check"
+      ]
+      ++ (lib.optional short "--short")
+      ++ (lib.optional (extra != "") extra)
+      ++ (map lib.escapeShellArg packages);
+      command = lib.concatStringsSep " " args;
     in
     ''
       # if user presses ctrl-c during run
