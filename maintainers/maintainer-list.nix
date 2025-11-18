@@ -4358,12 +4358,6 @@
     githubId = 37775;
     name = "Kirill A. Korinsky";
   };
-  catern = {
-    email = "sbaugh@catern.com";
-    github = "catern";
-    githubId = 5394722;
-    name = "Spencer Baugh";
-  };
   cathalmullan = {
     email = "contact@cathal.dev";
     github = "CathalMullan";

@@ -46,6 +46,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/MagicStack/immutables";
     changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ catern ];
   };
 }
