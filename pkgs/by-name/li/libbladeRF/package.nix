@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix clang build: https://github.com/Nuand/bladeRF/pull/1045
+    ./clang-fix.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
