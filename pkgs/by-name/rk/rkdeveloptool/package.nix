@@ -5,11 +5,12 @@
   autoreconfHook,
   pkg-config,
   libusb1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
-  version = "unstable-2025-03-07";
+  version = "0-unstable-2025-03-07";
 
   src = fetchFromGitHub {
     owner = "rockchip-linux";
@@ -29,6 +30,10 @@ stdenv.mkDerivation {
   CPPFLAGS =
     lib.optionals stdenv.cc.isGNU [ "-Wno-error=format-truncation" ]
     ++ lib.optionals stdenv.isDarwin [ "-Wno-error=vla-cxx-extension" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";
