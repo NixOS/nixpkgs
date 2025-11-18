@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     cmake
     makeWrapper
     qt6.wrapQtAppsHook
@@ -93,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cryptopp
     openssl
-    pkg-config
     qt6.qtbase
     qt6.qttools
     xz
