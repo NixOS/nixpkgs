@@ -73,7 +73,10 @@ buildGo124Module rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with lib.maintainers; [ blakesmith ];
+    maintainers = with lib.maintainers; [
+      blakesmith
+      cherrykitten
+    ];
     license = lib.licenses.agpl3Only;
   };
 }
