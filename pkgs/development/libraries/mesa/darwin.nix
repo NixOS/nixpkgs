@@ -59,6 +59,17 @@ stdenv.mkDerivation {
     ./opencl.patch
   ];
 
+  postPatch = ''
+    # Darwin only installs `swrast_dri.so`. It is symlinked to `libdril_dri.dylib`, but the script never terminates
+    # checking for `swrast_dri.dylib`, which isn’t what will be created.
+    substituteInPlace bin/install_megadrivers.py \
+      --replace-fail "            while ext != '.' + args.libname_suffix" "            while ext != '.so'"
+
+    # Use `st_mtimespec` on Darwin instead of `st_mtim`.
+    substituteInPlace src/gallium/drivers/llvmpipe/lp_context.c \
+      --replace-fail 'st_mtim.' 'st_mtimespec.'
+  '';
+
   outputs = [
     "out"
     "dev"
