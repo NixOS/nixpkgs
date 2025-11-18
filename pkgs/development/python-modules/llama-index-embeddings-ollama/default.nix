@@ -6,15 +6,12 @@
   llama-index-core,
   ollama,
   pytest-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
   version = "0.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
