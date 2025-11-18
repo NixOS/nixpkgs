@@ -128,10 +128,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       // Make sure that we always check the current target as well, even if its a WIP branch.
-      // If it's not a WIP branch, it was already included in either releases or secondary.
-      if (classify(base.ref).type.includes('wip')) {
-        secondary.push(classify(base.ref))
-      }
+      secondary.push(classify(base.ref))
 
       for (const branch of secondary) {
         const nextCandidate = await mergeBase(branch)
