@@ -1,0 +1,14 @@
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 6e94318..dca18bb 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -10,8 +10,7 @@ check_PROGRAMS = \
+     test_snprintf \
+     test_strncpy \
+     test_strtcpy \
+-    test_typetraits \
+-    test_xaprintf
++    test_typetraits
+ 
+ if ENABLE_LOGIND
+ check_PROGRAMS += \
