@@ -68,6 +68,7 @@ jobs:
           extra_nix_config: sandbox = true
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
           # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
           name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
