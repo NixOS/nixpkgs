@@ -1933,8 +1933,6 @@ with pkgs;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
-  fast-cli = nodePackages.fast-cli;
-
   ### TOOLS/TYPESETTING/TEX
 
   advi = callPackage ../tools/typesetting/tex/advi {

@@ -6,7 +6,6 @@
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   aws-cdk = "cdk";
-  fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
   grunt-cli = "grunt";
