@@ -99,7 +99,8 @@ let
                 prev = f final;
                 thisOverlay = overlay final prev;
                 warnForBadVersionOverride = (
-                  thisOverlay ? version
+                  prev ? src
+                  && thisOverlay ? version
                   && prev ? version
                   # We could check that the version is actually distinct, but that
                   # would probably just delay the inevitable, or preserve tech debt.
