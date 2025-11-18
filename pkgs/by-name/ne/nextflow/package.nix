@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [
       Etjean
-      edmundmiller
     ];
     mainProgram = "nextflow";
     platforms = platforms.unix;

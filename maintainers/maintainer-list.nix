@@ -7409,13 +7409,6 @@
     github = "edlimerkaj";
     githubId = 71988351;
   };
-  edmundmiller = {
-    name = "Edmund Miller";
-    email = "git@edmundmiller.dev";
-    matrix = "@emiller:beeper.com";
-    github = "edmundmiller";
-    githubId = 20095261;
-  };
   edrex = {
     email = "ericdrex@gmail.com";
     github = "edrex";
