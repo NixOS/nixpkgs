@@ -6,29 +6,29 @@
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-duospace";
-  version = "0-unstable-2018-07-21";
+  version = "0-unstable-2023-06-16";
 
   src = fetchFromGitHub {
     owner = "iaolo";
     repo = "iA-Fonts";
-    rev = "55edf60f544078ab1e14987bc67e9029a200e0eb";
-    hash = "sha256-/ifzOScILLuFkjFIgpy0ArCcelgealbpypKvZ46xApU=";
+    rev = "f32c04c3058a75d7ce28919ce70fe8800817491b";
+    hash = "sha256-2T165nFfCzO65/PIHauJA//S+zug5nUwPcg8NUEydfc=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/opentype
-    cp "iA Writer Duospace/OTF (Mac)/"*.otf $out/share/fonts/opentype/
+    mkdir -p $out/share/fonts/truetype
+    cp iA\ Writer\ Duo/Variable/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "iA Writer Duospace Typeface";
     homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.richardjacton ];
   };
 }
