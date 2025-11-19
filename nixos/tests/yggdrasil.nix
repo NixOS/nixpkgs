@@ -2,7 +2,11 @@ let
   aliceIp6 = "202:b70:9b0b:cf34:f93c:8f18:bbfd:7034";
   aliceKeys = {
     PublicKey = "3e91ec9e861960d86e1ce88051f97c435bdf2859640ab681dfa906eb45ad5182";
-    PrivateKey = "a867f9e078e4ce58d310cf5acd4622d759e2a21df07e1d6fc380a2a26489480d3e91ec9e861960d86e1ce88051f97c435bdf2859640ab681dfa906eb45ad5182";
+    PrivateKeyPem = ''
+      -----BEGIN PRIVATE KEY-----
+      MC4CAQAwBQYDK2VwBCIEIKhn+eB45M5Y0xDPWs1GItdZ4qId8H4db8OAoqJkiUgN
+      -----END PRIVATE KEY-----
+    '';
   };
   bobIp6 = "202:a483:73a4:9f2d:a559:4a19:bc9:8458";
   bobPrefix = "302:a483:73a4:9f2d";
@@ -20,7 +24,11 @@ let
       }
     ];
     PublicKey = "2b6f918b6c1a4b54d6bcde86cf74e074fb32ead4ee439b7930df2aa60c825186";
-    PrivateKey = "0c4a24acd3402722ce9277ed179f4a04b895b49586493c25fbaed60653d857d62b6f918b6c1a4b54d6bcde86cf74e074fb32ead4ee439b7930df2aa60c825186";
+    PrivateKeyPem = ''
+      -----BEGIN PRIVATE KEY-----
+      MC4CAQAwBQYDK2VwBCIEIAxKJKzTQCcizpJ37RefSgS4lbSVhkk8Jfuu1gZT2FfW
+      -----END PRIVATE KEY-----
+    '';
   };
   danIp6 = bobPrefix + "::2";
 
@@ -59,13 +67,14 @@ in
           settings = {
             Listen = [ "tcp://0.0.0.0:12345" ];
             MulticastInterfaces = [ ];
+            PublicKey = aliceKeys.PublicKey;
+            PrivateKeyPath = toString (
+              pkgs.writeTextFile {
+                name = "yggdrasil-alice-private-key";
+                text = aliceKeys.PrivateKeyPem;
+              }
+            );
           };
-          configFile = toString (
-            pkgs.writeTextFile {
-              name = "yggdrasil-alice-conf";
-              text = builtins.toJSON aliceKeys;
-            }
-          );
         };
       };
 
@@ -78,12 +87,17 @@ in
         services.yggdrasil = {
           enable = true;
           openMulticastPort = true;
-          configFile = toString (
-            pkgs.writeTextFile {
-              name = "yggdrasil-bob-conf";
-              text = builtins.toJSON bobConfig;
-            }
-          );
+          settings = {
+            InterfacePeers = bobConfig.InterfacePeers;
+            MulticastInterfaces = bobConfig.MulticastInterfaces;
+            PublicKey = bobConfig.PublicKey;
+            PrivateKeyPath = toString (
+              pkgs.writeTextFile {
+                name = "yggdrasil-bob-private-key";
+                text = bobConfig.PrivateKeyPem;
+              }
+            );
+          };
         };
 
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
@@ -140,17 +154,18 @@ in
             "error"
           ];
           denyDhcpcdInterfaces = [ "ygg0" ];
+          openMulticastPort = true;
           settings = {
-            IfTAPMode = true;
             IfName = "ygg0";
             MulticastInterfaces = [
               {
+                Regex = ".*";
+                Beacon = true;
+                Listen = true;
                 Port = 43210;
               }
             ];
-            openMulticastPort = true;
           };
-          persistentKeys = true;
         };
       };
   };
