@@ -4,21 +4,20 @@
   fetchFromGitHub,
   stdenv,
   testers,
-  earthly,
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "earthly";
-  version = "0.8.16";
+  pname = "earthbuild";
+  version = "0.8.17";
 
   src = fetchFromGitHub {
-    owner = "earthly";
-    repo = "earthly";
+    owner = "EarthBuild";
+    repo = "earthbuild";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
+    hash = "sha256-ATdNA9KjAXsxMiez3AF6TxK7OujNDABY8jB6hXeSNpc=";
   };
 
-  vendorHash = "sha256-kEgg7zrT69X4yrsGtLyvnrGQ7+sXaEzdqd4Fz7rpFyg=";
+  vendorHash = "sha256-49FWzLHEbgwWOXT1uPshdY5risFHInA541Mfhu7v08A=";
   subPackages = [
     "cmd/earthly"
     "cmd/debugger"
@@ -30,9 +29,8 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X main.Version=v${finalAttrs.version}"
-    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${finalAttrs.version}"
+    "-X main.DefaultBuildkitdImage=docker.io/earthbuild/buildkitd:v${finalAttrs.version}"
     "-X main.GitSha=v${finalAttrs.version}"
-    "-X main.DefaultInstallationName=earthly"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
@@ -48,19 +46,22 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
+    ln -s $out/bin/earthly-debugger $out/bin/earth-debugger
+    ln -s $out/bin/earthly $out/bin/earth
   '';
 
   passthru = {
     tests.version = testers.testVersion {
-      package = earthly;
+      package = finalAttrs.finalPackage;
       version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Build automation for the container era";
-    homepage = "https://earthly.dev/";
-    changelog = "https://github.com/earthly/earthly/releases/tag/v${finalAttrs.version}";
+    mainProgram = "earth";
+    homepage = "https://earthbuild.dev/";
+    changelog = "https://github.com/EarthBuild/earthbuild/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       zoedsoupe
