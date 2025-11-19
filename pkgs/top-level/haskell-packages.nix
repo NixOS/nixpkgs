@@ -252,7 +252,11 @@ in
         microhs-boot = bb.compiler.microhs-0_14_18_0;
       };
 
-      microhs-0_14 = compiler.microhs-0_14_23_0;
+      microhs-0_14_23_1 = callPackage ../development/compilers/microhs/0.14.23.1.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14 = compiler.microhs-0_14_23_1;
       microhs = compiler.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
@@ -405,7 +409,14 @@ in
         packageSetConfig = bootstrapPackageSet;
       };
 
-      microhs-0_14 = packages.microhs-0_14_23_0;
+      microhs-0_14_23_1 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_23_1;
+        ghc = bh.compiler.microhs-0_14_23_1;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14 = packages.microhs-0_14_23_1;
       microhs = packages.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
