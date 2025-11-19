@@ -1,0 +1,49 @@
+diff --git a/sdk/account/Cargo.toml b/sdk/account/Cargo.toml
+index 62d3539114..cadbeaee86 100644
+--- a/sdk/account/Cargo.toml
++++ b/sdk/account/Cargo.toml
+@@ -28,6 +28,7 @@ solana-pubkey = { workspace = true }
+ [features]
+ bincode = ["dep:bincode", "dep:solana-instruction", "serde"]
+ dev-context-only-utils = ["bincode", "dep:qualifier_attr"]
++qualifier_attr = [] # see https://github.com/rust-lang/cargo/issues/10788
+ frozen-abi = [
+     "dep:solana-frozen-abi",
+     "dep:solana-frozen-abi-macro",
+diff --git a/sdk/program/Cargo.toml b/sdk/program/Cargo.toml
+index 37e88e9d56..40e7fc219c 100644
+--- a/sdk/program/Cargo.toml
++++ b/sdk/program/Cargo.toml
+@@ -138,6 +138,7 @@ borsh = [
+     "solana-pubkey/borsh"
+ ]
+ dev-context-only-utils = ["dep:qualifier_attr"]
++qualifier_attr = []
+ frozen-abi = [
+     "dep:solana-frozen-abi",
+     "dep:solana-frozen-abi-macro",
+diff --git a/accounts-db/Cargo.toml b/accounts-db/Cargo.toml
+index 82a983ede3..5cee90aa25 100644
+--- a/accounts-db/Cargo.toml
++++ b/accounts-db/Cargo.toml
+@@ -88,6 +88,7 @@ dev-context-only-utils = [
+     "dep:solana-stake-program",
+     "dep:solana-vote-program",
+ ]
++qualifier_attr = []
+ frozen-abi = [
+     "dep:solana-frozen-abi",
+     "dep:solana-frozen-abi-macro",
+diff --git a/svm/Cargo.toml b/svm/Cargo.toml
+index 0366710646..3a8a0c1645 100644
+--- a/svm/Cargo.toml
++++ b/svm/Cargo.toml
+@@ -93,6 +93,7 @@ targets = ["x86_64-unknown-linux-gnu"]
+ 
+ [features]
+ dev-context-only-utils = ["dep:qualifier_attr"]
++qualifier_attr = []
+ frozen-abi = [
+     "dep:solana-frozen-abi",
+     "dep:solana-frozen-abi-macro",
+
