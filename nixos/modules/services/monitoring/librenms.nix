@@ -669,7 +669,7 @@ in
             # .env file already exists --> only update database and cache config
             sed -i /^APP_URL=/d ${cfg.dataDir}/.env
             sed -i /^DB_/d ${cfg.dataDir}/.env
-            sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
+            sed -i /^CACHE_DRIVER=/d ${cfg.dataDir}/.env
           fi
           ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
             echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
