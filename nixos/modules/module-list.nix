@@ -269,6 +269,7 @@
   ./programs/nautilus-open-any-terminal.nix
   ./programs/nbd.nix
   ./programs/neovim.nix
+  ./programs/netextender.nix
   ./programs/nethoscope.nix
   ./programs/nexttrace.nix
   ./programs/nh.nix
