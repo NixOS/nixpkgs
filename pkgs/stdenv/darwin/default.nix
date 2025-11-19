@@ -1144,8 +1144,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               cctools
               cctools.libtool
               coreutils
-              darwin.binutils
-              darwin.binutils.bintools
               diffutils
               ed
               file
@@ -1185,6 +1183,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ]
           ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
+            binutils
+            binutils.bintools
             libcxx
             libiconv.out
             libresolv.out
@@ -1194,13 +1194,13 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ])
           ++ (with prevStage."llvmPackages_${llvmVersion}"; [
             bintools-unwrapped
-            clang-unwrapped
-            (lib.getLib clang-unwrapped)
             compiler-rt
             compiler-rt.dev
+            libclang
+            libclang.lib
+            libllvm
+            libllvm.lib
             lld
-            llvm
-            llvm.lib
           ]);
 
         __stdenvImpureHostDeps = commonImpureHostDeps;
