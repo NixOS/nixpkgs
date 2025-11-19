@@ -91,64 +91,7 @@ let
     }:
 
     let
-      cc =
-        if prevStage.llvmPackages.clang-unwrapped == null then
-          null
-        else
-          prevStage.wrapCCWith {
-            name = "${name}-clang-wrapper";
-
-            nativeTools = false;
-            nativeLibc = false;
-
-            expand-response-params = lib.optionalString (
-              prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null"
-            ) prevStage.expand-response-params;
-
-            extraPackages = [ prevStage.llvmPackages.compiler-rt ];
-
-            extraBuildCommands =
-              let
-                inherit (prevStage.llvmPackages) clang-unwrapped compiler-rt;
-              in
-              ''
-                function clangResourceRootIncludePath() {
-                  clangLib="$1/lib/clang"
-                  if (( $(ls "$clangLib" | wc -l) > 1 )); then
-                    echo "Multiple LLVM versions were found at "$clangLib", but there must only be one used when building the stdenv." >&2
-                    exit 1
-                  fi
-                  echo "$clangLib/$(ls -1 "$clangLib")/include"
-                }
-
-                rsrc="$out/resource-root"
-                mkdir "$rsrc"
-                ln -s "$(clangResourceRootIncludePath "${lib.getLib clang-unwrapped}")" "$rsrc"
-                ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
-                ln -s "${compiler-rt.out}/share" "$rsrc/share"
-                echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-              '';
-
-            cc = prevStage.llvmPackages.clang-unwrapped;
-            bintools = prevStage.darwin.binutils;
-
-            isClang = true;
-            inherit (prevStage) libc;
-            # TODO: replace with `darwin.libcxx` once the bootstrap tools no longer have libc++.
-            libcxx =
-              if
-                prevStage.darwin.libcxx == null || name == "bootstrap-stage1" || name == "bootstrap-stage-xclang"
-              then
-                prevStage.llvmPackages.libcxx
-              else
-                prevStage.darwin.libcxx;
-
-            inherit lib;
-            inherit (prevStage) coreutils gnugrep;
-
-            stdenvNoCC = prevStage.ccWrapperStdenv;
-            runtimeShell = prevStage.ccWrapperStdenv.shell;
-          };
+      cc = if prevStage.clang == null then null else prevStage.clang;
 
       bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
@@ -440,21 +383,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         darwin = super.darwin.overrideScope (
           selfDarwin: superDarwin: {
-            binutils = super.wrapBintoolsWith {
-              name = "bootstrap-stage0-binutils-wrapper";
-
-              nativeTools = false;
-              nativeLibc = false;
-
-              expand-response-params = "";
-              libc = selfDarwin.libSystem;
-
-              inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
-              runtimeShell = self.stdenvNoCC.shell;
-
-              bintools = selfDarwin.binutils-unwrapped;
-            };
 
             binutils-unwrapped =
               (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
@@ -503,6 +431,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   ln -s ${bootstrapTools}/lib/clang/$(ls -1 ${bootstrapTools}/lib/clang) $out/lib/clang/${llvmVersion}
                 '';
                 passthru = {
+                  isClang = true;
                   isFromBootstrapFiles = true;
                   hardeningUnsupportedFlags = [
                     "fortify3"
@@ -1004,54 +933,14 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               // llvmLibrariesDarwinDepsNoCC prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped libSystem;
-                binutils = superDarwin.binutils.override {
-                  # Build expand-response-params with last stage like below
-                  inherit (prevStage) expand-response-params;
-                };
                 # Avoid rebuilding bmake (and Python) just for locales
                 locale = superDarwin.locale.override { inherit (prevStage) bmake; };
               }
             );
 
-                _: _:
-                llvmToolsPackages prevStage
-                // llvmLibrariesPackages prevStage
-                // {
-                  systemLibcxxClang = super.wrapCCWith rec {
-                    nativeTools = false;
-                    nativeLibc = false;
-
-                    inherit (prevStage) expand-response-params;
-
-                    extraPackages = [ self.llvmPackages.compiler-rt ];
-
-                    extraBuildCommands = ''
-                      rsrc="$out/resource-root"
-                      mkdir "$rsrc"
-                      ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
-                      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-                      ln -s "${prevStage.llvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
-                      ln -s "${prevStage.llvmPackages.compiler-rt.out}/share" "$rsrc/share"
-                    '';
-
-                    cc = self.llvmPackages.clang-unwrapped;
-                    bintools = self.darwin.binutils;
-
-                    isClang = true;
-                    libc = self.darwin.libSystem;
-                    inherit (self.darwin) libcxx;
-
-                    inherit lib;
-                    inherit (self)
-                      stdenvNoCC
-                      coreutils
-                      gnugrep
-                      runtimeShell
-                      ;
-                  };
-                }
             "llvmPackages_${llvmVersion}" =
               (super."llvmPackages_${llvmVersion}".overrideScope (
+                _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
               ))
               // {
                 inherit (super."llvmPackages_${llvmVersion}") override;
