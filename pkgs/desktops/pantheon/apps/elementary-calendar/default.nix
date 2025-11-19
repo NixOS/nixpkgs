@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
-    rev = version;
-    sha256 = "sha256-gBQfrRSaw3TKcsSAQh/hcTpBoEQstGdLbppoZ1/Z1q8=";
+    tag = version;
+    hash = "sha256-kkdz82eCc9dKemUtCaz9OUObeICU5W1Ino4JNUvmhAw=";
   };
 
   nativeBuildInputs = [
