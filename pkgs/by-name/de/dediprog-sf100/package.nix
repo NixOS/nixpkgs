@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
       thillux
       felixsinger
     ];
+    mainProgram = "dpcmd";
   };
 })
