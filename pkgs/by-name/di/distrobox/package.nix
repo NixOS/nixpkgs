@@ -5,6 +5,8 @@
   makeWrapper,
   wget,
   gnugrep,
+  nix-update-script,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-uwJD7HsWoQ/LxYL0mSSxMni676qqEnMHndpL01M5ySE=";
   };
 
@@ -48,7 +50,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
     description = "Wrapper around podman or docker to create and start containers";
     longDescription = ''
       Use any linux distribution inside your terminal. Enable both backward and
@@ -56,9 +65,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       you’re more comfortable with
     '';
     homepage = "https://distrobox.it/";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atila ];
     mainProgram = "distrobox";
   };
 })
