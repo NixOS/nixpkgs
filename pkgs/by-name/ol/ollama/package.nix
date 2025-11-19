@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchNpmDeps,
   buildEnv,
   makeBinaryWrapper,
   stdenv,
@@ -10,6 +11,8 @@
 
   cmake,
   gitMinimal,
+  nodejs,
+  npmHooks,
   clblast,
   libdrm,
   rocmPackages,
@@ -36,6 +39,7 @@
   config,
   # one of `[ null false "rocm" "cuda" "vulkan" ]`
   acceleration ? null,
+  withUi ? stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWindows,
 }:
 
 assert builtins.elem acceleration [
@@ -147,6 +151,13 @@ goBuild (finalAttrs: {
 
   vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
 
+  npmDeps = lib.mkIf withUi (fetchNpmDeps {
+    src = "${finalAttrs.src}/app/ui/app";
+    hash = "sha256-VokHB501c8GJVqPcBEN+x3lOR161e4VCPg1ggbNJCP0=";
+  });
+
+  npmRoot = lib.mkIf withUi "app/ui/app";
+
   env =
     lib.optionalAttrs enableRocm {
       ROCM_PATH = rocmPath;
@@ -161,6 +172,10 @@ goBuild (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gitMinimal
+  ]
+  ++ lib.optionals withUi [
+    nodejs
+    npmHooks.npmConfigHook
   ]
   ++ lib.optionals enableRocm [
     rocmPackages.llvm.bintools
@@ -211,6 +226,13 @@ goBuild (finalAttrs: {
 
     in
     ''
+      ${lib.optionalString withUi ''
+        # Build the frontend UI (required before Go build due to embed directive)
+        pushd app/ui/app
+        npm run build
+        popd
+      ''}
+
       cmake -B build \
         -DCMAKE_SKIP_BUILD_RPATH=ON \
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
