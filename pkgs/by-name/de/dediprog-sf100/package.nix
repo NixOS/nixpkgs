@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   udevRules = pkgs.writeText "dediprog.rules" ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev"
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev", TAG+="uaccess"
   '';
 
   installPhase = ''
