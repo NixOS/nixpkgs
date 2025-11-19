@@ -290,11 +290,6 @@ in
       pkgs.budgie-desktop-services
     ];
 
-    # Register packages for udev.
-    services.udev.packages = with pkgs; [
-      magpie
-    ];
-
     # Shell integration for MATE Terminal.
     programs.bash.vteIntegration = true;
     programs.zsh.vteIntegration = true;
