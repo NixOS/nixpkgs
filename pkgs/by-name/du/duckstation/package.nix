@@ -61,7 +61,7 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = pkgSources.duckstation.version;
+    version = "0.1-10091";
 
     src = fetchFromGitHub {
       owner = "stenzek";
