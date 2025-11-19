@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.5.0";
+  version = "3.5.1";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
+    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
   };
 
   patches = [

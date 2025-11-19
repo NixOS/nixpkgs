@@ -11,7 +11,6 @@
   parameterized,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   textparser,
@@ -19,22 +18,20 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "40.7.1";
+  version = "41.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rn4EzIbgdjBzda6bzYNwcQjpmOPqYBm/lodzWAuaqV8=";
+    hash = "sha256-gdfvoy1moUmTSyG2kaQPtA254LdPoCwk9PJX9YfRaa4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argparse-addons
     bitstruct
     python-can
