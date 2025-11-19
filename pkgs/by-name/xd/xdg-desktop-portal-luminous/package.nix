@@ -8,6 +8,7 @@
   rustc,
   cargo,
   rustPlatform,
+  makeWrapper,
   xdg-desktop-portal,
   slurp,
   cairo,
@@ -15,6 +16,7 @@
   libxkbcommon,
   glib,
   pipewire,
+  wayland,
   nix-update-script,
 }:
 
@@ -42,17 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    makeWrapper
   ];
 
   buildInputs = [
     xdg-desktop-portal
-    slurp
     cairo
     pango
     glib
     pipewire
     libxkbcommon
   ];
+
+  postInstall = ''
+    wrapProgram $out/libexec/xdg-desktop-portal-luminous \
+      --prefix PATH ":" ${lib.makeBinPath [ slurp ]} \
+      --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath [ wayland ]}
+  '';
 
   passthru.updateScript = nix-update-script { };
 
