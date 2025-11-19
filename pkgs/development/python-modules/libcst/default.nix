@@ -3,14 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  callPackage,
   cargo,
   hypothesmith,
+  isPy313,
   libcst,
   libiconv,
   pytestCheckHook,
-  python,
-  pythonOlder,
   pyyaml,
   pyyaml-ft,
   rustPlatform,
@@ -58,7 +56,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [
-    (if pythonOlder "3.13" then pyyaml else pyyaml-ft)
+    (if isPy313 then pyyaml-ft else pyyaml)
   ];
 
   nativeCheckInputs = [
