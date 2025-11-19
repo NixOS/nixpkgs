@@ -1215,6 +1215,7 @@ let
         {
           modules,
           specialArgs ? { },
+          onlyDefinesConfig ? false,
           shorthandOnlyDefinesConfig ? false,
           description ? null,
           class ? null,
@@ -1226,11 +1227,21 @@ let
             defs:
             map (
               { value, file }:
-              if isAttrs value && shorthandOnlyDefinesConfig then
+              if isAttrs value && (onlyDefinesConfig || shorthandOnlyDefinesConfig) then
                 {
                   _file = file;
                   config = value;
                 }
+              else if isFunction value && onlyDefinesConfig then
+                lib.setFunctionArgs (args: {
+                  _file = file;
+                  config = value args;
+                }) (lib.functionArgs value)
+              else if builtins.isPath value && onlyDefinesConfig then
+                lib.setFunctionArgs (args: {
+                  _file = file;
+                  config = import value args;
+                }) (lib.functionArgs (import value))
               else
                 {
                   _file = file;
@@ -1314,12 +1325,10 @@ let
           getSubOptions =
             prefix:
             let
-              docsEval = (
-                base.extendModules {
-                  inherit prefix;
-                  modules = [ noCheckForDocsModule ];
-                }
-              );
+              docsEval = base.extendModules {
+                inherit prefix;
+                modules = [ noCheckForDocsModule ];
+              };
               # Intentionally shadow the freeformType from the possibly *checked*
               # configuration. See `noCheckForDocsModule` comment.
               inherit (docsEval._module) freeformType;
@@ -1350,6 +1359,7 @@ let
                 modules
                 class
                 specialArgs
+                onlyDefinesConfig
                 shorthandOnlyDefinesConfig
                 description
                 ;
@@ -1375,6 +1385,15 @@ let
                   lhs.specialArgs // rhs.specialArgs
                 else
                   throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
+              onlyDefinesConfig =
+                if lhs.onlyDefinesConfig == null then
+                  rhs.onlyDefinesConfig
+                else if rhs.onlyDefinesConfig == null then
+                  lhs.onlyDefinesConfig
+                else if lhs.onlyDefinesConfig == rhs.onlyDefinesConfig then
+                  lhs.onlyDefinesConfig
+                else
+                  throw "A submoduleWith option is declared multiple times with conflicting onlyDefinesConfig values";
               shorthandOnlyDefinesConfig =
                 if lhs.shorthandOnlyDefinesConfig == null then
                   rhs.shorthandOnlyDefinesConfig
