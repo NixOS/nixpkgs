@@ -46,16 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
-  # patches = [
-  #   # https://github.com/PrismLauncher/PrismLauncher/pull/3622
-  #   # https://github.com/NixOS/nixpkgs/issues/400119
-  #   (fetchpatch2 {
-  #     name = "fix-qt6.9-compatibility.patch";
-  #     url = "https://github.com/Project-Tick/ProjT-Launcher/commit/8bb9b168fb996df9209e1e34be854235eda3d42a.diff";
-  #     hash = "sha256-WYG+NTORxjrbfn9u8rRTlO6qdJ3Wa5V3r67jSfY2D8w=";
-  #   })
-  # ];
-
   nativeBuildInputs = [
     cmake
     ninja
@@ -110,11 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3orlater;
     maintainers = with lib.maintainers; [
-      minion3665
-      Scrumplex
-      getchoo
+      YongDo-Hyun
     ];
     mainProgram = "projtlauncher";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
