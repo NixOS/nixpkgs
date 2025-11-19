@@ -4,8 +4,10 @@
   fetchFromGitLab,
   installShellFiles,
   asciidoc,
-  git,
-  bash,
+  makeBinaryWrapper,
+  coreutils,
+  gnused,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,17 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     asciidoc
+    makeBinaryWrapper
   ];
 
-  buildInputs = [
-    git
-    bash
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  doInstallCheck = true;
 
   dontBuild = true;
 
   installPhase = ''
     installBin git-latexdiff
+    wrapProgram ''${!outputBin}/bin/git-latexdiff \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+        ]
+      }
     make git-latexdiff.1
     installManPage git-latexdiff.1
   '';
