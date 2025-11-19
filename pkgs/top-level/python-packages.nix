@@ -9315,6 +9315,8 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
+
   medpy = callPackage ../development/python-modules/medpy { };
 
   medvol = callPackage ../development/python-modules/medvol { };
@@ -20384,6 +20386,10 @@ self: super: with self; {
   wikipedia2vec = callPackage ../development/python-modules/wikipedia2vec { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
+
+  wikitextprocessor = callPackage ../development/python-modules/wikitextprocessor { };
+
+  wiktextract = callPackage ../development/python-modules/wiktextract { };
 
   willow = callPackage ../development/python-modules/willow { };
 
