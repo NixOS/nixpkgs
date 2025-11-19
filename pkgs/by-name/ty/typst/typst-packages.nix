@@ -9,6 +9,10 @@ let
 in
 lib.makeScope newScope (
   self:
+  let
+    # Not public, so do not expose to the package set
+    buildUniversePackage = self.callPackage ./build-universe-package.nix { typstPackages = self; };
+  in
   lib.foldlAttrs (
     packageSet: pname: versionSet:
     packageSet
@@ -16,7 +20,8 @@ lib.makeScope newScope (
       subPackageSet: version: packageSpec:
       subPackageSet
       // {
-        ${toPackageName pname version} = self.callPackage ./build-universe-package.nix {
+        ${toPackageName pname version} = buildUniversePackage {
+          inherit pname version;
           inherit (packageSpec)
             hash
             description
