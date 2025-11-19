@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "asyncpraw";
-  version = "7.8.1-unstable-2025-10-08";
+  version = "7.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
