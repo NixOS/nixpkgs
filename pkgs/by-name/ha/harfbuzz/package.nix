@@ -103,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # test_native_coretext_variations depends on the system fonts.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts"
+  ];
+
   # Slightly hacky; some pkgs expect them in a single directory.
   postFixup = lib.optionalString withIcu ''
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
