@@ -48,8 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib/rsshub
-    cp -r lib node_modules assets api package.json tsconfig.json $out/lib/rsshub
+    mkdir -p $out/bin $out/lib/rsshub/lib
+    cp -r dist node_modules $out/lib/rsshub
+    cp -r lib/assets $out/lib/rsshub/lib
     runHook postInstall
   '';
 
@@ -59,8 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
       --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
-      --append-flags "$out/lib/rsshub/node_modules/tsx/dist/cli.mjs" \
-      --append-flags "$out/lib/rsshub/lib/index.ts"
+      --append-flags "$out/lib/rsshub/dist/index.js"
   '';
 
   meta = {
