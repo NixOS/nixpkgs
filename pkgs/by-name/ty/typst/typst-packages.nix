@@ -13,14 +13,18 @@ lib.makeScope newScope (
     # Not public, so do not expose to the package set
     buildUniversePackage = self.callPackage ./build-universe-package.nix { typstPackages = self; };
   in
-  lib.foldlAttrs (
-    packageSet: pname: versionSet:
-    packageSet
-    // (lib.foldlAttrs (
-      subPackageSet: version: packageSpec:
-      subPackageSet
-      // {
-        ${toPackageName pname version} = buildUniversePackage {
+  lib.pipe (lib.importTOML ./typst-packages-from-universe.toml) [
+    (lib.mapAttrsToListRecursive (
+      path: packageSet:
+      let
+        # Path is always [ path version ]
+        pname = lib.head path;
+        version = lib.last path;
+      in
+      {
+        name = toPackageName pname version;
+
+        value = buildUniversePackage {
           inherit pname version;
           inherit (packageSpec)
             hash
@@ -31,9 +35,7 @@ lib.makeScope newScope (
             ;
         };
       }
-    ) { } versionSet)
-    // {
-      ${pname} = self.${toPackageName pname (lib.last (lib.attrNames versionSet))};
-    }
-  ) { } (lib.importTOML ./typst-packages-from-universe.toml)
+    ))
+    lib.listToAttrs
+  ]
 )
