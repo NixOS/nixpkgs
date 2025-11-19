@@ -3,6 +3,7 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,10 +20,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "crates/codebook-lsp";
   cargoHash = "sha256-HAJglGtOy+OMZoB50Uz5vrf8IXqBKMMO/Hr9Lcry2+Q=";
 
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+
   # Integration tests require internet access for dictionaries
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Unholy spellchecker for code";

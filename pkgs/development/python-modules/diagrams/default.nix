@@ -29,11 +29,9 @@ buildPythonPackage rec {
 
   patches = [
     # Add build-system, https://github.com/mingrammer/diagrams/pull/1089
-    (fetchpatch {
-      name = "add-build-system.patch";
-      url = "https://github.com/mingrammer/diagrams/commit/59b84698b142f5a0998ee9e395df717a1b77e9b2.patch";
-      hash = "sha256-/zV5X4qgHJs+KO9gHyu6LqQ3hB8Zx+BzOFo7K1vQK78=";
-    })
+    ./0001-Add-build-system-section.patch
+    # Fix poetry include, https://github.com/mingrammer/diagrams/pull/1128
+    ./0002-Fix-packaging-Ensure-resources-are-included.patch
     ./remove-black-requirement.patch
   ];
 
