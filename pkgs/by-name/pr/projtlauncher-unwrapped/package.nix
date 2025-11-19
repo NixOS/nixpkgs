@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3orlater;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       YongDo-Hyun
     ];
