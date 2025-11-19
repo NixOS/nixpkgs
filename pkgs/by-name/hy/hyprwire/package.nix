@@ -11,13 +11,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwire";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-84KqFPakU1Pv7axkwbSi1D5XssSHIW8B2xduOUq5Mw4=";
+    hash = "sha256-EoLyrxFJVr7igDhhVNRk2rRpEEOJllRWvYg5XZ3J5y0=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +26,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    pugixml
     hyprutils
     libffi
+    pugixml
   ];
 
   meta = {
