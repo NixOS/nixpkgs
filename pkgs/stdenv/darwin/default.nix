@@ -673,9 +673,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
-              inherit (self) coreutils;
+              inherit (self) coreutils libc;
               bintools = selfDarwin.binutils-unwrapped;
-              libc = selfDarwin.libSystem;
             };
 
             # Avoid building unnecessary Python dependencies due to building LLVM manpages.
@@ -837,7 +836,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 # Rewrap binutils so it uses the rebuilt Libsystem.
                 binutils = superDarwin.binutils.override {
                   inherit (prevStage) expand-response-params;
-                  libc = selfDarwin.libSystem;
+                  inherit (self) libc;
                 };
               }
             );
@@ -1125,7 +1124,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         extraAttrs = {
           inherit bootstrapTools;
-          libc = prevStage.darwin.libSystem;
+          inherit (prevStage) libc;
           shellPackage = prevStage.bashNonInteractive;
         };
 
