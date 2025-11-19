@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "scilla";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "scilla";
     tag = "v${version}";
-    hash = "sha256-V6QJqjuVLE6jpwv4XbsdPx8kpfTRjV4QH5O6lng9+h4=";
+    hash = "sha256-0aqcFtyi3cNiBelSTf8bwgxhErIDdXOI9c6FKT/Omlw=";
   };
 
-  vendorHash = "sha256-yTsiEA6NI2atN1VrclwVe1xz7CEFfcuRt4yMuz2CFog=";
+  vendorHash = "sha256-0DDBvoJiHXka90gvcyxnldJJWvb8dfBFwRjHJO4pFGA=";
 
   ldflags = [
     "-w"
