@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "pybluez";
-  version = "unstable-2022-01-28";
+  version = "0.23";
   format = "setuptools";
 
   src = fetchFromGitHub {
