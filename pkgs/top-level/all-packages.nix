@@ -1531,10 +1531,6 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
-  crystfel = callPackage ../applications/science/physics/crystfel { };
-
-  crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
-
   amule-daemon = amule.override {
     monolithic = false;
     enableDaemon = true;
