@@ -1244,22 +1244,36 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             }
             # These have to be dropped from the overlay when cross-compiling. Wrappers are obviously target-specific.
             # darwin.binutils is not yet ready to be target-independent.
-            (
-              lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage)
-              // {
-                inherit (prevStage.llvmPackages) clang;
-              }
-            )
-            # Since LLVM should be the same regardless of target platform, overlay it to avoid an unnecessary
-            # rebuild when cross-compiling from Darwin to another platform using clang.
+            (lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage))
             {
               "llvmPackages_${llvmVersion}" =
                 (super."llvmPackages_${llvmVersion}".overrideScope (
-                  _: _:
-                  llvmToolsPackages prevStage
-                  // llvmLibrariesPackages prevStage
+                  finalLLVM: _:
+                  # These are defined explicitly to make sure that overriding their dependencies using `overrideScope`
+                  # still works. `llvmPackages.libcxx` is not included because it’s not part of the Darwin stdenv.
+                  {
+                    inherit (prevStage."llvmPackages_${llvmVersion}") libllvm;
+                    libclang = prevStage."llvmPackages_${llvmVersion}".libclang.override {
+                      inherit (finalLLVM) libllvm;
+                    };
+                    lld = prevStage."llvmPackages_${llvmVersion}".lld.override {
+                      inherit (finalLLVM) libllvm;
+                    };
+                  }
+                  # Avoid using the llvm-manpages package from the bootstrap, which won’t build due to needing curl.
                   // {
                     inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                  }
+                  // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                    # Make sure the following are all the same in the local == target case:
+                    # - clang
+                    # - llvmPackages.stdenv.cc
+                    # - llvmPackages.systemLibcxxClang.
+                    # - llvmPackages.clang
+                    # - stdenv.cc
+                    systemLibcxxClang = prevStage."llvmPackages_${llvmVersion}".systemLibcxxClang.override {
+                      cc = finalLLVM.clang-unwrapped;
+                    };
                   }
                 ))
                 // {
@@ -1297,24 +1311,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert prevStage.libiconv == prevStage.darwin.libiconv;
 
     {
-      inherit (prevStage) config overlays;
-      # This should be done in the `overrideScope` above, but it causes rebuilds.
-      # TODO: Move it there once https://github.com/NixOS/nixpkgs/pull/445668 is merged.
-      stdenv = prevStage.stdenv // {
-        overrides =
-          self: super:
-          (prevStage.stdenv.overrides self super)
-          // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (
-            let
-              llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
-            in
-            {
-              "llvmPackages_${llvmVersion}" = prevStage."llvmPackages_${llvmVersion}" // {
-                inherit (prevStage) clang;
-              };
-            }
-          );
-      };
+      inherit (prevStage) config overlays stdenv;
     }
   )
 ]
