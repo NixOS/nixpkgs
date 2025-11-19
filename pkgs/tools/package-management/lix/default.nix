@@ -241,6 +241,35 @@ lib.makeExtensible (self: {
     };
   };
 
+  lix_2_94 = self.makeLixScope {
+    attrName = "lix_2_94";
+
+    lix-args = rec {
+      version = "2.94.0";
+
+      src = fetchFromGitea {
+        domain = "git.lix.systems";
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+      };
+
+      patches = [
+        # Bumping to toml11 ≥4.0.0 makes integer parsing throw (as it should) instead of saturate on overflow.
+        # However, the updated version is not in nixpkgs yet, and the released versions still have the saturation bug.
+        # Hence reverting the bump for now seems to be the least bad option.
+        ./revert-toml11-bump-2_94.patch
+      ];
+    };
+  };
+
   git = self.makeLixScope {
     attrName = "git";
 
@@ -270,7 +299,7 @@ lib.makeExtensible (self: {
     };
   };
 
-  latest = self.lix_2_93;
+  latest = self.lix_2_94;
 
   # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
   # See: https://git.lix.systems/lix-project/lix/issues/662
