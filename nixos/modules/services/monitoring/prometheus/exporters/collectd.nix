@@ -29,6 +29,12 @@ in
         description = "File mapping user names to pre-shared keys (passwords).";
       };
 
+      typesdbFile = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = "Collectd types.db file for datasource names mapping.";
+      };
+
       port = mkOption {
         type = types.port;
         default = 25826;
@@ -84,9 +90,17 @@ in
   };
   serviceOpts =
     let
+      authFileArgs = optionalString (cfg.collectdBinary.authFile != null) ''
+        --collectd.auth-file ${escapeShellArg cfg.collectdBinary.authFile} \
+      '';
+      typesdbFileArgs = optionalString (cfg.collectdBinary.typesdbFile != null) ''
+        --collectd.typesdb-file ${escapeShellArg cfg.collectdBinary.typesdbFile} \
+      '';
       collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
         --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
         --collectd.security-level ${cfg.collectdBinary.securityLevel} \
+        ${authFileArgs} \
+        ${typesdbFileArgs}
       '';
     in
     {
