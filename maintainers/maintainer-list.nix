@@ -4455,12 +4455,6 @@
     githubId = 543423;
     name = "Alex Wied";
   };
-  cfhammill = {
-    email = "cfhammill@gmail.com";
-    github = "cfhammill";
-    githubId = 7467038;
-    name = "Chris Hammill";
-  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
