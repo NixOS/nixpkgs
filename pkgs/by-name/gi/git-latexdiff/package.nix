@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  installShellFiles,
   git,
   bash,
 }:
@@ -25,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs git-latexdiff
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   buildInputs = [
     git
     bash
@@ -33,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $prefix/bin
-    mv git-latexdiff $prefix/bin
-    chmod +x $prefix/bin/git-latexdiff
+    installBin git-latexdiff
   '';
 
   meta = {
