@@ -638,93 +638,101 @@ in
           }"
         ];
       };
-      script = ''
-        set -euo pipefail
+      script =
+        let
+          nginxHasSSL =
+            with config.services.nginx.virtualHosts."${cfg.hostname}";
+            onlySSL || enableSSL || addSSL || forceSSL;
+        in
+        ''
+          set -euo pipefail
 
-        PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
+          PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
 
-        # config setup
-        ln -sf ${configFile} ${cfg.dataDir}/config.php
-        ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
-        export PHPRC=${phpIni}
+          # config setup
+          ln -sf ${configFile} ${cfg.dataDir}/config.php
+          ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
+          export PHPRC=${phpIni}
 
-        INIT=false
-        if [[ ! -s ${cfg.dataDir}/.env ]]; then
-          INIT=true
-          # init .env file
-          echo "APP_KEY=" > ${cfg.dataDir}/.env
-          ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
-          ${artisanWrapper}/bin/librenms-artisan webpush:vapid
-          echo "" >> ${cfg.dataDir}/.env
-          echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
-          ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
-          echo "" >> ${cfg.dataDir}/.env
-        else
-          # .env file already exists --> only update database and cache config
-          sed -i /^DB_/d ${cfg.dataDir}/.env
-          sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
-        fi
-        ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
-          echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
-        ''}
-        echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
-      ''
-      + (
-        if !isNull cfg.database.socket then
-          ''
-            # use socket connection
-            echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
-            echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
-          ''
-        else
-          ''
-            # use TCP connection
-            echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
-            echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
-            echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
-            echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
-            cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
-          ''
-      )
-      + ''
-        # clear cache if package has changed (cache may contain cached paths
-        # to the old package)
-        OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
-        if [[ $OLD_PACKAGE != "${package}" ]]; then
-          rm -r ${cfg.dataDir}/cache/*
-        fi
+          INIT=false
+          if [[ ! -s ${cfg.dataDir}/.env ]]; then
+            INIT=true
+            # init .env file
+            echo "APP_KEY=" > ${cfg.dataDir}/.env
+            ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
+            ${artisanWrapper}/bin/librenms-artisan webpush:vapid
+            echo "" >> ${cfg.dataDir}/.env
+            echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
+            ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
+            echo "" >> ${cfg.dataDir}/.env
+          else
+            # .env file already exists --> only update database and cache config
+            sed -i /^APP_URL=/d ${cfg.dataDir}/.env
+            sed -i /^DB_/d ${cfg.dataDir}/.env
+            sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
+          fi
+          ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
+            echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
+          ''}
+          echo "APP_URL=http${lib.optionalString nginxHasSSL "s"}://${cfg.hostname}/" >> ${cfg.dataDir}/.env
+          echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
+        ''
+        + (
+          if !isNull cfg.database.socket then
+            ''
+              # use socket connection
+              echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
+              echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
+            ''
+          else
+            ''
+              # use TCP connection
+              echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
+              echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
+              echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
+              echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
+              cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
+            ''
+        )
+        + ''
+          # clear cache if package has changed (cache may contain cached paths
+          # to the old package)
+          OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            rm -r ${cfg.dataDir}/cache/*
+          fi
 
-        # convert rrd files when the oneMinutePolling option is changed
-        OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
-        if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
-          ${package}/scripts/rrdstep.php -h all
-          echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
-        fi
+          # convert rrd files when the oneMinutePolling option is changed
+          OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
+          if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
+            ${package}/scripts/rrdstep.php -h all
+            echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
+          fi
 
-        # migrate db if package version has changed
-        # not necessary for every package change
-        OLD_VERSION=$(cat ${cfg.dataDir}/version)
-        if [[ $OLD_VERSION != "${package.version}" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
-          echo "${package.version}" > ${cfg.dataDir}/version
-        fi
+          # migrate db if package version has changed
+          # not necessary for every package change
+          OLD_VERSION=$(cat ${cfg.dataDir}/version)
+          if [[ $OLD_VERSION != "${package.version}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+            echo "${package.version}" > ${cfg.dataDir}/version
+          fi
 
-        if [[ $INIT == "true" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
-        fi
+          if [[ $INIT == "true" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
+          fi
 
-        # regenerate cache if package has changed
-        if [[ $OLD_PACKAGE != "${package}" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan view:clear
-          ${artisanWrapper}/bin/librenms-artisan optimize:clear
-          ${artisanWrapper}/bin/librenms-artisan view:cache
-          ${artisanWrapper}/bin/librenms-artisan optimize
-          echo "${package}" > ${cfg.dataDir}/package
-        fi
+          # regenerate cache if package has changed
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan view:clear
+            ${artisanWrapper}/bin/librenms-artisan optimize:clear
+            ${artisanWrapper}/bin/librenms-artisan view:cache
+            ${artisanWrapper}/bin/librenms-artisan optimize
+            echo "${package}" > ${cfg.dataDir}/package
+          fi
 
-        # to make sure to not read an outdated .env file
-        ${artisanWrapper}/bin/librenms-artisan config:cache
-      '';
+          # to make sure to not read an outdated .env file
+          ${artisanWrapper}/bin/librenms-artisan config:cache
+        '';
     };
 
     programs.mtr.enable = true;
