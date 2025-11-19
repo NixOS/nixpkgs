@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
-  version = "0.6.1-unstable-2024-02-25";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
