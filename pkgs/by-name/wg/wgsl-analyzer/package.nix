@@ -18,6 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-cbbuZ9kkYfjvY1Aq27in1poODowtVoP+m3TLHn+zT3E=";
 
+  cargoBuildFlags = [
+    "-p wgsl-analyzer"
+    "-p wgslfmt"
+  ];
+
   checkFlags = [
     # Imports failures
     "--skip=tests::parse_import"
