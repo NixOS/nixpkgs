@@ -71,6 +71,9 @@ buildPythonPackage rec {
     description = "Experimental features for LangChain";
     homepage = "https://github.com/langchain-ai/langchain-experimental/tree/main/libs/experimental";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mrdev023 ];
+    maintainers = with lib.maintainers; [
+      mrdev023
+      sarahec
+    ];
   };
 }
