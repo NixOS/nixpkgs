@@ -4,12 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
 
   # tests
+  beautifulsoup4,
   httpx,
   pytest-asyncio,
   pytestCheckHook,
@@ -20,19 +21,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.11";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-text-splitters==${version}";
-    hash = "sha256-SShVzssXi18j5gcDSwwDT+umObEk7uhaCP2mMolQJxI=";
+    hash = "sha256-DOWd94Vx61OS1OI2uIZVonf6BiXkjbS2pTrzleKvifM=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    beautifulsoup4
     httpx
     pytest-asyncio
     pytestCheckHook

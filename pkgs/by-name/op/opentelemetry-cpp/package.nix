@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       jfroche
       panicgh
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     # https://github.com/protocolbuffers/protobuf/issues/14492
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };

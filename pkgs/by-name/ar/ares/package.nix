@@ -1,9 +1,9 @@
 {
   lib,
   alsa-lib,
-  apple-sdk_14,
+  apple-sdk,
   cmake,
-  fetchFromGitHub,
+  fetchzip,
   gtk3,
   gtksourceview3,
   libGL,
@@ -29,13 +29,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "145";
+  version = "146";
 
-  src = fetchFromGitHub {
-    owner = "ares-emulator";
-    repo = "ares";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-es+K5+qlK7FcJCFEIMcOsXCZSnoXEEmtS0yhpCvaILM";
+  src = fetchzip {
+    url = "https://github.com/ares-emulator/ares/releases/download/v${finalAttrs.version}/ares-source.tar.gz";
+    hash = "sha256-D4N0u9NNlhs4nMoUrAY+sg6Ybt1xQPMiH1u0cV0Qixs=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
@@ -55,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
     moltenvk
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -73,13 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./darwin-build-fixes.patch {
-      sdkVersion = apple-sdk_14.version;
+      sdkVersion = apple-sdk.version;
     })
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "ARES_BUILD_LOCAL" false)
     (lib.cmakeBool "ARES_SKIP_DEPS" true)
+    (lib.cmakeBool "ARES_BUILD_OFFICIAL" true)
   ];
 
   postInstall =

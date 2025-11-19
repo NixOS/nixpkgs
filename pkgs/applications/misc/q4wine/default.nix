@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  mkDerivation,
+  stdenv,
   cmake,
   sqlite,
   qtbase,
@@ -15,15 +15,15 @@
   which, # runtime deps.
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "q4wine";
-  version = "1.3.13";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "brezerk";
     repo = "q4wine";
     rev = "v${version}";
-    sha256 = "04gw5y3dxdpivm2xqacqq85fdzx7xkl0c3h3hdazljb0c3cxxs6h";
+    sha256 = "sha256-5rj+EDsOZib78gWT003a4IN23cZQftnhVggIdLN6f7I=";
   };
 
   buildInputs = [

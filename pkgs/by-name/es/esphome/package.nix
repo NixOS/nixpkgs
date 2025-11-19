@@ -8,7 +8,6 @@
   platformio,
   esptool,
   git,
-  inetutils,
   versionCheckHook,
   nixosTests,
 }:
@@ -34,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.10.3";
+  version = "2025.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-k/wqS5koXQ/hGhDNhxuv/t496+f0YPHZibkUjRyCjwo=";
+    hash = "sha256-o40zMoqgjBpkn80dUvr7mJQ/EtmIHEI/cf/E+wbBPOw=";
   };
 
   patches = [
@@ -65,6 +64,10 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     "esptool"
     "platformio"
+    # esp-idf v5.1 uses esp-idf-kconfig instead:
+    # https://github.com/espressif/esp-idf/blob/release/v5.1/tools/requirements/requirements.core.txt#L15
+    # Can be removed once this pr is released: https://github.com/esphome/esphome/pull/11210
+    "kconfiglib"
   ];
 
   postPatch = ''
@@ -76,10 +79,6 @@ python.pkgs.buildPythonApplication rec {
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
-  # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used.
-  # They have validation functions like:
-  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
@@ -92,35 +91,30 @@ python.pkgs.buildPythonApplication rec {
     freetype-py
     icmplib
     jinja2
-    kconfiglib
-    packaging
     paho-mqtt
     pillow
     platformio
-    protobuf
     puremagic
     pyparsing
     pyserial
     pyyaml
-    requests
     ruamel-yaml
     tornado
     tzdata
     tzlocal
     voluptuous
+    zeroconf
   ];
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
-    # git is used in esphome/writer.py
-    # inetutils is used in esphome/dashboard/status/ping.py
+    # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
         esptool
         git
-        inetutils
       ]
     }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
@@ -134,7 +128,7 @@ python.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       hypothesis
       mock
@@ -156,7 +150,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+      argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
     in
     ''
       installShellCompletion --cmd esphome \
@@ -198,6 +192,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      thanegill
     ];
     mainProgram = "esphome";
   };

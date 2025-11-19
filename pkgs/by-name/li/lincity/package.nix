@@ -80,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlincity";
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
   };
 })

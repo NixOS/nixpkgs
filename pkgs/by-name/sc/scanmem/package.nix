@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/scanmem/scanmem";
     description = "Memory scanner for finding and poking addresses in executing processes";
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };

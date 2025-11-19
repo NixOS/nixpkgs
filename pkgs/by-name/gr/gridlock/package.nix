@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage {
     description = "Nix compatible lockfile manager, without Nix";
     homepage = "https://github.com/lf-/gridlock";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

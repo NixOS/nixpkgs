@@ -8,12 +8,11 @@
   jq,
   gnupg,
   gopass,
-  apple-sdk_14,
 }:
 
 let
 
-  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/internal/jsonapi/manifest/manifest_path_linux.go
+  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/internal/jsonapi/manifest/manifest_path_linux.go
   manifestPaths = {
     firefox = "$out/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json";
     chrome = "$out/etc/opt/chrome/native-messaging-hosts/com.justwatch.gopass.json";
@@ -27,27 +26,22 @@ let
 in
 buildGoModule rec {
   pname = "gopass-jsonapi";
-  version = "1.15.18";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
     rev = "v${version}";
-    hash = "sha256-TN6GC+T2S3xdUGtQFbsSnFtdb+DsERLjLMCPCb8Q+2c=";
+    hash = "sha256-LPGAK/vwcbsAvL3TXX78cPCbNbYXh2++Ta1D8RjbKK4=";
   };
 
-  vendorHash = "sha256-PJOGnx0zSxK95bWbweF/VoSfyXkkmru8XYToSh48YOw=";
+  vendorHash = "sha256-TTTjQRUYKqtyE/vFHol0ewbkh+2oGo9Pjr1qTmfXrq4=";
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # For ScreenCaptureKit.h, see https://github.com/NixOS/nixpkgs/pull/358760#discussion_r1858327365
-    apple-sdk_14
   ];
 
   ldflags = [
@@ -72,7 +66,7 @@ buildGoModule rec {
       # `gopass-jsonapi configure` will ask for them. (`--libpath` and `--global`
       # are overriden by `--manifest-path`. `--libpath` is only used to
       # compute Firefox's global manifest path. See
-      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/setup_others.go#L33-L46)
+      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/setup_others.go#L33-L46)
       #
       # `gopass-jsonapi configure` ask for confirmation before writing any files,
       # `echo y` gives it.

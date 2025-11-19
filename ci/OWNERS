@@ -215,10 +215,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
-/pkgs/build-support/rust @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt
+/pkgs/build-support/rust @zowoq @winterqt
 /pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
-/doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
+/doc/languages-frameworks/rust.section.md @zowoq @winterqt
 
 # Tcl
 /pkgs/development/interpreters/tcl  @fgaz
@@ -447,8 +447,8 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
 
 # Zig
-/pkgs/development/compilers/zig @figsoda @RossComputerGuy
-/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
+/pkgs/development/compilers/zig @RossComputerGuy
+/doc/hooks/zig.section.md       @RossComputerGuy
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
@@ -507,8 +507,14 @@ pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
-pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
 pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
+
+# Nim
+/doc/languages-frameworks/nim.section.md  @NixOS/nim
+/pkgs/build-support/build-nim-package.nix @NixOS/nim
+/pkgs/build-support/build-nim-sbom.nix    @NixOS/nim
+/pkgs/top-level/nim-overrides.nix         @NixOS/nim

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.7.1";
+  version = "2.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Parquery";
     repo = "icontract";
     tag = "v${version}";
-    hash = "sha256-7mRQ1g2mllHIaZh0jEd/iCgaDja1KJXuRnamhDo/Pbo=";
+    hash = "sha256-FRfDcjylYGWwYPgCipzS+NZYCSPATlQdWtavTo/NZY0=";
   };
 
   preCheck = ''

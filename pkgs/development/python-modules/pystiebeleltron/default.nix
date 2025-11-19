@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pystiebeleltron";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThyMYthOS";
     repo = "python-stiebel-eltron";
     tag = "v${version}";
-    hash = "sha256-36KEE1GvdXUjF6V3V5d+0hvUb4/cVKNfTI6xyc4/aLM=";
+    hash = "sha256-irZmtsGcbmr5+aniBofDg0fhkP646h3mpRyTdWndOyY=";
   };
 
   build-system = [ hatchling ];

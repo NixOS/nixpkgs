@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.0.55";
+  version = "0.0.56";
 in
 buildGoModule {
 
@@ -20,7 +20,7 @@ buildGoModule {
     repo = "mcap";
     owner = "foxglove";
     rev = "releases/mcap-cli/v${version}";
-    hash = "sha256-3HV7FNlS91J089FgtKOQEXCzQEoDR39w0kBB8H88rSw=";
+    hash = "sha256-PPllUAkcuv/FXIjsuJFJ9KbzA6qHCaOBQz77N7D2JtA=";
   };
 
   vendorHash = "sha256-twuXJXiGhjTqlEZ3xD8G9CruSLxFC33PMs2GZadl1Ow=";

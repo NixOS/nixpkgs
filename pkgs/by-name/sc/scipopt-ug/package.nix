@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
   version = "1.0.0-beta6";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.3";
+  scipVersion = "9.2.4";
 
   # Take the SCIPOptSuite source since no other source exists publicly.
   src = fetchzip {
     url = "https://github.com/scipopt/scip/releases/download/v${
       lib.replaceStrings [ "." ] [ "" ] scipVersion
     }/scipoptsuite-${scipVersion}.tgz";
-    sha256 = "sha256-Hi6oDPtJZODTBIuRYE62sUMTJqfmF0flY3cGoWh2IZE=";
+    hash = "sha256-ZFgHaC4JL0eFt/do0ucGkarmfL1WdGEecrE1iPBpFh0=";
   };
 
   sourceRoot = "${src.name}/ug";

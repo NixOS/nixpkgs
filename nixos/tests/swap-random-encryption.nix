@@ -78,7 +78,7 @@
       if not any(cipher_pattern.fullmatch(line) for line in results):
         raise Exception ("swap device encryption does not use the cipher specified in the configuration")
 
-      key_size_pattern = re.compile(r"\s*keysize:\s+512\s+bits\s*")
+      key_size_pattern = re.compile(r"\s*keysize:\s+512\s+\[?bits\]?\s*")
       if not any(key_size_pattern.fullmatch(line) for line in results):
         raise Exception ("swap device encryption does not use the key size specified in the configuration")
   '';

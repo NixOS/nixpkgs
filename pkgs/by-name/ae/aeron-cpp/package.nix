@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   fetchMavenArtifact,
+  fixDarwinDylibNames,
   jdk11,
   lib,
   libbsd,
@@ -54,11 +55,16 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cmake
     jdk11
     makeWrapper
     patchelf
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   configurePhase = ''
@@ -111,6 +117,12 @@ stdenv.mkDerivation {
     cp --archive --verbose --target-directory="$out" install/*
 
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for lib in $out/lib/*.dylib; do
+      install_name_tool -change "@rpath/$(basename $lib)" "$lib" "$out/bin/aeronmd"
+    done
   '';
 
   meta = with lib; {

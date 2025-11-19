@@ -64,6 +64,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = [
+    "-DSDL_INCLUDE_GLU_H"
+  ];
+
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/gak/gravit";

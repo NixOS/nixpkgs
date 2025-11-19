@@ -2,20 +2,21 @@
   stdenv,
   lib,
   fetchurl,
+  desktop-file-utils,
   gettext,
   itstool,
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   bzip2,
   glib,
-  gtk3,
-  libhandy,
+  gtk4,
+  libadwaita,
   libxml2,
   libxslt,
   sqlite,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   xz,
   yelp-xsl,
   gnome,
@@ -23,31 +24,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yelp";
-  version = "42.3";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${lib.versions.major finalAttrs.version}/yelp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JszEImeanmp6OqCD2Q/Ns0f18jAL4+AUMaMNDN0qiaM=";
+    hash = "sha256-5mFOCx9Lpf57jRSb3UJnPwMGVvvc1zaumGBxkZfGNFc=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     itstool
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     bzip2
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     libxml2
     libxslt
     sqlite
-    webkitgtk_4_1
+    webkitgtk_6_0
     xz
     yelp-xsl
   ];

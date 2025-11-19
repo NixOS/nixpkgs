@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
   doCheck = false;
   # internal_volume_io.h: No such file or directory
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/${owner}/arguments";
     description = "Library for argument handling for MINC programs";

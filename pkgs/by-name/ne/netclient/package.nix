@@ -21,8 +21,6 @@ buildGoModule rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
 
-  hardeningEnabled = [ "pie" ];
-
   meta = {
     description = "Automated WireGuard® Management Client";
     mainProgram = "netclient";

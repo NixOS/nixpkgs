@@ -2,6 +2,7 @@
   _cuda,
   backendStdenv,
   buildRedist,
+  setupCudaHook,
   cudaAtLeast,
   cudaOlder,
   cuda_cccl,
@@ -22,7 +23,7 @@ buildRedist (finalAttrs: {
   allowFHSReferences = true;
 
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
-  propagatedBuildInputs = [ backendStdenv.cc ];
+  propagatedBuildInputs = [ setupCudaHook ];
 
   # Patch the nvcc.profile.
   # Syntax:

@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-n3xJmbvUXZzfhotOBJRyH2OEL4NFZIKyB808HwEQSYo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n3xJmbvUXZzfhotOBJRyH2OEL4NFZIKyB808HwEQSYo=";
   };
 
   outputs = [
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
     cudaPackages.cuda_nvml_dev
 
   ]
@@ -101,8 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
-  ++ lib.optional enableRocm "--with-rocm=${rocm}";
+  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
+  ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;

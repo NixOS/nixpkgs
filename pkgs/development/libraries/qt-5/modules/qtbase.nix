@@ -17,7 +17,6 @@
   python3,
   which,
   # darwin support
-  apple-sdk_14,
   xcbuild,
 
   dbus,
@@ -86,11 +85,6 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
-
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
-  darwinVersionInputs = [
-    apple-sdk_14
-  ];
 in
 
 stdenv.mkDerivation (
@@ -153,7 +147,6 @@ stdenv.mkDerivation (
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
         lib.optional withLibinput libinput ++ lib.optional withGtk3 gtk3
       )
-      ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
       ++ lib.optional developerBuild gdb
       ++ lib.optional (cups != null) cups
       ++ lib.optional mysqlSupport libmysqlclient

@@ -8,13 +8,13 @@
 
 picom.overrideAttrs (previousAttrs: {
   pname = "picom-pijulius";
-  version = "8.2-unstable-2025-08-25";
+  version = "8.2-unstable-2025-11-01";
 
   src = fetchFromGitHub {
     owner = "pijulius";
     repo = "picom";
-    rev = "8efe4707c7bc4e0baccd51166ea8e0d08d96bd85";
-    hash = "sha256-KCK6/gmcs2VFd64veL9w27LWjCWoA7WT221dv89dGZc=";
+    rev = "efaa7efdca20dda01f34c3a16bd2aadb1417c643";
+    hash = "sha256-YF1pCbrQAvC+mLbj6WeOZzcrdhpge2MDtXiNHcjTGvs=";
   };
 
   dontVersionCheck = true;

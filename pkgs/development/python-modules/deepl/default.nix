@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "deepl";
-  version = "1.23.0";
+  version = "1.24.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T1TfU014I91osL6sdPyvYDWiJjLkrJSeasryT9riDuM=";
+    hash = "sha256-oPyCqgnSpqY5H1QrorkDS0FfqjhsCaKXwxclNor3ePs=";
   };
 
   nativeBuildInputs = [ poetry-core ];

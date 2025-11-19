@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
     mainProgram = "rewaita";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       getchoo
     ];
   };

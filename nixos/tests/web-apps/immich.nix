@@ -17,14 +17,14 @@
       services.immich = {
         enable = true;
         environment.IMMICH_LOG_LEVEL = "verbose";
-        settings.backup.database = {
-          enabled = true;
-          cronExpression = "invalid";
-        };
-        secretSettings = {
-          backup.database.cronExpression = "${pkgs.writeText "cron" "0 02 * * *"}";
+        settings = {
+          backup.database = {
+            enabled = true;
+            # Test loading secrets from files:
+            cronExpression._secret = "${pkgs.writeText "cron" "0 02 * * *"}";
+          };
           # thanks to LoadCredential files only readable by root should work
-          notifications.smtp.transport.password = "/etc/shadow";
+          notifications.smtp.transport.password._secret = "/etc/shadow";
         };
       };
 

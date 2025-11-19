@@ -2,7 +2,6 @@
   stdenv,
   fetchFromGitHub,
   lib,
-  fetchpatch,
   replaceVars,
   cmake,
   pkg-config,
@@ -24,6 +23,7 @@
   libspiro,
   withGTK ? false,
   gtk3,
+  gtkmm3,
   withGUI ? withGTK,
   withPython ? true,
   withExtras ? true,
@@ -34,46 +34,18 @@ assert withGTK -> withGUI;
 let
   py = python3.withPackages (ps: with ps; [ setuptools ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontforge";
-  version = "20230101";
+  version = "20251009";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "fontforge";
-    rev = version;
-    sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
+    tag = finalAttrs.version;
+    hash = "sha256-tlpdd+x1mA+HeLXpy5LotNC6sabxI6U7S+m/qOn1jwc=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2024-25081.CVE-2024-25082.patch";
-      url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
-      hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
-    })
-
-    # Replace distutils use in the build script
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/fontforge/fontforge/commit/8c75293e924602ed09a9481b0eeb67ba6c623a81.patch";
-      includes = [ "pyhook/CMakeLists.txt" ];
-      hash = "sha256-3CEwC8vygmCztKRmeD45aZIqyoj8yk5CLwxX2SGP7z4=";
-    })
-
-    # Fixes translation compatibility with gettext 0.22
-    (fetchpatch {
-      name = "update-translation-compatibility.patch";
-      url = "https://github.com/fontforge/fontforge/commit/642d8a3db6d4bc0e70b429622fdf01ecb09c4c10.patch";
-      hash = "sha256-uO9uEhB64hkVa6O2tJKE8BLFR96m27d8NEN9UikNcvg=";
-    })
-
-    # Updates to new Python initialization API
-    (fetchpatch {
-      name = "modern-python-initialization-api.patch";
-      url = "https://github.com/fontforge/fontforge/commit/2f2ba54c15c5565acbde04eb6608868cbc871e01.patch";
-      hash = "sha256-qF4DqFpiZDbULi9+POPM73HF6pEot8BAFSVaVCNQrMU=";
-    })
-
     # Provide a Nix-controlled location for the initial `sys.path` entry.
     (replaceVars ./set-python-sys-path.patch { python = "${py}/${py.sitePackages}"; })
   ];
@@ -113,6 +85,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withSpiro [ libspiro ]
   ++ lib.optionals withGUI [
     gtk3
+    gtkmm3
     cairo
     pango
   ];
@@ -128,7 +101,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
-    export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
+    export SOURCE_DATE_EPOCH=$(date -d ${finalAttrs.version} +%s)
   '';
 
   meta = {
@@ -141,4 +114,4 @@ stdenv.mkDerivation rec {
       ulysseszhan
     ];
   };
-}
+})

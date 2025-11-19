@@ -61,8 +61,12 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # https://github.com/libsdl-org/sdl2-compat/issues/476
+
+    # Can be removed with the next SDL3 bump.
     ./skip-rle-tests.patch
+
+    # https://github.com/pygame-community/pygame-ce/pull/3639
+    ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
   ];
 
   postPatch = ''

@@ -11,14 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpano13";
-  version = "2.9.22";
+  version = "2.9.23";
 
   src = fetchurl {
     url = "mirror://sourceforge/panotools/libpano13-${finalAttrs.version}.tar.gz";
-    hash = "sha256-r/xoMM2+ccKNJzHcv43qKs2m2f/UYJxtvzugxoRAqOM=";
+    hash = "sha256-58B203oUw5Q0liEV5H3b4YRSyj3lzkDiqu+nz1gV6ig=";
   };
-
-  patches = [ ./cmake4.patch ];
 
   strictDeps = true;
 

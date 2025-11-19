@@ -67,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     docutils
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.3)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/luastatus-stdout-wrapper \
       --prefix LUASTATUS : $out/bin/luastatus

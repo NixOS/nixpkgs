@@ -2,23 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   julius,
   librosa,
+  torch,
+  torch-pitch-shift,
+  torchaudio,
+
+  # tests
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  torch-pitch-shift,
-  torch,
-  torchaudio,
 }:
 
 buildPythonPackage rec {
   pname = "torch-audiomentations";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asteroid-team";
@@ -35,8 +38,8 @@ buildPythonPackage rec {
     julius
     librosa
     torch
-    torchaudio
     torch-pitch-shift
+    torchaudio
   ];
 
   nativeCheckInputs = [
@@ -54,13 +57,25 @@ buildPythonPackage rec {
     "tests/test_background_noise.py"
   ];
 
-  disabledTests = [ "test_transform_is_differentiable" ];
+  disabledTests = [
+    # AttributeError: module 'torchaudio' has no attribute 'info'
+    # Removed in torchaudio v2.9.0
+    # See https://github.com/pytorch/audio/issues/3902 for context
+    # Reported to torch-audiomentations: https://github.com/iver56/torch-audiomentations/issues/184
+    "test_background_noise_no_guarantee_with_empty_tensor"
+    "test_colored_noise_guaranteed_with_batched_tensor"
+    "test_colored_noise_guaranteed_with_single_tensor"
+    "test_colored_noise_guaranteed_with_zero_length_samples"
+    "test_colored_noise_no_guarantee_with_single_tensor"
+    "test_same_min_max_f_decay"
+    "test_transform_is_differentiable"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast audio data augmentation in PyTorch";
     homepage = "https://github.com/asteroid-team/torch-audiomentations";
     changelog = "https://github.com/asteroid-team/torch-audiomentations/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

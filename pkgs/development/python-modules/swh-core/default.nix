@@ -29,7 +29,7 @@
   pytest-postgresql,
   pytz,
   requests-mock,
-  systemd,
+  systemd-python,
   types-deprecated,
   types-psycopg2,
   types-pytz,
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     pytest-postgresql
     pytz
     requests-mock
-    systemd
+    systemd-python
     types-deprecated
     types-psycopg2
     types-pytz

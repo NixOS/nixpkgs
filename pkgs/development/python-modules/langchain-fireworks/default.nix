@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -24,19 +24,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-fireworks";
-  version = "0.3.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${version}";
-    hash = "sha256-OZou323FAk2I4YuQV7sllbzDwFQWy/90FK3gIHnEBd0=";
+    hash = "sha256-JULxbSSSerM7HifVBRxkv5YgpP5jFdm3XzHIJbM8T1Y=";
   };
 
   sourceRoot = "${src.name}/libs/partners/fireworks";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -75,8 +75,8 @@ buildPythonPackage rec {
     description = "Build LangChain applications with Fireworks";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/fireworks";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.sarahec
+    maintainers = with lib.maintainers; [
+      sarahec
     ];
   };
 }

@@ -57,13 +57,9 @@ let
     }:
     let
       ver = version;
-      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        !isCross
-        && (
-          stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
-        );
+        stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64);
       rubyDrv = lib.makeOverridable (
         {
           stdenv,
@@ -181,6 +177,13 @@ let
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
+          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+            # The ruby build system will use a bare `rust` command by default for its rust.
+            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+            # for cross-compilation output for the build target by default.
+            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+          };
+
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
           #   No such file or directory @ apply2files - ...-ruby-2.7.7-devdoc/share/ri/2.7.0/system/ARGF/inspect-i.ri (Errno::ENOENT)
@@ -195,15 +198,6 @@ let
               # the final product. Removing this reference doesn't seem to break
               # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
-            ]
-            # TODO: drop the isClang condition
-            ++ ops (lib.versionOlder ver.majMin "3.4" && stdenv.cc.isClang) [
-              (fetchpatch {
-                name = "ruby-3.3-fix-llvm-21.patch";
-                url = "https://github.com/ruby/ruby/commit/5a8d7642168f4ea0d9331fded3033c225bbc36c5.patch";
-                excludes = [ "version.h" ];
-                hash = "sha256-dV98gXXTSKM2ZezTvhVXNaKaXJxiWKEeUbqqL360cWw=";
-              })
             ]
             ++ ops (lib.versionAtLeast ver.majMin "3.4" && lib.versionOlder ver.majMin "3.5") [
               (fetchpatch {
@@ -421,8 +415,8 @@ in
   mkRuby = generic;
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "9" "";
-    hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
+    version = rubyVersion "3" "3" "10" "";
+    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 

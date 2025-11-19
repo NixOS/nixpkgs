@@ -753,14 +753,14 @@ stdenvNoCC.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
       for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
-      include -isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     ''
     # GCC NG friendly libc++

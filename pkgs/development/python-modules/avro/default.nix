@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ytnFOyPO7Wmceva93O1C4sVy/WtAjCV6fU/E6M8uLWs=";
+    hash = "sha256-xbjdLdTBCBbw3BJ8wpz9Q7XkBc9+aEDolGCgJL89CY0=";
   };
 
   build-system = [ setuptools ];

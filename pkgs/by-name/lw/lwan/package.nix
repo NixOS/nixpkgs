@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
   # Note: tcmalloc and mimalloc are also supported (and normal malloc)
   cmakeFlags = lib.optional enableJemalloc "-DUSE_ALTERNATIVE_MALLOC=jemalloc";
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "pie";
-
   meta = with lib; {
     description = "Lightweight high-performance multi-threaded web server";
     mainProgram = "lwan";
@@ -48,6 +46,5 @@ stdenv.mkDerivation rec {
     homepage = "https://lwan.ws/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

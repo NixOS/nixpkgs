@@ -1,13 +1,11 @@
-diff --git a/Makefile b/Makefile
-index fc7c3af1..c3672c6a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -34,7 +34,7 @@ ifdef ARCH_LIN
- 
- 	LDFLAGS += -Wl,--whole-archive
- 	LDFLAGS += -static-libstdc++ -static-libgcc
+diff --git i/Makefile w/Makefile
+index 1d6accc6..fc09198e 100644
+--- i/Makefile
++++ w/Makefile
+@@ -38 +38 @@ ifdef ARCH_LIN
 -	LDFLAGS += dep/lib/libGLEW.a dep/lib/libglfw3.a dep/lib/libjansson.a dep/lib/libcurl.a dep/lib/libssl.a dep/lib/libcrypto.a dep/lib/libarchive.a dep/lib/libzstd.a dep/lib/libspeexdsp.a dep/lib/libsamplerate.a dep/lib/librtmidi.a dep/lib/librtaudio.a
 +	LDFLAGS += -lGLEW -lglfw -ljansson -lcurl -lssl -lcrypto -larchive -lz -lspeexdsp -lsamplerate -lrtmidi -lrtaudio
- 	LDFLAGS += -Wl,--no-whole-archive
- 	LDFLAGS += -lpthread -lGL -ldl -lX11 -lasound -ljack -lpulse -lpulse-simple
- endif
+@@ -52,2 +52 @@ ifdef ARCH_MAC
+-	LDFLAGS += -Wl,-all_load
+-	LDFLAGS += dep/lib/libGLEW.a dep/lib/libglfw3.a dep/lib/libjansson.a dep/lib/libcurl.a dep/lib/libssl.a dep/lib/libcrypto.a -Wl,-load_hidden,dep/lib/libarchive.a -Wl,-load_hidden,dep/lib/libzstd.a dep/lib/libspeexdsp.a dep/lib/libsamplerate.a -Wl,-load_hidden,dep/lib/librtmidi.a -Wl,-load_hidden,dep/lib/librtaudio.a
++	LDFLAGS += -Wl,-reexport-lGLEW -Wl,-reexport-lglfw -Wl,-reexport-ljansson -lcurl -lssl -lcrypto -larchive -lz -Wl,-reexport-lspeexdsp -lsamplerate -lrtmidi -lrtaudio

@@ -25,11 +25,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmsh";
-  version = "4.14.0";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://gmsh.info/src/gmsh-${finalAttrs.version}-source.tgz";
-    hash = "sha256-2019ogYumkNWqCCDITirmfl69jiL/rIVmaLq37C3aig=";
+    hash = "sha256-q7JjJxW9fQEw3tcUT9YmNjXNfeqIO432G6TaWM5qHf4=";
   };
 
   nativeBuildInputs = [
@@ -113,5 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gmsh.info/";
     changelog = "https://gitlab.onelab.info/gmsh/gmsh/-/releases/gmsh_${lib.concatStringsSep "_" (lib.versions.splitVersion finalAttrs.version)}#changelog";
     license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
   };
 })

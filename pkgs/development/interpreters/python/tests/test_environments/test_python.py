@@ -8,6 +8,7 @@ that would interfere with the tests.
 
 import platform
 import sys
+import sysconfig
 import unittest
 import site
 
@@ -38,10 +39,14 @@ class TestCasePython(unittest.TestCase):
 
     @unittest.skipIf(IS_PYPY or sys.version_info.major==2, "Python 2 does not have base_prefix")
     def test_base_prefix(self):
-        if IS_VENV or IS_NIXENV or IS_VIRTUALENV:
+        if IS_VENV or IS_VIRTUALENV:
             self.assertNotEqual(sys.prefix, sys.base_prefix)
         else:
             self.assertEqual(sys.prefix, sys.base_prefix)
+        if IS_NIXENV:
+            self.assertNotEqual(sys.base_prefix, sysconfig.get_config_var('prefix'))
+        else:
+            self.assertEqual(sys.base_prefix, sysconfig.get_config_var('prefix'))
 
     @unittest.skipIf(sys.version_info.major==3, "sys.real_prefix is only set by virtualenv in case of Python 2.")
     def test_real_prefix(self):

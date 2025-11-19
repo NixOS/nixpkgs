@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-LnaS6lm2/fy9aWiV/MuRKegDAmjljQFvp+uI8FmEpdI=";
   };
 
+  patches = [
+    # add back --ng flag as a stub to argparser for compat reason
+    ./1.x-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

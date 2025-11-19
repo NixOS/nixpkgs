@@ -10,8 +10,10 @@ on:
         required: true
         type: string
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
+      CACHIX_AUTH_TOKEN_GHA:
+        required: false
 
 permissions: {}
 
@@ -33,7 +35,7 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
       # because the cache would be invalidated on every commit - treefmt checks every file.
@@ -68,14 +70,15 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: -source$
 
       - name: Parse all nix files
@@ -97,14 +100,15 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7 # v31
+      - uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: -source$
 
       - name: Running nixpkgs-vet

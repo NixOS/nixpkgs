@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fscryptctl";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscryptctl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5suEdSpX8alDkSnSnyiIjUmZq98eK0ZPVAtDKhOs65c=";
+    hash = "sha256-MScjiuKHmep2CrVnDXbSOZ7MQzcGrD0kP1xkF+Z5tK0=";
   };
 
   nativeBuildInputs = [ pandoc ];

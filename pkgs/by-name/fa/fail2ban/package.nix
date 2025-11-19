@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonPath =
     with python3.pkgs;
     lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
+      systemd-python
       pyinotify
 
       # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release

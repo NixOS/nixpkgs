@@ -5,35 +5,21 @@
   fetchFromGitHub,
 
   # build-system
-  deprecation,
-  poetry-core,
+  setuptools,
 
   # dependencies
   cloudevents,
   fastapi,
   grpc-interceptor,
   grpcio,
+  grpcio-tools,
   httpx,
   kubernetes,
   numpy,
   orjson,
   pandas,
-  uvicorn,
-
-  # optional-dependencies
-  azure-identity,
-  azure-storage-blob,
-  azure-storage-file-share,
-  boto3,
-  google-cloud-storage,
-  huggingface-hub,
-  asgi-logger,
-  ray,
-  vllm,
-
   prometheus-client,
   protobuf,
-  requests,
   psutil,
   pydantic,
   python-dateutil,
@@ -41,11 +27,24 @@
   six,
   tabulate,
   timing-asgi,
+  uvicorn,
+
+  # optional-dependencies
+  # storage
+  kserve-storage,
+  # logging
+  asgi-logger,
+  # ray
+  ray,
+  # llm
+  vllm,
 
   # tests
   avro,
   grpcio-testing,
+  jinja2,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpx,
   pytest-xdist,
   pytestCheckHook,
@@ -54,14 +53,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.15.2";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-NklR2Aoa5UdWkqNOfX+xl3R158JDSQtStXv9DkklOwM=";
+    hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -77,8 +76,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    deprecation
-    poetry-core
+    setuptools
   ];
 
   dependencies = [
@@ -86,6 +84,7 @@ buildPythonPackage rec {
     fastapi
     grpc-interceptor
     grpcio
+    grpcio-tools
     httpx
     kubernetes
     numpy
@@ -101,21 +100,20 @@ buildPythonPackage rec {
     tabulate
     timing-asgi
     uvicorn
-  ];
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   optional-dependencies = {
     storage = [
-      azure-identity
-      azure-storage-blob
-      azure-storage-file-share
-      boto3
-      huggingface-hub
-      google-cloud-storage
-      requests
+      kserve-storage
+    ];
+    logging = [
+      asgi-logger
+    ];
+    ray = [
+      ray
     ]
-    ++ huggingface-hub.optional-dependencies.hf_transfer;
-    logging = [ asgi-logger ];
-    ray = [ ray ];
+    ++ ray.optional-dependencies.serve;
     llm = [
       vllm
     ];
@@ -124,7 +122,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     avro
     grpcio-testing
+    jinja2
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpx
     pytest-xdist
     pytestCheckHook

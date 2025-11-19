@@ -75,12 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # sha256 because actual output of fpcalc is quite long
-      expectedHash = "c47ae40e02caf798ff5ab4d91ff00cfdca8f6786c581662436941d3e000c9aac";
+      expectedHash = "e2895130bcbe7190184379021daa60c5f5d476da4a2fecb06df7160819662e20";
     in
     ''
       runHook preCheck
       tests/all_tests
-      ${lib.optionalString withTools "diff -u <(src/cmd/fpcalc ${exampleAudio} | sha256sum | cut -c-64) <(echo '${expectedHash}')"}
+      ${lib.optionalString withTools "diff -u <(src/cmd/fpcalc -plain ${exampleAudio} | sha256sum | cut -c-64) <(echo '${expectedHash}')"}
       runHook postCheck
     '';
 

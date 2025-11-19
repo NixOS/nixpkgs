@@ -45,7 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pkosel
-      kachick
     ];
   };
 })

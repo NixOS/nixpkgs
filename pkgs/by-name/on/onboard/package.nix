@@ -103,7 +103,7 @@ python3.pkgs.buildPythonApplication rec {
     pyatspi
     pycairo
     pygobject3
-    systemd
+    systemd-python
   ];
 
   propagatedUserEnvPkgs = [ dconf ];

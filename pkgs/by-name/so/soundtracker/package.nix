@@ -12,11 +12,13 @@
   goocanvas, # graphical envelope editing
   libxml2,
   libsndfile,
+  libpulseaudio,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soundtracker";
-  version = "1.0.5";
+  version = "1.0.5.1";
 
   src = fetchzip {
     # Past releases get moved to the "old releases" directory.
@@ -24,10 +26,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
     url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
-    hash = "sha256-g96Z1SdFGMq7WFI6x+UtmAHPZF0C+tHUOjNhmK2ld8I=";
+    hash = "sha256-pvBCPPu8jBq9CFbSlKewEI+3t092zmtq+pbNLeJWU/8=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AM_PATH_XML2(2.6.0, [], AC_MSG_ERROR(Fatal error: Need libxml2 >= 2.6.0))' \
+          'PKG_CHECK_MODULES([XML], [libxml-2.0 >= 2.6.0])' \
+      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin binutils don't support D option for ar
     # ALSA macros are missing on Darwin, causing error
     substituteInPlace configure.ac \
@@ -49,23 +57,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    SDL # AM_PATH_SDL
+    glib # glib-genmarshal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # AM_PATH_ALSA
   ];
 
   buildInputs = [
     gtk2
-    SDL
+    SDL # found by AM_PATH_SDL
     jack2
     audiofile
     goocanvas
-    libxml2
+    libxml2 # found by PKG_CHECK_MODULES
     libsndfile
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # found by AM_PATH_ALSA
+    libpulseaudio # found by PKG_CHECK_MODULES
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS
@@ -76,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.soundtracker.org/";
     downloadPage = "https://sourceforge.net/projects/soundtracker/files/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 })

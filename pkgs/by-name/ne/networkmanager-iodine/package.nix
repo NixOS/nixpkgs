@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation {
   pname = "NetworkManager-iodine${lib.optionalString withGnome "-gnome"}";
-  version = "1.2.0-unstable-2025-09-06";
+  version = "1.2.0-unstable-2025-10-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "network-manager-iodine";
-    rev = "2a630d5c492521378160882864eb88277f6315cb";
-    sha256 = "vSvvJVWtV+BHM3rDtgUWYlIOfhP80J3uDHPMwd0vvbM=";
+    rev = "ad266003aa74ddba1d22259b213a7f9c996e1cd4";
+    sha256 = "OoJRkU4POW9RajwW05xYPlkodXqytq89GTbJuoLxebY=";
   };
 
   patches = [

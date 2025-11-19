@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python bindings for FluidSynth, a MIDI synthesizer that uses SoundFont instruments";
     homepage = "https://github.com/nwhitehead/pyfluidsynth";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

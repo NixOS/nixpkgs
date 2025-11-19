@@ -102,5 +102,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+    # needs memfd_create which is available on some unixes but not darwin
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }

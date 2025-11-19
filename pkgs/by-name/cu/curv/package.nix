@@ -70,6 +70,11 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
+  postPatch = ''
+    substituteInPlace extern/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {

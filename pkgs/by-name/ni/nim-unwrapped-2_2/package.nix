@@ -176,9 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nim-lang.org/";
     license = licenses.mit;
     mainProgram = "nim";
-    maintainers = with maintainers; [
-      eveeifyeve
-    ];
+    teams = [ lib.teams.nim ];
   };
 
 })

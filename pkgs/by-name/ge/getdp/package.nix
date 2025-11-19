@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   cmake,
   gfortran,
   blas,
@@ -14,12 +14,16 @@
 let
   mpiSupport = petsc.passthru.mpiSupport;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "getdp";
-  version = "3.6.0";
-  src = fetchurl {
-    url = "http://getdp.info/src/getdp-${version}-source.tgz";
-    hash = "sha256-nzefwCV+Z9BHDofuTfhR+vhqm3cCSiUT+7cbtn601N8=";
+  version = "3.6.0-unstable-2025-10-25";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.onelab.info";
+    owner = "getdp";
+    repo = "getdp";
+    rev = "cac7f393ac34be1618b588083d2e391efd4976f7";
+    hash = "sha256-yiqi9Fb3UM81iJtpU+Mg71BB73injdkWCzbJGgor4ww=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional mpiSupport mpi;
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
-  meta = with lib; {
+  meta = {
     description = "General Environment for the Treatment of Discrete Problems";
     mainProgram = "getdp";
     longDescription = ''
@@ -46,8 +50,8 @@ stdenv.mkDerivation rec {
       symbolic mathematical expressions of these problems.
     '';
     homepage = "http://getdp.info/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/egraphs-good/egglog";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       XBagon
     ];
   };

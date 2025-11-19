@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
-  gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
   sassc,
@@ -74,10 +73,6 @@ lib.checkListOfEnum "${pname}: theme variants"
     nativeBuildInputs = [
       jdupes
       sassc
-    ];
-
-    buildInputs = [
-      gnome-themes-extra
     ];
 
     propagatedUserEnvPkgs = [

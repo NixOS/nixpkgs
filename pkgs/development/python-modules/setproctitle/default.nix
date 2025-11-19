@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   # Setting the process title fails on macOS in the Nix builder environment (regardless of sandboxing)
-  disabledTests = if stdenv.hostPlatform.isDarwin then [ "test_setproctitle_darwin" ] else null;
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_setproctitle_darwin" ];
 
   pythonImportsCheck = [ "setproctitle" ];
 

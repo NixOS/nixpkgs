@@ -18,21 +18,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
-  version = "1.7.1";
+  version = "1.9.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
-    hash = "sha256-rBGz9g6+6jguJggBQKlyOWoME3VHOP8Gq4VtYywoVdI=";
+    hash = "sha256-jF6hWpOPbJKRyUWRyZdp4OziCdJupyFpNdrsiOdjByA=";
   };
-
-  # https://github.com/hongquan/CoBang/issues/117
-  postPatch = ''
-    substituteInPlace src/window.blp \
-      --replace-fail 'seeing-symbolic' 'scanner-symbolic'
-  '';
 
   nativeBuildInputs = [
     blueprint-compiler

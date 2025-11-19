@@ -20,6 +20,21 @@ let
       appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
     in
     "${lib.sources.urlToName url}${if append == "" then appendShort else append}";
+
+  getRevWithTag =
+    {
+      rev ? null,
+      tag ? null,
+    }:
+    if tag != null && rev != null then
+      throw "fetchgit requires one of either `rev` or `tag` to be provided (not both)."
+    else if tag != null then
+      "refs/tags/${tag}"
+    else if rev != null then
+      rev
+    else
+      # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+      "HEAD";
 in
 
 lib.makeOverridable (
@@ -27,8 +42,8 @@ lib.makeOverridable (
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
-      # Passed via `passthru`
-      "tag"
+      # Additional stdenv.mkDerivation arguments from derived fetchers.
+      "derivationArgs"
 
       # Hashes, handled by `lib.fetchers.withNormalizedHash`
       # whose outputs contain outputHash* attributes.
@@ -47,7 +62,7 @@ lib.makeOverridable (
           rev ? null,
           name ? urlToName {
             inherit url;
-            rev = lib.revOrTag rev tag;
+            rev = lib.revOrTag finalAttrs.revCustom finalAttrs.tag;
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
@@ -84,6 +99,10 @@ lib.makeOverridable (
           rootDir ? "",
           # GIT_CONFIG_GLOBAL (as a file)
           gitConfigFile ? config.gitConfigFile,
+          # Additional stdenvNoCC.mkDerivation arguments.
+          # It is typically for derived fetchers to pass down additional arguments,
+          # and the specified arguments have lower precedence than other mkDerivation arguments.
+          derivationArgs ? { },
         }:
 
         /*
@@ -113,29 +132,13 @@ lib.makeOverridable (
         assert fetchTags -> leaveDotGit;
         assert rootDir != "" -> !leaveDotGit;
 
-        let
-          revWithTag =
-            let
-              warningMsg = "fetchgit requires one of either `rev` or `tag` to be provided (not both).";
-              otherIsNull = other: lib.assertMsg (other == null) warningMsg;
-            in
-            if tag != null then
-              assert (otherIsNull rev);
-              "refs/tags/${tag}"
-            else if rev != null then
-              assert (otherIsNull tag);
-              rev
-            else
-              # FIXME fetching HEAD if no rev or tag is provided is problematic at best
-              "HEAD";
-        in
-
         if builtins.isString sparseCheckout then
           # Changed to throw on 2023-06-04
           throw
             "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
         else
-          {
+          derivationArgs
+          // {
             inherit name;
 
             builder = ./builder.sh;
@@ -170,7 +173,12 @@ lib.makeOverridable (
               rootDir
               gitConfigFile
               ;
-            rev = revWithTag;
+            inherit tag;
+            revCustom = rev;
+            rev = getRevWithTag {
+              inherit (finalAttrs) tag;
+              rev = finalAttrs.revCustom;
+            };
 
             postHook =
               if netrcPhase == null then
@@ -210,7 +218,6 @@ lib.makeOverridable (
 
             passthru = {
               gitRepoUrl = url;
-              inherit tag;
             }
             // passthru;
           }
@@ -220,3 +227,6 @@ lib.makeOverridable (
     inheritFunctionArgs = false;
   }
 )
+// {
+  inherit getRevWithTag;
+}

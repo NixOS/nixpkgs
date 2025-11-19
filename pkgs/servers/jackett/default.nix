@@ -14,9 +14,9 @@ buildDotnetModule rec {
   version = "0.22.2390";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "jackett";
+    repo = "jackett";
+    tag = "v${version}";
     hash = "sha512-Viz9gU16NG6nYeEwhar3OCSPnsHrM6ZehsOcNxteaGyvgrhbyWt5rNI54wCJ7OngHaZgIoQhMoNNkvIhX8JDUg==";
   };
 
@@ -51,13 +51,13 @@ buildDotnetModule rec {
 
   passthru.tests = { inherit (nixosTests) jackett; };
 
-  meta = with lib; {
+  meta = {
     description = "API Support for your favorite torrent trackers";
     mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       edwtjo
       nyanloutre
       purcell

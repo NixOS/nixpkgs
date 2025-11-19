@@ -5,22 +5,13 @@ let
 in
 {
   name = "n8n";
-  meta.maintainers = with lib.maintainers; [
-    freezeboy
-    k900
-  ];
+  meta.maintainers = with lib.maintainers; [ k900 ];
 
   node.pkgsReadOnly = false;
 
   nodes.machine =
     { ... }:
     {
-      nixpkgs.config.allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "n8n"
-        ];
-
       services.n8n = {
         enable = true;
         environment.WEBHOOK_URL = webhookUrl;

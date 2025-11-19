@@ -41,6 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/dnnrly/abbreviate";
     changelog = "https://github.com/dnnrly/abbreviate/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

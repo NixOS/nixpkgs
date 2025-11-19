@@ -665,6 +665,11 @@ lib.mapAttrs mkLicense (
       url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
     };
 
+    gnuplot = {
+      spdxId = "gnuplot";
+      fullName = "gnuplot License";
+    };
+
     gpl1Only = {
       spdxId = "GPL-1.0-only";
       fullName = "GNU General Public License v1.0 only";
@@ -740,6 +745,11 @@ lib.mapAttrs mkLicense (
     hpndUc = {
       spdxId = "HPND-UC";
       fullName = "Historical Permission Notice and Disclaimer - University of California variant";
+    };
+
+    hyphenBulgarian = {
+      fullName = "hyphen-bulgarian License";
+      spdxId = "hyphen-bulgarian";
     };
 
     # Intel's license, seems free
@@ -986,6 +996,11 @@ lib.mapAttrs mkLicense (
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";
+    };
+
+    mit-enna = {
+      spdxId = "MIT-enna";
+      fullName = "enna License";
     };
 
     mit-feh = {

@@ -406,6 +406,9 @@ let
 
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
               "test-wasi"
+
+              # This is failing on newer macOS versions, no fix has yet been provided upstream:
+              "test-cluster-dgram-1"
             ]
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
@@ -424,12 +427,9 @@ let
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
-            ++ lib.optionals (majorVersion == "22" && stdenv.buildPlatform.isDarwin) [
-              "test-cluster-dgram-1"
-              "test/sequential/test-http-server-request-timeouts-mixed.js"
-            ]
-            # This is failing on newer macOS versions, no fix has yet been provided upstream:
-            ++ lib.optional (majorVersion == "24" && stdenv.buildPlatform.isDarwin) "test-cluster-dgram-1"
+            ++ lib.optional (
+              majorVersion == "22" && stdenv.buildPlatform.isDarwin
+            ) "test/sequential/test-http-server-request-timeouts-mixed.js"
           )
         }"
       ];

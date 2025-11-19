@@ -6,56 +6,56 @@
   cmake,
   libGL,
   libGLU,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "connectome-workbench";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "workbench";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M5iverVDhBI/ijbgwfa6gHrthY4wrUi+/2A/443jBqg=";
+    hash = "sha256-f1T0i4x7rr3u/3ZvJ4cEAb377e7YcaGMKa2uUslVqR0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  patches = [
-    # remove after next release:
-    (fetchpatch {
-      name = "fix-missing-includes-in-CZIlib";
-      url = "https://github.com/Washington-University/workbench/commit/7ba3345d161d567a4b628ceb02ab4471fc96cb20.diff";
-      hash = "sha256-DMrJOr/2Wr4o4Z3AuhWfMZTX8f/kOYWwZQzBUwIrTd8=";
-      relative = "src";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace CMakeLists.txt  \
-      --replace-fail "ADD_SUBDIRECTORY ( Tests )" ""  \
-      --replace-fail "ENABLE_TESTING()" ""
-  '';
-  # tests are minimal and test_driver fails to link (also -DBUILD_TESTING=... is ignored):
-  # ld: ../Brain/libBrain.a(BrainOpenGLVolumeObliqueSliceDrawing.cxx.o): undefined reference to symbol 'glGetFloatv'
-  # ld: /nix/store/a5vcvrkh1c2ng5kr584g3zw3991vnhks-libGL-1.7.0/lib/libGL.so.1: error adding symbols: DSO missing from command line
+    substituteInPlace kloewe/{cpuinfo,dot}/CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  ''
+  +
+    # tests are minimal and test_driver fails to link (also -DBUILD_TESTING=... is ignored):
+    # ld: ../Brain/libBrain.a(BrainOpenGLVolumeObliqueSliceDrawing.cxx.o): undefined reference to symbol 'glGetFloatv'
+    # ld: /nix/store/a5vcvrkh1c2ng5kr584g3zw3991vnhks-libGL-1.7.0/lib/libGL.so.1: error adding symbols: DSO missing from command line
+    ''
+      substituteInPlace CMakeLists.txt  \
+        --replace-fail "ADD_SUBDIRECTORY ( Tests )" ""  \
+        --replace-fail "ENABLE_TESTING()" ""
+    '';
 
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     libGL
     libGLU
   ]
-  ++ (with libsForQt5; [
+  ++ (with qt6; [
     qtbase
+    qt5compat
   ]);
   # note: we should be able to unvendor a few libs (ftgl, quazip, qwt) but they aren't detected properly
+
+  cmakeFlags = [
+    "-DWORKBENCH_USE_QT6=TRUE"
+    "-DWORKBENCH_USE_QT5=FALSE"
+  ];
 
   meta = {
     description = "Visualization and discovery tool used to map neuroimaging data";

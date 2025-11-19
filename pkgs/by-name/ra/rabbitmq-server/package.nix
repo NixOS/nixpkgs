@@ -6,6 +6,7 @@
   python3,
   libxml2,
   libxslt,
+  git,
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -21,6 +22,7 @@
   glibcLocales,
   nixosTests,
   which,
+  p7zip,
 }:
 
 let
@@ -39,14 +41,14 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rabbitmq-server";
-  version = "4.0.9";
+  version = "4.2.1";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-imBxBn8RQS0jBGfT5KLLLt+fKvyybzLzPZu9DpFOos8=";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-loZsktSiUexsQQsMxDL4WVdtVsoXp3mEllNzkwglPgM=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
     rsync
     python3
     which
+    p7zip
   ];
 
   buildInputs = [
@@ -67,6 +70,15 @@ stdenv.mkDerivation rec {
     libxslt
     glibcLocales
   ];
+
+  prePatch = ''
+    # erlang.mk assumes that the elixir lib directory is at the same level as the bin of the elixir binary,
+    # this is not for the Nixpkgs packaging, so patch this
+    substituteInPlace erlang.mk \
+      --replace-fail \
+      "ELIXIR_LIBS ?= $(abspath $(dir $(ELIXIR_BIN))/../lib)" \
+      "ELIXIR_LIBS ?= ${beamPackages.elixir}/lib/elixir/lib"
+  '';
 
   outputs = [
     "out"
@@ -129,9 +141,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.rabbitmq.com/";
     description = "Implementation of the AMQP messaging protocol";
-    changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
+    changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ samueltardieu ];
   };
-}
+})

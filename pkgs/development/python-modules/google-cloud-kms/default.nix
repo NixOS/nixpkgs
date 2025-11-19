@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "3.4.1";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-kms-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+    hash = "sha256-/ZBpSn6bZpzFgIg3LmfV7xMowh9Gpslw0fcN021jAow=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-kms";

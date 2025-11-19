@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage {
     description = "Command-line DNS client";
     homepage = "https://dns.lookup.dog";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "dog";
   };
 }

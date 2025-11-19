@@ -69,7 +69,6 @@ jobs:
               '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/pull-request-target.yml',
-              '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
               'ci/github-script/bot.js',
               'ci/github-script/merge.js',
@@ -83,9 +82,8 @@ jobs:
     uses: ./.github/workflows/merge-group.yml
     # Those are actually only used on the merge_group event, but will throw an error if not set.
     permissions:
+      pull-requests: write
       statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       artifact-prefix: mg-
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -102,7 +100,6 @@ jobs:
       pull-requests: write
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: pr-

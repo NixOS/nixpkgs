@@ -34,8 +34,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "argcomplete"
     "cryptography"
-    "pycryptodome"
+    "dnspython"
     "ldap3"
+    "pycryptodome"
     "pyopenssl"
   ];
 

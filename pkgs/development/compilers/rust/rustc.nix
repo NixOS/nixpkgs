@@ -97,8 +97,17 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
-  # Increase codegen units to introduce parallelism within the compiler.
-  RUSTFLAGS = "-Ccodegen-units=10";
+  RUSTFLAGS = lib.concatStringsSep " " (
+    [
+      # Increase codegen units to introduce parallelism within the compiler.
+      "-Ccodegen-units=10"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") [
+      # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+      "-Clinker-features=-lld"
+      "-Clink-self-contained=-linker"
+    ]
+  );
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -436,7 +445,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ];
     teams = [ teams.rust ];
     license = [
       licenses.mit

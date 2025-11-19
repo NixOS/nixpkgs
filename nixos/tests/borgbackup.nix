@@ -9,6 +9,7 @@ let
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
+  localTarRepo = "/root/backup-tar";
   # a repository on a file system which is not mounted automatically
   localRepoMount = "/noAutoMount";
   archiveName = "my_archive";
@@ -47,7 +48,7 @@ in
 
   nodes = {
     client =
-      { ... }:
+      { lib, pkgs, ... }:
       {
         virtualisation.fileSystems.${localRepoMount} = {
           device = "tmpfs";
@@ -91,6 +92,20 @@ in
             encryption.mode = "none";
             wrapper = null;
             startAt = [ ];
+          };
+
+          localTar = {
+            dumpCommand = pkgs.writeScript "createTarArchive" ''
+              ${lib.getExe pkgs.gnutar} cf - ${dataDir}
+            '';
+            createCommand = "import-tar";
+            repo = localTarRepo;
+            # Make sure in import-tar mode encryption flags are still respected.
+            encryption = {
+              mode = "repokey";
+              inherit passphrase;
+            };
+            startAt = [ ]; # Do not run automatically
           };
 
           remote = {
@@ -230,6 +245,19 @@ in
 
         # Make sure disabling wrapper works
         client.fail("command -v borg-job-localMount")
+
+    with subtest("localTar"):
+        borg = "BORG_PASSPHRASE='${passphrase}' borg"
+        client.systemctl("start --wait borgbackup-job-localTar")
+        client.fail("systemctl is-failed borgbackup-job-localTar")
+        archiveName, = client.succeed("{} list --format '{{archive}}{{NL}}' '${localTarRepo}'".format(borg)).strip().split("\n")
+        # Since excludes are not supported by import-tar, we expect to find exclude file, too
+        client.succeed(
+            "{} list '${localTarRepo}::{}' | grep -qF '${excludeFile}'".format(borg, archiveName)
+        )
+        # Make sure keepFile has the correct content
+        client.succeed("{} extract '${localTarRepo}::{}'".format(borg, archiveName))
+        assert "${keepFileData}" in client.succeed("cat ${dataDir}/${keepFile}")
 
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"

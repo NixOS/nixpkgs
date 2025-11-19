@@ -4,10 +4,10 @@
   lib,
   versionCheckHook,
   writeShellScript,
-  lua,
+  cmake,
 }:
 let
-  version = "0.7.1";
+  version = "0.8.0";
 in
 rustPlatform.buildRustPackage {
   pname = "lovely-injector";
@@ -16,26 +16,22 @@ rustPlatform.buildRustPackage {
     owner = "ethangreen-dev";
     repo = "lovely-injector";
     tag = "v${version}";
-    hash = "sha256-j03/DOnLFfFYTwGGh+7BalS779jyg+p0UqtcTTyHgv4=";
+    hash = "sha256-leTe7j4RTqc6BkiS7W5e0viK8FEwJpPLNoyf4GLOI3E=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-hHq26kSKcqEldxUb6bn1laTpKGFplP9/2uogsal8T5A=";
+  cargoHash = "sha256-MnXB2ho48VPYtFSnGHGkuSv1eprOhmj4wMG2YmFSGec=";
+  cargoBuildFlags = [
+    "--package"
+    "lovely-unix"
+  ];
   # no tests
   doCheck = false;
   # lovely-injector depends on nightly rust features
   env.RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
-    lua
+    cmake
   ];
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = [ "${placeholder "out"}" ];
-  versionCheckProgram = writeShellScript "lovely-version-check" ''
-    export LD_PRELOAD="$1/lib/liblovely.so"
-    exec ${lua}/bin/lua < /dev/null
-  '';
 
   meta = {
     description = "Runtime lua injector for games built with LÖVE";

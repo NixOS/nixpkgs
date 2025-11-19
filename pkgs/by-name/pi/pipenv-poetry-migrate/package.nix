@@ -18,15 +18,15 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.poetry-core ];
 
-  pythonRelaxDeps = [
-    "typer"
-  ];
-
   dependencies = with python3Packages; [
     setuptools # for pkg_resources
     tomlkit
     typer
   ];
+
+  # typer for Click >= 8.2 removed "mix_stderr", upstream pins to 8.1.8
+  # https://typer.tiangolo.com/release-notes/#0160
+  disabledTestPaths = [ "tests/test_cli.py" ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 

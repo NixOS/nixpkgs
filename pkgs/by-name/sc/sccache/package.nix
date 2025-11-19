@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mozilla/sccache/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
     license = lib.licenses.asl20;
   };

@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
   pnpm,
   nodejs,
@@ -10,22 +10,22 @@
 }:
 
 let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
+  vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.zip";
     pname = "gitlens-vsix";
-    version = "17.6.2";
+    version = "17.7.1";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-RN5PH8OvMUSqvVqt00VhfYQyazBBU5YLxzUEXaVB0+A=";
+      hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
     };
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-R8E25vkc9kLjAEQ8UqxFhfvVbW5qMCWQUt3iWqJoSPE=";
+      hash = "sha256-QHITHoaz/lzZ3Th/YPlQayFMU9rtlnAZWEYkLyBuAkc=";
     };
 
     postPatch = ''

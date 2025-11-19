@@ -77,9 +77,11 @@ in
     ];
 
     systemd.user.targets."gnome-session".wants = [
-      "gnome-initial-setup-copy-worker.service"
       "gnome-initial-setup-first-login.service"
-      "gnome-welcome-tour.service"
+    ];
+
+    systemd.user.targets."graphical-session-pre".wants = [
+      "gnome-initial-setup-copy-worker.service"
     ];
 
     systemd.user.targets."gnome-session@gnome-initial-setup".wants = [
@@ -89,6 +91,11 @@ in
     programs.dconf.profiles.gnome-initial-setup.databases = [
       "${pkgs.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
     ];
+
+    users = {
+      # TODO: switch to using provided gnome-initial-setup sysusers.d
+      groups.gnome-initial-setup = { };
+    };
   };
 
 }

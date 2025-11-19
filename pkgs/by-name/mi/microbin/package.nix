@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
     ];
     mainProgram = "microbin";
   };

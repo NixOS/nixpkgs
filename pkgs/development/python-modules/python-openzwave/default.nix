@@ -4,7 +4,6 @@
   fetchPypi,
   isPy3k,
   pkg-config,
-  systemd,
   libyaml,
   openzwave,
   cython,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    systemd
     libyaml
     openzwave
     cython

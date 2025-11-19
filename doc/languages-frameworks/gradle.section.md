@@ -129,7 +129,7 @@ The update script does the following:
 `fetchDeps` takes the following arguments:
 
 - `attrPath` - the path to the package in nixpkgs (for example,
-  `"javaPackages.openjfx22"`). Used for update script metadata.
+  `"javaPackages.openjfx25"`). Used for update script metadata.
 - `pname` - an alias for `attrPath` for convenience. This is what you
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults

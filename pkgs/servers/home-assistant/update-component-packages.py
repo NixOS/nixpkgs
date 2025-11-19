@@ -39,6 +39,7 @@ PKG_SET = "home-assistant.python.pkgs"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "av": "av",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
     "ha-av": "av",
@@ -69,7 +70,9 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
+    "proxmoxer": "2.2.0",
     "pybluez": "0.22",
+    "pyps4-2ndscreen": "1.3.1",
 }
 
 

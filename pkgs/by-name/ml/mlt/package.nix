@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   which,
-  ffmpeg,
+  ffmpeg_7,
   fftw,
   frei0r,
   libdv,
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (opencv4.override { inherit ffmpeg; })
-    ffmpeg
+    (opencv4.override { inherit ffmpeg_7; })
+    ffmpeg_7
     fftw
     frei0r
     libdv
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit ffmpeg;
+    ffmpeg = ffmpeg_7;
   };
 
   passthru.updateScript = gitUpdater {

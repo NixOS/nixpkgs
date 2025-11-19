@@ -7,7 +7,9 @@ name: Bot
 
 on:
   schedule:
-    - cron: '07,17,27,37,47,57 * * * *'
+    # Run every 10m
+    # i.e., at each of the listed minutes, every hour
+    - cron: '05,15,25,35,45,55 * * * *'
   workflow_call:
     inputs:
       headBranch:

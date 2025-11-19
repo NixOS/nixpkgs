@@ -14,15 +14,15 @@ let
   oz = x: if x then "1" else "0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apulse";
   version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-SWvQvS9QBOevOSRpjY3XpyhzWoHAkXzkk8Mh4ovltNI=";
+    repo = "apulse";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SWvQvS9QBOevOSRpjY3XpyhzWoHAkXzkk8Mh4ovltNI=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +40,13 @@ stdenv.mkDerivation rec {
     "-DLOG_TO_STDERR=${oz logToStderr}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PulseAudio emulation for ALSA";
     homepage = "https://github.com/i-rinat/apulse";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    changelog = "https://github.com/i-rinat/apulse/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jagajaga ];
     mainProgram = "apulse";
   };
-}
+})

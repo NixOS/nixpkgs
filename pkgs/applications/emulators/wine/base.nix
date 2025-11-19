@@ -40,12 +40,6 @@ let
     };
   } ./setup-hook-darwin.sh;
 
-  # Using the 14.4 SDK allows Wine to use `os_sync_wait_on_address` for its futex implementation on Darwin.
-  # It does an availability check, so older systems will still work.
-  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
-    toBuildInputs pkgArches (pkgs: [ pkgs.apple-sdk_14 ])
-  );
-
   # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
   darwinUnsupportedFlags = [
@@ -168,7 +162,6 @@ stdenv.mkDerivation (
           pkgs.libGL
           pkgs.libdrm
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
         ++ lib.optionals x11Support (
           with pkgs.xorg;
           [
@@ -195,6 +188,9 @@ stdenv.mkDerivation (
             libgbm
           ]
         )
+        ++ lib.optionals ffmpegSupport [
+          pkgs.ffmpeg-headless
+        ]
       )
     );
 
@@ -213,11 +209,7 @@ stdenv.mkDerivation (
     # LD_LIBRARY_PATH.
     NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
-        map (x: "${lib.getLib x}/lib") (
-          [ stdenv.cc.cc ]
-          # Avoid adding rpath references to non-existent framework `lib` paths.
-          ++ lib.subtractLists darwinFrameworks finalAttrs.buildInputs
-        )
+        map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
         ++ lib.optionals supportFlags.pulseaudioSupport (
           map (x: "${lib.getLib x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ]))

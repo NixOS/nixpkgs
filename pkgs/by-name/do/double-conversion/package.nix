@@ -4,17 +4,19 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+  ninja,
+  ctestCheckHook,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "double-conversion";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "double-conversion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-M80H+azCzQYa4/gBLWv5GNNhEuHsH7LbJ/ajwmACnrM=";
   };
 
@@ -30,22 +32,46 @@ stdenv.mkDerivation rec {
       url = "https://github.com/google/double-conversion/commit/0604b4c18815aadcf7f4b78dfa6bfcb91a634ed7.patch";
       hash = "sha256-cJBp1ou1O/bMQ/7kvcX52dWbUdhmPfQ9aWmEhQdyhis=";
     })
+    (fetchpatch {
+      name = "double-conversion-add-pkg-config.patch";
+      url = "https://github.com/google/double-conversion/commit/ddfd18c58ecc32fc74afc1083bb8774240b54efb.patch";
+      hash = "sha256-/pKCL19vS8fNwCm27yTNP+32ApHTH5dEGpnsMI11Lf4=";
+    })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  cmakeFlags = lib.optional (!enableStatic) "-DBUILD_SHARED_LIBS=ON";
+  nativeBuildInputs = [
+    cmake
+    ninja
+    ctestCheckHook
+  ];
+
+  doCheck = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+  ];
 
   # Case sensitivity issue
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm BUILD
   '';
 
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
+    pkgConfigModules = [ "double-conversion" ];
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
     homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fzakaria ];
   };
-}
+})

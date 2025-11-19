@@ -6,7 +6,6 @@
 }:
 
 let
-
   cfge = config.environment;
 
   cfg = config.programs.fish;
@@ -27,6 +26,16 @@ let
 
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
+  # Need to use --no-config to prevent fish_indent from trying to read from config
+  # See https://github.com/fish-shell/fish-shell/issues/12079
+  indentFishFile =
+    name: text:
+    pkgs.runCommand name {
+      nativeBuildInputs = [ cfg.package ];
+      inherit text;
+      passAsFile = [ "text" ];
+    } "fish --no-config -c 'fish_indent $textPath' > $out";
+
   sourceEnv =
     file:
     if cfg.useBabelfish then
@@ -46,13 +55,9 @@ let
     } "babelfish < ${path} > $out;";
 
 in
-
 {
-
   options = {
-
     programs.fish = {
-
       enable = lib.mkOption {
         default = false;
         description = ''
@@ -153,13 +158,10 @@ in
         '';
         type = lib.types.lines;
       };
-
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
@@ -182,16 +184,16 @@ in
       })
 
       {
-        etc."fish/nixos-env-preinit.fish".text =
+        etc."fish/nixos-env-preinit.fish".source =
           if cfg.useBabelfish then
-            ''
+            indentFishFile "nixos-env-preinit.fish" ''
               # source the NixOS environment config
               if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
                 source /etc/fish/setEnvironment.fish
               end
             ''
           else
-            ''
+            indentFishFile "nixos-env-preinit.fish" ''
               # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
               # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
               set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
@@ -207,7 +209,7 @@ in
       }
 
       {
-        etc."fish/config.fish".text = ''
+        etc."fish/config.fish".source = indentFishFile "config.fish" ''
           # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
           # if we haven't sourced the general config, do it
@@ -259,7 +261,6 @@ in
               name = "fish_patched-completion-generator";
               srcs = [
                 "${cfg.package}/share/fish/tools/create_manpage_completions.py"
-                "${cfg.package}/share/fish/tools/deroff.py"
               ];
               unpackCmd = "cp $curSrc $(basename $curSrc)";
               sourceRoot = ".";

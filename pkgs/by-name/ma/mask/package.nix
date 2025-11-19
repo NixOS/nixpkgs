@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/jacobdeichert/mask/blob/mask/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       defelo
     ];
   };

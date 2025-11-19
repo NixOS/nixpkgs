@@ -559,12 +559,7 @@ in
                                     '';
                                   };
                                   encryptionPasswordFile = mkOption {
-                                    type = types.nullOr (
-                                      types.pathWith {
-                                        inStore = false;
-                                        absolute = true;
-                                      }
-                                    );
+                                    type = types.nullOr types.externalPath;
                                     default = null;
                                     description = ''
                                       Path to encryption password. If set, the file will be read during

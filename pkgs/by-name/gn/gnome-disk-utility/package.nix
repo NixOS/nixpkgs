@@ -24,7 +24,7 @@
   ninja,
   pkg-config,
   systemd,
-  udisks2,
+  udisks,
   wrapGAppsHook3,
   xz,
 }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libpwquality
     libsecret
     systemd
-    udisks2
+    udisks
     xz
   ];
 

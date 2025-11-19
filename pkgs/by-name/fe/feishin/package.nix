@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_36,
+  electron_38,
   dart-sass,
   pnpm_10,
   darwin,
@@ -21,7 +21,7 @@ let
     hash = "sha256-F5m0hsN1BLfiUcl2Go54bpFnN8ktn6Rqa/df1xxoCA4=";
   };
 
-  electron = electron_36;
+  electron = electron_38;
   pnpm = pnpm_10;
 in
 buildNpmPackage {

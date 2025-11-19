@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   expat,
-  fmt,
+  fmt_11,
   proj,
   bzip2,
   cli11,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cli11
     expat
-    fmt
+    fmt_11
     libosmium
     libpq
     nlohmann_json

@@ -32,7 +32,7 @@
   libmtp,
   withOnlineServices ? true,
   withDevices ? true,
-  udisks2,
+  udisks,
   withDynamic ? true,
   withHttpServer ? true,
   withLibVlc ? true,
@@ -156,7 +156,7 @@ let
     {
       names = [ "UDISKS2" ];
       enable = withUdisks;
-      pkgs = [ udisks2 ];
+      pkgs = [ udisks ];
     }
   ];
 

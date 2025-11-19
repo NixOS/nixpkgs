@@ -74,11 +74,18 @@ mkDerivation {
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Tora SQL tool";
     mainProgram = "tora";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
     license = licenses.asl20;
+    # fails to build on hydra since 2024
+    broken = true;
   };
 }

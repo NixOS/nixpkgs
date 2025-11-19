@@ -135,7 +135,7 @@ import ../make-test-python.nix (
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)

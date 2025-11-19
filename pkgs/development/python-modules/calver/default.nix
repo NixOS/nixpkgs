@@ -10,14 +10,14 @@
 let
   self = buildPythonPackage rec {
     pname = "calver";
-    version = "2025.04.17";
+    version = "2025.10.20";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "di";
       repo = "calver";
       tag = version;
-      hash = "sha256-C0l/SThDhA1DnOeMJfuh3d8R606nzyQag+cg7QqvYWY=";
+      hash = "sha256-8CfPQ4uMgKDqMMgutLdsjn/MaAVBJQAp1KqUfxzNMQw=";
     };
 
     postPatch = ''

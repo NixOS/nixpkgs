@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
     mainProgram = "kmon";

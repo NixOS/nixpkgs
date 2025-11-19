@@ -16,17 +16,15 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2024.2.7";
+  version = "2025.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = "v${version}";
-    hash = "sha256-gBY9+cd0DKqzHKyB86NzfKkULjVXn3oBSHxyRhmMAno=";
+    hash = "sha256-Rr7QseViy6i13QbZVb8BxMWDsE9meG4NqT5B1Z+TZbc=";
   };
-
-  pythonRelaxDeps = [ "deepdiff" ];
 
   build-system = [
     poetry-core

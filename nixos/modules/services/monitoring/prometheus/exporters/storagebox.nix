@@ -15,10 +15,7 @@ in
   extraOpts = {
     package = mkPackageOption pkgs "prometheus-storagebox-exporter" { };
     tokenFile = lib.mkOption {
-      type = lib.types.pathWith {
-        inStore = false;
-        absolute = true;
-      };
+      type = lib.types.externalPath;
       description = "File that contains the Hetzner API token to use.";
     };
 

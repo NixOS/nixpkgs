@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Pure python implementation of the BiDi layout algorithm";
     mainProgram = "pybidi";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

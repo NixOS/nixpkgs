@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/getcuia/stransi";
     changelog = "https://github.com/getcuia/stransi/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

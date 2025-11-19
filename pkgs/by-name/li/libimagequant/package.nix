@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rust,
+  buildPackages,
   rustPlatform,
   cargo-c,
   python3,
@@ -37,13 +37,13 @@ rustPlatform.buildRustPackage rec {
 
   postBuild = ''
     pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 
   postInstall = ''
     pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 

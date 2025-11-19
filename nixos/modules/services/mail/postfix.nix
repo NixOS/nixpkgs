@@ -522,6 +522,7 @@ in
                 nullOr (oneOf [
                   bool
                   int
+                  path
                   str
                   (listOf str)
                 ])
@@ -971,7 +972,7 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${lib.getExe' cfg.package "postmap"} -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postmap"} /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 

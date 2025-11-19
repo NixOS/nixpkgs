@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "asgineer";
-  version = "0.9.3";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "asgineer";
     tag = "v${version}";
-    hash = "sha256-Uk1kstEBt321BVeNcfdhZuonmm1i9IXSBnZLa4eDS2E=";
+    hash = "sha256-8qI5eHt+UmQGZNCn12Iup9dIVd+aI6r3Z1R+u+SziMc=";
   };
 
   build-system = [ flit-core ];

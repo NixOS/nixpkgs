@@ -5,6 +5,7 @@
   replaceVars,
   accountsservice,
   adwaita-icon-theme,
+  blueprint-compiler,
   colord,
   colord-gtk4,
   cups,
@@ -27,6 +28,7 @@
   gsettings-desktop-schemas,
   gsound,
   gst_all_1,
+  gtk3,
   gtk4,
   ibus,
   json-glib,
@@ -42,7 +44,6 @@
   libsecret,
   libsoup_3,
   libwacom,
-  libXi,
   libxml2,
   libxslt,
   meson,
@@ -63,7 +64,7 @@
   tinysparql,
   localsearch,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   wayland-scanner,
   libepoxy,
@@ -75,11 +76,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "48.4";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KiDu5uBcjTrdru+lJNzh7p+Ip32Djj/R7e88DC5GetI=";
+    hash = "sha256-VALv+PIxY6dV3sJJNmwbOmXoDw2mDwd0p0DR5YdG+Gk=";
   };
 
   patches = [
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     docbook-xsl-nons
     gettext
     libxslt
@@ -123,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
+    gtk3 # org.gtk.Settings.FileChooser schema (datetime panel sets clock-format)
     gtk4
     ibus
     json-glib
@@ -138,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libsoup_3
     libwacom
-    libXi
     libxml2
     modemmanager
     mutter # schemas for the keybindings
@@ -147,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     tinysparql
     localsearch # for search locations dialog
-    udisks2
+    udisks
     upower
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base

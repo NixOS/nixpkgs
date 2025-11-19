@@ -9,14 +9,14 @@
   xdg-utils,
   gtk3,
   jdk21,
-  openjfx23,
+  openjfx25,
   gradle_8,
   python3,
 }:
 let
   jdk = jdk21.override {
     enableJavaFX = true;
-    openjfx_jdk = openjfx23;
+    openjfx_jdk = openjfx25;
   };
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;

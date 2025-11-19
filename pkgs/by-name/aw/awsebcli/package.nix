@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   git,
+  versionCheckHook,
 }:
 
 let
@@ -25,14 +26,15 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.25.1";
+  version = "3.25.3";
   pyproject = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-objIzpYMyuFjEc85H9dXhQez3MZfNu3lWSWm6+E2iJs=";
+    hash = "sha256-PFyLVpmye+WIiF9xR37ydjLy0OvlIMDSIMaN4y0WM/E=";
   };
 
   pythonRelaxDeps = [
@@ -68,7 +70,9 @@ python.pkgs.buildPythonApplication rec {
     mock
     pytest-socket
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     "tests/unit"

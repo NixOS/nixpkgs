@@ -359,6 +359,7 @@ in
   cinnamon = runTest ./cinnamon.nix;
   cinnamon-wayland = runTest ./cinnamon-wayland.nix;
   cjdns = runTest ./cjdns.nix;
+  clamav = runTest ./clamav.nix;
   clatd = runTest ./clatd.nix;
   clickhouse = import ./clickhouse {
     inherit runTest;
@@ -522,6 +523,7 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
+  ersatztv = handleTest ./ersatztv.nix { };
   esphome = runTest ./esphome.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   etcd = import ./etcd/default.nix { inherit pkgs runTest; };
@@ -642,7 +644,6 @@ in
   gnome = runTest ./gnome.nix;
   gnome-extensions = runTest ./gnome-extensions.nix;
   gnome-flashback = runTest ./gnome-flashback.nix;
-  gnome-xorg = runTest ./gnome-xorg.nix;
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
   go-camo = runTest ./go-camo.nix;
@@ -673,7 +674,10 @@ in
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
-  h2o = import ./web-servers/h2o { inherit runTest; };
+  h2o = import ./web-servers/h2o {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   hadoop = import ./hadoop {
     inherit handleTestOn;
     package = pkgs.hadoop;
@@ -743,13 +747,14 @@ in
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   incron = runTest ./incron.nix;
-  incus = recurseIntoAttrs (
-    handleTest ./incus {
-      lts = false;
-      inherit system pkgs;
-    }
-  );
-  incus-lts = recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
+  incus = import ./incus {
+    inherit runTestOn;
+    package = pkgs.incus;
+  };
+  incus-lts = import ./incus {
+    inherit runTestOn;
+    package = pkgs.incus-lts;
+  };
   influxdb = runTest ./influxdb.nix;
   influxdb2 = runTest ./influxdb2.nix;
   initrd-luks-empty-passphrase = runTest ./initrd-luks-empty-passphrase.nix;
@@ -814,7 +819,10 @@ in
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
   kubernetes = handleTestOn [ "x86_64-linux" ] ./kubernetes { };
-  kubo = import ./kubo { inherit runTest; };
+  kubo = import ./kubo {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
@@ -882,7 +890,7 @@ in
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
-  lxc = handleTest ./lxc { };
+  lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;
@@ -959,7 +967,10 @@ in
   mopidy = runTest ./mopidy.nix;
   morph-browser = runTest ./morph-browser.nix;
   mosquitto = runTest ./mosquitto.nix;
-  movim = import ./web-apps/movim { inherit runTest; };
+  movim = import ./web-apps/movim {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
@@ -1001,12 +1012,15 @@ in
     defaults.services.ncps.cache.dataPath = "/path/to/ncps";
   };
   ndppd = runTest ./ndppd.nix;
-  nebula = runTest ./nebula.nix;
+  nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
+  nebula.connectivity = runTest ./nebula/connectivity.nix;
+  nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
+  netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netdata = runTest ./netdata.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   networking.networkmanager = handleTest ./networking/networkmanager.nix { };
@@ -1126,6 +1140,7 @@ in
   ombi = runTest ./ombi.nix;
   omnom = runTest ./omnom;
   oncall = runTest ./web-apps/oncall.nix;
+  onlyoffice = runTest ./onlyoffice.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
   openarena = runTest ./openarena.nix;
@@ -1294,7 +1309,6 @@ in
   quake3 = runTest ./quake3.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
-  quorum = runTest ./quorum.nix;
   rabbitmq = runTest ./rabbitmq.nix;
   radarr = runTest ./radarr.nix;
   radicale = runTest ./radicale.nix;
@@ -1303,6 +1317,7 @@ in
   ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
+  rauc = runTest ./rauc.nix;
   readarr = runTest ./readarr.nix;
   readeck = runTest ./readeck.nix;
   realm = runTest ./realm.nix;
@@ -1510,6 +1525,7 @@ in
   systemd-sysusers-password-option-override-ordering = runTest ./systemd-sysusers-password-option-override-ordering.nix;
   systemd-timesyncd-nscd-dnssec = runTest ./systemd-timesyncd-nscd-dnssec.nix;
   systemd-user-linger = runTest ./systemd-user-linger.nix;
+  systemd-user-linger-purge = runTest ./systemd-user-linger-purge.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;
   systemd-userdbd = runTest ./systemd-userdbd.nix;
   systemtap = handleTest ./systemtap.nix { };
@@ -1545,6 +1561,7 @@ in
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
   tpm2 = runTest ./tpm2.nix;
+  traccar = runTest ./traccar.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;

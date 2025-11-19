@@ -32,6 +32,6 @@ buildGoModule rec {
     mainProgram = "unfurl";
     homepage = "https://github.com/tomnomnom/unfurl";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

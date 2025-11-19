@@ -5,21 +5,23 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  libredirect,
+  iana-etc,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "somo";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "theopfr";
     repo = "somo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HUTaBSy3FemAQH1aKZYTJnUWiq0bU/H6c5Gz3yamPiA=";
+    hash = "sha256-k7PDCylA6KR/S1dQDSMIoOELPYwJ25dz1u+PM6ITGKg=";
   };
 
-  cargoHash = "sha256-e3NrEfbWz6h9q4TJnn8jnRmMJbeaEc4Yo3hFlaRLzzQ=";
+  cargoHash = "sha256-i3GmdBqCWPeslpr2zzOR4r8PgMP7EkC1mNFI7jSWO34=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,6 +30,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.
     rustPlatform.bindgenHook
   ];
+
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  preCheck = ''
+    export NIX_REDIRECTS=/etc/services=${iana-etc}/etc/services
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd somo \

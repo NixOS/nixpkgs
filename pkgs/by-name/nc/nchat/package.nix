@@ -13,17 +13,16 @@
   gperf,
   nix-update-script,
   withWhatsApp ? true,
-  apple-sdk_12,
 }:
 
 let
-  version = "5.10.15";
+  version = "5.11.32";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-wA0sLOcCDPi3w1naIx/Q82DJk/tl/LTnrUBbMAPvvFU=";
+    hash = "sha256-iDy3h1km7Xg6hzkRg3bO8lNSe3CPBk6JOJV8Ph/Rm2w=";
   };
 
   libcgowm = buildGoModule {
@@ -31,7 +30,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-u64b9z/B0j3qArMfxJ8QolgDc9k7Q+LqrQRle3nN7eM=";
+    vendorHash = "sha256-f6UGMP+IASvII82XZR8GIRG2tEx9ejf6WgCkKnicnD0=";
 
     buildPhase = ''
       runHook preBuild
@@ -88,10 +87,6 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # For SecTrustCopyCertificateChain, see https://github.com/NixOS/nixpkgs/pull/445063#pullrequestreview-3261846621
-    apple-sdk_12
   ];
 
   cmakeFlags = [

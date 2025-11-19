@@ -7,7 +7,7 @@
   yodl,
   perl,
   groff,
-  util-linux,
+  util-linuxMinimal,
   texinfo,
   ncurses,
   pcre2,
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    util-linux
+    util-linuxMinimal
     yodl
   ];
 

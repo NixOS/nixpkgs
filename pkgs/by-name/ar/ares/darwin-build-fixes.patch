@@ -24,15 +24,15 @@ index 3777ac98a..07ff17009 100644
      install(TARGETS ${target} BUNDLE DESTINATION "." COMPONENT Application)
    endif()
 diff --git a/ruby/cmake/os-macos.cmake b/ruby/cmake/os-macos.cmake
-index 39c339428..dafb58c66 100644
+index 7b594bb4a..18e886fe7 100644
 --- a/ruby/cmake/os-macos.cmake
 +++ b/ruby/cmake/os-macos.cmake
-@@ -43,7 +43,7 @@ target_link_libraries(
+@@ -41,7 +41,7 @@ target_link_libraries(
+ )
+ 
  if(SDL_FOUND)
-   target_link_libraries(
-     ruby
--    PRIVATE "$<LINK_LIBRARY:WEAK_FRAMEWORK,SDL::SDL>"
-+    PRIVATE "$<LINK_LIBRARY:WEAK_LIBRARY,SDL::SDL>"
-   )
+-  target_link_libraries(ruby PRIVATE "$<LINK_LIBRARY:WEAK_FRAMEWORK,SDL::SDL>")
++  target_link_libraries(ruby PRIVATE "$<LINK_LIBRARY:WEAK_LIBRARY,SDL::SDL>")
  endif()
  
+ if(librashader_FOUND)

@@ -61,8 +61,8 @@
   },
   {
     "pname": "fantomas",
-    "version": "7.0.1",
-    "hash": "sha256-2aGD6Kjh83gmssRqqZ/Uihi7VbNqNUelX4otIfCuhTI="
+    "version": "7.0.3",
+    "hash": "sha256-0XlfV7SxXPDnk/CjkUesJSaH0cxlNHJ+Jj86zNUhkNA="
   },
   {
     "pname": "Fantomas.Client",
@@ -76,8 +76,8 @@
   },
   {
     "pname": "fsharp-analyzers",
-    "version": "0.32.1",
-    "hash": "sha256-le6rPnAF7cKGBZ2w8H2u9glK+6rT2ZjiAVnrkH2IhrM="
+    "version": "0.33.0",
+    "hash": "sha256-inPKPeLTaImrj4uiEy/vpru1cestNr/s/qgyRsgvwPc="
   },
   {
     "pname": "FSharp.Analyzers.Build",
@@ -86,8 +86,8 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
-    "version": "0.32.1",
-    "hash": "sha256-JOqyzBUVMm1wx9g0YZmAZghj3/9f7nh9YenVt4mQI0M="
+    "version": "0.33.1",
+    "hash": "sha256-bx4DTUakeLlwbAUxZZpNK8E0sGa7B6UvN1rX6nFOZf0="
   },
   {
     "pname": "FSharp.Compiler.Service",
@@ -206,8 +206,8 @@
   },
   {
     "pname": "Ionide.Analyzers",
-    "version": "0.14.7",
-    "hash": "sha256-capdHUKfY3W8QYgg5Q6/dRggEF6w/yQ9rEKIh+VQLlc="
+    "version": "0.14.9",
+    "hash": "sha256-41vXbwlwWbM/iwbrqA+lhsxpMochokM9xsOsgKlKqXg="
   },
   {
     "pname": "Ionide.KeepAChangelog.Tasks",
@@ -221,18 +221,18 @@
   },
   {
     "pname": "Ionide.ProjInfo",
-    "version": "0.71.2",
-    "hash": "sha256-mQM7nVZL/rwFKlt+esfygistjilIDfySMnZmHS5IFv0="
+    "version": "0.72.0",
+    "hash": "sha256-zu9ssScreEgwFQb0YOgVfAFxTEoGLjsLiMbWIdf2zkg="
   },
   {
     "pname": "Ionide.ProjInfo.FCS",
-    "version": "0.71.2",
-    "hash": "sha256-TJCBJpv6OEsT/3enqjsW7JaSd0P+idlqJR5UR3jhaSI="
+    "version": "0.72.0",
+    "hash": "sha256-udtCva1gKPo6rJpsCCVI+DCY2ilUwSFQ9P9XCysNcto="
   },
   {
     "pname": "Ionide.ProjInfo.ProjectSystem",
-    "version": "0.71.2",
-    "hash": "sha256-Agja7VwF/MbOOieLVJWv42z+l6hWhVw1V0dNrVAJ0Ks="
+    "version": "0.72.0",
+    "hash": "sha256-ilUr29oAONpGm76Dc1ocSfu33p0Gyr9VhiNfMoxyKfI="
   },
   {
     "pname": "LinkDotNet.StringBuilder",

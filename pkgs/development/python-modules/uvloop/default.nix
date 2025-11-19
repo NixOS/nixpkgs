@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
 
   # build-system
@@ -21,29 +21,15 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
+  src = fetchFromGitHub {
+    owner = "MagicStack";
+    repo = "uvloop";
+    tag = "v${version}";
+    hash = "sha256-LAOa+Oshssy4ZHl4eE6dn2DeZQ9d5tRDV5Hv9BCJJ3c=";
   };
-
-  patches = [
-    # fix test failures on Python 3.13
-    # (remove on next update)
-    (fetchpatch {
-      url = "https://github.com/MagicStack/uvloop/commit/96b7ed31afaf02800d779a395591da6a2c8c50e1.patch";
-      hash = "sha256-Nbe3BuIuwlylll5fIYij+OiP90ZeFNI0GKHK9SwWRk8=";
-      excludes = [ ".github/workflows/tests.yml" ];
-    })
-    (fetchpatch {
-      url = "https://github.com/MagicStack/uvloop/commit/56807922f847ddac231a53d5b03eef70092b987c.patch";
-      hash = "sha256-X5Ob1t/CRy9csw2JrWvwS55G6qTqZhIuGLTy83O03GU=";
-    })
-  ];
 
   postPatch = ''
     rm -rf vendor
@@ -82,6 +68,8 @@ buildPythonPackage rec {
     "tests/test_dns.py"
     # Asserts on exact wording of error message
     "tests/test_tcp.py::Test_AIO_TCP::test_create_connection_open_con_addr"
+    # ConnectionAbortedError: SSL handshake is taking longer than 15.0 seconds
+    "tests/test_tcp.py::Test_AIO_TCPSSL::test_create_connection_ssl_1"
   ]
   ++ lib.optionals (pythonOlder "3.11") [
     "tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"

@@ -44,6 +44,9 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "magika"
+  ];
   dependencies = [
     beautifulsoup4
     defusedxml
@@ -85,6 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

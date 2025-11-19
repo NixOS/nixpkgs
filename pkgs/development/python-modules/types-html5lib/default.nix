@@ -3,20 +3,23 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  types-webencodings,
 }:
 
 buildPythonPackage rec {
   pname = "types-html5lib";
-  version = "1.1.11.20251014";
+  version = "1.1.11.20251117";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_html5lib";
     inherit version;
-    hash = "sha256-zGKNYm4BEaJCamT18GHs/RE5WLaf9rPcDqrtI0e6lFU=";
+    hash = "sha256-Gmo6xTlKoSv1R/rl1e/5Hc7sRrbQfENn2bOaN/QvIBo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ types-webencodings ];
 
   # Module has no tests
   doCheck = false;

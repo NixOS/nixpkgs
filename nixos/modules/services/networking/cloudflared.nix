@@ -223,6 +223,23 @@ in
                 };
               };
 
+              edgeIPVersion = lib.mkOption {
+                type = lib.types.enum [
+                  "auto"
+                  "4"
+                  "6"
+                ];
+                default = "4";
+                description = ''
+                  Specifies the IP address version (IPv4 or IPv6) used to establish a connection between `cloudflared` and the Cloudflare global network.
+
+                  The value `auto` relies on the host operating system to determine which IP version to select. The first IP version returned from the DNS resolution of the region lookup will be used as the primary set. In dual IPv6 and IPv4 network setups, `cloudflared` will separate the IP versions into two address sets that will be used to fallback in connectivity failure scenarios.
+
+                  See [Tunnel run parameters](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/cloudflared-parameters/run-parameters/#edge-ip-version).
+                '';
+                example = "auto";
+              };
+
               default = lib.mkOption {
                 type = lib.types.str;
                 description = ''
@@ -377,7 +394,10 @@ in
           DynamicUser = true;
         };
 
-        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+        environment = {
+          TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+          TUNNEL_EDGE_IP_VERSION = tunnel.edgeIPVersion;
+        };
       }
     ) config.services.cloudflared.tunnels;
   };

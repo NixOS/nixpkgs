@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal plotting written in Rust";
     homepage = "https://github.com/loony-bean/textplots-rs";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "textplots";
   };
 }

@@ -6,20 +6,23 @@
   testers,
   flyctl,
   installShellFiles,
+  git,
 }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.172";
+  version = "0.3.209";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-jKzlKOdE+SrCzY81ciI9sKN0iiFZMsKp04A+1TV1+i0=";
+    leaveDotGit = true;
+    hash = "sha256-hzKKCwGTaz1MFQ1+F9piNBnaEDZJwJqoerR1c/uzSsQ=";
   };
 
-  vendorHash = "sha256-D6b+dLoE4IdhsmnWILe7Thkggq3p0ur4C3BOz7Cuk98=";
+  proxyVendor = true;
+  vendorHash = "sha256-ezGA1LGwQVFMzV/Ogj26pooD06O7FNTXMrYWkv6AwWM=";
 
   subPackages = [ "." ];
 
@@ -31,11 +34,17 @@ buildGoModule rec {
   ];
   tags = [ "production" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    git
+  ];
 
   patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
+    # Embed VCS Infos
+    export GOFLAGS="$GOFLAGS -buildvcs=true"
+
     GOOS= GOARCH= CGO_ENABLED=0 go generate ./...
   '';
 
@@ -78,6 +87,7 @@ buildGoModule rec {
       jsierles
       techknowlogick
       RaghavSood
+      SchahinRohani
     ];
     mainProgram = "flyctl";
   };

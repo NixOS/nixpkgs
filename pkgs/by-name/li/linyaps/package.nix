@@ -39,22 +39,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.9.13";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-sAxHDvhRz7okElk8vdISJt/yrNnCdu95hW3ImHOjiyw=";
+    hash = "sha256-C5rP6r3V+hxTjM+kmXjS4MnuL6P5wxSVP9nNmlQbcB8=";
   };
 
   patches = [
     ./fix-host-path.patch
-    # Fix for Qt 6.10
-    (fetchpatch {
-      url = "https://github.com/OpenAtom-Linyaps/linyaps/commit/c49e6cfab304ffa2b5b1657da247a6eda6f46c3a.patch";
-      hash = "sha256-lFyPb8YiaXJl2yzPElUR1jYwdOxA0h+db4sv/N70N4E=";
-    })
   ];
 
   postPatch = ''

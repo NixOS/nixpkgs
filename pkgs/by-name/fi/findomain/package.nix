@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      figsoda
     ];
     mainProgram = "findomain";
   };

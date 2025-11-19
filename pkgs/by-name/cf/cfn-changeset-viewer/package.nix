@@ -1,23 +1,23 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
-  gitUpdater,
   lib,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildNpmPackage rec {
   pname = "cfn-changeset-viewer";
-  version = "0.2.1";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "cfn-changeset-viewer";
     tag = version;
-    hash = "sha256-PPMmU5GMxxzBiTNAv/Rbtvkl5QK1BZjW4TJLT7xlpw4=";
+    hash = "sha256-RTGKt8Mq0v3zIFZWTeAV+nDlegw0p9b19wpB/BfQGQk=";
   };
 
-  npmDepsHash = "sha256-ICaGtofENMaAjk/KGRn8RgpMAICSttx4AIcbi1HsW8Q=";
+  npmDepsHash = "sha256-NyWZ+8ArlUCsuBN5wZA9vnuX/3HFtuI42/V1+RIKom0=";
 
   dontNpmBuild = true;
 
@@ -27,7 +27,7 @@ buildNpmPackage rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI to view the changes calculated in a CloudFormation ChangeSet in a more human-friendly way";

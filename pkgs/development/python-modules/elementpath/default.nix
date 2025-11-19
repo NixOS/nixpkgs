@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "5.0.3";
+  version = "5.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "elementpath";
     tag = "v${version}";
-    hash = "sha256-gjJsgc3JrFHgdhDDzLHQspoj99jHmIbkCULEq20yAss=";
+    hash = "sha256-puScPtX46KQ5tSpsZMtuyiCz1cRY43STeJD4P3rkoFY=";
   };
 
   build-system = [ setuptools ];

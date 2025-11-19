@@ -43,9 +43,7 @@
   numMultipath ? 64,
   watchfrrSupport ? true,
   cumulusSupport ? false,
-  rtadvSupport ? true,
   irdpSupport ? true,
-  routeReplacementSupport ? true,
   mgmtdSupport ? true,
   # Experimental as of 10.1, reconsider if upstream changes defaults
   grpcSupport ? false,
@@ -151,24 +149,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-silent-rules"
-    "--disable-exampledir"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
     "--enable-multipath=${toString numMultipath}"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
-    "--localstatedir=/run/frr"
+    "--localstatedir=/var"
     "--sbindir=${placeholder "out"}/libexec/frr"
-    "--sysconfdir=/etc/frr"
+    "--sysconfdir=/etc"
     "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
     # general options
     (lib.strings.enableFeature snmpSupport "snmp")
     (lib.strings.enableFeature rpkiSupport "rpki")
     (lib.strings.enableFeature watchfrrSupport "watchfrr")
-    (lib.strings.enableFeature rtadvSupport "rtadv")
     (lib.strings.enableFeature irdpSupport "irdp")
-    (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
     (lib.strings.enableFeature grpcSupport "grpc")
 

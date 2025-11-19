@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxide-rs";
-  version = "0.13.0+20250730.0.0";
+  version = "0.14.0+20251008.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
     rev = "v${version}";
-    hash = "sha256-baEXsDzM4y4HmUwjIqVBJm+8L+q+llq9g2o1kEZU3vI=";
+    hash = "sha256-/xFtANxapsPU99Lj8TN+ZFcLy0AOyq+lcqhqIt3ZWgs=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_cmd_auth_debug_logging"
   ];
 
-  cargoHash = "sha256-radMOVLnHaV+5bUYanw5mswGM9A+xqNN/a4boe1jWDM=";
+  cargoHash = "sha256-D08NacxKZKVsqR7qQEce2lz8E4GahtSo7jwwmSPRvUc=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"

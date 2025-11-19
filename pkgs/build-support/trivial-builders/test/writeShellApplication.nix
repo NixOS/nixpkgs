@@ -35,14 +35,15 @@ in
 linkFarm "writeShellApplication-tests" {
   test-meta =
     let
-      script = writeShellApplication {
+      args = {
         name = "test-meta";
         text = "";
         meta.description = "Test for the `writeShellApplication` `meta` argument";
       };
+      script = writeShellApplication args;
     in
-    assert script.meta.mainProgram == "test-meta";
-    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument";
+    assert script.meta.mainProgram == args.name;
+    assert script.meta.description == args.meta.description;
     script;
 
   test-runtime-inputs = checkShellApplication {

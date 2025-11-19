@@ -25,6 +25,9 @@
   conf ? null,
   removeReferencesTo,
   testers,
+  providers ? [ ], # Each provider in the format { name = "provider-name"; package = <drv>; }
+  autoloadProviders ? false,
+  extraINIConfig ? null, # Extra INI config in the format { section_name = { key = "value"}; }
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -87,15 +90,7 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
-      ''
-      # This test will fail if the error strings between the build libc and host
-      # libc mismatch, e.g. when cross-compiling from glibc to musl
-      +
-        lib.optionalString
-          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
-          ''
-            rm test/recipes/02-test_errstr.t
-          '';
+      '';
 
       outputs = [
         "bin"
@@ -191,6 +186,11 @@ let
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
+      # Tell build system it's cross environment. This allows to skip tests
+      # that would fail when libc is different. Otherwise, run the tests.
+      ++ lib.optional (
+        !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
+      ) "--cross-compile-prefix=${lib.getBin stdenv.cc}/bin/"
       ++ lib.optionals withCryptodev [
         "-DHAVE_CRYPTODEV"
         "-DUSE_CRYPTODEV_DIGESTS"
@@ -239,7 +239,10 @@ let
         # the code above, inhibiting `./Configure` from adding the
         # conflicting flags.
         "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
-      ];
+      ]
+      # tests are not being installed, it makes no sense
+      # to build them if check is disabled, e.g. on cross.
+      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
 
       makeFlags = [
         "MANDIR=$(man)/share/man"
@@ -256,6 +259,8 @@ let
       preCheck = ''
         patchShebangs util
       '';
+
+      __darwinAllowLocalNetworking = true;
 
       postInstall =
         (
@@ -304,6 +309,44 @@ let
         ''
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
+        ''
+
+        # Replace the config's default provider section with the providers we wish
+        # to automatically load
+        + lib.optionalString autoloadProviders ''
+          sed -i '/^[[:space:]]*#/!s|\[provider_sect\]|${
+            let
+              config-provider-attrset = lib.foldl' (acc: elem: acc // elem) { } (
+                map (provider: { "${provider.name}" = "${provider.name}_sect"; }) providers
+              );
+            in
+            lib.escape [ "\n" ] (lib.generators.toINI { } { provider_sect = config-provider-attrset; })
+          }|' $etc/etc/ssl/openssl.cnf
+
+          # Activate the default provider
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.concatStringsSep "\n" (
+          map
+            (provider: ''
+              cp ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+
+              ${lib.optionalString autoloadProviders ''
+                echo '${
+                  lib.generators.toINI { } {
+                    "${provider.name}_sect" = {
+                      activate = 1;
+                    };
+                  }
+                }' >> $etc/etc/ssl/openssl.cnf
+              ''}
+            '')
+
+            providers
+        )
+        + lib.optionalString (extraINIConfig != null) ''
+          echo '${lib.generators.toINI { } extraINIConfig}' >> $etc/etc/ssl/openssl.cnf
         '';
 
       allowedImpureDLLs = [ "CRYPT32.dll" ];

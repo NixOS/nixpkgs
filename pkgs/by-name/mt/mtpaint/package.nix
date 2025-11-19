@@ -12,20 +12,28 @@
   libtiff,
   openjpeg,
   gifsicle,
+  gettext,
 }:
 
 stdenv.mkDerivation {
   pname = "mtPaint";
-  version = "3.50.01";
+  version = "3.50.12";
 
   src = fetchFromGitHub {
     owner = "wjaguar";
     repo = "mtPaint";
-    rev = "a4675ff5cd9fcd57d291444cb9f332b48f11243f";
-    sha256 = "04wqxz8i655gz5rnz90cksy8v6m2jhcn1j8rzhqpp5xhawlmq24y";
+    rev = "7cae5d663ed835a365d89a535536c39e18862a83";
+    hash = "sha256-W/MQZ1WqoVMzyEd60rbvA8yieesDc/xfKqbYGZumi2U=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
+
   buildInputs = [
     freetype
     giflib

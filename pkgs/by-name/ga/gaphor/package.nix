@@ -4,26 +4,29 @@
   glib,
   gobject-introspection,
   wrapGAppsHook4,
+  gitMinimal,
   gtksourceview5,
   libadwaita,
   python3Packages,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gaphor";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
     tag = version;
-    hash = "sha256-0xivimpYM1gwOO2QrovYiJPNUfuGclr+F/WyHLNl+jw=";
+    hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
   };
 
   pythonRelaxDeps = [
     "pydot"
     "pygobject"
+    "dulwich"
   ];
 
   nativeBuildInputs = [
@@ -52,6 +55,8 @@ python3Packages.buildPythonApplication rec {
     pydot
     pygobject3
     tinycss2
+    ipython
+    sphinx
   ];
 
   postInstall = ''
@@ -75,6 +80,35 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace $out/share/dbus-1/services/org.gaphor.Gaphor.service \
                       --replace-fail "Exec=/usr/bin/gaphor" "Exec=$out/bin/gaphor"
   '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    gitMinimal
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-archon
+    hypothesis
+    xdoctest
+    markdown-it-py
+  ]);
+
+  disabledTests = [
+    # Segfault due to gtk initialization failure?
+    "page"
+    "editor"
+    "drop"
+  ];
+
+  disabledTestPaths = [
+    # Same, segfault
+    "gaphor/diagram/tools/tests"
+    "gaphor/plugins/console/tests"
+    "gaphor/ui/tests"
+    "gaphor/tests/test_application.py"
+    "tests/*"
+  ];
 
   # Prevent double wrapping
   dontWrapGApps = true;

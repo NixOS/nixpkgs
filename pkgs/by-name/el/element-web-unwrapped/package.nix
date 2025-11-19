@@ -15,6 +15,12 @@ let
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
+  # Do not inherit jitsi-meet's knownVulnerabilities (libolm).
+  # https://github.com/NixOS/nixpkgs/pull/335753
+  # https://github.com/NixOS/nixpkgs/pull/334638
+  jitsi-meet-override = jitsi-meet.overrideAttrs (previousAttrs: {
+    meta = removeAttrs previousAttrs.meta [ "knownVulnerabilities" ];
+  });
 in
 stdenv.mkDerivation (
   finalAttrs:
@@ -55,7 +61,7 @@ stdenv.mkDerivation (
       runHook preInstall
 
       cp -R webapp $out
-      tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
+      cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
       echo "${finalAttrs.version}" > "$out/version"
       jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 

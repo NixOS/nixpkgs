@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages_19,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -12,15 +13,19 @@
   opencl-headers,
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
+in
+
+stdenv'.mkDerivation (finalAttrs: {
   pname = "clblas";
   version = "2.12";
 
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clBLAS";
-    rev = "v${version}";
-    sha256 = "154mz52r5hm0jrp5fqrirzzbki14c1jkacj75flplnykbl36ibjs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Wq5oBl3TW3qpK0cyNWVgJMS5/s8xY1dulqDCkkX5lZQ=";
   };
 
   patches = [
@@ -33,6 +38,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -re 's/(set\(\s*Boost_USE_STATIC_LIBS\s+).*/\1OFF\ \)/g' src/CMakeLists.txt
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/library/tools/tplgen/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   preConfigure = ''
@@ -59,15 +69,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clMathLibraries/clBLAS";
     description = "Software library containing BLAS functions written in OpenCL";
     longDescription = ''
       This package contains a library of BLAS functions on top of OpenCL.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
-}
+})

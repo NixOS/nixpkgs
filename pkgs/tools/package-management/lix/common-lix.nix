@@ -373,7 +373,6 @@ stdenv.mkDerivation (finalAttrs: {
   # fortify breaks the build with lto and musl for some reason
   ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
   enableParallelBuilding = true;
 

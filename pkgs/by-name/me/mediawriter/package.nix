@@ -6,7 +6,7 @@
   cmake,
   fetchFromGitHub,
   qt6,
-  udisks2,
+  udisks,
   xz,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
-    udisks2
+    udisks
     xz
   ];
 

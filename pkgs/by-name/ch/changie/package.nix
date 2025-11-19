@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
     rev = "v${version}";
-    hash = "sha256-JXVrOZKm8whmc3LkCDsbZkNcYMgiolp9dgnZFPYCtAs=";
+    hash = "sha256-eTGmF70xhecIo8JMKKxbApwQj7rg3LpyEzXFxsp92xU=";
   };
 
-  vendorHash = "sha256-bUopfHd6/0dd3OuxQMW9ZNsZtVqnRSDRqZLkfaQq12I=";
+  vendorHash = "sha256-IJdocKlyIbuRnfWnPiyjluV74186YYnjmGXBaDuTxkY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,7 +43,6 @@ buildGoModule rec {
     changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

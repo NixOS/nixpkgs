@@ -189,10 +189,10 @@ index 8ebd250..5bb9edb 100755
              if platform.bleached:
                  output.write(f"#ifndef __APPLE_BLEACH_SDK__\n")
              writeDefines(platformString, platformString, platform.versioned)
-@@ -326,9 +351,9 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
-         output.write(f" #endif /* __has_attribute(availability) */\n")
+@@ -327,9 +352,9 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
          output.write(f"#endif /* defined(__has_feature) && defined(__has_attribute) */\n")
      def AVAILABILITY_MACRO_IMPL(self, output, prefix, dispatcher, **optionals):
+         av_version_hash = zlib.adler32(avVersion.encode()) # This does not need to cryptographically secure as it is meant to detect accidental failures
 -        count = len(versions.platforms())
 -        for platformString in versions.platforms():
 -            platform = versions.platforms()[platformString]
@@ -241,4 +241,3 @@ index 8ebd250..5bb9edb 100755
          if getattr(args, platform, None):
 -- 
 2.45.2
-

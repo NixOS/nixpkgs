@@ -39,7 +39,6 @@ let
 
   static_gtest = gtest.overrideAttrs (old: {
     dontDisableStatic = true;
-    disableHardening = [ "pie" ];
     cmakeFlags = old.cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" ];
   });
 

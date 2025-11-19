@@ -33,7 +33,7 @@ buildGoModule rec {
     homepage = "https://github.com/expr-lang/expr";
     changelog = "https://github.com/expr-lang/expr/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "expr";
   };
 }

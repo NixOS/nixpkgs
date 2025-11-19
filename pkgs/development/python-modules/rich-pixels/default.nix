@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/darrenburns/rich-pixels";
     changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

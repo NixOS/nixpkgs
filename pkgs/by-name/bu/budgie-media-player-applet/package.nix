@@ -43,8 +43,18 @@ stdenv.mkDerivation (finalAttrs: {
     requests
   ];
 
+  mesonFlags = [
+    # The meson option actually enables libpeas2 support
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
+    "-Dfor-wayland=true"
+  ];
+
   postPatch = ''
     substituteInPlace meson.build --replace-fail "/usr" "$out"
+
+    # https://github.com/zalesyc/budgie-media-player-applet/issues/25
+    substituteInPlace src/{applet,testWin,Popover,BudgieMediaPlayer}.py \
+      --replace-fail "gi.require_version('Budgie', '1.0')" "gi.require_version('Budgie', '2.0')"
   '';
 
   postFixup = ''

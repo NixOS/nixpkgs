@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/${src.rev}/item/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

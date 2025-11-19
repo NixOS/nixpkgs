@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/ui
+    mkdir -p $out/lib
     ln -s ${ui} $out/lib/ui
   '';
 
@@ -72,9 +72,9 @@ rustPlatform.buildRustPackage {
   passthru = {
     inherit ui;
     tests.version = testers.testVersion {
-      inherit version;
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
+      version = "Version: v${version}";
     };
   };
 

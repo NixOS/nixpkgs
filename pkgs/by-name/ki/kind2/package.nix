@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "kind2";
     homepage = "https://github.com/higherorderco/kind";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -42,7 +42,7 @@ mapAliases (
     blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
-    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # addedd 2025-10-01
+    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
     coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
     coffee-script = vim-coffee-script;
     coffeeScript = vim-coffee-script; # backwards compat, added 2014-10-18
@@ -78,6 +78,7 @@ mapAliases (
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
     fugitive = vim-fugitive;
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
+    fruzzy = throw "vimPlugins.fruzzy did not update since 2019-10-28 and uses EOL version of Nim"; # Added 2025-11-12
     fzfWrapper = fzf-wrapper;
     ghc-mod-vim = ghcmod-vim;
     ghcmod = ghcmod-vim;
@@ -115,11 +116,13 @@ mapAliases (
     peskcolor-vim = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
     polyglot = vim-polyglot;
     prettyprint = vim-prettyprint;
+    pure-lua = lib.warnOnInstantiate "Please replace 'pure-lua' with 'moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
     quickrun = vim-quickrun;
     rainbow_parentheses = rainbow_parentheses-vim;
     repeat = vim-repeat;
     riv = riv-vim;
     rhubarb = vim-rhubarb;
+    rust-tools-nvim = lib.warnOnInstantiate "rust-tools-nvim is abandoned by upstream; you should use rustaceanvim" rust-tools-nvim;
     sensible = vim-sensible;
     signature = vim-signature;
     snipmate = vim-snipmate;

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nemorosa";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyokoMiki";
     repo = "nemorosa";
     tag = version;
-    hash = "sha256-UBvtff5fU3kH/+Kw426+yyoyJ3aASBIYDPX+X5jqkA8=";
+    hash = "sha256-AqFjpEakEZ21iXmIIxhX+ez2aI/RMsLaUoECipQcaM4=";
   };
 
   # Upstream uses overly strict, fresh version specifiers

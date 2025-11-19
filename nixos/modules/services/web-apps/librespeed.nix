@@ -71,14 +71,7 @@ in
         The contents of the specified paths will be read at service start time and merged with the attributes provided in `settings`.
       '';
       default = { };
-      type =
-        with lib.types;
-        nullOr (
-          attrsOf (pathWith {
-            inStore = false;
-            absolute = true;
-          })
-        );
+      type = with lib.types; nullOr (attrsOf externalPath);
     };
 
     settings = lib.mkOption {

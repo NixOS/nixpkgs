@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://riff.sh";
     changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

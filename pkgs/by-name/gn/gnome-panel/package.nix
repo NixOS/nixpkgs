@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-panel";
-  version = "3.56.0";
+  version = "3.58.1";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-panel/${lib.versions.majorMinor finalAttrs.version}/gnome-panel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UoptZ92E7a5sgKXuZW+E+9lC87Nx1g+XottgZc9P0XA=";
+    hash = "sha256-fovKQ6gaE0xmazp4uvKv+wxdMO+xvKZTiH/EGzHdXmQ=";
   };
 
   patches = [

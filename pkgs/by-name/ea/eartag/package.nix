@@ -22,7 +22,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.5";
+  version = "1.0.2";
   format = "other";
 
   src = fetchFromGitLab {
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "eartag";
     rev = version;
-    hash = "sha256-sxVivQppX8KdkvHaW6xQ64Wi8Nfv5Rmwf4NADBDpOOo=";
+    hash = "sha256-Iwfk0SqxYF2bzkKZNqGonJh8MQ2c+K1wN0o4GECR/Rw=";
   };
 
   postPatch = ''
@@ -61,6 +61,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    aiofiles
+    aiohttp
     pygobject3
     eyed3
     pillow
@@ -68,6 +70,7 @@ python3Packages.buildPythonApplication rec {
     pytaglib
     python-magic
     pyacoustid
+    xxhash
   ];
 
   dontWrapGApps = true;
@@ -82,6 +85,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
+    changelog = "https://gitlab.gnome.org/World/eartag/-/releases/${version}";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.

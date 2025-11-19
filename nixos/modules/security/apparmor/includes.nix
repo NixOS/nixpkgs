@@ -431,6 +431,13 @@ in
     "abstractions/python" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/python"
     '';
+    "abstractions/golang" = ''
+      # Container-aware GOMAXPROCS
+      owner @{PROC}/@{pid}/mountinfo r,
+      owner @{PROC}/@{pid}/cgroup r,
+      @{sys}/fs/cgroup/**/{cpu.cfs_quota_us,cpu.cfs_period_us} r, # V1
+      @{sys}/fs/cgroup/**/cpu.max r, # V2
+    '';
     "abstractions/qt5" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/qt5"
     ''

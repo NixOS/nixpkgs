@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

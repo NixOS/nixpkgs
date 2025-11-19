@@ -49,7 +49,7 @@ buildDotnetModule (finalAttrs: {
   '';
 
   # Patch some prebuilt libraries fetched via NuGet.
-  fixupPhase = ''
+  fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     runHook preFixup
 
     autoPatchelf $out/lib/${finalAttrs.pname}/libnfd.so

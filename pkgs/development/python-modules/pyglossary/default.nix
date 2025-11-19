@@ -21,6 +21,9 @@
   # for GUI only
   pygobject3,
   gtk3,
+  enableCmd ? false,
+  prompt-toolkit,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -58,6 +61,10 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals enableGui [
     pygobject3
+  ]
+  ++ lib.optionals enableCmd [
+    prompt-toolkit
+    tqdm
   ];
 
   buildInputs = lib.optionals enableGui [

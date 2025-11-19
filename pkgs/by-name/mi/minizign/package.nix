@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Minisign reimplemented in Zig";
     homepage = "https://github.com/jedisct1/zig-minisign";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "minizign";
     inherit (zig.meta) platforms;
   };

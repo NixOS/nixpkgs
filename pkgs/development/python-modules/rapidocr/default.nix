@@ -110,9 +110,6 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
-    # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
-    # Also some related issue: https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
-    badPlatforms = [ "aarch64-linux" ];
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";

@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [
       bennofs
-      figsoda
       ncfavier
     ];
   };

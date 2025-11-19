@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ktls-utils";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "ktls-utils";
     rev = "ktls-utils-${version}";
-    hash = "sha256-aCn9qBD1bh7VFSSrC1uR/XPfFI+YC/gylCr7tSs56VQ=";
+    hash = "sha256-xBh9iSmTf8YCfahWnJvDx/nvz91NFZ3AiJ2JYs+pMfY=";
   };
 
   nativeBuildInputs = [

@@ -1147,6 +1147,9 @@ let
         instead of:
 
           baseType // { check = value: /* your check */; }
+
+        Alternatively, this message may also occur as false positive when mixing Nixpkgs
+        versions, if one Nixpkgs is between 83fed2e6..58696117 (Aug 28 - Oct 28 2025)
       '';
 
   # Merge definitions of a value of a given type.

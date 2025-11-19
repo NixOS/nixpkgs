@@ -1,24 +1,24 @@
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1250,7 +1250,7 @@
+@@ -1249,7 +1249,7 @@
   "sha2",
   "shadowquic",
   "shadowsocks",
 - "smoltcp 0.12.0 (git+https://github.com/smoltcp-rs/smoltcp.git?rev=ac32e64)",
-+ "smoltcp 0.12.0",
-  "socket2 0.6.0",
++ "smoltcp",
+  "sock2proc",
+  "socket2 0.6.1",
   "tempfile",
-  "thiserror 2.0.17",
-@@ -4096,7 +4096,7 @@
+@@ -4234,7 +4234,7 @@
   "etherparse 0.16.0",
   "futures",
   "rand 0.8.5",
 - "smoltcp 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
-+ "smoltcp 0.12.0",
++ "smoltcp",
   "spin 0.9.8",
   "tokio",
   "tokio-util",
-@@ -6487,20 +6487,6 @@
+@@ -6632,20 +6632,6 @@
  ]
  
  [[package]]
@@ -36,15 +36,15 @@
 -]
 -
 -[[package]]
- name = "socket2"
- version = "0.4.10"
- source = "registry+https://github.com/rust-lang/crates.io-index"
-@@ -8792,7 +8778,7 @@
+ name = "sock2proc"
+ version = "0.1.0"
+ source = "git+https://github.com/Watfaq/sock2proc.git?rev=1097e6b#1097e6ba692025f80567446e0035af1222f5231f"
+@@ -8964,7 +8950,7 @@
   "netstack-lwip",
   "netstack-smoltcp",
   "rand 0.9.2",
 - "smoltcp 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
-+ "smoltcp 0.12.0",
-  "socket2 0.6.0",
++ "smoltcp",
+  "socket2 0.6.1",
   "tokio",
   "tracing",

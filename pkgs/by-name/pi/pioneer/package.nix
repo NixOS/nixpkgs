@@ -32,8 +32,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'string(TIMESTAMP PROJECT_VERSION "%Y%m%d")' 'set(PROJECT_VERSION ${version})'
+    substituteInPlace contrib/lz4/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.4)' 'cmake_minimum_required(VERSION 3.13)'
+    substituteInPlace contrib/nanosockets/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.13)'
   '';
 
   nativeBuildInputs = [

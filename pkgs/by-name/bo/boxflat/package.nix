@@ -45,12 +45,12 @@ python3Packages.buildPythonPackage rec {
     udevCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-        --replace-fail "psutil==6.1.0" "psutil" \
-        --replace-fail "evdev==1.7.1" "evdev" \
-        --replace-fail "pycairo==1.27.0" "pycairo"
-  '';
+  pythonRelaxDeps = [
+    "psutil"
+    "evdev"
+    "pycairo"
+    "PyYAML"
+  ];
 
   preBuild = ''
     cat > setup.py << EOF

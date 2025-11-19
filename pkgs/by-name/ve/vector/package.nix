@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -21,21 +20,22 @@
   nixosTests,
   nix-update-script,
   darwin,
+  versionCheckHook,
   zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.50.0";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vyRvBCpWOKeI7Y+RbxCdVCAF45vWjC7ZD4PCS0QloPg=";
+    hash = "sha256-EjG8FFz4PDAgCPTkHAxJieW+t6RAPx3MTSku8QGXjYg=";
   };
 
-  cargoHash = "sha256-4Nsq5Ta08wlHuevOfrr1mPi+qY+49q9S+AtbY35sfEM=";
+  cargoHash = "sha256-17hmdom7ZZQQ4vYte3IKZnqlLEv7D7LY6tyWqdeuUHk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -111,6 +111,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace ./src/dns.rs \
       --replace-fail "#[tokio::test]" ""
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     tests = {

@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "openai-harmony";
-  version = "0.0.4";
+  version = "0.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "harmony";
     rev = "v${version}";
-    hash = "sha256-2LOrMLrNR1D3isbjiv5w+1Ni9IMwMEPPTOnG1rm//ag=";
+    hash = "sha256-CaEldCrjBkjwsVeTzpiAFl/llAnUwJGTlU8Pt8YTV1E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-tQq6PFMYghIfJu8CddbXFKXxr41GJaElbCCQuSpnaqk=";
+    hash = "sha256-HeUK/S9nUDRTVkLf8CPrHfjBbyGZezZGu5P8XkfStVQ=";
   };
 
   nativeBuildInputs = [

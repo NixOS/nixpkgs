@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit chromium grpc mercurial;
-    inherit (python3Packages) fb-re2 google-re2;
+    inherit (python3Packages) google-re2;
     haskell-re2 = haskellPackages.re2;
   };
 

@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       moni
-      kachick
     ];
     mainProgram = "ox";
   };

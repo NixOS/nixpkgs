@@ -66,7 +66,7 @@
 
       with subtest("Login with elementary-greeter"):
           machine.send_chars("${user.password}\n")
-          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
+          machine.wait_until_succeeds('journalctl -t gnome-session-service --grep "Entering running state"')
 
       with subtest("Wait for wayland server"):
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")

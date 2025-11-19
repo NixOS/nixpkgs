@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/neovim/pynvim";
     changelog = "https://github.com/neovim/pynvim/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }
