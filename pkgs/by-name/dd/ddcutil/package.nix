@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-KTChTw80jARrghtbJAcksC5H0ElOTrkICBkexVW+K3M=";
+    hash = "sha256-e24U+z1VHctBJbbw++R6FvpMo/egi0GWO+mOUOwjQiM=";
   };
 
   nativeBuildInputs = [
