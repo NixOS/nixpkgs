@@ -8322,12 +8322,6 @@
     githubId = 88741530;
     name = "Fabian Rigoll";
   };
-  fadenb = {
-    email = "tristan.helmich+nixos@gmail.com";
-    github = "fadenb";
-    githubId = 878822;
-    name = "Tristan Helmich";
-  };
   famfo = {
     name = "famfo";
     email = "famfo+nixpkgs@famfo.xyz";
