@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -281,7 +280,7 @@ in
 buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
   outputs = [
