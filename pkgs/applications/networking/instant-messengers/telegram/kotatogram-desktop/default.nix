@@ -60,6 +60,7 @@ telegram-desktop.override {
 
     patches = [
       ./macos-qt5.patch
+      ./glib-2.86.patch
       (fetchpatch {
         url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
         stripLen = 1;
