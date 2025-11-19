@@ -17549,12 +17549,6 @@
     matrix = "@motiejus:jakstys.lt";
     name = "Motiejus Jakštys";
   };
-  mounium = {
-    email = "muoniurn@gmail.com";
-    github = "Mounium";
-    githubId = 20026143;
-    name = "Katona László";
-  };
   mpcsh = {
     email = "m@mpc.sh";
     github = "mpcsh";
