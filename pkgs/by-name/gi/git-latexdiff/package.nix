@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "View diff on LaTeX source files on the generated PDF files";
     homepage = "https://gitlab.com/git-latexdiff/git-latexdiff";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ doronbehar ];
     license = lib.licenses.bsd3; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
     platforms = lib.platforms.unix;
     mainProgram = "git-latexdiff";
