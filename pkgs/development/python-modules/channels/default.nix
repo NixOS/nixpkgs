@@ -9,16 +9,15 @@
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
+  selenium,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "channels";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django";
@@ -43,6 +42,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-django
     pytestCheckHook
+    selenium
+    writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
@@ -53,10 +54,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "channels" ];
 
+  disabledTestPaths = [
+    # Don't test the sample project
+    "tests/sample_project/"
+  ];
+
   meta = with lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     homepage = "https://github.com/django/channels";
-    changelog = "https://github.com/django/channels/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/django/channels/blob/${src.tag}/CHANGELOG.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
