@@ -8,6 +8,7 @@
   wayland-scanner,
   aquamarine,
   cairo,
+  gtest,
   hyprgraphics,
   hyprlang,
   hyprutils,
@@ -24,13 +25,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprtoolkit";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprtoolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SjZAlFpZ/ZpYXj59toamF4qx5rC8RP0U/yEsPVniyI8=";
+    hash = "sha256-M+mlYKvzqW+TSoJ4MH9U+HcFoUmWc1etiXehyLEVB2M=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     aquamarine
     cairo
+    gtest
     hyprgraphics
     hyprlang
     hyprutils

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
 }:
-assert version == "2.9.0";
+assert version == "2.9.1";
 rec {
   src_aiter = fetchFromGitHub {
     owner = "ROCm";
@@ -99,8 +99,8 @@ rec {
   src_cudnn-frontend = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
-    rev = "f937055efc6d414d11f4c6577e3977fe74f35fb6";
-    hash = "sha256-LiTajW2hrDth8wEC4Vp2lZO+CeMqK+tEKPLok7gXB/s=";
+    rev = "243c7ff63be1ce6dd5bf9047668b5d4de83f55f6";
+    hash = "sha256-yJgJ4ecN7Fv5VlGyGtzoktkkBUZvxe2kbrsmaiQQmVA=";
   };
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
@@ -441,8 +441,8 @@ rec {
   src_pytorch = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
-    rev = "v2.9.0";
-    hash = "sha256-0NdREKn9h3FtHKVe1Z3QtSOVdEcfgLlWXG/OiI+QrwA=";
+    rev = "v2.9.1";
+    hash = "sha256-9DJsjsxT+KLdSBnV08MXSVAhjg6kXkHdOAjRsq+ocd8=";
   };
   src_sleef = fetchFromGitHub {
     owner = "shibatch";

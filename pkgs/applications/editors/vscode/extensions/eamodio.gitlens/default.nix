@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
   pnpm,
   nodejs,
@@ -10,7 +10,7 @@
 }:
 
 let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
+  vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.zip";
     pname = "gitlens-vsix";
     version = "17.7.1";
