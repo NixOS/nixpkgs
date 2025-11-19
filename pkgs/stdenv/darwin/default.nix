@@ -383,6 +383,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         darwin = super.darwin.overrideScope (
           selfDarwin: superDarwin: {
+            # The bootstrap tools provide a libc++ that is definitely compatible with the Clang in the bootstrap tools.
+            # Otherwise, it is possible for the bootstrap tools Clang to be too old for the system libc++ headers.
+            inherit (self.llvmPackages) libcxx;
 
             binutils-unwrapped =
               (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
@@ -608,6 +611,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           selfDarwin: superDarwin:
           llvmLibrariesDarwinDepsNoCC prevStage
           // {
+            # The bootstrap tools provide a libc++ that is definitely compatible with the Clang in the bootstrap tools.
+            # Otherwise, it is possible for the bootstrap tools Clang to be too old for the system libc++ headers.
+            inherit (self.llvmPackages) libcxx;
+
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
             # Rewrap binutils with the real libSystem
