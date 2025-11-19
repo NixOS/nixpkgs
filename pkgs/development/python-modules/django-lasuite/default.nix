@@ -16,6 +16,7 @@
   responses,
   celery,
   pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -59,6 +60,13 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "lasuite" ];
+
+  passthru.tests = {
+    inherit (nixosTests)
+      lasuite-docs
+      lasuite-meet
+      ;
+  };
 
   meta = {
     description = "Common library for La Suite Django projects and Proconnected Django projects";
