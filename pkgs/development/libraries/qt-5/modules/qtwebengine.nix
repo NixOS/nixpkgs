@@ -57,7 +57,7 @@
   bootstrap_cmds,
   xcbuild,
   writeScriptBin,
-  ffmpeg ? null,
+  ffmpeg_7 ? null,
   lib,
   stdenv,
   version ? null,
@@ -354,7 +354,7 @@ qtModule (
       icu
 
       libevent
-      ffmpeg
+      ffmpeg_7
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       dbus
