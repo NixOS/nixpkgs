@@ -13,7 +13,6 @@
   hatch-fancy-pypi-readme,
 
   # web assets
-  zip,
   nodejs,
   pnpm_9,
 
@@ -76,25 +75,29 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.38.2";
+  version = "5.49.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
+    hash = "sha256-tfjyu2yl+2ndPZWrsSrVf8qv2eqpU5ZJHVqM9saJVt4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
+    hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
   };
 
   pythonRelaxDeps = [
     "aiofiles"
     "markupsafe"
+    "pillow"
+    # Falsely complains that "gradio-client==1.13.3 not satisfied by version 1.12.1"
+    # (it is in fact v1.13.3, verified by both looking at the drv and the failed build)
+    "gradio-client"
   ];
 
   pythonRemoveDeps = [
@@ -103,7 +106,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    zip
     nodejs
     pnpm_9.configHook
   ];
@@ -183,11 +185,6 @@ buildPythonPackage rec {
   preBuild = ''
     pnpm build
     pnpm package
-  '';
-
-  postBuild = ''
-    # SyntaxError: 'await' outside function
-    zip -d dist/gradio-*.whl gradio/_frontend_code/lite/examples/transformers_basic/run.py
   '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
