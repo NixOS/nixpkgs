@@ -43,6 +43,8 @@ callPackage vscode-generic {
   tests = { };
   updateScript = ./update.sh;
 
+  dontFixup = hostPlatform.isDarwin;
+
   meta = {
     mainProgram = "antigravity";
     description = "Agentic development platform, evolving the IDE into the agent-first era";
