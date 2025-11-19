@@ -6695,12 +6695,6 @@
     githubId = 28980797;
     name = "David Leslie";
   };
-  dlip = {
-    email = "dane@lipscombe.com.au";
-    github = "dlip";
-    githubId = 283316;
-    name = "Dane Lipscombe";
-  };
   dlugoschvincent = {
     email = "dlugoschvincent@gmail.com";
     github = "dlugoschvincent";
