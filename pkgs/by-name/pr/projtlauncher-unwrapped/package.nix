@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
-    rev = finalAttrs.version; # version 0.0.1 commit hash
+    tag = finalAttrs.version;
     sha256 = "sha256-X4ktTps48EKjWvzGxrBfShmHpOhKFtt47+LQGrV3cx8=";
     fetchSubmodules = true;
   };
@@ -100,7 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = with lib.licenses; [
+      gpl3Plus
+      gpl3Only
+      asl20
+      cc-by-sa-40
+    ];
     maintainers = with lib.maintainers; [
       yongdohyun
     ];

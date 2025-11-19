@@ -51,14 +51,14 @@ assert lib.assertMsg (
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
-  projtlauncher = projtlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
+  projtlauncher' = projtlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
 in
 
 symlinkJoin {
   pname = "projtlauncher";
-  inherit (projtlauncher) version;
+  inherit (projtlauncher') version;
 
-  paths = [ projtlauncher ];
+  paths = [ projtlauncher' ];
 
   nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
 
@@ -120,7 +120,7 @@ symlinkJoin {
     ];
 
   meta = {
-    inherit (projtlauncher.meta)
+    inherit (projtlauncher'.meta)
       description
       longDescription
       homepage
