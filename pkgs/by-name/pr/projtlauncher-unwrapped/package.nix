@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      YongDoHyun
+      yongdohyun
     ];
     mainProgram = "projtlauncher";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
