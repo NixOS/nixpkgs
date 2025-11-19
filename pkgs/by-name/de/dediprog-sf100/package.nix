@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DediProgSW";
     repo = "SF100Linux";
-    rev = "V${finalAttrs.dediprogVersion}";
+    tag = "V${finalAttrs.dediprogVersion}";
     hash = finalAttrs.dediprogHash;
   };
 
