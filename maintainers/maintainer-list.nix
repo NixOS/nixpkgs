@@ -6539,12 +6539,6 @@
     githubId = 41772157;
     name = "Dict Xiong";
   };
-  diegolelis = {
-    email = "diego.o.lelis@gmail.com";
-    github = "DiegoLelis";
-    githubId = 8404455;
-    name = "Diego Lelis";
-  };
   diegs = {
     email = "dpontor@gmail.com";
     github = "diegs";
