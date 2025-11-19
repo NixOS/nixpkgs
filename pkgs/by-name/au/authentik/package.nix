@@ -20,7 +20,7 @@ let
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
-    rev = "version/${version}";
+    tag = "version/${version}";
     hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
   };
 

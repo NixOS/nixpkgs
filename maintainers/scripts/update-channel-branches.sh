@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-: ${NIXOS_CHANNELS:=https://nixos.org/channels/}
+: ${NIXOS_CHANNELS:=https://channels.nixos.org/}
 : ${CHANNELS_NAMESPACE:=refs/heads/channels/}
 
 # List all channels which are currently in the repository which we would
