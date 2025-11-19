@@ -20209,12 +20209,6 @@
     githubId = 722550;
     name = "Peter Hoeg";
   };
-  peterromfeldhk = {
-    email = "peter.romfeld.hk@gmail.com";
-    github = "peterromfeldhk";
-    githubId = 5515707;
-    name = "Peter Romfeld";
-  };
   petersjt014 = {
     email = "petersjt014@gmail.com";
     github = "petersjt014";

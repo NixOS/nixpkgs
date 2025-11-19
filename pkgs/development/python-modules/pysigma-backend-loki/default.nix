@@ -38,6 +38,5 @@ buildPythonPackage rec {
     description = "Library to support the loki backend for pySigma";
     homepage = "https://github.com/grafana/pySigma-backend-loki";
     license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ peterromfeldhk ];
   };
 }
