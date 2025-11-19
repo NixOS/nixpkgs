@@ -467,7 +467,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 '';
                 passthru.isFromBootstrapFiles = true;
               };
-              llvm-manpages = self.llvmPackages.libllvm;
               lld = self.stdenv.mkDerivation {
                 name = "bootstrap-stage0-lld";
                 buildCommand = "";
