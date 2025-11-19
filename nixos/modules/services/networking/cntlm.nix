@@ -8,31 +8,58 @@ let
 
   cfg = config.services.cntlm;
 
-  configFile =
-    if cfg.configText != "" then
-      pkgs.writeText "cntlm.conf" ''
-        ${cfg.configText}
-      ''
-    else
-      pkgs.writeText "lighttpd.conf" ''
-        # Cntlm Authentication Proxy Configuration
-        Username ${cfg.username}
-        Domain ${cfg.domain}
-        Password ${cfg.password}
-        ${lib.optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
-        ${lib.concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
-        ${lib.optionalString (cfg.noproxy != [ ]) "NoProxy ${lib.concatStringsSep ", " cfg.noproxy}"}
+  needsPassNTLMv2 = builtins.elem cfg.authType [ "NTLMv2" ];
+  needsPassNT = builtins.elem cfg.authType [
+    "NT"
+    "NTLM"
+    "NTLM2SR"
+  ];
+  needsPassLM = builtins.elem cfg.authType [
+    "LM"
+    "NTLM"
+  ];
 
-        ${lib.concatMapStrings (port: ''
-          Listen ${toString port}
-        '') cfg.port}
+  buildConfig = pkgs.runCommandNoCC "cntlm.conf" { } ''
+    set -euo pipefail
+    cat ${configPrelude} >$out
+    GENERATED=$(echo "${cfg.password}" | ${pkgs.cntlm}/bin/cntlm \
+      -u ${cfg.username} -d ${cfg.domain} -H)
 
-        ${cfg.extraConfig}
-      '';
+    ${lib.optionalString needsPassNTLMv2 ''
+      echo "$GENERATED" | grep 'PassNTLMv2 ' >>$out
+    ''}
+    ${lib.optionalString needsPassNT ''
+      echo "$GENERATED" | grep 'PassNT ' >>$out
+    ''}
+    ${lib.optionalString needsPassLM ''
+      echo "$GENERATED" | grep 'PassLM ' >>$out
+    ''}
+  '';
 
+  configPrelude = pkgs.writeText "cntlm-prelude.conf" ''
+    # Cntlm Authentication Proxy Configuration
+    Username ${cfg.username}
+    Domain ${cfg.domain}
+    Auth ${cfg.authType}
+    ${lib.optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
+    ${lib.concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
+    ${lib.optionalString (cfg.noproxy != [ ]) "NoProxy ${lib.concatStringsSep ", " cfg.noproxy}"}
+
+    ${lib.concatMapStrings (port: ''
+      Listen ${toString port}
+    '') cfg.port}
+
+    ${cfg.extraConfig}
+  '';
+
+  configFile = if cfg.configFile != null then cfg.configFile else buildConfig;
 in
-
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "cntlm" "configText" ] ''
+      Use services.cntlm.configFile in conjunction with a trivial builder, e.g. writeText
+    '')
+  ];
 
   options.services.cntlm = {
 
@@ -50,10 +77,23 @@ in
       description = "Proxy account domain/workgroup name.";
     };
 
+    authType = lib.mkOption {
+      type = lib.types.enum [
+        "LM"
+        "NT"
+        "NTLM"
+        "NTLM2SR"
+        "NTLMv2"
+      ];
+      description = "Authentication type for the ntlm proxy";
+    };
+
     password = lib.mkOption {
-      default = "/etc/cntlm.password";
       type = lib.types.str;
-      description = "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
+      description = ''
+        Proxy account password in plaintext. Will be hashed in accordance with the selected authType.
+        Note that hashed passwords will be world-readable in the Nix store.
+      '';
     };
 
     netbios_hostname = lib.mkOption {
@@ -100,10 +140,13 @@ in
       description = "Additional config appended to the end of the generated {file}`cntlm.conf`.";
     };
 
-    configText = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
-      description = "Verbatim contents of {file}`cntlm.conf`.";
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to custom {file}`cntlm.conf`.
+        If unset, the config file will be generated based on the value of other options.
+      '';
     };
 
   };
