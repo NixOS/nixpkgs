@@ -14073,12 +14073,6 @@
     name = "Kristoffer Longva Eriksen";
     matrix = "@krisleri:pvv.ntnu.no";
   };
-  kroell = {
-    email = "nixosmainter@makroell.de";
-    github = "rokk4";
-    githubId = 17659803;
-    name = "Matthias Axel Kröll";
-  };
   krostar = {
     email = "alexis.destrez@pm.me";
     github = "krostar";
