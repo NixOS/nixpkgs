@@ -19253,12 +19253,6 @@
     githubId = 123140;
     name = "Oliver Breitwieser";
   };
-  obsidian-systems-maintenance = {
-    name = "Obsidian Systems Maintenance";
-    email = "maintainer@obsidian.systems";
-    github = "obsidian-systems-maintenance";
-    githubId = 80847921;
-  };
   obsoleszenz = {
     name = "obsoleszenz";
     email = "obsoleszenz@riseup.net";
