@@ -5,6 +5,7 @@
   lib,
   qbe,
   stdenv,
+  fetchpatch,
 }:
 let
   platform = lib.toLower stdenv.hostPlatform.uname.system;
@@ -19,14 +20,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "0.24.2";
+  version = "0.25.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
     rev = finalAttrs.version;
-    hash = "sha256-YCUBdPYr/44stW9k54QoUEhNkti6ULJkVBphx7xhmKo=";
+    hash = "sha256-5+aYoO7khH1wfH0iC6ZiIVZ4Y11+TpIC4yaEEEC00GM=";
   };
+
+  patches = [
+    # Fix miscellaneous gcc warnings
+    (fetchpatch {
+      url = "https://git.sr.ht/~sircmpwn/harec/commit/31df27c26e026f3d934759f0e7b3ff105e7bf74c.patch";
+      hash = "sha256-in1MQjiNovlebGaykE8/aMEJkz+bRtlr5EYvCXW4jSA=";
+    })
+  ];
 
   nativeBuildInputs = [ qbe ];
 
