@@ -1444,8 +1444,6 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
-  crystfel-headless = crystfel.override { withGui = false; };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
