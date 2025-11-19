@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "mobsql";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mobsql";
     rev = "v${version}";
-    hash = "sha256-7zrM2vmaikyClNgHHO8OXmATNpJtH85/CDv/86vwzZU=";
+    hash = "sha256-Q0TMSomLDDivfDD4bDeirEpzRUuoJkC0Ph3XIhJ/dYw=";
   };
   vendorHash = "sha256-YqduGY9c4zRQscjqze3ZOAB8EYj+0/6V7NceRwLe3DY=";
 
