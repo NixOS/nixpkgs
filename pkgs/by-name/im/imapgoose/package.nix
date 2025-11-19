@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromSourcehut,
+  installShellFiles,
 }:
 buildGoModule rec {
   pname = "imapgoose";
@@ -21,10 +22,11 @@ buildGoModule rec {
     "cmd/capcheck"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    install -Dm644 imapgoose.1 -t $out/share/man/man1/
-    install -Dm644 imapgoose.conf.5 -t $out/share/man/man5/
-    install -Dm644 LICENCE -t $out/share/licenses/imapgoose/
+    installManPage imapgoose.1
+    installManPage imapgoose.conf.5
   '';
 
   meta = {
