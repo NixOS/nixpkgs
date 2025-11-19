@@ -290,7 +290,7 @@ buildPythonPackage {
   ++ optional-dependencies.api
   ++ optional-dependencies.similarity;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test/python/*"
   ];
 
