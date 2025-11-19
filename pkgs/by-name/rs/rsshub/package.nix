@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://docs.rsshub.app";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    maintainers = with lib.maintainers; [ xinyangli ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
   };
