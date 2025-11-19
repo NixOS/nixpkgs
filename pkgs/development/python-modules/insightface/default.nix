@@ -30,12 +30,15 @@ buildPythonPackage rec {
   version = "0.7.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
+
+  postPatch = ''
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
+  '';
 
   build-system = [
     cython
