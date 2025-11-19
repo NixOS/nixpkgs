@@ -312,13 +312,10 @@ let
   llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
-      clang-unwrapped
     inherit (prevStage."llvmPackages_${llvmVersion}")
       libclang
       libllvm
       lld
-      llvm
-      llvm-manpages
       ;
   };
 
@@ -381,9 +378,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         sigtool = null;
       };
 
-        clang-unwrapped = null;
+      clang = null;
       "llvmPackages_${llvmVersion}" = {
         compiler-rt = null;
+        libclang = null;
         libcxx = null;
         libllvm = null;
       };
