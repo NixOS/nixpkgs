@@ -2,14 +2,11 @@
   lib,
   stdenv,
   writeText,
-  fetchFromGitHub,
+  fetchurl,
   buildcatrust,
   blacklist ? [ ],
   extraCertificateFiles ? [ ],
   extraCertificateStrings ? [ ],
-
-  # Used by update.sh
-  nssOverride ? null,
 
   # Used for tests only
   runCommand,
@@ -23,10 +20,9 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  srcVersion = "3.117";
-  version = if nssOverride != null then nssOverride.version else srcVersion;
+  version = "3.117";
   meta = {
-    homepage = "https://curl.haxx.se/docs/caextract.html";
+    homepage = "https://firefox-source-docs.mozilla.org/security/nss/runbooks/rootstore.html#root-store-consumers";
     description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -35,40 +31,23 @@ let
     ];
     license = lib.licenses.mpl20;
   };
-  certdata = stdenv.mkDerivation {
-    pname = "nss-cacert-certdata";
-    inherit version;
-
-    src =
-      if nssOverride != null then
-        nssOverride.src
-      else
-        fetchFromGitHub {
-          owner = "nss-dev";
-          repo = "nss";
-          rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
-          hash = "sha256-sAs0TiV3TK/WtgHvEjl2KFAgebyWZYmcRcmxjpn2AME=";
-        };
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp lib/ckfw/builtins/certdata.txt $out
-
-      runHook postInstall
-    '';
-
-    inherit meta;
-  };
 in
 stdenv.mkDerivation {
   pname = "nss-cacert";
   inherit version;
 
-  src = certdata;
+  src = fetchurl {
+    url = "https://hg-edge.mozilla.org/projects/nss/raw-file/NSS_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }_RTM/lib/ckfw/builtins/certdata.txt";
+    sha256 = "sha256-A5Eyv/UXnOV87FgDuln+N6vm0Cl661OMWvJ4R/BwJRc=";
+  };
+
+  unpackPhase = ''
+    runHook preUnpack
+    cp "$src" "$(stripHash "$src")"
+    runHook postUnpack
+  '';
 
   outputs = [
     "out"
