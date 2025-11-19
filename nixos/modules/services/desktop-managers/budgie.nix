@@ -156,6 +156,9 @@ in
       fi
     '';
 
+    # https://docs.buddiesofbudgie.org/10.10/developer/workflow/building-budgie-desktop/#compositor-recommendations
+    programs.labwc.enable = mkDefault true;
+
     environment.systemPackages =
       with pkgs;
       [
