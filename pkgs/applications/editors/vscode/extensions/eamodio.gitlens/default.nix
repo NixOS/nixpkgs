@@ -22,6 +22,10 @@ let
       hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
     };
 
+    patches = [
+      ./gitlens-disable-swc-minification.patch
+    ];
+
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;

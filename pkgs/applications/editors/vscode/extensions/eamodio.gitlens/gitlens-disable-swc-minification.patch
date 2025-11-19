@@ -1,0 +1,91 @@
+diff --git a/webpack.config.mjs b/webpack.config.mjs
+index 9d3de47..926fb40 100644
+--- a/webpack.config.mjs
++++ b/webpack.config.mjs
+@@ -259,31 +259,7 @@ function getExtensionConfig(target, mode, env) {
+ 			path: target === 'webworker' ? path.join(__dirname, 'dist', 'browser') : path.join(__dirname, 'dist'),
+ 		},
+ 		optimization: {
+-			minimizer: [
+-				new TerserPlugin({
+-					minify: TerserPlugin.swcMinify,
+-					extractComments: false,
+-					parallel: true,
+-					terserOptions: {
+-						compress: {
+-							drop_debugger: true,
+-							drop_console: true,
+-							ecma: 2020,
+-							// Keep the class names otherwise @log won't provide a useful name
+-							keep_classnames: true,
+-							module: true,
+-						},
+-						format: {
+-							comments: false,
+-							ecma: 2020,
+-						},
+-						mangle: {
+-							// Keep the class names otherwise @log won't provide a useful name
+-							keep_classnames: true,
+-						},
+-					},
+-				}),
+-			],
++			minimizer: [],
+ 			splitChunks:
+ 				target === 'webworker'
+ 					? false
+@@ -576,52 +552,7 @@ function getWebviewConfig(webviews, overrides, mode, env) {
+ 			outputModule: true,
+ 		},
+ 		optimization: {
+-			minimizer:
+-				mode === 'production'
+-					? [
+-							new TerserPlugin({
+-								minify: TerserPlugin.swcMinify,
+-								extractComments: false,
+-								parallel: true,
+-								terserOptions: {
+-									compress: {
+-										drop_debugger: true,
+-										drop_console: true,
+-										ecma: 2020,
+-										// Keep the class names otherwise @log won't provide a useful name
+-										keep_classnames: true,
+-										module: true,
+-									},
+-									format: {
+-										comments: false,
+-										ecma: 2020,
+-									},
+-									mangle: {
+-										// Keep the class names otherwise @log won't provide a useful name
+-										keep_classnames: true,
+-									},
+-								},
+-							}),
+-							new ImageMinimizerPlugin({
+-								deleteOriginalAssets: true,
+-								generator: [imageGeneratorConfig],
+-							}),
+-							new CssMinimizerPlugin({
+-								minimizerOptions: {
+-									preset: [
+-										'cssnano-preset-advanced',
+-										{
+-											autoprefixer: false,
+-											discardUnused: false,
+-											mergeIdents: false,
+-											reduceIdents: false,
+-											zindex: false,
+-										},
+-									],
+-								},
+-							}),
+-						]
+-					: [],
++			minimizer: [],
+ 			splitChunks: {
+ 				// Disable all non-async code splitting
+ 				// chunks: () => false,
