@@ -348,6 +348,8 @@ self: super: with self; {
 
   aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
 
+  aioice = callPackage ../development/python-modules/aioice { };
+
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
   aioimmich = callPackage ../development/python-modules/aioimmich { };
@@ -457,6 +459,8 @@ self: super: with self; {
   aiormq = callPackage ../development/python-modules/aiormq { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
+
+  aiortc = callPackage ../development/python-modules/aiortc { };
 
   aiortm = callPackage ../development/python-modules/aiortm { };
 
@@ -7906,6 +7910,12 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
+  keeper-secrets-manager-core =
+    callPackage ../development/python-modules/keeper-secrets-manager-core
+      { };
+
+  keepercommander = callPackage ../development/python-modules/keepercommander { };
+
   keepkey = callPackage ../development/python-modules/keepkey { };
 
   keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
@@ -13567,6 +13577,8 @@ self: super: with self; {
   pylibmc = callPackage ../development/python-modules/pylibmc { };
 
   pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
+
+  pylibsrtp = callPackage ../development/python-modules/pylibsrtp { };
 
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 
