@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mounium ];
     teams = [ teams.sage ];
   };
 }
