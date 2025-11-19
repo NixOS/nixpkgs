@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       platforms
       ;
     maintainers = with lib.maintainers; [
-      montchr
+      astratagem
     ];
   };
 
