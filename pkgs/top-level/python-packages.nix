@@ -8139,6 +8139,8 @@ self: super: with self; {
 
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
+  langgraph-store-mongodb = callPackage ../development/python-modules/langgraph-store-mongodb { };
+
   langid = callPackage ../development/python-modules/langid { };
 
   langsmith = callPackage ../development/python-modules/langsmith { };
