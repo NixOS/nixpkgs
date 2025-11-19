@@ -223,8 +223,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update/update.ts;
+    tests = callPackage ./tests { };
+    inherit librusty_v8;
+  };
 
   meta = with lib; {
     homepage = "https://deno.land/";
