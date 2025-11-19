@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace git-latexdiff \
-      --replace "@GIT_LATEXDIFF_VERSION@" "v${finalAttrs.version}"
+      --replace-fail "@GIT_LATEXDIFF_VERSION@" "v${finalAttrs.version}"
     patchShebangs git-latexdiff
   '';
 
