@@ -29,7 +29,7 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "zulip-term";
-  version = "0.7.0-unstable-2025-05-19";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
