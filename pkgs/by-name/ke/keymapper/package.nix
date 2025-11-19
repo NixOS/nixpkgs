@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keymapper";
     maintainers = with lib.maintainers; [
       dit7ya
-      spitulax
     ];
     platforms = lib.platforms.linux;
   };
