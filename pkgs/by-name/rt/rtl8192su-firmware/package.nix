@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation {
     owner = "chunkeey";
     repo = "rtl8192su";
     rev = "c00112c9a14133290fe30bd3b44e45196994cb1c";
-    sha256 = "0j3c35paapq1icmxq0mg7pm2xa2m69q7bkfmwgq99d682yr2cb5l";
+    hash = "sha256-tCwmshfItJTw49XNdXAyVagu6j2vAtwriwFfpW4ZbEg=";
   };
 
   dontBuild = true;
