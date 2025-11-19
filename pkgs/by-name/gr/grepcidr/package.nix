@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pc-tools.net/unix/grepcidr/";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.fadenb ];
     mainProgram = "grepcidr";
   };
 }
