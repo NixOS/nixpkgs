@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-clicker";
-  version = "0.3.1";
+  version = "0.4";
 
   nativeBuildInputs = [ wayland-scanner ];
   buildInputs = [
@@ -18,15 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "phonetic112";
+    owner = "phoneticalb";
     repo = "wl-clicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HuUK1kkqIdB5SdcewJ1J8elzqrFaFWC3BRV3GgcasTU=";
+    hash = "sha256-+k3iZOv12WbqpeYbYjIXBIB4mO2DrY1pl+MJn2B+cZA=";
   };
-
-  postPatch = ''
-    sed -i 's|/usr|${wlr-protocols}|g' Makefile
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -40,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Wayland autoclicker";
     longDescription = "Script for auto clicking at incredibly high speeds - user must be a part of `input` group to run.";
-    homepage = "https://github.com/phonetic112/wl-clicker";
+    homepage = "https://github.com/phoneticalb/wl-clicker";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Flameopathic ];
     mainProgram = "wl-clicker";
