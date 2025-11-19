@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmark
-    ghc_filesystem
     kdePackages.qtbase
     kdePackages.qtnetworkauth
     kdePackages.quazip
