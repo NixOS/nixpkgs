@@ -1,35 +1,41 @@
 {
   lib,
   stdenv,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-benchmark,
+  pytestCheckHook,
   setuptools,
   twisted,
-  pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.22.1";
+  version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
     tag = "v${version}";
-    hash = "sha256-DEuIoVpRDJTd9qXBeHa5jrBscmGgosCKAluqCuUBzuU=";
+    hash = "sha256-sCtLokMscfuZrQVN3ok36wlnwUb+Qukkepnzs611/kU=";
   };
-
-  build-system = [ setuptools ];
-
-  optional-dependencies.twisted = [ twisted ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    twisted = [ twisted ];
+  };
+
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "prometheus_client" ];
 
