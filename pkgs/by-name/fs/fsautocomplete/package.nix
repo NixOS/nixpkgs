@@ -9,13 +9,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.80.1";
+  version = "0.81.0";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ad589R2SXOvnXcNAEhwjOpITv5ptnIR7BUamFgTLF+k=";
+    hash = "sha256-xQJmsfERMK1wh3KOMezNFhVBpQK72iPr3CT1TYRqoV8=";
   };
 
   nugetDeps = ./deps.json;
