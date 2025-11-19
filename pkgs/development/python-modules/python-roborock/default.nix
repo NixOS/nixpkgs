@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-KgrpfcGaq84VWlcGvKMjJfz4bEkC9l1waj1ZucQa7DA=";
+    hash = "sha256-Ts1X07eTv4KXv344F3fGazHlDx6XXGQfdmxb+gd/0qc=";
   };
 
   pythonRelaxDeps = [ "pycryptodome" ];
