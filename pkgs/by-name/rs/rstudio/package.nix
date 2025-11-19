@@ -361,7 +361,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ciil
-      cfhammill
       tomasajt
     ];
     mainProgram = "rstudio" + lib.optionalString server "-server";
