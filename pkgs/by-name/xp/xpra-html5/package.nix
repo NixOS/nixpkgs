@@ -8,13 +8,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "xpra-html5";
-  version = "17.1";
+  version = "18.1";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra-html5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmv3L5Fcq1GF/txqHV6pCT530SFKm0RpfGmI4BLGGp0=";
+    hash = "sha256-HMYww+30+VIuSxw2hCLHRF3ne3x5mi89GBja4nyw2DU=";
   };
 
   buildInputs = [
