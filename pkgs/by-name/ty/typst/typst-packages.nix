@@ -1,13 +1,14 @@
 {
   lib,
   callPackage,
+  newScope,
 }:
 
 let
   toPackageName = name: version: "${name}_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
-lib.makeExtensible (
-  final:
+lib.makeScope newScope (
+  self:
   lib.recurseIntoAttrs (
     lib.foldlAttrs (
       packageSet: pname: versionSet:
@@ -16,7 +17,7 @@ lib.makeExtensible (
         subPackageSet: version: packageSpec:
         subPackageSet
         // {
-          ${toPackageName pname version} = callPackage (
+          ${toPackageName pname version} = self.callPackage (
             {
               lib,
               buildTypstPackage,
@@ -32,7 +33,7 @@ lib.makeExtensible (
               };
 
               typstDeps = builtins.filter (x: x != null) (
-                lib.map (d: (lib.attrsets.attrByPath [ d ] null final)) packageSpec.typstDeps
+                lib.map (d: (lib.attrsets.attrByPath [ d ] null self)) packageSpec.typstDeps
               );
 
               meta = {
@@ -46,7 +47,7 @@ lib.makeExtensible (
         }
       ) { } versionSet)
       // {
-        ${pname} = final.${toPackageName pname (lib.last (lib.attrNames versionSet))};
+        ${pname} = self.${toPackageName pname (lib.last (lib.attrNames versionSet))};
       }
     ) { } (lib.importTOML ./typst-packages-from-universe.toml)
   )
