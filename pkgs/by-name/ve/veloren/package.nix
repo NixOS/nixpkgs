@@ -72,6 +72,12 @@ rustPlatform.buildRustPackage {
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "default-publish" ];
+  cargoBuildFlags = [
+    "--bin"
+    "veloren-voxygen"
+    "--bin"
+    "veloren-server-cli"
+  ];
 
   env = {
     # Enable unstable features, see https://gitlab.com/veloren/veloren/-/issues/264
