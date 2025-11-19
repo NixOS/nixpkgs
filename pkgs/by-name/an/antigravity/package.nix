@@ -57,6 +57,9 @@ callPackage vscode-generic {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ Zaczero ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      Zaczero
+    ];
   };
 }
