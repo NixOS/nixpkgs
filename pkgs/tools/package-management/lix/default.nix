@@ -213,6 +213,28 @@ lib.makeExtensible (
       };
     };
 
+    lix_2_94 = self.makeLixScope {
+      attrName = "lix_2_94";
+
+      lix-args = rec {
+        version = "2.94.0";
+
+        src = fetchFromGitea {
+          domain = "git.lix.systems";
+          owner = "lix-project";
+          repo = "lix";
+          rev = version;
+          hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
+        };
+
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+        };
+      };
+    };
+
     git = self.makeLixScope {
       attrName = "git";
 
@@ -235,7 +257,7 @@ lib.makeExtensible (
       };
     };
 
-    latest = self.lix_2_93;
+    latest = self.lix_2_94;
 
     stable = self.lix_2_93;
 
