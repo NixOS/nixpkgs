@@ -16,33 +16,15 @@ lib.makeScope newScope (
       subPackageSet: version: packageSpec:
       subPackageSet
       // {
-        ${toPackageName pname version} = self.callPackage (
-          {
-            lib,
-            buildTypstPackage,
-            fetchzip,
-          }:
-          buildTypstPackage (finalAttrs: {
-            inherit pname version;
-
-            src = fetchzip {
-              inherit (packageSpec) hash;
-              url = "https://packages.typst.org/preview/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-              stripRoot = false;
-            };
-
-            typstDeps = builtins.filter (x: x != null) (
-              lib.map (d: (lib.attrsets.attrByPath [ d ] null self)) packageSpec.typstDeps
-            );
-
-            meta = {
-              inherit (packageSpec) description;
-              maintainers = with lib.maintainers; [ cherrypiejam ];
-              license = lib.map (lib.flip lib.getAttr lib.licensesSpdx) packageSpec.license;
-            }
-            // (if packageSpec ? "homepage" then { inherit (packageSpec) homepage; } else { });
-          })
-        ) { };
+        ${toPackageName pname version} = self.callPackage ./build-universe-package.nix {
+          inherit (packageSpec)
+            hash
+            description
+            license
+            typstDeps
+            homepage
+            ;
+        };
       }
     ) { } versionSet)
     // {
