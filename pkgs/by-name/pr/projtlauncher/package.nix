@@ -51,7 +51,7 @@ assert lib.assertMsg (
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
-  projtlauncher' = projtlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
+  projtlauncher = projtlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
 in
 
 symlinkJoin {
