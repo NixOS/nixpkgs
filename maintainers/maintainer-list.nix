@@ -16106,12 +16106,6 @@
     githubId = 3674056;
     name = "Asad Saeeduddin";
   };
-  masipcat = {
-    email = "jordi@masip.cat";
-    github = "masipcat";
-    githubId = 775189;
-    name = "Jordi Masip";
-  };
   MaskedBelgian = {
     email = "michael.colicchia@imio.be";
     github = "MaskedBelgian";
