@@ -641,6 +641,8 @@ in
       script = ''
         set -euo pipefail
 
+        PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
+
         # config setup
         ln -sf ${configFile} ${cfg.dataDir}/config.php
         ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
@@ -659,8 +661,8 @@ in
           echo "" >> ${cfg.dataDir}/.env
         else
           # .env file already exists --> only update database and cache config
-          ${pkgs.gnused}/bin/sed -i /^DB_/d ${cfg.dataDir}/.env
-          ${pkgs.gnused}/bin/sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
+          sed -i /^DB_/d ${cfg.dataDir}/.env
+          sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
         fi
         ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
           echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
