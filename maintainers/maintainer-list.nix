@@ -27426,12 +27426,6 @@
     github = "victormeriqui";
     githubId = 1396008;
   };
-  vidbina = {
-    email = "vid@bina.me";
-    github = "vidbina";
-    githubId = 335406;
-    name = "David Asabina";
-  };
   videl = {
     email = "thibaut.smith@mailbox.org";
     github = "videl";

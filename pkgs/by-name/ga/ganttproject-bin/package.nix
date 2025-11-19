@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vidbina ];
     mainProgram = "ganttproject";
   };
 }
