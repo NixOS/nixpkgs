@@ -48,7 +48,6 @@ stdenvNoCC.mkDerivation rec {
     hydraPlatforms = [ ]; # The build is little more than copying the binary
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      steinybot
       tricktron
       emaiax
     ];
