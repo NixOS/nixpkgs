@@ -657,7 +657,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         xar = super.xarMinimal;
 
         darwin = super.darwin.overrideScope (
-          selfDarwin: superDarwin: {
+          selfDarwin: superDarwin:
+          llvmLibrariesDarwinDepsNoCC prevStage
+          // {
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
             # Rewrap binutils with the real libSystem
@@ -820,6 +822,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
               darwinPackages prevStage
+              // llvmLibrariesDarwinDepsNoCC prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped;
                 # Rewrap binutils so it uses the rebuilt Libsystem.
@@ -903,6 +906,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               selfDarwin: superDarwin:
               darwinPackages prevStage
               // sdkDarwinPackages prevStage
+              // llvmLibrariesDarwinDepsNoCC prevStage
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
                 inherit (prevStage.darwin) libSystem;
@@ -977,6 +981,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             darwin = super.darwin.overrideScope (
               _: superDarwin:
               sdkDarwinPackages prevStage
+              // llvmLibrariesDarwinDepsNoCC prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped libSystem;
                 binutils = superDarwin.binutils.override {
@@ -1217,6 +1222,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               darwin = super.darwin.overrideScope (
                 _: _:
                 sdkDarwinPackages prevStage
+                // llvmLibrariesDarwinDepsNoCC prevStage
                 // {
                   inherit (prevStage.darwin) libSystem locale sigtool;
                 }
