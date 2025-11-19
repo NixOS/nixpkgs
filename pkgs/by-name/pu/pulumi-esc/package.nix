@@ -30,7 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/pulumi/esc/tree/main";
     changelog = "https://github.com/pulumi/esc/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yomaq ];
     mainProgram = "esc";
   };
 }
