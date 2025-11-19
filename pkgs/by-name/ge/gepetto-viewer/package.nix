@@ -121,6 +121,7 @@ let
       maintainers = [ lib.maintainers.nim65s ];
       mainProgram = "gepetto-gui";
       platforms = lib.platforms.unix;
+      broken = true;
     };
   });
 in
