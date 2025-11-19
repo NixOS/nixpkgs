@@ -29,14 +29,15 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/x90skysn3k/brutespray";
     description = "Tool to do brute-forcing from Nmap output";
-    mainProgram = "brutespray";
+    homepage = "https://github.com/x90skysn3k/brutespray";
     longDescription = ''
       This tool automatically attempts default credentials on found services
       directly from Nmap output.
     '';
+    changelog = "https://github.com/x90skysn3k/brutespray/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    mainProgram = "brutespray";
   };
 })
