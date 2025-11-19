@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
-    rev = "0154de9edd0b0a53bb5a8f674ed86a04ed213c17"; # version 0.0.1 commit hash
+    rev = finalAttrs.version; # version 0.0.1 commit hash
     sha256 = "sha256-X4ktTps48EKjWvzGxrBfShmHpOhKFtt47+LQGrV3cx8=";
     fetchSubmodules = true;
   };
