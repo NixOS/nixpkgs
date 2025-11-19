@@ -415,6 +415,16 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gnugrep = bootstrapTools;
         pbzx = bootstrapTools;
 
+        # Build expand-response-params with an unwrapped clang. This works because the SDK has headers and stubs,
+        # which is all that’s needed.
+        expand-response-params = super.expand-response-params.overrideAttrs (old: {
+          buildPhase = ''
+            CC=${bootstrapTools}/bin/clang
+            export SDKROOT=${self.apple-sdk.sdkroot}
+          ''
+          + old.buildPhase;
+        });
+
         jq = bootstrapTools;
 
         cctools = bootstrapTools // {
