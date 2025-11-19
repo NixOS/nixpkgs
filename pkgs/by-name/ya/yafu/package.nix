@@ -140,8 +140,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/bbuhrow/yafu";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ brubsby ];
     mainProgram = "yafu";
   };
 }
