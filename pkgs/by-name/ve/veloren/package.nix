@@ -16,33 +16,33 @@
   libXrandr,
   wayland,
   stdenv,
+  mold,
 }:
 
 let
   # Note: use this to get the release metadata
-  # https://gitlab.com/api/v4/projects/10174980/repository/tags/v{version}
-  version = "0.17.0";
-  date = "2024-12-28-12:49";
-  rev = "a1be5a7bece7af43ebd76910eb0020c1cf3c0798";
-in
-
-rustPlatform.buildRustPackage {
-  pname = "veloren";
-  inherit version;
+  # https://gitlab.com/api/v4/projects/10174980/repository/tags/nightly
+  version = "0-unstable-2025-11-16";
+  date = "2025-11-16-13:54";
+  rev = "378d14f5403a7e682ffe9d55a7e5dae5e6a736d7";
 
   src = fetchFromGitLab {
     owner = "veloren";
     repo = "veloren";
     inherit rev;
-    hash = "sha256-AnmXn4GWzxu27FUyQIIVnANtu3sr0NIi7seN7buAtL8=";
+    hash = "sha256-PBCWR9NNwfM0qX9+c8ZwnS3aFnEezkpJ1UTPSUn25/w=";
   };
+in
+
+rustPlatform.buildRustPackage {
+  pname = "veloren";
+  inherit version src;
 
   cargoPatches = [
-    ./fix-on-rust-stable.patch
     ./fix-assets-path.patch
   ];
 
-  cargoHash = "sha256-Uj0gFcStWhIS+GbM/Hn/vD2PrA0ftzEnMnCwV0n0g7g=";
+  cargoHash = "sha256-2gx7LqYe55pcGkmdn5OQgG3G9iSNjdn1t2Du4OOKoGE=";
 
   postPatch = ''
     # Force vek to build in unstable mode
@@ -52,6 +52,9 @@ rustPlatform.buildRustPackage {
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+    # Use env var for null sound path
+    sed -i 's:"../../../assets/voxygen/audio/null.ogg":env!("VOXYGEN_NULL_SOUND_PATH"):' \
+      voxygen/src/audio/soundcache.rs
     # Fix assets path
     substituteAllInPlace common/assets/src/lib.rs
   '';
@@ -59,6 +62,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     autoPatchelfHook
     pkg-config
+    mold
   ];
 
   buildInputs = [
@@ -87,6 +91,9 @@ rustPlatform.buildRustPackage {
 
     # Use system shaderc
     SHADERC_LIB_DIR = "${shaderc.lib}/lib";
+
+    # Path to null sound file for voxygen
+    VOXYGEN_NULL_SOUND_PATH = "${src}/assets/voxygen/audio/null.ogg";
   };
 
   # Some tests require internet access
@@ -99,6 +106,7 @@ rustPlatform.buildRustPackage {
         libXi
         libXcursor
         libXrandr
+        libxkbcommon
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
