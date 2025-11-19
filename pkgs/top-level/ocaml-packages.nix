@@ -1617,6 +1617,8 @@ let
 
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
 
+        oxenstored = callPackage ../development/ocaml-modules/oxenstored { };
+
         ### P ###
 
         paf = callPackage ../development/ocaml-modules/paf { };
