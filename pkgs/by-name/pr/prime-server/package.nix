@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prime-server";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "kevinkreiser";
     repo = "prime_server";
     tag = version;
-    sha256 = "0izmmvi3pvidhlrgfpg4ccblrw6fil3ddxg5cfxsz4qbh399x83w";
+    sha256 = "sha256-4hjRj1uW8oU/0IqS7Od9XTGK/D4r1GkBN1LE7xM46W0=";
     fetchSubmodules = true;
   };
 
