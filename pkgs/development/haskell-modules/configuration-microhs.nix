@@ -13,9 +13,24 @@ let
       revision = null;
     } p;
 
+  # mhs has its own versions of some packages
+  renamePackage =
+    pname: pkg:
+    overrideCabal (old: {
+      inherit pname;
+      inherit (pkg) src;
+
+      postPatch = ''
+        ${old.postPatch or ""}
+        sed -e 's/name: \*${old.pname}/name: ${pname}/' ${old.pname}.cabal > ${pname}.cabal
+        rm ${old.pname}.cabal
+      '';
+    }) pkg;
+
 in
 
-self: super: {
+self: super:
+{
   # Disable MicroHs core libraries
   array = null;
   base = null;
@@ -44,6 +59,7 @@ self: super: {
   };
 
   # hackage-packages does not include GHC core libraries
+  array-mhs = markUnbroken super.array-mhs;
   binary = self.binary_0_8_9_3;
   Cabal = self.Cabal_3_16_0_0;
   Cabal-syntax = self.Cabal-syntax_3_16_0_0;
@@ -81,4 +97,8 @@ self: super: {
   transformers = self.transformers_0_6_2_0;
   unix = self.unix_2_8_7_0;
   xhtml = self.xhtml_3000_4_0_0;
+}
+// lib.optionalAttrs (lib.versionAtLeast super.ghc.version "0.14.17.0") {
+  # array-related modules were moved from base to array-mhs
+  array = renamePackage "array" self.array-mhs;
 }
