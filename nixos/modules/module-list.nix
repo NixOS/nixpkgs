@@ -1137,6 +1137,7 @@
   ./services/networking/dae.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
+  ./services/networking/ddns-go.nix
   ./services/networking/ddns-updater.nix
   ./services/networking/deconz.nix
   ./services/networking/dhcpcd.nix
