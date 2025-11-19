@@ -21,9 +21,6 @@ bundlerApp {
     homepage = "https://github.com/CocoaPods/CocoaPods";
     license = licenses.mit;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [
-      peterromfeldhk
-    ];
     mainProgram = "pod";
   };
 }

@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [
       ghuntley
-      peterromfeldhk
       jlesquembre
       cpcloud
       wrbbz
