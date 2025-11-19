@@ -116,7 +116,7 @@ in
           default = null;
           example = "/run/agenix/send-redis-password";
           description = ''
-            The path to the file containing the Redis password.
+            The full path to the file containing the Redis password.
 
             If {option}`services.send.redis.createLocally` is set to true,
             the content of this file will be used as the password for the locally created Redis instance.
@@ -158,7 +158,7 @@ in
         ReadWritePaths = cfg.dataDir;
         LoadCredential = lib.optionalString (
           cfg.redis.passwordFile != null
-        ) "redis-password:${cfg.redis.passwordFile}";
+        ) "redis-password:${toString cfg.redis.passwordFile}"; # Avoid path being included in the store
 
         # Hardening
         RestrictAddressFamilies = [
