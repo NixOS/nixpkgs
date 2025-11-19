@@ -26,13 +26,15 @@ let
 
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
+  # Need to use --no-config to prevent fish_indent from trying to read from config
+  # See https://github.com/fish-shell/fish-shell/issues/12079
   indentFishFile =
     name: text:
     pkgs.runCommand name {
       nativeBuildInputs = [ cfg.package ];
       inherit text;
       passAsFile = [ "text" ];
-    } "fish_indent < $textPath > $out";
+    } "fish --no-config -c 'fish_indent $textPath' > $out";
 
   sourceEnv =
     file:
