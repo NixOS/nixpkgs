@@ -3337,6 +3337,10 @@ let
         };
       };
 
+      ms-vscode.js-debug = callPackage ./ms-vscode.js-debug { };
+
+      ms-vscode.js-debug-companion = callPackage ./ms-vscode.js-debug-companion { };
+
       ms-vscode.hexeditor = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "ms-vscode";
@@ -3408,6 +3412,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      ms-vscode.vscode-js-profile-table = callPackage ./ms-vscode.vscode-js-profile-table { };
 
       ms-vscode-remote.remote-containers = buildVscodeMarketplaceExtension {
         mktplcRef = {
