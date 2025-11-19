@@ -17,7 +17,7 @@
   python3,
   wrapGAppsHook4,
   yt-dlp,
-  youtubeSupport ? true,
+  youtubeSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libadwaita
     libepoxy
-    mpv
+    (mpv.override { inherit youtubeSupport; })
   ];
 
   postPatch = ''
