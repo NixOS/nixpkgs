@@ -11,18 +11,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "git-latexdiff";
 
   src = fetchFromGitLab {
-    hash = "sha256-DMoGEbCBuqUGjbna3yDpD4WNTikPudYRD4Wy1pPG2mw=";
-    tag = finalAttrs.version;
     repo = "git-latexdiff";
     owner = "git-latexdiff";
+    tag = finalAttrs.version;
+    hash = "sha256-DMoGEbCBuqUGjbna3yDpD4WNTikPudYRD4Wy1pPG2mw=";
   };
-
-  buildInputs = [
-    git
-    bash
-  ];
-
-  dontBuild = true;
 
   patches = [ ./version-test.patch ];
 
@@ -31,6 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@GIT_LATEXDIFF_VERSION@" "v${finalAttrs.version}"
     patchShebangs git-latexdiff
   '';
+
+  buildInputs = [
+    git
+    bash
+  ];
+
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $prefix/bin
