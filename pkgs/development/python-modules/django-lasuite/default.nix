@@ -16,18 +16,19 @@
   responses,
   celery,
   pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "django-lasuite";
-  version = "0.0.14";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
-    hash = "sha256-v4VSiZf/gpCrD/YGcEQpj6mYJUaxatqktwI+NL+oF7A=";
+    hash = "sha256-kXRaoVOyabGPCnO8uyWHbpE0zOIYZkHcqmWNSz0BHZY=";
   };
 
   build-system = [ hatchling ];
@@ -60,12 +61,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lasuite" ];
 
+  passthru.tests = {
+    inherit (nixosTests)
+      lasuite-docs
+      lasuite-meet
+      ;
+  };
+
   meta = {
     description = "Common library for La Suite Django projects and Proconnected Django projects";
     homepage = "https://github.com/suitenumerique/django-lasuite";
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
-    broken = lib.versionOlder django.version "5.2";
   };
 }

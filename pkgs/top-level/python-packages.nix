@@ -4735,6 +4735,8 @@ self: super: with self; {
 
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
 
+  ekey-bionyxpy = callPackage ../development/python-modules/ekey-bionyxpy { };
+
   elastic-apm = callPackage ../development/python-modules/elastic-apm { };
 
   elastic-transport = callPackage ../development/python-modules/elastic-transport { };

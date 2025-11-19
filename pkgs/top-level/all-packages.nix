@@ -12566,6 +12566,12 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
+  antigravity = callPackage ../by-name/an/antigravity/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+  antigravity-fhs = antigravity.fhs;
+  antigravity-fhsWithPackages = antigravity.fhsWithPackages;
+
   code-cursor = callPackage ../by-name/co/code-cursor/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
