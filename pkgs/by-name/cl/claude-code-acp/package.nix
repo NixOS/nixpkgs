@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-code-acp";
-  version = "0.4.5";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "claude-code-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kkAQuYP2S5EwIGJV8TLrlYzHOC54vmxEHwwuZD5P1hI=";
+    hash = "sha256-sq4m4w8ZmgU7Quel5gUwmvq0rumo+G1SkCt7fQsg+8M=";
   };
 
-  npmDepsHash = "sha256-IR88NP1AiR6t/MLDdaZY1Np0AE7wfqEUfmnohaf0ymc=";
+  npmDepsHash = "sha256-ElxSaU74txRC/eH7S+Uv33Ji7y2HE6rZU2DmEPICTko=";
 
   meta = {
     description = "ACP-compatible coding agent powered by the Claude Code SDK";
