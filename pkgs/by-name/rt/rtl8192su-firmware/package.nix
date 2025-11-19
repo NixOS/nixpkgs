@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 stdenvNoCC.mkDerivation {
-  pname = "rtl8192su";
+  pname = "rtl8192su-firmware";
   version = "0-unstable-2016-10-05";
 
   src = fetchFromGitHub {
