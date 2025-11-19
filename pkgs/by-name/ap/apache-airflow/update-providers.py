@@ -33,7 +33,7 @@ EXTRA_REQS = {
 
 
 def get_version():
-    with open(os.path.dirname(sys.argv[0]) + "/default.nix") as fh:
+    with open(os.path.dirname(sys.argv[0]) + "/python-package.nix") as fh:
         # A version consists of digits, dots, and possibly a "b" (for beta)
         m = re.search('version = "([\\d\\.b]+)";', fh.read())
         return m.group(1)
@@ -47,7 +47,7 @@ def get_file_from_github(version: str, path: str):
 
 
 def repository_root() -> Path:
-    return Path(os.path.dirname(sys.argv[0])) / "../../.."
+    return Path(os.path.dirname(sys.argv[0])) / "../../../.."
 
 
 def dump_packages() -> Dict[str, Dict[str, str]]:
