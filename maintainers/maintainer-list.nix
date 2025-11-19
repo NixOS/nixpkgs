@@ -28844,16 +28844,16 @@
       { fingerprint = "D2A8 A906 ACA7 B6D6 575E 9A2F 3A49 5054 6EA6 9E5C"; }
     ];
   };
+  yomaq = {
+    name = "yomaq";
+    github = "yomaq";
+    githubId = 112864332;
+  };
   yongdohyun = {
     name = "Yong Do-Hyun";
     email = "froster12@naver.com";
     github = "YongDo-Hyun";
     githubId = 97219311;
-  };
-  yomaq = {
-    name = "yomaq";
-    github = "yomaq";
-    githubId = 112864332;
   };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";

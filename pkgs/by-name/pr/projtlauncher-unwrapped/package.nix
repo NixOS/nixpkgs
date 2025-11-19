@@ -31,13 +31,13 @@ assert lib.assertMsg (
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "projtlauncher-unwrapped";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
     tag = finalAttrs.version;
-    sha256 = "sha256-X4ktTps48EKjWvzGxrBfShmHpOhKFtt47+LQGrV3cx8=";
+    sha256 = "sha256-wTyhOHNaxfrBNTa9cqK8oA4Nw5Rj8lPONjOrkSYwVjM=";
     fetchSubmodules = true;
   };
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmark
-    ghc_filesystem
     kdePackages.qtbase
     kdePackages.qtnetworkauth
     kdePackages.quazip
