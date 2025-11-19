@@ -41,9 +41,13 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != null) "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != null) "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != null) "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.tls.certPath != null) "sslCert=${cfg.tls.certPath}"}
+    ${lib.optionalString (cfg.tls.keyPath != null) "sslKey=${cfg.tls.keyPath}"}
+    ${lib.optionalString (cfg.tls.caPath != null) "sslCA=${cfg.tls.caPath}"}
+    sslDHParams=${
+      if cfg.tls.dhParamsSource == "file" then cfg.tls.dhParamsPath else cfg.tls.dhParamsSource
+    }
+    sslCiphers=${lib.strings.concatStringsSep ":" cfg.tls.cipherSuites}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -58,6 +62,12 @@ in
       "murmur"
       "logFile"
     ] "This option has been superseded by services.murmur.logToFile")
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslCa" ] [ "services" "murmur" "tls" "caPath" ])
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslKey" ] [ "services" "murmur" "tls" "keyPath" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "murmur" "sslCert" ]
+      [ "services" "murmur" "tls" "certPath" ]
+    )
   ];
 
   options = {
@@ -237,22 +247,64 @@ in
 
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
-      sslCert = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL certificate.";
-      };
+      tls = {
+        certPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your SSL certificate.";
+        };
 
-      sslKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL key.";
-      };
+        keyPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your SSL key.";
+        };
 
-      sslCa = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL CA certificate.";
+        caPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your SSL CA certificate.";
+        };
+
+        dhParamsSource = lib.mkOption {
+          type = lib.types.enum [
+            "@ffdhe2048"
+            "@ffdhe3072"
+            "@ffdhe4096"
+            "@ffdhe6144"
+            "@ffdhe8192"
+            "file"
+          ];
+          default = "@ffdhe2048";
+          description = "";
+        };
+
+        dhParamsPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = "/var/lib/murmur/dhparams.pem";
+          description = "";
+        };
+
+        cipherSuites = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [
+            "EECDH+AESGCM"
+            "EDH+aRSA+AESGCM"
+            "DHE-RSA-AES256-SHA"
+            "DHE-RSA-AES128-SHA"
+            "AES256-SHA"
+            "AES128-SHA"
+          ];
+          description = "";
+        };
+
+        useACMEHost = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "mumble.example.com";
+          description = "ACME name";
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -300,6 +352,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.tls.dhParamsSource != "file" -> cfg.tls.dhParamsPath == null;
+        message = "";
+      }
+      {
+        assertion =
+          cfg.tls.useACMEHost != null
+          -> cfg.tls.certPath == null && cfg.tls.keyPath == null && cfg.tls.caPath == null;
+        message = "";
+      }
+    ];
+
     users.users.murmur = lib.mkIf (cfg.user == "murmur") {
       description = "Murmur Service user";
       home = cfg.stateDir;
@@ -319,7 +384,11 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
+      wants = [ ] ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
       preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -422,14 +491,14 @@ in
     + lib.optionalString cfg.logToFile ''
       rw /var/log/murmur/murmurd.log,
     ''
-    + lib.optionalString (cfg.sslCert != null) ''
-      r ${cfg.sslCert},
+    + lib.optionalString (cfg.tls.certPath != null) ''
+      r ${cfg.tls.certPath},
     ''
-    + lib.optionalString (cfg.sslKey != null) ''
-      r ${cfg.sslKey},
+    + lib.optionalString (cfg.tls.keyPath != null) ''
+      r ${cfg.tls.keyPath},
     ''
-    + lib.optionalString (cfg.sslCa != null) ''
-      r ${cfg.sslCa},
+    + lib.optionalString (cfg.tls.caPath != null) ''
+      r ${cfg.tls.caPath},
     ''
     + lib.optionalString (cfg.dbus != null) ''
       dbus bus=${cfg.dbus}
