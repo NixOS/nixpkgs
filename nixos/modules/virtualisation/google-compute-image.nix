@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -181,6 +182,56 @@ in
 
       boot.loader.systemd-boot.enable = true;
       system.build.googleComputeImage = config.system.build.image;
+
+      # TODO: This hack just vendors this system.build.image from image/repart.nix
+      # for the moment, as the latter does not give us a nice way to call overrideAttrs
+      # on system.build.image.
+      system.build.image = lib.mkForce (
+        let
+          cfg = config.image.repart;
+          mkfsOptionsToEnv =
+            opts:
+            lib.mapAttrs' (fsType: options: {
+              name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
+              value = builtins.concatStringsSep " " options;
+            }) opts;
+
+          fileSystems = lib.filter (f: f != null) (
+            lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions
+          );
+
+          format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
+
+          definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
+            lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
+          );
+
+          mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
+          val = pkgs.callPackage ../image/repart-image.nix {
+            systemd = cfg.package;
+            inherit (config.image) baseName;
+            inherit (cfg)
+              name
+              version
+              compression
+              split
+              seed
+              sectorSize
+              finalPartitions
+              ;
+            inherit fileSystems definitionsDirectory mkfsEnv;
+          };
+        in
+        lib.asserts.checkAssertWarn cfg.assertions cfg.warnings (
+          val.overrideAttrs (old: {
+            postInstall = ''
+              mv $out/${old.name}.raw disk.raw
+              tar -Sczf $out/${old.name}.tar.gz disk.raw
+            '';
+          })
+        )
+      );
+
       image = {
         repart = {
           # OVMF does not work with the default repart sector size of 4096
