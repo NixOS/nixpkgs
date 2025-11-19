@@ -19,13 +19,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlauncher";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6JVor77g1LR/22lZYCArUm/geIXE0aGJZ4DHIlgSOj4=";
+    hash = "sha256-KMqHEAuRfO4ep40jxsGW6mnJSeWM41qv63KbWcLBfuw=";
   };
 
   nativeBuildInputs = [
