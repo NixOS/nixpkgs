@@ -17,6 +17,7 @@
   wayland,
   stdenv,
   mold,
+  makeWrapper,
 }:
 
 let
@@ -38,10 +39,6 @@ rustPlatform.buildRustPackage {
   pname = "veloren";
   inherit version src;
 
-  cargoPatches = [
-    ./fix-assets-path.patch
-  ];
-
   cargoHash = "sha256-2gx7LqYe55pcGkmdn5OQgG3G9iSNjdn1t2Du4OOKoGE=";
 
   postPatch = ''
@@ -55,14 +52,13 @@ rustPlatform.buildRustPackage {
     # Use env var for null sound path
     sed -i 's:"../../../assets/voxygen/audio/null.ogg":env!("VOXYGEN_NULL_SOUND_PATH"):' \
       voxygen/src/audio/soundcache.rs
-    # Fix assets path
-    substituteAllInPlace common/assets/src/lib.rs
   '';
 
   nativeBuildInputs = [
     autoPatchelfHook
     pkg-config
     mold
+    makeWrapper
   ];
 
   buildInputs = [
@@ -122,6 +118,11 @@ rustPlatform.buildRustPackage {
     install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
+    # Wrap binaries to set assets path
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --set VELOREN_ASSETS "$out/share/veloren/assets"
+    done
   '';
 
   meta = {
