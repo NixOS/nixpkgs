@@ -3131,12 +3131,6 @@
     github = "beeb";
     githubId = 703631;
   };
-  beezow = {
-    name = "beezow";
-    email = "zbeezow@gmail.com";
-    github = "beezow";
-    githubId = 42082156;
-  };
   bellackn = {
     name = "Nico Bellack";
     email = "blcknc@pm.me";
