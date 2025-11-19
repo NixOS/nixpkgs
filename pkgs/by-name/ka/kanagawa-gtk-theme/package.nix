@@ -4,20 +4,25 @@
   fetchFromGitHub,
   gtk3,
   gtk-engine-murrine,
+  sassc,
+  tweaks ? [ ],
+  variant ? "default",
+  size ? "standard",
 }:
 stdenvNoCC.mkDerivation {
   pname = "kanagawa-gtk-theme";
-  version = "0-unstable-2023-07-03";
+  version = "0-unstable-2025-09-10";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Kanagawa-GKT-Theme";
-    rev = "35936a1e3bbd329339991b29725fc1f67f192c1e";
-    hash = "sha256-BZRmjVas8q6zsYbXFk4bCk5Ec/3liy9PQ8fqFGHAXe0=";
+    rev = "36ce4c341dca01e497109f62e3ca26c9614ebefc";
+    hash = "sha256-iQbvKmHeyrNIFbuoqmX5jgmXWFjc0ZjAw4IxCOxic4k=";
   };
 
   nativeBuildInputs = [
     gtk3
+    sassc
   ];
 
   propagatedUserEnvPkgs = [
@@ -27,8 +32,13 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    patchShebangs ./themes/install.sh
+    ./themes/install.sh \
+      --name Kanagawa \
+      --tweaks ${lib.concatStringsSep " " tweaks} \
+      --theme ${variant} \
+      --size ${size} \
+      --dest $out/share/themes
 
     runHook postInstall
   '';
