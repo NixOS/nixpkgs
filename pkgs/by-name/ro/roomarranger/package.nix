@@ -10,6 +10,8 @@
 }:
 
 let
+  version = "10.3.1";
+
   desktopItem = makeDesktopItem {
     type = "Application";
     exec = "roomarranger";
@@ -28,11 +30,11 @@ in
 
 stdenv.mkDerivation {
   pname = "roomarranger";
-  version = "10.3";
+  inherit version;
 
   src = fetchurl {
-    url = "https://f000.backblazeb2.com/file/rooarr/rooarr1030-linux64.tar.gz";
-    hash = "sha256-v9PdWPR9x0lUmqIuTgwBZuyPy/vJLB5XM4eb5y0/SN8=";
+    url = "https://f000.backblazeb2.com/file/rooarr/rooarr${lib.versions.major version}${lib.versions.minor version}${lib.versions.patch version}-linux64.tar.gz";
+    hash = "sha256-J4/IsOH12CutjorGtZzKbL4uFYWd9SXmjNx32Vi5dr0=";
   };
 
   nativeBuildInputs = [
