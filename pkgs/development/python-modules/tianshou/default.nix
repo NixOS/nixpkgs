@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "tianshou";
-  version = "1.2.0";
+  version = "2.0.0b2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     owner = "thu-ml";
     repo = "tianshou";
     tag = "v${version}";
-    hash = "sha256-lJAxjE+GMwssov1r4jOCOTf5Aonu+q6FSz5oWvZpuQQ=";
+    hash = "sha256-g74oogyBCaEynW2ySucXRW+jgH5sYp3ZgIhQRCIZed8=";
   };
 
   pythonRelaxDeps = [
