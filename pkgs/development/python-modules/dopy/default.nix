@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "dopy";
-  version = "2016-01-04";
+  version = "0.2";
   format = "setuptools";
 
   src = pkgs.fetchFromGitHub {
