@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.9.1";
+  version = "1.0.0";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-7A3XzfUALsmkykwOqF/8fg7T7LoVzwk1+7TmRkh1Wys=";
+    hash = "sha256-KXICqldEJC3xKc0bd1X4O2glLeipzqHE1cGle7TKvAw=";
   };
 
   depsBuildBuild = [ pkg-config ];
