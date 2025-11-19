@@ -51,6 +51,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/deeptools/pyBigWig";
     changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
   };
 }
