@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "djot-js";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "jgm";
     repo = "djot.js";
     rev = "@djot/djot@${version}";
-    hash = "sha256-dQfjI+8cKqn4qLT9eUKfCP++BFCWQ/MmrlQNVRNCFuU=";
+    hash = "sha256-SkE7ssWC62sYZNshB8ncfMVI4NEyEbzO5IVIDsKtynU=";
   };
 
   npmDepsHash = "sha256-FjrjwhVv2WRjbEga9w37lwz7KYgTTHGsoqt496Uq/0c=";
@@ -41,7 +41,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/jgm/djot.js";
     changelog = "https://github.com/jgm/djot.js/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ rpqt ];
     mainProgram = "djot";
   };
 }
