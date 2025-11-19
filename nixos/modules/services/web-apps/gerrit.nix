@@ -178,8 +178,9 @@ in
       requires = [ "gerrit.socket" ];
       after = [
         "gerrit.socket"
-        "network.target"
+        "network-online.target"
       ];
+      wants = [ "network-online.target" ];
 
       path = [
         gerrit-cli
