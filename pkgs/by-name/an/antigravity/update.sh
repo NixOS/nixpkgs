@@ -23,7 +23,7 @@ linux_x86_64_url=$(
 # Extract version and check for update
 version=$(
   printf '%s\n' "$linux_x86_64_url" \
-    | sed -n 's#.*/stable/\([^/]*\)/linux-x64/Antigravity.tar.gz#\1#p'
+    | sed -n 's#.*/stable/\([^-]*\)-[0-9]*/linux-x64/Antigravity.tar.gz#\1#p'
 )
 echo "Version: $version"
 

@@ -15,7 +15,7 @@ let
     (lib.importJSON ./sources.json)."${hostPlatform.system}"
       or (throw "antigravity: unsupported system ${hostPlatform.system}");
 
-  version = "1.11.3-6583016683339776";
+  version = "1.11.3";
   vscodeVersion = "1.104.0";
 in
 callPackage vscode-generic {
@@ -43,6 +43,8 @@ callPackage vscode-generic {
   tests = { };
   updateScript = ./update.sh;
 
+  dontFixup = hostPlatform.isDarwin;
+
   meta = {
     mainProgram = "antigravity";
     description = "Agentic development platform, evolving the IDE into the agent-first era";
@@ -57,6 +59,9 @@ callPackage vscode-generic {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ Zaczero ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      Zaczero
+    ];
   };
 }
