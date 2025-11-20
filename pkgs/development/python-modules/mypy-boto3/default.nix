@@ -1321,8 +1321,8 @@ in
       "sha256-5SzomJcGADuDsTqJtrIuMiYcMN5fiiP87OCZoAIjUGI=";
 
   mypy-boto3-stepfunctions =
-    buildMypyBoto3Package "stepfunctions" "1.40.60"
-      "sha256-zDN+pmptUjq9Cnc6U7mmWqat6PiSWxJibgEuYq1P96Q=";
+    buildMypyBoto3Package "stepfunctions" "1.41.0"
+      "sha256-j8f4fyxXZt1c7PR5B4m5ogL4KkY/EyUHeEprLfJgaIo=";
 
   mypy-boto3-storagegateway =
     buildMypyBoto3Package "storagegateway" "1.40.58"
