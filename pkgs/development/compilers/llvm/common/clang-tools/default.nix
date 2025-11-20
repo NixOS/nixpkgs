@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -51,6 +52,10 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    nginx = nixosTests.clangd;
+  };
 
   meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";
