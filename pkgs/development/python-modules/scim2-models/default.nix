@@ -3,26 +3,26 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  hatchling,
+  uv-build,
   pydantic,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scim2-models";
-  version = "0.4.1";
+  version = "0.5.0";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;
     pname = "scim2_models";
-    hash = "sha256-SRUPO67otfZsrdjGQyTul5vIrYRU2WFaL0fvAtVd/1c=";
+    hash = "sha256-9K7iBKN304vG4nEOAW33JWRrEo3ZoK7lCGl5fUTcGww=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
