@@ -19,7 +19,7 @@
   dmgbuild,
 
   # tests
-  ensureNewerSourcesForZipFilesHook,
+  pillow,
   pytest-mock,
   pytestCheckHook,
   versionCheckHook,
@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "8.3.0";
+  version = "8.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelotduarte";
     repo = "cx_Freeze";
     tag = version;
-    hash = "sha256-PhUzHSn9IqUcb11D0kRT8zhmZ/KusTBDpAempiDN4Rc=";
+    hash = "sha256-1uannW1U6ElPjwSaTCiQoWFix7YIm+q2t61lMWxN3s8=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=77.0.3,<=80.4.0" "setuptools>=77.0.3"
+      --replace-fail "setuptools>=77.0.3,<=80.9.0" "setuptools>=77.0.3"
   '';
 
   build-system = [
@@ -84,13 +84,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pillow
     pytest-mock
     pytestCheckHook
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf cx_Freeze

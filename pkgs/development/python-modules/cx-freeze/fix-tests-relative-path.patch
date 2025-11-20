@@ -1,15 +1,16 @@
 diff --git a/tests/conftest.py b/tests/conftest.py
-index 04400a17..1facf55d 100644
+index de76c5f3..841b83b7 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
-@@ -46,9 +46,7 @@ class TempPackage:
-         # environment
+@@ -80,9 +80,9 @@ class TempPackage:
+         self.python: Path = sysexe
          self.system_path: Path = Path(os.getcwd())
-         self.system_prefix: Path = Path(sys.prefix)
--        self.relative_site = Path(pytest.__file__).parent.parent.relative_to(
--            self.system_prefix
--        )
-+        self.relative_site = Path(pytest.__file__).resolve().parent.parent
+         self.system_prefix: Path = prefix
+-        self.relative_bin: str = sysexe.parent.relative_to(prefix).as_posix()
++        self.relative_bin: str = sysexe.resolve().parent
+         self.relative_site: str = (
+-            Path(pytest.__file__).parent.parent.relative_to(prefix).as_posix()
++            Path(pytest.__file__).resolve().parent.parent
+         )
  
          # make a temporary directory and set it as current
-         name = request.node.name
