@@ -234,8 +234,8 @@ in
       "sha256-AJobxl5lk6qMCw0jaCe50Es0dne5tFvg2Y1AsVhRIkg=";
 
   mypy-boto3-cloudhsm =
-    buildMypyBoto3Package "cloudhsm" "1.40.57"
-      "sha256-XlV7rtzGlcL4iTrJmADZQdlvtAJFBDEUlP1kkeI9kQU=";
+    buildMypyBoto3Package "cloudhsm" "1.41.0"
+      "sha256-oPD1K3BUsr7c6HRUgecbcGbruIT8TMM6N5AzASJIWJ0=";
 
   mypy-boto3-cloudhsmv2 =
     buildMypyBoto3Package "cloudhsmv2" "1.40.57"
