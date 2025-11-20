@@ -3,7 +3,9 @@
   buildNpmPackage,
   dotnet-sdk,
   fetchFromGitHub,
+  fetchpatch,
   lib,
+  nixosTests,
   writeShellApplication,
 }:
 
@@ -22,6 +24,25 @@ let
     projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
     nugetDeps = ./deps.json;
     dotnet-runtime = dotnet-sdk.aspnetcore;
+
+    patches = [
+      # This not-yet-released commit has landed upstream. It adds a
+      # `IMMICHFRAME_CONFIG_PATH` environment variable for a "configurable"
+      # config path.
+      (fetchpatch {
+        name = "Configurable config path";
+        url = "https://github.com/immichFrame/ImmichFrame/commit/f6680f23bcf107ce27372dfb37809c0f92ebb2f2.patch";
+        hash = "sha256-dQnspQEKixQgBpCvNxrYL51z5wg5BhdN0uTuaXgKQZU=";
+      })
+      # This patch adds an `ApiKeyFile` option, which makes it possible to
+      # configure ImmichFrame without leaking secrets into your configuration.
+      # See [upstream PR](https://github.com/immichFrame/ImmichFrame/pull/511)
+      (fetchpatch {
+        name = "Add a `ApiKeyFile` option";
+        url = "https://github.com/immichFrame/ImmichFrame/commit/f5bb164170460b1020bfe6bce8e8abb3315e32e3.diff";
+        hash = "sha256-F3BVIxcu8Hm6wbWmzVnfgm6XvqdBw4IiS61CDQiMRVg=";
+      })
+    ];
 
     meta.mainProgram = "ImmichFrame.WebApi";
   };
@@ -52,6 +73,8 @@ writeShellApplication {
     cd ${frontend}
     exec ${lib.getExe publishApi} "$@"
   '';
+
+  passthru.tests = { inherit (nixosTests) immichframe; };
 
   meta = {
     description = "Display your photos from Immich as a digital photo frame";
