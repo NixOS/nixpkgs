@@ -709,8 +709,8 @@ in
       "sha256-xyAjosHBkjuTTAcJaK0Fs5XH/1FwlXM248H1n/6yfok=";
 
   mypy-boto3-kafka =
-    buildMypyBoto3Package "kafka" "1.40.70"
-      "sha256-ggYFo/V1uLHNd8eIsF+t2m94RQsK3myTD6rcP5T6h2Y=";
+    buildMypyBoto3Package "kafka" "1.41.0"
+      "sha256-beHMH1UcyZK38U3YKoGUshnDsN9E88BePC8spDR86Zc=";
 
   mypy-boto3-kafkaconnect =
     buildMypyBoto3Package "kafkaconnect" "1.40.61"
