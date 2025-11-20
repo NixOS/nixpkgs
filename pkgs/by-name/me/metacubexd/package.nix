@@ -3,29 +3,29 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metacubexd";
-  version = "1.192.0";
+  version = "1.202.0";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "metacubexd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OZLwKckwiw0FPJYOLgj9bXEm6xq9SmDrDZNQhM0r7dc=";
+    hash = "sha256-2fvXRjQxQr+xdhnRBBij9tQNXZk/WVow1+EAkuSM1uY=";
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpm_10.configHook
     nodejs
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-v+wuYGK0WEgrPNBLuLnoO/uDEk6AqJTlNJZHTpEb4mc=";
+    hash = "sha256-AfhYvxeSQfBIvdccj1YKczRoVs+IU689i8UKLBv6cys=";
   };
 
   buildPhase = ''
