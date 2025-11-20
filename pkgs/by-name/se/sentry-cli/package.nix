@@ -10,14 +10,15 @@
   swiftpm,
   replaceVars,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sentry-cli";
   version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8fz8bSQxqylTQ7mD/QbQ6gc8qlEdx/SDCjaB3uqFnGA=";
   };
   doCheck = false;
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     description = "Command line utility to work with Sentry";
     mainProgram = "sentry-cli";
-    changelog = "https://github.com/getsentry/sentry-cli/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/sentry-cli/raw/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ rizary ];
   };
-}
+})
