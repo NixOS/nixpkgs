@@ -7,17 +7,10 @@
   docbook-xsl-nons,
   libxslt,
   pkg-config,
-  alsa-lib,
-  faac,
-  faad2,
-  ffmpeg,
-  fuse3,
   glib,
-  openh264,
   openssl,
   pcre2,
   pkcs11helper,
-  uriparser,
   zlib,
   libX11,
   libXcursor,
@@ -34,32 +27,87 @@
   libxkbfile,
   wayland,
   wayland-scanner,
-  icu,
   libunwind,
   orc,
-  cairo,
-  cjson,
   libusb1,
-  libpulseaudio,
-  cups,
-  pcsclite,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
   systemd,
-  libjpeg_turbo,
-  libkrb5,
-  libopus,
   buildServer ? true,
   nocaps ? false,
   withUnfree ? false,
+
+  withJPEG ? true,
+  libjpeg_turbo,
+
+  withKerberos ? true,
+  libkrb5,
+
+  withURIParser ? stdenv.hostPlatform.isLinux,
+  uriparser,
+
+  withFFmpeg ? true,
+  ffmpeg,
+
+  withOpenH264 ? true,
+  openh264,
+
+  withGSM ? true,
+  gsm,
+
+  withAAC ? true,
+  faad2,
+  faac,
+
+  withOpus ? true,
+  libopus,
+
+  withSoxr ? true,
+  soxr,
+
+  withCairo ? true,
+  cairo,
+
+  withAlsa ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+
+  withPulseAudio ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+
+  withPrinting ? true,
+  cups,
+
+  withFuse ? stdenv.hostPlatform.isLinux,
+  fuse3,
+
+  withUnicode ? true,
+  icu,
+
+  withSmartCard ? true,
+  pcsclite,
+
+  withJSON ? true,
+  cjson,
+
+  withSDL ? true,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+
+  withWebview ? false,
+  webkitgtk_4_1,
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
   gnome-remote-desktop,
   remmina,
+  testers,
+  freerdp
 }:
+
+assert withURIParser -> stdenv.hostPlatform.isLinux;
+assert withAlsa -> stdenv.hostPlatform.isLinux;
+assert withPulseAudio -> stdenv.hostPlatform.isLinux;
+assert withFuse -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
@@ -83,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
       --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
   ''
-  + lib.optionalString (pcsclite != null) ''
+  + lib.optionalString withSmartCard ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
       --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
   ''
@@ -102,13 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cairo
-    cjson
-    cups
-    faad2
-    ffmpeg
     glib
-    icu
     libX11
     libXcursor
     libXdamage
@@ -123,33 +165,45 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg_turbo
     libkrb5
     libopus
-    libpulseaudio
     libunwind
     libusb1
     libxkbcommon
     libxkbfile
-    openh264
     openssl
     orc
     pcre2
-    pcsclite
     pkcs11helper
-    SDL2
-    SDL2_ttf
-    SDL2_image
-    uriparser
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    fuse3
     systemd
     wayland
     wayland-scanner
   ]
-  ++ lib.optionals withUnfree [
-    faac
-  ];
+  ++ lib.optional withJPEG libjpeg_turbo
+  ++ lib.optional withKerberos libkrb5
+  ++ lib.optional withURIParser uriparser
+  ++ lib.optional withFFmpeg ffmpeg
+  ++ lib.optional withOpenH264 openh264
+  ++ lib.optional withGSM gsm
+  ++ lib.optional withAAC faad2
+  ++ lib.optional (withUnfree && withAAC) faac
+  ++ lib.optional withOpus libopus
+  ++ lib.optional withSoxr soxr
+  ++ lib.optional withCairo cairo
+  ++ lib.optional withAlsa alsa-lib
+  ++ lib.optional withPulseAudio libpulseaudio
+  ++ lib.optional withPrinting cups
+  ++ lib.optional withFuse fuse3
+  ++ lib.optional withUnicode icu
+  ++ lib.optional withSmartCard pcsclite
+  ++ lib.optional withJSON cjson
+  ++ lib.optionals withSDL [
+    SDL2
+    SDL2_ttf
+    SDL2_image
+  ]
+  ++ lib.optional withWebview webkitgtk_4_1;
 
   # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
   cmakeFlags = [
@@ -159,21 +213,33 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.mapAttrsToList lib.cmakeBool {
     BUILD_TESTING = false; # false is recommended by upstream
-    WITH_CAIRO = cairo != null;
-    WITH_CUPS = cups != null;
-    WITH_FAAC = withUnfree && faac != null;
-    WITH_FAAD2 = faad2 != null;
-    WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
-    WITH_JPEG = libjpeg_turbo != null;
-    WITH_KRB5 = libkrb5 != null;
-    WITH_OPENH264 = openh264 != null;
-    WITH_OPUS = libopus != null;
+    WITH_FFMPEG = withFFmpeg;
+    WITH_SWSCALE = withFFmpeg;
+    WITH_DSP_FFMPEG = withFFmpeg;
+    WITH_CAIRO = withCairo;
+    WITH_CUPS = withPrinting;
+    CUPS = withPrinting;
+    WITH_FAAC = withUnfree && withAAC;
+    WITH_FAAD2 = withAAC;
+    AAC = withAAC;
+    WITH_FUSE = withFuse;
+    FUSE = withFuse;
+    ICU = withUnicode;
+    WITH_UNICODE_BUILTIN = !withUnicode;
+    WITH_JPEG = withJPEG;
+    JPEG = withJPEG;
+    WITH_KRB5 = withKerberos;
+    WITH_OPENH264 = withOpenH264;
+    WITH_OPUS = withOpus;
+    OPUS = withOpus;
     WITH_OSS = false;
     WITH_MANPAGES = withManPages;
-    WITH_PCSC = pcsclite != null;
-    WITH_PULSE = libpulseaudio != null;
+    WITH_PCSC = withSmartCard;
+    PCSC = withSmartCard;
+    WITH_PULSE = withPulseAudio;
+    PULSE = withPulseAudio;
     WITH_SERVER = buildServer;
-    WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
+    WITH_WEBVIEW = withWebview;
     WITH_VAAPI = false; # false is recommended by upstream
     WITH_X11 = true;
   }
@@ -190,7 +256,32 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  passthru.tests = {
+  passthru.tests = rec {
+    version = testers.testVersion { package = freerdp; };
+    # ensure we can build a minimal build, with none of the optional dependencies
+    minimal = freerdp.override {
+      withJPEG = false;
+      withKerberos = false;
+      withURIParser = false;
+      withFFmpeg = false;
+      withOpenH264 = false;
+      withGSM = false;
+      withAAC = false;
+      withOpus = false;
+      withSoxr = false;
+      withCairo = false;
+      withAlsa = false;
+      withPulseAudio = false;
+      withPrinting = false;
+      withFuse = false;
+      withUnicode = false;
+      withSmartCard = false;
+      withJSON = false;
+      withSDL = false;
+      withWebview = false;
+      withManPages = false;
+    };
+    minimal-version = testers.testVersion { package = minimal; };
     inherit remmina;
     inherit gnome-remote-desktop;
   };
@@ -205,5 +296,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+    mainProgram = "xfreerdp";
   };
 })
