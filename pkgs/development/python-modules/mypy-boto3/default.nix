@@ -254,8 +254,8 @@ in
       "sha256-1Pu/8nnFxtRvJiHTUnv672m1/asEeKunpWK2RDGDlFw=";
 
   mypy-boto3-cloudtrail-data =
-    buildMypyBoto3Package "cloudtrail-data" "1.40.58"
-      "sha256-ywvJwaPTrQIoZ6xrQtK1/7FFVMM59ls1HOCUFSA9Pv0=";
+    buildMypyBoto3Package "cloudtrail-data" "1.41.0"
+      "sha256-foMvPcxeR671VVpN7sbDqr1N9erBnn5A6Xa9UTCxVAw=";
 
   mypy-boto3-cloudwatch =
     buildMypyBoto3Package "cloudwatch" "1.40.63"
