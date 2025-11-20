@@ -318,8 +318,8 @@ in
       "sha256-9MCBpnk5peEGatBczFtD9vlyMjKGPtrJwGs2a+yggsQ=";
 
   mypy-boto3-cognito-sync =
-    buildMypyBoto3Package "cognito-sync" "1.40.63"
-      "sha256-PzwZSGvdN1+tNmWZPOlZErP5WWk2eE0pE7XCh2/5AJc=";
+    buildMypyBoto3Package "cognito-sync" "1.41.0"
+      "sha256-S/GVoK7BcnL7ZCzCiq974tr4UtJjJM0/SysR2x14jkI=";
 
   mypy-boto3-comprehend =
     buildMypyBoto3Package "comprehend" "1.40.60"
