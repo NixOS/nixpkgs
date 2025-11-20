@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication {
       colorama
       junit-xml
       ptpython
+      ovmfvartool
       ipython
       remote-pdb
     ]
