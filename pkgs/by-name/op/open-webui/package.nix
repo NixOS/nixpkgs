@@ -75,6 +75,8 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ hatchling ];
 
+  patches = [ ./langchain-v1.patch ];
+
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -128,6 +130,7 @@ python3Packages.buildPythonApplication rec {
       iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
       langdetect
       ldap3
