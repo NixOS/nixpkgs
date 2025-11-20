@@ -7,6 +7,7 @@
   dbus,
   stdenv,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -59,6 +60,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-noxwayland
         cosmic-autologin-noxwayland
         ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
     };
   };
 
