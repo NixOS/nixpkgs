@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GeoStat-Framework/PyKrige";
     changelog = "https://github.com/GeoStat-Framework/PyKrige/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.sikmir ];
+    teams = [ lib.teams.geospatial ];
   };
 }
