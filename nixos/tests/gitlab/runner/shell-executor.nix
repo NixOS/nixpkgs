@@ -1,10 +1,10 @@
 {
-  config,
-  lib,
-  runnerTokenFile,
+  runnerConfig,
 }:
+# This is the runner config for the `nixosConfiguration.services.gitlab-runner.services.X`
 {
-  description = "NixOS Shell Executor";
-  authenticationTokenConfigFile = runnerTokenFile;
+  description = runnerConfig.desc;
+  authenticationTokenConfigFile = runnerConfig.tokenFile;
+
   executor = "shell";
 }
