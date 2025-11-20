@@ -554,8 +554,8 @@ in
       "sha256-MYR7xdRgdoiZi21SMAr5sqSdrxdgmH0HE56x2wJ41sA=";
 
   mypy-boto3-frauddetector =
-    buildMypyBoto3Package "frauddetector" "1.40.63"
-      "sha256-Qex9NGctqp5L2XkIxw6J9t4C5rqVzDmNCKWzQLI+040=";
+    buildMypyBoto3Package "frauddetector" "1.41.0"
+      "sha256-JacU0+evD+6uNfzub/BZGBR7YUB13zCWreIE5N1GYTU=";
 
   mypy-boto3-fsx =
     buildMypyBoto3Package "fsx" "1.40.64"
