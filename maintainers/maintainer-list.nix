@@ -12414,11 +12414,6 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
-  joanmassachs = {
-    github = "joanmassachs";
-    githubId = 22916782;
-    name = "Joan Massachs";
-  };
   joaomoreira = {
     matrix = "@joaomoreira:matrix.org";
     github = "joaoymoreira";
