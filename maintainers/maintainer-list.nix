@@ -3078,6 +3078,12 @@
     githubId = 354230;
     name = "Benjamin Esham";
   };
+  bdim404 = {
+    email = "i@bdim.moe";
+    github = "bdim404";
+    githubId = 102711645;
+    name = "bdim";
+  };
   bdimcheff = {
     email = "brandon@dimcheff.com";
     github = "bdimcheff";
