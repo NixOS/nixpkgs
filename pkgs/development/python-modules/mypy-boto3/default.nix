@@ -1229,8 +1229,8 @@ in
       "sha256-3Qndx0VJnwDnNqv4GoCb+fgG4nuSCo5GRCC4AquWPMk=";
 
   mypy-boto3-serverlessrepo =
-    buildMypyBoto3Package "serverlessrepo" "1.40.63"
-      "sha256-zj7R0tvQvheGrQIAuXQsHBJrm01lQlkoCxkJLZDJR/8=";
+    buildMypyBoto3Package "serverlessrepo" "1.41.0"
+      "sha256-04clE0dVC9nNXmLQClSMhCuvE09N6SxWxXk7sYGuLhY=";
 
   mypy-boto3-service-quotas =
     buildMypyBoto3Package "service-quotas" "1.40.48"
