@@ -1357,8 +1357,8 @@ in
       "sha256-/MQzey2mxw63ye2JbNM9CaQ3hJcaEdZctXYn65D0tWI=";
 
   mypy-boto3-timestream-write =
-    buildMypyBoto3Package "timestream-write" "1.40.55"
-      "sha256-cdyFlcNg9F5RPYJ8xuLm1G1plHQDhRe2YQZqUv+wk8U=";
+    buildMypyBoto3Package "timestream-write" "1.41.0"
+      "sha256-N+7gAU4cThxOKaJjCC9hLpB77mloiIHz6nmZGybqsGU=";
 
   mypy-boto3-tnb =
     buildMypyBoto3Package "tnb" "1.40.55"
