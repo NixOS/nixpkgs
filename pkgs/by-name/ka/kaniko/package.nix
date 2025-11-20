@@ -4,8 +4,6 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
-  testers,
-  kaniko,
   versionCheckHook,
 }:
 
