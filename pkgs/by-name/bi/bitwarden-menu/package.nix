@@ -1,33 +1,36 @@
 {
   lib,
-  buildPythonApplication,
-  fetchPypi,
-  hatch-vcs,
-  hatchling,
-  pynput,
-  xdg-base-dirs,
+  python3Packages,
+  fetchFromGitHub,
+  dmenu,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bitwarden-menu";
-  version = "0.4.5";
+  version = "0.4.5-unstable-2025-08-17";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "bitwarden_menu";
-    inherit version;
-    hash = "sha256-vUlNqSVdGhfN5WjDjf1ub32Y2WoBndIdFzfCNwo5+Vg=";
+  src = fetchFromGitHub {
+    owner = "firecat53";
+    repo = "bitwarden-menu";
+    rev = "b7567137b8d24edc3b6914d7581df3ec06392ce0";
+    hash = "sha256-gXdq8ublHgqXMr5Up51tLIFcTkntz/a7otMJXeznNDU=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    pynput
-    xdg-base-dirs
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      pynput
+      xdg-base-dirs
+    ]
+    ++ [
+      dmenu
+    ];
 
   doCheck = false;
 
