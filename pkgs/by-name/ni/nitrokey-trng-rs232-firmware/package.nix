@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nitrokey-trng-rs232-firmware";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-trng-rs232-firmware";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vY/9KAGB6lTkkjW9zUiHA3wD2d35cEBVBTr12bHCy4k=";
+    hash = "sha256-d8H19UwJLTsvcUdYjBv3JJ7Iplrww5ytCIFoXnbrFUg=";
   };
 
   nativeBuildInputs = [ pkgsCross.avr.stdenv.cc ];
