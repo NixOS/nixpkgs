@@ -46,6 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     mido
+    numpy
     pygame
     pygobject3
     numpy
