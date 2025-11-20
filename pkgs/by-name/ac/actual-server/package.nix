@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  darwin,
+  cctools,
   fetchFromGitHub,
   jq,
   makeWrapper,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   env = {
