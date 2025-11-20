@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   installPhase = ''
     runHook preInstall
