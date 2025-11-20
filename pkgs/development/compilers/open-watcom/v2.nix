@@ -3,10 +3,11 @@
   lib,
   fetchFromGitHub,
   unstableGitUpdater,
-  dosbox,
 
   # Docs cause an immense increase in build time, up to 2 additional hours
   withDocs ? false,
+  dosbox,
+  mesa,
   ghostscript,
 
   # GUI tools aren't ported to non-MS platforms, building them usually just wastes time
@@ -27,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs *.sh
-
+  ''
+  # Patch references to current time & date into SOURCE_DATE_EPOCH-respecting ones
+  + ''
     substituteInPlace bld/wipfc/configure \
       --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
 
@@ -38,16 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build/makeinit \
       --replace-fail '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   ''
+  # (SDL? DOSBox?) needs OpenGL now, and that doesn't seem to play nicely anymore with the dummy driver
+  + ''
+    substituteInPlace build/mif/wgmlcmd.mif \
+      --replace-fail 'SDL_VIDEODRIVER=dummy' 'SDL_VIDEODRIVER=offscreen'
+  ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
       --replace-fail '-static' ""
   '';
 
-  nativeBuildInputs = [
-    dosbox
-  ]
-  ++ lib.optionals withDocs [
+  nativeBuildInputs = lib.optionals withDocs [
+    dosbox # running prebuilt WGML tool to create docs
     ghostscript
+    mesa.llvmpipeHook # DOSBox doesn't seem to launch without OpenGL available, even on SDL dummy platform
   ];
 
   configurePhase = ''
