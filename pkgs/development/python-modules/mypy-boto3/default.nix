@@ -1381,8 +1381,8 @@ in
       "sha256-+8ZiZ/f82s6qIIQ80+GNF8WFzCLcbSPz4Clz+9/QGf0=";
 
   mypy-boto3-voice-id =
-    buildMypyBoto3Package "voice-id" "1.40.54"
-      "sha256-6usEXd0rpBSaLBKHawPIiPzqfHoNCGVO8c2p0eBqrvs=";
+    buildMypyBoto3Package "voice-id" "1.41.0"
+      "sha256-rHitg2Jl8HlJVBItCFynO5oyKcE8N3ya6hIUk7m+xwM=";
 
   mypy-boto3-vpc-lattice =
     buildMypyBoto3Package "vpc-lattice" "1.40.69"
