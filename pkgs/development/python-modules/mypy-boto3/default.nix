@@ -114,8 +114,8 @@ in
       "sha256-z96/hxoHwQFZF2PqUUshHl7Hxnd2YspUIk7Njikv3Tg=";
 
   mypy-boto3-application-insights =
-    buildMypyBoto3Package "application-insights" "1.40.55"
-      "sha256-JWzHe+4UxLenKYXdNXhShTGWTGDFgWx6O8TAfxEaWPI=";
+    buildMypyBoto3Package "application-insights" "1.41.0"
+      "sha256-PGsUW2WGc1ZCiDi8iROfGyeQP1qJvZrB3AN6R2jDGik=";
 
   mypy-boto3-applicationcostprofiler =
     buildMypyBoto3Package "applicationcostprofiler" "1.40.63"
