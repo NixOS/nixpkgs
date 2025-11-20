@@ -1,10 +1,11 @@
 # Test the firewall module.
 
-{ lib, nftables, ... }:
+{ lib, backend, ... }:
 {
-  name = "firewall" + lib.optionalString nftables "-nftables";
+  name = "firewall-${backend}";
   meta = with lib.maintainers; {
     maintainers = [
+      prince213
       rvfg
       garyguo
     ];
@@ -12,10 +13,11 @@
 
   nodes = {
     walled =
-      { ... }:
+      { lib, ... }:
       {
         networking.firewall = {
           enable = true;
+          inherit backend;
           logRefusedPackets = true;
           # Syntax smoke test, not actually verified otherwise
           allowedTCPPorts = [
@@ -37,26 +39,29 @@
               to = 8010;
             }
           ];
-          interfaces.eth0 = {
-            allowedTCPPorts = [ 10003 ];
-            allowedTCPPortRanges = [
-              {
-                from = 10000;
-                to = 10005;
-              }
-            ];
-          };
-          interfaces.eth3 = {
-            allowedUDPPorts = [ 10003 ];
-            allowedUDPPortRanges = [
-              {
-                from = 10000;
-                to = 10005;
-              }
-            ];
+          interfaces = lib.mkIf (backend != "firewalld") {
+            eth0 = {
+              allowedTCPPorts = [ 10003 ];
+              allowedTCPPortRanges = [
+                {
+                  from = 10000;
+                  to = 10005;
+                }
+              ];
+            };
+            eth3 = {
+              allowedUDPPorts = [ 10003 ];
+              allowedUDPPortRanges = [
+                {
+                  from = 10000;
+                  to = 10005;
+                }
+              ];
+            };
           };
         };
-        networking.nftables.enable = nftables;
+        services.firewalld.enable = backend == "firewalld";
+        networking.nftables.enable = backend != "iptables";
         services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
 
@@ -77,7 +82,13 @@
   testScript =
     { nodes, ... }:
     let
-      unit = if nftables then "nftables" else "firewall";
+      unit = if backend == "iptables" then "firewall" else backend;
+      openPort =
+        if backend == "firewalld" then
+          "firewall-cmd --add-port=80/tcp"
+        else
+          "nixos-firewall-tool open tcp 80";
+      reset = if backend == "firewalld" then "firewall-cmd --reload" else "nixos-firewall-tool reset";
     in
     ''
       start_all()
@@ -98,11 +109,11 @@
       walled.succeed("ping -c 1 attacker >&2")
 
       # Open tcp port 80 at runtime
-      walled.succeed("nixos-firewall-tool open tcp 80")
+      walled.succeed("${openPort}")
       attacker.succeed("curl -v http://walled/ >&2")
 
       # Reset the firewall
-      walled.succeed("nixos-firewall-tool reset")
+      walled.succeed("${reset}")
       attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
 
       # If we stop the firewall, then connections should succeed.

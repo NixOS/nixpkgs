@@ -13,6 +13,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pHwQq6/KGCIYm3Q63YbUit6yUjwEFnpBJCE6lpGBcZc=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/settings.rs \
+      --replace-fail 'cmd.env("RUSTFLAGS", "-Cinstrument-coverage");' '''
+  '';
+
   cargoHash = "sha256-tAwU7vJLp4KLzYAEbtSpNKbZBz+hBdAiIkUD/A5CpwI=";
 
   meta = with lib; {
