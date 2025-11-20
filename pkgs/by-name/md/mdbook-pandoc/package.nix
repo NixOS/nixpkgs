@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pandoc";
-  version = "0.10.5";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "max-heller";
     repo = "mdbook-pandoc";
     tag = "v${version}";
-    hash = "sha256-ihKju9XXJy4JciuMLw4EcKhqSQjrBiUJDG0Rd5DbFdk=";
+    hash = "sha256-HtWsQe9Z2kl17upN+wSWexh9om8l74gJ8vsiBRnO+Js=";
   };
 
-  cargoHash = "sha256-SXXzGOBvfyLYhed5EMFUCzkFWoGEMM73PD3uWjkUcic=";
+  cargoHash = "sha256-H66a95AjC9PdMJgcKsj4og49fcOicjWPgGQv25Fi/hE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
