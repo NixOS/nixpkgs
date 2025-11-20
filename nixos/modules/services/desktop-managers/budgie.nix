@@ -169,7 +169,6 @@ in
         budgie-desktop-services
         (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie-desktop-view
-        budgie-screensaver
         budgie-session
 
         # Required by Budgie Menu.
@@ -239,9 +238,6 @@ in
     # Required by Budgie Desktop.
     services.xserver.updateDbusEnvironment = true;
     programs.dconf.enable = true;
-
-    # Required by Budgie Screensaver.
-    security.pam.services.budgie-screensaver = { };
 
     # Required by Budgie's Polkit Dialog.
     security.polkit.enable = mkDefault true;
