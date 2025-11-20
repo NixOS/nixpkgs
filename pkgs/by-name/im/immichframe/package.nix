@@ -3,6 +3,7 @@
   buildNpmPackage,
   dotnet-sdk,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   writeShellApplication,
 }:
@@ -22,6 +23,27 @@ let
     projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
     nugetDeps = ./deps.json;
     dotnet-runtime = dotnet-sdk.aspnetcore;
+
+    patches = [
+      # ImmichFrame currently only looks for its config alongside the
+      # executable. In nix, this would mean we'd have to recompile the
+      # application every time we change its config. This patch adds an
+      # environment variable we can use to choose a different place to look for
+      # config. See [upstream PR](https://github.com/immichFrame/ImmichFrame/pull/512).
+      (fetchpatch {
+        name = "Configurable config path";
+        url = "https://github.com/immichFrame/ImmichFrame/commit/d39a27cb0cd23a48d388088390cae983e851040e.diff";
+        hash = "sha256-JnBNwo7pl61XdE2ELcDts/BCeGb0EtTDCJyORUa/L90=";
+      })
+      # This patch adds an `ApiKeyFile` option, which makes it possible to
+      # configure ImmichFrame without leaking secrets into your configuration.
+      # See [upstream PR](https://github.com/immichFrame/ImmichFrame/pull/511)
+      (fetchpatch {
+        name = "Add a `ApiKeyFile` option";
+        url = "https://github.com/immichFrame/ImmichFrame/commit/82e6324384697932fbb0c7dc7aaeed473d933abd.diff";
+        hash = "sha256-BVNm6tCkAT6m7UCC/8vr46N0a4oSJOiqcmdIAGcYJ7Q=";
+      })
+    ];
 
     meta.mainProgram = "ImmichFrame.WebApi";
   };
