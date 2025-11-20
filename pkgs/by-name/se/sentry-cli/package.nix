@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-8fz8bSQxqylTQ7mD/QbQ6gc8qlEdx/SDCjaB3uqFnGA=";
   };
   doCheck = false;
