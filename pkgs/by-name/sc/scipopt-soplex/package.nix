@@ -11,16 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-soplex";
-  version = "7.1.5";
-
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
+  version = "7.1.6";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "soplex";
     rev = "release-${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
-    hash = "sha256-gtz2h5EszE77zYZ8m2UtkYnoquO8GJhAAzsvQW5b+3I=";
+    hash = "sha256-v2lDtnY3O1nP8RYALqpeO8q4b3bUAKZe4b3QhtnGiGg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     mainProgram = "soplex";
     maintainers = with lib.maintainers; [ david-r-cox ];
-    changelog = "https://scipopt.org/doc-${finalAttrs.scipVersion}/html/RN${lib.versions.major finalAttrs.scipVersion}.php";
+    changelog = "https://soplex.zib.de/doc-${finalAttrs.version}/html/CHANGELOG.php";
     platforms = lib.platforms.unix;
   };
 })
