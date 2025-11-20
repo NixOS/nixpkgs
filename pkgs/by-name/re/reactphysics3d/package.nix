@@ -16,13 +16,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZwV3mh/onlHPHeT6tky2CpawLZxEikY6hq4FVn6i5hI=";
   };
 
+  cmakeFlags = [
+    # It always builds a static binary, so we need PIC to enable linking from dynamic libraries
+    (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
+  ];
+
+  patches = [
+    ./add-cmake-config.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Open source C++ physics engine library";
     homepage = "https://www.reactphysics3d.com";
     changelog = "https://github.com/DanielChappuis/reactphysics3d/releases/tag/${finalAttrs.src.rev}";
-    maintainers = with maintainers; [ rexxDigital ];
+    maintainers = with maintainers; [
+      rexxDigital
+      pandapip1
+    ];
     license = licenses.zlib;
     platforms = platforms.all;
   };
