@@ -94,7 +94,7 @@ stdenv.mkDerivation {
       mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
       mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
-      echo 'require("${equicord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+      echo 'require("${equicord}/desktop/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
     ''
     + lib.strings.optionalString withMoonlight ''
       mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
