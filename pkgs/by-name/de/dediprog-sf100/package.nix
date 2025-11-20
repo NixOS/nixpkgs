@@ -47,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux software for DediProg SF100/SF600 programmers";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thillux ];
+    maintainers = with lib.maintainers; [
+      thillux
+      felixsinger
+    ];
   };
 })
