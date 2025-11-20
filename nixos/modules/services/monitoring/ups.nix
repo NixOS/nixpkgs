@@ -93,7 +93,7 @@ let
   upsdUsers = pkgs.writeText "upsd.users" (
     let
       # This looks like INI, but it's not quite because the
-      # 'upsmon' option lacks a '='. See: man upsd.users
+      # 'upsmon' option lacks a '='. See: man upsd.users(5)
       userConfig =
         name: user:
         lib.concatStringsSep "\n      " (
@@ -128,7 +128,7 @@ let
         port = lib.mkOption {
           type = lib.types.str;
           description = ''
-            The serial port to which your UPS is connected.  /dev/ttyS0 is
+            The serial port to which your UPS is connected.  {file}`/dev/ttyS0` is
             usually the first port on Linux boxes, for example.
           '';
         };
@@ -176,7 +176,7 @@ let
           default = "";
           type = lib.types.lines;
           description = ''
-            Lines which would be added inside ups.conf for handling this UPS.
+            Lines which would be added inside {file}`ups.conf` for handling this UPS.
           '';
         };
 
@@ -203,7 +203,7 @@ let
         type = lib.types.str;
         description = ''
           Address of the interface for `upsd` to listen on.
-          See `man upsd.conf` for details.
+          See {manpage}`upsd.conf(5)` for details.
         '';
       };
 
@@ -212,7 +212,7 @@ let
         default = defaultPort;
         description = ''
           TCP port for `upsd` to listen on.
-          See `man upsd.conf` for details.
+          See {manpage}`upsd.conf(5)` for details.
         '';
       };
     };
@@ -240,7 +240,7 @@ let
         ];
         description = ''
           Address of the interface for `upsd` to listen on.
-          See `man upsd` for details`.
+          See {manpage}`upsd(8)` for details`.
         '';
       };
 
@@ -248,7 +248,7 @@ let
         type = lib.types.lines;
         default = "";
         description = ''
-          Additional lines to add to `upsd.conf`.
+          Additional lines to add to {file}`upsd.conf`.
         '';
       };
     };
@@ -272,7 +272,7 @@ let
           default = name;
           description = ''
             Identifier of the UPS to monitor, in this form: `<upsname>[@<hostname>[:<port>]]`
-            See `upsmon.conf` for details.
+            See {manpage}`upsmon.conf(5)` for details.
           '';
         };
 
@@ -281,7 +281,7 @@ let
           default = 1;
           description = ''
             Number of power supplies that the UPS feeds on this system.
-            See `upsmon.conf` for details.
+            See {file}`upsmon.conf` for details.
           '';
         };
 
@@ -289,7 +289,7 @@ let
           type = lib.types.str;
           description = ''
             Username from `upsd.users` for accessing this UPS.
-            See `upsmon.conf` for details.
+            See {manpage}`upsmon.conf(5)` for details.
           '';
         };
 
@@ -300,7 +300,7 @@ let
             The full path to a file containing the password from
             `upsd.users` for accessing this UPS. The password file
             is read on service start.
-            See `upsmon.conf` for details.
+            See {manpage}`upsmon.conf(5)` for details.
           '';
         };
 
@@ -309,7 +309,7 @@ let
           default = "master";
           description = ''
             The relationship with `upsd`.
-            See `upsmon.conf` for details.
+            See {manpage}`upsmon.conf(5)` for details.
           '';
         };
       };
@@ -331,7 +331,7 @@ let
         type = lib.types.str;
         default = "nutmon";
         description = ''
-          User to run `upsmon` as. `upsmon.conf` will have its owner set to this
+          User to run `upsmon` as. {file}`upsmon.conf` will have its owner set to this
           user. If not specified, a default user will be created.
         '';
       };
@@ -348,7 +348,7 @@ let
         type = with lib.types; attrsOf (submodule monitorOptions);
         default = { };
         description = ''
-          Set of UPS to monitor. See `man upsmon.conf` for details.
+          Set of UPS to monitor. See {manpage}`upsmon.conf(5)` for details.
         '';
       };
 
@@ -364,7 +364,7 @@ let
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
           }
         '';
-        description = "Additional settings to add to `upsmon.conf`.";
+        description = "Additional settings to add to {file}`upsmon.conf`.";
         example = lib.literalMD ''
           {
             MINSUPPLIES = 2;
@@ -418,7 +418,7 @@ let
         default = [ ];
         description = ''
           Allow the user to do certain things with upsd.
-          See `man upsd.users` for details.
+          See {manpage}`upsd.users(5)` for details.
         '';
       };
 
@@ -427,7 +427,7 @@ let
         default = [ ];
         description = ''
           Let the user initiate specific instant commands. Use "ALL" to grant all commands automatically. For the full list of what your UPS supports, use "upscmd -l".
-          See `man upsd.users` for details.
+          See {manpage}`upsd.users(5)` for details.
         '';
       };
 
@@ -441,7 +441,7 @@ let
         default = null;
         description = ''
           Add the necessary actions for a upsmon process to work.
-          See `man upsd.users` for details.
+          See {manpage}`upsd.users(5)` for details.
         '';
       };
     };
@@ -524,7 +524,7 @@ in
       upsmon = lib.mkOption {
         default = { };
         description = ''
-          Options for the `upsmon.conf` configuration file.
+          Options for the {file}`upsmon.conf` configuration file.
         '';
         type = lib.types.submodule upsmonOptions;
       };
@@ -532,7 +532,7 @@ in
       upsd = lib.mkOption {
         default = { };
         description = ''
-          Options for the `upsd.conf` configuration file.
+          Options for the {file}`upsd.conf` configuration file.
         '';
         type = lib.types.submodule upsdOptions;
       };
@@ -551,7 +551,7 @@ in
       users = lib.mkOption {
         default = { };
         description = ''
-          Users that can access upsd. See `man upsd.users`.
+          Users that can access upsd. See {manpage}`upsd.users(5)`.
         '';
         type = with lib.types; attrsOf (submodule userOptions);
       };
