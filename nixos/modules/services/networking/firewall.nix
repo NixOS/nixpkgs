@@ -10,7 +10,7 @@ let
 
   canonicalizePortList = ports: lib.unique (builtins.sort builtins.lessThan ports);
 
-  commonOptions = {
+  commonOptions = direction: {
     allowedTCPPorts = lib.mkOption {
       type = lib.types.listOf lib.types.port;
       default = [ ];
@@ -20,7 +20,7 @@ let
         80
       ];
       description = ''
-        List of TCP ports on which incoming connections are
+        List of TCP ports on which ${direction} connections are
         accepted.
       '';
     };
@@ -35,7 +35,7 @@ let
         }
       ];
       description = ''
-        A range of TCP ports on which incoming connections are
+        A range of TCP ports on which ${direction} connections are
         accepted.
       '';
     };
@@ -46,7 +46,8 @@ let
       apply = canonicalizePortList;
       example = [ 53 ];
       description = ''
-        List of open UDP ports.
+        List of UDP ports on which ${direction} packets are
+        accepted.
       '';
     };
 
@@ -60,11 +61,13 @@ let
         }
       ];
       description = ''
-        Range of open UDP ports.
+        A range of UDP ports on which ${direction} UDP packets are
+        accepted.
       '';
     };
   };
 
+  commonOptionsIncoming = commonOptions "incoming";
 in
 
 {
@@ -296,7 +299,7 @@ in
 
       interfaces = lib.mkOption {
         default = { };
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [ { options = commonOptionsIncoming; } ]);
         description = ''
           Interface-specific open ports.
         '';
@@ -306,16 +309,16 @@ in
         internal = true;
         visible = false;
         default = {
-          default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
+          default = lib.mapAttrs (name: value: cfg.${name}) commonOptionsIncoming;
         }
         // cfg.interfaces;
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [ { options = commonOptionsIncoming; } ]);
         description = ''
           All open ports.
         '';
       };
     }
-    // commonOptions;
+    // commonOptionsIncoming;
   };
 
   config = lib.mkIf cfg.enable {
