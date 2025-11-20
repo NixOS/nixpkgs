@@ -1,0 +1,352 @@
+--- a/plugins/ABTester/CMakeLists.txt
++++ b/plugins/ABTester/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(ABTester
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "AB Tester"
+   DESCRIPTION "AB Tester"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/AddInvert/CMakeLists.txt
++++ b/plugins/AddInvert/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(AddInvert
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Add and Invert"
+   DESCRIPTION "Add and Invert"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/ChannelMute/CMakeLists.txt
++++ b/plugins/ChannelMute/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(ChannelMute
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "ChannelMute"
+   DESCRIPTION "ChannelMute"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/CompensatedDelay/CMakeLists.txt
++++ b/plugins/CompensatedDelay/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(CompensatedDelay
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Compensated Delay"
+   DESCRIPTION "Compensated Delay"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Compressor/CMakeLists.txt
++++ b/plugins/Compressor/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Compressor
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Compressor"
+   DESCRIPTION "Compressor"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Delay/CMakeLists.txt
++++ b/plugins/Delay/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Delay
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Delay"
+   DESCRIPTION "Delay"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/EQ3/CMakeLists.txt
++++ b/plugins/EQ3/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Gate
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Gate"
+   DESCRIPTION "Gate"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Expander/CMakeLists.txt
++++ b/plugins/Expander/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Expander
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Expander"
+   DESCRIPTION "Expander"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Gate/CMakeLists.txt
++++ b/plugins/Gate/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Gate
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Gate"
+   DESCRIPTION "Gate"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/HugeGain/CMakeLists.txt
++++ b/plugins/HugeGain/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(HugeGain
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "HugeGain"
+   DESCRIPTION "HugeGain"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Keyboard/CMakeLists.txt
++++ b/plugins/Keyboard/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Keyboard
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Keyboard"
+   DESCRIPTION "Keyboard"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Limiter/CMakeLists.txt
++++ b/plugins/Limiter/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Limiter
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Limiter"
+   DESCRIPTION "Limiter"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Maths/CMakeLists.txt
++++ b/plugins/Maths/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Maths
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Maths"
+   DESCRIPTION "Maths"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/Oscilloscope/CMakeLists.txt
++++ b/plugins/Oscilloscope/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(Oscilloscope
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "Oscilloscope"
+   DESCRIPTION "Oscilloscope"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/PitchTrack/CMakeLists.txt
++++ b/plugins/PitchTrack/CMakeLists.txt
+@@ -11,12 +11,7 @@ juce_add_plugin(PitchTrack
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS ${PLUGIN_FORMATS}
+   PLUGIN_NAME "PitchTrack"
+   DESCRIPTION "PitchTrack"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/SFX8/CMakeLists.txt
++++ b/plugins/SFX8/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(SFX8
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "SFX8"
+   DESCRIPTION "SFX8"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/SampleDelay/CMakeLists.txt
++++ b/plugins/SampleDelay/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(SampleDelay
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "Sample Delay"
+   DESCRIPTION "Sample Delay"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/SpectrumAnalyzer/CMakeLists.txt
++++ b/plugins/SpectrumAnalyzer/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(SpectrumAnalyzer
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "SpectrumAnalyzer"
+   DESCRIPTION "Spectrum Analyzer"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/ToneGenerator/CMakeLists.txt
++++ b/plugins/ToneGenerator/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(ToneGenerator
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "ToneGenerator"
+   DESCRIPTION "ToneGenerator"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/WaveLooper/CMakeLists.txt
++++ b/plugins/WaveLooper/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(WaveLooper
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "WaveLooper"
+   DESCRIPTION "WaveLooper"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/XYScope/CMakeLists.txt
++++ b/plugins/XYScope/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(XYScope
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "XYScope"
+   DESCRIPTION "XYScope"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/slCrossfeed/CMakeLists.txt
++++ b/plugins/slCrossfeed/CMakeLists.txt
+@@ -11,12 +11,7 @@ juce_add_plugin(slCrossfeed
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+
+-  FORMATS
+-  "VST3"
+-  "AU"
+-  "Standalone"
+-  "VST"
+-  "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "slCrossfeed"
+   DESCRIPTION "slCrossfeed"
+   PLUGIN_MANUFACTURER_CODE "Soca"
