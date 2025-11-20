@@ -27,7 +27,7 @@ writeShellApplication {
     }
 
     version=$(get_latest_release)
-    version="''${version#release-}"
+    version="''${version#v-}"
 
     if [[ "$oldVersion" == "$version" ]]; then
         echo "Already up to date!"
