@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
-  version = "1.32.10";
+  version = "1.32.11";
 
   src = fetchurl {
     url = "https://proton.me/download/pass/linux/x64/proton-pass_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-FeU7ubjT1WqtviCPA78SW8zZi1h6gnj7erFebg2mgg4=";
+    hash = "sha256-OuwLuLvPx8TUQ3sH4Ac0F0bPbe2yeZPy5Kq14zoTqnE=";
   };
 
   dontConfigure = true;
@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/ProtonMail/WebClients/blob/proton-pass@${finalAttrs.version}/applications/pass-desktop/CHANGELOG.md";
     description = "Desktop application for Proton Pass";
     homepage = "https://proton.me/pass";
     license = lib.licenses.gpl3Plus;
