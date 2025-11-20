@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
     # <https://github.com/apple/foundationdb/pull/11788>
     substituteInPlace cmake/CompileBoost.cmake \
       --replace-fail 'find_package(Boost 1.78.0 EXACT ' 'find_package(Boost '
+
+    # Fix cross compilation
+    substituteInPlace cmake/ConfigureCompiler.cmake \
+      --replace-fail 'gcc-ar' '${stdenv.cc.targetPrefix}ar'
   '';
 
   buildInputs = [
@@ -166,8 +170,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.foundationdb.org";
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ] ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
-    # Fails when cross-compiling with "/bin/sh: gcc-ar: not found"
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
     maintainers = with lib.maintainers; [
       thoughtpolice
       lostnet
