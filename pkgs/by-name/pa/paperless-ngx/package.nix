@@ -28,13 +28,13 @@
   xorg,
 }:
 let
-  version = "2.19.5";
+  version = "2.19.6";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-sIPi7A6V5YNDB0ZvB5uIQaO/P5hIxY3JNRnB2sfVii0=";
+    hash = "sha256-nHLsA5hmAFkOAEQU/xD+hllwtc2SyBtns5auCNm9KNg=";
   };
 
   python = python3.override {
