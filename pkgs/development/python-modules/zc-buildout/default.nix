@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zc-buildout";
-  version = "4.1.12";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buildout";
     repo = "buildout";
     tag = version;
-    hash = "sha256-4MutmUuF4WdoD/wdhYtpVvOYBJEv+2JVkskmO6sz24U=";
+    hash = "sha256-OHTw7KFFBSLcrvu848wjuxFIF83AF/wuWL8ewaO5TXE=";
   };
 
   build-system = [ setuptools ];
