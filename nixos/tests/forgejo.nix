@@ -30,7 +30,7 @@ let
     }:
 
     {
-      name = "forgejo-${type}";
+      name = "forgejo-${forgejoPackage.version}-${type}";
       meta.maintainers = with lib.maintainers; [
         bendlas
         emilylange
