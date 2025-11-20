@@ -16,6 +16,7 @@
   expat,
   fontconfig,
   freetype,
+  git,
   libGL,
   libXcursor,
   libXext,
@@ -29,14 +30,16 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = "${finalAttrs.version}";
-    hash = "sha256-9TmvjBXTrvR0+qnGDFhCczanxiry3d43QVn/pJLUREY=";
+    hash = "sha256-7U6qukR+S0DFdU89Pu5+0AQAiKGtqPT0qc1gORRxxhQ=";
     fetchSubmodules = true;
+    # We need the .git to get the commit hash in the settings screen
+    leaveDotGit = true;
   };
 
   nativeBuildInputs = [
@@ -52,6 +55,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     freetype
+    git
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -87,6 +91,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # set the version for in the settings screen.
+    (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];
 
   installPhase = ''
