@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.48";
+  version = "1.0.0.alpha.49";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CB3Jb7N8vcNTLCWXKoDh/wQkPW1CH6WRlwXg4efU3GY=";
+    hash = "sha256-dVV/rqd3DktI67DPo0qTs3VP7yZIAy7Ew5TSYsE6ZTA=";
     fetchSubmodules = true;
   };
 
