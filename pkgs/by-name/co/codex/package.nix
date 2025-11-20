@@ -14,18 +14,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.58.0";
+  version = "0.60.1";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-CY9ai6Ia6bixACEIIWc85DqFDUf31zMnVJTqkVQArDs=";
+    hash = "sha256-VWvSMS7A8xi6n3RLvWphy8caqolYAaB51E9fyVb1ZNI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-FqGgHzq9JhegpRQEpOGtTmdnfypOeIlE43SdWs1/ddM=";
+  cargoHash = "sha256-F9YU77p7T7sfThP6R3HVOFN1pl05/myUMV6zVRcriHY=";
 
   nativeBuildInputs = [
     installShellFiles
