@@ -697,8 +697,8 @@ in
       "sha256-I/gqDPbuABc7k8vlBr/yiMASuxmABdjLCKC3UpHC3RY=";
 
   mypy-boto3-ivs =
-    buildMypyBoto3Package "ivs" "1.40.54"
-      "sha256-t4l1s2RCkP572kbJLxsbh5EQnKZXk6zPc82PYytFzEQ=";
+    buildMypyBoto3Package "ivs" "1.41.0"
+      "sha256-0qeTVNObdbKGsLpeiQfpButPGx0C3MmjPRgccVs/SMU=";
 
   mypy-boto3-ivs-realtime =
     buildMypyBoto3Package "ivs-realtime" "1.40.54"
