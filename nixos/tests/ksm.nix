@@ -13,11 +13,13 @@
 
       hardware.ksm.enable = true;
       hardware.ksm.sleep = 300;
+      hardware.ksm.scan = 100;
     };
 
   testScript = ''
     machine.start()
     machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/run) -eq 1")
     machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/sleep_millisecs) -eq 300")
+    machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/pages_to_scan) -eq 100")
   '';
 }
