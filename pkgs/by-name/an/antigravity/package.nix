@@ -4,6 +4,7 @@
   callPackage,
   vscode-generic,
   fetchurl,
+  jq,
   buildFHSEnv,
   writeShellScript,
   coreutils,
@@ -21,7 +22,7 @@ let
   version = "1.11.3";
   vscodeVersion = "1.104.0";
 in
-callPackage vscode-generic {
+(callPackage vscode-generic {
   inherit
     commandLineArgs
     useVSCodeRipgrep
@@ -32,7 +33,7 @@ callPackage vscode-generic {
   pname = "antigravity";
 
   executableName = "antigravity";
-  longName = "Google Antigravity";
+  longName = "Antigravity";
   shortName = "Antigravity";
   libraryName = "antigravity";
   iconName = "antigravity";
@@ -90,4 +91,15 @@ callPackage vscode-generic {
       Zaczero
     ];
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    # Disable update checks
+    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ jq ];
+    postPatch = (oldAttrs.postPatch or "") + ''
+      productJson="${
+        if stdenv.hostPlatform.isDarwin then "Contents/Resources" else "resources"
+      }/app/product.json"
+      data=$(jq 'del(.updateUrl)' "$productJson")
+      echo "$data" > "$productJson"
+    '';
+  })
