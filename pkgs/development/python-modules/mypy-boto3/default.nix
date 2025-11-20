@@ -1009,8 +1009,8 @@ in
       "sha256-4A6qMIFkeMX/mgQdncEzM0vpCtcySKSqwLSY9WnBU1g=";
 
   mypy-boto3-pca-connector-ad =
-    buildMypyBoto3Package "pca-connector-ad" "1.40.59"
-      "sha256-f3SQuBhNc2tL3vdqJmoYgnpUICkvJmENShpVbtE7cuM=";
+    buildMypyBoto3Package "pca-connector-ad" "1.41.0"
+      "sha256-0UQP+P+QovxCZU8zyE8oSGNyOMqBouWJxjCYYH2Ayhw=";
 
   mypy-boto3-personalize =
     buildMypyBoto3Package "personalize" "1.40.54"
