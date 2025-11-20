@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cfgv";
-  version = "3.4.0";
+  version = "3.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = "cfgv";
     tag = "v${version}";
-    hash = "sha256-P02j53dltwdrlUBG89AI+P2GkXYKTVrQNF15rZt58jw=";
+    hash = "sha256-ccCalTNVEHvh1gKhQgceD/yAScIEQy3ZKqndoWs7FQQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
