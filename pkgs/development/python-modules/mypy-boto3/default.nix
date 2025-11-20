@@ -286,8 +286,8 @@ in
       "sha256-iar4vSx4dlcXvsJH+sVe42DhzkFIgNuR64YzUGbglUU=";
 
   mypy-boto3-codeguru-security =
-    buildMypyBoto3Package "codeguru-security" "1.40.61"
-      "sha256-NQ5S5zqviRDtAkdYT5yjNikvH1ki7Vqt2+AzAAcHr5A=";
+    buildMypyBoto3Package "codeguru-security" "1.41.0"
+      "sha256-w4BbIBurj8hE78RUtWdmLekEPOiHBe00cQGrRLa7LA0=";
 
   mypy-boto3-codeguruprofiler =
     buildMypyBoto3Package "codeguruprofiler" "1.40.60"
