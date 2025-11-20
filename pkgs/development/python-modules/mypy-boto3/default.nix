@@ -1213,8 +1213,8 @@ in
       "sha256-G1dtEgE4NX1woY5mE3rxHcjN4iInF35NnHjdCXBIIws=";
 
   mypy-boto3-sdb =
-    buildMypyBoto3Package "sdb" "1.40.0"
-      "sha256-0Ih/hjzLE+pf9dXfTHLli5PYAyRGOTq5ghxNcpMN0RA=";
+    buildMypyBoto3Package "sdb" "1.41.0"
+      "sha256-4JI37HhTJo75sHyU0Lm9fKB6Ig87NcgN3Lel5sIEQjs=";
 
   mypy-boto3-secretsmanager =
     buildMypyBoto3Package "secretsmanager" "1.40.60"
