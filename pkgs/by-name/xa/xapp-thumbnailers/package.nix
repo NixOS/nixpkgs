@@ -32,14 +32,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xapp-thumbnailers";
-  version = "1.2.8";
+  version = "1.2.9";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp-thumbnailers";
     tag = version;
-    hash = "sha256-MX2TvtuOmqi8cpA/K8pSEPScUOXEmz++t7Xb/eDdb9c=";
+    hash = "sha256-XlmWenp3BmGnmLGt9jauys9P92icsezjieHuyGVMisw=";
   };
 
   patches = [ ./meson.patch ];
