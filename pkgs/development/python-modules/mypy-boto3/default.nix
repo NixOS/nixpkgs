@@ -1433,6 +1433,6 @@ in
       "sha256-MCL/FaNV3RctO9k6CBZAAtCYhN1puWdm5a00WpFTsHs=";
 
   mypy-boto3-xray =
-    buildMypyBoto3Package "xray" "1.40.61"
-      "sha256-FEAlQu+9Ghddr4peEO6zbhHM9LN6/aJZ/+tdMKHH8bM=";
+    buildMypyBoto3Package "xray" "1.41.0"
+      "sha256-v3lfrykupkITvB9pEjFreOINv3PzDhzFloNPGz6EgCM=";
 }
