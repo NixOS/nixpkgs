@@ -1339,8 +1339,8 @@
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-hzgDUuflap7gg60jjHO1n8RCFp4QzpRY5ZttCx0wIYA=",
-                    "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
+                    "hash": "sha256-I4lltlu5a+8S9Lg2ESAe3jBzDQmCVBLQ5DIulTNYW2U=",
+                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
                     "tag": "138.0.7204.251",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
@@ -1380,10 +1380,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-nE6qhNX6k+TqHS6PPZcsQ3BCH1ckkn6/FNPv12TcHQ0=",
+                    "hash": "sha256-I8C0lT1VnNP4fSMp5LReFe8tQj/3IM1Ko6SohY187Cc=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v37.10.0"
+                    "tag": "v37.10.2"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2653,7 +2653,7 @@
         "electron_yarn_hash": "0hm126bl9cscs2mjb3yx2yr4b22agqp9r0c5kv25r3lvc020r9pk",
         "modules": "136",
         "node": "22.21.1",
-        "version": "37.10.0"
+        "version": "37.10.2"
     },
     "38": {
         "chrome": "140.0.7339.249",
