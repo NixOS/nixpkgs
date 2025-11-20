@@ -21,7 +21,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refine";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = false; # uses meson
 
   src = fetchFromGitLab {
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     owner = "TheEvilSkeleton";
     repo = "Refine";
     tag = version;
-    hash = "sha256-EomhAJORgVBwBb6CUAKAW82SoRwN9CBCyI0nLuO9ii0=";
+    hash = "sha256-HNfKsyppYen+oprGsw7hrOaXiHMg/iQsIEKuDlKMDQM=";
   };
 
   nativeBuildInputs = [
