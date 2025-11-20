@@ -76,8 +76,14 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteAllInPlace src/res/watch.yaml \
       --replace '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
+    substituteInPlace wlx-overlay-s.desktop \
+      --replace 'Categories=Utility;' 'Categories=Utility;X-WiVRn-VR;'
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
+  '';
+  postInstall = ''
+    install -Dm644 wlx-overlay-s.desktop $out/share/applications/wlx-overlay-s.desktop
+    install -Dm644 wlx-overlay-s.svg $out/share/icons/hicolor/scalable/apps/wlx-overlay-s.svg
   '';
 
   passthru = {
