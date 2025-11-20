@@ -1389,8 +1389,8 @@ in
       "sha256-jTBdsBSgLubTL4CTSpEivxeQZKiaP/tRmocMBTejmu8=";
 
   mypy-boto3-waf =
-    buildMypyBoto3Package "waf" "1.40.64"
-      "sha256-6hFX0XgzB+dMqyaEUJQADjivNJH71oD4KG4KulkqRjE=";
+    buildMypyBoto3Package "waf" "1.41.0"
+      "sha256-5BA7zb0ypdyo1cieXqCr1GBGZbqS+3ZsQqn2cnEVnMg=";
 
   mypy-boto3-waf-regional =
     buildMypyBoto3Package "waf-regional" "1.40.60"
