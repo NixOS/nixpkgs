@@ -1,17 +1,17 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchurl,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "cbmc-viewer";
-  version = "3.8";
-  pyproject = true;
+  version = "3.11.1";
+  format = "wheel";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JFL06z7lJWZxTALovDBVwNJWenWPUQV9J0qZz3Ek6gI=";
+  src = fetchurl {
+    url = "https://github.com/model-checking/${pname}/releases/download/viewer-${version}/cbmc_viewer-${version}-py3-none-any.whl";
+    hash = "sha256-mT2JPUQ+t3r/MXUTH+OO0dpd/9N85HTuRljSoAm+FgA=";
   };
 
   propagatedBuildInputs = with python3Packages; [
