@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipscan";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchurl {
     url = "https://github.com/angryip/ipscan/releases/download/${finalAttrs.version}/ipscan_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-5H6QCT7Z3EOJks/jLBluTCgJbqpRMW5iheds9nl4ktU=";
+    hash = "sha256-RLdlcrtpWcO4z7cKSN+y9UJzMBtnli2mAvuJSXCMoJU=";
   };
 
   nativeBuildInputs = [
