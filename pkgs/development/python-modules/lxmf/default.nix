@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   rns,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "lxmf";
   version = "0.9.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "markqvist";
