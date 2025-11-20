@@ -11,17 +11,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.0";
+  version = "1.7.1";
   pname = "git-latexdiff";
 
   src = fetchFromGitLab {
     repo = "git-latexdiff";
     owner = "git-latexdiff";
     tag = finalAttrs.version;
-    hash = "sha256-DMoGEbCBuqUGjbna3yDpD4WNTikPudYRD4Wy1pPG2mw=";
+    hash = "sha256-ocEDds1vAnaj84YiAez150OZV82w3NlsgXoxNbUGW/Q=";
   };
-
-  patches = [ ./version-test.patch ];
 
   postPatch = ''
     substituteInPlace git-latexdiff \
