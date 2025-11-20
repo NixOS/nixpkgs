@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D "$src" "$out/bin/gemini"
+    sed -i '/disableAutoUpdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
 
     runHook postInstall
   '';
