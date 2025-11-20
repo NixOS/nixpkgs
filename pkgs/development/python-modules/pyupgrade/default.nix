@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "3.21.0";
+  version = "3.21.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = "pyupgrade";
     rev = "v${version}";
-    hash = "sha256-8nvA0uN+j9lkACcNohfthW9lKfI9GIxLEwtJ+3lCYV0=";
+    hash = "sha256-u4iudzPhVuAOS9cL3z6FCVpWKJZHg7UGpe9aHnN7Byc=";
   };
 
   propagatedBuildInputs = [ tokenize-rt ];
