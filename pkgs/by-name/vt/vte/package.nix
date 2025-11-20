@@ -34,6 +34,7 @@
   nixosTests,
   blackbox-terminal,
   darwinMinVersionHook,
+  withApp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,6 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f672ed15a88dd3e25c33aa0a5ef6f6d291a6d5c7.patch";
       hash = "sha256-JdLDild5j7marvR5n2heW9YD00+bwzJIoxDlzO5r/6w=";
+    })
+
+    # Add option to not build the vte application
+    (fetchpatch {
+      url = "https://github.com/GNOME/vte/commit/6b7a6a7df9df99368b7ce5ac5903bd2578167567.patch";
+      hash = "sha256-s3HigfTZLtGmsZS6dfD3YE95ZdBjB4WOWDvuoatOu3o=";
     })
   ];
 
@@ -118,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "app" withApp)
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
     (lib.mesonBool "_systemd" (!systemdSupport))
