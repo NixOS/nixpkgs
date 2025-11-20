@@ -68,6 +68,56 @@ let
   };
 
   commonOptionsIncoming = commonOptions "incoming";
+  commonOptionsOutgoing = commonOptions "outgoing";
+
+  filterOutputOptions = {
+    enabled = lib.mkEnableOption "filtering for outgoing traffic";
+
+    interfaces = lib.mkOption {
+      default = { };
+      type = with lib.types; attrsOf (submodule [ { options = commonOptionsOutgoing; } ]);
+      description = ''
+        Interface-specific allowed outgoing ports.
+      '';
+    };
+
+    trustedInterfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "enp0s2" ];
+      description = ''
+        Traffic leaving via these interfaces will be accepted
+        unconditionally. Traffic going into the loopback (lo)
+        interface will always be accepted.
+      '';
+    };
+
+    extraRules = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      example = "oifname wg0 accept";
+      description = ''
+        Additional nftables rules to be appended to the output-allow
+        chain.
+
+        This option only works with the nftables based firewall.
+      '';
+    };
+
+    allInterfaces = lib.mkOption {
+      internal = true;
+      visible = false;
+      default = {
+        default = lib.mapAttrs (name: value: cfg.filterOutput.${name}) commonOptionsOutgoing;
+      }
+      // cfg.filterOutput.interfaces;
+      type = with lib.types; attrsOf (submodule [ { options = commonOptionsOutgoing; } ]);
+      description = ''
+        All open ports.
+      '';
+    };
+  }
+  // commonOptionsOutgoing;
 in
 
 {
@@ -235,6 +285,16 @@ in
         '';
       };
 
+      filterOutput = lib.mkOption {
+        type = lib.types.submodule { options = filterOutputOptions; };
+        default = { };
+        description = ''
+          Configure firewall for outgoing packages.
+
+          This option only works with the nftables based firewall.
+        '';
+      };
+
       filterForward = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -328,6 +388,10 @@ in
         message = "filterForward only works with the nftables based firewall";
       }
       {
+        assertion = cfg.filterOutput.enabled -> config.networking.nftables.enable;
+        message = "filterOutput.enabled only works with the nftables based firewall";
+      }
+      {
         assertion =
           cfg.autoLoadConntrackHelpers -> lib.versionOlder config.boot.kernelPackages.kernel.version "6";
         message = "conntrack helper autoloading has been removed from kernel 6.0 and newer";
@@ -335,6 +399,7 @@ in
     ];
 
     networking.firewall.trustedInterfaces = [ "lo" ];
+    networking.firewall.filterOutput.trustedInterfaces = [ "lo" ];
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
 

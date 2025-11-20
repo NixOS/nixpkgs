@@ -9,6 +9,9 @@ let
   cfg = config.networking.firewall;
 
   incomingTrustedInterfaces = lib.concatStringsSep ", " (map (x: ''"${x}"'') cfg.trustedInterfaces);
+  outgoingTrustedInterfaces = lib.concatStringsSep ", " (
+    map (x: ''"${x}"'') cfg.filterOutput.trustedInterfaces
+  );
 
   portsToNftSet =
     ports: portRanges:
@@ -175,6 +178,63 @@ in
         ${cfg.extraInputRules}
 
       }
+
+      ${lib.optionalString cfg.filterOutput.enabled ''
+        chain output {
+          type filter hook output priority filter; policy drop;
+
+          ${lib.optionalString (
+            outgoingTrustedInterfaces != ""
+          ) ''oifname { ${outgoingTrustedInterfaces} } accept comment "trusted interfaces"''}
+
+          ip6 nexthdr icmpv6 accept comment "Accept all ICMPv6 messages."
+
+          ct state vmap {
+            invalid : drop,
+            established : accept,
+            related : accept,
+            new : jump output-allow,
+          }
+
+          ${lib.optionalString cfg.logRefusedConnections ''
+            tcp flags syn / fin,syn,rst,ack log level info prefix "refused outgoing connection: "
+          ''}
+          ${lib.optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
+            pkttype broadcast log level info prefix "refused outgoing broadcast: "
+            pkttype multicast log level info prefix "refused outgoing multicast: "
+          ''}
+          ${lib.optionalString cfg.logRefusedPackets ''
+            pkttype host log level info prefix "refused outgoing packet: "
+          ''}
+        }
+
+        chain output-allow {
+          ${lib.concatStrings (
+            lib.mapAttrsToList (
+              iface: cfg:
+              let
+                ifaceExpr = lib.optionalString (iface != "default") "oifname ${iface}";
+                tcpSet = portsToNftSet cfg.allowedTCPPorts cfg.allowedTCPPortRanges;
+                udpSet = portsToNftSet cfg.allowedUDPPorts cfg.allowedUDPPortRanges;
+              in
+              ''
+                ${lib.optionalString (tcpSet != "") "${ifaceExpr} tcp dport { ${tcpSet} } accept"}
+                ${lib.optionalString (udpSet != "") "${ifaceExpr} udp dport { ${udpSet} } accept"}
+              ''
+            ) cfg.filterOutput.allInterfaces
+          )}
+
+          ${lib.optionalString cfg.allowPing ''
+            icmp type { echo-request, echo-reply } ${
+              lib.optionalString (cfg.pingLimit != null) "limit rate ${cfg.pingLimit}"
+            } accept comment "allow ping"
+          ''}
+
+          ip6 daddr fe80::/64 udp dport 547 accept comment "DHCPv6 client"
+
+          ${cfg.filterOutput.extraRules}
+        }
+      ''}
 
       ${lib.optionalString cfg.filterForward ''
         chain forward {
