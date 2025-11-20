@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  buildEnv,
   makeFontsConf,
   gnused,
   writeScript,

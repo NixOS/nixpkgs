@@ -1,4 +1,4 @@
-inputs@{
+{
   autoconf,
   automake,
   config,
@@ -28,8 +28,7 @@ let
     nccl
     ;
 
-  stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;

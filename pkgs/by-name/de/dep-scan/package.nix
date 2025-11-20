@@ -3,7 +3,6 @@
   fetchFromGitHub,
   python3Packages,
   writableTmpDirAsHomeHook,
-  makeWrapper,
   cdxgen,
   nixosTests,
 }:

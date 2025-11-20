@@ -63,13 +63,6 @@ let
     hplipPlatforms.${stdenv.hostPlatform.system}
       or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
-  pluginArches = [
-    "x86_32"
-    "x86_64"
-    "arm32"
-    "arm64"
-  ];
-
 in
 
 python3Packages.buildPythonApplication {
