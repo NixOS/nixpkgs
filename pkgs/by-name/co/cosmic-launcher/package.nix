@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
-    passthru.updateScript = nix-update-script {
+    updateScript = nix-update-script {
       extraArgs = [
         "--version"
         "unstable"
