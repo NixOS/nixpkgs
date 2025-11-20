@@ -1446,6 +1446,7 @@ in
   swayfx = runTest ./swayfx.nix;
   switchTest = runTest ./switch-test.nix;
   sx = runTest ./sx.nix;
+  sylkserver = runTest ./sylkserver.nix;
   sympa = runTest ./sympa.nix;
   syncthing = runTest ./syncthing/main.nix;
   syncthing-folders = runTest ./syncthing/folders.nix;
