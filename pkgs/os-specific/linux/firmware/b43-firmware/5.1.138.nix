@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "http://www.lwfinger.com/b43-firmware/broadcom-wl-${version}.tar.bz2";
-    sha256 = "0vz4ka8gycf72gmnaq61k8rh8y17j1wm2k3fidxvcqjvmix0drzi";
+    hash = "sha256-8ecGeqxbYrZ7i25MUXmQJ3gEM5rBYGXrE8cx/5Ca5G8=";
   };
 
   nativeBuildInputs = [ b43FirmwareCutter ];
