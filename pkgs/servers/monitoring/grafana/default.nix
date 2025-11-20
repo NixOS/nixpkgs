@@ -44,7 +44,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.6";
+  version = "12.0.7";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -56,7 +56,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-VvySbS5c4jYsSEDRDlifOCNIDgoIQGGobDRHxAASXVY=";
+    hash = "sha256-FnmmB0KDc7V/vFIf5WAfk/5WABO6/zAQbxCqatqnuxM=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -70,7 +70,7 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-60I2rAdl5KczfvGevkoP2ahmV9r1Hm30zM2mA9jVdl4=";
+    hash = "sha256-DQ4hpXRRpguzSh2lRGItqQS3n6CXUqjxOOQrJXm3xPs=";
   };
 
   disallowedRequisites = [ offlineCache ];
