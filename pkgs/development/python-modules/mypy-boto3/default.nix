@@ -1341,8 +1341,8 @@ in
       "sha256-MXdyTYfdXdf4fqj1ubfRW3MPw/TgfyhkvffjlWCU5v4=";
 
   mypy-boto3-swf =
-    buildMypyBoto3Package "swf" "1.40.55"
-      "sha256-zer2dqLkBLe1CA5I6+9DavQPvVLtrGFoxi50BRDOI3s=";
+    buildMypyBoto3Package "swf" "1.41.0"
+      "sha256-+DQTs6FvwMf7/lWdJXKoHMXCLOlPJF/95X+uF8xe5lc=";
 
   mypy-boto3-synthetics =
     buildMypyBoto3Package "synthetics" "1.40.58"
