@@ -17,7 +17,9 @@ in
 
 lib.makeOverridable (
   {
-    name,
+    name ? "${pname}-${version}",
+    pname ? null,
+    version ? null,
 
     # The manifest file (if any).  A symlink $out/manifest will be
     # created to it.
@@ -60,8 +62,6 @@ lib.makeOverridable (
 
     passthru ? { },
     meta ? { },
-    pname ? null,
-    version ? null,
   }:
   let
     chosenOutputs = map (drv: {
