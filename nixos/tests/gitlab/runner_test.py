@@ -123,7 +123,7 @@ def test_runner_registered(r: Runner):
     Test that the runner `r` is registered in Gitlab and its status is active.
     """
 
-    print("==> Check that runner '{r.name}' is registered.")
+    print(f"==> Check that runner '{r.name}' is registered.")
 
     resp = vms.gitlab.execute(
         f"""
