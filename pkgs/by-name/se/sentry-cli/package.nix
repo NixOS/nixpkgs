@@ -25,30 +25,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-8fz8bSQxqylTQ7mD/QbQ6gc8qlEdx/SDCjaB3uqFnGA=";
   };
 
-  # Needed to get openssl-sys to use pkgconfig.
-  OPENSSL_NO_VENDOR = 1;
-
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-swift-lib-path.patch { swiftLib = lib.getLib swift; })
   ];
 
-  buildInputs = [ openssl ];
+  cargoHash = "sha256-3I0uKHpD4SpSeLSIAEjBxxAFfyS4WIvb76x7QAy53HM=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ]
-  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-    swift
-    swiftpm
-  ]);
-
-  nativeCheckInputs = [ gitMinimal ];
-
-  checkFlags = [
-    "--skip=integration::send_metric::command_send_metric"
-    "--skip=integration::update::command_update"
-  ];
+  # Needed to get openssl-sys to use pkgconfig.
+  env.OPENSSL_NO_VENDOR = 1;
 
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
@@ -56,7 +40,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  cargoHash = "sha256-3I0uKHpD4SpSeLSIAEjBxxAFfyS4WIvb76x7QAy53HM=";
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    swift
+    swiftpm
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [ gitMinimal ];
+
+  checkFlags = [
+    "--skip=integration::send_metric::command_send_metric"
+    "--skip=integration::update::command_update"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \
