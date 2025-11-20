@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.13.0";
+  version = "1.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "peewee_migrate";
     tag = version;
-    hash = "sha256-sC63WH/4EmoQYfvl3HyBHDzT/jMZW/G7mTC138+ZHHU=";
+    hash = "sha256-WO6XTlHenEh8gO1eYJHaysQFMMmAOAdHYcISBZaNcrE=";
   };
 
   postPatch = ''
