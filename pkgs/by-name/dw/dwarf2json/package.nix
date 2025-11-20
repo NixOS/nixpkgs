@@ -20,7 +20,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";

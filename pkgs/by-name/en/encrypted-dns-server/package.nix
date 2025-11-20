@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/encrypted-dns";
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/DNSCrypt/encrypted-dns-server/releases/tag/${version}";

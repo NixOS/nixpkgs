@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       prefix' = lib.optionalString (prefix != null) prefix;
     in
     "${placeholder "out"}/bin/${prefix'}ls";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -32,7 +32,6 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = false;
 
     meta.mainProgram = "cord";

@@ -25,7 +25,6 @@ buildRubyGem rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bundler";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

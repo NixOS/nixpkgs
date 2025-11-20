@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   # Tries to create /var/empty/.volta as $HOME is not writable
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

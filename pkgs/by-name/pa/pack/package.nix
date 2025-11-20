@@ -37,7 +37,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {

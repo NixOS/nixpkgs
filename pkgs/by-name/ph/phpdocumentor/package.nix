@@ -31,7 +31,6 @@ php.buildComposerProject2 (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

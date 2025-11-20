@@ -41,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     updateScript = ./update.sh;
     tests = {

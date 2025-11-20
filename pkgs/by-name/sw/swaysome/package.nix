@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Helper to make sway behave more like awesomewm";
     homepage = "https://gitlab.com/hyask/swaysome";

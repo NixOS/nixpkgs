@@ -20,7 +20,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phel-lang/phel-lang/releases/tag/v${finalAttrs.version}";

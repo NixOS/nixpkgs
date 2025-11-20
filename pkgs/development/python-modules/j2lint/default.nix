@@ -32,7 +32,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     homepage = "https://github.com/aristanetworks/j2lint";

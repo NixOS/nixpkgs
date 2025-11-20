@@ -81,8 +81,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "granian" ];
 
-  versionCheckProgramArg = "--version";
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

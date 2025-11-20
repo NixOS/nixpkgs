@@ -62,8 +62,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [ "mypy_boto3_builder" ];
 
   disabledTests = [

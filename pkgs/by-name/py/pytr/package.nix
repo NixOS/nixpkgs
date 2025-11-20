@@ -50,8 +50,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [ "pytr" ];
 
   meta = {
