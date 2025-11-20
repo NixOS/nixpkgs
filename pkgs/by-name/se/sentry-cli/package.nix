@@ -9,6 +9,7 @@
   swift,
   swiftpm,
   replaceVars,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-8fz8bSQxqylTQ7mD/QbQ6gc8qlEdx/SDCjaB3uqFnGA=";
   };
-  doCheck = false;
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [ openssl ];
+
   nativeBuildInputs = [
     installShellFiles
     pkg-config
@@ -40,8 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     swiftpm
   ]);
 
+  nativeCheckInputs = [ gitMinimal ];
+
+  checkFlags = [
+    "--skip=integration::send_metric::command_send_metric"
+    "--skip=integration::update::command_update"
+  ];
+
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
+  dontUseSwiftpmCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   cargoHash = "sha256-3I0uKHpD4SpSeLSIAEjBxxAFfyS4WIvb76x7QAy53HM=";
 
