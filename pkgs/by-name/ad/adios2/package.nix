@@ -64,11 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x cmake/install/post/adios2-config.pre.sh.in
     patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
-  ''
-  # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
-      --replace-fail "dynamic_cast" "reinterpret_cast"
   '';
 
   nativeBuildInputs = [
