@@ -130,8 +130,8 @@ in
       "sha256-HHh5F9fl6FUiLN7TYWr79qekw7+RgrnhvHQQLc435PI=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.40.75"
-      "sha256-7/Uhmaab+gyBfQBg+mG2kwMlDcxJgRBGNgtfAslYtuY=";
+    buildMypyBoto3Package "appstream" "1.41.0"
+      "sha256-hhm8V0Rth32Vxm+szkkm+MAIvIKBjmGJasxuyqWesOc=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.40.63"
