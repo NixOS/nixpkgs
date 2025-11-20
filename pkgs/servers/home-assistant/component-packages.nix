@@ -844,6 +844,7 @@
       ps: with ps; [
         caldav
         icalendar
+        vobject
       ];
     "calendar" =
       ps: with ps; [
