@@ -10,6 +10,7 @@
   swiftpm,
   replaceVars,
   gitMinimal,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <($out/bin/sentry-cli completions fish) \
         --zsh <($out/bin/sentry-cli completions zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://docs.sentry.io/cli/";
