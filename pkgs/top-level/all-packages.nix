@@ -10721,12 +10721,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  clight = callPackage ../applications/misc/clight { };
-
-  clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
-
-  clightd = callPackage ../applications/misc/clight/clightd.nix { };
-
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -12569,6 +12563,12 @@ with pkgs;
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+
+  antigravity = callPackage ../by-name/an/antigravity/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+  antigravity-fhs = antigravity.fhs;
+  antigravity-fhsWithPackages = antigravity.fhsWithPackages;
 
   code-cursor = callPackage ../by-name/co/code-cursor/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;

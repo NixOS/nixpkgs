@@ -18,15 +18,15 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clight";
   version = "4.11";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
-    rev = version;
-    sha256 = "sha256-Fu38HRP83Yn2jsq9xnCWOXNlV/0hJKD1/cOOp3EV45Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-Fu38HRP83Yn2jsq9xnCWOXNlV/0hJKD1/cOOp3EV45Q=";
   };
 
   nativeBuildInputs = [
@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     "-DZSH_COMPLETIONS_DIR=${placeholder "out"}/share/zsh/site-functions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C daemon that turns your webcam into a light sensor";
     homepage = "https://github.com/FedeDP/Clight";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       eadwu
     ];
     mainProgram = "clight";
   };
-}
+})

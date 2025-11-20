@@ -3852,8 +3852,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.47.0";
-          hash = "sha256-zxhNZJWi4mjENzHsO74FjOrztl5uZbVU3aMPO5DwGRo=";
+          version = "1.48.0";
+          hash = "sha256-/JW5PVM4USBflC5eloi8u9AgpdIzkpEmoHKYr1yVkgI=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -5318,8 +5318,8 @@ let
         mktplcRef = {
           name = "php-debug";
           publisher = "xdebug";
-          version = "1.37.0";
-          hash = "sha256-7Dz8i66tWPStk2fgFdZPY2Jz3j4IquJVyQbSnV+SVpk=";
+          version = "1.38.0";
+          hash = "sha256-QOA8At2akj9zLYxIuQJLkDL2Zg/isPIssFG/UipRBbU=";
         };
         meta = {
           description = "PHP Debug Adapter";

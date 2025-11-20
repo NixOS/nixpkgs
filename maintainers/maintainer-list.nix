@@ -3054,6 +3054,12 @@
     githubId = 5409401;
     name = "Bradley Cooley";
   };
+  bct = {
+    email = "bct@diffeq.com";
+    github = "bct";
+    githubId = 548;
+    name = "Brendan Taylor";
+  };
   bcyran = {
     email = "bazyli@cyran.dev";
     github = "bcyran";
@@ -21360,6 +21366,12 @@
     githubId = 74491719;
     matrix = "@zitrone:utwente.io";
     name = "quantenzitrone";
+  };
+  quarterstar = {
+    email = "quarterstar+nix@proton.me";
+    github = "quarterstar";
+    githubId = 201157222;
+    name = "Quarterstar";
   };
   qubasa = {
     email = "consulting@qube.email";
