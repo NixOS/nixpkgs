@@ -46,7 +46,6 @@ let
     concatStringsSep
     head
     isAttrs
-    listToAttrs
     tail
     ;
 in
@@ -152,15 +151,7 @@ rec {
           else if done ? ${entry} then
             f done (tail todo)
           else
-            f (
-              done
-              // listToAttrs [
-                {
-                  name = entry;
-                  value = 1;
-                }
-              ]
-            ) ([ predefined.${entry} ] ++ tail todo);
+            f (done // { ${entry} = 1; }) ([ predefined.${entry} ] ++ tail todo);
     in
     (f { } arg).result;
 
