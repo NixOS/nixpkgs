@@ -825,8 +825,8 @@ in
       "sha256-MlMkIgzc2D3i5xAPdk+th0e9AYrvRxGwzl4zwEwy4xw=";
 
   mypy-boto3-m2 =
-    buildMypyBoto3Package "m2" "1.40.54"
-      "sha256-qpYLmQ4CfAG30fnY86vT74B33pmD1cDGLHrKiuDOpN8=";
+    buildMypyBoto3Package "m2" "1.41.0"
+      "sha256-JpBd1G28XCMH4SIVIe2IlMteHUoIgGHPC3Mk0vTQ27Q=";
 
   mypy-boto3-machinelearning =
     buildMypyBoto3Package "machinelearning" "1.40.54"
