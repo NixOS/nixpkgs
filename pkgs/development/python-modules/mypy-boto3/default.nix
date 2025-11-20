@@ -158,8 +158,8 @@ in
       "sha256-Y1bZsWppIJKw3fkEhVz+uEm/JbyY7Ot/ysKnwH9P7uw=";
 
   mypy-boto3-backup =
-    buildMypyBoto3Package "backup" "1.40.75"
-      "sha256-cbIfWbUQNvGZDyS1K5NnxJoKeFpDSf0NWCjEjTL5H5U=";
+    buildMypyBoto3Package "backup" "1.41.0"
+      "sha256-++Vizo1wxUQWWylXVzBrR/3c2Y7Iwn/2dW16NUGTwQY=";
 
   mypy-boto3-backup-gateway =
     buildMypyBoto3Package "backup-gateway" "1.40.60"
