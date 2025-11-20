@@ -120,9 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocs=true"
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
-  ]
-  ++ lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
+    (lib.mesonBool "_systemd" (!systemdSupport))
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
@@ -136,11 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    patchShebangs perf/*
-    patchShebangs src/app/meson_desktopfile.py
-    patchShebangs src/parser-seq.py
-    patchShebangs src/minifont-coverage.py
-    patchShebangs src/modes.py
+    patchShebangs perf/* \
+      src/app/meson_desktopfile.py \
+      src/parser-seq.py \
+      src/minifont-coverage.py \
+      src/modes.py
   '';
 
   postFixup = ''
