@@ -50,20 +50,15 @@ in
 
   nodes = {
     gitlab-runner =
-      { config, lib, ... }:
+      { ... }:
       {
+        imports = [
+          (import ./runner/shell-executor.nix { inherit runnerConfigs; })
+        ];
+
         # Define the Gitlab Runner.
         services.gitlab-runner = {
           enable = true;
-
-          services.shell-executor = import ./runner/shell-executor.nix {
-            runnerConfig = runnerConfigs.shell;
-          };
-
-          # TODO: Add here the container executor (podman, nixDaemon etc)
-          # services.container-executor = import ./runner/container-executor.nix {
-          #   inherit config lib runnerTokenFile;
-          # };
 
           settings = {
             log_level = "info";
@@ -75,7 +70,6 @@ in
     gitlab =
       { config, ... }:
       {
-
         imports = [ ../common/user-account.nix ];
 
         networking.firewall.allowedTCPPorts = [
