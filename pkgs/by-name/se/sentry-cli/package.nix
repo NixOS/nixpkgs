@@ -25,10 +25,8 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  patches = [
-    (replaceVars ./fix-swift-lib-path.patch {
-      swiftLib = lib.getLib swift;
-    })
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    (replaceVars ./fix-swift-lib-path.patch { swiftLib = lib.getLib swift; })
   ];
 
   buildInputs = [ openssl ];
