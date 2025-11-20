@@ -23,6 +23,7 @@
   pipewire,
   pulseaudio,
   tinysparql,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dVV/rqd3DktI67DPo0qTs3VP7yZIAy7Ew5TSYsE6ZTA=";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -69,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "plugin_bluez" true)
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
     mainProgram = "valent";
@@ -90,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       ```
     '';
     homepage = "https://valent.andyholmes.ca";
-    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       gpl3Plus
       cc0
