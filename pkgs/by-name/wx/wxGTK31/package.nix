@@ -21,7 +21,7 @@
   withEGL ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? stdenv.hostPlatform.isDarwin,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libpng,
 }:
 
@@ -39,7 +39,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
+    ./0001-fix-assertion-using-hide-in-destroy.patch
+    # Add support for libwebkit2gtk-4.1 and libsoup-3.0, cherry-picked from
+    # https://github.com/SoftFever/Orca-deps-wxWidgets/commit/1b8664426603376b68f8ca3c54de97ec630e5940
+    ./0002-support-webkitgtk-41.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
+  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_1
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
   ];
