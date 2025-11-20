@@ -813,8 +813,8 @@ in
       "sha256-y4nhdq4Q7Z5kepbajnw9CQgmuwLFcjgqDMot795EM8c=";
 
   mypy-boto3-lookoutequipment =
-    buildMypyBoto3Package "lookoutequipment" "1.40.54"
-      "sha256-TW5IgaSvPWbBu39VsO+6HMpgzu1TAKZ62RZGUQ3HoFo=";
+    buildMypyBoto3Package "lookoutequipment" "1.41.0"
+      "sha256-8dAMWt03PuP2x71cojBHCJrsH823K0GDDh1Iply0mr4=";
 
   mypy-boto3-lookoutmetrics =
     buildMypyBoto3Package "lookoutmetrics" "1.40.15"
