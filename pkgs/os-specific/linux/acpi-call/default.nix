@@ -5,11 +5,13 @@
   kernel,
   kernelModuleMakeFlags,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "acpi-call";
   version = "1.2.2";
-  name = "${pname}-${version}-${kernel.version}";
+in
+stdenv.mkDerivation {
+  inherit pname;
+  version = "${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "nix-community";
