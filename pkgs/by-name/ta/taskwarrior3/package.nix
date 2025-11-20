@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs test
   ''
-  + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+  + lib.optionalString (finalAttrs.failingTests != [ ]) ''
     substituteInPlace test/CMakeLists.txt \
       ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
   '';

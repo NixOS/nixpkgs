@@ -199,7 +199,7 @@ in
           map (path: path.target) config.boot.initrd.systemd.storePaths
         );
       in
-      lib.optional (lib.length paths > 0) (
+      lib.optional (paths != [ ]) (
         lib.concatStringsSep " " [
           "Files inside /etc/tmpfiles.d in the initrd need to be created with"
           "boot.initrd.systemd.tmpfiles.settings."

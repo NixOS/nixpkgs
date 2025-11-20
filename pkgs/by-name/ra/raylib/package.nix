@@ -50,7 +50,7 @@ lib.checkListOfEnum "${pname}: platform"
       nativeBuildInputs = [
         cmake
       ]
-      ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
+      ++ optional (finalAttrs.appendRunpaths != [ ]) autoPatchelfHook;
 
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 

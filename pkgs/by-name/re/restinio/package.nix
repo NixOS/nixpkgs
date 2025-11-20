@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         ];
       excludeRegex = "^(${builtins.concatStringsSep "|" disabledTests})";
     in
-    lib.optionalString (builtins.length disabledTests != 0) ''
+    lib.optionalString (disabledTests != [ ]) ''
       checkFlagsArray+=(ARGS="--exclude-regex '${excludeRegex}'")
     '';
 

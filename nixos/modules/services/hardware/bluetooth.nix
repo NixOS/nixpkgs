@@ -30,7 +30,7 @@ let
     Policy.AutoEnable = cfg.powerOnBoot;
   };
 
-  hasDisabledPlugins = builtins.length cfg.disabledPlugins > 0;
+  hasDisabledPlugins = cfg.disabledPlugins != [ ];
 
 in
 {

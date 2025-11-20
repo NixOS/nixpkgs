@@ -36,7 +36,7 @@ in
       message = "OpenSSH userdb integration requires security wrappers.";
     };
 
-    warnings = lib.optional (lib.length highSystemUsers > 0 && !cfg.silenceHighSystemUsers) ''
+    warnings = lib.optional (highSystemUsers != [ ] && !cfg.silenceHighSystemUsers) ''
       The following system users have UIDs higher than 1000:
 
       ${lib.concatLines (lib.map (user: user.name) highSystemUsers)}
