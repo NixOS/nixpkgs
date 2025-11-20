@@ -498,8 +498,8 @@ in
       "sha256-k6hbyZO+uRTIbGiNxm87Ybc7i9LCQ6CIrZj1nCg/KNk=";
 
   mypy-boto3-emr =
-    buildMypyBoto3Package "emr" "1.40.64"
-      "sha256-NxYFJHvE3QifWP6csT3Rp/R0Yd2hYXjSjfe6ds3UQz0=";
+    buildMypyBoto3Package "emr" "1.41.0"
+      "sha256-c8dsPpKA6yVGIbfbRh9ST8zQTRsLu7wfC2v77tOM6q4=";
 
   mypy-boto3-emr-containers =
     buildMypyBoto3Package "emr-containers" "1.40.61"
