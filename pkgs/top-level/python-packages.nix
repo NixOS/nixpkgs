@@ -8123,6 +8123,10 @@ self: super: with self; {
 
   langgraph-checkpoint = callPackage ../development/python-modules/langgraph-checkpoint { };
 
+  langgraph-checkpoint-mongodb =
+    callPackage ../development/python-modules/langgraph-checkpoint-mongodb
+      { };
+
   langgraph-checkpoint-postgres =
     callPackage ../development/python-modules/langgraph-checkpoint-postgres
       { };
