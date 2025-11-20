@@ -11,6 +11,7 @@ let
   ollamaPackage = cfg.package.override { inherit (cfg) acceleration; };
 
   staticUser = cfg.user != null && cfg.group != null;
+  loadModels = builtins.filter (model: model != "") cfg.loadModels;
 in
 {
   imports = [
@@ -153,12 +154,28 @@ in
       loadModels = lib.mkOption {
         type = types.listOf types.str;
         default = [ ];
+        example = [
+          "dolphin3"
+          "gemma3"
+          "gemma3:27b"
+          "deepseek-r1:latest"
+          "deepseek-r1:1.5b"
+        ];
         description = ''
           Download these models using `ollama pull` as soon as `ollama.service` has started.
 
           This creates a systemd unit `ollama-model-loader.service`.
+          Use `services.ollama.syncModels` to automatically remove any models not currently declared here.
 
           Search for models of your choice from: <https://ollama.com/library>
+        '';
+      };
+      syncModels = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Synchronize all currently installed models with those declared in `services.ollama.loadModels`,
+          removing any models that are installed but not currently declared there.
         '';
       };
       openFirewall = lib.mkOption {
@@ -264,7 +281,7 @@ in
         };
     };
 
-    systemd.services.ollama-model-loader = lib.mkIf (cfg.loadModels != [ ]) {
+    systemd.services.ollama-model-loader = lib.mkIf (loadModels != [ ] || cfg.syncModels) {
       description = "Download ollama models in the background";
       wantedBy = [
         "multi-user.target"
@@ -292,14 +309,45 @@ in
           binaryInputs = lib.mapAttrs (_: lib.getExe) {
             ollama = ollamaPackage;
             parallel = pkgs.parallel;
+            awk = pkgs.gawk;
+            sed = pkgs.gnused;
           };
           inherit (binaryInputs)
             ollama
             parallel
+            awk
+            sed
             ;
+
+          declaredModelsRegex = lib.pipe loadModels [
+            (map lib.escapeRegex)
+            (lib.concatStringsSep "|")
+            (lib.escape [ "/" ])
+            lib.escapeShellArg
+          ];
         in
         ''
-          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs cfg.loadModels}
+          ${lib.optionalString cfg.syncModels ''
+            installed=$('${ollama}' list | '${awk}' 'NR > 1 {print $1}')
+            ${
+              # if `declaredModelsRegex` is empty, sed will err
+              if (loadModels != [ ]) then
+                ''
+                  echo declared models regex: ${declaredModelsRegex}
+                  undeclared=$(echo "$installed" | '${sed}' -E /${declaredModelsRegex}/d)
+                ''
+              else
+                ''
+                  undeclared="$installed"
+                ''
+            }
+            if [ -n "$undeclared" ]; then
+              echo removing: $undeclared
+              '${ollama}' rm $undeclared
+            fi
+          ''}
+
+          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs loadModels}
         '';
     };
 
