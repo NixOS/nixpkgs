@@ -102,8 +102,8 @@ in
       "sha256-kqqiBj5RPasumOgDC88cgytek1qnMVvhWW+NwMIyEy0=";
 
   mypy-boto3-appflow =
-    buildMypyBoto3Package "appflow" "1.40.63"
-      "sha256-/JAEmxuUuHyGeoehZY6LZjUEk0k0WxuR/48kEc7SmsE=";
+    buildMypyBoto3Package "appflow" "1.41.0"
+      "sha256-OLleWS1SYn4Y7JFnyiixKUQoFxpMcwT3I/ajptABtPw=";
 
   mypy-boto3-appintegrations =
     buildMypyBoto3Package "appintegrations" "1.40.55"
