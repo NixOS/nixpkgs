@@ -1674,6 +1674,7 @@ in
   xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
   xpadneo = runTest ./xpadneo.nix;
+  xray = import ./xray.nix { inherit runTest; };
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
   xscreensaver = runTest ./xscreensaver.nix;
