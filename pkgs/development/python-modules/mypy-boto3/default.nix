@@ -526,8 +526,8 @@ in
       "sha256-tmSa+gqvJpOI0MlVcL9InKJD7He8rmXq/DAAH5pJdg0=";
 
   mypy-boto3-finspace =
-    buildMypyBoto3Package "finspace" "1.40.55"
-      "sha256-7P/MvdQjYmNgda7EZ8GSI0mLPe3o19ETSspd8wL23Ag=";
+    buildMypyBoto3Package "finspace" "1.41.0"
+      "sha256-V7LbRsfHAgqNcVyTJ7nuRQJbj31a2PWrVbSxiqASxlw=";
 
   mypy-boto3-finspace-data =
     buildMypyBoto3Package "finspace-data" "1.40.55"
