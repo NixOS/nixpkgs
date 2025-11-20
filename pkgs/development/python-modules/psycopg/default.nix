@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   # build
@@ -47,6 +48,11 @@ let
     (replaceVars ./ctypes.patch {
       libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
+    })
+    (fetchpatch {
+      # cython 3.2 compat
+      url = "https://github.com/psycopg/psycopg/commit/70cc1d1b14ab99be2a066032dc353e7c7aa77b20.patch";
+      hash = "sha256-raSo3y3UEwDQDRXzbZ8dacS/DsE5g1hoYt/IgM+848A=";
     })
   ];
 
