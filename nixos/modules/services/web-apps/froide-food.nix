@@ -8,11 +8,11 @@ let
 
   cfg = config.services.froide-food;
   pythonFmt = pkgs.formats.pythonVars { };
-  settingsFile = pythonFmt.generate "extra_settings.py" cfg.settings;
+  #settingsFile = pythonFmt.generate "extra_settings.py" cfg.settings;
 
   pkg = cfg.package.overridePythonAttrs (old: {
     postInstall = old.postInstall + ''
-      ln -s ${settingsFile} $out/${pkg.python.sitePackages}/froide_food/project/extra_settings.py
+      #ln -s #$#{settingsFile} $out/#$#{pkg.python.sitePackages}/froide_food/project/extra_settings.py
     '';
   });
 
