@@ -150,8 +150,8 @@ in
       "sha256-GTFJ5vTrn2cesnQaPzJzXb3Zd53rzDOA6LyH2lprvug=";
 
   mypy-boto3-autoscaling =
-    buildMypyBoto3Package "autoscaling" "1.40.57"
-      "sha256-haVFlPVqDuB6ZjhQ7ZOF57jfC8mNGXStDhzuMnObeiw=";
+    buildMypyBoto3Package "autoscaling" "1.41.0"
+      "sha256-a8Z+OxMamZn9fiLrHT55EPqdA4QBhz/5NOqY5DJ6U2E=";
 
   mypy-boto3-autoscaling-plans =
     buildMypyBoto3Package "autoscaling-plans" "1.40.54"
