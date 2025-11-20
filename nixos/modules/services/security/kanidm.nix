@@ -367,7 +367,7 @@ in
         freeformType = settingsFormat.type;
 
         options = {
-          pam_allowed_login_groups = mkOption {
+          kanidm.pam_allowed_login_groups = mkOption {
             description = "Kanidm groups that are allowed to login using PAM.";
             example = "my_pam_group";
             type = types.listOf types.str;
@@ -672,6 +672,10 @@ in
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
     warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+    services.kanidm = {
+      unixSettings.version = "2";
+      serverSettings.version = "2";
+    };
 
     assertions =
       let
@@ -709,6 +713,14 @@ in
           };
       in
       [
+        {
+          assertion = cfg.enablePam -> !(cfg.unixSettings ? pam_allowed_login_groups);
+          message = ''
+            <option>services.kanidm.unixSettings.pam_allowed_login_groups</option> has been renamed
+            to <option>services.kanidm.unixSettings.kanidm.pam_allowed_login_groups</option>.
+            Please change your usage.
+          '';
+        }
         {
           assertion =
             !cfg.enableServer
@@ -873,7 +885,7 @@ in
 
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
-    systemd.tmpfiles.settings."10-kanidm" = {
+    systemd.tmpfiles.settings."10-kanidm" = mkIf cfg.enableServer {
       ${cfg.serverSettings.online_backup.path}.d = {
         mode = "0700";
         user = "kanidm";
