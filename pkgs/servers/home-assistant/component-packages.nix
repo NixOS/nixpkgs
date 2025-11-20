@@ -1457,7 +1457,8 @@
       ];
     "ekeybionyx" =
       ps: with ps; [
-      ]; # missing inputs: ekey-bionyxpy
+        ekey-bionyxpy
+      ];
     "electrasmart" =
       ps: with ps; [
         pyelectra
@@ -7241,6 +7242,7 @@
     "efergy"
     "eheimdigital"
     "eight_sleep"
+    "ekeybionyx"
     "electrasmart"
     "electric_kiwi"
     "elevenlabs"
