@@ -14,12 +14,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.0.45";
+  version = "1.0.78";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-59nsauILNEvQ4Q8ATHKtgTViIWMaFnUyBf7CN6qrtdk=";
+    hash = "sha256-o+rNkij9niggHkA+TtexTbrXLK0I9Ol1Cp9NC/wEuAk=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -80,9 +80,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # NOTE: Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `_api.json` from the file bundled with `bun build`.
-    ./local-models-dev.patch
     # NOTE: Skip npm pack commands in build.ts since packages are already in node_modules
     ./skip-npm-pack.patch
   ];
@@ -168,5 +165,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "opencode";
+    badPlatforms = [
+      # Problems with bun >= 1.3.2, see https://github.com/oven-sh/bun/issues/24645
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })

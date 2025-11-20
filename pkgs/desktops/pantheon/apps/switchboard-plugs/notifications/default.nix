@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-notifications";
-    rev = version;
-    sha256 = "sha256-53rpnp1RWdPofY00XWKiz8WDPC7RNMaGQFHBDzjsIt4=";
+    repo = "settings-notifications";
+    tag = version;
+    hash = "sha256-MYvSru/78jMhc1Rk8YuztajEdmRRssCFN7IMUHWzW78=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Notifications Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-notifications";
+    homepage = "https://github.com/elementary/settings-notifications";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];
