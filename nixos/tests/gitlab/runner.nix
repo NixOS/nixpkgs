@@ -126,7 +126,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      auth = pkgs.writeText "auth.json" (
+      authPayload = pkgs.writeText "auth.json" (
         builtins.toJSON {
           grant_type = "password";
           username = "root";
@@ -134,129 +134,35 @@ in
         }
       );
 
-      runnerTokenTmpl = pkgs.writeText "runner-token.env" ''
+      runnerTokenEnv = pkgs.writeText "runner-token.env" ''
         CI_SERVER_URL=http://gitlab
         CI_SERVER_TOKEN=$token
       '';
 
-      createRunner = pkgs.writeText "create-runner.json" (
+      createRunnerPayload = pkgs.writeText "create-runner.json" (
         builtins.toJSON {
           runner_type = "instance_type";
         }
       );
-
-      # Wait for all GitLab services to be fully started.
-      waitForServices = ''
-        gitlab.wait_for_unit("gitaly.service")
-        gitlab.wait_for_unit("gitlab-workhorse.service")
-        gitlab.wait_for_unit("gitlab.service")
-        gitlab.wait_for_unit("gitlab-sidekiq.service")
-        gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
-        gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
-      '';
-
-      testSetup =
-        # python
-        ''
-          import os
-          import json
-          from pathlib import Path
-          from string import Template
-          from dataclasses import dataclass
-
-          print("==> Getting secrets and headers.")
-          gitlab.succeed("cp /var/gitlab/state/config/secrets.yml /root/gitlab-secrets.yml")
-
-          gitlab.succeed(
-              "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers"
-          )
-
-          gitlab.copy_from_vm("/tmp/headers")
-          out_dir = os.environ.get("out", os.getcwd())
-          gitlab_runner.copy_from_host(str(Path(out_dir, "headers")), "/tmp/headers")
-
-          print("==> Testing connection.")
-          gitlab_runner.succeed("curl -v -H @/tmp/headers http://gitlab/api/v4/version")
-
-          # Runner config data.
-          @dataclass
-          class Runner:
-              name: str
-              desc: str
-              tokenFile: str
-
-              id: str
-              token: str
-
-          runnerConfigs: dict[str, Runner] = {}
-        '';
-
-      testRegisterRunner =
-        runnerConfig:
-        # python
-        ''
-          r = Runner(name="${runnerConfig.name}",
-                     desc="${runnerConfig.desc}",
-                     tokenFile="${runnerConfig.tokenFile}",
-                     token="",
-                     id="")
-          runnerConfigs[r.name] = r
-
-          print(f"==> Create Runner '{r.name}'")
-          resp = gitlab.execute("""
-            curl -s -X POST \
-              -H 'Content-Type: application/json' \
-              -H @/tmp/headers \
-              -d @${createRunner} \
-              http://gitlab/api/v4/user/runners
-          """)[1]
-          obj = json.loads(resp)
-          r.id = obj["id"]
-          r.token = obj["token"]
-
-          # Push the token to the runner machine.
-          print("==> Push runner token to machine.")
-          tokenF = Path(out_dir, f"token-{r.name}.env")
-          with open("${runnerTokenTmpl}", "r") as f:
-              tokenData = Template(f.read()).substitute({"token": token})
-          with open(tokenF, "w") as w:
-              w.write(tokenData)
-          gitlab_runner.copy_from_host(str(tokenF), r.tokenFile)
-        '';
-
-      restartRunnerService =
-        # python
-        ''
-          print("==> Restart Gitlab Runner")
-          gitlab_runner.systemctl("restart gitlab-runner.service")
-          gitlab_runner.wait_for_unit("gitlab-runner.service")
-        '';
-
-      testRunnerConnected =
-        runnerConfig:
-        # python
-        ''
-          r = runnerConfigs["${runnerConfig.name}"]
-
-          resp = gitlab.execute(f"""
-            curl -s -X GET \
-              -H 'Content-Type: application/json' \
-              -H @/tmp/headers \
-              http://gitlab/api/v4/runners/{r.id}
-          """)[1]
-          runnerStatus = json.loads(resp)
-
-          if not runnerStatus["active"]:
-              raise Exception(f"Runner '{r.name}' [id: '{r.id}'] status is not active: {resp}")
-        '';
     in
     # python
     ''
+      # Define some globals for the python script below.
+      JQ_BINARY="${pkgs.jq}/bin/jq"
+      GITLAB_STATE_PATH="${nodes.gitlab.services.gitlab.statePath}"
+      RUNNER_TOKEN_ENV_FILE="${runnerTokenEnv}"
+      AUTH_PAYLOAD_FILE="${authPayload}"
+      CREATE_RUNNER_PAYLOAD_FILE="${createRunnerPayload}"
+
+      ${lib.readFile ./runner_test.py}
+
       start_all()
-    ''
-    + waitForServices
-    + testSetup
-    + (testRegisterRunner runnerConfigs.shell)
-    + restartRunnerService
-    + (testRunnerConnected runnerConfigs.shell);
+      wait_for_services()
+
+      # Run all tests.
+      test_connection()
+      test_register_runner(name="shell", tokenFile="${runnerConfigs.shell.tokenFile}")
+      restart_gitlab_runner_service()
+      test_runner_registered(runnerConfigs["shell"])
+    '';
 }
