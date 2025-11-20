@@ -1113,8 +1113,8 @@ in
       "sha256-tELeaCl7ocFM6IQQ5tw59MPt+9zuHmCCS2IJd6XPRgQ=";
 
   mypy-boto3-resource-explorer-2 =
-    buildMypyBoto3Package "resource-explorer-2" "1.40.46"
-      "sha256-x1BJr6TZpO5OlfAG5l9PuAmfTAMtjnRv3SWO6bh2zPc=";
+    buildMypyBoto3Package "resource-explorer-2" "1.41.0"
+      "sha256-ZSa72Cw35a2UMHLI/j1xsftLpnL3D5kK5cS5cfhsa2M=";
 
   mypy-boto3-resource-groups =
     buildMypyBoto3Package "resource-groups" "1.40.61"
