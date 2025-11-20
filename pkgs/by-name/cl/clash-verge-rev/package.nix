@@ -66,7 +66,7 @@ let
     maintainers = with lib.maintainers; [
       hhr2020
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 in
 stdenv.mkDerivation {
@@ -83,17 +83,30 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
     cp -r ${unwrapped}/share/* $out/share
     cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
     # This can't be symbol linked. It will find mihomo in its runtime path
     cp ${service}/bin/clash-verge-service $out/bin/clash-verge-service
     ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
+    export resourceDir="$out/lib/Clash Verge/resources"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    cp -r "${unwrapped}/Applications/Clash Verge.app" "$out/Applications/Clash Verge.app"
+    chmod -R u+w "$out/Applications/Clash Verge.app"
+    mkdir -p "$out/Applications/Clash Verge.app/Contents/Resources/resources"
+    cp ${service}/bin/clash-verge-service "$out/Applications/Clash Verge.app/Contents/Resources/resources/clash-verge-service"
+    ln -s ${mihomo}/bin/mihomo "$out/Applications/Clash Verge.app/Contents/MacOS/verge-mihomo"
+    export resourceDir="$out/Applications/Clash Verge.app/Contents/Resources/resources"
+  ''
+  + ''
     # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
-    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
-    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
-    ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat "$resourceDir/geoip.dat"
+    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat "$resourceDir/geosite.dat"
+    ln -s ${dbip-country-lite.mmdb} "$resourceDir/Country.mmdb"
 
     runHook postInstall
   '';
