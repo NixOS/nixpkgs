@@ -1077,8 +1077,8 @@ in
       "sha256-ndkiuYmHUSJr2wyR+axlszEORn80QwLy6obJSwE4L+s=";
 
   mypy-boto3-ram =
-    buildMypyBoto3Package "ram" "1.40.61"
-      "sha256-AJOmbZZ199Qtgc7s/TN+Mit2/cPM2dDCmgD1Oz24N0A=";
+    buildMypyBoto3Package "ram" "1.41.0"
+      "sha256-8migaRgVoR5BkKbd1T1f6IydBhy5D9jGl7AmiEngbBs=";
 
   mypy-boto3-rbin =
     buildMypyBoto3Package "rbin" "1.40.60"
