@@ -1049,8 +1049,8 @@ in
       "sha256-IvX+5zDxZxHLUsqNFtWzJkSoNmvwTcitwKk7g6kL3T4=";
 
   mypy-boto3-polly =
-    buildMypyBoto3Package "polly" "1.40.54"
-      "sha256-3qic3Zk9WZ1JF570ASGt6X6EBeWO4hGhs4kYQZ3RfQg=";
+    buildMypyBoto3Package "polly" "1.41.0"
+      "sha256-ltOX8P81ISThHVfZGUdPwhHHk8mQEAmfWPMDt9S2zVg=";
 
   mypy-boto3-pricing =
     buildMypyBoto3Package "pricing" "1.40.54"
