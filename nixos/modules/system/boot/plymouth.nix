@@ -156,8 +156,8 @@ in
         defaultText = literalExpression ''"''${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
         example = literalExpression ''
           pkgs.fetchurl {
-            url = "https://nixos.org/logo/nixos-hires.png";
-            sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
+            url = "https://brand.nixos.org/logos/nixos-logo-default-gradient-white-regular-horizontal-recommended.svg";
+            sha256 = "sha256-zCQDqFrqkJu/so4rCoblYJHEkPR8KiE1C1cKf7xqGZo=";
           }
         '';
         description = ''
