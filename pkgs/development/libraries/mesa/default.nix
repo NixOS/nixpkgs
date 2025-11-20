@@ -150,6 +150,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    ./musl.patch
   ];
 
   postPatch = ''
