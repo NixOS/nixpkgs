@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   # pypi source doesn't include tests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "cocotb";
     repo = "cocotb";
     tag = "v${version}";
-    hash = "sha256-BpshczKA83ZeytGDrHEg6IAbI5FxciAUnzwE10hgPC0=";
+    hash = "sha256-LXQNqFlvP+WBaDGWPs5+BXBtW2dhDu+v+7lR/AMG21M=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
