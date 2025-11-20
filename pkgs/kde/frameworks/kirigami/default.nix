@@ -23,6 +23,9 @@ let
     ];
     extraBuildInputs = [ qtdeclarative ];
     extraPropagatedBuildInputs = [ qt5compat ];
+
+    # Disable QML cachegen to ensure reproducible builds
+    extraCmakeFlags = [ "-DQT_QML_NO_CACHEGEN=TRUE" ];
   };
 in
 stdenv.mkDerivation {
