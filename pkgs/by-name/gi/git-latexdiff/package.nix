@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   installShellFiles,
+  asciidoc,
   git,
   bash,
 }:
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    asciidoc
   ];
 
   buildInputs = [
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     installBin git-latexdiff
+    make git-latexdiff.1
+    installManPage git-latexdiff.1
   '';
 
   meta = {
