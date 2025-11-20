@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ marcin-serwin ];
+    maintainers = with lib.maintainers; [ marcin-serwin zerone-coder ];
     platforms = lib.platforms.linux;
     # added zerone-coder as maintainer
   };
