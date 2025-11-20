@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.13.5";
+  version = "4.13.6";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,7 +25,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-6/19GEbb0OK+FZLfl5kWqigZFU5ygoMK3h1IWj924Uk=";
+      hash = "sha256-SSnbmAFXQwxAZQzMZeDzf/ebbWUVRICAs1msFXMMi98=";
     };
 
     installPhase = ''
@@ -33,7 +33,7 @@ let
       cp -R ./dist $out/
     '';
 
-    npmDepsHash = "sha256-pLb606++UYqruqGiKALMHbdDmvf9OF6CtHuwRhHoJ5o=";
+    npmDepsHash = "sha256-2VK3LOqUxOJaR8cUuINhrhMkvHGyUr206RJR18NCvUo=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-WMIM43CzVE+7ZkcSXUxwcs7G1tpf+mMMLkfo2DCSV2Q=";
+    hash = "sha256-EL0Yd8pfTG8/DlY9A3F0lRuPl/wU2/LyACclzttrsjw=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-mrjsFnd9y8ReJmnRpD2nO9G9q7ksrRHhguTyoctIB3U=";
+  mvnHash = "sha256-HZK/o/RMbMj7OUfucizO5/LpJhwNhHfwbyvUOcO13dA=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
