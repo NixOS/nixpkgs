@@ -13,17 +13,17 @@
   openssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "proton-client";
-  version = "0.7.1";
+  version = "0.7.1-unstable-2023-04-13";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-python-client";
-    rev = version;
-    hash = "sha256-mhPq9O/LCu3+E1jKlaJmrI8dxbA9BIwlc34qGwoxi5g=";
+    rev = "fb64dee036c4beb57eb92c598337ac95cd6972e6";
+    hash = "sha256-nI6sw0ZM6RCP42qIzbIKJxMB5DFPwHP4hi5cvrmNDoo=";
   };
 
   propagatedBuildInputs = [
@@ -46,17 +46,25 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    #ValueError: Invalid modulus
+    # ValueError: Invalid modulus
     "test_modulus_verification"
+
+    # ValueError: password cannot be longer than 72 bytes
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
+    "test_compute_v"
+    "test_generate_v"
+    "test_srp"
   ];
 
   pythonImportsCheck = [ "proton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
