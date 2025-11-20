@@ -22,13 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.20.2";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hpsrHHh0Bk+9Z4Qp5aTqH5i8KnqCLQdseYGrbr4sh1k=";
+    hash = "sha256-RTQ3EwfA7hRfnCJoRubWtaqFVHhRdbWfLTBORVc+kss=";
     fetchSubmodules = true;
   };
 
@@ -137,6 +137,9 @@ buildDotnetModule (finalAttrs: {
     "--environment=USER=nobody"
     "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+
+    # Disable native apphosts for tests; they fail in checkPhase as the wrapper env (DOTNET_ROOT, libs) isn't applied
+    "--property:UseAppHost=false"
   ];
 
   testFilters = [
