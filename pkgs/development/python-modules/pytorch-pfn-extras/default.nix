@@ -85,6 +85,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_as_output.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export_testcase.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_helper.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_lax.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_load_model.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
