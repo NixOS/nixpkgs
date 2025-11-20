@@ -2,7 +2,7 @@
 #! nix-shell -i python3 -p python3 python3Packages.sh sd nix-prefetch-github common-updater-scripts
 
 """
-Updates the main vLLM package and three external dependencies.
+Updates the main vLLM package and four external dependencies.
 """
 
 import argparse
@@ -42,6 +42,16 @@ DEPENDENCIES = {
             'source_file': 'setup.py',
             'version_pattern': r'"([0-9]+\.[0-9]+\.[0-9]+)"',
             'update_pattern': r'(flashmla = stdenv\.mkDerivation.*?version = ")[^"]+(";)',
+        },
+    },
+    'iST-DASLab/qutlass': {
+        'upstream_file': 'cmake/external_projects/qutlass.cmake',
+        'upstream_pattern': r'GIT_TAG ([a-f0-9]+)',
+        'update_pattern': r'(qutlass = stdenv\.mkDerivation.*?rev = ")[^"]+(";.*?hash = ")[^"]+(";)',
+        'version_config': {
+            'source_file': 'setup.py',
+            'version_pattern': r"version='([0-9]+\.[0-9]+\.[0-9]+)'",
+            'update_pattern': r'(qutlass = stdenv\.mkDerivation.*?version = ")[^"]+(";)',
         },
     },
     'vllm-project/flash-attention': {

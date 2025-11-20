@@ -1,8 +1,8 @@
 diff --git a/requirements/cpu.txt b/requirements/cpu.txt
-index 2db6d87ee..37f816170 100644
+index d53ab3649308ad6cf7d00496d391fdaada583b5d..03d3eb105afb659e80742ad426116b2d25ddbc02 100644
 --- a/requirements/cpu.txt
 +++ b/requirements/cpu.txt
-@@ -21,9 +21,6 @@ torchvision; platform_machine != "ppc64le" and platform_machine != "s390x"
+@@ -20,9 +20,6 @@ torchvision; platform_machine != "ppc64le" and platform_machine != "s390x"
  torchvision==0.23.0; platform_machine == "ppc64le"
  datasets # for benchmark scripts
  
