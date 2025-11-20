@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "beautysh";
-  version = "6.4.1";
+  version = "6.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = "beautysh";
     tag = "v${version}";
-    hash = "sha256-B+1qwivb9MZ+W0u7hccDt3aTjDOcbEQ89Alc8mWd2Sg=";
+    hash = "sha256-wLqysNhkagZ+sphqMC78cLoKvsMJpJCJr16lgvU37JI=";
   };
 
   build-system = [ hatchling ];
