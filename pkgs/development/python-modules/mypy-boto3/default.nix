@@ -294,8 +294,8 @@ in
       "sha256-fpIUzumcbJa/aM+JrsiNcY69A3lHLfogZQVj8egnhGc=";
 
   mypy-boto3-codepipeline =
-    buildMypyBoto3Package "codepipeline" "1.40.59"
-      "sha256-2DJafQV9fGFILCPSFZD/oEx3joh1tDOqJLl7KbU4djk=";
+    buildMypyBoto3Package "codepipeline" "1.41.0"
+      "sha256-Hoel1nyEKB9hC7/Gd4zYhwDAXgQhCExrjAc48HlHakg=";
 
   mypy-boto3-codestar =
     buildMypyBoto3Package "codestar" "1.35.0"
