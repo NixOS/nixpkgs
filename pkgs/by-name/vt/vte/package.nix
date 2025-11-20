@@ -60,6 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
+
+    # Skip test depending on gdk when building without gtk3 and gtk4
+    (fetchpatch {
+      url = "https://github.com/GNOME/vte/commit/f946e5bacf97305453d731c507885c52d4c34171.patch";
+      hash = "sha256-axi16Fpt4d32akFYeAR+SuUIwzRhjhK2oHp/yAXVRgk=";
+    })
+    # https://gitlab.gnome.org/GNOME/vte/-/merge_requests/11
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f672ed15a88dd3e25c33aa0a5ef6f6d291a6d5c7.patch";
+      hash = "sha256-JdLDild5j7marvR5n2heW9YD00+bwzJIoxDlzO5r/6w=";
+    })
   ];
 
   nativeBuildInputs = [
