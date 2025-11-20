@@ -51,18 +51,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "3c152de654fa948e12e5fba4c04ed0200e472556a8081ddc2d4c22e5831d6020",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.4.tar.gz",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "995c334cc3e143f13467abafef07a1ccf7d06275512bb6f4c91123948786ab7c",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5.tar.gz",
+      "build_number": "252.28238.7"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "4d909f989d7fa0a002f5bc669e002e8ab336ee7091f32756a74549cd8c11f432",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.4.tar.gz",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "dc92cd3850ba256d2cb1c9d884f9579f613f6fa747f628361458d21f66687393",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.5.tar.gz",
+      "build_number": "252.28238.7"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -100,10 +100,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.tar.gz",
-      "version": "2025.3",
-      "sha256": "bf7be76634ec70dc33008505a08dcc024d4d7ec2bf0e4ace8a71f219d2f40706",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.tar.gz",
-      "build_number": "253.28294.88"
+      "version": "2025.3.0.2",
+      "sha256": "d8739da04c993ea6230b286b3811bde8cb3c6acb47d6c66694b6ae0891b90bcd",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.0.2.tar.gz",
+      "build_number": "253.28294.189"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -190,18 +190,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "7d7a7d54eb55b13206ead9c3ab115b05998a0a510c13ebf0b33541270112523c",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.4-aarch64.tar.gz",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "4c57a783f31ee6f2c82d8c43bb5d0334a9afbc8bfb4542e732048c41f61e63a0",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5-aarch64.tar.gz",
+      "build_number": "252.28238.7"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
-      "version": "2025.2.4",
-      "sha256": "f5687e1d0dc416d6f0fb89495d2b4ad4639d4896497db245272d1fe697b1037b",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.4-aarch64.tar.gz",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "6203b9dbc2461abc59604a7fb319d8e06948b2886489ae03499e98f4c1a0a57c",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.5-aarch64.tar.gz",
+      "build_number": "252.28238.7"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -239,10 +239,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
-      "version": "2025.3",
-      "sha256": "bce1eed1a6fac3cc0850fc2b38ef557e1c51872c4b619a86ce36d002f6cbcbcb",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3-aarch64.tar.gz",
-      "build_number": "253.28294.88"
+      "version": "2025.3.0.2",
+      "sha256": "9b9b7a61833a0aa8c383c205931da1132aecc07f553d71b005e85aa05f450a8c",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.0.2-aarch64.tar.gz",
+      "build_number": "253.28294.189"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -329,18 +329,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.dmg",
-      "version": "2025.2.4",
-      "sha256": "0a064d890b8152cb2d34a2b712e5850eabd15aa7fdeaaa64c047d32a1f0a07d4",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.4.dmg",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "ff48a1e60869342a91db867fa482a49d4cdf38476496911c109f34a7e8d6523d",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5.dmg",
+      "build_number": "252.28238.7"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
-      "version": "2025.2.4",
-      "sha256": "045f0d832c9d9d3360dfaf82aece11c125b6ba1c879c86bc19568f3ee77e24e6",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.4.dmg",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "c0d6731d60bdcdaaea5c0474c296e39cc336f424da872c6ed022e8f139d779ee",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.5.dmg",
+      "build_number": "252.28238.7"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -378,10 +378,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.dmg",
-      "version": "2025.3",
-      "sha256": "add7e6e67b9f2588979782d86a7ff680a263ef41cd13664ed703975a6498976e",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.dmg",
-      "build_number": "253.28294.88"
+      "version": "2025.3.0.2",
+      "sha256": "4ca4a71665449a6aed96fe971e26fb58a4462d90c828c27dd80797113ded7409",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.0.2.dmg",
+      "build_number": "253.28294.189"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -468,18 +468,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.dmg",
-      "version": "2025.2.4",
-      "sha256": "c4e1ae63bf8683d12d307d6eca13f9ddb688df932608eb258a1c66ee5d45b6c3",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.4-aarch64.dmg",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "52065492d433f0ea9df4debd5f0683154ab4dab5846394cabc8a49903d70e5bc",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5-aarch64.dmg",
+      "build_number": "252.28238.7"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
-      "version": "2025.2.4",
-      "sha256": "2b5504f86c6969ed0564483b6886390cfc1bb1b3ab99e658881d60edf57c481f",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.4-aarch64.dmg",
-      "build_number": "252.27397.103"
+      "version": "2025.2.5",
+      "sha256": "6ec8cf520556c75e91a3cae1c54f464dee3609c4d7efef3bb307b129c7d9cb63",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2025.2.5-aarch64.dmg",
+      "build_number": "252.28238.7"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -517,10 +517,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.dmg",
-      "version": "2025.3",
-      "sha256": "033f8dad94b9fec826ba9bd87025dfe668ef6d063a5cb49e7d33f7122ec2885e",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3-aarch64.dmg",
-      "build_number": "253.28294.88"
+      "version": "2025.3.0.2",
+      "sha256": "7ab3b25b044c7f3439a0b2f76a3e8fc79bd36018fe4a21bcfaf643440209fe37",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.0.2-aarch64.dmg",
+      "build_number": "253.28294.189"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
