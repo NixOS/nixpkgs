@@ -287,30 +287,20 @@ in
         RestartSteps = "10";
       };
 
-      script = ''
-        total=${toString (builtins.length cfg.loadModels)}
-        failed=0
-
-        for model in ${lib.escapeShellArgs cfg.loadModels}; do
-          '${lib.getExe ollamaPackage}' pull "$model" &
-        done
-
-        for job in $(jobs -p); do
-          set +e
-          wait $job
-          exit_code=$?
-          set -e
-
-          if [ $exit_code != 0 ]; then
-            failed=$((failed + 1))
-          fi
-        done
-
-        if [ $failed != 0 ]; then
-          echo "error: $failed out of $total attempted model downloads failed" >&2
-          exit 1
-        fi
-      '';
+      script =
+        let
+          binaryInputs = lib.mapAttrs (_: lib.getExe) {
+            ollama = ollamaPackage;
+            parallel = pkgs.parallel;
+          };
+          inherit (binaryInputs)
+            ollama
+            parallel
+            ;
+        in
+        ''
+          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs cfg.loadModels}
+        '';
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
