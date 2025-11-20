@@ -394,8 +394,8 @@ in
       "sha256-kA5DMRWtDouDlnmbeitWxzvcqA9wHVHgtouDhuIADXc=";
 
   mypy-boto3-devicefarm =
-    buildMypyBoto3Package "devicefarm" "1.40.75"
-      "sha256-qUL6eLtqbCtmVDQuOBhhOI0yytay3TfpDHaPFeUJnDU=";
+    buildMypyBoto3Package "devicefarm" "1.41.0"
+      "sha256-Ie1BSBlKkV79MV1qeQPMtlY8ZJEEdM2Twj/vhXJFbUA=";
 
   mypy-boto3-devops-guru =
     buildMypyBoto3Package "devops-guru" "1.40.63"
