@@ -797,8 +797,8 @@ in
       "sha256-7HFSwIvcnqZ5Vq266TUhOQCSJ4sIrJXTVqiOhXosjcI=";
 
   mypy-boto3-license-manager-user-subscriptions =
-    buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.55"
-      "sha256-NP3FOwMuz5k0wk+ofCEzyVOKyZSO+TITyb67V82tHgM=";
+    buildMypyBoto3Package "license-manager-user-subscriptions" "1.41.0"
+      "sha256-Urt3Xz6dPJ/YWHfhIdV9aDWRkOVkpf2kBE9wBEadfvY=";
 
   mypy-boto3-lightsail =
     buildMypyBoto3Package "lightsail" "1.40.53"
