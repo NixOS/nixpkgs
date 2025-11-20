@@ -306,8 +306,8 @@ in
       "sha256-/cLI2xjOur0PG9zJrPDpQjbmzUXUSXDmSCghBHS0DY0=";
 
   mypy-boto3-codestar-notifications =
-    buildMypyBoto3Package "codestar-notifications" "1.40.55"
-      "sha256-MWnreUSpk4QdquRu1X4/HL9imPSYgl4fJz1BxJvcyPk=";
+    buildMypyBoto3Package "codestar-notifications" "1.41.0"
+      "sha256-ig0uezjHHO+WwkIimc5ETQLm9xJ805LBAU8Tb8iRStU=";
 
   mypy-boto3-cognito-identity =
     buildMypyBoto3Package "cognito-identity" "1.40.57"
