@@ -4520,8 +4520,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.324.0";
-          hash = "sha256-W1+TCXUmuTCb+IZZk3n6dyIDfVbMuU3jJUOsfrdjoXo=";
+          version = "3.326.0";
+          hash = "sha256-aPJiUfwfR9JFX3S8fFrSCV4MezGYVY4nqCF0t3Wevfc=";
         };
         meta = {
           license = lib.licenses.mit;
