@@ -105,7 +105,7 @@ def test_register_runner(name: str, tokenFile: str):
     # Push the token to the runner machine.
     print("==> Push runner token to machine.")
     tokenF = Path(out_dir, f"token-{r.name}.env")
-    with open("${runnerTokenTmpl}", "r") as f:
+    with open(nix.runner_token_env_file, "r") as f:
         tokenData = Template(f.read()).substitute({"token": r.token})
     with open(tokenF, "w") as w:
         w.write(tokenData)
