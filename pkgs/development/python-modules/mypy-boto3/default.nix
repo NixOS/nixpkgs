@@ -665,8 +665,8 @@ in
       "sha256-E+Db1QkBCf+P+a74Nuj4HzAYIOsg0JKdDNJlUW5WU6A=";
 
   mypy-boto3-iotevents-data =
-    buildMypyBoto3Package "iotevents-data" "1.40.63"
-      "sha256-jhLj/7AWoC9oqprKhm+vCnwFSWU1aMBK8tmL3rX9sSA=";
+    buildMypyBoto3Package "iotevents-data" "1.41.0"
+      "sha256-V+6z3jwSclpL2hOdN/EhiZwvRGHtt0U0+L+eYngVCjU=";
 
   mypy-boto3-iotfleethub =
     buildMypyBoto3Package "iotfleethub" "1.40.17"
