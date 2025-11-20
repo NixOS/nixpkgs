@@ -2,20 +2,23 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-code-acp";
-  version = "0.4.5";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "claude-code-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kkAQuYP2S5EwIGJV8TLrlYzHOC54vmxEHwwuZD5P1hI=";
+    hash = "sha256-f9NGkSH3+4jB5lyol0iQ/EvCvM+vmJLsMrfgxhYeAHA=";
   };
 
-  npmDepsHash = "sha256-IR88NP1AiR6t/MLDdaZY1Np0AE7wfqEUfmnohaf0ymc=";
+  npmDepsHash = "sha256-I5/f4H/aW+lexBriVZoqIzbhwmdW1eZTMZftoE9XaAs=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ACP-compatible coding agent powered by the Claude Code SDK";
