@@ -10,6 +10,7 @@
   swiftpm,
   replaceVars,
   gitMinimal,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -63,6 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <($out/bin/sentry-cli completions fish) \
         --zsh <($out/bin/sentry-cli completions zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
