@@ -78,6 +78,9 @@ buildGoModule rec {
     homepage = "https://readeck.org/";
     changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ julienmalka ];
+    maintainers = with lib.maintainers; [
+      julienmalka
+      linsui
+    ];
   };
 }
