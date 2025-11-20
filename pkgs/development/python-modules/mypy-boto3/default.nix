@@ -993,8 +993,8 @@ in
       "sha256-Z65C+xnObE6G8x6yAP4OF3p1ZuJN+mU/x5O8UdxSPHE=";
 
   mypy-boto3-outposts =
-    buildMypyBoto3Package "outposts" "1.40.60"
-      "sha256-I/2vBxmVVqYbiFN/PXCwA/s66oyoG2Q8VS6YTHNrAJo=";
+    buildMypyBoto3Package "outposts" "1.41.0"
+      "sha256-RfCDnavYW/nVEn4wyQtqF8+wrx71kSR0Ztjb225rRdE=";
 
   mypy-boto3-panorama =
     buildMypyBoto3Package "panorama" "1.40.59"
