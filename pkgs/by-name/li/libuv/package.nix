@@ -12,7 +12,7 @@
   # for passthru.tests
   bind,
   cmake,
-  knot-resolver,
+  knot-resolver_5,
   sbclPackages,
   luajitPackages,
   mosquitto,
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       bind
       cmake
-      knot-resolver
+      knot-resolver_5
       mosquitto
       neovim
       nodejs
