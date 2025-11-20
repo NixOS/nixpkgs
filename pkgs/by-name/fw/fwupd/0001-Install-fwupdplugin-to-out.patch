@@ -1,14 +1,17 @@
-commit 3ffe2d7842b62986e2267e6542068e6356b06fdf
-Author: r-vdp <ramses@well-founded.dev>
-Date:   Mon Oct 28 12:07:51 2024 +0100
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Mon, 28 Oct 2024 12:07:51 +0100
+Subject: [PATCH] Install fwupdplugin to out
 
-    Install fwupdplugin to out
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index 3a163331e..cb66be0cc 100644
+index b711ab04b..7b065f278 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -733,7 +733,7 @@ if build_standalone
+@@ -734,7 +734,7 @@ if build_standalone
    if host_machine.system() == 'windows'
      libdir_pkg = bindir
    else

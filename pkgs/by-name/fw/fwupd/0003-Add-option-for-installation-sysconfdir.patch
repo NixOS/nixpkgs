@@ -1,8 +1,18 @@
-commit 56507892ff7a03ed283d7fd2d7ff2000fc9c17d7
-Author: r-vdp <ramses@well-founded.dev>
-Date:   Tue Oct 15 11:46:38 2024 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Tue, 15 Oct 2024 11:46:38 +0200
+Subject: [PATCH] Add option for installation sysconfdir
 
-    Add option for installation sysconfdir
+---
+ data/bios-settings.d/meson.build |  2 +-
+ data/meson.build                 |  2 +-
+ data/pki/meson.build             |  8 ++++----
+ data/remotes.d/meson.build       |  8 ++++----
+ docs/meson.build                 | 16 ++++++++--------
+ meson.build                      |  6 ++++++
+ meson_options.txt                |  6 ++++++
+ plugins/uefi-capsule/meson.build |  4 ++--
+ 8 files changed, 32 insertions(+), 20 deletions(-)
 
 diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
 index 2a2a07016..99df55afb 100644
@@ -30,7 +40,7 @@ index 5716669f0..78e754f40 100644
    )
    plugin_quirks += files('cfi.quirk', 'ds20.quirk', 'power.quirk', 'vendors.quirk')
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index 5b962adf1..b6575f7e4 100644
+index 1072051c0..6ef9c9111 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
 @@ -12,12 +12,12 @@ if supported_gpg
@@ -50,13 +60,13 @@ index 5b962adf1..b6575f7e4 100644
  
 @@ -25,11 +25,11 @@ if supported_pkcs7
    install_data(
-     ['LVFS-CA.pem'],
+     ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
      install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'pki', 'fwupd'),
 +    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd'),
    )
    install_data(
-     ['LVFS-CA.pem'],
+     ['LVFS-CA.pem', 'LVFS-CA-2025PQ.pem'],
      install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata'),
 +    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata'),
@@ -166,7 +176,7 @@ index 787b4387c..b3144757f 100644
    )
  endif
 diff --git a/meson.build b/meson.build
-index ca431980b..d9bab5264 100644
+index 1a4b0ea1f..16c7cad40 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -246,6 +246,12 @@ endif
@@ -183,21 +193,22 @@ index ca431980b..d9bab5264 100644
  gio = dependency(
    'gio-2.0',
 diff --git a/meson_options.txt b/meson_options.txt
-index 63c8d288d..04f6651e6 100644
+index 937578f19..08b26b3ad 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -7,6 +7,11 @@ option('bluez',
+@@ -14,6 +14,12 @@ option(
    type: 'feature',
    description: 'BlueZ support',
  )
-+option('sysconfdir_install',
++option(
++  'sysconfdir_install',
 +  type: 'string',
 +  value: '',
-+  description: 'sysconfdir to use during installation'
++  description: 'sysconfdir to use during installation',
 +)
- option('build',
+ option(
+   'build',
    type: 'combo',
-   choices: [
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
 index 647ace53e..4ee0192df 100644
 --- a/plugins/uefi-capsule/meson.build
