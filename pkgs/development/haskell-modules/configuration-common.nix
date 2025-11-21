@@ -2958,24 +2958,14 @@ with haskellLib;
   # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
   snappy-hs = doJailbreak super.snappy-hs;
 
+  # Too strict upper bound on doctest
+  # https://github.com/awakesecurity/proto3-wire/pull/111
   proto3-wire = appendPatches [
     (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/108
       name = "add-reverse-encoders-for-packed-repeated-fields.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
-      hash = "sha256-vtEYg/jLoTn1YRVhQJi6kyta+U4XiWeS7i1ZSN7BYf8=";
-      includes = [
-        "**.cabal"
-        "*.hs"
-      ];
-    })
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/111
-      name = "support-LTS-24.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/35fd88c4daf6643135db6da9ab6ed6d6f33eb3de.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/fcc53d9935b64b6d8aaf65c8cef17f4bbed56867.patch";
       hash = "sha256-GzXlweRshVLA29xVHhJSRIU40y+KtAplIqfvp0I8cY0=";
     })
-
   ] super.proto3-wire;
 
   # 2024-07-27: building test component requires non-trivial custom build steps
