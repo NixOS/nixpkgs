@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pysdl2";
-  version = "0.9.17-unstable-2025-04-03";
+  version = "0.9.17";
   pyproject = true;
 
   pythonImportsCheck = [ "sdl2" ];
