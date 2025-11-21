@@ -51,11 +51,11 @@ let
         self = discord-canary;
       };
       discord-development = rec {
-        version = "0.0.89";
+        version = "0.0.92";
 
         src = fetchurl {
           url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-          hash = "sha256-ZMsBR0LAISrM3dib8fehW/eZGkwSCinQF60jJG76O7M=";
+          hash = "sha256-oG50YrXQUCnbn+rO0EeRjixeqvXYBdnyqdomdPfxfos=";
         };
 
         branch = "development";
