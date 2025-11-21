@@ -47,7 +47,7 @@ lib.makeOverridable (
 
       # Hashes, handled by `lib.fetchers.withNormalizedHash`
       # whose outputs contain outputHash* attributes.
-      "hash"
+      # Use `hash` when overriding with `<pkg>.overrideAttrs`.
       "sha256"
     ];
 
@@ -137,6 +137,10 @@ lib.makeOverridable (
           throw
             "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
         else
+          let
+            finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+            finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
+          in
           derivationArgs
           // {
             inherit name;
@@ -151,7 +155,20 @@ lib.makeOverridable (
             ++ lib.optionals fetchLFS [ git-lfs ]
             ++ nativeBuildInputs;
 
-            inherit outputHash outputHashAlgo;
+            hash =
+              if outputHashAlgo == null || outputHash == "" || lib.hasPrefix outputHashAlgo outputHash then
+                outputHash
+              else
+                "${outputHashAlgo}:${outputHash}";
+
+            outputHash =
+              if finalAttrs.hash == "" then
+                lib.fakeHash
+              else if finalHashHasColon then
+                lib.elemAt finalHashColonMatch 1
+              else
+                finalAttrs.hash;
+            outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
             outputHashMode = "recursive";
 
             # git-sparse-checkout(1) says:
