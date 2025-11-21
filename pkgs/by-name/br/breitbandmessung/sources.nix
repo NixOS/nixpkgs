@@ -1,11 +1,11 @@
 {
-  version = "3.9.0";
+  version = "3.10.0";
   x86_64-linux = {
-    url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-3.9.0-linux.deb";
-    sha256 = "sha256-OG+oZr5UHIjrQOxPmLs/DzGJuUAd5pAyvLuTOvhC+20=";
+    url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-3.10.0-linux.deb";
+    sha256 = "sha256-Lh1bVV7hp1XvQoeToxkOtT5Tdq7ayUDzR6D/VgDSIWQ=";
   };
   x86_64-darwin = {
-    url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-3.9.0-mac.dmg";
-    sha256 = "sha256-Tvb2Cum/Bavu+VAVS/1O7pxSIVLdP2XzTG27fhgIh9E=";
+    url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-3.10.0-mac.dmg";
+    sha256 = "sha256-sdBOcjc4q3LUKwCz+gHisMtg4aH1I21R6/5T5IZ/ah8=";
   };
 }
