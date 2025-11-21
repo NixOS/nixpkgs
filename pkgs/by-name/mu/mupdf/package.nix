@@ -65,12 +65,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "1.26.10";
+  version = "1.26.11";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-FlPzW9j72XDwVSPv3H+G5B6XKOJWSjKVKW4Dz1mlFDc=";
+    hash = "sha256-7uR/22TeMJEk3yEIHUpNpK0OkXgkqy7Wj8gAj2tSOXk=";
   };
 
   patches = [
