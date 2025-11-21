@@ -25,11 +25,11 @@ let
         self = discord;
       };
       discord-ptb = rec {
-        version = "0.0.161";
+        version = "0.0.167";
 
         src = fetchurl {
           url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-          hash = "sha256-pDWOnj8tQK9runi/QzcvEFbNGCwAb/gISM9LrLoTzxM=";
+          hash = "sha256-Q4IrmvoP//49GN2L9kRQ/zG28XjicJEXZpVG6RklFB8=";
         };
 
         branch = "ptb";
