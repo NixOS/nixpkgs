@@ -22,6 +22,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-CT+walpFIFTaO480ATHO1E38K9Tw14QqLRYzztWQmeA=";
 
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+
   nativeBuildInputs = [
     installShellFiles
     cargo-c
@@ -45,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Seems to be flaky
     "--skip=scanner::blocks::tests::block_scanner_timeout"
   ];
+  checkType = "debug";
 
   nativeCheckInputs = [
     versionCheckHook
