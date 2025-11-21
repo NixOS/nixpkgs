@@ -58,6 +58,10 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
 
   preFixup = ''
     ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
+    ln -s $out/lib $out/lib/${stdenvNoLibc.system}
+  ''
+  + lib.optionalString (stdenvNoLibc.system != stdenvNoLibc.targetPlatform.rust.rustcTargetSpec) ''
+    ln -s $out/lib $out/lib/${stdenvNoLibc.targetPlatform.rust.rustcTargetSpec}
   '';
 
   passthru.tests = {
