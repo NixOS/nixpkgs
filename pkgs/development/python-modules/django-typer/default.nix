@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Use Typer to define the CLI for your Django management commands.";
     homepage = "https://django-typer.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ MOIS3Y ];
+    maintainers = [ ];
   };
 }
