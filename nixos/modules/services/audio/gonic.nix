@@ -50,6 +50,10 @@ in
       (assertKey "music-path")
       (assertKey "podcast-path")
       (assertKey "playlists-path")
+      {
+        assertion = cfg.settings.cache-path == "/var/cache/gonic";
+        message = "services.gonic.settings.cache-path must be set to /var/cache/gonic";
+      }
     ];
 
     systemd.services.gonic = {
@@ -75,7 +79,6 @@ in
         BindPaths = [
           cfg.settings.playlists-path
           cfg.settings.podcast-path
-          cfg.settings.cache-path
         ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
