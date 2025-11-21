@@ -42,4 +42,5 @@ mkTmuxPlugin {
       tmuxFingersDir = "${fingers}/bin";
     })
   ];
+  updateStrategy = "stable";
 }
