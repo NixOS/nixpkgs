@@ -8172,6 +8172,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  markdoc-nvim = buildVimPlugin {
+    pname = "markdoc.nvim";
+    version = "2025-11-14";
+    src = fetchFromGitHub {
+      owner = "OXY2DEV";
+      repo = "markdoc.nvim";
+      rev = "12607a127ba7c3890c3ab6e7b2a60f65b6d6d3ec";
+      sha256 = "1ghiylf4j4k5s7zs200dznqs8zi30py1a45ykbrw3b08v8xv3mkv";
+    };
+    meta.homepage = "https://github.com/OXY2DEV/markdoc.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   markdown-nvim = buildVimPlugin {
     pname = "markdown.nvim";
     version = "2025-10-03";

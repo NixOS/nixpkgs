@@ -1848,6 +1848,16 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  markdoc-nvim = super.markdoc-nvim.overrideAttrs {
+    dependencies = with self; [
+      (nvim-treesitter.withPlugins (p: [
+        p.markdown
+        p.markdown_inline
+        p.html
+      ]))
+    ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
