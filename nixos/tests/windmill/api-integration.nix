@@ -43,5 +43,7 @@
     with subtest("Validation"):
       windmill.succeed("integration-test --language python3 --script ${./python3.script} --input ${./python3.input}")
       windmill.succeed("integration-test --language go --script ${./go.script} --input ${./go.input}")
+      windmill.succeed("integration-test --language bun --script ${./bun.script} --input ${./bun.input}")
+      windmill.succeed("integration-test --language deno --script ${./deno.script} --input ${./deno.input}")
   '';
 }
