@@ -3718,10 +3718,6 @@ with pkgs;
 
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
-  pleroma = callPackage ../servers/pleroma {
-    beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
-  };
-
   plfit = callPackage ../by-name/pl/plfit/package.nix {
     python = null;
   };
