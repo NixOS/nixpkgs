@@ -21809,6 +21809,11 @@
     github = "s1341";
     githubId = 5682183;
   };
+  S3r4f1n = {
+    name = "Serafin Schoch";
+    github = "S3r4f1n";
+    githubId = 30957606;
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
