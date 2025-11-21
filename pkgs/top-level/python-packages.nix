@@ -3108,6 +3108,8 @@ self: super: with self; {
 
   countryguess = callPackage ../development/python-modules/countryguess { };
 
+  countryinfo = callPackage ../development/python-modules/countryinfo { };
+
   courlan = callPackage ../development/python-modules/courlan { };
 
   coverage = callPackage ../development/python-modules/coverage { };
