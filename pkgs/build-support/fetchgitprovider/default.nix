@@ -8,7 +8,7 @@
   # due to performance overhead (+4% CPU time for `pkgs` evaluation if enabled globally).
   # Switching this on enables aggressive dynamic switching between backends after `<pkg>.overrideAttrs` by default,
   # and also enable manual specifying useFetchGit via `overrideAttrs`.
-  enableUseFetchGitFinal ? false,
+  enableUseFetchGitFinal ? true,
   expectDrvArgsExtra ? { },
 }:
 let
