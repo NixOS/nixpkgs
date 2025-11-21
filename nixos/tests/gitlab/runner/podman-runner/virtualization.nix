@@ -1,5 +1,13 @@
-{ ... }:
+{ lib, ... }:
 {
+  virtualisation = {
+    diskSize = 50000;
+  };
+
+  virtualisation.docker = {
+    enable = lib.mkForce false;
+  };
+
   virtualisation.podman = {
     enable = true;
 
