@@ -355,6 +355,10 @@ in
         touch $out
       '';
 
+  test-inputDerivation-structured = (stdenv.mkDerivation {
+    __structuredAttrs = true;
+  }).inputDerivation;
+
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;

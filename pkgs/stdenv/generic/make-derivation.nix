@@ -912,23 +912,20 @@ let
             ];
           }
           // (
-            let
-              sharedOutputChecks = {
-                # inputDerivation produces the inputs; not the outputs, so any
-                # restrictions on what used to be the outputs don't serve a purpose
-                # anymore.
+            # inputDerivation produces the inputs; not the outputs, so any
+            # restrictions on what used to be the outputs don't serve a purpose
+            # anymore.
+            if __structuredAttrs then
+              {
+                outputChecks = { };
+              }
+            else
+              {
                 allowedReferences = null;
                 allowedRequisites = null;
                 disallowedReferences = [ ];
                 disallowedRequisites = [ ];
-              };
-            in
-            if __structuredAttrs then
-              {
-                outputChecks.out = sharedOutputChecks;
               }
-            else
-              sharedOutputChecks
           )
         );
 
