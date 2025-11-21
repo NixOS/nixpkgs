@@ -548,9 +548,8 @@ let
       cabal2nix-unstable = released;
       funcmp = released;
       git-annex = [
-        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
-        compilerNames.ghc9102
-        compilerNames.ghc9103
+        # test that -f-OsPath still works correctly
+        compilerNames.ghc984
       ];
       haskell-language-server = released;
       hoogle = released;
