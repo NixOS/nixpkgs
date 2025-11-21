@@ -25,6 +25,8 @@ from test_driver.logger import AbstractLogger
 from .ocr import perform_ocr_on_screenshot, perform_ocr_variants_on_screenshot
 from .qmp import QMPSession
 
+import testinfra  # type: ignore
+
 CHAR_TO_KEY = {
     "A": "shift-a",
     "N": "shift-n",
@@ -193,6 +195,27 @@ class StartCommand:
         )
 
 
+class TestInfraBackendNix(testinfra.backend.base.BaseBackend):
+    NAME = "Nix"
+
+    def __init__(self, host: testinfra.host.Host, *args: Any, **kwargs: Any):
+        super().__init__(host.name, **kwargs)
+        self._host = host
+
+    def run(
+        self, command: str, *args: str, **kwargs: Any
+    ) -> testinfra.backend.base.CommandResult:
+        cmd = self.get_command(command, *args)
+        rc, output = self._host.execute(cmd)
+        return testinfra.backend.base.CommandResult(
+            backend=self,
+            exit_status=rc,
+            command=cmd,
+            _stdout=output,
+            _stderr="",
+        )
+
+
 class NixStartScript(StartCommand):
     """A start script from nixos/modules/virtualiation/qemu-vm.nix.
     These Nix commands have the particular characteristic that the
@@ -212,7 +235,7 @@ class NixStartScript(StartCommand):
         return name
 
 
-class Machine:
+class Machine(testinfra.host.Host):
     """A handle to the machine with this name, that also knows how to manage
     the machine lifecycle with the help of a start script / command."""
 
@@ -287,6 +310,8 @@ class Machine:
 
         self.booted = False
         self.connected = False
+
+        testinfra.host.Host.__init__(self, backend=TestInfraBackendNix(self))
 
     def is_up(self) -> bool:
         return self.booted and self.connected
