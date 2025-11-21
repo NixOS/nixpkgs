@@ -1,10 +1,13 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   lib,
   envoy,
-  mkYarnPackage,
+  yarnConfigHook,
+  yarnBuildHook,
   fetchYarnDeps,
+  nodejs,
   nixosTests,
   pomerium-cli,
 }:
@@ -29,29 +32,27 @@ buildGoModule rec {
 
   vendorHash = "sha256-mOTjBH8VqsMdyW5jTIZ76bf55WnHw9XuUSh6zsBktt0=";
 
-  ui = mkYarnPackage {
+  ui = stdenv.mkDerivation {
+    pname = "pomerium-ui";
     inherit version;
     src = "${src}/ui";
 
-    packageJSON = ./package.json;
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      sha256 = lib.fileContents ./yarn-hash;
+      hash = "sha256-V2nSSMvTCK+SYmEhTbLMArIOmNs/AgB5xfhQGx3e/x8=";
     };
 
-    buildPhase = ''
-      runHook preBuild
-      yarn --offline build
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
-      cp -R deps/pomerium/dist $out
+      cp -R dist $out
       runHook postInstall
     '';
-
-    doDist = false;
   };
 
   subPackages = [
