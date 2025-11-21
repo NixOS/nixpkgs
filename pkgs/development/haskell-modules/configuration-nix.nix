@@ -1259,9 +1259,6 @@ builtins.intersectAttrs super {
       '';
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
-  # Compiling the readme throws errors and has no purpose in nixpkgs
-  aeson-gadt-th = disableCabalFlag "build-readme" super.aeson-gadt-th;
-
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
   guid = overrideCabal (drv: {
@@ -2109,4 +2106,20 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Avoids a cycle by disabling use of the external interpreter by the packages that are dependencies of iserv-proxy
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy libiserv network; }
+    )
+    iserv-proxy
+    libiserv
+    network
+    ;
 }

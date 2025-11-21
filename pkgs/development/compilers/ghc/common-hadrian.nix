@@ -340,7 +340,14 @@ let
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
-    ];
+    ]
+    # Force iserv-proxy to load static libraries
+    ++
+      lib.optionals
+        (targetPlatform.isAndroid || (targetPlatform.isMusl && hostPlatform != targetPlatform))
+        [
+          "*.ghc.cabal.configure.opts += --flags=-dynamic-system-linker"
+        ];
 
   # Splicer will pull out correct variations
   libDeps =
@@ -632,7 +639,7 @@ stdenv.mkDerivation (
       "--with-ffi-includes=${targetLibs.libffi.dev}/include"
       "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
     ]
-    ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+    ++ lib.optionals (!enableNativeBignum && !targetPlatform.isGhcjs && !targetPlatform.isWasm) [
       "--with-gmp-includes=${targetLibs.gmp.dev}/include"
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
