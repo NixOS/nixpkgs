@@ -1,0 +1,82 @@
+diff --git a/ext/phar/tar.c b/ext/phar/tar.c
+--- a/ext/phar/tar.c
++++ b/ext/phar/tar.c
+@@ -972,7 +972,7 @@
+ 	char *buf, *signature, sigbuf[8];
+
+ 	entry.flags = PHAR_ENT_PERM_DEF_FILE;
+-	entry.timestamp = time(NULL);
++	entry.timestamp = source_date_epoch_time(NULL);
+ 	entry.is_modified = 1;
+ 	entry.is_crc_checked = 1;
+ 	entry.is_tar = 1;
+diff --git a/ext/phar/zip.c b/ext/phar/zip.c
+--- a/ext/phar/zip.c
++++ b/ext/phar/zip.c
+@@ -158,7 +158,7 @@
+ 	struct tm *tm, tmbuf;
+ 	time_t now;
+
+-	now = time(NULL);
++	now = source_date_epoch_time(NULL);
+ 	tm = php_localtime_r(&now, &tmbuf);
+
+ 	tm->tm_year = ((ddate>>9)&127) + 1980 - 1900;
+@@ -1271,7 +1271,7 @@
+
+ 	pass.error = &temperr;
+ 	entry.flags = PHAR_ENT_PERM_DEF_FILE;
+-	entry.timestamp = time(NULL);
++	entry.timestamp = source_date_epoch_time(NULL);
+ 	entry.is_modified = 1;
+ 	entry.is_zip = true;
+ 	entry.phar = phar;
+diff --git a/ext/phar/phar.c b/ext/phar/phar.c
+--- a/ext/phar/phar.c
++++ b/ext/phar/phar.c
+@@ -2965,7 +2965,7 @@
+ 			4: metadata-len
+ 			+: metadata
+ 		*/
+-		mytime = time(NULL);
++		mytime = source_date_epoch_time(NULL);
+ 		phar_set_32(entry_buffer, entry->uncompressed_filesize);
+ 		phar_set_32(entry_buffer+4, mytime);
+ 		phar_set_32(entry_buffer+8, entry->compressed_filesize);
+diff --git a/ext/phar/stream.c b/ext/phar/stream.c
+--- a/ext/phar/stream.c
++++ b/ext/phar/stream.c
+@@ -474,7 +474,7 @@
+ 	phar_entry_data *data = (phar_entry_data *) stream->abstract;
+
+ 	if (data->internal_file->is_modified) {
+-		data->internal_file->timestamp = time(0);
++		data->internal_file->timestamp = source_date_epoch_time(0);
+ 		phar_flush(data->phar, &error);
+ 		if (error) {
+ 			php_stream_wrapper_log_error(stream->wrapper, REPORT_ERRORS, "%s", error);
+diff --git a/ext/phar/phar_internal.h b/ext/phar/phar_internal.h
+--- a/ext/phar/phar_internal.h
++++ b/ext/phar/phar_internal.h
+@@ -323,6 +323,21 @@
+ 	return PHAR_G(cached_fp)[entry->phar->phar_pos].manifest[entry->manifest_pos].fp_type;
+ }
+
++static inline time_t source_date_epoch_time(time_t *tloc)
++{
++	const char *sde;
++	time_t ts;
++
++	tsrm_env_lock();
++	sde = getenv("SOURCE_DATE_EPOCH");
++	ts = (sde) ? strtoul(sde, NULL, 10) : time(0);
++	tsrm_env_unlock();
++	if (tloc) {
++		*tloc = ts;
++	}
++	return ts;
++}
++
+ #define PHAR_MIME_PHP '\0'
+ #define PHAR_MIME_PHPS '\1'
+ #define PHAR_MIME_OTHER '\2'

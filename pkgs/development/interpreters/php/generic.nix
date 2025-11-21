@@ -10,6 +10,7 @@ let
       nixosTests,
       tests,
       fetchurl,
+      fetchpatch,
       makeBinaryWrapper,
       symlinkJoin,
       writeText,
@@ -356,6 +357,12 @@ let
             ]
             ++ lib.optionals (lib.versionAtLeast version "8.4") [
               ./fix-paths-php84.patch
+              # Make sure that Phar files are reproducible by removing timestamps (1/2)
+              # Patch source: https://codeberg.org/stagex/stagex/src/branch/staging/packages/core/php-zts
+              ./remove-timestamps-from-phar.patch
+              # Make sure that Phar files are reproducible by having deterministic sorting order (2/2)
+              # Patch source: https://codeberg.org/stagex/stagex/src/branch/staging/packages/core/php-zts
+              ./file-order-phar-pack.patch
             ]
             ++ extraPatches;
 
