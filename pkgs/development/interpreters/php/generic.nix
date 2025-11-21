@@ -133,7 +133,8 @@ let
                   type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
                 in
                 lib.nameValuePair extName {
-                  text = "${type}=${ext}/lib/php/extensions/${extName}.so";
+                  text = lib.optionalString (ext.includeInPHPIniFile or true
+                  ) "${type}=${ext}/lib/php/extensions/${extName}.so";
                   deps = map getExtName phpDeps;
                 }
               ) (enabledExtensions ++ (getDepsRecursively enabledExtensions))
