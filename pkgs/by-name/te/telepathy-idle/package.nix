@@ -7,6 +7,7 @@
   pkg-config,
   dbus-glib,
   telepathy-glib,
+  glib-networking,
   python3,
   libxslt,
   makeWrapper,
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
+    glib-networking
     telepathy-glib
     dbus-glib
     libxslt
@@ -36,7 +38,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-idle" \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${
+        lib.makeSearchPath "lib/gio/modules" [
+          (lib.getLib dconf)
+          glib-networking
+        ]
+      }"
   '';
 
   meta = {
