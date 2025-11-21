@@ -556,8 +556,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
           # apparently the interpreter needs to match libc, too.
           bintools = self.stdenvNoCC.mkDerivation {
-            pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
-            inherit (prevStage.bintools.bintools) version;
+            pname = prevStage.binutils.bintools.pname + "-patchelfed-ld";
+            inherit (prevStage.binutils.bintools) version;
             passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
             enableParallelBuilding = true;
             dontUnpack = true;
@@ -566,7 +566,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
             installPhase = ''
               mkdir -p "$out"/bin
-              cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+              cp -a '${prevStage.binutils.bintools}'/bin/* "$out"/bin/
               chmod +w "$out"/bin/ld.bfd
               patchelf --set-interpreter '${self.libc}'/lib/ld*.so.? \
                 --set-rpath "${self.libc}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
