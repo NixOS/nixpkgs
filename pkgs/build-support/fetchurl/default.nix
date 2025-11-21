@@ -214,8 +214,8 @@ lib.extendMkDerivation {
           }
         else if cacert != null then
           {
-            outputHashAlgo = "sha256";
-            outputHash = "";
+            outputHashAlgo = null;
+            outputHash = lib.fakeHash;
           }
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
