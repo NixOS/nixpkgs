@@ -7795,11 +7795,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xorg-server";
-      version = "21.1.18";
+      version = "21.1.20";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/xserver/xorg-server-21.1.18.tar.xz";
-        sha256 = "0lk3268gzpll547zvaa64rdhs4z89d7w567lbd55swl71n9x2y68";
+        url = "mirror://xorg/individual/xserver/xorg-server-21.1.20.tar.xz";
+        sha256 = "sha256-dpW8YYJLOoG2utL3iwVADKAVAD3kAtGzIhFxBbcC6Tc=";
       };
       hardeningDisable = [
         "bindnow"
