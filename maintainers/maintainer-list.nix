@@ -11620,6 +11620,13 @@
     githubId = 49811314;
     keys = [ { fingerprint = "CC36 4CF4 32DD 443F 27FC  033C 3475 AA20 D72F 6A93"; } ];
   };
+  jaanonim = {
+    name = "Jaanonim";
+    email = "mat8mro@gmail.com";
+    github = "jaanonim";
+    githubId = 28810058;
+    keys = [ { fingerprint = "5C4A 273F 5F11 3DF7 ECDF  0AD7 933A F32D 3ABD 5CAF"; } ];
+  };
   jab = {
     name = "Joshua Bronson";
     email = "jabronson@gmail.com";
