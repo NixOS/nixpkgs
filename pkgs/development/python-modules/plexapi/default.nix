@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.17.1";
+  version = "4.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pkkid";
     repo = "python-plexapi";
     tag = version;
-    hash = "sha256-INnZ8aklr6mvawEy2XgI8mA9UD+S2KpQTsbHAZuYii0=";
+    hash = "sha256-GLuTNfK8FmTx6PuvhBheYgK7ZurxvmaY1Sqxo0QKRXM=";
   };
 
   build-system = [ setuptools ];
