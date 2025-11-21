@@ -1,0 +1,6 @@
+[
+  "@prettier/plugin-php"
+, "@prettier/plugin-pug"
+, "@prettier/plugin-ruby"
+, "@prettier/plugin-xml"
+]
