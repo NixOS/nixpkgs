@@ -390,13 +390,13 @@
     "vendorHash": null
   },
   "fastly_fastly": {
-    "hash": "sha256-3jXm7uY93g2NE6HfaWKQqQr05AvnCKvzt3981thgV8Q=",
+    "hash": "sha256-HP3pl1KLW8vPKI9FYZKViFQvslGuNmEJTw/nvjsDQRk=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v8.4.0",
+    "rev": "v8.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-NBp18Ult6o1hQUEZX1r9I0ebfY9VnwVY4QhChIjsGSI="
+    "vendorHash": "sha256-khWWD2JCiVnDQiz9AXAOaqHfYwCdmSq5Yj+AyrBc8Go="
   },
   "flexibleenginecloud_flexibleengine": {
     "hash": "sha256-yEZ9JiUSqFFbfqzOOD59ZBv4yFCeUBBKlp6aiUqDqiM=",
@@ -516,11 +516,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-U7KmukBPLrHyWgkM3yaRIoKtnXONDRxZGIaTFIKfvOk=",
+    "hash": "sha256-t74oNkRchvTn3eletKAFlriOn/BOFUwNLK6NxILawpg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.52.0",
+    "rev": "v4.54.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -705,11 +705,11 @@
     "vendorHash": "sha256-xkhOzwFpON6dzi/qdpBazfrpMfWSUwUWs8VXLSAsqaM="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-h7mFrBubLS3UaSxSEkZpJAceMm3AYNq0UVdnSa45Qho=",
+    "hash": "sha256-QyJkzNI+9kGz7c7laDA33zhRTJbeSwGt9PaLjun3TmU=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.80.2",
+    "rev": "v1.80.3",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1228,11 +1228,11 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "spacelift-io_spacelift": {
-    "hash": "sha256-d26HPdufp8HgZSMA/wkEMtwXUOXSRgFd7+wqRc3V0OI=",
+    "hash": "sha256-aOpS9KJm31Rz3LnSLAAxV9A5XLuJxGzIWkv9JuEG3H8=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.37.0",
+    "rev": "v1.38.0",
     "spdx": "MIT",
     "vendorHash": "sha256-cX5K221Jnq701Nb+2bC1LmXVL7YvkZ8dkc2wYjDNOSw="
   },
