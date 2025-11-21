@@ -20140,6 +20140,8 @@ self: super: with self; {
 
   vulture = callPackage ../development/python-modules/vulture { };
 
+  vunit-hdl = callPackage ../development/python-modules/vunit-hdl { };
+
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   vyper = callPackage ../development/compilers/vyper { };
