@@ -23,6 +23,7 @@
 
   pname ? "kicad",
   stable ? true,
+  compressStep ? true,
   testing ? false,
   withNgspice ? !stdenv.hostPlatform.isDarwin,
   libngspice,
@@ -175,7 +176,7 @@ in
 stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
-  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc compressStep; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
     inherit stable testing;
