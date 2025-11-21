@@ -25,7 +25,9 @@
   libffi,
   yaml-cpp,
   nlohmann_json,
+  openssl,
   llvmPackages,
+  gtest,
   ctestCheckHook,
   mpiCheckPhaseHook,
   testers,
@@ -51,14 +53,14 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.10.2";
+  version = "2.11.0";
   pname = "adios2";
 
   src = fetchFromGitHub {
     owner = "ornladios";
     repo = "adios2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVyw7xoPutXeUS87jjVv1YxJnwNGZAT4QfkBLzvQbwg=";
+    hash = "sha256-yHPI///17poiCEb7Luu5qfqxTWm9Nh+o9r57mZT26U0=";
   };
 
   postPatch = ''
@@ -98,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     yaml-cpp
     nlohmann_json
+    openssl
 
     # Todo: add these optional dependencies in nixpkgs.
     # sz
@@ -145,11 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_UCX" (lib.meta.availableOn stdenv.hostPlatform ucx))
     (lib.cmakeBool "ADIOS2_USE_Sodium" true)
     (lib.cmakeBool "ADIOS2_USE_Catalyst" true)
+    (lib.cmakeBool "ADIOS2_USE_OpenSSL" true)
     (lib.cmakeBool "ADIOS2_USE_Campaign" true)
     (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
 
-    # use vendored gtest as nixpkgs#gtest does not include <iomanip> in <gtest/gtest.h>
-    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_GTEST" false)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     # higher MPIEXEC_MAX_NUMPROCS>8 might cause tests failure in
     #   - Engine.BP.BPJoinedArray.MultiBlock.BP4.MPI
@@ -175,46 +177,28 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
   dontUseNinjaCheck = true;
 
-  preCheck = ''
-    export adios2_DIR=$PWD
-  '';
-
   enableParallelChecking = false;
 
   __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck && mpiSupport;
 
   nativeCheckInputs = [
     python3Packages.python
+    gtest
     ctestCheckHook
     mpiCheckPhaseHook
   ];
 
-  # required for finding the generated adios2-config.cmake file
-  preInstall = ''
-    export adios2_DIR=$out/lib/cmake/adios2
-  '';
-
   pythonImportsCheck = [ "adios2" ];
 
   passthru.tests = {
-    withCheck = finalAttrs.finalPackage.overrideAttrs {
-      doCheck = true;
-
-      disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        # TypeError: cannot pickle 'TextIOWrapper' instances
-        "Test.Engine.DataMan1xN.Serial"
-        "Test.Engine.DataManSingleValues"
-        # The test assumed to always contain n*64 byte-length records. Right now the length of index buffer is 71 bytes.
-        "Staging.1x1.Local2.BPS.BB.BP4_stream"
-        # Timeout
-        "Staging.3x5LockGeometry.FS.BB.FileStream"
-        "Engine.Staging.TestOnDemandMPI.ADIOS2OnDemandMPI.SST.MPI"
-      ];
-    };
-
     cmake-config = testers.hasCmakeConfigModules {
       moduleNames = [ "adios2" ];
       package = finalAttrs.finalPackage;
+    };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
     };
   };
 
