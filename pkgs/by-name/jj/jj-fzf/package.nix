@@ -7,50 +7,59 @@
   gawk,
   gnused,
   jujutsu,
+  python3,
   makeWrapper,
   stdenv,
+  util-linux,
+  pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jj-fzf";
-  version = "0.33.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "tim-janik";
     repo = "jj-fzf";
-    tag = "v${version}";
-    hash = "sha256-iVgX2Lu06t1pCQl5ZGgl3+lTv4HAPKbD/83STDtYhdU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aJyKVMg/yI2CmAx5TxN0w670Rq26ESdLzESgh8Jr4nE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pandoc
+  ];
 
-  dontConfigure = true;
-  dontBuild = true;
+  buildInputs = [
+    bashInteractive
+    jujutsu
+    fzf
+    gawk
+    gnused
+    coreutils
+    util-linux
+    python3
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D jj-fzf $out/bin/jj-fzf
-    substituteInPlace $out/bin/jj-fzf \
-      --replace-fail "/usr/bin/env bash" "${lib.getExe bashInteractive}"
-    wrapProgram $out/bin/jj-fzf \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          bashInteractive
-          coreutils
-          fzf
-          gawk
-          gnused
-          jujutsu
-        ]
-      }
-    runHook postInstall
+  postPatch = ''
+    patchShebangs .
   '';
 
-  meta = with lib; {
+  installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    rm -f $out/libexec/jj-fzf-*/{README.md,NEWS.md,sfx.sh}
+     patchShebangs $out
+     wrapProgram $out/bin/jj-fzf \
+       --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
+  '';
+
+  meta = {
     description = "Text UI for Jujutsu based on fzf";
     homepage = "https://github.com/tim-janik/jj-fzf";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ bbigras ];
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ bbigras ];
+    platforms = lib.platforms.all;
+    mainProgram = "jj-fzf";
   };
-}
+})
