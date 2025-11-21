@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
   };
 
+  patches = [
+    # Fix Qt 6.10 compatibility: QString::arg() no longer accepts Euro type directly
+    ./fix-qt610-euro-arg.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     qt6.qmake
