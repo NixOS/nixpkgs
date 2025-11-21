@@ -1,0 +1,26 @@
+diff --git a/vpn/l2tp/l2tpipsecwidget.cpp b/vpn/l2tp/l2tpipsecwidget.cpp
+index 487c329cd..084bec658 100644
+--- a/vpn/l2tp/l2tpipsecwidget.cpp
++++ b/vpn/l2tp/l2tpipsecwidget.cpp
+@@ -338,7 +338,7 @@ bool L2tpIpsecWidget::hasIpsecDaemon()
+         return true;
+     }
+ 
+-    QString ipsecBinary = QStandardPaths::findExecutable(QStringLiteral("ipsec"), QStringList() << QStringLiteral("/sbin") << QStringLiteral("/usr/sbin"));
++    QString ipsecBinary = QStringLiteral("@strongswan@");
+ 
+     // On some Linux distributions, ipsec executable has been renamed strongswan
+     if (ipsecBinary.isEmpty()) {
+diff --git a/vpn/openvpn/openvpnadvancedwidget.cpp b/vpn/openvpn/openvpnadvancedwidget.cpp
+index cbe74d622..174eee8ba 100644
+--- a/vpn/openvpn/openvpnadvancedwidget.cpp
++++ b/vpn/openvpn/openvpnadvancedwidget.cpp
+@@ -80,7 +80,7 @@ OpenVpnAdvancedWidget::OpenVpnAdvancedWidget(const NetworkManager::VpnSetting::P
+     });
+ 
+     // start openVPN process and get its cipher list
+-    const QString openVpnBinary = QStandardPaths::findExecutable("openvpn", QStringList{"/sbin", "/usr/sbin"});
++    const QString openVpnBinary = QStringLiteral("@openvpn@");
+     const QStringList ciphersArgs(QLatin1String("--show-ciphers"));
+     const QStringList versionArgs(QLatin1String("--version"));
+ 
