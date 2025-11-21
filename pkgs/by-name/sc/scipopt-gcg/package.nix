@@ -15,9 +15,6 @@ stdenv.mkDerivation rec {
   pname = "scipopt-gcg";
   version = "372-unstable-2025-10-11";
 
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
-
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    changelog = "https://gcg.or.rwth-aachen.de/doc-3.5.0/RN${lib.versions.major version}${lib.versions.minor version}.html";
     description = "Branch-and-Price & Column Generation for Everyone";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://gcg.zib.de";
