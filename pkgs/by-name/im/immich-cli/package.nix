@@ -5,6 +5,7 @@
   nodejs,
   makeWrapper,
   stdenv,
+  versionCheckHook,
 }:
 
 let
@@ -50,6 +51,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";
