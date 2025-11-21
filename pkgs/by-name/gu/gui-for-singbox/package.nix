@@ -16,13 +16,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-oReDI6w+N82f+DSv1mPvr0hPG7CJ7CbIFljhSNQ86cI=";
+    hash = "sha256-CNJOI+zHH5zXy3hdYsh9bHah1uJRw56mdiTHyGSEyR0=";
   };
 
   metaCommon = {
@@ -50,7 +50,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-gSgryNui5uXuJEKoojz+knZ8rlJpjaR2+XF3xTwV5YI=";
+      hash = "sha256-gYQM2kjYdMNem/O813ROFZza4u4IDZhdiLQRn1/kQpE=";
     };
 
     buildPhase = ''
