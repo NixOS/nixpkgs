@@ -10682,8 +10682,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  blender-hip = blender.override { hipSupport = true; };
-
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
