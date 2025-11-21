@@ -3777,6 +3777,8 @@ with pkgs;
     mangohud32 = pkgsi686Linux.mangohud;
   };
 
+  manta-vst3 = callPackage ../by-name/ma/manta-vst3/package.nix { };
+
   marimo = with python3Packages; toPythonApplication marimo;
 
   mecab =
