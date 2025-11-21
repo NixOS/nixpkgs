@@ -22,7 +22,6 @@ let
     substring
     attrValues
     concatLists
-    const
     elem
     foldl'
     generators
@@ -223,7 +222,7 @@ rec {
         else
           v;
       noQuotes = str: v: {
-        __pretty = const str;
+        __pretty = _: str;
         val = v;
       };
       modify =
@@ -233,7 +232,7 @@ rec {
         else if isList v then
           map (modify (n - 1) fn) v
         else if isAttrs v then
-          mapAttrs (const (modify (n - 1) fn)) v
+          mapAttrs (_: modify (n - 1) fn) v
         else
           v;
     in

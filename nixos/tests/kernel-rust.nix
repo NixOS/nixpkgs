@@ -6,7 +6,6 @@
 
 let
   inherit (pkgs.lib)
-    const
     filterAttrs
     mapAttrs
     meta
@@ -49,8 +48,8 @@ let
   kernels = {
     inherit (pkgs.linuxKernel.packages) linux_testing;
   }
-  // filterAttrs (const (
-    x:
+  // filterAttrs (
+    _: x:
     let
       inherit (builtins.tryEval (x.rust-out-of-tree-module or null != null))
         success
@@ -59,6 +58,6 @@ let
       available = meta.availableOn pkgs.stdenv.hostPlatform x.rust-out-of-tree-module;
     in
     success && value && available
-  )) pkgs.linuxKernel.vanillaPackages;
+  ) pkgs.linuxKernel.vanillaPackages;
 in
-mapAttrs (const kernelRustTest) kernels
+mapAttrs (_: kernelRustTest) kernels

@@ -2443,7 +2443,7 @@ runTests {
           # float = 42.23; # floats are strange
         };
       in
-      mapAttrs (const (generators.mkValueStringDefault { })) vals;
+      mapAttrs (_: generators.mkValueStringDefault { }) vals;
     expected = {
       int = "42";
       string = ''fo"o'';
@@ -2684,7 +2684,7 @@ runTests {
       };
     in
     {
-      expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
+      expr = mapAttrs (_: generators.toPretty { multiline = false; }) rec {
         int = 42;
         float = 0.1337;
         bool = true;
@@ -2782,7 +2782,7 @@ runTests {
     };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) {
+    expr = mapAttrs (_: generators.toPretty { }) {
       list = [
         3
         4
@@ -2844,7 +2844,7 @@ runTests {
   };
 
   testToPlistUnescaped = {
-    expr = mapAttrs (const (generators.toPlist { })) {
+    expr = mapAttrs (_: generators.toPlist { }) {
       value = {
         nested.values = {
           int = 42;
@@ -2876,7 +2876,7 @@ runTests {
   };
 
   testToPlistEscaped = {
-    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+    expr = mapAttrs (_: generators.toPlist { escape = true; }) {
       value = {
         nested.values = {
           int = 42;

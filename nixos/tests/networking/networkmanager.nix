@@ -182,8 +182,8 @@ let
     };
   };
 in
-lib.mapAttrs (lib.const (
-  attrs:
+lib.mapAttrs (
+  _: attrs:
   makeTest (
     attrs
     // {
@@ -194,4 +194,4 @@ lib.mapAttrs (lib.const (
 
     }
   )
-)) testCases
+) testCases

@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ucyBQPCskHwz8rYzOULJ3enL6rhvpLxJzS7sTNwuBW4=";
 
-  passthru = lib.mapAttrs (name: lib.const (xremap.override { withVariant = name; })) variants;
+  passthru = lib.mapAttrs (name: _: xremap.override { withVariant = name; }) variants;
 
   meta = {
     description = "Key remapper for X11 and Wayland (${variant.descriptionSuffix} support)";

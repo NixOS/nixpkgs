@@ -235,7 +235,7 @@ let
         ""
       ];
 
-      masterCf = lib.mapAttrsToList (lib.const (lib.getAttr "rawEntry")) cfg.settings.master;
+      masterCf = lib.mapAttrsToList (_: lib.getAttr "rawEntry") cfg.settings.master;
 
       # A list of the maximum width of the columns across all lines and labels
       maxWidths =
