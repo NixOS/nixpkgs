@@ -11598,6 +11598,12 @@
     githubId = 153585330;
     name = "Jacob Levi";
   };
+  jakeginesin = {
+    email = "ginesin@cmu.edu";
+    github = "JakeGinesin";
+    githubId = 39607713;
+    name = "Jake Ginesin";
+  };
   jakehamilton = {
     name = "Jake Hamilton";
     email = "jake.hamilton@hey.com";
