@@ -10,12 +10,12 @@
 }:
 let
   pname = "cup-docker";
-  version = "3.4.3";
+  version = "3.5.0";
   src = fetchFromGitHub {
     owner = "sergi0g";
     repo = "cup";
     tag = "v${version}";
-    hash = "sha256-RRhUSL9TR7qr93F5+fyhGW7j6VTs+yVvpni/JHmC5os=";
+    hash = "sha256-dYWk2GMqSJiEHjEBEeMQCmCiVSwcsJwkAHYH0vYpxYA=";
   };
   web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-web";
