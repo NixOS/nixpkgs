@@ -649,6 +649,7 @@
   ./services/hardware/ddccontrol.nix
   ./services/hardware/deepcool-digital-linux.nix
   ./services/hardware/display.nix
+  ./services/hardware/fan2go.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
