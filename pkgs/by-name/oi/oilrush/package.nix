@@ -16,15 +16,13 @@
 
 let
   inherit (lib) makeLibraryPath;
+  url = config.oilrush.url or null;
+  sha256 = config.oilrush.sha256 or null;
 in
 
 stdenv.mkDerivation {
   name = "oilrush";
   src =
-    let
-      url = config.oilrush.url or null;
-      sha256 = config.oilrush.sha256 or null;
-    in
     assert url != null && sha256 != null;
     fetchurl { inherit url sha256; };
   shell = stdenv.shell;
@@ -130,7 +128,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://oilrush-game.com/";
     license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    platforms = if url != null && sha256 != null then lib.platforms.linux else [ ];
     hydraPlatforms = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
