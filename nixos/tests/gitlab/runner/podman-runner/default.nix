@@ -46,7 +46,6 @@
 #       to set `.execConfig.User = 'ci'`
 #       and see if we can start it with out requiring root.
 {
-  config,
   lib,
   pkgs,
   ...
@@ -58,7 +57,7 @@ let
     owner = "NixOS";
     repo = "nix";
     rev = "2.32.4";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
   };
 
   # Either we use a Nix as the base image or Alpine.
@@ -71,7 +70,7 @@ let
 
     all = with imageNames; [
       alpine
-      nixRepo
+      nix
       ubuntu
     ];
   };
@@ -85,7 +84,7 @@ let
   # derivation will be symlinked in `/`.
   auxRootFiles = fs.toSource {
     root = ./root;
-    fileset = fs.gitTracked ./root/etc;
+    fileset = ./root/etc;
   };
 
   preBuildScript = pkgs.callPackage ./scripts/prebuild.nix { };
@@ -356,6 +355,7 @@ let
 
 in
 {
+  imports = [ ./virtualization.nix ];
 
   virtualisation.oci-containers = {
     backend = "podman";
@@ -381,7 +381,7 @@ in
 
     inherit registrationFlags;
 
-    authenticationTokenConfigFile = config.age.secrets.gitlab-runner-token-config.path;
+    authenticationTokenConfigFile = runnerConfig.tokenFile;
 
     executor = "docker";
     dockerImage = imageNames.default;

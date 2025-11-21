@@ -2,8 +2,8 @@
 # two machines `gitlab` and `gitlab-runner`:
 # - Create runners in the `gitlab` machine for all runners in `./runner`.
 # - Inject the runner tokens into the `gitlab-runner.service` (machine `gitlab-runner`)
-#   which runs all executors:
-#     - Shell Executor in `./runner/shell-executor`.
+#   which runs all runners:
+#     - Shell runner in `./runner/shell-runner`.
 # - Start the `gitlab-runner.service`.
 # - Check that all runners in `gitlab` are `active`.
 #
@@ -24,19 +24,19 @@ let
   runnerConfigs = {
     # The Gitlab runner where each job runs
     # on the host (not containerized and very insecure).
-    "shell" = {
-      desc = "Shell Executor (host NixOS shell, host Nix store)";
+    shell = {
+      desc = "Shell runner (host NixOS shell, host Nix store)";
       name = "shell";
       tokenFile = "${runnerTokenDir}/token-shell.env";
     };
 
-    # The Gitlab runner which uses the Docker executor (we use podman).
+    # The Gitlab runner which uses the Docker runner (we use podman).
     # Features:
     #  - Daemonizes the Nix store into a container.
     #  - All jobs run in an unprivileged container, e.g. with image
     #    (`local/nix`, `local/alpine`, `local/ubuntu`)
-    "podman" = {
-      desc = "Podman Executor (containers, shared containerized Nix store)";
+    podman = {
+      desc = "Podman runner (containers, shared containerized Nix store)";
       name = "podman";
       tokenFile = "${runnerTokenDir}/token-podman.env";
     };
@@ -53,7 +53,13 @@ in
       { ... }:
       {
         imports = [
-          (import ./runner/shell-executor.nix { inherit runnerConfigs; })
+          ../common/user-account.nix
+          (import ./runner/shell-runner.nix {
+            runnerConfig = runnerConfigs.shell;
+          })
+          (import ./runner/podman-runner {
+            runnerConfig = runnerConfigs.shell;
+          })
         ];
 
         # Define the Gitlab Runner.
@@ -156,7 +162,9 @@ in
       # Run all tests.
       test_connection()
       test_register_runner(name="shell", tokenFile="${runnerConfigs.shell.tokenFile}")
+      test_register_runner(name="podman", tokenFile="${runnerConfigs.podman.tokenFile}")
       restart_gitlab_runner_service()
       test_runner_registered(runnerConfigs["shell"])
+      test_runner_registered(runnerConfigs["podman"])
     '';
 }
