@@ -12,11 +12,11 @@ let
   variants = rec {
     x86_64-linux = {
       discord = rec {
-        version = "0.0.111";
+        version = "0.0.115";
 
         src = fetchurl {
           url = "https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-          hash = "sha256-o4U6i223Agtbt1N9v0GO/Ivx68OQcX/N3mHXUX2gruA=";
+          hash = "sha256-DXGlo9qdmJTqm6ResvspauQ0awIFSuYalcpVXEfTxK4=";
         };
 
         branch = "stable";
