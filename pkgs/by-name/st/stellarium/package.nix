@@ -17,6 +17,7 @@
   xvfb-run,
   gitUpdater,
   md4c,
+  withQtWebEngine ? lib.meta.availableOn stdenv.hostPlatform qt6.qtwebengine,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebEngine [
+    qt6.qtwebengine
   ];
 
   preConfigure = ''
