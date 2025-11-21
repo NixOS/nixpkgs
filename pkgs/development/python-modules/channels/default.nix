@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "channels";
   version = "4.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django";
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     homepage = "https://github.com/django/channels";
-    changelog = "https://github.com/django/channels/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/django/channels/blob/${src.tag}/CHANGELOG.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
