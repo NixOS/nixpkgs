@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     gawk
     gnused
     jujutsu
+    python3
+    util-linux
   ];
 
   postPatch = ''
