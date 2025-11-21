@@ -637,10 +637,10 @@ lib.makeScope pkgs.newScope (
               buildInputs = [
                 pcre2
               ]
-              ++ lib.optional (
+              ++ lib.optionals (
                 !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-              ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              ) [ valgrind.dev ];
+              configureFlags = lib.optionals php.ztsSupport [ "--disable-opcache-jit" ];
               zendExtension = true;
               postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
                 # Tests are flaky on darwin
