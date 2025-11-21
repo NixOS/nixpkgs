@@ -13,6 +13,7 @@
   gzip,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils-musl";
   version = "9.4";
 
@@ -28,12 +29,14 @@ let
     # musl 1.1.x doesn't use 64bit time_t
     "--disable-year2038"
     # libstdbuf.so fails in static builds
-    "--enable-no-install-program=stdbuf"
+    "--enable-no-install-program=stdbuf,arch,coreutils,hostname"
+    # Disable PATH_MAX for better reproducibility
+    "gl_cv_func_getcwd_path_max=\"no, but it is partly working\""
+    "gl_cv_have_unlimited_file_name_length=no"
   ];
 in
-bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+bash.runCommand "${pname}-${version}" {
+  inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -45,29 +48,20 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/cat --version
-        mkdir $out
-      '';
-
-    meta = with lib; {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
-  ''
-    # Unpack
-    tar xzf ${src}
-    cd coreutils-${version}
+  passthru.tests.get-version = result:
+    bash.runCommand "${pname}-get-version-${version}" {} ''
+      ${result}/bin/cat --version
+      mkdir $out
+    '';
+} ''
+  # Unpack
+  tar xzf ${src}
+  cd coreutils-${version}
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export LD=tcc
+    export LDFLAGS="-L ./lib"
     bash ./configure ${lib.concatStringsSep " " configureFlags}
 
     # Build
