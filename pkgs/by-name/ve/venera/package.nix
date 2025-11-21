@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-yjO7nQ3F+DLudjqXUp0N13lhBZSAKwAeKXRAKxPxDVQ=";
+    hash = "sha256-5/bbgg+XiJ1c+3qaGnyXPMg0b7dcf3DSmKOmJM1xfGQ=";
   };
 in
 flutter335.buildFlutterApplication {
