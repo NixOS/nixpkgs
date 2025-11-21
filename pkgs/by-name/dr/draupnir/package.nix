@@ -20,14 +20,14 @@ let
   nodeSources = srcOnly nodejs;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "draupnir";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I9DYiNxD95pzHVsgZ/hJwHfrsVqE/eBALNiePVNDpy0=";
   };
 
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   offlineCache = fetchYarnDeps {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-kTdJ6zKNjH5CxcM9EvXzbz2Phrp5xI0+pvNwMLRmLgQ=";
   };
 
   preBuild = ''
     # install proper version info
-    echo "${version}-nix" > version.txt
+    echo "${finalAttrs.version}-nix" > version.txt
 
     # makes network requests
     sed -i 's/corepack //g' package.json
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RorySys ];
     mainProgram = "draupnir";
   };
-}
+})
