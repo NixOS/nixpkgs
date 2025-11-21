@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "fsg-src-${version}.tar.gz";
-    url = "https://github.com/ctrlcctrlv/wxsand/blob/master/fsg-src-${version}-ORIGINAL.tar.gz?raw=true";
+    url = "https://raw.githubusercontent.com/ctrlcctrlv/wxsand/5716c16b655ca3670e7acd76372b43763bec20d1/fsg-src-${version}-ORIGINAL.tar.gz";
     sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
   };
 

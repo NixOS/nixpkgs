@@ -251,9 +251,9 @@
 
   k8s-configuration = mkAzExtension rec {
     pname = "k8s-configuration";
-    version = "2.2.0";
+    version = "2.3.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_configuration-${version}-py3-none-any.whl";
-    hash = "sha256-aRdNy3aH+xfLNK7asYqok9aw6RedEcAQqOUKxtIwRwg=";
+    hash = "sha256-ABkAYL19wQIiB+xuu2y/9otpSh/SSxgbuXhv5RrHP2c=";
     description = "Microsoft Azure Command-Line Tools K8s-configuration Extension";
     propagatedBuildInputs = with python3Packages; [
       pycryptodome

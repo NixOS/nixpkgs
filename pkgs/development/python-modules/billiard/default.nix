@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "4.2.2";
+  version = "4.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "billiard";
     tag = "v${version}";
-    hash = "sha256-KUA1ydRoDIALhapDPG4c0C4q0Z72MReHeFCqqGviCNw=";
+    hash = "sha256-Zogy5O/bHymkKMn5zeTltNq/1c1fT7s/YFIDA53dr40=";
   };
 
   build-system = [ setuptools ];
