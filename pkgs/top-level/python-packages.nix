@@ -14741,6 +14741,8 @@ self: super: with self; {
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
+  pytest-integration = callPackage ../development/python-modules/pytest-integration { };
+
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
@@ -18852,6 +18854,8 @@ self: super: with self; {
   torchsummary = callPackage ../development/python-modules/torchsummary { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
+
+  torchtune = callPackage ../development/python-modules/torchtune { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
