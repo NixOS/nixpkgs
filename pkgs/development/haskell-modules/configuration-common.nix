@@ -601,7 +601,7 @@ with haskellLib;
           name = "git-annex-${super.git-annex.version}-src";
           url = "git://git-annex.branchable.com/";
           rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "sha256-HkUrc9T8qpGsONIuM7ciKbx4vuJTOLFNxneIPte0wv4=";
+          sha256 = "sha256-hDbwkpu7qpJZmLNe/rF4eOewLrozo/qpCjFEczZv9S4=";
           # delete android and Android directories which cause issues on
           # darwin (case insensitive directory). Since we don't need them
           # during the build process, we can delete it to prevent a hash
