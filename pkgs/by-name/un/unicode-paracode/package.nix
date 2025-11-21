@@ -5,6 +5,7 @@
   python3Packages,
   installShellFiles,
   gitUpdater,
+  unicode-character-database,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,18 +28,13 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  ucdtxt = fetchurl {
-    url = "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-/1jlgjvQlRZlZKAG5H0RETCBPc+L8jTvefpRqHDttI8=";
-  };
-
   nativeBuildInputs = [ installShellFiles ];
 
   build-system = with python3Packages; [ setuptools ];
 
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "/usr/share/unicode/UnicodeData.txt" "${unicode-character-database}/share/unicode/UnicodeData.txt"
   '';
 
   postInstall = ''
