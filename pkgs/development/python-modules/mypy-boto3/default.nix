@@ -953,8 +953,8 @@ in
       "sha256-0rtTR067/fJ9ZocM6QNDqA5x0CEqjO4uKA8WMB/wOtE=";
 
   mypy-boto3-networkmanager =
-    buildMypyBoto3Package "networkmanager" "1.41.0"
-      "sha256-dzcCZonHrc7Yt4soJUuhE4+tF/qfRaxHJWeieO/MmeI=";
+    buildMypyBoto3Package "networkmanager" "1.41.1"
+      "sha256-QHxkGRF5U/xO8uqVQMJ7k4Vj3kFosjIff1HEWfAZdNI=";
 
   mypy-boto3-nimble =
     buildMypyBoto3Package "nimble" "1.35.0"
