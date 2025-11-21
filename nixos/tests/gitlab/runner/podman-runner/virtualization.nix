@@ -1,9 +1,5 @@
 { lib, ... }:
 {
-  virtualisation = {
-    diskSize = 50000;
-  };
-
   virtualisation.docker = {
     enable = lib.mkForce false;
   };

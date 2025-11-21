@@ -116,7 +116,7 @@ def test_register_runner(name: str, tokenFile: str):
 def restart_gitlab_runner_service(runnerConfigs):
     print("==> Restart Gitlab Runner")
 
-    if any([r.name == "podman" for r in runnerConfigs]):
+    if any([n == "podman" for n in runnerConfigs.keys()]):
         vms.gitlab_runner.wait_for_unit("podman-nix-daemon-container.service")
         vms.gitlab_runner.wait_for_unit("podman-podman-daemon-container.service")
 

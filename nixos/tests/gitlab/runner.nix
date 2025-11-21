@@ -62,6 +62,10 @@ in
           })
         ];
 
+        virtualisation = {
+          diskSize = 50000;
+        };
+
         # Define the Gitlab Runner.
         services.gitlab-runner = {
           enable = true;
@@ -163,7 +167,7 @@ in
       test_connection()
       test_register_runner(name="shell", tokenFile="${runnerConfigs.shell.tokenFile}")
       test_register_runner(name="podman", tokenFile="${runnerConfigs.podman.tokenFile}")
-      restart_gitlab_runner_service()
+      restart_gitlab_runner_service(runnerConfigs)
       test_runner_registered(runnerConfigs["shell"])
       test_runner_registered(runnerConfigs["podman"])
     '';
