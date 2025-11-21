@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "LV2 plugin for using Bauer stereophonic-to-binaural DSP library";
     homepage = "https://github.com/nilninull/bs2b-lv2";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

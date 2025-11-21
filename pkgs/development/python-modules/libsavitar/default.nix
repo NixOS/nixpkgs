@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

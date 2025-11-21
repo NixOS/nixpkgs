@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/awslabs/aws-c-cal";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

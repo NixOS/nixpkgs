@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       maxdamantus
-      orivej
     ];
     platforms = lib.platforms.linux;
   };

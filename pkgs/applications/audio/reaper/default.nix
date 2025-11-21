@@ -150,7 +150,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       atinba
       ilian
-      orivej
       uniquepointer
       viraptor
     ];

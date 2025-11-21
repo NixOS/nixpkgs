@@ -34,7 +34,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       nico202
-      orivej
     ];
   };
 }

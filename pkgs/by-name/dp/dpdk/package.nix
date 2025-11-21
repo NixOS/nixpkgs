@@ -113,7 +113,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      orivej
       mic92
       zhaofengli
     ];

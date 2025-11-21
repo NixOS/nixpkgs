@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bino3d.org/";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "bino";
   };

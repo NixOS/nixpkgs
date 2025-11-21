@@ -29,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Selectively remove C preprocessor conditionals";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })
