@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "2.0.3";
+  version = "2.0.4";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-QJ+SOuL0BgvhUBscCuoAPeVcfUBGBmSZoSK5imQftwg8z8fQa7y4fjiq3FERx4dXVocchR8F4a43lL51KPWj/g==";
+    sha512 = "649a508b7727df6e7e1203abb3853e05f167b64832fd5e1271f142ccf782e600b1de73c72dc02673d7b175effdc54f2c0f60318208a968af9f9763d09cf4f9ef";
   };
 
   nativeBuildInputs = [
@@ -80,28 +80,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableStatic [
     "install_static"
   ];
-
-  postInstall =
-    let
-      soVersion = "2";
-    in
-
-    # Check that soVersion is up to date even if we are not on darwin
-    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
-      test -f $lib/lib/liblowdown.so.${soVersion} || \
-        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
-    ''
-    # Versioned lib doesn't end in .dylib which is required by fixDarwinDylibNames
-    # <https://github.com/kristapsdz/lowdown/issues/168>.
-    + lib.optionalString (enableShared && stdenv.hostPlatform.isDarwin) ''
-      darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
-      mv "$lib/lib/liblowdown.dylib.${soVersion}" "$darwinDylib"
-
-      # Make sure we are re-creating a symbolic link here
-      test -L "$lib/lib/liblowdown.dylib" || \
-        die "postInstall: expected $lib/lib/liblowdown.dylib to be a symlink"
-      ln -sf "$darwinDylib" "$lib/lib/liblowdown.dylib"
-    '';
 
   doInstallCheck = !stdenv.hostPlatform.isDarwin || !enableDarwinSandbox;
   installCheckPhase = ''
