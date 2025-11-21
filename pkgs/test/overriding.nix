@@ -292,13 +292,59 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
-      });
+      python-package-stub = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+        }
+      ) { };
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (previousAttrs: {
+          overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+        });
+      checkOverridePythonAttrs = p: p ? overridePythonAttrsFlag;
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
+      checkAttrsFooBar = drv: drv.FOO == "a" && drv.BAR == "a";
     in
     {
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = (applyOverridePythonAttrs python-package-stub).overridePythonAttrsFlag == 1;
+        expected = true;
+      };
+      overridePythonAttrs-nested = {
+        expr =
+          (applyOverridePythonAttrs (applyOverridePythonAttrs python-package-stub)).overridePythonAttrsFlag
+          == 2;
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = checkAttrsFooBar (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = checkOverridePythonAttrs (
+          applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub)
+        );
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr =
+          (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub))
+          == (overrideAttrsFooBar (applyOverridePythonAttrs python-package-stub));
         expected = true;
       };
     };
