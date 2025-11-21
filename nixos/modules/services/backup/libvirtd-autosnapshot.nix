@@ -185,7 +185,7 @@ in
                     default = null;
                     description = ''
                       Type of snapshot to create (internal or external).
-                      If not specified, uses global snapshotType (${toString cfg.snapshotType}).
+                      If not specified, uses global snapshotType.
                     '';
                   };
                   keep = lib.mkOption {
@@ -193,7 +193,7 @@ in
                     default = null;
                     description = ''
                       Number of snapshots to keep for this VM.
-                      If not specified, uses global keep (${toString cfg.keep}).
+                      If not specified, uses global keep.
                     '';
                   };
                 };
