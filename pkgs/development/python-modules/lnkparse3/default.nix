@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Matmaus";
     repo = "LnkParse3";
     tag = "v${version}";
-    hash = "sha256-z+qjPs7gHQMAUlnGLN06xZ0hyrAnBF8i0FbaiEpguNE=";
+    hash = "sha256-1BjESKJxEO6EOR2/IRR1wxFrqFAYA/DUp9XL00xja8M=";
   };
 
   build-system = [ setuptools ];
