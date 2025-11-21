@@ -1,19 +1,31 @@
 #!/usr/bin/env nix
 #!nix shell nixpkgs#python3 --command python
 
-import json
-import time
+from argparse import ArgumentParser
+import pathlib
 from urllib.request import build_opener, HTTPCookieProcessor, Request
 from http.cookiejar import CookieJar
+import json
+import time
+
+parser = ArgumentParser()
+parser.add_argument("-l", "--language", dest="language", type=str,
+                    help="Name of the scripting language", metavar="LANG", required=True)
+parser.add_argument("-s", "--script", dest="content_file", type=pathlib.Path,
+                    help="read script contents from FILE", metavar="FILE", required=True)
+parser.add_argument("-i", "--input", dest="input_file", type=pathlib.Path,
+                    help="read script arguments from FILE", metavar="FILE", required=True)
+
+args = parser.parse_args()
+
 
 cookiejar = CookieJar()
 cookieprocessor = HTTPCookieProcessor(cookiejar)
-http_request = build_opener(cookieprocessor)
+http_client = build_opener(cookieprocessor)
 
 admin_token = None
 id_admin_workspace = "admins"
-python_script_hash = None
-started_jobs = set()
+
 
 login_form = {"email": "admin@windmill.dev", "password": "changeme"}
 login_req = Request(
@@ -22,11 +34,27 @@ login_req = Request(
     headers={'Content-Type': 'application/json'},
     data=json.dumps(login_form).encode('utf-8')
 )
-with http_request.open(login_req) as response:
-    assert 200 == response.status, "Failure: Login"
+with http_client.open(login_req) as response:
+    assert 200 == response.status, f"Failure {response.status}: Superuser login"
     assert any(cookie.name == "token" for cookie in cookiejar)
     admin_token = next(cookie.value for cookie in cookiejar if cookie.name == "token")
-    assert admin_token
+    assert admin_token, "Failed to receive a session key from admin login"
+
+
+if "python" in args.language:
+    # Windmill package recipe requires a manually set default python version in the global instance settings
+    python_version_form = {
+        # NOTE; Update hardcoded python version below to match the windmill package
+        "value": "3.12"
+    }
+    python_version_req = Request(
+        "http://localhost:8001/api/settings/global/instance_python_version",
+        method="GET",
+        headers={'Authorization': f'Bearer {admin_token}'},
+        data=json.dumps(python_version_form).encode('utf-8')
+    )
+    with http_client.open(python_version_req) as response:
+        assert 200 == response.status, f"Failure {response.status}: Update global instance python version."
 
 
 workspace_req = Request(
@@ -34,53 +62,55 @@ workspace_req = Request(
     method="GET",
     headers={'Authorization': f'Bearer {admin_token}'}
 )
-with http_request.open(workspace_req) as response:
-    assert 200 == response.status, "Failure: List workspaces"
+with http_client.open(workspace_req) as response:
+    assert 200 == response.status, f"Failure {response.status}: List workspaces"
     workspace_list = json.loads(response.read().decode('utf-8'))
     assert any(workspace['id'] == id_admin_workspace for workspace in workspace_list)
 
-
-python_script_form = {
-    "path": "u/admin/python_test",
-    "summary": "Test Python",
+script_hash = None
+script_form = {
+    "path": f"u/admin/{args.language}_test",
+    "summary": f"Test {args.language}",
     "description": "",
-    "language": "python3",
-    "content": "def main():\n\t\treturn 'ok'",
+    "language": args.language,
+    "content": args.content_file.read_text()
 }
-python_script_req = Request(
+script_request = Request(
     f"http://localhost:8001/api/w/{id_admin_workspace}/scripts/create",
     method="POST",
     headers={
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {admin_token}',
     },
-    data=json.dumps(python_script_form).encode('utf-8')
+    data=json.dumps(script_form).encode('utf-8')
 )
-with http_request.open(python_script_req) as response:
-    assert 201 == response.status, "Failure: Create python script"
-    python_script_hash = response.read().decode('utf-8')
+with http_client.open(script_request) as response:
+    assert 201 == response.status, f"Failure {response.status}: Create {args.language} script"
+    script_hash = response.read().decode('utf-8')
+    assert script_hash, "Failed to receive an identifier from script creation"
 
 
-python_run_script_form = {}
-python_run_script_req = Request(
-    f"http://localhost:8001/api/w/{id_admin_workspace}/jobs/run/h/{python_script_hash}",
+job_id = None
+request = Request(
+    f"http://localhost:8001/api/w/{id_admin_workspace}/jobs/run/h/{script_hash}",
     method="POST",
     headers={
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {admin_token}',
     },
-    data=json.dumps(python_run_script_form).encode('utf-8')
+    data=args.input_file.read_bytes(),
 )
-with http_request.open(python_run_script_req) as response:
-    assert 201 == response.status, "Failure: Run python script"
-    started_jobs.add(response.read().decode('utf-8'))
+with http_client.open(request) as response:
+    assert 201 == response.status, f"Failure {response.status}: Run {args.language} script"
+    job_id = response.read().decode('utf-8')
+    assert job_id, "Failed to receive an identifier from job creation/scheduling"
 
 
-print(started_jobs)
-
+started_jobs = set([job_id])
 timeout = 300  # seconds
 timeout_end = time.time() + timeout
 while any(started_jobs) and time.time() < timeout_end:
+    print("DEBUG: SLEEPING")
     time.sleep(10)  # seconds
 
     retrieve_jobs_req = Request(
@@ -90,12 +120,12 @@ while any(started_jobs) and time.time() < timeout_end:
             'Authorization': f'Bearer {admin_token}',
         },
     )
-    with http_request.open(retrieve_jobs_req) as response:
-        assert 200 == response.status, "Failure: Retrieve jobs"
+    with http_client.open(retrieve_jobs_req) as response:
+        assert 200 == response.status, f"Failure {response.status}: Retrieve jobs"
         job_results = json.loads(response.read().decode('utf-8'))
-        for job_id in set(started_jobs):  # Must create copy of set being iterated over
-            if any(job['id'] == job_id for job in job_results if bool(job['success'])):
-                started_jobs.remove(job_id)
+        for id in set(started_jobs):  # Must create copy of set being iterated over
+            if any(job['id'] == id for job in job_results if bool(job['success'])):
+                started_jobs.remove(id)
 
 if any(started_jobs):
     # There are started jobs that have not completed before timeout
