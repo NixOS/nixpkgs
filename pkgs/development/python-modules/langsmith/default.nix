@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.4.41";
+  version = "0.4.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-hZRZ4IAPKxCtvDZfk9D5irkYk0KM6pG2l+HSq742KYw=";
+    hash = "sha256-m5JzGAi+l57F0Sg/KcUSDRiLXF0kh6inqpF7EktgwrQ=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -85,6 +85,10 @@ buildPythonPackage rec {
     "test_chat_sync_api"
     "test_completions_async_api"
     "test_completions_sync_api"
+    # flaky -- compares two timestamps that can differ by a small amount
+    # ex: `assert 1763763094282 == 1763763094283`
+    "test_traceable_uses_uuidv7_and_start_time_matches_run_id"
+    "test_run_tree_default_uuidv7_and_start_time_match"
   ];
 
   disabledTestPaths = [
