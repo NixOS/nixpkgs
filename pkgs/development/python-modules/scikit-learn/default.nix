@@ -38,6 +38,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.10,<3.2.0" "Cython>=3.0.10"
+
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
