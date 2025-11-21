@@ -11,10 +11,10 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_2";
   # check the release notes for compatible kernels
-  kernelCompatible = kernel: kernel.kernelOlder "6.16";
+  kernelCompatible = kernel: kernel.kernelOlder "6.18";
 
   # this package should point to the latest release.
-  version = "2.2.8";
+  version = "2.2.9";
 
   tests = {
     inherit (nixosTests.zfs) series_2_2;
@@ -28,5 +28,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-ZYgC8L4iI9ewaC7rkMFSRAKeTWr72N5aRP98VLL4oqo=";
+  hash = "sha256-o8rsBtWo4d/gKmMRA1RysPBYZaO8GxQ4rZcJKmgMMsY=";
 }
