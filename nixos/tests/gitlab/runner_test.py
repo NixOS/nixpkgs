@@ -101,6 +101,7 @@ def test_register_runner(name: str, tokenFile: str):
     obj = json.loads(resp)
     r.id = obj["id"]
     r.token = obj["token"]
+    print("==> Registered runner '{r.id}' with token '{r.token}'.")
 
     # Push the token to the runner machine.
     print("==> Push runner token to machine.")
@@ -112,8 +113,13 @@ def test_register_runner(name: str, tokenFile: str):
     vms.gitlab_runner.copy_from_host(str(tokenF), r.tokenFile)
 
 
-def restart_gitlab_runner_service():
+def restart_gitlab_runner_service(runnerConfigs):
     print("==> Restart Gitlab Runner")
+
+    if any([r.name == "podman" for r in runnerConfigs]):
+        vms.gitlab_runner.wait_for_unit("podman-nix-daemon-container.service")
+        vms.gitlab_runner.wait_for_unit("podman-podman-daemon-container.service")
+
     vms.gitlab_runner.systemctl("restart gitlab-runner.service")
     vms.gitlab_runner.wait_for_unit("gitlab-runner.service")
 
