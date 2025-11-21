@@ -11,7 +11,7 @@ export async function main(
   a: number,
   b: "my" | "enum",
   //c: Postgresql,
-  //d: wmill.S3Object, // https://www.windmill.dev/docs/core_concepts/persistent_storage/large_data_files 
+  //d: wmill.S3Object, // https://www.windmill.dev/docs/core_concepts/persistent_storage/large_data_files
   //d: DynSelect_foo, // https://www.windmill.dev/docs/core_concepts/json_schema_and_parsing#dynamic-select
   e = "inferred type string from default arg",
   f = { nested: "object" },
