@@ -13,7 +13,7 @@
   stdenv,
   util-linux,
   installShellFiles,
-}
+}:
 
 stdenv.mkDerivation rec {
   pname = "jj-fzf";
