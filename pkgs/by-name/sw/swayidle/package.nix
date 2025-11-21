@@ -10,8 +10,8 @@
   wayland,
   wayland-protocols,
   runtimeShell,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fxDwRfAXb9D6epLlyWnXpy9g8V3ovJRpQ/f3M4jxY/s=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ]
-  ++ lib.optionals systemdSupport [ systemd ];
+  ++ lib.optionals systemdSupport [ systemdLibs ];
 
   mesonFlags = [
     "-Dman-pages=enabled"
