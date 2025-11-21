@@ -244,7 +244,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./update-ui_builder.sh
   ];
 
-  passthru.tests = nixosTests.windmill;
+  passthru.tests = lib.optionalAttrs (stdenv.hostPlatform.isLinux) nixosTests.windmill;
 
   meta = {
     changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";
