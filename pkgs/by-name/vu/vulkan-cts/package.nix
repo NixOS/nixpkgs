@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.4.3.3";
+  version = "1.4.4.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-bhbk2ayY4syyUXJcYesRlVFArAVhivTjELvM8uuNzEQ=";
+    hash = "sha256-Kf5IzSrd4fI77rgnjejy9UcnopxMsqqtce172UfpNNc=";
   };
 
   prePatch = ''
@@ -60,12 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
     ${sources.prePatch}
-
-    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
-      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
-
-    substituteInPlace external/vulkan-video-samples/src/cmake/FindVulkanSDK.cmake \
-      --replace-fail 'GIT_TAG main' 'GIT_TAG main FIND_PACKAGE_ARGS NAMES VulkanHeaders'
 
     chmod u+w -R external
   '';
