@@ -1,6 +1,7 @@
 {
+  beam,
+  elixir_1_17,
   lib,
-  beamPackages,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchHex,
@@ -14,6 +15,9 @@
   fetchpatch,
 }:
 
+let
+  beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
+in
 beamPackages.mixRelease rec {
   pname = "pleroma";
   version = "2.9.1";
