@@ -38,7 +38,6 @@ awk <meshcentral.js "
 # yarn.lock/yarn.nix
 yarn install --ignore-scripts
 
-cp package.json "$expr_dir"
 cp yarn.lock "$expr_dir/yarn.lock"
 
 cd "$expr_dir/../../../.."
