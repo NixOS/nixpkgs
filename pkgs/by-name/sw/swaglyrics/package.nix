@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "swaglyrics";
-  version = "unstable-2021-06-17";
+  version = "1.2.2-unstable-2021-06-17";
   pyproject = true;
 
   src = fetchFromGitHub {
