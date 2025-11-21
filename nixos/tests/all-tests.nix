@@ -246,6 +246,7 @@ in
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
   atd = runTest ./atd.nix;
+  atlantis = runTest ./atlantis.nix;
   atop = import ./atop.nix { inherit pkgs runTest; };
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
