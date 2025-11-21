@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "mkdocs-linkcheck";
-  version = "unstable-2021-08-24";
+  version = "1.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
