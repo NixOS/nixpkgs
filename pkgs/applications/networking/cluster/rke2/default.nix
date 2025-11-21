@@ -21,15 +21,21 @@ rec {
         ];
       };
 
-  rke2_1_30 = common (
-    (import ./1_30/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "30"
-      ];
-    }
-  ) extraArgs;
+  rke2_1_30 =
+    (common (
+      (import ./1_30/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "30"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        meta.knownVulnerabilities = [
+          "rke2_1_30 has reached end-of-life on 2025-06-28. See https://www.suse.com/lifecycle#rke2"
+        ];
+      };
 
   rke2_1_31 = common (
     (import ./1_31/versions.nix)
