@@ -1,26 +1,27 @@
 {
   lib,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
   srcOnly,
   removeReferencesTo,
-  mkYarnPackage,
   fetchYarnDeps,
   stdenv,
   cctools,
   nixosTests,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
+  nix-update-script,
 }:
-
-# docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
   nodeSources = srcOnly nodejs;
 in
-mkYarnPackage rec {
+
+stdenv.mkDerivation rec {
   pname = "draupnir";
   version = "2.7.1";
 
@@ -32,73 +33,63 @@ mkYarnPackage rec {
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     sqlite
-  ];
+    python3
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   offlineCache = fetchYarnDeps {
-    name = "${pname}-yarn-offline-cache";
-    yarnLock = src + "/yarn.lock";
-    hash = hashesFile.yarn_offline_cache_hash;
-  };
-
-  packageJSON = ./package.json;
-
-  pkgConfig = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = {
-      postInstall = ''
-        # replace with the existing package in nixpkgs
-        cd ..
-        rm -r matrix-sdk-crypto-nodejs
-        ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/* ./
-      '';
-    };
-
-    better-sqlite3 = {
-      nativeBuildInputs = [ python3 ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
-      postInstall = ''
-        # build native sqlite bindings
-        npm run build-release --offline --nodedir="${nodeSources}"
-        find build -type f -exec \
-          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
-      '';
-    };
+    inherit src;
+    hash = "sha256-EZ8dVRfzAFr8wepLuS90YHvAi9BA+4etVz+Vji+bQVA=";
   };
 
   preBuild = ''
     # install proper version info
-    mkdir --parents deps/draupnir/
-    echo "${version}-nix" > deps/draupnir/version.txt
+    echo "${version}-nix" > version.txt
 
     # makes network requests
-    sed -i 's/corepack //g' deps/draupnir/package.json
+    sed -i 's/corepack //g' package.json
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline --verbose build
-
-    runHook postBuild
+  postBuild = ''
+    yarn --offline run copy-assets
   '';
 
-  installPhase = ''
-    runHook preInstall
+  postInstall = ''
+    # Replace matrix-sdk-crypto-nodejs with nixpkgs version
+    nodeCryptoPath="$out/lib/node_modules/draupnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
+    rm -rf "$nodeCryptoPath"
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      "$nodeCryptoPath"
+    chmod -R a+rx "$nodeCryptoPath"
 
-    mkdir --parents $out/share
-    cp --archive . $out/share/draupnir
+    # build better-sqlite3
+    betterSqlitePath="$out/lib/node_modules/draupnir/node_modules/better-sqlite3"
+    pushd "$betterSqlitePath"
+    npm run build-release --offline --nodedir="${nodeSources}"
+    rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
+    find build -type f -exec \
+          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
+    popd
 
+
+    # Copy files it doesn't copy for some reason
+    rm -rf $out/lib/node_modules/draupnir/lib
+    mv ./lib ./version.txt $out/lib/node_modules/draupnir
+
+    # Create wrapper executable
     makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
-      --add-flags $out/share/draupnir/deps/draupnir/lib/index.js
-
-    runHook postInstall
+      --add-flags $out/lib/node_modules/draupnir/lib/index.js
   '';
-
-  distPhase = "true";
 
   passthru = {
     tests = { inherit (nixosTests) draupnir; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
