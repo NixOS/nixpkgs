@@ -30,14 +30,14 @@ assert lib.assertMsg (
   gamemodeSupport -> stdenv.hostPlatform.isLinux
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
-  pname = "projtlauncher-unwrapped";
+  pname = "projtlauncher";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
     tag = finalAttrs.version;
-    sha256 = "sha256-wTyhOHNaxfrBNTa9cqK8oA4Nw5Rj8lPONjOrkSYwVjM=";
+    hash = "sha256-26NfnIfjngFb6cZeAq6NeQ7XGafhaJWwR8MOGAO9uiQ=";
     fetchSubmodules = true;
   };
 
@@ -88,14 +88,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = stdenv.mkDerivation {
+      name = "projtlauncher-version-test";
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
+      dontUnpack = true;
+      buildPhase = ''
+        ${finalAttrs.finalPackage}/bin/projtlauncher --version
+      '';
+      installPhase = ''
+        touch $out
+      '';
+    };
   };
 
   meta = {
-    description = "Free, open source launcher for Minecraft";
+    description = "ProjT‑Launcher lets you manage Minecraft versions, mods, and worlds, standing out with new and upcoming features.";
     longDescription = ''
-      Allows you to have multiple, separate instances of Minecraft (each with
-      their own mods, texture packs, saves, etc) and helps you manage them and
-      their associated options with a simple interface.
+      This application lets you create and manage multiple
+      independent Minecraft instances, each with its own
+      unique mods, texture packs, worlds, and settings.
+      Easily switch between different setups without conflicts,
+      keep all your saves and customizations organized, and
+      configure options for each instance through a simple and
+      intuitive interface. Perfect for players who want to
+      experiment with different modpacks, resource packs, or
+      gameplay styles while keeping everything neatly separated.
     '';
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";

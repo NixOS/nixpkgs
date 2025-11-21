@@ -55,7 +55,7 @@ let
 in
 
 symlinkJoin {
-  pname = "projtlauncher";
+  pname = "projtlauncher-wrapped";
   inherit (projtlauncher') version;
 
   paths = [ projtlauncher' ];
