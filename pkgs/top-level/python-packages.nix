@@ -9717,6 +9717,10 @@ self: super: with self; {
 
   model-checker = callPackage ../development/python-modules/model-checker { };
 
+  model-hosting-container-standards =
+    callPackage ../development/python-modules/model-hosting-container-standards
+      { };
+
   model-signing = callPackage ../development/python-modules/model-signing { };
 
   modelcif = callPackage ../development/python-modules/modelcif { };
@@ -14737,6 +14741,8 @@ self: super: with self; {
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
+  pytest-integration = callPackage ../development/python-modules/pytest-integration { };
+
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
@@ -16793,6 +16799,8 @@ self: super: with self; {
 
   segyio = callPackage ../development/python-modules/segyio { inherit (pkgs) cmake ninja; };
 
+  selectolax = callPackage ../development/python-modules/selectolax { };
+
   selenium = callPackage ../development/python-modules/selenium { };
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
@@ -18846,6 +18854,8 @@ self: super: with self; {
   torchsummary = callPackage ../development/python-modules/torchsummary { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
+
+  torchtune = callPackage ../development/python-modules/torchtune { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 

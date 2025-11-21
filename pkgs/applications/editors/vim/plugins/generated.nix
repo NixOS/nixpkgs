@@ -14500,6 +14500,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  stringbreaker-nvim = buildVimPlugin {
+    pname = "stringbreaker.nvim";
+    version = "2025-09-24";
+    src = fetchFromGitHub {
+      owner = "duqcyxwd";
+      repo = "stringbreaker.nvim";
+      rev = "f6310ad154063151078548b21e8de05bec1f6ac9";
+      sha256 = "14k7cvjh9kz3p33np275qp2p2aipbxm934kqz2yc7l08fag9sg3x";
+    };
+    meta.homepage = "https://github.com/duqcyxwd/stringbreaker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   styler-nvim = buildVimPlugin {
     pname = "styler.nvim";
     version = "2025-10-28";
