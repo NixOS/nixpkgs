@@ -17,7 +17,7 @@
 
 let
   pname = "findpython";
-  version = "0.7.0";
+  version = "0.7.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,7 +25,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-izFkfHY1J3mjwaCAZpm2jmp73AtcLd2a8qB6DUDGc9w=";
+    hash = "sha256-nynmo9q9t18rOclJdywO0m6rFTCABmafNHjNqw2GfHg=";
   };
 
   build-system = [ pdm-backend ];

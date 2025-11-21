@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "youtubeaio";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-qN2HV30Ds/FUOUG84cbtOgu2wVGeBRbwfYeXiP554g8=";
+    hash = "sha256-2PqVFZ5816g8Ilc0Mhlm+Gzw/eOSaC1JYPY/t2yzxCU=";
   };
 
   postPatch = ''
