@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.15.4";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-X4QXDZYtTY0LO9OiE9F99DBvit79Tsz/4zhfVHPQxSE=";
+    hash = "sha256-BL+qIQgqqVuOQzCVjS9lnExijM0XDj5v3+RPkbspw9Q=";
   };
 
   dontUnpack = true;
@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D "$src" "$out/bin/gemini"
+    sed -i '/disableAutoUpdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
 
     runHook postInstall
   '';

@@ -1,7 +1,6 @@
 {
   "duckstation": {
     "version": "0.1-10091",
-    "hash_linux": "sha256-mgrln6Z0kshFy/8QberfeXHWoSxxojvn53B/WYkobpQ=",
     "hash_darwin": "sha256-6bp3ksI3a3FYuGhP6y77AxTR1XOXyjmBuQNnWwU9Zoo="
   },
   "discord_rpc": {

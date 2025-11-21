@@ -40,6 +40,7 @@ let
       parseque = callPackage ../development/rocq-modules/parseque { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
     };
