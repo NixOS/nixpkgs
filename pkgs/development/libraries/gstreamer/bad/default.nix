@@ -108,7 +108,8 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
-  guiSupport ? true,
+  # causes gtk4 to depend on gtk3 and makes little sense
+  guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
 }:
@@ -356,8 +357,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ]
-  ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
+  ++ lib.optionals (!guiSupport) [
     "-Dgtk3=disabled" # Wayland-based GTK sink
+  ]
+  ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
   ]
   ++ lib.optionals (!gst-plugins-base.glEnabled) [
