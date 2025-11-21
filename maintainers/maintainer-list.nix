@@ -22701,6 +22701,12 @@
     githubId = 1387224;
     name = "Richard Szibele";
   };
+  rszyma = {
+    email = "rszyma.dev@gmail.com";
+    github = "rszyma";
+    githubId = 44318430;
+    name = "rszyma";
+  };
   rtburns-jpl = {
     email = "rtburns@jpl.nasa.gov";
     github = "rtburns-jpl";
