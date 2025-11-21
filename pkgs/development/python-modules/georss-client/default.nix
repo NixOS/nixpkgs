@@ -7,32 +7,31 @@
   setuptools,
 
   # dependencies
-  dateparser,
   haversine,
+  python-dateutil,
   requests,
   xmltodict,
 
-  # tests
+  # testing
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "georss-client";
-  version = "0.18";
+  version = "0.19-unstable-20251121";
   pyproject = true;
-
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";
-    tag = "v${version}";
-    hash = "sha256-KtndXsNvmjSGwqfKqkGAimHbapIC3I0yi4JuDh6cMzs=";
+    rev = "8ff46176ab45a02a3a29c1de3871a186243df3a7";
+    hash = "sha256-+CmauNb+5mDbZXQCd8ZxZCz6FSfEPAnktkMjvQueiO0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    dateparser
     haversine
+    python-dateutil
     requests
     xmltodict
   ];
@@ -44,7 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
-    changelog = "https://github.com/exxamalte/python-georss-client/releases/tag/${src.tag}";
+    # Reinstate when back on a stable release
+    # changelog = "https://github.com/exxamalte/python-georss-client/releases/tag/${src.tag}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
