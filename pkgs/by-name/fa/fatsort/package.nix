@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.5.640";
+  version = "1.7.679";
   pname = "fatsort";
 
   src = fetchurl {
     url = "mirror://sourceforge/fatsort/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Yw7OVtnrOlVSSvCuw6reeFQ2DrqUkXKmz7R2jLj75C4=";
+    sha256 = "sha256-EBL1UTgmOdaeGU6r++mTQu3nyFaxzWeIKH+d/UvY0SI=";
   };
 
   buildInputs = [
