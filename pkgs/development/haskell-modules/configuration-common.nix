@@ -594,42 +594,36 @@ with haskellLib;
   # but we want e.g. completions as well. See
   # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-  git-annex = lib.pipe super.git-annex (
-    [
-      (overrideCabal (drv: {
-        src = pkgs.fetchgit {
-          name = "git-annex-${super.git-annex.version}-src";
-          url = "git://git-annex.branchable.com/";
-          rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "sha256-hDbwkpu7qpJZmLNe/rF4eOewLrozo/qpCjFEczZv9S4=";
-          # delete android and Android directories which cause issues on
-          # darwin (case insensitive directory). Since we don't need them
-          # during the build process, we can delete it to prevent a hash
-          # mismatch on darwin.
-          postFetch = ''
-            rm -r $out/doc/?ndroid*
-          '';
-        };
-
-        patches = drv.patches or [ ] ++ [
-          # Prevent .desktop files from being installed to $out/usr/share.
-          # TODO(@sternenseemann): submit upstreamable patch resolving this
-          # (this should be possible by also taking PREFIX into account).
-          ./patches/git-annex-no-usr-prefix.patch
-        ];
-
-        postPatch = ''
-          substituteInPlace Makefile \
-            --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
-                           'InstallDesktopFile git-annex'
+  git-annex = lib.pipe super.git-annex [
+    (overrideCabal (drv: {
+      src = pkgs.fetchgit {
+        name = "git-annex-${super.git-annex.version}-src";
+        url = "git://git-annex.branchable.com/";
+        rev = "refs/tags/" + super.git-annex.version;
+        sha256 = "sha256-hDbwkpu7qpJZmLNe/rF4eOewLrozo/qpCjFEczZv9S4=";
+        # delete android and Android directories which cause issues on
+        # darwin (case insensitive directory). Since we don't need them
+        # during the build process, we can delete it to prevent a hash
+        # mismatch on darwin.
+        postFetch = ''
+          rm -r $out/doc/?ndroid*
         '';
-      }))
-    ]
-    ++ lib.optionals (lib.versionOlder self.ghc.version "9.10") [
-      (disableCabalFlag "OsPath")
-      (addBuildDepends [ self.filepath-bytestring ])
-    ]
-  );
+      };
+
+      patches = drv.patches or [ ] ++ [
+        # Prevent .desktop files from being installed to $out/usr/share.
+        # TODO(@sternenseemann): submit upstreamable patch resolving this
+        # (this should be possible by also taking PREFIX into account).
+        ./patches/git-annex-no-usr-prefix.patch
+      ];
+
+      postPatch = ''
+        substituteInPlace Makefile \
+          --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                         'InstallDesktopFile git-annex'
+      '';
+    }))
+  ];
 
   # Too strict bounds on servant
   # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
