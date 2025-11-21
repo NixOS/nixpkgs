@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   libao,
   libmodplug,
   libsamplerate,
@@ -41,12 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/macports/macports-ports/5c70d849addb2df2ea9ad2cc4fd4a15e5d4cc3a5/games/frotz/files/Makefile.patch";
-      extraPrefix = "";
-      hash = "sha256-ydIA1Td1ufp4y4Qfm5ijg9AY8z7cQ8BiX9hQz8gkKZY=";
-    })
-
     # https://gitlab.com/DavidGriffith/frotz/-/merge_requests/226
     ./0001-Fix-SDL_SOUND_CFLAGS-usage.patch
   ];
@@ -78,7 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
       ]
   );
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "HOMEBREW_PREFIX=/var/empty"
+  ];
+  preConfigure = ''
+    makeFlagsArray+=(CURSES_CONFIG="$PKG_CONFIG ncurses")
+  '';
+
   buildFlags = [ frontend ];
   installTargets = if frontend == "ncurses" then "install-frotz" else "install-${frontend}";
 
