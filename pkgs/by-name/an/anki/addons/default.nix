@@ -2,6 +2,8 @@
   callPackage,
 }:
 {
+  ajt-card-management = callPackage ./ajt-card-management { };
+
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
   anki-connect = callPackage ./anki-connect { };
