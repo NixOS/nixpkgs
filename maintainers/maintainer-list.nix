@@ -18864,6 +18864,12 @@
     githubId = 810877;
     name = "Tom Doggett";
   };
+  noderyos = {
+    email = "vincent.bsod@gmail.com";
+    github = "Noderyos";
+    githubId = 56077132;
+    name = "Noderyos";
+  };
   noiioiu = {
     github = "noiioiu";
     githubId = 151288161;
