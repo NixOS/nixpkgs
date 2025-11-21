@@ -64,4 +64,5 @@ get_imds() {
 get_imds -o "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
 (umask 077 && get_imds -o "$metaDir/user-data" http://169.254.169.254/1.0/user-data)
 get_imds -o "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
+get_imds -o "$metaDir/instance-id" http://169.254.169.254/1.0/meta-data/instance-id
 get_imds -o "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
