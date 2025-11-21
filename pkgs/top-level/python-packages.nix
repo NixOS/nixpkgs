@@ -9717,6 +9717,10 @@ self: super: with self; {
 
   model-checker = callPackage ../development/python-modules/model-checker { };
 
+  model-hosting-container-standards =
+    callPackage ../development/python-modules/model-hosting-container-standards
+      { };
+
   model-signing = callPackage ../development/python-modules/model-signing { };
 
   modelcif = callPackage ../development/python-modules/modelcif { };
