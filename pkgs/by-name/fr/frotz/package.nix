@@ -13,7 +13,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frotz";
   version = "2.55";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gsi6i1cXTONA9iZ39dPy1QH5trIg7P++/D/VVzexmpg=";
   };
 
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  enableParallelBuilding = true;
   nativeBuildInputs = [
     which
     pkg-config
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://davidgriffith.gitlab.io/frotz/";
-    changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${finalAttrs.version}/NEWS";
     description = "Z-machine interpreter for Infocom games and other interactive fiction";
     mainProgram = "frotz";
     platforms = lib.platforms.unix;
@@ -60,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})
