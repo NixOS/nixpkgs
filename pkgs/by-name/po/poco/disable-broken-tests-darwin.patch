@@ -1,0 +1,21 @@
+diff --git a/Data/testsuite/src/DataTest.cpp b/Data/testsuite/src/DataTest.cpp
+index a78c4e5..e8d9335 100644
+--- a/Data/testsuite/src/DataTest.cpp
++++ b/Data/testsuite/src/DataTest.cpp
+@@ -1652 +1652 @@ CppUnit::Test* DataTest::suite()
+-	CppUnit_addTest(pSuite, DataTest, testSQLChannel);
++	// CppUnit_addTest(pSuite, DataTest, testSQLChannel);
+diff --git a/Net/testsuite/src/HTTPClientSessionTest.cpp b/Net/testsuite/src/HTTPClientSessionTest.cpp
+index 31de150..b5c0d13 100644
+--- a/Net/testsuite/src/HTTPClientSessionTest.cpp
++++ b/Net/testsuite/src/HTTPClientSessionTest.cpp
+@@ -406 +406 @@ CppUnit::Test* HTTPClientSessionTest::suite()
+-	CppUnit_addTest(pSuite, HTTPClientSessionTest, testGetSmallUnix);
++	// CppUnit_addTest(pSuite, HTTPClientSessionTest, testGetSmallUnix);
+diff --git a/Net/testsuite/src/SocketTest.cpp b/Net/testsuite/src/SocketTest.cpp
+index 27c1800..9bd684b 100644
+--- a/Net/testsuite/src/SocketTest.cpp
++++ b/Net/testsuite/src/SocketTest.cpp
+@@ -900 +900 @@ CppUnit::Test* SocketTest::suite()
+-	CppUnit_addTest(pSuite, SocketTest, testEchoUnixLocal);
++	// CppUnit_addTest(pSuite, SocketTest, testEchoUnixLocal);

@@ -1,0 +1,28 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/w556rbsnv2fxb229av2iq180ri9x0d9j-source",
+      "rev": "77469f58916369bc3863194cabb05238577fb257",
+      "sha256": "18wjz5yqzr1dz6286p2w02fk2xjr54l477g90bz4pskjcqrqnjbv",
+      "url": "https://github.com/khchen/tinyre/archive/77469f58916369bc3863194cabb05238577fb257.tar.gz",
+      "ref": "1.6.0",
+      "packages": [
+        "tinyre"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/6aph9sfwcws7pd2725fwjnibdfrv7qmw-source",
+      "rev": "f8f6bd34bfa3fe12c64b919059ad856a96efcba0",
+      "sha256": "11m1rb6rzk70kvskppf97ddzgf5fnh9crjziqc6hib0jgsm5d615",
+      "url": "https://github.com/nim-lang/checksums/archive/f8f6bd34bfa3fe12c64b919059ad856a96efcba0.tar.gz",
+      "ref": "v0.2.1",
+      "packages": [
+        "checksums"
+      ],
+      "srcDir": "src"
+    }
+  ]
+}

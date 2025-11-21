@@ -1,0 +1,25 @@
+diff --git a/lddwrap/__init__.py b/lddwrap/__init__.py
+index 1222c97..db8a735 100644
+--- a/lddwrap/__init__.py
++++ b/lddwrap/__init__.py
+@@ -190,10 +190,8 @@ def list_dependencies(path: pathlib.Path,
+         Otherwise specified env is used.
+     :return: list of dependencies
+     """
+-    # We need to use /usr/bin/env since Popen ignores the PATH,
+-    # see https://stackoverflow.com/questions/5658622
+     proc = subprocess.Popen(
+-        ["/usr/bin/env", "ldd", path.as_posix()],
++        ["@ldd_bin@", path.as_posix()],
+         stdout=subprocess.PIPE,
+         stderr=subprocess.PIPE,
+         universal_newlines=True,
+@@ -209,7 +207,7 @@ def list_dependencies(path: pathlib.Path,
+ 
+     if unused:
+         proc_unused = subprocess.Popen(
+-            ["/usr/bin/env", "ldd", "--unused",
++            ["@ldd_bin@", "--unused",
+              path.as_posix()],
+             stdout=subprocess.PIPE,
+             stderr=subprocess.PIPE,

@@ -1,0 +1,102 @@
+name: "Request: NixOS module"
+description: "Create a new NixOS Module request for an existing package."
+title: "Module Request: nixos/MODULENAME"
+labels: ["0.kind: enhancement", "6.topic: nixos", "9.needs: module (new)"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Welcome to Nixpkgs. Please replace the **`Module Request: nixos/MODULENAME`** template above with the correct module name (As seen in the [NixOS Option Search](https://search.nixos.org/options)).
+
+        > [!TIP]
+        > For instance, if you were filing a request against the missing `hello` module, your title would be as follows:
+        > ```
+        > Module Request: nixos/hello
+        > ```
+
+        ---
+  - type: "dropdown"
+    id: "version"
+    attributes:
+      label: "Nixpkgs version"
+      description: |
+        What version of Nixpkgs are you using?
+
+        If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
+      options:
+        - "Please select a version."
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
+        - "- Old Stable (25.05)"
+      default: 0
+    validations:
+      required: true
+  - type: "textarea"
+    id: "description"
+    attributes:
+      label: "Describe the proposed module"
+      description: "Please include a clear and concise description of what the module should accomplish."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "additional-context"
+    attributes:
+      label: "Additional context"
+      description: "Add any other context about the proposed module here."
+    validations:
+      required: false
+  - type: "textarea"
+    id: "maintainers"
+    attributes:
+      label: "Notify maintainers"
+      description: |
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+      value: |2
+
+
+        ---
+
+        **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)
+    validations:
+      required: false
+  - type: "checkboxes"
+    id: "sanity-check"
+    attributes:
+      label: "I assert that this issue is relevant for Nixpkgs"
+      options:
+        - label: "I assert that this module does not yet exist in an [open pull request](https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%228.has%3A+module+%28new%29%22) or in [NixOS Unstable](https://search.nixos.org/options?channel=unstable)."
+          required: true
+        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%229.needs%3A+module+%28new%29%22). "
+          required: true
+        - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+  - type: "markdown"
+    attributes:
+      value: |
+        # Thank you for helping improve NixOS!
+
+        ---
+  - type: "textarea"
+    id: "prioritisation"
+    attributes:
+      label: "Is this issue important to you?"
+      description: |
+        **Please do not modify this text area!**
+
+        This template helps Nixpkgs developers know which issues should be prioritised by allowing users to vote with a :+1: reaction.
+        This is not a guarantee that highly-requested issues will be fixed first, but it helps us to figure out what's important to users. Please react on other users' issues if you find them important.
+      value: |
+        Add a :+1: [reaction] to [issues you find important].
+
+        [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+        [issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

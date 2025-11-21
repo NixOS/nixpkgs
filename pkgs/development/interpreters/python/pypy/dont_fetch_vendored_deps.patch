@@ -1,0 +1,12 @@
+diff -ur a/lib_pypy/pypy_tools/build_cffi_imports.py b/lib_pypy/pypy_tools/build_cffi_imports.py
+--- a/lib_pypy/pypy_tools/build_cffi_imports.py	2021-04-12 01:11:48.000000000 -0400
++++ b/lib_pypy/pypy_tools/build_cffi_imports.py	2021-07-16 06:37:03.000000000 -0400
+@@ -225,6 +225,8 @@
+ 
+         print('*', ' '.join(args), file=sys.stderr)
+         if embed_dependencies and key in cffi_dependencies:
++            print("Nixpkgs: skipping fetching/building dependency", key)
++        elif False:
+             status, stdout, stderr = _build_dependency(key)
+             if status != 0:
+                 failures.append((key, module))

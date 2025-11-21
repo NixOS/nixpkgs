@@ -1,0 +1,21 @@
+From 59b84698b142f5a0998ee9e395df717a1b77e9b2 Mon Sep 17 00:00:00 2001
+From: Fabian Affolter <mail@fabian-affolter.ch>
+Date: Wed, 1 Jan 2025 21:57:06 +0100
+Subject: [PATCH] Add build-system section
+
+---
+ pyproject.toml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index bcb1e65e3..00dc374fe 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -28,3 +28,7 @@ black = "^24.4"
+ 
+ [tool.black]
+ line-length=120
++
++[build-system]
++requires = ["poetry_core>=1.0.0"]
++build-backend = "poetry.core.masonry.api"

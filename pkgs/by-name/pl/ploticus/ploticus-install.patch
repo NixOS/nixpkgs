@@ -1,0 +1,12 @@
+--- pl240src/src/Makefile	2008-01-15 21:05:14.000000000 +0100
++++ pl240src/src/Makefile	2008-03-26 23:51:53.000000000 +0100
+@@ -131,7 +131,7 @@ ZFLAG = -DWZ
+ 
+ 
+ #### If you do a "make install", where do you want the executable(s) to be moved to?
+-INSTALLBIN = /usr/local/bin
++INSTALLBIN = $(out)/bin
+ 
+ 
+ #### For LOCALE support (non-roman alphabets & collation), uncomment the following..
+

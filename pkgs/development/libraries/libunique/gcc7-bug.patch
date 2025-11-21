@@ -1,0 +1,18 @@
+gcc-7 newly detects this class of bugs.
+In this particular case it's clear that the inention was
+to detect if the string is non-NULL *and* non-empty.
+
+
+diff --git a/unique/uniqueapp.c b/unique/uniqueapp.c
+index b40a86c..66a7226 100644
+--- a/unique/uniqueapp.c
++++ b/unique/uniqueapp.c
+@@ -176,7 +176,7 @@ set_startup_id (UniqueBackend *backend,
+ {
+   gchar *id;
+ 
+-  if (startup_id && startup_id != '\0')
++  if (startup_id && *startup_id != '\0')
+     id = g_strdup (startup_id);
+   else
+     {

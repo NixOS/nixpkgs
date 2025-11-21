@@ -1,0 +1,95 @@
+From b1bc81051810899189b071349443d82fdc1caebe Mon Sep 17 00:00:00 2001
+From: NImaism <nima.gholamyy@gmail.com>
+Date: Sat, 16 Aug 2025 22:20:15 +0330
+Subject: [PATCH] fix: warp endpoints issues
+
+---
+ app/app.go               | 18 ++++++++++++++----
+ cmd/warp-plus/rootcmd.go | 10 ----------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/app/app.go b/app/app.go
+index 770c58b536e11be3ebdb098c54cf74228139cb51..0197655d681539ed1dd1915ed65107cb7c007b17 100644
+--- a/app/app.go
++++ b/app/app.go
+@@ -56,6 +56,16 @@ func RunWarp(ctx context.Context, l *slog.Logger, opts WarpOptions) error {
+ 		return errors.New("must provide country for psiphon")
+ 	}
+ 
++	if opts.Endpoint == "" {
++		ident, err := warp.LoadOrCreateIdentity(l, path.Join(opts.CacheDir, "primary"), opts.License)
++		if err != nil {
++			l.Error("failed to load or create primary warp identity")
++			return err
++		}
++
++		opts.Endpoint = ident.Config.Peers[0].Endpoint.V4[:len(ident.Config.Peers[0].Endpoint.V4)-2] + ":500"
++	}
++
+ 	// Decide Working Scenario
+ 	endpoints := []string{opts.Endpoint, opts.Endpoint}
+ 
+@@ -96,7 +106,7 @@ func RunWarp(ctx context.Context, l *slog.Logger, opts WarpOptions) error {
+ 	case opts.Gool:
+ 		l.Info("running in warp-in-warp (gool) mode")
+ 		// run warp in warp
+-		warpErr = runWarpInWarp(ctx, l, opts, endpoints)
++		warpErr = runWarpInWarp(ctx, l, opts, endpoints[0])
+ 	default:
+ 		l.Info("running in normal warp mode")
+ 		// just run primary warp on bindAddress
+@@ -237,7 +247,7 @@ func runWarp(ctx context.Context, l *slog.Logger, opts WarpOptions, endpoint str
+ 	return nil
+ }
+ 
+-func runWarpInWarp(ctx context.Context, l *slog.Logger, opts WarpOptions, endpoints []string) error {
++func runWarpInWarp(ctx context.Context, l *slog.Logger, opts WarpOptions, endpoint string) error {
+ 	// make primary identity
+ 	ident1, err := warp.LoadOrCreateIdentity(l, path.Join(opts.CacheDir, "primary"), opts.License)
+ 	if err != nil {
+@@ -254,7 +264,7 @@ func runWarpInWarp(ctx context.Context, l *slog.Logger, opts WarpOptions, endpoi
+ 
+ 	// Enable trick and keepalive on all peers in config
+ 	for i, peer := range conf.Peers {
+-		peer.Endpoint = endpoints[0]
++		peer.Endpoint = endpoint
+ 		peer.Trick = true
+ 		peer.KeepAlive = 5
+ 
+@@ -297,7 +307,7 @@ func runWarpInWarp(ctx context.Context, l *slog.Logger, opts WarpOptions, endpoi
+ 	}
+ 
+ 	// Create a UDP port forward between localhost and the remote endpoint
+-	addr, err := wiresocks.NewVtunUDPForwarder(ctx, netip.MustParseAddrPort("127.0.0.1:0"), endpoints[0], tnet1, singleMTU)
++	addr, err := wiresocks.NewVtunUDPForwarder(ctx, netip.MustParseAddrPort("127.0.0.1:0"), endpoint, tnet1, singleMTU)
+ 	if err != nil {
+ 		return err
+ 	}
+diff --git a/cmd/warp-plus/rootcmd.go b/cmd/warp-plus/rootcmd.go
+index 87642c3708d5084d89771808c0ff7e96f6da1014..87eec817a35390cae4b66ad51fd152fce55670f6 100644
+--- a/cmd/warp-plus/rootcmd.go
++++ b/cmd/warp-plus/rootcmd.go
+@@ -13,7 +13,6 @@ import (
+ 	"github.com/adrg/xdg"
+ 	"github.com/bepass-org/warp-plus/app"
+ 	p "github.com/bepass-org/warp-plus/psiphon"
+-	"github.com/bepass-org/warp-plus/warp"
+ 	"github.com/bepass-org/warp-plus/wiresocks"
+ 	"github.com/peterbourgon/ff/v4"
+ 	"github.com/peterbourgon/ff/v4/ffval"
+@@ -205,15 +204,6 @@ func (c *rootConfig) exec(ctx context.Context, args []string) error {
+ 		opts.Scan = &wiresocks.ScanOptions{V4: c.v4, V6: c.v6, MaxRTT: c.rtt}
+ 	}
+ 
+-	// If the endpoint is not set, choose a random warp endpoint
+-	if opts.Endpoint == "" {
+-		addrPort, err := warp.RandomWarpEndpoint(c.v4, c.v6)
+-		if err != nil {
+-			fatal(l, err)
+-		}
+-		opts.Endpoint = addrPort.String()
+-	}
+-
+ 	go func() {
+ 		if err := app.RunWarp(ctx, l, opts); err != nil {
+ 			fatal(l, err)

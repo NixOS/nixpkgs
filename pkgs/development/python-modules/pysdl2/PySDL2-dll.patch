@@ -1,0 +1,102 @@
+diff --git a/sdl2/dll.py b/sdl2/dll.py
+index 2413329..f460bf6 100644
+--- a/sdl2/dll.py
++++ b/sdl2/dll.py
+@@ -235,7 +235,7 @@ class DLL(object):
+     """Function wrapper around the different DLL functions. Do not use or
+     instantiate this one directly from your user code.
+     """
+-    def __init__(self, libinfo, libnames, path=None):
++    def __init__(self, libinfo, libfile):
+         self._dll = None
+         self._deps = None
+         self._libname = libinfo
+@@ -247,11 +247,7 @@ class DLL(object):
+             "SDL2_image": (2, 0, 1),
+             "SDL2_gfx": (1, 0, 3)
+         }
+-        foundlibs = _findlib(libnames, path)
+-        dllmsg = "PYSDL2_DLL_PATH: %s" % (os.getenv("PYSDL2_DLL_PATH") or "unset")
+-        if len(foundlibs) == 0:
+-            raise RuntimeError("could not find any library for %s (%s)" %
+-                               (libinfo, dllmsg))
++        foundlibs = [ libfile ]
+         for libfile in foundlibs:
+             try:
+                 self._dll = CDLL(libfile)
+@@ -276,9 +272,6 @@ class DLL(object):
+                                (foundlibs, libinfo))
+         if _using_ms_store_python():
+             self._deps = _preload_deps(libinfo, self._libfile)
+-        if path is not None and sys.platform in ("win32",) and \
+-            path in self._libfile:
+-            os.environ["PATH"] = "%s;%s" % (path, os.environ["PATH"])
+ 
+     def bind_function(self, funcname, args=None, returns=None, added=None):
+         """Binds the passed argument and return value types to the specified
+@@ -359,7 +352,7 @@ class DLL(object):
+ # Once the DLL class is defined, try loading the main SDL2 library
+ 
+ try:
+-    dll = DLL("SDL2", ["SDL2", "SDL2-2.0", "SDL2-2.0.0"], os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2", "@SDL2@")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff --git a/sdl2/sdlgfx.py b/sdl2/sdlgfx.py
+index 015eeaf..d6ce52f 100644
+--- a/sdl2/sdlgfx.py
++++ b/sdl2/sdlgfx.py
+@@ -27,8 +27,7 @@ __all__ = [
+ 
+ 
+ try:
+-    dll = DLL("SDL2_gfx", ["SDL2_gfx", "SDL2_gfx-1.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_gfx", "@SDL2_gfx@")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff --git a/sdl2/sdlimage.py b/sdl2/sdlimage.py
+index a702136..dcdea51 100644
+--- a/sdl2/sdlimage.py
++++ b/sdl2/sdlimage.py
+@@ -30,9 +30,7 @@ __all__ = [
+ 
+ 
+ try:
+-    dll = DLL(
+-        "SDL2_image", ["SDL2_image", "SDL2_image-2.0"], os.getenv("PYSDL2_DLL_PATH")
+-    )
++    dll = DLL("SDL2_image", "@SDL2_image@")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff --git a/sdl2/sdlmixer.py b/sdl2/sdlmixer.py
+index 5f2163c..23d95b0 100644
+--- a/sdl2/sdlmixer.py
++++ b/sdl2/sdlmixer.py
+@@ -50,8 +50,7 @@ __all__ = [
+ ]
+ 
+ try:
+-    dll = DLL("SDL2_mixer", ["SDL2_mixer", "SDL2_mixer-2.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_mixer", "@SDL2_mixer@")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff --git a/sdl2/sdlttf.py b/sdl2/sdlttf.py
+index 7c5f7db..61814cd 100644
+--- a/sdl2/sdlttf.py
++++ b/sdl2/sdlttf.py
+@@ -41,8 +41,7 @@ __all__ = [
+ 
+ 
+ try:
+-    dll = DLL("SDL2_ttf", ["SDL2_ttf", "SDL2_ttf-2.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_ttf", "@SDL2_ttf@")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 

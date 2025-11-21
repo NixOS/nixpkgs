@@ -1,0 +1,345 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 989abbb..dbfc483 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -26,6 +26,55 @@ dependencies = [
+  "memchr",
+ ]
+ 
++[[package]]
++name = "anstream"
++version = "0.6.18"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "8acc5369981196006228e28809f761875c0327210a891e941f4c683b3a99529b"
++dependencies = [
++ "anstyle",
++ "anstyle-parse",
++ "anstyle-query",
++ "anstyle-wincon",
++ "colorchoice",
++ "is_terminal_polyfill",
++ "utf8parse",
++]
++
++[[package]]
++name = "anstyle"
++version = "1.0.10"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "55cc3b69f167a1ef2e161439aa98aed94e6028e5f9a59be9a6ffb47aef1651f9"
++
++[[package]]
++name = "anstyle-parse"
++version = "0.2.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3b2d16507662817a6a20a9ea92df6652ee4f94f914589377d69f3b21bc5798a9"
++dependencies = [
++ "utf8parse",
++]
++
++[[package]]
++name = "anstyle-query"
++version = "1.1.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "79947af37f4177cfead1110013d678905c37501914fba0efea834c3fe9a8d60c"
++dependencies = [
++ "windows-sys 0.59.0",
++]
++
++[[package]]
++name = "anstyle-wincon"
++version = "3.0.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2109dbce0e72be3ec00bed26e6a7479ca384ad226efdd66db8fa2e3a38c83125"
++dependencies = [
++ "anstyle",
++ "windows-sys 0.59.0",
++]
++
+ [[package]]
+ name = "anyhow"
+ version = "1.0.93"
+@@ -368,6 +417,46 @@ dependencies = [
+  "libloading",
+ ]
+ 
++[[package]]
++name = "clap"
++version = "4.5.23"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3135e7ec2ef7b10c6ed8950f0f792ed96ee093fa088608f1c76e569722700c84"
++dependencies = [
++ "clap_builder",
++ "clap_derive",
++]
++
++[[package]]
++name = "clap_builder"
++version = "4.5.23"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "30582fc632330df2bd26877bde0c1f4470d57c582bbc070376afcd04d8cb4838"
++dependencies = [
++ "anstream",
++ "anstyle",
++ "clap_lex",
++ "strsim",
++]
++
++[[package]]
++name = "clap_derive"
++version = "4.5.18"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "4ac6a0c7b1a9e9a5186361f67dfa1b88213572f427fb9ab038efb2bd8c582dab"
++dependencies = [
++ "heck",
++ "proc-macro2",
++ "quote",
++ "syn",
++]
++
++[[package]]
++name = "clap_lex"
++version = "0.7.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
++
+ [[package]]
+ name = "cmake"
+ version = "0.1.52"
+@@ -377,6 +466,12 @@ dependencies = [
+  "cc",
+ ]
+ 
++[[package]]
++name = "colorchoice"
++version = "1.0.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
++
+ [[package]]
+ name = "concurrent-queue"
+ version = "2.5.0"
+@@ -558,6 +653,7 @@ version = "2.0.1"
+ dependencies = [
+  "anyhow",
+  "ash",
++ "clap",
+  "gettext-rs",
+  "git2",
+  "gtk4",
+@@ -1443,6 +1539,12 @@ version = "2.10.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ddc24109865250148c2e0f3d25d4f0f479571723792d3802153c60922a4fb708"
+ 
++[[package]]
++name = "is_terminal_polyfill"
++version = "1.70.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7943c866cc5cd64cbc25b2e01621d07fa8eb2a1a23160ee81ce38704e97b8ecf"
++
+ [[package]]
+ name = "itertools"
+ version = "0.12.1"
+@@ -2637,6 +2739,12 @@ version = "1.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+ 
++[[package]]
++name = "strsim"
++version = "0.11.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
++
+ [[package]]
+ name = "subtle"
+ version = "2.6.1"
+@@ -3045,6 +3153,12 @@ version = "1.0.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
+ 
++[[package]]
++name = "utf8parse"
++version = "0.2.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
++
+ [[package]]
+ name = "uuid"
+ version = "1.11.0"
+diff --git a/Cargo.toml b/Cargo.toml
+index 512e892..01e9fb7 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -42,3 +42,4 @@ notify-rust = "4.11.3"
+ zbus = { version = "5.1.1", features = ["tokio"] }
+ tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
+ tracing = "0.1.41"
++clap = { version = "4.5.23", features = ["derive"] }
+diff --git a/meson.build b/meson.build
+index 4d58596..53991dd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -77,6 +77,7 @@ meson.add_dist_script(
+ 
+ global_conf = configuration_data()
+ global_conf.set('APP_ID', application_id)
++global_conf.set('DESCRIPTION', description)
+ global_conf.set('RESOURCES_BASE_PATH', '/' + base_id.replace('.', '/'))
+ global_conf.set('PKGDATADIR', pkgdatadir)
+ global_conf.set('PROFILE', profile)
+diff --git a/src/constants.rs.in b/src/constants.rs.in
+index db00776..886e545 100644
+--- a/src/constants.rs.in
++++ b/src/constants.rs.in
+@@ -3,6 +3,7 @@ use std::path::PathBuf;
+ 
+ pub const APP_NAME: &str = "@PRETTY_NAME@";
+ pub const APP_ID: &str = "@APP_ID@";
++pub const DESCRIPTION: &str = "@DESCRIPTION@";
+ pub const RESOURCES_BASE_PATH: &str = "@RESOURCES_BASE_PATH@";
+ pub const PKG_DATA_DIR: &str = "@PKGDATADIR@";
+ pub const RESOURCES: &str = concat!("@PKGDATADIR@", "/resources.gresource");
+diff --git a/src/main.rs b/src/main.rs
+index 4453911..cd7c212 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,5 @@
+ use anyhow::Result;
++use clap::Parser;
+ use constants::{resources, APP_ID, APP_NAME, GETTEXT_PACKAGE, LOCALE_DIR, RESOURCES_BASE_PATH};
+ use file_builders::{
+     active_runtime_json::restore_active_runtime_backup,
+@@ -82,6 +83,11 @@ fn main() -> Result<()> {
+     gettextrs::bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR).expect("Unable to bind the text domain");
+     gettextrs::textdomain(GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
+ 
++    let opts = CmdLineOpts::parse();
++    if let Some(exit_code) = opts.handle_non_activating_opts() {
++        std::process::exit(exit_code);
++    }
++
+     gtk::init()?;
+     glib::set_application_name(APP_NAME);
+ 
+@@ -115,10 +121,6 @@ fn main() -> Result<()> {
+     let sender = BROKER.sender();
+     main_app.connect_command_line(move |this, cmdline| {
+         let opts = CmdLineOpts::from_cmdline(cmdline);
+-        if let Some(exit_code) = opts.handle_non_activating_opts() {
+-            this.quit();
+-            return exit_code;
+-        }
+         this.activate();
+         sender.emit(Msg::HandleCommandLine(opts));
+         0
+diff --git a/src/ui/cmdline_opts.rs b/src/ui/cmdline_opts.rs
+index 48458e0..4b224c6 100644
+--- a/src/ui/cmdline_opts.rs
++++ b/src/ui/cmdline_opts.rs
+@@ -1,4 +1,8 @@
+-use crate::config::Config;
++use crate::{
++    config::Config,
++    constants::{APP_NAME, DESCRIPTION, VERSION},
++};
++use clap::Parser;
+ use gtk::{
+     gio::{
+         prelude::{ApplicationCommandLineExt, ApplicationExt},
+@@ -8,21 +12,47 @@ use gtk::{
+ };
+ use tracing::error;
+ 
+-#[derive(Debug, Clone)]
++#[derive(Parser, Debug, Clone)]
++#[command(name = APP_NAME)]
++#[command(version = VERSION)]
++#[command(about = DESCRIPTION, long_about = None)]
+ pub struct CmdLineOpts {
++    #[arg(short = 'S', long = "start", help = "Start the XR Service right away")]
+     pub start: bool,
++
++    #[arg(
++        short = 'l',
++        long = "list-profiles",
++        help = "List the available profiles"
++    )]
+     pub list_profiles: bool,
++
++    #[arg(
++        short = 'p',
++        long = "profile",
++        help = "Switch to the profile indicated by the UUID"
++    )]
+     pub profile_uuid: Option<String>,
++
++    #[arg(
++        short = 'd',
++        long = "skip-dependency-check",
++        help = "Skip dependency checks when building profiles"
++    )]
+     pub skip_depcheck: bool,
++
++    #[arg(
++        short = 'c',
++        long = "check-deps-for",
++        help = "Prints missing dependencies for given profile id; returns nothing if all dependencies are satisfied"
++    )]
+     pub check_dependencies_for: Option<String>,
+ }
+ 
+ impl CmdLineOpts {
+     const OPT_START: (&'static str, char) = ("start", 'S');
+-    const OPT_LIST_PROFILES: (&'static str, char) = ("list-profiles", 'l');
+     const OPT_PROFILE: (&'static str, char) = ("profile", 'p');
+     const OPT_SKIP_DEPCHECK: (&'static str, char) = ("skip-dependency-check", 'd');
+-    const OPT_CHECK_DEPS_FOR: (&'static str, char) = ("check-deps-for", 'c');
+ 
+     pub fn init(app: &impl IsA<Application>) {
+         app.add_main_option(
+@@ -33,14 +63,6 @@ impl CmdLineOpts {
+             "Start the XR Service right away",
+             None,
+         );
+-        app.add_main_option(
+-            Self::OPT_LIST_PROFILES.0,
+-            glib::Char::try_from(Self::OPT_LIST_PROFILES.1).unwrap(),
+-            glib::OptionFlags::IN_MAIN,
+-            glib::OptionArg::None,
+-            "List the available profiles",
+-            None,
+-        );
+         app.add_main_option(
+             Self::OPT_PROFILE.0,
+             glib::Char::try_from(Self::OPT_PROFILE.1).unwrap(),
+@@ -57,14 +79,6 @@ impl CmdLineOpts {
+             "Skip dependency checks when building profiles",
+             None,
+         );
+-        app.add_main_option(
+-            Self::OPT_CHECK_DEPS_FOR.0,
+-            glib::Char::try_from(Self::OPT_CHECK_DEPS_FOR.1).unwrap(),
+-            glib::OptionFlags::IN_MAIN,
+-            glib::OptionArg::String,
+-            "Prints missing dependencies for given profile id; returns nothing if all dependencies are satisfied",
+-            None,
+-        );
+     }
+ 
+     /// returns an exit code if the application should quit immediately
+@@ -100,14 +114,12 @@ impl CmdLineOpts {
+         let opts = cmdline.options_dict();
+         Self {
+             start: opts.contains(Self::OPT_START.0),
+-            list_profiles: opts.contains(Self::OPT_LIST_PROFILES.0),
++            list_profiles: false,
+             profile_uuid: opts
+                 .lookup::<String>(Self::OPT_PROFILE.0)
+                 .unwrap_or_default(),
+             skip_depcheck: opts.contains(Self::OPT_SKIP_DEPCHECK.0),
+-            check_dependencies_for: opts
+-                .lookup::<String>(Self::OPT_CHECK_DEPS_FOR.0)
+-                .unwrap_or_default(),
++            check_dependencies_for: None,
+         }
+     }
+ }

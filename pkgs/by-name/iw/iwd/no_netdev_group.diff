@@ -1,0 +1,30 @@
+diff --git a/src/iwd-dbus.conf b/src/iwd-dbus.conf
+index f2509ebc..a443987d 100644
+--- a/src/iwd-dbus.conf
++++ b/src/iwd-dbus.conf
+@@ -19,10 +19,6 @@
+     <allow send_destination="net.connman.iwd"/>
+   </policy>
+ 
+-  <policy group="netdev">
+-    <allow send_destination="net.connman.iwd"/>
+-  </policy>
+-
+   <policy context="default">
+     <deny send_destination="net.connman.iwd"/>
+   </policy>
+diff --git a/wired/ead-dbus.conf b/wired/ead-dbus.conf
+index 8a685e0a..749d0c05 100644
+--- a/wired/ead-dbus.conf
++++ b/wired/ead-dbus.conf
+@@ -17,10 +17,6 @@
+     <allow send_destination="net.connman.ead"/>
+   </policy>
+ 
+-  <policy group="netdev">
+-    <allow send_destination="net.connman.ead"/>
+-  </policy>
+-
+   <policy context="default">
+     <deny send_destination="net.connman.ead"/>
+   </policy>

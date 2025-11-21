@@ -1,0 +1,26 @@
+diff --git a/autoload/health/openscad_nvim.vim b/autoload/health/openscad_nvim.vim
+index d6d4b4c..9853877 100644
+--- a/autoload/health/openscad_nvim.vim
++++ b/autoload/health/openscad_nvim.vim
+@@ -15,7 +15,7 @@ function! s:check_zathura_installed() abort
+ endfunction
+
+ function! s:check_htop_installed() abort
+-	if !executable('htop')
++	if !executable('@htop@')
+ 		call v:lua.vim.health.error('has(htop)','install htop')
+ 	else
+ 		call v:lua.vim.health.ok("htop is installed")
+diff --git a/lua/openscad.lua b/lua/openscad.lua
+index 0a26d08..1264989 100644
+--- a/lua/openscad.lua
++++ b/lua/openscad.lua
+@@ -126,7 +126,7 @@ function M.exec_openscad()
+ 		jobCommand = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD ' .. filename
+ 	else
+ 		-- TODO: What about Windows?
+-		jobCommand = 'openscad ' .. filename
++		jobCommand = '@openscad@ ' .. filename
+ 	end
+
+ 	vim.fn.jobstart(jobCommand)

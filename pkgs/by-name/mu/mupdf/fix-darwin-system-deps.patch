@@ -1,0 +1,240 @@
+diff --git a/Makefile b/Makefile
+index a16a69968..aa741b037 100644
+--- a/Makefile
++++ b/Makefile
+@@ -454,8 +454,10 @@ install-libs: libs install-headers
+ ifeq ($(shared),yes)
+ 	install -m $(SO_INSTALL_MODE) $(OUT)/libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)$(SO_VERSION)
+   ifneq ($(OS),OpenBSD)
+-	ln -sf libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)$(SO_VERSION_MAJOR)
+-	ln -sf libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)
++    ifneq ($(OS),Darwin)
++		ln -sf libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)$(SO_VERSION_MAJOR)
++		ln -sf libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)
++    endif
+   endif
+ else
+ 	install -m 644 $(MUPDF_LIB) $(DESTDIR)$(libdir)
+diff --git a/Makerules b/Makerules
+index ba4df2189..8eb62622a 100644
+--- a/Makerules
++++ b/Makerules
+@@ -212,101 +212,82 @@ ifneq "$(CLUSTER)" ""
+   CFLAGS += -DCLUSTER
+ endif
+ 
+-ifeq ($(OS),Darwin)
+-  HAVE_GLUT := yes
+-  SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
+-  SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
+-  CC = xcrun cc
+-  AR = xcrun ar
+-  LD = xcrun ld
+-  RANLIB = xcrun ranlib
+-
+-  ifneq ($(ARCHFLAGS),)
+-    $(warning "MacOS with ARCHFLAGS set. Assuming we are building for arm64, and setting HAVE_LIBCRYPTO to no.")
+-    HAVE_LIBCRYPTO := no
+-  else ifeq (, $(shell command -v pkg-config))
+-    $(warning "No pkg-config found, install it for proper integration of libcrypto")
+-  else
+-    HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
+-    ifeq ($(HAVE_LIBCRYPTO),yes)
+-      LIBCRYPTO_CFLAGS := $(shell pkg-config --cflags libcrypto) -DHAVE_LIBCRYPTO
+-      LIBCRYPTO_LIBS := $(shell pkg-config --libs libcrypto)
+-    endif
+-  endif
+-
+-else
+-
+-  ifeq ($(OS),Linux)
+-    HAVE_OBJCOPY := yes
+-  endif
++ifeq ($(OS),Linux)
++  HAVE_OBJCOPY := yes
++endif
+ 
+-  ifeq ($(OS),OpenBSD)
+-    LDFLAGS += -pthread
+-  endif
++ifeq ($(OS),OpenBSD)
++  LDFLAGS += -pthread
++endif
+ 
+-  ifeq ($(shell pkg-config --exists 'freetype2 >= 18.3.12' && echo yes),yes)
+-    SYS_FREETYPE_CFLAGS := $(shell pkg-config --cflags freetype2)
+-    SYS_FREETYPE_LIBS := $(shell pkg-config --libs freetype2)
+-  endif
+-  ifeq ($(shell pkg-config --exists 'gumbo >= 0.10.0' && echo yes),yes)
+-    SYS_GUMBO_CFLAGS := $(shell pkg-config --cflags gumbo)
+-    SYS_GUMBO_LIBS := $(shell pkg-config --libs gumbo)
+-  endif
+-  ifeq ($(shell pkg-config --exists 'harfbuzz >= 2.0.0' && echo yes),yes)
+-    SYS_HARFBUZZ_CFLAGS := $(shell pkg-config --cflags harfbuzz)
+-    SYS_HARFBUZZ_LIBS := $(shell pkg-config --libs harfbuzz)
+-  endif
+-  ifeq ($(shell pkg-config --exists lcms2 && echo yes),yes)
+-    SYS_LCMS2_CFLAGS := $(shell pkg-config --cflags lcms2)
+-    SYS_LCMS2_LIBS := $(shell pkg-config --libs lcms2)
+-  endif
+-  ifeq ($(shell pkg-config --exists libjpeg && echo yes),yes)
+-    SYS_LIBJPEG_CFLAGS := $(shell pkg-config --cflags libjpeg)
+-    SYS_LIBJPEG_LIBS := $(shell pkg-config --libs libjpeg)
+-  endif
+-  ifeq ($(shell pkg-config --exists 'libopenjp2 >= 2.1.0' && echo yes),yes)
+-    SYS_OPENJPEG_CFLAGS := $(shell pkg-config --cflags libopenjp2)
+-    SYS_OPENJPEG_LIBS := $(shell pkg-config --libs libopenjp2)
+-  endif
+-  ifeq ($(shell pkg-config --exists 'zlib >= 1.2.6' && echo yes),yes)
+-    SYS_ZLIB_CFLAGS := $(shell pkg-config --cflags zlib)
+-    SYS_ZLIB_LIBS := $(shell pkg-config --libs zlib)
+-  endif
+-  ifeq ($(shell pkg-config --exists 'libbrotlidec libbrotlienc >= 0.6.0' && echo yes),yes)
+-    SYS_BROTLI_CFLAGS := $(shell pkg-config --cflags libbrotlidec libbrotlienc)
+-    SYS_BROTLI_LIBS := $(shell pkg-config --libs libbrotlidec libbrotlienc)
+-  endif
++ifeq ($(shell pkg-config --exists 'freetype2 >= 18.3.12' && echo yes),yes)
++  SYS_FREETYPE_CFLAGS := $(shell pkg-config --cflags freetype2)
++  SYS_FREETYPE_LIBS := $(shell pkg-config --libs freetype2)
++endif
++ifeq ($(shell pkg-config --exists 'gumbo >= 0.10.0' && echo yes),yes)
++  SYS_GUMBO_CFLAGS := $(shell pkg-config --cflags gumbo)
++  SYS_GUMBO_LIBS := $(shell pkg-config --libs gumbo)
++endif
++ifeq ($(shell pkg-config --exists 'harfbuzz >= 2.0.0' && echo yes),yes)
++  SYS_HARFBUZZ_CFLAGS := $(shell pkg-config --cflags harfbuzz)
++  SYS_HARFBUZZ_LIBS := $(shell pkg-config --libs harfbuzz)
++endif
++ifeq ($(shell pkg-config --exists lcms2 && echo yes),yes)
++  SYS_LCMS2_CFLAGS := $(shell pkg-config --cflags lcms2)
++  SYS_LCMS2_LIBS := $(shell pkg-config --libs lcms2)
++endif
++ifeq ($(shell pkg-config --exists libjpeg && echo yes),yes)
++  SYS_LIBJPEG_CFLAGS := $(shell pkg-config --cflags libjpeg)
++  SYS_LIBJPEG_LIBS := $(shell pkg-config --libs libjpeg)
++endif
++ifeq ($(shell pkg-config --exists 'libopenjp2 >= 2.1.0' && echo yes),yes)
++  SYS_OPENJPEG_CFLAGS := $(shell pkg-config --cflags libopenjp2)
++  SYS_OPENJPEG_LIBS := $(shell pkg-config --libs libopenjp2)
++endif
++ifeq ($(shell pkg-config --exists 'zlib >= 1.2.6' && echo yes),yes)
++  SYS_ZLIB_CFLAGS := $(shell pkg-config --cflags zlib)
++  SYS_ZLIB_LIBS := $(shell pkg-config --libs zlib)
++endif
++ifeq ($(shell pkg-config --exists 'libbrotlidec libbrotlienc >= 0.6.0' && echo yes),yes)
++  SYS_BROTLI_CFLAGS := $(shell pkg-config --cflags libbrotlidec libbrotlienc)
++  SYS_BROTLI_LIBS := $(shell pkg-config --libs libbrotlidec libbrotlienc)
++endif
+ 
+-  HAVE_SYS_LEPTONICA := $(shell pkg-config --exists 'lept >= 1.7.4' && echo yes)
+-  ifeq ($(HAVE_SYS_LEPTONICA),yes)
+-    SYS_LEPTONICA_CFLAGS := $(shell pkg-config --cflags lept)
+-    SYS_LEPTONICA_LIBS := $(shell pkg-config --libs lept)
+-  endif
++HAVE_SYS_LEPTONICA := $(shell pkg-config --exists 'lept >= 1.7.4' && echo yes)
++ifeq ($(HAVE_SYS_LEPTONICA),yes)
++  SYS_LEPTONICA_CFLAGS := $(shell pkg-config --cflags lept)
++  SYS_LEPTONICA_LIBS := $(shell pkg-config --libs lept)
++endif
+ 
+-  HAVE_SYS_TESSERACT := $(shell pkg-config --exists 'tesseract >= 4.0.0' && echo yes)
+-  ifeq ($(HAVE_SYS_TESSERACT),yes)
+-    SYS_TESSERACT_CFLAGS := $(shell pkg-config --cflags tesseract)
+-    SYS_TESSERACT_LIBS := $(shell pkg-config --libs tesseract)
+-  endif
++HAVE_SYS_TESSERACT := $(shell pkg-config --exists 'tesseract >= 4.0.0' && echo yes)
++ifeq ($(HAVE_SYS_TESSERACT),yes)
++  SYS_TESSERACT_CFLAGS := $(shell pkg-config --cflags tesseract)
++  SYS_TESSERACT_LIBS := $(shell pkg-config --libs tesseract)
++endif
+ 
+-  HAVE_SYS_LIBARCHIVE := $(shell pkg-config --exists 'libarchive' && echo yes)
+-  ifeq ($(HAVE_SYS_LIBARCHIVE),yes)
+-    SYS_LIBARCHIVE_CFLAGS := $(shell pkg-config --cflags libarchive)
+-    SYS_LIBARCHIVE_LIBS := $(shell pkg-config --libs libarchive)
+-  endif
++HAVE_SYS_LIBARCHIVE := $(shell pkg-config --exists 'libarchive' && echo yes)
++ifeq ($(HAVE_SYS_LIBARCHIVE),yes)
++  SYS_LIBARCHIVE_CFLAGS := $(shell pkg-config --cflags libarchive)
++  SYS_LIBARCHIVE_LIBS := $(shell pkg-config --libs libarchive)
++endif
+ 
+-  HAVE_SYS_ZXINGCPP := $(shell pkg-config --exists 'zxing >= 2.0.0' && echo yes)
+-  ifeq ($(HAVE_SYS_ZXINGCPP),yes)
+-    SYS_ZXINGCPP_CFLAGS := $(shell pkg-config --cflags zxing)
+-    SYS_ZXINGCPP_LIBS := $(shell pkg-config --libs zxing)
+-  endif
++HAVE_SYS_ZXINGCPP := $(shell pkg-config --exists 'zxing >= 2.0.0' && echo yes)
++ifeq ($(HAVE_SYS_ZXINGCPP),yes)
++  SYS_ZXINGCPP_CFLAGS := $(shell pkg-config --cflags zxing)
++  SYS_ZXINGCPP_LIBS := $(shell pkg-config --libs zxing)
++endif
+ 
+-  HAVE_SYS_CURL := $(shell pkg-config --exists libcurl && echo yes)
+-  ifeq ($(HAVE_SYS_CURL),yes)
+-    SYS_CURL_CFLAGS := $(shell pkg-config --cflags libcurl)
+-    SYS_CURL_LIBS := $(shell pkg-config --libs libcurl)
+-  endif
++HAVE_SYS_CURL := $(shell pkg-config --exists libcurl && echo yes)
++ifeq ($(HAVE_SYS_CURL),yes)
++  SYS_CURL_CFLAGS := $(shell pkg-config --cflags libcurl)
++  SYS_CURL_LIBS := $(shell pkg-config --libs libcurl)
++endif
+ 
++ifeq ($(OS),Darwin)
++    HAVE_GLUT := yes
++    SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
++    SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
++else
+   ifeq ($(HAVE_GLUT),)
+     HAVE_GLUT := $(shell pkg-config --exists gl x11 xrandr && echo yes)
+   endif
+@@ -321,29 +302,28 @@ else
+       SYS_GLUT_LIBS := -lglut
+     endif
+   endif
++endif
+ 
+-  ifeq ($(HAVE_X11),)
+-    HAVE_X11 := $(shell pkg-config --exists x11 xext && echo yes)
+-  endif
+-  ifeq ($(HAVE_X11),yes)
+-    X11_CFLAGS := $(shell pkg-config --cflags x11 xext)
+-    X11_LIBS := $(shell pkg-config --libs x11 xext)
+-  endif
+-
+-  ifeq ($(HAVE_LIBCRYPTO),)
+-    HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
+-  endif
+-  ifeq ($(HAVE_LIBCRYPTO),yes)
+-    LIBCRYPTO_CFLAGS := $(shell pkg-config --cflags libcrypto) -DHAVE_LIBCRYPTO
+-    LIBCRYPTO_LIBS := $(shell pkg-config --libs libcrypto)
+-  endif
++ifeq ($(HAVE_X11),)
++  HAVE_X11 := $(shell pkg-config --exists x11 xext && echo yes)
++endif
++ifeq ($(HAVE_X11),yes)
++  X11_CFLAGS := $(shell pkg-config --cflags x11 xext)
++  X11_LIBS := $(shell pkg-config --libs x11 xext)
++endif
+ 
+-  HAVE_PTHREAD := yes
+-  ifeq ($(HAVE_PTHREAD),yes)
+-    PTHREAD_CFLAGS :=
+-    PTHREAD_LIBS := -lpthread
+-  endif
++ifeq ($(HAVE_LIBCRYPTO),)
++  HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
++endif
++ifeq ($(HAVE_LIBCRYPTO),yes)
++  LIBCRYPTO_CFLAGS := $(shell pkg-config --cflags libcrypto) -DHAVE_LIBCRYPTO
++  LIBCRYPTO_LIBS := $(shell pkg-config --libs libcrypto)
++endif
+ 
++HAVE_PTHREAD := yes
++ifeq ($(HAVE_PTHREAD),yes)
++  PTHREAD_CFLAGS :=
++  PTHREAD_LIBS := -lpthread
+ endif
+ 
+ # The following section has various cross compilation configurations.

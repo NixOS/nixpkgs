@@ -1,0 +1,12 @@
+diff --git a/apps/desktop/webpack.base.js b/apps/desktop/webpack.base.js
+index c9da84cd2e..3738bac27e 100644
+--- a/apps/desktop/webpack.base.js
++++ b/apps/desktop/webpack.base.js
+@@ -110,6 +110,7 @@ module.exports.buildConfig = function buildConfig(params) {
+       new CopyWebpackPlugin({
+         patterns: [
+           path.resolve(__dirname, "src/package.json"),
++          path.resolve(__dirname, "src/package-lock.json"),
+           { from: path.resolve(__dirname, "src/images"), to: "images" },
+           { from: path.resolve(__dirname, "src/locales"), to: "locales" },
+         ],

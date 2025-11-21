@@ -1,0 +1,13 @@
+diff --git i/test.sh w/test.sh
+index 4796ff11..a6627fec 100755
+--- i/test.sh
++++ w/test.sh
+@@ -148,7 +148,7 @@ function do_drogon_ctl_test()
+                               -DCMAKE_POLICY_DEFAULT_CMP0091=NEW \
+                               -DCMAKE_CXX_STANDARD=17"
+     fi
+-    cmake .. $cmake_gen
++    cmake .. $cmake_gen -DDrogon_DIR=$out/lib/cmake/Drogon -DTrantor_DIR=$out/lib/cmake/Trantor
+ 
+     if [ $? -ne 0 ]; then
+         echo "Failed to run CMake for example project"

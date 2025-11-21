@@ -1,0 +1,16 @@
+diff --git a/cmake/plugin.cmake b/cmake/plugin.cmake
+index 31291d26..fad52814 100644
+--- a/cmake/plugin.cmake
++++ b/cmake/plugin.cmake
+@@ -34,6 +34,11 @@ MACRO(MYSQL_ADD_PLUGIN)
+     "LINK_LIBRARIES;DEPENDENCIES"
+     ${ARGN}
+   )
++
++  IF(WITHOUT_SERVER OR ARG_CLIENT)
++  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
++  ENDIF()
++
+   IF(NOT WITHOUT_SERVER OR ARG_CLIENT)
+
+   # Add common include directories

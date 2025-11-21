@@ -1,0 +1,53 @@
+From 1bf9184e1208e805f70ccb8ba06b4c3d63a1a04a Mon Sep 17 00:00:00 2001
+From: Benjamin Dauvergne <bdauvergne@entrouvert.com>
+Date: Wed, 24 Jan 2024 15:15:39 +0100
+Subject: [PATCH] misc: adjust to structured error callback argument change in
+ libxml2 2.12 (#86080)
+
+---
+ lasso/lasso.c     | 8 +++++++-
+ lasso/xml/tools.c | 9 ++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/lasso/lasso.c b/lasso/lasso.c
+index 9902512f..7ea5df44 100644
+--- a/lasso/lasso.c
++++ b/lasso/lasso.c
+@@ -138,7 +138,13 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+ #include "types.c"
+ 
+ static void
+-lasso_xml_structured_error_func(G_GNUC_UNUSED void *user_data, xmlErrorPtr error)
++lasso_xml_structured_error_func(G_GNUC_UNUSED void *user_data,
++#if LIBXML_VERSION >= 21200
++                                        const xmlError *error
++#else
++                                        xmlErrorPtr error
++#endif
++				)
+ {
+ 	g_log("libxml2", G_LOG_LEVEL_DEBUG, "libxml2: %s", error->message);
+ }
+diff --git a/lasso/xml/tools.c b/lasso/xml/tools.c
+index 385858d1..014f4040 100644
+--- a/lasso/xml/tools.c
++++ b/lasso/xml/tools.c
+@@ -1449,7 +1449,14 @@ lasso_concat_url_query(const char *url, const char *query)
+ 	}
+ }
+ 
+-static void structuredErrorFunc (void *userData, xmlErrorPtr error) {
++static void structuredErrorFunc (void *userData,
++#if LIBXML_VERSION >= 21200
++                                        const xmlError *error
++#else
++                                        xmlErrorPtr error
++#endif
++				 )
++{
+ 		*(int*)userData = error->code;
+ }
+ 
+-- 
+2.49.0
+

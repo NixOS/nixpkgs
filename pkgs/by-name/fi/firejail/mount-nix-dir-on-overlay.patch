@@ -1,0 +1,27 @@
+--- a/src/firejail/fs_overlayfs.c
++++ b/src/firejail/fs_overlayfs.c
+@@ -327,6 +327,16 @@
+ 		errExit("mounting /dev");
+ 	fs_logger("whitelist /dev");
+ 
++	// mount-bind /nix
++	if (arg_debug)
++		printf("Mounting /nix\n");
++	char *nix;
++	if (asprintf(&nix, "%s/nix", oroot) == -1)
++		errExit("asprintf");
++	if (mount("/nix", nix, NULL, MS_BIND|MS_REC, NULL) < 0)
++		errExit("mounting /nix");
++	fs_logger("whitelist /nix");
++
+ 	// mount-bind run directory
+ 	if (arg_debug)
+ 		printf("Mounting /run\n");
+@@ -384,6 +394,7 @@
+ 	free(odiff);
+ 	free(owork);
+ 	free(dev);
++	free(nix);
+ 	free(run);
+ 	free(tmp);
+ }

@@ -1,0 +1,85 @@
+diff --git a/bin/melos.dart b/bin/melos.dart
+index 2476436..bd79fad 100644
+--- a/packages/melos/bin/melos.dart
++++ b/packages/melos/bin/melos.dart
+@@ -1,11 +1,72 @@
+ import 'package:cli_launcher/cli_launcher.dart';
+ import 'package:melos/src/command_runner.dart';
++import 'dart:io';
++import 'package:yaml/yaml.dart';
++import 'package:path/path.dart' as path;
+ 
+-Future<void> main(List<String> arguments) async => launchExecutable(
+-  arguments,
+-  LaunchConfig(
+-    name: ExecutableName('melos'),
+-    launchFromSelf: false,
+-    entrypoint: melosEntryPoint,
+-  ),
+-);
++final ExecutableName executableName = ExecutableName('melos');
++
++Future<void> main(List<String> arguments) async {
++  final workspaceRoot = _findLocalInstallation(Directory.current);
++
++  if (workspaceRoot == null) {
++    print("Error: Could not find your work  ");
++    return;
++  }
++
++  melosEntryPoint(
++    arguments,
++    LaunchContext(
++      directory: Directory.current,
++      localInstallation: ExecutableInstallation(
++        name: executableName,
++        isSelf: false,
++        packageRoot: workspaceRoot,
++      ),
++    ),
++  );
++}
++
++// Stolen then simplified from https://github.com/blaugold/cli_launcher/blob/dcdf11c42b77ddc8e38e7e2445c8cff9b55658ec/lib/cli_launcher.dart#L249
++Directory? _findLocalInstallation(
++  Directory start,
++) {
++  if (path.equals(start.path, start.parent.path)) {
++    return null;
++  }
++
++  final pubspecFile = File(path.join(start.path, 'pubspec.yaml'));
++  if (pubspecFile.existsSync()) {
++    final pubspecString = pubspecFile.readAsStringSync();
++    String? name;
++    YamlMap? dependencies;
++    YamlMap? devDependencies;
++
++    try {
++      final pubspecYaml = loadYamlDocument(
++        pubspecString,
++        sourceUrl: pubspecFile.uri,
++      );
++      final pubspec = pubspecYaml.contents as YamlMap;
++      name = pubspec['name'] as String?;
++      dependencies = pubspec['dependencies'] as YamlMap?;
++      devDependencies = pubspec['dev_dependencies'] as YamlMap?;
++    } catch (error, stackTrace) {
++      throw StateError(
++        'Could not parse pubspec.yaml at ${start.path}.\n$error\n$stackTrace',
++      );
++    }
++
++    final isSelf = name == executableName.package;
++
++    if ((isSelf) ||
++        (dependencies != null &&
++            dependencies.containsKey(executableName.package)) ||
++        (devDependencies != null &&
++            devDependencies.containsKey(executableName.package))) {
++      return start;
++    }
++  }
++
++  return _findLocalInstallation(start.parent);
++}

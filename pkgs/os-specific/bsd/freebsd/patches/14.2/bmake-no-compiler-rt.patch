@@ -1,0 +1,11 @@
+--- a/share/mk/src.libnames.mk	2023-12-21 23:56:50.767042385 -0800
++++ b/share/mk/src.libnames.mk	2023-12-21 23:56:39.671089506 -0800
+@@ -392,7 +392,7 @@
+ _DP_ztest=	geom m nvpair umem zpool pthread avl zfs_core spl zutil zfs uutil icp
+ # The libc dependencies are not strictly needed but are defined to make the
+ # assert happy.
+-_DP_c=		compiler_rt
++_DP_c=		
+ # Use libssp_nonshared only on i386 and power*.  Other archs emit direct calls
+ # to __stack_chk_fail, not __stack_chk_fail_local provided by libssp_nonshared.
+ .if ${MK_SSP} != "no" && \

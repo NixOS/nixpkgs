@@ -1,0 +1,968 @@
+# pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml
+
+# This is a list of packages with versions from the latest Stackage LTS release.
+#
+# The packages and versions in this list cause the `hackage2nix` tool to
+# generate the package at the given version.
+#
+# For instance, with a line like the following:
+#
+# - aeson ==1.4.6.0
+#
+# `hackage2nix` will generate the `aeson` package at version 1.4.6.0 in the
+# ./hackage-packages.nix file.
+#
+# Since the packages in the LTS package set are sometimes older than the latest
+# on Hackage, `hackage2nix` is smart enough to also generate the latest version
+# of a given package.
+#
+# In the above example with aeson, if there was version 1.5.0.0 of aeson
+# available on Hackage, `hackage2nix` would generate two packages, `aeson`
+# at version 1.4.6.0 and `aeson_1_5_0_0` at version 1.5.0.0.
+#
+# WARNING: We import a list of default-package-overrides from stackage which is
+# tracked in stackage.yaml. Adding conflicting overrides with stackage here will
+# not work.
+# keep-sorted start skip_lines=1 case=no numeric=yes
+default-package-overrides:
+  - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
+  # https://github.com/haskell-nix/hnix/pull/1112
+  - hnix-store-core < 0.7
+  - hnix-store-remote < 0.7
+  # 2025-08-03: need to match stackage version of hosc
+  - hsc3 >= 0.21 && < 0.22
+  # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
+  - liquid-fixpoint == 0.9.6.3.2
+  # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
+  - liquidhaskell == 0.9.10.*
+  - liquidhaskell-boot == 0.9.10.*
+  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  - microlens-pro < 0.2.0.4
+  # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
+  # this no longer works with later versions.
+  - pandoc-crossref == 0.3.21
+# keep-sorted end
+
+# keep-sorted start skip_lines=1 case=no numeric=yes
+extra-packages:
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2025-07-07: used by gren <= 0.5.4
+  - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
+  - Cabal == 3.10.*
+  - Cabal == 3.12.*
+  - Cabal == 3.14.*
+  - Cabal == 3.16.*                     # version required for cabal-install and other packages
+  - cabal-add == 0.1                    # 2025-09-09: Only needed for hls 2.11 can be removed once we are past it.
+  - Cabal-syntax == 3.10.*
+  - Cabal-syntax == 3.12.*
+  - Cabal-syntax == 3.14.*
+  - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
+  - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
+  - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
+  - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
+  - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
+  - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
+  - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
+  - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
+  - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
+  - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
+  - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
+  - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
+  - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.4
+  - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
+  - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.4
+  - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
+  - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
+  - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
+  - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
+  - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
+  - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
+  - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
+  - hasql-dynamic-statements < 0.3.1.6  # 2025-01-19: Needed for building postgrest
+  - hasql-implicits < 0.2               # 2025-01-19: Needed for building postgrest
+  - hasql-notifications < 0.2.3         # 2025-01-19: Needed for building postgrest
+  - hasql-pool < 1.1                    # 2025-01-19: Needed for building postgrest
+  - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
+  - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
+  - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
+  - hpack == 0.38.1                     # 2025-09-18: to match exact version upstream stack-3.7.1 uses
+  - language-javascript == 0.7.0.0      # required by purescript
+  - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
+  - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
+  - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
+  - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
+  - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
+  - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
+  - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
+  - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
+  - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
+  - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
+  - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
+  - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
+  - text-builder < 1                    # 2025-08-27: Needed for building postgrest
+  - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
+# keep-sorted end
+
+# keep-sorted start skip_lines=1 case=no
+package-maintainers:
+  alexfmpe:
+    - aeson-gadt-th
+    - android-activity
+    - basic-sop
+    - bytestring-aeson-orphans
+    - cli-extras
+    - cli-git
+    - cli-nix
+    - commutative-semigroups
+    - constraints-extras
+    - dependent-map
+    - dependent-monoidal-map
+    - dependent-sum
+    - dependent-sum-aeson-orphans
+    - dependent-sum-template
+    - gargoyle
+    - gargoyle-postgresql
+    - gargoyle-postgresql-connect
+    - gargoyle-postgresql-nix
+    - generics-sop
+    - ghcjs-base
+    - ghcjs-dom
+    - ghcjs-dom-javascript
+    - ghcjs-dom-jsaddle
+    - haveibeenpwned
+    - jsaddle
+    - jsaddle-clib
+    - jsaddle-dom
+    - jsaddle-warp
+    - jsaddle-wkwebview
+    - json-sop
+    - large-generics
+    - large-records
+    - lens-sop
+    - linux-namespaces
+    - monoid-map
+    - monoidal-containers
+    - nix-thunk
+    - patch
+    - proto-lens-arbitrary
+    - proto3-suite
+    - proto3-wire
+    - records-sop
+    - reflex
+    - reflex-dom
+    - reflex-dom-core
+    - reflex-gadt-api
+    - reflex-fsnotify
+    - th-abstraction
+    - universe
+    - universe-some
+    - vessel
+    - warp
+    - which
+  Anton-Latukha:
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
+  artem:
+    - BNFC-meta
+    - alex-meta
+    - happy-meta
+    - liquid-fixpoint
+    - liquidhaskell
+    - liquidhaskell-boot
+    - smtlib-backends
+    - smtlib-backends-process
+    - smtlib-backends-tests
+    - vector-hashtables
+  arturcygan:
+    - hevm
+  athas:
+    - futhark
+  auscyber:
+    - kmonad
+  bdesham:
+    - pinboard-notes-backup
+  berberman:
+    - nvfetcher
+    - arch-web
+    - uusi
+  cdepillabout:
+    - cloudy
+    - password
+    - password-instances
+    - pretty-simple
+    - stack
+    - termonad
+  centromere:
+    - nfc
+  dalpd:
+    - dhall-lsp-server
+    - ghc-vis
+    - patat
+    - svgcairo
+  danielrolls:
+    - aws-spend-summary
+    - byte-count-reader
+    - shellify
+    - specup
+  domenkozar:
+    - cachix
+    - cachix-api
+  dschrempf:
+    - circular
+    - covariance
+    - dirichlet
+    - elynx
+    - elynx-markov
+    - elynx-nexus
+    - elynx-seq
+    - elynx-tools
+    - elynx-tree
+    - glasso
+    - mcmc
+    - pava
+    - slynx
+    - tlynx
+    - xmonad
+    - xmonad-contrib
+  erictapen:
+    - hakyll
+  Gabriella439:
+    - annah
+    - bench
+    - break
+    - dhall-bash
+    - dhall-docs
+    - dhall-json
+    - dhall-lsp-server
+    - dhall-nix
+    - dhall-nixpkgs
+    - dhall-openapi
+    - dhall-text
+    - dhall-yaml
+    - dhall
+    - dirstream
+    - errors
+    - foldl
+    - index-core
+    - lens-tutorial
+    - list-transformer
+    - managed
+    - mmorph
+    - morte
+    - mvc-updates
+    - mvc
+    - nix-derivation
+    - nix-diff
+    - optional-args
+    - optparse-generic
+    - pipes-bytestring
+    - pipes-concurrency
+    - pipes-csv
+    - pipes-extras
+    - pipes-group
+    - pipes-http
+    - pipes-parse
+    - pipes-safe
+    - pipes
+    - server-generic
+    - total
+    - turtle
+    - typed-spreadsheet
+  gridaphobe:
+    - located-base
+  iblech:
+    - Agda
+  ivanbrennan:
+    - xmonad
+    - xmonad-contrib
+  jb55:
+    # - bson-lens
+    - cased
+    - elm-export-persistent
+    # - pipes-mongodb
+    - streaming-wai
+  libjared:
+    - sensei
+  malo:
+    - cornelis
+  mangoiv:
+    - fused-effects
+    - htree
+    - http-barf
+    - libsodium-bindings
+    - scoped-codensity
+    - sel
+    - text-display
+    - unclogging
+  maralorn:
+    - bluefin
+    - cabal-fmt
+    - eventlog2html
+    - falsify
+    - generic-optics
+    - ghc-debug-brick
+    - ghc-debug-stub
+    - ghcid
+    - graphql-client
+    - haskell-language-server
+    - hledger
+    - hledger-ui
+    - hledger-web
+    - hlint
+    - hspec-discover
+    - jsaddle-warp
+    - matrix-client
+    - optics
+    - pandoc
+    - pandoc-cli
+    - postgresql-simple
+    - purebred-email
+    - reflex-dom
+    - replace-megaparsec
+    - req
+    - say
+    - shake-bench
+    - shh
+    - shh-extras
+    - snap
+    - stm-containers
+    - streamly
+    - streamly-bytestring
+    - string-interpolate
+    - taskwarrior
+    - tasty
+    - threadscope
+    - tz
+    - weeder
+    - witch
+  mikatammi:
+    - botan-bindings
+    - botan-low
+  mpscholten:
+    - ihp-hsx
+    - push-notify-apn
+    - hs-pkpass
+    - raven-haskell
+    - stripe-concepts
+    - stripe-signature
+    - http2-client
+    - zip
+    - currencies
+    - string-random
+    - inflections
+    - pcre-heavy
+    - mmark
+    - mmark-ext
+    - typerep-map
+    - minio-hs
+    - smtp-mail
+    - pdftotext
+    - warp-systemd
+    - amazonka
+    - libssh2
+    - sitemap
+    - ihp-openai
+    - ihp
+    - ihp-ide
+    - ihp-migrate
+    - ihp-postgresql-simple-extra
+  ncfavier:
+    - Agda
+    - agda2hs
+    - irc-client
+    - lambdabot
+    - shake
+  nomeata:
+    - cabal-plan-bounds
+    - lhs2tex
+    - rec-def
+    - tasty-expected-failure
+  peti:
+    - cabal2spec
+    - funcmp
+    - git-annex
+    - hledger-interest
+    - hopenssl
+    - hsdns
+    - hsemail
+    - hsyslog
+    - logging-facade-syslog
+    - nix-paths
+    - structured-haskell-mode
+    - titlecase
+    - xmonad
+    - xmonad-contrib
+  phijor:
+    - cornelis
+  poscat:
+    - hinit
+  Profpatsch:
+    - gitit
+  psibi:
+    - path-pieces
+    - persistent
+    - persistent-sqlite
+    - persistent-template
+    - shakespeare
+  raehik:
+    - strongweak
+    - generic-data-functions
+    - binrep
+    - rerefined
+    - symparsec
+    - bytezap
+    - bytepatch
+    - heystone
+    - refined
+    - flatparse
+  roberth:
+    - arion-compose
+    - cabal-pkg-config-version-hook
+    - hercules-ci-agent
+    - hercules-ci-api
+    - hercules-ci-api-agent
+    - hercules-ci-api-core
+    - hercules-ci-cli
+    - hercules-ci-cnix-expr
+    - hercules-ci-cnix-store
+    - inline-c
+    - inline-c-cpp
+  rvl:
+    - taffybar
+    - arbtt
+    - lentil
+  sellout:
+    - dualizer
+    - no-recursion
+    - yaya
+    - yaya-containers
+    - yaya-hedgehog
+    - yaya-quickcheck
+    - yaya-unsafe
+  sheepforce:
+    - mpi-hs
+    - mpi-hs-store
+    - mpi-hs-cereal
+    - mpi-hs-binary
+    - cpython
+    - massiv
+    - massiv-io
+    - massiv-test
+  shlok:
+    - streamly-archive
+    - streamly-lmdb
+  slotThe:
+    - X11
+    - X11-xft
+    - html-parse-util
+    - kmonad
+    - optparse-applicative-cmdline-util
+    - xmonad
+    - xmonad-contrib
+    - xmonad-extras
+  sorki:
+    - cayenne-lpp
+    - blockfrost-client
+    - data-lens-light
+    - data-stm32
+    - gcodehs
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
+    - implicit
+    - nix-derivation
+    - nix-diff
+    - nix-narinfo
+    - ttn
+    - ttn-client
+    - update-nix-fetchgit
+    - zre
+  sternenseemann:
+    # also maintain upstream package
+    - cabal2nix
+    - distribution-nixpkgs
+    - hackage-db
+    - language-nix
+    - jailbreak-cabal
+    - spacecookie
+    - gopher-proxy
+    # other packages I can help out for
+    - cabal-install
+    - hledger
+    - pandoc
+    - systemd
+    - fast-logger
+    - flat
+    - Euterpea2
+    - utc
+    - socket
+    - gitit
+    - yarn-lock
+    - yarn2nix
+    - large-hashable
+    - haskell-ci
+    - diagrams
+    - rel8
+    - regex-rure
+    - jacinda
+    - citeproc
+    - mighttpd2
+    # owothia
+    - irc-client
+    - chatter
+    - envy
+  t4ccer:
+    - aeson-better-errors
+    - cheapskate
+    - containers-unicode-symbols
+    - numerals-base
+    - pattern-arrows
+  tbidne:
+    - rest-rewrite
+  terlar:
+    - nix-diff
+  thielema:
+    - accelerate-arithmetic
+    - accelerate-fftw
+    - accelerate-fourier
+    - accelerate-utility
+    - align-audio
+    - alsa-core
+    - alsa-pcm
+    - alsa-seq
+    - apportionment
+    - audacity
+    - battleship-combinatorics
+    - bibtex
+    - board-games
+    - buffer-pipe
+    - cabal-flatpak
+    - calendar-recycling
+    - checksum
+    - check-pvp
+    - coinor-clp
+    - combinatorial
+    - comfort-graph
+    - comfort-array
+    - comfort-array-shape
+    - comfort-fftw
+    - comfort-glpk
+    - concurrent-split
+    - cutter
+    - data-accessor
+    - data-accessor-mtl
+    - data-accessor-template
+    - data-accessor-transformers
+    - data-ref
+    - doctest-exitcode-stdio
+    - doctest-extract
+    - doctest-lib
+    - dsp
+    - enumset
+    - equal-files
+    - event-list
+    - explicit-exception
+    - fixed-length
+    - fftw-ffi
+    - gnuplot
+    - group-by-date
+    - guarded-allocation
+    - iff
+    - interpolation
+    - jack
+    - latex
+    - lazyio
+    - linear-programming
+    - llvm-ffi
+    - markov-chain
+    - midi
+    - midi-alsa
+    - midi-music-box
+    - mbox-utility
+    - med-module
+    - monoid-transformer
+    - non-empty
+    - non-negative
+    - numeric-prelude
+    - numeric-quest
+    - pathtype
+    - pooled-io
+    - probability
+    - quickcheck-transformer
+    - reactive-midyim
+    - reactive-balsa
+    - reactive-jack
+    - sample-frame
+    - sample-frame-np
+    - set-cover
+    - shell-utility
+    - sound-collage
+    - sox
+    - soxlib
+    - split-record
+    - spreadsheet
+    - stm-split
+    - storable-record
+    - storable-tuple
+    - storablevector
+    - synthesizer-core
+    - synthesizer-dimensional
+    - synthesizer-alsa
+    - synthesizer-midi
+    - tagchup
+    - tfp
+    - unicode
+    - unique-logic
+    - unique-logic-tf
+    - unsafe
+    - utility-ht
+    - wuerfelschlange
+    - xml-basic
+    - youtube
+    - prelude-compat
+    - fft
+    - carray
+    - lapack-ffi-tools
+    - netlib-ffi
+    - blas-ffi
+    - lapack-ffi
+    - netlib-carray
+    - blas-carray
+    - lapack-carray
+    - netlib-comfort-array
+    - blas-comfort-array
+    - lapack-comfort-array
+    - comfort-blas
+    - lapack
+    - lapack-hmatrix
+    - hmm-lapack
+    - magico
+    - resistor-cube
+    - linear-circuit
+  turion:
+    - Agda
+    - cabal-gild
+    - clay
+    - dunai
+    - essence-of-live-coding
+    - essence-of-live-coding-gloss
+    - essence-of-live-coding-pulse
+    - essence-of-live-coding-quickcheck
+    - essence-of-live-coding-warp
+    - finite-typelits
+    - has-transformers
+    - monad-bayes
+    - monad-schedule
+    - pulse-simple
+    - openapi3-code-generator
+    - rhine
+    - rhine-gloss
+    - simple-affine-space
+    - time-domain
+  utdemir:
+    - nix-tree
+  wolfgangwalther:
+    - postgres-websockets
+    - postgrest
+  zowoq:
+    - ShellCheck
+# keep-sorted end
+
+# keep-sorted start skip_lines=1 case=no
+unsupported-platforms:
+  Allure:                                       [ platforms.darwin ]
+  bdcs-api:                                     [ platforms.darwin ]
+  bindings-directfb:                            [ platforms.darwin ]
+  bindings-sane:                                [ platforms.darwin ]
+  bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
+  bytelog:                                      [ platforms.darwin ] # due to posix-api
+  camfort:                                      [ aarch64-linux ]
+  chalkboard-viewer:                            [ platforms.darwin ] # depends on chalkboard
+  chalkboard:                                   [ platforms.darwin ] # depends on Codec-Image-DevIL
+  charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
+  Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
+  coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
+  cut-the-crap:                                 [ platforms.darwin ]
+  essence-of-live-coding-PortMidi:              [ platforms.darwin ]
+  Euterpea:                                     [ platforms.darwin ]
+  follow-file:                                  [ platforms.darwin ]
+  freenect:                                     [ platforms.darwin ]
+  FTGL:                                         [ platforms.darwin ]
+  fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
+  ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
+  gi-adwaita:                                   [ platforms.darwin ]
+  gi-dbusmenu:                                  [ platforms.darwin ]
+  gi-dbusmenugtk3:                              [ platforms.darwin ]
+  gi-ggit:                                      [ platforms.darwin ]
+  gi-gtk-layer-shell:                           [ platforms.darwin ] # depends on gtk-layer-shell which is not supported on darwin
+  gi-ibus:                                      [ platforms.darwin ]
+  gi-javascriptcore:                            [ platforms.darwin ] # webkitgtk marked broken on darwin
+  gi-ostree:                                    [ platforms.darwin ]
+  gi-vte:                                       [ platforms.darwin ]
+  gi-webkit2:                                   [ platforms.darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2webextension:                       [ platforms.darwin ] # webkitgtk marked broken on darwin
+  gi-wnck:                                      [ platforms.darwin ]
+  gl:                                           [ platforms.darwin ] # depends on mesa
+  GLHUI:                                        [ platforms.darwin ] # depends on mesa
+  gnome-keyring:                                [ platforms.darwin ]
+  grid-proto:                                   [ platforms.darwin ]
+  gtk-sni-tray:                                 [ platforms.darwin ]
+  h-raylib:                                     [ platforms.darwin ] # depends on mesa
+  haskell-snake:                                [ platforms.darwin ]
+  hcwiid:                                       [ platforms.darwin ]
+  HDRUtils:                                     [ platforms.darwin ]
+  hinotify-bytestring:                          [ platforms.darwin ]
+  honk:                                         [ platforms.darwin ]
+  HSoM:                                         [ platforms.darwin ]
+  intricacy:                                    [ platforms.darwin ] # depends on mesa
+  iwlib:                                        [ platforms.darwin ]
+  Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
+  jsaddle-webkit2gtk:                           [ platforms.darwin ]
+  Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
+  LambdaHack:                                   [ platforms.darwin ]
+  libmodbus:                                    [ platforms.darwin ]
+  libsystemd-journal:                           [ platforms.darwin ]
+  libtelnet:                                    [ platforms.darwin ]
+  libvirt-hs:                                   [ platforms.darwin ] # spidermonkey is not supported on darwin
+  libzfs:                                       [ platforms.darwin ]
+  linearEqSolver:                               [ aarch64-linux ]
+  lio-fs:                                       [ platforms.darwin ]
+  logging-facade-journald:                      [ platforms.darwin ]
+  longshot:                                     [ aarch64-linux ]
+  mpi-hs-binary:                                [ aarch64-linux, platforms.darwin ]
+  mpi-hs-cereal:                                [ aarch64-linux, platforms.darwin ]
+  mpi-hs-store:                                 [ aarch64-linux, platforms.darwin ]
+  mpi-hs:                                       [ aarch64-linux, platforms.darwin ]
+  mplayer-spot:                                 [ aarch64-linux, platforms.darwin ]
+  mptcp-pm:                                     [ platforms.darwin ]
+  netlink:                                      [ platforms.darwin ]
+  network-unexceptional:                        [ platforms.darwin ] # depends on posix-api
+  notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
+  oculus:                                       [ platforms.darwin ]
+  ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
+  pam:                                          [ platforms.darwin ]
+  parport:                                      [ platforms.darwin ]
+  persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
+  piyo:                                         [ platforms.darwin ]
+  PortMidi-simple:                              [ platforms.darwin ]
+  portmidi-utility:                             [ platforms.darwin ]
+  PortMidi:                                     [ platforms.darwin ]
+  posix-api:                                    [ platforms.darwin ]
+  Raincat:                                      [ platforms.darwin ]
+  reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
+  reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
+  reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
+  rtlsdr:                                       [ platforms.darwin ]
+  rubberband:                                   [ platforms.darwin ]
+  SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
+  SDL-mpeg:                                     [ platforms.darwin ] # depends on mesa
+  sdl2-mixer:                                   [ platforms.darwin ]
+  sdl2-ttf:                                     [ platforms.darwin ]
+  sdr:                                          [ platforms.darwin ] # depends on rtlsdr
+  sensei:                                       [ platforms.darwin ]
+  sockets:                                      [ platforms.darwin ] # depends on posix-api
+  spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
+  synthesizer-alsa:                             [ platforms.darwin ]
+  taffybar:                                     [ platforms.darwin ]
+  termonad:                                     [ platforms.darwin ]
+  tokyotyrant-haskell:                          [ platforms.darwin ]
+  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
+  Unixutils-shadow:                             [ platforms.darwin ]
+  verifiable-expressions:                       [ aarch64-linux ]
+  vrpn:                                         [ platforms.darwin ]
+  vulkan-utils:                                 [ platforms.darwin ]
+  vulkan:                                       [ i686-linux, armv7l-linux, platforms.darwin ]
+  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, platforms.darwin ]
+  webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
+  wiringPi:                                     [ aarch64-darwin ]
+  xattr:                                        [ platforms.darwin ]
+  xgboost-haskell:                              [ aarch64-linux, armv7l-linux, platforms.darwin ]
+  xmobar:                                       [ platforms.darwin ]
+  xmonad-extras:                                [ platforms.darwin ]
+  xmonad-volume:                                [ platforms.darwin ]
+  xnobar:                                       [ platforms.darwin ]
+# keep-sorted end
+
+# keep-sorted start skip_lines=1 case=no
+supported-platforms:
+  alsa-mixer:                                   [ platforms.linux ]
+  alsa-pcm:                                     [ platforms.linux ]
+  alsa-seq:                                     [ platforms.linux ]
+  AWin32Console:                                [ platforms.windows ]
+  barbly:                                       [ platforms.darwin ]
+  bindings-parport:                             [ platforms.linux ] # parport is a linux kernel component
+  blake3:                                       [ platforms.x86 ] # uses x86 intrinsics
+  btrfs:                                        [ platforms.linux ] # depends on linux
+  bytepatch:                                    [ platforms.x86 ] # due to blake3
+  cpuid:                                        [ platforms.x86 ] # needs to be i386 compatible (IA-32)
+  cpython:                                      [ platforms.x86 ] # c2hs errors on glibc headers
+  crc32c:                                       [ platforms.x86 ] # uses x86 intrinsics
+  d3d11binding:                                 [ platforms.windows ]
+  DirectSound:                                  [ platforms.windows ]
+  dx9base:                                      [ platforms.windows ]
+  dx9d3d:                                       [ platforms.windows ]
+  dx9d3dx:                                      [ platforms.windows ]
+  erebos-tester:                                [ platforms.linux ] # depends on linux-namespaces
+  evdev-streamly:                               [ platforms.linux ]
+  evdev:                                        [ platforms.linux ]
+  geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
+  geomancy:                                     [ platforms.x86 ] # x86 intrinsics
+  ghcjs-base:                                   [ javascript-ghcjs ]
+  ghcjs-dom-javascript:                         [ javascript-ghcjs ]
+  gi-gtkosxapplication:                         [ platforms.darwin ]
+  gtk-mac-integration:                          [ platforms.darwin ]
+  gtk3-mac-integration:                         [ platforms.darwin ]
+  halide-haskell:                               [ platforms.linux ]
+  halide-JuicyPixels:                           [ platforms.linux ]
+  hb3sum:                                       [ platforms.x86 ] # due to blake3
+  HFuse:                                        [ platforms.linux ]
+  hommage-ds:                                   [ platforms.windows ]
+  hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
+  HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
+  hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
+  hsignal:                                      [ platforms.x86 ] # -msse2
+  htune:                                        [ platforms.linux ] # depends on alsa-pcm
+  hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
+  inline-asm:                                   [ platforms.x86 ] # x86 assembler
+  jsaddle-wkwebview:                            [ platforms.darwin ]
+  keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-frp-banana:                              [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-render-basic:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-resource-gltf:                           [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
+  libfuse3:                                     [ platforms.linux ]
+  linux-evdev:                                  [ platforms.linux ]
+  linux-file-extents:                           [ platforms.linux ]
+  linux-inotify:                                [ platforms.linux ]
+  linux-mount:                                  [ platforms.linux ]
+  linux-namespaces:                             [ platforms.linux ]
+  lxc:                                          [ platforms.linux ]
+  memfd:                                        [ platforms.linux ]
+  midi-alsa:                                    [ platforms.linux ] # alsa-core only supported on linux
+  midisurface:                                  [ platforms.linux ] # alsa-core only supported on linux
+  miso-action-logger:                           [ javascript-ghcjs ] # https://github.com/Lermex/miso-action-logger/issues/1
+  miso-examples:                                [ javascript-ghcjs ]
+  OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
+  reactivity:                                   [ platforms.windows ]
+  reflex-libtelnet:                             [ platforms.linux ] # pkgs.libtelnet only supports linux
+  scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
+  scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
+  seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  streamed:                                     [ platforms.linux] # alsa-core only supported on linux
+  swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
+  systemd-api:                                  [ platforms.linux ]
+  tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
+  tcod-haskell:                                 [ platforms.linux ] # limited by pkgs.libtcod
+  udev:                                         [ platforms.linux ]
+  vty-windows:                                  [ platforms.windows ] # depends on Win32
+  Win32-console:                                [ platforms.windows ]
+  Win32-dhcp-server:                            [ platforms.windows ]
+  Win32-errors:                                 [ platforms.windows ]
+  Win32-extras:                                 [ platforms.windows ]
+  Win32-junction-point:                         [ platforms.windows ]
+  Win32-notify:                                 [ platforms.windows ]
+  Win32-security:                               [ platforms.windows ]
+  Win32-services-wrapper:                       [ platforms.windows ]
+  Win32-services:                               [ platforms.windows ]
+  Win32:                                        [ platforms.windows ]
+  XInput:                                       [ platforms.windows ]
+  yesod-auth-simple:                            [ platforms.x86 ] # requires scrypt which only supports x86
+# keep-sorted end
+
+dont-distribute-packages:
+  # Depends on shine, which is a ghcjs project.
+  - shine-varying
+
+  # these packages depend on software with an unfree license
+  - accelerate-bignum
+  - accelerate-blas
+  - accelerate-cublas
+  - accelerate-cuda
+  - accelerate-cufft
+  - accelerate-examples
+  - accelerate-fft
+  - accelerate-fourier-benchmark
+  - accelerate-io-array
+  - accelerate-io-bmp
+  - accelerate-io-bytestring
+  - accelerate-io-cereal
+  - accelerate-io-JuicyPixels
+  - accelerate-io-repa
+  - accelerate-io-vector
+  - accelerate-kullback-liebler
+  - accelerate-llvm-ptx
+  - bindings-yices
+  - boolector
+  - ccelerate-cuda
+  - containers-accelerate
+  - cplex-hs
+  - cublas
+  - cuda # 2020-08-18 because of dependency nvidia-x11
+  - cufft
+  - cusolver
+  - cusparse
+  - gloss-raster-accelerate
+  - hashable-accelerate
+  - libnvvm
+  - matlab
+  - nvvm
+  - Obsidian
+  - odpic-raw
+  - patch-image
+  # license for input data unclear, dependency not on Hackage
+  # see https://github.com/NixOS/nixpkgs/pull/88604
+  - tensorflow-mnist
+  - yices-easy
+  - yices-painless
+
+  # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-hello
+  - jsaddle-webkit2gtk
+  - ghcjs-dom-hello
+  - gi-javascriptcore4
+  - gi-soup2
+  - gi-webkit2
+  - webkit2gtk3-javascriptcore
+
+  # These packages don’t build because they use deprecated webkit versions.
+  - diagrams-hsqml
+  - dialog
+  - ghcjs-dom-webkit
+  - hsqml
+  - hsqml-datamodel
+  - hsqml-datamodel-vinyl
+  - hsqml-demo-manic
+  - hsqml-demo-morris
+  - hsqml-demo-notes
+  - hsqml-demo-samples
+  - hsqml-morris
+  - hstorchat
+  - jsc
+  - lambdacat
+  - manatee-all
+  - manatee-browser
+  - manatee-reader
+  - markup-preview
+  - spike
+  - web-browser-in-haskell
+  - websnap
+
+  # mesos was removed from nixpkgs
+  - hs-mesos
+
+  # Output exceeds Hydra's maximum allowable size
+  - stripeapi
+
+  # Packages that (transitively) depend on insecure packages
+  - distributed-process-zookeeper # depends on hzk
+  - HDRUtils # depends on pfstools, which depends on imagemagick
+  - hzk # depends on zookeeper_mt, which depends on openssl-1.1
+  - jobqueue # depends on hzk
+  - persistent-zookeeper # depends on hzk
+  - pocket-dns # depends on persistent-zookeeper
+  - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1

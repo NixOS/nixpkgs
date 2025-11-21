@@ -1,0 +1,48 @@
+From 32944bbdbf2c7611e72ec9828464978ca42824ce Mon Sep 17 00:00:00 2001
+From: Jakob Kukla <jakob.kukla@gmail.com>
+Date: Fri, 12 Sep 2025 10:31:22 +0000
+Subject: [PATCH] cmake: support absolute paths for install dirs in pkg-config
+
+The GNUInstallDirs module supports absolute paths for CMAKE_INSTALL_LIBDIR and CMAKE_INSTALL_INCLUDEDIR. Some package managers like Nix depend on this behaviour. See https://github.com/NixOS/nixpkgs/issues/144170 for the nixpkgs tracking issue.
+---
+ host/CMakeLists.txt | 12 ++++++++++++
+ host/uhd.pc.in      |  4 ++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/host/CMakeLists.txt b/host/CMakeLists.txt
+index 3e93ea1f0c..4cd0afad9d 100644
+--- a/host/CMakeLists.txt
++++ b/host/CMakeLists.txt
+@@ -559,6 +559,18 @@ if(CMAKE_CROSSCOMPILING)
+     set(UHD_PC_LIBS)
+ endif(CMAKE_CROSSCOMPILING)
+ 
++# Support absolute paths for LIBDIR and INCLUDEDIR
++if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++    set(UHD_PC_LIBDIR "${CMAKE_INSTALL_LIBDIR}")
++else()
++    set(UHD_PC_LIBDIR "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
++endif()
++if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(UHD_PC_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}")
++else()
++    set(UHD_PC_INCLUDEDIR "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++endif()
++
+ configure_file(
+     ${CMAKE_CURRENT_SOURCE_DIR}/uhd.pc.in
+     ${CMAKE_CURRENT_BINARY_DIR}/uhd.pc
+diff --git a/host/uhd.pc.in b/host/uhd.pc.in
+index 4a5f67c969..f121e2fb70 100644
+--- a/host/uhd.pc.in
++++ b/host/uhd.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@UHD_PC_LIBDIR@
++includedir=@UHD_PC_INCLUDEDIR@
+ 
+ Name: @CPACK_PACKAGE_NAME@
+ Description: @CPACK_PACKAGE_DESCRIPTION_SUMMARY@

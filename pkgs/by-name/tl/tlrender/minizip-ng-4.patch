@@ -1,0 +1,95 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 95a03bbd..9ce32264 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -123,7 +123,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+ find_package(Imath REQUIRED)
+ find_package(nlohmann_json REQUIRED)
+ find_package(ZLIB REQUIRED)
+-find_package(minizip REQUIRED)
++find_package(minizip-ng REQUIRED)
+ find_package(OpenTimelineIO REQUIRED)
+ 
+ # OpenColorIO dependencies
+diff --git a/etc/SuperBuild/tests/OpenColorIOTest/CMakeLists.txt b/etc/SuperBuild/tests/OpenColorIOTest/CMakeLists.txt
+index 513e7351..2db48491 100644
+--- a/etc/SuperBuild/tests/OpenColorIOTest/CMakeLists.txt
++++ b/etc/SuperBuild/tests/OpenColorIOTest/CMakeLists.txt
+@@ -1,10 +1,10 @@
+ find_package(ZLIB REQUIRED)
+-find_package(minizip REQUIRED)
++find_package(minizip-ng REQUIRED)
+ find_package(OpenColorIO REQUIRED)
+ 
+ set(source main.cpp)
+ 
+ add_executable(OpenColorIOTest ${header} ${source})
+-target_link_libraries(OpenColorIOTest OpenColorIO::OpenColorIO MINIZIP::minizip ZLIB::ZLIB)
++target_link_libraries(OpenColorIOTest OpenColorIO::OpenColorIO MINIZIP::minizip-ng ZLIB::ZLIB)
+ 
+ add_test(OpenColorIOTest OpenColorIOTest)
+diff --git a/lib/tlCore/CMakeLists.txt b/lib/tlCore/CMakeLists.txt
+index d02fa96a..877c8462 100644
+--- a/lib/tlCore/CMakeLists.txt
++++ b/lib/tlCore/CMakeLists.txt
+@@ -40,7 +40,7 @@ else()
+ endif()
+ 
+ set(LIBRARIES tlResource feather-tk::feather-tk-core OTIO::opentimelineio Imath::Imath nlohmann_json::nlohmann_json)
+-set(LIBRARIES_PRIVATE Freetype::Freetype MINIZIP::minizip ZLIB::ZLIB)
++set(LIBRARIES_PRIVATE Freetype::Freetype MINIZIP::minizip-ng ZLIB::ZLIB)
+ if(TLRENDER_OCIO)
+     list(APPEND LIBRARIES OpenColorIO::OpenColorIO)
+ endif()
+diff --git a/lib/tlTimeline/CMakeLists.txt b/lib/tlTimeline/CMakeLists.txt
+index ad384749..82a6aacb 100644
+--- a/lib/tlTimeline/CMakeLists.txt
++++ b/lib/tlTimeline/CMakeLists.txt
+@@ -49,7 +49,7 @@ set(SOURCE
+     Video.cpp)
+ 
+ add_library(tlTimeline ${HEADERS} ${PRIVATE_HEADERS} ${SOURCE})
+-target_link_libraries(tlTimeline tlIO)
++target_link_libraries(tlTimeline tlIO MINIZIP::minizip-ng)
+ set_target_properties(tlTimeline PROPERTIES FOLDER lib)
+ set_target_properties(tlTimeline PROPERTIES PUBLIC_HEADER "${HEADERS}")
+ 
+diff --git a/lib/tlTimeline/TimelineCreate.cpp b/lib/tlTimeline/TimelineCreate.cpp
+index 9596ab21..c8884435 100644
+--- a/lib/tlTimeline/TimelineCreate.cpp
++++ b/lib/tlTimeline/TimelineCreate.cpp
+@@ -99,7 +99,7 @@ namespace tl
+         public:
+             ZipReader(const std::string& fileName)
+             {
+-                mz_zip_reader_create(&reader);
++                reader = mz_zip_reader_create();
+                 if (!reader)
+                 {
+                     throw std::runtime_error(feather_tk::Format(
+diff --git a/lib/tlTimeline/Util.cpp b/lib/tlTimeline/Util.cpp
+index 611f02ad..338df840 100644
+--- a/lib/tlTimeline/Util.cpp
++++ b/lib/tlTimeline/Util.cpp
+@@ -662,7 +662,7 @@ namespace tl
+                 }
+ 
+                 // Open the output file.
+-                mz_zip_writer_create(&_writer);
++                _writer = mz_zip_writer_create();
+                 if (!_writer)
+                 {
+                     throw std::runtime_error(feather_tk::Format("Cannot create writer: \"{0}\"").arg(fileName));
+diff --git a/tlRenderConfig.cmake.in b/tlRenderConfig.cmake.in
+index 11312d32..e6ec1184 100644
+--- a/tlRenderConfig.cmake.in
++++ b/tlRenderConfig.cmake.in
+@@ -9,7 +9,7 @@ include(CMakeFindDependencyMacro)
+ find_package(Imath REQUIRED)
+ find_package(nlohmann_json REQUIRED)
+ find_package(ZLIB REQUIRED)
+-find_package(minizip REQUIRED)
++find_package(minizip-ng REQUIRED)
+ find_package(OpenTimelineIO REQUIRED)
+ 
+ # OpenColorIO dependencies

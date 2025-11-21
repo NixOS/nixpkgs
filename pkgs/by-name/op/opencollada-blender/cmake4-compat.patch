@@ -1,0 +1,26 @@
+From f036950f1ccc3ebdfe2fdc0a52d35a4620252901 Mon Sep 17 00:00:00 2001
+From: Grimmauld <Grimmauld@grimmauld.de>
+Date: Sat, 27 Sep 2025 11:43:21 +0200
+Subject: [PATCH] Build: update cmake minimum version to 3.10
+
+cmake ABI compatibility with cmake <3.5 has been removed in cmake 4.
+Compatibility with cmake <3.10 is deprecated and soon to be removed.
+Thus set 3.10 minimum version. This is available in the vast majority
+of current linux distributions, as well as other platforms.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 95abbe213..2d14b2552 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,7 +18,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+ 	endif()
+ endif()
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ 
+ #-----------------------------------------------------------------------------

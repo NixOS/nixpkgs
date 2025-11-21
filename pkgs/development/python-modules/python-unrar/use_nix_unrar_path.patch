@@ -1,0 +1,13 @@
+diff --git a/unrar/unrarlib.py b/unrar/unrarlib.py
+index 06df081..22c1dde 100644
+--- a/unrar/unrarlib.py
++++ b/unrar/unrarlib.py
+@@ -31,7 +31,7 @@ __all__ = ["RAROpenArchiveDataEx", "RARHeaderDataEx", "RAROpenArchiveEx",
+            "dostime_to_timetuple"]
+ 
+ 
+-lib_path = os.environ.get('UNRAR_LIB_PATH', None)
++lib_path = "@unrar_lib_path@"
+ 
+ # find and load unrar library
+ unrarlib = None

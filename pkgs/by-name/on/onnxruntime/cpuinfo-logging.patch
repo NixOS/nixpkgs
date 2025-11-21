@@ -1,0 +1,45 @@
+diff --git a/onnxruntime/core/common/cpuid_info.cc b/onnxruntime/core/common/cpuid_info.cc
+--- a/onnxruntime/core/common/cpuid_info.cc
++++ b/onnxruntime/core/common/cpuid_info.cc
+@@ -3,6 +3,7 @@
+ #include "core/common/cpuid_info.h"
+ #include "core/common/logging/logging.h"
+ #include "core/common/logging/severity.h"
++#include <iostream>
+ 
+ #ifdef __linux__
+ 
+@@ -364,8 +365,14 @@
+ #if defined(CPUINFO_SUPPORTED)
+   pytorch_cpuinfo_init_ = cpuinfo_initialize();
+   if (!pytorch_cpuinfo_init_) {
+-    LOGS_DEFAULT(WARNING) << "Failed to initialize PyTorch cpuinfo library. May cause CPU EP performance degradation "
+-                             "due to undetected CPU features.";
++    constexpr const char* message =
++        "Failed to initialize PyTorch cpuinfo library. May cause CPU EP performance degradation due to undetected CPU "
++        "features.";
++    if (logging::LoggingManager::HasDefaultLogger()) {
++      LOGS_DEFAULT(WARNING) << message;
++    } else {
++      std::cerr << "onnxruntime cpuid_info warning: " << message << std::endl;
++    }
+   }
+ #endif  // defined(CPUINFO_SUPPORTED)
+ #if defined(__linux__)
+diff --git a/onnxruntime/core/platform/posix/env.cc b/onnxruntime/core/platform/posix/env.cc
+--- a/onnxruntime/core/platform/posix/env.cc
++++ b/onnxruntime/core/platform/posix/env.cc
+@@ -605,7 +605,12 @@
+   PosixEnv() {
+     cpuinfo_available_ = cpuinfo_initialize();
+     if (!cpuinfo_available_) {
+-      LOGS_DEFAULT(INFO) << "cpuinfo_initialize failed";
++      constexpr const char* message = "cpuinfo_initialize failed";
++      if (logging::LoggingManager::HasDefaultLogger()) {
++        LOGS_DEFAULT(INFO) << message;
++      } else {
++        std::cerr << "onnxruntime cpuid_info warning: " << message << std::endl;
++      }
+     }
+   }
+   bool cpuinfo_available_{false};

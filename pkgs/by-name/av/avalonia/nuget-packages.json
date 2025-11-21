@@ -1,0 +1,996 @@
+[
+  {
+    "id": "Avalonia",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": ".NETFramework,Version=v4.6.1",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Microsoft.Bcl.AsyncInterfaces",
+            "version": "6.0.0"
+          },
+          {
+            "id": "System.ComponentModel.Annotations",
+            "version": "4.5.0"
+          },
+          {
+            "id": "System.Memory",
+            "version": "4.5.3"
+          },
+          {
+            "id": "System.Runtime.CompilerServices.Unsafe",
+            "version": "4.6.0"
+          },
+          {
+            "id": "System.Threading.Tasks.Extensions",
+            "version": "4.5.4"
+          },
+          {
+            "id": "System.ValueTuple",
+            "version": "4.5.0"
+          },
+          {
+            "id": "MicroCom.Runtime",
+            "version": "0.11.0"
+          }
+        ]
+      },
+      {
+        "framework": ".NETCoreApp,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Microsoft.Bcl.AsyncInterfaces",
+            "version": "6.0.0"
+          },
+          {
+            "id": "System.ComponentModel.Annotations",
+            "version": "4.5.0"
+          },
+          {
+            "id": "System.Memory",
+            "version": "4.5.3"
+          },
+          {
+            "id": "System.Runtime.CompilerServices.Unsafe",
+            "version": "4.6.0"
+          },
+          {
+            "id": "System.Threading.Tasks.Extensions",
+            "version": "4.5.4"
+          },
+          {
+            "id": "System.ValueTuple",
+            "version": "4.5.0"
+          },
+          {
+            "id": "MicroCom.Runtime",
+            "version": "0.11.0"
+          }
+        ]
+      },
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "System.ComponentModel.Annotations",
+            "version": "4.5.0"
+          },
+          {
+            "id": "MicroCom.Runtime",
+            "version": "0.11.0"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Microsoft.Bcl.AsyncInterfaces",
+            "version": "6.0.0"
+          },
+          {
+            "id": "System.ComponentModel.Annotations",
+            "version": "4.5.0"
+          },
+          {
+            "id": "System.Memory",
+            "version": "4.5.3"
+          },
+          {
+            "id": "System.Runtime.CompilerServices.Unsafe",
+            "version": "4.6.0"
+          },
+          {
+            "id": "System.Threading.Tasks.Extensions",
+            "version": "4.5.4"
+          },
+          {
+            "id": "System.ValueTuple",
+            "version": "4.5.0"
+          },
+          {
+            "id": "MicroCom.Runtime",
+            "version": "0.11.0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Browser",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net7.0",
+        "packages": [
+          {
+            "id": "HarfBuzzSharp",
+            "version": "7.3.0"
+          },
+          {
+            "id": "SkiaSharp",
+            "version": "2.88.7"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Browser.Blazor",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net7.0",
+        "packages": [
+          {
+            "id": "Microsoft.AspNetCore.Components.Web",
+            "version": "7.0.2"
+          },
+          {
+            "id": "Avalonia.Browser",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Controls.ColorPicker",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Controls.DataGrid",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia.Remote.Protocol",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Controls.ItemsRepeater",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Desktop",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Native",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.X11",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Win32",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Native",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.X11",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Win32",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Diagnostics",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Microsoft.CodeAnalysis.CSharp.Scripting",
+            "version": "3.8.0"
+          },
+          {
+            "id": "Microsoft.CodeAnalysis.Common",
+            "version": "3.8.0"
+          },
+          {
+            "id": "Avalonia.Controls.ColorPicker",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Controls.DataGrid",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Themes.Simple",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Microsoft.CodeAnalysis.CSharp.Scripting",
+            "version": "3.8.0"
+          },
+          {
+            "id": "Microsoft.CodeAnalysis.Common",
+            "version": "3.8.0"
+          },
+          {
+            "id": "Avalonia.Controls.ColorPicker",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Controls.DataGrid",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Themes.Simple",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Direct2D1",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "HarfBuzzSharp",
+            "version": "7.3.0"
+          },
+          {
+            "id": "SharpDX",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.DXGI",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.Direct2D1",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.Direct3D11",
+            "version": "4.0.1"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Win32",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "HarfBuzzSharp",
+            "version": "7.3.0"
+          },
+          {
+            "id": "SharpDX",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.DXGI",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.Direct2D1",
+            "version": "4.0.1"
+          },
+          {
+            "id": "SharpDX.Direct3D11",
+            "version": "4.0.1"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Win32",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Fonts.Inter",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.FreeDesktop",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Tmds.DBus.Protocol",
+            "version": "0.15.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Tmds.DBus.Protocol",
+            "version": "0.15.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Headless",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Headless.NUnit",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "NUnit",
+            "version": "3.13.0"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "NUnit",
+            "version": "3.13.0"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Headless.Vnc",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Quamotion.RemoteViewing",
+            "version": "1.1.21"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Quamotion.RemoteViewing",
+            "version": "1.1.21"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Headless.XUnit",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "xunit.core",
+            "version": "2.4.0"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "xunit.core",
+            "version": "2.4.0"
+          },
+          {
+            "id": "Avalonia.Headless",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.LinuxFramebuffer",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Markup.Xaml.Loader",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "System.Reflection.Emit",
+            "version": "4.3.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "System.Reflection.Emit",
+            "version": "4.3.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Native",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.ReactiveUI",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "ReactiveUI",
+            "version": "18.3.1"
+          },
+          {
+            "id": "System.Reactive",
+            "version": "5.0.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "ReactiveUI",
+            "version": "18.3.1"
+          },
+          {
+            "id": "System.Reactive",
+            "version": "5.0.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Remote.Protocol",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": []
+  },
+  {
+    "id": "Avalonia.Skia",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "HarfBuzzSharp",
+            "version": "7.3.0"
+          },
+          {
+            "id": "HarfBuzzSharp.NativeAssets.Linux",
+            "version": "7.3.0"
+          },
+          {
+            "id": "HarfBuzzSharp.NativeAssets.WebAssembly",
+            "version": "7.3.0"
+          },
+          {
+            "id": "SkiaSharp",
+            "version": "2.88.7"
+          },
+          {
+            "id": "SkiaSharp.NativeAssets.Linux",
+            "version": "2.88.7"
+          },
+          {
+            "id": "SkiaSharp.NativeAssets.WebAssembly",
+            "version": "2.88.7"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "HarfBuzzSharp",
+            "version": "7.3.0"
+          },
+          {
+            "id": "HarfBuzzSharp.NativeAssets.Linux",
+            "version": "7.3.0"
+          },
+          {
+            "id": "HarfBuzzSharp.NativeAssets.WebAssembly",
+            "version": "7.3.0"
+          },
+          {
+            "id": "SkiaSharp",
+            "version": "2.88.7"
+          },
+          {
+            "id": "SkiaSharp.NativeAssets.Linux",
+            "version": "2.88.7"
+          },
+          {
+            "id": "SkiaSharp.NativeAssets.WebAssembly",
+            "version": "2.88.7"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Themes.Fluent",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Themes.Simple",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.Win32",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia.Angle.Windows.Natives",
+            "version": "2.1.0.2023020321"
+          },
+          {
+            "id": "System.Numerics.Vectors",
+            "version": "4.5.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia.Angle.Windows.Natives",
+            "version": "2.1.0.2023020321"
+          },
+          {
+            "id": "System.Numerics.Vectors",
+            "version": "4.5.0"
+          },
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Avalonia.X11",
+    "version": "11.0.11",
+    "hash": null,
+    "dependencies": [
+      {
+        "framework": "net6.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.FreeDesktop",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          }
+        ]
+      },
+      {
+        "framework": ".NETStandard,Version=v2.0",
+        "packages": [
+          {
+            "id": "Avalonia",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.FreeDesktop",
+            "version": "11.0.11"
+          },
+          {
+            "id": "Avalonia.Skia",
+            "version": "11.0.11"
+          }
+        ]
+      }
+    ]
+  }
+]

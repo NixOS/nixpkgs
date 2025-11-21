@@ -1,0 +1,102 @@
+Adapted from https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch
+--- /dev/null
++++ b/osmodel.mak
+@@ -0,0 +1,75 @@
++#   osmodel.mak
++#
++# Detects and sets the macros:
++#
++#   OS         = one of {osx,linux,freebsd,openbsd,netbsd,dragonflybsd,solaris}
++#   MODEL      = one of { 32, 64 }
++#   MODEL_FLAG = one of { -m32, -m64 }
++#   ARCH       = one of { x86, x86_64, aarch64 }
++#
++# Note:
++#   Keep this file in sync between druntime, phobos, and dmd repositories!
++# Source: https://github.com/dlang/dmd/blob/master/src/osmodel.mak
++
++
++ifeq (,$(OS))
++  uname_S:=$(shell uname -s)
++  ifeq (Darwin,$(uname_S))
++    OS:=osx
++  endif
++  ifeq (Linux,$(uname_S))
++    OS:=linux
++  endif
++  ifeq (FreeBSD,$(uname_S))
++    OS:=freebsd
++  endif
++  ifeq (OpenBSD,$(uname_S))
++    OS:=openbsd
++  endif
++  ifeq (NetBSD,$(uname_S))
++    OS:=netbsd
++  endif
++  ifeq (DragonFly,$(uname_S))
++    OS:=dragonflybsd
++  endif
++  ifeq (Solaris,$(uname_S))
++    OS:=solaris
++  endif
++  ifeq (SunOS,$(uname_S))
++    OS:=solaris
++  endif
++  ifeq (,$(OS))
++    $(error Unrecognized or unsupported OS for uname: $(uname_S))
++  endif
++endif
++
++# When running make from XCode it may set environment var OS=MACOS.
++# Adjust it here:
++ifeq (MACOS,$(OS))
++  OS:=osx
++endif
++
++ifeq (,$(MODEL))
++  ifeq ($(OS), solaris)
++    uname_M:=$(shell isainfo -n)
++  else
++    uname_M:=$(shell uname -m)
++  endif
++  ifneq (,$(findstring $(uname_M),x86_64 amd64))
++    MODEL:=64
++    ARCH:=x86_64
++  endif
++  ifneq (,$(findstring $(uname_M),aarch64 arm64))
++    MODEL:=64
++    ARCH:=aarch64
++  endif
++  ifneq (,$(findstring $(uname_M),i386 i586 i686))
++    MODEL:=32
++    ARCH:=x86
++  endif
++  ifeq (,$(MODEL))
++    $(error Cannot figure 32/64 model and arch from uname -m: $(uname_M))
++  endif
++endif
++
++MODEL_FLAG:=-m$(MODEL)
+--- a/Makefile
++++ b/Makefile
+@@ -9,9 +9,8 @@ DUB=dub
+ WITH_DOC = no
+ DOC = ../dlang.org
+ 
+-# Load operating system $(OS) (e.g. linux, osx, ...) and $(MODEL) (e.g. 32, 64) detection Makefile from dmd
+-$(shell [ ! -d $(DMD_DIR) ] && git clone --depth=1 https://github.com/dlang/dmd $(DMD_DIR))
+-include $(DMD_DIR)/compiler/src/osmodel.mak
++# Load operating system $(OS) (e.g. linux, osx, ...) and $(MODEL) (e.g. 32, 64) detection Makefile
++include osmodel.mak
+ 
+ ifeq (windows,$(OS))
+     DOTEXE:=.exe
+@@ -30,7 +29,7 @@ DFLAGS = $(MODEL_FLAG) $(if $(findstring windows,$(OS)),,-fPIC) -preview=dip1000
+ DFLAGS += $(WARNINGS)
+ 
+ # Default DUB flags (DUB uses a different architecture format)
+-DUBFLAGS = --arch=$(subst 32,x86,$(subst 64,x86_64,$(MODEL)))
++DUBFLAGS = --arch=$(ARCH)
+ 
+ TOOLS = \
+     $(ROOT)/catdoc$(DOTEXE) \

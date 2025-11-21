@@ -1,0 +1,13 @@
+diff --git a/src/test/java/nl/altindag/crip/command/FileBaseTest.java b/src/test/java/nl/altindag/crip/command/FileBaseTest.java
+index 674ca10..f140601 100644
+--- a/src/test/java/nl/altindag/crip/command/FileBaseTest.java
++++ b/src/test/java/nl/altindag/crip/command/FileBaseTest.java
+@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
+ 
+ public class FileBaseTest extends BaseTest {
+ 
+-    protected static final Path TEMP_DIRECTORY = Paths.get(System.getProperty("user.home"), "certificate-ripper-temp");
++    protected static final Path TEMP_DIRECTORY = Paths.get(System.getenv("TMP"), "certificate-ripper-temp");
+ 
+     @BeforeEach
+     void createTempDirAndClearConsoleCaptor() throws IOException {

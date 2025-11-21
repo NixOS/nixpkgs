@@ -1,0 +1,20 @@
+diff --git a/include/libxml/tree.h b/include/libxml/tree.h
+index e5a8fb709471f..7819d5819b427 100644
+--- a/include/libxml/tree.h
++++ b/include/libxml/tree.h
+@@ -454,6 +454,7 @@ struct _xmlAttr {
+     xmlAttributeType atype;     /* the attribute type if validating */
+     void            *psvi;	/* for type/PSVI information */
+     struct _xmlID   *id;        /* the ID struct */
++    unsigned int     extra;     /* extra data for XPath/XSLT */
+ };
+ 
+ /**
+@@ -592,6 +593,7 @@ struct _xmlDoc {
+ 				   document */
+     int             properties;	/* set of xmlDocProperties for this document
+ 				   set at the end of parsing */
++    unsigned int    extra;      /* extra data for XPath/XSLT */
+ };
+ 
+ 

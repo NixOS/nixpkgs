@@ -1,0 +1,261 @@
+commit cfc05af26b571e9ca09e9c709c0fb8934e9e46dd
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Sat Aug 20 17:48:01 2022 +0200
+
+    Fix finding tesseract
+
+diff --git a/src/pyocr/libtesseract/tesseract_raw.py b/src/pyocr/libtesseract/tesseract_raw.py
+index 1edec8c..434a336 100644
+--- a/src/pyocr/libtesseract/tesseract_raw.py
++++ b/src/pyocr/libtesseract/tesseract_raw.py
+@@ -2,7 +2,6 @@ import ctypes
+ import locale
+ import logging
+ import os
+-import sys
+ 
+ from ..error import TesseractError
+ 
+@@ -10,51 +9,16 @@ from ..error import TesseractError
+ logger = logging.getLogger(__name__)
+ 
+ TESSDATA_PREFIX = os.getenv('TESSDATA_PREFIX', None)
+-libnames = []
++if TESSDATA_PREFIX is None:
++    TESSDATA_PREFIX = '@tesseract@/share/tessdata'
++    os.environ['TESSDATA_PREFIX'] = TESSDATA_PREFIX
++
++
+ # 70 is the minimum credible dpi for tesseract and force it to compute an
+ # estimate of the image dpi
+ DPI_DEFAULT = 70
+ 
+-
+-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+-    # Pyinstaller integration
+-    libnames += [os.path.join(sys._MEIPASS, "libtesseract-4.dll")]
+-    libnames += [os.path.join(sys._MEIPASS, "libtesseract-3.dll")]
+-    tessdata = os.path.join(sys._MEIPASS, "data")
+-    if not os.path.exists(os.path.join(tessdata, "tessdata")):
+-        logger.warning(
+-            "Running from container, but no tessdata ({}) found !".format(
+-                tessdata
+-            )
+-        )
+-    else:
+-        TESSDATA_PREFIX = os.path.join(tessdata, "tessdata")
+-
+-
+-if sys.platform[:3] == "win":  # pragma: no cover
+-    libnames += [
+-        # Jflesch> Don't they have the equivalent of LD_LIBRARY_PATH on
+-        # Windows ?
+-        "../vs2010/DLL_Release/libtesseract302.dll",
+-        # prefer the most recent first
+-        "libtesseract305.dll",
+-        "libtesseract304.dll",
+-        "libtesseract303.dll",
+-        "libtesseract302.dll",
+-        "libtesseract400.dll",  # Tesseract 4 is still in alpha stage
+-        "libtesseract.dll",
+-        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-4.dll",
+-        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-3.dll",
+-    ]
+-else:
+-    libnames += [
+-        "libtesseract.so.5",
+-        "libtesseract.so.4",
+-        "libtesseract.so.3",
+-        "libtesseract.5.dylib",
+-        "libtesseract.4.dylib",
+-    ]
+-
++libnames = [ "@tesseractLibraryLocation@" ]
+ 
+ g_libtesseract = None
+ 
+@@ -367,12 +331,12 @@ def init(lang=None):
+     try:
+         if lang:
+             lang = lang.encode("utf-8")
+-        prefix = None
+-        if TESSDATA_PREFIX:  # pragma: no cover
+-            prefix = TESSDATA_PREFIX.encode("utf-8")
++
++        prefix = TESSDATA_PREFIX
++
+         g_libtesseract.TessBaseAPIInit3(
+             ctypes.c_void_p(handle),
+-            ctypes.c_char_p(prefix),
++            ctypes.c_char_p(prefix.encode('utf-8')),
+             ctypes.c_char_p(lang)
+         )
+         g_libtesseract.TessBaseAPISetVariable(
+diff --git a/src/pyocr/tesseract.py b/src/pyocr/tesseract.py
+index 0fe0d20..c1fdd27 100644
+--- a/src/pyocr/tesseract.py
++++ b/src/pyocr/tesseract.py
+@@ -28,8 +28,7 @@ from .builders import DigitBuilder  # backward compatibility
+ from .error import TesseractError  # backward compatibility
+ from .util import digits_only
+ 
+-# CHANGE THIS IF TESSERACT IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
+-TESSERACT_CMD = 'tesseract.exe' if os.name == 'nt' else 'tesseract'
++TESSERACT_CMD = '@tesseract@/bin/tesseract'
+ 
+ TESSDATA_EXTENSION = ".traineddata"
+ 
+diff --git a/tests/test_libtesseract.py b/tests/test_libtesseract.py
+index cc31a50..890c02c 100644
+--- a/tests/test_libtesseract.py
++++ b/tests/test_libtesseract.py
+@@ -167,7 +167,8 @@ class TestLibTesseractRaw(BaseTest):
+             args = libtess.TessBaseAPIInit3.call_args[0]
+             self.assertEqual(len(args), 3)
+             self.assertEqual(args[0].value, self.handle)
+-            self.assertEqual(args[1].value, None)
++            # we hardcode tesseract data, so we don't get None
++            #self.assertEqual(args[1].value, None)
+             self.assertEqual(args[2].value, lang.encode() if lang else None)
+ 
+             self.assertEqual(
+@@ -203,7 +204,8 @@ class TestLibTesseractRaw(BaseTest):
+             args = libtess.TessBaseAPIInit3.call_args[0]
+             self.assertEqual(len(args), 3)
+             self.assertEqual(args[0].value, self.handle)
+-            self.assertEqual(args[1].value, None)
++            # we hardcode tesseract data, so we don't get None
++            #self.assertEqual(args[1].value, None)
+             self.assertEqual(args[2].value, lang.encode() if lang else None)
+ 
+             self.assertEqual(
+diff --git a/tests/test_tesseract.py b/tests/test_tesseract.py
+index 823818f..2ee5fb4 100644
+--- a/tests/test_tesseract.py
++++ b/tests/test_tesseract.py
+@@ -37,7 +37,7 @@ class TestTesseract(BaseTest):
+     def test_available(self, which):
+         which.return_value = True
+         self.assertTrue(tesseract.is_available())
+-        which.assert_called_once_with("tesseract")
++        which.assert_called_once_with("@tesseract@/bin/tesseract")
+ 
+     @patch("subprocess.Popen")
+     def test_version_error(self, popen):
+@@ -163,7 +163,7 @@ class TestTesseract(BaseTest):
+         for lang in ("eng", "fra", "jpn", "osd"):
+             self.assertIn(lang, langs)
+         popen.assert_called_once_with(
+-            ["tesseract", "--list-langs"],
++            ["@tesseract@/bin/tesseract", "--list-langs"],
+             startupinfo=None, creationflags=0,
+             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+         )
+@@ -178,7 +178,7 @@ class TestTesseract(BaseTest):
+         self.assertEqual(te.exception.status, 1)
+         self.assertEqual("unable to get languages", te.exception.message)
+         popen.assert_called_once_with(
+-            ["tesseract", "--list-langs"],
++            ["@tesseract@/bin/tesseract", "--list-langs"],
+             startupinfo=None, creationflags=0,
+             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+         )
+@@ -255,7 +255,7 @@ class TestTesseract(BaseTest):
+         self.assertEqual(status, 0)
+         self.assertEqual(error, message)
+         popen.assert_called_once_with(
+-            ["tesseract", "input.bmp", "output"],
++            ["@tesseract@/bin/tesseract", "input.bmp", "output"],
+             cwd=tmpdir,
+             startupinfo=None,
+             creationflags=0,
+@@ -278,7 +278,7 @@ class TestTesseract(BaseTest):
+         self.assertEqual(status, 0)
+         self.assertEqual(error, message)
+         popen.assert_called_with(
+-            ["tesseract", "input2.bmp", "output2", "-l", "fra", "--psm", "3"],
++            ["@tesseract@/bin/tesseract", "input2.bmp", "output2", "-l", "fra", "--psm", "3"],
+             cwd=tmpdir,
+             startupinfo=None,
+             creationflags=0,
+@@ -309,7 +309,7 @@ class TestTesseract(BaseTest):
+             self.assertEqual(result["angle"], 90)
+             self.assertEqual(result["confidence"], 9.30)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "--psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "--psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -345,7 +345,7 @@ class TestTesseract(BaseTest):
+             self.assertEqual(result["angle"], 90)
+             self.assertEqual(result["confidence"], 9.30)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "--psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "--psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -378,7 +378,7 @@ class TestTesseract(BaseTest):
+             self.assertEqual(result["angle"], 90)
+             self.assertEqual(result["confidence"], 9.30)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout",
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout",
+                  "--psm", "0", "-l", "osd"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+@@ -406,7 +406,7 @@ class TestTesseract(BaseTest):
+             with self.assertRaises(tesseract.TesseractError) as te:
+                 tesseract.detect_orientation(self.image)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "--psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "--psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -440,7 +440,7 @@ class TestTesseract(BaseTest):
+             with self.assertRaises(tesseract.TesseractError) as te:
+                 tesseract.detect_orientation(self.image)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "--psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "--psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -474,7 +474,7 @@ class TestTesseract(BaseTest):
+             self.assertEqual(result["angle"], 90)
+             self.assertEqual(result["confidence"], 9.30)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "-psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "-psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -507,7 +507,7 @@ class TestTesseract(BaseTest):
+             self.assertEqual(result["angle"], 90)
+             self.assertEqual(result["confidence"], 9.30)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "-psm", "0", "-l", "fra"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "-psm", "0", "-l", "fra"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -534,7 +534,7 @@ class TestTesseract(BaseTest):
+             with self.assertRaises(tesseract.TesseractError) as te:
+                 tesseract.detect_orientation(self.image)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "-psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "-psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,
+@@ -568,7 +568,7 @@ class TestTesseract(BaseTest):
+             with self.assertRaises(tesseract.TesseractError) as te:
+                 tesseract.detect_orientation(self.image)
+             popen.assert_called_once_with(
+-                ["tesseract", "input.bmp", "stdout", "-psm", "0"],
++                ["@tesseract@/bin/tesseract", "input.bmp", "stdout", "-psm", "0"],
+                 stdin=subprocess.PIPE,
+                 shell=False,
+                 startupinfo=None,

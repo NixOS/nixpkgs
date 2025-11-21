@@ -1,0 +1,20 @@
+diff --git a/src/Runner.Common/HostContext.cs b/src/Runner.Common/HostContext.cs
+index d4ea48c..2ec8455 100644
+--- a/src/Runner.Common/HostContext.cs
++++ b/src/Runner.Common/HostContext.cs
+@@ -220,12 +220,13 @@ namespace GitHub.Runner.Common
+ 
+                 case WellKnownDirectory.Externals:
+                     path = Path.Combine(
+-                        GetDirectory(WellKnownDirectory.Root),
++                        new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName,
+                         Constants.Path.ExternalsDirectory);
+                     break;
+ 
+                 case WellKnownDirectory.Root:
+-                    path = new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
++                    path = Environment.GetEnvironmentVariable("RUNNER_ROOT")
++                                ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
+                     break;
+ 
+                 case WellKnownDirectory.Temp:

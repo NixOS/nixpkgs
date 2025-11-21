@@ -1,0 +1,104 @@
+{
+  "x86_64-linux": {
+    "libpicocv": {
+      "sha256": "cff2f4b4460ce58d97a8e4dfde55386cd1836b463b551c17928757493089e475",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libpicocv/libpicocv_1.1.43-1r443_amd64.deb",
+      "version": "1.1.43-1r443"
+    },
+    "libpicohrdl": {
+      "sha256": "920c529b8f49cfff3d1050f45753fa8bfca3f2d8e87c9712447c8f4fc766d60a",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libpicohrdl/libpicohrdl_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "libpicoipp": {
+      "sha256": "4a84f0af7f4e8cba91fad620eac0cd23c36b2fdda4637904be564286b10ffe1d",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libpicoipp/libpicoipp_1.4.0-4r161_amd64.deb",
+      "version": "1.4.0-4r161"
+    },
+    "libpl1000": {
+      "sha256": "5f81971fb54dc12ddb3654c95b085cc6d750e932b759cdfaae47d8ad1a1bcaaf",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libpl1000/libpl1000_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "libplcm3": {
+      "sha256": "82a962c4a1a3049b4c258cf419e8468326f7931bdd3d5288af697271ed39a261",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libplcm3/libplcm3_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "libps2000": {
+      "sha256": "e51a2870450b9921c9b4a2a26d579b9d44047cf015ef0c51d8a19c9f26309983",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps2000/libps2000_3.0.150-3r6187_amd64.deb",
+      "version": "3.0.150-3r6187"
+    },
+    "libps2000a": {
+      "sha256": "19be0c046dbd2725e236f3508af45141a6723ec51b0fcf9a2d7bcd818d53a0b1",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps2000a/libps2000a_2.2.154-5r6530_amd64.deb",
+      "version": "2.2.154-5r6530"
+    },
+    "libps3000": {
+      "sha256": "41bbabe8abc39245612996cbc10053dfe06275b819ab57f9fbf48ef798c18a1a",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps3000/libps3000_4.0.149-3r6187_amd64.deb",
+      "version": "4.0.149-3r6187"
+    },
+    "libps3000a": {
+      "sha256": "7a01aedb064c366405e9b5d9af5b1adfc27b6b782bda1d0bd3b3bee3e595a41a",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps3000a/libps3000a_2.2.157-6r7555_amd64.deb",
+      "version": "2.2.157-6r7555"
+    },
+    "libps4000": {
+      "sha256": "0d1dff842e806e8f193ee319f88203b8fbb0391d53188e77fa9601bbbf8d2ef6",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps4000/libps4000_2.1.151-2r6187_amd64.deb",
+      "version": "2.1.151-2r6187"
+    },
+    "libps4000a": {
+      "sha256": "1d2ab448ed2b92f305410dbea452268071cb096edb88855e60dd627be7faed45",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps4000a/libps4000a_2.2.206-2r7757_amd64.deb",
+      "version": "2.2.206-2r7757"
+    },
+    "libps5000": {
+      "sha256": "e3dbd0534d1acf5c81b5170d276dcb8d0b612c3fd55f5cc212581d51734079cd",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps5000/libps5000_2.1.151-3r6187_amd64.deb",
+      "version": "2.1.151-3r6187"
+    },
+    "libps5000a": {
+      "sha256": "f17ab24eb77df24d4957b848f64815a47227d5eb246c31a111d7eadb43d04cf4",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps5000a/libps5000a_2.2.11-5r5086_amd64.deb",
+      "version": "2.2.11-5r5086"
+    },
+    "libps6000": {
+      "sha256": "01716b5d24f670ca709ca6e0947f3ca1cebb225d3b1037eee692ef049dc1946c",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps6000/libps6000_2.1.151-6r6187_amd64.deb",
+      "version": "2.1.151-6r6187"
+    },
+    "libps6000a": {
+      "sha256": "4ecf9543d388c6b972e78d3b2caa09f9a314e9cb6fd54b24c1e227fcaa3f8f12",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libps6000a/libps6000a_2.0.156-0r167_amd64.deb",
+      "version": "2.0.156-0r167"
+    },
+    "libpsospa": {
+      "sha256": "adaf1f555b8b6f0950731cd642488bd8707a09291e0f1fb7a79ed22867203eb4",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libp/libpsospa/libpsospa_1.0.149-0r5787_amd64.deb",
+      "version": "1.0.149-0r5787"
+    },
+    "libusbdrdaq": {
+      "sha256": "0906429cd32b34aaaaa41ae9f60f6b47ecbdc0b53e49275a3349141f2e79d806",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libu/libusbdrdaq/libusbdrdaq_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "libusbpt104": {
+      "sha256": "a73a175dcced17e59ade58edb760c8e11551300841e5c30c16cbd7c1bfe6c540",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libu/libusbpt104/libusbpt104_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "libusbtc08": {
+      "sha256": "551f3f290d7ee672a4e0533ffebeab746ba552c3a4d0c857edaf7c2494a96659",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/libu/libusbtc08/libusbtc08_2.0.150-1r6187_amd64.deb",
+      "version": "2.0.150-1r6187"
+    },
+    "picoscope": {
+      "sha256": "ab4a0db634b93bd5dcf7cb7fca52591c03130d57451d3ddb3942a0e663c4ffd7",
+      "url": "https://labs.picotech.com/rc/picoscope7/debian/pool/main/p/picoscope/picoscope_7.2.6.7136_amd64.deb",
+      "version": "7.2.6.7136"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+From b69fee70154a861637c82e98e18be01bbb96423b Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Wed, 12 Jun 2019 17:03:09 +0200
+Subject: [PATCH] kubeconfig: don't store absolute path to gcloud binary
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The `gcloud beta container clusters get-credentials $cluster \
+--region $region --project $project`
+command can be used to write kubectl config files.
+
+In that file, normally the absolute path to the `gcloud` binary is
+stored.
+
+This is a bad idea in NixOS. We might eventually garbage-collect that
+specific gcloud binary - and in general, would expect a nix-shell
+provided gcloud to be used.
+
+In its current state, token renewal would just start to break with the
+following error message:
+
+Unable to connect to the server: error executing access token command "/nix/store/…/gcloud config config-helper --format=json": err=fork/exec /nix/store/…/gcloud: no such file or directory output= stderr=
+
+Avoid this by storing just `gcloud` inside `cmd-path`, which causes
+kubectl to lookup the gcloud command from $PATH, which is more likely to
+keep working.
+---
+ lib/googlecloudsdk/api_lib/container/kubeconfig.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/googlecloudsdk/api_lib/container/kubeconfig.py b/lib/googlecloudsdk/api_lib/container/kubeconfig.py
+index 5975cb8f..b98e6721 100644
+--- a/lib/googlecloudsdk/api_lib/container/kubeconfig.py
++++ b/lib/googlecloudsdk/api_lib/container/kubeconfig.py
+@@ -396,7 +396,7 @@ def _AuthProvider(name='gcp',
+       if sdk_bin_path is None:
+         log.error(SDK_BIN_PATH_NOT_FOUND)
+         raise Error(SDK_BIN_PATH_NOT_FOUND)
+-      cmd_path = os.path.join(sdk_bin_path, bin_name)
++      cmd_path = bin_name
+       try:
+         # Print warning if gke-gcloud-auth-plugin is not present or executable
+         _GetGkeGcloudPluginCommandAndPrintWarning()

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- taken from the nix test suite and then stripped down -->
+<testsuites tests="280" failures="0" disabled="2" errors="0" time="0.2" timestamp="2024-06-16T13:50:02.511" name="AllTests">
+  <testsuite name="parseShebangContent" tests="14" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2024-06-16T13:50:02.511">
+    <testcase name="basic" file="tests/unit/libutil/args.cc" line="10" status="run" result="completed" time="0." timestamp="2024-06-16T13:50:02.511" classname="parseShebangContent" />
+    <testcase name="empty" file="tests/unit/libutil/args.cc" line="18" status="run" result="completed" time="0." timestamp="2024-06-16T13:50:02.511" classname="parseShebangContent" />
+  </testsuite>
+</testsuites>

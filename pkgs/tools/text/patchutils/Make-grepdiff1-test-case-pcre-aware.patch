@@ -1,0 +1,36 @@
+From 1208a632aaeca43f3846116197d645394fbae45d Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Wed, 27 Aug 2025 09:36:01 +0100
+Subject: [PATCH] Make grepdiff1 test-case pcre-aware
+
+The test case needs a different pattern when configured with/without pcre2.
+
+Fixed: #61
+
+Assisted-by: Cursor
+---
+ tests/grepdiff1/run-test | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/tests/grepdiff1/run-test b/tests/grepdiff1/run-test
+index c4311f8..ebb6023 100755
+--- a/tests/grepdiff1/run-test
++++ b/tests/grepdiff1/run-test
+@@ -20,7 +20,16 @@ cat << EOF > diff
+ +b
+ EOF
+ 
+-${GREPDIFF} '\+a' diff 2>errors >index || exit 1
++# Check if PCRE2 is being used by examining the help output
++if ${GREPDIFF} --help 2>&1 | grep -q "PCRE regexes are used by default"; then
++    # PCRE2 is enabled - need to escape the plus sign
++    PATTERN='\+a'
++else
++    # Standard regex - plus sign doesn't need escaping
++    PATTERN='+a'
++fi
++
++${GREPDIFF} "$PATTERN" diff 2>errors >index || exit 1
+ [ -s errors ] && exit 1
+ 
+ cat << EOF | cmp - index || exit 1

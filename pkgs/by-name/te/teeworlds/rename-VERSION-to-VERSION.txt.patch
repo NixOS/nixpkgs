@@ -1,0 +1,33 @@
+From 86d6687ef07f7f05457a7f67537b650656b13820 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert=20M=C3=BCller?= <robert.mueller@uni-siegen.de>
+Date: Fri, 15 Oct 2021 23:45:50 +0200
+Subject: [PATCH] rename VERSION to VERSION.txt:
+
+Fixes compilation on systems with case insensitive file names where the standard library includes the version file source code.
+---
+ src/engine/external/json-parser/{VERSION => VERSION.txt} | 0
+ src/engine/external/pnglite/{VERSION => VERSION.txt}     | 0
+ src/engine/external/wavpack/{VERSION => VERSION.txt}     | 0
+ src/engine/external/zlib/{VERSION => VERSION.txt}        | 0
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+ rename src/engine/external/json-parser/{VERSION => VERSION.txt} (100%)
+ rename src/engine/external/pnglite/{VERSION => VERSION.txt} (100%)
+ rename src/engine/external/wavpack/{VERSION => VERSION.txt} (100%)
+ rename src/engine/external/zlib/{VERSION => VERSION.txt} (100%)
+
+diff --git a/src/engine/external/json-parser/VERSION b/src/engine/external/json-parser/VERSION.txt
+similarity index 100%
+rename from src/engine/external/json-parser/VERSION
+rename to src/engine/external/json-parser/VERSION.txt
+diff --git a/src/engine/external/pnglite/VERSION b/src/engine/external/pnglite/VERSION.txt
+similarity index 100%
+rename from src/engine/external/pnglite/VERSION
+rename to src/engine/external/pnglite/VERSION.txt
+diff --git a/src/engine/external/wavpack/VERSION b/src/engine/external/wavpack/VERSION.txt
+similarity index 100%
+rename from src/engine/external/wavpack/VERSION
+rename to src/engine/external/wavpack/VERSION.txt
+diff --git a/src/engine/external/zlib/VERSION b/src/engine/external/zlib/VERSION.txt
+similarity index 100%
+rename from src/engine/external/zlib/VERSION
+rename to src/engine/external/zlib/VERSION.txt

@@ -1,0 +1,93 @@
+From 78636289b073d67209a20145ef0dc003f2d77db6 Mon Sep 17 00:00:00 2001
+From: Sian Cao <yinshuiboy@gmail.com>
+Date: Tue, 12 Apr 2016 11:36:51 +0800
+Subject: [PATCH 1/2] Add GL_ARB_shader_texture_lod support
+
+The patch is used to do lod biased texturing. I can achieve
+faster blurring of images instead of using large blur radius.
+
+---
+ cogl/cogl-context.h                |  1 +
+ cogl/cogl-glsl-shader.c            | 13 +++++++++++--
+ cogl/cogl-types.h                  |  3 ++-
+ cogl/driver/gl/gl/cogl-driver-gl.c |  7 +++++++
+ 4 files changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/cogl/cogl-context.h b/cogl/cogl-context.h
+index 07badeb..261ce49 100644
+--- a/cogl/cogl-context.h
++++ b/cogl/cogl-context.h
+@@ -290,6 +290,7 @@ typedef enum _CoglFeatureID
+   COGL_FEATURE_ID_PER_VERTEX_POINT_SIZE,
+   COGL_FEATURE_ID_TEXTURE_RG,
+   COGL_FEATURE_ID_BUFFER_AGE,
++  COGL_FEATURE_ID_SHADER_TEXTURE_LOD,
+ 
+   /*< private >*/
+   _COGL_N_FEATURE_IDS   /*< skip >*/
+diff --git a/cogl/cogl-glsl-shader.c b/cogl/cogl-glsl-shader.c
+index 196e0c7..4fb0eb5 100644
+--- a/cogl/cogl-glsl-shader.c
++++ b/cogl/cogl-glsl-shader.c
+@@ -87,8 +87,8 @@ _cogl_glsl_shader_set_source_with_boilerplate (CoglContext *ctx,
+   const char *vertex_boilerplate;
+   const char *fragment_boilerplate;
+ 
+-  const char **strings = g_alloca (sizeof (char *) * (count_in + 4));
+-  GLint *lengths = g_alloca (sizeof (GLint) * (count_in + 4));
++  const char **strings = g_alloca (sizeof (char *) * (count_in + 5));
++  GLint *lengths = g_alloca (sizeof (GLint) * (count_in + 5));
+   char *version_string;
+   int count = 0;
+ 
+@@ -111,6 +111,15 @@ _cogl_glsl_shader_set_source_with_boilerplate (CoglContext *ctx,
+       lengths[count++] = sizeof (texture_3d_extension) - 1;
+     }
+ 
++  if (_cogl_has_private_feature (ctx, COGL_PRIVATE_FEATURE_GL_PROGRAMMABLE) &&
++      cogl_has_feature (ctx, COGL_FEATURE_ID_SHADER_TEXTURE_LOD))
++    {
++      static const char shader_texture_lod_ext[] =
++        "#extension GL_ARB_shader_texture_lod : enable\n";
++      strings[count] = shader_texture_lod_ext;
++      lengths[count++] = sizeof (shader_texture_lod_ext) - 1;
++    }
++
+   if (shader_gl_type == GL_VERTEX_SHADER)
+     {
+       strings[count] = vertex_boilerplate;
+diff --git a/cogl/cogl-types.h b/cogl/cogl-types.h
+index 6accf8d..77964c6 100644
+--- a/cogl/cogl-types.h
++++ b/cogl/cogl-types.h
+@@ -470,7 +470,8 @@ typedef enum
+   COGL_FEATURE_MAP_BUFFER_FOR_READ    = (1 << 21),
+   COGL_FEATURE_MAP_BUFFER_FOR_WRITE   = (1 << 22),
+   COGL_FEATURE_ONSCREEN_MULTIPLE      = (1 << 23),
+-  COGL_FEATURE_DEPTH_TEXTURE          = (1 << 24)
++  COGL_FEATURE_DEPTH_TEXTURE          = (1 << 24),
++  COGL_FEATURE_SHADER_TEXTURE_LOD     = (1 << 25)
+ } CoglFeatureFlags;
+ 
+ /**
+diff --git a/cogl/driver/gl/gl/cogl-driver-gl.c b/cogl/driver/gl/gl/cogl-driver-gl.c
+index 716d1dd..f305b6a 100644
+--- a/cogl/driver/gl/gl/cogl-driver-gl.c
++++ b/cogl/driver/gl/gl/cogl-driver-gl.c
+@@ -568,6 +568,13 @@ _cogl_driver_update_features (CoglContext *ctx,
+                       COGL_FEATURE_ID_TEXTURE_RECTANGLE, TRUE);
+     }
+ 
++  if (_cogl_check_extension ("GL_ARB_shader_texture_lod", gl_extensions))
++    {
++      flags |= COGL_FEATURE_SHADER_TEXTURE_LOD;
++      COGL_FLAGS_SET (ctx->features,
++                      COGL_FEATURE_ID_SHADER_TEXTURE_LOD, TRUE);
++    }
++
+   if (ctx->glTexImage3D)
+     {
+       flags |= COGL_FEATURE_TEXTURE_3D;
+-- 
+2.9.5
+

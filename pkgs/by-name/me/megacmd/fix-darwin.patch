@@ -1,0 +1,49 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -25,6 +25,11 @@ AM_CPPFLAGS = \
+ 
+ AM_CPPFLAGS+=-I$(top_srcdir)/src -I$(top_srcdir)/sdk/include
+ 
++if DARWIN
++AM_LIBTOOLFLAGS="--tag=CXX"
++AM_CPPFLAGS+=-I$(top_srcdir)/include/mega/osx -I$(top_srcdir)/sdk/include/mega/osx
++endif
++
+ if WIN32
+ AM_CPPFLAGS+=-I$(top_srcdir)/sdk/include/mega/win32
+ else
+--- a/src/megacmdshell/megacmdshellcommunications.cpp
++++ b/src/megacmdshell/megacmdshellcommunications.cpp
+@@ -306,10 +306,6 @@ SOCKET MegaCmdShellCommunications::createSocket(int number, bool initializeserve
+         #endif
+                     const char executable2[] = "./mega-cmd-server";
+     #else
+-        #ifdef __MACH__
+-                    const char executable[] = "/Applications/MEGAcmd.app/Contents/MacOS/mega-cmd";
+-                    const char executable2[] = "./mega-cmd";
+-        #else
+                     const char executable[] = "mega-cmd-server";
+             #ifdef __linux__
+                     char executable2[PATH_MAX];
+@@ -317,7 +313,6 @@ SOCKET MegaCmdShellCommunications::createSocket(int number, bool initializeserve
+             #else
+                     const char executable2[] = "./mega-cmd-server";
+             #endif
+-        #endif
+     #endif
+ 
+                     std::vector<char*> argsVector{
+--- a/sdk/Makefile.am
++++ b/sdk/Makefile.am
+@@ -27,6 +27,11 @@ AM_CPPFLAGS = \
+ 
+ include m4/aminclude.am
+ 
++if DARWIN
++AM_LIBTOOLFLAGS="--tag=CXX"
++AM_CPPFLAGS+=-I$(top_srcdir)/include/mega/osx
++endif
++
+ if WIN32
+ AM_CPPFLAGS+=-I$(top_srcdir)/include/mega/win32
+ else

@@ -1,0 +1,15 @@
+Disable dprint on dstBundler
+
+dprint fails on sandbox, because it requires internet access to install its
+plugins.
+
+--- a/scripts/dtsBundler.mjs
++++ b/scripts/dtsBundler.mjs
+@@ -430,5 +430,5 @@
+     return result.replace(/\r\n/g, "\n");
+ }
+ 
+-fs.writeFileSync(output, dprint(publicContents));
+-fs.writeFileSync(internalOutput, dprint(internalContents));
++fs.writeFileSync(output, publicContents);
++fs.writeFileSync(internalOutput, internalContents);

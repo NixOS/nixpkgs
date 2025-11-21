@@ -1,0 +1,48 @@
+From 95218b057d1c9ed571e1abc41f0377c6a087ca37 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Mon, 4 Nov 2024 16:52:56 +0100
+Subject: [PATCH] fix, allDay events not shown. mkCal store allDay event with
+ the same dateStart and dateEnd. Make it work with that setup
+
+---
+ src/qml/AllDayEventComponent.qml | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/src/qml/AllDayEventComponent.qml b/src/qml/AllDayEventComponent.qml
+index ba5a67aa..d3364c37 100644
+--- a/src/qml/AllDayEventComponent.qml
++++ b/src/qml/AllDayEventComponent.qml
+@@ -37,20 +37,22 @@ Row {
+     height: units.gu(5)
+ 
+     function getAllDayEvents(startDate, endDate) {
+-        var map = {};
+-        var items = model.itemsByTimePeriod(startDate,endDate);
+-        for(var i = 0 ; i < items.length ; ++i) {
+-            var event = items[(i)];
++        let map = {};
++        const events = model.itemsByTimePeriod(startDate,endDate);
++        events.forEach( event => {
+             if( event && event.allDay ) {
+-                for(var d = event.startDateTime; d < event.endDateTime; d = d.addDays(1)) {
+-                    var key = Qt.formatDateTime(d, "dd-MMM-yyyy");
+-                    if( !(key in map)) {
++                let currentDate = event.startDateTime
++                while (currentDate <= event.endDateTime) {
++                    const key = Qt.formatDateTime(currentDate, "dd-MMM-yyyy");
++                    if (!map[key]) {
+                         map[key] = [];
+                     }
+                     map[key].push(event);
++
++                    currentDate = currentDate.addDays(1);
+                 }
+             }
+-        }
++        })
+         return map;
+     }
+ 
+-- 
+GitLab
+
