@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     })
     # Fixes "error: no matching member function for call to 'emplace'"
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/refs/heads/main/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
+      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/5f04705ac3f356350ae31534ffbc476abc9ea83d/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
       hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
 
       extraPrefix = "third_party/";
