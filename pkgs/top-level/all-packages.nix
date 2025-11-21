@@ -4830,7 +4830,14 @@ with pkgs;
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
-  happy = haskell.lib.compose.justStaticExecutables haskellPackages.happy;
+  happy = haskell.lib.compose.justStaticExecutables (
+    haskell.lib.overrideCabal haskellPackages.happy (drv: {
+      postInstall = ''
+        remove-references-to -t ${haskellPackages.happy-lib} "''${!outputBin}/bin/happy"
+        ${drv.postInstall or ""}
+      '';
+    })
+  );
 
   hscolour = haskell.lib.compose.justStaticExecutables haskellPackages.hscolour;
 
