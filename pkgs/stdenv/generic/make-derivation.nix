@@ -882,6 +882,9 @@ let
             name = derivationArg.name or "inputDerivation";
             # This always only has one output
             outputs = [ "out" ];
+            # This doesn’t require any system features even if the original
+            # derivation did.
+            requiredSystemFeatures = [ ];
 
             # Propagate the original builder and arguments, since we override
             # them and they might contain references to build inputs
