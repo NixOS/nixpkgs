@@ -11,6 +11,7 @@
   llvmSharedForHost,
   llvmSharedForTarget,
   llvmPackages,
+  runCommand,
   runCommandLocal,
   fetchurl,
   file,
@@ -259,6 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals stdenv.targetPlatform.isMusl [
       "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+    ]
+    ++ optionals stdenv.targetPlatform.isWasi [
+      "${setTarget}.wasi-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
     ]
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
