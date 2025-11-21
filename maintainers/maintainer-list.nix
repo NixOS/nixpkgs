@@ -26859,6 +26859,12 @@
     githubId = 15064765;
     name = "tshaynik";
   };
+  tsheinen = {
+    email = "theinen@protonmail.com";
+    github = "tsheinen";
+    githubId = 1759360;
+    name = "Thea Heinen";
+  };
   tsowell = {
     email = "tom@ldtlb.com";
     github = "tsowell";
