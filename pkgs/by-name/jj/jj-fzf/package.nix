@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     # Fix Makefile to use absolute path for env
     substituteInPlace Makefile.mk \
-      --replace-fail "/usr/bin/env" "${lib.getExe coreutils \"env\"}"
+      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
   '';
 
   buildPhase = ''
