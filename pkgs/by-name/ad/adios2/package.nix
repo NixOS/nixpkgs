@@ -64,6 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x cmake/install/post/adios2-config.pre.sh.in
     patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
+
+    # use upstream GoogleTest.cmake
+    # see https://github.com/ornladios/ADIOS2/issues/4659
+    substituteInPlace cmake/GoogleTest.cmake \
+      --replace-fail 'CMAKE_VERSION VERSION_LESS 4' 'TRUE'
   '';
 
   nativeBuildInputs = [
