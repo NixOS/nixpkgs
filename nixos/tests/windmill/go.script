@@ -1,6 +1,6 @@
 package inner
 
-// NOTE; Cannot download go modules from internet
+// WARN; Cannot download dependency modules from internet during sandbox testing!
 import (
 	"fmt"
 	// "rsc.io/quote"

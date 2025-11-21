@@ -1,5 +1,6 @@
+# WARN; Cannot download dependency modules from internet during sandbox testing!
+
 import os
-# NOTE; Cannot download python modules from internet
 # import wmill
 
 def main(
