@@ -2,6 +2,9 @@
   lib,
   python3,
   stdenvNoCC,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 
 {
@@ -14,7 +17,7 @@
 stdenvNoCC.mkDerivation (
   lib.recursiveUpdate
     {
-      inherit name;
+      inherit name preferLocalBuild;
 
       nativeBuildInputs = [ python3 ];
 
