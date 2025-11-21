@@ -87,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "7d5de3033187c8a3bb4d2e322f5462cdaf49808f";
     hash = "sha256-ayW6sOZGvP3SBjfmpXvYQJrPOAElY0MEHPFvj2fq+bM=";
   };
+  patches = [
+    # fix tests nondeterministically hanging
+    # [llvm-exegesis] Timeout if subprocess executor hangs #132861
+    # https://github.com/llvm/llvm-project/pull/132861
+    ./llvm-exegesis-timeout.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
