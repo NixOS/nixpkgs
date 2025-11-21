@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.13";
+  version = "1.16.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "JessicaTegner";
     repo = "pypandoc";
     tag = "v${version}";
-    hash = "sha256-9fpits8O/50maM/e1lVVqBoTwUmcI+/IAYhVX1Pt6ZE=";
+    hash = "sha256-h0Ur5kWyKz1NCEMdnE0eNCYMAEqjx3g/tnfXs1h9zCs=";
   };
 
   patches = [
