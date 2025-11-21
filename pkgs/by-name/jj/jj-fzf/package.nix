@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     pandoc
-    python3
-    util-linux
     installShellFiles
   ];
 
