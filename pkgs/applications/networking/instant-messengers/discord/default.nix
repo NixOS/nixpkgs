@@ -38,11 +38,11 @@ let
         self = discord-ptb;
       };
       discord-canary = rec {
-        version = "0.0.761";
+        version = "0.0.811";
 
         src = fetchurl {
           url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-          hash = "sha256-L3MIcrz/xj8zOb2QVXBrBCHGt4BdHhjwKpPZ4iClQYQ=";
+          hash = "sha256-kg0o5KyBohmnk/czUQLVsA1GV2P6DUQLy0KhMaj80Sk=";
         };
 
         branch = "canary";
