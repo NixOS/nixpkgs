@@ -366,6 +366,12 @@ let
         Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
       '';
     };
+
+    failRustAudit = mkOption {
+      description = "Fail builds if cargoAuditHook for a package detects an error";
+      type = types.bool;
+      default = false;
+    };
   };
 
 in
