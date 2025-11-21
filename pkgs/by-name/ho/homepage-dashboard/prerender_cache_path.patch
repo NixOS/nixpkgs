@@ -1,8 +1,8 @@
 diff --git a/package.json b/package.json
-index 28b86649..16f71f77 100644
+index 927674f3..e7d45ae6 100644
 --- a/package.json
 +++ b/package.json
-@@ -74,6 +74,9 @@
+@@ -67,6 +67,9 @@
      "onlyBuiltDependencies": [
        "osx-temperature-sensor",
        "sharp"
@@ -33,7 +33,7 @@ index 00000000..39b17f16
 +         if (ctx.maxMemoryCacheSize) {
 +             if (!FileSystemCache.memoryCache) {
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index 113bacff..5dde94f0 100644
+index 2765fe04..11dc6a81 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
 @@ -4,6 +4,11 @@ settings:
@@ -61,7 +61,7 @@ index 113bacff..5dde94f0 100644
        ping:
          specifier: ^0.4.4
          version: 0.4.4
-@@ -5162,7 +5167,7 @@ snapshots:
+@@ -5243,7 +5248,7 @@ snapshots:
  
    net@1.0.2: {}
  
@@ -70,7 +70,7 @@ index 113bacff..5dde94f0 100644
      dependencies:
        '@babel/runtime': 7.26.9
        '@types/hoist-non-react-statics': 3.3.6
-@@ -5170,14 +5175,14 @@ snapshots:
+@@ -5251,14 +5256,14 @@ snapshots:
        hoist-non-react-statics: 3.3.2
        i18next: 21.10.0
        i18next-fs-backend: 1.2.0
