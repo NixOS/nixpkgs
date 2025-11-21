@@ -193,6 +193,8 @@ in
       default = "form";
       description = "Authentication type for FreshRSS.";
     };
+
+    api.enable = mkEnableOption "API access for mobile apps and third-party clients (Google Reader API and Fever API). Users must set individual API passwords in their profile settings";
   };
 
   config =
@@ -325,6 +327,7 @@ in
               "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
+              ${if cfg.api.enable then "--api-enabled" else null} = "";
               # The following attributes are optional depending on the type of
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
