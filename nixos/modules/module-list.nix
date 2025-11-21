@@ -1908,7 +1908,6 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/overlayfs.nix
-  ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
