@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
 
   # buildInputs
   buildbox,
