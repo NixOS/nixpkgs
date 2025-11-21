@@ -67,6 +67,7 @@ with http_client.open(workspace_req) as response:
     workspace_list = json.loads(response.read().decode('utf-8'))
     assert any(workspace['id'] == id_admin_workspace for workspace in workspace_list)
 
+
 script_hash = None
 script_form = {
     "path": f"u/admin/{args.language}_test",
@@ -87,7 +88,7 @@ script_request = Request(
 with http_client.open(script_request) as response:
     assert 201 == response.status, f"Failure {response.status}: Create {args.language} script"
     script_hash = response.read().decode('utf-8')
-    assert script_hash, "Failed to receive an identifier from script creation"
+    assert script_hash, "Failed to receive an identifier from script creation."
 
 
 job_id = None
@@ -103,14 +104,14 @@ request = Request(
 with http_client.open(request) as response:
     assert 201 == response.status, f"Failure {response.status}: Run {args.language} script"
     job_id = response.read().decode('utf-8')
-    assert job_id, "Failed to receive an identifier from job creation/scheduling"
+    assert job_id, "Failed to receive an identifier from job creation/scheduling."
 
 
 started_jobs = set([job_id])
-timeout = 300  # seconds
+# NOTE; Some languages require script compilation and take longer to run until completion
+timeout = 60  # seconds
 timeout_end = time.time() + timeout
 while any(started_jobs) and time.time() < timeout_end:
-    print("DEBUG: SLEEPING")
     time.sleep(10)  # seconds
 
     retrieve_jobs_req = Request(

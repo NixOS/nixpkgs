@@ -27,6 +27,7 @@
   };
 
   testScript = ''
+    import time
     # windmill.forward_port(8001, 8001) # DEBUG interactive
 
     with subtest("Server smoketest"):
@@ -34,10 +35,13 @@
       # ERROR; Do not early timeout because windmill starts running migration scripts.
       # There is no communication to systemd that signals migrations have finished.
       windmill.wait_for_open_port(8001)
+      # NOTE; Wait a couple of seconds for all windmill components to finalise their database migration flow
+      time.sleep(10)  # seconds
       windmill.succeed("curl --silent --fail http://windmill:8001")
       t.assertIn("v${pkgs.windmill.version}", machine.succeed("curl --silent --fail http://windmill:8001/api/version"), "Mismatched version response")
 
     with subtest("Validation"):
       windmill.succeed("integration-test --language python3 --script ${./python3.script} --input ${./python3.input}")
+      windmill.succeed("integration-test --language go --script ${./go.script} --input ${./go.input}")
   '';
 }
