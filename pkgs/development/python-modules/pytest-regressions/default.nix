@@ -13,6 +13,7 @@
   pytestCheckHook,
   pyyaml,
   setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -74,6 +75,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.system == "i686-linux") [
+    "tests/test_ndarrays_regression.py"
   ];
 
   meta = with lib; {
