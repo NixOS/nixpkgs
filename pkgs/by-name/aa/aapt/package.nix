@@ -52,11 +52,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ linsui ];
     teams = [ lib.teams.android ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      # The linux executable only supports x86_64
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
