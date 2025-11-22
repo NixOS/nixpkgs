@@ -7,7 +7,6 @@
   pygobject3,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   pyzmq,
   setuptools,
   setuptools-scm,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "urwid";
   version = "3.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "urwid";
