@@ -5,12 +5,16 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { program } from 'commander'
 import * as core from '@actions/core'
-import { getOctokit } from '@actions/github'
+import { GitHub, getOctokitOptions } from '@actions/github/lib/utils'
+import { paginateGraphQL } from "@octokit/plugin-paginate-graphql";
 
 async function run(action, owner, repo, pull_number, options = {}) {
   const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
 
-  const github = getOctokit(token)
+  // FIXME: Mirror this in the action-script workflows..
+  // https://github.com/actions/github-script/issues/309
+  const GitHubWithPlugins = GitHub.plugin(paginateGraphQL)
+  const github = new GitHubWithPlugins(getOctokitOptions(token))
 
   const payload = !pull_number ? {} : {
     pull_request: (await github.rest.pulls.get({

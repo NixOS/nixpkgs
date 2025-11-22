@@ -138,6 +138,23 @@ module.exports = async ({ github, context, core, dry }) => {
     return users[id]
   }
 
+  // Same for teams
+  const teams = {}
+  function getTeam(id) {
+    if (!teams[id]) {
+      teams[id] = github
+        .request({
+          method: 'GET',
+          url: '/organizations/{orgId}/team/{id}',
+          orgId: github.repository_owner_id,
+          id,
+        })
+        .then((resp) => resp.data)
+    }
+
+    return teams[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -170,16 +187,43 @@ module.exports = async ({ github, context, core, dry }) => {
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
     // Accounts could be deleted as well, so don't count them.
     const reviews = (
-      await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number,
-      })
-    ).filter(
+      await github.graphql.paginate(
+        `query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) {
+        repository(owner: $owner, name: $repo) {
+          pullRequest(number: $pr) {
+            reviews(first: 100) {
+              nodes {
+                state
+                user: author {
+                  ... on User {
+                    login
+                    id: databaseId
+                  }
+                }
+                onBehalfOf(first: 100) {
+                  nodes {
+                    slug
+                  }
+                }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
+          }
+        }
+      }`,
+        {
+          owner: context.repo.org,
+          repo: context.repo.repo,
+          pr: pull_number,
+        },
+      )
+    ).repository.pullRequest.reviews.nodes.filter(
       (r) =>
-        r.user &&
-        !r.user.login.endsWith('[bot]') &&
-        r.user.type !== 'Bot' &&
-        r.user.id !== pull_request.user?.id,
+        // Graphql query only sets this for "User" authors, so no bots, see https://docs.github.com/en/graphql/reference/interfaces#actor
+        r.user.login && r.user.id !== pull_request.user?.id,
     )
 
     const approvals = new Set(
@@ -359,14 +403,17 @@ module.exports = async ({ github, context, core, dry }) => {
           pull_request,
           reviews,
           // TODO: Use maintainer map instead of the artifact.
-          maintainers: Object.keys(
+          userMaintainers: Object.keys(
             JSON.parse(
               await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
             ),
           ).map((id) => parseInt(id)),
+          teamMaintainers: Object.keys(
+            JSON.parse(await readFile(`${pull_number}/teams.json`, 'utf-8')),
+          ).map((id) => parseInt(id)),
           owners,
-          getTeamMembers,
           getUser,
+          getTeam,
         })
       }
     }
