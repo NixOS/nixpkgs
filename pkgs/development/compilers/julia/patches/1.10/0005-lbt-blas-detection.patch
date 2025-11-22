@@ -1,0 +1,63 @@
+From 703ab0a26202358f28e6de584d6ecde96f585264 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Tue, 28 Oct 2025 18:04:55 -0500
+Subject: [PATCH] fix LBT blas detection on darwin
+
+---
+ deps/blastrampoline.mk             |  7 +++++++
+ deps/patches/lbt-suffix-hint.patch | 25 +++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 deps/patches/lbt-suffix-hint.patch
+
+diff --git a/deps/blastrampoline.mk b/deps/blastrampoline.mk
+index cfa28a4d8b..53f6d1e4bd 100644
+--- a/deps/blastrampoline.mk
++++ b/deps/blastrampoline.mk
+@@ -18,6 +18,13 @@ $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-compiled: $(BUILDDIR)/$(BLASTRAMPOLI
+ 	cd $(dir $@)/src && $(MAKE) $(BLASTRAMPOLINE_BUILD_OPTS)
+ 	echo 1 > $@
+ 
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/lbt-suffix-hint.patch.applied: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/source-extracted
++	cd $(dir $@) && \
++		patch -p1 -f < $(SRCDIR)/patches/lbt-suffix-hint.patch
++	echo 1 > $@
++
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-compiled: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/lbt-suffix-hint.patch.applied
++
+ define BLASTRAMPOLINE_INSTALL
+ 	$(MAKE) -C $(BLASTRAMPOLINE_BUILD_ROOT) install $(BLASTRAMPOLINE_BUILD_OPTS) DESTDIR="$2"
+ endef
+diff --git a/deps/patches/lbt-suffix-hint.patch b/deps/patches/lbt-suffix-hint.patch
+new file mode 100644
+index 0000000000..d5b5a43c13
+--- /dev/null
++++ b/deps/patches/lbt-suffix-hint.patch
+@@ -0,0 +1,25 @@
++From 70c929f9182f0c93d60cc68b439f119da80994aa Mon Sep 17 00:00:00 2001
++From: George Huebner <george@feyor.sh>
++Date: Tue, 28 Oct 2025 17:59:35 -0500
++Subject: [PATCH] correctly identify BLAS as ILP64 on darwin
++
++---
++ src/autodetection.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/autodetection.c b/src/autodetection.c
++index 86ee124..6a4e1cb 100644
++--- a/src/autodetection.c
+++++ b/src/autodetection.c
++@@ -61,6 +61,8 @@ const char * autodetect_symbol_suffix(void * handle, const char * suffix_hint) {
++     const char * suffixes[] = {
++         // Possibly-NULL suffix that we should search over
++         suffix_hint,
+++         
+++        "64_",
++ 
++         // First, search for LP64-mangling suffixes, so that when we are loading libs from an
++         // CLI environment, (where suffix hints are not easy) we want to give the most stable
++-- 
++2.50.1
++
+-- 
+2.50.1
+
