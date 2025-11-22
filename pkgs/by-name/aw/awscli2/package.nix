@@ -26,8 +26,8 @@ let
         prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
           version = "3.0.51";
           src = prev.src.override {
-            inherit version;
-            hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
+            tag = version;
+            hash = "sha256-pNYmjAgnP9nK40VS/qvPR3g+809Yra2ISASWJDdQKrU=";
           };
         });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
