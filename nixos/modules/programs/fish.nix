@@ -337,5 +337,8 @@ in
       '';
 
   };
-  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
+  meta.maintainers = with lib.maintainers; [
+    llakala
+    sigmasquadron
+  ];
 }
