@@ -11,7 +11,6 @@
   poetry-core,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "json-schema-for-humans";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coveooss";
