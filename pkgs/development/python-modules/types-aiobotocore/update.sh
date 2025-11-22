@@ -83,6 +83,7 @@ packages=(
   types-aiobotocore-connect
   types-aiobotocore-connect-contact-lens
   types-aiobotocore-connectcampaigns
+  types-aiobotocore-connectcampaignsv2
   types-aiobotocore-connectcases
   types-aiobotocore-connectparticipant
   types-aiobotocore-controltower
