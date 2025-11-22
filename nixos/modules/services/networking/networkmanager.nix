@@ -698,6 +698,8 @@ in
 
     services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
+    services.firewalld.packages = packages;
+
     services.udev.packages = packages;
 
     systemd.services.NetworkManager.path = pluginRuntimeDeps;

@@ -5,6 +5,7 @@
   gsettings-desktop-schemas,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  gobject-introspection,
   gdk-pixbuf,
   makeDesktopItem,
   copyDesktopItems,
@@ -51,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     python-jose
     requests-cache
+    pygobject3
   ];
 
   buildInputs = [
@@ -62,6 +64,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
+    gobject-introspection
     wrapGAppsHook3
     copyDesktopItems
   ];

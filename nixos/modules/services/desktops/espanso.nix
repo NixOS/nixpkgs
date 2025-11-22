@@ -44,7 +44,7 @@ in
         } daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
     };
 
     environment.systemPackages = [ cfg.package ];

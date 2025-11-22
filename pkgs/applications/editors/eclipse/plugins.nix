@@ -146,12 +146,12 @@ rec {
     version = "1.3.5.201612301822";
 
     srcFeature = fetchurl {
-      url = "https://github.com/mihnita/ansi-econsole/raw/refs/heads/main/AnsiConSitePublished/features/net.mihai-nita.ansicon_${version}.jar";
+      url = "https://raw.githubusercontent.com/mihnita/ansi-econsole/8dcf0a2531cbf091310c0e01db1a1310557fc383/AnsiConSitePublished/features/net.mihai-nita.ansicon_${version}.jar";
       hash = "sha256-o9hnMuZeohU+AKS+ueU8dWS9HomrnqaKpWYMG5vMeJs=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/mihnita/ansi-econsole/raw/refs/heads/main/AnsiConSitePublished/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
+      url = "https://raw.githubusercontent.com/mihnita/ansi-econsole/8dcf0a2531cbf091310c0e01db1a1310557fc383/AnsiConSitePublished/plugins/net.mihai-nita.ansicon.plugin_${version}.jar";
       hash = "sha256-WK7WxNZHvmMHGycC/12sIKj4wKIhWT8x1Anp3zuggsg=";
     };
 
@@ -215,12 +215,12 @@ rec {
     version = "2.7.3.202502241151";
 
     srcFeature = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/raw/refs/heads/latest/features/AnyEditTools_${version}.jar";
+      url = "https://raw.githubusercontent.com/iloveeclipse/plugins/f0560d1c628e0dba776831b1dea98d929515ebe5/features/AnyEditTools_${version}.jar";
       hash = "sha256-liEw+H8yTCrYQMe3gVQhJuxPXlSpEs4QwB2yv8n/CiE=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/plugins/raw/refs/heads/latest/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      url = "https://raw.githubusercontent.com/iloveeclipse/plugins/f0560d1c628e0dba776831b1dea98d929515ebe5/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
       hash = "sha256-LrWCWJWZxsnMiBnTwXdWaXUoyXMYpLqXMUkHEOna2kk=";
     };
 
@@ -590,12 +590,12 @@ rec {
     version = "6.9.13.201609291640";
 
     srcFeature = fetchurl {
-      url = "https://github.com/testng-team/testng-eclipse-update-site/raw/refs/heads/main/updatesites/${version}/features/org.testng.eclipse_${version}.jar";
+      url = "https://raw.githubusercontent.com/testng-team/testng-eclipse-update-site/0eb404d0c65dc0ef25b19145bb44a56326a53da6/updatesites/${version}/features/org.testng.eclipse_${version}.jar";
       hash = "sha256-JahgneGUJN4jVxgXdkhhj5/TENXKXG635UO9Q7Vnnws=";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/testng-team/testng-eclipse-update-site/raw/refs/heads/main/updatesites/${version}/plugins/org.testng.eclipse_${version}.jar";
+      url = "https://raw.githubusercontent.com/testng-team/testng-eclipse-update-site/0eb404d0c65dc0ef25b19145bb44a56326a53da6/updatesites/${version}/plugins/org.testng.eclipse_${version}.jar";
       hash = "sha256-DTE60G+1ZnBT0i6FHuYDQlzwxhwAeXbHN3hgkYbhn8g=";
     };
 
