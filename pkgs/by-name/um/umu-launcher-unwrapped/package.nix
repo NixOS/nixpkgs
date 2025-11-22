@@ -13,13 +13,13 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.2.9";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-nqI2XmMS28dvYrgD9kh7Xc510CvG7ifIybj+HlrU3qI=";
+    hash = "sha256-ELFOffP3KabvyOu4Fl7Z4zvPhamZrmhuuqz1aTYdbnE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
