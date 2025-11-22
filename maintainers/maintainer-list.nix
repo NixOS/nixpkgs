@@ -23894,12 +23894,6 @@
     githubId = 6292;
     name = "Andrey Petrov";
   };
-  sheenobu = {
-    email = "sheena.artrip@gmail.com";
-    github = "sheenobu";
-    githubId = 1443459;
-    name = "Sheena Artrip";
-  };
   sheepforce = {
     email = "phillip.seeber@googlemail.com";
     github = "sheepforce";

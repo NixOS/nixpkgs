@@ -80,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.sheenobu ];
+    maintainers = [ ];
   };
 })

@@ -232,7 +232,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = meta // {
     maintainers = with lib.maintainers; [
       ftrvxmtrx
-      sheenobu
       timokau
       ma27
     ];
