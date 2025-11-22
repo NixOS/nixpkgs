@@ -136,6 +136,7 @@
   xorg-cf-files,
   xorg-docs,
   xorgproto,
+  xorg-server,
   xorg-sgml-doctools,
   xprop,
   xrandr,
@@ -145,6 +146,7 @@
   xsm,
   xstdcmap,
   xtrans,
+  xvfb,
   xvinfo,
   xwininfo,
   xwud,
@@ -210,6 +212,7 @@ self: with self; {
     xsm
     xstdcmap
     xtrans
+    xvfb
     xvinfo
     xwininfo
     xwud
@@ -300,6 +303,7 @@ self: with self; {
   xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
+  xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
@@ -3023,64 +3027,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xorgserver = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      openssl,
-      libX11,
-      libXau,
-      libxcb,
-      xcbutil,
-      xcbutilwm,
-      xcbutilimage,
-      xcbutilkeysyms,
-      xcbutilrenderutil,
-      libXdmcp,
-      libXfixes,
-      libxkbfile,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xorg-server";
-      version = "21.1.20";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xserver/xorg-server-21.1.20.tar.xz";
-        sha256 = "sha256-dpW8YYJLOoG2utL3iwVADKAVAD3kAtGzIhFxBbcC6Tc=";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        openssl
-        libX11
-        libXau
-        libxcb
-        xcbutil
-        xcbutilwm
-        xcbutilimage
-        xcbutilkeysyms
-        xcbutilrenderutil
-        libXdmcp
-        libXfixes
-        libxkbfile
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-server" ];
         platforms = lib.platforms.unix;
       };
     })
