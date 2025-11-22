@@ -272,8 +272,8 @@ in
               package:
               pkgs.runCommandLocal
                 (
-                  with lib.strings;
                   let
+                    inherit (lib.strings) stringLength substring storeDir;
                     storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
                     pathName = substring storeLength (stringLength package - storeLength) package;
                   in
