@@ -10,6 +10,7 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
   pyyaml,
   setuptools,
   typing-extensions,
@@ -19,6 +20,9 @@ buildPythonPackage rec {
   pname = "aws-sam-translator";
   version = "1.103.0";
   pyproject = true;
+
+  # https://github.com/aws/serverless-application-model/issues/3831
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
