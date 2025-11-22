@@ -1,0 +1,47 @@
+[files]
+extend-exclude = [
+  'pkgs',
+  'nixos',
+  '*.md',
+  '**/generated.nix',
+  '*.diff',
+  '*.patch',
+  'lib/licenses.nix',
+  'maintainers/maintainer-list.nix',
+  'maintainers/team-list.nix',
+]
+[default]
+locale = "en"
+check-filename = true
+extend-ignore-re = [
+  # Custom ignore regex patterns: https://github.com/crate-ci/typos/blob/master/docs/reference.md#example-configurations
+  # https://github.com/crate-ci/typos/issues/316
+  ".*(?:#|--|//|/*).*(?:spellchecker|typos):\\s?ignore[^\\n]*\\n",
+  ".*(?:spellchecker|typos):\\s?ignore-next-line[^\\n]*\\n[^\\n]*",
+
+  '(e|p)?name\s*[:=]\s*".*"',
+  'owner\s*[:=]\s*".*"',
+  'version\s*[:=]\s*".*"',
+  'tag\s*[:=]\s*".*"',
+  'repo\s*[:=]\s*".*"',
+  'rev\s*[:=]\s*".*"',
+  'sha256\s*[:=]\s*".*"',
+  'hash\s*[:=]\s*".*"',
+  '(meta\.)?maintainers\s*[:=]\s*.*',
+  '(meta\.)?teams\s*[:=]\s*.*',
+  '(meta\.)?license\s*[:=]\s*.*',
+  '[c]?makeFlags\s*=\s*\[[^\]]*\]',
+  'nativeBuildInputs\s*=\s*\[[^\]]*\]',
+  'buildInputs\s*=\s*\[[^\]]*\]',
+  'propagatedBuildInputs\s*=\s*\[[^\]]*\]',
+  'dependencies\s*=\s*\[[^\]]*\]',
+
+  '(APP|API|SECRET|GH)_(KEY|TOKEN)\s*=\s*".*"',
+  '.*(i|I)d\s*[:=].*;',
+]
+[default.extend-words]
+splitted = "splitted"
+mosquitto = "mosquitto"
+thumbnailers = "thumbnailers"
+muc = "muc"
+merecat = "merecat"
