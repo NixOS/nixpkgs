@@ -6,16 +6,15 @@
   makeWrapper,
   nodejs_22,
   p7zip,
-  python311,
-  runCommand,
+  python3,
   stdenv,
   yarn-berry_3,
 }:
 let
-  inherit (lib) concatLines flip pipe;
+  inherit (lib) concatLines pipe;
   inherit (lib.versions) major minor patch;
 
-  # reference: https://github.com/SpecterOps/BloodHound/blob/v8.3.1/dockerfiles/bloodhound.Dockerfile
+  # reference: https://github.com/SpecterOps/BloodHound/blob/main/dockerfiles/bloodhound.Dockerfile
 
   pname = "bloodhound-ce";
   version = "8.3.1";
@@ -27,39 +26,15 @@ let
     hash = "sha256-mIoQkxUxv2BktFGSLKo5RVEF/7JByiyCWC2o9GWS9w4=";
   };
 
-  filter = flip pipe [
-    (map (x: ''
-      mkdir -p "$out/${dirOf x}"
-      cp -r "${src}/${x}" "$out/${x}"
-    ''))
-    concatLines
-    (runCommand "filtered-source" { })
-  ];
-
   yarn-berry = yarn-berry_3;
-
-  ##############################################################################
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "bloodhound-ce-frontend";
-    inherit version;
-
-    src = filter [
-      ".yarn/plugins"
-      ".yarn/releases"
-      ".yarnrc.yml"
-      "cmd/ui"
-      "constraints.pro"
-      "package.json"
-      "packages/javascript"
-      "yarn-workspaces.json"
-      "yarn.lock"
-    ];
+    inherit version src;
 
     patches = [
       # cmd/ui/package.json includes "git@github.com:BloodHoundAD/dagre.git"
-      # which is fetched using SSH, and that doesn't work in the Nix sandbox
-      # so we just replace it with a standard HTTPS URL
+      # which requires a valid SSH credential to fetch
       ./fetch-dagrejs-via-https.patch
     ];
 
@@ -67,7 +42,13 @@ let
       nodejs_22
       yarn-berry
       yarn-berry.yarnBerryConfigHook
-      python311 # for node-gyp builds
+
+      # for node-gyp builds
+      (python3.withPackages (
+        p: with p; [
+          distutils
+        ]
+      ))
     ];
 
     missingHashes = ./missing-hashes.json;
@@ -77,7 +58,9 @@ let
       hash = "sha256-0OXOZ9QVpOxqE4r1Gj0dOlEijY+JAqOvanntp5D5t1M=";
     };
 
-    env.JOBS = "max";
+    preConfigure = ''
+      export JOBS=$NIX_BUILD_CORES
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -91,8 +74,6 @@ let
       runHook postInstall
     '';
   });
-
-  ##############################################################################
 
   collectors =
     let
@@ -171,14 +152,7 @@ let
       ];
 in
 buildGoModule {
-  inherit pname version;
-
-  src = filter [
-    "cmd/api"
-    "go.mod"
-    "go.sum"
-    "packages/go"
-  ];
+  inherit pname version src;
 
   nativeBuildInputs = [
     makeWrapper
