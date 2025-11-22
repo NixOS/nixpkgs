@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rlwrap";
-  version = "0.47.1";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "hanslub42";
     repo = "rlwrap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkzvGfqrL4v8SK8Mi1SgKDYibnFfNU1xAlJJ8ZMKFfY=";
+    hash = "sha256-Szgyjt/KRFEZMu6JX4Ulm2guTMwh9ejzjlfpkITWOI4=";
   };
 
   nativeBuildInputs = [
