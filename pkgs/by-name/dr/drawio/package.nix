@@ -13,26 +13,27 @@
   electron,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
   version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-h9APkOtH7s31r89hqqH12zYqkVMrR2ZxMyc+Zwq21+A=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
   postPatch = ''
-    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.cjs
+    substituteInPlace ./build/fuses.cjs \
+      --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
   '';
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
     hash = "sha256-kmA0z/vmWH+yD2OQ6VVSE0yPxInTAGjjG+QfcoZHlQ0=";
+    yarnLock = finalAttrs.src + "/yarn.lock";
   };
 
   nativeBuildInputs = [
@@ -137,9 +138,9 @@ stdenv.mkDerivation rec {
       # The minified code authored by us in this repo is licensed under an Apache v2 license, but the sources to build those files are not in this repo. This is not an open source project.
       unfreeRedistributable
     ];
-    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "drawio";
   };
-}
+})
