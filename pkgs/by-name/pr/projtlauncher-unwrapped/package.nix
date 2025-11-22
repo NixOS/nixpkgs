@@ -71,9 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (msaClientID != null) [
     (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
   ]
-  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
-    (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
-  ]
+  (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" (lib.versions.major kdePackages.qtbase.version))
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # we wrap our binary manually
     (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
@@ -91,11 +89,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Free, open source launcher for Minecraft";
+    description = "A free and open-source Minecraft launcher that lets you manage multiple game instances, mods, resource packs, and worlds with ease.";
     longDescription = ''
-      Allows you to have multiple, separate instances of Minecraft (each with
-      their own mods, texture packs, saves, etc) and helps you manage them and
-      their associated options with a simple interface.
+      This application lets you create and manage multiple
+      independent Minecraft instances, each with its own
+      unique mods, texture packs, worlds, and settings.
+      Easily switch between different setups without conflicts,
+      keep all your saves and customizations organized, and
+      configure options for each instance through a simple and
+      intuitive interface. Perfect for players who want to
+      experiment with different modpacks, resource packs, or
+      gameplay styles while keeping everything neatly separated.
     '';
     homepage = "https://projtlauncher.yongdohyun.org.tr/";
     changelog = "https://github.com/Project-Tick/ProjT-Launcher/releases/tag/${finalAttrs.version}";
