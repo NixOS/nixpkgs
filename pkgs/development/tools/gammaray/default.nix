@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CJKb7H77PjPwCGW4fqLSJw1mhSweuFYlDE/7RyVDcT0=";
   };
 
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software introspection tool for Qt applications developed by KDAB";
     homepage = "https://github.com/KDAB/GammaRay";
+    changelog = "https://github.com/KDAB/GammaRay/releases/tag/${src.tag}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wineee ];
