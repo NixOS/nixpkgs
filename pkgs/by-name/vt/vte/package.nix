@@ -34,6 +34,7 @@
   nixosTests,
   blackbox-terminal,
   darwinMinVersionHook,
+  withApp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,23 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+
+    # Skip test depending on gdk when building without gtk3 and gtk4
+    (fetchpatch {
+      url = "https://github.com/GNOME/vte/commit/f946e5bacf97305453d731c507885c52d4c34171.patch";
+      hash = "sha256-axi16Fpt4d32akFYeAR+SuUIwzRhjhK2oHp/yAXVRgk=";
+    })
+    # https://gitlab.gnome.org/GNOME/vte/-/merge_requests/11
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f672ed15a88dd3e25c33aa0a5ef6f6d291a6d5c7.patch";
+      hash = "sha256-JdLDild5j7marvR5n2heW9YD00+bwzJIoxDlzO5r/6w=";
+    })
+
+    # Add option to not build the vte application
+    (fetchpatch {
+      url = "https://github.com/GNOME/vte/commit/6b7a6a7df9df99368b7ce5ac5903bd2578167567.patch";
+      hash = "sha256-s3HigfTZLtGmsZS6dfD3YE95ZdBjB4WOWDvuoatOu3o=";
     })
   ];
 
@@ -107,11 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "app" withApp)
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
-  ]
-  ++ lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
+    (lib.mesonBool "_systemd" (!systemdSupport))
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
@@ -125,11 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    patchShebangs perf/*
-    patchShebangs src/app/meson_desktopfile.py
-    patchShebangs src/parser-seq.py
-    patchShebangs src/minifont-coverage.py
-    patchShebangs src/modes.py
+    patchShebangs perf/* \
+      src/app/meson_desktopfile.py \
+      src/parser-seq.py \
+      src/minifont-coverage.py \
+      src/modes.py
   '';
 
   postFixup = ''
