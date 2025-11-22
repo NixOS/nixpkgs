@@ -276,6 +276,7 @@ packages=(
   types-aiobotocore-route53-recovery-readiness
   types-aiobotocore-route53domains
   types-aiobotocore-route53resolver
+  types-aiobotocore-rtbfabric
   types-aiobotocore-rum
   types-aiobotocore-s3
   types-aiobotocore-s3control
