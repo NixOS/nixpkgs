@@ -4,11 +4,44 @@
   name = "jellyfin";
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
-  nodes.machine = {
-    services.jellyfin.enable = true;
-    environment.systemPackages = with pkgs; [ ffmpeg ];
-    # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
-    virtualisation.diskSize = 3 * 1024;
+  nodes = {
+    machine = {
+      services.jellyfin.enable = true;
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
+      virtualisation.diskSize = 3 * 1024;
+    };
+
+    machineWithTranscoding = {
+      services.jellyfin = {
+        enable = true;
+        hardwareAcceleration = {
+          enable = true;
+          type = "vaapi";
+          devices = [ "/dev/dri/renderD128" ];
+        };
+        transcoding = {
+          enableToneMapping = false;
+          threadCount = 4;
+          enableHardwareEncoding = true;
+          enableSubtitleExtraction = true;
+          deleteSegments = true;
+          h264Crf = 23;
+          h265Crf = 28;
+          throttleTranscoding = false;
+          hardwareDecodingCodecs = [
+            "h264"
+            "hevc"
+          ];
+          hardwareEncodingCodecs = [
+            "h264"
+            "hevc"
+          ];
+        };
+      };
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      virtualisation.diskSize = 3 * 1024;
+    };
   };
 
   # Documentation of the Jellyfin API: https://api.jellyfin.org/
@@ -35,6 +68,15 @@
 
       machine.wait_until_succeeds("curl --fail http://localhost:8096/health | grep Healthy")
 
+      # Test hardware acceleration configuration
+      with subtest("Hardware acceleration configuration"):
+          machineWithTranscoding.wait_for_unit("jellyfin.service")
+          machineWithTranscoding.wait_for_open_port(8096)
+          machineWithTranscoding.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
+
+          # Check device access
+          machineWithTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
+
       auth_header = 'MediaBrowser Client="NixOS Integration Tests", DeviceId="1337", Device="Apple II", Version="20.09"'
 
 
@@ -47,6 +89,33 @@
               return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'X-Emby-Authorization:{auth_header}'"
           else:
               return f"curl --fail -X post 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+
+      # Test dashboard-based configuration verification
+      with subtest("Dashboard configuration verification"):
+          # Complete setup and get admin token
+          machineWithTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
+          machineWithTranscoding.succeed(api_post("/Startup/Complete"))
+
+          auth_result = json.loads(machineWithTranscoding.succeed(
+              api_post("/Users/AuthenticateByName", "${payloads.auth}")
+          ))
+          token = auth_result["AccessToken"]
+
+          def api_get_with_token(path):
+              return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={token}'"
+
+          # Get encoding config and verify key settings
+          config = json.loads(machineWithTranscoding.succeed(api_get_with_token("/System/Configuration/encoding")))
+
+          # Main hardware acceleration settings verification
+          assert config.get("HardwareAccelerationType") == "vaapi", f"Hardware acceleration type: expected 'vaapi', got '{config.get('HardwareAccelerationType')}'"
+          assert config.get("EncodingThreadCount") == 4, f"Thread count: expected 4, got '{config.get('EncodingThreadCount')}'"
+          assert config.get("EnableHardwareEncoding") == True, f"Hardware encoding: expected True, got '{config.get('EnableHardwareEncoding')}'"
+
+          # Transcoding settings verification
+          assert config.get("H264Crf") == 23, f"H264 CRF: expected 23, got '{config.get('H264Crf')}'"
+          assert config.get("EnableTonemapping") == False, f"Tone mapping: expected False, got '{config.get('EnableTonemapping')}'"
+          assert config.get("EnableThrottling") == False, f"Throttling: expected False, got '{config.get('EnableThrottling')}'"
 
 
       with machine.nested("Wizard completes"):
