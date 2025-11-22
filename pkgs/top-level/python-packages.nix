@@ -5306,6 +5306,8 @@ self: super: with self; {
 
   finvizfinance = callPackage ../development/python-modules/finvizfinance { };
 
+  fio_plot = callPackage ../development/python-modules/fio_plot { };
+
   fiona = callPackage ../development/python-modules/fiona { };
 
   fipy = callPackage ../development/python-modules/fipy { };
@@ -12754,6 +12756,8 @@ self: super: with self; {
   pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyaml-env = callPackage ../development/python-modules/pyaml-env { };
+
+  pyan3 = callPackage ../development/python-modules/pyan3 { };
 
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
