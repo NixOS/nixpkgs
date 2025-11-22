@@ -4,14 +4,17 @@
   fetchFromGitHub,
   setuptools,
   # runtime dependencies
-  layoutparser,
-  python-multipart,
-  huggingface-hub,
-  opencv-python,
-  onnxruntime,
-  transformers,
+  accelerate,
   detectron2,
+  huggingface-hub,
+  layoutparser,
+  onnx,
+  onnxruntime,
+  opencv-python,
   paddleocr,
+  python-multipart,
+  rapidfuzz,
+  transformers,
   # check inputs
   pytestCheckHook,
   coverage,
@@ -37,11 +40,14 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    layoutparser
-    python-multipart
+    accelerate
     huggingface-hub
-    opencv-python
+    layoutparser
+    onnx
     onnxruntime
+    opencv-python
+    python-multipart
+    rapidfuzz
     transformers
     # detectron2 # fails to build
     # paddleocr # 3.12 not yet supported
