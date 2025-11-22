@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "partio";
-  version = "1.19.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
     tag = "v${version}";
-    hash = "sha256-p3mpxP0slHIQ75UtNAr5PcSOaSt9UyGR/MyOZ2GoXdU=";
+    hash = "sha256-RoxWmEokvGIvBSzfoub39s9+S63zgt00u1QZDRg27Zg=";
   };
 
   outputs = [
