@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "podcastparser";
-  version = "0.6.10";
+  version = "0.6.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "gpodder";
     repo = "podcastparser";
     tag = version;
-    hash = "sha256-P9wVyxTO0nz/DfuBhCE+VjhH1uYx4jBd30Ca26yBzbo=";
+    hash = "sha256-eF/YHKSCMZnavkoX3LcAFHPSPABijn+aPVzaeRYY3WI=";
   };
 
   postPatch = ''
