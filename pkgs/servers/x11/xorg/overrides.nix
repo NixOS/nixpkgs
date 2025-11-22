@@ -113,13 +113,6 @@ self: super:
       )
   ) { };
 
-  editres = super.editres.overrideAttrs (attrs: {
-    hardeningDisable = [ "format" ];
-    meta = attrs.meta // {
-      mainProgram = "editres";
-    };
-  });
-
   fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
     meta = attrs.meta // {
       license = lib.licenses.mit;
