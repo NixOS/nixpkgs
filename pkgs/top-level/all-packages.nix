@@ -7853,6 +7853,7 @@ with pkgs;
 
   libv4l = lowPrio (
     v4l-utils.override {
+      withGUI = false;
       withUtils = false;
     }
   );

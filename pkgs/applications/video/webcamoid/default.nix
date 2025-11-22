@@ -14,7 +14,7 @@
   libpulseaudio,
   alsa-lib,
   jack2,
-  v4l-utils,
+  libv4l,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     jack2
-    v4l-utils
+    libv4l
   ];
 
   nativeBuildInputs = [
