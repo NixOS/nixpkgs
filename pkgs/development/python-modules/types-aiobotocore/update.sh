@@ -264,6 +264,7 @@ packages=(
   types-aiobotocore-redshift-data
   types-aiobotocore-redshift-serverless
   types-aiobotocore-rekognition
+  types-aiobotocore-repostspace
   types-aiobotocore-resiliencehub
   types-aiobotocore-resource-explorer-2
   types-aiobotocore-resource-groups
