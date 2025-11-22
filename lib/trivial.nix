@@ -261,6 +261,44 @@ in
   boolToYesNo = b: if b then "yes" else "no";
 
   /**
+    Converts a boolean to a bit (an integer with value 0 or 1).
+
+    This function uses the integers 1 and 0 to represent boolean values,
+    where `true` maps to 1 and `false` maps to 0.
+
+    Note that in many shell contexts, an exit code of 0 indicates success,
+    while 1 indicates failure. This function's mapping is inverted from that
+    convention.
+
+    # Inputs
+
+    `b`
+
+    : The boolean to convert
+
+    # Type
+
+    ```
+    boolToBit :: bool -> int
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.boolToBit` usage example
+
+    ```nix
+    lib.trivial.boolToBit true
+    => 1
+    ```
+    ```nix
+    lib.trivial.boolToBit false
+    => 0
+    ```
+    :::
+  */
+  boolToBit = b: if b then 1 else 0;
+
+  /**
     Merge two attribute sets shallowly, right side trumps left
 
     mergeAttrs :: attrs -> attrs -> attrs
