@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tcxparser";
-  version = "2.4.0-r1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "vkurup";
     repo = "python-tcxparser";
     tag = version;
-    hash = "sha256-lQczTuxmxu4nCPJsgblrW2RXST7kvhtPnscemwXCx0Y=";
+    hash = "sha256-YZgzvwRy47MOTClAeJhzD6kZhGgCeVSGko6LgR/Uy0o=";
   };
 
   build-system = [
