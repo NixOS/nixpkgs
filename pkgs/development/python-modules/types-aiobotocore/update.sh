@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-nix-update python312Packages.types-aiobotocore --commit --build
+nix-update python313Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-accessanalyzer
@@ -160,7 +160,6 @@ packages=(
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
   types-aiobotocore-iotevents-data
-  types-aiobotocore-iotfleethub
   types-aiobotocore-iotfleetwise
   types-aiobotocore-iotsecuretunneling
   types-aiobotocore-iotsitewise
@@ -197,8 +196,6 @@ packages=(
   types-aiobotocore-location
   types-aiobotocore-logs
   types-aiobotocore-lookoutequipment
-  types-aiobotocore-lookoutmetrics
-  types-aiobotocore-lookoutvision
   types-aiobotocore-m2
   types-aiobotocore-machinelearning
   types-aiobotocore-macie2
@@ -235,8 +232,6 @@ packages=(
   types-aiobotocore-omics
   types-aiobotocore-opensearch
   types-aiobotocore-opensearchserverless
-  types-aiobotocore-opsworks
-  types-aiobotocore-opsworkscm
   types-aiobotocore-organizations
   types-aiobotocore-osis
   types-aiobotocore-outposts
@@ -255,8 +250,6 @@ packages=(
   types-aiobotocore-polly
   types-aiobotocore-pricing
   types-aiobotocore-proton
-  types-aiobotocore-qldb
-  types-aiobotocore-qldb-session
   types-aiobotocore-quicksight
   types-aiobotocore-ram
   types-aiobotocore-rbin
@@ -270,7 +263,6 @@ packages=(
   types-aiobotocore-resource-explorer-2
   types-aiobotocore-resource-groups
   types-aiobotocore-resourcegroupstaggingapi
-  types-aiobotocore-robomaker
   types-aiobotocore-rolesanywhere
   types-aiobotocore-route53
   types-aiobotocore-route53-recovery-cluster
@@ -306,7 +298,6 @@ packages=(
   types-aiobotocore-shield
   types-aiobotocore-signer
   types-aiobotocore-simspaceweaver
-  types-aiobotocore-sms
   types-aiobotocore-snow-device-management
   types-aiobotocore-snowball
   types-aiobotocore-sns
