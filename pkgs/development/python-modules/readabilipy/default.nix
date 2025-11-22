@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
     src = src;
     sourceRoot = "${src.name}/readabilipy/javascript";
-    npmDepsHash = "sha256-LiPSCZamkJjivzpawG7H9IEXYjn3uzFeY2vfucyHfUo=";
+    npmDepsHash = "sha256-1yp80TwRbE/NcMa0qrml0TlSZJ6zwSTmj+zDjBejko8=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
