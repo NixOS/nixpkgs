@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -39,6 +40,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
+
+  patches = [
+    # https://github.com/valkey-io/valkey-py/pull/239
+    (fetchpatch {
+      name = "fix-lolwut-tests.patch";
+      url = "https://github.com/valkey-io/valkey-py/pull/239.patch";
+      hash = "sha256-rvA65inIioqdc+QV4KaaUv1I/TMZUq0TWaFJcJiy8NU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
