@@ -45,7 +45,9 @@ async function handleReviewers({
     ...(await Promise.all(
       maintainers.map(async (id) => (await getUser(id)).login.toLowerCase()),
     )),
-    ...owners.filter((handle) => handle && !handle.includes('/')),
+    ...owners
+      .filter((handle) => handle && !handle.includes('/'))
+      .map((handle) => handle.toLowerCase()),
   ])
   log('reviewers - users', Array.from(users).join(', '))
 
