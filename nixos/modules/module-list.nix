@@ -1309,6 +1309,7 @@
   ./services/networking/opkssh/opkssh.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/p2pool.nix
   ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
