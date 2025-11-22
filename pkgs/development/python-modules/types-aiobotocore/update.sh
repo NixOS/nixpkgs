@@ -95,6 +95,7 @@ packages=(
   types-aiobotocore-databrew
   types-aiobotocore-dataexchange
   types-aiobotocore-datapipeline
+  types-aiobotocore-datazone
   types-aiobotocore-datasync
   types-aiobotocore-dax
   types-aiobotocore-detective
