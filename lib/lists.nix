@@ -9,7 +9,6 @@ let
     min
     id
     warn
-    pipe
     ;
   inherit (lib.attrsets) mapAttrs attrNames;
   inherit (lib) max;
@@ -144,10 +143,13 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons
+    `fold` is an alias of `foldr` for historic reasons.
+
+    ::: {.warning}
+    This function will be removed in 26.05.
+    :::
   */
-  # FIXME(Profpatsch): deprecate?
-  fold = foldr;
+  fold = warn "fold has been deprecated, use foldr instead" foldr;
 
   /**
     “left fold”, like `foldr`, but from the left:
