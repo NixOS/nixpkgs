@@ -18,7 +18,6 @@
   pkg-config,
   pygobject3,
   pyxdg,
-  systemd,
   wrapGAppsHook3,
 }:
 
@@ -31,8 +30,8 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "vagnum08";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cpupower-gui";
+    tag = "v${version}";
     sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
   };
 
@@ -99,11 +98,11 @@ buildPythonApplication rec {
     wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Change the frequency limits of your cpu and its governor";
     mainProgram = "cpupower-gui";
     homepage = "https://github.com/vagnum08/cpupower-gui/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ unode ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ unode ];
   };
 }

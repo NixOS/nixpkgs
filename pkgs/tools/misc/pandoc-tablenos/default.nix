@@ -13,9 +13,9 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "tomduck";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-FwzsRziY3PoySo9hIFuLw6tOO9oQij6oQEyoY8HgnII=";
+    repo = "pandoc-tablenos";
+    tag = version;
+    hash = "sha256-FwzsRziY3PoySo9hIFuLw6tOO9oQij6oQEyoY8HgnII=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +27,12 @@ buildPythonApplication rec {
   # Different pandoc executables are not available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone pandoc filter from the pandoc-xnos suite for numbering tables and table references";
     homepage = "https://github.com/tomduck/pandoc-tablenos";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ppenguin ];
+    changelog = "https://github.com/tomduck/pandoc-tablenos/releases/tag/${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-tablenos";
   };
 }
