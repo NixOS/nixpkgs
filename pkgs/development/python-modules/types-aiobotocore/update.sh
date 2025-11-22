@@ -66,6 +66,7 @@ packages=(
   types-aiobotocore-codebuild
   types-aiobotocore-codecatalyst
   types-aiobotocore-codecommit
+  types-aiobotocore-codeconnections
   types-aiobotocore-codedeploy
   types-aiobotocore-codeguru-reviewer
   types-aiobotocore-codeguru-security
