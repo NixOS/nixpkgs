@@ -27,6 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+  # Fix undefined reference to `__rust_probestack` from wasmer_vm.
+  # Define it as a no-op since it's only needed for stack overflow detection.
+  env.RUSTFLAGS = "-C link-arg=-Wl,--defsym,__rust_probestack=0";
+
   cargoBuildFlags = [ "--all-features" ];
 
   doCheck = false; # requires multiple dbs to be installed
