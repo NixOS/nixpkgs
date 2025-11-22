@@ -140,6 +140,7 @@ packages=(
   types-aiobotocore-forecast
   types-aiobotocore-forecastquery
   types-aiobotocore-frauddetector
+  types-aiobotocore-freetier
   types-aiobotocore-fsx
   types-aiobotocore-gamelift
   types-aiobotocore-glacier
