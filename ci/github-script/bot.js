@@ -152,6 +152,8 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).data
 
+    log('author', pull_request.user?.login)
+
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
     const merge_bot_eligible = await handleMerge({
