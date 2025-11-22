@@ -5,33 +5,46 @@
   fetchFromGitHub,
   fzf,
   gawk,
+  gnumake,
   gnused,
   jujutsu,
   makeWrapper,
+  pandoc,
+  python3,
+  unixtools,
   stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "jj-fzf";
-  version = "0.33.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "tim-janik";
     repo = "jj-fzf";
     tag = "v${version}";
-    hash = "sha256-iVgX2Lu06t1pCQl5ZGgl3+lTv4HAPKbD/83STDtYhdU=";
+    hash = "sha256-aJyKVMg/yI2CmAx5TxN0w670Rq26ESdLzESgh8Jr4nE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    bashInteractive
+    coreutils
+    fzf
+    gnumake
+    jujutsu
+    makeWrapper
+    pandoc
+    python3
+    unixtools.column
+  ];
 
   dontConfigure = true;
   dontBuild = true;
+  patchPhase = "patchShebangs .";
 
   installPhase = ''
     runHook preInstall
-    install -D jj-fzf $out/bin/jj-fzf
-    substituteInPlace $out/bin/jj-fzf \
-      --replace-fail "/usr/bin/env bash" "${lib.getExe bashInteractive}"
+    make SHELL="${lib.getExe bashInteractive}" PREFIX="$out" install
     wrapProgram $out/bin/jj-fzf \
       --prefix PATH : ${
         lib.makeBinPath [
