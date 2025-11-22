@@ -20,7 +20,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iotas";
-  version = "0.11.2";
+  version = "0.12.5";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = "iotas";
     tag = version;
-    hash = "sha256-nDmofssoaB3BKh6X3Lpi5xftyo9Zw3IUoD3wte0wPM4=";
+    hash = "sha256-qbUI2hkW3rRiiBWFADuB9KFMf6Maw+WAkdy6dTE+Yo0=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,6 @@ python3.pkgs.buildPythonApplication rec {
     linkify-it-py
     mdit-py-plugins
     pypandoc
-    strenum
     packaging
   ];
 
