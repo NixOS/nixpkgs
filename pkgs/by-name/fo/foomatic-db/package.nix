@@ -14,15 +14,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-db";
-  version = "0-unstable-2024-12-05";
+  version = "0-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db";
-    rev = "9a7a08318598fea569cf073489709899c9af6143";
-    hash = "sha256-7vvJPhUa4oDe101Iv897LoChNIcdTa4LviLUndHxWtw=";
+    rev = "557e7b5cc2896bc94675142c11ec4eec4b1d1dab";
+    hash = "sha256-A2sxjHHRNhB9oBTTto7T7gCQXiDy6JxmgHg+rTVz3AA=";
   };
 
   buildInputs = [
