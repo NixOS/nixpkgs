@@ -154,8 +154,8 @@ in
     ];
 
     systemd = {
-      packages = [ cfg.package ];
       services.stalwart-mail = {
+        description = "Stalwart Mail Server";
         wantedBy = [ "multi-user.target" ];
         after = [
           "local-fs.target"
@@ -173,14 +173,20 @@ in
             '';
 
         serviceConfig = {
+          # Upstream service config
+          Type = "simple";
+          LimitNOFILE = 65536;
+          KillMode = "process";
+          KillSignal = "SIGINT";
+          Restart = "on-failure";
+          RestartSec = 5;
+          SyslogIdentifier = "stalwart-mail";
+
           ExecStart = [
             ""
             "${lib.getExe cfg.package} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
-
-          StandardOutput = "journal";
-          StandardError = "journal";
 
           ReadWritePaths = [
             cfg.dataDir
@@ -228,7 +234,6 @@ in
           UMask = "0077";
         };
         unitConfig.ConditionPathExists = [
-          ""
           "${configFile}"
         ];
       };
