@@ -59,10 +59,6 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  malloc0ReturnsNullCrossFlag = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
-
   addMainProgram =
     pkg:
     {
@@ -114,19 +110,6 @@ self: super:
   ) { };
 
   mkfontdir = xorg.mkfontscale;
-
-  xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xdpyinfo";
-    };
-  });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [

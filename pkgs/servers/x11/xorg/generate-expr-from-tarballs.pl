@@ -453,6 +453,7 @@ print OUT <<EOF;
   xcursorgen,
   xcursor-themes,
   xdm,
+  xdpyinfo,
   xdriinfo,
   xev,
   xeyes,
@@ -529,6 +530,7 @@ self: with self; {
     xconsole
     xcursorgen
     xdm
+    xdpyinfo
     xdriinfo
     xev
     xeyes

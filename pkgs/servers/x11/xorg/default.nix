@@ -122,6 +122,7 @@
   xcursorgen,
   xcursor-themes,
   xdm,
+  xdpyinfo,
   xdriinfo,
   xev,
   xeyes,
@@ -198,6 +199,7 @@ self: with self; {
     xconsole
     xcursorgen
     xdm
+    xdpyinfo
     xdriinfo
     xev
     xeyes
@@ -399,64 +401,6 @@ self: with self; {
         xorgproto
         libXrender
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdpyinfo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libdmx,
-      libX11,
-      libxcb,
-      libXcomposite,
-      libXext,
-      libXi,
-      libXinerama,
-      xorgproto,
-      libXrender,
-      libXtst,
-      libXxf86dga,
-      libXxf86misc,
-      libXxf86vm,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xdpyinfo";
-      version = "1.3.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xdpyinfo-1.3.4.tar.xz";
-        sha256 = "0aw2yhx4ys22231yihkzhnw9jsyzksl4yyf3sx0689npvf0sbbd8";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libdmx
-        libX11
-        libxcb
-        libXcomposite
-        libXext
-        libXi
-        libXinerama
-        xorgproto
-        libXrender
-        libXtst
-        libXxf86dga
-        libXxf86misc
-        libXxf86vm
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
