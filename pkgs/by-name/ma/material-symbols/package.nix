@@ -39,6 +39,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       fufexan
       luftmensch-luftmensch
+      alexphanna
     ];
     platforms = lib.platforms.all;
   };
