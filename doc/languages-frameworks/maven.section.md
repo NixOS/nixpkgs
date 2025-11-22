@@ -174,110 +174,7 @@ To make sure that your package does not add extra manual effort when upgrading M
 </plugin>
 ```
 
-## Manually using `mvn2nix` {#maven-mvn2nix}
-::: {.warning}
-This way is no longer recommended; see [](#maven-buildmavenpackage) for the simpler and preferred way.
-:::
-
-For the purposes of this example let's consider a very basic Maven project with the following `pom.xml` with a single dependency on [emoji-java](https://github.com/vdurmont/emoji-java).
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>io.github.fzakaria</groupId>
-  <artifactId>maven-demo</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
-  <name>NixOS Maven Demo</name>
-
-  <dependencies>
-    <dependency>
-        <groupId>com.vdurmont</groupId>
-        <artifactId>emoji-java</artifactId>
-        <version>5.1.1</version>
-      </dependency>
-  </dependencies>
-</project>
-```
-
-Our main class file will be very simple:
-
-```java
-import com.vdurmont.emoji.EmojiParser;
-
-public class Main {
-  public static void main(String[] args) {
-    String str = "NixOS :grinning: is super cool :smiley:!";
-    String result = EmojiParser.parseToUnicode(str);
-    System.out.println(result);
-  }
-}
-```
-
-You find this demo project at [https://github.com/fzakaria/nixos-maven-example](https://github.com/fzakaria/nixos-maven-example).
-
-### Solving for dependencies {#solving-for-dependencies}
-
-#### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
-`buildMaven` is an alternative method that tries to follow similar patterns of other programming languages by generating a lock file. It relies on the maven plugin [mvn2nix-maven-plugin](https://github.com/NixOS/mvn2nix-maven-plugin).
-
-First you generate a `project-info.json` file using the maven plugin.
-
-> This should be executed in the project's source repository or be told which `pom.xml` to execute with.
-
-```bash
-# run this step within the project's source repository
-❯ mvn org.nixos.mvn2nix:mvn2nix-maven-plugin:mvn2nix
-
-❯ cat project-info.json | jq | head
-{
-  "project": {
-    "artifactId": "maven-demo",
-    "groupId": "org.nixos",
-    "version": "1.0",
-    "classifier": "",
-    "extension": "jar",
-    "dependencies": [
-      {
-        "artifactId": "maven-resources-plugin",
-```
-
-This file is then given to the `buildMaven` function, and it returns 2 attributes.
-
-**`repo`**:
-    A Maven repository that is a symlink farm of all the dependencies found in the `project-info.json`
-
-
-**`build`**:
-    A simple derivation that runs through `mvn compile` & `mvn package` to build the JAR. You may use this as inspiration for more complicated derivations.
-
-Here is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/build-maven-repository.nix) of building the Maven repository
-
-```nix
-{
-  pkgs ? import <nixpkgs> { },
-}:
-with pkgs;
-(buildMaven ./project-info.json).repo
-```
-
-The benefit over the _double invocation_ as we will see below, is that the _/nix/store_ entry is a _linkFarm_ of every package, so that changes to your dependency set doesn't involve downloading everything from scratch.
-
-```bash
-❯ tree $(nix-build --no-out-link build-maven-repository.nix) | head
-/nix/store/g87va52nkc8jzbmi1aqdcf2f109r4dvn-maven-repository
-├── antlr
-│   └── antlr
-│       └── 2.7.2
-│           ├── antlr-2.7.2.jar -> /nix/store/d027c8f2cnmj5yrynpbq2s6wmc9cb559-antlr-2.7.2.jar
-│           └── antlr-2.7.2.pom -> /nix/store/mv42fc5gizl8h5g5vpywz1nfiynmzgp2-antlr-2.7.2.pom
-├── avalon-framework
-│   └── avalon-framework
-│       └── 4.1.3
-│           ├── avalon-framework-4.1.3.jar -> /nix/store/iv5fp3955w3nq28ff9xfz86wvxbiw6n9-avalon-framework-4.1.3.jar
-```
+### Solving for Dependencies {#maven-solving-for-dependencies}
 
 #### Double Invocation {#double-invocation}
 ::: {.note}
@@ -354,7 +251,7 @@ Some additional files are deleted that would cause the output hash to change pot
 │       │   ├── classworlds-1.1.jar
 ```
 
-If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over time, your output hash will change since the resolved dependencies may change. Hence this method is less recommended than using `buildMaven`.
+If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over time, your output hash will change since the resolved dependencies may change.
 
 ### Building a JAR {#building-a-jar}
 
@@ -367,7 +264,6 @@ Regardless of which strategy is chosen above, the step to build the derivation i
   callPackage,
 }:
 let
-  # pick a repository derivation, here we will use buildMaven
   repository = callPackage ./build-maven-repository.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -418,7 +314,7 @@ You need to use it with `java -jar $out/share/java/output.jar` and make sure to 
 
 The following explains how to use `makeWrapper` in order to make the derivation produce an executable that will run the JAR file you created.
 
-We will use the same repository we built above (either _double invocation_ or _buildMaven_) to setup a CLASSPATH for our JAR.
+We will use the same repository we built above with _double invocation_  to setup a CLASSPATH for our JAR.
 
 The following two methods are more suited to Nix then building an [UberJar](https://imagej.net/Uber-JAR) which may be the more traditional approach.
 
@@ -531,7 +427,6 @@ We will modify the derivation above to add a symlink to our repository so that i
   jre,
 }:
 let
-  # pick a repository derivation, here we will use buildMaven
   repository = callPackage ./build-maven-repository.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
