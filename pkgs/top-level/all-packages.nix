@@ -9533,7 +9533,6 @@ with pkgs;
   postgrest = haskellPackages.postgrest.bin;
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-artifactory-exporter =
     callPackage ../servers/monitoring/prometheus/artifactory-exporter.nix
