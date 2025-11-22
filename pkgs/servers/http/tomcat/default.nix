@@ -65,8 +65,8 @@ in
   };
 
   tomcat10 = common {
-    version = "10.1.48";
-    hash = "sha256-bAAMIBNs8q7QRhQpl4GEFqFgwOUWwfuiRUS00J26lRM=";
+    version = "10.1.49";
+    hash = "sha256-0fWWn7r3reKW+4rPexOh7xMF0n8sqjpMUSTo1MiqK4g=";
   };
 
   tomcat11 = common {
