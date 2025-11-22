@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.24.0";
+  version = "6.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
     tag = "v${version}";
-    hash = "sha256-mHDUcIII1gERlGMJvXPe3Hb38wNAylfMQpeLjA1Xbuk=";
+    hash = "sha256-8Q2fzaIG9dghjt4T00nqffGEfPDr4DEcdeHPJqhU8fs=";
   };
 
   build-system = [ setuptools ];
