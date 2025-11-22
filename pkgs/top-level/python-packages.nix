@@ -12604,6 +12604,8 @@ self: super: with self; {
 
   py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
 
+  py-markdown-table = callPackage ../development/python-modules/py-markdown-table { };
+
   py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
 
   py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
