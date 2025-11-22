@@ -30,24 +30,32 @@
   nix-update-script,
   gmsh,
   which,
+  orocos-kdl,
 }:
 let
-  pythonDeps = with python3Packages; [
+  pythonCoreDeps = with python3Packages; [
     boost
     gitpython # for addon manager
-    ifcopenshell
-    matplotlib
-    opencamlib
-    pivy
-    ply # for openSCAD file support
-    pybind11
-    pycollada
-    pyside6
+    ifcopenshell # BIM
+    matplotlib # detected by cmake, used for BIM
+    netgen-mesher # netgen FEM plugin for meshing
+    opencamlib # CAM
+    pivy # coin bindings
+    ply # openSCAD file format support
+    pybind11 # qt bindings
+    pycollada # collada file format support (BIM)
+    pyside6 # qt bindings
     python
-    pyyaml # (at least for) PyrateWorkbench
-    scipy
-    shiboken6
+    pyyaml # PyrateWorkbench, CAM
+    scipy # BIM
+    shiboken6 # qt bindings
     vtk
+  ];
+
+  externalTools = [
+    libredwg
+    gmsh # gmsh FEM plugin for meshing
+    which # for locating tools
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
@@ -90,13 +98,14 @@ freecad-utils.makeCustomizable (
       zlib
       opencascade-occt
       microsoft-gsl
+      orocos-kdl
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
       qt6.qtwayland
       qt6.qtwebengine
     ]
-    ++ pythonDeps;
+    ++ pythonCoreDeps;
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -114,12 +123,31 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
         hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
       })
+      # required for gmsh path patch to apply, preference entry to set Gmsh log verbosity
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/be8dfbfc7e4435faf84c20d641ba67330e35cdab.patch?full_index=1";
+        hash = "sha256-ERRrIaARL8xC8j5dhQ6Dvvs1tysHyvFEcLUNG0BAZzQ=";
+      })
+      # required for gmsh patch to apply, preference entry to set Gmsh number of threads
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/ad414a1878634c82a773ec6a9f95a29f2914b625.patch?full_index=1";
+        hash = "sha256-cEgG1c6VqEiklEHIQQ2FF2aTb9d9OwII+6K8PQK6O/o=";
+      })
+      # required for gmsh path patch to apply, updates some UI strings
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/dd702da1bc014ca8282d8da2ea24674ff8120b59.patch?full_index=1";
+        hash = "sha256-pnutlGBoUpws5kfjcOgUJ6Lty5LatPkl2qeSOgpShfE=";
+        includes = [
+          "src/Mod/Fem/Gui/DlgSettingsFemGmsh.ui"
+          "src/Mod/Fem/Gui/DlgSettingsFemGmshImp.cpp"
+        ];
+      })
+      # allow loading gmsh from PATH
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/8a7314631131339d58d3b00626875969a5298bd2.patch?full_index=1";
+        hash = "sha256-RWZ3ndED2OSvUcfwCUO19Q73OOLSy7U0mridKfJx1RI=";
+      })
     ];
-
-    postPatch = ''
-      substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
-        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
-    '';
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
@@ -129,20 +157,19 @@ freecad-utils.makeCustomizable (
       "-DFREECAD_USE_PYBIND11=ON"
       "-DBUILD_QT5=OFF"
       "-DBUILD_QT6=ON"
+      "-DREECAD_USE_EXTERNAL_KDL=ON"
     ];
 
-    qtWrapperArgs =
-      let
-        binPath = lib.makeBinPath [
-          libredwg
-          which # for locating tools
-        ];
-      in
-      [
-        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-        "--prefix PATH : ${binPath}"
-        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-      ];
+    qtWrapperArgs = [
+      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+      "--prefix PATH : ${lib.makeBinPath externalTools}"
+      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonCoreDeps}"
+
+      # use new python netgen bindings instead of shelling to binary
+      "--add-flag '--set-config'"
+      "--add-flag UseLegacyNetgen"
+      "--add-flag 0"
+    ];
 
     postFixup = ''
       mv $out/share/doc $out
