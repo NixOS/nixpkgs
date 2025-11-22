@@ -98,6 +98,7 @@ packages=(
   types-aiobotocore-datazone
   types-aiobotocore-datasync
   types-aiobotocore-dax
+  types-aiobotocore-deadline
   types-aiobotocore-detective
   types-aiobotocore-devicefarm
   types-aiobotocore-devops-guru
