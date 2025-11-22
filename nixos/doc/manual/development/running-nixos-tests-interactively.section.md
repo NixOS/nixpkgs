@@ -77,52 +77,34 @@ An SSH-based backdoor to log into machines can be enabled with
 }
 ```
 
-::: {.warning}
-Make sure to only enable the backdoor for interactive tests
-(i.e. by using `interactive.sshBackdoor.enable`)! This is the only
-supported configuration.
-
-Running a test in a sandbox with this will fail because `/dev/vhost-vsock` isn't available
-in the sandbox.
-:::
-
 This creates a [vsock socket](https://man7.org/linux/man-pages/man7/vsock.7.html)
 for each VM to log in with SSH. This configures root login with an empty password.
 
-When the VMs get started interactively with the test-driver, it's possible to
-connect to `machine` with
+On the host-side a UNIX domain-socket is used with
+[vhost-device-vsock](https://github.com/rust-vmm/vhost-device/blob/main/vhost-device-vsock/README.md).
+That way, it's not necessary to assign system-wide unique vsock numbers.
 
 ```
-$ ssh vsock/3 -o User=root
+$ ssh vsock-mux//tmp/path/to/host -o User=root
 ```
 
-The socket numbers correspond to the node number of the test VM, but start
-at three instead of one because that's the lowest possible
-vsock number. The exact SSH commands are also printed out when starting
-`nixos-test-driver`.
+The socket paths are printed when starting the test driver:
+
+```
+Note: this requires systemd-ssh-proxy(1) to be enabled (default on NixOS 25.05 and newer).
+    machine:  ssh -o User=root vsock-mux//tmp/tmpg1rp9nti/machine_host.socket
+```
 
 On non-NixOS systems you'll probably need to enable
 the SSH config from {manpage}`systemd-ssh-proxy(1)` yourself.
 
-If starting VM fails with an error like
+During a test-run, it's possible to print the SSH commands again by running
 
 ```
-qemu-system-x86_64: -device vhost-vsock-pci,guest-cid=3: vhost-vsock: unable to set guest cid: Address already in use
-```
-
-it means that the vsock numbers for the VMs are already in use. This can happen
-if another interactive test with SSH backdoor enabled is running on the machine.
-
-In that case, you need to assign another range of vsock numbers. You can pick another
-offset with
-
-```nix
-{
-  sshBackdoor = {
-    enable = true;
-    vsockOffset = 23542;
-  };
-}
+In [2]: dump_machine_ssh()
+SSH backdoor enabled, the machines can be accessed like this:
+Note: this requires systemd-ssh-proxy(1) to be enabled (default on NixOS 25.05 and newer).
+    machine:  ssh -o User=root vsock-mux//tmp/tmpg1rp9nti/machine_host.socket
 ```
 
 ## Port forwarding to NixOS test VMs {#sec-nixos-test-port-forwarding}
