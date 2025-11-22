@@ -4,6 +4,7 @@
   bash,
   buildGoModule,
   fetchFromGitLab,
+  fetchpatch,
   nix-update-script,
   versionCheckHook,
 }:
@@ -27,6 +28,12 @@ buildGoModule (finalAttrs: {
   patches = [
     ./fix-shell-path.patch
     ./remove-bash-test.patch
+    # fix regression. remove with next release.
+    (fetchpatch {
+      name = "fix-shell-executor-not-working-with-variables-that-use-file-variables.patch";
+      url = "https://gitlab.com/gitlab-org/gitlab-runner/-/commit/6318fe8e38ca9774eb0f52fa2c68555cdad3ab44.patch";
+      hash = "sha256-GTdBo+7kHHpNs6JywjOII4NBcHjFYEZ3xhdGTcGKov4=";
+    })
   ];
 
   prePatch = ''

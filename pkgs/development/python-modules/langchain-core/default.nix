@@ -36,24 +36,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "1.0.0";
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-/V2xwpVIR7AWkN85D51LYokMrTrnJlIkGr0q1ztVh8A=";
+    hash = "sha256-esMMA9z8z9Q909buPGZP1jujEWzdXT+Mxlwvjz0XqKk=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "packaging"
-    "tenacity"
-  ];
 
   dependencies = [
     jsonpatch
@@ -74,7 +69,6 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     grandalf
-    httpx
     langchain-tests
     numpy
     pytest-asyncio

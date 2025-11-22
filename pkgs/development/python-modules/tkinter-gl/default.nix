@@ -1,9 +1,11 @@
 {
   lib,
+  python,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
   tkinter,
+  tkgl,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +20,27 @@ buildPythonPackage rec {
     hash = "sha256-ObI8EEQ7mAOAuV6f+Ld4HH0xkFzqiAZqHDvzjwPA/wM";
   };
 
+  postPatch = ''
+    # Remove compiled TkGL, we compile it ourselves
+    rm -r src/tkinter_gl/tk
+    # Platform-specific directories are only necessary when using compiled TkGL
+    substituteInPlace src/tkinter_gl/__init__.py \
+      --replace-fail "pkg_dir = os.path.join(__path__[0], 'tk', sys.platform,)" \
+                     "pkg_dir = os.path.join(__path__[0], 'tk')"
+  '';
+
   build-system = [ setuptools-scm ];
 
   dependencies = [ tkinter ];
+
+  postInstall =
+    let
+      pkgDir = "$out/${python.sitePackages}/tkinter_gl/tk";
+    in
+    ''
+      mkdir -p ${pkgDir}
+      ln -s ${tkgl}/lib/Tkgl* ${pkgDir}
+    '';
 
   pythonImportsCheck = [ "tkinter_gl" ];
 

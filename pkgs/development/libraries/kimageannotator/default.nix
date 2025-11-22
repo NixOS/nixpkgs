@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kimageannotator";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
     rev = "v${version}";
-    hash = "sha256-LFou8gTF/XDBLNQbA4uurYJHQl7yOTKe2OGklUsmPrg=";
+    hash = "sha256-SKNNsBXmaS0ZnbMP7cKSfr+MM+ICdvYQ0k2h5s9SDcE=";
   };
 
   nativeBuildInputs = [
