@@ -17,7 +17,7 @@
 }:
 let
   jdk = jdk17;
-  buildNumber = "1295";
+  buildNumber = "1306";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -62,13 +62,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3.2";
+  version = "4.4.6";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
+    sha256 = "sha256-dqBJeDnQEDDJ1TAZqwbPU8Arsecf9iv1T311bFIBO4w=";
   };
 
   # Processing did not update the todo.txt file before tagging this release, so
@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
 
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
+    mkdir -p app/lib core/library
     cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
-    mkdir -p core/library
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
