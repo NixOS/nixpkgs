@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "2.0.0-rc9";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVQAux39JH997u+jR5Irjm479/0WgW9jWWpCQRE5rgg=";
+    hash = "sha256-33txlTRRzA1XxuKgWgz1lNIfzIMrPny6wGFHaecy7FY=";
   };
 
   patches = [ ./remove-vendoring.patch ];
