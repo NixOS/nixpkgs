@@ -572,6 +572,8 @@ in
 
         mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
+        morse-driver = callPackage ../os-specific/linux/morse-driver { };
+
         # compiles but has to be integrated into the kernel somehow
         # Let's have it uncommented and finish it..
         ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };

@@ -1,0 +1,619 @@
+From 366772a6801baa37171afbf4ecec103d58f97de5 Mon Sep 17 00:00:00 2001
+From: Govind Singh <govind.sk85@gmail.com>
+Date: Thu, 6 Nov 2025 11:25:53 +0400
+Subject: [PATCH] fix build compatibility with Linux 6.12+ and hardened kernels
+ with strict type checks
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This patch updates the Morse driver to build successfully with Linux kernel
+version 6.12 and later, addressing API changes and stricter type checks
+introduced in newer kernel releases.
+
+Key changes:
+- Fixed `morse_firmware_init()` enum–int type mismatch causing
+  `-Werror=enum-int-mismatch` failures.
+- Updated mac80211 compatibility for new API signatures:
+  - `sta_rc_update` now uses `ieee80211_link_sta` (6.13+)
+  - `set_frag_threshold` and `set_rts_threshold` updated to accept
+    `(struct ieee80211_hw *, int, u32)`
+  - Added support for `morse_mac_ops_config()` and `morse_wiphy_set_wiphy_params()`
+    variants with `radio_idx` argument (6.17+)
+- Adjusted `get_elements_from_s1g_beacon()` and related logic to align with
+  new `ieee80211_is_s1g_short_beacon()` behavior (requires `variable_len` in 6.12+).
+- Replaced deprecated timer APIs (`del_timer_sync`) with `timer_delete_sync`
+  where required (6.15+), and introduced `timer_container_of()` for 6.16+.
+- Fixed missing `mmrc_osal.h` include error by adding APF stub functions when
+  `CONFIG_ANDROID` is disabled.
+- Added kernel version guards and minor cleanup for conditional compilation
+  across 6.12–6.17 transitions.
+
+This ensures forward compatibility while maintaining backward support for
+older kernel versions.
+
+Signed-off-by: Govind Singh <govind.sk85@gmail.com>
+---
+ Makefile     |  2 +-
+ apf.c        | 27 ++++++++++++++++++++
+ bss_stats.c  | 16 +++++++++++-
+ cac.c        |  9 +++++--
+ debug.h      |  2 +-
+ dot11ah/ie.c |  4 +++
+ firmware.h   |  4 ++-
+ mac.c        | 72 ++++++++++++++++++++++++++++++++++++++++++----------
+ mesh.c       |  8 +++++-
+ rc.c         |  9 ++++++-
+ vendor.c     |  2 --
+ vendor_ie.c  |  9 +++++--
+ watchdog.c   |  5 ++++
+ wiphy.c      |  4 +++
+ yaps-hw.c    | 18 +++++++++----
+ yaps.c       | 15 +++++++++--
+ 16 files changed, 173 insertions(+), 33 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5dc7bb2..fce34ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -155,6 +155,7 @@ morse-y += coredump.o
+ morse-y += peer.o
+ morse-y += led.o
+ morse-y += bss_stats.o
++morse-y += apf.o
+ morse-$(CONFIG_MORSE_MONITOR) += monitor.o
+ morse-$(CONFIG_MORSE_SDIO) += sdio.o
+ morse-$(CONFIG_MORSE_SPI) += spi.o
+@@ -164,7 +165,6 @@ morse-$(CONFIG_MORSE_USER_ACCESS) += uaccess.o
+ morse-$(CONFIG_MORSE_HW_TRACE) += hw_trace.o
+ morse-$(CONFIG_MORSE_PAGESET_TRACE) += pageset_trace.o
+ morse-$(CONFIG_MORSE_BUS_TRACE) += bus_trace.o
+-morse-$(CONFIG_ANDROID) += apf.o
+ 
+ ifeq ($(CONFIG_DISABLE_MORSE_RC),y)
+ 	morse-y += minstrel_rc.o
+diff --git a/apf.c b/apf.c
+index baecd05..96b4b1b 100644
+--- a/apf.c
++++ b/apf.c
+@@ -16,6 +16,7 @@
+ #define MORSE_APF_WARN(_m, _f, _a...)		morse_warn(FEATURE_ID_APF, _m, _f, ##_a)
+ #define MORSE_APF_ERR(_m, _f, _a...)		morse_err(FEATURE_ID_APF, _m, _f, ##_a)
+ 
++#ifdef CONFIG_ANDROID
+ struct nla_policy morse_apf_nla_policy[VENDOR_ATTR_PACKET_FILTER_MAX] = {
+ 	[VENDOR_ATTR_PACKET_FILTER_VERSION] = { .type = NLA_U32},
+ 	[VENDOR_ATTR_PACKET_FILTER_MAX_LENGTH] = { .type = NLA_U32},
+@@ -210,3 +211,29 @@ exit:
+ 	kfree(program);
+ 	return ret;
+ }
++#else
++int morse_vendor_cmd_get_supported_feature_set(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_get_capabilities(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_set_packet_filter(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_read_packet_filter_data(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++#endif /* CONFIG_ANDROID */
+diff --git a/bss_stats.c b/bss_stats.c
+index cf1b06c..bac5789 100644
+--- a/bss_stats.c
++++ b/bss_stats.c
+@@ -152,7 +152,9 @@ static void morse_bss_stats_timer_cb(unsigned long addr)
+ static void morse_bss_stats_timer_cb(struct timer_list *t)
+ #endif
+ {
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct morse_bss_stats_context *bss_stats = timer_container_of(bss_stats, t, timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ 	struct morse_bss_stats_context *bss_stats = (struct morse_bss_stats_context *)addr;
+ #else
+ 	struct morse_bss_stats_context *bss_stats = from_timer(bss_stats, t, timer);
+@@ -465,7 +467,11 @@ int morse_bss_stats_pause(struct morse_vif *mors_vif)
+ 
+ 	/* disable and stop the stats timer */
+ 	bss_stats->paused = true;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&bss_stats->timer);
++#else
+ 	del_timer_sync(&bss_stats->timer);
++#endif
+ 
+ 	return 0;
+ }
+@@ -523,7 +529,11 @@ int morse_cmd_process_bss_stats_conf(struct morse_vif *mors_vif,
+ 		mod_timer(&bss_stats->timer,
+ 			jiffies + msecs_to_jiffies(bss_stats->monitor_window_ms));
+ 	else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++		timer_delete_sync(&bss_stats->timer);
++#else
+ 		del_timer_sync(&bss_stats->timer);
++#endif
+ 
+ 	return 0;
+ }
+@@ -573,5 +583,9 @@ void morse_bss_stats_deinit(struct morse_vif *mors_vif)
+ 
+ 	bss_stats = &mors_vif->ap->bss_stats;
+ 	morse_bss_stats_remove_all(mors_vif, bss_stats);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&bss_stats->timer);
++#else
+ 	del_timer_sync(&bss_stats->timer);
++#endif
+ }
+diff --git a/cac.c b/cac.c
+index aef151d..5eb2113 100644
+--- a/cac.c
++++ b/cac.c
+@@ -182,7 +182,9 @@ static void cac_timer(unsigned long addr)
+ static void cac_timer(struct timer_list *t)
+ #endif
+ {
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct morse_cac *cac = timer_container_of(cac, t, timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ 	struct morse_cac *cac = (struct morse_cac *)addr;
+ #else
+ 	struct morse_cac *cac = from_timer(cac, t, timer);
+@@ -231,8 +233,11 @@ int morse_cac_deinit(struct morse_vif *mors_vif)
+ 	if (!mors_vif->ap)
+ 		return 0;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&cac->timer);
++#else
+ 	del_timer_sync(&cac->timer);
+-
++#endif
+ 	return 0;
+ }
+ 
+diff --git a/debug.h b/debug.h
+index 2b734d5..f03f419 100644
+--- a/debug.h
++++ b/debug.h
+@@ -156,7 +156,7 @@ extern uint debug_mask;
+  *
+  * @returns	True if output would be generated and false otherwise.
+  */
+-bool morse_log_is_enabled(u32 id, u8 level);
++bool morse_log_is_enabled(enum morse_feature_id id, u8 level);
+ 
+ /**
+  * Set the default logging level for all features.
+diff --git a/dot11ah/ie.c b/dot11ah/ie.c
+index 40e38f5..ba636af 100644
+--- a/dot11ah/ie.c
++++ b/dot11ah/ie.c
+@@ -526,7 +526,11 @@ int morse_dot11_insert_ordered_ies_from_ies_mask(struct sk_buff *skb, u8 *pos,
+ 	if (!ies_mask)
+ 		return 0;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++	if (!ieee80211_is_s1g_beacon(frame_control) ||
++#else
+ 	if (ieee80211_is_s1g_short_beacon(frame_control) ||
++#endif
+ 	    (le16_to_cpu(frame_control) & IEEE80211_FC_COMPRESS_SSID)) {
+ 		ies_order_table = morse_ext_s1g_short_beacon_ies_order;
+ 		ies_order_table_len = ARRAY_SIZE(morse_ext_s1g_short_beacon_ies_order);
+diff --git a/firmware.h b/firmware.h
+index 217339a..0b1815f 100644
+--- a/firmware.h
++++ b/firmware.h
+@@ -32,6 +32,8 @@
+ #error "Capability subset filled by firmware is to big"
+ #endif
+ 
++enum morse_config_test_mode;
++
+ enum morse_fw_info_tlv_type {
+ 	MORSE_FW_INFO_TLV_BCF_ADDR = 1,
+ 	MORSE_FW_INFO_TLV_COREDUMP_MEM_REGION = 2,
+@@ -146,7 +148,7 @@ struct extended_host_table {
+ 	u8 ext_host_table_data_tlvs[];
+ } __packed;
+ 
+-int morse_firmware_init(struct morse *mors, uint test_mode);
++int morse_firmware_init(struct morse *mors, enum morse_config_test_mode test_mode);
+ 
+ /**
+  * @brief Do necessary preparation and then initialise firmware
+diff --git a/mac.c b/mac.c
+index 7844af9..4ec6169 100644
+--- a/mac.c
++++ b/mac.c
+@@ -2707,7 +2707,9 @@ static void morse_chswitch_timer(unsigned long addr)
+ static void morse_chswitch_timer(struct timer_list *t)
+ #endif
+ {
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct morse_vif *mors_vif = timer_container_of(mors_vif, t, chswitch_timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ 	struct morse_vif *mors_vif = (struct morse_vif *)addr;
+ #else
+ 	struct morse_vif *mors_vif = from_timer(mors_vif, t, chswitch_timer);
+@@ -3194,8 +3196,11 @@ static void morse_mac_ops_remove_interface(struct ieee80211_hw *hw, struct ieee8
+ 		MORSE_ERR(mors, "morse_cmd_rm_if failed %d", ret);
+ 		goto exit;
+ 	}
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&mors_vif->chswitch_timer);
++#else
+ 	del_timer_sync(&mors_vif->chswitch_timer);
++#endif
+ 	flush_delayed_work(&mors_vif->ecsa_chswitch_work);
+ 
+ 	/* If data TX is stopped, the LMAC will eventually send the
+@@ -3469,8 +3474,11 @@ static int morse_mac_change_channel(struct ieee80211_hw *hw)
+ 
+ 	return ret;
+ }
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static int morse_mac_ops_config(struct ieee80211_hw *hw, int radio_idx, u32 changed)
++#else
+ static int morse_mac_ops_config(struct ieee80211_hw *hw, u32 changed)
++#endif
+ {
+ 	int err = 0;
+ 	struct morse *mors = hw->priv;
+@@ -3540,7 +3548,11 @@ exit:
+ }
+ 
+ /* Return Tx power only when channel is configured and is the same as one in hw->conf */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static int morse_mac_ops_get_txpower(struct ieee80211_hw *hw, struct ieee80211_vif *vif, unsigned int link_id, int *dbm)
++#else
+ static int morse_mac_ops_get_txpower(struct ieee80211_hw *hw, struct ieee80211_vif *vif, int *dbm)
++#endif
+ {
+ 	int err;
+ 	struct morse *mors = hw->priv;
+@@ -4290,11 +4302,7 @@ void morse_mac_update_ibss_node_capabilities(struct ieee80211_hw *hw,
+ /* API to process the bandwidth change notification from mac80211 */
+ static void morse_mac_ops_sta_rc_update(struct ieee80211_hw *hw,
+ 					struct ieee80211_vif *vif,
+-#if KERNEL_VERSION(6, 13, 0) > MAC80211_VERSION_CODE
+ 					struct ieee80211_sta *sta,
+-#else
+-					struct ieee80211_link_sta *link_sta,
+-#endif
+ 					u32 changed)
+ {
+ 	struct morse *mors;
+@@ -4302,9 +4310,6 @@ static void morse_mac_ops_sta_rc_update(struct ieee80211_hw *hw,
+ 	enum ieee80211_sta_state old_state;
+ 	enum ieee80211_sta_state new_state;
+ #endif
+-#if KERNEL_VERSION(6, 13, 0) <= MAC80211_VERSION_CODE
+-	struct ieee80211_sta *sta = link_sta->sta;
+-#endif
+ 
+ 	if (!hw || !vif || !sta)
+ 		return;
+@@ -4340,6 +4345,20 @@ static void morse_mac_ops_sta_rc_update(struct ieee80211_hw *hw,
+ #endif
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,13,0)
++static void morse_link_sta_rc_update_compat(struct ieee80211_hw *hw,
++                                            struct ieee80211_vif *vif,
++                                            struct ieee80211_link_sta *link_sta,
++                                            u32 changed)
++{
++    if (!link_sta)
++        return;
++
++    /* link_sta always has a back-reference to the station */
++    morse_mac_ops_sta_rc_update(hw, vif, link_sta->sta, changed);
++}
++#endif
++
+ static int
+ morse_mac_ops_sta_state(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 			struct ieee80211_sta *sta,
+@@ -4891,7 +4910,18 @@ static int morse_mac_join_ibss(struct ieee80211_hw *hw, struct ieee80211_vif *vi
+ 		 * packets.
+ 		 */
+ 		changed |= IEEE80211_CONF_CHANGE_CHANNEL;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++		int idx;
++		struct ieee80211_vif *vif_tmp;
++		for (idx = 0; idx < mors->max_vifs; idx++) {
++			vif_tmp = morse_get_vif_from_vif_id(mors, idx);
++				if (!vif_tmp)
++					continue;
++			morse_mac_ops_config(hw, idx, changed);
++		}
++#else
+ 		morse_mac_ops_config(hw, changed);
++#endif
+ 	}
+ 
+ 	memcpy(bssid, vif->bss_conf.bssid, ETH_ALEN);
+@@ -4927,7 +4957,11 @@ static void morse_mac_leave_ibss(struct ieee80211_hw *hw, struct ieee80211_vif *
+ 	mutex_unlock(&mors->lock);
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static int morse_mac_set_frag_threshold(struct ieee80211_hw *hw, int radio_idx, u32 value)
++#else
+ static int morse_mac_set_frag_threshold(struct ieee80211_hw *hw, u32 value)
++#endif
+ {
+ 	int ret = -EINVAL;
+ 	struct morse *mors = hw->priv;
+@@ -4941,7 +4975,11 @@ static int morse_mac_set_frag_threshold(struct ieee80211_hw *hw, u32 value)
+ 	return ret;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static int morse_mac_set_rts_threshold(struct ieee80211_hw *hw, int radio_idx, u32 value)
++#else
+ static int morse_mac_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
++#endif
+ {
+ 	/* When Minstrel is not used, Linux checks if .set_rts_threshold is registered.
+ 	 * MMRC follows Minstrel to apply RTS on retry rates so does not use this function.
+@@ -5076,7 +5114,7 @@ static struct ieee80211_ops mors_ops = {
+ #if KERNEL_VERSION(6, 13, 0) > MAC80211_VERSION_CODE
+ 	.sta_rc_update = morse_mac_ops_sta_rc_update,
+ #else
+-	.link_sta_rc_update = morse_mac_ops_sta_rc_update,
++	.link_sta_rc_update = morse_link_sta_rc_update_compat,
+ #endif
+ 	.set_frag_threshold = morse_mac_set_frag_threshold,
+ 	.set_rts_threshold = morse_mac_set_rts_threshold,
+@@ -6490,8 +6528,11 @@ exit:
+ 	morse_ps_enable(mors);
+ 	return ret;
+ }
+-
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++static void morse_stale_tx_status_timer(struct timer_list *t)
++{
++	struct morse *mors = timer_container_of(mors, t, stale_status.timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ static void morse_stale_tx_status_timer(unsigned long addr)
+ {
+ 	struct morse *mors = (struct morse *)addr;
+@@ -6538,8 +6579,11 @@ static int morse_stale_tx_status_timer_finish(struct morse *mors)
+ 		return 0;
+ 
+ 	mors->stale_status.enabled = 0;
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&mors->stale_status.timer);
++#else
+ 	del_timer_sync(&mors->stale_status.timer);
++#endif
+ 
+ 	return 0;
+ }
+diff --git a/mesh.c b/mesh.c
+index a89e5d9..1c146cf 100644
+--- a/mesh.c
++++ b/mesh.c
+@@ -236,7 +236,9 @@ static void morse_mesh_probe_timer_cb(unsigned long addr)
+ static void morse_mesh_probe_timer_cb(struct timer_list *t)
+ #endif
+ {
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct morse_mesh *mesh = timer_container_of(mesh, t, mesh_probe_timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ 	struct morse_mesh *mesh = (struct morse_mesh *)addr;
+ #else
+ 	struct morse_mesh *mesh = from_timer(mesh, t, mesh_probe_timer);
+@@ -657,7 +659,11 @@ int morse_mesh_deinit(struct morse_vif *mors_vif)
+ {
+ 	struct morse_mesh *mesh = mors_vif->mesh;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++	timer_delete_sync(&mesh->mesh_probe_timer);
++#else
+ 	del_timer_sync(&mesh->mesh_probe_timer);
++#endif
+ 	kfree(mors_vif->mesh);
+ 
+ 	return 0;
+diff --git a/rc.c b/rc.c
+index bf11591..8e56d4c 100644
+--- a/rc.c
++++ b/rc.c
+@@ -90,7 +90,10 @@ static void morse_rc_timer(unsigned long addr)
+ static void morse_rc_timer(struct timer_list *t)
+ #endif
+ {
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct morse_rc *mrc = timer_container_of(mrc, t, timer);
++	struct morse *mors = mrc->mors;
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ 	struct morse *mors = (struct morse *)addr;
+ #else
+ 	struct morse_rc *mrc = from_timer(mrc, t, timer);
+@@ -124,7 +127,11 @@ int morse_rc_init(struct morse *mors)
+ int morse_rc_deinit(struct morse *mors)
+ {
+ 	cancel_work_sync(&mors->mrc.work);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
++        timer_delete_sync(&mors->mrc.timer);
++#else
+ 	del_timer_sync(&mors->mrc.timer);
++#endif
+ 
+ 	return 0;
+ }
+diff --git a/vendor.c b/vendor.c
+index 0556715..7fcd31a 100644
+--- a/vendor.c
++++ b/vendor.c
+@@ -14,9 +14,7 @@
+ #include "wiphy.h"
+ #include "vendor.h"
+ #include "mesh.h"
+-#ifdef CONFIG_ANDROID
+ #include "apf.h"
+-#endif
+ 
+ /** Extra overhead to account for any additional netlink framing */
+ #define VENDOR_EVENT_OVERHEAD			(30)
+diff --git a/vendor_ie.c b/vendor_ie.c
+index 9d4345a..48e042f 100644
+--- a/vendor_ie.c
++++ b/vendor_ie.c
+@@ -139,8 +139,13 @@ int morse_vendor_ie_process_rx_ies(struct wireless_dev *wdev, const u8 *ies, u16
+  */
+ static inline u8 *get_elements_from_s1g_beacon(struct ieee80211_ext *bcn)
+ {
+-	return (ieee80211_is_s1g_short_beacon(bcn->frame_control) ?
+-		bcn->u.s1g_short_beacon.variable : bcn->u.s1g_beacon.variable);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++	return (u8 *)bcn->u.s1g_beacon.variable;
++#else
++	return ieee80211_is_s1g_short_beacon(bcn->frame_control)
++           ? (u8 *)bcn->u.s1g_short_beacon.variable
++           : (u8 *)bcn->u.s1g_beacon.variable;
++#endif
+ }
+ 
+ /**
+diff --git a/watchdog.c b/watchdog.c
+index bf4ba7d..f9a52ea 100644
+--- a/watchdog.c
++++ b/watchdog.c
+@@ -181,8 +181,13 @@ int morse_watchdog_init(struct morse *mors, uint interval_s,
+ {
+ 	int ret = 0;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	hrtimer_setup(&mors->watchdog.timer, &morse_watchdog_fire, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++#else
++
+ 	hrtimer_init(&mors->watchdog.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	mors->watchdog.timer.function = &morse_watchdog_fire;
++#endif
+ 
+ 	mors->watchdog.interval_secs = interval_s;
+ 	mors->watchdog.ping = ping;
+diff --git a/wiphy.c b/wiphy.c
+index 58fa394..1e4cc67 100644
+--- a/wiphy.c
++++ b/wiphy.c
+@@ -1012,7 +1012,11 @@ out:
+ 	return ret;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static int morse_wiphy_set_wiphy_params(struct wiphy *wiphy, int radio_idx, u32 changed)
++#else
+ static int morse_wiphy_set_wiphy_params(struct wiphy *wiphy, u32 changed)
++#endif
+ {
+ 	struct morse *mors = wiphy_priv(wiphy);
+ 	int ret = 0;
+diff --git a/yaps-hw.c b/yaps-hw.c
+index 29efb32..b68ac09 100644
+--- a/yaps-hw.c
++++ b/yaps-hw.c
+@@ -182,14 +182,22 @@ static void morse_yaps_fill_aux_data_from_hw_tbl(struct morse_yaps_hw_aux_data *
+ static inline u8 morse_yaps_crc(u32 word)
+ {
+ 	u8 crc = 0;
+-	int len = sizeof(word);
++	u8 buf[4];
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 15, 0)
++	int i;
++#endif
+ 
+ 	/* Mask to look at only non-crc bits in both metadata word and delimiters */
+ 	word &= 0x1ffffff;
+-	while (len--) {
+-		crc = crc7_be_byte(crc, (word >> 24) & 0xff);
+-		word <<= 8;
+-	}
++	memcpy(buf, &word, sizeof(buf));
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 15, 0)
++	for (i = 0; i < sizeof(buf); i++)
++		crc = crc7_be_byte(crc, buf[i]);
++#else
++	crc = crc7_be(crc, buf, sizeof(buf));
++#endif
++
+ 	return crc >> 1;
+ }
+ 
+diff --git a/yaps.c b/yaps.c
+index a3b1962..8955a2a 100644
+--- a/yaps.c
++++ b/yaps.c
+@@ -84,7 +84,11 @@ static int yaps_irq_handler(struct morse *mors, u32 status)
+ 
+ 	if (test_bit(MORSE_INT_YAPS_FC_PACKET_FREED_UP_IRQN, (unsigned long *)&status)) {
+ 		/* No need for the timer anymore */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++		timer_delete_sync(&mors->chip_if->yaps->chip_queue_full.timer);
++#else
+ 		del_timer_sync(&mors->chip_if->yaps->chip_queue_full.timer);
++#endif
+ 		set_bit(MORSE_TX_PACKET_FREED_UP_PEND, &mors->chip_if->event_flags);
+ 	}
+ 
+@@ -662,7 +666,11 @@ int morse_yaps_get_tx_buffered_count(struct morse *mors)
+ 	return count;
+ }
+ 
+-#if KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++static void morse_tx_chip_full_timer(struct timer_list *t)
++{
++	struct morse_yaps *yaps = timer_container_of(yaps, t, chip_queue_full.timer);
++#elif KERNEL_VERSION(4, 14, 0) > LINUX_VERSION_CODE
+ static void morse_tx_chip_full_timer(unsigned long addr)
+ {
+ 	struct morse_yaps *yaps = (struct morse_yaps *)addr;
+@@ -695,8 +703,11 @@ static int morse_tx_chip_full_timer_init(struct morse_yaps *yaps)
+ 
+ static int morse_tx_chip_full_timer_finish(struct morse_yaps *yaps)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++	timer_delete_sync(&yaps->chip_queue_full.timer);
++#else
+ 	del_timer_sync(&yaps->chip_queue_full.timer);
+-
++#endif
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
+
