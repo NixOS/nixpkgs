@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [];
+  nativeInstallCheckInputs = [ ];
 
   passthru = {
     updateScript = nix-update-script {
