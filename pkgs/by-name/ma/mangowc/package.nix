@@ -57,10 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" enableXWayland)
+  ];
+
   passthru = {
     providedSessions = [
-      "dwl"
-      "mangowc"
+      "mango"
     ];
   };
 
