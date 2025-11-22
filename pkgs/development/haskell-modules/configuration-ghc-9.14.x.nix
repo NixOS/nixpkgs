@@ -69,7 +69,7 @@ with haskellLib;
   Win32 = null;
 
   #
-  # Hand pick versions that are compatible with ghc 9.14 and base 4.21
+  # Hand pick versions that are compatible with ghc 9.14 and base 4.22
   #
 
   extensions = doDistribute self.extensions_0_1_1_0;
@@ -78,6 +78,11 @@ with haskellLib;
   #
   # Jailbreaks
   #
+
+  primitive = doJailbreak (dontCheck super.primitive); # base <4.22 and a lot of dependencies on packages not yet working.
+  splitmix = doJailbreak super.splitmix; # base <4.22
+
+  /* Starting here, I naively copied the jailbreak for ghc 9.12 */
 
   large-generics = doJailbreak super.large-generics; # base <4.20
   cpphs = overrideCabal (drv: {
@@ -122,11 +127,4 @@ with haskellLib;
 
   # https://github.com/sjakobi/newtype-generics/pull/28/files
   newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
-
-  # Test failure because of GHC bug:
-  #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
-  #   https://github.com/sol/interpolate/issues/20
-  interpolate =
-    assert super.ghc.version == "9.14.1";
-    dontCheck super.interpolate;
 }
