@@ -72,6 +72,7 @@ packages=(
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
+  types-aiobotocore-codestar
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
