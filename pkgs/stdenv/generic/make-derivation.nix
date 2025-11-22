@@ -21,6 +21,7 @@ let
     getDev
     head
     imap1
+    intersectAttrs
     isAttrs
     isBool
     isDerivation
@@ -810,19 +811,31 @@ let
       mainProgram = meta.mainProgram or null;
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
-      derivationArg = makeDerivationArgument (
-        removeAttrs attrs [
-          "meta"
-          "passthru"
-          "pos"
-          "env"
-        ]
-        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
-        // {
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
-        }
-      );
+      derivationArg =
+        let
+          preserveMetaFields = {
+            identifiers = null;
+            license = null;
+            mainProgram = null;
+            vendor = null;
+          };
+          nixMeta = intersectAttrs preserveMetaFields meta;
+          nixMetaJSON = builtins.toJSON nixMeta;
+        in
+        makeDerivationArgument (
+          removeAttrs attrs [
+            "meta"
+            "passthru"
+            "pos"
+            "env"
+          ]
+          // optionalAttrs __structuredAttrs { env = checkedEnv; }
+          // {
+            nixMeta = if __structuredAttrs then nixMeta else nixMetaJSON;
+            cmakeFlags = makeCMakeFlags attrs;
+            mesonFlags = makeMesonFlags attrs;
+          }
+        );
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
@@ -836,7 +849,7 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
+          overlappingNames = attrNames (intersectAttrs env' derivationArg);
           prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
