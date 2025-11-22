@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
+  postPatch = ''
+    substituteInPlace compress.c \
+      --replace-fail "SIG_TYPE	void (*)()" "SIG_TYPE	void (*)(int)"
+  '';
+
   makeFlags = [ "PREFIX=$(out)" ];
   installTargets = "install_core";
 
