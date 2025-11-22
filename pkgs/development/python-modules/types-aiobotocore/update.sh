@@ -109,6 +109,7 @@ packages=(
   types-aiobotocore-docdb-elastic
   types-aiobotocore-drs
   types-aiobotocore-ds
+  types-aiobotocore-dsql
   types-aiobotocore-dynamodb
   types-aiobotocore-dynamodbstreams
   types-aiobotocore-ebs
