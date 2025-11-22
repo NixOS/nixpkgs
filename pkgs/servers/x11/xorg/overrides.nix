@@ -158,8 +158,6 @@ self: super:
     };
   });
 
-  oclock = addMainProgram super.oclock { };
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"

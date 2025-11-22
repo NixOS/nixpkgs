@@ -101,6 +101,7 @@
   luit,
   makedepend,
   mkfontscale,
+  oclock,
   pixman,
   sessreg,
   smproxy,
@@ -178,6 +179,7 @@ self: with self; {
     luit
     makedepend
     mkfontscale
+    oclock
     pixman
     sessreg
     smproxy
@@ -345,52 +347,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  oclock = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxkbfile,
-      libX11,
-      libXext,
-      libXmu,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "oclock";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/oclock-1.0.6.tar.xz";
-        sha256 = "1gi41nmf5glvzasri0glka19h6gkpbiy0bwbvdxwl7i15mg5xs1y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libxkbfile
-        libX11
-        libXext
-        libXmu
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })

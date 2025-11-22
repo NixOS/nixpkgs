@@ -432,6 +432,7 @@ print OUT <<EOF;
   luit,
   makedepend,
   mkfontscale,
+  oclock,
   pixman,
   sessreg,
   smproxy,
@@ -509,6 +510,7 @@ self: with self; {
     luit
     makedepend
     mkfontscale
+    oclock
     pixman
     sessreg
     smproxy
