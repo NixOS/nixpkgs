@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "src";
+  pname = "simple-revision-control";
   version = "1.41";
 
   src = fetchFromGitLab {
