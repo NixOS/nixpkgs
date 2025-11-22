@@ -80,14 +80,31 @@ let
       umask 0077
 
       curl() {
-          # get the api key by parsing the config.xml
-          while
-              ! ${pkgs.libxml2}/bin/xmllint \
-                  --xpath 'string(configuration/gui/apikey)' \
-                  ${cfg.configDir}/config.xml \
-                  >"$RUNTIME_DIRECTORY/api_key"
-          do sleep 1; done
-          (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+          ${
+            if (cfg.apiKeyFile != null) then
+              ''
+                if [ ! -f "$RUNTIME_DIRECTORY/headers" ]
+                then
+                    (printf "X-API-Key: "; cat "${cfg.apiKeyFile}") >"$RUNTIME_DIRECTORY/headers"
+                fi
+              ''
+            else
+              ''
+                # Get the api key by parsing config.xml, we do not cache the result
+                # since apiKeyFile was not set in the (NixOS) config, and if we
+                # update the gui settings (without `apikey` set) then syncthing will
+                # generate a new api key.
+                while
+                    ! ${pkgs.libxml2}/bin/xmllint \
+                        --xpath 'string(configuration/gui/apikey)' \
+                        ${cfg.configDir}/config.xml \
+                        >"$RUNTIME_DIRECTORY/api_key"
+                do
+                    sleep 1
+                done
+                (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+              ''
+          }
           ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
@@ -104,14 +121,14 @@ let
         {
           # The attributes below are the only ones that are different for devices /
           # folders.
-          devs = {
+          device = {
             new_conf_IDs = map (v: v.id) devices;
             GET_IdAttrName = "deviceID";
             override = cfg.overrideDevices;
             conf = devices;
             baseAddress = curlAddressArgs "/rest/config/devices";
           };
-          dirs = {
+          folder = {
             new_conf_IDs = map (v: v.id) folders;
             GET_IdAttrName = "id";
             override = cfg.overrideFolders;
@@ -125,9 +142,19 @@ let
           # identical to both folders and devices.
           (mapAttrs (
             conf_type: s:
+            ''
+              declare -A existing_${conf_type}_ids
+              # work around expansion issues by building an array first and then
+              # always going through a variable for keys instead of immediate values:
+              declare -a array
+              eval "array=($(curl -X GET ${s.baseAddress} | ${jq} --raw-output '.[].${s.GET_IdAttrName} | @sh'))"
+              for id in "''${array[@]}"; do
+                existing_${conf_type}_ids["$id"]=1;
+              done
+            ''
             # We iterate the `conf` list now, and run a curl -X POST command for each, that
             # should update that device/folder only.
-            lib.pipe s.conf [
+            + lib.pipe s.conf [
               # Quoting https://docs.syncthing.net/rest/config.html:
               #
               # > PUT takes an array and POST a single object. In both cases if a
@@ -148,9 +175,10 @@ let
                   };
                   injectSecretsJqCmd =
                     {
-                      # There are no secrets in `devs`, so no massaging needed.
-                      "devs" = "${jq} .";
-                      "dirs" =
+                      # There are no secrets in devices, so no massaging needed
+                      # when `conf_type` is "device".
+                      device = "${jq} .";
+                      folder =
                         let
                           folder = new_cfg;
                           devicesWithSecrets = lib.pipe folder.devices [
@@ -207,34 +235,48 @@ let
                         }";
                     }
                     .${conf_type};
+                  createItem = "${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}";
                 in
-                ''
-                  ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
-                ''
-                /*
-                  Check if we are configuring a folder which has ignore patterns.
-                  If it does, write the ignore patterns to the rest API.
-                */
+                (
+                  if s.override then
+                    ''
+                      printf "Overriding ${conf_type}: ${new_cfg.id}\n"
+                      ${createItem}
+                    ''
+                  else
+                    ''
+                      cfg_id=${lib.escapeShellArg new_cfg.id}
+                      if [[ ! -v existing_${conf_type}_ids["$cfg_id"] ]]; then
+                        printf "Creating ${conf_type}: %s\n" "$cfg_id"
+                        ${createItem}
+                      else
+                        printf "Not overriding ${conf_type}: %s already exists in Syncthing\n" "$cfg_id"
+                      fi
+                    ''
+                )
                 + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
                   curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
                 ''
               ))
               (lib.concatStringsSep "\n")
             ]
-            /*
-              If we need to override devices/folders, we iterate all currently configured
-              IDs, via another `curl -X GET`, and we delete all IDs that are not part of
-              the Nix configured list of IDs
-            */
+            # If we need to override devices/folders, we iterate all currently
+            # configured IDs, and delete all IDs that are not part of the Nix
+            # configured list of IDs.
             + lib.optionalString s.override ''
-              stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
-                --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
-                --raw-output \
-                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
-              )"
-              for id in ''${stale_${conf_type}_ids}; do
-                >&2 echo "Deleting stale device: $id"
-                curl -X DELETE ${s.baseAddress}/$id
+              declare -A new_${conf_type}_ids
+              # work around expansion issues by building an array first and then
+              # always going through a variable for keys instead of immediate values:
+              declare -a array
+              array=(${lib.escapeShellArgs s.new_conf_IDs})
+              for id in "''${array[@]}"; do
+                new_${conf_type}_ids["$id"]=1;
+              done
+              for existing_id in "''${!existing_${conf_type}_ids[@]}"; do
+                if [[ ! -v new_${conf_type}_ids["$existing_id"] ]]; then
+                  printf "Deleting stale ${conf_type}: %s\n" "$existing_id"
+                  curl -X DELETE ${s.baseAddress}/"$existing_id"
+                fi
               done
             ''
           ))
@@ -723,6 +765,22 @@ in
         '';
       };
 
+      apiKeyFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          The API key used by the REST API. You must set this option if you
+          plan to use the REST API, and have anything configured under
+          `settings.gui`, since the API key will be reset every time gui
+          settings are updated when syncthing is restarted.
+
+          If this option is set it takes precedence over anything set in
+          `settings.gui.apikey`. You can use `settings.gui.apikey` instead of
+          this option if having your API key in plain text in your NixOS
+          configuration does not bother you.
+        '';
+      };
+
       systemService = mkOption {
         type = types.bool;
         default = true;
@@ -941,17 +999,26 @@ in
               ''}";
           ExecStart =
             let
-              args = lib.escapeShellArgs (
-                (lib.cli.toCommandLineGNU { } {
+              args =
+                (lib.cli.toGNUCommandLine { } {
                   "no-browser" = true;
                   "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
                   "config" = cfg.configDir;
                   "data" = cfg.databaseDir;
                 })
-                ++ cfg.extraFlags
-              );
+                ++ (map lib.escapeShellArg cfg.extraFlags);
             in
-            "${lib.getExe cfg.package} ${args}";
+            pkgs.writeShellScript "syncthing-start" ''
+              ${optionalString (cfg.apiKeyFile != null) ''
+                if [ ! -r "${cfg.apiKeyFile}" ]; then
+                  printf >&2 "Cannot set STGUIAPIKEY: \"${cfg.apiKeyFile}\" could not be found\n"
+                  exit 1
+                fi
+                export STGUIAPIKEY="$(cat ${cfg.apiKeyFile})"
+              ''}
+              exec ${lib.getExe cfg.package} \
+                ${builtins.concatStringsSep " \\\n  " args}
+            '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
