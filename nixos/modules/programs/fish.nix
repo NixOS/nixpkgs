@@ -30,7 +30,7 @@ let
   # See https://github.com/fish-shell/fish-shell/issues/12079
   indentFishFile =
     name: text:
-    pkgs.runCommand name {
+    pkgs.runCommandLocal name {
       nativeBuildInputs = [ cfg.package ];
       inherit text;
       passAsFile = [ "text" ];
@@ -49,8 +49,7 @@ let
 
   babelfishTranslate =
     path: name:
-    pkgs.runCommand "${name}.fish" {
-      preferLocalBuild = true;
+    pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
     } "babelfish < ${path} > $out;";
 
@@ -275,7 +274,7 @@ in
             };
             generateCompletions =
               package:
-              pkgs.runCommand
+              pkgs.runCommandLocal
                 (
                   with lib.strings;
                   let
@@ -287,7 +286,6 @@ in
                 (
                   {
                     inherit package;
-                    preferLocalBuild = true;
                   }
                   // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
                 )
