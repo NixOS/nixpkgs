@@ -113,8 +113,6 @@ self: super:
       )
   ) { };
 
-  bitmap = addMainProgram super.bitmap { };
-
   editres = super.editres.overrideAttrs (attrs: {
     hardeningDisable = [ "format" ];
     meta = attrs.meta // {
