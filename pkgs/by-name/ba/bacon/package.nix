@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall =

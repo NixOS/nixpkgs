@@ -174,8 +174,6 @@ python.pkgs.buildPythonApplication rec {
     "test_run_platformio_cli_sets_environment_variables"
   ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };

@@ -61,7 +61,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

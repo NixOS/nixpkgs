@@ -19,7 +19,6 @@ php83.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-0Bk01aU3vicwk9swkv+8VZxcPdaEMOOtp9niNfPfQyA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

@@ -95,7 +95,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];

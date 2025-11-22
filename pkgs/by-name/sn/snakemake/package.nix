@@ -87,8 +87,6 @@ python3Packages.buildPythonApplication rec {
     ])
     ++ [ writableTmpDirAsHomeHook ];
 
-  versionCheckProgramArg = "--version";
-
   enabledTestPaths = [
     "tests/tests.py"
     "tests/test_expand.py"

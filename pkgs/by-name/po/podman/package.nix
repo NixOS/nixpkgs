@@ -175,7 +175,6 @@ buildGoModule rec {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) podman;

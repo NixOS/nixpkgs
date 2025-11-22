@@ -57,7 +57,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bao";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

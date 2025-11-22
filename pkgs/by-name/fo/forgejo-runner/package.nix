@@ -82,7 +82,6 @@ buildGoModule rec {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

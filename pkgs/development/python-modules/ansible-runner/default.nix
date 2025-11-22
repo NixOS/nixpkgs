@@ -74,7 +74,6 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # avoid coverage flags

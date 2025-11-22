@@ -20,7 +20,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";

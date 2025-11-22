@@ -602,7 +602,6 @@ in
     dontUseCmakeConfigure = true;
 
     doInstallCheck = true;
-    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip

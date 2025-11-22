@@ -138,7 +138,6 @@ buildPythonPackage rec {
     versionCheckHook
     virtualenv
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip

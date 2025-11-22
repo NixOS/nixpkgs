@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/dprint";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
