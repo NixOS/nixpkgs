@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       - No installation
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

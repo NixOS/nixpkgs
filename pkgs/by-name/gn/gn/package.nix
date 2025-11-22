@@ -94,7 +94,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       stesie
-      matthewbauer
       marcin-serwin
       emilylange
     ];

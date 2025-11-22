@@ -70,7 +70,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [
-      matthewbauer
       rvolosatovs
       wucke13
     ];
