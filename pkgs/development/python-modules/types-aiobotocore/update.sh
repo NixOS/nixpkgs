@@ -86,6 +86,7 @@ packages=(
   types-aiobotocore-connectcampaignsv2
   types-aiobotocore-connectcases
   types-aiobotocore-connectparticipant
+  types-aiobotocore-controlcatalog
   types-aiobotocore-controltower
   types-aiobotocore-cur
   types-aiobotocore-customer-profiles
