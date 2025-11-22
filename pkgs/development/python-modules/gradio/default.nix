@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  writeScript,
   writeShellScriptBin,
   gradio,
 
@@ -12,7 +13,6 @@
   hatch-fancy-pypi-readme,
 
   # web assets
-  zip,
   nodejs,
   pnpm_9,
 
@@ -75,25 +75,29 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.38.2";
+  version = "5.49.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
+    hash = "sha256-tfjyu2yl+2ndPZWrsSrVf8qv2eqpU5ZJHVqM9saJVt4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
+    hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
   };
 
   pythonRelaxDeps = [
     "aiofiles"
     "markupsafe"
+    "pillow"
+    # Falsely complains that "gradio-client==1.13.3 not satisfied by version 1.12.1"
+    # (it is in fact v1.13.3, verified by both looking at the drv and the failed build)
+    "gradio-client"
   ];
 
   pythonRemoveDeps = [
@@ -102,7 +106,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    zip
     nodejs
     pnpm_9.configHook
   ];
@@ -182,11 +185,6 @@ buildPythonPackage rec {
   preBuild = ''
     pnpm build
     pnpm package
-  '';
-
-  postBuild = ''
-    # SyntaxError: 'await' outside function
-    zip -d dist/gradio-*.whl gradio/_frontend_code/lite/examples/transformers_basic/run.py
   '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
@@ -347,27 +345,47 @@ buildPythonPackage rec {
 
   # Cyclic dependencies are fun!
   # This is gradio without gradio-client and gradio-pdf
-  passthru.sans-reverse-dependencies =
-    (gradio.override (old: {
-      gradio-client = null;
-      gradio-pdf = null;
-    })).overridePythonAttrs
-      (old: {
-        pname = old.pname + "-sans-reverse-dependencies";
-        pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
-        doInstallCheck = false;
-        doCheck = false;
-        preCheck = "";
-        postInstall = ''
-          shopt -s globstar
-          for f in $out/**/*.py; do
-            cp $f "$f"i
-          done
-          shopt -u globstar
-        '';
-        pythonImportsCheck = null;
-        dontCheckRuntimeDeps = true;
-      });
+  passthru = {
+    sans-reverse-dependencies =
+      (gradio.override (old: {
+        gradio-client = null;
+        gradio-pdf = null;
+      })).overridePythonAttrs
+        (old: {
+          pname = old.pname + "-sans-reverse-dependencies";
+          pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          doInstallCheck = false;
+          doCheck = false;
+          preCheck = "";
+          postInstall = ''
+            shopt -s globstar
+            for f in $out/**/*.py; do
+              cp $f "$f"i
+            done
+            shopt -u globstar
+          '';
+          pythonImportsCheck = null;
+          dontCheckRuntimeDeps = true;
+        });
+
+    # We can't use gitUpdater, because we need to update the pnpm hash.
+    # And we can't just use nix-update-script, because it often does not fetch
+    # enough tags for the ones we're looking for to show up.
+    updateScript = writeScript "update-python3Packages.gradio" ''
+      #! /usr/bin/env nix-shell
+      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update
+
+      tag=$(list-git-tags \
+            | grep "^gradio@" \
+            | sed -e "s,^gradio@,," \
+            | grep -v -E -e ".*-(beta|dev).*" \
+            | sort --reverse --version-sort \
+            | head -n 1 \
+            | tr -d '\n' \
+           )
+      nix-update --version="$tag"
+    '';
+  };
 
   meta = {
     homepage = "https://www.gradio.app/";

@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   hatchling,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.11.0";
+  version = "1.13.3";
   pyproject = true;
 
   # no tests on pypi
@@ -39,9 +39,10 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    tag = "gradio_client@${version}";
+    # tag = "gradio_client@${version}";
+    rev = "43b567db952d105cbe23b38ab549909b3ad081ff"; # TODO: switch back to a tag next release.
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-dj8hJPXUBbFG9awP3o0vgyPt+gcCgzKKEQTEHkrEimA=";
+    hash = "sha256-G0t8Xxup7IsuNHJqkhECG0TY/i6y12zuQNm7aOZiNWo=";
   };
 
   sourceRoot = "${src.name}/client/python";
@@ -110,11 +111,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "gradio_client@(.*)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "gradio_client@";
+    ignoredVersions = ".*-(beta|dev).*";
   };
 
   meta = {
