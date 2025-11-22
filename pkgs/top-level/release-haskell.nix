@@ -547,10 +547,6 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      git-annex = [
-        # test that -f-OsPath still works correctly
-        compilerNames.ghc984
-      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
