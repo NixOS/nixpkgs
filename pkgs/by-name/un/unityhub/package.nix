@@ -94,9 +94,13 @@ stdenv.mkDerivation rec {
         libglvnd # provides ligbl
         xorg.libX11
         xorg.libXcursor
+        xorg.libXi
+        xorg.libXrender
+        gnome2.GConf
         glib
         gdk-pixbuf
         libxml2_13
+        libcap
         zlib
         clang
         git # for git-based packages in unity package manager
