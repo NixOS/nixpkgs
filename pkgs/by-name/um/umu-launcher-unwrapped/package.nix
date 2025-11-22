@@ -3,13 +3,14 @@
   cargo,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   python3Packages,
   rustPlatform,
   scdoc,
   writableTmpDirAsHomeHook,
   withTruststore ? true,
   withDeltaUpdates ? true,
+  versionCheckHook,
+  nix-update-script,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
@@ -34,13 +35,15 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
-    python3Packages.build
-    python3Packages.installer
-    python3Packages.hatchling
-    python3Packages.hatch-vcs
     rustPlatform.cargoSetupHook
     scdoc
-  ];
+  ]
+  ++ (with python3Packages; [
+    build
+    hatchling
+    hatch-vcs
+    installer
+  ]);
 
   pythonPath =
     with python3Packages;
@@ -83,6 +86,9 @@ python3Packages.buildPythonPackage rec {
     # Fails with AssertionError: SystemExit not raised
     "test_parse_args_noopts"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
