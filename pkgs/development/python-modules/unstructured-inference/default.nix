@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   # runtime dependencies
   layoutparser,
   python-multipart,
@@ -24,7 +25,7 @@
 buildPythonPackage rec {
   pname = "unstructured-inference";
   version = "1.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
@@ -33,7 +34,9 @@ buildPythonPackage rec {
     hash = "sha256-XoGjcF9xxqZ1fEtI+ifjwEqxNlDHdakZLo8xzFKK8ic=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     layoutparser
     python-multipart
     huggingface-hub
