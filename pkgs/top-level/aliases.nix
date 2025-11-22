@@ -1598,6 +1598,7 @@ mapAliases {
   unicap = throw "'unicap' has been removed because it is unmaintained"; # Added 2025-05-17
   unifi-poller = throw "'unifi-poller' has been renamed to/replaced by 'unpoller'"; # Converted to throw 2025-10-27
   unzoo = throw "'unzoo' has been removed since it is unmaintained upstream and doesn't compile with newer versions of GCC anymore"; # Removed 2025-05-24
+  uptime-kuma = lib.warnOnInstantiate "pkgs.uptime-kuma will be upgraded to 2.x.x in NixOS 26.05, which might require manual intervention. To upgrade now, set `services.uptime-kuma.package` to `pkgs.uptime-kuma_2` instead, or to `pkgs.uptime-kuma_1` to dismiss this warning. See the upgrade guide at https://github.com/louislam/uptime-kuma/wiki/Migration-From-v1-To-v2" uptime-kuma_1; # Added 2025-11-13
   util-linuxCurses = throw "'util-linuxCurses' has been renamed to/replaced by 'util-linux'"; # Converted to throw 2025-10-27
   utillinux = warnAlias "'utillinux' has been renamed to/replaced by 'util-linux'" util-linux; # Converted to warning 2025-10-28
   vaapiIntel = throw "'vaapiIntel' has been renamed to/replaced by 'intel-vaapi-driver'"; # Converted to throw 2025-10-27

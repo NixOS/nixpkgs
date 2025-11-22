@@ -9386,6 +9386,11 @@ with pkgs;
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
+  inherit (callPackages ../servers/monitoring/uptime-kuma { })
+    uptime-kuma_1
+    uptime-kuma_2
+    ;
+
   # PulseAudio daemons
 
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
