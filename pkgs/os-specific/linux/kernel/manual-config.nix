@@ -512,6 +512,12 @@ lib.makeOverridable (
           find -empty -type d -delete
         '';
 
+        preFixup = lib.optionalString (kernelConf.target == "vmlinux") ''
+          stripDebugList+=(
+            vmlinux
+          )
+        '';
+
         requiredSystemFeatures = [ "big-parallel" ];
 
         meta = {
