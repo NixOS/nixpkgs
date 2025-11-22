@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KL2dRyfwwa365hEMeVixAP9DFx3QObJVeesj95tOUmo=";
   };
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fuzzy finder for Makefile";
     inherit (src.meta) homepage;
-    changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
+    changelog = "https://github.com/kyu08/fzf-make/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sigmanificient

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kamranahmedse";
     repo = "git-standup";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-x7Z4w4UzshXYc25ag6HopRrKbP+/ELkFPdsUBaUE1vY=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
-    changelog = "https://github.com/kamranahmedse/git-standup/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/kamranahmedse/git-standup/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
