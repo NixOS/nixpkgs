@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   which,
-  ffmpeg_7,
+  ffmpeg,
   fftw,
   frei0r,
   libdv,
@@ -25,6 +25,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   enableJackrack ? stdenv.hostPlatform.isLinux,
+  gdk-pixbuf,
   glib,
   ladspa-sdk,
   ladspaPlugins,
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.32.0";
+  version = "7.34.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     tag = "v${version}";
-    hash = "sha256-8T5FXXGs7SxL6nD+R1Q/0Forsdp5Xux4S3VLvgqXzw8=";
+    hash = "sha256-zdfjl4ZrdmX445hYx2CoKj1NuXQslQpTC5m96zPrZes=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
     # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
@@ -71,8 +72,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (opencv4.override { inherit ffmpeg_7; })
-    ffmpeg_7
+    gdk-pixbuf
+    (opencv4.override { inherit ffmpeg; })
+    ffmpeg
     fftw
     frei0r
     libdv
@@ -118,9 +120,18 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
   ]
-  ++ lib.optionals (qt != null) [
-    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
-    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
+  ++ lib.optionals (qt == null) [
+    "-DMOD_QT6=OFF"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "5") [
+    "-DMOD_QT=ON"
+    "-DMOD_QT6=OFF"
+    "-DMOD_GLAXNIMATE=ON"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "6") [
+    "-DMOD_QT6=ON"
+    "-DMOD_QT=OFF"
+    "-DMOD_GLAXNIMATE_QT6=ON"
   ];
 
   preFixup = ''
@@ -137,7 +148,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    ffmpeg = ffmpeg_7;
+    inherit ffmpeg;
   };
 
   passthru.updateScript = gitUpdater {

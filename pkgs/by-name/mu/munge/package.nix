@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "munge";
-  version = "0.5.16";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "dun";
     repo = "munge";
     rev = "munge-${finalAttrs.version}";
-    sha256 = "sha256-fv42RMUAP8Os33/iHXr70i5Pt2JWZK71DN5vFI3q7Ak=";
+    sha256 = "sha256-MfxED81P4ipdP4fuxwmpNrAeej3ZH+qiHIt5bSrct1o=";
   };
 
   nativeBuildInputs = [

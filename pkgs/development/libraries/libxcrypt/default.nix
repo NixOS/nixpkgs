@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.38";
+  version = "4.5.2";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
+    hash = "sha256-cVE6McAaQovM1TZ6Mv2V8RXW2sUPtbYMd51ceUKuwHE=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -78,9 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
     enabledCryptSchemeIds = [
-      # https://github.com/besser82/libxcrypt/blob/v4.4.35/lib/hashes.conf
+      # https://github.com/besser82/libxcrypt/blob/v4.5.0/lib/hashes.conf
       "y" # yescrypt
       "gy" # gost_yescrypt
+      "sm3y" # sm3_yescrypt
       "7" # scrypt
       "2b" # bcrypt
       "2y" # bcrypt_y

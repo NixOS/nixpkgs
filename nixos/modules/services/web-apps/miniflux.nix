@@ -207,15 +207,18 @@ in
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor.policies."bin.miniflux".profile = ''
+      abi <abi/4.0>,
       include <tunables/global>
-      ${cfg.package}/bin/miniflux {
+
+      profile ${cfg.package}/bin/miniflux {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
         include <abstractions/golang>
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
-        r ${cfg.package}/bin/miniflux,
-        rw /run/miniflux/**,
+        ${cfg.package}/bin/miniflux r,
+        /run/miniflux/** rw,
+        include if exists <local/bin.miniflux>
       }
     '';
   };

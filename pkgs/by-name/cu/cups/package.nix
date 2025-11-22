@@ -10,8 +10,8 @@
   libtiff,
   pam,
   dbus,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   acl,
   gmp,
   darwin,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     dbus
     acl
   ]
-  ++ lib.optional enableSystemd systemd;
+  ++ lib.optional enableSystemd systemdLibs;
 
   propagatedBuildInputs = [ gmp ];
 
