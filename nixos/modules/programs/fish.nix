@@ -302,8 +302,7 @@ in
       # include programs that bring their own completions
       {
         pathsToLink =
-          [ ]
-          ++ lib.optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
+          lib.optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
           ++ lib.optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
           ++ lib.optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
       }
