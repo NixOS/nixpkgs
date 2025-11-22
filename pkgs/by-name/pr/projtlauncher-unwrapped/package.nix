@@ -30,7 +30,7 @@ assert lib.assertMsg (
   gamemodeSupport -> stdenv.hostPlatform.isLinux
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
-  pname = "projtlauncher-unwrapped";
+  pname = "projtlauncher";
   version = "0.0.2";
 
   src = fetchFromGitHub {
