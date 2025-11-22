@@ -113,13 +113,6 @@ self: super:
       )
   ) { };
 
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "fonttosfnt";
-    };
-  });
-
   iceauth = addMainProgram super.iceauth { };
 
   mkfontdir = xorg.mkfontscale;
