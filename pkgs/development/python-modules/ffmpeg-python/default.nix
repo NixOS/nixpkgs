@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "ffmpeg-python";
-  version = "0.2.0-unstable-2022-07-11";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
