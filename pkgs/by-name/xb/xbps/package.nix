@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xbps";
-  version = "0.60.5";
+  version = "0.60.6";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     tag = finalAttrs.version;
-    hash = "sha256-ht5hhaaE9QAsp+5xmOAYQE9fgL0GBuQvz0qB64z0cbs=";
+    hash = "sha256-euV8oi1na+mfILnnUHK5S8Pi6+QuOUA8KhD0FHUqM70=";
   };
 
   nativeBuildInputs = [
