@@ -583,6 +583,13 @@ let
           '';
         };
 
+        enableUMask = lib.mkOption {
+          default = config.security.pam.enableUMask;
+          defaultText = lib.literalExpression "config.security.pam.enableUMask";
+          type = lib.types.bool;
+          description = "If enabled, the pam_umask module will be loaded.";
+        };
+
         failDelay = {
           enable = lib.mkOption {
             type = lib.types.bool;
@@ -1291,6 +1298,12 @@ let
                   enable = cfg.ttyAudit.enablePattern;
                   disable = cfg.ttyAudit.disablePattern;
                 };
+              }
+              {
+                name = "umask";
+                enable = cfg.enableUMask;
+                control = "optional";
+                modulePath = "${package}/lib/security/pam_umask.so";
               }
               {
                 name = "systemd_home";
@@ -2207,6 +2220,8 @@ in
         '';
       };
     };
+
+    security.pam.enableUMask = lib.mkEnableOption "umask PAM module";
 
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
     security.pam.enableFscrypt = lib.mkEnableOption ''
