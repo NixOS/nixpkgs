@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace sources/ioregistry.m \
         --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   installPhase = ''
     runHook preInstall

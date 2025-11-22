@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-0i8bKah3a7MrgzATysgFCsmDZxK9qH+4hmBMW+GR9/4=";
+    hash = "sha256-5ItNevLcZhAsYgxdJd2u62z9NkKyYUojWcRQgk/NTmU=";
   };
 
-  vendorHash = "sha256-x5WIwYvQtbR72jqdD+O4Wg+4/qs24aqNeBuron/0ztk=";
+  vendorHash = "sha256-/s5qkhLdFuv2lTdtbZEQqL83C6Pan9K3nwvC8yMbj8o=";
 
   subPackages = [ "." ];
 

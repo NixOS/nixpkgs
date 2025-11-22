@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.11";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzbvofNOAtqbjO5//ECu1FeZrS0FyDvFZPKxC0fOJnE=";
+    sha256 = "sha256-7GTp1UBAnxLVEQFTQbBxGiKSvZwEVVMA7oa3Iz5Ifzk=";
   };
 
-  cargoHash = "sha256-KVGdAPyUlPCgcx1DpZbfNRNmALdJvzOcsv3WQy3Q7OI=";
+  cargoHash = "sha256-i09ZcG3xUt+qFZge/8MiZ5yKxIeBd3l0BYlY5OFf3l8=";
 
   preBuild = ''
     version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
@@ -66,6 +66,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "script"
     "check_useless_excludes_remote"
     "run_worktree"
+    "try_repo_relative_path"
+    "languages::tests::test_native_tls"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -86,6 +88,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "python::can_not_download"
     "python::hook_stderr"
     "python::language_version"
+    "ruby::additional_gem_dependencies"
+    "ruby::environment_isolation"
+    "ruby::gemspec_workflow"
+    "ruby::language_version_default"
+    "ruby::local_hook_with_gemspec"
+    "ruby::native_gem_dependency"
+    "ruby::native_gem_dependency"
+    "ruby::process_files"
+    "ruby::specific_ruby_available"
+    "ruby::specific_ruby_unavailable"
+    "ruby::system_ruby"
     # can't checkout pre-commit-hooks
     "cjk_hook_name"
     "fail_fast"
@@ -116,6 +129,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "no_commit_to_branch_hook"
     "no_commit_to_branch_hook_with_custom_branches"
     "no_commit_to_branch_hook_with_patterns"
+    "check_executables_have_shebangs_various_cases"
+    "check_executables_have_shebangs_hook"
     # does not properly use TMP
     "hook_impl"
     # problems with environment

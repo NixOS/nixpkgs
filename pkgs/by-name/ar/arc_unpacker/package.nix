@@ -5,6 +5,7 @@
   fetchpatch,
   cmake,
   makeWrapper,
+  ninja,
   boost,
   libpng,
   libiconv,
@@ -26,22 +27,14 @@ stdenv.mkDerivation {
     hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "failing_tests.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/failing_tests.patch?h=arc_unpacker-git&id=bda1ad9f69e6802e703b2e6913d71a36d76cfef9";
-      hash = "sha256-bClACsf/+SktyLAPtt7EcSqprkw8JVIi1ZLpcJcv9IE=";
-    })
-    (fetchpatch {
-      name = "include_cstdint.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/include_cstdint.patch?h=arc_unpacker-git&id=8c5c5121b23813c7650db19cb617b409d8fdcc9f";
-      hash = "sha256-3BQ1v7s9enUK/js7Jqrqo2RdSRvGVd7hMcY4iL51SiE=";
-    })
-  ];
+  patches = [ ./fix-test-float-variance.patch ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
+
+    # missing includes
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
+    sed '1i#include <cstdint>' -i src/types.h # gcc13
     sed '1i#include <vector>' -i src/flow/cli_facade.h # gcc14
 
     # cmake-4 support
@@ -53,6 +46,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     makeWrapper
+    ninja
     catch2
   ];
 
@@ -66,15 +60,30 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    let
+      checkTarget = [
+        "~CatSystem INT archives"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [ "~Ivory WADY audio" ];
+    in
+    ''
+      # Specify test targets
+      # https://catch2-temp.readthedocs.io/en/latest/command-line.html#specifying-which-tests-to-run
+      checkTarget=(${lib.escapeShellArgs checkTarget})
 
-    pushd ..
-    ./build/run_tests
-    popd
+      runHook preCheck
 
-    runHook postCheck
-  '';
+      local flagsArray=()
+      concatTo flagsArray checkFlags checkFlagsArray checkTarget
+
+      pushd ..
+      echoCmd 'check flags' "''${flagsArray[@]}"
+      ./build/run_tests "''${flagsArray[@]}"
+      popd
+
+      runHook postCheck
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -88,8 +97,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # A few tests fail on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  doCheck = true;
 
   meta = with lib; {
     description = "Tool to extract files from visual novel archives";
@@ -98,8 +106,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;
     mainProgram = "arc_unpacker";
-
-    # unit test failures
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

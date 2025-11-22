@@ -249,7 +249,9 @@ in
       };
 
       # containers cannot reach aardvark-dns otherwise
-      networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+      networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
+        interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+      };
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
