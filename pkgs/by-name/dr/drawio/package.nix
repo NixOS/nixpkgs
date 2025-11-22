@@ -7,7 +7,7 @@
   copyDesktopItems,
   fixup-yarn-lock,
   makeWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   nodejs,
   yarn,
   electron,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;
