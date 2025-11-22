@@ -6,7 +6,6 @@
   cmake,
   pkg-config,
 
-  darwinMinVersionHook,
   dbus,
   openssl,
   sqlite,
@@ -33,9 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     sqlite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "13.3")
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus

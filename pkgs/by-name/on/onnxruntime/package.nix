@@ -22,7 +22,6 @@
   zlib,
   protobuf,
   microsoft-gsl,
-  darwinMinVersionHook,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
@@ -186,9 +185,6 @@ effectiveStdenv.mkDerivation rec {
     rocmPackages.rccl
     rocmPackages.rocm-smi
     rocmPackages.roctracer
-  ]
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "13.3")
   ];
 
   nativeCheckInputs = [

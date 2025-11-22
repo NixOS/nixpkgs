@@ -3,7 +3,6 @@
   stdenv,
   torch,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
 
   # nativeBuildInputs

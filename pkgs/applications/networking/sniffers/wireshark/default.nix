@@ -9,7 +9,6 @@
   buildPackages,
   c-ares,
   cmake,
-  darwinMinVersionHook,
   fixDarwinDylibNames,
   flex,
   gettext,
@@ -148,8 +147,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gmp
-    # Required by Qt 6
-    (darwinMinVersionHook "12.0")
   ];
 
   strictDeps = true;

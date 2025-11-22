@@ -36,7 +36,6 @@
   sigtool,
   DarwinTools,
   apple-sdk_14,
-  darwinMinVersionHook,
 }:
 
 let

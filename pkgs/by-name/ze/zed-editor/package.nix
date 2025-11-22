@@ -30,8 +30,6 @@
   buildFHSEnv,
   cargo-bundle,
   git,
-  apple-sdk_15,
-  darwinMinVersionHook,
   makeBinaryWrapper,
   nodejs,
   libGL,
@@ -170,12 +168,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libX11
     libXext
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_15
-    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-    # https://developer.apple.com/documentation/screencapturekit
-    (darwinMinVersionHook "12.3")
   ];
 
   cargoBuildFlags = [

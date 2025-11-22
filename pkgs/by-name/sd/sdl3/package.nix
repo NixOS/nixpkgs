@@ -4,7 +4,6 @@
   config,
   alsa-lib,
   cmake,
-  darwinMinVersionHook,
   dbus,
   fetchFromGitHub,
   ibusMinimal,

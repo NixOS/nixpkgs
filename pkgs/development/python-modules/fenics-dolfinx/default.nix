@@ -16,7 +16,6 @@
 
   # buildInputs
   dolfinx,
-  darwinMinVersionHook,
 
   # dependency
   numpy,
@@ -87,8 +86,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     fenicsPackages.dolfinx
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
+  ];
 
   dependencies = [
     numpy

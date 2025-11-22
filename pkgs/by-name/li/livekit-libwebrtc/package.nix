@@ -9,7 +9,6 @@
   xcbuild,
   python3,
   ninja,
-  darwinMinVersionHook,
   git,
   cpio,
   pkg-config,

@@ -6,11 +6,9 @@
   cmake,
   libsForQt5,
 
-  apple-sdk_15,
   asciidoctor,
   botan3,
   curl,
-  darwinMinVersionHook,
   libXi,
   libXtst,
   libargon2,
@@ -161,11 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libsForQt5.qtmacextras
-
-    apple-sdk_15
-    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-    # https://developer.apple.com/documentation/screencapturekit
-    (darwinMinVersionHook "12.3")
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libusb1
