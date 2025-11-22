@@ -69,12 +69,16 @@ telegram-desktop.override {
       })
     ];
 
-    buildInputs = (old.buildInputs or [ ]) ++ [
-      alsa-lib
-      jemalloc
-      libopus
-      libpulseaudio
-    ];
+    buildInputs =
+      (old.buildInputs or [ ])
+      ++ [
+        libopus
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        jemalloc
+        libpulseaudio
+      ];
 
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
