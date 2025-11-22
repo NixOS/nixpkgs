@@ -25,5 +25,6 @@ in
     machine.succeed("grep -qF ${webhookUrl} /etc/systemd/system/n8n.service")
     machine.succeed("grep -qF 'HOME=/var/lib/n8n' /etc/systemd/system/n8n.service")
     machine.fail("grep -qF 'GENERIC_TIMEZONE=' /etc/systemd/system/n8n.service")
+    machine.succeed("grep -qF 'N8N_DIAGNOSTICS_ENABLED=false' /etc/systemd/system/n8n.service")
   '';
 }
