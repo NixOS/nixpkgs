@@ -2888,6 +2888,8 @@ self: super: with self; {
     callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
       { };
 
+  colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
