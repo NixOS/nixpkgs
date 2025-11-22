@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/include/stb
     cp *.h $out/include/stb/
+    cp *.c $out/include/stb/
     runHook postInstall
   '';
 

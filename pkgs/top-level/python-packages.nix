@@ -8081,6 +8081,8 @@ self: super: with self; {
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
 
+  langchain-classic = callPackage ../development/python-modules/langchain-classic { };
+
   langchain-community = callPackage ../development/python-modules/langchain-community { };
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
@@ -8123,6 +8125,10 @@ self: super: with self; {
 
   langgraph-checkpoint = callPackage ../development/python-modules/langgraph-checkpoint { };
 
+  langgraph-checkpoint-mongodb =
+    callPackage ../development/python-modules/langgraph-checkpoint-mongodb
+      { };
+
   langgraph-checkpoint-postgres =
     callPackage ../development/python-modules/langgraph-checkpoint-postgres
       { };
@@ -8138,6 +8144,8 @@ self: super: with self; {
   langgraph-runtime-inmem = callPackage ../development/python-modules/langgraph-runtime-inmem { };
 
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
+
+  langgraph-store-mongodb = callPackage ../development/python-modules/langgraph-store-mongodb { };
 
   langid = callPackage ../development/python-modules/langid { };
 
@@ -9718,6 +9726,10 @@ self: super: with self; {
   model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   model-checker = callPackage ../development/python-modules/model-checker { };
+
+  model-hosting-container-standards =
+    callPackage ../development/python-modules/model-hosting-container-standards
+      { };
 
   model-signing = callPackage ../development/python-modules/model-signing { };
 
@@ -11801,6 +11813,8 @@ self: super: with self; {
   pencompy = callPackage ../development/python-modules/pencompy { };
 
   pendulum = callPackage ../development/python-modules/pendulum { };
+
+  pentapy = callPackage ../development/python-modules/pentapy { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
@@ -14739,6 +14753,8 @@ self: super: with self; {
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
+  pytest-integration = callPackage ../development/python-modules/pytest-integration { };
+
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
@@ -15512,6 +15528,8 @@ self: super: with self; {
   pytransportnsw = callPackage ../development/python-modules/pytransportnsw { };
 
   pytransportnswv2 = callPackage ../development/python-modules/pytransportnswv2 { };
+
+  pytricia = callPackage ../development/python-modules/pytricia { };
 
   pytrydan = callPackage ../development/python-modules/pytrydan { };
 
@@ -16793,6 +16811,8 @@ self: super: with self; {
 
   segyio = callPackage ../development/python-modules/segyio { inherit (pkgs) cmake ninja; };
 
+  selectolax = callPackage ../development/python-modules/selectolax { };
+
   selenium = callPackage ../development/python-modules/selenium { };
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
@@ -17288,6 +17308,8 @@ self: super: with self; {
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
+
+  snappy = callPackage ../development/python-modules/snappy { };
 
   snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
 
@@ -18846,6 +18868,8 @@ self: super: with self; {
   torchsummary = callPackage ../development/python-modules/torchsummary { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
+
+  torchtune = callPackage ../development/python-modules/torchtune { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
