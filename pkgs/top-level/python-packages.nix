@@ -7906,6 +7906,12 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
+  keeper_pam_webrtc_rs = callPackage ../development/python-modules/keeper_pam_webrtc_rs { };
+
+  keeper_secrets_manager_core =
+    callPackage ../development/python-modules/keeper_secrets_manager_core
+      { };
+
   keepkey = callPackage ../development/python-modules/keepkey { };
 
   keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
