@@ -1293,6 +1293,12 @@ let
                 };
               }
               {
+                name = "umask";
+                enable = config.security.pam.enableUMask;
+                control = "optional";
+                modulePath = "${package}/lib/security/pam_umask.so";
+              }
+              {
                 name = "systemd_home";
                 enable = config.services.homed.enable;
                 control = "required";
@@ -2207,6 +2213,8 @@ in
         '';
       };
     };
+
+    security.pam.enableUMask = lib.mkEnableOption "umask PAM module";
 
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
     security.pam.enableFscrypt = lib.mkEnableOption ''
