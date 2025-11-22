@@ -849,8 +849,8 @@ in
       "sha256-7qSbGMs4YI04zFpoTG0OGfVcAtHm4DsNyRXIILyqOa0=";
 
   mypy-boto3-marketplace-entitlement =
-    buildMypyBoto3Package "marketplace-entitlement" "1.41.0"
-      "sha256-KrbfCp9YCOevWWD/sSLbGKd6ApbZmW3UplMJ4gw//IQ=";
+    buildMypyBoto3Package "marketplace-entitlement" "1.41.2"
+      "sha256-anYA3v/Bdzye2q9aM5R++/RJflOSTxB0/fK1K6x94Bs=";
 
   mypy-boto3-marketplacecommerceanalytics =
     buildMypyBoto3Package "marketplacecommerceanalytics" "1.41.0"
