@@ -1,0 +1,10 @@
+--- a/src/cmd/INIT/dylink.sh
++++ b/src/cmd/INIT/dylink.sh
+@@ -126,6 +126,6 @@
+ 	case $HOSTTYPE in
+ 	darwin.*)
+ 		do_link "lib/$lib_file" -dynamiclib \
+-			-Wl,-dylib_install_name -Wl,"$lib_linkname" \
++			-Wl,-dylib_install_name -Wl,"$out/$lib_linkname" \
+ 			"$@" -L"$dest_dir/lib" $l_flags
+ 		;;
