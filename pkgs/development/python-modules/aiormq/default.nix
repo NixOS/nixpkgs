@@ -3,7 +3,6 @@
   aiomisc-pytest,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pamqp,
   yarl,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   version = "6.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";
@@ -24,13 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-ApwL3okhpc3Dtq4bfWCCnoikyRx+4zPI9XtJ+qPKQdg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
   pythonRelaxDeps = [ "pamqp" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     pamqp
     yarl
   ];
