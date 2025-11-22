@@ -1,76 +1,115 @@
 {
+  stdenv,
   lib,
   pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  libiconv,
 
-  # build-system
+  dill,
+  numpy,
+  python-dateutil,
+  rustworkx,
+  scipy,
   setuptools,
+  setuptools-rust,
+  stevedore,
+  symengine,
+  sympy,
+  typing-extensions,
 
-  # Python Inputs
-  qiskit-aer,
-  qiskit-ibmq-provider,
-  qiskit-ignis,
-  qiskit-terra,
-  # Optional inputs
-  withOptionalPackages ? true,
-  qiskit-finance,
-  qiskit-machine-learning,
-  qiskit-nature,
-  qiskit-optimization,
-  # Check Inputs
-  pytestCheckHook,
+  withVisualization ? false,
+  matplotlib,
+  pillow,
+  pydot,
+  pylatexenc,
+  seaborn,
+
+  withCrosstalkPass ? false,
+  z3-solver,
+
+  withCspLayoutPass ? false,
+  python-constraint,
 }:
 
 let
-  optionalQiskitPackages = [
-    qiskit-finance
-    qiskit-machine-learning
-    qiskit-nature
-    qiskit-optimization
+  visualizationPackages = [
+    matplotlib
+    pillow
+    pydot
+    pylatexenc
+    seaborn
   ];
+  crosstalkPackages = [ z3-solver ];
+  cspLayoutPackages = [ python-constraint ];
 in
+
 buildPythonPackage rec {
   pname = "qiskit";
-  # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "2.1.1";
+  version = "2.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
     tag = version;
-    hash = "sha256-WHfsl/T4lmnvkGY7gF5PStilGq3G66TZG9oB1tKwuOQ=";
+    hash = "sha256-4FniNQghcbWHYkjIhaUXL6QqqIS6dA4LjgOCk9znFOM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
-  propagatedBuildInputs = [
-    qiskit-aer
-    qiskit-ibmq-provider
-    qiskit-ignis
-    qiskit-terra
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src pname version;
+    hash = "sha256-61DPuefMnTlYJCCO7YQw6+mfMM20xlS/nY0DI6beo4s=";
+  };
+
+  dependencies = [
+    dill
+    numpy
+    python-dateutil
+    rustworkx
+    scipy
+    stevedore
+    symengine
+    sympy
+    typing-extensions
   ]
-  ++ lib.optionals withOptionalPackages optionalQiskitPackages;
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  ++ lib.optionals withVisualization visualizationPackages
+  ++ lib.optionals withCrosstalkPass crosstalkPackages
+  ++ lib.optionals withCspLayoutPass cspLayoutPackages;
 
   pythonImportsCheck = [
     "qiskit"
     "qiskit.circuit"
-    "qiskit.ignis"
-    "qiskit.providers.aer"
-    "qiskit.providers.ibmq"
+    "qiskit.providers.basic_provider"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for developing quantum computing programs";
-    homepage = "https://qiskit.org";
+    longDescription = ''
+      Open-source SDK for working with quantum computers at the level of
+      extended quantum circuits, operators, and primitives.
+    '';
+    homepage = "https://www.ibm.com/quantum/qiskit";
     downloadPage = "https://github.com/QISKit/qiskit/releases";
-    changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
+    changelog = "https://docs.quantum.ibm.com/api/qiskit/release-notes";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }
