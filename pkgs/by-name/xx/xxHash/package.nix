@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       gpl2
     ];
     mainProgram = "xxhsum";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.all;
     pkgConfigModules = [
       "libxxhash"

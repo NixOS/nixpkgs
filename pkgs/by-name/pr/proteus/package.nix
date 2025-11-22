@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GuitarML/Proteus";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     mainProgram = "Proteus";
   };
 }

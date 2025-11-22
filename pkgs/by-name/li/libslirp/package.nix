@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

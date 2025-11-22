@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     mainProgram = "cpuid_tool";
     changelog = "https://raw.githubusercontent.com/anrieff/libcpuid/master/ChangeLog";
     license = licenses.bsd2;
-    maintainers = with maintainers; [
-      orivej
+    maintainers = [
     ];
     platforms = platforms.x86;
   };

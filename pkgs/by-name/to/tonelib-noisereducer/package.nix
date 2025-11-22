@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/tl-noisereducer.html";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-NoiseReducer";
   };

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Hosting library for JSFX";
     homepage = "https://github.com/jpcima/ysfx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/pali/libopenaptx";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

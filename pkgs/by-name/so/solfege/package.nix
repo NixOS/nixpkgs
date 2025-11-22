@@ -109,7 +109,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       bjornfor
-      orivej
       anthonyroussel
     ];
     mainProgram = "solfege";

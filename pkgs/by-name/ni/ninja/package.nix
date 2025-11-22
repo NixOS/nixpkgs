@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       bjornfor
-      orivej
     ];
   };
 })

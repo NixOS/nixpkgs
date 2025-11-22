@@ -163,7 +163,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter
-      orivej
     ];
     teams = [ teams.cuda ];
   };
