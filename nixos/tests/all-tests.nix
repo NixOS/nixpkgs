@@ -528,6 +528,7 @@ in
     inherit runTest;
   };
   esphome = runTest ./esphome.nix;
+  esphome-dashboard = runTest ./esphome-dashboard.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   etcd = import ./etcd/default.nix { inherit pkgs runTest; };
   etebase-server = runTest ./etebase-server.nix;
