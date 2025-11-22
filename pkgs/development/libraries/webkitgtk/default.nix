@@ -271,11 +271,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    pkgConfigModules = [
-      "javascriptcoregtk-${abiVersion}"
-      "webkit2gtk-${abiVersion}"
-      "webkit2gtk-web-extension-${abiVersion}"
-    ];
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
