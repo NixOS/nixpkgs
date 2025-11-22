@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A free and open-source Minecraft launcher that lets you manage multiple game instances, mods, resource packs, and worlds with ease.";
+    description = "ProjT‑Launcher lets you manage Minecraft versions, mods, and worlds, standing out with new and upcoming features.";
     longDescription = ''
       This application lets you create and manage multiple
       independent Minecraft instances, each with its own
