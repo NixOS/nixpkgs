@@ -5,17 +5,17 @@
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alertmanager";
   version = "0.29.0";
-  rev = "v${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2uP4JCbQEe7/en5sBq/k73kqK6YVmuLvfiUy1fqPitw=";
   };
 
@@ -31,8 +31,8 @@ buildGoModule rec {
       t = "github.com/prometheus/common/version";
     in
     [
-      "-X ${t}.Version=${version}"
-      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Version=${finalAttrs.version}"
+      "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
@@ -50,11 +50,17 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
-    changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/prometheus/alertmanager/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "alertmanager";
     maintainers = with maintainers; [
       benley
       fpletz
@@ -62,4 +68,4 @@ buildGoModule rec {
       Frostman
     ];
   };
-}
+})
