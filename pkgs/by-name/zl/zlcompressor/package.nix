@@ -16,6 +16,7 @@
   expat,
   fontconfig,
   freetype,
+  git,
   libGL,
   libXcursor,
   libXext,
@@ -35,8 +36,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "ZL-Audio";
     repo = "ZLCompressor";
     tag = "${finalAttrs.version}";
-    hash = "sha256-0Z29+jLtAtThFaVVqvuqUJkj1VRI69WOvIbEfE45db4=";
+    hash = "sha256-m+nKeK3bjWEZDgWNp1H1bG1vfP+cSG/UPiS4k179urc=";
     fetchSubmodules = true;
+    # We need the .git to get the commit hash in the settings screen
+    leaveDotGit = true;
   };
 
   nativeBuildInputs = [
@@ -52,6 +55,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     freetype
+    git
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -87,6 +91,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # set the version for in the settings screen.
+    (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];
 
   installPhase = ''
