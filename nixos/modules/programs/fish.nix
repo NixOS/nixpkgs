@@ -7,7 +7,6 @@
 
 let
   cfge = config.environment;
-
   cfg = config.programs.fish;
 
   fishAbbrs = lib.concatStringsSep "\n" (
@@ -21,9 +20,7 @@ let
   );
 
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
-
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
-
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
   # Need to use --no-config to prevent fish_indent from trying to read from config
@@ -52,7 +49,6 @@ let
     pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
     } "babelfish < ${path} > $out;";
-
 in
 {
   options = {
