@@ -81,6 +81,9 @@ lib.extendMkDerivation {
     lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
     }
+    // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
+      RUSTFLAGS = "-L native=${windows.pthreads}/lib" + (args.RUSTFLAGS or "");
+    }
     // {
       cargoDeps =
         if cargoVendorDir != null then
@@ -138,8 +141,6 @@ lib.extendMkDerivation {
           rustc
           cargo
         ];
-
-      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
 
