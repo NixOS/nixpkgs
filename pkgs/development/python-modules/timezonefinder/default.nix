@@ -10,18 +10,19 @@
   poetry-core,
   pytestCheckHook,
   setuptools,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "8.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
     tag = version;
-    hash = "sha256-AvuNsIpJBZymlJe4HLPEmHfxN1jhqPmrEgRPb3W+B3E=";
+    hash = "sha256-jIsS8RcbMNhj5Z/AYbNyVsbQOozbk75tXSLRqhez9Ug=";
   };
 
   build-system = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     numba
+    pydantic
     pytestCheckHook
   ];
 
