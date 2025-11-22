@@ -17437,6 +17437,11 @@
     githubId = 45770;
     name = "Mitsuhiro Nakamura";
   };
+  MNThomson = {
+    github = "MNThomson";
+    githubId = 73045936;
+    name = "Max Thomson";
+  };
   moaxcp = {
     email = "moaxcp@gmail.com";
     github = "moaxcp";
