@@ -299,7 +299,6 @@ in
             if [ ! -f /var/lib/roundcube/des_key ]; then
               base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
               # we need to log out everyone in case change the des_key
-              # from the default when upgrading from nixos 19.09
               ${psql} <<< 'TRUNCATE TABLE session;'
             fi
 

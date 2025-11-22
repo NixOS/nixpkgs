@@ -233,12 +233,6 @@ in
       group = group;
     };
 
-    systemd.tmpfiles.rules = [
-      # present since NixOS 19.09: remove old stateful symlink join directory,
-      # which has been replaced with the journalwatchConfigDir store path
-      "R ${dataDir}/config"
-    ];
-
     systemd.services.journalwatch = {
 
       environment = {
