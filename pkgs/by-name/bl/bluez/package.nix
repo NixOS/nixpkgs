@@ -29,7 +29,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  inherit (bluez-headers) version src;
+  inherit (bluez-headers) version;
+
+  # Do not break overrideAttrs on this package
+  inherit
+    (bluez-headers.overrideAttrs (_: {
+      inherit (finalAttrs) version;
+      __intentionallyOverridingVersion = true;
+    }))
+    src
+    ;
 
   patches = [
     (fetchurl {
