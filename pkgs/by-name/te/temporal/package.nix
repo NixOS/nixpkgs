@@ -5,6 +5,7 @@
   nixosTests,
   testers,
   temporal,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -46,6 +47,14 @@ buildGoModule rec {
 
     runHook postInstall
   '';
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) temporal;
