@@ -609,7 +609,7 @@ module.exports = async ({ github, context, core, dry }) => {
         ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
-        if (artifact) {
+        if (artifact && !artifact.expired) {
           stats.artifacts++
 
           const { downloadPath } = await artifactClient.downloadArtifact(
