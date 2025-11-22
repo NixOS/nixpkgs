@@ -5,26 +5,29 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.19.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1Cc7W6qyawcg5ZfjsGWH7gScdRhcYpqppjzD83QWV60=";
+    sha256 = "sha256-ZSO/9pWiG87zJEZ6ODG2AFIM2zho+0CePOeRTvQ1q0E=";
   };
-  vendorHash = "sha256-81qCRwp57PpzK/eavycOLFYsuD8uVq46h12YVlJRK7Y=";
+  vendorHash = "sha256-wcS0NoSF5R5ogYc2xCc4hOWCnkhWkDBpUnfr1GpNlao=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
     "-s"
-    "-X helm.sh/helm/v3/internal/version.version=v${finalAttrs.version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${finalAttrs.src.rev}"
+    "-X helm.sh/helm/v4/internal/version.version=v${finalAttrs.version}"
+    "-X helm.sh/helm/v4/internal/version.metadata="
+    "-X helm.sh/helm/v4/internal/version.gitCommit=${finalAttrs.src.rev}"
+    "-X helm.sh/helm/v4/internal/version.gitTreeState=clean"
   ];
 
   preBuild = ''
@@ -33,10 +36,14 @@ buildGoModule (finalAttrs: {
     K8S_MODULES_MAJOR_VER="$(($(cut -d. -f1 <<<"$K8S_MODULES_VER") + 1))"
     K8S_MODULES_MINOR_VER="$(cut -d. -f2 <<<"$K8S_MODULES_VER")"
     old_ldflags="''${ldflags}"
-    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
-    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
-    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
-    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/chart/v2/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/chart/v2/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/internal/v3/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/internal/v3/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/chart/common/util.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/pkg/chart/common/util.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/internal/version.kubeClientVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v4/internal/version.kubeClientVersionMinor=''${K8S_MODULES_MINOR_VER}"
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -46,10 +53,10 @@ buildGoModule (finalAttrs: {
     ldflags="''${old_ldflags}"
 
     # skipping version tests because they require dot git directory
-    substituteInPlace cmd/helm/version_test.go \
+    substituteInPlace pkg/cmd/version_test.go \
       --replace "TestVersion" "SkipVersion"
     # skipping plugin tests
-    substituteInPlace cmd/helm/plugin_test.go \
+    substituteInPlace pkg/cmd/plugin_test.go \
       --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
       --replace "TestLoadPlugins" "SkipLoadPlugins"
     substituteInPlace cmd/helm/helm_test.go \
@@ -57,6 +64,7 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
