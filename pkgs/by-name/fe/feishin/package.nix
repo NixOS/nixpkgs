@@ -7,6 +7,7 @@
   dart-sass,
   pnpm_10,
   darwin,
+  mpv,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -97,7 +98,8 @@ buildNpmPackage {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
@@ -110,6 +112,7 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED=1 \
