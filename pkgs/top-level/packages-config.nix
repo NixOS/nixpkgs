@@ -11,7 +11,6 @@
     with super;
     lib.mapAttrs (_: set: lib.recurseIntoAttrs set) {
       inherit (super)
-        rPackages
         sourceHanPackages
         ;
 
