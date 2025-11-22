@@ -1505,6 +1505,11 @@
     githubId = 5149377;
     name = "Amine Chikhaoui";
   };
+  aMOPel = {
+    github = "aMOPel";
+    githubId = 36712072;
+    name = "aMOPel";
+  };
   amozeo = {
     email = "wroclaw223@outlook.com";
     github = "amozeo";
