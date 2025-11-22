@@ -2011,6 +2011,8 @@ let
 
       Google.gemini-cli-vscode-ide-companion = callPackage ./Google.gemini-cli-vscode-ide-companion { };
 
+      gplane.wasm-language-tools = callPackage ./gplane.wasm-language-tools { };
+
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gc-excelviewer";
