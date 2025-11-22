@@ -3,8 +3,8 @@
   lib,
   go,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  fetchurl,
   nixosTests,
   enableAWS ? true,
   enableAzure ? true,
@@ -29,31 +29,67 @@
   enableVultr ? true,
   enableXDS ? true,
   enableZookeeper ? true,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  source = import ./source.nix;
+
+  inherit (source) version vendorHash;
+
   pname = "prometheus";
-  version = "3.7.2";
+
+  src = fetchFromGitHub {
+    owner = "prometheus";
+    repo = "prometheus";
+    tag = "v${version}";
+    hash = source.hash;
+  };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version;
+
+    src = "${src}/web/ui";
+
+    npmDepsHash = source.npmDepsHash;
+
+    patches = [
+      # Disable old React app as it depends on deprecated create-react-apps
+      # script
+      ./disable-react-app.diff
+    ];
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      CI=true npm test
+      runHook postCheck
+    '';
+
+    postInstall = ''
+      mkdir -p $out/static
+      cp -r $out/lib/node_modules/prometheus-io/static/* $out/static
+      find $out/static -type f -exec gzip -f9 {} \;
+
+      # Remove node_modules
+      rm -rf $out/lib
+    '';
+  };
+in
+buildGoModule (finalAttrs: {
+  inherit
+    pname
+    version
+    vendorHash
+    src
+    ;
 
   outputs = [
     "out"
     "doc"
     "cli"
   ];
-
-  src = fetchFromGitHub {
-    owner = "prometheus";
-    repo = "prometheus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bitRDX1oymFfzvQVYL31BON6UBfQYnqjZefQKc+yXx0=";
-  };
-
-  vendorHash = "sha256-V+qLxjqGOaT1veEwtklqcS7iO31ufvDHBA9DbZLzDiE=";
-
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NFv6zNpMacd0RgVYBlWKbXKNCEh7WijpREg0bNojisM=";
-  };
 
   excludedPackages = [
     "documentation/prometheus-mixin"
@@ -62,7 +98,7 @@ buildGoModule (finalAttrs: {
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
+    cp -r ${assets}/static web/ui/static/
 
     patchShebangs scripts
 
@@ -96,7 +132,18 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
+
+    # Recreate the `make assets-compress` target here - workaround permissions
+    # errors
+    cp web/ui/embed.go.tmpl web/ui/embed.go
+
+    find web/ui/static -type f -name '*.gz' -print0 | sort -z | xargs -0 echo //go:embed >> web/ui/embed.go
+
+    echo 'var EmbedFS embed.FS' >> web/ui/embed.go
+
+    # EmbedFS requires relative paths
+    substituteInPlace web/ui/embed.go --replace-fail "web/ui/" ""
   '';
 
   tags = [ "builtinassets" ];
@@ -133,15 +180,27 @@ buildGoModule (finalAttrs: {
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
-  passthru.tests = { inherit (nixosTests) prometheus; };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) prometheus; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
     license = licenses.asl20;
+    mainProgram = "prometheus";
+    changelog = "https://github.com/prometheus/prometheus/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [
       fpletz
       Frostman
+      jpds
     ];
   };
 })
