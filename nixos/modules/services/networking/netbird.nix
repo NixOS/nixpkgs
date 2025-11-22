@@ -507,17 +507,33 @@ in
         ) "loose";
 
         # Ports opened on a specific
-        interfaces = listToAttrs (
-          toClientList (client: {
-            name = client.interface;
-            value.allowedUDPPorts = optionals client.openInternalFirewall [
-              # note: those should be opened up by NetBird itself, but it needs additional
-              #  NixOS -specific debugging and tweaking before it works
-              5353 # <0.59.0 DNS forwarder port, kept for compatibility with those clients
-              22054 # >=0.59.0 DNS forwarder port
-            ];
-          })
+        interfaces = lib.mkIf (config.networking.firewall.backend != "firewalld") (
+          listToAttrs (
+            toClientList (client: {
+              name = client.interface;
+              value.allowedUDPPorts = optionals client.openInternalFirewall [
+                # note: those should be opened up by NetBird itself, but it needs additional
+                #  NixOS -specific debugging and tweaking before it works
+                5353 # <0.59.0 DNS forwarder port, kept for compatibility with those clients
+                22054 # >=0.59.0 DNS forwarder port
+              ];
+            })
+          )
         );
+      };
+
+      services.firewalld.zones.netbird = {
+        interfaces = lib.pipe cfg.clients [
+          (lib.filterAttrs (_: client: client.openFirewall))
+          lib.attrValues
+          (map (client: client.interface))
+        ];
+        ports = [
+          {
+            protocol = "udp";
+            port = 5353;
+          }
+        ];
       };
 
       systemd.network.networks = mkIf config.networking.useNetworkd (

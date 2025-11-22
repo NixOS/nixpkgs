@@ -285,9 +285,7 @@ let
 in
 
 {
-
   options = {
-
     networking.firewall = {
       extraCommands = lib.mkOption {
         type = lib.types.lines;
@@ -317,13 +315,11 @@ in
         '';
       };
     };
-
   };
 
   # FIXME: Maybe if `enable' is false, the firewall should still be
   # built but not started by default?
-  config = lib.mkIf (cfg.enable && config.networking.nftables.enable == false) {
-
+  config = lib.mkIf (cfg.enable && cfg.backend == "iptables") {
     assertions = [
       # This is approximately "checkReversePath -> kernelHasRPFilter",
       # but the checkReversePath option can include non-boolean
@@ -335,6 +331,8 @@ in
     ];
 
     networking.firewall.checkReversePath = lib.mkIf (!kernelHasRPFilter) (lib.mkDefault false);
+
+    environment.systemPackages = [ pkgs.nixos-firewall-tool ];
 
     systemd.services.firewall = {
       description = "Firewall";
@@ -365,7 +363,5 @@ in
         ExecStop = "@${stopScript} firewall-stop";
       };
     };
-
   };
-
 }

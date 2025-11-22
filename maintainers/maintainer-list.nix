@@ -2386,6 +2386,13 @@
     name = "Chatnoir Miki";
     matrix = "@mikiiki:matrix.org";
   };
+  astratagem = {
+    name = "Chris Montgomery";
+    email = "chmont@protonmail.com";
+    github = "astratagem";
+    githubId = 1757914;
+    keys = [ { fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3"; } ];
+  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -3053,6 +3060,12 @@
     github = "Bradley-Cooley";
     githubId = 5409401;
     name = "Bradley Cooley";
+  };
+  bct = {
+    email = "bct@diffeq.com";
+    github = "bct";
+    githubId = 548;
+    name = "Brendan Taylor";
   };
   bcyran = {
     email = "bazyli@cyran.dev";
@@ -3733,6 +3746,13 @@
     github = "bradediger";
     githubId = 4621;
     name = "Brad Ediger";
+  };
+  bradleyjones = {
+    email = "jones.bradley@me.com";
+    github = "bradleyjones";
+    githubId = 2159185;
+    name = "Bradley Jones";
+    keys = [ { fingerprint = "FE6E 9D7A 6ECC C6E7 8F7B  F166 3A0E 7022 EBAD D1AA"; } ];
   };
   brahyerr = {
     name = "Bryant Pham";
@@ -17495,13 +17515,6 @@
     github = "montag451";
     githubId = 249317;
     name = "montag451";
-  };
-  montchr = {
-    name = "Chris Montgomery";
-    email = "chris@cdom.io";
-    github = "montchr";
-    githubId = 1757914;
-    keys = [ { fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3"; } ];
   };
   moody = {
     email = "moody@posixcafe.org";
