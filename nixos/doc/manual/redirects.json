@@ -1588,6 +1588,9 @@
   "module-services-web-apps-pihole-web-configuration": [
     "index.html#module-services-web-apps-pihole-web-configuration"
   ],
+  "module-services-newt": [
+    "index.html#module-services-newt"
+  ],
   "ch-profiles": [
     "index.html#ch-profiles"
   ],
