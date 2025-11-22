@@ -114,7 +114,6 @@ effectiveStdenv.mkDerivation rec {
     cmake
     pkg-config
     python3Packages.python
-    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -145,6 +144,7 @@ effectiveStdenv.mkDerivation rec {
     libpng
     nlohmann_json
     microsoft-gsl
+    protobuf
     zlib
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
@@ -239,6 +239,8 @@ effectiveStdenv.mkDerivation rec {
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
+    # Needed when cross compiling
+    (lib.cmakeFeature "Python_NumPy_INCLUDE_DIR" "${python3Packages.numpy.coreIncludeDir}")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
