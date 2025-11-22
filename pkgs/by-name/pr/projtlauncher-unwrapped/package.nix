@@ -71,7 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (msaClientID != null) [
     (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
   ]
-  (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" (lib.versions.major kdePackages.qtbase.version))
+  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
+    (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # we wrap our binary manually
     (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
