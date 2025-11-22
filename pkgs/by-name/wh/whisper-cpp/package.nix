@@ -8,6 +8,7 @@
   SDL2,
   wget,
   which,
+  ffmpeg,
   autoAddDriverRunpath,
   makeWrapper,
   nix-update-script,
@@ -29,6 +30,8 @@
   vulkan-loader,
 
   withSDL ? true,
+
+  withFFmpegSupport ? false,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
@@ -108,6 +111,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
+    ++ optional withFFmpegSupport ffmpeg
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
@@ -146,6 +150,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "GGML_METAL" true)
     (cmakeBool "GGML_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals withFFmpegSupport [
+    (cmakeFeature "WHISPER_FFMPEG" "yes")
   ];
 
   postInstall = ''
@@ -156,6 +163,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
+  ''
+  + lib.optionalString withFFmpegSupport ''
+    wrapProgram "$out/bin/whisper-server" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
