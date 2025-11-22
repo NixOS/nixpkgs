@@ -7,7 +7,7 @@
 }:
 let
   pname = "coloraide";
-  version = "5.1";
+  version = "6.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -15,7 +15,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DfBmpjbb2EgZgfrEkCQNPtkGtANDx8AXErPfVC8rJ1A=";
+    hash = "sha256-0ybosmdDtGNpRv3t2QGUrGGJwEtpoPPIVO6bkbvHgq4=";
   };
 
   build-system = [
