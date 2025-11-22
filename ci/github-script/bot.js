@@ -46,7 +46,7 @@ module.exports = async ({ github, context, core, dry }) => {
           name: 'maintainers',
         })
       ).data.artifacts[0]
-      if (!artifact) continue
+      if (!artifact || artifact.expired) continue
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
@@ -151,6 +151,8 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
       })
     ).data
+
+    log('author', pull_request.user?.login)
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
