@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "26.1.1";
+  version = "29.0.3";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-h9APkOtH7s31r89hqqH12zYqkVMrR2ZxMyc+Zwq21+A=";
+    hash = "sha256-YVkGt096Vy1s/ZjvuWUWVE2eiaI7Wg/YdWSueTsKzEg=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   offlineCache = fetchYarnDeps {
-    hash = "sha256-kmA0z/vmWH+yD2OQ6VVSE0yPxInTAGjjG+QfcoZHlQ0=";
     yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-/CzHvGUKhB2RBaz+LVXaHr5q6KLkQR0asFZRruOUmqU=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + ''
     yarn --offline run electron-builder --dir \
-      ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json"} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json --config.mac.identity=null"} \
       -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
