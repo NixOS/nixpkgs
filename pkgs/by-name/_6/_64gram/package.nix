@@ -2,10 +2,6 @@
   lib,
   fetchFromGitHub,
   telegram-desktop,
-  alsa-lib,
-  jemalloc,
-  libopus,
-  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -23,17 +19,6 @@ telegram-desktop.override {
       hash = "sha256-CtDCrgKZpaTdR+Eh9H1uq7EmO0SFIgHKlW/zeeWBaCM=";
       fetchSubmodules = true;
     };
-
-    buildInputs = (old.buildInputs or [ ]) ++ [
-      alsa-lib
-      jemalloc
-      libopus
-      libpulseaudio
-    ];
-
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
-      (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
-    ];
 
     meta = {
       description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
