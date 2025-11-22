@@ -22,11 +22,35 @@ rec {
     linux-kernel.autoModules = false;
   };
 
+  ##
+  ## POWER
+  ##
+
   powernv = {
     linux-kernel = {
       name = "PowerNV";
 
       baseConfig = "powernv_defconfig";
+      target = "vmlinux";
+      autoModules = true;
+      # avoid driver/FS trouble arising from unusual page size
+      extraConfig = ''
+        PPC_64K_PAGES n
+        PPC_4K_PAGES y
+        IPV6 y
+
+        ATA_BMDMA y
+        ATA_SFF y
+        VIRTIO_MENU y
+      '';
+    };
+  };
+
+  ppc64 = {
+    linux-kernel = {
+      name = "powerpc64";
+
+      baseConfig = "ppc64_defconfig";
       target = "vmlinux";
       autoModules = true;
       # avoid driver/FS trouble arising from unusual page size
@@ -628,8 +652,8 @@ rec {
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
-      powernv
+    else if platform.isPower64 then
+      if platform.isLittleEndian then powernv else ppc64
 
     else if platform.isLoongArch64 then
       loongarch64-multiplatform
