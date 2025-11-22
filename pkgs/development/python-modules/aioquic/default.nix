@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of QUIC and HTTP/3";
     homepage = "https://github.com/aiortc/aioquic";
+    changelog = "https://github.com/aiortc/aioquic/blob/${version}/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };
