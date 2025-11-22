@@ -4,13 +4,12 @@ let
   ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
   versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
 in
-
 {
   lib,
   stdenv,
   callPackage,
   fetchurl,
-
+  buildFHSEnv,
   jdk,
   zlib,
   python3,
@@ -31,15 +30,12 @@ in
   xz,
   xorg,
   libGL,
-
   libICE,
   libSM,
   libX11,
-
   vmopts ? null,
   forceWayland ? false,
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -80,53 +76,86 @@ let
       extraBuildInputs ? [ ],
       extraTests ? { },
     }:
-    mkJetBrainsProductCore {
-      inherit
-        pname
-        extraLdPath
-        jdk
-        ;
-      extraBuildInputs =
-        extraBuildInputs
-        ++ [ stdenv.cc.cc ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          fontconfig
-          libGL
-          libX11
-        ];
-      extraWrapperArgs =
-        extraWrapperArgs
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
-          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-        ];
-      src =
-        if fromSource then
-          communitySources."${pname}"
-        else
-          fetchurl {
-            url = products."${pname}".url;
-            sha256 = products."${pname}".sha256;
-          };
-      version = if fromSource then communitySources."${pname}".version else products."${pname}".version;
-      buildNumber =
-        if fromSource then communitySources."${pname}".buildNumber else products."${pname}".build_number;
-      inherit (ideInfo."${pname}") wmClass product;
-      productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
-      meta = mkMeta ideInfo."${pname}".meta fromSource;
-      passthru.tests = extraTests // {
-        plugins = callPackage ./plugins/tests.nix { ideName = pname; };
+    let
+      basePackage = mkJetBrainsProductCore {
+        inherit
+          pname
+          extraLdPath
+          jdk
+          ;
+        extraBuildInputs =
+          extraBuildInputs
+          ++ [ stdenv.cc.cc ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            fontconfig
+            libGL
+            libX11
+          ];
+        extraWrapperArgs =
+          extraWrapperArgs
+          ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
+            ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
+          ];
+        src =
+          if fromSource then
+            communitySources."${pname}"
+          else
+            fetchurl {
+              url = products."${pname}".url;
+              sha256 = products."${pname}".sha256;
+            };
+        version = if fromSource then communitySources."${pname}".version else products."${pname}".version;
+        buildNumber =
+          if fromSource then communitySources."${pname}".buildNumber else products."${pname}".build_number;
+        inherit (ideInfo."${pname}") wmClass product;
+        productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
+        meta = mkMeta ideInfo."${pname}".meta fromSource;
+        passthru.tests = extraTests // {
+          plugins = callPackage ./plugins/tests.nix { ideName = pname; };
+        };
+        libdbm =
+          if ideInfo."${pname}".meta.isOpenSource then
+            communitySources."${pname}".libdbm
+          else
+            communitySources.idea-community.libdbm;
+        fsnotifier =
+          if ideInfo."${pname}".meta.isOpenSource then
+            communitySources."${pname}".fsnotifier
+          else
+            communitySources.idea-community.fsnotifier;
       };
-      libdbm =
-        if ideInfo."${pname}".meta.isOpenSource then
-          communitySources."${pname}".libdbm
-        else
-          communitySources.idea-community.libdbm;
-      fsnotifier =
-        if ideInfo."${pname}".meta.isOpenSource then
-          communitySources."${pname}".fsnotifier
-        else
-          communitySources.idea-community.fsnotifier;
-    };
+    in
+    # Add FHS support using overrideAttrs (Linux only)
+    basePackage.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        passthru =
+          oldAttrs.passthru
+          // lib.optionalAttrs stdenv.hostPlatform.isLinux (
+            let
+              fhsEnv = callPackage ./fhs-env.nix { inherit buildFHSEnv; };
+            in
+            {
+              fhs = fhsEnv {
+                product = finalAttrs.finalPackage;
+                pname = basePackage.pname;
+                version = basePackage.version;
+                meta = basePackage.meta;
+                executableName = basePackage.pname;
+              };
+              fhsWithPackages =
+                f:
+                fhsEnv {
+                  product = finalAttrs.finalPackage;
+                  pname = basePackage.pname;
+                  version = basePackage.version;
+                  meta = basePackage.meta;
+                  executableName = basePackage.pname;
+                  extraTargetPkgs = f;
+                };
+            }
+          );
+      }
+    );
 
   communitySources = callPackage ./source { };
 
@@ -191,6 +220,8 @@ rec {
       lldb
     ];
   };
+  aqua-fhs = if stdenv.hostPlatform.isLinux then aqua.fhs else null;
+  aqua-fhsWithPackages = if stdenv.hostPlatform.isLinux then aqua.fhsWithPackages else null;
 
   clion =
     (mkJetBrainsProduct {
@@ -224,10 +255,14 @@ rec {
           ${patchSharedLibs}
         '';
       });
+  clion-fhs = if stdenv.hostPlatform.isLinux then clion.fhs else null;
+  clion-fhsWithPackages = if stdenv.hostPlatform.isLinux then clion.fhsWithPackages else null;
 
   datagrip = mkJetBrainsProduct {
     pname = "datagrip";
   };
+  datagrip-fhs = if stdenv.hostPlatform.isLinux then datagrip.fhs else null;
+  datagrip-fhsWithPackages = if stdenv.hostPlatform.isLinux then datagrip.fhsWithPackages else null;
 
   dataspell =
     let
@@ -243,11 +278,15 @@ rec {
         libr
       ];
     };
+  dataspell-fhs = if stdenv.hostPlatform.isLinux then dataspell.fhs else null;
+  dataspell-fhsWithPackages = if stdenv.hostPlatform.isLinux then dataspell.fhsWithPackages else null;
 
   gateway = mkJetBrainsProduct {
     pname = "gateway";
     extraBuildInputs = [ libgcc ];
   };
+  gateway-fhs = if stdenv.hostPlatform.isLinux then gateway.fhs else null;
+  gateway-fhsWithPackages = if stdenv.hostPlatform.isLinux then gateway.fhsWithPackages else null;
 
   goland =
     (mkJetBrainsProduct {
@@ -269,6 +308,8 @@ rec {
             chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
           '';
       });
+  goland-fhs = if stdenv.hostPlatform.isLinux then goland.fhs else null;
+  goland-fhsWithPackages = if stdenv.hostPlatform.isLinux then goland.fhsWithPackages else null;
 
   idea-community-bin = buildIdea {
     pname = "idea-community";
@@ -284,6 +325,9 @@ rec {
       idea-community-bin
     else
       idea-community-src;
+  idea-community-fhs = if stdenv.hostPlatform.isLinux then idea-community.fhs else null;
+  idea-community-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then idea-community.fhsWithPackages else null;
 
   idea-ultimate = buildIdea {
     pname = "idea-ultimate";
@@ -292,8 +336,13 @@ rec {
       musl
     ];
   };
+  idea-ultimate-fhs = if stdenv.hostPlatform.isLinux then idea-ultimate.fhs else null;
+  idea-ultimate-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then idea-ultimate.fhsWithPackages else null;
 
   mps = mkJetBrainsProduct { pname = "mps"; };
+  mps-fhs = if stdenv.hostPlatform.isLinux then mps.fhs else null;
+  mps-fhsWithPackages = if stdenv.hostPlatform.isLinux then mps.fhsWithPackages else null;
 
   phpstorm = mkJetBrainsProduct {
     pname = "phpstorm";
@@ -301,6 +350,8 @@ rec {
       musl
     ];
   };
+  phpstorm-fhs = if stdenv.hostPlatform.isLinux then phpstorm.fhs else null;
+  phpstorm-fhsWithPackages = if stdenv.hostPlatform.isLinux then phpstorm.fhsWithPackages else null;
 
   pycharm-community-bin = buildPycharm { pname = "pycharm-community"; };
 
@@ -311,11 +362,17 @@ rec {
 
   pycharm-community =
     if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
+  pycharm-community-fhs = if stdenv.hostPlatform.isLinux then pycharm-community.fhs else null;
+  pycharm-community-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then pycharm-community.fhsWithPackages else null;
 
   pycharm-professional = buildPycharm {
     pname = "pycharm-professional";
     extraBuildInputs = [ musl ];
   };
+  pycharm-professional-fhs = if stdenv.hostPlatform.isLinux then pycharm-professional.fhs else null;
+  pycharm-professional-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then pycharm-professional.fhsWithPackages else null;
 
   rider =
     (mkJetBrainsProduct {
@@ -353,6 +410,8 @@ rec {
             done
           '';
       });
+  rider-fhs = if stdenv.hostPlatform.isLinux then rider.fhs else null;
+  rider-fhsWithPackages = if stdenv.hostPlatform.isLinux then rider.fhsWithPackages else null;
 
   ruby-mine = mkJetBrainsProduct {
     pname = "ruby-mine";
@@ -360,6 +419,8 @@ rec {
       musl
     ];
   };
+  ruby-mine-fhs = if stdenv.hostPlatform.isLinux then ruby-mine.fhs else null;
+  ruby-mine-fhsWithPackages = if stdenv.hostPlatform.isLinux then ruby-mine.fhsWithPackages else null;
 
   rust-rover =
     (mkJetBrainsProduct {
@@ -382,6 +443,9 @@ rec {
           ${patchSharedLibs}
         '';
       });
+  rust-rover-fhs = if stdenv.hostPlatform.isLinux then rust-rover.fhs else null;
+  rust-rover-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then rust-rover.fhsWithPackages else null;
 
   webstorm = mkJetBrainsProduct {
     pname = "webstorm";
@@ -389,6 +453,8 @@ rec {
       musl
     ];
   };
+  webstorm-fhs = if stdenv.hostPlatform.isLinux then webstorm.fhs else null;
+  webstorm-fhsWithPackages = if stdenv.hostPlatform.isLinux then webstorm.fhsWithPackages else null;
 
   writerside = mkJetBrainsProduct {
     pname = "writerside";
@@ -396,7 +462,9 @@ rec {
       musl
     ];
   };
+  writerside-fhs = if stdenv.hostPlatform.isLinux then writerside.fhs else null;
+  writerside-fhsWithPackages =
+    if stdenv.hostPlatform.isLinux then writerside.fhsWithPackages else null;
 
   plugins = callPackage ./plugins { };
-
 }
