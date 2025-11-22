@@ -6,6 +6,7 @@
   pythonOlder,
   hatchling,
   aiohttp,
+  async-timeout,
   attrs,
   multidict,
   colorlog,
@@ -58,6 +59,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-randomly
     mock
+    async-timeout
   ];
 
   pythonImportsCheck = [ "hikari" ];
