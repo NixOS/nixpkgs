@@ -13,7 +13,19 @@ in
   options.services.fluidd = {
     enable = mkEnableOption "Fluidd, a Klipper web interface for managing your 3d printer";
 
-    package = mkPackageOption pkgs "fluidd" { };
+    baseUrl = mkOption {
+      type = types.str;
+      default = "/";
+      example = "/fluidd/";
+      description = ''
+        Base URL path for the fluidd web interface.
+        Must start and end with a slash if not "/".
+      '';
+    };
+
+    package = (mkPackageOption pkgs "fluidd" { }) // {
+      apply = pkg: if cfg.baseUrl != "/" then pkg.override { baseUrl = cfg.baseUrl; } else pkg;
+    };
 
     hostName = mkOption {
       type = types.str;
@@ -42,18 +54,18 @@ in
         {
           root = mkForce "${cfg.package}/share/fluidd/htdocs";
           locations = {
-            "/" = {
+            "${cfg.baseUrl}" = {
               index = "index.html";
-              tryFiles = "$uri $uri/ /index.html";
+              tryFiles = "$uri $uri/ ${cfg.baseUrl}index.html";
             };
-            "/index.html".extraConfig = ''
+            "${cfg.baseUrl}index.html".extraConfig = ''
               add_header Cache-Control "no-store, no-cache, must-revalidate";
             '';
-            "/websocket" = {
+            "${cfg.baseUrl}websocket" = {
               proxyWebsockets = true;
-              proxyPass = "http://fluidd-apiserver/websocket";
+              proxyPass = "http://fluidd-apiserver${moonraker.routePrefix or "/"}websocket";
             };
-            "~ ^/(printer|api|access|machine|server)/" = {
+            "~ ^${cfg.baseUrl}(printer|api|access|machine|server)/" = {
               proxyWebsockets = true;
               proxyPass = "http://fluidd-apiserver$request_uri";
             };
