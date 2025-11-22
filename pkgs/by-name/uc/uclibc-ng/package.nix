@@ -143,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
+      aleclearmind
       rasendubi
     ];
     platforms = lib.platforms.linux;
