@@ -324,4 +324,7 @@ in
       };
     };
   };
+  meta.maintainers = with lib.maintainers; [
+    shokerplz
+  ];
 }
