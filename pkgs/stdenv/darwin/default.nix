@@ -789,12 +789,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             "llvmPackages_${llvmVersion}" =
               (super."llvmPackages_${llvmVersion}".overrideScope (
-                _: _:
-                llvmToolsPackages prevStage
-                // llvmLibrariesPackages prevStage
-                // {
-                  inherit (prevStage."llvmPackages_${llvmVersion}") clangNoCompilerRtWithLibc;
-                }
+                _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
               ))
               // {
                 inherit (super."llvmPackages_${llvmVersion}") override;
