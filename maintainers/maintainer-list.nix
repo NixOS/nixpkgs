@@ -16137,6 +16137,11 @@
     githubId = 29855073;
     name = "Michael Colicchia";
   };
+  masrlinu = {
+    github = "masrlinu";
+    githubId = 5259918;
+    name = "masrlinu";
+  };
   massimogengarelli = {
     email = "massimo.gengarelli@gmail.com";
     github = "massix";
