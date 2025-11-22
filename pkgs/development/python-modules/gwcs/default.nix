@@ -9,7 +9,6 @@
   numpy,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "gwcs";
   version = "0.26.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "spacetelescope";
