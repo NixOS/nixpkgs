@@ -15,16 +15,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "galene-stt";
-  version = "0.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene-stt";
     tag = "galene-stt-${finalAttrs.version}";
-    hash = "sha256-uW1b5T+p7KGvqt+PlR9d7bo62V+URHniS45sZP/VuLQ=";
+    hash = "sha256-rYYSGlBaJfuxOyuJFEKqUI0+Slbvta+VYeapO6ZgF/E=";
   };
 
-  vendorHash = "sha256-UFOxo8jq+gxN1dkM2A/BQqtT9ggIp7qovFRLv3Q6Io0=";
+  vendorHash = "sha256-uQkZ7qZF/gh6LWoBWSA4XEsAglbI6tuvft0NLHMBR8E=";
 
   # Not necessary, but feels cleaner to pull it in like that
   postPatch = ''
