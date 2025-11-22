@@ -25964,6 +25964,12 @@
     githubId = 629710;
     name = "David Meister";
   };
+  theeasternfurry = {
+    email = "theeasternfurry@outlook.com";
+    github = "theeasternfurry";
+    githubId = 221808896;
+    name = "theeasternfurry";
+  };
   thefenriswolf = {
     email = "stefan.rohrbacher97@gmail.com";
     github = "thefenriswolf";
