@@ -176,7 +176,7 @@ while [ "$#" -gt 0 ]; do
       --no-ssh-tty)
         noSSHTTY=1
         ;;
-      --flake)
+      --flake|-F)
         flake="$1"
         shift 1
         ;;
