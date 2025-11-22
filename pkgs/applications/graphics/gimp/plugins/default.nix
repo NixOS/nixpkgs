@@ -227,19 +227,14 @@ lib.makeScope pkgs.newScope (
         Filters/Render/Texture...
       */
       pname = "resynthesizer";
-      version = "2.0.3";
+      version = "0-unstable-2024-02-03";
       buildInputs = with pkgs; [ fftw ];
       nativeBuildInputs = with pkgs; [ autoreconfHook ];
-      makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
       src = fetchFromGitHub {
-        owner = "bootchk";
-        repo = "resynthesizer";
-        rev = "v${version}";
-        sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
-      };
-
-      meta = {
-        broken = gimp.majorVersion != "2.0";
+        owner = "itr-tert";
+        repo = "gimp-resynthesizer-scm";
+        rev = "c44500b86e298433c32b0a4b05caf63b8811f959";
+        hash = "sha256-Zc1wJaT7a9GCa6EaoyAwXaHk59lYYwrEHY1KGbPu6ic=";
       };
     };
 
