@@ -20,7 +20,6 @@
   libpng,
   libunwind,
   libva-minimal,
-  libvdpau,
   llvmPackages,
   lm_sensors,
   meson,
@@ -44,6 +43,19 @@
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withOpenCL ? lib.meta.availableOn stdenv.hostPlatform llvmPackages.clang,
+  # Check if we have a VA gallium driver enabled
+  # See https://gitlab.freedesktop.org/mesa/mesa/-/blob/25.2/meson.build?ref_type=heads#L675-681
+  withVa ? lib.any (
+    x:
+    lib.elem x [
+      "r600"
+      "radeonsi"
+      "nouveau"
+      "d3d12"
+      "virgl"
+    ]
+  ) galliumDrivers,
 
   # We enable as many drivers as possible here, to build cross tools
   # and support emulation use cases (emulated x86_64 on aarch64, etc)
@@ -139,6 +151,8 @@ let
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   common = import ./common.nix { inherit lib fetchFromGitLab; };
+
+  withDozen = lib.elem "d3d12" galliumDrivers;
 in
 stdenv.mkDerivation {
   inherit (common)
@@ -166,14 +180,10 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
-    # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
-    # if the user didn't explicitly ask for it
-    "opencl"
-    # the Dozen drivers depend on libspirv2dxil, but link it statically, and
-    # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
-    # case anything wants to use it at some point
-    "spirv2dxil"
   ]
+  # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
+  # if the user didn't explicitly ask for it
+  ++ lib.optional withOpenCL "opencl"
   ++ lib.optionals (!needNativeCLC) [
     # tools for the host platform to be used when cross-compiling.
     # mesa builds these only when not already built. hence:
@@ -182,7 +192,11 @@ stdenv.mkDerivation {
     # - for a cross build (needNativeCLC = true), we provide mesa with `*-clc`
     #   binaries, so it skips building & installing any new CLC files.
     "cross_tools"
-  ];
+  ]
+  # the Dozen drivers depend on libspirv2dxil, but link it statically, and
+  # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
+  # case anything wants to use it at some point
+  ++ lib.optional withDozen "spirv2dxil";
 
   # Keep build-ids so drivers can use them for caching, etc.
   # Also some drivers segfault without this.
@@ -217,11 +231,8 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
-    # Required for OpenCL
-    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
-
     # Rusticl, new OpenCL frontend
-    (lib.mesonBool "gallium-rusticl" true)
+    (lib.mesonBool "gallium-rusticl" withOpenCL)
     (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
     # Enable more sensors in gallium-hud
@@ -233,10 +244,14 @@ stdenv.mkDerivation {
     # Enable Intel RT stuff when available
     (lib.mesonEnable "intel-rt" (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
 
+    # Enable VA-API
+    (lib.mesonEnable "gallium-va" withVa)
+
     # meson auto_features enables these, but we do not want them
     (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
     (lib.mesonEnable "android-libbacktrace" false) # Android only
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "gallium-vdpau" false) # Gone in 25.3
   ]
   ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
@@ -250,6 +265,10 @@ stdenv.mkDerivation {
   ++ lib.optionals needNativeCLC [
     (lib.mesonOption "mesa-clc" "system")
     (lib.mesonOption "precomp-compiler" "system")
+  ]
+  ++ lib.optionals withOpenCL [
+    # Required for OpenCL
+    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
   ];
 
   strictDeps = true;
@@ -268,7 +287,6 @@ stdenv.mkDerivation {
       libpng
       libunwind
       libva-minimal
-      libvdpau
       libX11
       libxcb
       libXext
@@ -276,10 +294,6 @@ stdenv.mkDerivation {
       libXrandr
       libxshmfence
       libXxf86vm
-      llvmPackages.clang
-      llvmPackages.clang-unwrapped
-      llvmPackages.libclc
-      llvmPackages.libllvm
       lm_sensors
       python3Packages.python # for shebang
       spirv-llvm-translator
@@ -293,6 +307,12 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withValgrind [
       valgrind-light
+    ]
+    ++ lib.optionals withOpenCL [
+      llvmPackages.clang
+      llvmPackages.clang-unwrapped
+      llvmPackages.libclc
+      llvmPackages.libllvm
     ];
 
   depsBuildBuild = [
@@ -344,10 +364,12 @@ stdenv.mkDerivation {
     moveToOutput bin/pco_clc $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
-    moveToOutput "lib/lib*OpenCL*" $opencl
-    # Construct our own .icd file that contains an absolute path.
-    mkdir -p $opencl/etc/OpenCL/vendors/
-    echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+    ${lib.optionalString withOpenCL ''
+      moveToOutput "lib/lib*OpenCL*" $opencl
+      # Construct our own .icd file that contains an absolute path.
+      mkdir -p $opencl/etc/OpenCL/vendors/
+      echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+    ''}
 
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
