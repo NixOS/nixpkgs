@@ -201,6 +201,9 @@ let
       '';
       homepage = "https://flutter.dev";
       license = lib.licenses.bsd3;
+      sourceProvenance =
+        with lib.sourceTypes;
+        if useNixpkgsEngine then [ fromSource ] else [ binaryNativeCode ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
