@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmat-oss";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = "hmat-oss";
     tag = finalAttrs.version;
-    hash = "sha256-GnFlvZCEzSCcBVLjFWLe+AKXVA6UMs/gycrOJ2TBqrE=";
+    hash = "sha256-Yeeqze1J1u1j7a5UrivjCvwJdhBGeBqVouhbnjUrCX8=";
   };
 
   cmakeFlags = [
