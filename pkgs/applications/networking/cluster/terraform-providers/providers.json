@@ -372,11 +372,11 @@
     "vendorHash": "sha256-GEdgHY2cIiXxeIYev7zbGd4c+IyZZfeZtSj9Z/gG6E4="
   },
   "exoscale_exoscale": {
-    "hash": "sha256-dOgWrQoVMLGpTYaa80f22BS14073Iio9JrCyJl36caY=",
+    "hash": "sha256-8FIZO+iRqYa7y5Li8GoGnFT069vx4q4KczCgEB4SKuk=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.67.0",
+    "rev": "v0.67.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -462,13 +462,13 @@
     "vendorHash": "sha256-UmlhKa2SVgrhRc1EOO9sEkherIS77CP+hkAL3Y79h3U="
   },
   "grafana_grafana": {
-    "hash": "sha256-ou8S+18+vFmfPr1GuB2KjHzDCAQ0OT/a/KcrivnWo0g=",
+    "hash": "sha256-GfWspwBBff1Ds9RFFKFTGLDpuS7VSVwG/9iXrR9Q5e8=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v4.14.0",
+    "rev": "v4.17.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jdf10eXhTj0FGkG9bCZQYclbuGWwS0HAZX+4oET7oTQ="
+    "vendorHash": "sha256-Fs6xaO8I56mXRUqc63tTB+yQQeSZo72rMlgwqTyqH6Q="
   },
   "gridscale_gridscale": {
     "hash": "sha256-XdBGD94kMLcB3ycZABVT+skiPg7rYyR4ycfvnubj6JM=",
