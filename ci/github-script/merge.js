@@ -67,7 +67,11 @@ function runChecklist({
     }
   } else {
     // This is only used when no user is passed, i.e. for labeling.
-    checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
+    // We don't need to have a label if every eligible maintainer is also a
+    // a committer (because every maintainer can merge it themselves anyways).
+    checklist['PR has non-committer maintainers eligible to merge.'] =
+      eligible.size > 0 &&
+      eligible.size !== eligible.intersection(committers).size
   }
 
   const result = Object.values(checklist).every((v) =>
