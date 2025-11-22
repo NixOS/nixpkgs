@@ -86,6 +86,32 @@ let
       ];
     };
   };
+
+  buildImageXattrsTestImage = pkgs.dockerTools.buildImage {
+    name = "xattrs-test";
+    tag = "latest";
+    copyToRoot = [
+      pkgs.libcap
+      (pkgs.writeShellScriptBin "test-script" "echo test")
+    ];
+    runAsRoot = ''
+      cp /bin/test-script /test-script
+      bin/setcap 'cap_net_bind_service=+ep' /test-script
+    '';
+  };
+
+  layeredXattrsTestImage = pkgs.dockerTools.streamLayeredImage {
+    name = "xattrs-layered-test";
+    tag = "latest";
+    contents = [
+      pkgs.libcap
+      (pkgs.writeShellScriptBin "test-script" "echo test")
+    ];
+    fakeRootCommands = ''
+      cp bin/test-script test-script
+      bin/setcap 'cap_net_bind_service=+ep' test-script
+    '';
+  };
 in
 {
   name = "docker-tools";
@@ -597,6 +623,18 @@ in
         docker.succeed(
             "${nonRootTestImage} | docker load",
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
+        )
+
+    with subtest("buildImage: preserve root xattrs"):
+        docker.succeed(
+            "docker load <${buildImageXattrsTestImage}",
+            "docker run --rm ${buildImageXattrsTestImage.imageName} getcap /test-script | diff /dev/stdin <(echo '/test-script cap_net_bind_service=ep')"
+        )
+
+    with subtest("streamLayeredImage: preserve fakeroot xattrs"):
+        docker.succeed(
+            "${layeredXattrsTestImage} | docker load",
+            "docker run --rm ${layeredXattrsTestImage.imageName} getcap /test-script | diff /dev/stdin <(echo '/test-script cap_net_bind_service=ep')"
         )
   '';
 }

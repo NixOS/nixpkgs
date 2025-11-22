@@ -563,7 +563,7 @@ rec {
 
         echo "Packing layer..."
         mkdir -p $out
-        tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
+        tarhash=$(tar --xattrs --xattrs-include='*' -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
                     tee -p $out/layer.tar |
                     ${lib.getExe tarsum})
 
@@ -1092,6 +1092,7 @@ rec {
                   source $stdenv/setup
                   eval "$fakeRootCommands"
                   tar \
+                    --xattrs --xattrs-include='"'"'*'"'"' \
                     --sort name \
                     --exclude=./dev \
                     --exclude=./proc \
@@ -1111,6 +1112,7 @@ rec {
                   cd old_out
                   eval "$fakeRootCommands"
                   tar \
+                    --xattrs --xattrs-include='"'"'*'"'"' \
                     --sort name \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                     --hard-dereference \
