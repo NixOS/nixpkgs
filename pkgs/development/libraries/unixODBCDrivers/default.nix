@@ -104,11 +104,11 @@
 
   sqlite = stdenv.mkDerivation rec {
     pname = "sqlite-connector-odbc";
-    version = "0.9993";
+    version = "0.99991";
 
     src = fetchurl {
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
-      sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
+      hash = "sha256-TZStuNPN4fqUoorrDfzHvnMUW8383z1eIlQ02zHcilw=";
     };
 
     buildInputs = [
@@ -140,6 +140,7 @@
     meta = with lib; {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
+      changelog = "http://www.ch-werner.de/sqliteodbc/html/index.html#changelog";
       license = licenses.bsd2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ vlstill ];
