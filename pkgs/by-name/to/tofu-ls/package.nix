@@ -23,6 +23,12 @@ buildGoModule (finalAttrs: {
     "-s"
   ];
 
+  # Generate schema
+  # https://github.com/opentofu/tofu-ls/issues/129#issuecomment-3457512823
+  preBuild = ''
+    go generate .
+  '';
+
   checkFlags =
     let
       skippedTests = [
