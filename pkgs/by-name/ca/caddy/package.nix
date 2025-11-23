@@ -19,14 +19,14 @@ let
     hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGo125Module {
+buildGo125Module (finalAttrs: {
   pname = "caddy";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "caddyserver";
     repo = "caddy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KvikafRYPFZ0xCXqDdji1rxlkThEDEOHycK8GP5e8vk=";
   };
 
@@ -35,7 +35,7 @@ buildGo125Module {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
+    "-X github.com/caddyserver/caddy/v2.CustomVersion=${finalAttrs.version}"
   ];
 
   # matches upstream since v2.8.0
@@ -99,4 +99,4 @@ buildGo125Module {
       ryan4yin
     ];
   };
-}
+})
