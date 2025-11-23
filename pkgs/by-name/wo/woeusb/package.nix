@@ -78,12 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Create bootable USB disks from Windows ISO images";
     homepage = "https://github.com/WoeUSB/WoeUSB";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.linux;
     mainProgram = "woeusb";
   };
 })
