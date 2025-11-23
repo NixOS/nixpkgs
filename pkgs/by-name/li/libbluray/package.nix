@@ -19,6 +19,7 @@
   libxml2,
   withFonts ? true,
   freetype,
+  libbluray-full, # Used for tests
 }:
 
 # Info on how to use:
@@ -71,16 +72,9 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    variants = {
-      full = callPackage ./package.nix {
-        withAACS = true;
-        withBDplus = true;
-        withJava = true;
-      };
-    };
     tests = {
       # Verify the "full" package when verifying changes to this package
-      full = passthru.variants.full;
+      inherit libbluray-full;
     };
   };
 }
