@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Project-Tick";
     repo = "ProjT-Launcher";
     tag = finalAttrs.version;
-    hash = "sha256-wTyhOHNaxfrBNTa9cqK8oA4Nw5Rj8lPONjOrkSYwVjM=";
+    hash = "sha256-26NfnIfjngFb6cZeAq6NeQ7XGafhaJWwR8MOGAO9uiQ=";
     fetchSubmodules = true;
   };
 
