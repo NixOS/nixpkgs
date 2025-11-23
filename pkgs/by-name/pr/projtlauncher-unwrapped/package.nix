@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
   ];
 
-  doCheck = stdenv.hostPlatform.isLinux;
+  doCheck = true;
 
   dontWrapQtApps = true;
 
