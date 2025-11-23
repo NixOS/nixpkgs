@@ -6558,6 +6558,12 @@
     github = "dietmarw";
     githubId = 9332;
   };
+  Dietr1ch = {
+    name = "Dietrich Daroch";
+
+    github = "Dietr1ch";
+    githubId = 2096594;
+  };
   different-name = {
     name = "different-name";
     email = "hello@different-name.dev";
