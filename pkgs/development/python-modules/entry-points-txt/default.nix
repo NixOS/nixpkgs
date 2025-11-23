@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-8oGK7aIDgXkCLh/d38hWzfF367KhmggG2s820D2r/EA=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
