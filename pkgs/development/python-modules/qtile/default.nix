@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cairocffi,
   dbus-fast,
+  aiohttp,
+  cairo,
+  cffi,
   glib,
   iwlib,
   libcst,
@@ -24,6 +27,8 @@
   setuptools,
   setuptools-scm,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
   wlroots,
   xcbutilcursor,
   xcbutilwm,
@@ -35,36 +40,35 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.33.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     tag = "v${version}";
-    hash = "sha256-npteZR48xN3G5gDsHt8c67zzc8Tom1YxnxbnDuKZHVg=";
+    hash = "sha256-o92N8AQQfNQP8sX4LCnlq0Ppe9OA0+goCv+sOxMFYjo=";
   };
-
-  patches = [
-    ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
-  ];
-
-  postPatch = ''
-    substituteInPlace libqtile/pangocffi.py \
-      --replace-fail libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
-      --replace-fail libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
-      --replace-fail libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
-    substituteInPlace libqtile/backend/x11/xcursors.py \
-      --replace-fail libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
-    substituteInPlace libqtile/backend/wayland/cffi/build.py \
-        --replace-fail /usr/include/pixman-1 ${lib.getDev pixman}/include \
-        --replace-fail /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
     pkg-config
+  ];
+
+  env = {
+    "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
+    "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
+    "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
+    "QTILE_WLROOTS_PATH" = "${lib.getDev wlroots}/include/wlroots-0.19";
+  };
+
+  pypaBuildFlags = [
+    "--config-setting=backend=wayland"
+    "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
+    "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
+    "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
+    "--config-setting=XCBCURSOR=${lib.getLib xcbutilcursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
@@ -85,11 +89,20 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    cairo
     libinput
     libxkbcommon
     wayland
     wlroots
     xcbutilwm
+  ];
+
+  propagatedBuildInputs = [
+    wayland-scanner
+    wayland-protocols
+    cffi
+    xcffib
+    aiohttp
   ];
 
   doCheck = false;
