@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-gen-files";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "mkdocs-gen-files";
     tag = "v${version}";
-    hash = "sha256-nRRdY7/en42s4PmHH+9vccRIl4pIp1F/Ka1bYvSHpBw=";
+    hash = "sha256-9mOLRZZugaGCWR/Ms9z8CTvDp8QgAiGcKqiB/LGTApk=";
   };
 
   build-system = [
