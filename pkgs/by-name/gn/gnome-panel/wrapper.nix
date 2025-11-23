@@ -43,7 +43,6 @@ stdenv.mkDerivation {
   dontMoveSystemdUserUnits = true;
 
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   installPhase = ''
     runHook preInstall

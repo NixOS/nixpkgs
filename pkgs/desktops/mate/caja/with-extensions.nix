@@ -36,7 +36,6 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   installPhase = ''
     runHook preInstall

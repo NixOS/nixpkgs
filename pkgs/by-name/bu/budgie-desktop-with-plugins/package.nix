@@ -32,7 +32,6 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   installPhase = ''
     mkdir -p $out

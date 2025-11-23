@@ -29,7 +29,6 @@ stdenv.mkDerivation {
 
   # Trivial derivation
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   # For hacking purposes
   passthru.env = taffybarEnv;
