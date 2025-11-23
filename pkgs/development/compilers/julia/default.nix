@@ -71,8 +71,8 @@ in
   );
   julia_112 = wrapJulia (
     callPackage (import ./generic.nix {
-      version = "1.12.1";
-      hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
+      version = "1.12.2";
+      hash = "sha256-/LZBB1xUZeXeTeFdDFxzwjUXox/o5l+K2JtqfMhH1Gw=";
     }) { }
   );
 }
