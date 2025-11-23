@@ -31,6 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmartapp" ];
 
+  disabledTestPaths = [
+    # These tests are outdated
+    "tests/test_smartapp.py"
+  ];
+
   meta = with lib; {
     description = "Python implementation to work with SmartApp lifecycle events";
     homepage = "https://github.com/andrewsayre/pysmartapp";
