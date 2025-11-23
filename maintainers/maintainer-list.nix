@@ -28254,6 +28254,12 @@
     githubId = 1322287;
     name = "William O'Hanley";
   };
+  woile = {
+    email = "santiwilly@gmail.com";
+    github = "woile";
+    githubId = 2585816;
+    name = "Santiago Fraire Willemoes";
+  };
   woky = {
     email = "pampu.andrei@pm.me";
     github = "andreisergiu98";
