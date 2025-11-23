@@ -77,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
   # GTK4 is not supported yet. See:
   # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
   makeFlags = "gtk3";
+
+  postPatch = "sed -i '/^CFLAGS += -Werror$/d' library/make_linux.mak";
+
   preBuild = ''
     cd library
     mkdir -p ${finalAttrs.OUTPUT_DIR}
