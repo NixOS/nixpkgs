@@ -2,6 +2,9 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -14,15 +17,19 @@ buildPythonPackage rec {
     hash = "sha256-Oas3nUypBbr+1Q9a/Do95vlkNgV3b7yrxNMIjU7TgrA=";
   };
 
+  build-system = [
+    setuptools
+  ];
+
   # has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pymorphy3_dicts_ru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Russian dictionaries for pymorphy3";
     homepage = "https://github.com/no-plagiarism/pymorphy3-dicts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

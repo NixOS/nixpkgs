@@ -18,6 +18,7 @@
   hypothesis,
   iso8601,
   lzip,
+  moto,
   msgpack,
   postgresql,
   postgresqlTestHook,
@@ -29,7 +30,9 @@
   pytest-postgresql,
   pytz,
   requests-mock,
+  swh-model,
   systemd-python,
+  tqdm,
   types-deprecated,
   types-psycopg2,
   types-pytz,
@@ -41,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "swh-core";
-  version = "4.5.2";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -50,12 +53,17 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-core";
     tag = "v${version}";
-    hash = "sha256-yNWij9GclQCysQe9Bukr4cHlZgSQqLAuX1KwGWzAK+0=";
+    hash = "sha256-dI+xfj0DnUbBdYIVycyJQg3B/jnH/eg/Ju8YX2k8Qkc=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [
@@ -79,6 +87,7 @@ buildPythonPackage rec {
     hypothesis
     iso8601
     lzip
+    moto
     msgpack
     postgresql
     postgresqlTestHook
@@ -90,7 +99,9 @@ buildPythonPackage rec {
     pytest-postgresql
     pytz
     requests-mock
+    swh-model
     systemd-python
+    tqdm
     types-deprecated
     types-psycopg2
     types-pytz
@@ -111,6 +122,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-core/-/tags/${src.tag}";
     description = "Low-level utilities and helpers used by almost all other modules in the stack";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-core";
     license = lib.licenses.gpl3Only;

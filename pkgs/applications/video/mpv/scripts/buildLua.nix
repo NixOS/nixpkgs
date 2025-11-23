@@ -23,7 +23,7 @@ lib.makeOverridable (
     extendedBy (if lib.isFunction args then args else (_: args)) (
       {
         pname,
-        extraScripts ? [ ],
+        extraScriptsToCopy ? [ ],
         runtime-dependencies ? [ ],
         ...
       }@args:
@@ -59,8 +59,8 @@ lib.makeOverridable (
               echo "Script directory '${scriptPath}' does not contain 'main.lua'" >&2
               exit 1
             }
-            [ ${with builtins; toString (length extraScripts)} -eq 0 ] || {
-              echo "mpvScripts.buildLua does not support 'extraScripts'" \
+            [ ${with builtins; toString (length extraScriptsToCopy)} -eq 0 ] || {
+              echo "mpvScripts.buildLua does not support 'extraScriptsToCopy'" \
                    "when 'scriptPath' is a directory" >&2
               exit 1
             }
@@ -69,8 +69,8 @@ lib.makeOverridable (
           else
             install -m644 -Dt "${scriptsDir}" ${escaped scriptPath}
             ${lib.optionalString (
-              extraScripts != [ ]
-            ) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''}
+              extraScriptsToCopy != [ ]
+            ) ''cp -at "${scriptsDir}/" ${escapedList extraScriptsToCopy}''}
           fi
 
           runHook postInstall
