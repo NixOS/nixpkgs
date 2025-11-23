@@ -1,34 +1,46 @@
 {
   lib,
-  callPackage,
+  newScope,
+  config,
   build ? null,
 }:
-
-let
-  pkgs = {
-    mod = {
+lib.makeScope newScope (
+  self:
+  let
+    inherit (self) callPackage;
+  in
+  {
+    buildMod = callPackage ./mkAsset.nix {
+      assetType = "mod";
+    };
+    buildSoundPack = callPackage ./mkAsset.nix {
+      assetType = "soundpack";
     };
 
-    soundpack = {
+    buildTileSet = callPackage ./mkAsset.nix {
+      assetType = "tileset";
     };
 
-    tileset = {
-      UndeadPeople = callPackage ./tilesets/UndeadPeople { };
+    mods = { };
+
+    soundPacks = { };
+
+    tileSets = {
+      undead-people = callPackage ./tilesets/UndeadPeople { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      UndeadPeople = lib.warnOnInstantiate "'cataclysm.pkgs.tileSets.UndeadPeople' has been renamed to 'cataclysm.pkgs.tileSets.undead-people'" self.tileSets.undead-people;
     };
-  };
-
-  pkgs' = lib.mapAttrs (_: mods: lib.filterAttrs isAvailable mods) pkgs;
-
-  isAvailable =
-    _: mod:
-    if (build == null) then
-      true
-    else if build.isTiles then
-      mod.forTiles or false
-    else if build.isCurses then
-      mod.forCurses or false
-    else
-      false;
-in
-
-lib.makeExtensible (_: pkgs')
+  }
+  // (lib.optionalAttrs config.allowAliases {
+    mod = lib.mapAttrs (
+      _: lib.warn "'cataclysm.pkgs.mod' has been renamed to 'cataclysm.pkgs.mods'"
+    ) self.mods;
+    soundpack = lib.mapAttrs (
+      _: lib.warn "'cataclysm.pkgs.soundpack' has been renamed to 'cataclysm.pkgs.soundPacks'"
+    ) self.soundPacks;
+    tileset = lib.mapAttrs (
+      _: lib.warn "'cataclysm.pkgs.tileset' has been renamed to 'cataclysm.pkgs.tileSets'"
+    ) self.tileSets;
+  })
+)

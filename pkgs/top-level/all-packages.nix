@@ -12932,11 +12932,7 @@ with pkgs;
     inherit (python3Packages) beancount beancount-plugin-utils;
   };
 
-  cataclysmDDA = callPackage ../games/cataclysm-dda { };
-
-  cataclysm-dda = cataclysmDDA.stable.tiles;
-
-  cataclysm-dda-git = cataclysmDDA.git.tiles;
+  cataclysmPackages = recurseIntoAttrs (callPackage ../games/cataclysm-dda { });
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
