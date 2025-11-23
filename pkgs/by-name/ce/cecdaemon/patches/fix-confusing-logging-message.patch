@@ -1,0 +1,31 @@
+commit 7d6c889b33bd5f5a2b230d4634445acfa21c4969
+Author:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+AuthorDate: Sun Nov 23 12:13:06 2025 -0800
+Commit:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+CommitDate: Sun Nov 23 12:13:06 2025 -0800
+
+    Fix confusing logging message
+    
+    The previous behavior would *always* log "running command", even if the
+    holdtime had not yet passed.
+
+diff --git a/cecdaemon/custom_cmd.py b/cecdaemon/custom_cmd.py
+index ff41347..f4854a1 100644
+--- a/cecdaemon/custom_cmd.py
++++ b/cecdaemon/custom_cmd.py
+@@ -23,11 +23,14 @@ def run_command(self, key, state):
+         :str key: the key pressed
+         :int state: the time key was pressed in ms
+         """
+-        logging.info('running command: %s', self.command)
+         try:
+             if state >= int(self.holdtime):
++                logging.info('running command: %s', self.command)
+                 cmd = Popen(self.command.split(), stdout=PIPE, stderr=STDOUT)
+                 output, _ = cmd.communicate()
+                 logging.debug(str(output))
++            else:
++                logging.info('not running command: %s, as not enough time has passed (%s >= %s)', self.command, state, int(self.holdtime))
++
+         except OSError:
+             logging.warning('failed to run custom command for key %s', key)
