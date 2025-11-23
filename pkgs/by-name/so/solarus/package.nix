@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ marcin-serwin ];
     platforms = lib.platforms.linux;
+    # added zerone-coder as maintainer
   };
 })
