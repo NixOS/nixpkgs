@@ -37,7 +37,6 @@ buildNpmPackage' rec {
   nativeBuildInputs = [
     node-gyp'
     python3
-    versionCheckHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -47,6 +46,9 @@ buildNpmPackage' rec {
     udev
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
 
