@@ -6,14 +6,14 @@
 
 buildGoModule rec {
   pname = "vegeta";
-  version = "12.12.0";
+  version = "12.13.0";
   rev = "03ca49e9b419c106db29d687827c4c823d8b8ece";
 
   src = fetchFromGitHub {
     owner = "tsenart";
     repo = "vegeta";
     rev = "v${version}";
-    hash = "sha256-nTtQ/BB5rU+0k4dPRCmukCRNI0iFTjHIJiSTN0cNR+Q=";
+    hash = "sha256-Co+bGUSdiapDSJpcgOlCGMU3p0BfjtG1WjmErR8W/OM=";
   };
 
   vendorHash = "sha256-0Ho1HYckFHaWEE6Ti3fIL/t0hBj5MnKOd4fOZx+LYiE=";
