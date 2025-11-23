@@ -6,7 +6,6 @@
   fzf,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "iterfzf";
   version = "1.8.0.62.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dahlia";
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic interface to fzf, a CLI fuzzy finder";
     homepage = "https://github.com/dahlia/iterfzf";
-    changelog = "https://github.com/dahlia/iterfzf/releases/tag/${version}";
+    changelog = "https://github.com/dahlia/iterfzf/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.unix;
