@@ -33,6 +33,10 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook3
   ];
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   propagatedBuildInputs = [
     p7zip
