@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   postFixup = ''
-    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} --prefix PATH : ${
+    wrapProgram $out/bin/pugio --prefix PATH : ${
       lib.makeBinPath [
         cargo-bloat
         graphviz
