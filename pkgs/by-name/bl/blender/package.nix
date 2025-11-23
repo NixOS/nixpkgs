@@ -16,7 +16,7 @@
   embree,
   fetchzip,
   fetchFromGitHub,
-  ffmpeg_7,
+  ffmpeg,
   fftw,
   fftwFloat,
   freetype,
@@ -234,7 +234,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     alembic
     boost
-    ffmpeg_7
+    ffmpeg
     fftw
     fftwFloat
     freetype
