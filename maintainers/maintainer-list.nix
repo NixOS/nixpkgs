@@ -15592,6 +15592,14 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lyranight = {
+    email = "lyranight@disroot.org";
+    github = "lyranight";
+    githubId = 233298324;
+    keys = [ { fingerprint = "9885 C5EC 266E 25CD FEDC  2FBA 1E3C 11E0 D3FB 70C6"; } ];
+    matrix = "@lyranight:converser.eu";
+    name = "Lyra Nightingale";
+  };
   lzcunt = {
     email = "umutinanerdogan@proton.me";
     github = "lzcunt";
