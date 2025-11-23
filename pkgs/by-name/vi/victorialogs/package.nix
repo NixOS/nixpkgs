@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.36.1";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZhgZ8x1ESXrNMU6Sa4cQMurTZ+obD/JqqIJFJ18KOA=";
+    hash = "sha256-UosxxeTZzM/f2rqUdMqPxHgnu57/dUc/X7gFOySy+M4=";
   };
 
   vendorHash = null;
@@ -35,11 +35,9 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.2" "go ${finalAttrs.passthru.go.version}"
+    sed -i go.mod -e 's/^go .*/go ${finalAttrs.passthru.go.version}/'
+    sed -i vendor/modules.txt -e 's/## explicit; go .*/## explicit; go ${finalAttrs.passthru.go.version}/'
 
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
   '';
 
   ldflags = [
