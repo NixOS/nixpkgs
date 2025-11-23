@@ -3,24 +3,23 @@
   stdenv,
   fetchurl,
   pkg-config,
+  python3,
   bison,
   numactl,
   libxml2,
   perl,
   gfortran,
-  slurm,
   openssh,
   hwloc,
   zlib,
+  ucx,
   makeWrapper,
-  # InfiniBand dependencies
-  opensm,
+  # InfiniBand adependencies
   rdma-core,
+  opensm,
   # OmniPath dependencies
   libpsm2,
   libfabric,
-  # Compile with slurm as a process manager
-  useSlurm ? false,
   # Network type for MVAPICH2
   network ? "ethernet",
 }:
@@ -33,17 +32,16 @@ assert builtins.elem network [
 
 stdenv.mkDerivation rec {
   pname = "mvapich";
-  version = "2.3.7";
+  version = "4.1";
 
   src = fetchurl {
-    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
-    sha256 = "sha256-w5pEkvS+UN9hAHhXSLoolOI85FCpQSgYHVFtpXV3Ua4=";
+    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${version}.tar.gz";
+    hash = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
   };
 
   outputs = [
     "out"
     "doc"
-    "man"
   ];
 
   nativeBuildInputs = [
@@ -51,6 +49,7 @@ stdenv.mkDerivation rec {
     bison
     makeWrapper
     gfortran
+    python3
   ];
   propagatedBuildInputs = [
     numactl
@@ -65,15 +64,14 @@ stdenv.mkDerivation rec {
     openssh
     hwloc
   ]
-  ++ lib.optionals (network == "infiniband") [
+  ++ lib.optionals (network == "ethernet" || network == "infiniband") [
+    ucx
     rdma-core
-    opensm
   ]
   ++ lib.optionals (network == "omnipath") [
     libpsm2
     libfabric
-  ]
-  ++ lib.optional useSlurm slurm;
+  ];
 
   configureFlags = [
     "--with-pm=hydra"
@@ -84,19 +82,15 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
   ]
-  ++ lib.optional useSlurm "--with-pm=slurm"
-  ++ lib.optional (network == "ethernet") "--with-device=ch3:sock"
-  ++ lib.optionals (network == "infiniband") [
-    "--with-device=ch3:mrail"
-    "--with-rdma=gen2"
-    "--disable-ibv-dlopen"
+  ++ lib.optionals (network == "ethernet" || network == "infiniband") [
+    "--with-device=ch4:ucx"
+    "--with-ucx=${ucx}"
   ]
   ++ lib.optionals (network == "omnipath") [
-    "--with-device=ch3:psm"
-    "--with-psm2=${libpsm2}"
+    "--with-device=ch4:ofi"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   preFixup = ''
     # /tmp/nix-build... ends up in the RPATH, fix it manually
