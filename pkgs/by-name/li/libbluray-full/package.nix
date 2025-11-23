@@ -1,4 +1,4 @@
-{libbluray}:
+{ libbluray }:
 libbluray.override {
   withAACS = true;
   withBDplus = true;
