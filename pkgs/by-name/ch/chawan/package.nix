@@ -3,14 +3,12 @@
   stdenv,
   fetchFromSourcehut,
   makeBinaryWrapper,
-  curlMinimal,
+  openssl,
+  libssh2,
   mandoc,
-  ncurses,
   nim,
-  pandoc,
   pkg-config,
   brotli,
-  zlib,
   gitUpdater,
   versionCheckHook,
 }:
@@ -33,20 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
-    pandoc
     pkg-config
     brotli
   ];
 
   buildInputs = [
-    curlMinimal
-    ncurses
-    zlib
+    openssl
+    libssh2
   ];
 
   buildFlags = [
     "all"
-    "manpage"
   ];
   installFlags = [
     "DESTDIR=$(out)"
