@@ -11,19 +11,21 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.27.6";
+  version = "0.28.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RfPdCz+xPfvqhW3ZbJrP53vrpXubAZRE7pYu0rdidt0=";
+    hash = "sha256-0oNQlOktCj0XItA6/VSYMRWyFy1XWBpmStairz0zwSw=";
   };
 
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
+
+  hardeningDisable = [ "fortify" ]; # needed for jitterentropy
 
   dontUseCmakeConfigure = true;
 

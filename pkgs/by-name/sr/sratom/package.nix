@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sratom";
-  version = "0.6.18";
+  version = "0.6.20";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-TGptngtNbAHMBqiEmRD+zrkuZmyzh3nGFN0kBKmTHpI=";
+    hash = "sha256-OCbpGGyrxDyl41n8w9gjgGAjL1+KIJC+XcmrOQ5bZHc=";
   };
 
   strictDeps = true;
