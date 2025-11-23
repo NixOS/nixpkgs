@@ -6,15 +6,12 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-fat";
   version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
