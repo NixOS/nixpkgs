@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Python library for update and track the requirements";
     homepage = "https://github.com/alanhamlett/pip-update-requirements";
-    changelog = "https://github.com/alanhamlett/pip-update-requirements/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/alanhamlett/pip-update-requirements/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pur";
