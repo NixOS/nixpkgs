@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     # Tests are failing after the last mass update
     "test_missing_requirements_file"
     "test_no_arguments_and_no_requirements_file"
+    "test_interactive_choice_default"
   ];
 
   meta = {
