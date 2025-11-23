@@ -297,7 +297,8 @@ lib.extendMkDerivation {
         else
           "/no-cert-file.crt";
 
-      outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
+      outputHashMode =
+        if (finalAttrs.recursiveHash || finalAttrs.executable) then "recursive" else "flat";
 
       curlOpts = lib.warnIf (lib.isList curlOpts) (
         let
@@ -324,6 +325,7 @@ lib.extendMkDerivation {
         executable
         mirrorsFile
         postFetch
+        recursiveHash
         showURLs
         ;
 
