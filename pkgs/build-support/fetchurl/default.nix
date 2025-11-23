@@ -290,7 +290,7 @@ lib.extendMkDerivation {
             || hash_.outputHash == lib.fakeSha256
             || hash_.outputHash == lib.fakeSha512
             || hash_.outputHash == lib.fakeHash
-            || netrcPhase != null
+            || finalAttrs.netrcPhase != null
           )
         then
           "${cacert}/etc/ssl/certs/ca-bundle.crt"
@@ -324,6 +324,7 @@ lib.extendMkDerivation {
         downloadToTemp
         executable
         mirrorsFile
+        netrcPhase
         postFetch
         recursiveHash
         showURLs
@@ -336,11 +337,11 @@ lib.extendMkDerivation {
       inherit preferLocalBuild;
 
       postHook =
-        if netrcPhase == null then
+        if finalAttrs.netrcPhase == null then
           null
         else
           ''
-            ${netrcPhase}
+            ${finalAttrs.netrcPhase}
             curlOpts="$curlOpts --netrc-file $PWD/netrc"
           '';
 
