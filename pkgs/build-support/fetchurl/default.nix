@@ -324,13 +324,14 @@ lib.extendMkDerivation {
         downloadToTemp
         executable
         mirrorsFile
+        netrcImpureEnvVars
         netrcPhase
         postFetch
         recursiveHash
         showURLs
         ;
 
-      impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+      impureEnvVars = impureEnvVars ++ finalAttrs.netrcImpureEnvVars;
 
       nixpkgsVersion = lib.trivial.release;
 
