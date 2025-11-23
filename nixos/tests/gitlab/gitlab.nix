@@ -7,7 +7,7 @@
 # - Opening and closing issues.
 # - Downloading repository archives as tar.gz and tar.bz2
 # Run with
-# [nixpkgs]$ nix-build -A nixosTests.gitlab
+# [nixpkgs]$ nix-build -A nixosTests.gitlab.gitlab
 
 { pkgs, lib, ... }:
 
