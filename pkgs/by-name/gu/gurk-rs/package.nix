@@ -64,6 +64,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [
+      devhell
+      mattkang
+    ];
   };
 }
