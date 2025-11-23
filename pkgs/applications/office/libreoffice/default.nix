@@ -238,26 +238,29 @@ let
     help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
+  kdeDependencies = [
+    qt6.qtbase.out # has a dev output but you cannot find the headers there
+    qt6.qtmultimedia.out
+    kdePackages.kconfig
+    kdePackages.kcoreaddons
+    kdePackages.ki18n
+    kdePackages.kio
+    kdePackages.kwindowsystem
+  ];
+  mkKdeDeps =
+    pkgs: func:
+    symlinkJoin {
+      name = "libreoffice-kde-dependencies-${version}";
+      paths = flatten (
+        map (e: [
+          (func e)
+        ]) pkgs
+      );
+    };
   # See `postPatch` for details
-  kdeDeps = symlinkJoin {
-    name = "libreoffice-kde-dependencies-${version}";
-    paths = flatten (
-      map
-        (e: [
-          (getDev e)
-          (getLib e)
-        ])
-        [
-          qt6.qtbase
-          qt6.qtmultimedia
-          kdePackages.kconfig
-          kdePackages.kcoreaddons
-          kdePackages.ki18n
-          kdePackages.kio
-          kdePackages.kwindowsystem
-        ]
-    );
-  };
+  kdeDepsIncludes = mkKdeDeps kdeDependencies getDev;
+  kdeDepsLibs = mkKdeDeps kdeDependencies getLib;
+
   tarballPath = "external/tarballs";
 
 in
@@ -519,10 +522,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
     # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
     # add the missing dependencies to it).
-    export QT6INC=${kdeDeps}/include
-    export QT6LIB=${kdeDeps}/lib
-    export KF6INC="${kdeDeps}/include ${kdeDeps}/include/KF6"
-    export KF6LIB=${kdeDeps}/lib
+    export QT6INC=${kdeDepsIncludes}/include
+    export QT6LIB=${kdeDepsLibs}/lib
+    export KF6INC="${kdeDepsIncludes}/include ${kdeDepsIncludes}/include/KF6"
+    export KF6LIB=${kdeDepsLibs}/lib
   '';
 
   configureFlags = [
