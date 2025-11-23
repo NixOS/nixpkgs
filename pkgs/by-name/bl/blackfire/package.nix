@@ -7,6 +7,7 @@
   curl,
   jq,
   common-updater-scripts,
+  php,
 }:
 
 stdenv.mkDerivation rec {
@@ -115,5 +116,6 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
