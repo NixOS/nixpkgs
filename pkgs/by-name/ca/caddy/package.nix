@@ -5,10 +5,10 @@
   fetchFromGitHub,
   nixosTests,
   caddy,
-  testers,
   installShellFiles,
   stdenv,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 let
   version = "2.10.2";
@@ -75,14 +75,17 @@ buildGo125Module {
   passthru = {
     tests = {
       inherit (nixosTests) caddy;
-      version = testers.testVersion {
-        command = "${caddy}/bin/caddy version";
-        package = caddy;
-      };
       acme-integration = nixosTests.acme.caddy;
     };
     withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
+
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://caddyserver.com";
