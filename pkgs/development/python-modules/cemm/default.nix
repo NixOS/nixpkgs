@@ -31,6 +31,12 @@ buildPythonPackage rec {
       url = "https://github.com/klaasnicolaas/python-cemm/commit/1e373dac078f18563264e6733baf6a93962cac4b.patch";
       hash = "sha256-DVNn4BZwi8yNpKFmzt7YSYhzzB4vaAyrd/My8TtYzj0=";
     })
+    # https://github.com/klaasnicolaas/python-cemm/pull/568
+    (fetchpatch {
+      name = "replace-async_timeout.patch";
+      url = "https://github.com/klaasnicolaas/python-cemm/commit/a818e7ccf196cd5cd4c3e6bf503fb932993281ca.patch";
+      hash = "sha256-MwPxK+TRZVvf0sS6HS3+CRRY7dDr1qwCCJ+arQ26gWU=";
+    })
   ];
 
   postPatch = ''
