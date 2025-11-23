@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.5.14";
+  version = "3.6.6";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-cF7gg4kT0z/7Qu7d6AyXpnvrSQ937JbFUgpXw5F4AWE=";
+    hash = "sha256-aCk9id3yFAQHh5plG0LZ0F4S9AP2ljPsY1qWop2QtPM=";
   };
 
   dontFixup = true;
@@ -40,6 +40,8 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
@@ -48,6 +50,7 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
       steinybot
       tricktron
+      emaiax
     ];
     platforms = [
       "x86_64-darwin"
