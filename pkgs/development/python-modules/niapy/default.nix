@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "NiaOrg";
     repo = "NiaPy";
     tag = "v${version}";
-    hash = "sha256-8hKT0WxnJijm22w4DkzicvtikaTL/mL3VhQX/WVHL58=";
+    hash = "sha256-o/JHFPsYMHxSkUMfRbR3SJawbzTsoh6ae0pyxLd1bAs=";
   };
 
   build-system = [ poetry-core ];
