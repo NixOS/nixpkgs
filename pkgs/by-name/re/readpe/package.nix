@@ -4,19 +4,15 @@
   openssl,
   fetchFromGitHub,
 }:
-let
-  version = "0.85.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "readpe";
-  inherit version;
+  version = "0.85.1";
 
   src = fetchFromGitHub {
     owner = "mentebinaria";
     repo = "readpe";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-e9omL/HSlzBkJSUnjw271hmXGhasZlWw9X8P8ohoRi0=";
-    fetchSubmodules = true;
   };
 
   buildInputs = [ openssl ];
@@ -34,4 +30,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ jeschli ];
     platforms = platforms.linux;
   };
-}
+})
