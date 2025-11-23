@@ -56,6 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dahlia/iterfzf/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 }
