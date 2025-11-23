@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nickgerace";
     repo = "gfold";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-sPvhZaDGInXH2PT8fg28m7wyDZiIE4fFScNO8WIjV9s=";
   };
 
