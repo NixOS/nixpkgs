@@ -27,13 +27,13 @@
   vala,
   fetchpatch,
   withQt5 ? false,
-  qtbase,
+  qt5,
   yelp-tools,
   yelp-xsl,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm";
   version = "1.32.0";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lightdm";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
   };
 
@@ -74,13 +74,13 @@ stdenv.mkDerivation rec {
     pam
     polkit
   ]
-  ++ lib.optional withQt5 qtbase;
+  ++ lib.optional withQt5 qt5.qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/lightdm/raw/4cf0d2bed8d1c68970b0322ccd5dbbbb7a0b12bc/f/lightdm-1.25.1-disable_dmrc.patch";
-      sha256 = "06f7iabagrsiws2l75sx2jyljknr9js7ydn151p3qfi104d1541n";
+      hash = "sha256-NpASGgEhOjxuKME2f7RM2U5JvRRdl0OF5lHnp5aKxxk=";
     })
 
     # Hardcode plymouth to fix transitions.
@@ -128,11 +128,18 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) lightdm; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/canonical/lightdm";
     description = "Cross-desktop display manager";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    teams = [ teams.pantheon ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      gpl3Plus
+      # and (
+      lgpl2Only
+      # or
+      lgpl3Only
+      # )
+    ];
+    teams = [ lib.teams.pantheon ];
   };
-}
+})

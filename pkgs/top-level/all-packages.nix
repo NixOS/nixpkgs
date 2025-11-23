@@ -12160,8 +12160,6 @@ with pkgs;
     stdenv = stdenv_32bit;
   };
 
-  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
-
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   lightdm-gtk-greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
