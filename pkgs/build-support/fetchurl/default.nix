@@ -164,12 +164,6 @@ lib.extendMkDerivation {
         else
           throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
 
-      urls_ =
-        let
-          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
-        in
-        if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
-
       hash_ =
         if
           with lib.lists;
@@ -183,7 +177,7 @@ lib.extendMkDerivation {
             ]
           ) > 1
         then
-          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
+          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } finalAttrs.urls}"
         else
 
         if hash != "" then
@@ -195,7 +189,9 @@ lib.extendMkDerivation {
           if outputHashAlgo != "" then
             { inherit outputHashAlgo outputHash; }
           else
-            throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
+            throw "fetchurl was passed outputHash without outputHashAlgo: ${
+              lib.generators.toPretty { } finalAttrs.urls
+            }"
         else if sha512 != "" then
           {
             outputHashAlgo = "sha512";
@@ -217,7 +213,9 @@ lib.extendMkDerivation {
             outputHash = lib.fakeHash;
           }
         else
-          throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+          throw "fetchurl requires a hash for fixed-output derivation: ${
+            lib.generators.toPretty { } finalAttrs.urls
+          }";
 
       finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
       finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
@@ -248,13 +246,17 @@ lib.extendMkDerivation {
         else if name != null then
           name
         else
-          baseNameOf (toString (lib.head urls_));
+          baseNameOf (toString (lib.head finalAttrs.urls));
 
       builder = ./builder.sh;
 
       nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
-      urls = urls_;
+      urls =
+        let
+          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+        in
+        if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
       # If set, prefer the content-addressable mirrors
       # (http://tarballs.nixos.org) over the original URLs.
@@ -299,7 +301,7 @@ lib.extendMkDerivation {
 
       curlOpts = lib.warnIf (lib.isList curlOpts) (
         let
-          url = toString (builtins.head urls_);
+          url = toString (builtins.head finalAttrs.urls);
           curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
           curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
           curlOptsListElementsRepresentation =
