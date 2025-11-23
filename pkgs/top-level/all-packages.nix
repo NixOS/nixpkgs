@@ -3321,10 +3321,6 @@ with pkgs;
   libportal-qt5 = libportal.override { variant = "qt5"; };
   libportal-qt6 = libportal.override { variant = "qt6"; };
 
-  jesec-rtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent {
-    libtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent/libtorrent.nix { };
-  };
-
   librest = callPackage ../development/libraries/librest { };
 
   librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
