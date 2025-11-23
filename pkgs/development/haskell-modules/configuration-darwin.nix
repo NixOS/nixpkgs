@@ -398,6 +398,10 @@ self: super:
       '';
     }) super.rio;
 
+    # Don't use homebrew icu on macOS
+    # https://github.com/NixOS/nixpkgs/issues/462046
+    text-icu = disableCabalFlag "homebrew" super.text-icu;
+
     # https://github.com/haskell-crypto/cryptonite/issues/360
     cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 
