@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dexed";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
+    hash = "sha256-SPIcaFwx4uGx4Bc1EH1FTnAZ2BAno2h3iO0yhB3G71U=";
   };
 
   postPatch = ''
