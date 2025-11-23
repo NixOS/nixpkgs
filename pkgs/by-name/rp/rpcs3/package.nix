@@ -14,7 +14,7 @@
   vulkan-loader,
   libpng,
   libSM,
-  ffmpeg_7,
+  ffmpeg,
   libevdev,
   libusb1,
   zlib,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-loader
     libpng
-    ffmpeg_7
+    ffmpeg
     libevdev
     zlib
     libusb1
