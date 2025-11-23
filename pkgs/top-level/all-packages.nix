@@ -7177,6 +7177,8 @@ with pkgs;
       }
   );
 
+  libbluray-full = libbluray.variants.full;
+
   mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
