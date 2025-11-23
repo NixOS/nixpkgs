@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
+    homepage = "https://github.com/dellytools/delly";
     mainProgram = "delly";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];

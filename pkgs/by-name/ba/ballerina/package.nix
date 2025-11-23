@@ -50,6 +50,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Open-source programming language for the cloud";
+    homepage = "https://ballerina.io";
     mainProgram = "bal";
     license = licenses.asl20;
     platforms = openjdk.meta.platforms;

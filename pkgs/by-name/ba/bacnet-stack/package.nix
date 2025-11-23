@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "BACnet open source protocol stack for embedded systems, Linux, and Windows";
+    homepage = "https://github.com/bacnet-stack/bacnet-stack";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ WhittlesJr ];

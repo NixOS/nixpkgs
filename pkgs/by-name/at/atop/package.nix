@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
       memory growth, disk utilization, priority, username, state, and exit code.
     '';
     license = licenses.gpl2Plus;
+    homepage = "http://atoptool.nl";
     downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }
