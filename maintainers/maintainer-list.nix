@@ -1646,12 +1646,6 @@
     githubId = 9131943;
     name = "Andrew Bastin";
   };
-  andrewchambers = {
-    email = "ac@acha.ninja";
-    github = "andrewchambers";
-    githubId = 962885;
-    name = "Andrew Chambers";
-  };
   andrewfield = {
     email = "andrew_field@hotmail.co.uk";
     github = "andrew-field";
