@@ -54,7 +54,7 @@ gradleUpdateScript() {
     runHook preBuild
     runHook preGradleUpdate
 
-    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:-nixDownloadDeps}
+    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:-nixDownloadDeps --no-configuration-cache}
 
     runHook postGradleUpdate
 }
