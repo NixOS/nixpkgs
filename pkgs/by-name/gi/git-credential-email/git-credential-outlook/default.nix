@@ -3,12 +3,9 @@
   callPackage,
 }:
 
-let
-  script = "git-credential-outlook";
-in
 callPackage ../package.nix {
-  pname = script;
-  scripts = [ script ];
+  pname = "git-credential-outlook";
+  scripts = [ "git-credential-outlook" ];
   description = "Git credential helper for Microsoft Outlook accounts";
   license = lib.licenses.asl20;
 }

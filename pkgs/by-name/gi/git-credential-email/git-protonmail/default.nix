@@ -3,12 +3,9 @@
   callPackage,
 }:
 
-let
-  script = "git-protonmail";
-in
 callPackage ../package.nix {
-  pname = script;
-  scripts = [ script ];
+  pname = "git-protonmail";
+  scripts = [ "git-protonmail" ];
   description = "Git helper to use ProtonMail API to send emails";
   license = lib.licenses.gpl3Only;
 }

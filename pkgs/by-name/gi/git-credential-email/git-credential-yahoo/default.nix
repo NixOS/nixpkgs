@@ -3,12 +3,9 @@
   callPackage,
 }:
 
-let
-  script = "git-credential-yahoo";
-in
 callPackage ../package.nix {
-  pname = script;
-  scripts = [ script ];
+  pname = "git-credential-yahoo";
+  scripts = [ "git-credential-yahoo" ];
   description = "Git credential helper for Yahoo accounts";
   license = lib.licenses.asl20;
 }

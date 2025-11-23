@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   withOpencv ? false,
-  withPyqt6 ? if builtins.elem "git-protonmail" scripts then true else false,
+  withPyqt6 ? builtins.elem "git-protonmail" scripts,
   withQrcode ? true,
   pname ? "git-credential-email",
   scripts ? [
@@ -58,10 +58,10 @@ python3Packages.buildPythonApplication rec {
     install -D -t $out/bin ${lib.concatStringsSep " " scripts}
   '';
 
-  meta = rec {
+  meta = {
     inherit description license;
     homepage = "https://github.com/AdityaGarg8/git-credential-email";
-    changelog = "${homepage}/releases/tag/${src.tag}";
+    changelog = "https://github.com/AdityaGarg8/git-credential-email/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ sephalon ];
   };
 }

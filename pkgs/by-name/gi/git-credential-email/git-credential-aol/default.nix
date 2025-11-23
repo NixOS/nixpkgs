@@ -3,12 +3,9 @@
   callPackage,
 }:
 
-let
-  script = "git-credential-aol";
-in
 callPackage ../package.nix {
-  pname = script;
-  scripts = [ script ];
+  pname = "git-credential-aol";
+  scripts = [ "git-credential-aol" ];
   description = "Git credential helper for AOL accounts";
   license = lib.licenses.asl20;
 }

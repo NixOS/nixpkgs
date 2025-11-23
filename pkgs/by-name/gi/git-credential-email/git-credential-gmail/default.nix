@@ -3,12 +3,9 @@
   callPackage,
 }:
 
-let
-  script = "git-credential-gmail";
-in
 callPackage ../package.nix {
-  pname = script;
-  scripts = [ script ];
+  pname = "git-credential-gmail";
+  scripts = [ "git-credential-gmail" ];
   description = "Git credential helper for Gmail accounts";
   license = lib.licenses.asl20;
 }
