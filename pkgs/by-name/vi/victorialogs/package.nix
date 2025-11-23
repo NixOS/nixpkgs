@@ -33,12 +33,9 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withVlAgent [ "app/vlagent" ];
 
   postPatch = ''
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.2" "go ${finalAttrs.passthru.go.version}"
-
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+    # Relax go version to major.minor
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
   '';
 
   ldflags = [
