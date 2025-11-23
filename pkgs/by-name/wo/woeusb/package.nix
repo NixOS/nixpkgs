@@ -20,14 +20,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.2.4";
   pname = "woeusb";
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
     for file in sbin/woeusb share/man/man1/woeusb.1; do
       substituteInPlace "$file" \
-        --replace '@@WOEUSB_VERSION@@' '${version}'
+        --replace '@@WOEUSB_VERSION@@' '${finalAttrs.version}'
     done
   '';
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "woeusb";
   };
-}
+})
