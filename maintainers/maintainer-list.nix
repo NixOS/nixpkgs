@@ -1511,6 +1511,12 @@
     githubId = 37040543;
     name = "Wroclaw";
   };
+  amronos = {
+    email = "aarav@spikonado.com";
+    github = "Amronos";
+    githubId = 134804732;
+    name = "Aarav Gupta";
+  };
   amuckstot30 = {
     github = "amuckstot30";
     githubId = 157274630;
@@ -16460,6 +16466,12 @@
     githubId = 1472826;
     name = "Max Smolin";
   };
+  maxmosk = {
+    email = "maximmosk4@gmail.com";
+    github = "maxmosk";
+    githubId = 89240935;
+    name = "Maxim Moskalets";
+  };
   maxstrid = {
     email = "mxwhenderson@gmail.com";
     github = "maxstrid";
@@ -28247,6 +28259,12 @@
     github = "wohanley";
     githubId = 1322287;
     name = "William O'Hanley";
+  };
+  woile = {
+    email = "santiwilly@gmail.com";
+    github = "woile";
+    githubId = 2585816;
+    name = "Santiago Fraire Willemoes";
   };
   woky = {
     email = "pampu.andrei@pm.me";
