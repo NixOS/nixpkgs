@@ -108,7 +108,7 @@ checkCudaFhsRefs() {
   local -a outputPaths=()
   local firstMatches
 
-  mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "${!o}"; done)
+  mapfile -t outputPaths < <(for outputName in $(getAllOutputNames); do echo "${!outputName:?}"; done)
   firstMatches="$(grep --max-count=5 --recursive --exclude=LICENSE /usr/ "${outputPaths[@]}")" || true
   if [[ -n $firstMatches ]]; then
     nixErrorLog "detected references to /usr: $firstMatches"
@@ -119,20 +119,22 @@ checkCudaFhsRefs() {
 }
 
 checkCudaNonEmptyOutputs() {
-  local output
+  local outputName
   local dirs
-  local -a failingOutputs=()
+  local -a failingOutputNames=()
 
-  for output in $(getAllOutputNames); do
-    [[ ${!output:?} == "out" || ${!output:?} == "${!outputDev:?}" ]] && continue
-    dirs="$(find "${!output:?}" -mindepth 1 -maxdepth 1)" || true
-    if [[ -z $dirs || $dirs == "${!output:?}/nix-support" ]]; then
-      failingOutputs+=("$output")
+  for outputName in $(getAllOutputNames); do
+    # NOTE: Reminder that outputDev is the name of the dev output, so we compare it as-is against outputName rather
+    # than using !outputDev, which would give us the path to the dev output.
+    [[ ${outputName:?} == "out" || ${outputName:?} == "${outputDev:?}" ]] && continue
+    dirs="$(find "${!outputName:?}" -mindepth 1 -maxdepth 1)" || true
+    if [[ -z $dirs || $dirs == "${!outputName:?}/nix-support" ]]; then
+      failingOutputNames+=("${outputName:?}")
     fi
   done
 
-  if ((${#failingOutputs[@]})); then
-    nixErrorLog "detected empty (excluding nix-support) outputs: ${failingOutputs[*]}"
+  if ((${#failingOutputNames[@]})); then
+    nixErrorLog "detected empty (excluding nix-support) outputs: ${failingOutputNames[*]}"
     nixErrorLog "this typically indicates a failure in packaging or moveToOutput ordering"
     exit 1
   fi
