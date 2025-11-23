@@ -40,6 +40,8 @@ let
       "SSE4.1"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      "ARM_NEON_ASIMD"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
