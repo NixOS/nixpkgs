@@ -19,19 +19,19 @@
 
 buildPythonPackage rec {
   pname = "ormsgpack";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aviramha";
     repo = "ormsgpack";
     tag = version;
-    hash = "sha256-fEmAKo68BRHAsYkLp+aYVMG97fdb7YaApKTo0w9Nfzc=";
+    hash = "sha256-kCISXmj2dDDMb7iuY/eY4W/dmyNziQwtIQX6qNvEJa4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-RpfrR9dkdaaPCMt6vUuJjSSaEv6zH/UjbKfaavV8Ypg=";
+    hash = "sha256-J8XVLl7EHnxctYk3GMs4pRexHegFl6yRSxeCCFDQPgk=";
   };
 
   build-system = [
