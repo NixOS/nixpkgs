@@ -7,11 +7,8 @@
   copyDesktopItems,
   makeDesktopItem,
   writableTmpDirAsHomeHook,
-  swftools,
   ffmpeg,
   miniupnpc,
-
-  enableSwftools ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,37 +50,40 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  dependencies = with python3Packages; [
-    beautifulsoup4
-    cbor2
-    chardet
-    cloudscraper
-    dateparser
-    html5lib
-    lxml
-    lz4
-    numpy
-    opencv4
-    olefile
-    pillow
-    pillow-heif
-    psutil
-    psd-tools
-    pympler
-    pyopenssl
-    pyqt6
-    pyqt6-charts
-    pysocks
-    python-dateutil
-    python3Packages.mpv
-    pyyaml
-    qtpy
-    requests
-    show-in-file-manager
-    send2trash
-    service-identity
-    twisted
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      beautifulsoup4
+      cbor2
+      chardet
+      dateparser
+      html5lib
+      lxml
+      lz4
+      mpv
+      numpy
+      opencv4
+      olefile
+      pillow
+      pillow-heif
+      pillow-jpegxl-plugin
+      psutil
+      pympler
+      pyopenssl
+      pyqt6
+      pyqt6-charts
+      pysocks
+      python-dateutil
+      pyyaml
+      qtpy
+      requests
+      show-in-file-manager
+      send2trash
+      service-identity
+      twisted
+    ]
+    ++ python3Packages.twisted.optional-dependencies.tls
+    ++ python3Packages.twisted.optional-dependencies.http2;
 
   nativeCheckInputs =
     (with python3Packages; [
@@ -121,15 +121,7 @@ python3Packages.buildPythonApplication rec {
     # desktop item
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
-  ''
-  + lib.optionalString enableSwftools ''
-    mkdir -p $out/${python3Packages.python.sitePackages}/bin
-    # swfrender seems to have to be called sfwrender_linux
-    # not sure if it can be loaded through PATH, but this is simpler
-    # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
-    ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
-  ''
-  + ''
+
     runHook postInstall
   '';
 
@@ -159,6 +151,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Danbooru-like image tagging and searching system for the desktop";
+    mainProgram = "hydrus-client";
     license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
     changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${src.tag}";
