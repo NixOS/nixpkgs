@@ -320,11 +320,11 @@ lib.extendMkDerivation {
       curlOptsList = lib.escapeShellArgs curlOptsList;
 
       inherit
-        showURLs
-        mirrorsFile
-        postFetch
         downloadToTemp
         executable
+        mirrorsFile
+        postFetch
+        showURLs
         ;
 
       impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
