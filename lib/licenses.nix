@@ -1520,6 +1520,11 @@ lib.mapAttrs mkLicense (
       fullName = "X11 License";
     };
 
+    x11NoPermitPersons = {
+      spdxId = "X11-no-permit-persons";
+      fullName = "X11 no permit persons clause";
+    };
+
     xerox = {
       spdxId = "Xerox";
       fullName = "Xerox License";
