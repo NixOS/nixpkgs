@@ -331,10 +331,10 @@ in
                 proxy_buffering off;
                 proxy_request_buffering off;
               ''
-              + lib.optionalString (lib.elem "brotli" config.services.nginx.additionalModules) ''
+              + lib.optionalString (lib.any (m: m.name == "brotli") config.services.nginx.additionalModules) ''
                 brotli off;
               ''
-              + lib.optionalString (lib.elem "zstd" config.services.nginx.additionalModules) ''
+              + lib.optionalString (lib.any (m: m.name == "zstd") config.services.nginx.additionalModules) ''
                 zstd off;
               '';
             };
