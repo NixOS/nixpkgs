@@ -216,6 +216,10 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
+    "test_add_then_delete_n_minus_1"
   ];
 
   disabledTestPaths = [
