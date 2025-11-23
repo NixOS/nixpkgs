@@ -10,7 +10,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "monkeys-audio";
 
   src = fetchzip {
-    url = "https://monkeysaudio.com/files/MAC_${builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
+    urls =
+      let
+        url = "https://monkeysaudio.com/files/MAC_${builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
+      in
+      [
+        url
+        "https://web.archive.org/web/0/${url}"
+      ];
     hash = "sha256-m6CG0Ar6w2fF4h3CjVsdjWWHxau2Cl3iqxh4JLH+91k=";
     stripRoot = false;
   };
