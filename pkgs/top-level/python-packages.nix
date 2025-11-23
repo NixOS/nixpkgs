@@ -2970,6 +2970,8 @@ self: super: with self; {
 
   cdxj-indexer = callPackage ../development/python-modules/cdxj-indexer { };
 
+  cec = callPackage ../development/python-modules/cec { };
+
   cel-python = callPackage ../development/python-modules/cel-python { };
 
   celery = callPackage ../development/python-modules/celery { };
