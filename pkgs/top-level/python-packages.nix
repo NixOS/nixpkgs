@@ -19125,8 +19125,6 @@ self: super: with self; {
 
   tvdb-api = callPackage ../development/python-modules/tvdb-api { };
 
-  tweedledum = callPackage ../development/python-modules/tweedledum { };
-
   tweepy = callPackage ../development/python-modules/tweepy { };
 
   twentemilieu = callPackage ../development/python-modules/twentemilieu { };
