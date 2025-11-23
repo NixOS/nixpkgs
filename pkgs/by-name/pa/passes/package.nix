@@ -15,7 +15,9 @@
   wrapGAppsHook4,
   libzint,
 }:
-
+let
+  pythonEnv = python3.withPackages (pp: [ pp.pygobject3 ]);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
   version = "0.10";
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pp: [ pp.pygobject3 ]))
+    pythonEnv
     wrapGAppsHook4
   ];
 
@@ -50,15 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libzint
+    pythonEnv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Digital pass manager";
     mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Crashes
   };
 })
