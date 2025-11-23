@@ -18,8 +18,9 @@
   boost,
   avahi,
   lame,
+  exiv2,
   gettext,
-  pcre-cpp,
+  pcre2,
   yajl,
   fribidi,
   which,
@@ -72,7 +73,7 @@
   libcec_platform,
   dcadec,
   libuuid,
-  libcrossguid,
+  crossguid,
   libmicrohttpd,
   bluez,
   doxygen,
@@ -88,7 +89,7 @@
   zlib,
   flatbuffers,
   fstrcmp,
-  rapidjson,
+  nlohmann_json,
   lirc,
   mesa-gl-headers,
   x11Support ? true,
@@ -244,14 +245,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "kodi";
-    version = "21.3";
-    kodiReleaseName = "Omega";
+    version = "22.0a2";
+    kodiReleaseName = "Piers";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = "xbmc";
       rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
+      hash = "sha256-6+hpADxmZH2jc4mgzbnX0UO4LK1AY9WPY36HQ6rmK2I=";
     };
 
     # make  derivations declared in the let binding available here, so
@@ -275,8 +276,9 @@ stdenv.mkDerivation (
       python3Packages.python
       boost
       libmicrohttpd
+      exiv2
       gettext
-      pcre-cpp
+      pcre2
       yajl
       fribidi
       libva
@@ -329,7 +331,7 @@ stdenv.mkDerivation (
       libgcrypt
       libgpg-error
       libunistring
-      libcrossguid
+      crossguid
       libplist
       bluez
       glib
@@ -339,7 +341,7 @@ stdenv.mkDerivation (
       ffmpeg
       flatbuffers
       fstrcmp
-      rapidjson
+      nlohmann_json
       lirc
       mesa-gl-headers
 
@@ -422,7 +424,7 @@ stdenv.mkDerivation (
       "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
-      "-DENABLE_INTERNAL_RapidJSON=OFF"
+      "-DENABLE_INTERNAL_NLOHMANNJ=OFF"
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
