@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "13.1.0";
+  version = "16.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+    hash = "sha256-iFKDDOJzCynaqwHIjykfh82diGiuOjWytwU3dq1J9PA=";
   };
 
   build-system = [
