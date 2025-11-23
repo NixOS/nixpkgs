@@ -5,22 +5,23 @@
   pkgs,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "dr14_tmeter";
-  version = "1.0.16";
+  version = "unstable-20250927";
   format = "setuptools";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchFromGitHub {
-    owner = "simon-r";
+    owner = "hboetes";
     repo = "dr14_t.meter";
-    rev = "v${version}";
-    sha256 = "1nfsasi7kx0myxkahbd7rz8796mcf5nsadrsjjpx2kgaaw5nkv1m";
+    rev = "f9d62f60c30d9404d4c4b644931e76049332310c";
+    sha256 = "sha256-3z9Gi32aG6Tk9UHpfT1VqmBZpFJrlKB+NZFu3CH+18U=";
   };
 
   propagatedBuildInputs = with pkgs; [
     python3Packages.numpy
+    python3Packages.mutagen
     flac
     vorbis-tools
     ffmpeg
@@ -35,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     description = "Compute the DR14 of a given audio file according to the procedure described by the Pleasurize Music Foundation";
     mainProgram = "dr14_tmeter";
     license = licenses.gpl3Plus;
-    homepage = "http://dr14tmeter.sourceforge.net/";
-    maintainers = [ ];
+    homepage = "https://github.com/hboetes/dr14_t.meter";
+    maintainers = with maintainers; [ sciencentistguy ];
   };
 }
