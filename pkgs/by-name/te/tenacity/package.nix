@@ -31,7 +31,7 @@
   expat,
   libid3tag,
   libopus,
-  ffmpeg_7,
+  ffmpeg,
   soundtouch,
   pcre,
   portaudio,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     # looking only in a few specific directories.
     # Make sure it searches for our version of ffmpeg in the nix store.
     substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
-      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg_7}/lib
+      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-    ffmpeg_7
+    ffmpeg
     file
     flac
     glib
