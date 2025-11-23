@@ -154,11 +154,12 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "GitKraken Desktop";
+        name = "gitkraken";
         exec = "gitkraken";
         icon = "gitkraken";
         desktopName = "GitKraken Desktop";
         genericName = "Git Client";
+        startupWMClass = "GitKraken";
         categories = [ "Development" ];
         comment = "Unleash your repo";
       })

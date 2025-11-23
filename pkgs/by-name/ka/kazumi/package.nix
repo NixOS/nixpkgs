@@ -11,9 +11,10 @@
   mpv-unwrapped,
   webkitgtk_4_1,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
   runCommand,
   yq-go,
+  dart,
 }:
 
 let
@@ -32,7 +33,7 @@ flutter338.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -114,11 +115,22 @@ flutter338.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };
