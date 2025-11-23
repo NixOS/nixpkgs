@@ -65,7 +65,6 @@ in
             ) cfg.settings;
           in
           "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
-        DynamicUser = true;
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
         WorkingDirectory = "/var/lib/gonic";
