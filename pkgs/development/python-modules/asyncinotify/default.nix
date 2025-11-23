@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asyncinotify";
   version = "4.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "absperf";
@@ -37,7 +34,7 @@ buildPythonPackage rec {
     ];
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
-    changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
+    changelog = "https://github.com/absperf/asyncinotify/releases/tag/${src.tag}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cynerd ];
   };
