@@ -10,7 +10,7 @@
 
 let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "roo-code-${finalAttrs.version}.zip";
+    name = "roo-code-${finalAttrs.version}.vsix";
     pname = "roo-code-vsix";
     version = "3.36.2";
 

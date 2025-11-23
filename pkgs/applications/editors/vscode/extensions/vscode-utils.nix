@@ -6,10 +6,18 @@
   fetchurl,
   vscode,
   unzip,
+  makeSetupHook,
+  writeScript,
   jq,
   vscode-extension-update-script,
 }:
 let
+  unpackVsixSetupHook = makeSetupHook {
+    name = "unpack-vsix-setup-hook";
+    substitutions = {
+      unzip = "${unzip}/bin/unzip";
+    };
+  } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
     excludeDrvArgNames = [
@@ -63,7 +71,7 @@ let
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-        nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
+        nativeBuildInputs = [ unpackVsixSetupHook ] ++ nativeBuildInputs;
 
         installPhase =
           args.installPhase or ''
