@@ -5,7 +5,7 @@
   copyDesktopItems,
   fetchFromGitHub,
   flutter329,
-  ffmpeg_7,
+  ffmpeg,
   gst_all_1,
   fuse3,
   libXtst,
@@ -119,7 +119,7 @@ flutter329.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
