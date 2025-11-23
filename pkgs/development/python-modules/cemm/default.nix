@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "cemm";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -62,8 +59,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with CEMM devices";
     homepage = "https://github.com/klaasnicolaas/python-cemm";
-    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
