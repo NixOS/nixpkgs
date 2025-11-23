@@ -91,9 +91,7 @@
   lib,
   options,
   transformOptions ? lib.id, # function for additional transformations of the options
-  documentType ? "appendix",
-  # TODO deprecate "appendix" in favor of "none"
-  #      and/or rename function to moduleOptionDoc for clean slate
+  # TODO  rename function to moduleOptionDoc for clean slate
 
   # If you include more than one option list into a document, you need to
   # provide different ids.
