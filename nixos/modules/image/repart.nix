@@ -297,6 +297,8 @@ in
   };
 
   config = {
+    virtualisation.diskSizeAutoSupported = lib.mkImageMediaOverride true;
+
     image.baseName =
       let
         version = config.image.repart.version;
@@ -409,6 +411,7 @@ in
         val = pkgs.callPackage ./repart-image.nix {
           systemd = cfg.package;
           inherit (config.image) baseName;
+          inherit (config.virtualisation) diskSize;
           inherit (cfg)
             name
             version

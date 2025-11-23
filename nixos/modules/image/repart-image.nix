@@ -37,6 +37,7 @@
   split,
   seed,
   definitionsDirectory,
+  diskSize ? "auto",
   sectorSize,
   mkfsEnv ? { },
   createEmpty ? true,
@@ -170,7 +171,7 @@ stdenvNoCC.mkDerivation (
     systemdRepartFlags = [
       "--architecture=${systemdArch}"
       "--dry-run=no"
-      "--size=auto"
+      "--size=${if diskSize == "auto" then diskSize else "${toString diskSize}M"}"
       "--definitions=${finalAttrs.finalRepartDefinitions}"
       "--split=${lib.boolToString split}"
       "--json=pretty"
