@@ -5228,6 +5228,8 @@ self: super: with self; {
 
   fava-dashboards = callPackage ../development/python-modules/fava-dashboards { };
 
+  fava-investor = callPackage ../development/python-modules/fava-investor { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
