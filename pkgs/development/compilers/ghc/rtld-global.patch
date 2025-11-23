@@ -1,0 +1,23 @@
+diff --git a/rts/linker/LoadNativeObjPosix.c b/rts/linker/LoadNativeObjPosix.c
+--- a/rts/linker/LoadNativeObjPosix.c
++++ b/rts/linker/LoadNativeObjPosix.c
+@@ -167,7 +167,18 @@ try_again:
+ #endif
+
+    const int dlopen_mode = load_now ? RTLD_NOW : RTLD_LAZY;
+-   hdl = dlopen(path, dlopen_mode|RTLD_LOCAL); /* see Note [RTLD_LOCAL] */
++   /*
++    * See Note [RTLD_LOCAL] for why we use RTLD_LOCAL by default.
++    *
++    * However, RTLD_LOCAL can cause issues on Darwin with weak symbol
++    * resolution when building packages that use Template Haskell and
++    * depend on native libraries (e.g., Nix's libnixexpr). In such cases,
++    * setting NIX_GHC_USE_RTLD_GLOBAL=1 allows using RTLD_GLOBAL instead.
++    * This is safe for package builds but would break GHCi's symbol
++    * override behavior if used interactively.
++    */
++   const int rtld_scope = getenv("NIX_GHC_USE_RTLD_GLOBAL") ? RTLD_GLOBAL : RTLD_LOCAL;
++   hdl = dlopen(path, dlopen_mode|rtld_scope);
+    nc->dlopen_handle = hdl;
+    nc->status = OBJECT_READY;
+
