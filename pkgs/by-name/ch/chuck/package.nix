@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    maintainers = [ ];
     mainProgram = "chuck";
   };
 })
