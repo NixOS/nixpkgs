@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openscap";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "openscap";
-    rev = finalAttrs.version;
-    hash = "sha256-AOldgYS8qMOLB/Nm2/O0obdDOrefSrubTETb50f3Gv8=";
+    tag = finalAttrs.version;
+    hash = "sha256-6k9ePHI+EefErz7hPwrxQp5eCo8gLHJZDcGXWWopElA=";
   };
 
   strictDeps = true;
@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "NIST Certified SCAP 1.2 toolkit";
     homepage = "https://github.com/OpenSCAP/openscap";
-    changelog = "https://github.com/OpenSCAP/openscap/blob/${finalAttrs.src.rev}/NEWS";
+    changelog = "https://github.com/OpenSCAP/openscap/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "oscap";
