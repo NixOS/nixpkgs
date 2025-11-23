@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "Hue is an audio plugin that helps mix different noise types into an audio signal.";
+    description = "Audio plugin that helps mix different noise types into an audio signal";
     homepage = "https://github.com/bljustice/hue";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
