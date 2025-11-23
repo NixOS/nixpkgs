@@ -11,8 +11,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swt";
-  version = "4.34";
-  fullVersion = "${finalAttrs.version}-202411201800";
+  # NOTE: In case you wish to override, don't override version, override
+  # `fullVersion`.
+  version = builtins.elemAt (lib.splitString "-" finalAttrs.fullVersion) 1;
+  fullVersion = "S-4.38M3-202511140540";
 
   hardeningDisable = [ "format" ];
 
@@ -21,17 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     # equal on all linux systems as well as all darwin systems. Even though each
     # of these zip archives themselves contains a different hash.
     x86_64-linux.platform = "gtk-linux-x86_64";
-    x86_64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    x86_64-linux.hash = "sha256-aEpPHn55QuK1kgUaEtDANztCJ2tTPZhK5yo72BojmQw=";
     aarch64-linux.platform = "gtk-linux-aarch64";
-    aarch64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    aarch64-linux.hash = "sha256-aEpPHn55QuK1kgUaEtDANztCJ2tTPZhK5yo72BojmQw=";
     ppc64le-linux.platform = "gtk-linux-ppc64le";
-    ppc64le-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    ppc64le-linux.hash = "sha256-aEpPHn55QuK1kgUaEtDANztCJ2tTPZhK5yo72BojmQw=";
     riscv64-linux.platform = "gtk-linux-riscv64";
-    riscv64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    riscv64-linux.hash = "sha256-aEpPHn55QuK1kgUaEtDANztCJ2tTPZhK5yo72BojmQw=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
-    x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
+    x86_64-darwin.hash = "sha256-B2eqUvXXRDW8wRswhtpgP1sMyBHAaS9gvrj13jlwup8=";
     aarch64-darwin.platform = "cocoa-macosx-aarch64";
-    aarch64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI";
+    aarch64-darwin.hash = "sha256-E5tHr46LPKnh9ELYduPdM3Bx6NRCnAnLRQ2tSKvrv1E=";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;
@@ -44,28 +46,40 @@ stdenv.mkDerivation (finalAttrs: {
     in
     assert srcMetadata != null;
     fetchzip {
-      url = "https://archive.eclipse.org/eclipse/downloads/drops4/R-${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
+      url = "https://download.eclipse.org/eclipse/downloads/drops4/${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
       inherit (srcMetadata) hash;
       stripRoot = false;
-      postFetch = ''
-        mkdir "$unpackDir"
-        cd "$unpackDir"
+      postFetch =
+        # On Darwin, copy the prebuilt swt.jar before processing sources and
+        # save it with a different name so it doesn't get removed.
+        if stdenv.hostPlatform.isDarwin then
+          ''
+            cp "$out/swt.jar" "$out/swt-prebuilt.jar" || echo "Warning: swt.jar not found"
+            ls -la "$out/"
+          ''
+        else
+          # On Linux, extract and use only the sources from src.zip
+          ''
+            mkdir "$unpackDir"
+            cd "$unpackDir"
 
-        renamed="$TMPDIR/src.zip"
-        mv -- "$out/src.zip" "$renamed"
-        unpackFile "$renamed"
-        rm -r -- "$out"
+            renamed="$TMPDIR/src.zip"
+            mv -- "$out/src.zip" "$renamed"
+            unpackFile "$renamed"
+            rm -r -- "$out"
 
-        mv -- "$unpackDir" "$out"
-      '';
+            mv -- "$unpackDir" "$out"
+          '';
     };
 
   nativeBuildInputs = [
     jdk
     stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     libGLU
   ];
@@ -76,14 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
   OUTPUT_DIR = "${placeholder "out"}/lib";
   # GTK4 is not supported yet. See:
   # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
-  makeFlags = "gtk3";
-  preBuild = ''
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "gtk3" ];
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     cd library
     mkdir -p ${finalAttrs.OUTPUT_DIR}
   '';
 
-  # Build the jar
-  postBuild = ''
+  # Build the jar (Linux only, Darwin uses prebuilt)
+  postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     cd ../
     mkdir out
     find org/ -name '*.java' -type f -exec javac -encoding utf8 -d out/ {} +
@@ -97,9 +111,30 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -d -- "$out/jars"
-    install -m 644 -t out -- version.txt
-    (cd out && jar -c *) > "$out/jars/swt.jar"
 
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # On Darwin, use the prebuilt swt.jar which includes native libraries
+    # Remove signature files to avoid validation errors after stripJavaArchivesHook modifies the jar
+    mkdir -p jar-temp
+    cd jar-temp
+    ${jdk}/bin/jar -xf ../swt.jar
+    rm -f META-INF/*.SF META-INF/*.RSA META-INF/*.DSA
+    ${jdk}/bin/jar -cf "$out/jars/swt.jar" *
+    cd ..
+    rm -rf jar-temp
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # On Linux, build from source
+    install -m 644 -t out -- version.txt
+
+    # Copy native libraries into the jar
+    cp -v ${finalAttrs.OUTPUT_DIR}/*.so out/ || true
+
+    (cd out && jar -c *) > "$out/jars/swt.jar"
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -118,5 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     platforms = lib.attrNames finalAttrs.passthru.srcMetadataByPlatform;
+    # Fails with: `java.nio.file.NoSuchFileException: ../swt.jar`
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })
