@@ -90,6 +90,7 @@ buildGo125Module (finalAttrs: {
   meta = {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
+    changelog = "https://github.com/caddyserver/caddy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "caddy";
     maintainers = with lib.maintainers; [
