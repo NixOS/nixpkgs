@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "gonic";
+  meta.maintainers = pkgs.gonic.meta.maintainers;
 
   nodes.default_cache_dir =
     { config, ... }:
