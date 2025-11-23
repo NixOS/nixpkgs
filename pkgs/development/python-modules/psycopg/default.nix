@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   replaceVars,
 
   # build
@@ -35,24 +34,19 @@
 
 let
   pname = "psycopg";
-  version = "3.2.12";
+  version = "3.2.13";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-g1mms12EqRiln5dK/BmBa9dd9duSPRgRIiZkVmSRaYI=";
+    hash = "sha256-sd3LAuBgZtWMx/hVNzET65vEXIFQvgevmCkoRjrsh5c=";
   };
 
   patches = [
     (replaceVars ./ctypes.patch {
       libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
-    })
-    (fetchpatch {
-      # cython 3.2 compat
-      url = "https://github.com/psycopg/psycopg/commit/70cc1d1b14ab99be2a066032dc353e7c7aa77b20.patch";
-      hash = "sha256-raSo3y3UEwDQDRXzbZ8dacS/DsE5g1hoYt/IgM+848A=";
     })
   ];
 
