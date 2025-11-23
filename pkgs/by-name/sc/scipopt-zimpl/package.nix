@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
   pname = "scipopt-zimpl";
   version = "362";
 
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
-
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "zimpl";
@@ -48,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    changelog = "https://zimpl.zib.de/download/CHANGELOG.txt";
     description = "Zuse Institut Mathematical Programming Language";
     longDescription = ''
       ZIMPL is a little language to translate the mathematical model of a
