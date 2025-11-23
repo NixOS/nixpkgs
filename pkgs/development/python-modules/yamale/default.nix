@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyyaml,
   ruamel-yaml,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "yamale";
   version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
