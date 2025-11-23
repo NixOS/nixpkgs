@@ -42,15 +42,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-fzdKajjNcP9LMsnToDEL+oBNlG/tTJ5pp9SfrNy5Xpw=";
   };
 
-  # TODO apply unconditionally on rebuild
-  patches = lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "timersub.patch";
-      url = "https://github.com/GNOME/at-spi2-core/commit/02108ea1b96db0189b2d4a9eceb843e1f13b7bdf.diff";
-      hash = "sha256-pVBhawfRnJoXmovl9CAmzh+YWJkbvlOVrCs8XanjP00=";
-    })
-  ];
-
   nativeBuildInputs = [
     glib
     meson
