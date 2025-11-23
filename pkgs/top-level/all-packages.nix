@@ -10723,11 +10723,6 @@ with pkgs;
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
-  cmus = callPackage ../applications/audio/cmus {
-    libjack = libjack2;
-    ffmpeg = ffmpeg_7;
-  };
-
   cni = callPackage ../applications/networking/cluster/cni { };
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
 
