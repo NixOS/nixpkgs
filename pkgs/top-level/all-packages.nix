@@ -10499,10 +10499,6 @@ with pkgs;
 
   papis = with python3Packages; toPythonApplication papis;
 
-  plata-theme = callPackage ../data/themes/plata {
-    inherit (mate) marco;
-  };
-
   polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
 
   qogir-kde = libsForQt5.callPackage ../data/themes/qogir-kde { };
