@@ -69,7 +69,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chuangzhu
-      linsui
     ];
     mainProgram = "blackbox";
     platforms = lib.platforms.linux;
