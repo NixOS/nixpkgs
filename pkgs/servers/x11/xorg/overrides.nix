@@ -147,17 +147,6 @@ self: super:
     };
   });
 
-  setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
-    postInstall = ''
-      mkdir -p $out/share/man/man7
-      ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
-      ln -sfn ${xorg.xkeyboardconfig}/share/man/man7/xkeyboard-config.7.gz $out/share/man/man7
-    '';
-    meta = attrs.meta // {
-      mainProgram = "setxkbmap";
-    };
-  });
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
