@@ -778,6 +778,8 @@ self: super: with self; {
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
+  apeye = callPackage ../development/python-modules/apeye { };
+
   apeye-core = callPackage ../development/python-modules/apeye-core { };
 
   apipkg = callPackage ../development/python-modules/apipkg { };
@@ -1177,6 +1179,8 @@ self: super: with self; {
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   autocommand = callPackage ../development/python-modules/autocommand { };
+
+  autodocsumm = callPackage ../development/python-modules/autodocsumm { };
 
   autofaiss = callPackage ../development/python-modules/autofaiss { };
 
@@ -3744,6 +3748,8 @@ self: super: with self; {
   dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
 
   dicomweb-client = callPackage ../development/python-modules/dicomweb-client { };
+
+  dict2css = callPackage ../development/python-modules/dict2css { };
 
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
@@ -17547,6 +17553,8 @@ self: super: with self; {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
+  sphinx-jinja2-compat = callPackage ../development/python-modules/sphinx-jinja2-compat { };
+
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
   sphinx-last-updated-by-git =
@@ -17597,6 +17605,8 @@ self: super: with self; {
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
+  sphinx-toolbox = callPackage ../development/python-modules/sphinx-toolbox { };
+
   sphinx-version-warning = callPackage ../development/python-modules/sphinx-version-warning { };
 
   sphinx-versions = callPackage ../development/python-modules/sphinx-versions { };
@@ -17644,6 +17654,8 @@ self: super: with self; {
   sphinxcontrib-katex = callPackage ../development/python-modules/sphinxcontrib-katex { };
 
   sphinxcontrib-log-cabinet = callPackage ../development/python-modules/sphinxcontrib-log-cabinet { };
+
+  sphinxcontrib-mermaid = callPackage ../development/python-modules/sphinxcontrib-mermaid { };
 
   sphinxcontrib-moderncmakedomain =
     callPackage ../development/python-modules/sphinxcontrib-moderncmakedomain
