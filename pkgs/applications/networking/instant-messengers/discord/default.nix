@@ -12,11 +12,11 @@ let
   variants = rec {
     x86_64-linux = {
       discord = rec {
-        version = "0.0.111";
+        version = "0.0.115";
 
         src = fetchurl {
           url = "https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-          hash = "sha256-o4U6i223Agtbt1N9v0GO/Ivx68OQcX/N3mHXUX2gruA=";
+          hash = "sha256-DXGlo9qdmJTqm6ResvspauQ0awIFSuYalcpVXEfTxK4=";
         };
 
         branch = "stable";
@@ -25,11 +25,11 @@ let
         self = discord;
       };
       discord-ptb = rec {
-        version = "0.0.161";
+        version = "0.0.167";
 
         src = fetchurl {
           url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-          hash = "sha256-pDWOnj8tQK9runi/QzcvEFbNGCwAb/gISM9LrLoTzxM=";
+          hash = "sha256-Q4IrmvoP//49GN2L9kRQ/zG28XjicJEXZpVG6RklFB8=";
         };
 
         branch = "ptb";
@@ -38,11 +38,11 @@ let
         self = discord-ptb;
       };
       discord-canary = rec {
-        version = "0.0.761";
+        version = "0.0.811";
 
         src = fetchurl {
           url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-          hash = "sha256-L3MIcrz/xj8zOb2QVXBrBCHGt4BdHhjwKpPZ4iClQYQ=";
+          hash = "sha256-kg0o5KyBohmnk/czUQLVsA1GV2P6DUQLy0KhMaj80Sk=";
         };
 
         branch = "canary";
@@ -51,11 +51,11 @@ let
         self = discord-canary;
       };
       discord-development = rec {
-        version = "0.0.89";
+        version = "0.0.92";
 
         src = fetchurl {
           url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-          hash = "sha256-ZMsBR0LAISrM3dib8fehW/eZGkwSCinQF60jJG76O7M=";
+          hash = "sha256-oG50YrXQUCnbn+rO0EeRjixeqvXYBdnyqdomdPfxfos=";
         };
 
         branch = "development";
