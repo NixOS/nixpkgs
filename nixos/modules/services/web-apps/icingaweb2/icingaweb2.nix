@@ -75,7 +75,7 @@ in
       description = ''
         Name-package attrset of Icingaweb 2 modules packages to enable.
 
-        If you enable modules manually (e.g. via the web ui), they will not be touched.
+        If you enable modules manually, they will not be touched.
       '';
     };
 
@@ -98,7 +98,7 @@ in
         If you don't set global.module_path, the module will take care of it.
 
         If the value is null, no config.ini is created and you can
-        modify it manually (e.g. via the web interface).
+        modify it manually.
         Note that you need to update module_path manually.
       '';
     };
@@ -121,7 +121,7 @@ in
         Will automatically be converted to a .ini file.
 
         If the value is null, no resources.ini is created and you can
-        modify it manually (e.g. via the web interface).
+        modify it manually.
         Note that if you set passwords here, they will go into the nix store.
       '';
     };
@@ -140,7 +140,7 @@ in
         Will automatically be converted to a .ini file.
 
         If the value is null, no authentication.ini is created and you can
-        modify it manually (e.g. via the web interface).
+        modify it manually.
       '';
     };
 
@@ -158,7 +158,7 @@ in
         Will automatically be converted to a .ini file.
 
         If the value is null, no groups.ini is created and you can
-        modify it manually (e.g. via the web interface).
+        modify it manually.
       '';
     };
 
@@ -176,7 +176,7 @@ in
         Will automatically be converted to a .ini file.
 
         If the value is null, no roles.ini is created and you can
-        modify it manually (e.g. via the web interface).
+        modify it manually.
       '';
     };
   };
