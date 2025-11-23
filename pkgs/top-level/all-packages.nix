@@ -10337,8 +10337,6 @@ with pkgs;
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
 
-  ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
-
   ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
