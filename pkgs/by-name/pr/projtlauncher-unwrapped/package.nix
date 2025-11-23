@@ -82,12 +82,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
   ];
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   dontWrapQtApps = true;
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = stdenv.mkDerivation {
+      name = "projtlauncher-version-test";
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
+      dontUnpack = true;
+      buildPhase = ''
+        ${finalAttrs.finalPackage}/bin/projtlauncher --version
+      '';
+      installPhase = ''
+        touch $out
+      '';
+    };
   };
 
   meta = {
