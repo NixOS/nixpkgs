@@ -213,18 +213,18 @@ lib.makeExtensible (
       };
     };
 
-    git = self.makeLixScope {
-      attrName = "git";
+    lix_2_94 = self.makeLixScope {
+      attrName = "lix_2_94";
 
       lix-args = rec {
-        version = "2.94.0-pre-20251018_${builtins.substring 0 12 src.rev}";
+        version = "2.94.0";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "6e2edbff930dbf5b17a23e23f0b563e1db201f5b";
-          hash = "sha256-t2f3YDiRTi6GTHc940lwozaxY7RFE1CW7EeNtVYG+FE=";
+          rev = version;
+          hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -235,7 +235,29 @@ lib.makeExtensible (
       };
     };
 
-    latest = self.lix_2_93;
+    git = self.makeLixScope {
+      attrName = "git";
+
+      lix-args = rec {
+        version = "2.95.0-pre-20251121_${builtins.substring 0 12 src.rev}";
+
+        src = fetchFromGitea {
+          domain = "git.lix.systems";
+          owner = "lix-project";
+          repo = "lix";
+          rev = "b707403a308030739dfeacc5b0aaaeef8ba3f633";
+          hash = "sha256-kas7FT2J86DVJlPH5dNNHM56OgdQQyfCE/dX/EOKDp8=";
+        };
+
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+        };
+      };
+    };
+
+    latest = self.lix_2_94;
 
     stable = self.lix_2_93;
 
