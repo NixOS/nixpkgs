@@ -1900,8 +1900,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.17.5";
-          hash = "sha256-xv7Yx2chKqKnC7tKcvXUKrL5DBW0eFT8hi0p9shwX04=";
+          version = "1.18.0";
+          hash = "sha256-D5Khohd1oV8c7uHT6zgiZsigtafAWdXinV2NTUF0EaM=";
         };
 
         meta = {
