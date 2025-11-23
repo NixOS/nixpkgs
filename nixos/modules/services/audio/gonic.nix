@@ -21,6 +21,8 @@ in
 
       enable = lib.mkEnableOption "Gonic music server";
 
+      package = lib.mkPackageOption pkgs "gonic" { };
+
       settings = lib.mkOption rec {
         type = settingsFormat.type;
         apply = lib.recursiveUpdate default;
@@ -48,6 +50,10 @@ in
       (assertKey "music-path")
       (assertKey "podcast-path")
       (assertKey "playlists-path")
+      {
+        assertion = cfg.settings.cache-path == "/var/cache/gonic";
+        message = "services.gonic.settings.cache-path must be set to /var/cache/gonic";
+      }
     ];
 
     systemd.services.gonic = {
@@ -62,7 +68,7 @@ in
               n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
             ) cfg.settings;
           in
-          "${pkgs.gonic}/bin/gonic -config-path ${settingsFormat.generate "gonic" filteredSettings}";
+          "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         DynamicUser = true;
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
@@ -73,7 +79,6 @@ in
         BindPaths = [
           cfg.settings.playlists-path
           cfg.settings.podcast-path
-          cfg.settings.cache-path
         ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
