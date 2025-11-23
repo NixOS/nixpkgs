@@ -205,9 +205,9 @@ let
             ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
 
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
+              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
