@@ -10,10 +10,12 @@
   stdenv,
   ffmpeg-headless,
   taglib,
+  xorg,
   zlib,
   nixosTests,
   nix-update-script,
   ffmpegSupport ? true,
+  plugins ? [ ],
 }:
 
 buildGo124Module rec {
@@ -42,7 +44,10 @@ buildGo124Module rec {
     nodejs
     npmHooks.npmConfigHook
     pkg-config
+    xorg.lndir
   ];
+
+  runtimeInputs = plugins;
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -69,6 +74,14 @@ buildGo124Module rec {
     make buildjs
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/plugins/
+    ${lib.concatMapStringsSep "\n" (plugin: ''
+      mkdir $out/share/plugins/${plugin.pname}
+      lndir ${plugin}/share/${plugin.pname} $out/share/plugins/${plugin.pname}
+    '') plugins}
+  '';
+
   tags = [
     "netgo"
   ];
@@ -79,8 +92,10 @@ buildGo124Module rec {
   '';
 
   passthru = {
+    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
+    buildGoModule = buildGo124Module;
   };
 
   meta = {
