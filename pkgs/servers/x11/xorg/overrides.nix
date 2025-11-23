@@ -113,24 +113,6 @@ self: super:
       )
   ) { };
 
-  bitmap = addMainProgram super.bitmap { };
-
-  editres = super.editres.overrideAttrs (attrs: {
-    hardeningDisable = [ "format" ];
-    meta = attrs.meta // {
-      mainProgram = "editres";
-    };
-  });
-
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "fonttosfnt";
-    };
-  });
-
-  iceauth = addMainProgram super.iceauth { };
-
   mkfontdir = xorg.mkfontscale;
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
@@ -175,8 +157,6 @@ self: super:
       mainProgram = "setxkbmap";
     };
   });
-
-  oclock = addMainProgram super.oclock { };
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
