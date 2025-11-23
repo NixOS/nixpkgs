@@ -17,6 +17,7 @@
   util-linux,
   wimlib,
   wget,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,13 +73,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-
-  postInstallCheck = ''
-    # woeusb --version checks for missing runtime dependencies.
-    out_version="$("$out/bin/woeusb" --version)"
-    [ "$out_version" = '${version}' ]
-  '';
 
   meta = with lib; {
     description = "Create bootable USB disks from Windows ISO images";
