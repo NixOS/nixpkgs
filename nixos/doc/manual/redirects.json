@@ -38,9 +38,6 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
-  "module-services-gitlab-runner": [
-    "index.html#module-services-gitlab-runner"
-  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
@@ -1196,6 +1193,12 @@
   ],
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
+  ],
+  "module-services-gitlab-runner": [
+    "index.html#module-services-gitlab-runner"
+  ],
+  "ex-gitlab-runner-podman": [
+    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"
