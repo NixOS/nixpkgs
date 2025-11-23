@@ -8,7 +8,7 @@
   node-gyp,
   python3,
   udev,
-  cctools,
+  xcbuild,
 }:
 
 let
@@ -39,7 +39,7 @@ buildNpmPackage' rec {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
+    xcbuild
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -49,7 +49,13 @@ buildNpmPackage' rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  doInstallCheck = true;
+  # Disabled on Darwin due to:
+  #
+  # https://github.com/NixOS/nix/issues/5748
+  #
+  # No matter whether $TMP and $HOME point to real writable directories, the
+  # Darwin sandbox tries to use /var/empty and fails.
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
 
   meta = {
