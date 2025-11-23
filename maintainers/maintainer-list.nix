@@ -4096,6 +4096,12 @@
       { fingerprint = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A"; }
     ];
   };
+  cablehead = {
+    email = "andy@thecablelounge.com";
+    github = "cablehead";
+    githubId = 1394;
+    name = "Andy Gayton";
+  };
   CactiChameleon9 = {
     email = "h19xjkkp@duck.com";
     github = "CactiChameleon9";
@@ -4395,6 +4401,12 @@
     github = "avdv";
     githubId = 3471749;
     name = "Claudio Bley";
+  };
+  cboecking = {
+    email = "chuck@chuboe.com";
+    github = "cboecking";
+    githubId = 16024854;
+    name = "Chuck Boecking";
   };
   cbrewster = {
     email = "cbrewster@hey.com";
