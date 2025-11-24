@@ -12461,6 +12461,8 @@ self: super: with self; {
 
   prov = callPackage ../development/python-modules/prov { };
 
+  prowlpy = callPackage ../development/python-modules/prowlpy { };
+
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
