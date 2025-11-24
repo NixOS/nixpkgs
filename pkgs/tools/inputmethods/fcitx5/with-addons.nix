@@ -8,6 +8,8 @@
   libsForQt5,
   qt6Packages,
   fcitx5-gtk,
+  librsvg,
+  gdk-pixbuf,
   addons ? [ ],
 }:
 
@@ -25,10 +27,16 @@ symlinkJoin {
   ]
   ++ addons;
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    gdk-pixbuf
+  ];
 
   postBuild = ''
+    findGdkPixbufLoaders "${librsvg}"
+
     wrapProgram $out/bin/fcitx5 \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
       --suffix PATH : "$out/bin" \
