@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gowitness";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "gowitness";
     tag = version;
-    hash = "sha256-i7yaen7Ht34D6Ryt5C/oFnBVx9M2uQEJGA1t1OCpcyo=";
+    hash = "sha256-XFzU2zqKyHO89LUIcbL1wRYNkFv/ps1UrobDqmhrVRY=";
   };
 
-  vendorHash = "sha256-IvOmBCJ07ASKpxgk6+FLNg4wJi6E0Lh38f+DAnR0gDg=";
+  vendorHash = "sha256-B6T60o4kwezYH9OXJqbv8VrNpcfVghC+QiA+dmzuDVY=";
 
   ldflags = [
     "-s"
