@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "flask-sqlalchemy-lite";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-sqlalchemy-lite";
     tag = version;
-    hash = "sha256-c7lTxihlW48bj9+pU2uq2V/dQrZCi5kq2gWdFhipQGE=";
+    hash = "sha256-KX4kpqgvNlcAe4NSWaSkcgtPQINmeQOx46/4uFM8q8A=";
   };
 
   build-system = [ flit-core ];
