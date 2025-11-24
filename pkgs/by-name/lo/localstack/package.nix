@@ -48,13 +48,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "localstack" ];
 
+  # Localstack uses a framework called Plux to do all kinds of dynamic code loading.
+  # Due to this, we'll encounter build errors when it attempts to set up cache directories
+  # in the sandboxed build environment unless we tell it to create it's cache in a safe
+  # directory.
+  makeWrapperArgs = [
+    "--set-default" "XDG_CACHE_HOME" "/tmp/cache"
+  ];
+
   # Test suite requires boto, which has been removed from nixpkgs
   # Just do minimal test, buildPythonPackage maps checkPhase
   # to installCheckPhase, so we can test that entrypoint point works.
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     $out/bin/localstack --version
 
     runHook postCheck
