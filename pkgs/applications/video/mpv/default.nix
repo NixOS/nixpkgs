@@ -340,7 +340,10 @@ stdenv.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Plus;
+    license = [
+      lib.licenses.gpl2Plus
+      lib.licenses.lgpl21Plus
+    ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz
