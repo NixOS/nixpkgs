@@ -20384,8 +20384,6 @@ self: super: with self; {
 
   wget = callPackage ../development/python-modules/wget { };
 
-  wgnlpy = callPackage ../development/python-modules/wgnlpy { };
-
   wgpu-py = callPackage ../development/python-modules/wgpu-py { };
 
   whatthepatch = callPackage ../development/python-modules/whatthepatch { };
