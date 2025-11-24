@@ -16,5 +16,12 @@ buildDartApplication {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  meta.mainProgram = "domine";
+  meta = {
+    description = "Instantly search domains with expressions and AI";
+    homepage = "https://github.com/breitburg/domine";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
+    mainProgram = "domine";
+  };
 }
