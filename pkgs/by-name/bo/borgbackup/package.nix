@@ -20,14 +20,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.4.2";
+  version = "1.4.2.post3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = version;
-    hash = "sha256-KoOulgOkMgnkN3I0Gw9z0YKZvqvPJ0A9sIAxRLOlchU=";
+    hash = "sha256-CauMAHpB36LV2bOx/Yqv02CksLUH6NnXOGdE/GxjJfo=";
   };
 
   postPatch = ''
