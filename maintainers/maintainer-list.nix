@@ -1872,6 +1872,12 @@
     githubId = 20933385;
     name = "Anton Latukha";
   };
+  antonjah = {
+    email = "privat@antonandersson.se";
+    github = "antonjah";
+    githubId = 45765333;
+    name = "Anton Andersson";
+  };
   antonmosich = {
     email = "anton@mosich.at";
     github = "antonmosich";
