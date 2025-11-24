@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.41.1";
+  version = "1.41.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${version}";
-    hash = "sha256-UGd+4XBFT0EmL0lO2Yu4jQxNPwX24QrrqAwc6cqa2ak=";
+    hash = "sha256-k6GgJpgjn2sFzdoPNVmsfOzAwIUiq5rSW7faLbijpnk=";
   };
 
   pythonRelaxDeps = [
@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication rec {
       llm
       paramiko
       prompt-toolkit
-      pyaes
       pycryptodomex
       pygments
       pymysql
