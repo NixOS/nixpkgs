@@ -4695,6 +4695,8 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
+  ecoji = callPackage ../development/python-modules/ecoji { };
+
   ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
@@ -5785,6 +5787,8 @@ self: super: with self; {
   gamble = callPackage ../development/python-modules/gamble { };
 
   gaphas = callPackage ../development/python-modules/gaphas { };
+
+  garak = callPackage ../development/python-modules/garak { };
 
   gardena-bluetooth = callPackage ../development/python-modules/gardena-bluetooth { };
 
@@ -8962,6 +8966,8 @@ self: super: with self; {
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
 
+  lorem = callPackage ../development/python-modules/lorem { };
+
   loro = callPackage ../development/python-modules/loro { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
@@ -9547,6 +9553,8 @@ self: super: with self; {
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistral-common = callPackage ../development/python-modules/mistral-common { };
+
+  mistralai = callPackage ../development/python-modules/mistralai { };
 
   mistune = callPackage ../development/python-modules/mistune { };
 
@@ -10529,6 +10537,8 @@ self: super: with self; {
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
 
+  nemollm = callPackage ../development/python-modules/nemollm { };
+
   nemosis = callPackage ../development/python-modules/nemosis { };
 
   nengo = callPackage ../development/python-modules/nengo { };
@@ -10905,6 +10915,8 @@ self: super: with self; {
       { };
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
+
+  nvidia-riva-client = callPackage ../development/python-modules/nvidia-riva-client { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
@@ -20786,6 +20798,8 @@ self: super: with self; {
   zabbix-utils = callPackage ../development/python-modules/zabbix-utils { };
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
+
+  zalgolib = callPackage ../development/python-modules/zalgolib { };
 
   zamg = callPackage ../development/python-modules/zamg { };
 
