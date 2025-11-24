@@ -34,6 +34,7 @@ let
       additionalFiles = cfg.additionalFiles;
       validateChecksums = cfg.validateChecksums;
       panicOnChecksumMismatch = cfg.panicOnChecksumMismatch;
+      protocolOverride = cfg.protocolOverride;
     }
   );
   defaultWallpaper = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath;
@@ -108,6 +109,15 @@ in
         A set of files to be copied to {file}`/boot`. Each attribute name denotes the
         destination file name in {file}`/boot`, while the corresponding attribute value
         specifies the source file.
+      '';
+    };
+
+    protocolOverride = lib.mkOption {
+      default = "linux";
+      type = lib.types.str;
+      description = ''
+        Override the protocol for nixos entries.
+        Valid values are "linux", "limine", "multiboot", "multiboot1", "multiboot2", "efi", "bios".
       '';
     };
 

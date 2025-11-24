@@ -287,7 +287,7 @@ def xen_config_entry(
 
 def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     entry = '/' * levels + label + '\n'
-    entry += 'protocol: linux\n'
+    entry += 'protocol: ' + config('protocolOverride') + '\n'
     entry += f'comment: {bootspec.label}, built on {time}\n'
     entry += 'kernel_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
     entry += 'cmdline: ' + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip() + '\n'
