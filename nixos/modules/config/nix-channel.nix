@@ -71,7 +71,7 @@ in
       defaultChannel = mkOption {
         internal = true;
         type = types.str;
-        default = "https://channels.nixos.org/nixos-unstable";
+        default = "https://channels.nixos.org/nixos-25.11";
         description = "Default NixOS channel to which the root user is subscribed.";
       };
     };
