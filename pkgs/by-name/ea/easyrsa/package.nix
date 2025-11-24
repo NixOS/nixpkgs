@@ -4,6 +4,7 @@
   fetchFromGitHub,
   openssl,
   makeWrapper,
+  nix-update-script,
   runtimeShell,
 }:
 
@@ -59,13 +60,15 @@ stdenv.mkDerivation rec {
     openssl x509 -in pki/ca.crt -noout -subject | tee /dev/stderr | grep -zq "$EASYRSA_REQ_CN"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
     license = lib.licenses.gpl2Only;
-    maintainers = [
-      lib.maintainers.offline
-      lib.maintainers.numinit
+    maintainers = with lib.maintainers; [
+      offline
+      numinit
     ];
     platforms = lib.platforms.unix;
   };
