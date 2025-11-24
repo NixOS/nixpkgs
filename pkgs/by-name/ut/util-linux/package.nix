@@ -213,19 +213,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   passthru = {
-    updateScript = gitUpdater {
-      # No nicer place to find latest release.
-      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
-      rev-prefix = "v";
-      ignoredVersions = "(-rc).*";
-    };
-
     # encode upstream assumption to be used in man-db
     # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
     hasCol = stdenv.hostPlatform.libc == "glibc";
 
     tests = {
       inherit (nixosTests) pam-lastlog;
+    };
+  }
+  // lib.optionalAttrs (!isMinimal) {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc|-start|-devel).*";
     };
   };
 
