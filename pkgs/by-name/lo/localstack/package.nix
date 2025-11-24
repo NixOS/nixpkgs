@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   localstack,
+  nix-update-script,
   python3,
   testers,
 }:
@@ -75,6 +76,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
+    updateScript = nix-update-script {};
+
     tests.version = testers.testVersion {
       package = localstack;
       command = "localstack --version";
