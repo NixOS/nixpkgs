@@ -165,7 +165,7 @@ in
           serviceConfig = {
             DynamicUser = true;
             User = cfg.database.user;
-            ExecStart = "${cfg.package}/bin/documenso";
+            ExecStart = lib.getExe cfg.package;
             Restart = "always";
           }
           // lib.optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
