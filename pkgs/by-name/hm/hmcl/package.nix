@@ -5,7 +5,8 @@
   fetchurl,
   fetchFromGitHub,
 
-  gradle,
+  gradle_9,
+  hmclGradle ? gradle_9,
   unzip,
   replaceVars,
   makeDesktopItem,
@@ -66,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.7.3";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "HMCL-dev";
     repo = "HMCL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3YeVMaMKgyndnxnKjPaP0M0xdMpqc2L809t1v4mhmKM=";
+    hash = "sha256-wKhzV5arWaOCBq3ndmHjWFD96RIjluO1VtnqmomeuW8=";
   };
 
   patches = [
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     gobject-introspection
-    gradle
+    hmclGradle
     imagemagick
     stripJavaArchivesHook
     unzip
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = hmclGradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
@@ -227,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = lib.getExe (callPackage ./update.nix { });
     jar = fetchurl {
       url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-      hash = "sha256-VE/83KD1xIrkD6BGBK0rJpbKuNPOpmNSC/RHjhRsGco=";
+      hash = "sha256-bgZsQ/5CUeOkbahIV0hQSPHrYfK+EaAIV6uMZzpLOVM=";
     };
   };
 
