@@ -13,7 +13,7 @@
   aoSupport ? !stdenv.hostPlatform.isLinux,
   libao ? null,
   jackSupport ? false,
-  libjack ? null,
+  libjack2 ? null,
   samplerateSupport ? jackSupport,
   libsamplerate ? null,
   ossSupport ? false,
@@ -41,7 +41,7 @@
   discidSupport ? false,
   libdiscid ? null,
   ffmpegSupport ? true,
-  ffmpeg ? null,
+  ffmpeg_7 ? null,
   flacSupport ? true,
   flac ? null,
   madSupport ? true,
@@ -95,7 +95,7 @@ let
     # Audio output
     (mkFlag alsaSupport "CONFIG_ALSA=y" alsa-lib)
     (mkFlag aoSupport "CONFIG_AO=y" libao)
-    (mkFlag jackSupport "CONFIG_JACK=y" libjack)
+    (mkFlag jackSupport "CONFIG_JACK=y" libjack2)
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
     (mkFlag ossSupport "CONFIG_OSS=y" alsa-oss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y" libpulseaudio)
@@ -115,7 +115,7 @@ let
     ])
     (mkFlag cueSupport "CONFIG_CUE=y" libcue)
     (mkFlag discidSupport "CONFIG_DISCID=y" libdiscid)
-    (mkFlag ffmpegSupport "CONFIG_FFMPEG=y" ffmpeg)
+    (mkFlag ffmpegSupport "CONFIG_FFMPEG=y" ffmpeg_7)
     (mkFlag flacSupport "CONFIG_FLAC=y" flac)
     (mkFlag madSupport "CONFIG_MAD=y" libmad)
     (mkFlag mikmodSupport "CONFIG_MIKMOD=y" libmikmod)
@@ -133,14 +133,14 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmus";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "cmus";
     repo = "cmus";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8hgibGtkiwzenMI9YImIApRmw2EzTwE6RhglALpUkp4=";
   };
 
@@ -163,11 +163,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "LD=$(CC)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = "https://cmus.github.io/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.oxij ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.oxij ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
