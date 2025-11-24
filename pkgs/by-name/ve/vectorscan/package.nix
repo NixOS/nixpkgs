@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/cflags-generic.cmake \
       --replace-fail "-Werror" ""
     substituteInPlace cmake/build_wrapper.sh \
-      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
+      --replace-fail 'nm -f p ' '${stdenv.cc.targetPrefix}nm --format=posix ' \
       --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
   '';
 
