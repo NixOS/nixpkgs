@@ -11,6 +11,9 @@
   lzip,
   patch,
 
+  # nativeBuildInputs
+  installShellFiles,
+
   # tests
   addBinToPathHook,
   gitMinimal,
@@ -75,6 +78,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.buildstream-plugins
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   buildInputs = [
     fuse3
     lzip
@@ -126,6 +133,12 @@ python3Packages.buildPythonApplication rec {
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tmp/popen-gw1/test_report_when_cascache_exit0/buildbox-casd'
     "tests/internals/cascache.py"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd bst \
+      --bash src/buildstream/data/bst \
+      --zsh src/buildstream/data/zsh/_bst
+  '';
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
   versionCheckProgramArg = "--version";
