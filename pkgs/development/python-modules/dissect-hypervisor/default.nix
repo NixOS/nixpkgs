@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "dissect-hypervisor";
   version = "3.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
