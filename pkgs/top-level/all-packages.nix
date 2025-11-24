@@ -3767,8 +3767,6 @@ with pkgs;
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
 
-  quictls = callPackage ../development/libraries/quictls { };
-
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
