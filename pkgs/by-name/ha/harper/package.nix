@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "0.72.0";
+  version = "0.73.0";
 
   src = fetchFromGitHub {
     owner = "Automattic";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildAndTestSubdir = "harper-ls";
 
-  cargoHash = "sha256-oZUYU3ZR9i6DlcolYshPq24vvrMeDUhDjh5RbbZlwtI=";
+  cargoHash = "sha256-K5/QPTLdT4SeZr6hvth8aDodaj2NnFsLpHDQle+FU1k=";
 
   passthru.updateScript = nix-update-script { };
 
