@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "croc";
   version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oNk4ReqteTeWKjsmVPC2yVRv1A9WN9jUbiT40flfM+o=";
   };
 
@@ -74,4 +74,4 @@ buildGoModule rec {
     ];
     mainProgram = "croc";
   };
-}
+})
