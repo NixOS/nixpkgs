@@ -13641,6 +13641,10 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  cvc5 = callPackage ../by-name/cv/cvc5/package.nix {
+    cadical = cadical.override { version = "2.1.3"; };
+  };
+
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };

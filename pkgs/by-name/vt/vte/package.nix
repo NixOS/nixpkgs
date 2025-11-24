@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
         termite
         xfce4-terminal
         ;
-      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
+      inherit blackbox-terminal;
     };
   };
 

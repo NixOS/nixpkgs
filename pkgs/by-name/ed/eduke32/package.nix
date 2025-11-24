@@ -179,8 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
-    description = "Enhanched port of Duke Nukem 3D for various platforms";
-    homepage = "http://eduke32.com";
+    description = "Enhanced port of Duke Nukem 3D for various platforms";
+    homepage = "https://eduke32.com";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
       qubitnano
