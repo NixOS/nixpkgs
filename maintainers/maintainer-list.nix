@@ -2910,6 +2910,12 @@
     githubId = 766221;
     name = "Ngoc Nguyen";
   };
+  BaptTF = {
+    email = "baptiste.jullien06@gmail.com";
+    github = "BaptTF";
+    githubId = 34722625;
+    name = "Baptiste Jullien";
+  };
   barab-i = {
     email = "barab_i@outlook.com";
     github = "barab-i";
