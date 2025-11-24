@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, requests
-, certifi
-, aiohttp
-, cryptography
-, aiodns
-, yarl
-, typing-extensions
-, coincurve
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  requests,
+  certifi,
+  aiohttp,
+  cryptography,
+  aiodns,
+  yarl,
+  typing-extensions,
+  coincurve,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,6 @@ buildPythonPackage rec {
     description = "Cryptocurrency trading library";
     homepage = "https://github.com/ccxt/ccxt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cybermanu84 ]; 
+    maintainers = with lib.maintainers; [ cybermanu84 ];
   };
 }

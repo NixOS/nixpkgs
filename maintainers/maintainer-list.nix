@@ -3,12 +3,12 @@
    ```nix
    handle = {
      # Required
-     name = "Your name";
-     github = "GithubUsername";
-     githubId = your-github-id;
+     name = "";
+     github = "";
+     githubId = ;
 
      # Optional
-     email = "address@example.org";
+     email = "";
      matrix = "@user:example.org";
      keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
@@ -5523,6 +5523,12 @@
     name = "Sheikh";
     github = "cybardev";
     githubId = 50134239;
+  };
+  cybermanu84 = {
+    email = "cybermanu@gmail.com";
+    name = "Emmanuel Le Calonnec";
+    github = "cybermanu84";
+    githubId = 14197102;
   };
   cybershadow = {
     name = "Vladimir Panteleev";
