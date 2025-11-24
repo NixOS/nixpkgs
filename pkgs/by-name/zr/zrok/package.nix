@@ -13,6 +13,8 @@ let
       x86_64-linux = "linux_amd64";
       aarch64-linux = "linux_arm64";
       armv7l-linux = "linux_armv7";
+      x86_64-darwin = "darwin_amd64";
+      aarch64-darwin = "darwin_arm64";
     }
     .${system} or throwSystem;
 
@@ -21,6 +23,8 @@ let
       x86_64-linux = "sha256-Ewez2QUsIAmxyjxR8wvt7UJpXVHjIb8s6gGF1YNgrec=";
       aarch64-linux = "sha256-5hZaOqnTYWeUJXGObzUZMqE62ZgNvJ9Wi8shVng10l8=";
       armv7l-linux = "sha256-MOM0OS2/mhYaxowsBVnZH0poR+wXsbjsJKldU/nAfjU=";
+      x86_64-darwin = "sha256-DlB24u4CPK5NqrX+vlDJWqjtcz04X0UQurYY0hZtZ0Q=";
+      aarch64-darwin = "sha256-HS7xMpJUFm2PYEe4aXMJ5THGklDTAuziCtcCgf7sX9Q=";
     }
     .${system} or throwSystem;
 in
@@ -36,20 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   updateScript = ./update.sh;
 
-  installPhase =
-    let
-      interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/bin
-      cp zrok $out/bin/
-      chmod +x $out/bin/zrok
-      patchelf --set-interpreter "${interpreter}" "$out/bin/zrok"
+    mkdir -p $out/bin
+    cp zrok $out/bin/
+    chmod +x $out/bin/zrok
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-interpreter "$(< "$NIX_CC/nix-support/dynamic-linker")" "$out/bin/zrok"
+    ''}
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     description = "Geo-scale, next-generation sharing platform built on top of OpenZiti";
@@ -61,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
