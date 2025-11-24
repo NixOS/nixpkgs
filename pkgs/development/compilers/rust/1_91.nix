@@ -22,6 +22,7 @@
   wrapRustcWith,
   llvmPackages,
   llvm,
+  cargo-auditable,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -51,7 +52,7 @@ import ./default.nix
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
-    inherit llvmPackages;
+    inherit llvmPackages cargo-auditable;
 
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
