@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^v(2\\.3\\.[0-9]+)$"
+        "^(2\\.3\\.[0-9]+)$"
       ];
     };
   };
