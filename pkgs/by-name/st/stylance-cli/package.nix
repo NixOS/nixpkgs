@@ -5,14 +5,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "stylance-cli";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Cdv+Lz+l0+8Jdk9stHACXDbUPedM/YryDMExdsqVvsU=";
+    hash = "sha256-lGgKmNqZ0nflVAM3GMDwGgxnXyLCqVz1bTUsvabXmj8=";
   };
 
-  cargoHash = "sha256-cwgR5AHCeS9YkaJlyFxvEOrBXg7/tXNGXgtSEPHAwm4=";
+  cargoHash = "sha256-HWZQNEKTyNnmA1twN5cfo5RY2tOeCnL6zEp+M4F+Tqg=";
 
   meta = {
     description = "Library and cli tool for working with scoped CSS in rust";
