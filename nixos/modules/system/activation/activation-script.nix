@@ -13,17 +13,16 @@ let
   addAttributeName = mapAttrs (
     a: v:
     v
-    // {
+    // (lib.optionalAttrs (v.text != "") {
       text = ''
         #### Activation script snippet ${a}:
         _localstatus=0
         ${v.text}
-
         if (( _localstatus > 0 )); then
           printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
         fi
       '';
-    }
+    })
   );
 
   systemActivationScript =
@@ -68,8 +67,11 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${textClosureMap id withDrySnippets (attrNames withDrySnippets)}
-
+      ${lib.concatStringsSep "\n" (
+        lib.filter (v: v != "") (
+          textClosureList withDrySnippets (attrNames (lib.filterAttrs (_: v: v.text != "") withDrySnippets))
+        )
+      )}
     ''
     + optionalString (!onlyDry) ''
       # Make this configuration the current configuration.
