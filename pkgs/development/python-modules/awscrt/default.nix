@@ -6,19 +6,16 @@
   cmake,
   perl,
   stdenv,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.28.4";
+  version = "0.29.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0oNQlOktCj0XItA6/VSYMRWyFy1XWBpmStairz0zwSw=";
+    hash = "sha256-D6GHTFohd2G2IlQ5PTq3r2v+qUfLqH044XEdV2/WPTE=";
   };
 
   build-system = [ setuptools ];
