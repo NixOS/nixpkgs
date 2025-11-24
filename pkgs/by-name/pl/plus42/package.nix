@@ -10,12 +10,12 @@
   nix-update-script,
 }:
 stdenv.mkDerivation rec {
-  pname = "free42";
-  version = "3.3.10";
+  pname = "plus42";
+  version = "1.3.12";
 
   src = fetchurl {
-    url = "https://thomasokken.com/free42/upstream/free42-nologo-${version}.tgz";
-    hash = "sha256-Vh+Sh3oX1ICy0R6R4zu9Df2+ba2mM33qHtifINNpn7Y=";
+    url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${version}.tgz";
+    hash = "sha256-IBXQu1hI0bJZISL9wInAzf2z8zbynXXP15oG/od+MC8=";
   };
 
   nativeBuildInputs = [
@@ -35,26 +35,26 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "free42bin";
-      desktopName = "Free42Bin";
+      name = "plus42bin";
+      desktopName = "Plus42Bin";
       genericName = "Calculator";
-      exec = "free42bin";
+      exec = "plus42bin";
       type = "Application";
-      comment = "Software clone of the HP-42S calculator";
-      icon = "free42";
+      comment = "Software clone of the HP-42S calculator (enhanced version)";
+      icon = "plus42";
       categories = [
         "Utility"
         "Calculator"
       ];
     })
     (makeDesktopItem {
-      name = "free42dec";
-      desktopName = "Free42Dec";
+      name = "plus42dec";
+      desktopName = "Plus42Dec";
       genericName = "Calculator";
-      exec = "free42dec";
+      exec = "plus42dec";
       type = "Application";
-      comment = "Software clone of the HP-42S calculator";
-      icon = "free42";
+      comment = "Software clone of the HP-42S calculator (enhanced version)";
+      icon = "plus42";
       categories = [
         "Utility"
         "Calculator"
@@ -77,17 +77,17 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install --directory $out/bin \
-                        $out/share/doc/free42 \
-                        $out/share/free42/skins \
+                        $out/share/doc/plus42 \
+                        $out/share/plus42/skins \
                         $out/share/icons/hicolor/48x48/apps \
                         $out/share/icons/hicolor/128x128/apps
 
-    install -m755 gtk/free42dec gtk/free42bin $out/bin
-    install -m644 README $out/share/doc/free42/README
+    install -m755 gtk/plus42dec gtk/plus42bin $out/bin
+    install -m644 README $out/share/doc/plus42/README
 
-    install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/free42.png
-    install -m644 gtk/icon-128x128.png $out/share/icons/hicolor/128x128/apps/free42.png
-    install -m644 skins/* $out/share/free42/skins
+    install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/plus42.png
+    install -m644 gtk/icon-128x128.png $out/share/icons/hicolor/128x128/apps/plus42.png
+    install -m644 skins/* $out/share/plus42/skins
 
     runHook postInstall
   '';
@@ -95,26 +95,26 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    wrapProgram $out/bin/free42dec \
+    wrapProgram $out/bin/plus42dec \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
       "''${gappsWrapperArgs[@]}"
 
-    wrapProgram $out/bin/free42bin \
+    wrapProgram $out/bin/plus42bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
       "''${gappsWrapperArgs[@]}"
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--url=https://codeberg.org/thomasokken/free42" ];
+    extraArgs = [ "--url=https://codeberg.org/thomasokken/plus42desktop" ];
   };
 
   meta = {
-    homepage = "https://thomasokken.com/free42/";
-    changelog = "https://thomasokken.com/free42/history.html";
-    description = "Software clone of the HP-42S calculator";
+    homepage = "https://thomasokken.com/plus42/";
+    changelog = "https://thomasokken.com/plus42/history.html";
+    description = "Software clone of the HP-42S calculator (enhanced version)";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ elfenermarcell ];
-    mainProgram = "free42dec";
+    mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;
   };
 }
