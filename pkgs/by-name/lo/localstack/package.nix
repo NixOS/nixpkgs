@@ -3,6 +3,7 @@
   lib,
   localstack,
   python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -72,6 +73,14 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = ''
     rm $out/nix-support/propagated-build-inputs
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = localstack;
+      command = "localstack --version";
+      inherit version;
+    };
+  };
 
   meta = with lib; {
     description = "Fully functional local Cloud stack";
