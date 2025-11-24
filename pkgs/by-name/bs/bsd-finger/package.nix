@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
         "daemon" = "Remote user information server";
       }
       .${buildProduct};
+    homepage = "https://salsa.debian.org/debian/bsd-finger";
     license = lib.licenses.bsdOriginal;
     mainProgram =
       {
