@@ -8899,6 +8899,12 @@
     githubId = 26125115;
     name = "Frédéric Christ";
   };
+  FreeCap23 = {
+    name = "Dionisie Stratulat";
+    email = "dionisiestratulat@gmail.com";
+    github = "FreeCap23";
+    githubId = 62378314;
+  };
   Freed-Wu = {
     email = "wuzhenyu@ustc.edu";
     github = "Freed-Wu";
