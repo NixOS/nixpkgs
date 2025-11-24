@@ -2457,6 +2457,8 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { krb5-c = pkgs.krb5; };
 
+  ccxt = callPackage ../development/python-modules/ccxt { };
+
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
@@ -18973,18 +18975,20 @@ self: super: with self; {
     lib.mapAttrs
       (
         name: grammarDrv:
-        callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
+          callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
       )
       (
         # Filtering grammars not compatible with current py-tree-sitter version
-        lib.filterAttrs (
-          name: value:
-          !(builtins.elem name [
-            "tree-sitter-go-template"
-            "tree-sitter-sql"
-            "tree-sitter-templ"
-          ])
-        ) pkgs.tree-sitter.builtGrammars
+        lib.filterAttrs
+          (
+            name: value:
+              !(builtins.elem name [
+                "tree-sitter-go-template"
+                "tree-sitter-sql"
+                "tree-sitter-templ"
+              ])
+          )
+          pkgs.tree-sitter.builtGrammars
       )
   );
 
