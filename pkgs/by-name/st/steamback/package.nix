@@ -1,44 +1,32 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  pillow,
-  psutil,
-  async-tkinter-loop,
-  timeago,
-  platformdirs,
-  sv-ttk,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "steamback";
   version = "0.3.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-hvMPSxIfwwQqo80JCpYhcbVY4kXs5jWtjjafVSMrw6o=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
+    setuptools
     setuptools-scm
     wheel
   ];
 
-  buildInputs = [
-    setuptools
-    pillow
-  ];
-
-  dependencies = [
+  dependencies = with python3Packages; [
     psutil
     async-tkinter-loop
     timeago
     platformdirs
     sv-ttk
+    pillow
   ];
 
   pythonRelaxDeps = [
