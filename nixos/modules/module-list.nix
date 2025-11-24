@@ -1517,6 +1517,7 @@
   ./services/system/earlyoom.nix
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
+  ./services/system/nix-daemon-firewall.nix
   ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
   ./services/system/nvme-rs.nix

@@ -1067,6 +1067,7 @@ in
   nitter = runTest ./nitter.nix;
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nix-config = runTest ./nix-config.nix;
+  nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
