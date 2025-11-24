@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "uptime-kuma";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-zW5sl1g96PvDK3S6XhJ6F369/NSnvU9uSQORCQugfvs=";
   };
 
@@ -45,10 +45,10 @@ buildNpmPackage rec {
     description = "Fancy self-hosted monitoring tool";
     mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
-    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
+    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ julienmalka ];
     # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
