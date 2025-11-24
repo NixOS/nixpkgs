@@ -9,23 +9,26 @@
   python3Packages,
 }:
 
-# NOTE: for subunit python library see pkgs/top-level/python-packages.nix
+# NOTE: for the subunit python library see pkgs/top-level/python-packages.nix
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subunit";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/subunit/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/subunit/trunk/${finalAttrs.version}/+download/subunit-${finalAttrs.version}.tar.gz";
     hash = "sha256-hlOOv6kIC97w7ICVsuXeWrsUbVu3tCSzEVKUHXYG2dI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+    python3Packages.wrapPython
+    python3Packages.testscenarios
+  ];
   buildInputs = [
     check
     cppunit
-    perl
-    python3Packages.wrapPython
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -33,13 +36,16 @@ stdenv.mkDerivation rec {
     testscenarios
   ];
 
+  strictDeps = true;
+
   postFixup = "wrapPythonPrograms";
 
-  meta = with lib; {
+  meta = {
     description = "Streaming protocol for test results";
     mainProgram = "subunit-diff";
     homepage = "https://launchpad.net/subunit";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ azey7f ];
   };
-}
+})
