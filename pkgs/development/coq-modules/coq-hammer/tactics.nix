@@ -23,7 +23,7 @@ let
     ] null;
 
   release = {
-    "1.3.2+9.1".sha256 = "sha256-SXNVniCzx8yUcwkNRRCqfETiGQi+8hSO46/UQnyGa8E=";
+    "1.3.2+9.1".sha256 = "sha256-tf+Hrfv/ZrLXryTjJchvLfydxzjkXB2hbL7P280Clzw=";
     "1.3.2+9.0".sha256 = "sha256-/UHtK9fjpHTbra4/Cnsjt8fg1fvxx7U6kGjQPm15NwM=";
     "1.3.2+8.20".sha256 = "sha256-RuX2aInSjwebs/aEOoisNxqcIPqDA2kWehN9tFYqOx4=";
     "1.3.2+8.19".sha256 = "sha256-Zd7piAWlKPAZKEz7HVWxhnzOLbA/eR9C/E0T298MJVY=";
