@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "diction";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchurl {
-    url = "http://www.moria.de/~michael/diction/${pname}-${version}.tar.gz";
-    sha256 = "08fi971b8qa4xycxbgb42i6b5ms3qx9zpp5hwpbxy2vypfs0wph9";
+    url = "https://www.moria.de/~michael/comp/diction/diction-${version}.tar.gz";
+    hash = "sha256-2gEvs6XLplZtI4zahpsM7NvvBFJ4DE02gQCoQEcv1/w=";
   };
 
   meta = {
