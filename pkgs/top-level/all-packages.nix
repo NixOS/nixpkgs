@@ -5987,8 +5987,18 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
-  ansible = ansible_2_19;
-  ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_20;
+  ansible_2_20 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_19 = python3Packages.toPythonApplication (
+    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+      version = "2.19.4";
+      src = fetchPypi {
+        pname = "ansible_core";
+        inherit version;
+        hash = "sha256-iI22WT8v1CzQW9vlRnBNnJadzpnjNzpUSY9tvvz6GRc=";
+      };
+    })
+  );
   ansible_2_18 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.18.8";
