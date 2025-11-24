@@ -1,5 +1,5 @@
 diff --git a/turbo.json b/turbo.json
-index d767b46..b2d1ad3 100644
+index 0c169bc..e00df03 100644
 --- a/turbo.json
 +++ b/turbo.json
 @@ -1,41 +1,8 @@
@@ -46,11 +46,11 @@ index d767b46..b2d1ad3 100644
 +  ],
    "globalEnv": [
      "APP_VERSION",
-     "NEXT_PRIVATE_ENCRYPTION_KEY",
-@@ -119,5 +86,53 @@
-     "E2E_TEST_AUTHENTICATE_USERNAME",
-     "E2E_TEST_AUTHENTICATE_USER_EMAIL",
-     "E2E_TEST_AUTHENTICATE_USER_PASSWORD"
+     "PORT",
+@@ -125,5 +92,53 @@
+     "E2E_TEST_AUTHENTICATE_USER_PASSWORD",
+     "NEXT_PUBLIC_USE_INTERNAL_URL_BROWSERLESS",
+     "NEXT_PRIVATE_OIDC_PROMPT"
 -  ]
 +  ],
 +  "tasks": {
