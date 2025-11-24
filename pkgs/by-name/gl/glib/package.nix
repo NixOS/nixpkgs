@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gettext,
   meson,
   ninja,
@@ -99,6 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
       ./gobject_init_on_demand.patch
     ]
     ++ [
+      (fetchpatch {
+        name = "CVE-2025-7039.patch";
+        url = "https://gitlab.gnome.org/GNOME/glib/-/commit/61e963284889ddb4544e6f1d5261c16120f6fcc3.patch";
+        hash = "sha256-g0TIvKk5XEb4+iiDsDBkDH62ldlQ/jjGsMhHORD806k=";
+      })
+
       # This patch lets GLib's GDesktopAppInfo API watch and notice changes
       # to the Nix user and system profiles.  That way, the list of available
       # applications shown by the desktop environment is immediately updated
