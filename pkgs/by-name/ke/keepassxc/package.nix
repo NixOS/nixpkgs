@@ -188,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
       sigmasquadron
+      ryand56
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
