@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "multimethod";
-  version = "2.0";
+  version = "2.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "coady";
     repo = "multimethod";
     tag = "v${version}";
-    hash = "sha256-/91re2K+nVKULJOjDoimpOukQlLlsMS9blkVQWit2eI=";
+    hash = "sha256-0En3NdLLmS/4bw0I3z9xxKa85tECi1rjmpZyxYuZk3w=";
   };
 
   nativeBuildInputs = [ setuptools ];
