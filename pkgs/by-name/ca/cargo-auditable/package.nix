@@ -45,8 +45,8 @@ let
         checkFlags = [
           # requires wasm32-unknown-unknown target
           "--skip=test_wasm"
-        ]
-        ++ lib.optionals (!auditable) [
+          # Seems to be a bug in tests of locked vs. semver compatible packages
+          # https://github.com/rust-secure-code/cargo-auditable/issues/235
           "--skip=test_proc_macro"
           "--skip=test_self_hosting"
         ];
