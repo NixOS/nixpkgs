@@ -1,9 +1,9 @@
 {
+  abseil-cpp,
   cmake,
   cmark-gfm,
   fetchFromGitHub,
   fetchNpmDeps,
-  grpc-tools,
   kdePackages,
   lib,
   libqalculate,
@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CMAKE_INSTALL_LIBDIR" = "lib";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -59,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    abseil-cpp
     cmark-gfm
-    grpc-tools
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
     libqalculate
