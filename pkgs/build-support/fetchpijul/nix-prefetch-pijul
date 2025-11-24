@@ -123,10 +123,10 @@ cat <<EOF
 	"channel": $(json_escape "$channel"),
 EOF
 if [ -n "$change" ]; then cat <<EOF
-	"change": "$(json_escape "$change")",
+	"change": $(json_escape "$change"),
 EOF
 elif [ -n "$state" ]; then cat <<EOF
-	"state": "$(json_escape "$state")",
+	"state": $(json_escape "$state"),
 EOF
 fi; cat <<EOF
 	"path": "$final_path",
