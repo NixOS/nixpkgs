@@ -135,9 +135,7 @@ in
       };
       ghc912 = compiler.ghc9122;
       ghc9141 = callPackage ../development/compilers/ghc/9.14.1.nix {
-        bootPkgs =
-          # No suitable bindist packaged yet
-          bb.packages.ghc9103;
+        bootPkgs = bb.packges.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
