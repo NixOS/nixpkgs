@@ -53,7 +53,6 @@ dont-distribute-packages:
  - age
  - agentx
  - aip
- - airgql
  - alg
  - algebra-checkers
  - algebra-driven-design
@@ -74,7 +73,6 @@ dont-distribute-packages:
  - alto
  - amazon-emailer-client-snap
  - amby
- - ampersand
  - analyze-client
  - anansi-hscolour
  - anatomy
@@ -625,7 +623,6 @@ dont-distribute-packages:
  - crf-chain2-tiers
  - criu-rpc
  - cron-compat
- - crucible-llvm
  - crux
  - crux-llvm
  - crypto-classical
@@ -869,6 +866,7 @@ dont-distribute-packages:
  - error-message
  - errors-ext
  - ersatz-toysat
+ - ersatz-viz
  - esotericbot
  - EsounD
  - esqueleto-postgis
@@ -1196,13 +1194,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
- - gpu-vulkan
- - gpu-vulkan-khr-surface
- - gpu-vulkan-khr-surface-glfw
- - gpu-vulkan-khr-swapchain
- - gpu-vulkan-middle-khr-surface
- - gpu-vulkan-middle-khr-surface-glfw
- - gpu-vulkan-middle-khr-swapchain
  - GPX
  - grab-form
  - graflog
@@ -1989,7 +1980,6 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
- - kvitable
  - laborantin-hs
  - labsat
  - labyrinth
@@ -2400,7 +2390,6 @@ dont-distribute-packages:
  - nakadi-client
  - named-servant-client
  - named-servant-server
- - named-text
  - nanq
  - NaperianNetCDF
  - national-australia-bank
@@ -2412,8 +2401,6 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt-lens
- - net-mqtt-rpc
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
@@ -2795,7 +2782,6 @@ dont-distribute-packages:
  - puzzle-draw-cmdline
  - pvd
  - qd-vec
- - qhs
  - qhull
  - qnap-decrypt
  - qr-repa
@@ -3284,8 +3270,6 @@ dont-distribute-packages:
  - snowflake-server
  - snumber
  - Snusmumrik
- - soap-openssl
- - soap-tls
  - SoccerFun
  - SoccerFunGL
  - sock2stream
@@ -3450,15 +3434,12 @@ dont-distribute-packages:
  - target
  - task
  - task-distribution
- - tasklite
- - tasklite-core
  - tasty-bdd
  - tasty-groundhog-converters
  - tasty-integrate
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
- - tasty-sugar
  - TastyTLT
  - tateti-tateti
  - Taxonomy
