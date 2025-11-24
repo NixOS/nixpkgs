@@ -156,7 +156,11 @@
   # adds python to closure which is too much by default
   withUkify ? false,
   withUserDb ? true,
-  withUtmp ? true,
+  # utmp does not exist on musl, so it would be implicitly disabled
+  # It is important to document the lack of utmp in nix,
+  # otherwise the condition for systemd-update-utmp.service will
+  # attempt to load a service which does not exist, resulting in errors.
+  withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
