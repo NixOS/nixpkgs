@@ -41,7 +41,7 @@ let
         set -eu
         export PATH="${lib.makeBinPath deps}:$PATH"
         export HOME="/homeless-shelter"
-        exec ${src} "$@"
+        exec ${lib.getExe shell} ${src} "$@"
       '';
 
       checkPhase = /* sh */ ''
@@ -52,7 +52,10 @@ let
 
       meta = {
         description = "Script used to obtain source hashes for fetch${tool}";
-        maintainers = with lib.maintainers; [ bennofs ];
+        maintainers = with lib.maintainers; [
+          bennofs
+          toastal
+        ];
         platforms = lib.platforms.unix;
         mainProgram = "nix-prefetch-${tool}";
       };
