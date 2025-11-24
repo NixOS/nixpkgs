@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-AYjwgC1Cw9pymXUztVoAgVZZp40/gdS0dHsfsVpXKOY=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace \
       requirements.txt PKG-INFO pyproject.toml \
       --replace-fail "standard-imghdr==3.10.14" "standard-imghdr"
