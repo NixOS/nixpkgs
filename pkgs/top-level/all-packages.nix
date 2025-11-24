@@ -9411,10 +9411,6 @@ with pkgs;
     libOnly = true;
   };
 
-  apulse = callPackage ../misc/apulse { };
-
-  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
-
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
   libmysqlclient = libmysqlclient_3_3;
@@ -12161,8 +12157,6 @@ with pkgs;
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;
   };
-
-  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 

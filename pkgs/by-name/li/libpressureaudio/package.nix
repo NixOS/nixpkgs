@@ -21,6 +21,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     echo "Copying libraries from apulse."
     mkdir -p $out/lib
     ls ${apulse}/lib/apulse $out/lib
@@ -66,6 +68,8 @@ stdenv.mkDerivation {
     Cflags: -I$out/include -D_REENTRANT
     Requires: libpulse glib-2.0
     EOF
+
+    runHook postInstall
   '';
 
   meta = apulse.meta // {
