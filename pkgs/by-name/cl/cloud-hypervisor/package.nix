@@ -6,6 +6,7 @@
   pkg-config,
   dtc,
   openssl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,6 +41,11 @@ rustPlatform.buildRustPackage rec {
     "--exclude"
     "vmm" # /dev/kvm
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
