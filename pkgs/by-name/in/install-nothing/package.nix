@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Installation simulator";
+    description = "Terminal application that simulates installing things but doesn't actually install anything";
     homepage = "https://github.com/buyukakyuz/install-nothing";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yiyu ];
