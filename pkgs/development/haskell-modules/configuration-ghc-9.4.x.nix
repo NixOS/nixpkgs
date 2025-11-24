@@ -145,7 +145,7 @@ self: super: {
       "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
       (markBroken super.haskell-language-server);
 
-  hlint = doDistribute self.hlint_3_8;
+  hlint = doDistribute self.hlint_3_6_1;
 
   # directory-ospath-streaming requires the ospath API in core packages
   # filepath, directory and unix.
