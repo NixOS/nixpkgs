@@ -6,6 +6,7 @@
   installShellFiles,
   nixosTests,
   stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -44,6 +45,11 @@ buildGoModule rec {
       inherit (nixosTests) croc;
     };
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Easily and securely send things from one computer to another";
