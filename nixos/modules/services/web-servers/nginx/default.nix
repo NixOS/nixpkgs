@@ -573,10 +573,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
-  oldHTTP2 = (
-    versionOlder cfg.package.version "1.25.1"
-    && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic")
-  );
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie"));
 in
 
 {
@@ -778,7 +775,6 @@ in
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
-          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -1371,27 +1367,6 @@ in
           message = ''
             Options services.nginx.service.virtualHosts.<name>.proxyPass and
             services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
-          message = ''
-            services.nginx.enableQuicBPF requires using nginxQuic package,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic"
-            -> all (host: !host.quic) (attrValues virtualHosts);
-          message = ''
-            services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
           '';
         }
 
