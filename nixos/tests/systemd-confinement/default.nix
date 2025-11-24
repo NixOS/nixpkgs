@@ -215,6 +215,73 @@ import ../make-test-python.nix {
             }
           );
 
+      concurrentTest = {
+        systemd.sockets.concurrent-server = {
+          description = "Socket for synchronising concurrent processes";
+          requiredBy = [ "sockets.target" ];
+          socketConfig.ListenStream = 12345;
+        };
+
+        systemd.services.concurrent-server = {
+          description = "Server for synchronising concurrent processes";
+          requiredBy = [ "multi-user.target" ];
+          requires = [ "concurrent-server.socket" ];
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = mkTest "concurrent-server" ''
+            import socket
+
+            SD_LISTEN_FDS_START = 3
+
+            clients = []
+
+            with socket.fromfd(
+              SD_LISTEN_FDS_START,
+              socket.AF_INET6,
+              socket.SOCK_STREAM,
+            ) as server:
+              counter = 1
+
+              while len(clients) < 5:
+                run([
+                  'systemctl', 'start', f'concurrent@{counter}.service'
+                ], check=True)
+                counter += 1
+
+                clients.append(client := server.accept()[0])
+                client.sendall(b'hello')
+
+              for client in clients:
+                client.sendall(b'please run')
+
+              for client in clients:
+                assert client.recv(2) == b'ok'
+
+              for client in clients:
+                client.sendall(b'goodbye')
+          '';
+        };
+
+        systemd.services."concurrent@" = {
+          description = "Process %I running concurrently with others";
+          after = [ "concurrent-server.socket" ];
+          confinement.enable = true;
+          serviceConfig.ExecStart = mkTest "concurrent-client" ''
+            import socket
+
+            with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as client:
+              client.connect(('::1', 12345))
+              assert client.recv(5) == b'hello'
+
+              assert client.recv(10) == b'please run'
+              run(["${pkgs.fortune}/bin/fortune"], check=True)
+              client.sendall(b'ok')
+
+              assert client.recv(7) == b'goodbye'
+              assert client.recv(1) == b""
+          '';
+        };
+      };
+
     in
     {
       imports = lib.imap1 mkTestStep (
@@ -330,7 +397,7 @@ import ../make-test-python.nix {
             '';
           }
         ]
-      );
+      ) ++ [ concurrentTest ];
 
       config.users.groups.chroot-testgroup = { };
       config.users.users.chroot-testuser = {
