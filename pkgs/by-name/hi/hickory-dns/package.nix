@@ -5,6 +5,7 @@
   pkg-config,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # tests expect internet connectivity to query real nameservers like 8.8.8.8
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
