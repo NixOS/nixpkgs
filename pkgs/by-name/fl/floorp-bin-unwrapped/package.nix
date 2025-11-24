@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = builtins.attrNames sources;
     hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [
+      caniko
       christoph-heiss
     ];
     mainProgram = "floorp";
