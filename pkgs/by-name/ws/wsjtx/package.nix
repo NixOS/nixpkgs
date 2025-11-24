@@ -13,13 +13,9 @@
   hamlib_4,
   libtool,
   libusb1,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
-  qttools,
+  qt5,
   boost,
   texinfo,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,18 +36,18 @@ stdenv.mkDerivation (finalAttrs: {
     hamlib_4 # rigctl
     libtool
     pkg-config
-    qttools
+    qt5.qttools
     texinfo
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     fftw
     fftwFloat
     hamlib_4
     libusb1
-    qtbase
-    qtmultimedia
-    qtserialport
+    qt5.qtbase
+    qt5.qtmultimedia
+    qt5.qtserialport
     boost
   ];
 
