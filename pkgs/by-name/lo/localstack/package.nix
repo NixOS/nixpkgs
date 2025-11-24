@@ -1,7 +1,8 @@
 {
-  lib,
-  python3,
   fetchFromGitHub,
+  lib,
+  localstack,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
