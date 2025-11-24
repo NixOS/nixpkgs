@@ -7,6 +7,7 @@
   pandas,
   pyarrow,
   pytest8_3CheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -21,6 +22,13 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-Aq/2yDyvUpLsGr+mmBDQpC9X1pWLpDtYD6qql2sgGNw=";
   };
+
+  # https://github.com/googleapis/python-db-dtypes-pandas/pull/379
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace tests/unit/test_date.py \
+      --replace-fail '"year 10000 is out of range"' '"year must be in 1..9999, not 10000"' \
+      --replace-fail '"day is out of range for month"' '"day 99 must be in range 1..28 for month 2 in year 2021"'
+  '';
 
   build-system = [ setuptools ];
 
