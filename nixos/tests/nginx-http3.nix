@@ -114,7 +114,7 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angieQuic
-      pkgs.nginxQuic
+      pkgs.angie
+      pkgs.nginx
     ]
 )

@@ -1128,6 +1128,7 @@ mapAliases {
   "; # Added 2025-09-25
   nextcloud30Packages = throw "Nextcloud 30 is EOL!"; # Added 2025-09-25
   nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
+  nginxQuic = throw "'nginxQuic' has been removed. QUIC support is now available in the default nginx builds.";
   ngrid = throw "'ngrid' has been removed as it has been unmaintained upstream and broken"; # Added 2025-11-15
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
