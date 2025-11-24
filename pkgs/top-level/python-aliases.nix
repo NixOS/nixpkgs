@@ -60,6 +60,7 @@ mapAliases {
   abodepy = throw "'abodepy' has been renamed to/replaced by 'jaraco-abode'"; # Converted to throw 2025-10-29
   amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = throw "'amazon_kclpy' has been renamed to/replaced by 'amazon-kclpy'"; # Converted to throw 2025-10-29
+  amqplib = throw "amqplib has been removed as it was unmaintained upstream"; # Added 2025-11-22
   ansiwrap = throw "ansiwrap has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
@@ -249,6 +250,7 @@ mapAliases {
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
   lxml-stubs = throw "'lxml-stubs' has been removed as it was broken and unmaintained upstream. Consider using 'types-lxml' instead."; # Converted to throw 2025-11-07
+  lzstring = throw "'lzstring' has been removed as it was unmaintained upstream"; # Added 2025-11-22
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
@@ -452,6 +454,7 @@ mapAliases {
   supervise_api = throw "'supervise_api' has been renamed to/replaced by 'supervise-api'"; # Converted to throw 2025-10-29
   swh-perfecthash = throw "'swh-perfecthash' has been renamed to/replaced by 'swh-shard'"; # added 2025-11-13
   synologydsm-api = throw "'synologydsm-api' has been renamed to/replaced by 'py-synologydsm-api'"; # Converted to throw 2025-10-29
+  systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
@@ -471,6 +474,7 @@ mapAliases {
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = throw "'trezor_agent' has been renamed to/replaced by 'trezor-agent'"; # Converted to throw 2025-10-29
   tvdb_api = throw "'tvdb_api' has been renamed to/replaced by 'tvdb-api'"; # Converted to throw 2025-10-29
+  tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
