@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "alexapy";
-  version = "1.29.9";
+  version = "1.29.10";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "keatontaylor";
     repo = "alexapy";
     tag = "v${version}";
-    hash = "sha256-Ecj4IQd0UJuNcGqSj48WrULyOwkbNh1YITkj0ftS7yY=";
+    hash = "sha256-XyTnCSaE5yednpsR21cenY7Pl/msn3zJsOYGiSGPflA=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];
