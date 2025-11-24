@@ -5,6 +5,7 @@
   asciidoc,
   asciidoctor,
   cmake,
+  gitUpdater,
   pkg-config,
   fftw,
   fftwFloat,
@@ -21,13 +22,13 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
   version = "2.7.0";
 
   src = fetchgit {
-    url = "http://git.code.sf.net/p/wsjt/wsjtx";
-    rev = "wsjtx-${version}";
+    url = "https://git.code.sf.net/p/wsjt/wsjtx";
+    rev = "wsjtx-${finalAttrs.version}";
     hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
@@ -56,6 +57,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "wsjtx-";
+    ignoredVersions = "(-rc).*";
+  };
+
   meta = {
     description = "Weak-signal digital communication modes for amateur radio";
     longDescription = ''
@@ -73,4 +79,4 @@ stdenv.mkDerivation rec {
       numinit
     ];
   };
-}
+})
