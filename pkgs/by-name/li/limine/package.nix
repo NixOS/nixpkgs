@@ -114,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       johnrtitor
       lzcunt
-      phip1611
       prince213
       programmerlexi
       surfaceflinger
