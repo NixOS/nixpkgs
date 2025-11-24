@@ -20,6 +20,9 @@ let
   fangfrischConfigFile = pkgs.writeText "fangfrisch.conf" ''
     ${lib.generators.toINI { } cfg.fangfrisch.settings}
   '';
+
+  tcpEnabled = cfg.daemon.settings ? TCPSocket;
+  tcpAddrs = lib.toList (cfg.daemon.settings.TCPAddr or (if tcpEnabled then [ "any" ] else [ ]));
 in
 {
   imports = [
@@ -209,6 +212,10 @@ in
         assertion = cfg.clamonacc.enable -> cfg.daemon.enable;
         message = "ClamAV on-access scanner requires ClamAV daemon to operate";
       }
+      {
+        assertion = builtins.length tcpAddrs < 2;
+        message = "ClamAV only supports at most one TCPAddr with socket activation";
+      }
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -257,12 +264,24 @@ in
       description = "ClamAV Antivirus Slice";
     };
 
-    systemd.sockets.clamav-daemon = lib.mkIf cfg.daemon.enable {
+    systemd.sockets.clamav-daemon = lib.mkIf (cfg.daemon.enable && cfg.daemon.socketActivation) {
       description = "Socket for ClamAV daemon (clamd)";
       wantedBy = [ "sockets.target" ];
       listenStreams = [
         cfg.daemon.settings.LocalSocket
-      ];
+      ]
+      ++ (builtins.map (
+        addr:
+        (
+          if addr == "any" then
+            ""
+          else if lib.hasInfix ":" addr then
+            "[${addr}]:"
+          else
+            "${addr}:"
+        )
+        + (builtins.toString cfg.daemon.settings.TCPSocket)
+      ) tcpAddrs);
       socketConfig = {
         SocketUser = clamavUser;
         SocketGroup = clamavGroup;
