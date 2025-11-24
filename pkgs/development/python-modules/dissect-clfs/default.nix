@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.10";
+  version = "1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.clfs";
     tag = version;
-    hash = "sha256-rw2LuCgn/oUnvf2HNXv00pDaiLrqjC5L57a1k62U6zU=";
+    hash = "sha256-IwiE7sikZ2Rqg8GS0DKLbV/ENcRPTm0eAS3xvVG0gLw=";
   };
 
   build-system = [
