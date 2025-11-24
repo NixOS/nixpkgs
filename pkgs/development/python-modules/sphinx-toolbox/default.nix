@@ -30,7 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-SMMUUdsuLYxxwDk55yoZ73vJLKeFCmLbY/x7uDlbZ4U=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace \
       requirements.txt PKG-INFO pyproject.toml \
       --replace-fail "sphinx-tabs<3.4.7,>=1.2.1" "sphinx-tabs<=3.4.7,>=1.2.1"
