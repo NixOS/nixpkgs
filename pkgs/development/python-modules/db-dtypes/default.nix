@@ -7,22 +7,19 @@
   pandas,
   pyarrow,
   pytest8_3CheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     tag = "v${version}";
-    hash = "sha256-AyO/GwtExMWi4mB3OMtYPFvAVS/ylcBXGiGXgaScyCA=";
+    hash = "sha256-Aq/2yDyvUpLsGr+mmBDQpC9X1pWLpDtYD6qql2sgGNw=";
   };
 
   build-system = [ setuptools ];
