@@ -6,17 +6,18 @@
   jre,
   maven,
   makeWrapper,
+  unzip,
   nixosTests,
   writeText,
 }:
 let
-  version = "4.6.0";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-Qc2l/CSVK+8k7b3RZA8hQsGTq29OvkDMbMzHcnPm/yE=";
+    hash = "sha256-B0ztra7j5V5Qm0DRpu4cl04tmOE1gS89NOV2kyMrzOg=";
   };
 
   frontend = buildNpmPackage {
@@ -26,7 +27,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-bQShz6dmE9IZ9to5Z2DScncc/WVJnX1tRCm8XQJNmiU=";
+    npmDepsHash = "sha256-TD57bDY/7/zYT1T/HOl0+G59/hct8fzJaKaMC8/bBEI=";
 
     nativeBuildInputs = [ biome ];
 
@@ -52,7 +53,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-7nm8Cz05Qa44TMC0ioklvKAXQnE9J2wUDZFXLQt2A1w=";
+  mvnHash = "sha256-ipGxdX/LHEn2mQa2JhfeMTmg0esj5Z+7fJ3W2ipLfto=";
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
@@ -61,7 +62,10 @@ maven.buildMavenPackage {
     "-Dmaven.gitcommitid.skip"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -79,19 +83,12 @@ maven.buildMavenPackage {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    install -Dm644 commafeed-server/target/commafeed.jar $out/share/commafeed.jar
-    install -Dm644 commafeed-server/config.yml.example $out/share/config.yml
+    unzip -d $out/share/ commafeed-server/target/commafeed-$version-h2-jvm.zip
 
     makeWrapper ${jre}/bin/java $out/bin/commafeed \
-      --add-flags "-jar $out/share/commafeed.jar"
+      --add-flags "-jar $out/share/commafeed-$version-h2/quarkus-run.jar"
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/share/config.yml \
-      --replace-fail 'url: jdbc:h2:/commafeed/data/db;DEFRAG_ALWAYS=TRUE' \
-        'url: jdbc:h2:./database/db;DEFRAG_ALWAYS=TRUE'
   '';
 
   passthru.tests = nixosTests.commafeed;

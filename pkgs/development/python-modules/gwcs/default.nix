@@ -9,7 +9,6 @@
   numpy,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "gwcs";
-  version = "0.26.0";
+  version = "0.26.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "spacetelescope";
     repo = "gwcs";
     tag = version;
-    hash = "sha256-cJfNVX7rdJASQA3NmZt7d4pvYh6GAteR22jat0kccoo=";
+    hash = "sha256-S7+jDWCyQPQJAVgb/+BHC03+1aYyw2TK6SmkEz+k6u4=";
   };
 
   build-system = [

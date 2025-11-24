@@ -348,6 +348,8 @@ self: super: with self; {
 
   aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
 
+  aioice = callPackage ../development/python-modules/aioice { };
+
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
   aioimmich = callPackage ../development/python-modules/aioimmich { };
@@ -457,6 +459,8 @@ self: super: with self; {
   aiormq = callPackage ../development/python-modules/aiormq { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
+
+  aiortc = callPackage ../development/python-modules/aiortc { };
 
   aiortm = callPackage ../development/python-modules/aiortm { };
 
@@ -2864,6 +2868,8 @@ self: super: with self; {
 
   colcon-cargo = callPackage ../development/python-modules/colcon-cargo { };
 
+  colcon-cd = callPackage ../development/python-modules/colcon-cd { };
+
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
   colcon-installed-package-information =
@@ -5227,6 +5233,8 @@ self: super: with self; {
   fava = callPackage ../development/python-modules/fava { };
 
   fava-dashboards = callPackage ../development/python-modules/fava-dashboards { };
+
+  fava-investor = callPackage ../development/python-modules/fava-investor { };
 
   favicon = callPackage ../development/python-modules/favicon { };
 
@@ -8993,6 +9001,8 @@ self: super: with self; {
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
   luhn = callPackage ../development/python-modules/luhn { };
+
+  luma-core = callPackage ../development/python-modules/luma-core { };
 
   luna-soc = callPackage ../development/python-modules/luna-soc { };
 
@@ -13585,6 +13595,8 @@ self: super: with self; {
   pylibmc = callPackage ../development/python-modules/pylibmc { };
 
   pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
+
+  pylibsrtp = callPackage ../development/python-modules/pylibsrtp { };
 
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 

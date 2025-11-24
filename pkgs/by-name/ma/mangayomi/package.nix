@@ -117,7 +117,7 @@ flutter332.buildFlutterApplication {
       };
   };
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
