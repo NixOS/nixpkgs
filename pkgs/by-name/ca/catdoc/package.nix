@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MS-Word/Excel/PowerPoint to text converter";
+    homepage = "https://www.wagner.pp.ru/~vitus/software/catdoc/";
     platforms = platforms.all;
     license = licenses.gpl2Only;
     maintainers = [ ];

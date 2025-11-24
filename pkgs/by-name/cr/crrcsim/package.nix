@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Model-airplane flight simulator";
+    homepage = "https://sourceforge.net/projects/crrcsim/";
     mainProgram = "crrcsim";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = [

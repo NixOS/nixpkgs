@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multiplatform basic GUI library";
+    homepage = "https://cgui.sourceforge.net/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.free;
