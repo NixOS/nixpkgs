@@ -52,6 +52,7 @@
   nix-update-script,
   # for passthru.tests
   gnutls,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -202,6 +203,12 @@ stdenv.mkDerivation (finalAttrs: {
       ) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'"
     ) (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
@@ -220,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
     maintainers = with lib.maintainers; [ Scrumplex ];
+    mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
   };
 })
