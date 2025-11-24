@@ -3949,6 +3949,8 @@ self: super: with self; {
 
   django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
+  django-cache-memoize = callPackage ../development/python-modules/django-cache-memoize { };
+
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
@@ -8214,6 +8216,8 @@ self: super: with self; {
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
+  lb-matching-tools = callPackage ../development/python-modules/lb-matching-tools { };
+
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
   lcd-i2c = callPackage ../development/python-modules/lcd-i2c { };
@@ -8393,6 +8397,8 @@ self: super: with self; {
   libknot = callPackage ../development/python-modules/libknot { };
 
   liblarch = callPackage ../development/python-modules/liblarch { };
+
+  liblistenbrainz = callPackage ../development/python-modules/liblistenbrainz { };
 
   liblp = callPackage ../development/python-modules/liblp { };
 
@@ -12167,6 +12173,8 @@ self: super: with self; {
   plum-py = callPackage ../development/python-modules/plum-py { };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
+
+  pluralizer = callPackage ../development/python-modules/pluralizer { };
 
   pluthon = callPackage ../development/python-modules/pluthon { };
 
@@ -16166,6 +16174,10 @@ self: super: with self; {
 
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
+  requests-http-message-signatures =
+    callPackage ../development/python-modules/requests-http-message-signatures
+      { };
+
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
 
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
@@ -19063,6 +19075,8 @@ self: super: with self; {
     }
   );
 
+  troi = callPackage ../development/python-modules/troi { };
+
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
@@ -19652,6 +19666,10 @@ self: super: with self; {
   types-webencodings = callPackage ../development/python-modules/types-webencodings { };
 
   types-xxhash = callPackage ../development/python-modules/types-xxhash { };
+
+  typesense = callPackage ../development/python-modules/typesense {
+    inherit (pkgs) typesense curl;
+  };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 
