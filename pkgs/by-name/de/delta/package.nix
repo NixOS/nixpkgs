@@ -8,6 +8,7 @@
   stdenv,
   git,
   zlib,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +57,11 @@ rustPlatform.buildRustPackage rec {
     # enabled on Darwin
     "--skip=test_diff_real_files"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/dandavison/delta";
