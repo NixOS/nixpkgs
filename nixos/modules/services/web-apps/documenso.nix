@@ -130,7 +130,7 @@ in
     ];
 
     services.postgresql = lib.optionalAttrs (cfg.database.createLocally) {
-      enable = lib.mkDefault true;
+      enable = true;
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
