@@ -21,6 +21,7 @@
   # the bare NixOS build hash independent of changes to the ruby ecosystem,
   # saving mass-rebuilds.
   rebuildMan ? false,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -96,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isMusl;
 
   passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.com/cryptsetup/cryptsetup.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc).*";
+    };
     tests = {
       nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux (
         lib.recurseIntoAttrs (
