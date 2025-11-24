@@ -1,18 +1,21 @@
 GEM
-  specs:
-
-GEM
   remote: https://rubygems.org/
   specs:
     asmrepl (1.0.3)
       fisk (~> 2)
     fisk (2.3.0)
+    logger (1.7.0)
+    racc (1.8.1)
+    rbs (3.9.5)
+      logger
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  asmrepl!
+  asmrepl
+  racc (~> 1.8)
+  rbs (~> 3.9)
 
 BUNDLED WITH
-   2.2.24
+   2.7.2

@@ -1,3 +1,5 @@
-source 'https://rubygems.org' do
+source 'https://rubygems.org'
   gem 'asmrepl'
-end
+  # Extra dependencies
+  gem 'racc', '~> 1.8'
+  gem 'rbs', '~> 3.9'
