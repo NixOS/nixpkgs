@@ -51,7 +51,7 @@ _nixos-rebuild() {
 
     # flakes options
     --commit-lock-file
-    --flake # flake-uri
+    --flake -F # flake-uri
     --override-input # input-name flake-uri
     --recreate-lock-file
     --update-input
