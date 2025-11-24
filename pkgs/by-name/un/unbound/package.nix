@@ -226,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
+    changelog = "https://github.com/NLnetLabs/unbound/releases/tag/release-${finalAttrs.version}";
     maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
