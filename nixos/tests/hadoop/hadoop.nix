@@ -4,7 +4,7 @@
 import ../make-test-python.nix (
   { package, ... }:
   {
-    name = "hadoop-combined";
+    name = "hadoop-${package.version}-combined";
 
     nodes =
       let

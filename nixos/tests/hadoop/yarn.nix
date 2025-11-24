@@ -2,7 +2,7 @@
 import ../make-test-python.nix (
   { package, ... }:
   {
-    name = "hadoop-yarn";
+    name = "hadoop-${package.version}-yarn";
 
     nodes = {
       resourcemanager =
