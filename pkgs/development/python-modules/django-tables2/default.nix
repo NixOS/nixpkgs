@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.7.5";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jieter";
     repo = "django-tables2";
     tag = "v${version}";
-    hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
+    hash = "sha256-gEURC3LUBdqebd4+TAJcbgn4SpY1oTI+tg9p2GGKClE=";
   };
 
   build-system = [ hatchling ];
