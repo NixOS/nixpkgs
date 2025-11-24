@@ -48,9 +48,12 @@ in
           "postgres://documenso@localhost/documenso?host=/run/postgresql";
         '';
         description = ''
-          Database url. Note that any secret here would be world-readable. Use
-          `services.documenso.environmentFile` instead to include database
-          secrets.
+          Database url.
+          
+          :::{.note}
+          Any secret here would be world-readable.
+          Use `services.documenso.environmentFile` instead to include database secrets.
+          :::
         '';
       };
 
