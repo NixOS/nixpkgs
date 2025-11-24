@@ -31,7 +31,7 @@ let
   version = fileContents ../.version;
   versionSuffix =
     (if stableBranch then "." else "beta")
-    + "${toString nixpkgs.revCount - 901827}.${nixpkgs.shortRev}";
+    + "${toString (nixpkgs.revCount - 901827)}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
