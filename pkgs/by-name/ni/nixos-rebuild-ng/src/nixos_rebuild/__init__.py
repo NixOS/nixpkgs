@@ -99,6 +99,14 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "specified attribute path from file specified by the --file option",
     )
     main_parser.add_argument(
+        "--use-prebuilt-closure",
+        "-C",
+        help="Skips building the referenced NixOS closure and causes the "
+        "specified closure path to be activated instead. "
+        "Useful when you've just copied a closure from a build machine "
+        "or are rolling back to a previous generation"
+    )
+    main_parser.add_argument(
         "--flake",
         nargs="?",
         const=True,
