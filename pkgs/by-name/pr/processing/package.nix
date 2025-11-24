@@ -71,12 +71,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
-  # Processing did not update the todo.txt file before tagging this release, so
-  # the "revision-check" Ant target fails.
-  patches = [
-    ./disable-revision-check.patch
-    ./fix-ant-build.patch
-  ];
+  patches = [ ./fix-ant-build.patch ];
 
   nativeBuildInputs = [
     ant
