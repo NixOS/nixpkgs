@@ -55,7 +55,9 @@ python3.pkgs.buildPythonApplication rec {
   # in the sandboxed build environment unless we tell it to create it's cache in a safe
   # directory.
   makeWrapperArgs = [
-    "--set-default" "XDG_CACHE_HOME" "/tmp/cache"
+    "--set-default"
+    "XDG_CACHE_HOME"
+    "/tmp/cache"
   ];
 
   # Test suite requires boto, which has been removed from nixpkgs
@@ -76,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
 
     tests.version = testers.testVersion {
       package = localstack;
