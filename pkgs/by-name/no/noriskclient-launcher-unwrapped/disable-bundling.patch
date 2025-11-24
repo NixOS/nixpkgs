@@ -1,0 +1,22 @@
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index bb58d13..0063fd2 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -101,7 +101,7 @@
+       }
+     },
+     "active": true,
+-    "targets": ["app", "dmg", "deb", "appimage", "nsis"],
++    "targets": ["app"],
+     "icon": [
+       "icons/32x32.png",
+       "icons/128x128.png",
+@@ -109,7 +109,7 @@
+       "icons/icon.icns",
+       "icons/icon.ico"
+     ],
+-    "createUpdaterArtifacts": true,
++    "createUpdaterArtifacts": false,
+     "fileAssociations": [
+       {
+         "ext": ["noriskpack"],
