@@ -3442,6 +3442,11 @@
     githubId = 10164833;
     name = "Birk Bohne";
   };
+  bitbloxhub = {
+    name = "bitbloxhub";
+    github = "bitbloxhub";
+    githubId = 45184892;
+  };
   bizmyth = {
     email = "andrew.p.council@gmail.com";
     github = "bizmythy";
@@ -23395,6 +23400,13 @@
     github = "schrobingus";
     githubId = 72168352;
     matrix = "@schrobingus:matrix.org";
+  };
+  schromp = {
+    email = "schromp@echsen.club";
+    github = "schromp";
+    githubId = 103186360;
+    matrix = "@schromp:echsen.club";
+    name = "schromp";
   };
   Schweber = {
     github = "Schweber";
