@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NM9SspeMXu1q3tfpcFk4OuLapu/clbotJLu2u4nmAlY=";
   };
 
+  # Fix build with Qt 6.10.1
+  # Submitted upstream: https://github.com/opencloud-eu/desktop/pull/710
+  patches = [
+    ./qt-6.10.1.patch
+  ];
+
   buildInputs = [
     ecm618
     qt6.qtbase
