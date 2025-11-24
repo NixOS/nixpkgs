@@ -51,5 +51,6 @@ buildPythonPackage rec {
     description = "Cryptocurrency trading library";
     homepage = "https://github.com/ccxt/ccxt";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cybermanu84 ]; 
   };
 }
