@@ -4734,7 +4734,8 @@
       ];
     "prowl" =
       ps: with ps; [
-      ]; # missing inputs: prowlpy
+        prowlpy
+      ];
     "proximity" =
       ps: with ps; [
       ];
@@ -7715,6 +7716,7 @@
     "progettihwsw"
     "prometheus"
     "prosegur"
+    "prowl"
     "proximity"
     "prusalink"
     "ps4"
