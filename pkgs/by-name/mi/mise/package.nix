@@ -119,10 +119,9 @@ rustPlatform.buildRustPackage rec {
           ''
             export HOME=$(mktemp -d)
 
-            spec="$(mise usage)"
             for shl in bash fish zsh; do
               echo "testing $shl"
-              usage complete-word --shell $shl --spec "$spec"
+              usage complete-word --shell $shl --file <(mise usage)
             done
 
             touch $out

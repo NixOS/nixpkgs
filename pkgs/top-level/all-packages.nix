@@ -1219,6 +1219,18 @@ with pkgs;
 
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
+  git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
+
+  git-credential-gmail = callPackage ../by-name/gi/git-credential-email/git-credential-gmail { };
+
+  git-credential-outlook = callPackage ../by-name/gi/git-credential-email/git-credential-outlook { };
+
+  git-credential-yahoo = callPackage ../by-name/gi/git-credential-email/git-credential-yahoo { };
+
+  git-msgraph = callPackage ../by-name/gi/git-credential-email/git-msgraph { };
+
+  git-protonmail = callPackage ../by-name/gi/git-credential-email/git-protonmail { };
+
   gitRepo = git-repo;
 
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
@@ -3314,10 +3326,6 @@ with pkgs;
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };
   libportal-qt6 = libportal.override { variant = "qt6"; };
-
-  jesec-rtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent {
-    libtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent/libtorrent.nix { };
-  };
 
   librest = callPackage ../development/libraries/librest { };
 
@@ -10798,11 +10806,6 @@ with pkgs;
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
-  drawio = callPackage ../applications/graphics/drawio {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-  drawio-headless = callPackage ../applications/graphics/drawio/headless.nix { };
-
   drawpile-server-headless = drawpile.override {
     buildClient = false;
     buildServerGui = false;
@@ -13174,11 +13177,6 @@ with pkgs;
   steam-run-free = steam.run-free;
 
   steamback = python3.pkgs.callPackage ../tools/games/steamback { };
-
-  protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    steam-run = steam-run-free;
-    inherit winetricks yad;
-  };
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
