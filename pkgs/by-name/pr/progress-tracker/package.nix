@@ -10,22 +10,27 @@
   stdenv,
   tinyxml-2,
   wrapGAppsHook4,
+  gettext,
+  libuuid,
+  spdlog,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "progress-tracker";
-  version = "1.6";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "smolBlackCat";
     repo = "progress-tracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uUw3+BJWRoCT1VH27SZBEBRsEbbpaP4IahKonfSOyeM=";
+    fetchSubmodules = true;
+    hash = "sha256-RIguUto0ADAT9OJ+gBf/JBpAiDn1DX9NBuGmDJYJn+Q=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook4
+    gettext
   ];
 
   buildInputs = [
@@ -34,18 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     pcre2
     tinyxml-2
+    spdlog
+    libuuid
   ];
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "/usr/bin/" "${placeholder "out"}/bin/"
-
-    substituteInPlace po/CMakeLists.txt \
-      --replace-fail "/usr/share/" "${placeholder "out"}/share/"
-
-    substituteInPlace data/CMakeLists.txt \
-      --replace-fail "/usr/share/" "${placeholder "out"}/share/"
-  '';
+  cmakeFlags = [
+    "-DDEVELOPMENT=OFF"
+    "-DBUILD_APP=ON"
+  ];
 
   meta = {
     description = "Simple kanban-style task organiser";
