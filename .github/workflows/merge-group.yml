@@ -18,7 +18,7 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
@@ -113,7 +113,7 @@ jobs:
     needs:
       - lint
       - eval
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     permissions:
       statuses: write
     steps:
