@@ -66,6 +66,7 @@ buildGoModule (finalAttrs: {
       - Does not require a server or port-forwarding
     '';
     homepage = "https://github.com/schollz/croc";
+    changelog = "https://github.com/schollz/croc/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       equirosa
