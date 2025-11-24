@@ -14,9 +14,13 @@ let
   src = fetchurl {
     url =
       if stdenv.hostPlatform.isDarwin then
-        "https://github.com/jeffvli/feishin/releases/download/v${version}/Feishin-${version}-mac-${if stdenv.hostPlatform.isAarch64 then "arm64" else "x64"}.dmg"
+        "https://github.com/jeffvli/feishin/releases/download/v${version}/Feishin-${version}-mac-${
+          if stdenv.hostPlatform.isAarch64 then "arm64" else "x64"
+        }.dmg"
       else
-        "https://github.com/jeffvli/feishin/releases/download/v${version}/Feishin-linux-${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"}.AppImage";
+        "https://github.com/jeffvli/feishin/releases/download/v${version}/Feishin-linux-${
+          if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"
+        }.AppImage";
     hash =
       # macOS
       if stdenv.hostPlatform.isDarwin then
@@ -25,11 +29,10 @@ let
         else
           "sha256-YK3QMJ55ENqV6PCflWIaRJi8Xy5H4Hl3tc+/HazzZFc="
       # Linux
+      else if stdenv.hostPlatform.isAarch64 then
+        "sha256-ToaBmxy+Tvv7DNF9UgrBitTVcYetVHbMwW2W0SiodKw="
       else
-        if stdenv.hostPlatform.isAarch64 then
-          "sha256-ToaBmxy+Tvv7DNF9UgrBitTVcYetVHbMwW2W0SiodKw="
-        else
-          "sha256-CDYI9xTPpU89SrXvPZ7Qm2c0piuW11qjAgXZWxtspSY=";
+        "sha256-CDYI9xTPpU89SrXvPZ7Qm2c0piuW11qjAgXZWxtspSY=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -78,7 +81,12 @@ let
 in
 if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [ undmg ];
 
@@ -95,7 +103,12 @@ if stdenv.hostPlatform.isDarwin then
   }
 else
   appimageTools.wrapType2 {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     extraInstallCommands = ''
       mkdir -p $out/share/applications
