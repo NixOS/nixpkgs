@@ -1,0 +1,19 @@
+diff --git a/froide/settings.py b/froide/settings.py
+index 428349cb..1e1bd7a8 100644
+--- a/froide/settings.py
++++ b/froide/settings.py
+@@ -867,9 +867,11 @@ class Production(Base):
+ 
+     ALLOWED_HOSTS = values.TupleValue(("example.com",))
+     CELERY_TASK_ALWAYS_EAGER = values.BooleanValue(False)
+-    STATICFILES_STORAGE = (
+-        "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+-    )
++    STORAGES = {
++        'staticfiles': {
++            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
++        },
++    }
+ 
+ 
+ class SSLSite(object):

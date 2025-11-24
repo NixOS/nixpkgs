@@ -1,0 +1,40 @@
+From 30c4d7fb34a09cf0a711c43231bd13fc380844d0 Mon Sep 17 00:00:00 2001
+From: Silvan Mosberger <silvan.mosberger@moduscreate.com>
+Date: Tue, 7 Oct 2025 15:08:49 +0200
+Subject: [PATCH 2/2] allow keeping output of potentially failed tests
+
+Previously if a test produced a diff, the only way to fix it was to
+inspect the test output.
+
+We introduce the BASH_TSTOUT_KEEPDIR environment variable which is
+expected to point to a directory.
+If set, that directory will be populated with output from all failed
+tests, with test names as file names.
+
+This makes debugging or updating the expected test outputs easier.
+
+Co-Authored-By: Silvan Mosberger <silvan.mosberger@tweag.io>
+Co-Authored-By: Aleksander Bantyev <alexander.bantyev@tweag.io>
+---
+ tests/run-all | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git tests/run-all tests/run-all
+index c8f503a2..5d769d0f 100644
+--- tests/run-all
++++ tests/run-all
+@@ -72,6 +72,11 @@ do
+ 			passed=$(( passed + 1 ))
+ 		else
+ 			echo "$x EXITED NON-ZERO ($?) - possible anomaly unless otherwise noted"
++			if [ "${BASH_TSTOUT_KEEPDIR+set}" = "set" ]; then
++				cp "${BASH_TSTOUT}" "${BASH_TSTOUT_KEEPDIR}/$x"
++			else
++				echo "Hint: set BASH_TSTOUT_KEEPDIR environment variable to a directory to keep test output there"
++			fi
+ 		fi
+ 		rm -f "${BASH_TSTOUT}"
+ 		;;
+-- 
+2.49.0
+

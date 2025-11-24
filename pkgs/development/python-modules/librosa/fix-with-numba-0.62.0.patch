@@ -1,0 +1,27 @@
+From 902bcca8cfc84801cf93a6c3ca59da283072a79f Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Wed, 27 Aug 2025 18:58:07 +0100
+Subject: [PATCH] Fix types in beat tracking code
+
+The development version of Numba 0.62.0 is unhappy about `range`
+being applied to floating point values here.
+---
+ librosa/beat.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/librosa/beat.py b/librosa/beat.py
+index 1a19005d..4ed9e945 100644
+--- a/librosa/beat.py
++++ b/librosa/beat.py
+@@ -582,7 +582,7 @@ def __beat_track_dp(localscore, frames_per_beat, tightness, backlink, cumscore):
+         # Search over all possible predecessors to find the best preceding beat
+         # NOTE: to provide time-varying tempo estimates, we replace
+         # frames_per_beat[0] by frames_per_beat[i] in this loop body.
+-        for loc in range(i - np.round(frames_per_beat[tv * i] / 2), i - 2 * frames_per_beat[tv * i] - 1, - 1):
++        for loc in range(i - round(frames_per_beat[tv * i] / 2), int(i - 2 * frames_per_beat[tv * i] - 1), - 1):
+             # Once we're searching past the start, break out
+             if loc < 0:
+                 break
+-- 
+2.50.1
+

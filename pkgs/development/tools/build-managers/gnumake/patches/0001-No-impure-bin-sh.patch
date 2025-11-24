@@ -1,0 +1,35 @@
+From b69e3740e68afaec97b9957d40b9c135db87eaab Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 24 Apr 2021 10:11:40 +0200
+Subject: [PATCH 1/3] No impure bin sh
+
+default_shell is used to populuate default shell used to execute jobs.
+Unless SHELL is set to a different value this would be /bin/sh.
+Our stdenv provides sh in form of bash anyway. Having this value not
+hard-coded has some advantages:
+
+- It would ensure that on all systems it uses sh from its PATH rather
+  than /bin/sh, which helps as different systems might have different
+  shells there (bash vs. dash)
+- In the past I had issues with LD_PRELOAD with BEAR, where /bin/sh
+  used a different glibc than BEAR which came from my development shell.
+---
+ src/job.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/job.c b/src/job.c
+index ea885614..8a9bd8e0 100644
+--- a/src/job.c
++++ b/src/job.c
+@@ -76,7 +76,7 @@ char * vms_strsignal (int status);
+ 
+ #else
+ 
+-const char *default_shell = "/bin/sh";
++const char *default_shell = "sh";
+ int batch_mode_shell = 0;
+ 
+ #endif
+-- 
+2.44.1
+

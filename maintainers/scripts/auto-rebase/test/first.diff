@@ -1,0 +1,11 @@
+diff --git a/b.nix b/b.nix
+index 9d18f25..67b0466 100644
+--- a/b.nix
++++ b/b.nix
+@@ -1,5 +1,5 @@
+ {
+   this = "is";
+ 
+-  some = "set";
++  some = "value";
+ }

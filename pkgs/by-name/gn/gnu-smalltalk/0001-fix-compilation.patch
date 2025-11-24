@@ -1,0 +1,26 @@
+diff --git a/packages/iconv/iconv.c b/packages/iconv/iconv.c
+index ba2c38a7..55c2e737 100644
+--- a/packages/iconv/iconv.c
++++ b/packages/iconv/iconv.c
+@@ -66,7 +66,7 @@ iconvWrapper (iconv_t handle, OOP readBufferOOP, int readPos,
+              int readCount, OOP writeBufferOOP, int writeCount,
+              OOP bytesLeftOOP)
+ {
+-  const char *inbuf;
++  char *inbuf;
+   size_t inbytesleft;
+   char *outbuf;
+   size_t outbytesleft;
+diff --git a/packages/xml/expat/expat.c b/packages/xml/expat/expat.c
+index 0ceee46c..4ea35289 100644
+--- a/packages/xml/expat/expat.c
++++ b/packages/xml/expat/expat.c
+@@ -573,7 +573,7 @@ gst_XML_ParserCreate (OOP parserOOP)
+   XML_SetNotationDeclHandler (p, gst_NotationDeclHandler);
+   XML_SetStartNamespaceDeclHandler (p, gst_StartNamespaceDeclHandler);
+   XML_SetEndNamespaceDeclHandler (p, gst_EndNamespaceDeclHandler);
+-  XML_SetSkippedEntityHandler (p, gst_SkippedEntityHandler);
++  XML_SetSkippedEntityHandler (p, (void (*)(void *, const XML_Char *, int))(gst_SkippedEntityHandler));
+   XML_SetReturnNSTriplet (p, true);
+ 
+   if (!saxEventSequenceClass)

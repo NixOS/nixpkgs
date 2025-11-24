@@ -1,0 +1,222 @@
+commit 56507892ff7a03ed283d7fd2d7ff2000fc9c17d7
+Author: r-vdp <ramses@well-founded.dev>
+Date:   Tue Oct 15 11:46:38 2024 +0200
+
+    Add option for installation sysconfdir
+
+diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
+index 2a2a07016..99df55afb 100644
+--- a/data/bios-settings.d/meson.build
++++ b/data/bios-settings.d/meson.build
+@@ -2,6 +2,6 @@ if build_standalone and host_machine.system() == 'linux'
+   install_data(
+     'README.md',
+     install_tag: 'doc',
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'bios-settings.d'),
++    install_dir: join_paths(datadir, 'fwupd', 'bios-settings.d'),
+   )
+ endif
+diff --git a/data/meson.build b/data/meson.build
+index 5716669f0..78e754f40 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -29,7 +29,7 @@ if build_standalone
+   install_data(
+     ['fwupd.conf'],
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd'),
+     install_mode: 'rw-r-----',
+   )
+   plugin_quirks += files('cfi.quirk', 'ds20.quirk', 'power.quirk', 'vendors.quirk')
+diff --git a/data/pki/meson.build b/data/pki/meson.build
+index 5b962adf1..b6575f7e4 100644
+--- a/data/pki/meson.build
++++ b/data/pki/meson.build
+@@ -12,12 +12,12 @@ if supported_gpg
+   install_data(
+     ['GPG-KEY-Linux-Foundation-Firmware', 'GPG-KEY-Linux-Vendor-Firmware-Service'],
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'pki', 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd'),
+   )
+   install_data(
+     ['GPG-KEY-Linux-Foundation-Metadata', 'GPG-KEY-Linux-Vendor-Firmware-Service'],
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata'),
++    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata'),
+   )
+ endif
+ 
+@@ -25,11 +25,11 @@ if supported_pkcs7
+   install_data(
+     ['LVFS-CA.pem'],
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'pki', 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd'),
+   )
+   install_data(
+     ['LVFS-CA.pem'],
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata'),
++    install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata'),
+   )
+ endif
+diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
+index b8d24c267..0dd4ad32a 100644
+--- a/data/remotes.d/meson.build
++++ b/data/remotes.d/meson.build
+@@ -12,7 +12,7 @@ if build_standalone and get_option('lvfs') != 'false'
+     configuration: con3,
+     install: true,
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+   )
+   configure_file(
+     input: 'lvfs-testing.conf',
+@@ -20,7 +20,7 @@ if build_standalone and get_option('lvfs') != 'false'
+     configuration: con3,
+     install: true,
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+   )
+   i18n.merge_file(
+     input: 'lvfs.metainfo.xml',
+@@ -59,7 +59,7 @@ configure_file(
+   configuration: con2,
+   install: get_option('vendor_metadata'),
+   install_tag: 'runtime',
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+ )
+ configure_file(
+   input: 'vendor-directory.conf',
+@@ -67,5 +67,5 @@ configure_file(
+   configuration: con2,
+   install: true,
+   install_tag: 'runtime',
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+ )
+diff --git a/docs/meson.build b/docs/meson.build
+index 787b4387c..b3144757f 100644
+--- a/docs/meson.build
++++ b/docs/meson.build
+@@ -196,7 +196,7 @@ if build_docs
+     build_by_default: true,
+     install: true,
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc'),
++    install_dir: join_paths(sysconfdir_install, 'doc'),
+   )
+ 
+   subdir('hsi-tests.d')
+@@ -247,7 +247,7 @@ if build_docs
+     build_by_default: true,
+     install: true,
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc'),
++    install_dir: join_paths(sysconfdir_install, 'doc'),
+   )
+   man_cmd = []
+   foreach man : man_md
+@@ -260,36 +260,36 @@ if build_docs
+     command: [generate_index, '@INPUT@', '-o', '@OUTPUT@', man_cmd],
+     install: true,
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc', 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
+   )
+   if hsi
+     install_data(
+       ['hsi.html'],
+       install_tag: 'doc',
+-      install_dir: join_paths(datadir, 'doc', 'fwupd'),
++      install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
+     )
+   endif
+   install_data(
+     ['urlmap_fwupd.js'],
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc', 'libfwupd'),
++    install_dir: join_paths(sysconfdir_install, 'doc', 'libfwupd'),
+   )
+   install_data(
+     ['urlmap_fwupdplugin.js'],
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc', 'libfwupdplugin'),
++    install_dir: join_paths(sysconfdir_install, 'doc', 'libfwupdplugin'),
+   )
+   #make devhelp work
+   install_symlink(
+     'libfwupd',
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc', 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
+     pointing_to: join_paths('..', 'libfwupd'),
+   )
+   install_symlink(
+     'libfwupdplugin',
+     install_tag: 'doc',
+-    install_dir: join_paths(datadir, 'doc', 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
+     pointing_to: join_paths('..', 'libfwupdplugin'),
+   )
+ endif
+diff --git a/meson.build b/meson.build
+index ca431980b..d9bab5264 100644
+--- a/meson.build
++++ b/meson.build
+@@ -246,6 +246,12 @@ endif
+ mandir = join_paths(prefix, get_option('mandir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ 
++if get_option('sysconfdir_install') != ''
++  sysconfdir_install = join_paths(prefix, get_option('sysconfdir_install'))
++else
++  sysconfdir_install = sysconfdir
++endif
++
+ diffcmd = find_program('diff')
+ gio = dependency(
+   'gio-2.0',
+diff --git a/meson_options.txt b/meson_options.txt
+index 63c8d288d..04f6651e6 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -7,6 +7,11 @@ option('bluez',
+   type: 'feature',
+   description: 'BlueZ support',
+ )
++option('sysconfdir_install',
++  type: 'string',
++  value: '',
++  description: 'sysconfdir to use during installation'
++)
+ option('build',
+   type: 'combo',
+   choices: [
+diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
+index 647ace53e..4ee0192df 100644
+--- a/plugins/uefi-capsule/meson.build
++++ b/plugins/uefi-capsule/meson.build
+@@ -23,7 +23,7 @@ if host_machine.system() == 'linux'
+     configuration: con2,
+     install: true,
+     install_tag: 'runtime',
+-    install_dir: join_paths(sysconfdir, 'grub.d')
++    install_dir: join_paths(sysconfdir_install, 'grub.d')
+   )
+ elif host_machine.system() == 'freebsd'
+   backend_srcs += 'fu-uefi-capsule-backend-freebsd.c'
+@@ -98,7 +98,7 @@ if get_option('plugin_uefi_capsule_splash')
+     ],
+     install: true,
+     install_tag: 'runtime',
+-    install_dir: join_paths(datadir, 'fwupd'),
++    install_dir: join_paths(sysconfdir_install, 'fwupd'),
+   )
+ endif
+ 

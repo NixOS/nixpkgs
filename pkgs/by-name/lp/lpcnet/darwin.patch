@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1600871..1536c55 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -158,7 +158,7 @@ elseif(${SSE} AND (${SSE_PRESENT} OR ${SSE_PRESENT} GREATER 0))
+ # AVX and AVX2 machines will also match on SSE
+     message(STATUS "sse processor flags found or enabled.")
+     set(LPCNET_C_PROC_FLAGS -msse4.1)
+-elseif(${NEON} AND (${NEON_PRESENT} OR ${NEON_PRESENT} GREATER 0))
++elseif(${NEON} AND (${NEON_PRESENT} OR ${NEON_PRESENT} GREATER 0) AND NOT APPLE)
+     # RPi / ARM 32bit
+     message(STATUS "neon processor flags found or enabled.")
+     set(LPCNET_C_PROC_FLAGS -mfpu=neon -march=armv8-a -mtune=cortex-a53)

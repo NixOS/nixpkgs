@@ -1,0 +1,20 @@
+diff --git a/playwright/_impl/_driver.py b/playwright/_impl/_driver.py
+index 22b53b8..2d86626 100644
+--- a/playwright/_impl/_driver.py
++++ b/playwright/_impl/_driver.py
+@@ -23,14 +23,7 @@ from playwright._repo_version import version
+ 
+ 
+ def compute_driver_executable() -> Tuple[str, str]:
+-    driver_path = Path(inspect.getfile(playwright)).parent / "driver"
+-    cli_path = str(driver_path / "package" / "cli.js")
+-    if sys.platform == "win32":
+-        return (
+-            os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node.exe")),
+-            cli_path,
+-        )
+-    return (os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node")), cli_path)
++    return "@node@", "@driver@"
+ 
+ 
+ def get_driver_env() -> dict:

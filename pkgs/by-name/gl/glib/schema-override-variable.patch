@@ -1,0 +1,14 @@
+diff --git a/gio/gsettingsschema.c b/gio/gsettingsschema.c
+index b1918657d..504ff97c4 100644
+--- a/gio/gsettingsschema.c
++++ b/gio/gsettingsschema.c
+@@ -356,6 +356,9 @@ initialise_schema_sources (void)
+ 
+       try_prepend_data_dir (g_get_user_data_dir ());
+ 
++      if (!is_setuid && (path = g_getenv ("NIX_GSETTINGS_OVERRIDES_DIR")) != NULL)
++        try_prepend_dir (path);
++
+       /* Disallow loading extra schemas if running as setuid, as that could
+        * allow reading privileged files. */
+       if (!is_setuid && (path = g_getenv ("GSETTINGS_SCHEMA_DIR")) != NULL)

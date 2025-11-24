@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/mtoohey31/tree-sitter-koka",
+  "rev": "6dce132911ac375ac1a3591c868c47a2a84b30aa",
+  "date": "2025-07-26T15:26:41-04:00",
+  "path": "/nix/store/xvk32hz6j2yidxq4sj78phs4i1mqlwv8-tree-sitter-koka",
+  "sha256": "1l50l8m3ql2j6q772pgb8x3v1awvng12fd9rpv6p3cva1mg9ywj1",
+  "hash": "sha256-QXKfXg1qs3HNvjk1J8Kzm6uwR0frXXEONlJQPCqioNA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

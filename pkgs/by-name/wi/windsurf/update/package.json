@@ -1,0 +1,12 @@
+{
+  "name": "windsurf-scripts",
+  "version": "1.0.0",
+  "scripts": {
+    "update": "node update.mts"
+  },
+  "dependencies": {
+    "@types/node": "^22.13.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  }
+}

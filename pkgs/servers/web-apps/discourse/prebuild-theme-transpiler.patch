@@ -1,0 +1,23 @@
+diff --git a/lib/discourse_js_processor.rb b/lib/discourse_js_processor.rb
+index f1642386c5..5a672818da 100644
+--- a/lib/discourse_js_processor.rb
++++ b/lib/discourse_js_processor.rb
+@@ -54,7 +54,7 @@ class DiscourseJsProcessor
+   end
+
+   class Transpiler
+-    TRANSPILER_PATH = "tmp/theme-transpiler.js"
++    TRANSPILER_PATH = "app/assets/javascripts/theme-transpiler.js"
+
+     @mutex = Mutex.new
+     @ctx_init = Mutex.new
+@@ -75,7 +75,9 @@ class DiscourseJsProcessor
+     end
+
+     def self.build_production_theme_transpiler
+-      File.write(TRANSPILER_PATH, build_theme_transpiler)
++      if (!Rails.env.production? or !File.file?(TRANSPILER_PATH))
++        File.write(TRANSPILER_PATH, build_theme_transpiler)
++      end
+       TRANSPILER_PATH
+     end

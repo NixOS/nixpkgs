@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 5a80c6b..07c37bf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,6 +3,7 @@ AC_CONFIG_SRCDIR([src/spek.cc])
+ AC_CONFIG_HEADERS([config.h])
+ AM_INIT_AUTOMAKE([1.11.1 foreign no-dist-gzip dist-xz serial-tests])
+ AM_SILENT_RULES([yes])
++AC_CONFIG_MACRO_DIRS([m4])
+ 
+ AC_LANG([C++])
+ AM_PROG_AR

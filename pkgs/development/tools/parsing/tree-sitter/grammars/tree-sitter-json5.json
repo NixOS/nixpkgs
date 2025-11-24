@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/joakker/tree-sitter-json5",
+  "rev": "8cb4114a4d7e5bab75d74466422e032de31d83df",
+  "date": "2025-09-20T19:19:04-03:00",
+  "path": "/nix/store/gmjjsjdj4xrkw89zq1asva5pdw455dnd-tree-sitter-json5",
+  "sha256": "0ckxr80dbzaxkasn9dldwcl0klkyxs8kiiqibk82y9mx8x2ymz21",
+  "hash": "sha256-QfzqRUe9Ji/QXBHHOJHuftIJKOONtmS1ml391QDKfTI=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

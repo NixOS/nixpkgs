@@ -1,0 +1,27 @@
+--- a/Makefile
++++ b/Makefile
+@@ -796,15 +796,7 @@
+ 	install -m 755 $(BIN)/SDL/sameboy $(DESTDIR)$(PREFIX)/bin/sameboy
+ 	install -m 755 $(BIN)/XdgThumbnailer/sameboy-thumbnailer $(DESTDIR)$(PREFIX)/bin/sameboy-thumbnailer
+ 	install -m 644 XdgThumbnailer/sameboy.thumbnailer $(DESTDIR)$(PREFIX)/share/thumbnailers/sameboy.thumbnailer
+-ifeq ($(DESTDIR),)
+-	xdg-mime install --novendor FreeDesktop/sameboy.xml
+-	xdg-desktop-menu install --novendor FreeDesktop/sameboy.desktop
+-	for size in 16 32 64 128 256 512; do \
+-		xdg-icon-resource install --novendor --theme hicolor --size $$size --context apps FreeDesktop/AppIcon/$${size}x$${size}.png sameboy; \
+-		xdg-icon-resource install --novendor --theme hicolor --size $$size --context mimetypes FreeDesktop/Cartridge/$${size}x$${size}.png x-gameboy-rom; \
+-		xdg-icon-resource install --novendor --theme hicolor --size $$size --context mimetypes FreeDesktop/ColorCartridge/$${size}x$${size}.png x-gameboy-color-rom; \
+-	done
+-else
++
+ 	install -m 644 FreeDesktop/sameboy.xml $(DESTDIR)$(PREFIX)/share/mime/packages/sameboy.xml
+ 	install -m 644 FreeDesktop/sameboy.desktop $(DESTDIR)$(PREFIX)/share/applications/sameboy.desktop
+ 	for size in 16x16 32x32 64x64 128x128 256x256 512x512; do \
+@@ -815,7 +807,6 @@
+ 		install -m 644 FreeDesktop/ColorCartridge/$$size.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/$$size/mimetypes/x-gameboy-color-rom.png; \
+ 	done
+ endif
+-endif
+
+ ios: bootroms
+ 	@$(MAKE) _ios

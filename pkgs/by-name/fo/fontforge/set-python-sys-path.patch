@@ -1,0 +1,21 @@
+Author: Philip Taron <philip.taron@gmail.com>
+Date:   Sat Jan 4 12:22:38 2025 -0800
+
+    fontforge: add an initial value for `sys.path`
+
+diff --git a/fontforge/python.c b/fontforge/python.c
+index e18d77d43..2e312eeb4 100644
+--- a/fontforge/python.c
++++ b/fontforge/python.c
+@@ -19576,6 +19576,11 @@ void FontForge_InitializeEmbeddedPython(void) {
+     PyStatus status;
+     PyConfig_InitPythonConfig(&config);
+ 
++    status = PyConfig_SetBytesString(&config, &config.pythonpath_env, "@python@");
++    if (PyStatus_Exception(status)) {
++        fprintf(stderr, "Failed to set the Python search path: %s\n", status.err_msg);
++    }
++
+     status = PyConfig_SetBytesString(&config, &config.program_name,
+                                      "fontforge");
+     if (PyStatus_Exception(status)) {

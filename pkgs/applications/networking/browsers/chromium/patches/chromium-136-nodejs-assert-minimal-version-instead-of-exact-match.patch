@@ -1,0 +1,19 @@
+diff --git a/third_party/node/check_version.js b/third_party/node/check_version.js
+index 0a037ab449c3b8780e68506993e6281d44cef7dc..e7cba2e457543eb8767c9868d851e5e4f5c32f2a 100644
+--- a/third_party/node/check_version.js
++++ b/third_party/node/check_version.js
+@@ -29,11 +29,9 @@ async function main() {
+   const expectedVersion = extractExpectedVersion(contents);
+ 
+   const errorMessage =
+-      `Failed NodeJS version check: Expected version '${expectedVersion}', ` +
+-      `but found '${process.version}'. Did you run 'gclient sync'? If the ` +
+-      `problem persists try running 'gclient sync -f' instead, or deleting ` +
+-      `third_party/node/{linux,win,mac} folders and trying again.`;
++      `Failed NodeJS version check: Expected at least version '${expectedVersion}', ` +
++      `but found '${process.version}'.`;
+ 
+-  assert.equal(expectedVersion, process.version, errorMessage);
++  assert.ok(expectedVersion <= process.version, errorMessage);
+ }
+ main();
