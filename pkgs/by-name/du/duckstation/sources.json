@@ -1,7 +1,7 @@
 {
   "duckstation": {
-    "version": "0.1-10091",
-    "hash_darwin": "sha256-6bp3ksI3a3FYuGhP6y77AxTR1XOXyjmBuQNnWwU9Zoo="
+    "version": "0.1-10130",
+    "hash_darwin": "sha256-20E6Tcx3ZCD4qPmFBxwCfkSdhsxHBzAZpYRYTYnjHLI="
   },
   "discord_rpc": {
     "rev": "cc59d26d1d628fbd6527aac0ac1d6301f4978b92",
