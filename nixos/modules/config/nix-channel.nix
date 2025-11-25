@@ -6,7 +6,7 @@
   - ./nix.nix
   - ./nix-flakes.nix
 */
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib)
     mkDefault
