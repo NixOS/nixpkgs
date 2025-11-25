@@ -27,6 +27,8 @@ let
     base64 --input="${channelsFilePlaintext}" --output="$out"
   '';
 
+  channelsFileEncodedContent = ''${builtins.readFile channelsFileBase64}'';
+
 in
 {
   options = {
@@ -107,7 +109,7 @@ in
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
-      ''f~ /root/.nix-channels - - - - ${builtins.readFile channelsFileBase64}''
+      ''f~ /root/.nix-channels - - - - ${channelsFileEncodedContent}''
     ];
 
     system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
