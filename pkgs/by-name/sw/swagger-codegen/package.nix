@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.45";
+  version = "2.4.50";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/swagger/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-imM4/JG878P2QJf/YaHOkHTupQPSXzkmldrYYQd9ZWE=";
+    sha256 = "sha256-rsoQFd5XTIcAz32jv2vv/OkqSSC3wCvxBeRbVJhZfLA=";
   };
 
   dontUnpack = true;
