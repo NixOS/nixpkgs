@@ -51,9 +51,6 @@ flutter335.buildFlutterApplication {
   ];
 
   # Git dependencies from pubspec.lock.json
-  # These hashes will be filled in automatically during the build process
-  # When you first run nix-build, it will fail with the expected hash for each dependency
-  # Copy those hashes here to fix the build
   gitHashes =
     let
       # Most dependencies come from DonutWare/media-kit with shared hash
