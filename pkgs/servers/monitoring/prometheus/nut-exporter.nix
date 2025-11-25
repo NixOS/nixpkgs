@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-cMZ4GSal03LIZi7ESr/sQx8zLHNepOTZGEEsdvsNhec=";
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Network UPS Tools";
     mainProgram = "nut_exporter";
     homepage = "https://github.com/DRuggeri/nut_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jhh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jhh ];
   };
 }

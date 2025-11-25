@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg";
     description = "Medical image registration software";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = [ "x86_64-linux" ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

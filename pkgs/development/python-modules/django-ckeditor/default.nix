@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ckeditor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django admin CKEditor integration";
     homepage = "https://github.com/django-ckeditor/django-ckeditor";
     changelog = "https://github.com/django-ckeditor/django-ckeditor/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
     knownVulnerabilities = [
       ''
         django-ckeditor bundles CKEditor 4.22.1 which isn’t supported anmyore and

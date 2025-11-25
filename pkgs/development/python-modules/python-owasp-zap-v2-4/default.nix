@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zapv2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to access the OWASP ZAP API";
     homepage = "https://github.com/zaproxy/zap-api-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

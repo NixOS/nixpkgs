@@ -36,11 +36,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command output timestamper";
     homepage = "https://github.com/gdubicki/ets/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cameronfyfe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cameronfyfe ];
     mainProgram = "ets";
   };
 }

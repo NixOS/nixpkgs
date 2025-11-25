@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
   doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
-  meta = with lib; {
+  meta = {
     description = "Spritely Goblins for Guile";
     homepage = "https://spritely.institute/goblins/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };

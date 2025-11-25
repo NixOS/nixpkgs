@@ -24,11 +24,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "jupyter_lsp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-Language Server WebSocket proxy for your Jupyter notebook or lab server";
     homepage = "https://jupyterlab-lsp.readthedocs.io/en/latest/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

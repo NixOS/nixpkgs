@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BjUPXsErdLGmZaDIMaY+iV3XcoQHGNZbRmFJb/fblwU=";
 
-  meta = with lib; {
+  meta = {
     description = "Typing tui with visualized results and historical logging";
     homepage = "https://github.com/thatvegandev/thokr";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "thokr";
   };

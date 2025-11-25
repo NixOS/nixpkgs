@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";
     description = "Library for handling ZIP and GZIP files in OCaml";
     longDescription = ''

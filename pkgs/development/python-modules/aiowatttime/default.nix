@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiowatttime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with WattTime";
     homepage = "https://github.com/bachya/aiowatttime";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

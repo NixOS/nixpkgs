@@ -24,12 +24,12 @@ buildGoModule rec {
     installManPage debian/hd-idle.8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Spins down external disks after a period of idle time";
     mainProgram = "hd-idle";
     homepage = "https://github.com/adelolmo/hd-idle";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rycee ];
   };
 }

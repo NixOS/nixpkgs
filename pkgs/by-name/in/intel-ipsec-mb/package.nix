@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "NOLDCONFIG=y"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Intel Multi-Buffer Crypto for IPsec Library";
     longDescription = ''
       Intel Multi-Buffer Crypto for IPsec Library provides software crypto
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       and MPEG DRM.
     '';
     homepage = "https://github.com/intel/intel-ipsec-mb";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

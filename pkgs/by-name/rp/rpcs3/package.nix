@@ -170,13 +170,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ${./99-dualsense-controllers.rules} $out/etc/udev/rules.d/99-dualsense-controllers.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ilian
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

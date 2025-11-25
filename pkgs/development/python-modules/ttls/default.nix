@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ttls" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Twinkly LEDs";
     mainProgram = "ttls";
     homepage = "https://github.com/jschlyter/ttls";
     changelog = "https://github.com/jschlyter/ttls/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

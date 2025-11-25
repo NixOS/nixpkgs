@@ -300,7 +300,7 @@ let
         ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Coq proof assistant";
       longDescription = ''
         Coq is a formal proof management system.  It provides a formal language
@@ -309,15 +309,15 @@ let
         machine-checked proofs.
       '';
       homepage = "https://coq.inria.fr";
-      license = licenses.lgpl21;
+      license = lib.licenses.lgpl21;
       branch = coq-version;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         roconnor
         thoughtpolice
         vbgl
         Zimmi48
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "coqide";
     };
   };

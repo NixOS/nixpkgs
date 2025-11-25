@@ -117,11 +117,11 @@ buildGoModule rec {
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       techknowlogick
       SuperSandro2000
     ];

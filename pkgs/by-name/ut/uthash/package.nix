@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/include/*.h -t $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hash table for C structures";
     homepage = "http://troydhanson.github.io/uthash";
-    license = licenses.bsd2; # it's one-clause, actually, as it's source-only
-    platforms = platforms.all;
+    license = lib.licenses.bsd2; # it's one-clause, actually, as it's source-only
+    platforms = lib.platforms.all;
   };
 }

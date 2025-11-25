@@ -41,11 +41,11 @@ buildGoModule rec {
     installShellCompletion --bash $bashCompletionScript
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
-    maintainers = with maintainers; [ ris ];
+    maintainers = with lib.maintainers; [ ris ];
     mainProgram = "cf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

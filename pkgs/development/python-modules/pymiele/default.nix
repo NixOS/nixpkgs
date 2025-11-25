@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymiele" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/astrandb/pymiele/releases/tag/v${version}";
     description = "Lib for Miele integration with Home Assistant";
     homepage = "https://github.com/astrandb/pymiele";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

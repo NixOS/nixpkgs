@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

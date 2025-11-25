@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eternalegypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Netgear LTE modems";
     homepage = "https://github.com/amelchio/eternalegypt";
     changelog = "https://github.com/amelchio/eternalegypt/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -47,11 +47,11 @@ buildPythonPackage rec {
     inherit pylint;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

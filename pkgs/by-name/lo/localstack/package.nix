@@ -65,10 +65,10 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "localstack";
   };

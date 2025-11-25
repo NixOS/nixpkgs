@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://erratique.ch/software/fmt";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "OCaml Format pretty-printer combinators";
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
     broken = lib.versionOlder ocaml.version "4.08";
   };
 }

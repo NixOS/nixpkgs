@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "renson_endura_delta" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Renson endura delta";
     homepage = "https://github.com/jimmyd-be/Renson-endura-delta-library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

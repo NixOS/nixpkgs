@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Markdown to Gemini text format conversion library";
     homepage = "https://github.com/makeworld-the-better-one/md2gemini";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.kaction ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.kaction ];
     broken = versionAtLeast mistune.version "3";
   };
 }

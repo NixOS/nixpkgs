@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marshmallow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for converting complex objects to and from simple Python datatypes";
     homepage = "https://github.com/marshmallow-code/marshmallow";
     changelog = "https://github.com/marshmallow-code/marshmallow/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
   };
 }

@@ -56,7 +56,7 @@ clangStdenv.mkDerivation rec {
     blas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
     mainProgram = "yodaStruct";
     longDescription = ''
@@ -67,8 +67,8 @@ clangStdenv.mkDerivation rec {
       interface.
     '';
     homepage = "https://dseams.info";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.HaoZeke ];
+    maintainers = [ lib.maintainers.HaoZeke ];
   };
 }

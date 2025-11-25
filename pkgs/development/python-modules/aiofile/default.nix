@@ -57,11 +57,11 @@ buildPythonPackage rec {
     "test_write_read_nothing"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/aiofile";
     changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

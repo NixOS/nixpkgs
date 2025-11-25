@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "test_current_values"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Aranet4 devices";
     homepage = "https://github.com/Anrijs/Aranet4-Python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aranetctl";
   };
 }

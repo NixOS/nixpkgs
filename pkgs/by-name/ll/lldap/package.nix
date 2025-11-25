@@ -126,13 +126,13 @@ rustPlatform.buildRustPackage (
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
       homepage = "https://github.com/lldap/lldap";
       changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
-      license = licenses.gpl3Only;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         bendlas
         ibizaman
       ];

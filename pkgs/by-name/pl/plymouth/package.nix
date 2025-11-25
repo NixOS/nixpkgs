@@ -122,11 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
   # location using DESTDIR and then move it to proper one in postInstall.
   env.DESTDIR = "${placeholder "out"}/dest";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

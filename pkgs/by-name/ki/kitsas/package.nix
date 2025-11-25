@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
       install -Dm644 ../kitsas.desktop -t $out/share/applications
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/artoh/kitupiikki";
     description = "Accounting tool suitable for Finnish associations and small business";
     mainProgram = "kitsas";
-    maintainers = with maintainers; [ gspia ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ gspia ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

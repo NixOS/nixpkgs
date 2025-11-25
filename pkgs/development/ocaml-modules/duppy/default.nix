@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ re ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-duppy";
     description = "Library providing monadic threads";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

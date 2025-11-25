@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keyrings.alt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternate keyring implementations";
     homepage = "https://github.com/jaraco/keyrings.alt";
     changelog = "https://github.com/jaraco/keyrings.alt/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyarly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyarly ];
   };
 }

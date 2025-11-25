@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/alioth";
     description = "Experimental Type-2 Hypervisor in Rust implemented from scratch";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alioth";
-    maintainers = with maintainers; [ astro ];
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

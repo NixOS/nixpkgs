@@ -43,8 +43,8 @@ mkXfceDerivation {
 
   passthru.xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
 
-  meta = with lib; {
+  meta = {
     description = "Session manager for Xfce";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

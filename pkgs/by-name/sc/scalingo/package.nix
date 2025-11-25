@@ -30,13 +30,13 @@ buildGoModule rec {
      --zsh cmd/autocomplete/scripts/scalingo_complete.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for the Scalingo PaaS";
     mainProgram = "scalingo";
     homepage = "https://doc.scalingo.com/platform/cli/start";
     changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cimm ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ cimm ];
     platforms = with lib.platforms; unix;
   };
 }

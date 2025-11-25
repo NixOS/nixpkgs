@@ -151,14 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Concise ChartPlotter/Navigator";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kragniz
       lovesegfault
     ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
 })

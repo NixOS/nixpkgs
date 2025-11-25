@@ -42,11 +42,11 @@ buildPythonPackage rec {
     "test_ignore_date_error_previous_day"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";
     mainProgram = "taxi";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ jocelynthode ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ jocelynthode ];
   };
 }

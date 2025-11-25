@@ -86,15 +86,15 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LunarG Vulkan Tools and Utilities";
     longDescription = ''
       Tools to aid in Vulkan development including useful layers, trace and
       replay, and tests.
     '';
     homepage = "https://github.com/LunarG/VulkanTools";
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -77,10 +77,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "onlykey_agent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Middleware that lets you use OnlyKey as a hardware SSH/GPG device";
     homepage = "https://github.com/trustcrypto/onlykey-agent";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

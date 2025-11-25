@@ -66,10 +66,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pytest_html" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for generating HTML reports";
     homepage = "https://github.com/pytest-dev/pytest-html";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ mpoquet ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ mpoquet ];
   };
 }

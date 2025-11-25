@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Show the set of running processes as a tree";
     homepage = "http://www.thp.uni-duisburg.de/pstree/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.c0bw3b ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.c0bw3b ];
+    platforms = lib.platforms.unix;
     priority = 5; # Lower than psmisc also providing pstree on Linux platforms
     mainProgram = "pstree";
   };

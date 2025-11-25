@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.dashboard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Dashboard Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/dashboard/azure-mgmt-dashboard/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

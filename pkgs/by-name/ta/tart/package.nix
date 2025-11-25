@@ -45,16 +45,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [
       emilytrau
       aduh95
     ];
     mainProgram = "tart";
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

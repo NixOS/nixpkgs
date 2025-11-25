@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "pymystrom.switch"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client for interacting with myStrom devices";
     longDescription = ''
       Asynchronous Python API client for interacting with myStrom devices.
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-mystrom";
     changelog = "https://github.com/home-assistant-ecosystem/python-mystrom/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mystrom";
   };
 }

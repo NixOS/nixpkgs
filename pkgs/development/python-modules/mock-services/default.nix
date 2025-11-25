@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mock_services" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mock an entire service API based on requests-mock";
     homepage = "https://github.com/peopledoc/mock-services";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

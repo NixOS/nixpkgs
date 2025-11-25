@@ -26,12 +26,12 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/share/* $out/share
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Next generation notepad-based calculator, built with extendibility and privacy in mind";
     homepage = "https://parsify.app/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.linux;
     mainProgram = "parsify";
   };
 }

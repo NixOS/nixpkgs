@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typical shell-completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Data interchange with algebraic data types";
     mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
     changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

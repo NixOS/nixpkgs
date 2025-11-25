@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unifi_discovery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
     changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

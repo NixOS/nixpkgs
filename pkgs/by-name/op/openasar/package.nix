@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative of Discord desktop's \"app.asar\"";
     homepage = "https://openasar.dev";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Scrumplex
       jopejoe1
     ];

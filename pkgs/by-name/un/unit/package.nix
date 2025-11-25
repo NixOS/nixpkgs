@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
     unit-php = nixosTests.unit-php;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
     mainProgram = "unitd";
     homepage = "https://unit.nginx.org/";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

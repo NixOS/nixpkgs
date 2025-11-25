@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_CUBE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

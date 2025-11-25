@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-U28OJ5heeiaj3aGAhR6eAXzfvFMehAUcHzyFkZBRK6c=";
 
-  meta = with lib; {
+  meta = {
     description = "Universal manager to set base16 themes for any supported application";
     homepage = "https://github.com/pinpox/base16-universal-manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jo1gi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jo1gi ];
     mainProgram = "base16-universal-manager";
   };
 }

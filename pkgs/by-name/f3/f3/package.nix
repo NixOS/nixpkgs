@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/f3 LICENSE README.rst
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fight Flash Fraud";
     homepage = "https://fight-flash-fraud.readthedocs.io/en/stable/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       makefu
     ];
   };

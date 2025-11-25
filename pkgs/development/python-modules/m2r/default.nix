@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown to reStructuredText converter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     # https://github.com/miyakogi/m2r/issues/66
     broken = versionAtLeast mistune.version "2";

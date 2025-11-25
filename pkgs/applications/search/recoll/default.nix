@@ -205,9 +205,9 @@ mkDerivation rec {
     '';
     homepage = "https://www.recoll.org";
     changelog = "https://www.recoll.org/pages/release-history.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       jcumming
     ];
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     allowedVersions = "^[0-9\\.]+$";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
       Since linux 4.8 the GPIO sysfs interface is deprecated. User space should use
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
     license =
-      with licenses;
+      with lib.licenses;
       [
         lgpl21Plus # libgpiod
         lgpl3Plus # C++ bindings
       ]
       ++ lib.optional enable-tools gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

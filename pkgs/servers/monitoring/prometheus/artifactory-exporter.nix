@@ -32,12 +32,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) artifactory; };
 
-  meta = with lib; {
+  meta = {
     description = "JFrog Artifactory Prometheus Exporter";
     mainProgram = "artifactory_exporter";
     homepage = "https://github.com/peimanja/artifactory_exporter";
     changelog = "https://github.com/peimanja/artifactory_exporter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lbpdt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lbpdt ];
   };
 }

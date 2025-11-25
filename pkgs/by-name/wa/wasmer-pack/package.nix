@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Import your WebAssembly code just like any other dependency";
     mainProgram = "wasmer-pack";
     homepage = "https://github.com/wasmerio/wasmer-pack";
     changelog = "https://github.com/wasmerio/wasmer-pack/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

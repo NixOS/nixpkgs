@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
 
   postInstall = postInstallContrib + postInstallEmacs;
 
-  meta = with lib; {
+  meta = {
     description = "Functional programming language with dependent types";
     homepage = "http://www.ats-lang.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       ttuegel
       bbarker

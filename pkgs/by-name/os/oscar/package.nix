@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sleepfiles.com/OSCAR/";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
     mainProgram = "OSCAR";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.roconnor ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.roconnor ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.
     # See https://gitlab.com/pholy/OSCAR-code/-/tree/master/Building.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

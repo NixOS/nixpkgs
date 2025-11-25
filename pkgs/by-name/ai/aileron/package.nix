@@ -26,13 +26,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/aileron/";
     description = "Helvetica font in nine weights";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

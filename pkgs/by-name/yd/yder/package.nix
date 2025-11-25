@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Logging library for C applications";
     homepage = "https://github.com/babelouest/yder";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
+    platforms = lib.platforms.all;
   };
 }

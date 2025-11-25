@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     "LIBNET_BASE=${libnet}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transparent SSL/TLS interception";
     homepage = "https://www.roe.ch/SSLsplit";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ contrun ];
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ contrun ];
+    license = with lib.licenses; [
       bsd2
       mit
       unlicense

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nmapthon2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to automate nmap";
     homepage = "https://github.com/cblopez/nmapthon2";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

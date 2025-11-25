@@ -125,9 +125,9 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small open source library for using 3D graphics hardware for rendering";
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 ];
 
     longDescription = ''
       Cogl is a small open source library for using 3D graphics hardware for
@@ -136,8 +136,8 @@ stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       mit
       bsd3
       publicDomain

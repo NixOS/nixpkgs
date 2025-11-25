@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "w1thermsensor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to 1-Wire temperature sensors";
     mainProgram = "w1thermsensor";
     longDescription = ''
@@ -59,8 +59,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/timofurrer/w1thermsensor";
     changelog = "https://github.com/timofurrer/w1thermsensor/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ quentin ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ quentin ];
+    platforms = lib.platforms.all;
   };
 }

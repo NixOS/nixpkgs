@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IgGuWIsDsiMqscO4B876iTCdrR+nI9bpTQOyxjCtjMk=";
 
-  meta = with lib; {
+  meta = {
     description = "Find and remove unused code in .nix source files";
     homepage = "https://github.com/astro/deadnix";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "deadnix";
-    maintainers = with maintainers; [ astro ];
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

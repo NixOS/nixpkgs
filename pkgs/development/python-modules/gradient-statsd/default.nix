@@ -40,11 +40,11 @@ buildPythonPackage rec {
   # Pypi does not contain tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around the DogStatsd client";
     homepage = "https://paperspace.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

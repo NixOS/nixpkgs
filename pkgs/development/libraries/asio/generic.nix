@@ -22,11 +22,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://asio.sourceforge.net/";
     description = "Cross-platform C++ library for network and low-level I/O programming";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     broken = stdenv.hostPlatform.isDarwin && lib.versionOlder version "1.16.1";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

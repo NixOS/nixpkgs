@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace debugging and diagnostic tool for AMD GPUs";
     homepage = "https://gitlab.freedesktop.org/tomstdenis/umr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

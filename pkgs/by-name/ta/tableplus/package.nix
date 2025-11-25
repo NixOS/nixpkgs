@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Database management made easy";
     homepage = "https://tableplus.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ yamashitax ];
-    platforms = platforms.darwin;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ yamashitax ];
+    platforms = lib.platforms.darwin;
   };
 })

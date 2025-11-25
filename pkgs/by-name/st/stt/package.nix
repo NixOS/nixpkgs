@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     install -D libstt.so $out/lib/libstt.so
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coqui-ai/STT";
     description = "Deep learning toolkit for Speech-to-Text, battle-tested in research and production";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with lib.maintainers; [ rvolosatovs ];
     mainProgram = "stt";
   };
 }

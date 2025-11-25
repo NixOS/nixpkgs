@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) couchdb;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "https://couchdb.apache.org";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ lostnet ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ lostnet ];
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

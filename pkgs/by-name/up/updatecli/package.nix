@@ -56,16 +56,16 @@ buildGoModule rec {
     installManPage updatecli.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
     changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       croissong
       lpostula
     ];

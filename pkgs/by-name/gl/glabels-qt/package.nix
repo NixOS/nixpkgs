@@ -23,11 +23,11 @@ stdenv.mkDerivation {
     libsForQt5.qttools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GLabels Label Designer (Qt/C++)";
     homepage = "https://github.com/jimevins/glabels-qt";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.matthewcroughan ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.linux;
   };
 }

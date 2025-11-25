@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_get_deps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extra command for MkDocs that infers required PyPI packages from `plugins` in mkdocs.yml";
     homepage = "https://github.com/mkdocs/get-deps";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

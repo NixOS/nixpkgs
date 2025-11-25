@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to protect your users from Excel injections in CSV-format exports, drop-in replacement for standard library's csv module";
     homepage = "https://github.com/raphaelm/defusedcsv";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

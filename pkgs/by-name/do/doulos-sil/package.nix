@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://software.sil.org/doulos";
     description = "Font that provides complete support for the International Phonetic Alphabet";
     longDescription = ''
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
 
       The goal for this product was to provide a single Unicode-based font family that would contain a comprehensive inventory of glyphs needed for almost any Roman- or Cyrillic-based writing system, whether used for phonetic or orthographic needs. In addition, there is provision for other characters and symbols useful to linguists. This font makes use of state-of-the-art font technologies to support complex typographic issues, such as the need to position arbitrary combinations of base glyphs and diacritics optimally.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.f--t ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.f--t ];
   };
 }

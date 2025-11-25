@@ -192,11 +192,11 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCm/rocBLAS";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

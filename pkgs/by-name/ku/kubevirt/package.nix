@@ -46,11 +46,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client tool to use advanced features such as console access";
     homepage = "https://kubevirt.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ haslersn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ haslersn ];
     mainProgram = "virtctl";
   };
 }

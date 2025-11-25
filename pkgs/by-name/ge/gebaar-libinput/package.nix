@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gebaar, A Super Simple WM Independent Touchpad Gesture Daemon for libinput";
     mainProgram = "gebaard";
     homepage = "https://github.com/Coffee2CodeNL/gebaar-libinput";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       lovesegfault
     ];
   };

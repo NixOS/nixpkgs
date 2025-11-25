@@ -61,11 +61,11 @@ buildPythonPackage rec {
     fastembed = [ fastembed ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Qdrant vector search engine";
     homepage = "https://github.com/qdrant/qdrant-client";
     changelog = "https://github.com/qdrant/qdrant-client/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

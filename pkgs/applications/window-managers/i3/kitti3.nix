@@ -32,11 +32,11 @@ buildPythonApplication {
     i3ipc
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LandingEllipse/kitti3";
     description = "Kitty drop-down service for sway & i3wm";
     mainProgram = "kitti3";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     changelog = "https://sourceforge.net/p/ruamel-yaml/code/ci/default/tree/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
