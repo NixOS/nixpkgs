@@ -18,6 +18,15 @@ let
 
   cfg = config.nix;
 
+  channelsFilePlaintext = pkgs.writeTextFile {
+    name = "plaintext-channels-file";
+    text = builtins.concatStringsSep "\n" config.system.defaultChannels;
+  };
+
+  channelsFileBase64 = pkgs.runCommand "base64-encode-file" { buildInputs = [ pkgs.basez ]; } ''
+    base64 --input="${channelsFilePlaintext}" --output="$out"
+  '';
+
 in
 {
   options = {
@@ -68,11 +77,13 @@ in
     };
 
     system = {
-      defaultChannel = mkOption {
+      defaultChannels = mkOption {
         internal = true;
         type = types.str;
-        default = "https://channels.nixos.org/nixos-unstable";
-        description = "Default NixOS channel to which the root user is subscribed.";
+        default = [
+          "https://channels.nixos.org/nixos-unstable nixos"
+        ];
+        description = "Default NixOS channels to which the root user is subscribed.";
       };
     };
   };
@@ -96,7 +107,7 @@ in
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
-      ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
+      ''f~ /root/.nix-channels - - - - ${builtins.readFile channelsFileBase64}''
     ];
 
     system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
