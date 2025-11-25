@@ -6,16 +6,17 @@
   installShellFiles,
   nixosTests,
   stdenv,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "croc";
   version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oNk4ReqteTeWKjsmVPC2yVRv1A9WN9jUbiT40flfM+o=";
   };
 
@@ -45,6 +46,11 @@ buildGoModule rec {
     };
   };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Easily and securely send things from one computer to another";
     longDescription = ''
@@ -60,6 +66,7 @@ buildGoModule rec {
       - Does not require a server or port-forwarding
     '';
     homepage = "https://github.com/schollz/croc";
+    changelog = "https://github.com/schollz/croc/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       equirosa
@@ -68,4 +75,4 @@ buildGoModule rec {
     ];
     mainProgram = "croc";
   };
-}
+})

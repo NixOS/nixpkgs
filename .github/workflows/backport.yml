@@ -22,7 +22,7 @@ jobs:
   backport:
     name: Backport Pull Request
     if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered

@@ -12158,10 +12158,6 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
-  lightdm-gtk-greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
-    inherit (xfce) xfce4-dev-tools;
-  };
-
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
   curaengine = callPackage ../applications/misc/curaengine {
