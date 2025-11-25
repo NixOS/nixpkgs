@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
     repo = "libssc";
     tag = "v${version}";
     hash = "sha256-vc3phLAURKXAVD/o4uiGkBtJ3wsbLEfkwygMltEhqug=";
-    fetchSubmodules = false;
   };
 
   buildInputs = [
