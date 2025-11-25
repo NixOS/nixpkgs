@@ -6,11 +6,16 @@
   fetchurl,
   copyDesktopItems,
   makeDesktopItem,
-  mpv-unwrapped,
+  makeBinaryWrapper,
+  mpv,
   sqlite,
   alsa-lib,
   libepoxy,
   libpulseaudio,
+  libGL,
+  libx11,
+  libgbm,
+  libdrm,
 }:
 let
   # MDK SDK required by fvp plugin
@@ -40,14 +45,19 @@ flutter335.buildFlutterApplication {
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeBinaryWrapper # Required for wrapProgram
   ];
 
   buildInputs = [
-    mpv-unwrapped
+    mpv
     sqlite
     alsa-lib
     libepoxy
     libpulseaudio
+    libGL
+    libx11
+    libgbm
+    libdrm
   ];
 
   # Git dependencies from pubspec.lock.json
@@ -148,6 +158,22 @@ flutter335.buildFlutterApplication {
     # Install SVG icon
     install -Dm644 icons/fladder_icon.svg \
       $out/share/icons/hicolor/scalable/apps/fladder.svg
+  '';
+
+  # Wrap the executable to find libraries loaded at runtime (dlopen)
+  postFixup = ''
+    wrapProgram $out/bin/Fladder \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+        libpulseaudio
+        libepoxy
+        alsa-lib
+        mpv
+        sqlite
+        libGL
+        libx11
+        libgbm
+        libdrm
+      ]}
   '';
 
   desktopItems = [
