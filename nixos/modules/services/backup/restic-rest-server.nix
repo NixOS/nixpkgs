@@ -136,6 +136,7 @@ in
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ReusePort = true;
+        FreeBind = true;
       };
     };
 
