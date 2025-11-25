@@ -79,7 +79,7 @@ in
     system = {
       defaultChannels = mkOption {
         internal = true;
-        type = types.str;
+        type = types.listOf types.str;
         default = [
           "https://channels.nixos.org/nixos-unstable nixos"
         ];
