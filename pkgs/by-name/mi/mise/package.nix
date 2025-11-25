@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.11.6";
+  version = "2025.11.7";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-P+FHyCWlYWiJlv846QFhgjbERPH/MOkSlNTr7eVq9qw=";
+    hash = "sha256-R4DmHUsXPiXwfn+9pO3Vl58fQXhZhsaa0tonspcTHFU=";
   };
 
-  cargoHash = "sha256-ZHWfMQRIx4rOs+KDanf7u1DctPCYpSr2VUXWrIhUTzg=";
+  cargoHash = "sha256-qxJcUrH+JK1T2qTWYe3/DE8zuiNlZ52BM19uooUTDYM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -119,10 +119,9 @@ rustPlatform.buildRustPackage rec {
           ''
             export HOME=$(mktemp -d)
 
-            spec="$(mise usage)"
             for shl in bash fish zsh; do
               echo "testing $shl"
-              usage complete-word --shell $shl --spec "$spec"
+              usage complete-word --shell $shl --file <(mise usage)
             done
 
             touch $out

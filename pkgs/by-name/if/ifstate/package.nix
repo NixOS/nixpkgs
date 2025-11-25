@@ -10,17 +10,16 @@
   withBpf ? false,
   withConfigValidation ? true,
   withShellColor ? false,
-  withWireguard ? true,
 }:
 
 let
-  version = "2.1.0";
+  version = "2.2.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "liske";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-HgbaLKlWU9YL279/WKLMLC/vxwmnDhBZFdELMRyJl0Y=";
+    hash = "sha256-Q06lGGGQxJ7ntgXRzfnsJN+A/08AIOsOkz3cg2xZGr4=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -80,8 +79,7 @@ let
         setproctitle
       ]
       ++ lib.optional withConfigValidation jsonschema
-      ++ lib.optional withShellColor pygments
-      ++ lib.optional withWireguard wgnlpy;
+      ++ lib.optional withShellColor pygments;
 
     pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
 
@@ -100,7 +98,6 @@ let
           withBpf
           withConfigValidation
           withShellColor
-          withWireguard
           ;
       };
       # needed for access in schema validaten in module

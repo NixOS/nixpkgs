@@ -100,6 +100,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--flake",
+        "-F",
         nargs="?",
         const=True,
         help="Build the NixOS system from the specified flake",

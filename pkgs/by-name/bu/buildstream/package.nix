@@ -92,9 +92,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # ValueError: Unexpected comparison between all and ''
-    "test_help"
-
     # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
     "test_source_mirror_plugin"
 
