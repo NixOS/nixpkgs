@@ -59,10 +59,14 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
   '';
 
+  # Prevent npmDeps from getting into the closure
+  disallowedReferences = [ finalAttrs.npmDeps ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/gemini-cli}
 
+    npm prune --omit=dev
     cp -r node_modules $out/share/gemini-cli/
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
