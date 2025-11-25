@@ -40,6 +40,9 @@
   passthru ? { },
   # : attributes to be merged into meta
   broken ? false,
+  nativeBuildInputs ? [ ],
+  buildInputs ? [ ],
+  propagatedBuildInputs ? [ ],
 }:
 
 let
@@ -115,7 +118,12 @@ stdenv.mkDerivation {
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
     ++ (lib.optional stdenv.hostPlatform.isDarwin "--build=${stdenv.hostPlatform.system}");
 
-  inherit postConfigure;
+  inherit
+    postConfigure
+    nativeBuildInputs
+    buildInputs
+    propagatedBuildInputs
+    ;
 
   makeFlags = lib.optionals stdenv.cc.isClang [
     "AR=${stdenv.cc.targetPrefix}ar"
