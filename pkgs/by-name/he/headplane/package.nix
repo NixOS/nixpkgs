@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A feature-complete Web UI for Headscale";
+    description = "Feature-complete Web UI for Headscale";
     homepage = "https://github.com/tale/headplane";
     changelog = "https://github.com/tale/headplane/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
