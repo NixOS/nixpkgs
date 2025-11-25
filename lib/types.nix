@@ -965,7 +965,7 @@ let
         in
         mkOptionType {
           name = "attrTag";
-          description = "attribute-tagged union";
+          description = "attribute-tagged union with choices: ${choicesStr}";
           descriptionClass = "noun";
           getSubOptions =
             prefix: mapAttrs (tagName: tagOption: tagOption // { loc = prefix ++ [ tagName ]; }) tags;
