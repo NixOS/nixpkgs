@@ -3,21 +3,20 @@
   fetchFromGitHub,
   python3Packages,
   writableTmpDirAsHomeHook,
-  makeWrapper,
   cdxgen,
   nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "6.0.0b3";
+  version = "6.0.0b5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${version}";
-    hash = "sha256-GdrFsECcBZ2J47ojM33flqOtrY3avchGpsZk6pt8Aks=";
+    hash = "sha256-D+ILgWifIV27CG4aJUHeI6F7ASomS0iyAG0beIIzJNk=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -29,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     defusedxml
     ds-analysis-lib
     ds-reporting-lib
+    ds-server-lib
     ds-xbom-lib
     jinja2
     oras
@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     httpretty
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     writableTmpDirAsHomeHook

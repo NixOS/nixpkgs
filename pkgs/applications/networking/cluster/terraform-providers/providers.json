@@ -264,13 +264,13 @@
     "vendorHash": "sha256-3o6YRDrq4rQhNAFyqiGJrAoxuAykWw85OExRGSE3kGI="
   },
   "datadog_datadog": {
-    "hash": "sha256-3McGeaYAMXJKD4C/5L9VIA0Cwt87arm3UB3ifkd6fV0=",
+    "hash": "sha256-6VRifhAzLqgugh5oi2LgSWrJhhy3mPpQJSeaudAm/0g=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.80.0",
+    "rev": "v3.81.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-neEEhCNceYDNqo8u6sPeBhCztD6iKxl3kylKyfHbkDE="
+    "vendorHash": "sha256-3fOhxvIEBbBLA/4Nbq/Qp3+ynNnFYclH3nGnV2vYvug="
   },
   "datadrivers_nexus": {
     "hash": "sha256-Lm5CZ+eBDUNIL2KuK/iKc5dTif7P+E9II714vwvYuyU=",
@@ -489,13 +489,13 @@
     "vendorHash": "sha256-MYVkNvJ+rbwGw0htClIbmxk3YX2OK/ZO/QOTyMRFiug="
   },
   "hashicorp_aws": {
-    "hash": "sha256-d0WNES9Z1aDd9BkHYrr4PFrFP+aYubgT9DrQBkAU/Xk=",
+    "hash": "sha256-Y3xLc6HUlfz8bw1hcU8d1zoWhOUTm2vOMvr/4nkOC8Q=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.21.0",
+    "rev": "v6.22.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UdXgrCr2aYuDkQGhN4NGOU/kFTQhCRaAABHyJ+6/lrg="
+    "vendorHash": "sha256-xdQvS6yGzwshFBYz9RoDliwccbBeWuSqRF3W4A+leFc="
   },
   "hashicorp_awscc": {
     "hash": "sha256-TpSNJZN+V1uCHrJZs9R6W7SEwqYpcZwq69LxGCPIFIM=",
@@ -1417,13 +1417,13 @@
     "vendorHash": null
   },
   "vancluever_acme": {
-    "hash": "sha256-I3x6oiyM29xAvvsrDF8WfZLvgA5bmdta8yDAxeNjTvM=",
+    "hash": "sha256-I0ZWvXP4U1cfGq7isXhAL+02La1N3SGt9fs/otstAVw=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "repo": "terraform-provider-acme",
-    "rev": "v2.38.0",
+    "rev": "v2.38.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6kRbFB8KCvh8kbSy557AJn5BvYs2e0iBqbWvtVFXPrI="
+    "vendorHash": "sha256-gk9r4fj8vHamCxPOSkXuj0UWZcyRVKBWTj23Vn2m7zs="
   },
   "venafi_venafi": {
     "hash": "sha256-wpAckNRqZjSDt7KpCRpLSYkn6Gm+QPzn5sIJ90wRXjI=",
