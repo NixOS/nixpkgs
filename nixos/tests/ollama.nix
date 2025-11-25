@@ -9,16 +9,25 @@ in
 
   nodes = {
     cpu =
-      { ... }:
       {
         services.ollama.enable = true;
       };
 
     altAddress =
-      { ... }:
       {
         services.ollama.enable = true;
         services.ollama.port = altPort;
+      };
+
+    preload =
+      {
+        services.ollama.enable = true;
+        services.ollama.preloadModels = [
+          {
+            model = "tinydolphin";
+            hash = "sha256-Y4TJJ76Y3P0T00aoha2ldtXs2I6QHvMxNOUwp8KJmtY=";
+          }
+        ];
       };
   };
 
@@ -42,6 +51,7 @@ in
     vms = [
       (cpu, ${toString mainPort}),
       (altAddress, ${toString altPort}),
+      (preload, ${toString mainPort}),
     ]
 
     start_all()
