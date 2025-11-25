@@ -29,6 +29,11 @@ let
     '';
     license = lib.licenses.cc-by-30;
     homepage = "https://durian.blender.org/";
+
+    # Reported in https://github.com/NixOS/nixpkgs/pull/458193#issuecomment-3575753211 that these
+    # tests are causing Hydra to spin for hours. They all pass locally, and we don't care too much
+    # about running them on Hydra.
+    hydraPlatforms = [ ];
   };
 
   # Via https://webtorrent.io/free-torrents
