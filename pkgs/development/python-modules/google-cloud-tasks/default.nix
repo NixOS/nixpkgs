@@ -9,7 +9,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "google-cloud-tasks";
   version = "2.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_tasks";
