@@ -10,6 +10,7 @@
   sqlite,
   alsa-lib,
   libepoxy,
+  libpulseaudio,
 }:
 let
   # MDK SDK required by fvp plugin
@@ -46,6 +47,7 @@ flutter335.buildFlutterApplication {
     sqlite
     alsa-lib
     libepoxy
+    libpulseaudio
   ];
 
   # Git dependencies from pubspec.lock.json
@@ -146,15 +148,9 @@ flutter335.buildFlutterApplication {
   };
 
   postInstall = ''
-    # Install icon
-    for size in 16 32 48 64 128 256 512; do
-      install -Dm644 assets/icon/icon-''${size}x''${size}.png \
-        $out/share/icons/hicolor/''${size}x''${size}/apps/fladder.png
-    done
-    
-    # Fallback to a main icon if specific sizes don't exist
-    install -Dm644 assets/icon/icon.png \
-      $out/share/icons/hicolor/256x256/apps/fladder.png || true
+    # Install SVG icon
+    install -Dm644 icons/fladder_icon.svg \
+      $out/share/icons/hicolor/scalable/apps/fladder.svg
   '';
 
   desktopItems = [
