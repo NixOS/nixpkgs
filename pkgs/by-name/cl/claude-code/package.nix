@@ -7,6 +7,10 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
+  # NOTE: Use the following command to update the package
+  # ```sh
+  # nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package vscode-extensions.anthropic.claude-code && nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package claude-code
+  # ```
   version = "2.0.53";
 
   src = fetchzip {
