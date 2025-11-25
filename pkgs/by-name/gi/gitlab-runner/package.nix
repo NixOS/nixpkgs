@@ -4,20 +4,19 @@
   bash,
   buildGoModule,
   fetchFromGitLab,
-  fetchpatch,
   nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.6.0";
+  version = "18.6.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SpfmFpL4bZbzC3T77EEbOoV9dVY3tLgcuE0gN4x1168=";
+    hash = "sha256-PdrIjo9N/zaLFcnteiBLLI9WeP04H9oY7PfllSqAk6M=";
   };
 
   vendorHash = "sha256-9Ttmf/iTikSAlAIlmKSRMEDizPP4Iw0CttcR8oYLiMU=";
@@ -28,12 +27,6 @@ buildGoModule (finalAttrs: {
   patches = [
     ./fix-shell-path.patch
     ./remove-bash-test.patch
-    # fix regression. remove with next release.
-    (fetchpatch {
-      name = "fix-shell-executor-not-working-with-variables-that-use-file-variables.patch";
-      url = "https://gitlab.com/gitlab-org/gitlab-runner/-/commit/6318fe8e38ca9774eb0f52fa2c68555cdad3ab44.patch";
-      hash = "sha256-GTdBo+7kHHpNs6JywjOII4NBcHjFYEZ3xhdGTcGKov4=";
-    })
   ];
 
   prePatch = ''
