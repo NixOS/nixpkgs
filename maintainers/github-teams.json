@@ -631,8 +631,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -695,11 +694,12 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
       "xokdvium": 145775305
     },
