@@ -4542,6 +4542,8 @@ self: super: with self; {
 
   ds-reporting-lib = callPackage ../development/python-modules/ds-reporting-lib { };
 
+  ds-server-lib = callPackage ../development/python-modules/ds-server-lib { };
+
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds-xbom-lib = callPackage ../development/python-modules/ds-xbom-lib { };
