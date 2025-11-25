@@ -85,16 +85,6 @@ in
       default = false;
       description = "Open ports in the firewall for the Rustical.";
     };
-    user = mkOption {
-      type = str;
-      default = "rustical";
-      description = "User under which the rustical service runs.";
-    };
-    group = mkOption {
-      type = str;
-      default = "rustical";
-      description = "Group under which the rustical service runs.";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -116,14 +106,6 @@ in
       allowedTCPPorts = [ cfg.settings.http.port ];
     };
 
-    users = {
-      users.${cfg.user} = {
-        isSystemUser = true;
-        group = cfg.group;
-      };
-      groups.${cfg.group} = { };
-    };
-
     systemd = {
       services.rustical = {
         description = "A CalDAV/CardDAV server";
@@ -135,8 +117,10 @@ in
           ExecStart = "${getExe cfg.package} --config-file ${settingsFormat.generate "config.toml" cfg.settings}";
           EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/rustical") "rustical";
-          User = cfg.user;
-          Group = cfg.group;
+          DynamicUser = true;
+          PrivateMounts = false;
+          User = "rustical";
+          Group = "rustical";
           Restart = "on-failure";
           # Hardening
           SystemCallFilter = [
