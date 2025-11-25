@@ -13,6 +13,7 @@
   texinfo,
   buildPackages,
   # only for passthru.tests
+  gpa,
   libsForQt5,
   qt6Packages,
   python3,
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
+    inherit gpa;
     python = python3.pkgs.gpgme;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
