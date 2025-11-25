@@ -7335,8 +7335,6 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  gpgme = callPackage ../development/libraries/gpgme { };
-
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
   glib = callPackage ../by-name/gl/glib/package.nix (
