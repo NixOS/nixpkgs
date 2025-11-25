@@ -139,7 +139,10 @@ in
           Group = cfg.group;
           Restart = "on-failure";
           # Hardening
-          SystemCallFilter = "@system-service";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
           SystemCallErrorNumber = "EPERM";
           ProtectSystem = "strict";
           ProtectHome = "yes";
@@ -156,6 +159,18 @@ in
           ReadWritePaths = cfg.dataDir;
           ProtectHostname = "yes";
           ProtectClock = "yes";
+          RestrictRealtime = "yes";
+          RestrictNamespaces = "";
+          LockPersonality = "yes";
+          MemoryDenyWriteExecute = "yes";
+          ProtectKernelLogs = "yes";
+          RemoveIPC = "yes";
+          DeviceAllow = "";
+          UMask = "0027";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
         };
       };
       tmpfiles.settings.rustical."${cfg.dataDir}".d = mkIf (cfg.dataDir != "/var/lib/rustical") {
