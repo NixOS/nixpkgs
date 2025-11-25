@@ -11,8 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "headplane";
   version = "0.5.10";
   src = fetchFromGitHub {
-    repo = "tale";
-    owner = "headplane";
+    owner = "tale";
+    repo = "headplane";
     rev = finalAttrs.version;
     hash = "sha256-0sckkbjyjrgshzmxx1biylxasybcmybarmqgfhl2cn6yy40dw6p4";
   };
