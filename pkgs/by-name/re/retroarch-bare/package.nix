@@ -178,7 +178,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with lib.maintainers; [
-      matthewbauer
       kolbycrouch
     ];
     teams = [ lib.teams.libretro ];

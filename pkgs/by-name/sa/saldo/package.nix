@@ -20,14 +20,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "saldo";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = false;
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "saldo";
     tag = version;
-    hash = "sha256-B1+lod6IJfSWDsMobXw5QMP3L7fin4Nub9DNfpVulzo=";
+    hash = "sha256-ItdEse9ab5spvxcWn1FTAl7ppfjohRr0CXI4ImiSe+g=";
   };
 
   postPatch = ''

@@ -108,7 +108,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre
-      matthewbauer
       nekowinston
     ];
     platforms = lib.platforms.unix;

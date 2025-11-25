@@ -7666,6 +7666,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  emaiax = {
+    email = "github@emaiax.dev";
+    github = "emaiax";
+    githubId = 1289661;
+    name = "Eduardo Maia";
+  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "Emantor";
@@ -16291,12 +16297,6 @@
     github = "matthew-levan";
     githubId = 91502660;
     name = "Matthew LeVan";
-  };
-  matthewbauer = {
-    email = "mjbauer95@gmail.com";
-    github = "matthewbauer";
-    githubId = 19036;
-    name = "Matthew Bauer";
   };
   matthewcroughan = {
     email = "matt@croughan.sh";
