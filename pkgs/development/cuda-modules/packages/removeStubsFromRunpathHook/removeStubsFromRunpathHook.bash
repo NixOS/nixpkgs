@@ -6,10 +6,6 @@ if [[ -n ${removeStubsFromRunpathHookOnce-} ]]; then
   nixDebugLog "skipping sourcing removeStubsFromRunpathHook.bash (hostOffset=$hostOffset) (targetOffset=$targetOffset)" \
     "because it has already been sourced"
   return 0
-elif [[ -n ${strictDeps:-} ]] && ! ((hostOffset == -1 && targetOffset == 0)); then
-  nixDebugLog "skipping sourcing removeStubsFromRunpathHook.bash (hostOffset=$hostOffset) (targetOffset=$targetOffset)" \
-    "because it is not in nativeBuildInputs"
-  return 0
 fi
 
 declare -g removeStubsFromRunpathHookOnce=1
