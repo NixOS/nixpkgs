@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.18";
+  version = "7.2.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
     tag = version;
-    hash = "sha256-2SmqtCWOwmSxi9vsBvH2bhYiUwc2LyZ/zO2jJpnhPDw=";
+    hash = "sha256-HFlLUQCjcZ5crkSMVTxEgcUf6ZzIp/QeiGGf0a/Cka8=";
   };
 
   postPatch = ''
