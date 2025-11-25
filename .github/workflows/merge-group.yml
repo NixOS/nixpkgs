@@ -111,8 +111,10 @@ jobs:
     if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
+      - check
       - lint
       - eval
+      - build
     runs-on: ubuntu-slim
     permissions:
       statuses: write
