@@ -1,18 +1,18 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGoModule,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "redli";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
     repo = "redli";
     tag = "v${version}";
-    hash = "sha256-/D+kE45PN0rWYvBBm4oxjPWgS8kN/LNf76OTC5rBt1g=";
+    hash = "sha256-pEEfJWDwMBkx2Ff9pHuvO6N8FvEe93pOI3EO40sNV+8=";
   };
 
   vendorHash = "sha256-30a/cZNkXsR0+fv74mfFZnvsylqJDRU72t/cwJur1dU=";
