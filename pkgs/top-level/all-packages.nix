@@ -2186,8 +2186,9 @@ with pkgs;
     citrix_workspace_24_11_0
     citrix_workspace_25_03_0
     citrix_workspace_25_05_0
+    citrix_workspace_25_08_0
     ;
-  citrix_workspace = citrix_workspace_25_05_0;
+  citrix_workspace = citrix_workspace_25_08_0;
 
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 

@@ -65,6 +65,15 @@ let
       suffix = "44";
       homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
+
+    "25.08.0" = {
+      major = "25";
+      minor = "08";
+      patch = "0";
+      hash = "19nx7j78c84m6wlidkaicqf5rgy05rm85vzh3admhrl8q9zr1avr";
+      suffix = "88";
+      homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
   };
 in
 supportedVersions
