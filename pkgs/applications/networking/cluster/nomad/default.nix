@@ -41,12 +41,6 @@ let
           inherit hash;
         };
 
-        # Nomad requires Go 1.24.6, but nixpkgs doesn't have it in unstable yet.
-        postPatch = ''
-          substituteInPlace go.mod \
-            --replace-warn "go 1.24.6" "go 1.24.5"
-        '';
-
         nativeBuildInputs = [ installShellFiles ];
 
         ldflags = [
