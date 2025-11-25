@@ -2970,8 +2970,6 @@ with pkgs;
     threadsafe = true;
   };
 
-  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
-
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
