@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isUnix [
     (lib.cmakeBool "SPIRV_CROSS_SHARED" true)
   ];
 
