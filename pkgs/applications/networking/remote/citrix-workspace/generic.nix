@@ -61,7 +61,6 @@
 
   homepage,
   version,
-  prefix,
   hash,
 
   extraCerts ? [ ],
@@ -97,12 +96,12 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = requireFile rec {
-    name = "${prefix}-${version}.tar.gz";
+    name = "linuxx64-${version}.tar.gz";
     sha256 = hash;
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.hostPlatform.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the 64-bit binaries, .tar.gz from:
 
       ${homepage}
 
@@ -247,9 +246,9 @@ stdenv.mkDerivation rec {
       export HOME=$(mktemp -d)
 
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
+      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
-      faketime -f "$source_date" ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+      faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
@@ -318,7 +317,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ] ++ lib.optional (lib.versionOlder version "24") "i686-linux";
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ flacks ];
     inherit homepage;
   };
