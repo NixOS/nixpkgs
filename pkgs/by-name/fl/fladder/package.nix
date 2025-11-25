@@ -73,6 +73,26 @@ flutter335.buildFlutterApplication {
           runHook postInstall
         '';
       };
+
+    media_kit_libs_linux =
+      { version, src, ... }:
+      stdenv.mkDerivation {
+        pname = "media_kit_libs_linux";
+        inherit version src;
+        inherit (src) passthru;
+
+        # No patching needed for media_kit_libs_linux
+        dontPatch = true;
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir $out
+          cp -r ./* $out/
+
+          runHook postInstall
+        '';
+      };
   };
 
   postInstall = ''
