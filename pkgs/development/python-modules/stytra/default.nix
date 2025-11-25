@@ -85,10 +85,10 @@ buildPythonPackage rec {
     "stytra/tests/test_z_experiments.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

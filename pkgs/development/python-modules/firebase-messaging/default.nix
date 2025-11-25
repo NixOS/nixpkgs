@@ -83,11 +83,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to subscribe to GCM/FCM and receive notifications within a python application";
     homepage = "https://github.com/sdb9696/firebase-messaging";
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

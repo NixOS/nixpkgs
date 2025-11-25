@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install -D -m644 guid.h "$out/include/guid.h"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight cross platform C++ GUID/UUID library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ edwtjo ];
     homepage = "https://github.com/graeme-hill/crossguid";
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 
 }

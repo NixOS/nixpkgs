@@ -24,13 +24,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=list_optional_deps_as_feature"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo plugin to manage dependency features";
     mainProgram = "cargo-feature";
     homepage = "https://github.com/Riey/cargo-feature";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       riey
       matthiasbeyer
     ];

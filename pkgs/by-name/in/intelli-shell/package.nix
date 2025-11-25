@@ -42,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Like IntelliSense, but for shells";
     homepage = "https://github.com/lasantosr/intelli-shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lasantosr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
 }

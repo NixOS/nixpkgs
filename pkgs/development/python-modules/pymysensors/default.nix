@@ -54,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mysensors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for talking to a MySensors gateway";
     homepage = "https://github.com/theolind/pymysensors";
     changelog = "https://github.com/theolind/pymysensors/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pymysensors";
   };
 }

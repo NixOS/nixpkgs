@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/shepherd/";
     description = "Service manager that looks after the herd of system services";
-    license = with licenses; [ gpl3Plus ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kloenk ];
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kloenk ];
   };
 }

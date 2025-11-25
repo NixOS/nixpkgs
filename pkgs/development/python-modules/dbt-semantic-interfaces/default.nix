@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt_semantic_interfaces" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared interfaces used by dbt-core and MetricFlow projects";
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
     changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

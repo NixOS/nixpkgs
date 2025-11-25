@@ -194,14 +194,14 @@ stdenv.mkDerivation (finalAttrs: {
     "install"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license = licenses.clArtistic;
-    maintainers = with maintainers; [
+    license = lib.licenses.clArtistic;
+    maintainers = with lib.maintainers; [
       siraben
       hzeller
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

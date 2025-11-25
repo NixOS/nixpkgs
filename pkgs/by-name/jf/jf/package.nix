@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     installManPage assets/jf.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to safely format and print JSON objects in the commandline";
     mainProgram = "jf";
     homepage = "https://github.com/sayanarijit/jf";
-    license = licenses.mit;
-    maintainers = [ maintainers.sayanarijit ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sayanarijit ];
   };
 }

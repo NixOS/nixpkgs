@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbxmpp" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Chess library with move generation, move validation, and support for common formats";
     homepage = "https://github.com/niklasf/python-chess";
     changelog = "https://github.com/niklasf/python-chess/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ smancill ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ smancill ];
   };
 }

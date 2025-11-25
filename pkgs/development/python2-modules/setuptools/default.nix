@@ -75,10 +75,10 @@ buildPythonPackage {
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://pypi.python.org/pypi/setuptools";
-    license = with licenses; [
+    license = with lib.licenses; [
       psfl
       zpl20
     ];

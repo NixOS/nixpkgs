@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) nvmetcfg;
   };
 
-  meta = with lib; {
+  meta = {
     description = "NVMe-oF Target Configuration Utility for Linux";
     homepage = "https://github.com/vifino/nvmetcfg";
-    license = licenses.isc;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "nvmetcfg";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

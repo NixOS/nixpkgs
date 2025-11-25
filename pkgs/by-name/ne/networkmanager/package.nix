@@ -235,16 +235,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       obadz
     ];
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

@@ -17,10 +17,10 @@ buildGoModule {
 
   vendorHash = "sha256-Vj6ZmNwegKBVJPh6MsjtLMmX9WR76msuR2DPM8Qyhe0=";
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Drone runner that executes a pipeline on a remote machine";
     homepage = "https://github.com/drone-runners/drone-runner-ssh";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "drone-runner-ssh";
   };
 }

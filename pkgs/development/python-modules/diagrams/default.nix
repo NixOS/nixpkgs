@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diagrams" ];
 
-  meta = with lib; {
+  meta = {
     description = "Diagram as Code";
     homepage = "https://diagrams.mingrammer.com/";
     changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ addict3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ addict3d ];
   };
 }

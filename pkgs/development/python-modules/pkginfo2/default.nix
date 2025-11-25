@@ -29,12 +29,12 @@ buildPythonPackage rec {
     "test_ctor_w_path"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Query metadatdata from sdists, bdists or installed packages";
     homepage = "https://github.com/nexB/pkginfo2";
     changelog = "https://github.com/aboutcode-org/pkginfo2/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pkginfo2";
   };
 }

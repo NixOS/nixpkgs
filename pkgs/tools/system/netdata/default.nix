@@ -339,10 +339,10 @@ stdenv.mkDerivation (
       description = "Real-time performance monitoring tool";
       homepage = "https://www.netdata.cloud/";
       changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-      license = [ licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ licenses.ncul1 ];
+      license = [ lib.licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ lib.licenses.ncul1 ];
       mainProgram = "netdata";
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         mkg20001
         rhoriguchi
       ];

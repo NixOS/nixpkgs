@@ -49,11 +49,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "silver_platter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automate the creation of merge proposals for scriptable changes";
     homepage = "https://jelmer.uk/code/silver-platter";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "svp";
   };
 }

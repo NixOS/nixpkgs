@@ -12,10 +12,10 @@ mkDiscoursePlugin {
     rev = "14b8370160cda35568470a36a25e508eb8364609";
     sha256 = "sha256-3yIV5LKsYSDrhBwsalKZo9jY6j8kNzz99x/AJ95kPuk=";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/discourse-bbcode-color";
-    maintainers = with maintainers; [ ryantm ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ryantm ];
+    license = lib.licenses.mit;
     description = "Support BBCode color tags";
   };
 }

@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "item_synchronizer" ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     homepage = "https://github.com/bergercookie/item_synchronizer";
     changelog = "https://github.com/bergercookie/item_synchronizer/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

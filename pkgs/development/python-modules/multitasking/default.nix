@@ -18,10 +18,10 @@ buildPythonPackage rec {
   doCheck = false; # No tests included
   pythonImportsCheck = [ "multitasking" ];
 
-  meta = with lib; {
+  meta = {
     description = "Non-blocking Python methods using decorators";
     homepage = "https://github.com/ranaroussi/multitasking";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     url = "https://gitlab.freedesktop.org/wayland/wayland-utils.git";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland utilities (wayland-info)";
     longDescription = ''
       A collection of Wayland related utilities:
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
         protocols supported by a Wayland compositor.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-utils";
-    license = licenses.mit; # Expat version
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "wayland-info";
   };
 }

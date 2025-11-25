@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.logging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support for Python logging facility";
     homepage = "https://github.com/jaraco/jaraco.logging";
     changelog = "https://github.com/jaraco/jaraco.logging/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

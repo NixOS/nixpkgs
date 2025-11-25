@@ -47,10 +47,10 @@ buildPythonPackage rec {
     "test_options"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jinja2 template bindings for the Pyramid web framework";
     homepage = "https://github.com/Pylons/pyramid_jinja2";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

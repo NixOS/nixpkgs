@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # Tests require a local instance of elasticsearch
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High level Python client for Elasticsearch";
     longDescription = ''
       Elasticsearch DSL is a high-level library whose aim is to help with
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     "mongoaudit"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MongoDB auditing and pentesting tool";
     homepage = "https://github.com/stampery/mongoaudit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mongoaudit";
   };
 }

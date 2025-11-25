@@ -25,12 +25,12 @@ buildGoModule {
     inherit (nixosTests.prometheus-exporters) unbound;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/letsencrypt/unbound_exporter/releases/tag/v${version}";
     description = "Prometheus exporter for Unbound DNS resolver";
     mainProgram = "unbound_exporter";
     homepage = "https://github.com/letsencrypt/unbound_exporter/tree/main";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

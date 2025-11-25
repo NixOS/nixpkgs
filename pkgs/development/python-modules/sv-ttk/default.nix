@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sv_ttk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gorgeous theme for Tkinter/ttk, based on the Sun Valley visual style";
     homepage = "https://github.com/rdbende/Sun-Valley-ttk-theme";
     changelog = "https://github.com/rdbende/Sun-Valley-ttk-theme/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AngryAnt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AngryAnt ];
   };
 }

@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-lmRo6Q67hJ3hv0jQt6epiNOckRv0rA0a0DNEKIdDoUE=";
 
-  meta = with lib; {
+  meta = {
     description = "Rust API search engine which allows you to search functions by names and type signatures";
     mainProgram = "roogle";
     homepage = "https://github.com/hkmatsumoto/roogle";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];

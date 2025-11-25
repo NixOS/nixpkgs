@@ -28,12 +28,12 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false; # 3 or 4 failures depending on version, haven't investigated.
 
-  meta = with lib; {
+  meta = {
     description = "Find a code format style that fits given source files";
     mainProgram = "whatstyle";
     homepage = "https://github.com/mikr/whatstyle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zfec" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tahoe-lafs/zfec";
     description = "Fast erasure codec which can be used with the command-line, C, Python, or Haskell";
     longDescription = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       zfec package includes command-line tools, C API, Python API,
       and Haskell API.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

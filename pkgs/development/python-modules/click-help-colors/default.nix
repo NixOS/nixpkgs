@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_help_colors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Colorization of help messages in Click";
     homepage = "https://github.com/click-contrib/click-help-colors";
     changelog = "https://github.com/click-contrib/click-help-colors/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sievelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client-side Sieve and Managesieve library";
     longDescription = ''
       A library written in Python that implements RFC 5228 (Sieve: An Email
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/tonioo/sievelib";
     changelog = "https://github.com/tonioo/sievelib/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

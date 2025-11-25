@@ -46,12 +46,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Play chess in your terminal";
     mainProgram = "gambit";
     homepage = "https://github.com/maaslalani/gambit";
     changelog = "https://github.com/maaslalani/gambit/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

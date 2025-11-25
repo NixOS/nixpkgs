@@ -30,9 +30,9 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_soundcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from SoundCloud";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

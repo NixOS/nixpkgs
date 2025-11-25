@@ -40,18 +40,18 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = with lib; {
+  meta = {
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tvorog
       atila
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "4.20";
     priority = -1;
   };

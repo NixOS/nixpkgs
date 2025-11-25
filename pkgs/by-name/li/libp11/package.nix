@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openssl; };
 
-  meta = with lib; {
+  meta = {
     description = "Small layer on top of PKCS#11 API to make PKCS#11 implementations easier";
     homepage = "https://github.com/OpenSC/libp11";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hub64iZNVw/BJjibtDnJ3boIU27DEbYSlMLhFFVJ9ps=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/3andne/restls";
     changelog = "https://github.com/3andne/restls/releases/tag/${src.rev}";
     description = "Perfect Impersonation of TLS";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "restls";
-    maintainers = with maintainers; [ oluceps ];
+    maintainers = with lib.maintainers; [ oluceps ];
   };
 }

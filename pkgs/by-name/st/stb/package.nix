@@ -42,15 +42,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single-file public domain libraries for C/C++";
     homepage = "https://github.com/nothings/stb";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # OR
       unlicense
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

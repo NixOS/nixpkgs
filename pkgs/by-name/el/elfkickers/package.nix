@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.muppetlabs.com/~breadbox/software/elfkickers.html";
     description = "Collection of programs that access and manipulate ELF files";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

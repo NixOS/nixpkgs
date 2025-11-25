@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://q4wine.brezblock.org.ua/";
     description = "Qt GUI for Wine to manage prefixes and applications";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ rkitover ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ rkitover ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -57,11 +57,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "kaggle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

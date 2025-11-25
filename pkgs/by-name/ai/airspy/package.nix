@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/airspy/airspyone_host";
     description = "Host tools and driver library for the AirSpy SDR";
-    license = licenses.bsd3;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

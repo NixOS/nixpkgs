@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setupmeta" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to simplify setup.py files";
     homepage = "https://github.com/codrsquad/setupmeta";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

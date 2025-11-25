@@ -40,11 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/vitalik/django-ninja/releases/tag/${src.tag}";
     description = "Web framework for building APIs with Django and Python type hints";
     homepage = "https://django-ninja.dev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

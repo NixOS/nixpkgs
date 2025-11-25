@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tvdr.de/";
     description = "Video Disc Recorder";
-    maintainers = [ maintainers.ck3d ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ck3d ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

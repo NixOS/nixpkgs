@@ -75,10 +75,10 @@ python.pkgs.buildPythonApplication {
 
   passthru.tests.szurubooru = nixosTests.szurubooru;
 
-  meta = with lib; {
+  meta = {
     description = "Server of szurubooru, an image board engine for small and medium communities";
     homepage = "https://github.com/rr-/szurubooru";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ratcornu ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ratcornu ];
   };
 }

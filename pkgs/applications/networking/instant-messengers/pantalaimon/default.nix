@@ -87,10 +87,10 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) pantalaimon;
   };
 
-  meta = with lib; {
+  meta = {
     description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ valodim ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ valodim ];
   };
 }

@@ -15,10 +15,10 @@ buildPecl {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ samba ];
 
-  meta = with lib; {
+  meta = {
     description = "PHP wrapper for libsmbclient";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/eduardok/libsmbclient-php";
-    teams = [ teams.php ];
+    teams = [ lib.teams.php ];
   };
 }

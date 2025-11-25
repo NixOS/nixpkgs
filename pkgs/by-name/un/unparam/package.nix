@@ -19,11 +19,11 @@ buildGoModule {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Find unused parameters in Go";
     homepage = "https://github.com/mvdan/unparam";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "unparam";
   };
 }

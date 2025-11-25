@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ buildah ]} \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI-based utility for creating microVMs from OCI images";
     homepage = "https://github.com/containers/krunvm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = libkrun.meta.platforms;
     mainProgram = "krunvm";
   };

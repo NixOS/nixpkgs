@@ -188,7 +188,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/umami-software/umami/releases/tag/v${finalAttrs.version}";
     description = "Simple, easy to use, self-hosted web analytics solution";
     homepage = "https://umami.is/";
@@ -198,6 +198,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "umami-server";
-    maintainers = with maintainers; [ diogotcorreia ];
+    maintainers = with lib.maintainers; [ diogotcorreia ];
   };
 })

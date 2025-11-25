@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgineer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Really thin ASGI web framework";
     homepage = "https://asgineer.readthedocs.io";
     changelog = "https://github.com/almarklein/asgineer/releases/tag/v${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

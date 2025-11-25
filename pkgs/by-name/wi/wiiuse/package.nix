@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
   ]
   ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
-  meta = with lib; {
+  meta = {
     description = "Feature complete cross-platform Wii Remote access library";
     mainProgram = "wiiuseexample";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = with lib.platforms; unix;
   };
 }

@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bbidulock/xdg-launch";
     description = "Command line XDG compliant launcher and tools";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ck3d ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ck3d ];
   };
 }

@@ -32,11 +32,11 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/gops completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to list and diagnose Go processes currently running on your system";
     mainProgram = "gops";
     homepage = "https://github.com/google/gops";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pborzenkov ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pborzenkov ];
   };
 })

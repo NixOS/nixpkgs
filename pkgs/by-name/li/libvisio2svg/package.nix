@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and tools to convert Microsoft Visio documents (VSS and VSD) to SVG";
     homepage = "https://github.com/kakwa/libvisio2svg";
-    maintainers = with maintainers; [ erdnaxe ];
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ erdnaxe ];
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
   };
 }

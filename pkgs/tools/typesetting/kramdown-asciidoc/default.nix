@@ -27,12 +27,12 @@ let
     #   updateScript = bundlerUpdateScript "kramdown-asciidoc";
     # };
 
-    meta = with lib; {
+    meta = {
       description = "Kramdown extension for converting Markdown documents to AsciiDoc";
       homepage = "https://asciidoctor.org/";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "kramdoc";
     };
   };

@@ -316,17 +316,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

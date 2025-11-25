@@ -21,10 +21,10 @@ buildLua rec {
   extraScriptsToCopy = lib.optional oscSupport "quality-menu-osc.lua";
   extraScriptsToLoad = lib.optional oscSupport "quality-menu-osc.lua";
 
-  meta = with lib; {
+  meta = {
     description = "Userscript for MPV that allows you to change youtube video quality (ytdl-format) on the fly";
     homepage = "https://github.com/christoph-heinrich/mpv-quality-menu";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lunik1 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lunik1 ];
   };
 }

@@ -169,12 +169,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
     ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;

@@ -176,17 +176,17 @@ stdenv.mkDerivation (finalAttrs: {
     spidermonkey = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       lostnet
       catap
       bobby285271
     ];
     # ERROR: Failed to find an adequate linker
     broken = lib.versionOlder version "128" && stdenv.hostPlatform.isDarwin;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

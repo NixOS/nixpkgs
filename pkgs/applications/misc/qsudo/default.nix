@@ -33,12 +33,12 @@ mkDerivation rec {
     substituteInPlace qsudo.pro --replace /usr/bin $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical sudo utility from Project Trident";
     mainProgram = "qsudo";
     homepage = "https://github.com/project-trident/qsudo";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

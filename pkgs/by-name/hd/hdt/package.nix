@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.rdfhdt.org/";
     description = "Header Dictionary Triples (HDT) is a compression format for RDF data that can also be queried for Triple Patterns";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.koslambrou ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.koslambrou ];
   };
 }

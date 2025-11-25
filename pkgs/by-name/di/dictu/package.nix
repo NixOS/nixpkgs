@@ -84,13 +84,13 @@ stdenv.mkDerivation rec {
     install -Dm755 dictu $out/bin/dictu
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-level dynamically typed, multi-paradigm, interpreted programming language";
     mainProgram = "dictu";
     homepage = "https://dictu-lang.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dictu.x86_64-darwin
   };
 }

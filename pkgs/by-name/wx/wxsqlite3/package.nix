@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://utelle.github.io/wxsqlite3/";
     description = "C++ wrapper around the public domain SQLite 3.x for wxWidgets";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];

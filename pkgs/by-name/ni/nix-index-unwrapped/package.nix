@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Files database for nixpkgs";
     homepage = "https://github.com/nix-community/nix-index";
     changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [
       bennofs
       ncfavier
     ];

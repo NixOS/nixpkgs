@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of command-line tools to work with your Mastodon account";
     homepage = "https://github.com/muesli/mastotool";
     changelog = "https://github.com/muesli/mastotool/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "mastotool";
   };

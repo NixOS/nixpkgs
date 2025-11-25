@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradient_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

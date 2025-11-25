@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     extensionUuid = "no-title-bar@jonaspoehler.de";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ svsdep ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ svsdep ];
+    platforms = lib.platforms.linux;
   };
 }

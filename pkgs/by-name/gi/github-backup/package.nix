@@ -42,12 +42,12 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
     changelog = "https://github.com/josegonzalez/python-github-backup/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "github-backup";
   };
 }

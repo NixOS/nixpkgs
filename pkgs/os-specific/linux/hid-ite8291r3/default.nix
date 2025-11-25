@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux driver for the ITE 8291 RGB keyboard backlight controller";
     homepage = "https://github.com/pobrn/hid-ite8291r3/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ aacebedo ];
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "5.9";
   };
 }

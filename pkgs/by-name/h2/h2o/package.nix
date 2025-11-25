@@ -78,15 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) h2o; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       toastal
       thoughtpolice
     ];
     mainProgram = "h2o";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

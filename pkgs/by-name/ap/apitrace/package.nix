@@ -96,10 +96,10 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/qapitrace
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apitrace.github.io";
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

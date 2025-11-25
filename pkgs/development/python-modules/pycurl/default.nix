@@ -115,7 +115,7 @@ buildPythonPackage rec {
       "https://github.com/pycurl/pycurl/blob/REL_"
       + replaceStrings [ "." ] [ "_" ] version
       + "/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       mit
     ];

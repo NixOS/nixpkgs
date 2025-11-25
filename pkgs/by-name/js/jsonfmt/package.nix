@@ -31,11 +31,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Formatter for JSON files";
     homepage = "https://github.com/caarlos0/jsonfmt";
     changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jsonfmt";
   };

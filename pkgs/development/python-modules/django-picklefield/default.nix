@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "picklefield" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
     changelog = "https://github.com/gintas/django-picklefield/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

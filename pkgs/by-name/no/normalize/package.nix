@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmad ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/normalize/";
     description = "Audio file normalizer";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

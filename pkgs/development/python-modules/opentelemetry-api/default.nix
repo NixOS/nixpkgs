@@ -62,13 +62,13 @@ let
       tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
       description = "OpenTelemetry Python API";
       changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
-      license = licenses.asl20;
-      maintainers = [ maintainers.natsukium ];
-      teams = [ teams.deshaw ];
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.natsukium ];
+      teams = [ lib.teams.deshaw ];
     };
   };
 in

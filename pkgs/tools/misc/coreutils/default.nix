@@ -264,7 +264,7 @@ stdenv.mkDerivation rec {
       '';
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "GNU Core Utilities";
     longDescription = ''
@@ -272,9 +272,9 @@ stdenv.mkDerivation rec {
       utilities of the GNU operating system. These are the core utilities which
       are expected to exist on every operating system.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ das_j ];
+    platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };
 }

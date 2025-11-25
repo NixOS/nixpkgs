@@ -118,7 +118,7 @@ buildPythonPackage rec {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
     changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "brz";
   };
