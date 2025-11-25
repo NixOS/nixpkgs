@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   CGO_ENABLED = 0;
 
   meta = {
-    description = "An optional sidecar process providing additional features for headplane";
+    description = "Optional sidecar process providing additional features for headplane";
     homepage = "https://github.com/tale/headplane";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.igor-ramazanov ];
