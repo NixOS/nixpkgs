@@ -9,26 +9,26 @@
   linkFarm,
   wrapGAppsHook3,
   gtk3,
-  xfce4-dev-tools,
+  xfce,
   at-spi2-core,
   librsvg,
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm-gtk-greeter";
   version = "2.0.9";
 
   src = fetchurl {
     # Release tarball differs from source tarball.
-    url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${version}/lightdm-gtk-greeter-${version}.tar.gz";
+    url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${finalAttrs.version}/lightdm-gtk-greeter-${finalAttrs.version}.tar.gz";
     hash = "sha256-yP3xmKqaP50NrQtI3+I8Ine3kQfo/PxillKQ8QgfZF0=";
   };
 
   nativeBuildInputs = [
     pkg-config
     intltool
-    xfce4-dev-tools
+    xfce.xfce4-dev-tools
     wrapGAppsHook3
   ];
 
@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Xubuntu/lightdm-gtk-greeter";
     description = "GTK greeter for LightDM";
     mainProgram = "lightdm-gtk-greeter";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bobby285271 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bobby285271 ];
   };
-}
+})
