@@ -39,7 +39,7 @@ defaults:
 
 jobs:
   run:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     env:
       # TODO: Remove after 2026-03-04, when Node 24 becomes the default.
