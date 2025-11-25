@@ -176,7 +176,7 @@ in
       tmpfiles.settings.rustical."${cfg.dataDir}".d = mkIf (cfg.dataDir != "/var/lib/rustical") {
         inherit (cfg) user group;
 
-        mode = "0755";
+        mode = "0750";
       };
     };
   };
