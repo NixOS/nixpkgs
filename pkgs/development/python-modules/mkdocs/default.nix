@@ -48,6 +48,11 @@ buildPythonPackage rec {
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
+  patches = [
+    # https://github.com/mkdocs/mkdocs/pull/4065
+    ./click-8.3.0-compat.patch
+  ];
+
   build-system = [
     hatchling
     # babel, setuptools required as "build hooks"
