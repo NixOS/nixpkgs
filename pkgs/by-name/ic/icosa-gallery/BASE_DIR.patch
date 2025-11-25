@@ -1,0 +1,11 @@
+--- a/django_project/settings.py
++++ b/django_project/settings.py
+@@ -12,7 +12,7 @@
+ from botocore.client import Config as BotoConfig
+ 
+ # Build paths inside the project like this: BASE_DIR / 'subdir'.
+-BASE_DIR = Path(__file__).resolve().parent.parent
++BASE_DIR = os.environ.get("BASE_DIR", Path(__file__).resolve().parent.parent)
+ if os.environ.get("DJANGO_DISABLE_CACHE"):
+     CACHES = {
+         "default": {
