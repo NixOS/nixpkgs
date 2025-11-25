@@ -76,18 +76,22 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  fetchpatch,
 }:
+
+let
+  abiVersion =
+    if lib.versionAtLeast gtk3.version "4.0" then
+      "6.0"
+    else
+      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}";
+in
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.1";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
-    if lib.versionAtLeast gtk3.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"
-  }";
+  version = "2.50.2";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
     "out"
@@ -101,13 +105,28 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
+    hash = "sha256-Gath8tROYs1ENnOUPS1TQbhNCEBfZ6fDe3p3rTVQ+IA=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
+    })
+
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
+    })
+
+    # Remove the CustomToJSObject flag to avoid a link error due to an undefined toJS() symbol
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/730bffd856d2a1e56dd3bd2a0702282f19c5242a.patch";
+      hash = "sha256-QRgYzr1Flk9BOV74/H7/38sRwc44BFFBhnX+xODgYX4=";
     })
   ];
 
@@ -256,11 +275,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    pkgConfigModules = [
-      "javascriptcoregtk-4.0"
-      "webkit2gtk-4.0"
-      "webkit2gtk-web-extension-4.0"
-    ];
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
