@@ -132,7 +132,6 @@ let
       buildRedist = import ./buildRedist {
         inherit
           _cuda
-          config
           lib
           ;
         inherit (pkgs)
@@ -151,7 +150,6 @@ let
           cudaNamePrefix
           manifests
           markForCudatoolkitRootHook
-          setupCudaHook
           ;
       };
 
