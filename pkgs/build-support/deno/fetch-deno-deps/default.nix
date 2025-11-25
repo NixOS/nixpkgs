@@ -42,32 +42,38 @@ let
       hash,
       name,
     }:
-    stdenvNoCC.mkDerivation {
-      inherit name;
-      src = null;
-      unpackPhase = "true";
-      buildPhase = ''
-        single-fod-fetcher \
-          --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
-          --common-lock-npm-path ${transformedDenoLock}/npm.json \
-          --common-lock-https-path ${transformedDenoLock}/https.json \
-          --out-path-prefix $out;
-        cp ${denoLock} $out/deno.lock
-      '';
-      nativeBuildInputs = [
-        fetch-deno-deps-scripts
-      ];
-
-      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-      outputHashMode = "recursive";
-      outputHash = hash;
-      outputHashAlgo = "sha256";
-
-      meta = {
-        maintainers = [ lib.maintainers.aMOPel ];
+    let
+      args = {
+        src = null;
+        unpackPhase = "true";
+        buildPhase = ''
+          single-fod-fetcher \
+            --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
+            --common-lock-npm-path ${transformedDenoLock}/npm.json \
+            --common-lock-https-path ${transformedDenoLock}/https.json \
+            --out-path-prefix $out;
+          cp ${denoLock} $out/deno.lock
+        '';
+        nativeBuildInputs = [
+          fetch-deno-deps-scripts
+        ];
       };
-    };
+    in
+    stdenvNoCC.mkDerivation (
+      args
+      // {
+        name = "${builtins.hashString "sha1" (builtins.toJSON args)}-${name}";
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+        outputHashMode = "recursive";
+        outputHash = hash;
+        outputHashAlgo = "sha256";
+
+        meta = {
+          maintainers = [ lib.maintainers.aMOPel ];
+        };
+      }
+    );
 
   # this derivation only meant to be used, if the dependency dir is needed outside of buildDenoPackage
   transformedFiles =
