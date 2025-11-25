@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ciso8601";
-  version = "2.3.2";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "closeio";
     repo = "ciso8601";
     tag = "v${version}";
-    hash = "sha256-oVnQ0vHhWs8spfOnJOgTJ6MAHcY8VGZHZ0E/T8JsKqE=";
+    hash = "sha256-14HiCn8BPALPaW53k118lHb5F4oG9mMNN6sdLdKB6v0=";
   };
 
   build-system = [ setuptools ];

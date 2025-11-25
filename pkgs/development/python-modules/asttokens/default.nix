@@ -2,23 +2,24 @@
   lib,
   astroid,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asttokens";
-  version = "3.0.0";
+  version = "3.0.0-unstable-2025-11-08";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Dc2Lqo1isMHRGLOZst26PEr/Jx0Nep4NTBaBx5A1u8c=";
+  src = fetchFromGitHub {
+    owner = "gristlabs";
+    repo = "asttokens";
+    rev = "f859c055e8453650e1987c5aefaaec36582d3a07";
+    hash = "sha256-dHtKyd5rj1Y7m1vTL9toyQ+GLV5fBNUFNkBM9t4e8yM=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "3.0.0";
 
   build-system = [ setuptools-scm ];
 

@@ -8,7 +8,7 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   pytz,
   setuptools,
   six,
@@ -19,7 +19,8 @@ buildPythonPackage rec {
   version = "2.4.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # https://github.com/PyFilesystem/pyfilesystem2/issues/596
+  disabled = pythonAtLeast "3.14";
 
   src = fetchPypi {
     inherit pname version;
