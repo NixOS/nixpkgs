@@ -14,6 +14,7 @@
   libpulseaudio,
   pipewire,
   libgbm,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
     pipewire
     libgbm
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility program for screen recording of wlroots-based compositors";
