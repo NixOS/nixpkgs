@@ -23,6 +23,10 @@ let
 
   tcpEnabled = cfg.daemon.settings ? TCPSocket;
   tcpAddrs = lib.toList (cfg.daemon.settings.TCPAddr or (if tcpEnabled then [ "any" ] else [ ]));
+
+  # Daemon unit to wait on for dependent services.
+  daemonUnit =
+    if cfg.daemon.socketActivation then "clamav-daemon.socket" else "clamav-daemon.service";
 in
 {
   imports = [
@@ -65,6 +69,17 @@ in
           description = ''
             ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
             for details on supported values.
+          '';
+        };
+
+        socketActivation = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Use systemd socket activation for the ClamAV daemon.
+
+            This is the recommended approach with ClamAV daemon, however it does not support listening on multiple TCP addresses.
+            If you turn this option off, there is no guarantee that ClamAV daemon will be up and running when the service is started.
           '';
         };
       };
@@ -213,8 +228,12 @@ in
         message = "ClamAV on-access scanner requires ClamAV daemon to operate";
       }
       {
-        assertion = builtins.length tcpAddrs < 2;
-        message = "ClamAV only supports at most one TCPAddr with socket activation";
+        assertion = cfg.daemon.socketActivation -> (builtins.length tcpAddrs < 2);
+        message = ''
+          ClamAV only supports at most one TCPAddr with socket activation.
+
+          Set `services.clamav.daemon.socketActivation = false;` to use multiple TCPAddr.
+        '';
       }
     ];
 
@@ -295,7 +314,7 @@ in
       documentation = [ "man:clamd(8)" ];
       after = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
       wants = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
-      requires = [ "clamav-daemon.socket" ];
+      requires = lib.optionals cfg.daemon.socketActivation [ "clamav-daemon.socket" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -315,8 +334,8 @@ in
 
     systemd.services.clamav-clamonacc = lib.mkIf cfg.clamonacc.enable {
       description = "ClamAV on-access scanner (clamonacc)";
-      after = [ "clamav-daemon.socket" ];
-      requires = [ "clamav-daemon.socket" ];
+      after = [ daemonUnit ];
+      requires = [ daemonUnit ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
