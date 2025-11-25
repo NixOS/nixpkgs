@@ -140,7 +140,7 @@ if [ -z "$final_path" ]; then
 	# Darcs has a weak hash using the XOR of the patch hashes which is useful
 	# for other scripts
 	# https://darcs.net/Internals/Hashes
-	weak_hash="$(darcs show repo | grep '^ *Weak Hash:' | cut -d: -f2- | tr -d "[:space:]")"
+	weak_hash="$(darcs show repo | awk '/^[[:space:]]*Weak Hash:/ { sub(/^[[:space:]]*Weak Hash:[[:space:]]*/, "", $0); printf $0 }')"
 	date="$(darcs log --repodir="$tmp_clone/$name" --max-count 1 | awk '/^Date:/ { sub(/^Date:[[:space:]]*/, "", $0); printf $0 }')"
 	date="$(date -u -d "$date" "+%Y-%m-%dT%H:%M:%SZ")"
 	cd - >/dev/null
