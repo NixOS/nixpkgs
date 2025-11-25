@@ -345,9 +345,6 @@ in
             fi
 
             # Unmount old metadata mounts
-            # For some reason, `findmnt /tmp --submounts` does not show the nested
-            # mounts. So we'll just find all mounts of type erofs and filter on the
-            # name of the mountpoint.
             findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
               if [[ ("$mountPoint" =~ ^/run/nixos-etc-metadata\..{10}$ || "$mountPoint" =~ ^/run/nixos-etc-metadata$ ) &&
                     "$mountPoint" != "$tmpMetadataMount" ]]; then
