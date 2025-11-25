@@ -39,29 +39,23 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.0";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-2ldebsgR0xZV4WiCLV7DBUKXZo3oE+M6cmvRbSeCSLQ=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "bcrypt"
-    "brotli"
-    "cryptography"
-    "flask"
-    "h2"
-    "kaitaistruct"
-    "pyopenssl"
-    "pyperclip"
-    "tornado"
-    "typing-extensions"
-    "urwid"
     "zstandard"
+
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
   ];
 
   build-system = [ setuptools ];
@@ -131,6 +125,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
