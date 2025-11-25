@@ -507,7 +507,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = ''
           p2p_disabled=1
