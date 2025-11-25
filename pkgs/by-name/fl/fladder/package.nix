@@ -197,7 +197,7 @@ flutter335.buildFlutterApplication {
     description = "Simple cross-platform Jellyfin client built with Flutter";
     homepage = "https://github.com/DonutWare/Fladder";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "fladder";
     platforms = lib.platforms.linux;
   };
