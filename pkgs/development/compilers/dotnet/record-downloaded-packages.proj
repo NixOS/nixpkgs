@@ -1,0 +1,17 @@
+<Project>
+  <Target Name="NuGetToNix"
+    BeforeTargets="CopyInnerBuildRestoredPackages">
+    <ItemGroup>
+      <!-- dotnet 8 -->
+      <_NuGetToNixPackageCache Include="$(ProjectDirectory)artifacts/source-build/self/package-cache/"/>
+      <!-- dotnet 9 -->
+      <_NuGetToNixPackageCache Include="$(ProjectDirectory)artifacts/sb/package-cache/"/>
+      <!-- dotnet 10 -->
+      <_NuGetToNixPackageCache Include="$(RepoArtifactsPackageCache)"/>
+    </ItemGroup>
+    <Exec
+      Command="nuget-to-json '@(_NuGetToNixPackageCache)' >'$(ProjectDirectory)deps.json'"
+      WorkingDirectory="$(ProjectDirectory)"
+      Condition="Exists('%(Identity)')"/>
+  </Target>
+</Project>

@@ -1,0 +1,7 @@
+{
+  "permission_handler": "sha256-b2igh231BkLe/vkCACVyWg8SxR5V6wjmhPljEs9Ue3o=",
+  "permission_handler_windows": "sha256-b2igh231BkLe/vkCACVyWg8SxR5V6wjmhPljEs9Ue3o=",
+  "sideswap_logger": "sha256-cTJfSODRmIJXctLQ++BfvJ6OKflau94AjQdXg7j95B0=",
+  "sideswap_websocket": "sha256-vsG5eUFu/WJvY3y6jaWD/5GfULwpqh3bO4EZmmBSkbs=",
+  "window_size": "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak="
+}

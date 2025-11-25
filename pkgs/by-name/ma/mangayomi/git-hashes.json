@@ -1,0 +1,15 @@
+{
+  "desktop_webview_window": "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=",
+  "epubx": "sha256-Rf9zaabPvP7D4NgyJ+LpSB8zHjBvhq2wE0p9Sy7uOXM=",
+  "flutter_discord_rpc_fork": "sha256-jMvtKEBIxwZDc49pxC/YY4TuqFQNtlj4khp9+MUZNX0=",
+  "flutter_qjs": "sha256-VCw6U0DTGGdC0ZV5c5l34NhBF+Bw/la9of0BZYcTlYo=",
+  "flutter_web_auth_2": "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=",
+  "media_kit": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_android_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_ios_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_linux": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_macos_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_libs_windows_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4=",
+  "media_kit_video": "sha256-Wc+rfxFaHiqNhsDFN7gYneM+97O1fg2b4q4hjhnRlI4="
+}

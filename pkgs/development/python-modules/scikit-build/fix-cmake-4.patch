@@ -1,0 +1,47 @@
+From 9efbf7f9baa846867a9c5586e4cc82a8a19e2e84 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Wed, 17 Sep 2025 19:00:01 +0100
+Subject: [PATCH 1/2] tests: fix `test_issue335_support_cmake_source_dir` with
+ CMake 4
+
+---
+ tests/samples/issue-335-support-cmake-source-dir/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/samples/issue-335-support-cmake-source-dir/CMakeLists.txt b/tests/samples/issue-335-support-cmake-source-dir/CMakeLists.txt
+index 7e391c46..18bae2bf 100644
+--- a/tests/samples/issue-335-support-cmake-source-dir/CMakeLists.txt
++++ b/tests/samples/issue-335-support-cmake-source-dir/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.2...3.10)
+ 
+ project(hello NONE)
+ 
+
+From 491d7494a3ec6cc181d37d02670c65b74c67cbfe Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Wed, 17 Sep 2025 19:00:01 +0100
+Subject: [PATCH 2/2] tests: fix `test_make_without_configure_fails` with CMake
+ 4
+
+---
+ tests/test_cmaker.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test_cmaker.py b/tests/test_cmaker.py
+index cf166905..9b6c3758 100644
+--- a/tests/test_cmaker.py
++++ b/tests/test_cmaker.py
+@@ -82,7 +82,10 @@ def test_make_without_configure_fails(capfd):
+         CMaker().make()
+     _, err = capfd.readouterr()
+     assert "An error occurred while building with CMake." in str(excinfo.value)
+-    assert "Error: could not load cache" in err
++    # CMake 4 changed the error message.
++    err_message_cmake_3 = "Error: could not load cache"
++    err_message_cmake_4 = "Error: not a CMake build directory (missing CMakeCache.txt)"
++    assert err_message_cmake_3 in err or err_message_cmake_4 in err
+ 
+ 
+ @pytest.mark.parametrize("configure_with_cmake_source_dir", [True, False])

@@ -1,0 +1,27 @@
+--- a/plugins/af_xdp/CMakeLists.txt
++++ b/plugins/af_xdp/CMakeLists.txt
+@@ -18,8 +18,8 @@ if (NOT XDP_INCLUDE_DIR)
+ endif()
+
+ set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
+-vpp_plugin_find_library(af_xdp XDP_LIB libxdp.a)
+-vpp_plugin_find_library(af_xdp BPF_LIB libbpf.a)
++vpp_plugin_find_library(af_xdp XDP_LIB xdp)
++vpp_plugin_find_library(af_xdp BPF_LIB bpf)
+ vpp_plugin_find_library(af_xdp ELF_LIB elf)
+ vpp_plugin_find_library(af_xdp Z_LIB z)
+ if (NOT XDP_LIB OR NOT BPF_LIB OR NOT ELF_LIB OR NOT Z_LIB)
+
+--- a/plugins/rdma/CMakeLists.txt
++++ b/plugins/rdma/CMakeLists.txt
+@@ -18,8 +18,8 @@ if (NOT IBVERBS_INCLUDE_DIR)
+   return()
+ endif()
+ 
+-vpp_plugin_find_library(rdma IBVERBS_LIB libibverbs.a)
+-vpp_plugin_find_library(rdma MLX5_LIB libmlx5.a)
++vpp_plugin_find_library(rdma IBVERBS_LIB ibverbs)
++vpp_plugin_find_library(rdma MLX5_LIB mlx5)
+ 
+ if (NOT IBVERBS_LIB OR NOT MLX5_LIB)
+   message(WARNING "rdma plugin - ibverbs not found - rdma plugin disabled")

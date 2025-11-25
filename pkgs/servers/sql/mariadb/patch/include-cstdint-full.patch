@@ -1,0 +1,48 @@
+diff --git a/storage/rocksdb/rocksdb/table/block_based/data_block_hash_index.h b/storage/rocksdb/rocksdb/table/block_based/data_block_hash_index.h
+index f356395..3215221 100644
+--- a/storage/rocksdb/rocksdb/table/block_based/data_block_hash_index.h
++++ b/storage/rocksdb/rocksdb/table/block_based/data_block_hash_index.h
+@@ -5,6 +5,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+diff --git a/storage/rocksdb/rocksdb/util/string_util.h b/storage/rocksdb/rocksdb/util/string_util.h
+index a761be6..064d059 100644
+--- a/storage/rocksdb/rocksdb/util/string_util.h
++++ b/storage/rocksdb/rocksdb/util/string_util.h
+@@ -6,6 +6,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <sstream>
+ #include <string>
+ #include <unordered_map>
+diff --git a/storage/rocksdb/rocksdb/include/rocksdb/utilities/checkpoint.h b/storage/rocksdb/rocksdb/include/rocksdb/utilities/checkpoint.h
+index c7f93b4..3c2ab80 100644
+--- a/storage/rocksdb/rocksdb/include/rocksdb/utilities/checkpoint.h
++++ b/storage/rocksdb/rocksdb/include/rocksdb/utilities/checkpoint.h
+@@ -8,6 +8,7 @@
+ #pragma once
+ #ifndef ROCKSDB_LITE
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ #include "rocksdb/status.h"
+diff --git a/storage/rocksdb/rocksdb/db/compaction/compaction_iteration_stats.h b/storage/rocksdb/rocksdb/db/compaction/compaction_iteration_stats.h
+index 963c1d8..8d70309 100644
+--- a/storage/rocksdb/rocksdb/db/compaction/compaction_iteration_stats.h
++++ b/storage/rocksdb/rocksdb/db/compaction/compaction_iteration_stats.h
+@@ -6,6 +6,7 @@
+ #pragma once
+ 
+ #include "rocksdb/rocksdb_namespace.h"
++#include <cstdint>
+ 
+ struct CompactionIterationStats {
+   // Compaction statistics

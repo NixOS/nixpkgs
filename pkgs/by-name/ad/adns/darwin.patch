@@ -1,0 +1,21 @@
+diff --git a/configure.in b/configure.in
+index b753a5bb3e..ee7d546984 100644
+--- a/configure.in
++++ b/configure.in
+@@ -134,12 +134,12 @@
+ AC_SUBST(SHLIBFILE)
+ AC_SUBST(SHLIBSONAME)
+ 
+-SHLIBFORLINK='libadns.so'
+-SHLIBSONAME='$(SHLIBFORLINK).$(MAJOR)'
+-SHLIBFILE='$(SHLIBSONAME).$(MINOR)'
++SHLIBFORLINK='libadns.dylib'
++SHLIBSONAME='libadns.$(MAJOR).dylib'
++SHLIBFILE='libadns.$(MAJOR).$(MINOR).dylib'
+ 
+ SHLIBCC='$(CC) $(CFLAGS) -fpic'
+-MKSHLIB_1='$(CC) $(LDFLAGS) -shared -Wl,-soname=$(SHLIBSONAME) -o'
++MKSHLIB_1='$(CC) $(LDFLAGS) -shared -Wl,-install_name,$(libdir)/$(SHLIBFILE) -o'
+ MKSHLIB_2=''
+ MKSHLIB_3='-lc'
+ 

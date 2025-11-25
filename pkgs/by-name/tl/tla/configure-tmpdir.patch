@@ -1,0 +1,11 @@
+--- tla-1.3.5/src/build-tools/auto-conf-lib/gnu-patch-test	2006-07-20 08:34:28.000000000 +0200
++++ tla-1.3.5/src/build-tools/auto-conf-lib/gnu-patch-test	2008-02-17 13:00:07.000000000 +0100
+@@ -27,7 +27,7 @@ else
+ fi
+ 
+ CMP='cmp'    # we require a working 'cmp' utility
+-TMPDIR="/tmp/,patch-test.$$"
++TMPDIR="${TMPDIR:-/tmp}/,patch-test.$$"
+ 
+ ORIG_A="$TMPDIR/to-patch_a"
+ ORIG_PRISTINE_A="$TMPDIR/to-patch_a.the-original"

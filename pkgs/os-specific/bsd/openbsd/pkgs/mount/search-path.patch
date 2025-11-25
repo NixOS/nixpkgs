@@ -1,0 +1,39 @@
+diff --git a/sbin/mount/mount.c b/sbin/mount/mount.c
+index eaff190b572..4bce21559f6 100644
+--- a/sbin/mount/mount.c
++++ b/sbin/mount/mount.c
+@@ -338,12 +338,6 @@ mountfs(const char *vfstype, const char *spec, const char *name,
+ {
+ 	char *cp;
+ 
+-	/* List of directories containing mount_xxx subcommands. */
+-	static const char *edirs[] = {
+-		_PATH_SBIN,
+-		_PATH_USRSBIN,
+-		NULL
+-	};
+ 	const char **argv, **edir;
+ 	struct statfs sf;
+ 	pid_t pid;
+@@ -427,15 +421,12 @@ mountfs(const char *vfstype, const char *spec, const char *name,
+ 		return (1);
+ 	case 0:					/* Child. */
+ 		/* Go find an executable. */
+-		edir = edirs;
+-		do {
+-			(void)snprintf(execname,
+-			    sizeof(execname), "%s/mount_%s", *edir, vfstype);
+-			argv[0] = execname;
+-			execv(execname, (char * const *)argv);
+-			if (errno != ENOENT)
+-				warn("exec %s for %s", execname, name);
+-		} while (*++edir != NULL);
++		(void)snprintf(execname,
++		    sizeof(execname), "mount_%s", vfstype);
++		argv[0] = execname;
++		execvp(execname, (char * const *)argv);
++		if (errno != ENOENT)
++			warn("exec %s for %s", execname, name);
+ 
+ 		if (errno == ENOENT)
+ 			warn("no mount helper program found for %s", vfstype);

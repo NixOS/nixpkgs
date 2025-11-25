@@ -1,0 +1,5 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -9 +9 @@
+-bashcompdir = $(pkgdatadir)/completions
++bashcompdir = $(datadir)/bash-completion/completions

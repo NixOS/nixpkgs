@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 312df041d..43500be48 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -116,11 +116,6 @@ endif ()
+ #------------------------------------------------------------------------------
+ # Prepare gobal CMAKE configuration specific to the current project
+ 
+-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/OUTPUT" CACHE PATH "Default linphone-app installation prefix" FORCE)
+-	set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT FALSE)
+-endif()
+-
+ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+ 	message(STATUS "Setting build type to 'RelWithDebInfo' as none was specified")
+ 	set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)

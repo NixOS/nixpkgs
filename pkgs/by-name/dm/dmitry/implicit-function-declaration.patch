@@ -1,0 +1,28 @@
+---
+ src/dmitry.c | 1 +
+ src/file.c   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/dmitry.c b/src/dmitry.c
+index d47f231..567482d 100644
+--- a/src/dmitry.c
++++ b/src/dmitry.c
+@@ -9,6 +9,7 @@
+ #include <ctype.h>
+ #include <string.h>
+ #include <signal.h>
++#include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+diff --git a/src/file.c b/src/file.c
+index f4ad48b..3714786 100644
+--- a/src/file.c
++++ b/src/file.c
+@@ -1,4 +1,6 @@
+ #include "includes/file.h"
++#include <string.h>
++#include <stdlib.h>
+ int file_prep()
+ {
+ 	outputfile[strlen(outputfile)] = '\0';

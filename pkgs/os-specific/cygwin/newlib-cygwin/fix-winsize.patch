@@ -1,0 +1,31 @@
+diff --git a/winsup/cygwin/include/sys/termios.h b/winsup/cygwin/include/sys/termios.h
+index d1b4a0af5..75e0c5348 100644
+--- a/winsup/cygwin/include/sys/termios.h
++++ b/winsup/cygwin/include/sys/termios.h
+@@ -282,6 +282,12 @@ struct termios
+   speed_t	c_ospeed;
+ };
+ 
++struct winsize
++{
++  unsigned short ws_row, ws_col;
++  unsigned short ws_xpixel, ws_ypixel;
++};
++
+ #define termio termios
+ 
+ #ifdef __cplusplus
+@@ -313,13 +319,6 @@ int tcsetwinsize(int fd, const struct winsize *winsz);
+ #define cfgetospeed(tp)		((tp)->c_ospeed)
+ #endif
+ 
+-/* Extra stuff to make porting stuff easier.  */
+-struct winsize
+-{
+-  unsigned short ws_row, ws_col;
+-  unsigned short ws_xpixel, ws_ypixel;
+-};
+-
+ #define TIOCGWINSZ (('T' << 8) | 1)
+ #define TIOCSWINSZ (('T' << 8) | 2)
+ #define TIOCLINUX  (('T' << 8) | 3)

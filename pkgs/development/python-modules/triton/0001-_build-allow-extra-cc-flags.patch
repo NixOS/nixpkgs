@@ -1,0 +1,19 @@
+diff --git a/python/triton/runtime/build.py b/python/triton/runtime/build.py
+index 7614fe2ae..203db996b 100644
+--- a/python/triton/runtime/build.py
++++ b/python/triton/runtime/build.py
+@@ -47,6 +47,14 @@ def _build(name: str, src: str, srcdir: str, library_dirs: list[str], include_di
+     cc_cmd += [f'-l{lib}' for lib in libraries]
+     cc_cmd += [f"-L{dir}" for dir in library_dirs]
+     cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
++
++    # Nixpkgs support branch
++    # Allows passing e.g. extra -Wl,-rpath
++    cc_cmd_extra_flags = "@ccCmdExtraFlags@"
++    if cc_cmd_extra_flags != ("@" + "ccCmdExtraFlags@"): # substituteAll hack
++        import shlex
++        cc_cmd.extend(shlex.split(cc_cmd_extra_flags))
++
+     cc_cmd.extend(ccflags)
+     subprocess.check_call(cc_cmd, stdout=subprocess.DEVNULL)
+     return so

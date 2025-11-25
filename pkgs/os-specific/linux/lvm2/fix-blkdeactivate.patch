@@ -1,0 +1,51 @@
+diff --git a/scripts/blkdeactivate.sh.in b/scripts/blkdeactivate.sh.in
+index 7c517b87b..e51a33778 100644
+--- a/scripts/blkdeactivate.sh.in
++++ b/scripts/blkdeactivate.sh.in
+@@ -34,11 +34,11 @@ TOOL=blkdeactivate
+ DEV_DIR="/dev"
+ SYS_BLK_DIR="/sys/block"
+ 
+-MDADM="/sbin/mdadm"
+-MOUNTPOINT="/bin/mountpoint"
+-MPATHD="/sbin/multipathd"
+-UMOUNT="/bin/umount"
+-VDO="/bin/vdo"
++MDADM="@mdadm@/bin/mdadm"
++MOUNTPOINT="@util_linux@/bin/mountpoint"
++MPATHD="@multipath_tools@/bin/multipathd"
++UMOUNT="@util_linux@/bin/umount"
++VDO="@vdo@/bin/vdo"
+ 
+ sbindir="@SBINDIR@"
+ DMSETUP="$sbindir/dmsetup"
+@@ -48,7 +48,7 @@ if "$UMOUNT" --help | grep -- "--all-targets" >"$DEV_DIR/null"; then
+ 	UMOUNT_OPTS="--all-targets "
+ else
+ 	UMOUNT_OPTS=""
+-	FINDMNT="/bin/findmnt -r --noheadings -u -o TARGET"
++	FINDMNT="@util_linux@/bin/findmnt -r --noheadings -u -o TARGET"
+ 	FINDMNT_READ="read -r mnt"
+ fi
+ DMSETUP_OPTS=""
+@@ -57,10 +57,10 @@ MDADM_OPTS=""
+ MPATHD_OPTS=""
+ VDO_OPTS=""
+ 
+-LSBLK="/bin/lsblk -r --noheadings -o TYPE,KNAME,NAME,MOUNTPOINT"
++LSBLK="@util_linux@/bin/lsblk -r --noheadings -o TYPE,KNAME,NAME,MOUNTPOINT"
+ LSBLK_VARS="local devtype local kname local name local mnt"
+ LSBLK_READ="read -r devtype kname name mnt"
+-SORT_MNT="/bin/sort -r -u -k 4"
++SORT_MNT="@coreutils@/bin/sort -r -u -k 4"
+ 
+ # Do not show tool errors by default (only done/skipping summary
+ # message provided by this script) and no verbose mode by default.
+@@ -102,6 +102,7 @@ declare -A SKIP_VG_LIST=()
+ # (list is an associative array!)
+ #
+ declare -A SKIP_UMOUNT_LIST=(["/"]=1 \
++                             ["/nix"]=1 ["/nix/store"]=1 \
+                              ["/lib"]=1 ["/lib64"]=1 \
+                              ["/bin"]=1 ["/sbin"]=1 \
+                              ["/var"]=1 ["/var/log"]=1 \

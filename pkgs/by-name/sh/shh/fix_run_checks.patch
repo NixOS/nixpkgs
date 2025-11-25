@@ -1,0 +1,152 @@
+commit 3052c2c8be6a44aab2d4c5fa0d560a8109c5ed5e
+Author: 06kellyjac <dev@j-k.io>
+Date:   Mon Sep 22 13:17:14 2025 +0100
+
+    fix(tests): add support for nix-build-system for tests
+
+    Co-authored-by: kuflierl <41301536+kuflierl@users.noreply.github.com>
+
+diff --git a/src/systemd/resolver.rs b/src/systemd/resolver.rs
+index 989f378..0629fb5 100644
+--- a/src/systemd/resolver.rs
++++ b/src/systemd/resolver.rs
+@@ -650,17 +650,14 @@ mod tests {
+         let OptionValue::List(opt_list) = &candidates[0].value else {
+             panic!();
+         };
+-        assert!(opt_list.values.contains(&"/boot".to_owned()));
++        // information gathering
++        // eprint!("{}\n", &candidates[0].to_string());
+         assert!(opt_list.values.contains(&"/dev".to_owned()));
+         assert!(opt_list.values.contains(&"/etc".to_owned()));
+-        assert!(opt_list.values.contains(&"/home".to_owned()));
+-        assert!(opt_list.values.contains(&"/root".to_owned()));
+-        assert!(opt_list.values.contains(&"/sys".to_owned()));
++        assert!(opt_list.values.contains(&"/nix".to_owned()));
++        assert!(opt_list.values.contains(&"/bin".to_owned()));
++        assert!(opt_list.values.contains(&"/build".to_owned()));
+         assert!(opt_list.values.contains(&"/tmp".to_owned()));
+-        assert!(opt_list.values.contains(&"/usr".to_owned()));
+-        assert!(opt_list.values.contains(&"/var".to_owned()));
+-        assert!(!opt_list.values.contains(&"/proc".to_owned()));
+-        assert!(!opt_list.values.contains(&"/run".to_owned()));
+ 
+         let actions = vec![ProgramAction::Read("/var/data".into())];
+         let candidates = resolve(&opts, &actions, &hardening_opts);
+diff --git a/tests/options.rs b/tests/options.rs
+index cf20ea0..ab9f389 100644
+--- a/tests/options.rs
++++ b/tests/options.rs
+@@ -24,7 +24,7 @@ fn run_true() {
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -50,7 +50,7 @@ fn run_true() {
+         .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
+         .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
+-        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
++        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+ }
+ 
+@@ -97,7 +97,7 @@ fn run_ls_dev() {
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -130,12 +130,12 @@ fn run_ls_dev() {
+ fn run_ls_proc() {
+     Command::cargo_bin("shh")
+         .unwrap()
+-        .args(["run", "--", "busybox", "ls", "/proc/1/"])
++        .args(["run", "--", "ls", "/proc/1/"])
+         .unwrap()
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -166,7 +166,7 @@ fn run_ls_proc() {
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -188,7 +188,7 @@ fn run_ls_proc() {
+         .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
+         .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
+-        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
++        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+ }
+ 
+@@ -201,7 +201,7 @@ fn run_read_kallsyms() {
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -227,7 +227,7 @@ fn run_read_kallsyms() {
+         .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
+         .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
+-        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
++        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @network-io:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+ }
+ 
+@@ -344,6 +344,7 @@ fn run_systemctl() {
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+ }
+ 
++// patched due to nix build isolation
+ #[test]
+ fn run_ss() {
+     Command::cargo_bin("shh")
+@@ -353,7 +354,7 @@ fn run_ss() {
+         .assert()
+         .success()
+         .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
+-        .stdout(if Uid::effective().is_root() {
++        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
+         } else {
+             BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
+@@ -369,7 +370,7 @@ fn run_ss() {
+         .stdout(predicate::str::contains("ProtectKernelModules=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectKernelLogs=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectControlGroups=true\n").count(1))
+-        .stdout(predicate::str::contains("ProtectProc=").not())
++        //.stdout(predicate::str::contains("ProtectProc=").not())
+         .stdout(predicate::str::contains("MemoryDenyWriteExecute=true\n").count(1))
+         .stdout(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK AF_UNIX\n").count(1).or(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK\n").count(1)))
+         .stdout(predicate::str::contains("SocketBindDeny=ipv4:tcp\n").count(1))
+@@ -379,7 +380,7 @@ fn run_ss() {
+         .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
+         .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
+         .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
+-        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
++        .stdout(predicate::str::contains("SystemCallFilter=~@aio:EPERM @chown:EPERM @clock:EPERM @cpu-emulation:EPERM @debug:EPERM @io-event:EPERM @ipc:EPERM @keyring:EPERM @memlock:EPERM @module:EPERM @mount:EPERM @obsolete:EPERM @pkey:EPERM @privileged:EPERM @process:EPERM @raw-io:EPERM @reboot:EPERM @resources:EPERM @sandbox:EPERM @setuid:EPERM @signal:EPERM @swap:EPERM @sync:EPERM @timer:EPERM\n").count(1))
+         .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
+ }
+ 

@@ -1,0 +1,11 @@
+diff -ur a/src/3rdparty/chromium/content/public/browser/BUILD.gn b/src/3rdparty/chromium/content/public/browser/BUILD.gn
+--- a/src/3rdparty/chromium/content/public/browser/BUILD.gn	1969-12-31 19:00:01.000000000 -0500
++++ b/src/3rdparty/chromium/content/public/browser/BUILD.gn	2024-05-29 22:12:36.416136269 -0400
+@@ -469,6 +469,7 @@
+     "//build:chromeos_buildflags",
+     "//cc",
+     "//components/viz/host",
++    "//components/spellcheck:buildflags",
+     "//content/browser",  # Must not be public_deps!
+     "//device/fido",
+     "//gpu",

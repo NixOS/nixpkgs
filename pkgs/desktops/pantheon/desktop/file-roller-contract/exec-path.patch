@@ -1,0 +1,22 @@
+diff --git a/io.elementary.contractor.file-roller-compress.contract b/io.elementary.contractor.file-roller-compress.contract
+index 11e4da3..d58549f 100644
+--- a/io.elementary.contractor.file-roller-compress.contract
++++ b/io.elementary.contractor.file-roller-compress.contract
+@@ -3,5 +3,5 @@ Name=Compress
+ Icon=add-files-to-archive
+ Description=Create a compressed archive with the selected objects
+ MimeType=!archive;inode/blockdevice;inode/chardevice;inode/fifo;inode/socket;
+-Exec=file-roller --add %U
++Exec=@file_roller@/bin/file-roller --add %U
+ Gettext-Domain=file-roller
+diff --git a/io.elementary.contractor.file-roller-extract-here.contract b/io.elementary.contractor.file-roller-extract-here.contract
+index 184a6f2..345f4e7 100644
+--- a/io.elementary.contractor.file-roller-extract-here.contract
++++ b/io.elementary.contractor.file-roller-extract-here.contract
+@@ -3,5 +3,5 @@ Name=Extract Here
+ Icon=extract-archive
+ Description=Extract the contents of the archives in the archive folder and quit the program
+ MimeType=application/x-7z-compressed;application/x-7z-compressed-tar;application/x-ace;application/x-alz;application/x-ar;application/x-arj;application/x-bzip;application/x-bzip-compressed-tar;application/x-bzip1;application/x-bzip1-compressed-tar;application/x-cabinet;application/x-cbr;application/x-cbz;application/x-cd-image;application/x-compress;application/x-compressed-tar;application/x-cpio;application/x-deb;application/x-ear;application/x-ms-dos-executable;application/x-gtar;application/x-gzip;application/x-gzpostscript;application/x-java-archive;application/x-lha;application/x-lhz;application/x-lrzip;application/x-lrzip-compressed-tar;application/x-lzip;application/x-lzip-compressed-tar;application/x-lzma;application/x-lzma-compressed-tar;application/x-lzop;application/x-lzop-compressed-tar;application/x-ms-wim;application/x-rar;application/x-rar-compressed;application/x-rpm;application/x-rzip;application/x-tar;application/x-tarz;application/x-stuffit;application/x-war;application/x-xz;application/x-xz-compressed-tar;application/x-zip;application/x-zip-compressed;application/x-zoo;application/zip;
+-Exec=file-roller --extract-here %U
++Exec=@file_roller@/bin/file-roller --extract-here %U
+ Gettext-Domain=file-roller

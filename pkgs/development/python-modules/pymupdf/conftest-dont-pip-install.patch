@@ -1,0 +1,12 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 8b9bd31b..472f57b8 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -29,7 +29,6 @@ def install_required_packages():
+     print(f'{__file__}:install_required_packages)(): Running: {command}', flush=1)
+     subprocess.run(command, shell=1, check=1)
+ 
+-install_required_packages()
+ 
+ # Need to import pymupdf only after we've installed pymupdf-fonts above,
+ # because pymupdf imports pymupdf_fonts, and copes with import failure.

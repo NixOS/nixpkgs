@@ -1,0 +1,25 @@
+diff --git a/configure.ac b/configure.ac
+index 7429f614..67b0bf0c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -410,17 +410,11 @@ test "${ENABLE_XATTR}" = "yes" && AC_DEFINE([ENABLE_XATTR], 1,
+ #
+ # Gettext
+ #
+-m4_ifdef([AM_GNU_GETTEXT], [
+-  AM_GNU_GETTEXT([external],[need-ngettext])
+-  AC_CONFIG_FILES([po/Makefile.in])
+-  have_po=yes
+-], [
+-  have_po=no
+-])
+-m4_ifdef([AM_GNU_GETTEXT_VERSION], [
++AM_GNU_GETTEXT([external],[need-ngettext])
++AC_CONFIG_FILES([po/Makefile.in])
++have_po=yes
+ #do not indent here
+ AM_GNU_GETTEXT_VERSION([0.21])
+-])
+ AM_CONDITIONAL([HAVE_PO], [ test "$have_po" = "yes" ])
+ 
+ #
