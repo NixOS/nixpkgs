@@ -7544,8 +7544,6 @@ with pkgs;
     '';
   });
 
-  isoimagewriter = libsForQt5.callPackage ../tools/misc/isoimagewriter { };
-
   isso = callPackage ../servers/isso {
     nodejs = nodejs_20;
   };
