@@ -22,13 +22,13 @@
   udev,
   systemdLibs,
   xorg,
-  version ? "142.0.10",
-  gitRevision ? "29548e2",
-  chromiumVersion ? "142.0.7444.135",
+  version ? "138.0.54",
+  gitRevision ? "f75f6a3",
+  chromiumVersion ? "138.0.7204.298",
   buildType ? "Release",
   srcHashes ? {
-    aarch64-linux = "sha256-wUCXk5Nqgzu0q0PvV8a2AKF3h4YxxTeaP2yVecrf0j8=";
-    x86_64-linux = "sha256-pFMHjj4MktjnX3g03sgLqgai4X/lF29Phmduf7a+KfM=";
+    aarch64-linux = "sha256-gcAyogGd3ByTD5Cs1Z/XidUeDFhGM1CliDcXn/24y9M=";
+    x86_64-linux = "sha256-LbagMDxwxgpPDp75kcLeFqbu8KMuKJtJb4RRXIlnqZw=";
   },
 }:
 
