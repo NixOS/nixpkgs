@@ -7666,6 +7666,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  emaiax = {
+    email = "github@emaiax.dev";
+    github = "emaiax";
+    githubId = 1289661;
+    name = "Eduardo Maia";
+  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "Emantor";
