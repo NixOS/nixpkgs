@@ -34,10 +34,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     protobuf
+    protobufc
     pkg-config
     meson
     ninja
   ];
+
+  strictDeps = true;
 
   meta = {
     description = "Library for exposing Qualcomm Sensor Core sensors to Linux";
