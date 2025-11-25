@@ -12471,6 +12471,8 @@ self: super: with self; {
 
   prov = callPackage ../development/python-modules/prov { };
 
+  prowlpy = callPackage ../development/python-modules/prowlpy { };
+
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
@@ -20383,8 +20385,6 @@ self: super: with self; {
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 
   wget = callPackage ../development/python-modules/wget { };
-
-  wgnlpy = callPackage ../development/python-modules/wgnlpy { };
 
   wgpu-py = callPackage ../development/python-modules/wgpu-py { };
 
