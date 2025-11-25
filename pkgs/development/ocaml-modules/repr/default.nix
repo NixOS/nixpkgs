@@ -12,13 +12,13 @@
 
 buildDunePackage rec {
   pname = "repr";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "repr";
     rev = version;
-    hash = "sha256-SM55m5NIaQ2UKAtznNFSt3LN4QA7As0DyTxVeQjOTjI=";
+    hash = "sha256-TMGGC1eevDqO4ksIFwHSjwZpfYTAnkqDTtwCgigXHLI=";
   };
 
   minimalOCamlVersion = "4.08";
