@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       understand some basic concepts about the MS-DOS environment.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "dosbox";
   };
