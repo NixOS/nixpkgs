@@ -7,15 +7,12 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-regf";
   version = "3.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -24,12 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-bzRx+GwmT+tqCIIu/cJkbnwvkiGbZrtoUFNiirZFp28=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
