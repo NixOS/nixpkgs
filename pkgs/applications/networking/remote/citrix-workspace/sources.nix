@@ -106,18 +106,5 @@ let
       homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
   };
-
-  # Retain attribute-names for abandoned versions of Citrix workspace to
-  # provide a meaningful error-message if it's attempted to use such an old one.
-  #
-  # The lifespans of Citrix products can be found here:
-  # https://www.citrix.com/support/product-lifecycle/workspace-app.html
-  unsupportedVersions = [
-    "23.02.0"
-    "23.07.0"
-    "23.09.0"
-  ];
 in
-{
-  inherit supportedVersions unsupportedVersions;
-}
+supportedVersions
