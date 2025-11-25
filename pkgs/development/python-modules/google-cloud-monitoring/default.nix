@@ -10,7 +10,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-cloud-monitoring";
   version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
