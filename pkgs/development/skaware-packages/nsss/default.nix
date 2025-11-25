@@ -2,6 +2,7 @@
   lib,
   skawarePackages,
   skalibs,
+  pkg-config,
 }:
 
 skawarePackages.buildPackage {
@@ -15,21 +16,25 @@ skawarePackages.buildPackage {
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     skalibs
+  ];
+
+  outputs = [
+    "bin"
+    "dev"
+    "doc"
+    "out"
   ];
 
   # TODO: nsss support
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
     "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-lib=${lib.getLib skalibs}/lib"
     "--with-dynlib=${lib.getLib skalibs}/lib"
     "--with-pkgconfig"
+    "--enable-pkgconfig"
   ];
 
   postInstall = ''
