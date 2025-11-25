@@ -1,4 +1,8 @@
-{ skawarePackages, skalibs }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+}:
 
 skawarePackages.buildPackage {
   pname = "nsss";
@@ -7,16 +11,25 @@ skawarePackages.buildPackage {
 
   description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    skalibs
+  ];
+
   # TODO: nsss support
   configureFlags = [
     "--libdir=\${lib}/lib"
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
     "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
+    "--with-dynlib=${lib.getLib skalibs}/lib"
+    "--with-pkgconfig"
   ];
 
   postInstall = ''
