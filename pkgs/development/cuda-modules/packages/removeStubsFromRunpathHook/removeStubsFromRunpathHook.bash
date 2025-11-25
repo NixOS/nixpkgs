@@ -60,9 +60,7 @@ removeStubsFromRunpath() {
   # NOTE: Always pre-increment since (( 0 )) sets an exit code of 1.
   for runpathEntry in "${origRunpathEntries[@]}"; do
     case $runpathEntry in
-    # NOTE: This assumes all CUDA redistributables with stubs use cudaNamePrefix in name;
-    # that should be safe given the redistributables are built with buildRedist, which does
-    # this automatically.
+    # NOTE: This assumes stubs have "-cuda" (`cudaNamePrefix` in `buildRedist`) in name.
     # Match on (sub)directories named stubs or lib inside a stubs output.
     *-cuda*/stubs|*-cuda*-stubs/lib*)
       if ((driverLinkLibSightings)); then
