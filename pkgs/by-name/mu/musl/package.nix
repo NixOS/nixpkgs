@@ -94,6 +94,10 @@ stdenv.mkDerivation rec {
       url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
       hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
     })
+    # required for systemd user namespacing and oomd to work correctly on musl
+    # drop next release
+    # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
+    ./stdio-skip-empty-iovec-when-buffering-is-disabled.patch
   ];
   CFLAGS = [
     "-fstack-protector-strong"
