@@ -2,11 +2,13 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
   inherit (lib)
     attrsToList
+    getExe
     listToAttrs
     map
     mkEnableOption
@@ -76,7 +78,7 @@ in
         User = config.services.headscale.user;
         Group = config.services.headscale.group;
 
-        ExecStart = "${pkgs.headplane-agent}/bin/hp_agent";
+        ExecStart = utils.escapeSystemdExecArgs (getExe cfg.agent.package);
         Restart = "always";
         RestartSec = 5;
 
@@ -96,7 +98,7 @@ in
         User = config.services.headscale.user;
         Group = config.services.headscale.group;
 
-        ExecStart = "${pkgs.headplane}/bin/headplane";
+        ExecStart = utils.escapeSystemdExecArgs (getExe cfg.package);
         Restart = "always";
         RestartSec = 5;
 
