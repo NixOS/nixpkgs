@@ -3,6 +3,7 @@
   lib,
   love,
   lovely-injector,
+  curl,
   p7zip,
   copyDesktopItems,
   makeWrapper,
@@ -27,7 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeWrapper
   ];
-  buildInputs = [ love ] ++ lib.optional withMods lovely-injector;
+  buildInputs = [
+    love
+  ]
+  ++ lib.optionals withMods [
+    lovely-injector
+    curl
+  ];
   dontUnpack = true;
   desktopItems = [
     (makeDesktopItem {
@@ -50,8 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # The `cat` bit is a hack suggested by whitelje (https://github.com/ethangreen-dev/lovely-injector/pull/66#issuecomment-2319615509)
-  # to make it so that lovely will pick up Balatro as the game name. The `LD_PRELOAD` bit is used to load lovely and it is the
-  # 'official' way of doing it.
+  # to make it so that lovely will pick up Balatro as the game name.
+  # The `LD_PRELOAD` bit is used to load lovely and it is the 'official' way of doing it.
+  # The `LD_LIBRARY_PATH` bit adds `curl` as that is the community standard backend for network-related mods on non-Windows systems
   installPhase = ''
     runHook preInstall
     install -Dm444 $tmpdir/resources/textures/2x/balatro.png -t $out/share/icons/
@@ -59,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cat ${lib.getExe love} $patchedExe > $out/share/Balatro
     chmod +x $out/share/Balatro
 
-    makeWrapper $out/share/Balatro $out/bin/balatro ${lib.optionalString withMods "--prefix LD_PRELOAD : '${lovely-injector}/lib/liblovely.so'"}
+    makeWrapper $out/share/Balatro $out/bin/balatro ${lib.optionalString withMods "--prefix LD_PRELOAD : '${lovely-injector}/lib/liblovely.so' --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [ curl ]}'"}
     runHook postInstall
   '';
 
