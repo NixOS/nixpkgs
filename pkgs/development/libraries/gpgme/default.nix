@@ -12,7 +12,6 @@
   which,
   texinfo,
   buildPackages,
-  qtbase ? null,
   # only for passthru.tests
   libsForQt5,
   qt6Packages,
@@ -54,8 +53,7 @@ stdenv.mkDerivation rec {
     libassuan
     libgpg-error
     pth
-  ]
-  ++ lib.optionals (qtbase != null) [ qtbase ];
+  ];
 
   nativeCheckInputs = [ which ];
 
@@ -75,11 +73,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
-    # debugging is disabled
-    lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
+    lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
   enableParallelBuilding = true;
@@ -101,8 +96,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    # fatal error: 'QtCore/qcompare.h' file not found
-    broken = qtbase != null && stdenv.hostPlatform.isDarwin;
     homepage = "https://gnupg.org/software/gpgme/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";
