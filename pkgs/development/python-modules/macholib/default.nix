@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "macholib";
-  version = "1.16.3";
+  version = "1.16.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ronaldoussoren";
     repo = "macholib";
     rev = "v${version}";
-    hash = "sha256-bTql10Ceny4fBCxnEWz1m1wi03EWMDW9u99IQiWYbnY=";
+    hash = "sha256-+7dFPwzwKmvtDY/blLNyrNDEATcgo+BUceoSGg55gbo=";
   };
 
   build-system = [ setuptools ];
