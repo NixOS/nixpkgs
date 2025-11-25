@@ -81,7 +81,6 @@ lib.extendMkDerivation {
       buildAndTestSubdir ? null,
       ...
     }@args:
-
     assert lib.assertMsg useFetchCargoVendor
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
 
@@ -89,17 +88,21 @@ lib.extendMkDerivation {
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
       true;
     {
-      env = {
-        PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
-        RUST_LOG = logLevel;
-        RUSTFLAGS =
-          lib.optionalString (
-            stdenv.hostPlatform.isDarwin && buildType == "debug"
-          ) "-C split-debuginfo=packed "
-          # Workaround the existing RUSTFLAGS specified as a list.
-          + interpolateString (args.RUSTFLAGS or "");
-      }
-      // args.env or { };
+      env =
+        let
+          rustFlags =
+            lib.optionalString (
+              stdenv.hostPlatform.isDarwin && buildType == "debug"
+            ) "-C split-debuginfo=packed "
+            # Workaround the existing RUSTFLAGS specified as a list.
+            + interpolateString (args.RUSTFLAGS or "");
+        in
+        {
+          PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+          RUST_LOG = logLevel;
+        }
+        // lib.optionalAttrs (rustFlags != "") { RUSTFLAGS = rustFlags; }
+        // args.env or { };
 
       cargoDeps =
         if cargoVendorDir != null then
