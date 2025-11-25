@@ -29,7 +29,7 @@ defaults:
 jobs:
   base:
     name: Trigger jobs
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     if: github.event.changes.base.ref.from && github.event.changes.base.ref.from != github.event.pull_request.base.ref
     timeout-minutes: 2
     steps:
