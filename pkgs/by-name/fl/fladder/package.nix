@@ -63,7 +63,6 @@ flutter335.buildFlutterApplication {
   # Git dependencies from pubspec.lock.json
   gitHashes =
     let
-      # Most dependencies come from DonutWare/media-kit with shared hash
       media_kit-hash = "sha256-Vw/XMFa4TBHS69fJcnCOKfEuTCuZ+Yqdz/WPMLIXQEk=";
     in
     {
@@ -163,17 +162,19 @@ flutter335.buildFlutterApplication {
   # Wrap the executable to find libraries loaded at runtime (dlopen)
   postFixup = ''
     wrapProgram $out/bin/Fladder \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        libpulseaudio
-        libepoxy
-        alsa-lib
-        mpv
-        sqlite
-        libGL
-        libx11
-        libgbm
-        libdrm
-      ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpulseaudio
+          libepoxy
+          alsa-lib
+          mpv
+          sqlite
+          libGL
+          libx11
+          libgbm
+          libdrm
+        ]
+      }
   '';
 
   desktopItems = [
