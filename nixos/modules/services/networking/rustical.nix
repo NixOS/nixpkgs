@@ -135,8 +135,8 @@ in
           ProtectControlGroups = "yes";
           ProtectProc = "invisible";
           ProcSubset = "pid";
-          CapabilityBoundingSet = "";
-          AmbientCapabilities = "";
+          CapabilityBoundingSet = lib.optionals (cfg.settings.http.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+          AmbientCapabilities = lib.optionals (cfg.settings.http.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           PrivateDevices = "yes";
           PrivateTmp = "yes";
           NoNewPrivileges = "yes";
