@@ -88,6 +88,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
     services.rustical.settings = {
       # We assume dataDir is used, so we require this value,
       # therefore no mkDefault
