@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
   git,
-  libz,
 }:
 let
   version = "1.1.8";
@@ -23,14 +21,6 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-W6znChJaDPKdqACDGrVRyEYWKGRinZKLb/21fze2t0c=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Until upstream bumps the libz-sys dependency to >= 1.1.15 the build fails on unstable
-    # nixpkgs with macOS, because the following commit is not part of libz-sys < 1.1.15:
-    # https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9
-    # Instead, use the nixpkgs libz so that libz-sys does not have to be built.
-    libz
-  ];
 
   nativeCheckInputs = [
     git
