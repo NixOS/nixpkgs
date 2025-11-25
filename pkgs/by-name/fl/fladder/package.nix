@@ -16,7 +16,7 @@ flutter335.buildFlutterApplication {
     owner = "DonutWare";
     repo = "Fladder";
     rev = "v0.8.0";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-Rpnf4fYsChbCsezBtmqQ8xkaj6HmfnDPvZLSZjPEPJ0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -37,7 +37,7 @@ flutter335.buildFlutterApplication {
   gitHashes =
     let
       # Most dependencies come from DonutWare/media-kit with shared hash
-      media_kit-hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      media_kit-hash = "sha256-Vw/XMFa4TBHS69fJcnCOKfEuTCuZ+Yqdz/WPMLIXQEk=";
     in
     {
       media_kit = media_kit-hash;
