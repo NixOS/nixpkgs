@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.6.9";
+  version = "0.6.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "zxdavb";
     repo = "incomfort-client";
     tag = "v${version}";
-    hash = "sha256-hZoEQhlCJ1qXbet5elNOLudPEN15MDtDcwbGhm/auTc=";
+    hash = "sha256-+RSKmWVNLiI/NzfbM/xu+/sCNYvkZ2l/AE5TwnF4RCc=";
   };
 
   build-system = [ poetry-core ];
