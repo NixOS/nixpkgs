@@ -17,13 +17,22 @@ stdenv.mkDerivation {
     sha256 = "1cl159svfs1zzzrd3zgn4x7qy6751bvlnxfwf5hn5fmg4iszajw7";
   };
 
+  patches = [
+    # https://patchwork.ozlabs.org/project/buildroot/patch/20240808192126.1767471-1-bernd@kuhls.net/#3373402
+    # https://github.com/jacksonliam/mjpg-streamer/pull/401
+    ./fix-undefined-symbol-error.patch
+  ];
+
   prePatch = ''
-    cd mjpg-streamer-experimental
-    substituteInPlace ./CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.3)" "cmake_minimum_required(VERSION 2.8.3...3.10)"
+    substituteInPlace ./mjpg-streamer-experimental/CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.3)" "cmake_minimum_required(VERSION 2.8.3...3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libjpeg ];
+
+  preConfigure = ''
+    cd mjpg-streamer-experimental
+  '';
 
   postFixup = ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/mjpg_streamer):$out/lib/mjpg-streamer" $out/bin/mjpg_streamer
