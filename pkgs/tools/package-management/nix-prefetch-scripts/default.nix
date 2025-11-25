@@ -83,6 +83,7 @@ rec {
     subversion
   ];
   nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
+    gawk
     pijul
     cacert
     jq

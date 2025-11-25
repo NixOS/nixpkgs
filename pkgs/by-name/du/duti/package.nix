@@ -31,7 +31,6 @@ stdenv.mkDerivation {
       user can change which application acts as the default handler for a given UTI.
     '';
     maintainers = with maintainers; [
-      matthewbauer
       n-hass
     ];
     platforms = platforms.darwin;

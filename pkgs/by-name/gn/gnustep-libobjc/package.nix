@@ -32,7 +32,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ashalkhakov
       dblsaiko
-      matthewbauer
     ];
     platforms = platforms.unix;
   };

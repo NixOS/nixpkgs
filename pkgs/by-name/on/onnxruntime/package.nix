@@ -128,7 +128,6 @@ effectiveStdenv.mkDerivation rec {
   )
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
-    cudaPackages.cudnn-frontend
     removeReferencesTo
   ]
   ++ lib.optionals isCudaJetson [
@@ -167,6 +166,7 @@ effectiveStdenv.mkDerivation rec {
       libcusparse # cusparse.h
       libcufft # cufft.h
       cudnn # cudnn.h
+      cudnn-frontend
       cuda_cudart
     ]
     ++ lib.optionals ncclSupport [ nccl ]
@@ -241,6 +241,8 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
+    # Werror and cudnn_frontend deprecations make for a bad time.
+    "--compile-no-warning-as-error"
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)

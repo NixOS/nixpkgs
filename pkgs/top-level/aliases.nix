@@ -62,6 +62,7 @@ let
       grantleetheme
       incidenceeditor
       index
+      isoimagewriter
       juk
       kaccounts-integration
       kaccounts-providers
