@@ -1,12 +1,13 @@
 {
   lib,
-  newScope,
   yarn-berry,
   yarn,
   replaceVars,
   libzip,
   zlib,
   zlib-ng,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
 }:
 
 let
@@ -56,32 +57,36 @@ let
           });
     };
   };
+
+  berryVersion = lib.versions.major yarn-berry.version;
+
+  otherSplices = generateSplicesForMkScope "yarn-berry_${berryVersion}-fetcher";
 in
 
-lib.makeScope newScope (
-  final:
-  let
-    berryVersion = lib.versions.major yarn-berry.version;
+makeScopeWithSplicing' {
+  inherit otherSplices;
+  f =
+    final:
+    let
+      err = throw ''
+        Berry version ${toString berryVersion} not supported by yarn-berry-fetcher.
+        Supported versions: ${lib.concatStringsSep ", " (lib.attrNames variantOverlays)}
+      '';
+      variantOverlay = (variantOverlays.${berryVersion} or err) final;
+    in
+    (
+      {
+        inherit yarn-berry berryVersion;
 
-    err = throw ''
-      Berry version ${toString berryVersion} not supported by yarn-berry-fetcher.
-      Supported versions: ${lib.concatStringsSep ", " (lib.attrNames variantOverlays)}
-    '';
-    variantOverlay = (variantOverlays.${berryVersion} or err) final;
-  in
-  (
-    {
-      inherit yarn-berry berryVersion;
+        yarn-berry-offline = final.yarn-berry.overrideAttrs (old: {
+          pname = old.pname + "-offline";
+          patches = (old.patches or [ ]) ++ final.berryOfflinePatches;
+        });
 
-      yarn-berry-offline = final.yarn-berry.overrideAttrs (old: {
-        pname = old.pname + "-offline";
-        patches = (old.patches or [ ]) ++ final.berryOfflinePatches;
-      });
-
-      yarn-berry-fetcher = final.callPackage ./yarn-berry-fetcher.nix { };
-      fetchYarnBerryDeps = final.callPackage ./fetch-yarn-berry-deps.nix { };
-      yarnBerryConfigHook = final.callPackage ./yarn-berry-config-hook.nix { };
-    }
-    // variantOverlay
-  )
-)
+        yarn-berry-fetcher = final.callPackage ./yarn-berry-fetcher.nix { };
+        fetchYarnBerryDeps = final.callPackage ./fetch-yarn-berry-deps.nix { };
+        yarnBerryConfigHook = final.callPackage ./yarn-berry-config-hook.nix { };
+      }
+      // variantOverlay
+    );
+}
