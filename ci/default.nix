@@ -117,7 +117,12 @@ let
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
-          options = [ "-disable-indent-size" ];
+          options = [
+            "-disable-indent-size"
+            # TODO: Remove this once this upstream issue is fixed:
+            #   https://github.com/editorconfig-checker/editorconfig-checker/issues/505
+            "-disable-charset"
+          ];
           includes = [ "*" ];
           priority = 1;
         };
