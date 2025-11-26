@@ -1,6 +1,12 @@
 {
   stdenv,
   fetchurl,
+  lib,
+  writeScript,
+  libpulseaudio,
+  libGL,
+  libx11,
+  libgbm,
 }:
 
 { version, src, ... }:
@@ -15,6 +21,16 @@ stdenv.mkDerivation {
   pname = "media_kit_libs_linux";
   inherit version src;
   inherit (src) passthru;
+
+  setupHook = writeScript "media-kit-libs-linux-setup-hook" ''
+    mediaKitLibsLinuxFixupHook() {
+      runtimeDependencies+=('${lib.getLib libpulseaudio}')
+      runtimeDependencies+=('${lib.getLib libGL}')
+      runtimeDependencies+=('${lib.getLib libx11}')
+      runtimeDependencies+=('${lib.getLib libgbm}')
+    }
+    preFixupHooks+=(mediaKitLibsLinuxFixupHook)
+  '';
 
   postPatch = ''
     sed -i '/download_and_verify(/,/)/{
