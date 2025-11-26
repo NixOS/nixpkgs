@@ -108,6 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.stealthbadger747
     ];
     mainProgram = "headplane";
-    platforms = lib.platforms.unix;
+    platforms = [
+      lib.systems.aarch64-darwin
+      lib.systems.aarch64-linux
+      lib.systems.i686-linux
+      lib.systems.x86_64-darwin
+      lib.systems.x86_64-linux
+    ];
   };
 })
