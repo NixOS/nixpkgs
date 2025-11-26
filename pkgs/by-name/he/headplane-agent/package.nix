@@ -5,6 +5,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "hp_agent";
+  # Note, if you are upgrading this, you should upgrade headplane at the same time
   version = "0.6.1";
 
   src = fetchFromGitHub {

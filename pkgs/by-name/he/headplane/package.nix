@@ -10,6 +10,7 @@
 }:
 let
   pname = "headplane";
+  # Note, if you are upgrading this, you should upgrade headplane-agent at the same time
   version = "0.6.1";
   src = fetchFromGitHub {
     owner = "tale";
