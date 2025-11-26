@@ -77,8 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.settingsTemplate = ./pihole.toml;
-  passthru.tests = nixosTests.pihole-ftl;
+  passthru = {
+    settingsTemplate = ./pihole.toml;
+
+    tests = nixosTests.pihole-ftl;
+  };
 
   meta = {
     description = "Pi-hole FTL engine";
