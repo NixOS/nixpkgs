@@ -20,11 +20,11 @@ let
     {
       "0.8.0" = {
         minimalOCamlVersion = "4.03";
-        sha512 = "c34c67b00d6a989a2660204ea70db8521736d6105f15d1ee0ec6287a662798fe5c4d47075c6e7c84f5d5372adb5af5c4c404f79db70d69140af5e0ebbea3b6a5";
+        hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
       };
       "0.10.0" = {
         minimalOCamlVersion = "4.14";
-        sha512 = "122b7a77bd07aee1e0cb8e07e82b195a12528cf015e72fa0dd5afaae26ce04bad9b29f32a6d3bd3547fe522b8a036608785e8adb900e31580a0d555719bbb7e7";
+        hash = "sha256-dg7CkcEo11t0gmCRM3dk+SW1ykFLAuLTNqCze/MN9Oo=";
       };
     }
     .${version};
@@ -66,7 +66,7 @@ buildTopkgPackage {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    inherit (param) sha512;
+    inherit (param) hash;
   };
 
   buildInputs = optional_buildInputs;
