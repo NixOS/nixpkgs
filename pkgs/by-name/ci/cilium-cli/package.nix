@@ -2,10 +2,9 @@
   lib,
   stdenv,
   buildGoModule,
-  cilium-cli,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -42,11 +41,9 @@ buildGoModule rec {
       --zsh <($out/bin/cilium completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = cilium-cli;
-    command = "cilium version --client";
-    version = "${version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckScript = "${placeholder "out"}/bin/cilium version --client";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
