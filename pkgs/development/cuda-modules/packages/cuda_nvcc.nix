@@ -8,6 +8,7 @@
   cuda_cccl,
   lib,
   libnvvm,
+  makeBinaryWrapper,
 }:
 buildRedist (finalAttrs: {
   redistName = "cuda";
@@ -21,6 +22,10 @@ buildRedist (finalAttrs: {
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
   propagatedBuildInputs = [ setupCudaHook ];
@@ -144,13 +149,21 @@ buildRedist (finalAttrs: {
         EOF
       ''
       # Add the dependency on backendStdenv.cc to the nvcc.profile.
+      # NOTE: NVCC explodes in horrifying fashion if GCC is not on PATH -- it fails even before
+      # reading nvcc.profile!
       + ''
-        nixLog "adding backendStdenv.cc to nvcc.profile"
+        nixLog "setting compiler-bindir to backendStdenv.cc in nvcc.profile"
         cat << EOF >> "''${!outputBin:?}/bin/nvcc.profile"
-
         # Fix a compatible backend compiler
-        PATH += "${backendStdenv.cc}/bin":
+        compiler-bindir = ${backendStdenv.cc}/bin
         EOF
+
+        nixLog "wrapping nvcc to add backendStdenv.cc to its PATH"
+        mv "''${!outputBin:?}/bin/nvcc" "''${!outputBin:?}/bin/.nvcc-wrapped"
+        makeBinaryWrapper \
+          "''${!outputBin:?}/bin/.nvcc-wrapped" \
+          "''${!outputBin:?}/bin/nvcc" \
+          --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
       ''
     );
 
