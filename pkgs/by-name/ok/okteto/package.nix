@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.13.2";
+  version = "3.13.3";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     tag = finalAttrs.version;
-    hash = "sha256-UEnviH+DX9DxgVXsi/hutw97TOvEz2zr2cI9y47+9z8=";
+    hash = "sha256-mHInKRsJSzhorDvsFETTpmIloO6MMs/OyueGb19alHA=";
   };
 
   vendorHash = "sha256-8pfrp7eOsgpCB44TQXn98G8+5WSn4EnuGKt6JUajAQ8=";
