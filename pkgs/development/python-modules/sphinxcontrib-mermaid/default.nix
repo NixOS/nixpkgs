@@ -1,12 +1,13 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  sphinx,
   pyyaml,
   rst2pdf,
-  lib,
+  setuptools,
+  sphinx,
 }:
+
 buildPythonPackage rec {
   pname = "sphinxcontrib-mermaid";
   version = "1.2.2";
