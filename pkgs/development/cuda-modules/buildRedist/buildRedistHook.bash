@@ -157,7 +157,8 @@ checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
 
   for outputName in $(getAllOutputNames); do
     hasStubs=0
-    if find "${!outputName:?}" -mindepth 1 -type d -name stubs -print -quit | grep --silent .; then
+    if [[ $outputName == "stubs" ]] ||
+      find "${!outputName:?}" -mindepth 1 -type d -name stubs -print -quit | grep --silent .; then
       hasStubs=1
     fi
 
