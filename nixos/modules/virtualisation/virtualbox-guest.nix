@@ -95,6 +95,12 @@ in
       type = lib.types.bool;
       description = "Whether to load vboxsf";
     };
+
+    use3rdPartyModules = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to use the 3rd party kernel modules instead of the ones shipped with the kernel.";
+    };
   };
 
   ###### implementation
@@ -111,7 +117,8 @@ in
 
         environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
-        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages =
+          [ ] ++ lib.optional cfg.use3rdPartyModules kernel.virtualboxGuestAdditions;
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
