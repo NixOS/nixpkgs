@@ -135,6 +135,8 @@ lib.makeOverridable (
 
         derivationArgs
         // {
+          __structuredAttrs = true;
+
           inherit name;
 
           builder = ./builder.sh;
@@ -228,7 +230,11 @@ lib.makeOverridable (
               "FETCHGIT_HTTP_PROXIES"
             ];
 
-          inherit preferLocalBuild meta allowedRequisites;
+          outputChecks.out = {
+            ${if allowedRequisites != null then "allowedRequisites" else null} = allowedRequisites;
+          };
+
+          inherit preferLocalBuild meta;
 
           env = {
             NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
