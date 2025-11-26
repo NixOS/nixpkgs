@@ -5,9 +5,10 @@
   replaceVars,
   terracotta,
   makeDesktopItem,
+  makeWrapper,
   wrapGAppsHook3,
   copyDesktopItems,
-  imagemagick,
+  desktopToDarwinBundle,
   jdk,
   jdk17,
   hmclJdk ? jdk.override {
@@ -45,11 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
     hash = "sha256-bgZsQ/5CUeOkbahIV0hQSPHrYfK+EaAIV6uMZzpLOVM=";
-  };
-
-  icon = fetchurl {
-    url = "https://github.com/HMCL-dev/HMCL/raw/release-${finalAttrs.version}/HMCL/src/main/resources/assets/img/icon@8x.png";
-    hash = "sha256-1OVq4ujA2ZHboB7zEk7004kYgl9YcoM4qLq154MZMGo=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -124,64 +120,66 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gobject-introspection
+    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
-    imagemagick
     hmclJdkBuild
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
+
+  runtimeDeps = [
+    libGL
+    glfw
+    glib
+    openal
+    libglvnd
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libX11
+    xorg.libXxf86vm
+    xorg.libXext
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXtst
+    libpulseaudio
+    wayland
+    alsa-lib
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/hmcl}
-    cp $src $out/lib/hmcl/hmcl.jar
-    cp patch.jar $out/lib/hmcl/hmcl-terracotta-patch.jar
+    install -Dm444 $src $out/lib/hmcl/hmcl.jar
+    install -Dm444 patch.jar $out/lib/hmcl/hmcl-terracotta-patch.jar
 
-    for n in 16 32 48 64 96 128 256
-    do
-      size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      magick ${finalAttrs.icon} -resize $size $out/share/icons/hicolor/$size/apps/hmcl.png
-    done
-
+    jar xf $src assets/img
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm444 assets/img/icon-title.png $out/share/icons/hicolor/24x24/apps/hmcl.png
+    install -Dm444 assets/img/icon.png $out/share/icons/hicolor/32x32/apps/hmcl.png
+    install -Dm444 assets/img/icon-title@2x.png $out/share/icons/hicolor/48x48/apps/hmcl.png
+    install -Dm444 assets/img/icon@2x.png $out/share/icons/hicolor/64x64/apps/hmcl.png
+    install -Dm444 assets/img/icon@4x.png $out/share/icons/hicolor/128x128/apps/hmcl.png
+    install -Dm444 assets/img/icon@8x.png $out/share/icons/hicolor/256x256/apps/hmcl.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm444 assets/img/icon-mac.png $out/share/icons/hicolor/512x512/apps/hmcl.png
+  ''
+  + ''
     runHook postInstall
   '';
 
-  fixupPhase =
-    let
-      libpath = lib.makeLibraryPath (
-        [
-          libGL
-          glfw
-          glib
-          openal
-          libglvnd
-          vulkan-loader
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          xorg.libX11
-          xorg.libXxf86vm
-          xorg.libXext
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXtst
-          libpulseaudio
-          wayland
-          alsa-lib
-        ]
-      );
-    in
-    ''
-      runHook preFixup
-
-      makeBinaryWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
-        --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
-        --set LD_LIBRARY_PATH ${libpath} \
-        --prefix PATH : "${lib.makeBinPath minecraftJdks}"\
-        ''${gappsWrapperArgs[@]}
-
-      runHook postFixup
-    '';
+  postFixup = ''
+    makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
+      --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
+      --prefix PATH : "${lib.makeBinPath minecraftJdks}" \
+      --run 'cd $HOME' \
+      ''${gappsWrapperArgs[@]}
+  '';
 
   passthru.updateScript = lib.getExe (callPackage ./update.nix { });
 
