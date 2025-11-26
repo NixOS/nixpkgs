@@ -69,7 +69,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";

@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
 

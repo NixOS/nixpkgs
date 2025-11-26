@@ -81,7 +81,6 @@ let
           nativeInstallCheckInputs = [
             versionCheckHook
           ];
-          versionCheckProgramArg = "--version";
 
           meta = sharedMeta // {
             mainProgram = name;

@@ -48,8 +48,6 @@ python3Packages.buildPythonApplication rec {
   # ansible.errors.AnsibleError: Unable to create local directories(/private/var/empty/.ansible/tmp)
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";

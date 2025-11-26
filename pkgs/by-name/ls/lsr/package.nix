@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://tangled.sh/@rockorager.dev/lsr";

@@ -26,7 +26,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/geteduroam-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

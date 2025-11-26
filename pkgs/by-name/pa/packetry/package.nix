@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # packetry-cli is only necessary on windows https://github.com/greatscottgadgets/packetry/pull/154

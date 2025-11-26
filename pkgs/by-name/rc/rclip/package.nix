@@ -46,7 +46,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
-  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # requires network

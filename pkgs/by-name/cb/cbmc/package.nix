@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/cbmc";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -35,7 +35,6 @@ python3Packages.buildPythonApplication rec {
     testfixtures
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://github.com/cpplint/cpplint";

@@ -51,7 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf watchfiles

@@ -124,7 +124,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [ "--skip=::egl" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

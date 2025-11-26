@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

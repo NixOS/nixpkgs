@@ -168,7 +168,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/environmentd";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

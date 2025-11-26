@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Numeric file shortcuts for common git commands";

@@ -121,7 +121,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

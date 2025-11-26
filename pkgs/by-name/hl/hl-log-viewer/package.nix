@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/hl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

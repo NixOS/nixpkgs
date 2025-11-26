@@ -146,7 +146,6 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

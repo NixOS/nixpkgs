@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mdb-ver";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

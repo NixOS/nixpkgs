@@ -40,7 +40,6 @@ buildNpmPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/task-master";
-  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Node.js agentic AI workflow orchestrator";
