@@ -2,18 +2,16 @@
   useLua ? true,
   usePcre ? true,
   withPrometheusExporter ? true,
-  sslLibrary ? "quictls",
+  sslLibrary ? "openssl",
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   nixosTests,
   zlib,
   libxcrypt,
   aws-lc,
   libressl,
   openssl,
-  quictls,
   wolfssl,
   lua5_4,
   pcre2,
@@ -23,7 +21,6 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "aws-lc"
   "libressl"
   "openssl"
-  "quictls"
   "wolfssl"
 ];
 let
@@ -32,7 +29,6 @@ let
       aws-lc
       libressl
       openssl
-      quictls
       ;
     wolfssl = wolfssl.override {
       variant = "haproxy";
