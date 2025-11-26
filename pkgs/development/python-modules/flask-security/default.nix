@@ -52,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.7.0";
+  version = "5.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     owner = "pallets-eco";
     repo = "flask-security";
     tag = version;
-    hash = "sha256-y8qj9Ahb0J//15yWQ9iXkwTiuCTQlLFKriw9DUmEv/M=";
+    hash = "sha256-XxlSkD9mWNcaHi9WvNtOayvFCOZMOznnLzdXvjxfKP8=";
   };
 
   build-system = [ flit-core ];
