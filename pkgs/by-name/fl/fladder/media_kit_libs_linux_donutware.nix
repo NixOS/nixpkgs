@@ -9,6 +9,7 @@
   libgbm,
   libdrm,
   miMallocVersion,
+  miMallocHash,
 }:
 
 { version, src, ... }:
@@ -16,7 +17,7 @@
 let
   mimalloc = fetchurl {
     url = "https://github.com/microsoft/mimalloc/archive/refs/tags/v${miMallocVersion}.tar.gz";
-    hash = "sha256-Kxv/b3F/lyXHC/jXnkeG2hPeiicAWeS6C90mKue+Rus=";
+    hash = miMallocHash;
   };
 in
 stdenv.mkDerivation {

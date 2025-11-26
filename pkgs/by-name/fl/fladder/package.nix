@@ -54,6 +54,7 @@ flutter335.buildFlutterApplication rec {
   customSourceBuilders = {
     media_kit_libs_linux = callPackage ./media_kit_libs_linux_donutware.nix {
       miMallocVersion = "2.1.2";
+      miMallocHash = "sha256-Kxv/b3F/lyXHC/jXnkeG2hPeiicAWeS6C90mKue+Rus=";
     };
   };
 
