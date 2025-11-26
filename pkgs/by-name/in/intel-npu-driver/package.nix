@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-npu-driver";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-npu-driver";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-pnQ4OV+7bKivhS5lVmdz5Zb9kqaSJK0eK0lK+68wzYU=";
+    hash = "sha256-f3GxvYBfCCK6EGASuHrevFEVcBAyKyWXaIvSNcNcSZQ=";
   };
 
   buildInputs = [
@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     rm -rf third_party/level-zero
     rm third_party/cmake/level-zero.cmake
     rm third_party/cmake/FindLevelZero.cmake
+
+    substituteInPlace third_party/yaml-cpp/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required" \
+      "# cmake_minimum_required"
+
     substituteInPlace third_party/CMakeLists.txt --replace-fail \
       "include(cmake/level-zero.cmake)" \
       ""
