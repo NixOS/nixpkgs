@@ -9,7 +9,6 @@
   gmp,
   bliss,
   nauty,
-  mpfr,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     gmp
     bliss
     nauty
-    mpfr
   ];
 
   # Fixing the error

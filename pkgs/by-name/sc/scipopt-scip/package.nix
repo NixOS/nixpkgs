@@ -42,8 +42,9 @@ stdenv.mkDerivation rec {
     boost
     gfortran
     criterion
-    mpfr # if not included, throws fatal error: mpfr.h not found
   ];
+
+  propagatedBuildInputs = [ mpfr ];
 
   doCheck = true;
 

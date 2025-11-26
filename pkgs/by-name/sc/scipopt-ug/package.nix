@@ -7,7 +7,6 @@
   zlib,
   mpi,
   gmp,
-  mpfr,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     mpi
     zlib
     gmp
-    mpfr
   ];
 
   meta = {
