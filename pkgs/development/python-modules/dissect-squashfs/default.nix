@@ -6,7 +6,6 @@
   fetchFromGitHub,
   lz4,
   python-lzo,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   zstandard,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "dissect-squashfs";
   version = "1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
