@@ -7,6 +7,7 @@
   libGL,
   libx11,
   libgbm,
+  libdrm,
 }:
 
 { version, src, ... }:
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
       runtimeDependencies+=('${lib.getLib libGL}')
       runtimeDependencies+=('${lib.getLib libx11}')
       runtimeDependencies+=('${lib.getLib libgbm}')
+      runtimeDependencies+=('${lib.getLib libdrm}')
     }
     preFixupHooks+=(mediaKitLibsLinuxFixupHook)
   '';
