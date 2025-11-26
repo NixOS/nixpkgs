@@ -2,6 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  home-assistant,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
@@ -30,7 +31,8 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant-custom-component
     pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
 
   #skip phases with nothing to do
   dontConfigure = true;

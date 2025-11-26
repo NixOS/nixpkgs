@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.36";
+  version = "0.6.38";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-7+KFMmiJZB14kUtkKxTLZrZ2bA2MR1qA/cx7GX+FnUw=";
+    hash = "sha256-3FVH/8DMkoS5wlc7cBGpoM3+6nzxIOaqmOBL+W92AZs=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-CEjWmDcHHr0PeltETi5uIdoQ2C2Twmg+gDBZT5myo/E=";
+    npmDepsHash = "sha256-WxgxGgpWVSNfTBx9cXU0id7ZGqg2QTOoubvWUyDpK0U=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -74,6 +74,8 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   build-system = with python3Packages; [ hatchling ];
+
+  patches = [ ./langchain-v1.patch ];
 
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
@@ -128,11 +130,13 @@ python3Packages.buildPythonApplication rec {
       iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
       langdetect
       ldap3
       loguru
       markdown
+      msoffcrypto-tool
       mcp
       nltk
       onnxruntime
@@ -201,6 +205,7 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
+      azure-search-documents
       colbert-ai
       elasticsearch
       firecrawl-py
@@ -212,6 +217,7 @@ python3Packages.buildPythonApplication rec {
       pymilvus
       pymongo
       qdrant-client
+      weaviate-client
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

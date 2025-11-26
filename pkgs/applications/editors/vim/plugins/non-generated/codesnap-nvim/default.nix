@@ -29,6 +29,9 @@ let
       rustPlatform.bindgenHook
     ];
 
+    # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+    env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+
     buildInputs = [
       libuv.dev
     ];

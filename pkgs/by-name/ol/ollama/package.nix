@@ -32,6 +32,7 @@
   ollama,
   ollama-rocm,
   ollama-cuda,
+  ollama-vulkan,
 
   config,
   # one of `[ null false "rocm" "cuda" "vulkan" ]`
@@ -119,6 +120,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
+    "--set-default OLLAMA_VULKAN : '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -268,10 +270,11 @@ goBuild (finalAttrs: {
       inherit ollama;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit ollama-rocm ollama-cuda;
+      inherit ollama-rocm ollama-cuda ollama-vulkan;
       service = nixosTests.ollama;
       service-cuda = nixosTests.ollama-cuda;
       service-rocm = nixosTests.ollama-rocm;
+      service-vulkan = nixosTests.ollama-vulkan;
     };
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
