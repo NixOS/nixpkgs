@@ -140,7 +140,7 @@ in
                 public_url = mkOption {
                   type = types.nullOr types.str;
                   default = null;
-                  description = "Public URL if differrent. This affects certain parts of the web UI.";
+                  description = "Public URL if different. This affects certain parts of the web UI.";
                   example = "https://headscale.example.com";
                 };
 
