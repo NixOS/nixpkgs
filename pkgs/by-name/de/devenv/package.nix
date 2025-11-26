@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "1.10";
+  version = "1.11.1";
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-rsb+6Wca43guzLL4Czoc89L394ZW9JZF2MShxaz2Sx4=";
+    hash = "sha256-xfvW7aF2bDXDXzUeaSOXE+bARfcDbf4YCMVfNp8DTv0=";
   };
 
-  cargoHash = "sha256-Wt47YdBEtFXQACk1ByDwQyXzHU4/nGVQKY7gaZeQrQ4=";
+  cargoHash = "sha256-jv/JwSdVMvL5ymO/1NxLNGbJ2Ly2QrVLGQHNTnSPpc0=";
 
   buildAndTestSubdir = "devenv";
 
