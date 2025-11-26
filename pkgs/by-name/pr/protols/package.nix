@@ -1,5 +1,7 @@
 {
   lib,
+  pkgs,
+  makeWrapper,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -16,6 +18,25 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-10DU8/j9+LvT42r4Hyk0kdgQHEtDrZ4FZBQwlSGapPw=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  # protols requires *.proto files provided by protobuf for well-known imports
+  # (go to definition and linting) and uses a detection mechanism based on
+  # pkg-config to find the directory containing the relevant files in runtime.
+  #
+  # This is sub-optimal, because:
+  # - it requires pkg-config and protobuf.pc(+deps) as runtime dependencies,
+  # - the set of include paths it finds is non-minimal.
+  #
+  # We don't provide pkg-config or protobuf as dependencies, hoping for this
+  # detection to fail silently. Instead, the directory path containing the
+  # relevant *.proto files is passed as an include path.
+  postFixup = ''
+    wrapProgram $out/bin/protols \
+      --add-flag "--include-paths" \
+      --add-flag "${pkgs.protobuf}/include"
+  '';
 
   meta = {
     description = "Protocol Buffers language server written in Rust";
