@@ -12,6 +12,11 @@ let
   pname = "headplane";
   # Note, if you are upgrading this, you should upgrade headplane-agent at the same time
   version = "0.6.1";
+  pnpmDepsHash =
+    if stdenv.hostPlatform.isDarwin then
+      "sha256-H06zDYElXXiZepqxH/uCdePW6jB6VjiAX7bXnVjxwq0="
+    else
+      "sha256-KyUcaR2Lvu5kT8arr4ZO8rCa5HWXTqmk8C7P8WoYK+c=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
@@ -73,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-H06zDYElXXiZepqxH/uCdePW6jB6VjiAX7bXnVjxwq0=";
+    hash = pnpmDepsHash;
     fetcherVersion = 1;
   };
 
