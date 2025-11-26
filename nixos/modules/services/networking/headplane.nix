@@ -118,7 +118,8 @@ in
               options = {
                 url = mkOption {
                   type = types.str;
-                  default = "http://127.0.0.1:8080";
+                  default = "http://127.0.0.1:${toString config.services.headscale.port}";
+                  defaultText = lib.literalExpression ''http://127.0.0.1:''${toString config.services.headscale.port}'';
                   description = ''
                     The URL to your Headscale instance.
                     All API requests are routed through this URL.
@@ -139,7 +140,8 @@ in
 
                 public_url = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
+                  default = config.services.headscale.settings.server_url;
+                  defaultText = lib.literalExpression "config.services.headscale.settings.server_url";
                   description = "Public URL if different. This affects certain parts of the web UI.";
                   example = "https://headscale.example.com";
                 };
