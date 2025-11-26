@@ -343,14 +343,14 @@ extendMkDerivation {
       inherit allowFHSReferences;
       inherit includeRemoveStubsFromRunpathHook;
 
-      postFixup = postFixup + ''
-        if [[ -n "''${includeRemoveStubsFromRunpathHook:-}" ]] ; then
+      postFixup =
+        postFixup
+        + optionalString finalAttrs.includeRemoveStubsFromRunpathHook ''
           nixLog "installing stub removal runpath hook"
           mkdir -p "''${!outputStubs:?}/nix-support"
           printWords >>"''${!outputStubs:?}/nix-support/propagated-build-inputs" \
             "${getDev removeStubsFromRunpathHook}"
-        fi
-      '';
+        '';
 
       passthru = passthru // {
         inherit redistName release;
