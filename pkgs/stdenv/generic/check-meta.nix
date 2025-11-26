@@ -448,6 +448,9 @@ let
       teamsPosition = any;
 
       identifiers = attrs;
+
+      # Output-specific metadata (shallow check, because cyclic)
+      outputs = attrsOf attrs;
     };
 
   checkMetaAttr =
