@@ -28901,6 +28901,12 @@
     github = "yomaq";
     githubId = 112864332;
   };
+  yongdohyun = {
+    name = "Yong Do-Hyun";
+    email = "froster12@naver.com";
+    github = "YongDo-Hyun";
+    githubId = 97219311;
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     matrix = "@yorickvp:matrix.org";
