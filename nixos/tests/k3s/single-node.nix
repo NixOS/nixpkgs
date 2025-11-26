@@ -11,7 +11,7 @@ import ../make-test-python.nix (
       name = "k3s-pause-image-env";
       paths = with pkgs; [
         tini
-        (hiPrio coreutils)
+        (lib.hiPrio coreutils)
         busybox
       ];
     };
