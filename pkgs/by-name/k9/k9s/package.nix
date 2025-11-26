@@ -75,7 +75,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       Gonzih
       markus1189
-      bryanasdev000
       qjoly
       devusb
       ryan4yin
