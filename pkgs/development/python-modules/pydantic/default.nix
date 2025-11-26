@@ -19,10 +19,8 @@
   dirty-equals,
   jsonschema,
   pytestCheckHook,
-  pytest-codspeed,
   pytest-mock,
   pytest-run-parallel,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -61,11 +59,9 @@ buildPythonPackage rec {
     cloudpickle
     dirty-equals
     jsonschema
-    pytest-codspeed
     pytest-mock
     pytest-run-parallel
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
