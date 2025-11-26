@@ -5,7 +5,6 @@
   makeBinaryWrapper,
   openssl,
   libssh2,
-  mandoc,
   nim,
   pkg-config,
   brotli,
@@ -51,12 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       makeWrapperArgs = ''
-        --set MANCHA_CHA $out/bin/cha \
-        --set MANCHA_MAN ${mandoc}/bin/man
+        --set MANCHA_CHA $out/bin/cha
       '';
     in
     ''
-      wrapProgram $out/bin/cha ${makeWrapperArgs}
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
