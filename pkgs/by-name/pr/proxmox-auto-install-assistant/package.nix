@@ -4,22 +4,25 @@
   rustPlatform,
   pkg-config,
   openssl,
+  libxcrypt,
+  libisoburn,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "proxmox-auto-install-assistant";
-  version = "9.0.7";
+  version = "9.1.6";
 
   src = fetchgit {
     url = "git://git.proxmox.com/git/pve-installer.git";
-    rev = "cfcaceacb797bfdbff8c7e8fed76e56642390b20";
-    hash = "sha256-tXwNuT25GzQhdDtYiiQKPu6EPZQffUOZhBqkLZK/+DY=";
+    rev = "eab66c74a79663008ab12990bd27195a8d5c4204";
+    hash = "sha256-nMyi3GfdQv/L05hpReSIoFrvmpbs4+5t/lUXXgP0bUs=";
   };
 
   postPatch = ''
     rm -v .cargo/config.toml
     cp -v ${./Cargo.lock} Cargo.lock
+    chmod u+w Cargo.lock
     # pre-generated using `make locale-info.json`
     # depends on non-packaged perl modules and debian-specific files
     cp -v ${./locale-info.json} locale-info.json
@@ -27,22 +30,31 @@ rustPlatform.buildRustPackage {
 
   buildAndTestSubdir = "proxmox-auto-install-assistant";
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "proxmox-io-1.2.1" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
+      "proxmox-lang-1.5.0" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
+      "proxmox-sys-1.0.0" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl.dev ];
+  buildInputs = [
+    libxcrypt
+    openssl.dev
+  ];
+
+  propagatedBuildInputs = [ libisoburn ];
 
   postFixup = ''
     # these libraries are not actually necessary, only linked in by cargo
     # through crate dependencies (unfortunately)
     patchelf \
       --remove-needed libcrypto.so.3 \
-      --remove-needed libssl.so.3 \
       $out/bin/proxmox-auto-install-assistant
     patchelf --shrink-rpath $out/bin/proxmox-auto-install-assistant
   '';
-
-  disallowedReferences = [ openssl.out ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
