@@ -11,7 +11,6 @@
   hotkey_manager_linux = callPackage ./hotkey_manager_linux { };
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
-  media_kit_libs_linux_donutware = callPackage ./media_kit_libs_linux_donutware { };
   olm = callPackage ./olm { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };

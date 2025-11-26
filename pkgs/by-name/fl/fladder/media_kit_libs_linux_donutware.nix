@@ -8,13 +8,14 @@
   libx11,
   libgbm,
   libdrm,
+  miMallocVersion,
 }:
 
 { version, src, ... }:
 
 let
   mimalloc = fetchurl {
-    url = "https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.2.tar.gz";
+    url = "https://github.com/microsoft/mimalloc/archive/refs/tags/v${miMallocVersion}.tar.gz";
     hash = "sha256-Kxv/b3F/lyXHC/jXnkeG2hPeiicAWeS6C90mKue+Rus=";
   };
 in

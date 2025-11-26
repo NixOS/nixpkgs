@@ -52,10 +52,9 @@ flutter335.buildFlutterApplication rec {
     };
 
   customSourceBuilders = {
-    media_kit_libs_linux =
-      callPackage
-        ../../../development/compilers/dart/package-source-builders/media_kit_libs_linux_donutware/default.nix
-        { };
+    media_kit_libs_linux = callPackage ./media_kit_libs_linux_donutware.nix {
+      miMallocVersion = "2.1.2";
+    };
   };
 
   postInstall = ''
