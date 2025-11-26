@@ -17,23 +17,28 @@ let
     updateManyAttrsByPath
     ;
   cfg = config.services.headplane;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   settingsWithAgentExecutablePath = recursiveUpdate cfg.settings {
     integration.agent.executable_path = "${cfg.settings.integration.agent.package}/bin/hp_agent";
   };
-  settingsWithoutAgentPackage =
-    updateManyAttrsByPath [
-      {
-        path = ["integration" "agent"];
-        update = old: filterAttrs (key: value: key != "package") old;
-      }
-    ]
-    settingsWithAgentExecutablePath;
+  settingsWithoutAgentPackage = updateManyAttrsByPath [
+    {
+      path = [
+        "integration"
+        "agent"
+      ];
+      update = old: filterAttrs (key: value: key != "package") old;
+    }
+  ] settingsWithAgentExecutablePath;
   settingsWithoutNulls = filterAttrsRecursive (key: value: value != null) settingsWithoutAgentPackage;
   settingsWithoutEmptyOidc =
-    if settingsWithoutNulls ? oidc &&
-       ((settingsWithoutNulls.oidc.issuer or "") == "" && (settingsWithoutNulls.oidc.client_id or "") == "") then
-      builtins.removeAttrs settingsWithoutNulls ["oidc"]
+    if
+      settingsWithoutNulls ? oidc
+      && (
+        (settingsWithoutNulls.oidc.issuer or "") == "" && (settingsWithoutNulls.oidc.client_id or "") == ""
+      )
+    then
+      builtins.removeAttrs settingsWithoutNulls [ "oidc" ]
     else
       settingsWithoutNulls;
   settingsFile = settingsFormat.generate "headplane-config.yaml" settingsWithoutEmptyOidc;
@@ -41,7 +46,7 @@ in
 {
   options.services.headplane = {
     enable = mkEnableOption "Headplane";
-    package = mkPackageOption pkgs "headplane" {};
+    package = mkPackageOption pkgs "headplane" { };
 
     debug = mkOption {
       type = types.bool;
@@ -104,7 +109,7 @@ in
                 };
               };
             };
-            default = {};
+            default = { };
             description = "Server configuration for Headplane web application.";
           };
 
@@ -173,7 +178,7 @@ in
                 };
               };
             };
-            default = {};
+            default = { };
             description = "Headscale specific settings for Headplane integration.";
           };
 
@@ -235,10 +240,10 @@ in
                         '';
                       };
 
-                      package = mkPackageOption pkgs "headplane-agent" {};
+                      package = mkPackageOption pkgs "headplane-agent" { };
                     };
                   };
-                  default = {};
+                  default = { };
                   description = "Agent configuration for the Headplane agent.";
                 };
 
@@ -257,12 +262,12 @@ in
                       };
                     };
                   };
-                  default = {};
+                  default = { };
                   description = "Native process integration settings.";
                 };
               };
             };
-            default = {};
+            default = { };
             description = "Integration configurations for Headplane to interact with Headscale.";
           };
 
@@ -337,7 +342,10 @@ in
                 };
 
                 profile_picture_source = mkOption {
-                  type = types.enum [ "oidc" "gravatar" ];
+                  type = types.enum [
+                    "oidc"
+                    "gravatar"
+                  ];
                   default = "oidc";
                   description = "Source for user profile pictures.";
                 };
@@ -358,7 +366,9 @@ in
                   type = types.nullOr (types.attrsOf types.str);
                   default = null;
                   description = "Extra parameters to send to the OIDC provider.";
-                  example = { prompt = "consent"; };
+                  example = {
+                    prompt = "consent";
+                  };
                 };
 
                 authorization_endpoint = mkOption {
@@ -383,30 +393,35 @@ in
                 };
               };
             };
-            default = {};
+            default = { };
             description = "OIDC Configuration for authentication.";
           };
         };
       };
-      default = {};
+      default = { };
     };
   };
 
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [cfg.package];
+      systemPackages = [ cfg.package ];
       etc."headplane/config.yaml".source = "${settingsFile}";
     };
 
     systemd.services.headplane = {
       description = "Headscale Web UI";
 
-      wantedBy = ["multi-user.target"];
-      wants = ["network-online.target"];
-      after = ["network-online.target" "headscale.service"];
-      requires = ["headscale.service"];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "headscale.service"
+      ];
+      requires = [ "headscale.service" ];
 
-      environment = {HEADPLANE_DEBUG_LOG = builtins.toString cfg.debug;};
+      environment = {
+        HEADPLANE_DEBUG_LOG = builtins.toString cfg.debug;
+      };
       serviceConfig = {
         User = config.services.headscale.user;
         Group = config.services.headscale.group;

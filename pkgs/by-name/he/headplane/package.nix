@@ -22,11 +22,12 @@ let
   headplaneSshWasm = buildGoModule {
     pname = "headplane-ssh-wasm";
     inherit version src;
-    subPackages = ["cmd/hp_ssh"];
+    subPackages = [ "cmd/hp_ssh" ];
     vendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
     env.CGO_ENABLED = 0;
+    doCheck = false;
 
-    nativeBuildInputs = [go];
+    nativeBuildInputs = [ go ];
 
     buildPhase = ''
       export GOOS=js
@@ -36,15 +37,23 @@ let
 
     installPhase = ''
       runHook preInstall
-      mkdir -p "$out"
-      cp hp_ssh.wasm "$out/"
-      cp "${
-        if builtins.pathExists "${go}/share/go/lib/wasm/wasm_exec.js"
-        then "${go}/share/go/lib/wasm/wasm_exec.js"
-        else if builtins.pathExists "${go}/lib/wasm/wasm_exec.js"
-        then "${go}/lib/wasm/wasm_exec.js"
-        else "${go}/share/go/misc/wasm/wasm_exec.js"
-      }" "$out/wasm_exec.js"
+      install -Dm444 hp_ssh.wasm "$out/hp_ssh.wasm"
+
+      goRoot="$(go env GOROOT)"
+
+      # First, trust the canonical Go layout.
+      wasm_exec="$goRoot/misc/wasm/wasm_exec.js"
+      if [ ! -e "$wasm_exec" ]; then
+        # Be robust to distro / packaging differences:
+        wasm_exec="$(find "$goRoot" -path '*wasm_exec.js' -print -quit || true)"
+      fi
+
+      if [ -z "$wasm_exec" ] || [ ! -e "$wasm_exec" ]; then
+        echo "ERROR: wasm_exec.js not found under GOROOT=$goRoot" >&2
+        exit 1
+      fi
+
+      install -Dm444 "$wasm_exec" "$out/wasm_exec.js"
       runHook postInstall
     '';
   };
@@ -94,7 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tale/headplane";
     changelog = "https://github.com/tale/headplane/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.igor-ramazanov lib.maintainers.stealthbadger747 ];
+    maintainers = [
+      lib.maintainers.igor-ramazanov
+      lib.maintainers.stealthbadger747
+    ];
     mainProgram = "headplane";
     platforms = lib.platforms.unix;
   };

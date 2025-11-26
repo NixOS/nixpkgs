@@ -26,7 +26,10 @@ buildGoModule (finalAttrs: {
     description = "Optional sidecar process providing additional features for headplane";
     homepage = "https://github.com/tale/headplane";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.igor-ramazanov lib.maintainers.stealthbadger747 ];
+    maintainers = [
+      lib.maintainers.igor-ramazanov
+      lib.maintainers.stealthbadger747
+    ];
     mainProgram = "hp_agent";
     platforms = lib.platforms.unix;
   };
