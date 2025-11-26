@@ -3,31 +3,39 @@
   lib,
   fetchFromGitHub,
   swift,
-  swiftformat,
   swiftpm,
-  testers,
   versionCheckHook,
   nix-update-script,
 }:
 
-swift.stdenv.mkDerivation rec {
+swift.stdenv.mkDerivation (finalAttrs: {
   pname = "swiftformat";
   version = "0.58.5";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
-    rev = version;
-    sha256 = "sha256-QTfdMJpdm4m2YSZefPclGcAZFjyFgJeeWIYLf3apuFo=";
+    tag = finalAttrs.version;
+    hash = "sha256-QTfdMJpdm4m2YSZefPclGcAZFjyFgJeeWIYLf3apuFo=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     swift
     swiftpm
   ];
 
+  buildInputs = [
+    swiftpm
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     install -D "$(swiftpmBinPath)/swiftformat" $out/bin/swiftformat
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [
@@ -49,4 +57,4 @@ swift.stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
