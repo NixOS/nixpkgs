@@ -5689,6 +5689,8 @@ self: super: with self; {
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
+  freeze-core = callPackage ../development/python-modules/freeze-core { };
+
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   frelatage = callPackage ../development/python-modules/frelatage { };
