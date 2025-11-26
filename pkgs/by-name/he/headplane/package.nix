@@ -2,7 +2,6 @@
   buildGoModule,
   fetchFromGitHub,
   git,
-  go,
   lib,
   makeWrapper,
   nodejs_22,
@@ -26,9 +25,6 @@ let
     vendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
     env.CGO_ENABLED = 0;
     doCheck = false;
-
-    nativeBuildInputs = [ go ];
-
     buildPhase = ''
       export GOOS=js
       export GOARCH=wasm
@@ -39,12 +35,16 @@ let
       runHook preInstall
       install -Dm444 hp_ssh.wasm "$out/hp_ssh.wasm"
 
+      # Go's WebAssembly shim (wasm_exec.js) has no stable `go env` key, and
+      # different Go packages may place it in different locations under GOROOT.
+      #   1. Ask `go env GOROOT` for the active GOROOT.
+      #   2. First try the path misc/wasm/wasm_exec.js.
+      #   3. If that fails, fall back to searching under GOROOT to handle
+      #      distro / OS / packaging layout variations.
       goRoot="$(go env GOROOT)"
 
-      # First, trust the canonical Go layout.
       wasm_exec="$goRoot/misc/wasm/wasm_exec.js"
       if [ ! -e "$wasm_exec" ]; then
-        # Be robust to distro / packaging differences:
         wasm_exec="$(find "$goRoot" -path '*wasm_exec.js' -print -quit || true)"
       fi
 
