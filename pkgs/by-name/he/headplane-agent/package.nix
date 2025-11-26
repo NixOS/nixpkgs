@@ -33,11 +33,11 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "hp_agent";
     platforms = [
-      lib.systems.aarch64-darwin
-      lib.systems.aarch64-linux
-      lib.systems.i686-linux
-      lib.systems.x86_64-darwin
-      lib.systems.x86_64-linux
+      "x86_64-linux"
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 })
