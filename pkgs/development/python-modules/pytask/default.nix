@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
@@ -22,8 +21,8 @@
   pytest-xdist,
   syrupy,
   git,
-  tomli,
 }:
+
 buildPythonPackage rec {
   pname = "pytask";
   version = "0.5.7";
@@ -52,8 +51,7 @@ buildPythonPackage rec {
     rich
     sqlalchemy
     universal-pathlib
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
