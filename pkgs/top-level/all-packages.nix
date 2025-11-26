@@ -12820,10 +12820,10 @@ with pkgs;
     teos-watchtower-plugin
     ;
 
-  vertcoin = libsForQt5.callPackage ../applications/blockchains/vertcoin {
+  vertcoin = libsForQt5.callPackage ../by-name/ve/vertcoin/package.nix {
     withGui = true;
   };
-  vertcoind = callPackage ../applications/blockchains/vertcoin {
+  vertcoind = callPackage ../by-name/ve/vertcoin/package.nix {
     withGui = false;
   };
 
