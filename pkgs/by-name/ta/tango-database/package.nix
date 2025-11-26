@@ -17,14 +17,14 @@
 # See $out/share/tango/db/create_db.sh
 stdenv.mkDerivation rec {
   pname = "tango-database";
-  version = "5.25";
+  version = "5.28";
 
   src = fetchFromGitLab {
     owner = "tango-controls";
     repo = "TangoDatabase";
     tag = "Database-Release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-hu2TIPxXyUtLK3bHFHuBYho23TGLkmsHfxEabsjsvmE=";
+    hash = "sha256-r8jrsDR22u30l1R6mK95KsLWHhheZa4/N6n/Xv4mKPc=";
   };
 
   nativeBuildInputs = [
