@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://sourceware.org/libffi/";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.all;
     pkgConfigModules = [ "libffi" ];
   };

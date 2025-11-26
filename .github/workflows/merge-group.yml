@@ -18,7 +18,7 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
@@ -111,9 +111,11 @@ jobs:
     if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
+      - check
       - lint
       - eval
-    runs-on: ubuntu-24.04-arm
+      - build
+    runs-on: ubuntu-slim
     permissions:
       statuses: write
     steps:

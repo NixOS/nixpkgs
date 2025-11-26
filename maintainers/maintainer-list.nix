@@ -7666,6 +7666,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  emaiax = {
+    email = "github@emaiax.dev";
+    github = "emaiax";
+    githubId = 1289661;
+    name = "Eduardo Maia";
+  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "Emantor";
@@ -16292,12 +16298,6 @@
     githubId = 91502660;
     name = "Matthew LeVan";
   };
-  matthewbauer = {
-    email = "mjbauer95@gmail.com";
-    github = "matthewbauer";
-    githubId = 19036;
-    name = "Matthew Bauer";
-  };
   matthewcroughan = {
     email = "matt@croughan.sh";
     github = "MatthewCroughan";
@@ -21249,6 +21249,12 @@
     githubId = 37715;
     name = "Brian McKenna";
   };
+  puiyq = {
+    name = "Pui Yong Qing";
+    email = "puiyongqing@gmail.com";
+    github = "puiyq";
+    githubId = 96353706;
+  };
   pulsation = {
     name = "Philippe Sam-Long";
     github = "pulsation";
@@ -23926,12 +23932,6 @@
     github = "shazow";
     githubId = 6292;
     name = "Andrey Petrov";
-  };
-  sheenobu = {
-    email = "sheena.artrip@gmail.com";
-    github = "sheenobu";
-    githubId = 1443459;
-    name = "Sheena Artrip";
   };
   sheepforce = {
     email = "phillip.seeber@googlemail.com";
