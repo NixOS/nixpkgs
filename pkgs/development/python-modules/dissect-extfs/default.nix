@@ -7,15 +7,12 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-extfs";
   version = "3.15";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -24,12 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-Ffm4AT5PLqlIOq6kxPcwqzRHNXP0tQ5tvkMS7dv9fZ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
