@@ -1,6 +1,8 @@
 {
   stdenv,
   fetchurl,
+  fvpVersion,
+  fvpHash,
 }:
 
 { version, src, ... }:
@@ -8,8 +10,8 @@
 let
   # MDK SDK required by fvp plugin
   mdk-sdk = fetchurl {
-    url = "https://sourceforge.net/projects/mdk-sdk/files/nightly/mdk-sdk-linux-x64.tar.xz";
-    hash = "sha256-eFfcMNgjns89BS3LxJ0Ts1qnaQLn92hrKxkXeAsJ1Z4=";
+    url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${fvpVersion}/mdk-sdk-linux-x64.tar.xz";
+    hash = fvpHash;
   };
 in
 stdenv.mkDerivation {
