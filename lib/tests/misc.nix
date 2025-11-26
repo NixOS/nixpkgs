@@ -6,7 +6,8 @@
   which is `throw`'s and `abort`'s, without error messages.
 
   If you need to test error messages or more complex evaluations, see
-  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+  `lib/tests/modules.sh`, `lib/tests/sources.sh`, `lib/tests/filesystem.sh` or
+  `lib/tests/debug.sh` as examples.
 
   To run these tests:
 
@@ -4813,32 +4814,4 @@ runTests {
       targetTarget = "prefix-tt";
     };
   };
-
-  testThrowTestFailuresEmpty = {
-    expr = lib.debug.throwTestFailures {
-      failures = [ ];
-    };
-
-    expected = null;
-  };
-
-  testThrowTestFailures = testingThrow (
-    lib.debug.throwTestFailures {
-      failures = [
-        {
-          name = "testDerivation";
-          expected = builtins.derivation {
-            name = "a";
-            builder = "bash";
-            system = "x86_64-linux";
-          };
-          result = builtins.derivation {
-            name = "b";
-            builder = "bash";
-            system = "x86_64-linux";
-          };
-        }
-      ];
-    }
-  );
 }
