@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-zimpl";
-  version = "362";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "zimpl";
     tag = "v${version}";
-    hash = "sha256-juqAwzqBArsFXmz7L7RQaE78EhQdP5P51wQFlCoo7/o=";
+    hash = "sha256-ataepqBfdA7CgqPhbw+Xy7PC3VZTLcSrF2/xnFyx+YI=";
   };
 
   postPatch = ''
