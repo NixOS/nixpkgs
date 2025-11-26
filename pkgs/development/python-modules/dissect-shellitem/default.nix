@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.shellitem";
     tag = version;
-    hash = "sha256-mklMNKW3amPed2qXWVUxl73O9iORdauTh1ZygY/rg7I=";
+    hash = "sha256-2pgKfvlYt8eZh6YsTx6Gqd0XvvzJtaSh0tnhVF+Z/50=";
   };
 
   build-system = [
