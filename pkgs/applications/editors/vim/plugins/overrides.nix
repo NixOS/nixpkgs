@@ -4085,6 +4085,12 @@ assertNoAdditions {
     ];
   };
 
+  vscode-diff-nvim = super.vscode-diff-nvim.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+  };
+
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
   };
