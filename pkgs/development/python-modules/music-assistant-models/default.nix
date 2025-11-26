@@ -20,7 +20,9 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-models";
-  version = "1.1.70"; # Must be compatible with music-assistant-client package
+  # Must be compatible with music-assistant-client package
+  # nixpkgs-update: no auto update
+  version = "1.1.70";
   pyproject = true;
 
   src = fetchFromGitHub {
