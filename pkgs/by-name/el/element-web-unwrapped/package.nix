@@ -35,6 +35,8 @@ stdenv.mkDerivation (
       hash = webSrcHash;
     };
 
+    # https://github.com/element-hq/element-web/commit/e883b05206129857aa00ca726252e10a0eb05cf9
+    # introduced a link: dependency that we need to fetch as well
     offlineCacheSharedComponents = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/packages/shared-components/yarn.lock";
       sha256 = webSharedComponentsYarnHash;
