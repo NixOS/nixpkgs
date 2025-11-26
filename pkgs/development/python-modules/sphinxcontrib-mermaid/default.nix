@@ -9,13 +9,13 @@
 }:
 buildPythonPackage rec {
   pname = "sphinxcontrib-mermaid";
-  version = "1.0.0";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinxcontrib_mermaid";
-    hash = "sha256-Loq2fT4eKBZmP5NH0Cao3uSoWKzdStMt0cgIiT24gUY=";
+    hash = "sha256-NUI8E+Vlq7g5sT+VX5ci8Haed+XWB8oHh3zpPhY2wZY=";
   };
 
   build-system = [ setuptools ];
