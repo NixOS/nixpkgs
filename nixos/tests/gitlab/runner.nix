@@ -57,10 +57,14 @@ in
           (import ./runner/shell-runner.nix {
             runnerConfig = runnerConfigs.shell;
           })
-          (import ./runner/podman-runner {
-            runnerConfig = runnerConfigs.shell;
-          })
-        ];
+        ]
+        # Only enable the podman runner on x86_64
+        # cause of built images.
+        ++ (lib.optional pkgs.stdenv.buildPlatform.isx86_64 (
+          import ./runner/podman-runner {
+            runnerConfig = runnerConfigs.podman;
+          }
+        ));
 
         virtualisation = {
           diskSize = 10000;

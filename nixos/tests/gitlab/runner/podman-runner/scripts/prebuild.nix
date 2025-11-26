@@ -56,7 +56,7 @@ writeShellScriptBin "gitlab-runner-pre-build-script"
     function setup_pipeline_scratch_dir() {
         scratch_dir="/scratch/$CI_PIPELINE_ID"
 
-        echo "Create scrtach directory for pipeline: $scratch_dir"
+        echo "Create scratch directory for pipeline: $scratch_dir"
         mkdir -p "$scratch_dir" || {
             echo "Could not create scratch dir '$scratch_dir'." >&2
             exit 1

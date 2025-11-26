@@ -101,7 +101,7 @@ def test_register_runner(name: str, tokenFile: str):
     obj = json.loads(resp)
     r.id = obj["id"]
     r.token = obj["token"]
-    print("==> Registered runner '{r.id}' with token '{r.token}'.")
+    print(f"==> Registered runner '{r.id}' with token '{r.token}'.")
 
     # Push the token to the runner machine.
     print("==> Push runner token to machine.")

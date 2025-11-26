@@ -39,7 +39,7 @@
 #   you can run `cd tools/nix/vm && just vm::status`
 #   to get some information about the
 #   running stuff.
-# - You can clean all logs with `journalclt --vacuume-time=1s`
+# - You can clean all logs with `journalctl --vacuum-time=1s`
 # - Also you can run `btop` on the machine to inspect the performance.
 #
 # TODO: use `.execConfig` on `gitlab-runner.service` created

@@ -33,10 +33,10 @@ features:
   - `local/ubuntu`: An image based on Ubuntu with a Nix installation
     (variable `ubuntuImage`).
   - `local/nix`: An image based on Nix which only comes with `nix`
-    installed(variable `nixImage`).
+    installed (variable `nixImage`).
 
   **Images for VM Setup**:
-  - `local/nix-daemon-image`: An image with with a Nix daemon which is
+  - `local/nix-daemon-image`: An image with a Nix daemon which is
     used to share the `/nix/store` across jobs (variable `nixDaemonImage`).
   - `local/podman-daemon-image`: An image with a `podman` running as a daemon which is
     used to run `podman` inside the above job containers images
@@ -70,7 +70,7 @@ features:
   - The job containers do **not** mount the `podman` socket from the host (NixOS
     VM) mounted for security reasons.
 
-    **Note:**: Building container images with `buildah` (stripped
+    **Note:** Building container images with `buildah` (stripped
     `podman` for building images) inside a job which runs `alpineImage`
     is still possible.
 
