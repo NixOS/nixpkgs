@@ -11,7 +11,6 @@
   wrapGAppsHook4,
   libxml2,
   libadwaita,
-  libgda6,
   libsoup_3,
   libspelling,
   json-glib,
@@ -20,15 +19,16 @@
   gtksourceview5,
   gnome,
   gsettings-desktop-schemas,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "48.0";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5468IAaiUdh5btHnK5wuU2R5c3B+ZbdNn5RSGwOSnp8=";
+    hash = "sha256-6qhWIJSdXCfBQiGfwYQoGyKdwx7qNxe1uG7ucNzcweY=";
   };
 
   nativeBuildInputs = [
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
-    libgda6
     libsoup_3
     libspelling
     json-glib
     gettext
     gsettings-desktop-schemas
+    sqlite
   ];
 
   passthru = {
