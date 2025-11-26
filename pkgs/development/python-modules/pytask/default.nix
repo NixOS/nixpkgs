@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
@@ -22,18 +21,18 @@
   pytest-xdist,
   syrupy,
   git,
-  tomli,
 }:
+
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.6";
+  version = "0.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-mWjuXfH0u3MCG9RpmDin0buXyLPofXgEllzF5M8y6Jo=";
+    hash = "sha256-qXqmI3IRJUTTsTdLlkjHc5+Vdct4j4MJYgnrRx3gTR8=";
   };
 
   build-system = [
@@ -52,8 +51,7 @@ buildPythonPackage rec {
     rich
     sqlalchemy
     universal-pathlib
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

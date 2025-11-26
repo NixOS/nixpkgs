@@ -230,8 +230,8 @@ in
       "sha256-1gKMYZN5MDiJNiI2a9f7P1XhR4ncKR+jakJLMqLtmik=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.41.1"
-      "sha256-ccQGB53br+K60woFky3RkNM0WtwtKsY+ECRCFq9x/q4=";
+    buildMypyBoto3Package "cloudfront" "1.41.3"
+      "sha256-EToB3g6IDQpvSmRoKZtO6l5IU5hHucDjMMTOADbWsY8=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.41.0"
@@ -809,8 +809,8 @@ in
       "sha256-S9Wy0uqdlvqRmaheZBWFcHVFjCyhLuHmRb8Vk1wgpHI=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.41.0"
-      "sha256-y4nhdq4Q7Z5kepbajnw9CQgmuwLFcjgqDMot795EM8c=";
+    buildMypyBoto3Package "logs" "1.41.3"
+      "sha256-4ScSAQrnibU/s//gYq41hoHURd+Om+YzTDgNRGGDuOQ=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.41.0"
