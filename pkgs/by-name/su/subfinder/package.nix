@@ -39,6 +39,7 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
       fpletz
