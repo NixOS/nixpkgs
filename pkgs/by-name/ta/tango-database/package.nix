@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tango distributed control system - database server";
     homepage = "https://gitlab.com/tango-controls/TangoDatabase";
+    changelog = "https://gitlab.com/tango-controls/TangoDatabase/-/blob/Database-Release-${version}/RELEASE_NOTES.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gilice ];
