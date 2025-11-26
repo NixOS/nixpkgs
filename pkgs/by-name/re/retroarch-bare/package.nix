@@ -36,6 +36,7 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
+  wrapGAppsHook3,
   zlib,
   # wrapper deps
   libretro,
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optional withWayland wayland
   ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
