@@ -3852,8 +3852,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.48.0";
-          hash = "sha256-/JW5PVM4USBflC5eloi8u9AgpdIzkpEmoHKYr1yVkgI=";
+          version = "1.49.0";
+          hash = "sha256-4uBn2NHd32ZsooTJ0c9PWJ14YHIq7RgXb+KdaH4vuCo=";
         };
         buildInputs = [ jdk ];
         meta = {
