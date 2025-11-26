@@ -161,11 +161,8 @@ checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
       hasStubs=1
     fi
 
-    # The dependency should be recorded in both propagated-native-build-inputs and propagated-build-inputs, so the
-    # hook is propagated regardless of which dependency array includes the stubs-providing output.
     hasRemoveStubsFromRunpathHook=0
-    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-build-inputs"
-    then
+    if grep --silent --no-messages removeStubsFromRunpathHook "${!outputName:?}/nix-support/propagated-build-inputs"; then
       hasRemoveStubsFromRunpathHook=1
     fi
 
