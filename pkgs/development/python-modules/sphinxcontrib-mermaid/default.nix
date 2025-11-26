@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  myst-parser,
+  pytestCheckHook,
   pyyaml,
   rst2pdf,
   setuptools,
@@ -13,10 +15,11 @@ buildPythonPackage rec {
   version = "1.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sphinxcontrib_mermaid";
-    hash = "sha256-NUI8E+Vlq7g5sT+VX5ci8Haed+XWB8oHh3zpPhY2wZY=";
+  src = fetchFromGitHub {
+    owner = "mgaitan";
+    repo = "sphinxcontrib-mermaid";
+    tag = version;
+    hash = "sha256-aeACJT5KWDTbjGJEB4s7ff9LilXcj/8Rxbz5uYXiUY8=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +28,11 @@ buildPythonPackage rec {
     sphinx
     pyyaml
     rst2pdf
+  ];
+
+  nativeCheckInputs = [
+    myst-parser
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "sphinxcontrib.mermaid" ];
