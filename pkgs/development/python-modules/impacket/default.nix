@@ -11,7 +11,6 @@
   pyasn1-modules,
   pycryptodomex,
   pyopenssl,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   six,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "impacket";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
