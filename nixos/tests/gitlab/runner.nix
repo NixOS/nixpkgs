@@ -63,7 +63,7 @@ in
         ];
 
         virtualisation = {
-          diskSize = 50000;
+          diskSize = 10000;
         };
 
         # Define the Gitlab Runner.
