@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Corosync Cluster Engine Qdevice";
     homepage = "https://github.com/corosync/corosync-qdevice";
     changelog = "https://github.com/corosync/corosync-qdevice/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ x123 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "corosync-qdevice";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
