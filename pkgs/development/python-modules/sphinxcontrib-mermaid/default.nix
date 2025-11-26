@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Mermaid diagrams in yours sphinx powered docs";
     homepage = "https://github.com/mgaitan/sphinxcontrib-mermaid";
+    changelog = "https://github.com/mgaitan/sphinxcontrib-mermaid/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
