@@ -6,21 +6,21 @@
   scipopt-scip,
   zlib,
   mpi,
+  gmp,
+  mpfr,
 }:
 
 stdenv.mkDerivation rec {
   pname = "scipopt-ug";
-  version = "1.0.0-beta6";
+  version = "1.0.0";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
+  scipVersion = "10.0.0";
 
   # Take the SCIPOptSuite source since no other source exists publicly.
   src = fetchzip {
-    url = "https://github.com/scipopt/scip/releases/download/v${
-      lib.replaceStrings [ "." ] [ "" ] scipVersion
-    }/scipoptsuite-${scipVersion}.tgz";
-    hash = "sha256-ZFgHaC4JL0eFt/do0ucGkarmfL1WdGEecrE1iPBpFh0=";
+    url = "https://github.com/scipopt/scip/releases/download/v${scipVersion}/scipoptsuite-${scipVersion}.tgz";
+    hash = "sha256-Nskb8quLsox7igz1UZCfd+VjR9Q8/oa8dZBYjAdc1EU=";
   };
 
   sourceRoot = "${src.name}/ug";
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     scipopt-scip
     mpi
     zlib
+    gmp
+    mpfr
   ];
 
   meta = {
