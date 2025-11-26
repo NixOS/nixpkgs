@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   xapp,
+  xapp-symbolic-icons,
   circle-flags,
   gettext,
   gobject-introspection,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     tag = version;
-    hash = "sha256-KJqGdBqeNtXYO3XOQvRJs4ie8jK4Hyv+YS86PB0dnOM=";
+    hash = "sha256-aLcuRg6I1PaHBKyHMEV+TYOM82wb1hPVzMuF0SZixs8=";
   };
 
   patches = [
@@ -81,6 +82,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/hypnotix \
       --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}" \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}" \
       ''${gappsWrapperArgs[@]}
   '';
 
