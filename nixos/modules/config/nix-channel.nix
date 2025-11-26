@@ -23,7 +23,7 @@ let
     text = builtins.concatStringsSep "\n" config.system.defaultChannels;
   };
 
-  channelsFileBase64 = pkgs.runCommand "base64-encode-file" { buildInputs = [ pkgs.basez ]; } ''
+  channelsFileBase64 = pkgs.runCommand "base64-encode-file" { nativeBuildInputs = [ pkgs.basez ]; } ''
     base64 --input="${channelsFilePlaintext}" --output="$out"
   '';
 
