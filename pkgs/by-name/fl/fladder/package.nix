@@ -7,7 +7,7 @@
   copyDesktopItems,
   makeDesktopItem,
   makeBinaryWrapper,
-  mpv,
+  mpv-unwrapped,
   sqlite,
   alsa-lib,
   libepoxy,
@@ -16,6 +16,31 @@
   libx11,
   libgbm,
   libdrm,
+  libass,
+  ffmpeg,
+  libplacebo,
+  libunwind,
+  shaderc,
+  vulkan-loader,
+  lcms,
+  libdovi,
+  libdvdnav,
+  libdvdread,
+  mujs,
+  libbluray,
+  lua,
+  rubberband,
+  libuchardet,
+  zimg,
+  openal,
+  pipewire,
+  libcaca,
+  libdisplay-info,
+  libxscrnsaver,
+  libxpresent,
+  nv-codec-headers-12,
+  libva,
+  libvdpau,
 }:
 let
   # MDK SDK required by fvp plugin
@@ -29,6 +54,43 @@ let
     url = "https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.2.tar.gz";
     hash = "sha256-Kxv/b3F/lyXHC/jXnkeG2hPeiicAWeS6C90mKue+Rus=";
   };
+
+  runtimeDependencies = [
+    mpv-unwrapped
+    sqlite
+    alsa-lib
+    libepoxy
+    libpulseaudio
+    libGL
+    libx11
+    libgbm
+    libdrm
+    libass
+    ffmpeg
+    libplacebo
+    libunwind
+    shaderc
+    vulkan-loader
+    lcms
+    libdovi
+    libdvdnav
+    libdvdread
+    mujs
+    libbluray
+    lua
+    rubberband
+    libuchardet
+    zimg
+    openal
+    pipewire
+    libcaca
+    libdisplay-info
+    libxscrnsaver
+    libxpresent
+    nv-codec-headers-12
+    libva
+    libvdpau
+  ];
 in
 flutter335.buildFlutterApplication {
   pname = "fladder";
@@ -48,17 +110,7 @@ flutter335.buildFlutterApplication {
     makeBinaryWrapper # Required for wrapProgram
   ];
 
-  buildInputs = [
-    mpv
-    sqlite
-    alsa-lib
-    libepoxy
-    libpulseaudio
-    libGL
-    libx11
-    libgbm
-    libdrm
-  ];
+  buildInputs = runtimeDependencies;
 
   # Git dependencies from pubspec.lock.json
   gitHashes =
@@ -162,19 +214,7 @@ flutter335.buildFlutterApplication {
   # Wrap the executable to find libraries loaded at runtime (dlopen)
   postFixup = ''
     wrapProgram $out/bin/Fladder \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libpulseaudio
-          libepoxy
-          alsa-lib
-          mpv
-          sqlite
-          libGL
-          libx11
-          libgbm
-          libdrm
-        ]
-      }
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDependencies}
   '';
 
   desktopItems = [
