@@ -10,9 +10,9 @@
 }:
 let
   mainProgram = "proton-mail";
-  version = "1.9.1";
-  linuxHash = "sha256-P2i/uX++F1JUgwSUyndYazjLSCK1mP+XSGICPUoo1VE=";
-  darwinHash = "sha256-U+I0ttToDiLLjEaKlvdb7HhE4dMrLryc251GXBVsQEM=";
+  version = "1.10.12";
+  linuxHash = "sha256-KUuU0JFbDXxxkJyRwL5E6sJwrqnGZnovKrR7oDh6vlI=";
+  darwinHash = "sha256-iw4OtHvCf2zJw7/MHuY4SIswrKfjupBBKhRW5fWQ6E0=";
 in
 stdenv.mkDerivation {
   pname = "protonmail-desktop";
