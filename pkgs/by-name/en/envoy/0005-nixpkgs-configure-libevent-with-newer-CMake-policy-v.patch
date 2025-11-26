@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Fri, 24 Oct 2025 13:41:50 +0100
+Subject: [PATCH] nixpkgs: configure libevent with newer CMake policy version
+
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
+---
+ bazel/foreign_cc/BUILD | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/bazel/foreign_cc/BUILD b/bazel/foreign_cc/BUILD
+index dc07b536d38292c8f2c3cd4f92c3870210e702f5..584bf5229893eca38ba6abaa9b6f19271926df31 100644
+--- a/bazel/foreign_cc/BUILD
++++ b/bazel/foreign_cc/BUILD
+@@ -350,6 +350,7 @@ envoy_cmake(
+         "//conditions:default": ["-j1"],
+     }),
+     cache_entries = {
++        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+         "EVENT__DISABLE_OPENSSL": "on",
+         "EVENT__DISABLE_MBEDTLS": "on",
+         "EVENT__DISABLE_REGRESS": "on",
