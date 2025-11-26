@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "marksman";
-  version = "2024-12-18";
+  version = "2025-11-30";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-2OisUZHmf7k8vLkBGJG1HXNxaXmRF64x//bDK57S9to=";
+    sha256 = "sha256-rEGMh4QsxTe35psbflYGgjjDDf0TzvItkx/ARE8ZC1E=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -28,8 +28,8 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0_1xx-bin;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postInstall = ''
     install -m 644 -D -t "$out/share/doc/${pname}" LICENSE
