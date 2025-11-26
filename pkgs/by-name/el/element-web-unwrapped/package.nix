@@ -11,7 +11,7 @@
 
 let
   pinData = import ./element-web-pin.nix;
-  inherit (pinData.hashes) webSrcHash webYarnHash;
+  inherit (pinData.hashes) webSrcHash webYarnHash webSharedComponentsYarnHash;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -25,7 +25,7 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   removeAttrs pinData [ "hashes" ]
-  // {
+  // rec {
     pname = "element-web";
 
     src = fetchFromGitHub {
@@ -33,6 +33,11 @@ stdenv.mkDerivation (
       repo = "element-web";
       rev = "v${finalAttrs.version}";
       hash = webSrcHash;
+    };
+
+    offlineCacheSharedComponents = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/packages/shared-components/yarn.lock";
+      sha256 = webSharedComponentsYarnHash;
     };
 
     offlineCache = fetchYarnDeps {
@@ -50,6 +55,12 @@ stdenv.mkDerivation (
       runHook preBuild
 
       export VERSION=${finalAttrs.version}
+
+      pushd packages/shared-components
+      yarnOfflineCache=${offlineCacheSharedComponents} yarnConfigHook
+      popd
+      yarn --offline --cwd packages/shared-components prepare
+
       yarn --offline build:res
       yarn --offline build:module_system
       yarn --offline build:bundle
