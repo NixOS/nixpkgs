@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "http-sf";
   version = "1.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mnot";
@@ -33,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to parse and serialise HTTP structured field values";
     homepage = "https://github.com/mnot/http-sf";
-    changelog = "https://github.com/mnot/http-sf/releases/tag/v${version}";
+    changelog = "https://github.com/mnot/http-sf/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
