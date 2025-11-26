@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -21,6 +22,8 @@ buildNpmPackage (finalAttrs: {
     # Installed only for backwards compat, but should just be removed.
     rm $out/bin/_mocha
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/mochajs/mocha/blob/v${finalAttrs.version}/CHANGELOG.md";
