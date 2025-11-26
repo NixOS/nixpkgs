@@ -4,7 +4,6 @@
   fetchPypi,
   pythonOlder,
   setuptools,
-  twiggy,
   requests,
   offtrac,
   python-bugzilla,
@@ -12,50 +11,47 @@
   python-dateutil,
   pytz,
   keyring,
-  six,
   jinja2,
-  pycurl,
   dogpile-cache,
   lockfile,
   click,
-  pyxdg,
-  future,
   jira,
+  pydantic,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "bugwarrior";
-  version = "1.8.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "2.0.0";
+  disabled = pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f024c29d2089b826f05481cace33a62aa984f33e98d226f6e41897e6f11b3f51";
+    sha256 = "sha256-blTKtNfhTZyJHwIOq1P7HjtEmNnz/bL6dWr402veNm4=";
   };
 
   propagatedBuildInputs = [
     setuptools
-    twiggy
-    requests
-    offtrac
-    python-bugzilla
-    taskw
+
+    click
+    dogpile-cache
+    jinja2
+    lockfile
+    pydantic
     python-dateutil
     pytz
+    requests
+    taskw
+    tomli
+
+    python-bugzilla
     keyring
-    six
-    jinja2
-    pycurl
-    dogpile-cache
-    lockfile
-    click
-    pyxdg
-    future
     jira
+    offtrac
   ];
 
-  # for the moment oauth2client <4.0.0 and megaplan>=1.4 are missing for running the test suite.
+  # for the moment oauth2client <4.0.0 is missing for running the test suite.
   doCheck = false;
 
   meta = with lib; {
@@ -63,6 +59,9 @@ buildPythonPackage rec {
     description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [
+      pierron
+      ryneeverett
+    ];
   };
 }
