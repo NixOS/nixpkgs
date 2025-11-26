@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swig";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wEqbKDgXVU8kQxdh7uC+EZ0u5leeoYh2d/61qB4guOg=";
+    hash = "sha256-5RGucdPHWAUJsB6FzZ8/5vgzZ2dUkY52obUtqlac2Zk=";
   };
 
   strictDeps = true;
