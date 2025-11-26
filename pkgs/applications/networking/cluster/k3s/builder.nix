@@ -355,6 +355,13 @@ buildGoModule (finalAttrs: {
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
                  CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
                  "''${GO}" generate'
+
+    # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
+    # build-time version detection doesn't work with a vendor directory.
+    substituteInPlace scripts/version.sh \
+      --replace-fail \
+        "go list -mod=readonly -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1" \
+        "go list -mod=readonly -e -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1"
   '';
 
   # Important utilities used by the kubelet, see
