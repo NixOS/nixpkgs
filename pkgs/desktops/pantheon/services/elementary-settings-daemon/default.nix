@@ -15,6 +15,7 @@
   geoclue2,
   gexiv2,
   glib,
+  gnome-settings-daemon,
   gobject-introspection,
   gtk3,
   granite,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.3.1";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-bYwgxUrPMDaxv/Vv+DuMUzOT1/GRcvNHZW+fjiN5Kdo=";
+    sha256 = "sha256-VdvwrkafZJ0+z2MYWT83POdo8dZrSAOL5RhAiwGEc2g=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     geoclue2
     gexiv2
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.* gschema
     gtk3
     granite
     libgee

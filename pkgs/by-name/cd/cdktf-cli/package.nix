@@ -14,6 +14,7 @@
   removeReferencesTo,
   testers,
   yarn,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    bash ./tools/align-version.sh
+
     faketty yarn --offline build
 
     runHook postBuild
@@ -138,6 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl-tools/main.wasm" \
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     tests.version = testers.testVersion {
