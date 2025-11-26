@@ -69,17 +69,15 @@ buildTopkgPackage {
     inherit (param) sha512;
   };
 
-  buildInputs = [ topkg ] ++ optional_buildInputs;
-
-  strictDeps = true;
+  buildInputs = optional_buildInputs;
 
   buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
-  meta = with lib; {
+  meta = {
     description = "Logging infrastructure for OCaml";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
   };
 }
