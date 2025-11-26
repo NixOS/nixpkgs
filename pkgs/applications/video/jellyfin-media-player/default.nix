@@ -1,63 +1,68 @@
 {
   lib,
-  fetchFromGitHub,
-  fetchpatch,
-  mkDerivation,
-  stdenv,
+
   SDL2,
   cmake,
+  fetchFromGitHub,
+  fribidi,
+  kdePackages,
   libGL,
   libX11,
   libXrandr,
+  libass,
+  libsysprof-capture,
+  libunwind,
   libvdpau,
   mpv,
   ninja,
   pkg-config,
   python3,
   qtbase,
+  qtdeclarative,
+  qttools,
   qtwayland,
   qtwebchannel,
   qtwebengine,
-  qtx11extras,
-  jellyfin-web,
+  stdenv,
   withDbus ? stdenv.hostPlatform.isLinux,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.12.0";
+  version = "6c7a37d5e61da281e4cc4b1d51892f785e9566ad";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
-    rev = "v${version}";
-    sha256 = "sha256-IXinyenadnW+a+anQ9e61h+N8vG2r77JPboHm5dN4Iw=";
+    rev = "${version}";
+    sha256 = "sha256-AHYeLxlv+YH1sD6QebEn3qLu//aFeG8wqdQ35W6oZ1s=";
   };
 
   patches = [
     # fix the location of the jellyfin-web path
-    ./fix-web-path.patch
+    #./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
-
-    # cmake 4 compatibility
-    (fetchpatch {
-      url = "https://github.com/jellyfin/jellyfin-media-player/commit/6c5c603a1db489872832ed560581d98fdee89d6f.patch";
-      hash = "sha256-Blq7y7kOygbZ6uKxPJl9aDXJWqhE0jnM5GNEAwyQEA0=";
-    })
   ];
 
   buildInputs = [
     SDL2
+    libass
     libGL
     libX11
     libXrandr
     libvdpau
     mpv
+    kdePackages.mpvqt
     qtbase
+    qttools
+    qtdeclarative
     qtwebchannel
     qtwebengine
-    qtx11extras
+    libsysprof-capture
+    libunwind
+    fribidi
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
@@ -68,20 +73,18 @@ mkDerivation rec {
     ninja
     pkg-config
     python3
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [
     "-DQTROOT=${qtbase}"
     "-GNinja"
+    "-DUSE_STATIC_MPVQT=OFF"
+    "-DQt6_DIR=${qtbase}/lib/cmake/Qt6"
   ]
   ++ lib.optionals (!withDbus) [
     "-DLINUX_X11POWER=ON"
   ];
-
-  preConfigure = ''
-    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
-    ln -s ${jellyfin-web}/share/jellyfin-web .
-  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications

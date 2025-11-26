@@ -2072,7 +2072,7 @@ with pkgs;
 
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
-  jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player { };
+  jellyfin-media-player = qt6Packages.callPackage ../applications/video/jellyfin-media-player { };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
