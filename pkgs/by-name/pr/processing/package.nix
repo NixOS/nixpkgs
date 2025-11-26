@@ -127,16 +127,18 @@ stdenv.mkDerivation rec {
     cp -dpr build/linux/work $out/share/${pname}
     rmdir $out/share/${pname}/java
     ln -s ${jdk} $out/share/${pname}/java
+    runHook postInstall
+  '';
+
+  preFixup = ''
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
-      ''${gappsWrapperArgs[@]} \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
-      ''${gappsWrapperArgs[@]} \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
-
-    runHook postInstall
   '';
 
   meta = with lib; {
