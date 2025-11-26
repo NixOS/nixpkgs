@@ -3922,6 +3922,12 @@
     matrix = "@brsvh:mozilla.org";
     name = "Burgess Chang";
   };
+  brubsby = {
+    email = "brubsbybrubsby@gmail.com";
+    github = "brubsby";
+    githubId = 57653502;
+    name = "Tyler Busby";
+  };
   bryanasdev000 = {
     email = "bryanasdev000@gmail.com";
     matrix = "@bryanasdev000:matrix.org";
