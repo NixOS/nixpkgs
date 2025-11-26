@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libsodium,
-  mbedtls_2,
+  mbedtls,
   libev,
   c-ares,
   pcre,
@@ -28,9 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6.patch";
+      hash = "sha256-rpWXe8f95UU1DjQpbKMVMwA6r5yGVaDHwH/iWxW7wcw=";
+    })
+  ];
+
   buildInputs = [
     libsodium
-    mbedtls_2
+    mbedtls
     libev
     c-ares
     pcre
