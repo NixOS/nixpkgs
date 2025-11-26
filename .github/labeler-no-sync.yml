@@ -22,13 +22,4 @@
               - doc/**/*
               - nixos/doc/**/*
 
-"backport release-25.05":
-  - any:
-      - changed-files:
-          - any-glob-to-any-file:
-              - .github/actions/*
-              - .github/workflows/*
-              - ci/**/*.*
-              - maintainers/github-teams.json
-
 # keep-sorted end

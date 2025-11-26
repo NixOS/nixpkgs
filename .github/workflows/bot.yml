@@ -39,14 +39,14 @@ defaults:
 
 jobs:
   run:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     env:
       # TODO: Remove after 2026-03-04, when Node 24 becomes the default.
       # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -56,7 +56,7 @@ jobs:
         run: npm install @actions/artifact bottleneck
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
-      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_APP_ID
         id: app-token
         with:

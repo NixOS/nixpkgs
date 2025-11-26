@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-bg";
-  version = "1.0.0-beta.6";
+  version = "1.0.0-beta.7";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {

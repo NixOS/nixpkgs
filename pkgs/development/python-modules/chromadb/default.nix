@@ -67,19 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.2.2";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-D8vLkV8T1igOoCgJDiccLytxlXdF0oLJZTQpBsLM7Z0=";
+    hash = "sha256-pIVoPW7Sdc3XN66SuA6IILQkhoNwqy/X4OWgW08CC58=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-f5lU1ClKEZjzOAkng1B37d4VmHYzLOP2uMvoN1RFFoo=";
+    hash = "sha256-3cY9d28dE7Ndh0o1MiBLSwRggkjjnXRcnmsvC2t5S7A=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -216,6 +216,10 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
+    "test_add_then_delete_n_minus_1"
   ];
 
   disabledTestPaths = [
@@ -224,6 +228,7 @@ buildPythonPackage rec {
     "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress"
+    "chromadb/test/api/test_schema_e2e.py"
 
     # Excessively slow
     "chromadb/test/property/test_add.py"

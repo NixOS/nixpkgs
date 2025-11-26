@@ -9,22 +9,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "inkbird-ble";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
     tag = "v${version}";
-    hash = "sha256-Dwp65FKtqJbgux+T3Ql09sDy6m8CCeK26aDKM3I3eJo=";
+    hash = "sha256-Brib9OMI6LRS3GopiOsJijY/gpvv7j47OTQN8tTcqLo=";
   };
 
   build-system = [ poetry-core ];

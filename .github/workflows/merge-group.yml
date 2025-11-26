@@ -18,14 +18,14 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -111,9 +111,11 @@ jobs:
     if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
+      - check
       - lint
       - eval
-    runs-on: ubuntu-24.04-arm
+      - build
+    runs-on: ubuntu-slim
     permissions:
       statuses: write
     steps:

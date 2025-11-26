@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
     "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
-    "-DCMAKE_PREFIX_PATH=${lib.getLib protobuf}"
+    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -142,8 +142,7 @@ stdenv.mkDerivation rec {
     # system libs
     (cmakeBool "ENABLE_SYSTEM_FLATBUFFERS" true)
     (cmakeBool "ENABLE_SYSTEM_OPENCL" true)
-    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" true)
-    (cmakeBool "Protobuf_USE_STATIC_LIBS" false)
+    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" false)
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
@@ -164,7 +163,6 @@ stdenv.mkDerivation rec {
     libxml2
     ocl-icd
     opencv
-    protobuf
     pugixml
     snappy
     onetbb

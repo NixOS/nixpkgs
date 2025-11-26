@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pJveHjguNl8J67zu6O867iM/JlXM9VTAokIQYHvxUYs=";
+    hash = "sha256-zfORrAMVozHiUawWiy3TMT+pjEaRJ/DrHeDFPJiCp38=";
   };
 
-  npmDepsHash = "sha256-SVjUt8xoBtuZJa0mUfZCf/XXxc8OxDU7FG8ZYPTM3j4=";
+  npmDepsHash = "sha256-dKaKRuHzvNJgi8LP4kKsb68O5k2MTqblQ+7cjYqLqs0=";
 
   nativeBuildInputs = [
     jq
@@ -59,10 +59,14 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
   '';
 
+  # Prevent npmDeps from getting into the closure
+  disallowedReferences = [ finalAttrs.npmDeps ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/gemini-cli}
 
+    npm prune --omit=dev
     cp -r node_modules $out/share/gemini-cli/
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli

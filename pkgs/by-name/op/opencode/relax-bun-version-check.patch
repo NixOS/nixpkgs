@@ -1,0 +1,28 @@
+From 0e07ea8225f5667e39c6aa59eea726266f0afab0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 13 Nov 2025 10:16:31 +0100
+Subject: [PATCH] Change Bun version check from error to warning
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ packages/script/src/index.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/script/src/index.ts b/packages/script/src/index.ts
+index 141d2b75..de06d0dc 100644
+--- a/packages/script/src/index.ts
++++ b/packages/script/src/index.ts
+@@ -10,7 +10,7 @@ if (!expectedBunVersion) {
+ }
+ 
+ if (process.versions.bun !== expectedBunVersion) {
+-  throw new Error(`This script requires bun@${expectedBunVersion}, but you are using bun@${process.versions.bun}`)
++  console.warn(`Warning: This script expects bun@${expectedBunVersion}, but you are using bun@${process.versions.bun}`)
+ }
+ 
+ const CHANNEL = process.env["OPENCODE_CHANNEL"] ?? (await $`git branch --show-current`.text().then((x) => x.trim()))
+-- 
+2.51.0
