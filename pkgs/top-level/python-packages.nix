@@ -15475,6 +15475,8 @@ self: super: with self; {
       ;
   };
 
+  python-xbox = callPackage ../development/python-modules/python-xbox { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   python-xz = callPackage ../development/python-modules/python-xz { };
