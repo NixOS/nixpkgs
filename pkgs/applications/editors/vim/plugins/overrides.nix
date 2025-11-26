@@ -4089,6 +4089,13 @@ assertNoAdditions {
     dependencies = [
       self.nui-nvim
     ];
+    nativeBuildInputs = [ cmake ];
+    dontUseCmakeConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+      make
+      runHook postBuild
+    '';
   };
 
   which-key-nvim = super.which-key-nvim.overrideAttrs {
