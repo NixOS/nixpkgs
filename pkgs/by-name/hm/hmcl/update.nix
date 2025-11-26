@@ -35,7 +35,6 @@ writeShellApplication {
     fi
 
     nix-update hmcl --version="$version"
-    update-source-version hmcl --source-key=icon --ignore-same-version
     update-source-version hmcl --source-key=terracottaNativeJava --ignore-same-version
     update-source-version hmcl --source-key=macOSProviderJava --ignore-same-version
   '';
