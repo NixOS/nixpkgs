@@ -206,6 +206,7 @@ in
       # TODO: enable by default?
       tcp = {
         enable = lib.mkEnableOption "tcp streaming support";
+        openFirewall = lib.mkEnableOption "Open firewall for the specified port";
 
         port = lib.mkOption {
           type = lib.types.nullOr lib.types.port;
@@ -239,6 +240,12 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.tcp.openFirewall -> (!isNull cfg.tcp.port);
+            message = "If you wish to open the firewall for the Pulseaudio's tcp.port, set the port explicitly";
+          }
+        ];
         environment.etc."pulse/client.conf".source = clientConf;
 
         environment.systemPackages = [ overriddenPackage ];
@@ -292,6 +299,9 @@ in
       (lib.mkIf cfg.zeroconf.publish.enable {
         services.avahi.publish.enable = true;
         services.avahi.publish.userServices = true;
+      })
+      (lib.mkIf cfg.tcp.openFirewall {
+        networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];
       })
 
       (lib.mkIf (!cfg.systemWide) {
