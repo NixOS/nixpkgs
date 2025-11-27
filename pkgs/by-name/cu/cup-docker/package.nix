@@ -10,12 +10,12 @@
 }:
 let
   pname = "cup-docker";
-  version = "3.4.3";
+  version = "3.5.1";
   src = fetchFromGitHub {
     owner = "sergi0g";
     repo = "cup";
     tag = "v${version}";
-    hash = "sha256-RRhUSL9TR7qr93F5+fyhGW7j6VTs+yVvpni/JHmC5os=";
+    hash = "sha256-l7TQwCzQNwrsM+xRcRcQaxIsnd8SVzrqEMwIoZGVBR0=";
   };
   web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-web";
@@ -47,7 +47,7 @@ let
       cp -R ./dist $out
       runHook postInstall
     '';
-    outputHash = "sha256-Ac1PJYmTQv9XrmhmF1p77vdXh8252hz0CUKxJA+VQR4=";
+    outputHash = "sha256-uLsWppRabaI7JSHYf3YsEvf0Y36kU/iuNXnDXd+6AXY=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   });
