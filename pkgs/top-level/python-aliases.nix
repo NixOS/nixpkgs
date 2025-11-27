@@ -504,6 +504,7 @@ mapAliases {
   wxPython_4_2 = throw "'wxPython_4_2' has been renamed to/replaced by 'wxpython'"; # Converted to throw 2025-10-29
   x11_hash = throw "'x11_hash' has been renamed to/replaced by 'x11-hash'"; # Converted to throw 2025-10-29
   xapp = throw "'xapp' has been renamed to/replaced by 'python-xapp'"; # Converted to throw 2025-10-29
+  xbox-webapi = throw "xbox-webapi was removed because Home Assistant switched to python-xbox"; # added 2025-12-03
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
