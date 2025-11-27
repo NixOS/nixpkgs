@@ -1,6 +1,6 @@
 {
   lib,
-  pythonOlder,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   blas,
@@ -76,6 +76,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "High performance simulators for Qiskit";
+    # broken on darwin for unknown reasons
+    broken = stdenv.isDarwin;
     homepage = "https://qiskit.github.io/qiskit-aer/";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     changelog = "https://qiskit.github.io/qiskit-aer/release_notes.html";
