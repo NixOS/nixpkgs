@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.0";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-95IsNW/ha4XsH0E0adX3x9N7ANDL6MZreXy//mIQk/I=";
+    hash = "sha256-nZ00Zvks5O+6PvT68kiA3Y6/5yfOwKEpyIf8sPoURNo=";
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       prePnpmInstall
       ;
     fetcherVersion = 2;
-    hash = "sha256-LQpFnK+01SCyC4AHHHvdZlc6Ss40Lxq5+p9ioK10BSU=";
+    hash = "sha256-RVQfXvCRz8+t/En8FP+wQZD2qJiwlIUzmDK2aYfEK28=";
   };
 
   nativeBuildInputs = [
