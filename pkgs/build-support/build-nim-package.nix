@@ -113,15 +113,17 @@ let
           passthru ? { },
           ...
         }:
-        (
-          if requiredNimVersion == 2 then
-            {
-              depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-              nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
-            }
-          else
-            throw "requiredNimVersion ${toString requiredNimVersion} is not valid"
-        )
+        lib.warn
+          "warning: requiredNimVersion is deprecated and will be removed in a future release; please update your configuration."
+          (
+            if requiredNimVersion == 2 then
+              {
+                depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
+                nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
+              }
+            else
+              throw "requiredNimVersion ${toString requiredNimVersion} is not valid"
+          )
         // {
           nimFlags = lockFileNimFlags ++ nimFlags;
           passthru = passthru // {
