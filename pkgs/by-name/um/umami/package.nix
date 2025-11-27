@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   makeWrapper,
   nixosTests,
@@ -73,7 +72,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.0";
+  version = "3.0.1";
 
   nativeBuildInputs = [
     makeWrapper
@@ -85,16 +84,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z8YsHTx5k+imeuVALF6Lx+Ksho35+r7tWo863zqUFzI=";
+    hash = "sha256-M2SWsmvXzOe6ob46ntQ8X8/uOx6/Q5On6zSnkv83uj8=";
   };
-
-  patches = [
-    # Fix tests on v3.0.0. Remove on the next version.
-    (fetchpatch {
-      url = "https://github.com/umami-software/umami/commit/6135ef9dd218186ed663f89a511fa66bfecc6aec.patch";
-      hash = "sha256-uakKh8M8oC0fqQyPhosefg05+atRU3SVi7Y/xgIWq8M=";
-    })
-  ];
 
   # install dev dependencies as well, for rollup
   pnpmInstallFlags = [ "--prod=false" ];
@@ -107,7 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-0E2grcK8n4Xi30eCAVQtmWSQna0B1A/lctP+rEzxQ3A=";
+    hash = "sha256-Gpl57tTV4ML4ukRMzRu8taO75kyzYwa5PyM0jGbrhHI=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -137,7 +128,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    pnpm test
+    # Skip broken test: https://github.com/umami-software/umami/issues/3773
+    pnpm test --testPathIgnorePatterns="src/lib/__tests__/detect.test.ts"
 
     runHook postCheck
   '';

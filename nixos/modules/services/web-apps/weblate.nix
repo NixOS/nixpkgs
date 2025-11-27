@@ -369,9 +369,10 @@ in
             });
           in
           ''
-            ${gunicorn}/bin/gunicorn \
+            ${lib.getExe gunicorn} \
               --name=weblate \
               --bind='unix:///run/weblate.socket' \
+              --preload \
               weblate.wsgi
           '';
         ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
