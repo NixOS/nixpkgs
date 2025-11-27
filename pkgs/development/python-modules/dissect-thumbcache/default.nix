@@ -5,7 +5,6 @@
   dissect-util,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dissect-thumbcache";
   version = "1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
