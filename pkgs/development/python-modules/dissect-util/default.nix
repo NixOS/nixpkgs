@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.util";
-    changelog = "https://github.com/fox-it/dissect.util/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.util/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "dump-nskeyedarchiver";
