@@ -22528,6 +22528,12 @@
     githubId = 17805516;
     name = "Rohan Rao";
   };
+  rohi-devs = {
+    email = "rohi.devs@gmail.com";
+    github = "rohi-devs";
+    githubId = 129837916;
+    name = "Rohith S";
+  };
   rolfschr = {
     email = "rolf.schr@posteo.de";
     github = "rolfschr";
