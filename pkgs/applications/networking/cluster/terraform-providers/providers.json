@@ -1173,15 +1173,6 @@
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-v+yPo9ueuhC8QNEeiQGngk7o5t+QeIJaxqKE5Yb1eug="
   },
-  "sapcc_ccloud": {
-    "hash": "sha256-Dpx0eugcHCJV8GNPqjxx4P9ohgJgB10DTnHr+CeN/iQ=",
-    "homepage": "https://registry.terraform.io/providers/sapcc/ccloud",
-    "owner": "sapcc",
-    "repo": "terraform-provider-ccloud",
-    "rev": "v1.6.7",
-    "spdx": "MPL-2.0",
-    "vendorHash": "sha256-OqbnkuEy9w6F1DxmlYhRNYhBaYhWV0FtMK4wdwSybh8="
-  },
   "scaleway_scaleway": {
     "hash": "sha256-QVl06Yzl2QREcAIlyWeg0elq2yPL/VCgIM/OvOSELuI=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
