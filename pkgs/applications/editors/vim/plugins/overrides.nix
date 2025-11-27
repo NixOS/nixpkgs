@@ -4091,6 +4091,19 @@ assertNoAdditions {
     ];
   };
 
+  vscode-diff-nvim = super.vscode-diff-nvim.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+    nativeBuildInputs = [ cmake ];
+    dontUseCmakeConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+      make
+      runHook postBuild
+    '';
+  };
+
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
   };
