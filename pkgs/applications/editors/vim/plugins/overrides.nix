@@ -2335,6 +2335,12 @@ assertNoAdditions {
     ];
   };
 
+  neovim-tips = super.neovim-tips.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+  };
+
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };

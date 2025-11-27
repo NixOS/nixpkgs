@@ -10178,6 +10178,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neovim-tips = buildVimPlugin {
+    pname = "neovim-tips";
+    version = "2025-11-25";
+    src = fetchFromGitHub {
+      owner = "saxon1964";
+      repo = "neovim-tips";
+      rev = "b8c02411907ce1a5ded18a922a894a5dfb5c89a5";
+      sha256 = "084m1g9pxgkxcsbi6yja3fd71x1r5i0j32bsxjnf63dxyzlf7v20";
+    };
+    meta.homepage = "https://github.com/saxon1964/neovim-tips/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neovim-trunk = buildVimPlugin {
     pname = "neovim-trunk";
     version = "2025-07-23";

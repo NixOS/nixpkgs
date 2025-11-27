@@ -126,6 +126,47 @@ let
 
     meta.license = lib.licenses.unfree;
   };
+
+  # Fix for Wayland crash when XSetInputFocus is called
+  wemeet-x11-fix = stdenv.mkDerivation {
+    pname = "wemeet-x11-fix";
+    version = "0-unstable-2025-11-07";
+
+    src = ./wemeet-x11-fix.c;
+
+    dontUnpack = true;
+    dontWrapQtApps = true;
+
+    nativeBuildInputs = [ pkg-config ];
+
+    buildInputs = [
+      xorg.libX11
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      $CC $CFLAGS -Wall -Wextra -fPIC -shared \
+        -o libwemeet-x11-fix.so $src \
+        -ldl -lX11
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 ./libwemeet-x11-fix.so $out/lib/libwemeet-x11-fix.so
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Fix for wemeet Wayland XSetInputFocus crash";
+      license = lib.licenses.mit;
+    };
+  };
+
   selectSystem =
     attrs:
     attrs.${stdenv.hostPlatform.system}
@@ -237,7 +278,7 @@ stdenv.mkDerivation {
         "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
       ];
       commonWrapperArgs = baseWrapperArgs ++ [
-        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so"
+        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-x11-fix}/lib/libwemeet-x11-fix.so"
         "--run 'if [[ $XDG_SESSION_TYPE == \"wayland\" ]]; then export LD_PRELOAD=${wemeet-wayland-screenshare}/lib/wemeet/libhook.so\${LD_PRELOAD:+:$LD_PRELOAD}; fi'"
       ];
       xwaylandWrapperArgs = baseWrapperArgs ++ [
