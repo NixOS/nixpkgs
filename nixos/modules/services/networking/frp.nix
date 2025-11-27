@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.frp;
@@ -58,41 +59,40 @@ in
           after = if isClient then [ "network-online.target" ] else [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           description = "A fast reverse proxy frp ${cfg.role}";
-          serviceConfig =
-            {
-              Type = "simple";
-              Restart = "on-failure";
-              RestartSec = 15;
-              ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
-              DynamicUser = true;
-              # Hardening
-              CapabilityBoundingSet = serviceCapability;
-              AmbientCapabilities = serviceCapability;
-              PrivateDevices = true;
-              ProtectHostname = true;
-              ProtectClock = true;
-              ProtectKernelTunables = true;
-              ProtectKernelModules = true;
-              ProtectKernelLogs = true;
-              ProtectControlGroups = true;
-              RestrictAddressFamilies = [
-                "AF_INET"
-                "AF_INET6"
-              ]
-              ++ lib.optionals isClient [ "AF_UNIX" ];
-              LockPersonality = true;
-              MemoryDenyWriteExecute = true;
-              RestrictRealtime = true;
-              RestrictSUIDSGID = true;
-              PrivateMounts = true;
-              SystemCallArchitectures = "native";
-              SystemCallFilter = [ "@system-service" ];
-            }
-            // lib.optionalAttrs isServer {
-              StateDirectory = "frp";
-              StateDirectoryMode = "0700";
-              UMask = "0007";
-            };
+          serviceConfig = {
+            Type = "simple";
+            Restart = "on-failure";
+            RestartSec = 15;
+            ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
+            DynamicUser = true;
+            # Hardening
+            CapabilityBoundingSet = serviceCapability;
+            AmbientCapabilities = serviceCapability;
+            PrivateDevices = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectKernelLogs = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+            ]
+            ++ lib.optionals isClient [ "AF_UNIX" ];
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" ];
+          }
+          // lib.optionalAttrs isServer {
+            StateDirectory = "frp";
+            StateDirectoryMode = "0700";
+            UMask = "0007";
+          };
         };
       };
     };
