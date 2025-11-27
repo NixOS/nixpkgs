@@ -3,6 +3,7 @@
   stdenv,
   python312Packages,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   gitMinimal,
   portaudio,
@@ -150,6 +151,13 @@ let
 
       (replaceVars ./fix-flake8-invoke.patch {
         flake8 = lib.getExe python3Packages.flake8;
+      })
+
+      # https://github.com/Aider-AI/aider/pull/4671
+      (fetchpatch {
+        name = "add-new-exceptions-to-LiteLLMExceptions.patch";
+        url = "https://github.com/Aider-AI/aider/commit/7201abc56539ae8ee2bf4ea0926f584c9ec5558c.patch";
+        hash = "sha256-bjL9nbEQGGNkFczm1hDOMP3b48eRJk17zcivXjOdVnw=";
       })
     ];
 
