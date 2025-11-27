@@ -26718,6 +26718,12 @@
     githubId = 70387628;
     name = "Basil Keeler";
   };
+  totalyenglizlitrate = {
+    name = "Narendra S";
+    email = "narendra.s1232@gmail.com";
+    github = "TotalyEnglizLitrate";
+    githubId = 117704481;
+  };
   totoroot = {
     name = "Matthias Thym";
     email = "git@thym.at";
