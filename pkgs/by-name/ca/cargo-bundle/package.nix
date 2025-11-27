@@ -6,39 +6,53 @@
   stdenv,
   libxkbcommon,
   wayland,
+  openssl,
+  squashfsTools,
+  makeWrapper,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bundle";
-  # the latest stable release fails to build on darwin
-  version = "unstable-2023-08-18";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "burtonageo";
     repo = "cargo-bundle";
-    rev = "c9f7a182d233f0dc4ad84e10b1ffa0d44522ea43";
-    hash = "sha256-n+c83pmCvFdNRAlcadmcZvYj+IRqUYeE8CJVWWYbWDQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Ulah5NtjQh5dIB/nhTrDstnaub4LS9iH33E1iv1JpY=";
   };
 
-  cargoHash = "sha256-g898Oelrk/ok52raTEDhgtQ9psc0PFHd/uNnk1QeXCs=";
+  cargoHash = "sha256-qE0ZDq0UJHfsivvI1W44u/pVjKMDGrghSl7sfau/pIY=";
 
   nativeBuildInputs = [
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
     wayland
+    openssl
   ];
 
-  meta = with lib; {
+  postFixup = ''
+    wrapProgram $out/bin/cargo-bundle \
+      --prefix PATH : ${lib.makeBinPath [ squashfsTools ]}
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Wrap rust executables in OS-specific app bundles";
     mainProgram = "cargo-bundle";
     homepage = "https://github.com/burtonageo/cargo-bundle";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})
