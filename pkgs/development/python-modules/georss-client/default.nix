@@ -39,6 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "georss_client" ];
 
   meta = with lib; {
+    broken = lib.versionAtLeast xmltodict.version "1";
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
     changelog = "https://github.com/exxamalte/python-georss-client/releases/tag/${src.tag}";
