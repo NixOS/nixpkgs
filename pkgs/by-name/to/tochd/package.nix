@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tochd";
-  version = "0.13-unstable-2024-06-08";
+  version = "0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
