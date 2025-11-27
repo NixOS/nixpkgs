@@ -6,7 +6,7 @@
   nodejs,
 }:
 let
-  version = "3.0.1";
+  version = "3.1.1";
 in
 buildNpmPackage {
   pname = "appium-unwrapped";
@@ -21,10 +21,10 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium";
     rev = "appium@${version}";
-    hash = "sha256-TPzH6HtIqYjM9sltn5tXHHAoNs0xIZEZQ7oflue/x/M=";
+    hash = "sha256-SdnWrnkCyFSdS5KO99uxqO1s9N60IaxhRrMQHsg43EA=";
   };
 
-  npmDepsHash = "sha256-gORsfJZ78epTnVzZj4Ju2xTMaISR/0NHGXRSmWFjPG8=";
+  npmDepsHash = "sha256-bwjIBphk/+A0F3k7nClDXAVnX7D/o7LvCr8whCBLLdA=";
 
   # Lockfile fix backport, remove when upstream has a working lockfile
   postPatch = ''
