@@ -1205,6 +1205,13 @@ mapAliases {
   nim-unwrapped-1 = throw "'nim-unwrapped-1' has reached EOL, please use 'nim-unwrapped'"; # Added 2025-11-12
   nim-unwrapped_1_0 = throw "'nim-unwrapped_1_0' has reached EOL, please use 'nim-unwrapped'"; # Added 2025-11-12
   nim_1_0 = throw "'nim_1_0' has reached EOL, please use 'nim'"; # Added 2025-11-12
+  nim_2 = throw "'nim_2' has been upgraded and removed, please use 'nim'"; # Added 2025-27-12
+  nim-2 = throw "'nim-2' has been upgraded and removed, please use 'nim'"; # Added 2025-27-12
+  nim_2_0 = throw "'nim_2_0' has been upgraded and removed, please use 'nim'"; # Added 2025-27-12
+  nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2025-27-12
+  nim-unwrapped-2 = throw "'nim-unwrapped-2' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2025-27-12
+  nim-unwrapped-2_0 = throw "'nim-unwrapped-2_0' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2025-27-12
+  nim-unwrapped-2_2 = throw "'nim-unwrapped-2_2' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2025-27-12
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
   nix-linter = throw "nix-linter has been removed as it was broken for 3 years and unmaintained upstream"; # Added 2025-09-06
