@@ -69,9 +69,11 @@ let
     pkgs.writeShellScript "tailscale-service-${serviceName}" ''
       set -e
 
-      # Wait for tailscaled to be ready
+      # Wait for tailscaled to be ready with exponential backoff
       echo "Waiting for tailscaled to be ready..."
-      for i in {1..30}; do
+      max_wait_attempts=15
+      wait_attempt=1
+      while [ $wait_attempt -le $max_wait_attempts ]; do
         if ${tailscaleBin} status --json >/dev/null 2>&1; then
           STATE=$(${tailscaleBin} status --json | ${pkgs.jq}/bin/jq -r '.BackendState')
           if [ "$STATE" = "Running" ]; then
@@ -79,11 +81,20 @@ let
             break
           fi
         fi
-        if [ $i -eq 30 ]; then
-          echo "Timeout waiting for tailscaled to be ready."
+
+        if [ $wait_attempt -eq $max_wait_attempts ]; then
+          echo "Timeout waiting for tailscaled to be ready after $max_wait_attempts attempts."
           exit 1
         fi
-        sleep 1
+
+        # Exponential backoff: 2^(attempt-1) seconds, capped at 16 seconds
+        delay=$((2 ** ($wait_attempt - 1)))
+        if [ $delay -gt 16 ]; then
+          delay=16
+        fi
+        echo "Tailscaled not ready, waiting $delay seconds (attempt $wait_attempt/$max_wait_attempts)..."
+        sleep $delay
+        wait_attempt=$((wait_attempt + 1))
       done
 
       # Function to run a command with retry on etag conflicts
