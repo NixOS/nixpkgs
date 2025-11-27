@@ -20,12 +20,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "49.0";
+  version = "49.1";
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/showtime/${lib.versions.major version}/showtime-${version}.tar.xz";
-    hash = "sha256-Wryvl6telTADgoKEhYjozmwmFztzA+9nVr69sLIO05g=";
+    hash = "sha256-iu+7DiAJx6HNRKuAGwbKN19+loPwKaBS64b7Qzp4U5M=";
   };
 
   patches = [
