@@ -4,7 +4,7 @@
   cairo,
   cmake,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   gettext,
   wxGTK32,
   gtk3,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    ffmpeg
+    ffmpeg_7
     gettext
     libGLU
     libGL
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       lassulus
       netali
     ];
-    homepage = "https://vba-m.com/";
+    homepage = "https://www.visualboyadvance-m.org/";
     platforms = lib.platforms.linux;
     mainProgram = "visualboyadvance-m";
   };
