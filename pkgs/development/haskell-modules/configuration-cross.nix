@@ -16,10 +16,23 @@ self: super: {
           enableExternalInterpreter = false;
         };
       in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy libiserv network; }
+      lib.mapAttrs (_: noExternalInterpreter) {
+        inherit (super)
+          iserv-proxy
+          libiserv
+          network
+          random
+          splitmix
+          temporary
+          ;
+      }
     )
     iserv-proxy
     libiserv
     network
+    # dependencies on windows
+    random
+    splitmix
+    temporary
     ;
 }
