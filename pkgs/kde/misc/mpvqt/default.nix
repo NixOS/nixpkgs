@@ -25,14 +25,22 @@ mkKdeDerivation rec {
 
   extraCmakeFlags = [ "-DQt6_DIR=${qtbase}/lib/cmake/Qt6" ];
 
-  meta.license = with lib.licenses; [
-    bsd2
-    bsd3
-    cc-by-sa-40
-    cc0
-    lgpl21Only
-    lgpl3Only
-    lgpl3Plus
-    mit
-  ];
+  meta = {
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      cc-by-sa-40
+      cc0
+      lgpl21Only
+      lgpl3Only
+      lgpl3Plus
+      mit
+    ];
+  };
 }
