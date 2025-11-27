@@ -2912,6 +2912,8 @@ self: super: with self; {
     callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
       { };
 
+  colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
+
   colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
