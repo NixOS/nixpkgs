@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.82.1";
+  version = "0.82.2";
 
   outputs = [
     "out"
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eTdtcEAtJx4tOEJEGOGupyNXk00nLjIeOQa3Fwanjjo=";
+    hash = "sha256-4Slar8RoKztVDxI13CZ5uqD3FXDY7VQ8ABwSg9UwvpE=";
   };
 
   patches = [
