@@ -7,6 +7,8 @@
   tmux,
   fcft,
   arrow-cpp,
+  # build config
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DUTF8PROC_ENABLE_TESTING=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
+    (lib.cmakeBool "UTF8PROC_ENABLE_TESTING" doCheck)
   ];
 
   doCheck = true;
