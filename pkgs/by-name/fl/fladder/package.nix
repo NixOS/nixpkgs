@@ -57,7 +57,7 @@ flutter335.buildFlutterApplication rec {
       miMallocHash = "sha256-Kxv/b3F/lyXHC/jXnkeG2hPeiicAWeS6C90mKue+Rus=";
     };
 
-    fvp = callPackage ../../../development/compilers/dart/package-source-builders/fvp/default.nix {
+    fvp = callPackage ./fvp.nix {
       fvpVersion = pubspecLock.packages.fvp.version;
       fvpHash = "sha256-GaHaNYGUANhosX1Aq7ehGeGGwCxu3Ar1NxgTSyPhnhA=";
     };

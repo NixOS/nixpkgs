@@ -2,7 +2,6 @@
 
 {
   file_picker = callPackage ./file_picker { };
-  fvp = callPackage ./fvp { };
   flutter_discord_rpc = callPackage ./flutter_discord_rpc { };
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
   flutter_vodozemac = callPackage ./flutter_vodozemac { };
