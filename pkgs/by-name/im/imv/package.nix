@@ -75,9 +75,7 @@ let
     libjpeg = libjpeg_turbo;
   };
 
-  backendFlags = map (
-    b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
-  ) (builtins.attrNames backends);
+  backendFlags = map (b: lib.mesonEnable b (lib.elem b withBackends)) (lib.attrNames backends);
 in
 
 # check that given window system is valid
@@ -103,9 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
-    "-Dtest=enabled"
-    "-Dman=enabled"
+    (lib.mesonOption "windows" withWindowSystem)
+    (lib.mesonEnable "test" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "man" true)
   ]
   ++ backendFlags;
 
