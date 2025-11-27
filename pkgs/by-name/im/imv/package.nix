@@ -9,6 +9,7 @@
   meson,
   ninja,
   pkg-config,
+  tinyxxd,
   icu,
   pango,
   inih,
@@ -18,6 +19,7 @@
   libGLU,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   withBackends ? [
     "farbfeld"
     "libjxl"
@@ -41,7 +43,6 @@
   libnsbmp,
   libwebp,
   qoi,
-  wayland-scanner,
 }:
 
 let
@@ -89,7 +90,7 @@ assert builtins.all (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imv";
-  version = "5.0.0";
+  version = "5.0.1";
   outputs = [
     "out"
     "man"
@@ -99,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~exec64";
     repo = "imv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sOlWSv1GqdYzooTvcJjXxJI3pwWWJnlUpbGZgUAFYm0=";
+    hash = "sha256-2JTs/hj6t9wEZKoUpcLDFulbdU/grDlQkuEAE7uayDs=";
   };
 
   mesonFlags = [
@@ -130,16 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ windowSystems."${withWindowSystem}"
   ++ map (b: backends."${b}") withBackends;
 
-  postFixup = lib.optionalString (withWindowSystem == "all") ''
-    # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
-    # so we have to fix those to the binaries we installed into the /nix/store
-
-    substituteInPlace "$out/bin/imv" \
-      --replace-fail "imv-wayland" "$out/bin/imv-wayland" \
-      --replace-fail "imv-x11" "$out/bin/imv-x11"
-  '';
-
   doCheck = true;
+  nativeCheckInputs = [
+    tinyxxd
+  ];
 
   meta = {
     description = "Command line image viewer for tiling window managers";
