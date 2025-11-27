@@ -42,6 +42,7 @@
   libwebp,
   qoi,
   wayland-scanner,
+  fetchpatch,
 }:
 
 let
@@ -101,6 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-sOlWSv1GqdYzooTvcJjXxJI3pwWWJnlUpbGZgUAFYm0=";
   };
+
+  patches = [
+    # Fixes Wayland SIGSEGV (https://todo.sr.ht/~exec64/imv/80); remove after next release
+    (fetchpatch {
+      url = "https://git.sr.ht/~exec64/imv/commit/2dc80ccc64b6e1a315c6c2a06c26fc0138db3a13.patch";
+      hash = "sha256-EjnKwJ9bM+VyUPGuy2YHPWleLmQ/DGHHjY/QmnfRpQ4=";
+    })
+  ];
 
   mesonFlags = [
     "-Dwindows=${withWindowSystem}"
