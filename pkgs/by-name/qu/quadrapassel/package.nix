@@ -12,7 +12,6 @@
   librsvg,
   gsound,
   libmanette,
-  itstool,
   blueprint-compiler,
   wrapGAppsHook4,
   meson,
@@ -23,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quadrapassel";
-  version = "49.1";
+  version = "49.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/quadrapassel/${lib.versions.major finalAttrs.version}/quadrapassel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ttejtndabcTxmAvZN4MkZmF6iX7KoQmPOixZvhdhZQk=";
+    hash = "sha256-pTIKb47ghWKkNsq6TjT3rgQP7cjXL76iJ/cCXZPExrk=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     desktop-file-utils
     pkg-config
-    itstool
     blueprint-compiler
     wrapGAppsHook4
   ];
