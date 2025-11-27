@@ -13,7 +13,7 @@ let
   defaultUser = "firefox-syncserver";
 
   dbIsLocal = cfg.database.host == "localhost";
-  dbURL = "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}";
+  dbURL = "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}";
 
   format = pkgs.formats.toml { };
   settings = {
