@@ -9,7 +9,6 @@ autoconf.section.md
 automake.section.md
 autopatchcil.section.md
 autopatchelf.section.md
-aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md
