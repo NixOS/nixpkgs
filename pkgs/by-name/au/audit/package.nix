@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
       musl = pkgsMusl.audit or null;
       static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      audit = nixosTests.audit;
+      inherit (nixosTests) audit audit-testsuite;
       # Broken on a hardened kernel
       package = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
         pname = previousAttrs.pname + "-test";
