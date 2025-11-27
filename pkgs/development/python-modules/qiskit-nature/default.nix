@@ -67,6 +67,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
+    broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
