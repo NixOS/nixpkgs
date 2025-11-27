@@ -20,6 +20,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  versionCheckHook,
   withBackends ? [
     "farbfeld"
     "libjxl"
@@ -135,6 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     cmocka
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Command line image viewer for tiling window managers";
