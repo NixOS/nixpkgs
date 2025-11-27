@@ -9361,6 +9361,13 @@
     githubId = 6905586;
     keys = [ { fingerprint = "386E D1BF 848A BB4A 6B4A  3C45 FC83 907C 125B C2BC"; } ];
   };
+  geodic = {
+    name = "geodic";
+    email = "th3geodic@proton.me";
+    matrix = "@geodic:matrix.org";
+    github = "geodic";
+    githubId = 64704703;
+  };
   geoffreyfrogeye = {
     name = "Geoffrey Frogeye";
     email = "geoffrey@frogeye.fr";
