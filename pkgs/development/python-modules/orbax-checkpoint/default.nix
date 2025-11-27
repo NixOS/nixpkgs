@@ -120,18 +120,8 @@ buildPythonPackage rec {
     #   /build/source/checkpoint/orbax/checkpoint/_src/metadata/sharding_test.py
     "orbax/checkpoint/_src/metadata/sharding_test.py"
 
-    # Circular dependency with clu
-    "orbax/checkpoint/_src/testing/benchmarks/array_handler_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/checkpoint_manager_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/checkpoint_manager_perf_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/checkpoint_policy_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/core/config_parsing_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/core/core_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/core/metric_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/emergency_checkpoint_manager_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/multihost_dispatchers_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/pytree_checkpoint_benchmark_test.py"
-    "orbax/checkpoint/_src/testing/benchmarks/single_replica_benchmark_test.py"
+    # Circular dependency with clu (and we should not run benchmarks anyway)
+    "orbax/checkpoint/_src/testing/benchmarks/"
 
     # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
     # First from multiprocess_test, Second from orbax.checkpoint._src.testing.multiprocess_test.
