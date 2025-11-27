@@ -168,6 +168,7 @@ mapAliases {
   inherit (pkgs) eas-cli; # added 2025-01-08
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
+  inherit (pkgs) fauna-shell; # Added 2025-11-27
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   fkill-cli = throw "'fkill-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17

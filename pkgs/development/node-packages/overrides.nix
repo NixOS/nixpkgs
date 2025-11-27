@@ -33,13 +33,6 @@ final: prev: {
     '';
   };
 
-  fauna-shell = prev.fauna-shell.override {
-    # printReleaseNotes just pulls them from GitHub which is not allowed in sandbox
-    preRebuild = ''
-      sed -i 's|"node ./tools/printReleaseNotes"|"true"|' node_modules/faunadb/package.json
-    '';
-  };
-
   node2nix = prev.node2nix.override {
     # Get latest commit for misc fixes
     src = fetchFromGitHub {
