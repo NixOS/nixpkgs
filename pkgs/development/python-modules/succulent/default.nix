@@ -29,11 +29,11 @@ buildPythonPackage rec {
     "numpy"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     lxml
     numpy
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "succulent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect POST requests";
     homepage = "https://github.com/firefly-cpp/succulent";
     changelog = "https://github.com/firefly-cpp/succulent/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }
