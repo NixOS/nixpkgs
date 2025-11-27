@@ -21,7 +21,6 @@
   lazy-loader,
   h5io,
   pymatreader,
-  pythonOlder,
   procps,
   optipng,
 }:
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "mne";
   version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
