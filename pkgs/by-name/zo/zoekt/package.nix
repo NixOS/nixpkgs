@@ -8,7 +8,7 @@
 
 buildGoModule {
   pname = "zoekt";
-  version = "3.7.2-2-unstable-2025-11-20";
+  version = "0-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
