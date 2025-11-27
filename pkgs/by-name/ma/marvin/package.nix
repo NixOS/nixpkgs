@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "marvin";
-  version = "25.3.4";
+  version = "25.3.5";
 
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${version}.deb";
-    hash = "sha256-m9L2yYknpxT+0oiIFoMn2xg7EL9GeL7ENXuA3kCri9M=";
+    hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
   };
 
   nativeBuildInputs = [
