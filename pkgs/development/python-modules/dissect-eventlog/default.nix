@@ -7,15 +7,12 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-eventlog";
   version = "3.11";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -24,12 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-q9pbNBtTnrq7E8faW0a9v63oh7/8r9njeZOZeUFpt2k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
