@@ -43,7 +43,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       offline
-      bryanasdev000
       kashw2
     ];
   };
