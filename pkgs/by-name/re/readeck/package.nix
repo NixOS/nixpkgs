@@ -10,20 +10,15 @@
 
 buildGoModule rec {
   pname = "readeck";
-  version = "0.21.2";
+  version = "0.21.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-qbH95jsOrB/AEw4uy0DXfRCqLL+VSj9322PeP5mUgdk=";
+    hash = "sha256-d4FLyD2uOngUANc7fai8j0wZSY1ISS18JEBDxCqXdQw=";
   };
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail 'go 1.25.4' 'go 1.25.3'
-  '';
 
   nativeBuildInputs = [
     nodejs
@@ -67,10 +62,10 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-yhheyR9drXFgIdUIjfNe1rZWlNR1ShZooIZ12eIwlHM=";
+    hash = "sha256-XT+4IR1xVXiDY4wx2smt0pcNUx6UFoXYq+zxvbGsQ8A=";
   };
 
-  vendorHash = "sha256-Lf4chATpS+vwuWsrO3weVS/GvwWTvnT2FRu04wZLHZ8=";
+  vendorHash = "sha256-IWRlruj+zYixCRgbaf7QYBeCGwzf0qRY8OFa4s/PzME=";
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";
