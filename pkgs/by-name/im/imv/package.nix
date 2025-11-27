@@ -16,7 +16,7 @@
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
   xorg,
   libxkbcommon,
-  libGLU,
+  libGL,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -49,7 +49,6 @@ let
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
-      libGLU
       xorg.libxcb
       xorg.libX11
     ];
@@ -123,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmocka
+    libGL
     icu
     libxkbcommon
     pango
