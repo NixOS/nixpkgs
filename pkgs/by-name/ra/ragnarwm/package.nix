@@ -10,6 +10,7 @@
   libXcomposite,
   conf ? null,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.ragnarwm = nixosTests.ragnarwm;
     providedSessions = [ "ragnar" ];
+    updateScript = nix-update-script { };
   };
 
   meta = {
