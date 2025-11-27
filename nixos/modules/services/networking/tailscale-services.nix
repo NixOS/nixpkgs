@@ -170,6 +170,10 @@ let
   enabledServices = filterAttrs (_: serviceCfg: serviceCfg.enable) cfg;
 in
 {
+  meta.maintainers = with maintainers; [
+    kusold
+  ];
+
   options = {
     services.tailscale.service = mkOption {
       type = types.attrsOf (
