@@ -78,6 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/GNOME/vte/commit/6b7a6a7df9df99368b7ce5ac5903bd2578167567.patch";
       hash = "sha256-s3HigfTZLtGmsZS6dfD3YE95ZdBjB4WOWDvuoatOu3o=";
     })
+
+    (fetchpatch {
+      name = "qemu-backspace.patch";
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/79d5fea437185e52a740130d5a276b83dfdcd558.patch";
+      hash = "sha256-28Cehw5uJuGG7maLGUl1TBwfIwuXpkLKSQ2lXauLlz0=";
+    })
   ];
 
   nativeBuildInputs = [
