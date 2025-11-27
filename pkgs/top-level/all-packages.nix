@@ -3597,6 +3597,7 @@ with pkgs;
   opentelemetry-collector-releases =
     callPackage ../tools/misc/opentelemetry-collector/releases.nix
       { };
+  mdatagen = callPackage ../tools/misc/opentelemetry-collector/mdatagen.nix { };
 
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
