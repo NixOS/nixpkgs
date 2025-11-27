@@ -128,25 +128,6 @@ self: super:
     };
   });
 
-  xdm = super.xdm.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libxcrypt ];
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ [
-        "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-      ]
-      ++
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-          # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
-          [
-            "ac_cv_file__dev_urandom=true"
-            "ac_cv_file__dev_random=true"
-          ];
-    meta = attrs.meta // {
-      mainProgram = "xdm";
-    };
-  });
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
