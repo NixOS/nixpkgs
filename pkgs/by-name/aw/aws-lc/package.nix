@@ -6,6 +6,7 @@
   ninja,
   testers,
   aws-lc,
+  nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -55,19 +56,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = aws-lc;
-      command = "bssl version";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = aws-lc;
+        command = "bssl version";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = aws-lc;
+        moduleNames = [
+          "libcrypto"
+          "libssl"
+          "openssl"
+        ];
+      };
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = aws-lc;
-      moduleNames = [
-        "libcrypto"
-        "libssl"
-        "openssl"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
