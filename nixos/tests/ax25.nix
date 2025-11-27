@@ -39,12 +39,12 @@ let
     systemd.services.ax25-mock-hardware = {
       description = "mock AX.25 TNC and Radio";
       wantedBy = [ "default.target" ];
-      before = [
+      requiredBy = [
         "ax25-kissattach-${port}.service"
         "axlisten.service"
         "mheard.service"
       ];
-      after = [ "network.target" ];
+      requires = [ "network.target" ];
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.socat}/bin/socat -d -d tcp:192.168.1.1:${toString socatPort} pty,link=${tty},b${toString baud},raw";
@@ -63,7 +63,7 @@ in
           description = "mock radio ether";
           wantedBy = [ "default.target" ];
           requires = [ "network.target" ];
-          before = [ "ax25-mock-hardware.service" ];
+          requiredBy = [ "ax25-mock-hardware.service" ];
           # broken needs access to "ss" or "netstat"
           path = [ pkgs.iproute2 ];
           serviceConfig = {
