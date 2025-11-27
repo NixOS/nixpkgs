@@ -84,7 +84,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.4";
+  version = "2.2.6";
   strictDeps = true;
 
   src = fetchurl {
