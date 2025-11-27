@@ -71,7 +71,6 @@ buildGoModule rec {
       capturing, dissecting and monitoring all traffic and payloads going in, out and across containers, pods, nodes and clusters.
     '';
     maintainers = with lib.maintainers; [
-      bryanasdev000
       qjoly
     ];
   };

@@ -3922,13 +3922,6 @@
     matrix = "@brsvh:mozilla.org";
     name = "Burgess Chang";
   };
-  bryanasdev000 = {
-    email = "bryanasdev000@gmail.com";
-    matrix = "@bryanasdev000:matrix.org";
-    github = "bryanasdev000";
-    githubId = 53131727;
-    name = "Bryan Albuquerque";
-  };
   bryango = {
     name = "Bryan Lai";
     email = "bryanlais@gmail.com";
@@ -22534,6 +22527,12 @@
     github = "rohanssrao";
     githubId = 17805516;
     name = "Rohan Rao";
+  };
+  rohi-devs = {
+    email = "rohi.devs@gmail.com";
+    github = "rohi-devs";
+    githubId = 129837916;
+    name = "Rohith S";
   };
   rolfschr = {
     email = "rolf.schr@posteo.de";

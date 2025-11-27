@@ -210,7 +210,6 @@ py.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       bhipple
       davegallant
-      bryanasdev000
       devusb
       anthonyroussel
     ];
