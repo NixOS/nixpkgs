@@ -88,6 +88,12 @@ stdenv.mkDerivation rec {
     cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
   '';
 
+  # Fix mapscript library reference on Darwin
+  postFixup = lib.optionalString (withPython && stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -change "@rpath/libmapserver.2.dylib" "$out/lib/libmapserver.2.dylib" \
+      $out/${python3.sitePackages}/mapscript/_mapscript.so
+  '';
+
   pythonImportsCheck = [ "mapscript" ];
 
   meta = {
