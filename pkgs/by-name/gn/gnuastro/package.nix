@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
+
   meta = {
     description = "GNU astronomy utilities and library";
     homepage = "https://www.gnu.org/software/gnuastro/";
