@@ -4857,6 +4857,8 @@ self: super: with self; {
 
   energyflow = callPackage ../development/python-modules/energyflow { };
 
+  energyid-webhooks = callPackage ../development/python-modules/energyid-webhooks { };
+
   energyzero = callPackage ../development/python-modules/energyzero { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
