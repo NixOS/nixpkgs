@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.10.2";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-K99yjWpX7rt6Isp0ao0NJcUu7GBRNKVz2i+xVt2HBNY=";
+    hash = "sha256-lssSHlWUj3TU0F/31jTFc+oFdBx1C+9aolee6M8mJtw=";
   };
 
   postPatch = ''
