@@ -28,6 +28,10 @@ dotnetConfigurePhase() {
 
   dotnetRestore() {
     local -r projectFile="${1-}"
+
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
       if [[ -n $useRuntime ]]; then
