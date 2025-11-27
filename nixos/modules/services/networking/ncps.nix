@@ -48,6 +48,7 @@ let
       "--cache-lru-schedule-timezone='${cfg.cache.lru.scheduleTimeZone}'"
     ])
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
+    ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
     ++ (lib.forEach cfg.upstream.caches (url: "--upstream-cache='${url}'"))
     ++ (lib.forEach cfg.upstream.publicKeys (pk: "--upstream-public-key='${pk}'"))
     ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
@@ -178,6 +179,15 @@ in
           default = "/tmp";
           description = ''
             The path to the temporary directory that is used by the cache to download NAR files
+          '';
+        };
+
+        signNarinfo = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          example = "false";
+          description = ''
+            Whether to sign narInfo files or passthru as-is from upstream
           '';
         };
       };
