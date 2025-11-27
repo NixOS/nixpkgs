@@ -11,14 +11,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "utf8proc";
   version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
     repo = "utf8proc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/+/IrsLQ9ykuVOaItd2ZbX60pPlP2omvS1qJz51AnWA=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
-    (lib.cmakeBool "UTF8PROC_ENABLE_TESTING" doCheck)
+    (lib.cmakeBool "UTF8PROC_ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
       maintainers.sternenseemann
     ];
   };
-}
+})
