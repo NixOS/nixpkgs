@@ -84,12 +84,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.4";
+  version = "2.2.8";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+CtBl1D8zlYfP4l6BIaxgBhoRddvtdmfJIzhZhCBicc=";
+    hash = "sha256-EUGRr6CDxQWdy+XOiNvk9CVCz/BOLDAXZo7kOLwLjPw=";
   };
 
   buildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./nixbuild.patch
     # Load libraries at runtime by absolute path
 
-    ./extra-mangling-2.patch
+    ./extra-mangling.patch
     # Mangle store paths of modules to prevent runtime dependence.
 
     ./openssl.patch
@@ -138,9 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--cpu:${nimHost.cpu}"
     "--os:${nimHost.os}"
     "-d:release"
-    "-d:useGnuReadline"
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
+  ];
 
   preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace makefile \
