@@ -10,7 +10,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AnKing-VIP";
     repo = "AnkiRecolor";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sparseCheckout = [ "src/addon" ];
     hash = "sha256-28DJq2l9DP8O6OsbNQCZ0pm4S6CQ3Yz0Vfvlj+iQw8Y=";
   };
