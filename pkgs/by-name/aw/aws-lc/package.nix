@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.56.0";
+  version = "1.65.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h7GrR86h/Z9pfJowABJFwBf/TlQzsMMG2x0/dsepbmQ=";
+    hash = "sha256-rpxEhOy9qYwIDa78u1BOgANfnkfGgGacKOjjlqXtn88=";
   };
 
   outputs = [
@@ -52,13 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=stringop-overflow"
     ]
   );
-
-  postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
 
   __darwinAllowLocalNetworking = true;
 
