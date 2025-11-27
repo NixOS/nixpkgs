@@ -1,0 +1,2 @@
+{ callPackage }:
+callPackage ./package.nix { }
