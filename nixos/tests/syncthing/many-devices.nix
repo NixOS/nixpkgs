@@ -124,20 +124,8 @@ let
   addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
     set -euo pipefail
 
-    export RUNTIME_DIRECTORY=/tmp
-
     curl() {
-        # get the api key by parsing the config.xml
-        while
-            ! ${pkgs.libxml2}/bin/xmllint \
-                --xpath 'string(configuration/gui/apikey)' \
-                ${configPath} \
-                >"$RUNTIME_DIRECTORY/api_key"
-        do sleep 1; done
-
-        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-
-        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+        ${pkgs.curl}/bin/curl -sSLk -H "X-Api-Key: ${guiApiKey}" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -146,6 +134,7 @@ let
     curl -d ${lib.escapeShellArg (builtins.toJSON { id = IDsToDelete.folder; })} \
         -X POST 127.0.0.1:8384/rest/config/folders
   '';
+  guiApiKey = "very_secret_key";
 in
 {
   name = "syncthing-many-devices";
@@ -156,6 +145,7 @@ in
       enable = true;
       overrideDevices = true;
       overrideFolders = true;
+      apiKeyFile = pkgs.writeText "syncthing-api-key" guiApiKey;
       settings = settingsWithoutId // settingsWithId;
     };
   };
