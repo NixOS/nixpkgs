@@ -6,7 +6,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   uv-build,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "yte";
   version = "1.9.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koesterlab";
