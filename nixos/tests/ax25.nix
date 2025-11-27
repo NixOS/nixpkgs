@@ -42,6 +42,7 @@ let
       before = [
         "ax25-kissattach-${port}.service"
         "axlisten.service"
+        "mheard.service"
       ];
       after = [ "network.target" ];
       serviceConfig = {
