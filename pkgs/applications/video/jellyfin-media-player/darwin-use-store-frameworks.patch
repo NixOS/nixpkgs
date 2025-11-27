@@ -1,0 +1,30 @@
+diff -ur a/CMakeModules/CompleteBundleOSX.cmake.in b/CMakeModules/CompleteBundleOSX.cmake.in
+--- a/CMakeModules/CompleteBundleOSX.cmake.in	1969-12-31 19:00:01.000000000 -0500
++++ b/CMakeModules/CompleteBundleOSX.cmake.in	2025-11-26 22:17:36.915879421 -0500
+@@ -1,5 +1,5 @@
+ set(app "${CMAKE_INSTALL_PREFIX}/@EXE@")
+-set(weprocess "${app}/Contents/Frameworks/QtWebEngineCore.framework/Versions/Current/Helpers/QtWebEngineProcess.app")
++set(weprocess "@qtwebengine@/lib/QtWebEngineCore.framework/Versions/Current/Helpers/QtWebEngineProcess.app")
+ 
+ set(args ${app})
+ list(APPEND args "-verbose=2")
+@@ -11,12 +11,6 @@
+ set(ENV{DYLD_LIBRARY_PATH} @QTROOT@/lib:@DEPENDENCY_ROOT@/lib)
+ set(ENV{DYLD_FRAMEWORK_PATH} @QTROOT@/lib:@DEPENDENCY_ROOT@/lib)
+ 
+-execute_process(
+-  COMMAND ${CMAKE_COMMAND} -E remove "${app}/Contents/Resources/qt.conf"
+-  COMMAND "@QTROOT@/bin/macdeployqt" ${args}
+-  WORKING_DIRECTORY "@QTROOT@/bin"
+-)
+-
+ #set(ENTITLEMENTS --entitlements @SOURCE_ROOT@/bundle/osx/Konvergo.entitlements)
+ #set(CODESIGN codesign ${ENTITLEMENTS} --force --sign "Developer ID Application: Plex Inc.")
+ 
+@@ -63,4 +57,4 @@
+   if(NOT ${result} EQUAL 0)
+     message(FATAL_ERROR "Failed to verify binary!")
+   endif(NOT ${result} EQUAL 0)
+-endif(@DO_SIGN@)
+\ No newline at end of file
++endif(@DO_SIGN@)

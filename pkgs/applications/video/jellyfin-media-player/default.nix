@@ -23,6 +23,7 @@
   qtwayland,
   qtwebchannel,
   qtwebengine,
+  substitute,
   stdenv,
   withDbus ? stdenv.hostPlatform.isLinux,
   wrapQtAppsHook,
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     #./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
+    # Don’t copy the dylibs and frameworks into the app bundle
+    (substitute {
+      src = ./darwin-use-store-frameworks.patch;
+      substitutions = [
+        "--subst-var-by"
+        "qtwebengine"
+        (lib.getLib qtwebengine)
+      ];
+    })
   ];
 
   buildInputs = [
