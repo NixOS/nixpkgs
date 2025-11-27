@@ -26,6 +26,7 @@
   nixosTests,
   pkgsStatic ? { }, # CI has allowVariants = false, in which case pkgsMusl would not be passed. So, instead add a default here.
   pkgsMusl ? { },
+  callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
@@ -151,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    testsuite = callPackage ./testsuite.nix { };
     tests = {
       musl = pkgsMusl.audit or null;
       static = pkgsStatic.audit or null;
