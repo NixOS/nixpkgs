@@ -44,7 +44,7 @@ maven.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
       --add-flags "--enable-preview" \
       --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
