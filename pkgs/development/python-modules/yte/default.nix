@@ -6,23 +6,20 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.9.0";
+  version = "1.9.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "yte";
     tag = "v${version}";
-    hash = "sha256-kA4fQg2vpgDuW0OZOqzA6lggJLtSiQo+3SCOp7hnt8M=";
+    hash = "sha256-NaBzcy0HJ7IVR8Gto9NM0T+72qTl1ZS4i+2tq431O/M=";
   };
 
   build-system = [ uv-build ];

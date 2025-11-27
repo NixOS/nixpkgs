@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nexus-rpc";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nexus-rpc";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-CZOCNgYvlQCc/Ws2cEuryyVELS/FiNgLTYHwHp70yhM=";
+    hash = "sha256-AHyue0s0bb28WoUnSghpYI3Sh/FyS6FFSM9g0ElYs4I=";
     fetchSubmodules = true;
   };
 
