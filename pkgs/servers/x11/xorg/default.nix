@@ -121,6 +121,7 @@
   xconsole,
   xcursorgen,
   xcursor-themes,
+  xdm,
   xdriinfo,
   xev,
   xeyes,
@@ -196,6 +197,7 @@ self: with self; {
     xcompmgr
     xconsole
     xcursorgen
+    xdm
     xdriinfo
     xev
     xeyes
@@ -394,66 +396,6 @@ self: with self; {
         libXft
         libxkbfile
         libXmu
-        xorgproto
-        libXrender
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXau,
-      libXaw,
-      libXdmcp,
-      libXext,
-      libXft,
-      libXinerama,
-      libXmu,
-      libXpm,
-      xorgproto,
-      libXrender,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xdm";
-      version = "1.1.17";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xdm-1.1.17.tar.xz";
-        sha256 = "0spbxjxxrnfxf8gqncd7bry3z7dvr74ba987cx9iq0qsj7qax54l";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libX11
-        libXau
-        libXaw
-        libXdmcp
-        libXext
-        libXft
-        libXinerama
-        libXmu
-        libXpm
         xorgproto
         libXrender
         libXt
