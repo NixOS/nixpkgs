@@ -252,6 +252,7 @@ mapAliases {
   near-cli = throw "'near-cli' has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neovim = pkgs.neovim-node-client; # added 2024-11-13
   nijs = throw "'nijs' has been removed as it was unmaintained upstream"; # Added 2025-11-14
+  inherit (pkgs) node-gyp-build; # Added 2025-11-27
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05

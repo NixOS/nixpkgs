@@ -21,7 +21,6 @@
 , "jsdoc"
 , "lcov-result-merger"
 , "mathjax"
-, "node-gyp-build"
 , "node2nix"
 , "postcss"
 , "prebuild-install"

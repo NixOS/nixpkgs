@@ -23635,24 +23635,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  node-gyp-build = nodeEnv.buildNodePackage {
-    name = "node-gyp-build";
-    packageName = "node-gyp-build";
-    version = "4.8.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.4.tgz";
-      sha512 = "LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Build tool and bindings loader for node-gyp that supports prebuilds";
-      homepage = "https://github.com/prebuild/node-gyp-build";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   node2nix = nodeEnv.buildNodePackage {
     name = "node2nix";
     packageName = "node2nix";
