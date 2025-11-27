@@ -42,6 +42,9 @@
   p11-kit,
   openldap,
   spamassassin,
+  gnutar,
+  gzip,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -115,6 +118,18 @@ stdenv.mkDerivation rec {
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnutar
+          gzip
+          xz
+        ]
+      }"
+    )
+  '';
 
   requiredSystemFeatures = [
     "big-parallel"
