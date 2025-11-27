@@ -43,6 +43,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://ddosify.com/";
     changelog = "https://github.com/ddosify/ddosify/releases/tag/selfhosted-${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 })
