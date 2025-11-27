@@ -206,6 +206,7 @@ in
       # TODO: enable by default?
       tcp = {
         enable = lib.mkEnableOption "tcp streaming support";
+        openFirewall = lib.mkEnableOption "Open firewall for the specified port";
 
         port = lib.mkOption {
           type = lib.types.port;
@@ -292,6 +293,9 @@ in
       (lib.mkIf cfg.zeroconf.publish.enable {
         services.avahi.publish.enable = true;
         services.avahi.publish.userServices = true;
+      })
+      (lib.mkIf (cfg.tcp.openFirewall && !(isNull cfg.tcp.port)) {
+        networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];
       })
 
       (lib.mkIf (!cfg.systemWide) {
