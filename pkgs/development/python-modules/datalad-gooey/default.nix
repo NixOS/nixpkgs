@@ -17,7 +17,7 @@
 buildPythonPackage {
   pname = "datalad-gooey";
   # many bug fixes on `master` but no new release
-  version = "unstable-2024-02-20";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
