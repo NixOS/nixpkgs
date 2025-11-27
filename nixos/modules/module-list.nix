@@ -1463,6 +1463,7 @@
   ./services/security/bitwarden-directory-connector-cli.nix
   ./services/security/canaille.nix
   ./services/security/certmgr.nix
+  ./services/security/certmonger.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
   ./services/security/crowdsec-firewall-bouncer.nix
