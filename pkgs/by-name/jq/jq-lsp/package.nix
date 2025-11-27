@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "jq-lsp";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
     tag = "v${version}";
-    hash = "sha256-VWZZFa+mMFAbfHTrFqf5vEEqA20DiCz4VjX50mgTuzw=";
+    hash = "sha256-5z5CTamk13QL50Hof2XeQ02NqRWMh4cECDhD6egGcnE=";
   };
 
   vendorHash = "sha256-oiy80U6WmpG0lHl5yTF017gZbiB2cWuM+cQJB0bs+RU=";
