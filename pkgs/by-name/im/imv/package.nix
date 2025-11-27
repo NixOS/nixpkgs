@@ -119,7 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cmocka
     libGL
     icu
     libxkbcommon
@@ -132,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   nativeCheckInputs = [
     tinyxxd
+  ];
+  checkInputs = [
+    cmocka
   ];
 
   meta = {
