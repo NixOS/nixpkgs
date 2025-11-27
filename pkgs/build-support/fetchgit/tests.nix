@@ -17,6 +17,16 @@
     sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
   };
 
+  collect-rev = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "collect-rev-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    hash = "sha256-AUTX1K7J5+fojvKYJacXYVV5kio3hrWYz5MCekO6h68=";
+    postCheckout = ''
+      git -C "$out" rev-parse HEAD | tee "$out/revision.txt"
+    '';
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";
