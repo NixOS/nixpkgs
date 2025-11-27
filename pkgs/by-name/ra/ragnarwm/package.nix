@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ragnarwm";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "cococry";
     repo = "Ragnar";
     rev = finalAttrs.version;
-    hash = "sha256-OZhIwrKEhTfkw9K8nZIwGZzxXBObseWS92Y+85HmdNs=";
+    hash = "sha256-c6MBdDujrSleXpvwTyne1AhCQD2TD4eWOr30SU4UwnA=";
   };
 
   prePatch = ''
