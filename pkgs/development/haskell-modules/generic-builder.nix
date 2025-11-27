@@ -41,6 +41,7 @@ let
           buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
             set -euo pipefail
             PORT=$((5000 + $RANDOM % 5000))
+            ${lib.optionalString stdenv.hostPlatform.isWindows "export WINEPREFIX=$TMP"}
             (>&2 echo "---> Starting interpreter on port $PORT")
             ${emulator} ${hostProxy} tmp $PORT &
             RISERV_PID="$!"
