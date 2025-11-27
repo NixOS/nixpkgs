@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitHub,
 }:
 
@@ -16,4 +17,13 @@ in
   };
 
   vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+
+  meta = {
+    homepage = "https://github.com/lima-vm/lima";
+    changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      anhduy
+    ];
+  };
 }
