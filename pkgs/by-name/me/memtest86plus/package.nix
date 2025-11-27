@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -Dm0444 mt86plus $out/mt86plus.efi
   '';
+
+  passthru.tests.systemd-boot-memtest = nixosTests.systemd-boot.memtest86;
 
   meta = {
     homepage = "https://www.memtest.org/";
