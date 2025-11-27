@@ -950,6 +950,7 @@ in
   misc = runTest ./misc.nix;
   misskey = runTest ./misskey.nix;
   mitmproxy = runTest ./mitmproxy.nix;
+  mitmdump = runTest ./mitmdump.nix;
   mjolnir = runTest ./matrix/mjolnir.nix;
   mobilizon = runTest ./mobilizon.nix;
   mod_perl = runTest ./mod_perl.nix;
