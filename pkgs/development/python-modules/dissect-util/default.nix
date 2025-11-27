@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.21";
+  version = "3.23";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.util";
     tag = version;
-    hash = "sha256-DCe1V3ZQxr2uQ5L4Lucqu0E1jVo7P6cEwC+4tuBmmqI=";
+    hash = "sha256-dHP5nyumuQxAS3hkw4XRaLR3DMFn+WEFkLRbKBODIFo=";
   };
 
   nativeBuildInputs = [
