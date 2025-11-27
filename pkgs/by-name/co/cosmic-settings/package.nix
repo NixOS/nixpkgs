@@ -15,7 +15,6 @@
   pipewire,
   pulseaudio,
   udev,
-  util-linux,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -46,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook'
     pkg-config
     rustPlatform.bindgenHook
-    util-linux
   ];
 
   buildInputs = [

@@ -3149,8 +3149,6 @@ with pkgs;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
-  lolcat = callPackage ../tools/misc/lolcat { };
-
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
   };
