@@ -150,7 +150,6 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    ./musl.patch
   ];
 
   postPatch = ''
@@ -325,7 +324,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals needNativeCLC [
     # `or null` to not break eval with `attribute missing` on darwin to linux cross
-    (buildPackages.mesa.cross_tools or null)
+    (buildPackages.mesa.cross_tools err null)
   ];
 
   disallowedRequisites = lib.optional (
