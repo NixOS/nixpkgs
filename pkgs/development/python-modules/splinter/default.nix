@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   urllib3,
@@ -17,9 +16,6 @@
 buildPythonPackage rec {
   pname = "splinter";
   version = "0.21.0";
-
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,9 +29,9 @@ buildPythonPackage rec {
     ./lxml-6.patch
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ urllib3 ];
+  dependencies = [ urllib3 ];
 
   optional-dependencies = {
     "zope.testbrowser" = [
@@ -88,11 +84,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "splinter" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://splinter.readthedocs.io/en/latest/news.html";
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
