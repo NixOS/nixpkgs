@@ -27,7 +27,7 @@
   # The system packages will ultimately be run on.
   crossSystem ? localSystem,
 
-  # Allow a configuration attribute set to be passed in as an argument.
+  # Allow a configuration module to be passed in as an argument.
   config ? { },
 
   # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
@@ -106,22 +106,12 @@ let
     in
     if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
-  # Allow both:
-  # { /* the config */ } and
-  # { pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
-
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      (
-        { options, ... }:
-        {
-          _file = "nixpkgs.config";
-          config = config1;
-        }
-      )
+      (lib.modules.setDefaultModuleLocation "nixpkgs.config" config0)
     ];
+    specialArgs = { inherit pkgs; };
     class = "nixpkgsConfig";
   };
 
