@@ -8,6 +8,7 @@
   libcap,
   libtirpc,
   libevent,
+  libnl,
   sqlite,
   libkrb5,
   kmod,
@@ -23,6 +24,7 @@
   openldap,
   cyrus_sasl,
   libxml2,
+  readline,
   udevCheckHook,
   enablePython ? true,
   enableLdap ? true,
@@ -38,11 +40,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nfs-utils";
-  version = "2.7.1";
+  version = "2.8.4";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-iFyUioSli8pBSPRZWI+ac2nbtA3MRm8E5FXGsQ/Qqkg=";
+    url = "mirror://kernel/linux/utils/nfs-utils/${version}/nfs-utils-${version}.tar.xz";
+    hash = "sha256-EcTMWYpDTX00C60+Byo3O6HcwsSfhV1EsgIiK3js2/U=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -65,12 +67,14 @@ stdenv.mkDerivation rec {
     libtirpc
     libcap
     libevent
+    libnl
     sqlite
     lvm2
     libuuid
     keyutils
     libkrb5
     libxml2
+    readline
   ]
   ++ lib.optional enablePython python3
   ++ lib.optionals enableLdap [
@@ -107,16 +111,12 @@ stdenv.mkDerivation rec {
       sha256 = "1fqws9dz8n1d9a418c54r11y3w330qgy2652dpwcy96cm44sqyhf";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/bb636cdb1b274f44d92b1cb2fdf0dff6079f97aa/srcpkgs/nfs-utils/patches/nfs-utils-2.7.1-define_macros_for_musl.patch";
-      hash = "sha256-wsyioRjzs1PObMHwYgf5h/Ngv+s5MPsroAuUNGs9lR0=";
+      url = "https://github.com/void-linux/void-packages/raw/31f0d5fef2f74999212bcfa6f982969973432750/srcpkgs/nfs-utils/patches/musl-includes.patch";
+      hash = "sha256-dZEafrXDZH/IPo1u7B65u01nwFMfcqSMnVyHAapexa8=";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/bb636cdb1b274f44d92b1cb2fdf0dff6079f97aa/srcpkgs/nfs-utils/patches/musl-svcgssd-sysconf.patch";
-      hash = "sha256-3TXgqswxlhFqXRPcjwo4MdqlTYl+dWVaa0E5r9Mnw18=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/bb636cdb1b274f44d92b1cb2fdf0dff6079f97aa/srcpkgs/nfs-utils/patches/musl-fix_long_unsigned_int.patch";
-      hash = "sha256-rS6sqqoGLIaPVq04+QiqP4qa88i1z4ZZCssM5k/XQ68=";
+      url = "https://github.com/void-linux/void-packages/raw/31f0d5fef2f74999212bcfa6f982969973432750/srcpkgs/nfs-utils/patches/musl-fix_long_unsigned_int.patch";
+      hash = "sha256-wcQ2IRmlBP61qZVlXk6osi4UH8ETtjllVogPEaZNK9o=";
     })
   ];
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
     substituteInPlace utils/mount/Makefile.in \
-      --replace "chmod 4511" "chmod 0511"
+      --replace-fail "chmod 4711" "chmod 0711"
 
     sed '1i#include <stdint.h>' -i support/nsm/rpc.c
   '';
