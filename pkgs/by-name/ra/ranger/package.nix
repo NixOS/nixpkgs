@@ -27,8 +27,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-vn1rAOFB2vq04Y/WAE44iH/b/zamAmvq8putUKwNqR8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     astroid
