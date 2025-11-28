@@ -177,10 +177,20 @@ following are specific to `buildPythonPackage`:
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
-  use the existing [hooks](#setup-hooks) or provide your own logic to build the
+  use the existing [hooks](#setup-hooks) or provide your own logic to build and install the
   package. This can be useful for packages that don't support the pyproject
   format. When unset, the legacy `setuptools` hooks are used for backwards
-  compatibility.
+  compatibility, however, this behavior can be modified with the `format` parameter.
+* `format`: If `pyproject` is set to true, this value will be set to `"pyproject"`. If
+  `pyproject` is set to false, `format` will be set to `"other"`. If `pyproject`
+  is unset, `format` allows for these following values:
+  * `"setuptools"` (default): Installs python package using setuptools and disutils.
+    This builds a wheel.
+  * `"wheel"`: Installs a python package from a pre-packaged wheel.
+  * `"pyproject"`: Installs the package using a `"pyproject.toml"` file (PEP517).
+    This builds a wheel.
+  * `"egg"`: Installs the package using an [egg](https://setuptools.pypa.io/en/latest/deprecated/python_eggs.html) (Deprecated).
+  * `"other"`: Does not provide any default buildPhase or installPhase.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
   [`makeWrapper`](#fun-makeWrapper), which wraps generated binaries. By default, the arguments to
   [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
