@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "selectolax";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rushter";
     repo = "selectolax";
     tag = "v${version}";
-    hash = "sha256-1xoHMQzoO0NYi5gJsV++Ngvkaf/O3U14nYkJLvzzbrQ=";
+    hash = "sha256-Et4v105XW06uvzzwic2tBft8ljDurTWIiuKPjCXJbx8=";
   };
 
   patches = [
