@@ -29,6 +29,10 @@ buildPythonPackage rec {
     hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
   };
 
+  patches = [
+    ./lxml-6.patch
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ urllib3 ];
