@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "eigenwallet";
+  pname = "eigenwallet";
   version = "3.3.7";
 
   src = fetchurl {

@@ -59,12 +59,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.21.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
+    hash = "sha256-+3jgoh6OVbPzW5/nCvpB1CRgkMTBxLkYMm6UV16/cfU=";
     rev = "v${version}";
   };
 
@@ -119,7 +119,8 @@ stdenv.mkDerivation rec {
     "--disable-builtinmbedtls"
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
-    "--disable-builtinflac"
+    # https://github.com/libretro/RetroArch/issues/18370
+    # "--disable-builtinflac"
     "--disable-update_assets"
     "--disable-update_core_info"
   ]

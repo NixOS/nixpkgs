@@ -60,8 +60,6 @@ in
   tests = { };
   updateScript = ./update.js;
 
-  dontFixup = hostPlatform.isDarwin;
-
   meta = {
     mainProgram = "antigravity";
     description = "Agentic development platform, evolving the IDE into the agent-first era";

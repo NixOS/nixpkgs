@@ -46,7 +46,7 @@ buildGoModule rec {
     description = "Kubectx for operators, a drop-in replacement for kubectx";
     license = lib.licenses.asl20;
     homepage = "https://github.com/danielfoehrKn/kubeswitch";
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
     mainProgram = "switcher";
   };
 }

@@ -52,6 +52,6 @@ buildGoModule rec {
     mainProgram = "img";
     license = licenses.mit;
     homepage = "https://github.com/genuinetools/img";
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 }

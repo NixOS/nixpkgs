@@ -10,7 +10,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~foosoft";
     repo = "anki-connect";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZPjGqyxTyLg5DtOUPJWCBC/IMfDVxtWt86VeFrsE41k=";
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";

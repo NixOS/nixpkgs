@@ -108,7 +108,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       shahrukh330
-      bryanasdev000
       qjoly
       FKouhai
     ];
