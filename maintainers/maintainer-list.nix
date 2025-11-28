@@ -6296,6 +6296,12 @@
     githubId = 51992962;
     name = "Nikita Demin";
   };
+  demis = {
+    email = "damianoshushku@gmail.com";
+    github = "D3M1S22";
+    githubId = 48984462;
+    name = "Damiano Shushku";
+  };
   demize = {
     email = "johannes@kyriasis.com";
     github = "kyrias";
