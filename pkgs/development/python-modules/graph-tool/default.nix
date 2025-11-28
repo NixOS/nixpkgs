@@ -9,6 +9,7 @@
   cairomm,
   cgal,
   expat,
+  fontconfig,
   gobject-introspection,
   gtk3,
   llvmPackages,
@@ -99,7 +100,14 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ gobject-introspection ];
 
-  pythonImportsCheck = [ "graph_tool" ];
+  preInstallCheck =
+    # avoid warnings about Matplotlib and Fontconfig configuration issues
+    ''
+      export HOME=$(mktemp -d)
+      export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    '';
+
+  pythonImportsCheck = [ "graph_tool.all" ];
 
   passthru.updateScript = gitUpdater {
     url = "https://git.skewed.de/count0/graph-tool";
