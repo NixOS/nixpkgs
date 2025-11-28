@@ -24,7 +24,7 @@ let
   versions = "Qt${lib.versions.major qtVersion}-Python${lib.versions.majorMinor pyVersion}";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "python-qt";
+  pname = "python${lib.versions.majorMinor pyVersion}-qt${lib.versions.major qtVersion}";
   version = "3.6.1-unstable-2025-11-20";
 
   src = fetchFromGitHub {
@@ -54,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.QTDIR = "${qtbase}"; # Used to find qtcoreversion.h
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/src.pro --replace-fail \
+      "QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64" \
+      "QMAKE_APPLE_DEVICE_ARCHS = ${stdenv.hostPlatform.darwinArch}"
+  '';
 
   # generated cpp is available for many Qt5 versions but not Qt6
   # ref. https://github.com/MeVisLab/pythonqt#binding-generator
