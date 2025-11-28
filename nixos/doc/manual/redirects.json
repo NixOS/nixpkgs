@@ -140,6 +140,21 @@
   "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
     "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
   ],
+  "module-services-postal": [
+    "index.html#module-services-postal"
+  ],
+  "module-services-postal-minimal-example": [
+    "index.html#module-services-postal-minimal-example"
+  ],
+  "module-services-postal-basic-usage": [
+    "index.html#module-services-postal-basic-usage"
+  ],
+  "module-services-create-user-from-cli": [
+    "index.html#module-services-create-user-from-cli"
+  ],
+  "module-services-postal-emails-deliverability": [
+    "index.html#module-services-postal-emails-deliverability"
+  ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
   ],
