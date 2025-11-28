@@ -21942,24 +21942,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  mathjax = nodeEnv.buildNodePackage {
-    name = "mathjax";
-    packageName = "mathjax";
-    version = "3.2.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/mathjax/-/mathjax-3.2.2.tgz";
-      sha512 = "Bt+SSVU8eBG27zChVewOicYs7Xsdt40qm4+UpHyX7k0/O9NliPc+x77k1/FEsPsjKPZGJvtRZM1vO+geW0OhGw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source ";
-      homepage = "https://github.com/mathjax/MathJax#readme";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   node2nix = nodeEnv.buildNodePackage {
     name = "node2nix";
     packageName = "node2nix";
