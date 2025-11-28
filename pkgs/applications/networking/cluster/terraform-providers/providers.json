@@ -832,13 +832,13 @@
     "vendorHash": "sha256-Y1L1nIOubhBN5vNIXY7miQgR9OzoTCS7QA55DEMwDSA="
   },
   "linode_linode": {
-    "hash": "sha256-t6vHW9t3MWsPsGUh44OXvYTfHa03qiH3lveKK0dit9Q=",
+    "hash": "sha256-AxG8N/kEu2+Yym63Ac04SxjrUyCiSp/zmIXQqscpeWM=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.5.1",
+    "rev": "v3.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-8LbFq29JvQX3Trn81fr3YMjFwW+OTWAyK6OVAkh0I3A="
+    "vendorHash": "sha256-2zdUEV84CQ236ktTfMcucAb2gwDPIQ+Br5AfKncZdJA="
   },
   "loafoe_htpasswd": {
     "hash": "sha256-ALTyTTVyS2HHenmk8HVwtQenCmJX05kyXifJTzzmnHE=",
