@@ -54,7 +54,7 @@ in
         };
       }
 
-      (import ./wayland-session.nix {
+      (import ../wayland-session.nix {
         inherit lib pkgs;
         enableWlrPortal = false;
         enableXWayland = false;
