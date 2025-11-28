@@ -1,11 +1,11 @@
 {
   lib,
   libguestfs,
-  libguestfs-appliance,
+  libguestfs-appliance-fedora,
 }:
 
 let
-  appliance = libguestfs-appliance;
+  appliance = libguestfs-appliance-fedora;
   # check explicit forward compatibility declaration:
   # then do not warn if older appliance if known to work fine with newer libguestfs
   libguestfsCompatible =
