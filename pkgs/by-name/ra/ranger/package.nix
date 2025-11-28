@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication {
 
   meta = {
     description = "File manager with minimalistic curses interface";
-    homepage = "https://ranger.github.io/";
+    homepage = "https://ranger.fm/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
