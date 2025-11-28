@@ -10,7 +10,7 @@
   python3,
   xorg,
   fontconfig,
-  nodePackages,
+  node-gyp-build,
   ripgrep,
   pkg-config,
   libsecret,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: with ps; [ packaging ]))
     pkg-config
     nodejs
-    nodePackages.node-gyp-build
+    node-gyp-build
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild

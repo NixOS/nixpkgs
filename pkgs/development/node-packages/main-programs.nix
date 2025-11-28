@@ -6,7 +6,6 @@
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   aws-cdk = "cdk";
-  fauna-shell = "fauna";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   pulp = "pulp";
