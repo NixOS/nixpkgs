@@ -168,6 +168,6 @@ buildGoModule (finalAttrs: {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    mainProgram = "grafana-server";
+    mainProgram = "grafana";
   };
 })
