@@ -41,7 +41,7 @@ python3Packages.buildPythonPackage rec {
     description = "Tool to automatically purge old trashed files";
     license = lib.licenses.gpl3Plus;
     homepage = "https://bneijt.nl/pr/autotrash";
-    changelog = "https://github.com/bneijt/autotrash/releases/tag/${src.tag}";
+    changelog = "https://github.com/bneijt/autotrash/releases/tag/${version}";
     maintainers = with lib.maintainers; [
       sigmanificient
       mithicspirit
