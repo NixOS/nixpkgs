@@ -1,38 +1,41 @@
 {
   lib,
-  buildPackages,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
-  maturin,
-  nexusrpc,
-  nix-update-script,
-  nixosTests,
-  pythonOlder,
-  poetry-core,
-  protobuf5,
-  python-dateutil,
-  rustc,
   rustPlatform,
-  setuptools,
-  setuptools-rust,
+  buildPackages,
+
+  # build-system
+  maturin,
+
+  # dependencies
+  nexusrpc,
+  protobuf,
   types-protobuf,
   typing-extensions,
+  pythonOlder,
+  python-dateutil,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.19.0";
+  version = "1.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KjbHm1uSsIla+kiov5qxCS4SjAS4zMk0txgS+558bgI=";
+    tag = version;
     fetchSubmodules = true;
+    hash = "sha256-JScwBcVkl5kAxO4zKmt1ab6b1KlhGmPSjr7O0PRu0p8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -42,23 +45,20 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-BBXqIRj5Rpk0P/fhLb1ugnOli0NuQgS8E9jPFR39KpI=";
+    hash = "sha256-vhoXn4Aur4/VSwM2qVxOiWEI5/zAmep9ViQMGLln9PU=";
   };
 
   cargoRoot = "temporalio/bridge";
 
   build-system = [
     maturin
-    poetry-core
   ];
 
-  preBuild = ''
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
-  '';
+  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
 
   dependencies = [
     nexusrpc
-    protobuf5
+    protobuf
     types-protobuf
     typing-extensions
   ]
@@ -69,8 +69,6 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
-    setuptools
-    setuptools-rust
   ];
 
   pythonImportsCheck = [
