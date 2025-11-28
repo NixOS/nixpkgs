@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  mecab-nodic,
   buildPackages,
+  callPackage,
 }:
 
+let
+  mecab-nodic = callPackage ./nodic.nix { };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mecab-ipadic";
   version = "2.7.0-20070801";
