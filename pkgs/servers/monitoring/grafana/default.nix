@@ -15,6 +15,7 @@
   xcbuild,
   faketty,
   nodejs,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -132,6 +133,11 @@ buildGoModule (finalAttrs: {
     mkdir -p $out/share/grafana
     cp -r public conf $out/share/grafana/
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   postFixup = ''
     while read line; do
