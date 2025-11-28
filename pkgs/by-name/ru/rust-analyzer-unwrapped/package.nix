@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Modular compiler frontend for the Rust language";
+    description = "Language server for the Rust language";
     homepage = "https://rust-analyzer.github.io";
     license = with licenses; [
       mit
