@@ -9,7 +9,6 @@
   cairomm,
   cgal,
   expat,
-  gmp,
   gobject-introspection,
   gtk3,
   llvmPackages,
@@ -22,6 +21,7 @@
   python,
   scipy,
   sparsehash,
+  zstandard,
   gitUpdater,
 }:
 
@@ -74,26 +74,30 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  build-system = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
-  dependencies = [
+  buildInputs = [
     boost'
     cairomm
     cgal
     expat
-    gmp
-    gobject-introspection
+    mpfr
+    sparsehash
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
+  dependencies = [
     gtk3
     matplotlib
-    mpfr
     numpy
     pycairo
     pygobject3
     scipy
-    sparsehash
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+    zstandard
+  ];
+
+  propagatedNativeBuildInputs = [ gobject-introspection ];
 
   pythonImportsCheck = [ "graph_tool" ];
 
