@@ -13877,11 +13877,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops { })
     mkKops
-    kops_1_31
     kops_1_32
     kops_1_33
+    kops_1_34
     ;
-  kops = kops_1_33;
+  kops = kops_1_34;
 
   lilypond = callPackage ../misc/lilypond { };
 
