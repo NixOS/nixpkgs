@@ -10,11 +10,11 @@
 
 buildDunePackage rec {
   pname = "uuuu";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/uuuu/releases/download/v${version}/uuuu-${version}.tbz";
-    sha256 = "sha256:19n39yc7spgzpk9i70r0nhkwsb0bfbvbgpf8d863p0a3wgryhzkb";
+    sha256 = "sha256-5+GNk9s36ZocrAjuvlDIiQTq6WF9q0M8j3h/TakrGSg=";
   };
 
   postPatch = ''
