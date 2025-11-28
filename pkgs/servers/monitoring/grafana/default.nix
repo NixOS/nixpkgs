@@ -154,6 +154,7 @@ buildGoModule (finalAttrs: {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
+    changelog = "https://github.com/grafana/grafana/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [
       offline
       fpletz
