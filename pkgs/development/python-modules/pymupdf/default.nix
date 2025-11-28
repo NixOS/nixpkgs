@@ -166,7 +166,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
 }
