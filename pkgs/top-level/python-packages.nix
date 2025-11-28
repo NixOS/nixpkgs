@@ -2794,6 +2794,8 @@ self: super: with self; {
 
   cltk = callPackage ../development/python-modules/cltk { };
 
+  clu = callPackage ../development/python-modules/clu { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clx-sdk-xms = callPackage ../development/python-modules/clx-sdk-xms { };
@@ -3839,6 +3841,8 @@ self: super: with self; {
 
   dissect = callPackage ../development/python-modules/dissect { };
 
+  dissect-apfs = callPackage ../development/python-modules/dissect-apfs { };
+
   dissect-archive = callPackage ../development/python-modules/dissect-archive { };
 
   dissect-btrfs = callPackage ../development/python-modules/dissect-btrfs { };
@@ -3852,6 +3856,8 @@ self: super: with self; {
   dissect-cramfs = callPackage ../development/python-modules/dissect-cramfs { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
+
+  dissect-database = callPackage ../development/python-modules/dissect-database { };
 
   dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
 

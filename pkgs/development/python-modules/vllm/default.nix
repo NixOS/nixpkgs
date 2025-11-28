@@ -75,6 +75,11 @@
   setproctitle,
   openai-harmony,
 
+  # optional-dependencies
+  # audio
+  librosa,
+  soundfile,
+
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
 
@@ -462,6 +467,15 @@ buildPythonPackage rec {
     nvidia-ml-py
     flashinfer
   ];
+
+  optional-dependencies = {
+    audio = [
+      librosa
+      soundfile
+      mistral-common
+    ]
+    ++ mistral-common.optional-dependencies.audio;
+  };
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [

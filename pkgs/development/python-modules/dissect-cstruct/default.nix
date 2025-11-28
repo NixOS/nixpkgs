@@ -5,21 +5,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "4.6";
+  version = "4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cstruct";
     tag = version;
-    hash = "sha256-emxIFHSKAv4Fpzc5vQAkLaG91ezIszDnLKX8thVQKeo=";
+    hash = "sha256-eEaKGFpArg0p3+/I2dH3mQ+eNIVJ8KsUbRcw4Ecrl7g=";
   };
 
   build-system = [
