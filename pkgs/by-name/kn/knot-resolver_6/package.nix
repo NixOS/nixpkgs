@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   # native deps.
   runCommand,
   pkg-config,
@@ -15,7 +15,7 @@
   gnutls,
   lmdb,
   jemalloc,
-  systemd,
+  systemdMinimal,
   libcap_ng,
   dns-root-data,
   nghttp2, # optionals, in principle
@@ -33,43 +33,42 @@ let
   inherit (lib) optional optionals optionalString;
   lua = luajitPackages;
 
-  unwrapped = stdenv.mkDerivation rec {
-    pname = "knot-resolver";
-    version = "5.7.6";
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
+    pname = "knot-resolver_6";
+    version = "6.0.16";
 
-    src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
+    src = fetchFromGitLab {
+      domain = "gitlab.nic.cz";
+      owner = "knot";
+      repo = "knot-resolver";
+      fetchSubmodules = true;
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-hKKilmcMEsoeisshFWWQhFg69NXmeZRmjoj3qKp112s=";
     };
 
     outputs = [
       "out"
       "dev"
+      "config_py"
     ];
 
     # Path fixups for the NixOS service.
+    # systemd Exec* options are difficult to override in NixOS *if present*, so we drop them.
     postPatch = ''
       patch meson.build <<EOF
-      @@ -50,2 +50,2 @@
+      @@ -50,2 +50,3 @@
       -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
       -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
       +systemd_work_dir  = '/var/lib/knot-resolver'
       +systemd_cache_dir = '/var/cache/knot-resolver'
+      +run_dir = '/run/knot-resolver'
       EOF
 
-      # ExecStart can't be overwritten in overrides.
-      # We need that to use wrapped executable and correct config file.
-      sed '/^ExecStart=/d' -i systemd/kresd@.service.in
-
-      # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
-      # Even though they should already be loaded and they're in RPATH, too.
-      for f in daemon/lua/{kres,zonefile}.lua; do
-        substituteInPlace "$f" \
-          --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
-      done
+      sed -e '/^ExecStart=/d' -e '/^ExecReload=/d' \
+        -i systemd/knot-resolver.service.in
     ''
     # some tests have issues with network sandboxing, apparently
-    + optionalString doInstallCheck ''
+    + optionalString finalAttrs.doInstallCheck ''
       echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
       sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
         tests/config/doh2.test.lua modules/http/http_doh.test.lua
@@ -96,7 +95,7 @@ let
     ## the rest are optional dependencies
     ++ optionals stdenv.hostPlatform.isLinux [
       # lib
-      systemd
+      systemdMinimal
       libcap_ng
     ]
     ++ [
@@ -116,15 +115,15 @@ let
       "-Dmalloc=jemalloc"
       "--default-library=static" # not used by anyone
     ]
-    ++ optional doInstallCheck "-Dunit_tests=enabled"
-    ++ optional doInstallCheck "-Dconfig_tests=enabled"
+    ++ optional finalAttrs.doInstallCheck "-Dunit_tests=enabled"
+    ++ optional finalAttrs.doInstallCheck "-Dconfig_tests=enabled"
     ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
     ;
 
     postInstall = ''
+      cp -r ./python "$config_py"
       rm "$out"/lib/libkres.a
-      rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
     ''
     + optionalString stdenv.hostPlatform.isLinux ''
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
@@ -151,9 +150,10 @@ let
       maintainers = [
         maintainers.vcunat # upstream developer
       ];
+      teams = [ teams.flyingcircus ];
       mainProgram = "kresd";
     };
-  };
+  });
 
   wrapped-full =
     runCommand unwrapped.name
@@ -177,6 +177,7 @@ let
             --set LUA_PATH  "$LUA_PATH" \
             --set LUA_CPATH "$LUA_CPATH"
 
+          ln -sr '${unwrapped}/bin/kres-cache-gc' "$out"/bin/
           ln -sr '${unwrapped}/share' "$out"/
           ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
           ln -sr "$out"/{bin,sbin}
