@@ -2,9 +2,10 @@
   buildPythonPackage,
   lib,
   fetchurl,
+  fetchpatch,
   stdenv,
 
-  boost,
+  boost189,
   cairomm,
   cgal,
   expat,
@@ -25,7 +26,17 @@
 }:
 
 let
-  boost' = boost.override {
+  boost' = boost189.override {
+    patches = [
+      # required to build against Clang >= 21 (https://github.com/boostorg/lexical_cast/pull/87)
+      # TODO: drop when upgrading to Boost >= 1.90
+      (fetchpatch {
+        name = "Reduce-dependency-on-Boost.TypeTraits-now-that-C-11-.patch";
+        url = "https://github.com/boostorg/lexical_cast/commit/8fc8a19931c8cb452400af907959fdacbbdd8ec1.patch";
+        relative = "include";
+        hash = "sha256-OO39ejR+I5ufjqinrMJ6HgjTE7Ph+XBu50PqcIKaIQo=";
+      })
+    ];
     enablePython = true;
     inherit python;
   };
