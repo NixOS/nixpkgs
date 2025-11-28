@@ -1,0 +1,13 @@
+diff --git a/llef.py b/llef.py
+index 7f3adf4..8ca36c5 100644
+--- a/llef.py
++++ b/llef.py
+@@ -54,7 +54,7 @@ def __lldb_init_module(debugger: SBDebugger, _: Dict[Any, Any]) -> None:
+         handler.lldb_self_register(debugger, "llef")
+ 
+     LLEFState.platform = platform.system()
+-    if LLEFState.platform == "Darwin":
++    if False and LLEFState.platform == "Darwin": # Nix lldb on Darwin also follows the "regular" version scheme
+         # Getting Clang version (e.g.  lldb-1600.0.36.3)
+         LLEFState.version = [int(x) for x in debugger.GetVersionString().split()[0].split("-")[1].split(".")]
+     else:
