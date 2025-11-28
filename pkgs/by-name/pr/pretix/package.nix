@@ -78,6 +78,9 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # https://pretix.eu/about/en/blog/20251127-release-2025-9-2/
+    ./CVE-2025-13742.patch
   ];
 
   pythonRelaxDeps = [
