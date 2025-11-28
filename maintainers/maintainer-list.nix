@@ -6807,6 +6807,12 @@
     githubId = 13937320;
     name = "Dalton Caron";
   };
+  DomagojAlaber = {
+    email = "a.domagoj@hotmail.com";
+    github = "DomagojAlaber";
+    githubId = 86619082;
+    name = "Domagoj Alaber";
+  };
   domenkozar = {
     email = "domen@dev.si";
     github = "domenkozar";
