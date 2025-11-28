@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Use (almost) any camera as a webcam on Linux";
     longDescription = ''
-       Webcamize allows you to use basically any modern camera as a webcam on Linux—your DSLR,
-       mirrorless, camcorder, point-and-shoot, and even some smartphones/tablets. It also gets
-       many webcams that don't work out of the box on Linux up and running.
-     '';
+      Webcamize allows you to use basically any modern camera as a webcam on Linux—your DSLR,
+      mirrorless, camcorder, point-and-shoot, and even some smartphones/tablets. It also gets
+      many webcams that don't work out of the box on Linux up and running.
+    '';
     homepage = "https://github.com/cowtoolz/webcamize";
     changelog = "https://github.com/cowtoolz/webcamize/releases/tag/v${version}";
     license = lib.licenses.bsd2;
