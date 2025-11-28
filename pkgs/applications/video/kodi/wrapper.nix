@@ -28,6 +28,14 @@ let
     lib.concatMapStringsSep ":" (
       addon: "${addon}${kodiPackages.addonDir}/${addon.namespace}/${addon.pythonPath}"
     ) addonsWithPythonPath;
+
+  # each kodi addon can ask to add packages to the kodi PATH.
+  # E.g. sendtokodi asks to add deno. See any addon that supplies `passthru.pathPackages`.
+  pathPackages =
+    let
+      addonsHavingPathPackages = lib.filter (addon: addon ? pathPackages) addons;
+    in
+    lib.flatten (map (addon: addon.pathPackages) addonsHavingPathPackages);
 in
 
 buildEnv {
@@ -44,6 +52,7 @@ buildEnv {
     do
       makeWrapper ${kodi}/bin/$exe $out/bin/$exe \
         --prefix PYTHONPATH : ${requiredPythonPath}:${additionalPythonPath} \
+        --prefix PATH : ${lib.makeBinPath pathPackages} \
         --prefix KODI_HOME : $out/share/kodi \
         --prefix LD_LIBRARY_PATH ":" "${
           lib.makeLibraryPath (lib.concatMap (plugin: plugin.extraRuntimeDependencies or [ ]) addons)
