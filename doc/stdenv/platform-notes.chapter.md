@@ -117,10 +117,11 @@ The following is a list of Xcode versions, the SDK version in Nixpkgs, and the a
 Check your package’s documentation (platform support or installation instructions) to find which Xcode or SDK version to use.
 Generally, only the last SDK release for a major version is packaged.
 
-| Xcode version      | SDK version        | Nixpkgs attribute             |
-|--------------------|--------------------|-------------------------------|
-| 15.0–15.4          | 14.4               | `apple-sdk_14` / `apple-sdk`  |
-| 16.0               | 15.0               | `apple-sdk_15`                |
+| Xcode version | SDK version | Nixpkgs attribute            |
+|---------------|-------------|------------------------------|
+| 15.0–15.4     | 14.4        | `apple-sdk_14` / `apple-sdk` |
+| 16.0          | 15.0        | `apple-sdk_15`               |
+| 26.0+         | 26.0+       | `apple-sdk_26`, etc          |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
