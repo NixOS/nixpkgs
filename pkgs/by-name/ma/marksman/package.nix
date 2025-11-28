@@ -7,19 +7,23 @@
   testers,
 }:
 
-buildDotnetModule rec {
+let
   pname = "marksman";
+  dotnet-sdk = dotnetCorePackages.sdk_9_0_1xx-bin;
+in
+buildDotnetModule (finalAttrs: {
+  inherit pname dotnet-sdk;
   version = "2025-11-30";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-rEGMh4QsxTe35psbflYGgjjDDf0TzvItkx/ARE8ZC1E=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
-  dotnetBuildFlags = [ "-p:VersionString=${version}" ];
+  dotnetBuildFlags = [ "-p:VersionString=${finalAttrs.version}" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -28,7 +32,6 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0_1xx-bin;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postInstall = ''
@@ -60,6 +63,6 @@ buildDotnetModule rec {
       plusgut
     ];
     platforms = dotnet-sdk.meta.platforms;
-    mainProgram = "marksman";
+    mainProgram = pname;
   };
-}
+})
