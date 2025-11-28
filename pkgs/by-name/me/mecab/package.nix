@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  mecab-ipadic,
   libiconv,
+  callPackage,
 }:
 
 let
   mecab-base = import ./base.nix { inherit fetchurl libiconv; };
+  mecab-ipadic = callPackage ./ipadic.nix { };
 in
 stdenv.mkDerivation (
   finalAttrs:
