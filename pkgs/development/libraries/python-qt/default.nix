@@ -25,13 +25,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.6.1";
+  version = "3.6.1-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-OYFQtDGq+d32RQ0vChRKH//O9QgQPLMd1he8X3zCi+U=";
+    # tag = "v${finalAttrs.version}";
+    rev = "fd97b4b2ca5fc94a3219b002aadfbe2e8c89f59d";
+    hash = "sha256-BAuvs23VBKt6g5gpAtMUPyikL+D3sMEpch1BLICUotc=";
   };
 
   nativeBuildInputs = [
