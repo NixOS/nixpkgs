@@ -6422,7 +6422,7 @@ self: super: with self; {
 
   granian = callPackage ../development/python-modules/granian { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
+  graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal graphviz; };
 
   grapheme = callPackage ../development/python-modules/grapheme { };
 

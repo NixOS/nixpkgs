@@ -11,6 +11,7 @@
   expat,
   fontconfig,
   gobject-introspection,
+  graphviz,
   gtk3,
   llvmPackages,
   matplotlib,
@@ -58,6 +59,14 @@ buildPythonPackage rec {
       substituteInPlace configure \
         --replace-fail 'tput setaf $1' : \
         --replace-fail 'tput sgr0' :
+    ''
+    +
+    # hardcode path to graphviz library to avoid find_library, which would require setting LD_LIBRARY_PATH
+    ''
+      substituteInPlace src/graph_tool/draw/graphviz_draw.py \
+        --replace-fail \
+          'ctypes.util.find_library("gvc")' \
+          '"${lib.getLib graphviz}/lib/libgvc${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
 
   configureFlags =
