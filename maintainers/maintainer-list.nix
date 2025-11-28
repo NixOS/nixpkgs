@@ -19485,6 +19485,12 @@
     githubId = 20295134;
     name = "Oliver Ni";
   };
+  oliviermarty = {
+    email = "omarty@google.com";
+    github = "OlivierMarty";
+    githubId = 4533890;
+    name = "Olivier Marty";
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
