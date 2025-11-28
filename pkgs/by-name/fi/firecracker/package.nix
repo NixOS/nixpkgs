@@ -7,6 +7,7 @@
   libseccomp,
   rust-bindgen,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -77,6 +78,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=env::tests::test_userfaultfd_dev"
     "--skip=resource_limits::tests::test_set_resource_limits"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall
