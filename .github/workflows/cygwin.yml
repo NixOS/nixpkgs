@@ -8,7 +8,8 @@ jobs:
       - uses: actions/checkout@v5
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - run: nix build .#cygwinSystem.config.system.build.tarball
+      - name: build
+        run: nix build .#cygwinSystem.config.system.build.tarball
       - uses: actions/upload-artifact@v4
         with:
           name: tarball
@@ -20,9 +21,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: tarball
-      - run: tarball/install.ps1 cygwin
-      - run: cygwin/cygwin.ps1 -c 'nix build --no-sandbox nixpkgs#cygwinSystem.config.system.build.tarball'
-      - uses: actions/upload-artifact@v4
-        with:
-          name: tarball
-          path: result
+      - name: install
+        run: tarball/install.ps1 cygwin
+      - name: build
+        shell: cygwin/cygwin.ps1 {0}
+        run: nix build --no-sandbox nixpkgs#hello
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: tarball
+      #     path: result
