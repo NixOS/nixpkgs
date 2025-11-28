@@ -149,9 +149,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
-      wrapProgram "$bin" \
-        --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
-        --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
+      ${
+        # the fixed appliance built from NixOS requires `init=` to be
+        # specified for a successful boot and unlike FHS systems, we
+        # cannot use `init=/` so this is our way of specifying `init=`
+        if (appliance ? appendToCmdline) then
+          ''
+            wrapProgram "$bin" \
+              --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
+              --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}" \
+              --set LIBGUESTFS_APPEND "${appliance.appendToCmdline}"
+          ''
+        else
+          ''
+            wrapProgram "$bin" \
+              --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
+              --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
+          ''
+      }
     done
   '';
 
@@ -169,7 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
 
-    $out/bin/guestfish <<'EOF'
+    # set `LIBGUESTFS_DEBUG` and `LIBGUESTFS_TRACE` to debug any
+    # potential issues caused by updates/changes to/in the appliance
+    LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 $out/bin/guestfish <<'EOF'
     add-drive disk1.img
     run
     list-filesystems
