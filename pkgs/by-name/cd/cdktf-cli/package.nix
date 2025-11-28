@@ -142,8 +142,13 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  # Tries to write to /var/empty/.terraform.d on darwin
+  # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
   passthru = {
     tests.version = testers.testVersion {
