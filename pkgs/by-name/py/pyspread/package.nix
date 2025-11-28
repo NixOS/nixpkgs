@@ -2,17 +2,11 @@
   lib,
   python3Packages,
   fetchPypi,
+  qt6,
+  R,
   copyDesktopItems,
-  libsForQt5,
   makeDesktopItem,
 }:
-
-let
-  inherit (libsForQt5)
-    qtsvg
-    wrapQtAppsHook
-    ;
-in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.4";
@@ -26,21 +20,30 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   nativeBuildInputs = [
+    R
     copyDesktopItems
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtsvg
-  ];
+  buildInputs = [ qt6.qtsvg ];
 
   dependencies = with python3Packages; [
-    python-dateutil
-    markdown2
-    matplotlib
+    pyqt6
     numpy
-    pyenchant
-    pyqt5
+    markdown2
+
+    # Optional
+    matplotlib # data visualization
+    pyenchant # spellchecker bindings
+    pip # python package installer
+    python-dateutil # extensions to standard datetime module
+    rpy2 # interface to R
+    plotnine # data visualization
+    openpyxl # r/w Excel 2010 xlsx/xlsm files
+
+    # Optional & not in nixpkgs
+    #py-moneyed # currency & money classes
+    #pycel # compile Excel spreadsheets to Python code
   ];
 
   strictDeps = true;
@@ -63,6 +66,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ];
     })
   ];
+
+  makeWrapperArgs = [ "--set R_HOME ${lib.getLib R}/lib/R" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
