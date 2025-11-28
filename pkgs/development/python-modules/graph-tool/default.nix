@@ -59,11 +59,18 @@ buildPythonPackage rec {
         --replace-fail 'tput sgr0' :
     '';
 
-  configureFlags = lib.mapAttrsToList (lib.withFeatureAs true) {
-    boost-libdir = "${lib.getLib boost'}/lib";
-    cgal = lib.getDev cgal;
-    python-module-path = "$(out)/${python.sitePackages}";
-  };
+  configureFlags =
+    lib.mapAttrsToList (lib.withFeatureAs true) {
+      boost-libdir = "${lib.getLib boost'}/lib";
+      cgal = lib.getDev cgal;
+      python-module-path = "$(out)/${python.sitePackages}";
+    }
+    ++
+      lib.optionals stdenv.cc.isGNU
+        # enable GCC's link-time optimizer in order to reduce compilation time and memory usage during compilation
+        # https://graph-tool.skewed.de/installation.html#memory-requirements-for-compilation
+        # https://git.skewed.de/count0/graph-tool/-/issues/798#note_5626
+        [ "MOD_CXXFLAGS=-flto" ];
 
   enableParallelBuilding = true;
 
