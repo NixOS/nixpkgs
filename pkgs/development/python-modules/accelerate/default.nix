@@ -155,6 +155,9 @@ buildPythonPackage rec {
     # Fails with `sandbox=false` by mis-configuring the model it's using.
     # AttributeError: 'DistributedDataParallel' object has no attribute '_ignored_modules'. Did you mean: 'named_modules'?
     "test_ignored_modules_regex"
+
+    # Illegal instruction (x86_64) / Trace/BPT Error 5 (aarch64)
+    "test_can_pickle_dataloader"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
