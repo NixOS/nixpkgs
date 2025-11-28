@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
   meta = with lib; {
