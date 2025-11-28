@@ -35,6 +35,9 @@ let
   };
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
+  userbornBakedFiles =
+    pkgs.runCommand "baked userborn" { }
+      "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   # The filenames created by userborn.
@@ -51,12 +54,24 @@ in
 
     enable = lib.mkEnableOption "userborn";
 
+    baked = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to generate the password files at build time and store them directly
+        in the system closure, without requiring any services at boot time.
+
+        This is mostly intended for embedded appliance-style environments that only
+        have passwordless users and want to use an immutable `/etc`.
+      '';
+    };
+
     package = lib.mkPackageOption pkgs "userborn" { };
 
     passwordFilesLocation = lib.mkOption {
       type = lib.types.str;
-      default = if immutableEtc then "/var/lib/nixos" else "/etc";
-      defaultText = lib.literalExpression ''if immutableEtc then "/var/lib/nixos" else "/etc"'';
+      default = if immutableEtc && !cfg.baked then "/var/lib/nixos" else "/etc";
+      defaultText = lib.literalExpression ''if immutableEtc && !config.services.userborn.baked then "/var/lib/nixos" else "/etc"'';
       description = ''
         The location of the original password files.
 
@@ -83,8 +98,16 @@ in
         message = "system.activationScripts.users has to be empty to use userborn";
       }
       {
-        assertion = immutableEtc -> (cfg.passwordFilesLocation != "/etc");
-        message = "When `system.etc.overlay.mutable = false`, `services.userborn.passwordFilesLocation` cannot be set to `/etc`";
+        assertion = (immutableEtc && !cfg.baked) -> (cfg.passwordFilesLocation != "/etc");
+        message = "When `system.etc.overlay.mutable = false` and `services.userborn.baked = false`, `services.userborn.passwordFilesLocation` cannot be set to `/etc`";
+      }
+      {
+        assertion = cfg.baked -> cfg.passwordFilesLocation == "/etc";
+        message = "When `services.userborn.baked = false`, `services.userborn.passwordFilesLocation` must be set to `/etc`";
+      }
+      {
+        assertion = !(cfg.baked && userCfg.mutableUsers);
+        message = "You cannot use `services.userborn.baked = true` with mutable users";
       }
     ];
 
@@ -111,6 +134,7 @@ in
           );
 
       services.userborn = {
+        enable = !cfg.baked;
         wantedBy = [ "sysinit.target" ];
         requiredBy = [ "sysinit-reactivation.target" ];
         after = [
@@ -166,20 +190,33 @@ in
       };
     };
 
-    # Statically create the symlinks to passwordFilesLocation when they're not
-    # inside /etc because we will not be able to do it at runtime in case of an
-    # immutable /etc!
-    environment.etc = lib.mkIf (cfg.passwordFilesLocation != "/etc") (
-      lib.listToAttrs (
-        lib.map (
-          file:
-          lib.nameValuePair file {
-            source = "${cfg.passwordFilesLocation}/${file}";
-            mode = "direct-symlink";
-          }
-        ) passwordFiles
-      )
-    );
+    environment.etc =
+      if cfg.baked then
+        # In baked mode, statically drop the files into an immutable /etc.
+        lib.listToAttrs (
+          lib.map (
+            file:
+            lib.nameValuePair file {
+              source = "${userbornBakedFiles}/${file}";
+              mode = if file == "shadow" then "0440" else "0444";
+            }
+          ) passwordFiles
+        )
+      else if cfg.passwordFilesLocation != "/etc" then
+        # Statically create the symlinks to passwordFilesLocation when they're not
+        # inside /etc because we will not be able to do it at runtime in case of a
+        # (non-baked) immutable /etc!
+        lib.listToAttrs (
+          lib.map (
+            file:
+            lib.nameValuePair file {
+              source = "${cfg.passwordFilesLocation}/${file}";
+              mode = "direct-symlink";
+            }
+          ) passwordFiles
+        )
+      else
+        { };
   };
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
