@@ -224,11 +224,14 @@ lib.fix (
       paths = builtins.catAttrs "outPath" pkgList.nonbin;
 
       # mktexlsr
-      nativeBuildInputs = [ tl."texlive.infra" ];
+      nativeBuildInputs = [
+        tl.texlive-scripts # for mktexlsr.pl with --sort support
+        perl
+      ];
 
       postBuild = # generate ls-R database
         ''
-          mktexlsr "$out"
+          perl ${tl.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
         '';
     };
 

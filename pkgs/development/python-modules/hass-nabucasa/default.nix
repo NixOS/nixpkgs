@@ -11,6 +11,7 @@
   fetchFromGitHub,
   freezegun,
   josepy,
+  litellm,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.5.1";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-BYRVr8YWYG+6vmCFCEJH0v2s+EpefDxmcBMHkXHRCrA=";
+    hash = "sha256-LBJPzMosSgfdONu2preIBKmlKhY4P+jFTmR8u2BKCZI=";
   };
 
   postPatch = ''
@@ -51,7 +52,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "acme"
-    "josepy"
     "snitun"
   ];
 
@@ -64,6 +64,7 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     josepy
+    litellm
     pycognito
     pyjwt
     sentence-stream

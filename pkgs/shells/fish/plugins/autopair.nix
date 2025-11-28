@@ -21,7 +21,6 @@ buildFishPlugin rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       kidonng
-      pyrox0
     ];
   };
 }

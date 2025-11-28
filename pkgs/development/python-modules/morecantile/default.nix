@@ -47,7 +47,6 @@ buildPythonPackage rec {
     rasterio
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # AssertionError CLI exists with non-zero error code

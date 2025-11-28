@@ -57,10 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       mit
       mitOpenGroup
-      # TODO: change this to a new license depending on if this
-      # https://github.com/spdx/license-list-XML/issues/2831
-      # actually creates a new license or just new markup for X11
-      x11
+      x11NoPermitPersons
     ];
     maintainers = [ ];
     pkgConfigModules = [ "xinerama" ];

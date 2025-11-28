@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     mainProgram = "aacs_info";
     license = licenses.lgpl21;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

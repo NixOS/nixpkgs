@@ -138,6 +138,7 @@ in
           propagatedBuildInputs = [ installer ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
+            python = python.interpreter;
           };
         } ./pypa-install-hook.sh
       )

@@ -123,7 +123,7 @@ in
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 
-    # ### https://nixos.org/channels/nixos-unstable nixos
+    # ### https://channels.nixos.org/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 

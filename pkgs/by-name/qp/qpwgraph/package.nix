@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       kanashimia
       exi
       Scrumplex
+      matthiasbeyer
     ];
     mainProgram = "qpwgraph";
   };

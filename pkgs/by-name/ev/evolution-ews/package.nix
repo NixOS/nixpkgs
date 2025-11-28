@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.58.1";
+  version = "3.58.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-EABr14/7fWQJxdAKVYvp3BkOhZS7miuXPi7AVhMWeCA=";
+    hash = "sha256-+m/A39F+9hpjCtM8ZFuDWMQmZ2YSbxcWs8ef79KQyPs=";
   };
 
   patches = [

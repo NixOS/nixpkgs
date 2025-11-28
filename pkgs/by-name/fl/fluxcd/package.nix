@@ -8,10 +8,10 @@
 }:
 
 let
-  version = "2.7.3";
-  srcHash = "sha256-nyMKlcJcDa532NqiT16eQJH0Z4dAO1MHkIzsrWlJS7Q=";
-  vendorHash = "sha256-0aQYOmH9CFv0gQ3PIEWr3OhC1jyQOIkNMp9lb7GQ40I=";
-  manifestsHash = "sha256-SQkMqcJY3FHLx6aAwWL0Nuz3fzPTevod4paz2H2srcI=";
+  version = "2.7.4";
+  srcHash = "sha256-O3YaT8fFQz4iF8dZmwIVms/6XtJ+v/8hRw0wlSN2jq0=";
+  vendorHash = "sha256-vrIh4gI5SwhNpquNb5jz821ZHjoYlEHod84ljQkQQE4=";
+  manifestsHash = "sha256-5Bohn437eZcTKQ+7FP7eYdTuTq2X7/ennfKqIm58Lgg=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -78,7 +78,6 @@ buildGoModule rec {
     homepage = "https://fluxcd.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       jlesquembre
       ryan4yin
     ];

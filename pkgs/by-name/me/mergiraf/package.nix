@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   cargoBuildFlags = [
     # don't install the `mgf_dev`
     "--bin"

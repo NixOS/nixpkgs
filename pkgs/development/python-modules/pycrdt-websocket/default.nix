@@ -9,6 +9,7 @@
   # dependencies
   anyio,
   pycrdt,
+  pycrdt-store,
   sqlite-anyio,
 
   # optional-dependencies
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.15.5";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jupyter-server";
+    owner = "y-crdt";
     repo = "pycrdt-websocket";
-    tag = "v${version}";
-    hash = "sha256-piNd85X5YsTAOC9frYQRDyb/DPfzZicIPJ+bEVzgOsU=";
+    tag = version;
+    hash = "sha256-Qux8IxJR1nGbdpGz7RZBKJjYN0qfwfEpd2UDlduOna0=";
   };
 
   build-system = [ hatchling ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     pycrdt
+    pycrdt-store
     sqlite-anyio
   ];
 
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     django = [ channels ];
   };
 
-  pythonImportsCheck = [ "pycrdt_websocket" ];
+  pythonImportsCheck = [ "pycrdt.websocket" ];
 
   nativeCheckInputs = [
     httpx-ws
@@ -77,7 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
-    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };

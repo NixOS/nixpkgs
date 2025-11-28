@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt ext/bifrost/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     autoconf
     cmake

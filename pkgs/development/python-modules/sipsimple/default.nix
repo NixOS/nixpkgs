@@ -8,7 +8,7 @@
   cython,
   setuptools,
   alsa-lib,
-  ffmpeg,
+  ffmpeg_7,
   libopus,
   libuuid,
   libv4l,
@@ -102,7 +102,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     alsa-lib
-    ffmpeg
+    ffmpeg_7
     libopus
     libuuid
     libv4l

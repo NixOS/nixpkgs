@@ -6,21 +6,14 @@
   django,
   python-dateutil,
   # test dependencies
-  coverage,
   dj-database-url,
   freezegun,
   postgresql,
   psycopg2,
-  pytest,
-  pytest-benchmark,
-  pytest-cov,
   pytest-django,
   pytest-freezegun,
   pytest-lazy-fixture,
   pytestCheckHook,
-  syrupy,
-  tox,
-  types-psycopg2,
 }:
 buildPythonPackage rec {
   pname = "django-postgres-extra";
@@ -42,21 +35,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
     dj-database-url
     freezegun
     postgresql
     psycopg2
-    pytest
-    pytest-benchmark
-    pytest-cov
     pytest-django
     pytest-freezegun
     pytest-lazy-fixture
     pytestCheckHook
-    syrupy
-    tox
-    types-psycopg2
   ];
 
   preCheck = ''

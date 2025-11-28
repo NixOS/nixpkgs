@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.6.77";
+  version = "0.6.79";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-cxjDJT/ADoPwDmN4Cg06AyQvJcasGZwmw6ctuHVNRLc=";
+    hash = "sha256-QT2tN24GUhkKPAzjx9IIBVnufW28yBKVw5cMZvE8B7g=";
   };
 
   build-system = [ hatchling ];

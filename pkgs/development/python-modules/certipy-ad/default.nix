@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "5.0.3";
+  version = "5.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
     tag = version;
-    hash = "sha256-rS2d7jYHzmb2x6wKJizKrkna2xKrTAGwpSANnmbU16I=";
+    hash = "sha256-5STwBpX+8EsgRYMEirvqEhu4oMDs4hf4lDge1ShpKf4=";
   };
 
   pythonRelaxDeps = [

@@ -1267,7 +1267,7 @@ in
                 No IP addresses are being tracked, only simple counters to track running instances, versions, dashboard and error counts.
                 Counters are sent every 24 hours.
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 

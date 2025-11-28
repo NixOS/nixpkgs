@@ -143,6 +143,7 @@ let
 in
 
 assertNoAdditions {
+  # keep-sorted start case=no block=yes newline_separated=yes
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
       fzf-lua
@@ -1848,6 +1849,16 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  markdoc-nvim = super.markdoc-nvim.overrideAttrs {
+    dependencies = with self; [
+      (nvim-treesitter.withPlugins (p: [
+        p.markdown
+        p.markdown_inline
+        p.html
+      ]))
+    ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
@@ -2324,6 +2335,12 @@ assertNoAdditions {
     ];
   };
 
+  neovim-tips = super.neovim-tips.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+  };
+
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -2540,6 +2557,13 @@ assertNoAdditions {
       "nvls.errors.lilypond-book"
       "nvls.tex"
       "nvls.texinfo"
+    ];
+  };
+
+  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
     ];
   };
 
@@ -4067,6 +4091,19 @@ assertNoAdditions {
     ];
   };
 
+  vscode-diff-nvim = super.vscode-diff-nvim.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
+    ];
+    nativeBuildInputs = [ cmake ];
+    dontUseCmakeConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+      make
+      runHook postBuild
+    '';
+  };
+
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
   };
@@ -4218,11 +4255,5 @@ assertNoAdditions {
         --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
-
-  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      nvim-lspconfig
-    ];
-  };
+  # keep-sorted end
 }

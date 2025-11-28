@@ -10,20 +10,19 @@ let
     {
       enable = true;
       settings = {
-        namespaces.outside.interfaces.eth1 = {
-          addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
-          link = {
-            state = "up";
-            kind = "physical";
-          };
-        };
         interfaces = {
+          eth1 = {
+            addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
+            link = {
+              state = "up";
+              kind = "physical";
+            };
+          };
           wg0 = {
             addresses = [ "2001:0db8:b::${builtins.toString id}/64" ];
             link = {
               state = "up";
               kind = "wireguard";
-              bind_netns = "outside";
             };
             wireguard = {
               private_key = "!include ${pkgs.writeText "wg_priv.key" wgPriv}";

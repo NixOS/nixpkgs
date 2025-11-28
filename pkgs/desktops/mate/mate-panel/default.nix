@@ -32,6 +32,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-panel";
   version = "1.28.7";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mate-desktop";

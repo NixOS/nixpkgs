@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "17.0";
+  version = "17.0.0";
 
   fetchData =
     { suffix, hash }:
@@ -15,7 +15,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://www.unicode.org/Public/emoji/${version}/emoji-${suffix}.txt";
+        url = "https://www.unicode.org/Public/${version}/emoji/emoji-${suffix}.txt";
         inherit hash;
       };
 
@@ -35,11 +35,11 @@ let
   srcs = {
     emoji-sequences = fetchData {
       suffix = "sequences";
-      hash = "sha256-M1txywy3BISmMxoXYzGmg+LOafAdZOtAPu5mnE1XA5g=";
+      hash = "sha256-EsyCZ9wzy9Ee0yvPb8XcKtnHp3uuG9+6L0GxubPq2N0=";
     };
     emoji-test = fetchData {
       suffix = "test";
-      hash = "sha256-EYHEVX845REBhFBFD51CV02qiA0TQ9WsYfE0h34+veU=";
+      hash = "sha256-HYqUT4jXlS9+98UWf+88Z5lbyuJFQ5SXECMbA6IBrNo=";
     };
     emoji-zwj-sequences = fetchData {
       suffix = "zwj-sequences";

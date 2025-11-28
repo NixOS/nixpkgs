@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pnpm-shell-completion";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "pnpm-shell-completion";
     rev = "v${version}";
-    hash = "sha256-bc2ZVHQF+lSAmhy/fvdiVfg9uzPPcXYrtiNChjkjHtA=";
+    hash = "sha256-lwtRSl0/oqgvFUtCkgExAVTiUt+7PwAD/8ufl+1MIMY=";
   };
 
-  cargoHash = "sha256-JL9bWVHmdSktOEF70WMOmZKdZwO/gNDp0GPDMYteR1E=";
+  cargoHash = "sha256-/G+wiGlQ1UqH2uWmz55klsu1t6zBrwlv1XH3X+CAPQg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

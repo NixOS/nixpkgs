@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     "ETCDIR=${placeholder "out"}/etc"
     "PREFIX=${placeholder "out"}"
     "SHAREDDIR=${placeholder "out"}/share"
-    "SUB_FEATURES=${lib.concatStringsSep " " subFeatures}"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
@@ -89,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    make $makeFlags config
+    make $makeFlags config SUB_FEATURES="${lib.concatStringsSep " " subFeatures}"
 
     runHook postConfigure
   '';

@@ -3,41 +3,47 @@
   stdenv,
   fetchFromGitHub,
   desktop-file-utils,
+  glycin-loaders,
+  gobject-introspection,
   meson,
   ninja,
   pkg-config,
   wrapGAppsHook4,
   vala,
   evolution-data-server-gtk4,
-  gdk-pixbuf,
   glib,
   glib-networking,
   gnutls,
   gst_all_1,
   json-glib,
   libadwaita,
+  libglycin,
   libpeas2,
   libphonenumber,
   libportal-gtk4,
   pipewire,
   pulseaudio,
   tinysparql,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.46-unstable-2024-10-26";
+  version = "1.0.0.alpha.49";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "165a2791d4bf3e7dee69e3dd7885dbe4948265b9";
-    hash = "sha256-7klvOvwyAg+Xno6zWo8UByjaS9OkOuCceuZcAIEgdyU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dVV/rqd3DktI67DPo0qTs3VP7yZIAy7Ew5TSYsE6ZTA=";
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     desktop-file-utils
+    gobject-introspection
     meson
     ninja
     pkg-config
@@ -47,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     evolution-data-server-gtk4
-    gdk-pixbuf
     glib
     glib-networking
     gnutls
@@ -55,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     json-glib
     libadwaita
+    libglycin
     libpeas2
     libphonenumber
     libportal-gtk4
@@ -63,9 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "plugin_bluez" true)
-  ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
@@ -88,13 +98,16 @@ stdenv.mkDerivation (finalAttrs: {
       ```
     '';
     homepage = "https://valent.andyholmes.ca";
-    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       gpl3Plus
       cc0
       cc-by-sa-30
     ];
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      baduhai
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -11,10 +11,10 @@
   libinput,
   fontconfig,
   freetype,
+  isocodes,
   pipewire,
   pulseaudio,
   udev,
-  util-linux,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -27,14 +27,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-beta.6";
+  version = "1.0.0-beta.7";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-mE5zcFBFHBLisxrBJRYC0C33MrW5dG0DyzKPJ5kgT1c=";
+    hash = "sha256-CIY7SAS6WCn41mM+MpKaCm08cfnVIqFl+/t5u5717Lw=";
   };
 
   cargoHash = "sha256-Su+yAQLr3Us8YNU8z83XO1UDjjOY3SCGnkmwGaIGFho=";
@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook'
     pkg-config
     rustPlatform.bindgenHook
-    util-linux
   ];
 
   buildInputs = [
@@ -73,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     libcosmicAppWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPathOutput "bin" "share" [ isocodes ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )

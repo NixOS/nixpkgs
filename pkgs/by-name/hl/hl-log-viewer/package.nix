@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";
-  version = "0.31.2";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "pamburus";
     repo = "hl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SYPzYdbrXltBk/A5T/yZo3IJXdowsHk38yL86BreF0k=";
+    hash = "sha256-JG5+RpUc8UGYxSlEX0c+dcUU2fFuVEwz/duK94XYkOc=";
   };
 
-  cargoHash = "sha256-1iBpzoTyNB6ECDuGW26JMdu2YolrPmIT040V35Pi+C4=";
+  cargoHash = "sha256-dIUQVLjjlQGHrMgWUeFc3R/QJbddRG8wmZklUHQTaas=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,12 +31,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage hl.1
   '';
 
+  checkFlags = [
+    # test broken on zero-width TTY, see https://github.com/pamburus/hl/issues/1140
+    "--skip=help::tests::test_formatter_new"
+  ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/hl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   meta = with lib; {

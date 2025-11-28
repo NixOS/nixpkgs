@@ -12,6 +12,7 @@
   nixosTests,
   lib,
   nix-update-script,
+  cctools,
 }:
 
 let
@@ -39,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     pnpm_9.configHook
     removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   # Required for `sharp` NPM dependency

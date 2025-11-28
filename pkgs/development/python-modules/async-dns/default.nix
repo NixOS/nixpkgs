@@ -4,29 +4,35 @@
   fetchFromGitHub,
   poetry-core,
   python,
-  pythonOlder,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "async-dns";
   version = "2.0.0";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gera2ld";
     repo = "async_dns";
-    rev = "v${version}";
-    sha256 = "0vn7hxvpzikd7q61a27fwzal4lwsra2063awyr6fjpy6lh3cjdwf";
+    tag = "v${version}";
+    hash = "sha256-jjfJBqTGX+lM9lwNA4TKmlNC1efuCBUMPm3Gf3eHx24=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkPhase = ''
-    export HOME=$TMPDIR
+    runHook preCheck
+
     # Test needs network access
     rm -r tests/resolver
     ${python.interpreter} -m unittest
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "async_dns" ];
@@ -34,7 +40,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python DNS library";
     homepage = "https://github.com/gera2ld/async_dns";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/gera2ld/async_dns/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

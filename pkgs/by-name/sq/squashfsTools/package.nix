@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.7.2";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    hash = "sha256-iQ+pBt+jvqI6zgZRV2MZM3CeFqiXe8Z+SS+rLOB4DLw=";
+    hash = "sha256-xvTSGVwtzJjoAIF6GClASUIB5eIk+uquQNNzHIuwkuY=";
   };
 
   strictDeps = true;

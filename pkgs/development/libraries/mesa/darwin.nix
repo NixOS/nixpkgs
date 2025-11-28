@@ -25,6 +25,11 @@ stdenv.mkDerivation {
     meta
     ;
 
+  patches = [
+    # Backport of https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/38429
+    ./fix-darwin-build.patch
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -58,7 +63,6 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--datadir=${placeholder "out"}/share"
     (lib.mesonEnable "glvnd" false)
-    (lib.mesonEnable "shared-glapi" true)
     (lib.mesonEnable "llvm" true)
   ];
 

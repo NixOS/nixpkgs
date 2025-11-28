@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "discordo";
-  version = "0-unstable-2025-10-22";
+  version = "0-unstable-2025-11-24";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = "discordo";
-    rev = "55e31cfb477ffdb2cdba8fc81db84f45574fe218";
-    hash = "sha256-x8ZIcMEtnya32BuHN7HgG8WbLu+fPOiFrAAI49alpbM=";
+    rev = "ac1436b4d4e132f92b48b3afdf3f430e2846b41a";
+    hash = "sha256-qf7DPl/ZZlrjyX1dV9SP7wBiysqvZKNb+awYk6V+Lj8=";
   };
 
-  vendorHash = "sha256-UVjwirGN1A8SJRLr6L4bweFcwkXJolHrF6kRST2ShRA=";
+  vendorHash = "sha256-b5ilZPU6+KwiTj8aC0gqZvgGI+V69gF8LNxCpxwUy7c=";
 
   env.CGO_ENABLED = 0;
 
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ arian-d ];
     mainProgram = "discordo";
   };

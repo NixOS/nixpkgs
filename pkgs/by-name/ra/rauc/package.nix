@@ -14,7 +14,8 @@
   ninja,
   util-linux,
   libnl,
-  systemd,
+  systemdLibs,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     openssl
     util-linux
     libnl
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.rauc = nixosTests.rauc;
   };
 
   meta = {

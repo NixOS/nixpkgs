@@ -29,10 +29,7 @@
   udev,
   libbacktrace,
   ffmpeg_8-headless,
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  pipewire,
+  cubeb,
   fetchurl,
   zip,
   unzip,
@@ -64,21 +61,47 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = pkgSources.duckstation.version;
+    version = "0.1-10130";
 
     src = fetchFromGitHub {
       owner = "stenzek";
       repo = "duckstation";
       tag = "v${finalAttrs.version}";
-      hash = pkgSources.duckstation.hash_linux;
+      deepClone = true;
+      hash = "sha256-K7vqTv8m5JMAPvZuc2nyc1yh8he8RYx0OlqqxdPwNXg=";
+
+      postFetch = ''
+        cd $out
+        mkdir -p .nixpkgs-auxfiles/
+        git rev-parse HEAD > .nixpkgs-auxfiles/git_hash
+        git rev-parse --abbrev-ref HEAD | tr -d '\r\n' > .nixpkgs-auxfiles/git_branch
+        git describe | tr -d '\r\n' > .nixpkgs-auxfiles/git_tag
+        git log -1 --date=iso8601-strict --format=%cd > .nixpkgs-auxfiles/git_date
+        rm -rf .git
+      '';
     };
 
-    # TODO: Remove once this is fixed upstream.
-    postPatch = ''
-      substituteInPlace src/util/animated_image.cpp \
-        --replace-fail "png_write_frame_head(png_ptr, info_ptr," \
-                       "png_write_frame_head(png_ptr, info_ptr, 0,"
-    '';
+    patches = [
+      ./cubeb-remove-vendor.patch
+      ./git-version-info.patch
+    ];
+
+    postPatch =
+      # Fixes compilation error with nixpkgs libapng
+      ''
+        substituteInPlace src/util/animated_image.cpp \
+          --replace-fail "png_write_frame_head(png_ptr, info_ptr," \
+                         "png_write_frame_head(png_ptr, info_ptr, 0,"
+      ''
+      # Fills in git-info obtained in the `postFetch` step for version
+      # information in the UI
+      + ''
+        gitHash=$(cat .nixpkgs-auxfiles/git_hash) \
+        gitBranch=$(cat .nixpkgs-auxfiles/git_branch) \
+        gitTag=$(cat .nixpkgs-auxfiles/git_tag) \
+        gitDate=$(cat .nixpkgs-auxfiles/git_date) \
+        substituteAllInPlace src/scmversion/gen_scmversion.sh
+      '';
 
     vendorDiscordRPC = llvmPackages.stdenv.mkDerivation {
       pname = "discord-rpc-duckstation";
@@ -233,10 +256,7 @@ let
       udev
       libbacktrace
       ffmpeg_8-headless
-      alsa-lib
-      libjack2
-      pipewire
-      libpulseaudio
+      cubeb
     ]
     ++ [
       finalAttrs.vendorDiscordRPC

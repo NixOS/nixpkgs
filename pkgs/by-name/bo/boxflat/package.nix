@@ -49,6 +49,7 @@ python3Packages.buildPythonPackage rec {
     "psutil"
     "evdev"
     "pycairo"
+    "pygobject"
     "PyYAML"
   ];
 

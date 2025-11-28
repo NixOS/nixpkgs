@@ -52,7 +52,7 @@ in
       channel = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        example = "https://nixos.org/channels/nixos-14.12-small";
+        example = "https://channels.nixos.org/nixos-14.12-small";
         description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
@@ -184,6 +184,15 @@ in
         '';
       };
 
+      runGarbageCollection = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to automatically run `nix-gc.service` after a successful
+          system upgrade.
+        '';
+      };
+
     };
 
   };
@@ -195,6 +204,12 @@ in
         assertion = !((cfg.channel != null) && (cfg.flake != null));
         message = ''
           The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
+        '';
+      }
+      {
+        assertion = (cfg.runGarbageCollection -> config.nix.enable);
+        message = ''
+          The option 'system.autoUpgrade.runGarbageCollection = true' requires 'nix.enable = true'.
         '';
       }
     ];
@@ -218,6 +233,9 @@ in
 
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
+      unitConfig.OnSuccess = lib.optional (
+        cfg.runGarbageCollection && config.nix.enable
+      ) "nix-gc.service";
 
       serviceConfig.Type = "oneshot";
 

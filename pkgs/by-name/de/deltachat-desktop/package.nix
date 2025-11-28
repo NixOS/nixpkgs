@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.25.1";
+  version = "2.25.3";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+BZs8WUoDoW5mA7s6WIalEq3F5konJsJuZwWSdUeYiA=";
+    hash = "sha256-xaeO1mHqJJwEMAuuzlKnFP9TiPYPygGAV+26QdXoAxk=";
   };
 
   pnpmDeps = pnpm.fetchDeps {

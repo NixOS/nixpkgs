@@ -311,12 +311,5 @@ python3Packages.buildPythonApplication rec {
       junestepp
       oxij
     ];
-    # Reported to crash at launch on darwin (as of 2.1.65)
-    broken = stdenv.hostPlatform.isDarwin;
-    badPlatforms = [
-      # pyqt6-webengine is broken on darwin
-      # https://github.com/NixOS/nixpkgs/issues/375059
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

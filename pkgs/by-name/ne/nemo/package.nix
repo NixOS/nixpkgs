@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+    "man"
   ];
 
   buildInputs = [

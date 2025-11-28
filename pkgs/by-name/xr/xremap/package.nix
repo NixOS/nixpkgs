@@ -43,13 +43,13 @@ assert (
 );
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xremap${variant.suffix or ""}";
-  version = "0.14.3";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "xremap";
     repo = "xremap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UHkwTz5KEDAqXKpN/YVzY0xP7b6nN8WkPilzpF8YU3A=";
+    hash = "sha256-iqsLy6ZuU47s2eZ/Zo2A9svg1Q+UfpCCfSg1luRYdGg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = variant.features;
 
-  cargoHash = "sha256-ucyBQPCskHwz8rYzOULJ3enL6rhvpLxJzS7sTNwuBW4=";
+  cargoHash = "sha256-a7K+W4nPLSoGWBf1R7b3WZKrXn7hbOxaGnS1Vsg7Iak=";
 
   passthru = lib.mapAttrs (name: lib.const (xremap.override { withVariant = name; })) variants;
 

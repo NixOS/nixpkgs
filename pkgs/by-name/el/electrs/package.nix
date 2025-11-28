@@ -2,26 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  rocksdb_7_10,
+  rocksdb_9_10,
 }:
 
 let
-  rocksdb = rocksdb_7_10;
+  rocksdb = rocksdb_9_10;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "electrs";
-  version = "0.10.10";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "electrs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FSsTo2m88U7t6wMXaSuYhF5bCMRq11EBQsq6uiMdF7c=";
+    hash = "sha256-MDdxu+ITEEUs+DXKfRKlwStT94Bv8tYIqh2eQlqPgrQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hVPtnMqaFH+1QJ52ZG9vZ3clsMTsEpvF5JjTKWoKSPE=";
+    hash = "sha256-D8edLG3Zr/Qsk42husi/Nw1wGjvMb71Enl8hbifvLbk=";
   };
 
   # needed for librocksdb-sys

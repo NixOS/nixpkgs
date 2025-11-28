@@ -11,13 +11,13 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "mhabit";
-  version = "1.21.0+118";
+  version = "1.21.1+120";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-ZVuDOLGiigj4fa1kxIJ+vb3OZmrl22YMTvhZ5y7NGyI=";
+    hash = "sha256-ym+xCv7fRwlms2oIvcthyuz53T0LCgigleg1qmLfZVU=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

@@ -3,31 +3,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pytestCheckHook,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
   pname = "zope-deprecation";
-  version = "5.1";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.deprecation";
     tag = version;
-    hash = "sha256-5gqZuO3fGXkQl493QrvK7gl77mDteUp7tpo4DhSRI+o=";
+    hash = "sha256-N/+RtilRY/8NfhUjd/Y4T6dmZHt6PW4ofP1UE8Aj1e8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" "setuptools"
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ zope-testrunner ];
 
-  enabledTestPaths = [ "src/zope/deprecation/tests.py" ];
+  checkPhase = ''
+    runHook preCheck
+
+    zope-testrunner --test-path=src
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "zope.deprecation" ];
 

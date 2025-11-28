@@ -40,6 +40,13 @@ buildPythonPackage rec {
     hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
   };
 
+  postPatch = ''
+    # https://github.com/python-openapi/openapi-core/issues/1009
+    substituteInPlace tests/unit/extensions/test_factories.py \
+      --replace-fail 'assert test_model_class.__dataclass_fields__["name"].type == str(Any)' \
+                     'assert str(test_model_class.__dataclass_fields__["name"].type) == str(Any)'
+  '';
+
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [

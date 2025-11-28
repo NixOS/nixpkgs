@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   bundlerEnv,
   ruby_3_3,
@@ -25,7 +25,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 

@@ -2,27 +2,52 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependenices
   numpy,
   packaging,
   pandas,
+
+  # optional-dependencies
+  bottleneck,
+  cartopy,
+  cftime,
+  dask,
+  fsspec,
+  h5netcdf,
+  matplotlib,
+  netcdf4,
+  numba,
+  numbagg,
+  opt-einsum,
+  pooch,
+  scipy,
+  seaborn,
+  sparse,
+  zarr,
+
+  # tests
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2025.07.1";
+  version = "2025.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-UvBRGYZFkjxUYT+S4By+7xQZW6h0usQ26iFeJvWcxo0=";
+    hash = "sha256-Yk1nZkCsb54Rynlr4x1BEjT4ldZXUA96w31MzULB+Yo=";
   };
 
   postPatch = ''
@@ -41,8 +66,44 @@ buildPythonPackage rec {
     pandas
   ];
 
+  optional-dependencies = lib.fix (self: {
+    accel = [
+      bottleneck
+      # flox
+      numba
+      numbagg
+      opt-einsum
+      scipy
+    ];
+    io = [
+      netcdf4
+      h5netcdf
+      # pydap
+      scipy
+      zarr
+      fsspec
+      cftime
+      pooch
+    ];
+    etc = [ sparse ];
+    parallel = [ dask ] ++ dask.optional-dependencies.complete;
+    viz = [
+      cartopy
+      matplotlib
+      # nc-time-axis
+      seaborn
+    ];
+    complete = with self; accel ++ io ++ etc ++ parallel + viz;
+  });
+
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    # [2025.10.0] ChainedAssignmentError: behaviour will change in pandas 3.0!
+    "-Wignore::FutureWarning"
   ];
 
   pythonImportsCheck = [ "xarray" ];

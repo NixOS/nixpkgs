@@ -69,7 +69,7 @@ let
   # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
   commonServiceConfig = {
     after = [
-      "systemd-udevd.service"
+      "systemd-udev-settle.service"
       "network-pre.target"
       "systemd-sysusers.service"
       "systemd-sysctl.service"
@@ -123,9 +123,8 @@ in
         type = lib.types.package;
         default = cfg.package.override {
           withConfigValidation = false;
-          withWireguard = false;
         };
-        defaultText = lib.literalExpression "pkgs.ifstate.override { withConfigValidation = false; withWireguard = false; }";
+        defaultText = lib.literalExpression "pkgs.ifstate.override { withConfigValidation = false; }";
         description = "The initrd IfState package to use.";
       };
 
@@ -195,12 +194,6 @@ in
     })
     (lib.mkIf initrdCfg.enable {
       assertions = [
-        {
-          assertion =
-            initrdCfg.package.passthru.features.withWireguard
-            || !(builtins.elem "wireguard" initrdInterfaceTypes);
-          message = "IfState initrd package is configured without the `wireguard` feature, but wireguard interfaces are configured. Please see the `boot.initrd.network.ifstate.package` option.";
-        }
         {
           assertion = initrdCfg.allowIfstateToDrasticlyIncreaseInitrdSize;
           message = "IfState in initrd drastically increases the size of initrd, your boot partition may be too small and/or you may have significantly fewer generations. By setting boot.initrd.network.initrd.allowIfstateToDrasticlyIncreaseInitrdSize to true, you acknowledge this fact and keep it in mind when reporting issues.";

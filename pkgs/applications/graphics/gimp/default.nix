@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "devdoc"
+    "man"
   ];
 
   src = fetchurl {

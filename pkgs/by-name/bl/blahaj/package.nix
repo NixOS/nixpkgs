@@ -26,7 +26,7 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     description = "Gay sharks at your local terminal - lolcat-like CLI tool";
-    homepage = "https://blahaj.queer.software";
+    homepage = "https://blahaj.geopjr.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       aleksana

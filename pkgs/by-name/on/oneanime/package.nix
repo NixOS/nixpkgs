@@ -17,6 +17,7 @@
   yq-go,
   _experimental-update-script-combinators,
   nix-update-script,
+  dart,
 }:
 
 let
@@ -75,7 +76,7 @@ flutter335.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -166,7 +167,13 @@ flutter335.buildFlutterApplication {
         }
       )
       {
-        command = [ ./update-gitHashes.py ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
         supportedFeatures = [ ];
       }
     ];

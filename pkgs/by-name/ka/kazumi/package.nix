@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   alsa-lib,
@@ -11,28 +11,29 @@
   mpv-unwrapped,
   webkitgtk_4_1,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
   runCommand,
   yq-go,
+  dart,
 }:
 
 let
-  version = "1.8.7";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-pt5mM6dCI0v+WExs7oExSGhDKj8yJ9Dpjk5NfCvr20I=";
+    hash = "sha256-KcZh8T6tf81/bAJj2ZMNynfHWGvzrwxwj0nXbXckJhY=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "kazumi";
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -114,11 +115,22 @@ flutter335.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };

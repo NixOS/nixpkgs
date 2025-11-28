@@ -67,7 +67,7 @@ buildPythonPackage rec {
     toml = [
       tomli-w
     ]
-    ++ lib.optional (pythonOlder 3.11) tomli;
+    ++ lib.optional (pythonOlder "3.11") tomli;
     yaml = [ pyyaml ];
   };
 

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fselect";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jhspetersson";
     repo = "fselect";
     rev = version;
-    sha256 = "sha256-uR0AElAjzvxymA9K/JySfYpPK59G2SaLTfZpdFtTg/g=";
+    sha256 = "sha256-6TKCasE+Cks/f716mtEnPOvjcbQ7weipbGfFwnBYXJk=";
   };
 
-  cargoHash = "sha256-j/c2+I/KIYgNxYiHE2oWIq5frNPFtXE5wELWsog8dsc=";
+  cargoHash = "sha256-2DmfbQWyU+1vNKxZvDw92Rh5rxFifeKEglZSV2YNfdA=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      matthiasbeyer
+    ];
     mainProgram = "fselect";
   };
 }

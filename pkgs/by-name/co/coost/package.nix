@@ -17,14 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "idealvin";
     repo = "coost";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HbMenAL/UWsqQ1o7cMeWfwXkLh4GxIKV7iuZQD3hDA8=";
   };
 
   postPatch = ''
     substituteInPlace cmake/coost.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     allowedVersions = "^[0-9]";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny boost library in C++11";
     homepage = "https://github.com/idealvin/coost";
-    license = licenses.mit;
-    maintainers = [ maintainers.sigmanificient ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sigmanificient ];
+    platforms = lib.platforms.unix;
   };
 })

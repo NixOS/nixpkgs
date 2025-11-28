@@ -2,8 +2,6 @@
   fetchurl,
   fetchpatch,
   callPackage,
-  lib,
-  stdenv,
 }:
 
 (callPackage ./common.nix { }) rec {
@@ -13,31 +11,14 @@
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
   };
   patches = [
-    # FIXME: clean up rebuild avoidance on staging.
-    (
-      if
-        lib.elem stdenv.hostPlatform.config [
-          "arm64-apple-darwin"
-          "aarch64-unknown-linux-gnu"
-          "x86_64-apple-darwin"
-          "x86_64-unknown-linux-gnu"
-        ]
-      then
-        fetchpatch {
-          url = "https://github.com/freeswitch/spandsp/commit/f7b96b08db148763039cf3459d0e00da9636eb92.patch";
-          includes = [ "spandsp-sim/g1050.c" ];
-          hash = "sha256-TwMhWJXQG/UaWddWgice0klp1uATyHMiE6DcsCebXYQ=";
-        }
-      else
-        fetchpatch {
-          url = "https://github.com/freeswitch/spandsp/commit/f7b96b08db148763039cf3459d0e00da9636eb92.patch";
-          includes = [
-            "spandsp-sim/g1050.c"
-            "spandsp-sim/test_utils.c"
-          ];
-          hash = "sha256-2MmVgyMUK0Zn+mL7IX57Y7brYpgmt4GVlis5/NstuNM=";
-        }
-    )
+    (fetchpatch {
+      url = "https://github.com/freeswitch/spandsp/commit/f7b96b08db148763039cf3459d0e00da9636eb92.patch";
+      includes = [
+        "spandsp-sim/g1050.c"
+        "spandsp-sim/test_utils.c"
+      ];
+      hash = "sha256-2MmVgyMUK0Zn+mL7IX57Y7brYpgmt4GVlis5/NstuNM=";
+    })
     (fetchpatch {
       url = "https://github.com/freeswitch/spandsp/commit/f47bcdc301fbddad44e918939eed1b361882f740.patch";
       hash = "sha256-O+lIC3V92GVFoiHsUQOXkoTN2hJ7v5+LQP7RrAhvwlY=";

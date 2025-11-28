@@ -93,6 +93,7 @@ python.pkgs.buildPythonApplication rec {
     "mashumaro"
     "orjson"
     "pillow"
+    "podcastparser"
     "xmltodict"
     "zeroconf"
   ];

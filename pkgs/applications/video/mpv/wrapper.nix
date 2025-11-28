@@ -82,12 +82,17 @@ let
             # For every script in the `scripts` argument, add the necessary flags to the wrapper
             (
               script:
-              [
-                "--add-flags"
-                # Here we rely on the existence of the `scriptName` passthru
-                # attribute of the script derivation from the `scripts`
-                "--script=${script}/share/mpv/scripts/${script.scriptName}"
-              ]
+              let
+                mkScriptArgs = script: scriptName: [
+                  "--add-flags"
+                  "--script=${script}/share/mpv/scripts/${scriptName}"
+                ];
+              in
+              # Here we rely on the existence of the `scriptName` passthru
+              # attribute of the script derivation from the `scripts`
+              (mkScriptArgs script script.scriptName)
+              # scripts might need others to be explicitly loaded
+              ++ (map (extraScriptName: mkScriptArgs script extraScriptName) (script.extraScriptsToLoad or [ ]))
               # scripts can also set the `extraWrapperArgs` passthru
               ++ (script.extraWrapperArgs or [ ])
             )

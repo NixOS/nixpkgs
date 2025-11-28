@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./remove-default-commit-hash.patch
     ./remove-vendored-libraries.patch
+    ./fix-avcodec-close.patch
   ]
   ++ finalAttrs.cargoDeps.vendorStaging.patches;
 

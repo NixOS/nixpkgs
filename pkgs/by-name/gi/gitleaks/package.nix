@@ -14,7 +14,7 @@ buildGoModule rec {
   version = "8.28.0";
 
   src = fetchFromGitHub {
-    owner = "zricethezav";
+    owner = "gitleaks";
     repo = "gitleaks";
     tag = "v${version}";
     hash = "sha256-smh3Ge278lYVEcs6r1F43daexgjgddy1HKhU5E4CBYM=";
@@ -52,10 +52,13 @@ buildGoModule rec {
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
       API keys and tokens in git repos.
     '';
-    homepage = "https://github.com/zricethezav/gitleaks";
-    changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
+    homepage = "https://github.com/gitleaks/gitleaks";
+    changelog = "https://github.com/gitleaks/gitleaks/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      friedow
+    ];
     mainProgram = "gitleaks";
   };
 }

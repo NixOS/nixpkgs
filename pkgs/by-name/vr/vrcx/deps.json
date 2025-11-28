@@ -51,13 +51,13 @@
   },
   {
     "pname": "Microsoft.JavaScript.NodeApi",
-    "version": "0.9.15",
-    "hash": "sha256-4hvBLHkf6p1eNh/7ndV3GXnPZm1oWD1BmLA6OXFIL6o="
+    "version": "0.9.17",
+    "hash": "sha256-mTJlmKIVLEJBsQcO0VFsitmLbpcGpI9SsJbIk3tI6jo="
   },
   {
     "pname": "Microsoft.JavaScript.NodeApi.Generator",
-    "version": "0.9.15",
-    "hash": "sha256-1Glp6luML0JxZ3IyIxsIk6l7wcVKrnpNyBxdfAZWqwk="
+    "version": "0.9.17",
+    "hash": "sha256-xF8J46OIr2+8FbppAdpMzm5GUV9SZ6RFN1AgIWr0pos="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -96,8 +96,8 @@
   },
   {
     "pname": "Microsoft.Win32.SystemEvents",
-    "version": "9.0.9",
-    "hash": "sha256-5p9c8PwLC5whnkDnk7BvMLIln2RuaKdzdLjpUZDHU98="
+    "version": "9.0.10",
+    "hash": "sha256-hqtadbUx58gBwBFfVk2vyRmgWgdRpbmT84pcuhKTXl0="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -160,6 +160,11 @@
     "hash": "sha256-MlRF+3SGfahbsB1pZGKMOrsfUCx//hCo7ECrXr03DpA="
   },
   {
+    "pname": "SixLabors.ImageSharp",
+    "version": "3.1.12",
+    "hash": "sha256-FR8v74w4P/1AZdW5ARW0y8zgDqLtvhxQmL1CKv68xR0="
+  },
+  {
     "pname": "SixLabors.ImageSharp.Drawing",
     "version": "2.1.7",
     "hash": "sha256-LkStbMTvIPIXvkda4Xn1simHaH0mJHHuCI0+AaAS4/4="
@@ -181,8 +186,8 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "9.0.9",
-    "hash": "sha256-ajVuEZIA63vQBPPw/SgoTDSA+gGAU7V+QCcBts1LiTE="
+    "version": "9.0.10",
+    "hash": "sha256-AMmYDZGMI8HVtvpGBhXkCDoBaJa11FPf/t2VYl31Nk8="
   },
   {
     "pname": "System.Collections.Immutable",
@@ -231,13 +236,13 @@
   },
   {
     "pname": "System.Drawing.Common",
-    "version": "9.0.9",
-    "hash": "sha256-gupTW+JBaIaifxULV5m2Q8fccXIboeGd3FI33cn4MFs="
+    "version": "9.0.10",
+    "hash": "sha256-D4E99H3HVNatH+MDKuCGxaJOP7pXTxibBLThNZBXwLc="
   },
   {
     "pname": "System.Management",
-    "version": "9.0.9",
-    "hash": "sha256-BjnQqiA2z8SkicxP+71lR+WGrBHz9np7MlCUE3oO8IM="
+    "version": "9.0.10",
+    "hash": "sha256-C6mzt+JhNagK6G1mQF+iVwPZtrRpyzdAspbIAKndpqo="
   },
   {
     "pname": "System.Memory",
@@ -316,8 +321,8 @@
   },
   {
     "pname": "System.Text.Json",
-    "version": "9.0.9",
-    "hash": "sha256-I+GCgXZZUtgAta94BIBqy72HnZJ3egzNBOTxnVy2Ur8="
+    "version": "9.0.10",
+    "hash": "sha256-wqeobpRw3PqOw21q8oGvauj5BkX1pS02Cm78E6c742w="
   },
   {
     "pname": "System.Text.RegularExpressions",

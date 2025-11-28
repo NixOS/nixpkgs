@@ -103,6 +103,7 @@ in
             false
             "rocm"
             "cuda"
+            "vulkan"
           ]
         );
         default = null;
@@ -119,6 +120,7 @@ in
             - may require overriding gpu type with `services.ollama.rocmOverrideGfx`
               if rocm doesn't detect your AMD gpu
           - `"cuda"`: supported by most modern NVIDIA GPUs
+          - `"vulkan"`: supported by most modern GPUs on Linux
         '';
       };
       rocmOverrideGfx = lib.mkOption {
@@ -152,13 +154,30 @@ in
       };
       loadModels = lib.mkOption {
         type = types.listOf types.str;
+        apply = builtins.filter (model: model != "");
         default = [ ];
+        example = [
+          "dolphin3"
+          "gemma3"
+          "gemma3:27b"
+          "deepseek-r1:latest"
+          "deepseek-r1:1.5b"
+        ];
         description = ''
           Download these models using `ollama pull` as soon as `ollama.service` has started.
 
           This creates a systemd unit `ollama-model-loader.service`.
+          Use `services.ollama.syncModels` to automatically remove any models not currently declared here.
 
           Search for models of your choice from: <https://ollama.com/library>
+        '';
+      };
+      syncModels = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Synchronize all currently installed models with those declared in `services.ollama.loadModels`,
+          removing any models that are installed but not currently declared there.
         '';
       };
       openFirewall = lib.mkOption {
@@ -264,7 +283,7 @@ in
         };
     };
 
-    systemd.services.ollama-model-loader = lib.mkIf (cfg.loadModels != [ ]) {
+    systemd.services.ollama-model-loader = lib.mkIf (cfg.loadModels != [ ] || cfg.syncModels) {
       description = "Download ollama models in the background";
       wantedBy = [
         "multi-user.target"
@@ -287,30 +306,51 @@ in
         RestartSteps = "10";
       };
 
-      script = ''
-        total=${toString (builtins.length cfg.loadModels)}
-        failed=0
+      script =
+        let
+          binaryInputs = lib.mapAttrs (_: lib.getExe) {
+            ollama = ollamaPackage;
+            parallel = pkgs.parallel;
+            awk = pkgs.gawk;
+            sed = pkgs.gnused;
+          };
+          inherit (binaryInputs)
+            ollama
+            parallel
+            awk
+            sed
+            ;
 
-        for model in ${lib.escapeShellArgs cfg.loadModels}; do
-          '${lib.getExe ollamaPackage}' pull "$model" &
-        done
+          declaredModelsRegex = lib.pipe cfg.loadModels [
+            (map lib.escapeRegex)
+            (lib.concatStringsSep "|")
+            (lib.escape [ "/" ])
+            lib.escapeShellArg
+          ];
+        in
+        ''
+          ${lib.optionalString cfg.syncModels ''
+            installed=$('${ollama}' list | '${awk}' 'NR > 1 {print $1}')
+            ${
+              # if `declaredModelsRegex` is empty, sed will err
+              if (cfg.loadModels != [ ]) then
+                ''
+                  echo declared models regex: ${declaredModelsRegex}
+                  undeclared=$(echo "$installed" | '${sed}' -E /${declaredModelsRegex}/d)
+                ''
+              else
+                ''
+                  undeclared="$installed"
+                ''
+            }
+            if [ -n "$undeclared" ]; then
+              echo removing: $undeclared
+              '${ollama}' rm $undeclared
+            fi
+          ''}
 
-        for job in $(jobs -p); do
-          set +e
-          wait $job
-          exit_code=$?
-          set -e
-
-          if [ $exit_code != 0 ]; then
-            failed=$((failed + 1))
-          fi
-        done
-
-        if [ $failed != 0 ]; then
-          echo "error: $failed out of $total attempted model downloads failed" >&2
-          exit 1
-        fi
-      '';
+          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs cfg.loadModels}
+        '';
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };

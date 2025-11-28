@@ -12,21 +12,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.16.4";
+  version = "2.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_automl";
     inherit version;
-    hash = "sha256-XVK9SF3RiPCejokDA8thyrJ910f8aQfSYdX9Wl3AgqM=";
+    hash = "sha256-Fnd7X75kt2+HN665ZFQYv9+ST3wso1Dx/VViUyggfpw=";
   };
 
   build-system = [ setuptools ];

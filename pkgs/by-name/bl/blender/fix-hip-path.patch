@@ -1,0 +1,25 @@
+commit 0c7159ed66e28b4da4275cd79e01b2d0669808a3 (HEAD -> fix-hip-path-syntax-error, amarshall/fix-hip-path-syntax-error)
+Author: Andrew Marshall <andrew@johnandrewmarshall.com>
+Date:   Thu Nov 20 20:24:20 2025 -0500
+
+    Fix: Incorrect HIP load path on Linux
+    
+    Missing comma meant the following line was concatenated with this one,
+    causing the path to be
+    "/opt/rocm/hip/lib/libamdhip64.so.6libamdhip64.so.7".
+    
+    Broken in 14bd7a531feddb81a0e522b7db76288639f1ad05.
+
+diff --git a/extern/hipew/src/hipew.c b/extern/hipew/src/hipew.c
+index 3ce13ef7c32..e72ccde69ef 100644
+--- a/extern/hipew/src/hipew.c
++++ b/extern/hipew/src/hipew.c
+@@ -244,7 +244,7 @@ static int hipewHipInit(void) {
+   const char* hip_paths[] = { "libamdhip64.so",
+                             "libamdhip64.so.6",
+                             "/opt/rocm/lib/libamdhip64.so.6",
+-                            "/opt/rocm/hip/lib/libamdhip64.so.6"
++                            "/opt/rocm/hip/lib/libamdhip64.so.6",
+                             "libamdhip64.so.7",
+                             "/opt/rocm/lib/libamdhip64.so.7",
+                             "/opt/rocm/hip/lib/libamdhip64.so.7",

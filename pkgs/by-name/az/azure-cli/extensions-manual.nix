@@ -14,6 +14,59 @@
 }:
 
 {
+  acrcssc = mkAzExtension {
+    pname = "acrcssc";
+    version = "1.0.0b5";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/acrcssc-1.0.0b5-py3-none-any.whl";
+    hash = "sha256-Z3wi+/3UK+TUKHE7MCSP/Es8ViGVTrlcafojw2YFRBs=";
+    description = "Microsoft Azure Container Registry Container Secure Supply Chain (CSSC) Extension";
+    propagatedBuildInputs = with python3Packages; [
+      croniter
+      oras
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  aksarc = mkAzExtension {
+    pname = "aksarc";
+    version = "1.5.62";
+    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.62-py3-none-any.whl";
+    hash = "sha256-PCy4SUbB4Vlj+fIwhufGwMJrrRehQr/W+QxAphTPnEk=";
+    description = "Microsoft Azure Command-Line Tools HybridContainerService Extension";
+    propagatedBuildInputs = with python3Packages; [
+      kubernetes
+      paramiko
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  alias = mkAzExtension rec {
+    pname = "alias";
+    version = "0.5.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/alias-${version}-py2.py3-none-any.whl";
+    hash = "sha256-BfgtdQJueA0nvTShvlf07A9CVQDYq07n6S/uB7lE2jM=";
+    description = "Support for command aliases";
+    propagatedBuildInputs = with python3Packages; [
+      jinja2
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  aosm = mkAzExtension rec {
+    pname = "aosm";
+    version = "2.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/aosm-${version}-py2.py3-none-any.whl";
+    hash = "sha256-nK752/alBu0JYax8B+sp6oByPISqYGIgL6KFX5AIJmk=";
+    description = "Microsoft Azure Command-Line Tools Aosm Extension";
+    propagatedBuildInputs = with python3Packages; [
+      genson
+      jinja2
+      oras
+      ruamel-yaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   application-insights = mkAzExtension rec {
     pname = "application-insights";
     version = "2.0.0b1";
@@ -22,6 +75,51 @@
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
+  };
+
+  arcappliance = mkAzExtension {
+    pname = "arcappliance";
+    version = "1.6.0";
+    url = "https://arcplatformcliextprod.z13.web.core.windows.net/arcappliance-1.6.0-py2.py3-none-any.whl";
+    hash = "sha256-1VTKp4R6ohI4C9QsZgAabJJMnkTycEQF7DDshw/7Qkw=";
+    description = "Microsoft Azure Command-Line Tools Arcappliance Extension";
+    propagatedBuildInputs = with python3Packages; [
+      jsonschema
+      kubernetes
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  arcdata = mkAzExtension {
+    pname = "arcdata";
+    version = "1.5.25";
+    url = "https://azurearcdatacli.z13.web.core.windows.net/arcdata-1.5.25-py2.py3-none-any.whl";
+    hash = "sha256-/ejgjd/O37GtS6/+gzsscImoLllaDYCl2LS8m+pulTw=";
+    description = "Tools for managing ArcData";
+    propagatedBuildInputs = with python3Packages; [
+      jinja2
+      jsonpatch
+      jsonpath-ng
+      jsonschema
+      kubernetes
+      ndjson
+      pem
+      pydash
+      regex
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  attestation = mkAzExtension {
+    pname = "attestation";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.0-py3-none-any.whl";
+    hash = "sha256-5YJ3wpIhTjsKHmbeXFI0De3yX1x8NWRgsgJZ1frO70Y=";
+    description = "Microsoft Azure Command-Line Tools AttestationManagementClient Extension";
+    propagatedBuildInputs = with python3Packages; [
+      pyjwt
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   azure-devops = mkAzExtension rec {
@@ -61,6 +159,18 @@
     meta.maintainers = with lib.maintainers; [ mikut ];
   };
 
+  cloud-service = mkAzExtension {
+    pname = "cloud-service";
+    version = "1.0.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/cloud_service-1.0.1-py3-none-any.whl";
+    hash = "sha256-9rLYCn6rO6vTGFdBtGfgHQwceKbtf/t48DG4dQBzc+Q=";
+    description = "Microsoft Azure Command-Line Tools ComputeManagementClient Extension";
+    propagatedBuildInputs = with python3Packages; [
+      azure-mgmt-compute
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   confcom = mkAzExtension rec {
     pname = "confcom";
     version = "1.2.6";
@@ -78,14 +188,33 @@
     postInstall = ''
       chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
     '';
-    meta.maintainers = with lib.maintainers; [ miampf ];
+    meta = {
+      maintainers = with lib.maintainers; [ miampf ];
+      platforms = lib.platforms.linux; # confcom is linux only
+    };
+  };
+
+  connectedk8s = mkAzExtension rec {
+    pname = "connectedk8s";
+    version = "1.9.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
+    hash = "sha256-4OuN92PXzIWgOWhWu/S4ofQ4AbITH6XSG1soUOljY+8=";
+    description = "Microsoft Azure Command-Line Tools Connectedk8s Extension";
+    propagatedBuildInputs = with python3Packages; [
+      azure-graphrbac
+      azure-mgmt-hybridcompute
+      kubernetes
+      pycryptodome
+      pyyaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.2.0b4";
+    version = "1.3.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-v2Mu46qVpDKjGARgGkKzQm5QcK4Msj4XgdgWZwI8fS0=";
+    hash = "sha256-gEFo2qBqQ19SSIMx1BWPoc19xv7lCUkuZMSUz9qPqrE=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -108,6 +237,31 @@
     meta.maintainers = [ ];
   };
 
+  interactive = mkAzExtension {
+    pname = "interactive";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/interactive-1.0.0b1-py2.py3-none-any.whl";
+    hash = "sha256-COvHDhvsigEEMYlMQ2hHFKzjX7WwdkwfT9id6z+Sj7w=";
+    description = "Microsoft Azure Command-Line Interactive Shell";
+    propagatedBuildInputs = with python3Packages; [
+      prompt-toolkit
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  k8s-configuration = mkAzExtension rec {
+    pname = "k8s-configuration";
+    version = "2.3.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_configuration-${version}-py3-none-any.whl";
+    hash = "sha256-ABkAYL19wQIiB+xuu2y/9otpSh/SSxgbuXhv5RrHP2c=";
+    description = "Microsoft Azure Command-Line Tools K8s-configuration Extension";
+    propagatedBuildInputs = with python3Packages; [
+      pycryptodome
+      pyyaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.7";
@@ -123,6 +277,18 @@
       ])
       ++ [ mycli ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
+  };
+
+  serial-console = mkAzExtension {
+    pname = "serial-console";
+    version = "1.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/serial_console-1.0.0b2-py3-none-any.whl";
+    hash = "sha256-Weu4BEdq/0dvi07682UfYL8FzAd3cKZUGVJLTzJ27JM=";
+    description = "Microsoft Azure Command-Line Tools for Serial Console Extension";
+    propagatedBuildInputs = with python3Packages; [
+      websocket-client
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   ssh = mkAzExtension rec {
@@ -159,6 +325,18 @@
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = [ ];
+  };
+
+  webpubsub = mkAzExtension {
+    pname = "webpubsub";
+    version = "1.7.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/webpubsub-1.7.2-py3-none-any.whl";
+    hash = "sha256-axtA9vXM1WmzXTj7rbA6Tlrx7kpx2Z6c3NYtwUiv2UI=";
+    description = "Microsoft Azure Command-Line Tools Webpubsub Extension";
+    propagatedBuildInputs = with python3Packages; [
+      websockets
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }
 // lib.optionalAttrs config.allowAliases {

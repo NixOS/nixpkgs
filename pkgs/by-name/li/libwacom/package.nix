@@ -12,6 +12,7 @@
   libgudev,
   python3,
   valgrind,
+  libwacom-surface,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,7 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  passthru = {
+  passthru.tests = {
+    inherit libwacom-surface;
     tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 

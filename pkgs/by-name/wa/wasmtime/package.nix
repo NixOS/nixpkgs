@@ -91,7 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -108,7 +107,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre
-      matthewbauer
       nekowinston
     ];
     platforms = lib.platforms.unix;

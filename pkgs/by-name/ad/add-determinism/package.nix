@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   zlib,
   stdenv,
@@ -10,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "add-determinism";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "keszybz";
     repo = "add-determinism";
     tag = "v${version}";
-    hash = "sha256-jUBHIdqPuK95jNNMFeSgj0xd3WSneqRa0kcVDhFC3aw=";
+    hash = "sha256-wy0jle1Fhq4wpxMY1IeS3FGHOOaH0Bu8qhvmaIRAJyI=";
   };
 
   # this project has no Cargo.lock now

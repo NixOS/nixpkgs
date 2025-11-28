@@ -8,6 +8,7 @@
   pdm-backend,
 
   # dependencies
+  annotated-doc,
   starlette,
   pydantic,
   typing-extensions,
@@ -18,6 +19,7 @@
   flask,
   inline-snapshot,
   passlib,
+  pwdlib,
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
@@ -41,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.116.1";
+  version = "0.121.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +52,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-sd0SnaxuuF3Zaxx7rffn4ttBpRmWQoOtXln/amx9rII=";
+    hash = "sha256-uUUARIHY8VBoLfWfMvveapypqiB00cTTWpJ4fi9nvUo=";
   };
 
   build-system = [ pdm-backend ];
@@ -61,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    annotated-doc
     starlette
     pydantic
     typing-extensions
@@ -103,6 +106,7 @@ buildPythonPackage rec {
     flask
     inline-snapshot
     passlib
+    pwdlib
     pyjwt
     pytestCheckHook
     pytest-asyncio

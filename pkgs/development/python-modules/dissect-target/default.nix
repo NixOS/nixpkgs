@@ -8,6 +8,7 @@
   dissect-cim,
   dissect-clfs,
   dissect-cstruct,
+  dissect-database,
   dissect-esedb,
   dissect-etl,
   dissect-eventlog,
@@ -33,28 +34,24 @@
   paho-mqtt,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
   setuptools-scm,
   structlog,
-  tomli,
   yara-python,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.23.1";
+  version = "3.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     tag = version;
-    hash = "sha256-WOFtDFCN3OfhEjfhEgwtJN/tQVRGvd2RMQzcKtf0atU=";
+    hash = "sha256-i1oA7UVo880dHJkf19YRcmPV3Lwp1a8RokfRNDZ9gG0=";
     fetchLFS = true;
   };
 
@@ -71,6 +68,7 @@ buildPythonPackage rec {
   dependencies = [
     defusedxml
     dissect-cstruct
+    dissect-database
     dissect-eventlog
     dissect-evidence
     dissect-hypervisor
@@ -88,6 +86,7 @@ buildPythonPackage rec {
       dissect-btrfs
       dissect-cim
       dissect-clfs
+      dissect-database
       dissect-esedb
       dissect-etl
       dissect-extfs
@@ -103,8 +102,7 @@ buildPythonPackage rec {
       ruamel-yaml
       yara-python
       zstandard
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    ];
     yara = [ yara-python ] ++ optional-dependencies.full;
     smb = [ impacket ] ++ optional-dependencies.full;
     mqtt = [ paho-mqtt ] ++ optional-dependencies.full;

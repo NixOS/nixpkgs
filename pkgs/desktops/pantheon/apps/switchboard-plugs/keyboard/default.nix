@@ -20,7 +20,6 @@
   libgnomekbd,
   libxklavier,
   ibus,
-  onboard,
   switchboard,
 }:
 
@@ -40,8 +39,13 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/settings-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
+    # We no longer ship Pantheon X11 session in NixOS.
+    # https://github.com/elementary/session-settings/issues/91
+    # https://github.com/elementary/session-settings/issues/82
+    ./hide-onscreen-keyboard-settings.patch
+
     (replaceVars ./fix-paths.patch {
-      inherit onboard libgnomekbd;
+      inherit libgnomekbd;
     })
   ];
 

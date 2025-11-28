@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -50,7 +49,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.61.2";
+  version = "2.61.3";
 
   outputs = [
     "out"
@@ -62,23 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RkTYNiPdYcxEecKzw3Lh2isoFVLryQA1yNGsUC6x3AA=";
+    hash = "sha256-pW0sgNdErS8nGPhd9Gb+cdJP8fm8Pl71iL3k1+h4FfI=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1149
-      # libxml 2.15+ requires adjustments to error handling
-      # remove next librsvg release
-      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/6663df8e9aec323f0c124e97a7c7447a90c67c4a.patch";
-      hash = "sha256-+iyRvxVMxSCW0IIizXXheBFytwhBtU4cyJNTBebCOSg=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-OZspQg9ryDNILUZMiB77vIF0uGCMyVe7blX5BJk102k=";
+    hash = "sha256-5uNkjfZhETuG8Sjw66zapYXOj4dgz9Ziry2kAV+pvZQ=";
     dontConfigure = true;
   };
 

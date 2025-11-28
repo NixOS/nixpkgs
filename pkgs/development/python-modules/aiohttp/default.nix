@@ -103,8 +103,10 @@ buildPythonPackage rec {
 
   optional-dependencies.speedups = [
     aiodns
-    backports-zstd
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [

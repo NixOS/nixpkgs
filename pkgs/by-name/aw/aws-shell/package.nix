@@ -2,6 +2,7 @@
   python3Packages,
   lib,
   fetchFromGitHub,
+  fetchPypi,
   awscli,
   writableTmpDirAsHomeHook,
 }:
@@ -29,12 +30,16 @@ python3Packages.buildPythonApplication rec {
     configobj
     awscli
     (prompt-toolkit.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "prompt-toolkit";
-        repo = "python-prompt-toolkit";
-        rev = "refs/tags/1.0.18"; # Need >=1.0.0,<1.1.0
-        hash = "sha256-mt/fIubkpeVc7vhAaTk0pXZXI8JzB7n2MzXqgqK0wE4=";
+      src = fetchPypi {
+        pname = "prompt_toolkit";
+        version = "1.0.18";
+        hash = "sha256-3U/KAsgGlJetkxotCZFMaw0bUBUc6Ha8Fb3kx0cJASY=";
       };
+      postPatch = null;
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        wcwidth
+        six
+      ];
     }))
   ];
 

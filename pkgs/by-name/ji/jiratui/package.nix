@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jiratui";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "whyisdifficult";
     repo = "jiratui";
     tag = "v${version}";
-    hash = "sha256-2Fxf1pH2HCKtaJ1RYxUPJSuOrTmoy4RBXCLKLQKpwds=";
+    hash = "sha256-b5bSMPnqHqpeFDl501gSun7G38OlhV/IMNMYXQT+j/4=";
   };
 
   build-system = with python3Packages; [
@@ -25,12 +25,15 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       click
+      gitpython
       httpx
       pyaml
       pydantic-settings
       python-dateutil
       python-json-logger
+      python-magic
       textual
+      textual-image
       xdg-base-dirs
     ]
     ++ textual.optional-dependencies.syntax;

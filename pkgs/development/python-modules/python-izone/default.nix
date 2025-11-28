@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   aiohttp,
   netifaces,
   pytest-aio,
@@ -14,9 +14,7 @@
 buildPythonPackage rec {
   pname = "python-izone";
   version = "1.2.9";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
@@ -25,9 +23,24 @@ buildPythonPackage rec {
     hash = "sha256-0rj+tKn2pbFe+nczTMGLwIwmc4jCznGGF4/IMjlEvQg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  patches = [
+    # https://github.com/Swamp-Ig/pizone/pull/26
+    (fetchpatch {
+      name = "replace-async-timeout-with-asyncio.timeout.patch";
+      url = "https://github.com/Swamp-Ig/pizone/commit/776a7c5682ecd1b75a0b36dea71c914c25476a77.patch";
+      hash = "sha256-Cl71BErInSPtFNbPaV7E/LEDZPMuFNGKA8i5e+C3BMA=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm[toml] >= 4, <6" "setuptools-scm[toml]" \
+      --replace-fail '"setuptools_scm_git_archive",' ""
+  '';
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     aiohttp
     netifaces
   ];

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
-    hash = "sha256-KgGfJfxHOfpwVVo/OcbOjiO5pbxoDE1MiyKqUwsqfIg=";
+    hash = "sha256-A5qCTOCmKt/a1DTKVOC/WwuLCqOYI5pGhAGo/Y4C/FY=";
   };
 
   sourceRoot = "${src.name}/libs/experimental";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
+    pdm-backend
   ];
 
   pythonRelaxDeps = [
@@ -68,9 +68,12 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain-experimental/releases/tag/${src.tag}";
-    description = "Package add experimental features on LangChain";
+    description = "Experimental features for LangChain";
     homepage = "https://github.com/langchain-ai/langchain-experimental/tree/main/libs/experimental";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mrdev023 ];
+    maintainers = with lib.maintainers; [
+      mrdev023
+      sarahec
+    ];
   };
 }

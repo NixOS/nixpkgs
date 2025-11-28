@@ -48,5 +48,6 @@ stdenv.mkDerivation {
       "i686-linux"
       "aarch64-linux"
     ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }

@@ -50,9 +50,9 @@
   },
   "aks-preview": {
     "pname": "aks-preview",
-    "version": "19.0.0b10",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-19.0.0b10-py2.py3-none-any.whl",
-    "hash": "sha256-xteDVuaDzci2reA8MGECuGepCLlcwcWEb8fRCL3r7h8=",
+    "version": "19.0.0b16",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-19.0.0b16-py2.py3-none-any.whl",
+    "hash": "sha256-KtuekAC1Nu/fjLFPmIFKYeQCJTEFwsNOr5lar6YKXl8=",
     "description": "Provides a preview for upcoming AKS features"
   },
   "alb": {
@@ -295,9 +295,9 @@
   },
   "datadog": {
     "pname": "datadog",
-    "version": "2.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datadog-2.0.0-py3-none-any.whl",
-    "hash": "sha256-pdot6RlORnPubrsL8UWrqwUYFuGBYCPd+9DYG6fLklM=",
+    "version": "3.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datadog-3.0.0-py3-none-any.whl",
+    "hash": "sha256-va/om8UaRL+oqYSjNK34UuBlwfH7TyTLCcODzAwh2Og=",
     "description": "Microsoft Azure Command-Line Tools Datadog Extension"
   },
   "datafactory": {
@@ -316,9 +316,9 @@
   },
   "dataprotection": {
     "pname": "dataprotection",
-    "version": "1.6.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.6.0-py3-none-any.whl",
-    "hash": "sha256-UkZbS0aIcaSM6KlI6CaP5lgq6m/cQophstc2k9ZegKw=",
+    "version": "1.7.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.7.0-py3-none-any.whl",
+    "hash": "sha256-4JG0UHInWxi49cXPUoLlfP8FIg9VTjmzFiWfn0to3LQ=",
     "description": "Microsoft Azure Command-Line Tools DataProtectionClient Extension"
   },
   "datashare": {
@@ -386,23 +386,23 @@
   },
   "dns-resolver": {
     "pname": "dns-resolver",
-    "version": "1.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dns_resolver-1.1.0-py3-none-any.whl",
-    "hash": "sha256-xRmWnmsEcHW/TXuR2RsWCz7W3JDLrqPCxx19H8rZ2JE=",
+    "version": "1.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dns_resolver-1.2.0-py3-none-any.whl",
+    "hash": "sha256-4Jaf0p22SygVmg722FOp4dkqHKlxYFoBRlvE05gmvEQ=",
     "description": "Microsoft Azure Command-Line Tools DnsResolverManagementClient Extension"
   },
   "durabletask": {
     "pname": "durabletask",
-    "version": "1.0.0b4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/durabletask-1.0.0b4-py3-none-any.whl",
-    "hash": "sha256-L+gilyc4l/SbtEkXlmSuLfVvtolVJxO68Z/Ezl/YH1Y=",
+    "version": "1.0.0b5",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/durabletask-1.0.0b5-py3-none-any.whl",
+    "hash": "sha256-QO63iwBbXhiZU0YbvSDiMIM6xY3kvL0OYENKGRmHZT8=",
     "description": "Microsoft Azure Command-Line Tools Durabletask Extension"
   },
   "dynatrace": {
     "pname": "dynatrace",
-    "version": "1.1.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dynatrace-1.1.1-py3-none-any.whl",
-    "hash": "sha256-uDqTcLrHCSrShT7CMl3GrMWLXjGGqvB2ofaLCrnyhvg=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dynatrace-2.0.0-py3-none-any.whl",
+    "hash": "sha256-gS+82UbXH2fh7TrIsAxDqyaeM0iMwebt4v0ImJIs07Y=",
     "description": "Microsoft Azure Command-Line Tools Dynatrace Extension"
   },
   "edgeorder": {
@@ -456,9 +456,9 @@
   },
   "fleet": {
     "pname": "fleet",
-    "version": "1.8.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.8.1-py3-none-any.whl",
-    "hash": "sha256-842zQA4Jk0dp8jMCro5lut4Ro5u7ny1sp095uqXyR9k=",
+    "version": "1.8.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.8.2-py3-none-any.whl",
+    "hash": "sha256-3YRF7R7NB8zPonNcgv4Cfs3gk55pgTAbeo1tGOH6fsA=",
     "description": "Microsoft Azure Command-Line Tools Fleet Extension"
   },
   "fluid-relay": {
@@ -477,9 +477,9 @@
   },
   "front-door": {
     "pname": "front-door",
-    "version": "1.3.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/front_door-1.3.0-py3-none-any.whl",
-    "hash": "sha256-kJXpPk8IfhFbVbInxaBLq894/nzyxalvVZQkQ37PTRk=",
+    "version": "1.4.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/front_door-1.4.0-py3-none-any.whl",
+    "hash": "sha256-9chF08+QQe2WYR/vvifE9AzjYV4X26TweeGf2U5zcGA=",
     "description": "Manage networking Front Doors"
   },
   "fzf": {
@@ -974,9 +974,9 @@
   },
   "stack-hci-vm": {
     "pname": "stack-hci-vm",
-    "version": "1.10.4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stack_hci_vm-1.10.4-py3-none-any.whl",
-    "hash": "sha256-MjcpQ7a+5Rw6Z7MAVzoa/qT6HSX6uaV+kWoiMBhK/JM=",
+    "version": "1.11.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stack_hci_vm-1.11.1-py3-none-any.whl",
+    "hash": "sha256-VMxvHxjPVpnUcLZRMUv8PR95lT490FPulbAXutW9pDo=",
     "description": "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension"
   },
   "standbypool": {

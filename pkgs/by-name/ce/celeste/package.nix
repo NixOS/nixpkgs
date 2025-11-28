@@ -31,6 +31,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OBGDnhpVLOPdYhofWfeaueklt7KBkLhM02JNvuvUQ2Q=";
 
+  # rust 2024 requires that you put an unsafe block around std::env::set_var
+  patches = [ ./missing-unsafe-block.patch ];
+
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys-*
     oldHash=$(sha256sum build.rs | cut -d " " -f 1)
@@ -45,6 +48,10 @@ rustPlatform.buildRustPackage rec {
       --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
     # buildRustPackage takes care of installing the binary
     sed -i "#/bin/celeste#d" justfile
+
+    # fix: as of rust 1.85, it is required that you specify edition 2024 for let chains
+    substituteInPlace Cargo.toml \
+      --replace-warn 'edition = "2021"' 'edition = "2024"'
   '';
 
   RUSTC_BOOTSTRAP = 1;

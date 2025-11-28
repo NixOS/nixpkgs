@@ -21,9 +21,9 @@ flutter329.buildFlutterApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "tts-mod-vault";
-      exec = "tts-mod-vault";
-      icon = "tts-mod-vault";
+      name = "tts_mod_vault";
+      exec = "tts_mod_vault";
+      icon = "tts_mod_vault";
       comment = "Tabletop Simulator Mod Vault";
       desktopName = "TTS Mod Vault";
       categories = [ "Utility" ];
@@ -33,7 +33,7 @@ flutter329.buildFlutterApplication rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postInstall = ''
-    install -m 444 -D assets/icon/tts_mod_vault_icon.png $out/share/icons/hicolor/1024x1024/apps/tts-mod-vault.png
+    install -m 444 -D assets/icon/tts_mod_vault_icon.png $out/share/icons/hicolor/1024x1024/apps/tts_mod_vault.png
   '';
 
   meta = {
@@ -41,7 +41,7 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://github.com/markomijic/TTS-Mod-Vault";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ esch ];
-    mainProgram = "tts-mod-vault";
+    mainProgram = "tts_mod_vault";
     platforms = lib.platforms.linux;
   };
 }

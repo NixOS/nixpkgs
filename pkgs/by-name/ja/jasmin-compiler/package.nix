@@ -2,18 +2,19 @@
   stdenv,
   lib,
   fetchurl,
+  dune_3,
   ocamlPackages,
   mpfr,
   ppl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jasmin-compiler";
-  version = "2025.06.1";
+  version = "2025.06.2";
 
   src = fetchurl {
-    url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-6StC+mnafHMLDCbaz4QqcrT+vK9PIVeh3BizzOH4Wfo=";
+    url = "https://github.com/jasmin-lang/jasmin/releases/download/v${finalAttrs.version}/jasmin-compiler-v${finalAttrs.version}.tar.bz2";
+    hash = "sha256-qg0h9TLBVgoJOSRM/RyEFLorQsnRQDlg9FhQBEbLHrs=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -60,4 +61,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jasminc";
     platforms = lib.platforms.all;
   };
-}
+})

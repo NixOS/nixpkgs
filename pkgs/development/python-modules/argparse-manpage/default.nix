@@ -41,6 +41,11 @@ buildPythonPackage rec {
     "test_old_example_file_name"
   ];
 
+  disabledTestPaths = [
+    # network access to install setuptools, likely due to pip update
+    "tests/test_examples.py"
+  ];
+
   pythonImportsCheck = [ "argparse_manpage" ];
 
   optional-dependencies = {

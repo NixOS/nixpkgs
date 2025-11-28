@@ -43,7 +43,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf,
+  protobuf_32,
   python3,
   rapidjson,
   re2,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     lz4
     nlohmann_json # alternative JSON parser to rapidjson
-    protobuf # substrait requires protobuf
+    protobuf_32 # substrait requires protobuf
     rapidjson
     re2
     snappy
@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableFlight [
     grpc
     openssl
-    protobuf
     sqlite
   ]
   ++ lib.optionals enableS3 [

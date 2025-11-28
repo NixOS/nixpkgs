@@ -24,7 +24,6 @@
   stevedore,
   symengine,
   sympy,
-  tweedledum,
   withVisualization ? false,
   # Python visualization requirements, optional
   ipywidgets,
@@ -101,7 +100,6 @@ buildPythonPackage rec {
     stevedore
     symengine
     sympy
-    tweedledum
   ]
   ++ lib.optionals withVisualization visualizationPackages
   ++ lib.optionals withCrosstalkPass crosstalkPackages;

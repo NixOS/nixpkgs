@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ [
           "logging" # works around segfaults for now
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+          # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
+          # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
+          "symbolize"
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]

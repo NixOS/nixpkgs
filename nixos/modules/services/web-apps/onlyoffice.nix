@@ -7,10 +7,6 @@
 
 let
   cfg = config.services.onlyoffice;
-  defaultNginxNonceFileContent = "set $secure_link_secret \"mynonce\";";
-  defaultNginxNonceFile = pkgs.writeText "onlyoffice-nonce-nginx.conf" ''
-    ${defaultNginxNonceFileContent}
-  '';
 in
 {
   options.services.onlyoffice = {
@@ -26,17 +22,18 @@ in
 
     securityNonceFile = lib.mkOption {
       type = lib.types.str;
-      default = "${defaultNginxNonceFile}";
-      defaultText = lib.literalExpression ''
-        (pkgs.writeText "onlyoffice-nonce-nginx.conf" \'\'
-          ${defaultNginxNonceFileContent}
-        \'\').outPath;
-      '';
+      example = "/run/keys/onlyoffice-nginx-nonce.conf";
       description = ''
-        Path to a file that contains a secret to sign web requests.
-        This file should set a 'secure_link_secret' nginx variable,
-        and ideally be managed by a
-        [secret managing scheme](https://wiki.nixos.org/wiki/Comparison_of_secret_managing_schemes).
+        File holding nginx configuration that sets the nonce used to create secret links.
+
+        Example:
+        ```
+        set $secure_link_secret "changeme";
+        ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
       '';
     };
 
@@ -103,12 +100,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = [
-      (lib.optionalString (cfg.securityNonceFile == "${defaultNginxNonceFile}") ''
-        Please set `options.services.onlyoffice.securityNonceFile`
-        to avoid an (albeit unlikely) information disclosure issue.
-      '')
-    ];
     services = {
       nginx = {
         enable = lib.mkDefault true;
@@ -343,6 +334,7 @@ in
           after = [
             "network.target"
             "postgresql.target"
+            "rabbitmq.service"
           ];
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];

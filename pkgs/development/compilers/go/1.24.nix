@@ -9,45 +9,18 @@
   buildPackages,
   pkgsBuildTarget,
   targetPackages,
-  testers,
-  skopeo,
   buildGo124Module,
+  callPackage,
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo124Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
-
-  # In order for buildmode=pie to work either Go's internal linker must know how
-  # to produce position-independent executables or Go must be using an external linker.
-  #
-  # go-default-pie.patch tries to enable position-independent codegen (PIE) only when the platform
-  # reports support (via BuildModeSupported(..., "pie", ...)).
-  #
-  # That probe is not fully reliable: for example, `pkgsi686Linux.go` can fail during bootstrap
-  # with message 'default PIE binary requires external (cgo) linking, but cgo is not enabled'
-  # despite CGO being enabled. (we set `CGO_ENABLED=1`).
-  #
-  # To avoid such breakage, limit this patch to a small set of explicitly tested platforms
-  # rather than relying on the general BuildModeSupported("pie") check.
-  supportsDefaultPie =
-    let
-      hasPie = {
-        "amd64" = true;
-        "arm64" = true;
-        "ppc64le" = true;
-        "riscv64" = true;
-      };
-    in
-    hasPie.${stdenv.hostPlatform.go.GOARCH} or false
-    && hasPie.${stdenv.targetPlatform.go.GOARCH} or false;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
@@ -89,11 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
     ./go-env-go_ldso.patch
-  ]
-  ++ lib.optionals supportsDefaultPie [
-    (replaceVars ./go-default-pie.patch {
-      inherit (stdenv.targetPlatform.go) GOARCH;
-    })
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
@@ -195,14 +163,10 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap skopeoTest;
-    tests = {
-      skopeo = testers.testVersion { package = skopeoTest; };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "go version";
-        version = "go${finalAttrs.version}";
-      };
+    inherit goBootstrap;
+    tests = callPackage ./tests.nix {
+      go = finalAttrs.finalPackage;
+      buildGoModule = buildGo124Module;
     };
   };
 

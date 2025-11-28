@@ -23,24 +23,9 @@
     patch = ./bridge-stp-helper.patch;
   };
 
-  # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
-  dell_xps_regression = {
-    name = "dell_xps_regression";
-    patch = fetchpatch {
-      name = "Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
-      url = "https://raw.githubusercontent.com/openSUSE/kernel-source/1b02b1528a26f4e9b577e215c114d8c5e773ee10/patches.suse/Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
-      sha256 = "sha256-RHJdQ4p0msTOVPR+/dYiKuwwEoG9IpIBqT4dc5cJjf8=";
-    };
-  };
-
   request_key_helper = {
     name = "request-key-helper";
     patch = ./request-key-helper.patch;
-  };
-
-  request_key_helper_updated = {
-    name = "request-key-helper-updated";
-    patch = ./request-key-helper-updated.patch;
   };
 
   hardened =
@@ -64,13 +49,6 @@
       patches = lib.importJSON ./hardened/patches.json;
     in
     lib.mapAttrs mkPatch patches;
-
-  # Adapted for Linux 5.4 from:
-  # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04896832c94aae4842100cafb8d3a73e1bed3a45
-  rtl8761b_support = {
-    name = "rtl8761b-support";
-    patch = ./rtl8761b-support.patch;
-  };
 
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";

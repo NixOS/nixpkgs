@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  perl,
-  openssl,
-  vimUtils,
   nix-update-script,
+  openssl,
+  perl,
+  pkg-config,
+  stdenv,
+  vimUtils,
 }:
 let
   version = "65aeacf-unstable-2025-11-03";
@@ -35,6 +36,9 @@ let
       RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
       OPENSSL_NO_VENDOR = true;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
     };
   };
 in

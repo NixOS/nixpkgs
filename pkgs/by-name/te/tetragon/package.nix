@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     writableTmpDirAsHomeHook
     gitMinimal
   ];
@@ -31,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     clang
     go
     llvm
-    pkg-config
   ];
 
   env = {

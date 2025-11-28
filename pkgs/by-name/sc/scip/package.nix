@@ -47,8 +47,6 @@ buildGo124Module (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "SCIP Code Intelligence Protocol CLI";
     mainProgram = "scip";

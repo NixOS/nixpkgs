@@ -49,7 +49,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (config.hardware.facter.reportPath != null) {
     networking.enableIntel2200BGFirmware = lib.mkIf cfg._2200BG.enable (lib.mkDefault true);
     hardware.enableRedistributableFirmware = lib.mkIf cfg._3945ABG.enable (lib.mkDefault true);
   };

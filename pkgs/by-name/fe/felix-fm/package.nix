@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kyoheiu/felix";
     changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ _7karni ];
     mainProgram = "fx";
   };
 }

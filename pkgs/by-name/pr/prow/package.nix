@@ -2,23 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "prow";
-  version = "0-unstable-2024-08-27";
-  rev = "195f38540f39dd3ec95ca2d7086487ec19922e61";
+  version = "0-unstable-2025-11-17";
+  rev = "cfbb719bc9007c483499c37e5cda8e0046b21fb1";
 
   src = fetchFromGitHub {
     inherit rev;
 
     owner = "kubernetes-sigs";
     repo = "prow";
-    hash = "sha256-/OhlJdxPa4rTuT7XIklx8vxprbENfasJYwiJxD4CeXY=";
+    hash = "sha256-tMbq6W0wquqABV6Q9IS9M7IJ8J0OoeK/SO2QNwmFaPw=";
   };
 
-  vendorHash = "sha256-bJ0P/rHp+0zB/Dtp3F3n4AN3xF/A5qoq3lCQVBK+L4w=";
+  vendorHash = "sha256-J/DQbAWKHQdE+V/uRuo6rAwGGpEq4OeV1NUpB27xJTg=";
 
   # doCheck = false;
 
@@ -62,7 +63,17 @@ buildGoModule rec {
     "cmd/webhook-server"
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
+
+  # Workaround for: panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  # ref: https://github.com/NixOS/nix/pull/1646
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+  };
 
   meta = {
     description = "Kubernetes based CI/CD system developed to serve the Kubernetes community";

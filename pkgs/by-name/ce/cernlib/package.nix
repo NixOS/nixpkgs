@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)" \
+                     "cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)" \
       --replace-fail "find_program ( SED NAMES gsed" "find_program ( SED NAMES sed"
   '';
 

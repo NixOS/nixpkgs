@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "enterpriseattack";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xakepnz";
     repo = "enterpriseattack";
     tag = "v${version}";
-    hash = "sha256-9tEJVz6eO02/iwOHIjhcASfSd2t2W06JGzxSqepUYjk=";
+    hash = "sha256-OZ/nao2oiXzzWl/zQA5A3GpsRNobnHb4ubAsZvVITj0=";
   };
 
   build-system = [

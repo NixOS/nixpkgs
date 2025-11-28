@@ -6,7 +6,6 @@
   marshmallow,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-CwGmNyY4U1vt7CHuO4nS1TuUJWm6Ok8vIE3kRG/qles=";
+    hash = "sha256-Jn8wy5UmuzqEputujGJQtAe8AoGCLYpSwZWHpDGlSWg=";
   };
 
   pythonRelaxDeps = [

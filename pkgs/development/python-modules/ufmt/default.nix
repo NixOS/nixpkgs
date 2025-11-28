@@ -60,7 +60,6 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];
 

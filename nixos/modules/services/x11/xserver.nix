@@ -1021,7 +1021,8 @@ in
 
     fonts.packages = [
       (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
-      pkgs.xorg.fontmiscmisc
+      pkgs.font-misc-misc
+      pkgs.font-alias
     ];
 
   };

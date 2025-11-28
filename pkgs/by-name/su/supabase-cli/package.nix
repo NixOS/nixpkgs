@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "2.58.8";
+  version = "2.62.10";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-NmqDOM5IQp/dsRWN1qTaGARADWa1M3pzUjiiv2UY4ow=";
+    hash = "sha256-rHu74DHbmy+/1mdsEvvND4bzVzVXfQoSXfJIzPYSq2s=";
   };
 
-  vendorHash = "sha256-RH5U85/NjzCbzgxAm8t/NEMiHUURZBtrM7Dejs9aQEI=";
+  vendorHash = "sha256-neUCgxE7NH6rRKrmjpkzwcCFxYxiqgu5/0b0e/833Ng=";
 
   ldflags = [
     "-s"
@@ -46,7 +46,11 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = supabase-cli;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # Fetch versions from GitHub releases to detect pre-releases and
+      # avoid updating to them.
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   meta = with lib; {

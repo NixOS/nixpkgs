@@ -2,14 +2,6 @@ diff --git a/warp/build_dll.py b/warp/build_dll.py
 index 2218ff13..53786017 100644
 --- a/warp/build_dll.py
 +++ b/warp/build_dll.py
-@@ -408,6 +408,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
-         cpp_includes += f' -I"{warp_home_path.parent}/_build/host-deps/llvm-project/release-{arch}/include"'
-         cuda_includes = f' -I"{cuda_home}/include"' if cu_path else ""
-         includes = cpp_includes + cuda_includes
-+        includes += " -isystem @LIBCXX_DEV@/include/c++/v1"
- 
-         if sys.platform == "darwin":
-             version = f"--target={arch}-apple-macos11"
 @@ -441,6 +442,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
                  build_cmd = f'{cpp_compiler} {cpp_flags} -c "{cpp_path}" -o "{cpp_out}"'
                  run_cmd(build_cmd)

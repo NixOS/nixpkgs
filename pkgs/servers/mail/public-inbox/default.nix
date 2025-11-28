@@ -39,7 +39,6 @@
   PlackMiddlewareReverseProxy,
   PlackTestExternalServer,
   Xapian,
-  TestSimple13,
   TimeDate,
   URI,
   XMLTreePP,
@@ -145,7 +144,6 @@ buildPerlPackage rec {
     xapian
     EmailMIME
     PlackTestExternalServer
-    TestSimple13
     XMLTreePP
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

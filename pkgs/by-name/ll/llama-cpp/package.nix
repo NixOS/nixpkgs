@@ -36,7 +36,6 @@
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
@@ -92,7 +91,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    git
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc

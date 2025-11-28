@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3MGKpfhjmqnIvmt4mXnkmpjF/riXPDXyUiSrsceY6o=";
+    hash = "sha256-TgXPJP+Xm8LrO2d8yMu6aCCypuBRKNtYuZAb0dYfhng=";
   };
 
   postPatch = ''

@@ -26,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-share";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
-    hash = "sha256-grz9TvPqf9eyr3+6mkW0dOF03NgowcS/5/+KLvhYunc=";
+    hash = "sha256-Ayho1Ar4UIC6Thi6XatGwOZj7H5DiUnwgsgFeV9ivwY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

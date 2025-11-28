@@ -67,7 +67,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       zalakain
     ];
     mainProgram = "jrnl";

@@ -12,32 +12,20 @@
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-HBWvk6bX0GjU/yvUejYgTQM8/IP5dYVrf30wNzgWv0s=";
+    hash = "sha256-GmoeOLKxdW1x6PHtslwNPVq8wDWA413NHA/VeDRb4mA=";
   };
 
-  src-service = fetchFromGitHub {
-    owner = "clash-verge-rev";
-    repo = "clash-verge-service";
-    rev = "396150683e01e79740563561ae2fe2db28fb8904"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-D6U22+tJ6vxn8/BTj/PV+4SF5fvGv6KAWtu5+PNJ1SQ=";
-  };
-
-  service-cargo-hash = "sha256-54nmhQjtPLMPoRML/3rG1jipT1VC5EDgRXnKDYuLVmM=";
-  pnpm-hash = "sha256-neRjVL29xxbQu/XxsQjdAka71oJww40LeDusjsgsY00=";
-  vendor-hash = "sha256-XszXDajAdYKEUoyrHZDxxp8ICReMnSdEeKVx7JHiaU4=";
+  pnpm-hash = "sha256-qDwXPTfh1yOlugZe1UPUMKRyZOSagG4lX2eiFACgHRw=";
+  vendor-hash = "sha256-z5xVbqh+CiaTDtAx2VPQ4UjliYnV44tdp3pS8vzb1K4=";
 
   service = callPackage ./service.nix {
     inherit
-      version
-      src-service
-      service-cargo-hash
-      pname
       meta
       ;
   };

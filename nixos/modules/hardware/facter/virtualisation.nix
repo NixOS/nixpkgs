@@ -51,13 +51,20 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (config.hardware.facter.reportPath != null) {
 
     # KVM support
     boot.kernelModules =
       let
         hasCPUFeature =
-          feature: lib.any ({ features, ... }: lib.elem feature features) (report.hardware.cpu or [ ]);
+          feature:
+          lib.any (
+            {
+              features ? [ ],
+              ...
+            }:
+            lib.elem feature features
+          ) (report.hardware.cpu or [ ]);
       in
       lib.mkMerge [
         (lib.mkIf (hasCPUFeature "vmx") [ "kvm-intel" ])

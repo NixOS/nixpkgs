@@ -4,22 +4,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "3.2.1";
+  version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
     tag = "v${version}";
-    hash = "sha256-DBpu1vjK0uYwXF1fbbdoeqCd3a6VdeClhsTGkbf8o7U=";
+    hash = "sha256-yystaH2HRsJoYh2aTpOBA7DLiC2xwpBUccHwmJ0FlaY=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +35,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for the PowerView API";
     homepage = "https://github.com/sander76/aio-powerview-api";
-    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${src.tag}";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
-  version = "5.9.1";
+  version = "5.9.2";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gedit";
     repo = "libgedit-amtk";
     rev = version;
-    hash = "sha256-myKpZtqtf40UByBUKVF0jv521kGAUA6KDmbDJy/Q1q8=";
+    hash = "sha256-TpPiVIsHIBrRzDG2oBwtrIYB3CYEW6SRRVow9pe2XFs=";
   };
 
   strictDeps = true;

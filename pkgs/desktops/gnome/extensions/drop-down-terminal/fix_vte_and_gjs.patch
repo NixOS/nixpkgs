@@ -4,7 +4,7 @@
  
  // Author: Stéphane Démurget <stephane.demurget@free.fr>
  
-+imports.gi.GIRepository.Repository.prepend_search_path('@vte@/lib/girepository-1.0')
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@vte@/lib/girepository-1.0')
 +
  const Lang = imports.lang;
  const Gettext = imports.gettext.domain("drop-down-terminal");
@@ -25,7 +25,7 @@
  
  // Author: Stéphane Démurget <stephane.demurget@free.fr>
 +
-+imports.gi.GIRepository.Repository.prepend_search_path('@vte@/lib/girepository-1.0')
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@vte@/lib/girepository-1.0')
 +
  const Lang = imports.lang;
  

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportCheck = [ "rospkg" ];
+  pythonImportsCheck = [ "rospkg" ];
 
   meta = {
     description = "ROS package library for Python";

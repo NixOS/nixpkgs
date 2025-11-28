@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-x-icons";
     rev = version;
-    hash = "sha256-Ea0NkN9vnfqqqXpE+aM6zca1m7ri4mP1DMTQhvx9guQ=";
+    hash = "sha256-UNta7sj5xzZglYJekhxa0N/2RJU4cyqjX2fCFdWqoiY=";
   };
 
   propagatedBuildInputs = [

@@ -12,14 +12,14 @@
 let
   textx = buildPythonPackage rec {
     pname = "textx";
-    version = "4.2.3";
+    version = "4.3.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       tag = version;
-      hash = "sha256-2ZRu7aDDiq+EUjqYI7CxzsmPNXGmWc7DI4ocVZbj3gM=";
+      hash = "sha256-2sRMMbWJN9H34zD++9T499Y4+wv5ZSSkN6xevH2fuVs=";
     };
 
     outputs = [

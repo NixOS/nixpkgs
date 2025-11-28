@@ -9,6 +9,7 @@
   cmdliner,
   dolmen_model,
   dolmen_type,
+  dune-build-info,
   fpath,
   hc,
   menhirLib,
@@ -27,13 +28,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8AAS7C/X9YnkgZORRauKqPgXPyFXOhPvd7/VS693e8Q=";
+    hash = "sha256-z3DDdzU39tg2F3+pAFPILiKY3pQxOpehdoxwckyhZBI=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ buildDunePackage (finalAttrs: {
     cmdliner
     dolmen_model
     dolmen_type
+    dune-build-info
     fpath
     hc
     menhirLib

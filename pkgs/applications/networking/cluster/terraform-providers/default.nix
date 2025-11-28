@@ -125,6 +125,8 @@ let
       metal = archived "metal" "2025/10";
       stackpath = archived "stackpath" "2025/10";
       vra7 = archived "vra7" "2025/10";
+      ccloud = removed "ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
     };
 
   # added 2025-10-12
@@ -260,7 +262,6 @@ let
     rundeck = lib.warnOnInstantiate "terraform-providers.rundeck has been renamed to terraform-providers.rundeck_rundeck" actualProviders.rundeck_rundeck;
     sakuracloud = lib.warnOnInstantiate "terraform-providers.sakuracloud has been renamed to terraform-providers.sacloud_sakuracloud" actualProviders.sacloud_sakuracloud;
     btp = lib.warnOnInstantiate "terraform-providers.btp has been renamed to terraform-providers.sap_btp" actualProviders.sap_btp;
-    ccloud = lib.warnOnInstantiate "terraform-providers.ccloud has been renamed to terraform-providers.sapcc_ccloud" actualProviders.sapcc_ccloud;
     scaleway = lib.warnOnInstantiate "terraform-providers.scaleway has been renamed to terraform-providers.scaleway_scaleway" actualProviders.scaleway_scaleway;
     shell = lib.warnOnInstantiate "terraform-providers.shell has been renamed to terraform-providers.scottwinkler_shell" actualProviders.scottwinkler_shell;
     selectel = lib.warnOnInstantiate "terraform-providers.selectel has been renamed to terraform-providers.selectel_selectel" actualProviders.selectel_selectel;

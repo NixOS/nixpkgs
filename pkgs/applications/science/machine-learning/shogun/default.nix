@@ -210,6 +210,34 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
     sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
     sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
+
+    # Fix build with CMake 4
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.5)"
+
+    # Patch rxcpp to build with CMake 4 and GCC 14
+    rxcpp_tmpdir=$(mktemp -d)
+    tar -xzf third_party/rxcpp/v${rxcppVersion}.tar.gz -C "$rxcpp_tmpdir"
+    rm third_party/rxcpp/v${rxcppVersion}.tar.gz
+    find "$rxcpp_tmpdir/RxCpp-${rxcppVersion}" -type f -name "CMakeLists.txt" -exec \
+      sed -i -E 's/cmake_minimum_required\(VERSION.*\)/cmake_minimum_required\(VERSION 3.5\)/g' {} +
+    substituteInPlace "$rxcpp_tmpdir/RxCpp-${rxcppVersion}/Rx/v2/src/rxcpp/rx-notification.hpp" \
+      --replace-fail "{ ep = std::move(o.ep); return *this; }" "RXCPP_DELETE;"
+    tar -czf third_party/rxcpp/v${rxcppVersion}.tar.gz -C "$rxcpp_tmpdir" RxCpp-${rxcppVersion}
+    rxcpp_hash=$(md5sum third_party/rxcpp/v${rxcppVersion}.tar.gz | awk '{ print $1 }')
+    substituteInPlace cmake/external/rxcpp.cmake \
+      --replace-fail "feb89934f465bb5ac513c9adce8d3b1b" "$rxcpp_hash"
+
+    # Patch gtest to build with CMake 4
+    gtest_tmpdir=$(mktemp -d)
+    tar -xzf third_party/GoogleMock/release-${gtestVersion}.tar.gz -C "$gtest_tmpdir"
+    rm third_party/GoogleMock/release-${gtestVersion}.tar.gz
+    find "$gtest_tmpdir/googletest-release-${gtestVersion}" -type f -name "CMakeLists.txt" -exec \
+      sed -i -E 's/cmake_minimum_required\(VERSION.*\)/cmake_minimum_required\(VERSION 3.5\)/g' {} +
+    tar -czf third_party/GoogleMock/release-${gtestVersion}.tar.gz -C "$gtest_tmpdir" googletest-release-${gtestVersion}
+    gtest_hash=$(md5sum third_party/GoogleMock/release-${gtestVersion}.tar.gz | awk '{ print $1 }')
+    substituteInPlace cmake/external/GoogleTestNMock.cmake \
+      --replace-fail "16877098823401d1bf2ed7891d7dce36" "$gtest_hash"
   ''
   + lib.optionalString (!withSvmLight) ''
     # Run SVMlight scrubber

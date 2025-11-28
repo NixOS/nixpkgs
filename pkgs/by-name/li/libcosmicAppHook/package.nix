@@ -55,7 +55,10 @@ makeSetupHook {
       lib.makeSearchPath "share" (
         lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons ]
       );
-    cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
+    # Temporarily using RUSTFLAGS: https://github.com/NixOS/nixpkgs/issues/464392
+    # See ./libcosmic-app-hook.sh
+    # cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
+
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [

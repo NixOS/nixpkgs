@@ -13,7 +13,7 @@
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.11.2";
+  version = "10.11.3";
 
   src =
     assert version == jellyfin.version;
@@ -21,7 +21,7 @@ buildNpmPackage rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-xgZ2fh2dMpcvXXUWcZSvcARm4Qy8qgi8T5nFyk+sOgs=";
+      hash = "sha256-rsAxV3ABO1HYnVsvsIMMoWizPuFL0GyfKNUGYkqFxBc=";
     };
 
   nodejs = nodejs_20; # does not build with 22
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-Uikude8cNBA79KNPf6D0McwR/AoaaWJVMw2Q08AiK3U=";
+  npmDepsHash = "sha256-OLFjeCgq2c4d22L6yt7ihPuZiwsR1txZpjniuf/0L0I=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart

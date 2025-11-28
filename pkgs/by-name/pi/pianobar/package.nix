@@ -32,9 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  CC = "gcc";
-  CFLAGS = "-std=c99";
-
   meta = {
     changelog = "https://github.com/PromyLOPh/pianobar/raw/${finalAttrs.src.rev}/ChangeLog";
     description = "Console front-end for Pandora.com";

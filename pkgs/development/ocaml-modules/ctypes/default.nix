@@ -11,13 +11,13 @@
 
 buildDunePackage rec {
   pname = "ctypes";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-ctypes";
     rev = version;
-    hash = "sha256-fZfTsOMppHiI7BVvgICVt/9ofGFAfYjXzHSDA7L4vZk=";
+    hash = "sha256-Wlpk+/MSWmnIRsJfVQMTCYDRixuqLzDpdFNpkQyscA8=";
   };
 
   buildInputs = [ dune-configurator ];

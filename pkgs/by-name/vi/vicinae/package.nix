@@ -1,9 +1,9 @@
 {
+  abseil-cpp,
   cmake,
   cmark-gfm,
   fetchFromGitHub,
   fetchNpmDeps,
-  grpc-tools,
   kdePackages,
   lib,
   libqalculate,
@@ -20,18 +20,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.5";
+  version = "0.16.10";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-smhbchRZmp7DwRLGA3QoI12kQuMVaxiNkhzfC+n19+4=";
+    hash = "sha256-4t0AscBe+TMhQ5SuzkBSgKrMXGs/2BvlRv8ke3pg+yo=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-VrtxQG1wQGcRHbJWPPt6aS7x1hAHc4Z1+0l+cKv3YdI=";
+    hash = "sha256-4OgVCnw5th2TcXszVY5G9ENr3/Y/eR2Kd45DbUhQRNk=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CMAKE_INSTALL_LIBDIR" = "lib";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -59,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    abseil-cpp
     cmark-gfm
-    grpc-tools
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
     libqalculate

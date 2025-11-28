@@ -35,7 +35,8 @@ body:
         If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (25.11)"
+        - "- Unstable (26.05)"
+        - "- Beta (25.11)"
         - "- Stable (25.05)"
       default: 0
     validations:

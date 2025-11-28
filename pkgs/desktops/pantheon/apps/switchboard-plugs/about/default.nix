@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-about";
-    rev = version;
-    sha256 = "sha256-H4BDLP3yzQi+ougpvBvnv1R1TImzUjSOVDGbOqw9hvg=";
+    repo = "settings-system";
+    tag = version;
+    hash = "sha256-SPFCBsk4tVR+5Q6uuDG/fTIn+4TXdeAobfQxkmxMiW0=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard About Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-about";
+    homepage = "https://github.com/elementary/settings-system";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];

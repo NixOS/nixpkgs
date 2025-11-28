@@ -90,6 +90,7 @@
   waylandSupport ? !stdenv.hostPlatform.isDarwin,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   zimgSupport ? true,
+  versionCheckHook,
 }:
 
 let
@@ -300,6 +301,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version
@@ -319,7 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) mpv;
 
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
         moduleNames = [ "mpv" ];
@@ -335,7 +340,10 @@ stdenv.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Plus;
+    license = [
+      lib.licenses.gpl2Plus
+      lib.licenses.lgpl21Plus
+    ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz

@@ -65,6 +65,7 @@
   extrasSupport ? true,
 
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -135,7 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     xorg.libXft
+    xorg.libXfixes
     xorg.libSM
+    expat
   ]
   ++ lib.optionals waylandSupport [
     pango
@@ -182,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

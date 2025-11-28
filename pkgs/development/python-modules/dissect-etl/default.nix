@@ -8,21 +8,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.11";
+  version = "3.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.etl";
     tag = version;
-    hash = "sha256-soJH7kx/029yXyOjv6OsWjWAMMHXKx711GLPBClDAK0=";
+    hash = "sha256-QmtFkzO57jLTQg16MawAgU7Vq8vgo7DkEDq+FEjnObs=";
   };
 
   build-system = [

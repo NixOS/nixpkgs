@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.11.0";
+  version = "7.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nedbat";
+    owner = "coveragepy";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-l4JeGgy+WAN6NHz0ZkPYqiNw0k5VxaX32Vcp11sylgU=";
+    hash = "sha256-Geoj48/MIrI8YDdyvAz7AaSa9wY41KhW5Ret4pzpLjc=";
   };
 
   build-system = [ setuptools ];
@@ -69,9 +69,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/nedbat/coveragepy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/coveragepy/coveragepy/blob/${src.tag}/CHANGES.rst";
     description = "Code coverage measurement for Python";
-    homepage = "https://github.com/nedbat/coveragepy";
+    homepage = "https://github.com/coveragepy/coveragepy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -54,7 +54,6 @@ buildGoModule rec {
     changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       humancalico
       qjoly
       ryan4yin

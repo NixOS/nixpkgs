@@ -30,17 +30,18 @@
   desktop-file-utils,
   itstool,
   xapp,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.4.7";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "pix";
     rev = version;
-    hash = "sha256-Z8JGss5DA4Lsj7fhjRztF6Y+zYjZuIbmYRo7wvwxB8k=";
+    hash = "sha256-zK02qhTGuYgZWHkJ6c3EVinUcojNEWwecvPjblECLkw=";
   };
 
   nativeBuildInputs = [
@@ -85,7 +86,6 @@ stdenv.mkDerivation rec {
 
     patchShebangs data/gschemas/make-enums.py \
       pix/make-pix-h.py \
-      po/make-potfiles-in.py \
       postinstall.py \
       pix/make-authors-tab.py
   '';
@@ -95,7 +95,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dwebservices=false" ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${
+      lib.makeSearchPath "share" [
+        shared-mime-info
+        xapp-symbolic-icons
+      ]
+    }")
   '';
 
   meta = with lib; {

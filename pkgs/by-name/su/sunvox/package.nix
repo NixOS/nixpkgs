@@ -12,6 +12,8 @@
   makeDesktopItem,
   makeWrapper,
   SDL2,
+  fetchurl,
+  imagemagick,
 }:
 let
   platforms = {
@@ -25,6 +27,11 @@ let
   bindir =
     platforms."${stdenv.hostPlatform.system}"
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  icon = fetchurl {
+    url = "https://warmplace.ru/soft/sunvox/images/icon.png";
+    hash = "sha256-ld2GCOhBhMThuUYBNa+2iTdY2HsYBRyApWiHTPuVgKA=";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
@@ -43,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       copyDesktopItems
+      imagemagick
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
@@ -67,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "SunVox";
       genericName = "Modular Synthesizer";
       comment = "Modular synthesizer with pattern-based sequencer";
+      icon = "sunvox";
       categories = [
         "AudioVideo"
         "Audio"
@@ -96,6 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Cleanup, make sure we didn't miss anything
     find $out/share/sunvox/sunvox -type f -name readme.txt -delete
     rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+
+    # Resize & install icons
+    for size in 16 24 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+      magick ${icon} -resize ''${size}x''${size} \
+      $out/share/icons/hicolor/''${size}x''${size}/apps/sunvox.png
+    done
+
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications

@@ -25,18 +25,18 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "global-platform-pro";
-  version = "24.10.15";
-  GPPRO_VERSION = "v24.10.15-0-gf2af9ef"; # git describe --tags --always --long --dirty
+  version = "25.10.20";
+  GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
     rev = "v${version}";
-    sha256 = "sha256-yy2WOLDetBrbNRf6HvvPdNPD51ujXomI2a2Hj6eVx1Q=";
+    sha256 = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
   };
 
   mvnJdk = jdk11;
-  mvnHash = "sha256-vTlOxFBjEZRD23ldMF+VRKZx6jyZ6YvgvZM353FWrWQ=";
+  mvnHash = "sha256-tHqA408mUa5l53zdWmFmREI6Ds+vqexwMoYnJMflMCc=";
 
   nativeBuildInputs = [
     jdk11

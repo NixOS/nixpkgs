@@ -58,7 +58,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       sagikazarmark
-      bryanasdev000
     ];
   };
 }

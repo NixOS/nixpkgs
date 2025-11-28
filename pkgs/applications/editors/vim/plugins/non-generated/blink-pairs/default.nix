@@ -23,7 +23,12 @@ let
 
     cargoHash = "sha256-Cn9zRsQkBwaKbBD/JEpFMBOF6CBZTDx7fQa6Aoic4YU=";
 
-    env.RUSTC_BOOTSTRAP = 1;
+    env = {
+      RUSTC_BOOTSTRAP = 1;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+    };
 
     # NOTE: Disabled upstream too
     doCheck = false;

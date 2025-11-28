@@ -7,7 +7,6 @@
 
 let
   cfge = config.environment;
-
   cfg = config.programs.fish;
 
   fishAbbrs = lib.concatStringsSep "\n" (
@@ -21,18 +20,18 @@ let
   );
 
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
-
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
-
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
+  # Need to use --no-config to prevent fish_indent from trying to read from config
+  # See https://github.com/fish-shell/fish-shell/issues/12079
   indentFishFile =
     name: text:
-    pkgs.runCommand name {
+    pkgs.runCommandLocal name {
       nativeBuildInputs = [ cfg.package ];
       inherit text;
       passAsFile = [ "text" ];
-    } "fish_indent < $textPath > $out";
+    } "fish --no-config -c 'fish_indent $textPath' > $out";
 
   sourceEnv =
     file:
@@ -47,11 +46,9 @@ let
 
   babelfishTranslate =
     path: name:
-    pkgs.runCommand "${name}.fish" {
-      preferLocalBuild = true;
+    pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
     } "babelfish < ${path} > $out;";
-
 in
 {
   options = {
@@ -273,10 +270,10 @@ in
             };
             generateCompletions =
               package:
-              pkgs.runCommand
+              pkgs.runCommandLocal
                 (
-                  with lib.strings;
                   let
+                    inherit (lib.strings) stringLength substring storeDir;
                     storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
                     pathName = substring storeLength (stringLength package - storeLength) package;
                   in
@@ -285,7 +282,6 @@ in
                 (
                   {
                     inherit package;
-                    preferLocalBuild = true;
                   }
                   // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
                 )
@@ -306,8 +302,7 @@ in
       # include programs that bring their own completions
       {
         pathsToLink =
-          [ ]
-          ++ lib.optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
+          lib.optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
           ++ lib.optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
           ++ lib.optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
       }
@@ -341,5 +336,8 @@ in
       '';
 
   };
-  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
+  meta.maintainers = with lib.maintainers; [
+    llakala
+    sigmasquadron
+  ];
 }

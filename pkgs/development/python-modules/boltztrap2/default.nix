@@ -1,18 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
+  stdenv,
   spglib,
   numpy,
   scipy,
   matplotlib,
   ase,
   netcdf4,
-  pythonOlder,
   cython,
   cmake,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,12 +27,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    pname = "boltztrap2";
-    inherit version;
-    hash = "sha256-JUIGh/6AF+xYLmF3QN47/A5E9zPKdhO2lhn97giZJ48=";
+  src = fetchFromGitLab {
+    owner = "sousaw";
+    repo = "BoltzTraP2";
+    tag = "v${version}";
+    hash = "sha256-eocstudmgMkuxa94txU8uqIp8HpNEuWQys7WvRRZ4as=";
   };
 
   postPatch = ''
@@ -57,10 +57,28 @@ buildPythonPackage rec {
     netcdf4
   ];
 
-  # pypi release does no include files for tests
-  doCheck = false;
-
   pythonImportsCheck = [ "BoltzTraP2" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preInstallCheck = ''
+    tar xf data.tar.xz
+    rm -rf BoltzTraP2
+  '';
+
+  pytestFlags = [ "tests" ];
+
+  disabledTests = lib.optionals (stdenv.system != "x86_64-linux") [
+    # Tests np.load numpy arrays from disk that were, apparently, saved on
+    # x86_64-linux. Then these files are used to compare results of
+    # calculations, which won't work as expected if running on a different
+    # platform.
+    "test_DOS_Si"
+    "test_BTPDOS_Si"
+    "test_calc_cv_Si"
+    "test_fermiintegrals_Si"
+    "test_fitde3D_saved_noder"
+  ];
 
   meta = with lib; {
     description = "Band-structure interpolator and transport coefficient calculator";

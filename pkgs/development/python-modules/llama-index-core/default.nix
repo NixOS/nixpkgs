@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.13.0.post1";
+  version = "0.14.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-X4PDvxynQkHOdhDC5Aqwnr3jSF/83VgbFiDD1M9LOoM=";
+    hash = "sha256-wjw2XTRK1qjfNzndC7q197rU8PVtD8SI7FR4Skary+E=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -151,6 +151,7 @@ buildPythonPackage rec {
     "test_from_persist_dir"
     "test_mimetype_raw_data"
     "test_multiple_documents_context"
+    "test_predict_and_call_via_react_agent"
     "test_resource"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"

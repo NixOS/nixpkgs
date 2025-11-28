@@ -7,6 +7,7 @@
   yarnBuildHook,
   yarnInstallHook,
   nodejs,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     yarnInstallHook
     nodejs
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generate pretty HTML diffs from unified and git diff output in your terminal";

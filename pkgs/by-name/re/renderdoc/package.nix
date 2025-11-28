@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.40";
+  version = "1.41";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-420UV9I+jJ8sLOQVhfGfkGPqAnN+kgPy8k0rZLt5X+Y=";
+    hash = "sha256-1Us+hwvsHX2Zn0BCv8YkOCN1226gAXeZYsg4btyJi8w=";
   };
 
   outputs = [

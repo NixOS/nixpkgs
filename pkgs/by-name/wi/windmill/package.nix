@@ -42,6 +42,7 @@
   coreutils,
   withEnterpriseFeatures ? false,
   withClosedSourceFeatures ? false,
+  nixosTests,
 }:
 
 let
@@ -242,6 +243,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./update-librusty.sh
     ./update-ui_builder.sh
   ];
+
+  passthru.tests = lib.optionalAttrs (stdenv.hostPlatform.isLinux) nixosTests.windmill;
 
   meta = {
     changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";

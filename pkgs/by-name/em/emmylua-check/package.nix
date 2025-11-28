@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/emmylua_check";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

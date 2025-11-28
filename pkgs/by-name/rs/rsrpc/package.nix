@@ -4,6 +4,7 @@
   rustPlatform,
   openssl,
   pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/SpikeHD/rsRPC/releases/tag/v${finalAttrs.version}";

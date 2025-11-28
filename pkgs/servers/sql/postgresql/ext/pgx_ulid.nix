@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_16_0,
+  cargo-pgrx_0_16_1,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -9,25 +9,23 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_16_0;
+  cargo-pgrx = cargo-pgrx_0_16_1;
 
   pname = "pgx_ulid";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "pksunkara";
     repo = "pgx_ulid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjPTCJTeT1HQt8huDHBHs0DAHpmseMHeSaQhpPV6qdo=";
+    hash = "sha256-7zOAjQPdwaDwAz2Es5KX3HstTwY6wKNuB9b+xnnXNP0=";
   };
 
-  cargoHash = "sha256-LRfn/TO/bBEvvzY9m6C8Lb0qdUStQD3oAzjDovS6H1s=";
+  cargoHash = "sha256-4YuTOCE142BDDteB9ZQdxzI8EUXN+jRZfy1eq64qHtg=";
 
   postInstall = ''
-    # Upstream renames the extension when packaging
-    # https://github.com/pksunkara/pgx_ulid/blob/084778c3e2af08d16ec5ec3ef4e8f345ba0daa33/.github/workflows/release.yml#L81
-    # Upgrade scripts should be added later, so we also rename them with wildcard
-    # https://github.com/pksunkara/pgx_ulid/issues/49
+    # Upstream renames the extension when packaging as well as upgrade scripts
+    # https://github.com/pksunkara/pgx_ulid/blob/master/.github/workflows/release.yml#L80
     ${util-linux}/bin/rename pgx_ulid ulid $out/share/postgresql/extension/pgx_ulid*
   '';
 

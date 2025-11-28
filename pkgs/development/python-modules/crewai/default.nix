@@ -105,6 +105,9 @@ buildPythonPackage rec {
     "tests/test_crew.py" # require require API keys
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
+
+    # ImportError: cannot import name 'InitFrom' from 'qdrant_client.models'
+    "tests/rag/qdrant/test_client.py"
   ];
 
   disabledTests = [
@@ -378,8 +381,6 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

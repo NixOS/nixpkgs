@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     # Fix compilation errors caused by stricter restrictions on unused code in Rust 1.89.
     # TODO: remove this patch after upstream fix it.
     ./dummy.patch
+    # https://github.com/xrelkd/clipcat/pull/871
+    ./remove_unnecessary_parenthesis.patch
   ];
 
   nativeBuildInputs = [

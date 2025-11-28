@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-printers";
-    rev = version;
-    sha256 = "sha256-1znz8B4CGQGDiJC4Mt61XAh9wWAV8J0+K3AIpFcffXQ=";
+    repo = "settings-printers";
+    tag = version;
+    hash = "sha256-oqdmARZamTbMwpKKmyVZflYLCd0Qf5iE5lHSMfdPGA8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Printers Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-printers";
+    homepage = "https://github.com/elementary/settings-printers";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];

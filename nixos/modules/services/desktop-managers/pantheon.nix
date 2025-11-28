@@ -193,6 +193,7 @@ in
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
+        pantheon.elementary-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -207,9 +208,7 @@ in
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [
-          elementary-bluetooth-daemon
           elementary-session-settings
-          elementary-settings-daemon
           gala
           gnome-settings-daemon
           (switchboard-with-plugs.override {
@@ -226,7 +225,6 @@ in
             gnome-menus
             adwaita-icon-theme
             gtk3.out # for gtk-launch program
-            onboard
             sound-theme-freedesktop
             xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ])
@@ -243,8 +241,10 @@ in
             elementary-shortcut-overlay
 
             # Services
+            elementary-bluetooth-daemon
             elementary-capnet-assist
             elementary-notifications
+            elementary-settings-daemon
             pantheon-agent-geoclue2
             pantheon-agent-polkit
           ])
@@ -259,14 +259,17 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-      ]
-      ++ (with pkgs.pantheon; [
-        elementary-files
-        elementary-settings-daemon
-        xdg-desktop-portal-pantheon
-      ]);
+      xdg.portal.extraPortals = utils.removePackagesByName (
+        [
+          pkgs.xdg-desktop-portal-gtk
+        ]
+        ++ (with pkgs.pantheon; [
+          elementary-files
+          elementary-settings-daemon
+          # https://github.com/elementary/portals/issues/157
+          # xdg-desktop-portal-pantheon
+        ])
+      ) config.environment.pantheon.excludePackages;
 
       xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 
@@ -306,11 +309,11 @@ in
 
     (mkIf serviceCfg.apps.enable {
       programs.evince.enable = mkDefault (notExcluded pkgs.evince);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName (
         [
           pkgs.gnome-font-viewer
+          pkgs.file-roller
         ]
         ++ (
           with pkgs.pantheon;

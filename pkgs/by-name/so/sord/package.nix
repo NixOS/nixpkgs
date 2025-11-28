@@ -2,7 +2,7 @@
   lib,
   stdenv,
   doxygen,
-  fetchFromGitHub,
+  fetchFromGitLab,
   meson,
   ninja,
   pcre2,
@@ -14,13 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sord";
-  version = "0.16.18";
+  version = "0.16.20";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.com";
     owner = "drobilla";
     repo = "sord";
-    rev = "v${version}";
-    hash = "sha256-cFobmmO2RHJdfCgTyGigzsdLpj7YF6U3r71i267Azks=";
+    tag = "v${version}";
+    hash = "sha256-+f3dxhcxVoub+KeI5c5/J87SVvAawrm5cZgo2qogdRM=";
   };
 
   outputs = [

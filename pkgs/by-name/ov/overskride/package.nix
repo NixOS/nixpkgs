@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "overskride";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "kaii-lb";
     repo = "overskride";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-snyVSQG4eXAW8gIw9ryowTlLbrGo+2y+b4mEQ9ZEBzE=";
+    hash = "sha256-q37nKP18E8aDlTlh2REgeg40KH6orD6QY+ZlDKHHC20=";
   };
 
-  cargoHash = "sha256-AVdo6HPdCvitynqtWZEJMHF5UZpy9ZX6z4SqoqgyOTA=";
+  cargoHash = "sha256-q1g+6JFW+euYCq2uMYQn4R0AP4yt5/cJoP88AXg9NLw=";
 
   nativeBuildInputs = [
     pkg-config
