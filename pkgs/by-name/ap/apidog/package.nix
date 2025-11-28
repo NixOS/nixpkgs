@@ -55,10 +55,10 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "All-in-one API design, test, mock and documentation platform";
-    homepage    = "https://apidog.com";
-    license     = licenses.unfree;
+    homepage = "https://apidog.com";
+    license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     mainProgram = "apidog";
     maintainers = with maintainers; [ DomagojAlaber ];
   };
