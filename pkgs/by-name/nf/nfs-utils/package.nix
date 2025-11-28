@@ -195,6 +195,6 @@ stdenv.mkDerivation rec {
     homepage = "https://linux-nfs.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }
