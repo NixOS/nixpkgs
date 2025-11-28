@@ -23985,6 +23985,12 @@
     github = "shelvacu";
     githubId = 1731537;
   };
+  shgew = {
+    name = "Hleb Shauchenka";
+    email = "me@marleb.org";
+    github = "shgew";
+    githubId = 5584672;
+  };
   shhht = {
     name = "shhht";
     email = "stp.tjeerd@gmail.com";
