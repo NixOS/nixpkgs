@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "0.73.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hf086Ub0nVGET4qELDMddOErGAhK8B6ohbI5JhnU6z8=";
+    hash = "sha256-U0k6DODMW9OK+sR9kt8JzpmV32d9py9Pehv/0h8SqDg=";
   };
 
   buildAndTestSubdir = "harper-ls";
 
-  cargoHash = "sha256-K5/QPTLdT4SeZr6hvth8aDodaj2NnFsLpHDQle+FU1k=";
+  cargoHash = "sha256-TyqUKAlrcoqsDBS2Y3jzUFNNRazSBsCf6una0znc+yw=";
 
   passthru.updateScript = nix-update-script { };
 
