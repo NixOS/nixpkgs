@@ -12,7 +12,6 @@
   nix-update-script,
   patchelf,
   removeReferencesTo,
-  testers,
   yarn,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -149,12 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CDK for Terraform CLI";
