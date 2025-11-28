@@ -2,21 +2,31 @@
   lib,
   stdenv,
   fetchurl,
+  meson,
+  ninja,
+  pkg-config,
   libdvdcss,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdread";
-  version = "6.1.3";
+  version = "7.0.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdread/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-zjVFSZeiCMvlDpEjLw5z+xrDRxllgToTuHMKjxihU2k=";
+    url = "http://get.videolan.org/libdvdread/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-Lj4EowXBXDljqgOuG5qDwdI5iAAD/PPd6YbTlDNV1Ac=";
   };
 
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [ libdvdcss ];
 
-  NIX_LDFLAGS = "-ldvdcss";
+  mesonFlags = [
+    "-Dlibdvdcss=enabled"
+  ];
 
   postInstall = ''
     ln -s dvdread $out/include/libdvdread
@@ -29,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
   };
-}
+})
