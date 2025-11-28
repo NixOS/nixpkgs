@@ -28083,6 +28083,12 @@
     github = "wfdewith";
     githubId = 2306085;
   };
+  wgordon17 = {
+    email = "will@gordoncode.dev";
+    github = "wgordon17";
+    githubId = 22222756;
+    name = "Will Gordon";
+  };
   wgunderwood = {
     email = "wg.underwood13@gmail.com";
     github = "WGUNDERWOOD";
