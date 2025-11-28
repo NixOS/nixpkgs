@@ -15935,6 +15935,13 @@
     githubId = 7802795;
     name = "Manoj Karthick";
   };
+  ManUtopiK = {
+    email = "emmanuel.salomon@gmail.com";
+    matrix = "@ManUtopiK:matrix.org";
+    github = "ManUtopiK";
+    githubId = 188172;
+    name = "Emmanuel Salomon";
+  };
   manveru = {
     email = "m.fellinger@gmail.com";
     matrix = "@manveru:matrix.org";
