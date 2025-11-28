@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2025.11.0";
+  version = "2025.11.1";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     tag = finalAttrs.version;
-    hash = "sha256-0lzyCFp5V6eDaOKwCIDNG9QPry9fvUdnQcL+Ky9z1wo=";
+    hash = "sha256-PNV7hdaP5F/VuaNH3trtJ8oQqLEps/oE6p34LgJ/tEs=";
   };
 
   # Patches desktop file/dbus service bypassing wrapped executable
