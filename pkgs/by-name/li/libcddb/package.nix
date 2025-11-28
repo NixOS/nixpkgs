@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0fr21a7vprdyy1bq6s99m0x420c9jm5fipsd63pqv8qyfkhhxkim";
   };
 
+  patches = [
+    ./fix-getsockopt.patch
+  ];
+
   buildInputs = [ libiconv ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
