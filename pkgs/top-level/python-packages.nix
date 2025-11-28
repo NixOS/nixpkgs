@@ -19715,8 +19715,6 @@ self: super: with self; {
 
   typeshed-client = callPackage ../development/python-modules/typeshed-client { };
 
-  typical = callPackage ../development/python-modules/typical { };
-
   typing = null;
 
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };

@@ -217,6 +217,10 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
+    # Enable virtio-gpu kernel mode driver (native context) support for amdgpu as well.
+    # This option is ignored when RadeonSI/RADV are not being built.
+    (lib.mesonBool "amdgpu-virtio" true)
+
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
