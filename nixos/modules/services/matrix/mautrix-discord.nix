@@ -13,6 +13,7 @@ let
 
   settingsFile = "${dataDir}/config.yaml";
   settingsFileUnformatted = format.generate "discord-config-unsubstituted.yaml" cfg.settings;
+  default_token = ''"This value is generated when generating the registration"'';
 in
 {
   options = {
@@ -415,11 +416,14 @@ in
           rm -f '${settingsFile}'
           old_umask=$(umask)
           umask 0177
+
           envsubst \
             -o '${settingsFile}' \
             -i '${settingsFileUnformatted}'
-          config_has_tokens=$(yq '.appservice | has("as_token") and has("hs_token")' '${settingsFile}')
+          as_token=$(yq '.appservice.as_token' '${settingsFile}')
+          hs_token=$(yq '.appservice.hs_token' '${settingsFile}')
           registration_already_exists=$([[ -f '${registrationFile}' ]] && echo "true" || echo "false")
+          config_has_tokens=$([[ "$as_token" != "${default_token}" && "$hs_token" != "${default_token}" ]] && echo "true" || echo "false")
           echo "There are tokens in the config: $config_has_tokens"
           echo "Registration already existed: $registration_already_exists"
           # tokens not configured from config/environment file, and registration file
