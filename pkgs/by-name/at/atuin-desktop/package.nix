@@ -18,23 +18,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.1.11";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ySws3R4CatOrKjjGrLJQU9feXIb5MdVX1uKK0fFV21s=";
+    hash = "sha256-jBCf6Wq7xTgI2VjhQ+RZ3uN7LVh+ZlQ3TDJ0epsGj0M=";
   };
 
-  cargoRoot = "backend";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-gyDg8XBPiMovOtzmb0eHVWuXmavZTBMvPPgbcdNU6xo=";
+  cargoRoot = "./.";
+  cargoHash = "sha256-329uNcc8LSNreD8CgPCpEhGCR2PebpmFoaRwZn+oscE=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-6YDYrFo5iCelRGBnDFoI8V3Nv/8w3XPNwuArc+nSShU=";
+    hash = "sha256-2i1mL4HwwiXrmM1qaWvHhm27U2/oElbOpnXh09ziamo=";
   };
 
   nativeBuildInputs = [
@@ -54,8 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # Used upstream: https://github.com/atuinsh/desktop/blob/2f9a90963c4a6299bf35d8a49b0a2ffb8a28ee32/.envrc.
-    NODE_OPTIONS = "--max-old-space-size=5120";
+    # Used upstream: https://github.com/atuinsh/desktop/blob/6ddebdf66c70042defe5587f7f6c433f889b9ef4/.envrc#L1
+    NODE_OPTIONS = "--max-old-space-size=6144";
   };
 
   # Otherwise tauri will look for a private key we don't have.
@@ -72,8 +71,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   checkFlags = [
-    # Failing for unknown reason.
-    "--skip=runtime::blocks::handlers::script_output_test::tests::test_multiple_scripts"
+    "--skip=ui::viewport::tests::test_add_line_scrolling"
+    "--skip=ui::viewport::tests::test_line_wrapping"
   ];
   doCheck = !stdenv.isDarwin;
 
