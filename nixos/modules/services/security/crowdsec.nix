@@ -120,11 +120,7 @@ in
 
               See `https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#hub_branch` for more information.
             '';
-            example = [
-              "master"
-              "v1.4.3"
-              "v1.4.2"
-            ];
+            example = "master";
           };
         };
       };
