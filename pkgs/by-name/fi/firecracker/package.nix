@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firecracker";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZrIvz5hmP0d8ADF723Z+lOP9hi5nYbi6WUtV4wTp73U=";
   };
 
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
-    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${finalAttrs.version}";
     mainProgram = "firecracker";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
@@ -110,4 +110,4 @@ rustPlatform.buildRustPackage rec {
       techknowlogick
     ];
   };
-}
+})
