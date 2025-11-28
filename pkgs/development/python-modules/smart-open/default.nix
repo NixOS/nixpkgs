@@ -70,7 +70,7 @@ buildPythonPackage rec {
     responses
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 

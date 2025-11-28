@@ -74,7 +74,7 @@ buildPythonPackage rec {
     pylance
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Tests require pylance, which is a circular dependency
   doCheck = false;

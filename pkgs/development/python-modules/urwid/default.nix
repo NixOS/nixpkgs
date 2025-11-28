@@ -63,7 +63,7 @@ buildPythonPackage rec {
     glibcLocales
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   env.LC_ALL = "en_US.UTF8";
 

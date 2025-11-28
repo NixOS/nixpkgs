@@ -106,7 +106,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported

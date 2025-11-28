@@ -58,7 +58,7 @@ buildPythonPackage rec {
     elastic-transport
     pytest7CheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flow.record" ];
 

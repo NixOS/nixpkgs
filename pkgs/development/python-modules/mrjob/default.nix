@@ -72,7 +72,7 @@ buildPythonPackage rec {
     unittestCheckHook
     warcio
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   unittestFlagsArray = [ "-v" ];
 

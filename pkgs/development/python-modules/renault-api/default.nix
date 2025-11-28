@@ -53,7 +53,7 @@ buildPythonPackage rec {
     syrupy
     typeguard
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "renault_api" ];
 

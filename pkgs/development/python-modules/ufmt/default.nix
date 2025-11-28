@@ -59,7 +59,7 @@ buildPythonPackage rec {
     unittestCheckHook
     versionCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
   versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];

@@ -50,7 +50,7 @@ buildPythonPackage rec {
     sqlalchemy
     twisted
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     pushd test
