@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-launcher";
-  version = "1.0.0-beta.7";
+  version = "1.0.0-beta.8";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-lVNvmpiShkdT+VZMxV1bvYyC17edaepwlkmOvNMng8k=";
+    hash = "sha256-+qSh2QaLbUcBbJi5nqyXmzAIZfqQhwQF/QBN8a7nY5U=";
   };
 
   cargoHash = "sha256-pHW7kBbEQ8P9Ugkgzn1olSlMCeetuNQ2jMJyEteoeIo=";
