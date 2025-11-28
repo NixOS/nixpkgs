@@ -15,6 +15,7 @@
   testers,
   yarn,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -142,7 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   doInstallCheck = true;
 
   passthru = {
