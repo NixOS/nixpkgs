@@ -23242,6 +23242,11 @@
     githubId = 96694484;
     name = "Sandeep Patel";
   };
+  sandwoodjones = {
+    name = "SandWood Jones";
+    github = "SandWoodJones";
+    githubId = 35671374;
+  };
   sandydoo = {
     name = "Sander";
     github = "sandydoo";
