@@ -7,19 +7,19 @@
   testers,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "marksman";
   version = "2025-11-25";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-E+0zq38aIfBAPk0g3LMP1XrtxscfIIG5MT8Yg/22KRk=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
-  dotnetBuildFlags = [ "-p:VersionString=${version}" ];
+  dotnetBuildFlags = [ "-p:VersionString=${finalAttrs.version}" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -32,7 +32,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postInstall = ''
-    install -m 644 -D -t "$out/share/doc/${pname}" LICENSE
+    install -m 644 -D -t "$out/share/doc/${finalAttrs.pname}" LICENSE
   '';
 
   passthru = {
@@ -59,7 +59,7 @@ buildDotnetModule rec {
       stasjok
       plusgut
     ];
-    platforms = dotnet-sdk.meta.platforms;
-    mainProgram = "marksman";
+    platforms = finalAttrs.dotnet-sdk.meta.platforms;
+    mainProgram = finalAttrs.pname;
   };
-}
+})
