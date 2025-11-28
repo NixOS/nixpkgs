@@ -181,6 +181,8 @@ stdenv.mkDerivation rec {
     nfs4-kerberos = nixosTests.nfs4.kerberos;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Linux user-space NFS utilities";
 
