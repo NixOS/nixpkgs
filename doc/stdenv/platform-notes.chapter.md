@@ -130,7 +130,7 @@ The current default version of the SDK and deployment target (minimum supported 
 Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds.
 If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
-On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
+On macOS, the `darwinMinVersion` is 14.0, and the `darwinSdkVersion` is 14.4.
 
 
 #### `xcrun` cannot find a binary {#sec-darwin-troubleshooting-xcrun}
