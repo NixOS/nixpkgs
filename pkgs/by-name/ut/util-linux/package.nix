@@ -178,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
     ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
+    rm -f bash-completion/Makemodule.am
     installShellCompletion --bash bash-completion/*
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
