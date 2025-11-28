@@ -30,7 +30,7 @@ while [ $# -gt 0 ]; do
 		  quiet=1; shift 1 ;;
 		--name)
 			name="$2"; shift 2 ;;
-		--repository)
+		--repo)
 			repository="$2"; shift 2 ;;
 		--tag)
 			tag="$2"; shift 2 ;;

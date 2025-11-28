@@ -24,18 +24,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartero";
-  version = "0.2.4";
+  version = "25.0";
 
   src = fetchFromGitHub {
     owner = "danirod";
     repo = "cartero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l6UYsidMqTsEiabviWGAsEOFyDslpP2wIws0Yk10se4=";
+    hash = "sha256-XUf5Gfg+ZyyzcbZYSxFTM4ot84FF2bgGJoQg2ZAIZ3g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HUwIbrWt9coPjUKRL1nnt0NurwkEGV/Z07BHySnVfQo=";
+    hash = "sha256-T1OR8okOm5hFYsRLqqNYhP39Av/veHnoomkC29/JyAY=";
   };
 
   nativeBuildInputs = [
