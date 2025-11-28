@@ -19,13 +19,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.3.6";
+  version = "5.3.6-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    tag = version;
-    hash = "sha256-5t/71T/eBg4vkDZTj7mtCkXhS+AuiVhBmx0Zzrry5Lg=";
+    rev = "f3d587cc3e24f7ff8fe4732e1465cb92eb420be3";
+    hash = "sha256-f0qAFjDWxcnuRLkdj2b9JT47TuXTWatVYBg8sB6Nn2g=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +97,7 @@ stdenvNoCC.mkDerivation rec {
 
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
-          hash = "sha256-9Mdn18jJTXyAVQMGl9ImIEbzlkK6walPrgkGzupLPFQ=";
+          hash = "sha256-hg4Dtg3ZIyICpiccF1WjaVcTuKuM8bcGXs76EXl/izo=";
         };
       };
     in
