@@ -1376,6 +1376,7 @@
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/suricata/default.nix
+  ./services/networking/sylkserver
   ./services/networking/syncplay.nix
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncthing.nix

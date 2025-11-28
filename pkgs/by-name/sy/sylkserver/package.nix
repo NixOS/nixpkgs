@@ -4,6 +4,7 @@
   python3Packages,
   versionCheckHook,
   fetchpatch2,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -26,6 +27,14 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    # "value must be a string"
+    substituteInPlace \
+      sylk/configuration/__init__.py \
+      sylk/applications/xmppgateway/configuration.py \
+        --replace-fail "host.default_ip" "host.default_ip or '127.0.0.1'"
+  '';
+
   build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [
@@ -34,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     dnspython
     klein
     lxml
+    lxml-html-clean
     msrplib
     python3-eventlib
     python3-gnutls
@@ -49,6 +59,17 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sylk-server";
   versionCheckProgramArg = "--version";
+
+  # copy config file examples
+  postInstall = ''
+    for file in *.ini.sample; do
+      install -Dm0644 $file $out/share/sylkserver/examples/''${file%.*}
+    done
+  '';
+
+  passthru = {
+    tests = nixosTests.sylkserver;
+  };
 
   meta = {
     description = "SIP/XMPP/WebRTC Application Server";
