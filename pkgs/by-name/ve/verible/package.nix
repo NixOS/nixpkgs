@@ -48,11 +48,13 @@ buildBazelPackage rec {
     "file://${registry}"
   ];
 
+  USE_BAZEL_VERSION = bazel_7.version;
+
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-SUURIZF3mlFRFKpxdHrgYAbJQ4rkkzCeqcC/1vxmreo=";
-        x86_64-linux = "sha256-p7h2L1aLzmMeWWxXC//Qau8/F4HbnUFY6aV8u7zfjRk=";
+        aarch64-linux = "sha256-SUURIZF3mlFRFKpxdHrgYAbJQ4rkkzCeqcC/2vxmreo=";
+        x86_64-linux = "sha256-WrsyslfEmkURclcpBd0+2UCwFbReuZI492zh4JH979Q=";
         aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
       }
       .${system} or (throw "No hash for system: ${system}");

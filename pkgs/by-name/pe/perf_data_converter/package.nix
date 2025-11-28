@@ -14,8 +14,8 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "ef34e6bfad5a6ab54080ddcc83a4d65849855e3a";
-    hash = "sha256-PhacBegQDwWZqZeoZjoLR4akhVV3QrSPr1KflCuied0=";
+    rev = "5036d290fe2a3b274747df8fe89660296c92a4a7";
+    hash = "sha256-EwwlpsozuGJPI4BQVpj0po2WR6MhXEw6UJ8iazEUFqY=";
   };
 in
 buildBazelPackage {
@@ -38,8 +38,8 @@ buildBazelPackage {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-GvuOEQfzPF5J75TRlEc4oDiXXUN4G3fMfRhMDmg3FL0=";
-        x86_64-linux = "sha256-A47JJg+GUIhR7FhufxEsfsIuSg6dd7sPNzSWiQZXIEE=";
+        aarch64-linux = "sha256-4r1PbylPxQScqFUNkr90AooVniF4Dq8TTV+pWupl1JA=";
+        x86_64-linux = "sha256-20y5OEIIzhB3wd35aUdyVOR3YZU4So5RAJKOU6J90S0=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
