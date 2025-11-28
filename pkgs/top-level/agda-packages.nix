@@ -25,7 +25,7 @@ let
     {
       inherit mkLibraryFile mkDerivation;
 
-      lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+      inherit (import ../build-support/agda/lib.nix) interfaceFile isUnbrokenAgdaPackage;
 
       agda = withPackages [ ];
 
@@ -53,6 +53,7 @@ let
     }
     // lib.optionalAttrs config.allowAliases {
       generic = throw "agdaPackages.generic has been removed because it is unmaintained upstream and has been marked as broken since 2021. Consider using agdaPackages.generics instead."; # Added 2025-10-11
+      lib = throw "agdaPackages.lib has ben removed because it was just top-level lib extended with 2 functions, which are directly included in agdaPackages."; # Added 2025-11-16
     };
 in
 mkAgdaPackages Agda
