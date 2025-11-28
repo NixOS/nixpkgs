@@ -3,8 +3,7 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  marksman,
-  testers,
+  versionCheckHook,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -37,11 +36,10 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = marksman;
-      command = "marksman --version";
-    };
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Language Server for Markdown";
