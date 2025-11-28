@@ -44,25 +44,26 @@ in
 buildPythonPackage rec {
   pname = "graph-tool";
   version = "2.98";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
     hash = "sha256-7vGUi5N/XwQ3Se7nX+DG1+jwNlUdlF6dVeN4cLBsxSc=";
   };
 
-  postPatch = ''
+  postPatch =
     # remove error messages about tput during build process without adding ncurses
-    substituteInPlace configure \
-      --replace-fail 'tput setaf $1' : \
-      --replace-fail 'tput sgr0' :
-  '';
+    ''
+      substituteInPlace configure \
+        --replace-fail 'tput setaf $1' : \
+        --replace-fail 'tput sgr0' :
+    '';
 
-  configureFlags = [
-    "--with-python-module-path=$(out)/${python.sitePackages}"
-    "--with-boost-libdir=${boost'}/lib"
-    "--with-cgal=${cgal}"
-  ];
+  configureFlags = lib.mapAttrsToList (lib.withFeatureAs true) {
+    boost-libdir = "${lib.getLib boost'}/lib";
+    cgal = lib.getDev cgal;
+    python-module-path = "$(out)/${python.sitePackages}";
+  };
 
   enableParallelBuilding = true;
 
