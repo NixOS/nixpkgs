@@ -1,7 +1,8 @@
-{ lib
-, appimageTools
-, fetchurl
-, makeDesktopItem
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  makeDesktopItem,
 }:
 
 let
@@ -23,27 +24,31 @@ let
     icon = "apidog";
     desktopName = "Apidog";
     comment = "All-in-One API Platform: Design, Debug, Mock, Test, and Document.";
-    categories = [ "Development" "Utility" ];
+    categories = [
+      "Development"
+      "Utility"
+    ];
     mimeTypes = [ "x-scheme-handler/apidog" ];
   };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [
-    nss
-    gtk3
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libXext
-    libdbusmenu
-    alsa-lib
-    nodejs
-  ];
+  extraPkgs =
+    pkgs: with pkgs; [
+      nss
+      gtk3
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXrandr
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXfixes
+      xorg.libXext
+      libdbusmenu
+      alsa-lib
+      nodejs
+    ];
 
   extraInstallCommands = ''
 
