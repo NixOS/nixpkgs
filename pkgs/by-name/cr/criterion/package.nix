@@ -36,14 +36,14 @@ let
     hash = "sha256-+GaI5nXz4jYI0rO17xDhNtFpLlGL2WzeSVLMfB6Cl6E=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "criterion";
   version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-5GH7AYjrnBnqiSmp28BoaM1Xmy8sPs1atfqJkGy3Yf0=";
   };
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     testers.testVersion {
       package = criterion;
       command = "${lib.getExe tester} --version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
 
   meta = {
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
