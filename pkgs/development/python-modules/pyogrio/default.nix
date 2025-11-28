@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "pyogrio";
     tag = "v${version}";
-    hash = "sha256-F6XfkihN3k2xquYS8jJMlqtLXzaTORaduJ2Q9LhSQGM=";
+    hash = "sha256-ggyT5e2nm6XAZEtDF4lttfThd0afWKFo10RujTxDWt0=";
   };
 
   postPatch = ''
