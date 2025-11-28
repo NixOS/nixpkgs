@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.4.0";
-  mysqlServerVersion = "9.4.0";
+  mysqlShellVersion = "9.5.0";
+  mysqlServerVersion = "9.5.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-a7UJxU5YtUq776SeKW5yIPXnz+RGkUujYV9ZSWfPqSE=";
+      hash = "sha256-7zNDmBN1hlolGfcrYA5V+cZG5g4gSilk07fo50ihEKU=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-BpiDGA3Lxf/MrKqtPSA+apFNZx9N805PYYVa+2vQxPE=";
+      hash = "sha256-3AkaEAyC7Cl7CAxrSjMABQlbzGa747wI6RSaxoeg8+g=";
     })
   ];
 
@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Without this patch, the build will fail if boost is installed via Homebrew on macOS.
+    (cd ../mysql && patch -p1 < ${./homebrew-boost.patch})
+
     substituteInPlace ../mysql/cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
     substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
 
