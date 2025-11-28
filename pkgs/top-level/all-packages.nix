@@ -1692,12 +1692,6 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  avahi = callPackage ../development/libraries/avahi { };
-
-  avahi-compat = callPackage ../development/libraries/avahi {
-    withLibdnssdCompat = true;
-  };
-
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
   };
