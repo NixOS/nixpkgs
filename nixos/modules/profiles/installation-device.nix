@@ -133,7 +133,18 @@ with lib;
     # allow nix-copy to live system
     nix.settings.trusted-users = [ "nixos" ];
 
-    # Install less voices for speechd to save some space
+    # Provide rsync by default
+    environment.defaultPackages = with pkgs; [
+      rsync
+    ];
+
+    # Provide git by default
+    programs.git.enable = lib.mkDefault true;
+
+    # Set a default stateVersion to prevent evaluation warnings
+    system.stateVersion = lib.mkDefault lib.trivial.release;
+
+    # Install fewer voices for speechd to save some space
     nixpkgs.overlays = [
       (_: prev: {
         mbrola-voices = prev.mbrola-voices.override {
