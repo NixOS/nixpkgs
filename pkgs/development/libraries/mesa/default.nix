@@ -13,7 +13,6 @@
   spirv-tools,
   intltool,
   jdupes,
-  libdisplay-info,
   libdrm,
   libgbm,
   libglvnd,
@@ -51,7 +50,6 @@
     "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
-    "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
@@ -63,7 +61,6 @@
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
-    "rocket" # Rockchip NPU
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "tegra" # Nvidia Tegra SoCs
@@ -78,7 +75,7 @@
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "gfxstream" # Android virtualized GPU
-    "imagination" # PowerVR Rogue (currently N/A)
+    "imagination-experimental" # PowerVR Rogue (currently N/A)
     "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
@@ -99,7 +96,6 @@
     "wayland"
   ],
   vulkanLayers ? [
-    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
@@ -148,6 +144,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37027
+    ./gallivm-llvm-21.patch
   ];
 
   postPatch = ''
@@ -258,7 +256,6 @@ stdenv.mkDerivation {
       elfutils
       expat
       spirv-tools
-      libdisplay-info
       libdrm
       libgbm
       libglvnd
