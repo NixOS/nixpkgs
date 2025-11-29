@@ -6,12 +6,12 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "wl-crosshair";
-  version = "0.1.0-unstable-2024-05-09";
+  version = "0.1.0-unstable-2025-11-04";
 
   src = fetchFromGitHub {
     owner = "lelgenio";
     repo = "wl-crosshair";
-    rev = "39b716cf410a1b45006f50f32f8d63de5c43aedb";
+    rev = "233b6db7b39c80a92ac116c4ef4d88de4b49cbce";
     hash = "sha256-q5key9BWJjJQqECrhflso9ZTzULBeScvromo0S4fjqE=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Crosshair overlay for wlroots compositor";
     homepage = "https://github.com/lelgenio/wl-crosshair";
-    license = lib.licenses.unfree; # didn't found a license
+    license = lib.licenses.mit;
     mainProgram = "wl-crosshair";
     maintainers = with lib.maintainers; [ Guanran928 ];
     platforms = lib.platforms.linux;
