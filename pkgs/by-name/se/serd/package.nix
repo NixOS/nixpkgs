@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "serd";
-  version = "0.32.4";
+  version = "0.32.6";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.drobilla.net/serd-${finalAttrs.version}.tar.xz";
-    hash = "sha256-y++1aejbaGvoxpyzhmqVOMfLBV6PJCF91qRHHv+n00k=";
+    hash = "sha256-D74JSVL+F2uk2k8vdn3ftfYOZ+ZNF2G0ODoLhyz9Bxo=";
   };
 
   nativeBuildInputs = [
