@@ -11,11 +11,11 @@
   };
 
   vendorHash = "sha256-PvaV0tJjIVppB36Cxg4aAKX0MBjgFC5S4GTs1zHxCCU=";
-  
+
   meta = with lib; {
     description = "A beautiful, fast, and feature-rich terminal-based Excel and CSV viewer built with Go. ";
     homepage = "https://github.com/CodeOne45/vex-tui";
     license = licenses.mit;
-    maintainers = with maintainers; [ inarizxc ];
+    maintainers = with maintainers; [ Inarizxc ];
   };
 }
