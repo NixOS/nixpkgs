@@ -5,26 +5,31 @@
   fetchFromGitLab,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plum-py";
-  version = "0.8.6";
-  format = "setuptools";
+  version = "0.8.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
+    tag = version;
+    hash = "sha256-q9UNRZYBLBm0mf/r3cktGnGG9LzmTDrSVgXDgGDBMok=";
   };
 
   postPatch = ''
     # Drop broken version specifier
     sed -i "/python_requires =/d" setup.cfg
   '';
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     baseline
