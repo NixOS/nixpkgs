@@ -77,6 +77,11 @@ let
         ])
         ++ additionalPkgs pkgs;
 
+      extraBwrapArgs = [
+        "--bind-try /etc/nixos/ /etc/nixos/"
+        "--ro-bind-try /etc/xdg/ /etc/xdg/"
+      ];
+
       # symlink shared assets, including icons and desktop entries
       extraInstallCommands = ''
         ln -s "${zed-editor}/share" "$out/"
