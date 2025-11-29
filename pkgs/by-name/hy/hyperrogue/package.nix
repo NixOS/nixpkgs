@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyperrogue";
-  version = "13.1f";
+  version = "13.1g";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-HJer4CUtpJDI0aRbays9vhNTnmOYHl3eODDaLdxwjyE=";
+    sha256 = "sha256-hDV0FmrkoZEH7L3/r5SrNYg9cXQL49XkIKQSHom+nEI=";
   };
 
   env = {
