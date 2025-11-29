@@ -265,7 +265,10 @@ in
     };
 
     boot.initrd.allowMissingModules = mkOption {
-      type = types.bool;
+      type = types.oneOf [
+        types.bool
+        (types.listOf types.str)
+      ];
       default = false;
       description = ''
         Whether the initrd can be built even though modules listed in
