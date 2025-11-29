@@ -756,9 +756,9 @@ rec {
     * `indent` - initial indent.
     * `asBindings` - by default generate single value, but with this use attrset to set global vars.
 
-    Attention:
-
+    ::: {.note}
     Regardless of multiline parameter there is no trailing newline.
+    :::
 
     # Inputs
 

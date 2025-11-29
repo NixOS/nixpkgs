@@ -444,14 +444,18 @@ rec {
   /**
     Require a single definition.
 
-    WARNING: Does not perform nested checks, as this does not run the merge function!
+    ::: {.warning}
+    Does not perform nested checks, as this does not run the merge function!
+    :::
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
-    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    ::: {.note}
+    When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    :::
 
     # Inputs
 
