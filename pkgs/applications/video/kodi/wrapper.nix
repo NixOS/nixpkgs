@@ -33,9 +33,9 @@ let
   # E.g. sendtokodi asks to add deno. See any addon that supplies `passthru.pathPackages`.
   pathPackages =
     let
-      addonsHavingPathPackages = lib.filter (addon: addon ? pathPackages) addons;
+      addonsHavingPathPackages = lib.filter (addon: addon ? passthru.pathPackages) addons;
     in
-    lib.flatten (map (addon: addon.pathPackages) addonsHavingPathPackages);
+    lib.flatten (map (addon: addon.passthru.pathPackages) addonsHavingPathPackages);
 in
 
 buildEnv {
