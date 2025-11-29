@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "rembg";
-  version = "2.0.67";
+  version = "2.0.68";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${version}";
-    hash = "sha256-QHx1qa1tErneLC1H6df6mTbKTWPh3BzJUqeE65D2c4E=";
+    hash = "sha256-XFu0bRgr+oelvjfoyxqHFPquwfala+tt6Qzvih7QsWY=";
   };
 
   build-system = [
