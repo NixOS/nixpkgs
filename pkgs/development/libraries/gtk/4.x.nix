@@ -41,7 +41,7 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   libGL,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkanSupport ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin,
   shaderc,
   vulkan-loader,
   vulkan-headers,
@@ -134,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-headers
+  ]
+  ++ lib.optionals (vulkanSupport && stdenv.hostPlatform.isLinux) [
     libdrm
   ]
   ++ [
