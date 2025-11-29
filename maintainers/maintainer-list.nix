@@ -14023,6 +14023,12 @@
     githubId = 7763184;
     name = "kpcyrd";
   };
+  kqr = {
+    name = "Christoffer Stjernlöf";
+    github = "kqr";
+    githubId = 356598;
+    email = "nixpkgs@xkqr.org";
+  };
   kquick = {
     email = "quick@sparq.org";
     github = "kquick";
