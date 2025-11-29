@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enroot";
-  version = "3.5.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "enroot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sw4kfsb0Gi21At2pU8lt5wIfCih7VZ7Zf9/62xBKKRU=";
+    hash = "sha256-sZ0/Afohj6wtj0D6OjpZDkpuB03Mlu8HtnZkHVZch68=";
     fetchSubmodules = true;
   };
 
