@@ -86,7 +86,7 @@ buildPythonPackage rec {
   meta = {
     description = "Load STAC items into xarray Datasets";
     homepage = "https://github.com/opendatacube/odc-stac/";
-    changelog = "https://github.com/opendatacube/odc-stac/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-stac/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
