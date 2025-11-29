@@ -44,10 +44,10 @@ skawarePackages.buildPackage {
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
     "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
+    "--with-dynlib=${lib.getLib skalibs}/lib"
   ];
 
   postInstall = ''
@@ -71,7 +71,7 @@ skawarePackages.buildPackage {
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
       -I "${skalibs.dev}/include" \
-      -L "${skalibs.lib}/lib" \
+      -L "${lib.getLib skalibs}/lib" \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
       -lskarnet
