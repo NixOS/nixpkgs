@@ -27,15 +27,15 @@
 }:
 
 let
-  buildNum = "2025-06-12-1681";
+  buildNum = "2025-10-29-1732";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchurl {
-    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-e7IxoaZi77klrihRO6vDh1o2Clj5lNsVlzQ7btgLsu4=";
+    url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-iqdfVAG0ARPfjkJEtX7v2hpDnf3k60nAvQ+AZzcFnBM=";
   };
 
   nativeBuildInputs = [
