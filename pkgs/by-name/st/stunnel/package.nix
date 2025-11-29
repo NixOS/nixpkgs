@@ -4,8 +4,8 @@
   nixosTests,
   openssl,
   stdenv,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   mimalloc,
   mimallocSupport ? false,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals mimallocSupport [
     mimalloc
