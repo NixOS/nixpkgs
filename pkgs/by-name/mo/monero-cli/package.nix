@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   boost186,
@@ -31,22 +30,16 @@ let
     rev = "633500ad8c8759995049ccd022107d1fa8a1bbc9";
     hash = "sha256-26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
   };
-  trezor-common = fetchFromGitHub {
-    owner = "trezor";
-    repo = "trezor-common";
-    rev = "bff7fdfe436c727982cc553bdfb29a9021b423b0";
-    hash = "sha256-VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
-  };
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.3";
+  version = "0.18.4.4";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-tu8PHTiz3ScJ0uQh1ztkFmEthjb+BERtPMxCyQhuZPw=";
+    hash = "sha256-NH15PKlkm9Hpt25iIuUQmhDg+X3Qo+yUAbDY4LNnZdM=";
   };
 
   patches = [
@@ -57,7 +50,6 @@ stdenv.mkDerivation rec {
     # manually install submodules
     rmdir external/{supercop,trezor-common}
     ln -sf ${supercop} external/supercop
-    ln -sf ${trezor-common} external/trezor-common
     # export patched source for monero-gui
     cp -r . $source
   '';
