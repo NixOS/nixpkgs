@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "lastversion";
-  version = "3.5.7";
+  version = "3.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "dvershinin";
     repo = "lastversion";
     tag = "v${version}";
-    hash = "sha256-z3QrtnhIgXLVyaDNm0XqaVqZb05K3pq8mbweTpphdBQ=";
+    hash = "sha256-J1rx014cuZ2vLDnMg3SRT+ojEsF1KJyGvdDXNBs3Q7g=";
   };
 
   build-system = [ setuptools ];
