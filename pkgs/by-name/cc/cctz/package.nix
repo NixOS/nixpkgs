@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/cctz";
     description = "C++ library for translating between absolute and civil times";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

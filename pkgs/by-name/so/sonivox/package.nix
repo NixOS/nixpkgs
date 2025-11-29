@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pedrolcl/sonivox";
     description = "MIDI synthesizer library";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

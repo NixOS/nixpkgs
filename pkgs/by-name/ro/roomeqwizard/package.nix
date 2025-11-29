@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.all;
     maintainers = with maintainers; [
-      orivej
       zaninime
     ];
     description = "Room Acoustics Software";

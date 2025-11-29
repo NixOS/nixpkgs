@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     description = "Thin wrapper over POSIX syscalls and some replacement functionality";
     license = licenses.boost;
     maintainers = with maintainers; [
-      orivej
       raskin
     ];
     platforms = platforms.linux ++ platforms.darwin;

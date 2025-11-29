@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Losslessly translate MIDI to CSV and back";
     homepage = "https://www.fourmilab.ch/webtools/midicsv/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

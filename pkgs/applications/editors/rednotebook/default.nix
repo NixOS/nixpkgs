@@ -57,7 +57,7 @@ buildPythonApplication rec {
     changelog = "https://github.com/jendrikseipp/rednotebook/blob/${src.tag}/CHANGELOG.md";
     description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     mainProgram = "rednotebook";
   };
 }
