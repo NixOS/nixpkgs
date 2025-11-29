@@ -44,11 +44,7 @@ pkgs.releaseTools.sourceTarball {
   checkPhase = ''
     echo "generating packages.json"
 
-    (
-      echo -n '{"version":2,"packages":'
-      NIX_STATE_DIR=$TMPDIR NIX_PATH= nix-env -f $src -qa --meta --json --show-trace --arg config 'import ${./packages-config.nix}'
-      echo -n '}'
-    ) | sed "s|$src/||g" | jq -c > packages.json
+    NIX_STATE_DIR=$TMPDIR NIX_PATH= nix-instantiate --eval --raw --expr "(import ${./packages-info.nix} { lib = import $src/lib; }) (import $src { config = import ${./packages-config.nix};})" | sed "s|$src/||g" | jq -c > packages.json
 
     # Arbitrary number. The index has ~115k packages as of April 2024.
     if [ $(jq -r '.packages | length' < packages.json) -lt 100000 ]; then
