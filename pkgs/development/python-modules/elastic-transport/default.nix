@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.17.1";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     tag = "v${version}";
-    hash = "sha256-LWSvE88wEwMxRi6IZsMkIRP8UTRfImC9QZnuka1oiso=";
+    hash = "sha256-jXZjVAMs9JBBu8BR5I4RqfSiXDnDUThFfsmn6LzqQjM=";
   };
 
   # FIXME: backport fix for pytest-asyncio 1.2.0, as updating this entire ecosystem is painful
