@@ -193,6 +193,10 @@ buildPythonPackage (finalAttrs: {
 
   preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    if [ $OMP_NUM_THREADS -eq 0 ]; then
+      export OMP_NUM_THREADS=1
+    fi
+
     cd $out
   '';
 
