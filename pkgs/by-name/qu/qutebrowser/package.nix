@@ -15,6 +15,7 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   qt6Packages,
+  wayland,
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -104,6 +105,11 @@ python3.pkgs.buildPythonApplication {
   ''
   + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform wayland) ''
+    substituteInPlace qutebrowser/misc/wmname.py \
+      --replace-fail '_load_library("wayland-client")' \
+                     'ctypes.CDLL("${lib.getLib wayland}/lib/libwayland-client${stdenv.hostPlatform.extensions.sharedLibrary}")'
   '';
 
   installPhase = ''
