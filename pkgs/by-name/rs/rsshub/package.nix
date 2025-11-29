@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2025-05-31";
+  version = "0-unstable-2025-11-28";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "2dce2e32dd5f4dade2fc915ac8384c953e11cc83";
-    hash = "sha256-gS/t6O3MishJgi2K9hV22hT95oYHfm44cJqrUo2GPlM=";
+    rev = "b6dbafe33e0c3e3a4ba5a1edd2da29b70412389f";
+    hash = "sha256-FsevO2nb6leuuRmzCLIy093FCafl3Y/CsSp1ydJOnKY=";
   };
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-7qh6YZbIH/kHVssDZxHY7X8bytrnMcUq0MiJzWZYItc=";
+    hash = "sha256-zTsJZnhX7xUOsKST6S3TQUV8M1Tewcs9fZgrDSf5ba8=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
       --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
-      --append-flags "$out/lib/rsshub/dist/index.js"
+      --append-flags "$out/lib/rsshub/dist/index.mjs"
   '';
 
   meta = {
