@@ -96,7 +96,7 @@
     "meta": {
       "isOpenSource": false,
       "description": "IDE for building domain-specific languages from JetBrains",
-      "maintainers": [ "rasendubi" ],
+      "maintainers": [ ],
       "longDescription": "A metaprogramming system which uses projectional editing which allows users to overcome the limits of language parsers, and build DSL editors, such as ones with tables and diagrams.",
       "homepage": "https://www.jetbrains.com/mps/"
     }
