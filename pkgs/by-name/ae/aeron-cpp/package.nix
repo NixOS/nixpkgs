@@ -75,7 +75,6 @@ stdenv.mkDerivation {
       cd cppbuild/Release
       cmake \
         -G "CodeBlocks - Unix Makefiles" \
-        -DCMAKE_BUILD_TYPE=Release \
         -DAERON_TESTS=OFF \
         -DAERON_SYSTEM_TESTS=OFF \
         -DAERON_BUILD_SAMPLES=OFF \
