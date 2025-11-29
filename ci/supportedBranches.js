@@ -47,7 +47,7 @@ function classify(branch) {
 module.exports = { classify }
 
 // If called directly via CLI, runs the following tests:
-if (!module.parent) {
+if (require.main === module) {
   console.log('split(branch)')
   function testSplit(branch) {
     console.log(branch, split(branch))

@@ -1,3 +1,22 @@
+/**
+ * @typedef {import('@actions/github/lib/context').Context} GitHubContext
+ * @typedef {ReturnType<typeof import('@actions/github').getOctokit>} GitHubClient
+ */
+
+/**
+ * @typedef {Object} ReviewContext
+ * @property {GitHubClient} github - GitHub API client (Octokit instance)
+ * @property {GitHubContext} context - GitHub Actions context
+ * @property {typeof import('@actions/core')} core - GitHub Actions core utilities
+ * @property {boolean} dry - Whether to run in dry-run mode
+ * @property {string} [body] - Optional review body content
+ */
+
+/**
+ * Dismiss all pending reviews from the github-actions bot
+ * @param {ReviewContext} params - Review context parameters
+ * @returns {Promise<void>}
+ */
 async function dismissReviews({ github, context, dry }) {
   const pull_number = context.payload.pull_request.number
 
@@ -36,6 +55,11 @@ async function dismissReviews({ github, context, dry }) {
   )
 }
 
+/**
+ * Post or update a review on a pull request
+ * @param {ReviewContext & { body: string }} params - Review context parameters with body
+ * @returns {Promise<void>}
+ */
 async function postReview({ github, context, core, dry, body }) {
   const pull_number = context.payload.pull_request.number
 
