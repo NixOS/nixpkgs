@@ -93,7 +93,7 @@ let
         (lib.concatStringsSep " ")
       ];
     in
-    lib.optionalString ((lib.length devices) > 0) "linux-dev (${devicesString})";
+    lib.optionalString (devices != [ ]) "linux-dev (${devicesString})";
 
   mkConfig =
     name: keyboard:
@@ -195,7 +195,7 @@ in
     warnings =
       let
         keyboardsWithEmptyDevices = lib.filterAttrs (name: keyboard: keyboard.devices == [ ]) cfg.keyboards;
-        existEmptyDevices = lib.length (lib.attrNames keyboardsWithEmptyDevices) > 0;
+        existEmptyDevices = keyboardsWithEmptyDevices != { };
         moreThanOneKeyboard = lib.length (lib.attrNames cfg.keyboards) > 1;
       in
       lib.optional (existEmptyDevices && moreThanOneKeyboard)

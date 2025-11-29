@@ -238,7 +238,7 @@ in
 
   };
 
-  config = mkIf ((lib.length config.swapDevices) != 0) {
+  config = mkIf (config.swapDevices != [ ]) {
     assertions = lib.map (sw: {
       assertion =
         sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;

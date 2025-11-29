@@ -123,7 +123,7 @@ let
     ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}")
     ++ (lib.mapAttrsToList (credential: file: "${credential}:${file}") cfg.secrets);
 
-  requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
+  requiresRuntimeSystemdCredentials = runtimeSystemdCredentials != [ ];
 
   occ = pkgs.writeShellApplication {
     name = "nextcloud-occ";

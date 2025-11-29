@@ -103,8 +103,7 @@ let
     # Look for Nix identifiers surrounded by `@` that aren't substituted.
     checkPhase =
       let
-        lookahead =
-          if builtins.length left-overs == 0 then "" else "(?!${builtins.concatStringsSep "|" left-overs}@)";
+        lookahead = if left-overs == [ ] then "" else "(?!${builtins.concatStringsSep "|" left-overs}@)";
         regex = lib.escapeShellArg "@${lookahead}[a-zA-Z_][0-9A-Za-z_'-]*@";
       in
       ''

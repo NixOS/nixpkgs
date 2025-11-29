@@ -41,6 +41,6 @@ let
   '';
 in
 
-assert lib.assertMsg (lib.length unknownNames == 0) unknownNamesDiagnostic;
+assert lib.assertMsg (unknownNames == [ ]) unknownNamesDiagnostic;
 
 llm.withPlugins pluginArgs

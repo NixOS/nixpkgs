@@ -71,7 +71,7 @@ buildPythonPackage rec {
           "-j$NIX_BUILD_CORES"
           "--no-code-style"
         ]
-        ++ lib.optionals (builtins.length excludedTests != 0) [
+        ++ lib.optionals (excludedTests != { }) [
           ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''
         ]
       );

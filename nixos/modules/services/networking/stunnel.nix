@@ -173,8 +173,7 @@ in
 
     assertions = lib.concatLists [
       (lib.singleton {
-        assertion =
-          (lib.length (lib.attrValues cfg.servers) != 0) || ((lib.length (lib.attrValues cfg.clients)) != 0);
+        assertion = (cfg.servers != { }) || (cfg.clients != { });
         message = "stunnel: At least one server- or client-configuration has to be present.";
       })
 
