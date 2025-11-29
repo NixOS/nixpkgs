@@ -193,7 +193,10 @@ let
       --notify-ready=yes \
       --kill-signal=SIGRTMIN+3 \
       --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
+      ${
+        optionalString (config.virtualisation.writableStore or true
+        ) "--bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT"
+      } \
       --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
@@ -1156,6 +1159,28 @@ in
           "tap"
           "tun"
         ];
+
+        # Prevent the use of an overlayfs as it cannot be mounted inside the
+        # container with the required idmap option for private user namespaces
+        # See https://github.com/NixOS/nixpkgs/issues/451167
+        # See https://github.com/systemd/systemd/issues/25886
+        virtualisation.vmVariant.virtualisation =
+          let
+            privateUserNamespaces = (
+              builtins.any (
+                container:
+                !(builtins.elem container.privateUsers [
+                  0
+                  "no"
+                  "identity"
+                ])
+              ) (builtins.attrValues config.containers)
+            );
+          in
+          lib.mkIf privateUserNamespaces {
+            writableStore = false;
+            useNixStoreImage = true;
+          };
       }
     ))
   ];
