@@ -21749,12 +21749,6 @@
     githubId = 11351304;
     name = "Ricardo Ardissone";
   };
-  rasendubi = {
-    email = "rasen.dubi@gmail.com";
-    github = "rasendubi";
-    githubId = 1366419;
-    name = "Alexey Shmalko";
-  };
   raskin = {
     email = "7c6f434c@mail.ru";
     github = "7c6f434c";
