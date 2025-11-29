@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-# ! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
 import os
 import subprocess
 import pprint
@@ -45,7 +45,7 @@ def kotlin_jps_plugin_info(root_path: str) -> (str, str):
         version = option['@value']
 
         print(f"* Prefetching Kotlin JPS Plugin version {version}...")
-        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
 
         return (version, convert_hash_to_sri(prefetch.stdout.strip()))
 
@@ -93,8 +93,8 @@ def get_args() -> (str, str):
 def main():
     versions_path, out = get_args()
     versions = loads(open(versions_path).read())
-    idea_data = versions['x86_64-linux']['idea-oss']
-    pycharm_data = versions['x86_64-linux']['pycharm-oss']
+    idea_data = versions['x86_64-linux']['idea']
+    pycharm_data = versions['x86_64-linux']['pycharm']
 
     result = { 'idea-oss': {}, 'pycharm-oss': {} }
     result['idea-oss']['version'] = idea_data['version']
@@ -104,7 +104,7 @@ def main():
     result['pycharm-oss']['buildNumber'] = pycharm_data['build_number']
     result['pycharm-oss']['buildType'] = 'pycharm'
     print('Fetching IDEA info...')
-    result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_oss('idea', result['idea-oss']['buildNumber'])
+    result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-oss']['buildNumber'])
     result['idea-oss']['androidHash'] = prefetch_android('idea', result['idea-oss']['buildNumber'])
     result['idea-oss']['jpsHash'] = ''
     result['idea-oss']['restarterHash'] = ''
@@ -115,7 +115,7 @@ def main():
     kotlinc_version = requested_kotlinc_version(ideaOutPath)
     print(f"* Prefetched IDEA Open Source requested Kotlin compiler {kotlinc_version}")
     print('Fetching PyCharm info...')
-    result['pycharm-oss']['ideaHash'], pycharmOutPath = prefetch_intellij_oss('pycharm', result['pycharm-oss']['buildNumber'])
+    result['pycharm-oss']['ideaHash'], pycharmOutPath = prefetch_intellij_community('pycharm', result['pycharm-oss']['buildNumber'])
     result['pycharm-oss']['androidHash'] = prefetch_android('pycharm', result['pycharm-oss']['buildNumber'])
     result['pycharm-oss']['jpsHash'] = ''
     result['pycharm-oss']['restarterHash'] = ''
