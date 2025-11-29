@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2025-01-20";
+  version = "0.5-unstable-2025-11-22";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "doug-moen";
     repo = "curv";
-    rev = "ef082c6612407dd8abce06015f9a16b1ebf661b8";
-    hash = "sha256-BGL07ZBA+ao3fg3qp56sVTe+3tM2SOp8TGu/jF7SVlM=";
+    rev = "279c82a2ed097783dd36d6b3418a4ff4af31d969";
+    hash = "sha256-TNdHwLRiLOSHqx6mWzaXYvzEptsVxIQowYDkfAWlBF4=";
     fetchSubmodules = true;
   };
 
