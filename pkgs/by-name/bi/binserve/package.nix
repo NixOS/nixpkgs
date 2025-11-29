@@ -25,6 +25,11 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Fast production-ready static web server";
     homepage = "https://github.com/mufeedvh/binserve";
+    knownVulnerabilities = [
+      "CVE-2025-4432"
+      "CVE-2024-32650"
+      "This web server is unmaintained. Consider using maintained alternatives instead."
+    ];
     longDescription = ''
       A fast production-ready static web server with TLS
       (HTTPS), routing, hot reloading, caching, templating, and security in a
