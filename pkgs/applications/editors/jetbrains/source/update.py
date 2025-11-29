@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-# ! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
 import os
 import subprocess
 import pprint
@@ -45,7 +45,7 @@ def kotlin_jps_plugin_info(root_path: str) -> (str, str):
         version = option['@value']
 
         print(f"* Prefetching Kotlin JPS Plugin version {version}...")
-        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
 
         return (version, convert_hash_to_sri(prefetch.stdout.strip()))
 
@@ -93,8 +93,8 @@ def get_args() -> (str, str):
 def main():
     versions_path, out = get_args()
     versions = loads(open(versions_path).read())
-    idea_data = versions['x86_64-linux']['idea-oss']
-    pycharm_data = versions['x86_64-linux']['pycharm-oss']
+    idea_data = versions['x86_64-linux']['idea']
+    pycharm_data = versions['x86_64-linux']['pycharm']
 
     result = { 'idea-oss': {}, 'pycharm-oss': {} }
     result['idea-oss']['version'] = idea_data['version']
