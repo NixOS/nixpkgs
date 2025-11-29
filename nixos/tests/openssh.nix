@@ -216,7 +216,7 @@ in
             withPAM = false;
           };
           settings = {
-            UsePAM = false;
+            UsePAM = null;
           };
         };
         users.users.root.openssh.authorizedKeys.keys = [
