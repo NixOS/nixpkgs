@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -8,7 +8,7 @@
   withVlAgent ? false,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "VictoriaLogs";
   version = "1.38.0";
 
