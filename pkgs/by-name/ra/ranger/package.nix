@@ -3,6 +3,8 @@
   fetchFromGitHub,
   python3Packages,
   file,
+  coreutils,
+  bashNonInteractive,
   less,
   highlight,
   w3m,
@@ -32,15 +34,26 @@ python3Packages.buildPythonApplication {
     astroid
     pylint
   ];
-  propagatedBuildInputs = [
-    less
-    file
-  ]
-  ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
-  ++ lib.optionals sixelPreviewSupport [ imagemagick ]
-  ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
-  ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-  ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+  propagatedBuildInputs =
+    [ ]
+    ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
+    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath (
+      [
+        file
+        coreutils
+        bashNonInteractive
+      ]
+      ++ lib.optionals sixelPreviewSupport [ imagemagick ]
+    ))
+  ];
 
   preConfigure = ''
     ${lib.optionalString (highlight != null) ''
