@@ -98,12 +98,7 @@ buildGoModule rec {
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      adamcstephens
-      emilylange
-      christoph-heiss
-      tebriel
-    ];
+    teams = [ lib.teams.forgejo ];
     mainProgram = "forgejo-runner";
   };
 }
