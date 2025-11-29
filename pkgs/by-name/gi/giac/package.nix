@@ -38,30 +38,20 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.9.0-993"; # TODO try to remove preCheck phase on upgrade
+  version = "2.0.0-18"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
-    url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "sha256-pqytFWrSWfEwQqRdRbaigGCq68s8mdgj2j8M+kclslE=";
+    url = "https://www-fourier.univ-grenoble-alpes.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
+    hash = "sha256-JeKj2WhsmmgA2ea0okPu6wr3YCBn8GDmqrQTjmPkF9s=";
   };
 
   patches = [
-    ./remove-old-functional-patterns.patch
     ./fix-fltk-guard.patch
 
     (fetchpatch {
       name = "pari_2_15.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/07a2afd65fb4b0a1c9cbc43ede7d4a18c921a000/build/pkgs/giac/patches/pari_2_15.patch";
-      sha256 = "sha256-Q3xBFED7XEAyNz6AHjzt63XtospmdGAIdS6iPq1C2UE=";
-    })
-
-    (fetchpatch {
-      name = "infinity.patch";
-      url = "https://github.com/geogebra/giac/commit/851c2cd91e879c79d6652f8a5d5bed03b65c6d39.patch";
-      sha256 = "sha256-WJRT2b8I9kgAkRuIugMiXoF4hT7yR7qyad8A6IspNTM=";
-      stripLen = 5;
-      extraPrefix = "/src/";
-      excludes = [ "src/kdisplay.cc" ];
+      hash = "sha256-Q3xBFED7XEAyNz6AHjzt63XtospmdGAIdS6iPq1C2UE=";
     })
 
     # giac calls scanf/printf with non-constant first arguments, which
@@ -69,14 +59,14 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix-string-compiler-error.patch";
       url = "https://salsa.debian.org/science-team/giac/-/raw/9ca8dbf4bb16d9d96948aa4024326d32485d7917/debian/patches/fix-string-compiler-error.patch";
-      sha256 = "sha256-r+M+9MRPRqhHcdhYWI6inxyNvWbXUbBcPCeDY7aulvk=";
+      hash = "sha256-r+M+9MRPRqhHcdhYWI6inxyNvWbXUbBcPCeDY7aulvk=";
     })
 
     # issue with include path precedence
     (fetchpatch {
       name = "fix_implicit_declaration.patch";
       url = "https://salsa.debian.org/science-team/giac/-/raw/c05ae9b9e74d3c6ee6411d391071989426a76201/debian/patches/fix_implicit_declaration.patch";
-      sha256 = "sha256-ompUceYJLiL0ftfjBkIMcYvX1YqG2/XA7e1yDyFY0IY=";
+      hash = "sha256-ompUceYJLiL0ftfjBkIMcYvX1YqG2/XA7e1yDyFY0IY=";
     })
   ]
   ++ lib.optionals (!enableGUI) [
@@ -85,7 +75,10 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "nofltk-check.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26/build/pkgs/giac/patches/nofltk-check.patch";
-      sha256 = "sha256-nAl5q3ufLjK3X9s0qMlGNowdRRf3EaC24eVtJABzdXY=";
+      hash = "sha256-eA0S+pEgllv77+KIpMvZgjz99jlbnreVvtNqNXs2HvI=";
+      postFetch = ''
+        substituteInPlace "$out" --replace-quiet periode Periode
+      '';
     })
   ];
 
