@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "pspy";
@@ -11,8 +12,17 @@ buildGoModule (finalAttrs: {
     owner = "DominicBreuker";
     repo = "pspy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7R4Tp0Q7wjAuTDukiehtRZOcTABr0YTnvrod9Jdwjok=";
+
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      rm -rf $out/.git
+    '';
+
+    hash = "sha256-CPWoKxmjlGYP2kAC+LscOtrPpUjzpRoGTeohlw0mmh4=";
   };
+
+  vendorHash = "sha256-mgAsy2ufMDNpeCXG/cZ10zdmzFoGfcpCzPWIABnvJWU=";
 
   env.CGO_ENABLED = "0";
 
@@ -22,12 +32,18 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
+  preBuild = ''
+    ldflags+=" -X main.commit=$(<.git_head)"
+  '';
+
   # the various TestStart* tests defined in $src/internal/pspy/pspy_test.go
   # can in rare cases hit a race condition
   # ("Did not get message in time" or "Wrong message")
   checkFlags = [ "-skip=^TestStart" ];
 
-  vendorHash = "sha256-mgAsy2ufMDNpeCXG/cZ10zdmzFoGfcpCzPWIABnvJWU=";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--help";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Monitor linux processes without root permissions";
