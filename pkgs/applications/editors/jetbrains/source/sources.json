@@ -1,5 +1,5 @@
 {
-  "idea-community": {
+  "idea-oss": {
     "version": "2025.1.1.1",
     "buildNumber": "251.25410.129",
     "buildType": "idea",
@@ -24,7 +24,7 @@
       "hash": "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4="
     }
   },
-  "pycharm-community": {
+  "pycharm-oss": {
     "version": "2025.1.1.1",
     "buildNumber": "251.25410.159",
     "buildType": "pycharm",
