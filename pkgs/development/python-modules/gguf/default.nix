@@ -49,6 +49,9 @@ buildPythonPackage rec {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mitchmindtree ];
+    maintainers = with lib.maintainers; [
+      mitchmindtree
+      sarahec
+    ];
   };
 }
