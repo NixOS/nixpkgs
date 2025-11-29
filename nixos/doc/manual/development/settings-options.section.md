@@ -490,6 +490,41 @@ have a predefined type and string generator already declared under
 
     :   Creates PHP array that contains both indexed and associative values. For example, `lib.mkMixedArray [ "hello" "world" ] { "nix" = "is-great"; }` returns `['hello', 'world', 'nix' => 'is-great']`
 
+`pkgs.formats.xenLight { type ? "cfg" }` []{#pkgs-formats-xenLight}
+
+:   A function taking an attribute set with values and returning a set with Xen Project Hypervisor-specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+
+:   The `generate` function produces a minified, one-line configuration file.
+
+:   It is important to note that this function may not always produce parseable `libxenlight` configuration files. While it complies with the syntax requirements as defined in the {manpage}`xl.cfg(5)` documentation, Xen has some undocumented parsing quirks regarding the order of `SPECSTRING` key-value pairs. These quirks are most notable with `DISK_SPEC_STRING`, but a workaround for such ordering issues is to simply define values for keys that require a specific order as a preformatted string instead of an attribute set.
+
+:   For instance, the following disk configuration will produce `disk=["access=ro,vdev=hdc,devtype=cdrom,format=raw,target=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-image.iso"]`, which *should* be valid (as none of the parameters are [Positional Parameters](https://xenbits.xen.org/docs/unstable/man/xl-disk-configuration.5.html#Positional-Parameters)), but will fail, as `libxenlight` requires `format` to be the first attribute.
+    ```nix
+    {
+      disk = [
+        {
+          format = "raw";
+          vdev = "hdc";
+          access = "ro";
+          devtype = "cdrom";
+          target = "${imageFile}";
+        }
+      ];
+    }
+    ```
+    This can be resolved by using a preformatted string instead of an attribute set:
+    ```nix
+    {
+      disk = [
+        "format=raw,vdev=hdc,access=ro,devtype=cdrom,target=${imageFile}"
+      ];
+    }
+    ```
+
+    `type`
+
+    :   A variable to determine if the function is parsing `xl.cfg` (The system-wide `xl` configuration) or `xl.conf` (Per-domain definitions). Setting this variable to anything other than `cfg` or `conf` is invalid.
+
 []{#pkgs-formats-result}
 These functions all return an attribute set with these values:
 
