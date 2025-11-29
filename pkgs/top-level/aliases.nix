@@ -365,6 +365,7 @@ mapAliases {
   brasero-original = throw "'brasero-original' has been renamed to/replaced by 'brasero-unwrapped'"; # Converted to throw 2025-10-27
   breath-theme = throw "'breath-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   brogue = warnAlias "Use 'brogue-ce' instead of 'brogue' for updated releases" brogue-ce; # Added 2025-10-04
+  btanks = throw "'btanks' has been removed as it's been unmaintained since 2010 and fails to build"; # Added 2025-11-29
   buildBowerComponents = throw "buildBowerComponents has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   buildGo123Module = throw "Go 1.23 is end-of-life, and 'buildGo123Module' has been removed. Please use a newer builder version."; # Added 2025-08-13
   buildPlatform = warnAlias "'buildPlatform' has been renamed to/replaced by 'stdenv.buildPlatform'" stdenv.buildPlatform; # Converted to warning 2025-10-28
@@ -456,6 +457,7 @@ mapAliases {
   cosmic-tasks = throw "'cosmic-tasks' has been renamed to/replaced by 'tasks'"; # Converted to throw 2025-10-27
   cotton = throw "'cotton' has been removed since it is vulnerable to CVE-2025-62518 and upstream is unmaintained"; # Added 2025-10-26
   cpp-ipfs-api = throw "'cpp-ipfs-api' has been renamed to/replaced by 'cpp-ipfs-http-client'"; # Converted to throw 2025-10-27
+  cpr = warnAlias "'cpr' has been renamed to/replaced by 'libcpr'" libcpr; # Added 2025-11-17
   create-cycle-app = throw "'create-cycle-app' has been removed because it is unmaintained and has issues installing with recent nodejs versions."; # Added 2025-11-01
   crispyDoom = throw "'crispyDoom' has been renamed to/replaced by 'crispy-doom'"; # Converted to throw 2025-10-27
   critcl = throw "'critcl' has been renamed to/replaced by 'tclPackages.critcl'"; # Converted to throw 2025-10-27
@@ -1097,6 +1099,7 @@ mapAliases {
   near-cli = throw "'near-cli' has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neardal = throw "neardal has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
   nekoray = lib.warnOnInstantiate "nekoray has been renamed to throne" throne; # Added 2025-11-10
+  neo4j-desktop = throw "neo4j-desktop has been removed as it was out-of-date"; # Added 2025-11-01
   neocities-cli = throw "'neocities-cli' has been renamed to/replaced by 'neocities'"; # Converted to throw 2025-10-27
   netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
   netbsdCross = throw "'netbsdCross' has been renamed to/replaced by 'netbsd'"; # Converted to throw 2025-10-27
@@ -1298,6 +1301,7 @@ mapAliases {
   pot = throw "'pot' has been removed as it requires libsoup 2.4 which is EOL"; # Added 2025-10-09
   powerdns = throw "'powerdns' has been renamed to/replaced by 'pdns'"; # Converted to throw 2025-10-27
   prboom-plus = throw "'prboom-plus' has been removed since it is unmaintained upstream."; # Added 2025-09-14
+  preload = throw "'preload' has been removed due to lack of usage and being broken since its introduction into nixpkgs"; # Added 2025-11-29
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2025-06-19
   preserves-nim = throw "'preserves-nim' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   private-gpt = throw "'private-gpt' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2025-07-28
