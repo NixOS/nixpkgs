@@ -62,6 +62,9 @@ in
         };
 
         boot.initrd = {
+          # otherwise the interfaces do not get created
+          kernelModules = [ "virtio_net" ];
+
           network = {
             enable = true;
             ifstate =
@@ -76,6 +79,7 @@ in
                 allowIfstateToDrasticlyIncreaseInitrdSize = true;
               };
           };
+
           systemd = {
             enable = true;
             network.enable = false;
