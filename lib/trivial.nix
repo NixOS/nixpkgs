@@ -1143,7 +1143,8 @@ in
     ```
 
     # Examples
-
+    :::{.example}
+    ## `lib.trivial.fromHexString` usage examples
     ```nix
     fromHexString "FF"
     => 255
@@ -1151,6 +1152,7 @@ in
     fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
+    :::
   */
   fromHexString =
     str:
@@ -1171,13 +1173,20 @@ in
 
   /**
     Convert the given positive integer to a string of its hexadecimal
-    representation. For example:
+    representation.
 
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toHexString` usage example
+
+    ```nix
     toHexString 0 => "0"
 
     toHexString 16 => "10"
 
     toHexString 250 => "FA"
+    ```
+    :::
   */
   toHexString =
     let
@@ -1197,12 +1206,6 @@ in
     `toBaseDigits base i` converts the positive integer `i` to a list of its
     digits in the given base.
 
-    toBaseDigits 10 123 => [ 1 2 3 ]
-
-    toBaseDigits 2 6 => [ 1 1 0 ]
-
-    toBaseDigits 16 250 => [ 15 10 ]
-
     # Inputs
 
     `base`
@@ -1212,6 +1215,19 @@ in
     `i`
 
     : 2\. Function argument
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toBaseDigits`
+
+    ```nix
+    toBaseDigits 10 123 => [ 1 2 3 ]
+
+    toBaseDigits 2 6 => [ 1 1 0 ]
+
+    toBaseDigits 16 250 => [ 15 10 ]
+    ```
+    :::
   */
   toBaseDigits =
     base: i:
