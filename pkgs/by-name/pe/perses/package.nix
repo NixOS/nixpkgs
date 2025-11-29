@@ -10,6 +10,7 @@
   turbo,
   linkFarm,
   installShellFiles,
+  nixosTests,
 }:
 
 let
@@ -117,6 +118,12 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
+
+    tests.nixos = nixosTests.openssh.extendNixOS {
+      module = {
+        services.perses.package = finalAttrs.finalPackage;
+      };
+    };
 
     inherit pluginsArchive;
   };
