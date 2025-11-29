@@ -594,15 +594,29 @@ in
               (lib.mkIf cfg.powerManagement.enable {
                 nvidia-suspend = nvidiaService "suspend";
                 nvidia-hibernate = nvidiaService "hibernate";
+                nvidia-hybrid-sleep = (nvidiaService "hibernate") // {
+                  description = "NVIDIA system hybrid-sleep actions";
+                  before = [ "systemd-hybrid-sleep.service" ];
+                  requiredBy = [ "systemd-hybrid-sleep.service" ];
+                };
+                nvidia-suspend-then-hibernate = (nvidiaService "suspend") // {
+                  description = "NVIDIA system suspend-then-hibernate actions";
+                  before = [ "systemd-suspend-then-hibernate.service" ];
+                  requiredBy = [ "systemd-suspend-then-hibernate.service" ];
+                };
                 nvidia-resume = (nvidiaService "resume") // {
                   before = [ ];
                   after = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
                   requiredBy = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
                 };
               })
