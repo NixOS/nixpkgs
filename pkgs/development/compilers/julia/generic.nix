@@ -5,20 +5,24 @@
 }:
 
 {
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  python3,
-  gfortran,
+  buildPackages,
   cacert,
   cmake,
-  perl,
+  curl,
+  darwin,
+  fetchurl,
+  gfortran,
   gnum4,
-  openssl,
+  lib,
   libxml2,
+  openssl,
+  perl,
+  python3,
+  stdenv,
+  unzip,
+  which,
   zlib,
-  buildPackages,
+  ncurses,
 }:
 
 let
@@ -61,13 +65,20 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    which
-    python3
-    gfortran
     cmake
-    perl
+    gfortran
     gnum4
     openssl
+    perl
+    python3
+    which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+    darwin.DarwinTools
+    darwin.sigtool
+    darwin.autoSignDarwinBinariesHook
+    unzip
   ];
 
   buildInputs = [
@@ -98,6 +109,11 @@ stdenv.mkDerivation rec {
                      'cd $(dir $<) && $(TAR) -zxf $< && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" openssl-$(OPENSSL_VER)/Configure'
   '';
 
+  preBuild = lib.optionalString (lib.versionAtLeast version "1.11") ''
+    # terminfo dirs normally inaccessible in build sandbox
+    export TERMINFO="${ncurses.out}/share/terminfo/";
+  '';
+
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
@@ -111,14 +127,29 @@ stdenv.mkDerivation rec {
   ];
 
   # remove forbidden reference to $TMPDIR
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isElf ''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
   '';
 
+  # Code signing on version 1.9 is done as part of the build process, although
+  # we need a patch because darwin.sigtool has a more limited set of arguments
+  # than the modern macOS codesign utility.
+  #
+  # For the later versions, patching the same way doesn't seem to work, so we
+  # re-sign in the postFixup.
+  postFixup =
+    lib.optionalString (lib.versionAtLeast version "1.10" && stdenv.hostPlatform.isDarwin)
+      ''
+        codesign -s - --force --entitlements ./contrib/mac/app/Entitlements.plist $out/bin/julia
+      '';
+
   # tests are flaky for aarch64-linux on hydra
-  doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
+  # some tests not working on aarch64-darwin for unrelated reasons
+  doInstallCheck =
+    stdenv.hostPlatform.isLinux
+    && (lib.versionAtLeast version "1.10" || !stdenv.hostPlatform.isAarch64);
 
   preInstallCheck = ''
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
@@ -164,6 +195,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
   };
 }
