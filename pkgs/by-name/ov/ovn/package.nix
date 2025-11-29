@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "25.09.0";
+  version = "25.09.1";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
+    hash = "sha256-utNMWYMjm511+mkHC/Fe6wJ11vk1HAi0dHlk9JwBYl0=";
     fetchSubmodules = true;
   };
 
@@ -45,19 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix test failure with musl libc.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
-      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
-    })
-    # Fix sandbox test failure.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
-      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
-    })
     # Fix build failure due to make install race condition.
     # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
     ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
+
+    # disable scapy tests which hang indefinitely
+    (fetchpatch2 {
+      name = "disable-scapy-tests.patch";
+      url = "https://github.com/ovn-org/ovn/commit/df99035f88e43a3b80f4c58dc530fd3f45766c54.patch?full_index=1";
+      hash = "sha256-Ofbbu/j5ox3Tp0q62KrfOdMbuxenwofGdushRAmVQGI=";
+    })
   ];
 
   nativeBuildInputs = [
