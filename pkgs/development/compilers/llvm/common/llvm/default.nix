@@ -166,6 +166,10 @@ stdenv.mkDerivation (
         # on macOS (nothing about this _seems_ nix specific)..
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
+      # Fix tests nondeterministically hanging: https://github.com/llvm/llvm-project/pull/132861
+      ++ lib.optional (lib.versionAtLeast release_version "17") (
+        getVersionFile "llvm/llvm-exegesis-timeout.patch"
+      )
       ++
         lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
