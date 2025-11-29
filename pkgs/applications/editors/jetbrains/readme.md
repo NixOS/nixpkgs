@@ -24,14 +24,13 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to update stuff:
  - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Run ./source/update.py ./source/ides.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
+   - Run ./source/update.py ./source/sources.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
    - Run these commands respectively:
-     - `nix build .#jetbrains.idea-community-src.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
-     - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
+     - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
+     - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
    - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
+   - Fill out `restarterHash` and `jpsHash` in `./source/sources.json` and make sure the Kotlin version used is correct.
    - Do a test build
-     - Notice that sometimes a newer Kotlin version is required to build from source, if build fails, first check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
-     - Feel free to update the Kotlin version to a compatible one
    - If it succeeds, make a commit
    - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
    - make a PR/merge
@@ -40,7 +39,7 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to add an IDE:
  - Make dummy entries in `bin/versions.json` (make sure to set the version to something older than the real one)
  - Run `bin/update_bin.py`
- - Add an entry in `bin/ides.json`
+ - Add an entry in `ides.json`
  - Add an entry in `default.nix`
 
 ### TODO:
