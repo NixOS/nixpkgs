@@ -4,28 +4,29 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jigmo";
-  version = "20230816";
+  version = "20250912";
 
   src = fetchzip {
-    url = "https://kamichikoichi.github.io/jigmo/Jigmo-${version}.zip";
-    hash = "sha256-wBec7IiUneqCEyY704Wi6F6WG0Z1KK7gBGcJhRjrRDc=";
+    url = "https://kamichikoichi.github.io/jigmo/Jigmo-${finalAttrs.version}.zip";
+    hash = "sha256-Z9WYPqNjHqnYjRndxtHsQ9XhFshMR50hVkQsXgUMKE8=";
+    stripRoot = false;
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype/
+    install -Dm644 *.ttf --target-directory=$out/share/fonts/truetype
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese Kanji font set which is the official successor to Hanazono Mincho";
     homepage = "https://kamichikoichi.github.io/jigmo/";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
