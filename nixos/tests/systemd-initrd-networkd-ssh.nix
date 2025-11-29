@@ -10,6 +10,7 @@
         testing.initrdBackdoor = true;
         boot.initrd.systemd.enable = true;
         boot.initrd.systemd.contents."/etc/msg".text = "foo";
+        boot.initrd.systemd.extraBin.ping = "${pkgs.iputils}/bin/ping";
         boot.initrd.network = {
           enable = true;
           ssh = {
@@ -51,6 +52,8 @@
     with client.nested("waiting for SSH server to come up"):
         retry(ssh_is_up)
 
+    # Ensure that the server can resolve hosts in initrd
+    server.succeed("ping -c1 client")
     msg = client.succeed(
         "ssh -i /etc/sshKey -o UserKnownHostsFile=/etc/knownHosts server 'cat /etc/msg'"
     )
