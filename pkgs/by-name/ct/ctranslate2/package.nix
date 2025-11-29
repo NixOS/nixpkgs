@@ -72,6 +72,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "WITH_ACCELERATE" true)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.gcc.arch or null != null) [
+    (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
   ];
 
   buildInputs =
