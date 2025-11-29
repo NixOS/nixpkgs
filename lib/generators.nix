@@ -131,7 +131,7 @@ rec {
   /**
     Generate a line of key `k` and value `v`, separated by
     character `sep`. If `sep` appears in `k`, it is escaped.
-    Helper for synaxes with different separators.
+    Helper for syntaxes with different separators.
 
     `mkValueString` specifies how values should be formatted.
 

@@ -127,7 +127,7 @@ rec {
 
     : A list of strings representing the attribute path to check from `set`
 
-    `e`
+    `set`
 
     : The nested attribute set to check
 
@@ -563,7 +563,7 @@ rec {
 
     : A list of attribute names to get out of `set`
 
-    `attrs`
+    `set`
 
     : The set to get the named attributes from
 

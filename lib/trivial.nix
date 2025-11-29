@@ -1139,7 +1139,7 @@ in
     # Type
 
     ```
-    fromHexString :: String -> [ String ]
+    fromHexString :: String -> Int
     ```
 
     # Examples
