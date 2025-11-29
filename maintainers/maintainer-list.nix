@@ -1343,6 +1343,12 @@
     githubId = 2939703;
     name = "James Hollowell";
   };
+  allsimon = {
+    github = "Allsimon";
+    name = "Allegraud Simon";
+    email = "simon.allegraud@gmail.com";
+    githubId = 8037169;
+  };
   allusive = {
     email = "jasper@allusive.dev";
     name = "Allusive";
