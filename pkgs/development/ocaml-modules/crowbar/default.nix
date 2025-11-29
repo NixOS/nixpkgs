@@ -16,13 +16,13 @@
 
 buildDunePackage rec {
   pname = "crowbar";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "stedolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0jjwiOZ9Ut+dv5Iw4xNvf396WTehT1VClxY9VHicw4U=";
+    sha256 = "sha256-KGDOm9PMymFwyHoe7gp+rl+VxbbkLvnb8ypTXbImSgs=";
   };
 
   minimalOCamlVersion = "4.08";
