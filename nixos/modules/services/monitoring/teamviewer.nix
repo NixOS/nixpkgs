@@ -32,7 +32,6 @@ in
         "dbus.service"
       ];
       requires = [ "dbus.service" ];
-      preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 
       startLimitIntervalSec = 60;
       startLimitBurst = 10;
@@ -42,6 +41,8 @@ in
         PIDFile = "/run/teamviewerd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
+        StateDirectory = "teamviewer";
+        LogDirectory = "teamviewer";
       };
     };
   };
