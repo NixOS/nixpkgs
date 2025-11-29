@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   bundlerEnv,
+  bundlerUpdateScript,
   tree,
 }:
 let
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp ghi $out/bin
   '';
+
+  passthru.updateScript = bundlerUpdateScript "ghi";
 
   meta = {
     description = "GitHub Issues on the command line";
