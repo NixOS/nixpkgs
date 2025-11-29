@@ -357,6 +357,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
+    ./3.13/virtualenv-add-home-path.patch
   ]
   ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
