@@ -27,6 +27,13 @@
     '';
   };
 
+  simple-tag = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "simple-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";
