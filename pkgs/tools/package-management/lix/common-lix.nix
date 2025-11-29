@@ -294,9 +294,21 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++
     lib.optionals
-      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+      (
+        stdenv.hostPlatform.isLinux
+        && finalAttrs.doInstallCheck
+        && lib.versionAtLeast version "2.94"
+        && lib.versionOlder version "2.95"
+      )
       [
         (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
+      ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
+      [
+        (lib.mesonOption "build-test-env" "${pkgsStatic.busybox}/bin")
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
       ];
 
   ninjaFlags = [ "-v" ];
