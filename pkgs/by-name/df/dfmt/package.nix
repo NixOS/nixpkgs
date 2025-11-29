@@ -1,31 +1,42 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-let
-  inherit (python3.pkgs)
-    buildPythonApplication
-    pythonOlder
-    ;
-in
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dfmt";
   version = "1.2.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  format = "pyproject";
+  disabled = python3Packages.pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7af6360ca8d556f1cfe82b97f03b8d1ea5a9d6de1fa3018290c844b6566d9d6e";
+  src = fetchFromGitHub {
+    owner = "your-tools";
+    repo = "dfmt";
+    tag = "v${version}";
+    hash = "sha256-k1cKW5fNu+BS8roV8MNLlGSUHQ4WQXWT9OC4ZvS/oio=";
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api" \
+      --replace-fail "poetry>=0.12" "poetry-core>=1.0.0"
+  '';
+
+  build-system = [ python3Packages.poetry-core ];
+
+  dontUsePythonRemoveTestsDir = true;
+  nativeCheckInputs = [ python3Packages.pytest ];
+  doCheck = true;
+  checkPhase = ''
+    pytest -vv test_dfmt.py
+  '';
+
+  meta = {
     description = "Format paragraphs, comments and doc strings";
     mainProgram = "dfmt";
-    homepage = "https://github.com/dmerejkowsky/dfmt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cole-h ];
+    homepage = "https://github.com/your-tools/dfmt";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.cole-h ];
   };
 }
