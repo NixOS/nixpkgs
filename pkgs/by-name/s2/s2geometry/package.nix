@@ -1,5 +1,5 @@
 {
-  abseil-cpp,
+  abseil-cpp_202407,
   cmake,
   fetchFromGitHub,
   stdenv,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    (abseil-cpp.override { inherit cxxStandard; })
+    (abseil-cpp_202407.override { inherit cxxStandard; })
   ];
 
   meta = with lib; {
