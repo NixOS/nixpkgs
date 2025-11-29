@@ -9,15 +9,18 @@
   prisma,
   prisma-engines,
   vips,
+  giflib,
   pkg-config,
   cairo,
   pango,
   bash,
   openssl,
+  callPackage,
 }:
 let
   pname = "documenso";
-  version = "1.12.6";
+  version = "2.1.0";
+  skia-canvas = callPackage ./skia-canvas.nix { };
 in
 buildNpmPackage {
 
@@ -27,10 +30,10 @@ buildNpmPackage {
     owner = "documenso";
     repo = "documenso";
     rev = "v${version}";
-    hash = "sha256-1TKjsOKJkv3COFgsE4tPAymI0MdeT+T8HiNgnoWHlAY=";
+    hash = "sha256-UNuRjm6fr1fW37SvLahkVC3hKEzarta6nMPZBF5lUiY=";
   };
 
-  npmDepsHash = "sha256-ZddRSBDasa3mMAS2dqXgXRMOc1nvspdXsuTZ7c+einw=";
+  npmDepsHash = "sha256-wUKb2jCy9ooOcKvz4Owk744oVwcXLbQltBj3nobgq5w=";
 
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
@@ -50,6 +53,7 @@ buildNpmPackage {
   buildInputs = [
     node-pre-gyp
     node-gyp
+    giflib
     pixman
     cairo
     pango
@@ -62,8 +66,15 @@ buildNpmPackage {
     ./turbo.json.patch
   ];
 
+  npmFlags = [ "--ignore-scripts" ];
+
   buildPhase = ''
     runHook preBuild
+
+    cp ${skia-canvas}/lib/libskia_canvas.* node_modules/skia-canvas/lib/skia.node
+
+    npm rebuild
+    patchShebangs node_modules
 
     patchShebangs apps/remix/.bin/build.sh
     npm exec turbo -- telemetry disable
@@ -114,6 +125,10 @@ buildNpmPackage {
     rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/ee
     rm -Rf $out/lib/node_modules/@documenso/root/node_modules/@documenso/auth
   '';
+
+  passthru = {
+    inherit skia-canvas;
+  };
 
   meta = with lib; {
     description = "Open Source DocuSign Alternative";

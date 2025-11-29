@@ -1,7 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p wget git jq nodejs_24 npm-lockfile-fix
 CMDS=();DESC=();NARGS=$#;ARG1=$1;make_command(){ CMDS+=($1);DESC+=("$2");};usage(){ printf "\nUsage: %s [command]\n\nCommands:\n" $0;line="              ";for((i=0;i<=$(( ${#CMDS[*]} -1));i++));do printf "  %s %s ${DESC[$i]}\n" ${CMDS[$i]} "${line:${#CMDS[$i]}}";done;echo;};runme(){ if test $NARGS -eq 1;then eval "$ARG1"||usage;else usage;fi;}
 
-version="1.12.6";
+version="2.1.0";
 
 make_command "about" "About this update script."
 about(){
@@ -39,17 +40,19 @@ update(){
   echo "rm inngest-cli from root"
   npm uninstall inngest-cli
 
+  npm install node-addon-api
+
   npx @turbo/codemod migrate . --force
 
   jq '.envMode="loose"' turbo.json > turbo-patched.json
   cp turbo-patched.json turbo.json
 
   echo "fix package-lock.json hashes"
-  nix run nixpkgs#npm-lockfile-fix -- package-lock.json
+  npm-lockfile-fix package-lock.json
 
-  git diff package-lock.json > $current_nixpkgs_dir/package-lock.json.patch
-  git diff package.json > $current_nixpkgs_dir/package.json.patch
-  git diff turbo.json > $current_nixpkgs_dir/turbo.json.patch
+  git diff --no-ext-diff package-lock.json > $current_nixpkgs_dir/package-lock.json.patch
+  git diff --no-ext-diff package.json > $current_nixpkgs_dir/package.json.patch
+  git diff --no-ext-diff turbo.json > $current_nixpkgs_dir/turbo.json.patch
 }
 
 runme
