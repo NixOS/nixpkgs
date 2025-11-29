@@ -71,6 +71,16 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
