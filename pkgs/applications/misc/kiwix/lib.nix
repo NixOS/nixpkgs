@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "14.0.0";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
     rev = finalAttrs.version;
-    hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
+    hash = "sha256-/JR8TQPFwJUsWDHq0gsTazdd933LQ9ciGKtb7mKAQb8=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs scripts
-    substituteInPlace meson.build \
-        --replace-fail "libicu_dep = dependency('icu-i18n', static:static_deps)" \
-                       "libicu_dep = [dependency('icu-i18n', static:static_deps), dependency('icu-uc', static:static_deps)]"
+    # These tests use network access and cannot be run
+    substituteInPlace test/meson.build \
+        --replace-fail "'server'," "" \
+        --replace-fail "'library_server'," "" \
+        --replace-fail "'server_search'" ""
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -68,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ colinsane ];
   };
 })
