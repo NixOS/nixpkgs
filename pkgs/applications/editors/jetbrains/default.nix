@@ -406,9 +406,7 @@ in
 
   idea-ultimate = lib.warnOnInstantiate "'jetbrains.idea-ultimate' has been renamed to/replaced by 'jetbrains.idea'" _idea;
 
-  idea-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: IntelliJ IDEA Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.idea-oss', the Open Source build of IntelliJ. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/" (
-    _idea-oss
-  );
+  idea-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: IntelliJ IDEA Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.idea-oss', the Open Source build of IntelliJ. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/" _idea-oss;
 
   pycharm-community =
     lib.warnOnInstantiate
@@ -422,9 +420,7 @@ in
         pname = "pycharm-community";
       });
 
-  pycharm-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: PyCharm Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.pycharm-oss', the Open Source build of PyCharm. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025" (
-    _pycharm-oss
-  );
+  pycharm-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: PyCharm Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.pycharm-oss', the Open Source build of PyCharm. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025" _pycharm-oss;
 
   pycharm-professional = lib.warnOnInstantiate "'jetbrains.pycharm-professional' has been renamed to/replaced by 'jetbrains.pycharm'" _pycharm;
 
