@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hatoo/oha";
     changelog = "https://github.com/hatoo/oha/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jpds ];
     mainProgram = "oha";
   };
 })
