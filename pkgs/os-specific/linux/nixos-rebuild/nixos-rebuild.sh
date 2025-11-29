@@ -198,6 +198,16 @@ while [ "$#" -gt 0 ]; do
       --json)
         json=1
         ;;
+      --arg)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        extraBuildFlags+=("--arg" "$j" "$k")
+        ;;
+      --argstr)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        extraBuildFlags+=("--argstr" "$j" "$k")
+        ;;
       *)
         log "$0: unknown option \`$i'"
         exit 1
