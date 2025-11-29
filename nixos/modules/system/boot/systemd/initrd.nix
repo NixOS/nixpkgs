@@ -92,6 +92,9 @@ let
   jobScripts = concatLists (
     mapAttrsToList (_: unit: unit.jobScripts or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
   );
+  unitPaths = concatLists (
+    mapAttrsToList (_: unit: unit.path or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
+  );
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -583,6 +586,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
+      ++ unitPaths
       ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
