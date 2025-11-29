@@ -1,0 +1,17 @@
+diff --git a/closed/OpenJ9.gmk b/closed/OpenJ9.gmk
+index cf7492a33..6c3087942 100644
+--- a/closed/OpenJ9.gmk
++++ b/closed/OpenJ9.gmk
+@@ -61,9 +61,9 @@ define ShowVersions
+ 	@$(PRINTF) "    %-$(VersionLabelWidth)s - %s\n" $(VersionPairs)
+ endef # ShowVersions
+ 
+-$(call GetVersion, openjdk,  OPENJDK_SHA,   $(TOPDIR),           required)
+-$(call GetVersion, openj9,   OPENJ9_SHA,    $(OPENJ9_TOPDIR),    required)
+-$(call GetVersion, omr,      OPENJ9OMR_SHA, $(OPENJ9OMR_TOPDIR), required)
++$(call GetVersion, openjdk,  OPENJDK_SHA,   $(TOPDIR))
++$(call GetVersion, openj9,   OPENJ9_SHA,    $(OPENJ9_TOPDIR))
++$(call GetVersion, omr,      OPENJ9OMR_SHA, $(OPENJ9OMR_TOPDIR))
+ $(call GetVersion, openssl,  OPENSSL_SHA,   $(OPENSSL_DIR))
+ $(call GetVersion, vendor,   VENDOR_SHA,    $(VENDOR_TOPDIR))
+ 
