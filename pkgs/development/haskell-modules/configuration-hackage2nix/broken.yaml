@@ -6838,6 +6838,7 @@ broken-packages:
   - TYB # failure in job https://hydra.nixos.org/build/233246075 at 2023-09-02
   - tyfam-witnesses # failure in job https://hydra.nixos.org/build/233191033 at 2023-09-02
   - typalyze # failure in job https://hydra.nixos.org/build/233246228 at 2023-09-02
+  - type # failure in job https://hydra.nixos.org/build/315191813 at 2025-11-29
   - type-combinators # failure in job https://hydra.nixos.org/build/233230024 at 2023-09-02
   - type-compare # failure in job https://hydra.nixos.org/build/233207530 at 2023-09-02
   - type-eq # failure in job https://hydra.nixos.org/build/233214388 at 2023-09-02
