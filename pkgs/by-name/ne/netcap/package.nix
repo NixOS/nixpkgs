@@ -8,24 +8,22 @@
   libprotoident,
   libflowmanager,
   libtrace,
+  ndpi,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  ndpi = callPackage ./ndpi_4_0.nix { };
-in
 buildGoModule (finalAttrs: {
   pname = "netcap";
-  version = "0.6.11";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dreadl0ck";
     repo = "netcap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SCBKOIC/s+rfrVWmryp9EBp7ARpZZcxymsnZWtEHrhk=";
+    hash = "sha256-6Uc6xx14Ye1PK7iwRSwKCUkXZLGI7kEiw4kOueGYc9A=";
   };
 
-  vendorHash = "sha256-MvHrJLhcFA0fEgK+YT0rwI6wIwTGMcLWQt6AYkx1eZM=";
+  vendorHash = "sha256-AwColblpH/2zQOxLwiICw+8HSl1qOCVNVqBuCTYTatI=";
 
   subPackages = [ "cmd" ];
 
@@ -42,6 +40,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s -w"
   ];
+
+  env.GOWORK = "off";
 
   tags = lib.optionals (!withDpi) [
     "nodpi"
