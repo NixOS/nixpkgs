@@ -5,7 +5,7 @@
 }:
 let
   pname = "keto";
-  version = "0.14.0";
+  version = "25.4.0";
   commit = "613779b6dad89f6fb6b4fa6968f13ede11963c97";
 in
 buildGoModule {
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "keto";
     rev = "v${version}";
-    hash = "sha256-DQiE7PvRnOzdRITRl7LgUDmCJO5/aUzbFdEIyiofZfU=";
+    hash = "sha256-2DktCLYOj2azYBAhMVuqfU7QQ+eC3qDLtcp+fPljFAg=";
   };
 
-  vendorHash = "sha256-deQxdG3HZiMzzwTr6moILBSNeNR/3noFlJlIx1eyBZs=";
+  vendorHash = "sha256-+zHvIf3CBMMqKVmQYzMRGQg9iGf9Khnhpgt95lA0BBA=";
 
   tags = [
     "sqlite"
