@@ -913,7 +913,7 @@ in
   throwIfNot = cond: msg: if cond then x: x else throw msg;
 
   /**
-    Like throwIfNot, but negated (throw if the first argument is `true`).
+    Like `throwIfNot`, but negated (throw if the first argument is `true`).
 
     # Inputs
 
@@ -991,8 +991,8 @@ in
     setFunctionArgs : (a → b) → Map String Bool → (a → b)
 
     This function is necessary because you can't dynamically create a
-    function of the { a, b ? foo, ... }: format, but some facilities
-    like callPackage expect to be able to query expected arguments.
+    function of the `{ a, b ? foo, ... }:` format, but some facilities
+    like `callPackage` expect to be able to query expected arguments.
 
     # Inputs
 
@@ -1012,9 +1012,9 @@ in
 
   /**
     Extract the expected function arguments from a function.
-    This works both with nix-native { a, b ? foo, ... }: style
-    functions and functions with args set with 'setFunctionArgs'. It
-    has the same return type and semantics as builtins.functionArgs.
+    This works both with nix-native `{ a, b ? foo, ... }:` style
+    functions and functions with args set with `setFunctionArgs`. It
+    has the same return type and semantics as `builtins.functionArgs`.
     setFunctionArgs : (a → b) → Map String Bool.
 
     # Inputs
@@ -1180,8 +1180,8 @@ in
     i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /**
-    `toBaseDigits base i` converts the positive integer i to a list of its
-    digits in the given base. For example:
+    `toBaseDigits base i` converts the positive integer `i` to a list of its
+    digits in the given base.
 
     toBaseDigits 10 123 => [ 1 2 3 ]
 

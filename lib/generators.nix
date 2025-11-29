@@ -129,11 +129,11 @@ rec {
       err "this value is" (toString v);
 
   /**
-    Generate a line of key k and value v, separated by
-    character sep. If sep appears in k, it is escaped.
+    Generate a line of key `k` and value `v`, separated by
+    character `sep`. If `sep` appears in `k`, it is escaped.
     Helper for synaxes with different separators.
 
-    mkValueString specifies how values should be formatted.
+    `mkValueString` specifies how values should be formatted.
 
     ```nix
     mkKeyValueDefault {} ":" "f:oo" "bar"
@@ -430,7 +430,7 @@ rec {
     toINI_ (gitFlattenAttrs attrs);
 
   /**
-    mkKeyValueDefault wrapper that handles dconf INI quirks.
+    `mkKeyValueDefault` wrapper that handles dconf INI quirks.
     The main differences of the format is that it requires strings to be quoted.
   */
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
@@ -509,9 +509,9 @@ rec {
 
     Structured function argument
     : allowPrettyValues
-      : If this option is true, attrsets like { __pretty = fn; val = …; }
-        will use fn to convert val to a pretty printed representation.
-        (This means fn is type Val -> String.)
+      : If this option is true, attrsets like `{ __pretty = fn; val = …; }`
+        will use `fn` to convert `val` to a pretty printed representation.
+        (This means `fn` is type `Val -> String`.)
     : multiline
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
@@ -748,13 +748,13 @@ rec {
 
   /**
     Translate a simple Nix expression to Lua representation with occasional
-    Lua-inlines that can be constructed by mkLuaInline function.
+    Lua-inlines that can be constructed by `mkLuaInline` function.
 
     Configuration:
 
-    * multiline - by default is true which results in indented block-like view.
-    * indent - initial indent.
-    * asBindings - by default generate single value, but with this use attrset to set global vars.
+    * `multiline` - by default is true which results in indented block-like view.
+    * `indent` - initial indent.
+    * `asBindings` - by default generate single value, but with this use attrset to set global vars.
 
     Attention:
 
@@ -868,7 +868,7 @@ rec {
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
   /**
-    Mark string as Lua expression to be inlined when processed by toLua.
+    Mark string as Lua expression to be inlined when processed by `toLua`.
 
     # Inputs
 
