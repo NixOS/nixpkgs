@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "salesforce";
     repo = "cloudsplaining";
     tag = version;
-    hash = "sha256-Ix4SlkGMtserksazXCk0XcDhmxNcfV/QCVsDJjWbu2k=";
+    hash = "sha256-Abp/uvH1IYO/rb2o+7uI0Ef6q7K6T0kN1mo+Qit438E=";
   };
 
   postPatch = ''
