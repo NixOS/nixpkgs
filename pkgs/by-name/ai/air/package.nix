@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "air";
-  version = "1.63.0";
+  version = "1.63.4";
 
   src = fetchFromGitHub {
     owner = "air-verse";
     repo = "air";
     tag = "v${version}";
-    hash = "sha256-S8ARa6vZzKQTUhGt2eEdRDXCFyspSNLdGqhlIy0RjDc=";
+    hash = "sha256-9OFVo+xA4KpuSQb3pPB2TLdgfk1+KnyQIv+Pqf2xwQ0=";
   };
 
-  vendorHash = "sha256-1HUWdJc2YaLtszAswQTWn3bevDFJwY5xTCMlYM8j+GU=";
+  vendorHash = "sha256-0eaPJUFgcSY96o3uSL3dd4099axYXymD0ryp1O8fGRQ=";
 
   ldflags = [
     "-s"
