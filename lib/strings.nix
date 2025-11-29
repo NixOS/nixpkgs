@@ -2135,7 +2135,7 @@ rec {
     "-D${feature}:${toUpper type}=${value}";
 
   /**
-    Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+    Create a `"-D<condition>={TRUE,FALSE}"` string that can be passed to typical
     CMake invocations.
 
     # Inputs
@@ -2170,7 +2170,7 @@ rec {
     cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
 
   /**
-    Create a -D<feature>:STRING=<value> string that can be passed to typical
+    Create a `"-D<feature>:STRING=<value>"` string that can be passed to typical
     CMake invocations.
     This is the most typical usage, so it deserves a special case.
 
@@ -2206,7 +2206,7 @@ rec {
     cmakeOptionType "string" feature value;
 
   /**
-    Create a -D<feature>=<value> string that can be passed to typical Meson
+    Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
     invocations.
 
     # Inputs
@@ -2241,7 +2241,7 @@ rec {
     "-D${feature}=${value}";
 
   /**
-    Create a -D<condition>={true,false} string that can be passed to typical
+    Create a `"-D<condition>={true,false}"` string that can be passed to typical
     Meson invocations.
 
     # Inputs
@@ -2278,7 +2278,7 @@ rec {
     mesonOption condition (lib.boolToString flag);
 
   /**
-    Create a -D<feature>={enabled,disabled} string that can be passed to
+    Create a `"-D<feature>={enabled,disabled}"` string that can be passed to
     typical Meson invocations.
 
     # Inputs
@@ -2315,7 +2315,7 @@ rec {
     mesonOption feature (if flag then "enabled" else "disabled");
 
   /**
-    Create an --{enable,disable}-<feature> string that can be passed to
+    Create an `"--{enable,disable}-<feature>"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
@@ -2352,8 +2352,8 @@ rec {
     "--${if flag then "enable" else "disable"}-${feature}";
 
   /**
-    Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
-    standard GNU Autoconf scripts.
+    Create an `"--{enable-<feature>=<value>,disable-<feature>}"` string that
+    can be passed to standard GNU Autoconf scripts.
 
     # Inputs
 
@@ -2390,7 +2390,7 @@ rec {
     enableFeature flag feature + optionalString flag "=${value}";
 
   /**
-    Create an --{with,without}-<feature> string that can be passed to
+    Create an `"--{with,without}-<feature>"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
@@ -2426,7 +2426,7 @@ rec {
     "--${if flag then "with" else "without"}-${feature}";
 
   /**
-    Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
+    Create an `"--{with-<feature>=<value>,without-<feature>}"` string that can be passed to
     standard GNU Autoconf scripts.
 
     # Inputs
