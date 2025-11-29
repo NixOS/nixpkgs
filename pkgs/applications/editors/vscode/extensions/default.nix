@@ -2009,6 +2009,8 @@ let
         };
       };
 
+      google.colab = callPackage ./google.colab { };
+
       Google.gemini-cli-vscode-ide-companion = callPackage ./Google.gemini-cli-vscode-ide-companion { };
 
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
