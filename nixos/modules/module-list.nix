@@ -925,6 +925,7 @@
   ./services/misc/ringboard.nix
   ./services/misc/rkvm.nix
   ./services/misc/rmfakecloud.nix
+  ./services/misc/robloxapid.nix
   ./services/misc/rshim.nix
   ./services/misc/rsync.nix
   ./services/misc/safeeyes.nix

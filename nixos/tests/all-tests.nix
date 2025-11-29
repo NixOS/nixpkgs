@@ -1347,6 +1347,7 @@ in
   rke2 = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./rke2 { };
   rkvm = handleTest ./rkvm { };
   rmfakecloud = runTest ./rmfakecloud.nix;
+  robloxapid = runTest ./robloxapid.nix;
   robustirc-bridge = runTest ./robustirc-bridge.nix;
   rosenpass = runTest ./rosenpass.nix;
   roundcube = runTest ./roundcube.nix;
