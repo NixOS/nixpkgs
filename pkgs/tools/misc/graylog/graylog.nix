@@ -5,6 +5,7 @@
   makeWrapper,
   openjdk11_headless,
   openjdk17_headless,
+  openjdk21_headless,
   systemd,
   nixosTests,
 }:
@@ -30,7 +31,14 @@ stdenv.mkDerivation rec {
   makeWrapperArgs = [
     "--set-default"
     "JAVA_HOME"
-    "${if (lib.versionAtLeast version "5.0") then openjdk17_headless else openjdk11_headless}"
+    "${
+      if (lib.versionAtLeast version "7.0") then
+        openjdk21_headless
+      else if (lib.versionAtLeast version "5.0") then
+        openjdk17_headless
+      else
+        openjdk11_headless
+    }"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd ]}"
   ];
 
