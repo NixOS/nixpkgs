@@ -478,6 +478,53 @@ Composed types are types that take a type as parameter. `listOf
 
       Displays the option as `foo.<id>` in the manual.
 
+`types.setWith` { *`elemType`*, *`toKey`* }
+
+:   A list of elements where all the elements are of *`elemType`* type.
+
+    **Parameters**
+
+    `elemType` (Required)
+    : Specifies the type of the values contained in the list.
+
+    `toKey` (value -> str)
+    : A function that gets the value of an element as argument and returns a string that is used for deduplication.
+      The output is produced by merging entries into a single entry using the `key` returned from this function.
+
+    **Interactions**
+
+    ```nix
+    types.setWith {
+      elemType = types.str;
+      toKey = v: v;
+    }
+    ```
+
+    Deduplicates strings by their value.
+
+    **Removing items**
+
+    ```nix
+    # One module defines
+    set = [ "foo" "bar" "bar" ]
+    # Other module defines
+    set = [ "foo" "bar" ]
+    # Another module defines
+    set = lib.types.setRemove [ "foo" ]
+    => [ "bar" ]
+    ```
+
+    **mkOverride**
+
+    Using `mkOveride` such as `mkForce` overrides all prior definitions of the set including `setRemove`
+    When using `mkForce` and `setRemove` together the `setRemove` needs to be defined inside `mkForce`
+
+    Example: `mkForce (setRemove [ "foo" ])`
+
+    **order**
+
+    Using `mkOrder` properties such as `mkBefore` or `mkAfter` is not supported.
+
 
 `types.uniq` *`t`*
 
