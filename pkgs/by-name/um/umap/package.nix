@@ -86,6 +86,9 @@ python.pkgs.buildPythonApplication rec {
       makeWrapper ${start_script} $out/bin/umap-serve \
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PYTHONPATH : "${python.pkgs.makePythonPath dependencies}";
+
+      ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
+      mv static $out
     '';
 
   nativeCheckInputs =
