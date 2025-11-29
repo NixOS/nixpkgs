@@ -20,7 +20,7 @@
 python3Packages.buildPythonApplication {
   pname = "ranger";
   version = "1.9.3-unstable-2025-11-14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranger";
@@ -29,17 +29,22 @@ python3Packages.buildPythonApplication {
     hash = "sha256-vn1rAOFB2vq04Y/WAE44iH/b/zamAmvq8putUKwNqR8=";
   };
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    astroid
-    pylint
+  build-system = with python3Packages; [
+    setuptools
   ];
-  propagatedBuildInputs =
+
+  dependencies =
     [ ]
     ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
     ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    astroid
+    pylint
+  ];
 
   makeWrapperArgs = [
     "--prefix"
