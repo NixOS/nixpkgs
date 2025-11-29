@@ -73,9 +73,6 @@ in
                 wgPeerId = 2;
               }
               // {
-                package = pkgs.ifstate.override {
-                  withConfigValidation = false;
-                };
                 allowIfstateToDrasticlyIncreaseInitrdSize = true;
               };
           };
