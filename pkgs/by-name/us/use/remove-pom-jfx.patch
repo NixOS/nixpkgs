@@ -1,0 +1,57 @@
+diff '--color=auto' -ruN a/use-gui/pom.xml b/use-gui/pom.xml
+--- a/use-gui/pom.xml	2025-11-09 18:23:14.302905490 +0100
++++ b/use-gui/pom.xml	2025-11-09 18:24:40.296371651 +0100
+@@ -22,36 +22,6 @@
+             <version>33.5.0-jre</version>
+         </dependency>
+         <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-graphics</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-controls</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-web</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-media</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-swing</artifactId>
+-            <version>21.0.5</version>
+-        </dependency>
+-        <dependency>
+             <groupId>org.controlsfx</groupId>
+             <artifactId>controlsfx</artifactId>
+             <version>11.1.1</version>
+@@ -271,14 +241,6 @@
+                     </execution>
+                 </executions>
+             </plugin>
+-            <plugin>
+-                <groupId>org.openjfx</groupId>
+-                <artifactId>javafx-maven-plugin</artifactId>
+-                <version>0.0.8</version>
+-                <configuration>
+-                    <mainClass>org.tzi.use.main.gui.Main</mainClass>
+-                </configuration>
+-            </plugin>
+         </plugins>
+     </build>
+-</project>
+\ Kein Zeilenumbruch am Dateiende.
++</project>
