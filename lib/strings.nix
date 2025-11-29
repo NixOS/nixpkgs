@@ -2090,7 +2090,7 @@ rec {
 
     `type`
     : The type of the feature to be set, as described in
-      https://cmake.org/cmake/help/latest/command/set.html
+      [the CMake set documentation](https://cmake.org/cmake/help/latest/command/set.html)
       the possible values (case insensitive) are:
       BOOL FILEPATH PATH STRING INTERNAL LIST
 
@@ -2904,7 +2904,7 @@ rec {
     Computes the Levenshtein distance between two strings `a` and `b`.
 
     Complexity O(n*m) where n and m are the lengths of the strings.
-    Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
+    Algorithm adjusted from [this stackoverflow comment](https://stackoverflow.com/a/9750974/6605742)
 
     # Inputs
 

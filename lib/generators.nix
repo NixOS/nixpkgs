@@ -350,7 +350,7 @@ rec {
     1. values are indented with tabs
     2. sections can have sub-sections
 
-    Further: https://git-scm.com/docs/git-config#EXAMPLES
+    Further: [git-config examples](https://git-scm.com/docs/git-config#EXAMPLES)
 
     # Examples
     :::{.example}
@@ -376,7 +376,7 @@ rec {
     `attrs`
 
     : Key-value pairs to be converted to a git-config file.
-      See: https://git-scm.com/docs/git-config#_variables for possible values.
+      See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
   */
   toGitINI =
     attrs:
@@ -436,7 +436,7 @@ rec {
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
 
   /**
-    Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+    Generates INI in dconf keyfile style. See the [GNOME documentation](https://help.gnome.org/system-admin-guide/dconf-keyfiles.html)
     for details.
   */
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
