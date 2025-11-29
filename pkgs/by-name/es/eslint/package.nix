@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
 }:
 buildNpmPackage rec {
   pname = "eslint";
@@ -34,6 +33,9 @@ buildNpmPackage rec {
     description = "Find and fix problems in your JavaScript code";
     homepage = "https://eslint.org";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      onny
+    ];
   };
 }
