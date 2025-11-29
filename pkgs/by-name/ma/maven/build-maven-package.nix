@@ -4,7 +4,6 @@
   jdk,
   jre-generate-cacerts,
   maven,
-  perl,
   writers,
 }:
 
@@ -13,7 +12,9 @@
   sourceRoot ? null,
   buildOffline ? false,
   doCheck ? true,
+  prePatch ? null,
   patches ? [ ],
+  postPatch ? null,
   pname,
   version,
   mvnJdk ? jdk,
@@ -40,7 +41,9 @@ let
       inherit
         src
         sourceRoot
+        prePatch
         patches
+        postPatch
         version
         ;
 
