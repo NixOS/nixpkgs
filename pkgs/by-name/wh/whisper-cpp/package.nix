@@ -133,6 +133,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
     (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/lib")
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
