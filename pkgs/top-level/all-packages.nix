@@ -3389,10 +3389,6 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
-  mtr = callPackage ../tools/networking/mtr { };
-
-  mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
-
   multitran = recurseIntoAttrs (
     let
       callPackage = newScope pkgs.multitran;
