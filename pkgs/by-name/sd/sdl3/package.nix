@@ -171,6 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
     (lib.cmakeBool "SDL_DEPS_SHARED" false)
+
+    # Only ppc64le baseline guarantees AltiVec
+    (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
   ]
   ++
     lib.optionals
