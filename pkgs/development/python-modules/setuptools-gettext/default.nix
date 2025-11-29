@@ -2,30 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  tomli,
-  pytestCheckHook,
   gettext,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-gettext";
-  version = "0.1.14";
+  version = "0.1.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     tag = "v${version}";
-    hash = "sha256-05xKWRxmoI8tnRENuiK3Z3WNMyjgXIX5p3vhzSUeytQ=";
+    hash = "sha256-N59Hx6CyOzAin8KcMTAD++HFLDdJnJbql/U3fO2F3DU=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ setuptools ];
 
   pythonImportsCheck = [ "setuptools_gettext" ];
 
@@ -35,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/breezy-team/setuptools-gettext/releases/tag/v${version}";
+    changelog = "https://github.com/breezy-team/setuptools-gettext/releases/tag/${src.tag}";
     description = "Setuptools plugin for building mo files";
     homepage = "https://github.com/breezy-team/setuptools-gettext";
     license = lib.licenses.gpl2Plus;
