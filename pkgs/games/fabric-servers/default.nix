@@ -5,9 +5,7 @@
 let
   escapeVersion = lib.replaceString "." "_";
 
-  versions = lib.sort
-    (a: b: lib.versionOlder a.version b.version)
-    (lib.importJSON ./versions.json);
+  versions = lib.sort (a: b: lib.versionOlder a.version b.version) (lib.importJSON ./versions.json);
 
   latest = lib.last versions;
 
