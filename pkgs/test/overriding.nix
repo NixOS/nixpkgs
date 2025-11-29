@@ -292,13 +292,62 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
+      package-stub = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+        }
+      ) { };
+
+      package-stub-gcc = package-stub.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.gccStdenv;
+        };
       });
+      package-stub-clang = package-stub-gcc.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.clangStdenv;
+        };
+      });
+      package-stub-libcxx = package-stub-clang.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.libcxxStdenv;
+        };
+      });
+
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (previousAttrs: {
+          overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+        });
     in
     {
+      buildPythonPackageOverrideStdenvGCC = {
+        expr = package-stub-gcc.stdenv.cc.cc.pname == pkgs.gccStdenv.cc.cc.pname;
+        expected = true;
+      };
+      buildPythonPackageOverrideStdenvClang = {
+        expr = package-stub-clang.stdenv.cc.cc.pname == pkgs.clangStdenv.cc.cc.pname;
+        expected = true;
+      };
+      buildPythonPackageOverrideStdenvLibCXX = {
+        expr = package-stub-libcxx.stdenv.cc.libcxx.pname == pkgs.libcxxStdenv.cc.libcxx.pname;
+        expected = true;
+      };
+
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag == 1;
+        expected = true;
+      };
+      overridePythonAttrs-nested = {
+        expr =
+          (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag == 2;
         expected = true;
       };
     };
