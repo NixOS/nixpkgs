@@ -441,6 +441,9 @@ in
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
     '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
