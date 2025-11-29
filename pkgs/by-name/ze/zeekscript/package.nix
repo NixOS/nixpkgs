@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  unstableGitUpdater,
+  writeScript,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,7 +36,18 @@ python3.pkgs.buildPythonApplication rec {
     "zeekscript"
   ];
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = writeScript "update-${pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git common-updater-scripts
+    tmpdir="$(mktemp -d)"
+    git clone "${src.gitRepoUrl}" "$tmpdir"
+    pushd "$tmpdir"
+    newVersion=$(cat VERSION)
+    newRevision=$(git log -s -n 1 --pretty='format:%H' VERSION)
+    popd
+    rm -rf "$tmpdir"
+    update-source-version "${pname}" "$newVersion" --rev="$newRevision"
+  '';
 
   meta = {
     description = "Zeek script formatter and analyzer";
