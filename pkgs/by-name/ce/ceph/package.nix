@@ -321,6 +321,9 @@ let
           };
         });
 
+        httpcore = super.httpcore.overridePythonAttrs (old: {
+          nativeCheckInputs = lib.remove self.pproxy old.nativeCheckInputs;
+        });
       };
   };
 
