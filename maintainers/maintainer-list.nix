@@ -13574,9 +13574,9 @@
   };
   keyzox = {
     email = "nixpkgs@adjoly.fr";
-    github = "Keyzox";
+    github = "KeyZox71";
     matrix = "@keyzox:matrix.org";
-    githubId = 18579667;
+    githubId = 45126464;
     name = "Adam J.";
   };
   kfiz = {
