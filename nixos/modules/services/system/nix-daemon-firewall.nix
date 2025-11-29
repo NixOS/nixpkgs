@@ -137,5 +137,9 @@ in
         }
       }
     '';
+    # Not supported by LKL yet so the ruleset check would fail
+    networking.nftables.preCheckRuleset = ''
+      sed -i 's/socket cgroupv2 level 2 @nix_daemon//g' ruleset.conf
+    '';
   };
 }
