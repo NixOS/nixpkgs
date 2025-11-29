@@ -263,7 +263,11 @@ in
   /**
     Merge two attribute sets shallowly, right side trumps left
 
+    # Type
+
+    ```
     mergeAttrs :: attrs -> attrs -> attrs
+    ```
 
     # Inputs
 
@@ -988,11 +992,16 @@ in
     The metadata should match the format given by
     builtins.functionArgs, i.e. a set from expected argument to a bool
     representing whether that argument has a default or not.
-    setFunctionArgs : (a → b) → Map String Bool → (a → b)
 
     This function is necessary because you can't dynamically create a
     function of the `{ a, b ? foo, ... }:` format, but some facilities
     like `callPackage` expect to be able to query expected arguments.
+
+    # Type
+
+    ```
+    setFunctionArgs : (a -> b) -> Map String Bool -> (a -> b)
+    ```
 
     # Inputs
 
@@ -1015,7 +1024,12 @@ in
     This works both with nix-native `{ a, b ? foo, ... }:` style
     functions and functions with args set with `setFunctionArgs`. It
     has the same return type and semantics as `builtins.functionArgs`.
-    setFunctionArgs : (a → b) → Map String Bool.
+
+    # Type
+
+    ```
+    functionArgs : (a -> b) -> Map String Bool
+    ```
 
     # Inputs
 
