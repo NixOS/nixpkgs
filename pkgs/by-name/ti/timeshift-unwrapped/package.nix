@@ -17,8 +17,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "timeshift";
+  pname = "timeshift-unwrapped";
   version = "25.07.7";
+
   outputs = [
     "out"
     "man"
