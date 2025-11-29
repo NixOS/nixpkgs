@@ -1,6 +1,10 @@
-{buildGoModule, fetchFromGitHub, lib}:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
-  buildGoModule rec {
+buildGoModule rec {
   pname = "vex-tui";
   version = "1.1.0";
   src = fetchFromGitHub {
