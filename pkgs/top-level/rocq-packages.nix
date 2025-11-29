@@ -39,6 +39,7 @@ let
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
       parseque = callPackage ../development/rocq-modules/parseque { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
+      rocq-navi = callPackage ../development/rocq-modules/rocq-navi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
