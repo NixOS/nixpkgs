@@ -4,6 +4,7 @@
 # depend on a dependency marked as broken.
 dont-distribute-packages:
 
+ - 4Blocks
  - a50
  - abcBridge
  - AbortT-monadstf
@@ -3918,4 +3919,3 @@ dont-distribute-packages:
  - zoovisitor
  - zuramaru
  - zwirn
- - _4Blocks
