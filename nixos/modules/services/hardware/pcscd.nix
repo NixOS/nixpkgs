@@ -121,18 +121,40 @@ in
         ) cfg.extendReaderNames;
       };
 
-      # If the cfgFile is empty and not specified (in which case the default
-      # /etc/reader.conf is assumed), pcscd will happily start going through the
-      # entire confdir (/etc in our case) looking for a config file and try to
-      # parse everything it finds. Doesn't take a lot of imagination to see how
-      # well that works. It really shouldn't do that to begin with, but to work
-      # around it, we force the path to the cfgFile.
-      #
-      # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [
-        ""
-        "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
-      ];
+      serviceConfig = {
+        # If the cfgFile is empty and not specified (in which case the default
+        # /etc/reader.conf is assumed), pcscd will happily start going through the
+        # entire confdir (/etc in our case) looking for a config file and try to
+        # parse everything it finds. Doesn't take a lot of imagination to see how
+        # well that works. It really shouldn't do that to begin with, but to work
+        # around it, we force the path to the cfgFile.
+        #
+        # https://github.com/NixOS/nixpkgs/issues/121088
+        ExecStart = [
+          ""
+          "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
+        ];
+
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateUsers = "identity";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        UMask = "0077";
+      };
     };
   };
 }
