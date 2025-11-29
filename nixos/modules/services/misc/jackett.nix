@@ -45,6 +45,12 @@ in
         description = "Group under which Jackett runs.";
       };
 
+      serverConfig = lib.mkOption {
+        type = lib.types.attrs;
+        default = { };
+        description = "The ServerConfig.json to provide to Jackett";
+      };
+
       package = lib.mkPackageOption pkgs "jackett" { };
     };
   };
@@ -58,6 +64,18 @@ in
       description = "Jackett";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      preStart = # bash
+        ''
+          set -euo pipefail
+          umask 077 # ServerConfig.json should be 700
+
+          config_file="${cfg.dataDir}/ServerConfig.json"
+          generated="{}"
+          [ -f "$config_file" ] && generated=$(cat "$config_file")
+
+          nixcfg='${builtins.toJSON cfg.serverConfig}'
+          echo "$generated" | ${pkgs.jq}/bin/jq --argjson nix "$nixcfg" ' . * $nix' > '${cfg.dataDir}/ServerConfig.json'
+        '';
 
       serviceConfig = {
         Type = "simple";
