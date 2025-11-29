@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.3.2";
+  version = "1.3.3";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "PackageKit";
     repo = "PackageKit";
     rev = "v${version}";
-    hash = "sha256-oQuJpn9G/V8CrrEs2agbKVS9xZnS1MgHa8B8P1nFmiw=";
+    hash = "sha256-BgVfM2EtuvV9qTFSy+WW5Ny1QrHIj3t2Royrn7ZHAA8=";
   };
 
   buildInputs = [
