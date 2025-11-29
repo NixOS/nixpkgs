@@ -22314,12 +22314,12 @@ final: prev: {
 
   vscode-diff-nvim = buildVimPlugin {
     pname = "vscode-diff.nvim";
-    version = "2025-11-26";
+    version = "2025-11-29";
     src = fetchFromGitHub {
       owner = "esmuellert";
       repo = "vscode-diff.nvim";
-      rev = "94bba113413cb660397f219d4096775338ea08e1";
-      sha256 = "17kll9vclgy7flvxbw4hc2fj4xnn1hq3ds3s9fg0z7x9nmf23v85";
+      rev = "1cde497f876e1d959b1d008aca70f48bf9848513";
+      sha256 = "12l3ar0igqbn6l73by3dcbl4f1k5dgbac8xc1mii3anfmhaxnvqh";
     };
     meta.homepage = "https://github.com/esmuellert/vscode-diff.nvim/";
     meta.hydraPlatforms = [ ];
