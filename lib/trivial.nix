@@ -1094,6 +1094,58 @@ in
     g: setFunctionArgs g fArgs;
 
   /**
+    `inheritFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
+    but whose function arguments inherit from both `f` and `g`, with `g` overriding duplicates.
+    In other words, `g'` keeps all argument metadata of `g` and adds any missing ones from `f`.
+
+    # Inputs
+
+    `f`
+
+    : Source function providing argument metadata to inherit
+
+    `g`
+
+    : Target function that receives (inherits) argument metadata
+
+    # Type
+
+    ```
+    inheritFunctionArgs :: (a -> b) -> (a -> c) -> (a -> c)
+    ```
+
+    # Examples
+    :::{.example}
+    ## `delib.trivial.inheritFunctionArgs` usage example
+
+    ```nix
+    addab = {a, b, unused ? 1}: a + b
+    lib.functionArgs addab
+    => { a = false; b = false; unused = true; }
+
+    addab1 = {unused, ...}@attrs: addab attrs * unused
+    lib.functionArgs addab1
+    => { unused = false; }
+
+    addab1' = lib.inheritFunctionArgs addab addab1
+    addab1' { a = 2; b = 4; unused = 10; }
+    => 60
+
+    lib.functionArgs addab1'
+    => { a = false; b = false; unused = false; }
+    ```
+
+    :::
+  */
+  inheritFunctionArgs =
+    f: g:
+    let
+      fArgs = functionArgs f;
+      gArgs = functionArgs g;
+    in
+    lib.setFunctionArgs g (fArgs // gArgs);
+
+  /**
     Turns any non-callable values into constant functions.
     Returns callable values as is.
 
