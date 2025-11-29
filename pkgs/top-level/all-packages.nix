@@ -2631,8 +2631,6 @@ with pkgs;
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
-  ethercalc = callPackage ../servers/web-apps/ethercalc { };
-
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
   executor = with python3Packages; toPythonApplication executor;
