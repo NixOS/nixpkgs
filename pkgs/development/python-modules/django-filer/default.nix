@@ -34,7 +34,8 @@ buildPythonPackage rec {
     django
     django-polymorphic
     easy-thumbnails
-  ];
+  ]
+  ++ easy-thumbnails.optional-dependencies.svg;
 
   optional-dependencies = {
     heif = [ pillow-heif ];
