@@ -13656,8 +13656,6 @@ self: super: with self; {
 
   pylion = callPackage ../development/python-modules/pylion { };
 
-  pylit = callPackage ../development/python-modules/pylit { };
-
   pylitejet = callPackage ../development/python-modules/pylitejet { };
 
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };

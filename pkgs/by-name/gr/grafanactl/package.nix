@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tool designed to simplify interaction with Grafana instances";
     homepage = "https://github.com/grafana/grafanactl";
-    changelog = "https://github.com/grafana/grafanactl/tags/v${finalAttrs.version}";
+    changelog = "https://github.com/grafana/grafanactl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wcarlsen ];
     mainProgram = "grafanactl";
