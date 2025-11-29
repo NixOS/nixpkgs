@@ -1,0 +1,22 @@
+diff --git a/mhs/MHSPrelude.hs b/mhs/MHSPrelude.hs
+index c56e9174..92a26454 100644
+--- a/mhs/MHSPrelude.hs
++++ b/mhs/MHSPrelude.hs
+@@ -44,7 +44,7 @@ import qualified Prelude()
+ --import Primitives(primRnfNoErr, primRnfErr)
+ import Control.Applicative(Applicative(..))
+ import Control.DeepSeq.Class
+-import Control.Error(error, undefined, _error)
++import Control.Error(error, undefined)
+ import Control.Monad(Monad(..), mapM, mapM_, sequence, sequence_, (=<<))
+ import Control.Monad.Fail(MonadFail(..))
+ import Data.Bool(Bool(..), (&&), (||), not, otherwise)
+@@ -87,7 +87,7 @@ import Primitives(_wordSize, _isWindows)
+ import Data.Text(Text)
+ 
+ mhsError :: String -> a
+-mhsError = _error
++mhsError = error
+ 
+ -- So we can detect mhs vs ghc
+ _usingMhs :: Bool

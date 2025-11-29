@@ -145,15 +145,59 @@ in
       # with "native" and "gmp" backends.
       native-bignum =
         let
-          nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
-          );
+          isNativeBignumGhc =
+            name:
+            !(builtins.elem name nativeBignumExcludes) && !(compiler.${name} ? isMhs && compiler.${name}.isMhs);
+          nativeBignumGhcNames = pkgs.lib.filter isNativeBignumGhc (pkgs.lib.attrNames compiler);
         in
         pkgs.lib.recurseIntoAttrs (
           pkgs.lib.genAttrs nativeBignumGhcNames (
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
+
+      microhs-boot = callPackage ../development/compilers/microhs/boot.nix {
+        microhs-src = bb.compiler.microhs-0_14_15_0;
+      };
+
+      microhs-0_14_15_0 = callPackage ../development/compilers/microhs/0.14.15.0.nix {
+        inherit (bb.compiler) microhs-boot;
+      };
+
+      microhs-0_14_17_0 = callPackage ../development/compilers/microhs/0.14.17.0.nix {
+        inherit (bb.compiler) microhs-boot;
+      };
+
+      microhs-0_14_18_0 = callPackage ../development/compilers/microhs/0.14.18.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_17_0;
+      };
+
+      microhs-0_14_20_0 = callPackage ../development/compilers/microhs/0.14.20.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_17_0;
+      };
+
+      microhs-0_14_21_0 = callPackage ../development/compilers/microhs/0.14.21.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14_23_0 = callPackage ../development/compilers/microhs/0.14.23.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14_23_1 = callPackage ../development/compilers/microhs/0.14.23.1.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14_24_0 = callPackage ../development/compilers/microhs/0.14.24.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14_25_0 = callPackage ../development/compilers/microhs/0.14.25.0.nix {
+        microhs-boot = bb.compiler.microhs-0_14_18_0;
+      };
+
+      microhs-0_14 = compiler.microhs-0_14_25_0;
+      microhs = compiler.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
@@ -240,6 +284,72 @@ in
             buildHaskellPackages = bh.packages.native-bignum.${name};
           }
         );
+
+      microhs-0_14_15_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_15_0;
+        ghc = bh.compiler.microhs-0_14_15_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_17_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_17_0;
+        ghc = bh.compiler.microhs-0_14_17_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_18_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_18_0;
+        ghc = bh.compiler.microhs-0_14_18_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_20_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_20_0;
+        ghc = bh.compiler.microhs-0_14_20_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_21_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_21_0;
+        ghc = bh.compiler.microhs-0_14_21_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_23_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_23_0;
+        ghc = bh.compiler.microhs-0_14_23_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_23_1 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_23_1;
+        ghc = bh.compiler.microhs-0_14_23_1;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_24_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_24_0;
+        ghc = bh.compiler.microhs-0_14_24_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14_25_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs-0_14_25_0;
+        ghc = bh.compiler.microhs-0_14_25_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+
+      microhs-0_14 = packages.microhs-0_14_25_0;
+      microhs = packages.microhs-0_14;
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
