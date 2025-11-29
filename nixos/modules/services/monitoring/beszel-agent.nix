@@ -47,6 +47,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Static user required for D-Bus authentication and systemd monitoring.
+    # DynamicUser does not work reliably with D-Bus peer credential verification.
+    users.users.beszel-agent = {
+      isSystemUser = true;
+      group = "beszel-agent";
+    };
+
+    users.groups.beszel-agent = { };
+
     systemd.services.beszel-agent = {
       description = "Beszel Server Monitoring Agent";
 
@@ -74,15 +83,18 @@ in
 
         EnvironmentFile = cfg.environmentFile;
 
-        # adds ability to monitor docker/podman containers
+        # Adds ability to monitor docker/podman containers and systemd services.
+        # messagebus group is required for D-Bus system bus access to query systemd.
         SupplementaryGroups =
           lib.optionals config.virtualisation.docker.enable [ "docker" ]
           ++ lib.optionals (
             config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
-          ) [ "podman" ];
+          ) [ "podman" ]
+          ++ [ "messagebus" ];
 
-        DynamicUser = true;
+        DynamicUser = false;
         User = "beszel-agent";
+        Group = "beszel-agent";
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
