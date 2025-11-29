@@ -56,7 +56,7 @@ let
     hash = hashes.a;
   };
 
-  # Generates a file but tires to resolve via DNS first
+  # Generates a file but tries to resolve via DNS first
   resolver = pkgs.writeText "pinger.nix" ''
     derivation {
       name = "resolver";

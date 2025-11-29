@@ -9,13 +9,13 @@ in
     enable = lib.mkEnableOption "firewalling for outgoing traffic of the nix daemon";
 
     allowLoopback = lib.mkOption {
-      description = "Whether not not to allow traffic on the loopback interface. Traffic is still subject to protocol/port rules";
+      description = "Whether to allow traffic on the loopback interface. Traffic is still subject to protocol/port rules";
       default = false;
       example = true;
     };
 
     allowPrivateNetworks = lib.mkOption {
-      description = "Whether not not to allow traffic to local networks. Traffic is still subject to protocol/port rules. Note that this option may break DNS resolution when the DNS resolver is in a local network";
+      description = "Whether to allow traffic to local networks. Traffic is still subject to protocol/port rules. Note that this option may break DNS resolution when the DNS resolver is in a local network";
       default = true;
       example = false;
     };
@@ -136,6 +136,10 @@ in
           accept
         }
       }
+    '';
+    # Not supported by LKL yet so the ruleset check would fail
+    networking.nftables.preCheckRuleset = ''
+      sed -i 's/socket cgroupv2 level 2 @nix_daemon//g' ruleset.conf
     '';
   };
 }
