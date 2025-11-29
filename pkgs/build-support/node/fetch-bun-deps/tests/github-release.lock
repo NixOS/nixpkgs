@@ -1,0 +1,6 @@
+{
+  "lockfileVersion": 1,
+  "packages": {
+    "react": ["react@18.2.0", "", {}, null]
+  }
+}
