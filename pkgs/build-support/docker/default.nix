@@ -153,14 +153,18 @@ rec {
         os ? "linux",
         # Image architecture, defaults to the architecture of the `hostPlatform` when unset
         arch ? defaultArchitecture,
-        # This is used to set name to the pulled image
+        # Whether to save the image as an oci-archive with a digest, rather than as a docker-archive with a tag
+        ociArchive ? false,
+        # This is used to set a name for the pulled image
         finalImageName ? imageName,
-        # This used to set a tag to the pulled image
+        # This is used to set a tag for the pulled image, if `ociArchive` is false
         finalImageTag ? "latest",
         # This is used to disable TLS certificate verification, allowing access to http registries on (hopefully) trusted networks
         tlsVerify ? true,
 
-        name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar",
+        name ? fixName "docker-image-${finalImageName}-${
+          if ociArchive then imageDigest else finalImageTag
+        }.tar",
       }:
 
       runCommand name
@@ -177,19 +181,33 @@ rec {
           SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
           sourceURL = "docker://${imageName}@${imageDigest}";
-          destNameTag = "${finalImageName}:${finalImageTag}";
         }
-        ''
-          skopeo \
-            --insecure-policy \
-            --tmpdir=$TMPDIR \
-            --override-os ${os} \
-            --override-arch ${arch} \
-            copy \
-            --src-tls-verify=${lib.boolToString tlsVerify} \
-            "$sourceURL" "docker-archive://$out:$destNameTag" \
-            | cat  # pipe through cat to force-disable progress bar
-        ''
+        (
+          ''
+            skopeo \
+              --insecure-policy \
+              --tmpdir=$TMPDIR \
+              --override-os ${os} \
+              --override-arch ${arch} \
+              copy \
+              --preserve-digests=${lib.boolToString ociArchive} \
+              --src-tls-verify=${lib.boolToString tlsVerify} \
+              "$sourceURL" "${
+                if ociArchive then
+                  "oci-archive://$out:$imageName@$imageDigest"
+                else
+                  "docker-archive://$out:$imageName:$imageTag"
+              }" \
+              | cat  # pipe through cat to force-disable progress bar
+
+          ''
+          + lib.optionalString ociArchive ''
+            # ensure fetched archive is reproducible
+            mkdir "$TMPDIR/image"
+            tar -C "$TMPDIR/image" -xf $out
+            tar -C "$TMPDIR/image" -cf $out --sort=name --mtime='1970-01-01 UTC' --numeric-owner --owner=0 --group=0 --format=gnu .
+          ''
+        )
     );
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
