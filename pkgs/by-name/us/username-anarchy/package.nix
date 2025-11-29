@@ -3,33 +3,46 @@
   stdenv,
   fetchFromGitHub,
   ruby,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "username-anarchy";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
-    rev = "d5e653f0ab31d8d3fff79b2986f6ef9624d80fba";
     owner = "urbanadventurer";
     repo = "username-anarchy";
-    hash = "sha256-1he1FzNc6y7jm/UwedG81z5QGehh2qsd1QkAsIXwrag=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-46hl1ynA/nc2R70VHhOqbux6B2hwiJWs/sf0ZRwNFf0=";
   };
 
   buildInputs = [ ruby ];
 
   preInstall = ''
-    mkdir -p $out/bin
-    install -Dm 555 format-plugins.rb $out/bin/
-    install -Dm 555 username-anarchy $out/bin/
+    mkdir -p $out/bin $out/lib
+    install -Dm 555 format-plugins.rb $out/lib/
+    install -Dm 555 username-anarchy $out/lib/
+
+    ln -s $out/lib/username-anarchy $out/bin/username-anarchy
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/urbanadventurer/username-anarchy/";
     description = "Username generator tool for penetration testing";
-    license = licenses.mit;
-    maintainers = [ maintainers.akechishiro ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/adityatelange/evil-winrm-py/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      akechishiro
+      letgamer
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "username-anarchy";
   };
-}
+})
