@@ -11,12 +11,17 @@
 }:
 
 let
-  inherit (python3Packages) buildPythonApplication docutils pygobject3;
+  inherit (python3Packages)
+    buildPythonApplication
+    setuptools
+    docutils
+    pygobject3
+    ;
 in
 buildPythonApplication rec {
   pname = "arandr";
   version = "0.1.11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "arandr";
@@ -35,13 +40,15 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    docutils
     gsettings-desktop-schemas
     gtk3
+    xrandr
   ];
 
-  propagatedBuildInputs = [
-    xrandr
+  build-system = [ setuptools ];
+
+  dependencies = [
+    docutils
     pygobject3
   ];
 
