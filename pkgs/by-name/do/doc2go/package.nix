@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "doc2go";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "doc2go";
     rev = "v${version}";
-    hash = "sha256-vxGzDHTtA6GgyAq1bcXL1Jrn4H6ug/ZeHl+aWezOYGo=";
+    hash = "sha256-C6JxWViyOtEOfun8F4GODIXB6EdTonttxjAYi7dAdB8=";
   };
-  vendorHash = "sha256-GuBjImliR3iOthOL1/4AtH2ldf5AecYXPoexHGxm4zs=";
+  vendorHash = "sha256-nL85Plvf6I0nIe/gyXmyuRzjfCmrB6fFp1aO5Zz60hc=";
 
   ldflags = [
     "-s"
