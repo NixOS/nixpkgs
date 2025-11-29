@@ -10,6 +10,7 @@
 
   # dependencies
   aiohttp,
+  packaging,
 
   # tests
   ddt,
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp packaging ];
 
   pythonImportsCheck = [ "aioresponses" ];
 

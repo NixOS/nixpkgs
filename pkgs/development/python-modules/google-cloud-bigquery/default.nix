@@ -12,6 +12,7 @@
   google-cloud-core,
   google-resumable-media,
   grpcio,
+  packaging,
   proto-plus,
   protobuf,
   python-dateutil,
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     google-cloud-core
     google-resumable-media
     grpcio
+    packaging
     proto-plus
     protobuf
     python-dateutil
