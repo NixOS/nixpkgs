@@ -116,8 +116,6 @@ makeScopeWithSplicing' {
 
         lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-        openwith = callPackage ../os-specific/darwin/openwith { };
-
         trash = callPackage ../os-specific/darwin/trash { };
 
         inherit (self.file_cmds) xattr;

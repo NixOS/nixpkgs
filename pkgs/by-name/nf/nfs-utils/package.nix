@@ -16,7 +16,6 @@
   lvm2,
   systemd,
   coreutils,
-  tcp_wrappers,
   python3,
   buildPackages,
   nixosTests,
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     libuuid
     keyutils
     libkrb5
-    tcp_wrappers
     libxml2
   ]
   ++ lib.optional enablePython python3
