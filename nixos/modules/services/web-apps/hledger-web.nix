@@ -134,7 +134,7 @@ in
           "https://hledger.org/hledger-web.html"
         ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "networking.target" ];
+        after = [ "network.target" ];
         serviceConfig = mkMerge [
           {
             ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";

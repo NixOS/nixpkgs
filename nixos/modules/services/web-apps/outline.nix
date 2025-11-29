@@ -679,7 +679,7 @@ in
         description = "Outline wiki and knowledge base";
         wantedBy = [ "multi-user.target" ];
         after = [
-          "networking.target"
+          "network.target"
         ]
         ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
