@@ -47,7 +47,7 @@
   vala,
   gi-docgen,
   perl,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
   xorg,
   glib-networking,
@@ -79,7 +79,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.4";
+  version = "3.0.6";
 
   outputs = [
     "out"
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
+    hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
   };
 
   patches = [
@@ -112,13 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     # so we need to pick up the one from the package.
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
-    })
-
-    # Fix a crash that occurs when trying to pick a color for text outline
-    # TODO: remove after GIMP 3.2 is released, per https://gitlab.gnome.org/GNOME/gimp/-/issues/14047#note_2491655
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/1685c86af5d6253151d0056a9677ba469ea10164.diff";
-      hash = "sha256-Rb3ANXWki21thByEIWkBgWEml4x9Qq2HAIB9ho1bygw=";
     })
   ];
 
@@ -148,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream-glib # for library
+    appstream # for library
     babl
     cfitsio
     gegl
