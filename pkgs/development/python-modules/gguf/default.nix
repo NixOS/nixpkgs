@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -37,8 +38,12 @@ buildPythonPackage rec {
     numpy
     pyside6
     pyyaml
-    sentencepiece
     tqdm
+  ]
+  # Sentencepiece is optional and its inclusion crashes darwin
+  # See https://github.com/NixOS/nixpkgs/issues/466092
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    sentencepiece
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
