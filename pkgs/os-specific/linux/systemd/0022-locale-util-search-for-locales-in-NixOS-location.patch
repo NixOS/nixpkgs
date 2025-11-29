@@ -1,0 +1,34 @@
+From a34cbeed394225e8d9ce7d3962af6b12fc83f00c Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 21 Sep 2025 19:39:32 +0000
+Subject: [PATCH 2/2] locale-util: search for locales in NixOS location
+
+---
+ src/basic/locale-util.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/basic/locale-util.c b/src/basic/locale-util.c
+index e178a73c03..393a8cec7e 100644
+--- a/src/basic/locale-util.c
++++ b/src/basic/locale-util.c
+@@ -100,7 +100,7 @@ static int add_locales_from_archive(Set *locales) {
+         struct stat st;
+         int r;
+ 
+-        fd = open("/usr/lib/locale/locale-archive", O_RDONLY|O_NOCTTY|O_CLOEXEC);
++        fd = open("/run/current-system/sw/lib/locale/locale-archive", O_RDONLY|O_NOCTTY|O_CLOEXEC);
+         if (fd < 0)
+                 return errno == ENOENT ? 0 : -errno;
+ 
+@@ -164,7 +164,7 @@ static int add_locales_from_libdir(Set *locales) {
+         _cleanup_closedir_ DIR *dir = NULL;
+         int r;
+ 
+-        dir = opendir("/usr/lib/locale");
++        dir = opendir("/run/current-system/sw/lib/locale");
+         if (!dir)
+                 return errno == ENOENT ? 0 : -errno;
+ 
+-- 
+2.50.0
+
