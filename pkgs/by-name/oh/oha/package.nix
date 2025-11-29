@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   rust-jemalloc-sys,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,6 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # tests don't work inside the sandbox
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
