@@ -7,32 +7,33 @@
   pkgsBuildHost,
   openssl,
   pkg-config,
+  sqlx-cli,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
-  gurk-rs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.6.4";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${version}";
-    hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
+    hash = "sha256-BTplBpXn5Ekx+8EcGKEn6G1w7vx0n5xi0s/k/DPZ1qQ=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
+  cargoHash = "sha256-yStlstxw9t28iNJbGuyr1ScDLAtIkSljpnGeI/AZ5Qo=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
+    sqlx-cli
   ];
 
   buildInputs = [ openssl ];
@@ -43,6 +44,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
+
+  SQLX_OFFLINE = true;
 
   OPENSSL_NO_VENDOR = true;
 
@@ -64,6 +67,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [
+      devhell
+      mattkang
+    ];
   };
 }
