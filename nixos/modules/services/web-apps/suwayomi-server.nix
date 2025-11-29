@@ -218,7 +218,7 @@ in
 
         script = ''
           ${lib.optionalString cfg.settings.server.basicAuthEnabled ''
-            export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(<${cfg.settings.server.basicAuthPasswordFile})"
+            export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/TACHIDESK_SERVER_BASIC_AUTH_PASSWORD")"
           ''}
           ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/.local/share/Tachidesk/server.conf
           ${lib.getExe cfg.package} -Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}
@@ -232,6 +232,10 @@ in
           Restart = "on-failure";
 
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
+
+          LoadCredential = mkIf cfg.settings.server.basicAuthEnabled [
+            "TACHIDESK_SERVER_BASIC_AUTH_PASSWORD:${cfg.settings.server.basicAuthPasswordFile}"
+          ];
         };
       };
   };
