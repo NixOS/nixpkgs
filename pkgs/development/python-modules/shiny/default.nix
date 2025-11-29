@@ -110,7 +110,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     # ERROR: 'fixture' is not a valid asyncio_default_fixture_loop_scope.

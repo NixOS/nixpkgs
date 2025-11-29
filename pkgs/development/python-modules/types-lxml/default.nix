@@ -56,7 +56,7 @@ buildPythonPackage rec {
     typeguard
     urllib3
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "lxml-stubs" ];
 

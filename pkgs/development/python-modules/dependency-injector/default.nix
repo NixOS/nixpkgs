@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     scipy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "dependency_injector" ];
 

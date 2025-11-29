@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "avwx" ];
 

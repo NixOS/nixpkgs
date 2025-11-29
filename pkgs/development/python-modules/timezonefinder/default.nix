@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "timezonefinder" ];
 
