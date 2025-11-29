@@ -454,6 +454,7 @@ in
   dendrite = runTest ./matrix/dendrite.nix;
   dep-scan = runTest ./dep-scan.nix;
   dependency-track = runTest ./dependency-track.nix;
+  device-tree = import ./device-tree.nix { inherit pkgs runTestOn; };
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
   dhparams = runTest ./dhparams.nix;
