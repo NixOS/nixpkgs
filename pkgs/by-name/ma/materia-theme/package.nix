@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nana-4/materia-theme";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.mounium ];
   };
 }

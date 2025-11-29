@@ -150,9 +150,6 @@ mkDerivation rec {
     '';
     homepage = "https://digitalbitbox.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      vidbina
-    ];
     platforms = platforms.linux;
   };
 }

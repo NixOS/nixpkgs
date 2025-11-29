@@ -24,7 +24,6 @@ bundlerApp {
     homepage = "https://fastlane.tools/";
     license = licenses.mit;
     maintainers = with maintainers; [
-      peterromfeldhk
       nicknovitski
       shahrukh330
     ];

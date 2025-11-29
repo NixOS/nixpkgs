@@ -81,7 +81,6 @@ appimageTools.wrapAppImage {
     license = licenses.unfree;
     maintainers = with maintainers; [
       jshcmpbll
-      edmundmiller
       zh4ngx
     ];
     platforms = [ "x86_64-linux" ];

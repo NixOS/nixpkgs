@@ -162,7 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      masipcat
       zhaofengli
       armelclo
     ];

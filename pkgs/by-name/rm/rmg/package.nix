@@ -101,6 +101,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = if withAngrylionRdpPlus then lib.licenses.unfree else lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "RMG";
-    maintainers = with lib.maintainers; [ slam-bert ];
   };
 })

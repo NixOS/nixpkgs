@@ -74,7 +74,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [
-      ngiger
       nickcao
     ];
     platforms = [ "x86_64-linux" ];

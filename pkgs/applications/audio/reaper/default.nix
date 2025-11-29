@@ -151,7 +151,6 @@ stdenv.mkDerivation rec {
       atinba
       ilian
       orivej
-      uniquepointer
       viraptor
     ];
   };
