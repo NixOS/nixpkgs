@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "regex-tui";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "vitor-mariano";
     repo = "regex-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iBlvgFEjfyVL5kfI02UZ+gCLLSNMQte5xU9kcNby4GU=";
+    hash = "sha256-5KfFvyh134muAVSNEJHf2szYIT7OPs5SW0JQJlDWByQ=";
   };
 
-  vendorHash = "sha256-eYeMY+XYHgeFF18lKXhvJV7Xp2U/1afVETbJgaMJ7t8=";
+  vendorHash = "sha256-Abufbb6/gzZItfxSNKKxuuqTM/YsjDTpmKlBdBt2q+Y=";
 
   ldflags = [
     "-s"
