@@ -8,14 +8,14 @@
   rust-jemalloc-sys,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oha";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = "oha";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N52j8WYEVlmHQdr0HZJZZo92OhIz4V0R1SdaWlOD684=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
-    changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hatoo/oha/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "oha";
   };
-}
+})
