@@ -1,0 +1,63 @@
+diff --git a/base/inc/ImageIO.h b/base/inc/ImageIO.h
+index f93866c..046dacb 100644
+--- a/base/inc/ImageIO.h
++++ b/base/inc/ImageIO.h
+@@ -17,6 +17,7 @@
+ #define Force_ImageIO_H
+
+ #include <map>
++#include <string>
+
+ #include "Defines.h"
+
+diff --git a/base/inc/TestIO.h b/base/inc/TestIO.h
+index 7d28c32..08a9167 100644
+--- a/base/inc/TestIO.h
++++ b/base/inc/TestIO.h
+@@ -17,6 +17,7 @@
+ #define Force_TestIO_H
+
+ #include <map>
++#include <string>
+
+ #include "Defines.h"
+
+diff --git a/base/inc/VectorElementUpdates.h b/base/inc/VectorElementUpdates.h
+index ad397b2..dd5e39d 100644
+--- a/base/inc/VectorElementUpdates.h
++++ b/base/inc/VectorElementUpdates.h
+@@ -19,6 +19,7 @@
+ #include <set>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ #include "Defines.h"
+ 
+diff --git a/fpix/src/load_program_options.cc b/fpix/src/load_program_options.cc
+index 580fcf5..72571d8 100644
+--- a/fpix/src/load_program_options.cc
++++ b/fpix/src/load_program_options.cc
+@@ -14,6 +14,7 @@
+ // limitations under the License.
+ //
+ #include <algorithm>
++#include <cstdint>
+ #include <cstdlib>
+ #include <cstring>
+ #include <iostream>
+
+diff --git a/fpix/riscv/Makefile b/fpix/riscv/Makefile
+index b1968e4..de66339 100644
+--- a/fpix/riscv/Makefile
++++ b/fpix/riscv/Makefile
+@@ -21,7 +21,7 @@ ALL_SRCS := $(ALL_SRCS) $(SIM_SRCS)
+ OPTIMIZATION = -O2
+ include ../../utils/make/Makefile.common
+ 
+-INC_PATHS = -I./inc -I../inc -I../../base/inc -I../../3rd_party/inc -I../../utils/handcar -I$(PYTHON_INC)
++INC_PATHS = -iquote ./inc -iquote ../inc -iquote ../../base/inc -I../../3rd_party/inc -I../../utils/handcar -I$(PYTHON_INC)
+ 
+ CFLAGS := $(CFLAGS) -DUNIT_TEST
+ NODEPS:=clean
+
