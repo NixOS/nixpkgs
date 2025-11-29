@@ -240,6 +240,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
       "--enable-profiler" # build libprofiler_builtins
     ]
+    ++ optionals stdenv.targetPlatform.isDarwin [
+      # potentially other llvm targets work with the same fix?
+      "--enable-profiler" # build libprofiler_builtins
+      # Disable profiler for targets that don't support it
+      "--set=target.wasm32-unknown-unknown.profiler=false"
+      "--set=target.wasm32v1-none.profiler=false"
+      "--set=target.bpfel-unknown-none.profiler=false"
+      "--set=target.bpfeb-unknown-none.profiler=false"
+    ]
     ++ optionals stdenv.buildPlatform.isMusl [
       "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
     ]
