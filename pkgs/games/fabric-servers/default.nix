@@ -3,10 +3,9 @@
   lib,
 }:
 let
-  older = a: b: lib.versionOlder a.version b.version;
-  escapeVersion = builtins.replaceStrings [ "." ] [ "_" ];
+  escapeVersion = builtins.replaceString "." "_";
 
-  versions = builtins.sort older (lib.importJSON ./versions.json);
+  versions = builtins.sort (a: b: lib.versionOlder a.version b.version) (lib.importJSON ./versions.json);
   latest = lib.last versions;
 
   versions' = lib.listToAttrs (
