@@ -14,12 +14,12 @@
   neoVimSupport ? true,
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.3-unstable-2025-11-14";
+  version = "1.9.4-unstable-2025-11-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -82,7 +82,9 @@ python3Packages.buildPythonApplication {
       --replace "set preview_images false" "set preview_images true"
   '';
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "File manager with minimalistic curses interface";
