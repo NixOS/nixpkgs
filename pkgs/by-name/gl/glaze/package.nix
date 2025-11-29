@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (final: {
   pname = "glaze";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
     tag = "v${final.version}";
-    hash = "sha256-eBgcIhmezfYYaqBrKh6elbTMIQCUXd3W9TAuS/RDXcA=";
+    hash = "sha256-H1paMc0LH743aMHCO/Ocp96SaaoXLcl/MDmmbtSJG+Q=";
   };
 
   nativeBuildInputs = [ cmake ];
