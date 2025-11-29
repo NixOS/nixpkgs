@@ -37,14 +37,14 @@
 
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.1.10";
+    version = "2.2.20";
     src = fetchurl {
       url = oldAttrs.src.url;
-      sha256 = "sha256-xuniY2iJgo4ZyIEdWriQhiU4yJ3CoxAZVt/uPCqLprE=";
+      hash = "sha256-gfAmTJBztcu9s/+EGM8sXawHaHn8FW+hpkYvWlrMRCA=";
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef-17;
+  jbr = jetbrains.jdk-no-jcef;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -238,8 +238,8 @@ let
   };
 
   brokenPlugins = fetchurl {
-    url = "https://web.archive.org/web/20250509141038/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
-    hash = "sha256-FzYANZSTasCdVEu9jLF1+2PEH8SadUddaIaec5vhKH8=";
+    url = "https://web.archive.org/web/20251129133142/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-PUnSxLFkavhwrWNGyZmpy9IrKZ7F1TBeXqiB5VcM5tE=";
   };
 
 in
