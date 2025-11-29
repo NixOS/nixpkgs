@@ -49,5 +49,12 @@ symlinkJoin {
     ln -s ${gimp.man} $man
   '';
 
-  inherit (gimp) meta;
+  meta = gimp.meta // {
+    description = "${gimp.meta.description} with plugins";
+    longDescription = ''
+      Plugins:
+
+      ${lib.concatMapStringsSep "\n" (p: "- ${p.pname}") selectedPlugins}
+    '';
+  };
 }
