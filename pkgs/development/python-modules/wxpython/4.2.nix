@@ -53,9 +53,9 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./4.2-ctypes.patch {
-      libgdk = "${gtk3.out}/lib/libgdk-3.so";
-      libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
-      libcairo = "${cairo}/lib/libcairo.so";
+      libgdk = "${lib.getLib gtk3}/lib/libgdk-3${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libpangocairo = "${lib.getLib pango}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libcairo = "${lib.getLib cairo}/lib/libcairo${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
   ];
