@@ -30,11 +30,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
 
-  meta = with lib; {
+  meta = {
     description = "Exporter for systemd unit metrics";
     mainProgram = "systemd_exporter";
     homepage = "https://github.com/prometheus-community/systemd_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }
