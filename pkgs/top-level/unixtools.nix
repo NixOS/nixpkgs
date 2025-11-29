@@ -34,9 +34,12 @@ let
       provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manDir = "${getOutput "man" provider}/share/man";
+      pname = "${cmd}-${provider.pname}";
+      inherit (provider) version;
     in
-    runCommand "${cmd}-${provider.name}"
+    runCommand "${pname}-${version}"
       {
+        inherit pname version;
         meta = {
           mainProgram = cmd;
           priority = 10;
@@ -44,7 +47,6 @@ let
         };
         passthru = {
           inherit provider;
-          inherit (provider) version;
         }
         // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
           binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
@@ -71,10 +73,19 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${pkgs.less.name}" { } ''
-    mkdir -p $out/bin
-    ln -s ${pkgs.less}/bin/less $out/bin/more
-  '';
+  more_compat =
+    let
+      pname = "more-${pkgs.less.pname}";
+      version = pkgs.less.version;
+    in
+    runCommand "${pname}-${version}"
+      {
+        inherit pname version;
+      }
+      ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.less}/bin/less $out/bin/more
+      '';
 
   bins = mapAttrs singleBinary {
     # singular binaries
@@ -260,8 +271,7 @@ let
   makeCompat =
     pname: paths:
     buildEnv {
-      name = "${pname}-${version}";
-      inherit paths;
+      inherit paths pname version;
     };
 
   # Compatibility derivations
