@@ -10,7 +10,7 @@ let
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override { inherit (cfg) acceleration; };
 
-  staticUser = cfg.user != null && cfg.group != null;
+  staticUser = cfg.user != null;
 in
 {
   imports = [
