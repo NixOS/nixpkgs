@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # FIXME: Remove this after https://github.com/GRA0007/crab.fit/pull/341 is merged,
-  # or upstream bumps their locked version of 0.3 time to 0.3.36 or later
+  # or upstream bumps their locked version of 0.3 time to 0.3.36 or later.
+  # Note that the lockfile must be generated with this PR applied to the repo.
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
   '';
@@ -68,6 +69,12 @@ rustPlatform.buildRustPackage rec {
     description = "Enter your availability to find a time that works for everyone";
     homepage = "https://github.com/GRA0007/crab.fit";
     license = lib.licenses.gpl3;
+    knownVulnerabilities = [
+      "CVE-2022-35737"
+      "CVE-2024-32650"
+      "CVE-2024-12224"
+      "and 6+ others"
+    ];
     maintainers = [ ];
     mainProgram = "crabfit-api";
   };
