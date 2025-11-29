@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.2.1";
+  version = "7.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
-    hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
+    hash = "sha256-/FEwNeNydhdW4xCKmLhh9tkXGcUAhO+D5N/b9pY6jh4=";
   };
   patches = [
     (fetchpatch {
