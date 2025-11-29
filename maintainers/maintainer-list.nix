@@ -8832,6 +8832,12 @@
     githubId = 92793;
     name = "Friedrich von Never";
   };
+  Fovir = {
+    email = "fovir@disroot.org";
+    github = "Fovir-GitHub";
+    githubId = 175422207;
+    name = "Fovir";
+  };
   fpletz = {
     email = "fpletz@fnordicwalking.de";
     github = "fpletz";
