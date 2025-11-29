@@ -60,12 +60,7 @@ python3Packages.buildPythonApplication {
     ))
   ];
 
-  preConfigure = ''
-    ${lib.optionalString (highlight != null) ''
-      sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
-        ranger/data/scope.sh
-    ''}
-
+  postPatch = ''
     substituteInPlace ranger/__init__.py \
       --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
@@ -73,6 +68,10 @@ python3Packages.buildPythonApplication {
     substituteInPlace ranger/config/rc.conf \
       --replace /usr/share $out/share \
       --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+  ''
+  + lib.optionalString (highlight != null) ''
+    sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
+      ranger/data/scope.sh
   ''
   + lib.optionalString imagePreviewSupport ''
     substituteInPlace ranger/ext/img_display.py \
