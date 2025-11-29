@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -61,7 +62,8 @@ buildPythonPackage rec {
     opencv = [
       opencv-python-headless
     ];
-    sentencepiece = [
+    # Broken on Darwin. See https://github.com/NixOS/nixpkgs/issues/466092
+    sentencepiece = lib.optionals (!stdenv.hostPlatform.isDarwin) [
       sentencepiece
     ];
     soundfile = [
@@ -97,7 +99,7 @@ buildPythonPackage rec {
     soxr
     uvicorn
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Require internet
@@ -110,6 +112,20 @@ buildPythonPackage rec {
 
     # AssertionError, Extra items in the right set
     "test_openai_chat_fields"
+  ];
+
+  # Requires sentencepiece which segfaults when initialized on Darwin
+  # See https://github.com/NixOS/nixpkgs/issues/466092
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/experimental/test_app.py"
+    "tests/experimental/test_tools.py"
+    "tests/test_fim_tokenizer.py"
+    "tests/test_integration_samples.py"
+    "tests/test_mistral_tokenizer.py"
+    "tests/test_tokenize_v1.py"
+    "tests/test_tokenize_v2.py"
+    "tests/test_tokenize_v3.py"
+    "tests/test_tokenizer_v7.py"
   ];
 
   meta = {
