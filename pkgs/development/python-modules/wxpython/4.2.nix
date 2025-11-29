@@ -4,11 +4,13 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
+  fetchpatch,
   replaceVars,
 
   # build
   autoPatchelfHook,
   attrdict,
+  cython,
   doxygen,
   pkg-config,
   python,
@@ -48,13 +50,12 @@
 
 buildPythonPackage rec {
   pname = "wxpython";
-  version = "4.2.3";
+  version = "4.2.4";
   format = "other";
 
   src = fetchPypi {
-    pname = "wxPython";
-    inherit version;
-    hash = "sha256-INbgySfifO2FZDcZvWPp9/1QHfbpqKqxSJsDmJf9fAE=";
+    inherit pname version;
+    hash = "sha256-LrEjl5yHvLMp6KJFImnWD/j59lHpvyXGdXnlPE67rjw=";
   };
 
   patches = [
@@ -64,6 +65,13 @@ buildPythonPackage rec {
       libcairo = "${lib.getLib cairo}/lib/libcairo${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
+    # TODO: drop when updating beyond version 4.2.4
+    # https://github.com/wxWidgets/Phoenix/pull/2822
+    (fetchpatch {
+      name = "Fix-wx.svg-to-work-with-cython-3.1-generated-code.patch";
+      url = "https://github.com/wxWidgets/Phoenix/commit/31303649ab0a0fed0789e0951a7487d172b65bfa.patch";
+      hash = "sha256-OAnAsyqHGPNEAiOxLLpdEGcd92K7TCxqEBYceuIb8so=";
+    })
   ];
 
   # https://github.com/wxWidgets/Phoenix/issues/2575
@@ -76,6 +84,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     attrdict
+    cython
     pkg-config
     requests
     setuptools
