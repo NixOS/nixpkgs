@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svls";
-  version = "0.2.13";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "svls";
     rev = "v${version}";
-    sha256 = "sha256-kxsB7il2KKjxSUoA+e6tSNQHwGGVO4UB/mAfnDPjb0c=";
+    sha256 = "sha256-dLAlXsvUno6bx67A3knevo0ZRBMNOlWW3CmNfgCgha4=";
   };
 
-  cargoHash = "sha256-2SOCv8xeaRVlpJrBd9po5KgNY7ZSraw4UNsE0gRTbLs=";
+  cargoHash = "sha256-7q6VeMjnDE4N35Kk6w4T9Za2VquibuvitGVWTvHvvgs=";
 
   meta = with lib; {
     description = "SystemVerilog language server";
