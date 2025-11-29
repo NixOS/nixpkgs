@@ -1,0 +1,76 @@
+diff -ur source/usr/bs_glfs.c source.hack/usr/bs_glfs.c
+--- source/usr/bs_glfs.c	1970-01-01 01:00:01.000000000 +0100
++++ source.hack/usr/bs_glfs.c	2025-09-06 21:31:31.694360700 +0100
+@@ -110,7 +110,7 @@
+ 			break;
+ 		}
+ 
+-		ret = glfs_pread(gfd, tmpbuf, length, offset, lu->bsoflags);
++		ret = glfs_pread(gfd, tmpbuf, length, offset, lu->bsoflags, NULL);
+ 
+ 		if (ret != length) {
+ 			set_medium_error(&result, &key, &asc);
+@@ -147,7 +147,7 @@
+ 			break;
+ 		}
+ 
+-		ret = glfs_pread(gfd, tmpbuf, length, offset, SEEK_SET);
++		ret = glfs_pread(gfd, tmpbuf, length, offset, SEEK_SET, NULL);
+ 
+ 		if (ret != length) {
+ 			set_medium_error(&result, &key, &asc);
+@@ -190,7 +190,7 @@
+ 			key = ILLEGAL_REQUEST;
+ 			asc = ASC_INVALID_FIELD_IN_CDB;
+ 		} else {
+-			glfs_fdatasync(gfd);
++			glfs_fdatasync(gfd, NULL, NULL);
+ 		}
+ 		break;
+ 	case WRITE_VERIFY:
+@@ -204,7 +204,7 @@
+ 		length = scsi_get_out_length(cmd);
+ 		write_buf = scsi_get_out_buffer(cmd);
+ write:
+-		ret = glfs_pwrite(gfd, write_buf, length, offset, lu->bsoflags);
++		ret = glfs_pwrite(gfd, write_buf, length, offset, lu->bsoflags, NULL, NULL);
+ 
+ 		if (ret == length) {
+ 			struct mode_pg *pg;
+@@ -222,7 +222,7 @@
+ 			}
+ 			if (((cmd->scb[0] != WRITE_6) && (cmd->scb[1] & 0x8)) ||
+ 			    !(pg->mode_data[0] & 0x04))
+-				glfs_fdatasync(gfd);
++				glfs_fdatasync(gfd, NULL, NULL);
+ 		} else
+ 			set_medium_error(&result, &key, &asc);
+ 
+@@ -258,7 +258,7 @@
+ 			}
+ 
+ 			ret = glfs_pwrite(gfd, tmpbuf, blocksize,
+-					offset, lu->bsoflags);
++					offset, lu->bsoflags, NULL, NULL);
+ 
+ 			if (ret != blocksize)
+ 				set_medium_error(&result, &key, &asc);
+@@ -273,7 +273,7 @@
+ 	case READ_16:
+ 		length = scsi_get_in_length(cmd);
+ 		ret = glfs_pread(gfd, scsi_get_in_buffer(cmd),
+-				length, offset, SEEK_SET);
++				length, offset, SEEK_SET, NULL);
+ 
+ 		if (ret != length) {
+ 			eprintf("Error on read %x %x", ret, length);
+@@ -299,7 +299,7 @@
+ 			break;
+ 		}
+ 
+-		ret = glfs_pread(gfd, tmpbuf, length, offset, lu->bsoflags);
++		ret = glfs_pread(gfd, tmpbuf, length, offset, lu->bsoflags, NULL);
+ 
+ 		if (ret != length)
+ 			set_medium_error(&result, &key, &asc);
+
