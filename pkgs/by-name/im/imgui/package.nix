@@ -14,6 +14,8 @@
   vulkan-headers,
   vulkan-loader,
   imgui,
+  xorg,
+  wayland,
 
   # NOTE: Not coming from vcpkg
   IMGUI_LINK_GLVND ?
@@ -72,7 +74,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imgui";
-  version = "1.91.4";
+  version = "1.92.3";
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     owner = "ocornut";
     repo = "imgui";
     tag = "v${version}";
-    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
+    hash = "sha256-J+h7jJ+4wqr6RivtzyTDMXKxFoGs7dQbzqdu51XgEbc=";
   };
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
@@ -92,7 +94,13 @@ stdenv.mkDerivation rec {
     cp "$cmakeRules"/{CMakeLists.txt,*.cmake.in} ./
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXrandr
+    wayland
+  ];
 
   propagatedBuildInputs =
     lib.optionals IMGUI_LINK_GLVND [ libGL ]
