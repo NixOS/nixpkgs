@@ -12,6 +12,7 @@
 
 stdenv.mkDerivation {
   unwrapped = clang-unwrapped;
+  pyscripts = clang-unwrapped.python;
 
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
@@ -22,6 +23,12 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
+
+    for script in $pyscripts/share/clang/*; do
+      if [[ -x "$script" ]]; then
+        ln -s $script $out/bin/$(basename "$script")
+      fi
+    done
 
     for tool in $unwrapped/bin/clang-*; do
       tool=$(basename "$tool")
