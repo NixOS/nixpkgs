@@ -485,6 +485,13 @@
     githubId = 2321000;
     name = "Ruslan Babayev";
   };
+  abus-sh = {
+    email = "git@abus.sh";
+    github = "abus-sh";
+    githubId = 58699376;
+    name = "Abus";
+    keys = [ { fingerprint = "E067 7933 2AD2 D3D2 2498  9136 5CA4 ADDB 1AE3 1E49"; } ];
+  };
   abustany = {
     email = "adrien@bustany.org";
     github = "abustany";
