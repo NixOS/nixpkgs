@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topiary";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IhNgR73CgfUf84yEUfDKmGTXFM9cQYBbwVdmfr02PAM=";
+    hash = "sha256-9jBgZd8RD/yhxoqOIh1yYd8brnmcLcybgQQeMPOCvj0=";
   };
 
-  cargoHash = "sha256-R1t8AZsIztsLlpP+Gmaolg+HydfuQL/9mCuHfKq/njA=";
+  cargoHash = "sha256-opNXJqR+q/f7ip6CWZ+QCdmDHvDFH/WVAwCnwZGVQKk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

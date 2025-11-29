@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg,
+  ffmpeg_7,
   libaom,
   nasm,
   nix-update-script,
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     vapoursynth
   ];
 

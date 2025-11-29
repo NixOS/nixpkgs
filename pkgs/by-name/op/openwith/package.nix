@@ -6,7 +6,7 @@
 
 let
   inherit (swiftPackages) stdenv swift;
-  arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64";
+  inherit (stdenv.hostPlatform) darwinArch;
 in
 stdenv.mkDerivation {
   pname = "openwith";
@@ -21,11 +21,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ swift ];
 
-  makeFlags = [ "openwith_${arch}" ];
+  makeFlags = [ "openwith_${darwinArch}" ];
 
   installPhase = ''
     runHook preInstall
-    install openwith_${arch} -D $out/bin/openwith
+    install openwith_${darwinArch} -D $out/bin/openwith
     runHook postInstall
   '';
 

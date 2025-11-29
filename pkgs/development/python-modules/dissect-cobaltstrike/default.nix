@@ -13,7 +13,6 @@
   pyshark,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -72,6 +69,12 @@ buildPythonPackage rec {
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
+
+  disabledTests = [
+    # Don't run tests with a beacon
+    "test_c2profile_beacon_gate"
+    "test_beacon_dump_guardrails"
+  ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
