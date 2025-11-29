@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   django-polymorphic,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "django-filer";
   version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django-cms";
