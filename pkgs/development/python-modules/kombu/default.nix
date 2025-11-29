@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.5.4";
+  version = "5.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iGYAFoJ16+rak7iI6DE1L+V4FoNC8NHVgz2Iug2Ec2M=";
+    hash = "sha256-kPH+u1etT1PKMnqHWYGRslIODHk8deo7iNmOOxESguQ=";
   };
 
   build-system = [ setuptools ];
