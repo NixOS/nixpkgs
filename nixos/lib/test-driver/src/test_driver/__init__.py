@@ -115,9 +115,9 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
-        "--dump-vsocks",
+        "--enable-ssh-backdoor",
         help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        type=int,
+        action="store_true",
     )
 
     args = arg_parser.parse_args()
@@ -147,9 +147,10 @@ def main() -> None:
         args.keep_vm_state,
         args.global_timeout,
         debug=debugger,
+        enable_ssh_backdoor=args.enable_ssh_backdoor,
     ) as driver:
-        if offset := args.dump_vsocks:
-            driver.dump_machine_ssh(offset)
+        if args.enable_ssh_backdoor:
+            driver.dump_machine_ssh()
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")

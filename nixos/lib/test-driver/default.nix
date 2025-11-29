@@ -11,6 +11,7 @@
   ruff,
   tesseract4,
   vde2,
+  vhost-device-vsock,
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
@@ -43,6 +44,7 @@ python3Packages.buildPythonApplication {
     qemu_pkg
     socat
     vde2
+    vhost-device-vsock
   ]
   ++ lib.optionals enableOCR [
     imagemagick_light
