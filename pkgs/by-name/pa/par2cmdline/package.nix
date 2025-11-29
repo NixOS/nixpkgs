@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -30,4 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.all;
   };
+
+  passthru.updateScript = nix-update-script { };
 }
