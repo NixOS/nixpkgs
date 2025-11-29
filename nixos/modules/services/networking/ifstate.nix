@@ -144,6 +144,14 @@ in
   };
 
   config = lib.mkMerge [
+    (lib.mkIf (cfg.enable || initrdCfg.enable) {
+      # sane defaults to not let IfState work against the kernel
+      boot.extraModprobeConfig = ''
+        options bonding max_bonds=0
+        options dummy numdummies=0
+        options ifb numifbs=0
+      '';
+    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -157,13 +165,6 @@ in
       ];
 
       networking.useDHCP = lib.mkDefault false;
-
-      # sane defaults to not let IfState work against the kernel
-      boot.extraModprobeConfig = ''
-        options bonding max_bonds=0
-        options dummy numdummies=0
-        options ifb numifbs=0
-      '';
 
       environment = {
         # ifstatecli command should be available to use user, there are other useful subcommands like check or show
