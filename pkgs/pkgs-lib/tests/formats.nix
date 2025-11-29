@@ -1080,4 +1080,96 @@ runBuildTests {
       </dict>
       </plist>'';
   };
+
+  ronAtoms = shouldPass (
+    let
+      format = formats.ron { };
+    in
+    {
+      inherit format;
+      input = {
+        false = false;
+        true = true;
+        int = 10;
+        float = 3.141;
+        str = "foo";
+        attrs.foo = lib.ron.mkOptional null;
+        list = [
+          1
+          2
+          3
+        ];
+        char = lib.ron.mkChar "a";
+        optional_some = lib.ron.mkOptional 42;
+        optional_none = lib.ron.mkOptional null;
+        enum_simple = lib.ron.mkEnum { variant = "Red"; };
+        enum_tuple = lib.ron.mkEnum {
+          variant = "Point";
+          values = [
+            10
+            20
+          ];
+        };
+        tuple = lib.ron.mkTuple [
+          1
+          "hello"
+          true
+        ];
+        named_struct = lib.ron.mkNamedStruct {
+          name = "Point";
+          value = {
+            x = 10;
+            y = 20;
+          };
+        };
+        map = lib.ron.mkMap [
+          {
+            key = "a";
+            value = 1;
+          }
+          {
+            key = "b";
+            value = 2;
+          }
+        ];
+        raw = lib.ron.mkRaw "CustomValue";
+      };
+      expected = ''
+        (
+            attrs: (
+                foo: None,
+            ),
+            char: 'a',
+            enum_simple: Red,
+            enum_tuple: Point(10, 20),
+            false: false,
+            float: 3.141,
+            int: 10,
+            list: [
+                1,
+                2,
+                3,
+            ],
+            map: {
+                "a": 1,
+                "b": 2,
+            },
+            named_struct: Point(
+                x: 10,
+                y: 20,
+            ),
+            optional_none: None,
+            optional_some: Some(42),
+            raw: CustomValue,
+            str: "foo",
+            true: true,
+            tuple: (
+                1,
+                "hello",
+                true,
+            ),
+        )
+      '';
+    }
+  );
 }
