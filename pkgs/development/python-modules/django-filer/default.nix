@@ -49,6 +49,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://github.com/django-cms/django-filer/blob/${src.tag}/CHANGELOG.rst";
     description = "File management application for Django";
     homepage = "https://github.com/django-cms/django-filer";
     license = lib.licenses.mit;
