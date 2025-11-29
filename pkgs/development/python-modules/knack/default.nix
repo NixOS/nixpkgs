@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cfKmtCrpowLkMkMyD6Be2wmxkzn88fMx9bbQe/l/UpE=";
+    hash = "sha256-3aNbT/TFdrJQGhjw7C8v4KOl+czoJl1AZtMR5e1LW8Y=";
   };
 
   propagatedBuildInputs = [
