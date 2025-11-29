@@ -5,8 +5,9 @@
   qtbase,
   qtsvg,
   qtwayland,
-  nixosTests,
   wrapQtAppsHook,
+  gitUpdater,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -61,7 +62,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "maestral_qt" ];
 
-  passthru.tests.maestral = nixosTests.maestral;
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+      rev-prefix = "v";
+    };
+    tests.maestral = nixosTests.maestral;
+  };
 
   meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
