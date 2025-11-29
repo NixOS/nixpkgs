@@ -1,0 +1,48 @@
+--- a/plugins/SimpleVerb/CMakeLists.txt
++++ b/plugins/SimpleVerb/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(SimpleVerb
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+ 
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "SimpleVerb"
+   DESCRIPTION "SimpleVerb"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/StereoEnhancer/CMakeLists.txt
++++ b/plugins/StereoEnhancer/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(StereoEnhancer
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+ 
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "StereoEnhancer"
+   DESCRIPTION "StereoEnhancer"
+   PLUGIN_MANUFACTURER_CODE "Soca"
+--- a/plugins/StereoProcessor/CMakeLists.txt
++++ b/plugins/StereoProcessor/CMakeLists.txt
+@@ -12,12 +12,7 @@ juce_add_plugin(StereoProcessor
+   COMPANY_WEBSITE "www.socalabs.com"
+   COMPANY_EMAIL "info@socalabs.com"
+ 
+-  FORMATS
+-    "VST3"
+-    "AU"
+-    "Standalone"
+-    "VST"
+-    "LV2"
++  FORMATS "${PLUGIN_FORMATS}"
+   PLUGIN_NAME "StereoProcessor"
+   DESCRIPTION "StereoProcessor"
+   PLUGIN_MANUFACTURER_CODE "Soca"
