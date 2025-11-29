@@ -103,6 +103,9 @@ buildPythonPackage rec {
     "test_socket_disabled"
   ];
 
+  # Bulk updater selects wrong tag (there is no tag for this yet)
+  passthru.skipBulkUpdate = true;
+
   pythonImportsCheck = [ "langchain_classic" ];
 
   meta = {
