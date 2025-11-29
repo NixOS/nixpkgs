@@ -42,13 +42,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             which
           ]
         } \
-        --set JAVA_HOME ${openjdk11}
+        --set JAVA_HOME ${openjdk11} \
+        --run '
+          if [ ! -v NEO4J_HOME ]; then
+            echo "error: NEO4J_HOME must be set!" >&2
+            exit 1
+          fi'
     done
 
     runHook postInstall
   '';
 
+  env.NEO4J_HOME = "/tmp/neo4j";
+
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "NEO4J_HOME" ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
