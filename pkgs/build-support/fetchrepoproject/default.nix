@@ -4,6 +4,9 @@
   gitRepo,
   cacert,
   copyPathsToStore,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 lib.fetchers.withNormalizedHash { } (
   {
@@ -58,6 +61,7 @@ lib.fetchers.withNormalizedHash { } (
     inherit
       cacert
       manifest
+      preferLocalBuild
       rev
       repoRepoURL
       repoRepoRev
@@ -67,7 +71,6 @@ lib.fetchers.withNormalizedHash { } (
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";
 
-    preferLocalBuild = true;
     enableParallelBuilding = true;
 
     impureEnvVars = fetchers.proxyImpureEnvVars ++ [

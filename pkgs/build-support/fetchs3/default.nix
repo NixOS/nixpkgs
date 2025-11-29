@@ -2,6 +2,9 @@
   lib,
   runCommand,
   awscli,
+
+  # Used in `pkgs/build-support/prefer-remote-fetch/default.nix`
+  preferLocalBuild ? true,
 }:
 lib.fetchers.withNormalizedHash { } (
   {
@@ -35,10 +38,8 @@ lib.fetchers.withNormalizedHash { } (
       {
         nativeBuildInputs = [ awscli ];
 
-        inherit outputHash outputHashAlgo;
+        inherit outputHash outputHashAlgo preferLocalBuild;
         outputHashMode = if recursiveHash then "recursive" else "flat";
-
-        preferLocalBuild = true;
 
         AWS_DEFAULT_REGION = region;
       }
