@@ -1,35 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  cython_0,
-  oldest-supported-numpy,
+  cython,
+  gcc,
   setuptools,
-  fetchPypi,
+  fetchFromGitHub,
   mock,
   numpy,
   scipy,
   smart-open,
   pyemd,
   pytestCheckHook,
-  pythonOlder,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.3.3";
+  version = "4.4.0";
   pyproject = true;
 
-  # C code generated with CPython3.12 does not work cython_0.
-  disabled = !(pythonOlder "3.12");
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hIUgdqaj2I19rFviReJMIcO4GbVl4UwbYfo+Xudtz1c=";
+  src = fetchFromGitHub {
+    owner = "piskvorky";
+    repo = "gensim";
+    tag = "${version}";
+    hash = "sha256-TXutcU43ReBj9ss9+zBJFUxb5JqVHpl+B0c7hqcJAJY=";
   };
 
   build-system = [
-    cython_0
-    oldest-supported-numpy
+    cython
     setuptools
   ];
 
@@ -43,18 +41,31 @@ buildPythonPackage rec {
     mock
     pyemd
     pytestCheckHook
+    testfixtures
   ];
 
-  pythonRelaxDeps = [
-    "scipy"
+  # Build Cython extensions, required during checkPhase
+  preBuild = ''
+    python setup.py build_ext --inplace
+  '';
+
+  nativeBuildInputs = [
+    cython
+    gcc
   ];
 
   pythonImportsCheck = [ "gensim" ];
 
-  # Test setup takes several minutes
-  doCheck = false;
-
   enabledTestPaths = [ "gensim/test" ];
+
+  # test_parallel is flaky under load
+  disabledTests = [ "test_parallel" ];
+
+  preCheck = ''
+    export GENSIM_DATA_DIR="$NIX_BUILD_TOP/gensim-data"
+    mkdir -p "$GENSIM_DATA_DIR"
+    export SKIP_NETWORK_TESTS=1
+  '';
 
   meta = with lib; {
     description = "Topic-modelling library";
