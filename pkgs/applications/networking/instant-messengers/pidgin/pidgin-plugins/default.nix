@@ -38,6 +38,8 @@ lib.makeScope newScope (
 
     pidgin-window-merge = callPackage ./window-merge { };
 
+    pidgin-msn-pecan-crosstalk = callPackage ./pidgin-msn-pecan-crosstalk { };
+
     purple-discord = callPackage ./purple-discord { };
 
     purple-googlechat = callPackage ./purple-googlechat { };
