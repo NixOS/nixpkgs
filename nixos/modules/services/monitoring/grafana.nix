@@ -2045,7 +2045,7 @@ in
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "networking.target"
+        "network.target"
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";

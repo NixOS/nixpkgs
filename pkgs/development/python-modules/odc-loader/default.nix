@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for constructing xarray objects from parsed metadata";
     homepage = "https://github.com/opendatacube/odc-loader/";
-    changelog = "https://github.com/opendatacube/odc-loader/tag/${version}";
+    changelog = "https://github.com/opendatacube/odc-loader/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
