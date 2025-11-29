@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "benthos";
-  version = "4.57.1";
+  version = "4.61.0";
 
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "benthos";
     tag = "v${version}";
-    hash = "sha256-OiXdeoxaik+ynoLSR/fWieLIhcx5Y/G1fY2aTL2yBFM=";
+    hash = "sha256-6FhQIAnIDBN3noPYXtAJCzjRdit/g2LRyYnR5Aw/w8w=";
   };
 
   proxyVendor = true;
@@ -22,7 +22,7 @@ buildGoModule rec {
     "cmd/benthos"
   ];
 
-  vendorHash = "sha256-g1jqVJfpH2EsTYoXMGp0HiUEqKlprgMYqmzecGWKmoo=";
+  vendorHash = "sha256-LyNaJ7Xn4O5c/UQHiBD7cOdu2ADlsMk2+76/59TARK4=";
 
   #  doCheck = false;
 
