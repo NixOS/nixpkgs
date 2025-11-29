@@ -1,0 +1,15 @@
+diff --git a/build.sh b/build.sh
+index f3a86446..eec9590c 100755
+--- a/build.sh
++++ b/build.sh
+@@ -102,9 +102,7 @@ function make_build_file() {
+ 		local build_data="$target $build_time by ${USER}@${HOST}"
+ 	fi
+ 
+-        # TODO: handle case where build is not in a git repo
+-	# TODO: use -redef-field instead of generating a build file
+-        REVS="$(git rev-list --count HEAD)"
++        REVS=$(< REVS)
+ 	echo "var unused__ = (Version.buildData = \"$build_data\", Version.minorVersion = $REVS);" > $build_file
+ 
+ 	echo $build_file
