@@ -5,6 +5,7 @@
   installShellFiles,
   scdoc,
   makeWrapper,
+  nix-update-script,
 
   # Script dependencies.
   fzf,
@@ -14,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "license-cli";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "license";
     rev = version;
-    hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
+    hash = "sha256-jXhWktTwqVXrCFUVX8qnVoS7n4KkR9S6c/G8QpyU3VA=";
   };
 
-  cargoHash = "sha256-Jvg3XndPyQ9TYejJaO7GAI9RwLAOWB0uapA+6WIKAkI=";
+  cargoHash = "sha256-6P7QcshuZp3b+d0IYW8+M2TsBfvzGjVwkqZ1Gqa5SuI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage rec {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~zethra/license";
