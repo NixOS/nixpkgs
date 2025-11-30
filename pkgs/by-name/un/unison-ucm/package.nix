@@ -69,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set UCM_WEB_UI "$out/ui"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
