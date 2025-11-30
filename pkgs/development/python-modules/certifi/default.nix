@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "certifi";
     repo = "python-certifi";
-    rev = version;
+    tag = version;
     hash = "sha256-Z3SzL5IMfyb4zK6uxaNosrZfMs32cle5ATDPJI+6uEY=";
   };
 
