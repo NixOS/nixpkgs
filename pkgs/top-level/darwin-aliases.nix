@@ -94,8 +94,6 @@ in
 
 stubs
 // mapAliases {
-  apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
-  builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # Added 2023-07-06
   bsdmake = pkgs.bmake; # Added 2024-10-03
   cctools = pkgs.cctools; # Added 2024-07-17
   cctools-apple = pkgs.cctools; # Added 2024-07-01
@@ -103,21 +101,13 @@ stubs
   cctools-port = pkgs.cctools; # Added 2024-07-17
   discrete-scroll = pkgs.discrete-scroll; # Added 2024-11-27
   ditto = throw "'darwin.ditto' has been removed, because it was impure and unused"; # Added 2025-10-18
-  insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # Added 2024-04-04
-  ios-deploy = throw "'darwin.ios-deploy' has been renamed to 'ios-deploy'"; # Added 2024-11-28
   iproute2mac = lib.warnOnInstantiate "darwin.iproute2mac has been renamed to iproute2mac" pkgs.iproute2mac; # Added 2024-12-08
-  libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # Added 2024-05-10
   libresolvHeaders = throw "darwin.libresolvHeaders has been removed; use `lib.getInclude darwin.libresolv`"; # Converted to throw 2025-07-29
   libtapi = pkgs.libtapi; # Added 2024-08-16
   libutilHeaders = throw "darwin.libutilHeaders has been removed; use `lib.getInclude darwin.libutil`"; # Converted to throw 2025-07-29
   moltenvk = pkgs.moltenvk; # Added 2024-10-06
   opencflite = pkgs.opencflite; # Added 2024-05-02
   openwith = pkgs.openwith; # Added 2025-11-28
-  postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # Added 2025-02-23
-  print-reexports = throw "'darwin.print-reexports' has been removed as it was unused"; # Added 2025-04-20
-  rewrite-tbd = throw "'darwin.rewrite-tbd' has been removed, as it was unused and replaced by `llvm-readtapi(1)`"; # Added 2025-04-20
   stdenvNoCF = throw "darwin.stdenvNoCF has been removed; use `stdenv` or `stdenvNoCC`"; # Converted to throw 2025-07-29
-  stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # Added 2025-04-20
   sudo = throw "'darwin.sudo' has been removed, because it was impure and unused"; # Added 2025-10-18
-  swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # Added 2025-04-20
 }
