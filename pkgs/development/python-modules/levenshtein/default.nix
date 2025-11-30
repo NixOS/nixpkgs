@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.27.1";
+  version = "0.27.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "Levenshtein";
     tag = "v${version}";
-    hash = "sha256-EFEyP7eqB4sUQ2ksD67kCr0BEShTiKWbk1PxXOUOGc4=";
+    hash = "sha256-iKWS7gm0t3yPgeX5N09cTa3N1C6GXvIALueO8DlfLfE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.12,<3.1.0" Cython
+      --replace-fail "Cython>=3.1.6,<3.2.0" Cython
   '';
 
   build-system = [
