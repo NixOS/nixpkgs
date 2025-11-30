@@ -17501,6 +17501,12 @@
     githubId = 14153763;
     name = "modderme123";
   };
+  mofrim = {
+    email = "mofrim@posteo.de";
+    github = "mofrim";
+    githubId = 46672819;
+    name = "mofrim";
+  };
   mog = {
     email = "mog-lists@rldn.net";
     github = "mogorman";
