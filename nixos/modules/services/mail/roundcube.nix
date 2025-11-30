@@ -8,6 +8,15 @@ let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
+  mysqlLocal = localDB && cfg.database.type == "mysql";
+  pgsqlLocal = localDB && cfg.database.type == "pgsql";
+  dbHost =
+    if mysqlLocal then
+      "unix(/run/mysqld/mysqld.sock)"
+    else if pgsqlLocal then
+      "unix(/run/postgresql)"
+    else
+      cfg.database.host;
   user = cfg.database.username;
   phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
@@ -36,11 +45,22 @@ in
     };
 
     database = {
+      type = lib.mkOption {
+        type = lib.types.enum [
+          "mysql"
+          "pgsql"
+        ];
+        default = "pgsql";
+        description = ''
+          Database engine to use.
+          If `database.host` is set to `localhost` a database of the chosen type will be installed and configured locally.
+        '';
+      };
       username = lib.mkOption {
         type = lib.types.str;
         default = "roundcube";
         description = ''
-          Username for the postgresql connection.
+          Username for the database connection.
           If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
         '';
       };
@@ -48,15 +68,15 @@ in
         type = lib.types.str;
         default = "localhost";
         description = ''
-          Host of the postgresql server. If this is not set to
+          Host of the database server. If this is not set to
           `localhost`, you have to create the
-          postgresql user and database yourself, with appropriate
-          permissions.
+          database and its user with appropriate
+          permissions yourself.
         '';
       };
       password = lib.mkOption {
         type = lib.types.str;
-        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead.";
+        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead. This option is unsupported for mysql databases.";
         default = "";
       };
       passwordFile = lib.mkOption {
@@ -67,16 +87,17 @@ in
           '''
         '';
         description = ''
-          Password file for the postgresql connection.
-          Must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
+          Password file for the database connection.
+          For postgresql this must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
           but only one line, no comments and readable by user `nginx`.
+          For mysql the password must be provided in an option file (see https://dev.mysql.com/doc/refman/en/option-files.html) which is readable by user `nginx`.
           Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
         '';
       };
       dbname = lib.mkOption {
         type = lib.types.str;
         default = "roundcube";
-        description = "Name of the postgresql database";
+        description = "Name of the database";
       };
     };
 
@@ -138,7 +159,11 @@ in
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!localDB) ''
+      ${lib.optionalString (!localDB && cfg.database.type == "mysql") ''
+        $password = parse_ini_file('${cfg.database.passwordFile}', true)['client']['password'];
+      ''}
+
+      ${lib.optionalString (!localDB && cfg.database.type == "pgsql") ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
         $password = rtrim(end($password));
@@ -147,9 +172,9 @@ in
       ''}
 
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${
+      $config['db_dsnw'] = '${cfg.database.type}://${cfg.database.username}${
         lib.optionalString (!localDB) ":' . $password . '"
-      }@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
+      }@${dbHost}/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
       $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
       $config['plugins'] = [${lib.concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
@@ -221,9 +246,30 @@ in
           equal!
         '';
       }
+      {
+        assertion = !(cfg.database.type == "mysql" && cfg.database.password != "");
+        message = ''
+          The option 'services.roundcube.database.password' cannot be used with mysql databases.
+          Use 'services.roundcube.database.passwordFile' instead.
+        '';
+      }
     ];
 
-    services.postgresql = lib.mkIf localDB {
+    services.mysql = lib.mkIf mysqlLocal {
+      enable = true;
+      package = lib.mkDefault pkgs.mariadb;
+      ensureDatabases = [ cfg.database.dbname ];
+      ensureUsers = [
+        {
+          name = cfg.database.username;
+          ensurePermissions = {
+            "${cfg.database.dbname}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+    };
+
+    services.postgresql = lib.mkIf pgsqlLocal {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
       ensureUsers = [
@@ -271,48 +317,61 @@ in
       config.environment.etc."roundcube/config.inc.php".source
     ];
 
-    systemd.services.roundcube-setup = lib.mkMerge [
-      (lib.mkIf localDB {
-        requires = [ "postgresql.target" ];
-        after = [ "postgresql.target" ];
-      })
-      {
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.roundcube-setup = {
 
-        path = [
-          (if localDB then config.services.postgresql.package else pkgs.postgresql)
-        ];
-        script =
-          let
-            psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${
-              lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "
-            } ${cfg.database.dbname}";
-          in
-          ''
-            version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
-            if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
-              ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
-            fi
+      wants = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.target";
+      requires = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.target";
+      wantedBy = [ "multi-user.target" ];
 
-            if [ ! -f /var/lib/roundcube/des_key ]; then
-              base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
-              # we need to log out everyone in case change the des_key
-              # from the default when upgrading from nixos 19.09
-              ${psql} <<< 'TRUNCATE TABLE session;'
-            fi
+      script =
+        let
+          dbSettings =
+            if cfg.database.type == "mysql" then
+              rec {
+                packageName = (if localDB then config.services.mysql.package else pkgs.mariadb);
+                defaultsFile = lib.optionalString (!localDB) "--defaults-file=${cfg.database.passwordFile}";
+                dbCommand = "${lib.getExe' packageName "mariadb"} ${defaultsFile} ${
+                  lib.optionalString (!localDB) "-h ${cfg.database.host} -u ${cfg.database.username}"
+                } ${cfg.database.dbname}";
+                importInitialSql = "${dbCommand} < ${cfg.package}/SQL/mysql.initial.sql";
+              }
+            else
+              rec {
+                packageName = (if localDB then config.services.postgresql.package else pkgs.postgresql);
+                pgpassFile = lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}";
+                dbCommand = "${pgpassFile} ${lib.getExe' packageName "psql"} -t ${
+                  lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "
+                } ${cfg.database.dbname}";
+                importInitialSql = "${dbCommand} -f ${cfg.package}/SQL/postgres.initial.sql";
+              };
+        in
+        ''
+          version="$(${dbSettings.dbCommand} <<< "select value from system where name = 'roundcube-version';" || true)"
+          if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
+            ${dbSettings.importInitialSql}
+          fi
 
-            ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
-          '';
-        serviceConfig = {
-          Type = "oneshot";
-          StateDirectory = "roundcube";
-          User = if localDB then user else "nginx";
-          # so that the des_key is not world readable
-          StateDirectoryMode = "0700";
-        };
-      }
-    ];
+          if [ ! -f /var/lib/roundcube/des_key ]; then
+            base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
+            # we need to log out everyone in case change the des_key
+            # from the default when upgrading from nixos 19.09
+            ${dbSettings.dbCommand} <<< 'TRUNCATE TABLE session;'
+          fi
+
+          ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
+        '';
+      serviceConfig = {
+        Type = "oneshot";
+        StateDirectory = "roundcube";
+        User = if localDB then user else "nginx";
+        # so that the des_key is not world readable
+        StateDirectoryMode = "0700";
+      };
+    };
   };
 }
