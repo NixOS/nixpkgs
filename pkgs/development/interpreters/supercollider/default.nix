@@ -20,6 +20,7 @@
   qtwebengine,
   readline,
   qtwebsockets,
+  qtwayland,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -73,6 +74,7 @@ mkDerivation rec {
     libXt
     qtbase
     qtwebsockets
+    qtwayland
     readline
   ]
   ++ lib.optional withWebengine qtwebengine
