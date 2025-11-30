@@ -12,9 +12,9 @@
   nix-update-script,
   patchelf,
   removeReferencesTo,
-  testers,
   yarn,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -142,15 +142,13 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   doInstallCheck = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CDK for Terraform CLI";
