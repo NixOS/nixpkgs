@@ -8,22 +8,20 @@
 
 buildGoModule rec {
   pname = "abctl";
-  version = "0.29.0";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
     tag = "v${version}";
-    hash = "sha256-tb0KBATOitgFN49gJVrctxPKjrFY7w6AdBa2AN+scBU=";
+    hash = "sha256-pQvLFfj7/uZQUqtWAsTcw2RQ3KHFuoQCBP3lBvb2LTs=";
   };
 
   checkFlags =
     let
       skippedTests = [
         # network access
-        "TestManifestCmd"
-        "TestManifestCmd_Enterprise"
-        "TestManifestCmd_Nightly"
+        "TestResolveChartReference"
         # docker
         "TestValues_BadYaml"
         "TestInvalidHostFlag_IpAddr"
