@@ -22,7 +22,6 @@
   enableVulkan ? false,
   vulkan-loader,
 }:
-
 let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
@@ -37,7 +36,6 @@ let
 
   version = "3.6.2";
 in
-
 python3.pkgs.buildPythonApplication {
   pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
   inherit version;
@@ -159,6 +157,18 @@ python3.pkgs.buildPythonApplication {
         --set QTWEBENGINE_RESOURCES_PATH "${resourcesPath}"
       )
     '';
+
+  # `fixupPhase` uses `desktopToDarwinBundle` to generate an app bundle
+  # (qutebrowser.app) from the qutebrowser XDG Desktop specification
+  # file (./misc/org.qutebrowser.qutebrowser.desktop). Because
+  # `desktopToDarwinBundle` doesn't use the MIME metadata from the .desktop
+  # file, it does not generate necessary keys in Info.plist for qutebrowser to
+  # be recognized by MacOS  as a valid browser.
+  #
+  # This phase adds those keys.
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    python3 ${./patch-bundle-info.py} "$out/Applications/qutebrowser.app/Contents/Info.plist"
+  '';
 
   meta = {
     homepage = "https://github.com/qutebrowser/qutebrowser";
