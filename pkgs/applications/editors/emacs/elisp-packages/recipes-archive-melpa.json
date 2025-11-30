@@ -86660,11 +86660,11 @@
   "repo": "ashton314/nordic-night",
   "unstable": {
    "version": [
-    20251129,
-    409
+    20250624,
+    1732
    ],
-   "commit": "5d35f9c9da0ab7138b0a4897daaf52d78f4a1a37",
-   "sha256": "1l2k4xd2bcnbsyj733ry2p8vqr39rrdypzapsrg8hcp86zcnvk1p"
+   "commit": "a500ccc22fab22b291dfbddc8c534e665ae144f9",
+   "sha256": "03h3q9kwq3ss89hbs8ahl8xxafnx1fx3cdfidz3hbh5nm7ycz08l"
   },
   "stable": {
    "version": [
