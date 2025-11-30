@@ -99,6 +99,7 @@ stubs
   # even there are seemingly no usages of it
   cctools = pkgs.cctools; # Added 2024-07-17
 
+  # keep-sorted start case=no numeric=yes
   bsdmake = lib.warnOnInstantiate "`darwin.bsdmake` has been replaced by `pkgs.bmake`" pkgs.bmake; # Added 2025-11-30
   cctools-apple = lib.warnOnInstantiate "`darwin.cctools-apple` has been replaced by `pkgs.cctools`" pkgs.cctools; # Added 2024-07-01
   cctools-llvm = lib.warnOnInstantiate "`darwin.cctools-llvm` has been replaced by `pkgs.cctools`" pkgs.cctools; # Added 2024-07-01
@@ -114,4 +115,5 @@ stubs
   openwith = lib.warnOnInstantiate "`darwin.openwith` has been replaced by `pkgs.openwith`" pkgs.openwith; # Added 2025-11-28
   stdenvNoCF = throw "`darwin.stdenvNoCF` has been removed; use `stdenv` or `stdenvNoCC`"; # Converted to throw 2025-07-29
   sudo = throw "`darwin.sudo` has been removed, because it was impure and unused"; # Added 2025-10-18
+  # keep-sorted end
 }
