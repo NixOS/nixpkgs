@@ -1,26 +1,16 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   gobject-introspection,
-  setuptools,
   wrapGAppsHook3,
   libnotify,
-  dbus-python,
-  packaging,
-  proton-core,
-  proton-keyring-linux,
-  proton-vpn-api-core,
-  proton-vpn-local-agent,
-  proton-vpn-network-manager,
-  pycairo,
-  pygobject3,
   withIndicator ? true,
   libappindicator-gtk3,
   libayatana-appindicator,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "protonvpn-gui";
   version = "4.12.0";
   pyproject = true;
@@ -48,11 +38,11 @@ buildPythonApplication rec {
     libayatana-appindicator
   ];
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     dbus-python
     packaging
     proton-core
@@ -63,6 +53,12 @@ buildPythonApplication rec {
     pycairo
     pygobject3
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}

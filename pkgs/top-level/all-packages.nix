@@ -11889,8 +11889,6 @@ with pkgs;
     // (config.profanity or { })
   );
 
-  protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
-
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
