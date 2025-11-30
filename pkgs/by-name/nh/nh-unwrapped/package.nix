@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       NotAShelf
       viperML
+      midischwarz12
     ];
   };
 })
