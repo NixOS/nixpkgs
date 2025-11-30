@@ -21,30 +21,30 @@ let
     qtbase
 
     # optional
-    qt3d
-    qtcharts
-    qtconnectivity
-    qtdatavis3d
+    # qt3d
+    # qtcharts
+    # qtconnectivity
+    # qtdatavis3d
     qtdeclarative
-    qthttpserver
-    qtmultimedia
-    qtnetworkauth
-    qtquick3d
-    qtremoteobjects
-    qtscxml
-    qtsensors
-    qtspeech
-    qtsvg
-    qtwebchannel
-    qtwebsockets
-    qtwebview
-    qtpositioning
-    qtlocation
-    qtshadertools
-    qtserialport
-    qtserialbus
-    qtgraphs
-    qttools
+    # qthttpserver
+    # qtmultimedia
+    # qtnetworkauth
+    # qtquick3d
+    # qtremoteobjects
+    # qtscxml
+    # qtsensors
+    # qtspeech
+    # qtsvg
+    # qtwebchannel
+    # qtwebsockets
+    # qtwebview
+    # qtpositioning
+    # qtlocation
+    # qtshadertools
+    # qtserialport
+    # qtserialbus
+    # qtgraphs
+    # qttools
   ];
   qt_linked = symlinkJoin {
     name = "qt_linked";
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isLinux then
       # qtwebengine fails under darwin
       # see https://github.com/NixOS/nixpkgs/pull/312987
-      packages ++ [ python.pkgs.qt6.qtwebengine ]
+      packages # ++ [ python.pkgs.qt6.qtwebengine ]
     else
       python.pkgs.qt6.darwinVersionInputs
       ++ [
