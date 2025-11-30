@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bit-logo";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "superstarryeyes";
     repo = "bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VpAunQUttuuC+yrACD8piqKbiiTaAfKdJ/ZthvQijXI=";
+    hash = "sha256-czqzePH8+X4IVwuV+3L+JkDkxT5KVidybEjYKwRKZM4=";
   };
 
-  vendorHash = "sha256-ZQ5SbjQPngVUgGklADfNSM43ks3948ilDKdmxh2sq6A=";
+  vendorHash = "sha256-Zxw0NyZfM42ytn+vDExLwRgNLWsdGVLC3iNVpQd8VMw=";
 
   ldflags = [
     "-s"
