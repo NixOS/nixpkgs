@@ -79,7 +79,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # For paths in test to work, we have to be in python dir
