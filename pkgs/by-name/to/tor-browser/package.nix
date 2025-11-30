@@ -169,7 +169,6 @@ stdenv.mkDerivation rec {
   patchelfFlags = [ "--no-clobber-old-sections" ];
 
   preferLocalBuild = true;
-  allowSubstitutes = false;
 
   desktopItems = [
     (makeDesktopItem {

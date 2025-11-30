@@ -266,7 +266,6 @@ in
                 cp * $out/
               '';
               preferLocalBuild = true;
-              allowSubstitutes = false;
             };
             generateCompletions =
               package:

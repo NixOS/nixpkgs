@@ -33,16 +33,9 @@ runCommandWith :: {
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
 `runLocal` (Boolean)
-:   If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
+:   If set to `true` this forces the derivation to be built locally in the presence of remote builders.
     This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
-    Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
-
-   ::: {.note}
-   This prevents the use of [substituters][substituter], so only set `runLocal` (or use `runCommandLocal`) when certain the user will
-   always have a builder for the `system` of the derivation. This should be true for most trivial use cases
-   (e.g., just copying some files to a different location or adding symlinks) because there the `system`
-   is usually the same as `builtins.currentSystem`.
-   :::
+    Its effect is to set [`preferLocalBuild = true`][preferLocalBuild].
 
 `stdenv` (Derivation)
 :   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
@@ -57,7 +50,6 @@ runCommandWith :: {
     You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
     :::
 
-[allowSubstitutes]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-allowSubstitutes
 [preferLocalBuild]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-preferLocalBuild
 [substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
 [substitutes]: https://nix.dev/manual/nix/latest/glossary#gloss-substitute
@@ -346,10 +338,7 @@ Write a text file to the Nix store.
 : Whether to allow substituting from a binary cache.
   Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `derivation`.
 
-  It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
-  Set it to true if the `checkPhase` step is expensive.
-
-  Default: `false`
+  Default: `true`
 
 `preferLocalBuild` (Bool, _optional_)
 
@@ -357,7 +346,8 @@ Write a text file to the Nix store.
 
   Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `derivation`.
 
-  It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
+  It defaults to `true`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
+  Set it to false if the `checkPhase` step is expensive.
 
   Default: `true`
 
@@ -390,7 +380,7 @@ writeTextFile {
   meta = {
     license = pkgs.lib.licenses.cc0;
   };
-  allowSubstitutes = true;
+  allowSubstitutes = false;
   preferLocalBuild = false;
 }
 ```

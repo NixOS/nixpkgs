@@ -24,5 +24,4 @@ stdenv.mkDerivation {
 
   # trivial derivation
   preferLocalBuild = true;
-  allowSubstitutes = false;
 }

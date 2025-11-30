@@ -165,7 +165,6 @@ runCommand drvName
       ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudioForPlatform}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
-    allowSubstitutes = false;
     passthru = {
       unwrapped = androidStudioForPlatform;
     };
