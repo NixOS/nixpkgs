@@ -323,7 +323,7 @@ rec {
       abort "lib.customisation.callPackageWith: ${error}";
 
   /**
-    Like callPackage, but for a function that returns an attribute
+    Like `callPackage`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -665,7 +665,7 @@ rec {
     };
 
   /**
-    Like makeScope, but aims to support cross compilation. It's still ugly, but
+    Like `makeScope`, but aims to support cross compilation. It's still ugly, but
     hopefully it helps a little bit.
 
     # Type
@@ -775,7 +775,7 @@ rec {
         `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
 
       `extendDrvArgs` (required)
-      : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
 
       `inheritFunctionArgs` (default to `true`)
       : Whether to inherit `__functionArgs` from the base build helper.
