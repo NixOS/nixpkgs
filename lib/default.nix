@@ -402,7 +402,12 @@ let
         renameCrossIndexTo
         mapCrossIndex
         ;
-      inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+      inherit (self.derivations)
+        buildInputsClosureCond
+        lazyDerivation
+        optionalDrvAttr
+        warnOnInstantiate
+        ;
       inherit (self.generators) mkLuaInline;
       inherit (self.meta)
         addMetaAttrs

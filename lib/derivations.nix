@@ -214,6 +214,97 @@ in
   optionalDrvAttr = cond: value: if cond then value else null;
 
   /**
+    Compute a filtered closure of build inputs.
+
+    Specifically, `buildInputsClosureCond cond startSet` computes the closure formed
+    by recursive application of `p: filter cond p.buildInputs ++ filter cond p.propagatedBuildInputs`
+    to `startSet`.
+
+    The function recursively traverses the dependency tree starting from `startSet`,
+    applying the condition function to filter both `buildInputs` and `propagatedBuildInputs`
+    at each level.
+
+    # Why buildInputs and propagatedBuildInputs
+
+    These two attributes represent (typically) runtime dependencies - packages that become part of
+    or are needed by the final output. This gives the closure semantic coherence: all
+    items share a similar role in the build and runtime environment.
+
+    Other dependency attributes like `nativeBuildInputs` are excluded because they serve
+    a different purpose (build-time tools that don't become part of the output). Mixing
+    these would produce a closure with inconsistent semantics.
+
+    The inclusion of `propagatedBuildInputs` is essential because these dependencies are
+    transitively required - if A propagates B, then anything depending on A also needs B.
+    Omitting propagated inputs would produce an incomplete closure.
+
+    # Why startSet is not filtered
+
+    The initial `startSet` is NOT filtered by the condition - all items in `startSet`
+    are included in the result regardless of whether they satisfy the condition. This
+    allows explicitly requesting specific root packages while filtering their dependencies.
+
+    # Inputs
+
+    `cond`
+
+    : A predicate function that takes a derivation and returns a boolean,
+      used to filter which dependencies to include in the closure.
+
+    `startSet`
+
+    : A list of derivations to start the closure computation from.
+      These will all be included in the result without filtering.
+
+    # Type
+
+    ```
+    buildInputsClosureCond :: (Derivation -> Bool) -> [Derivation] -> [Derivation]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.derivations.buildInputsClosureCond` usage example
+
+    ```nix
+    # Get all internal dependencies (those in a specific set)
+    let
+      internalDrvs = { "${pkg1.drvPath}" = null; "${pkg2.drvPath}" = null; };
+      isInternal = dep: internalDrvs ? ${dep.drvPath or ""};
+    in
+    buildInputsClosureCond isInternal [ myPackage ]
+    # => [ myPackage pkg1 pkg2 ] (only internal dependencies)
+    ```
+
+    :::
+  */
+  buildInputsClosureCond =
+    cond: startSet:
+    let
+      closure = builtins.genericClosure {
+        startSet = map (d: {
+          key = d.drvPath;
+          value = d;
+        }) startSet;
+        operator =
+          d:
+          let
+            r =
+              map
+                (d': {
+                  key = d'.drvPath;
+                  value = d';
+                })
+                (
+                  lib.filter cond d.value.buildInputs or [ ] ++ lib.filter cond d.value.propagatedBuildInputs or [ ]
+                );
+          in
+          r;
+      };
+    in
+    map (item: item.value) closure;
+
+  /**
     Wrap a derivation such that instantiating it produces a warning.
 
     All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
