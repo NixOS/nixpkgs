@@ -4342,6 +4342,11 @@
     github = "carlthome";
     githubId = 1595907;
   };
+  carman = {
+    name = "Carman Fu";
+    github = "Futarimiti";
+    githubId = 96031125;
+  };
   casaca = {
     name = "J McNutt";
     email = "jmacasac@hotmail.com";
