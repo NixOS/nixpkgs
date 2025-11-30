@@ -22,7 +22,7 @@ fi
 
 echo "Updating $pname from $current_version to $version"
 
-# Update version in file
+# Update version in the file
 sed -i "s/version = \"$current_version\";/version = \"$version\";/" package.nix
 
 # Define platforms and their corresponding URL suffixes
