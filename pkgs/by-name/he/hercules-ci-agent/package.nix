@@ -26,6 +26,13 @@ let
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
     overrideCabal (o: {
+      # Use RTLD_GLOBAL on Darwin to fix Template Haskell compilation with native
+      # Nix library dependencies. See https://github.com/NixOS/nixpkgs/issues/461651
+      preBuild =
+        lib.optionalString stdenv.hostPlatform.isDarwin ''
+          export NIX_GHC_USE_RTLD_GLOBAL=1
+        ''
+        + (o.preBuild or "");
       postInstall = ''
         ${o.postInstall or ""}
         ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
