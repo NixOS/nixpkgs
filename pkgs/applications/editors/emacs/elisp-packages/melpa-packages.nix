@@ -1456,6 +1456,8 @@ let
 
           mu4e-views = addPackageRequires super.mu4e-views [ self.mu4e ];
 
+          mu4e-walk = addPackageRequires super.mu4e-walk [ self.mu4e ];
+
           # https://github.com/magnars/multifiles.el/issues/9
           multifiles = addPackageRequires super.multifiles [ self.dash ];
 
