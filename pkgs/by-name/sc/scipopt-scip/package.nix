@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.4";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
-    tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-nwFRtP63/HPfk9JhcyLKApicgqE9IF+7s5MGGrVJrpM=";
+    tag = "v${version}";
+    hash = "sha256-KW7N2ORspzkaR/gdU//p38BV4GyuhoSIVb6q9RTrCYQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,8 +42,9 @@ stdenv.mkDerivation rec {
     boost
     gfortran
     criterion
-    mpfr # if not included, throws fatal error: mpfr.h not found
   ];
+
+  propagatedBuildInputs = [ mpfr ];
 
   doCheck = true;
 
