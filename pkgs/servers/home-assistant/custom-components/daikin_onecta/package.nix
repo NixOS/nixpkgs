@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
   };
 
   meta = {
-    changelog = "https://github.com/jwillemsen/daikin_onecta/tag/v${version}";
+    changelog = "https://github.com/jwillemsen/daikin_onecta/releases/tag/v${version}";
     description = "Home Assistant Integration for devices supported by the Daikin Onecta App";
     homepage = "https://github.com/jwillemsen/daikin_onecta";
     maintainers = with lib.maintainers; [ dandellion ];
