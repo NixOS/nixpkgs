@@ -1109,7 +1109,7 @@ mapAliases {
   ncdu_2 = throw "`ncdu_2` has been renamed to/replaced by `ncdu`"; # Converted to throw 2025-10-27
   near-cli = throw "`near-cli` has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neardal = throw "`neardal` has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
-  nekoray = lib.warnOnInstantiate "`nekoray` has been renamed to `throne`" throne; # Added 2025-11-10
+  nekoray = warnAlias "`nekoray` has been renamed to `throne`" throne; # Added 2025-11-10
   neo4j-desktop = throw "`neo4j-desktop` has been removed as it was out-of-date"; # Added 2025-11-01
   neocities-cli = throw "`neocities-cli` has been renamed to/replaced by `neocities`"; # Converted to throw 2025-10-27
   netbox_4_1 = throw "`netbox_4_1` series has been removed as it was EOL"; # Added 2025-10-14
@@ -1236,7 +1236,7 @@ mapAliases {
   paperless-ng = throw "`paperless-ng` has been renamed to/replaced by `paperless-ngx`"; # Converted to throw 2025-10-27
   parcellite = throw "`parcellite` was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
   patchelfStable = throw "`patchelfStable` has been renamed to/replaced by `patchelf`"; # Converted to throw 2025-10-27
-  path-of-building = lib.warnOnInstantiate "`path-of-building` has been replaced by `rusty-path-of-building`" rusty-path-of-building; # Added 2025-10-30
+  path-of-building = warnAlias "`path-of-building` has been replaced by `rusty-path-of-building`" rusty-path-of-building; # Added 2025-10-30
   paup = throw "`paup` has been renamed to/replaced by `paup-cli`"; # Converted to throw 2025-10-27
   pcp = throw "`pcp` has been removed because the upstream repo was archived and it hasn`t been updated since 2021"; # Added 2025-09-23
   pcre16 = throw "`pcre16` has been removed because it is obsolete. Consider migrating to `pcre2` instead."; # Added 2025-05-29
@@ -1373,7 +1373,7 @@ mapAliases {
   quictls = throw "`quictls` has been removed. QUIC support is now available in `openssl`.";
   quorum = throw "`quorum` has been removed as it was broken and unmaintained upstream"; # Added 2025-11-07
   qv2ray = throw "`qv2ray` has been removed as it was unmaintained"; # Added 2025-06-03
-  ra-multiplex = lib.warnOnInstantiate "`ra-multiplex` has been renamed to/replaced by `lspmux`" lspmux; # Added 2025-10-27
+  ra-multiplex = warnAlias "`ra-multiplex` has been renamed to/replaced by `lspmux`" lspmux; # Added 2025-10-27
   radicale3 = throw "`radicale3` has been renamed to/replaced by `radicale`"; # Converted to throw 2025-10-27
   railway-travel = throw "`railway-travel` has been renamed to/replaced by `diebahn`"; # Converted to throw 2025-10-27
   rambox-pro = throw "`rambox-pro` has been renamed to/replaced by `rambox`"; # Converted to throw 2025-10-27
