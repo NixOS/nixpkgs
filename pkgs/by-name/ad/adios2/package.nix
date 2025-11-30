@@ -51,14 +51,14 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.10.2";
+  version = "2.11.0";
   pname = "adios2";
 
   src = fetchFromGitHub {
     owner = "ornladios";
     repo = "adios2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVyw7xoPutXeUS87jjVv1YxJnwNGZAT4QfkBLzvQbwg=";
+    hash = "sha256-yHPI///17poiCEb7Luu5qfqxTWm9Nh+o9r57mZT26U0=";
   };
 
   postPatch = ''
