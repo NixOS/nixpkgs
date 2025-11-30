@@ -4857,6 +4857,8 @@ self: super: with self; {
 
   energyflow = callPackage ../development/python-modules/energyflow { };
 
+  energyid-webhooks = callPackage ../development/python-modules/energyid-webhooks { };
+
   energyzero = callPackage ../development/python-modules/energyzero { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
@@ -6976,6 +6978,8 @@ self: super: with self; {
   httpx-ws = callPackage ../development/python-modules/httpx-ws { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
+
+  hueble = callPackage ../development/python-modules/hueble { };
 
   huepy = callPackage ../development/python-modules/huepy { };
 
@@ -15467,6 +15471,8 @@ self: super: with self; {
       ;
   };
 
+  python-xbox = callPackage ../development/python-modules/python-xbox { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   python-xz = callPackage ../development/python-modules/python-xz { };
@@ -20576,8 +20582,6 @@ self: super: with self; {
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
-
-  xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };
 

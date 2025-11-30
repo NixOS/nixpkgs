@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.8.12";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "alengwenus";
     repo = "pypck";
     tag = version;
-    hash = "sha256-XXlHgr8/Cl3eu1vIDl/XykB2gv8PPkPIFEBG30yUue0=";
+    hash = "sha256-mtlA4UT8bYZa6hFbO/AHRFfHQ+6SpMN97cfc3q4dDJ4=";
   };
 
   postPatch = ''

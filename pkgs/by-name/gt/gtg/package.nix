@@ -62,6 +62,7 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     caldav
+    vobject
   ];
 
   nativeCheckInputs = with python3Packages; [
