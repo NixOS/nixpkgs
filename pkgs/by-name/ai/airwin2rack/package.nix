@@ -56,7 +56,7 @@ let
 
   vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
-  version = "2.13.0-unstable-2025-09-14";
+  version = "2.13.0-unstable-2025-11-28";
 in
 stdenv.mkDerivation {
   inherit pname;
@@ -65,8 +65,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "baconpaul";
     repo = "airwin2rack";
-    rev = "fc75563323bd9d8e46b1d58d89830e0bf760f0e8";
-    hash = "sha256-7jCDNbGMfJBo2xvRsDYdlEKSpAiRDNm6N4jTYCu+kKs=";
+    rev = "e2982697ec169fce36bd451fd5bcb6d98b74741f";
+    hash = "sha256-ePudK9RCQ/E1vpKew6OWJNyHHmKTQgIZ5PfnhE+M1ME=";
     fetchSubmodules = true;
   };
 
