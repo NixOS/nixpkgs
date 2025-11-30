@@ -13,7 +13,6 @@ buildPythonPackage rec {
   version = "2025.11.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "certifi";
