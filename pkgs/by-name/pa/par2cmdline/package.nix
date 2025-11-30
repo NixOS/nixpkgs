@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  nix-update-script
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
