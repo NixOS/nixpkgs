@@ -64,6 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run build
 
+    # remove unneeded files
+    find dist -type f \( -name '*.cts' -or -name '*.mts' -or -name '*.ts' \) -delete
+
     # remove devDependencies that are only required to build
     #  and package the typescript code
     CI=true pnpm prune --prod
