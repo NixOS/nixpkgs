@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Nooo37/pinsel";
     license = licenses.mit;
     maintainers = with maintainers; [ lom ];
+    platforms = platforms.linux;
     mainProgram = "pinsel";
   };
 }
