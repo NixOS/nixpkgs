@@ -47,6 +47,14 @@ let
     toPretty
     ;
 
+  inherit (import ./problems.nix { inherit lib; })
+    problemKindsManual
+    problemKindsUnique'
+    ;
+  generateProblems = (import ./problems.nix { inherit lib; }).generateProblems {
+    inherit hasNoMaintainers;
+  } config.problems;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
@@ -55,6 +63,9 @@ let
   showWarnings = config.showDerivationWarnings;
 
   getNameWithVersion =
+    attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
+  # Do not use this in new code, use `lib.getName` instead
+  getName =
     attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
   allowUnfree = config.allowUnfree || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
@@ -204,6 +215,7 @@ let
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
     blocklisted = x: "";
     insecure = remediate_insecure;
+    problem = remediate_problem;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
     maintainerless = x: "";
@@ -295,6 +307,71 @@ let
 
     '';
 
+  remediate_problem =
+    pkg:
+    let
+      pkgName = lib.getName pkg;
+
+      fullMessage =
+        problem:
+        (if problem.kind != problem.name then problem.kind + ": " else "")
+        + problem.name
+        + ": "
+        + problem.message;
+      urlMessage =
+        problem:
+        let
+          urls = problem.urls or [ ];
+        in
+        lib.concatMapStrings (url: "\n  - " + url) urls;
+
+      printProblem = problem: "- " + fullMessage problem + urlMessage problem;
+
+      problems = generateProblems pkg;
+
+      ignorePattern =
+        indentation:
+        lib.pipe problems [
+          (lib.filter ({ handler, ... }: handler == "error"))
+          (builtins.map ({ name, ... }: ''"${pkgName}"."${name}" = "warn";''))
+          (lib.concatStringsSep ("\n" + indentation))
+        ];
+    in
+    ''
+
+
+      Package problems:
+
+      ${lib.pipe problems [
+        (lib.filter ({ handler, ... }: handler == "error"))
+        (builtins.map printProblem)
+        (lib.concatStringsSep "\n")
+      ]}
+
+      You can use it anyway by ignoring its problems, using one of the
+      following methods:
+
+      a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+        `nixpkgs.config.problems.handlers` inside configuration.nix,
+        like this:
+
+          {
+            nixpkgs.config.problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+
+      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+        "warn" or "ignore" to `problems.handlers` in
+        ~/.config/nixpkgs/config.nix, like this:
+
+          {
+            problems.handlers = {
+              ${ignorePattern "        "}
+            };
+          }
+    '';
+
   remediateOutputsToInstall =
     attrs:
     let
@@ -350,6 +427,21 @@ let
       isEnabled = findFirst (x: x == reason) null showWarnings;
     in
     if isEnabled != null then builtins.trace msg true else true;
+
+  problemTypes =
+    let
+      types = import ./meta-types.nix { inherit lib; };
+      inherit (types)
+        str
+        listOf
+        enum
+        ;
+    in
+    {
+      kind = enum problemKindsManual;
+      message = str;
+      urls = listOf str;
+    };
 
   metaTypes =
     let
@@ -407,6 +499,8 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+      # This is checked in more detail further down
+      problems = attrsOf (attrsOf any);
       tests = {
         name = "test";
         verify =
@@ -446,6 +540,7 @@ let
       identifiers = attrs;
     };
 
+  # Check that a value matches a specific type. Returns an error message, or null if the check passed
   checkMetaAttr =
     let
       # Map attrs directly to the verify function for performance
@@ -469,7 +564,66 @@ let
       ];
   checkMeta =
     meta:
-    optionals config.checkMeta (concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta));
+    optionals config.checkMeta (
+      concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta)
+
+      # Extended checks for problems, as they do not fit the module system
+      ++ lib.optionals (meta ? problems) (
+
+        # Check problem kinds are correct
+        lib.pipe meta.problems [
+          (lib.mapAttrs (name: problem: { kind = name; } // problem))
+          (lib.mapAttrsToList (
+            name: problem:
+            lib.mapAttrsToList (
+              k: v:
+              # TODO: Deduplicate with above code
+              if problemTypes ? ${k} then
+                if problemTypes.${k}.verify v then
+                  null
+                else
+                  "key 'meta.problems.${name}.${k}' has invalid value; expected ${problemTypes.${k}.name}, got\n    ${
+                    toPretty { indent = "    "; } v
+                  }"
+              else
+                "key 'meta.problems.${name}.${k}' is unrecognized; expected one of: \n  [${
+                  concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
+                }]"
+            ) problem
+          ))
+          (lib.concatLists)
+          (lib.remove null)
+        ]
+
+        # Check that problem has a message (required field)
+        ++ lib.pipe meta.problems [
+          (lib.mapAttrsToList (
+            name: problem: if problem ? message then null else "key 'meta.problems.${name}.message' is missing"
+          ))
+          (lib.remove null)
+        ]
+
+        # Check that some problem kinds are unqiue
+        ++ lib.pipe meta.problems [
+          (lib.mapAttrs (name: problem: { kind = name; } // problem))
+          # Count the number of instances of each problem kind,
+          # returns an attrset mapping kind -> count
+          (lib.foldlAttrs (
+            count: name: problem:
+            count // { ${problem.kind} = (count.${problem.kind} or [ ]) ++ [ name ]; }
+          ) { })
+          # We only care about those that must be unique
+          (builtins.intersectAttrs problemKindsUnique')
+          (lib.filterAttrs (_: names: builtins.length names > 1))
+          (lib.mapAttrsToList (
+            kind: names:
+            "keys [ ${
+              lib.concatMapStringsSep " " (name: "'meta.problems.${name}'") names
+            } ] all have the same problem kind, which is not allowed for kind '${kind}'"
+          ))
+        ]
+      )
+    );
 
   checkOutputsToInstall =
     attrs:
@@ -489,12 +643,6 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
-    let
-      validYes = {
-        valid = "yes";
-        handled = true;
-      };
-    in
     attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
@@ -505,77 +653,119 @@ let
       {
         valid = "no";
         reason = "unknown-meta";
-        errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
+        errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n  - " + x) res}\n";
+        unfree = false;
+        nonSource = false;
+        broken = false;
+        unsupported = false;
+        insecure = false;
       }
-
-    # --- Put checks that cannot be ignored here ---
-    else if checkOutputsToInstall attrs then
-      {
-        valid = "no";
-        reason = "broken-outputs";
-        errormsg = "has invalid meta.outputsToInstall";
-      }
-
-    # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
-      {
-        valid = "no";
-        reason = "unfree";
-        errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
-      }
-    else if hasBlocklistedLicense attrs then
-      {
-        valid = "no";
-        reason = "blocklisted";
-        errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
-      }
-    else if hasDeniedNonSourceProvenance attrs then
-      {
-        valid = "no";
-        reason = "non-source";
-        errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
-      }
-    else if hasDeniedBroken attrs then
-      {
-        valid = "no";
-        reason = "broken";
-        errormsg = "is marked as broken";
-      }
-    else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      let
-        toPretty' = toPretty {
-          allowPrettyValues = true;
-          indent = "  ";
-        };
-      in
-      {
-        valid = "no";
-        reason = "unsupported";
-        errormsg = ''
-          is not available on the requested hostPlatform:
-            hostPlatform.system = "${hostPlatform.system}"
-            package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
-            package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
-        '';
-      }
-    else if !(hasAllowedInsecure attrs) then
-      {
-        valid = "no";
-        reason = "insecure";
-        errormsg = "is marked as insecure";
-      }
-
-    # --- warnings ---
-    # Please also update the type in /pkgs/top-level/config.nix alongside this.
-    else if hasNoMaintainers attrs then
-      {
-        valid = "warn";
-        reason = "maintainerless";
-        errormsg = "has no maintainers or teams";
-      }
-    # -----
     else
-      validYes;
+      {
+        unfree = hasUnfreeLicense attrs;
+        nonSource = hasNonSourceProvenance attrs;
+        broken = isMarkedBroken attrs;
+        unsupported = hasUnsupportedPlatform attrs;
+        insecure = isMarkedInsecure attrs;
+      }
+      // (
+        # Check meta attribute types first, to make sure it is always called even when there are other issues
+        # Note that this is not a full type check and functions below still need to by careful about their inputs!
+        let
+          res = checkMeta (attrs.meta or { });
+        in
+        if res != [ ] then
+          {
+            valid = "no";
+            reason = "unknown-meta";
+            errormsg = "has malformed metadata:${lib.concatMapStrings (x: "\n\t - " + x) res}";
+          }
+        # --- Put checks that cannot be ignored here ---
+        else if checkOutputsToInstall attrs then
+          {
+            valid = "no";
+            reason = "broken-outputs";
+            errormsg = "has invalid meta.outputsToInstall";
+          }
+
+        # --- Put checks that can be ignored here ---
+        else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
+          {
+            valid = "no";
+            reason = "unfree";
+            errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
+          }
+        else if hasBlocklistedLicense attrs then
+          {
+            valid = "no";
+            reason = "blocklisted";
+            errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
+          }
+        else if hasDeniedNonSourceProvenance attrs then
+          {
+            valid = "no";
+            reason = "non-source";
+            errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
+          }
+
+        # --- Put checks that can be ignored here ---
+        else if hasDeniedBroken attrs then
+          {
+            valid = "no";
+            reason = "broken";
+            errormsg = "is marked as broken";
+          }
+        else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
+          let
+            toPretty' = toPretty {
+              allowPrettyValues = true;
+              indent = "  ";
+            };
+          in
+          {
+            valid = "no";
+            reason = "unsupported";
+            errormsg = ''
+              is not available on the requested hostPlatform:
+                hostPlatform.system = "${hostPlatform.system}"
+                package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
+                package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
+            '';
+          }
+        else if !(hasAllowedInsecure attrs) then
+          {
+            valid = "no";
+            reason = "insecure";
+            errormsg = "is marked as insecure";
+          }
+        # --- RFC 127 problems ---
+        # Please also update the type in pkgs/top-level/config.nix alongside this.
+        else
+          let
+            problems = (generateProblems attrs);
+            hasUnignoredProblems = lib.any ({ handler, ... }: handler != "ignore") problems;
+            hasErrorProblems = lib.any ({ handler, ... }: handler == "error") problems;
+          in
+          if hasUnignoredProblems then
+            {
+              valid = if hasErrorProblems then "no" else "warn";
+              reason = "problem";
+              errormsg =
+                if hasErrorProblems then
+                  "has some problem that must be acknowledged"
+                else
+                  "has the following problems: [ ${
+                    lib.pipe problems [
+                      (builtins.map (lib.getAttr "name"))
+                      (builtins.map (x: ''"${x}"''))
+                      (lib.concatStringsSep " ")
+                    ]
+                  } ]";
+            }
+          else
+            { valid = "yes"; }
+      );
+  # -----
 
   # Helper functions and declarations to handle identifiers, extracted to reduce allocations
   hasAllCPEParts =
