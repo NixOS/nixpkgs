@@ -419,13 +419,14 @@ let
         redirectListen = filter (x: !x.ssl) defaultListen;
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
-        # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
+        # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 or TLS-ALPN challenge
         acmeName = if vhost.useACMEHost != null then vhost.useACMEHost else vhost.serverName;
         acmeLocation =
           optionalString
             (
               (vhost.enableACME || vhost.useACMEHost != null)
               && config.security.acme.certs.${acmeName}.dnsProvider == null
+              && !config.security.acme.certs.${acmeName}.tlsMode
             )
             # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
             # We use ^~ here, so that we don't check any regexes (which could
@@ -1637,7 +1638,11 @@ in
               # if acmeRoot is null inherit config.security.acme
               # Since config.security.acme.certs.<cert>.webroot's own default value
               # should take precedence set priority higher than mkOptionDefault
-              webroot = mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
+              webroot =
+                if certs.${vhostConfig.serverName}.tlsMode then
+                  null
+                else
+                  mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
               # Also nudge dnsProvider to null in case it is inherited
               dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
               extraDomainNames = vhostConfig.serverAliases;

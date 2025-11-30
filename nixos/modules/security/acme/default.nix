@@ -243,6 +243,12 @@ let
             "--http.port"
             data.listenHTTP
           ]
+        else if data.tlsMode then
+          [
+            "--tls"
+            "--tls.port"
+            ":${toString data.tlsPort}"
+          ]
         else
           [
             "--http"
@@ -425,6 +431,13 @@ let
 
       orderRenewService = {
         description = "Order (and renew) ACME certificate for ${cert}";
+        # stop conflicting services while certs are renewed
+        conflicts = data.conflictingServices;
+        # start conflicting services again after cert renewal
+        # This causes systemd to issue a warning 'multiple trigger source candidates for exit status propagation',
+        # but this is more robust and not prone to race conditions as invoking systemctl in ExecStartPost/ExecStopPost
+        onSuccess = data.conflictingServices;
+        onFailure = data.conflictingServices;
         after = [
           "network.target"
           "network-online.target"
@@ -494,14 +507,19 @@ let
                   ) "systemctl --no-block try-reload-or-restart ${lib.escapeShellArgs data.reloadServices}"}
                 fi
               '');
+
           }
-          //
-            lib.optionalAttrs
-              (data.listenHTTP != null && lib.toInt (lib.last (lib.splitString ":" data.listenHTTP)) < 1024)
-              {
-                CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-                AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-              };
+          // (
+            let
+              needsToOpenPrivilegedPort =
+                (data.listenHTTP != null && lib.toInt (lib.last (lib.splitString ":" data.listenHTTP)) < 1024)
+                || (data.tlsMode && data.tlsPort < 1024);
+            in
+            lib.optionalAttrs needsToOpenPrivilegedPort {
+              CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+            }
+          );
 
         # Working directory will be /tmp
         script = wrapInFlock ''
@@ -685,6 +703,19 @@ let
           description = "Group running the ACME client.";
         };
 
+        conflictingServices = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          inherit (defaultAndText "conflictingServices" [ ]) default defaultText;
+          description = ''
+            List of conflicting systemd services that should be temporarily stopped
+            while renewing/checking certificates. This might be necessary with `tlsMode=true`
+            when a webserver occupies the `tlsPort`.
+          '';
+          example = ''
+            [ "nginx.service" ] # stops nginx temporarily while renewing/checking certificates
+          '';
+        };
+
         reloadServices = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           inherit (defaultAndText "reloadServices" [ ]) default defaultText;
@@ -746,6 +777,18 @@ let
             host:port. The default is to use the system resolvers, or Google's DNS
             resolvers if the system's cannot be determined.
           '';
+        };
+
+        tlsMode = lib.mkOption {
+          type = lib.types.bool;
+          inherit (defaultAndText "tlsMode" false) default defaultText;
+          description = "Use TLS challenge instead of HTTP.";
+        };
+
+        tlsPort = lib.mkOption {
+          type = lib.types.port;
+          inherit (defaultAndText "tlsPort" 443) default defaultText;
+          description = "Port to use for TLS challenge.";
         };
 
         environmentFile = lib.mkOption {
@@ -1107,17 +1150,20 @@ in
                     webroot
                     listenHTTP
                     s3Bucket
+                    tlsMode
                     ;
                 };
               in
               {
-                assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
+                assertion =
+                  lib.length (lib.filter (x: x != null && x != false) (builtins.attrValues exclusiveAttrs)) == 1;
                 message = ''
                   Exactly one of the options
                   `security.acme.certs.${cert}.dnsProvider`,
                   `security.acme.certs.${cert}.webroot`,
                   `security.acme.certs.${cert}.listenHTTP` and
                   `security.acme.certs.${cert}.s3Bucket`
+                  `security.acme.certs.${cert}.tlsMode`
                   is required.
                   Current values: ${(lib.generators.toPretty { } exclusiveAttrs)}.
                 '';
