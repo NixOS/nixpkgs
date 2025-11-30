@@ -10,10 +10,12 @@
   cacert,
   cairo,
   dconf,
+  enchant2,
   fetchurl,
   file,
   fontconfig,
   freetype,
+  fuse3,
   gdk-pixbuf,
   glib,
   glib-networking,
@@ -22,8 +24,11 @@
   gtk2-x11,
   gtk3,
   gtk_engines,
+  harfbuzzFull,
   heimdal,
+  hyphen,
   krb5,
+  lcms2,
   libGL,
   libappindicator-gtk3,
   libcanberra-gtk3,
@@ -34,13 +39,17 @@
   libinput,
   libjpeg,
   libjson,
+  libmanette,
+  libnotify,
   libpng12,
   libpulseaudio,
   libredirect,
+  libseccomp,
   libsecret,
   libsoup_2_4,
   libvorbis,
   libxml2_13,
+  libxslt,
   llvmPackages,
   more,
   nspr,
@@ -54,20 +63,27 @@
   symlinkJoin,
   systemd,
   tzdata,
-  # webkitgtk_4_0,
   which,
+  woff2,
   xorg,
   zlib,
 
   homepage,
   version,
-  prefix,
   hash,
 
   extraCerts ? [ ],
 }:
 
 let
+  fuse3' = symlinkJoin {
+    name = "fuse3-backwards-compat";
+    paths = [ (lib.getLib fuse3) ];
+    postBuild = ''
+      ln -sf $out/lib/libfuse3.so.3.17.4 $out/lib/libfuse3.so.3
+    '';
+  };
+
   openssl' = symlinkJoin {
     name = "openssl-backwards-compat";
     nativeBuildInputs = [ makeWrapper ];
@@ -97,12 +113,12 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = requireFile rec {
-    name = "${prefix}-${version}.tar.gz";
+    name = "linuxx64-${version}.tar.gz";
     sha256 = hash;
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.hostPlatform.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the 64-bit binaries, .tar.gz from:
 
       ${homepage}
 
@@ -137,8 +153,10 @@ stdenv.mkDerivation rec {
     atk
     cairo
     dconf
+    enchant2
     fontconfig
     freetype
+    fuse3'
     gdk-pixbuf
     glib-networking
     gnome2.gtkglext
@@ -146,8 +164,11 @@ stdenv.mkDerivation rec {
     gtk2-x11
     gtk3
     gtk_engines
+    harfbuzzFull
     heimdal
+    hyphen
     krb5
+    lcms2
     libGL
     libcanberra-gtk3
     libcap
@@ -156,12 +177,16 @@ stdenv.mkDerivation rec {
     libinput
     libjpeg
     libjson
+    libmanette
+    libnotify
     libpng12
     libpulseaudio
+    libseccomp
     libsecret
     libsoup_2_4
     libvorbis
     libxml2_13
+    libxslt
     llvmPackages.libunwind
     nspr
     nss
@@ -173,7 +198,7 @@ stdenv.mkDerivation rec {
     speex
     stdenv.cc.cc
     (lib.getLib systemd)
-    # webkitgtk_4_0
+    woff2
     xorg.libXScrnSaver
     xorg.libXaw
     xorg.libXmu
@@ -247,9 +272,9 @@ stdenv.mkDerivation rec {
       export HOME=$(mktemp -d)
 
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
+      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
-      faketime -f "$source_date" ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+      faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
@@ -306,6 +331,12 @@ stdenv.mkDerivation rec {
       # lib needs libjpeg.so.8, but nixpkgs provides libjpeg.so.9
       patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
     done
+
+    # 25.08.0+ bundles webkit2gtk 4.0
+    find $out/opt/citrix-icaclient/usr/lib -name "libwebkit2gtk-4.0.so.*" | while read -r fname; do
+      # lib needs libjpeg.so.8, but nixpkgs provides libjpeg.so.9
+      patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
+    done
   '';
   postFixup = ''
     autoPatchelf -- "$out"
@@ -313,12 +344,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # webkitgtk_4_0 was removed
-    broken = true;
+    # Older versions need webkitgtk_4_0 which was removed.
+    # 25.08 bundles the same.
+    broken = lib.versionOlder version "25.08";
     license = licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ flacks ];
     inherit homepage;
   };
