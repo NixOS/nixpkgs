@@ -120,6 +120,8 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `cvs`
    - `bzr`
    - `svn`
+   - `darcs`
+   - `pijul`
 
    The hash is printed to stdout.
 
