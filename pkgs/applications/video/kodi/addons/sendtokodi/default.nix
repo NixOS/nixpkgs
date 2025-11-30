@@ -5,6 +5,7 @@
   kodi,
   inputstreamhelper,
   requests,
+  deno,
 }:
 
 buildKodiAddon rec {
@@ -38,6 +39,8 @@ buildKodiAddon rec {
     echo "${lib.strings.getVersion kodi.pythonPackages.yt-dlp}" >lib/yt_dlp_version
     ln -s ${kodi.pythonPackages.yt-dlp}/${kodi.pythonPackages.python.sitePackages}/yt_dlp lib/
   '';
+
+  passthru.pathPackages = [ deno ];
 
   meta = with lib; {
     homepage = "https://github.com/firsttris/plugin.video.sendtokodi";
