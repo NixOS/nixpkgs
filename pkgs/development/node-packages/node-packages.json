@@ -19,7 +19,6 @@
 , "js-yaml"
 , "jsdoc"
 , "lcov-result-merger"
-, "mathjax"
 , "node2nix"
 , "postcss"
 , "prebuild-install"
