@@ -10299,12 +10299,6 @@ with pkgs;
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
 
-  ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
-
-  ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
-
-  ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
-
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
@@ -10466,10 +10460,6 @@ with pkgs;
   };
 
   papis = with python3Packages; toPythonApplication papis;
-
-  plata-theme = callPackage ../data/themes/plata {
-    inherit (mate) marco;
-  };
 
   polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
 

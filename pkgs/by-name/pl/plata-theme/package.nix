@@ -18,7 +18,7 @@
   xfceSupport ? true,
   mateSupport ? true,
   gtk3,
-  marco,
+  mate,
   gtkNextSupport ? false,
   plankSupport ? false,
   steamSupport ? false,
@@ -31,15 +31,15 @@
   destructionColor ? null, # Tertiary color for 'destructive' buttons (Default: #F44336 = Red500)
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plata-theme";
   version = "0.9.9";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
-    rev = version;
-    sha256 = "1iwvlv9qcrjyfbzab00vjqafmp3vdybz1hi02r6lwbgvwyfyrifk";
+    rev = finalAttrs.version;
+    hash = "sha256-08Xsnef7LU5NFiDC8Jdve9zqFJYbgKX+cl5mhtOmm8c=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals mateSupport [
     gtk3
-    marco
+    mate.marco
   ]
   ++ lib.optional telegramSupport zip;
 
@@ -96,14 +96,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK theme based on Material Design Refresh";
     homepage = "https://gitlab.com/tista500/plata-theme";
-    license = with licenses; [
-      gpl2
+    license = with lib.licenses; [
+      gpl2Plus
       cc-by-sa-40
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.tadfisher ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tadfisher ];
   };
-}
+})
