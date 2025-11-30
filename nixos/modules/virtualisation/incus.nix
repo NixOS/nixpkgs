@@ -57,6 +57,7 @@ let
         virtiofsd
         xdelta
         xz
+        zstd
       ]
       ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
         skopeo
