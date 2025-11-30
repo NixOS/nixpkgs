@@ -58,6 +58,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "roborock" ];
 
   meta = {
