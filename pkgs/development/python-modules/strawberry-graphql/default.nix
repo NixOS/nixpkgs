@@ -139,7 +139,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "strawberry" ];
 

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pyecharts" ];
 

@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     "test_patches"

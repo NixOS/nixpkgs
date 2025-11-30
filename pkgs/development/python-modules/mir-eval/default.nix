@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mpl
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     pushd tests

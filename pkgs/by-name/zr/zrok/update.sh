@@ -4,9 +4,9 @@
 set -euo pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-NIX_DRV="$ROOT/default.nix"
+NIX_DRV="$ROOT/package.nix"
 if [ ! -f "$NIX_DRV" ]; then
-  echo "ERROR: cannot find default.nix in $ROOT"
+  echo "ERROR: cannot find package.nix in $ROOT"
   exit 1
 fi
 
@@ -30,9 +30,13 @@ ZROK_VER=$(curl -Ls -w "%{url_effective}" -o /dev/null https://github.com/openzi
 ZROK_LINUX_X64_SHA256=$(fetch_arch "$ZROK_VER" "linux_amd64")
 ZROK_LINUX_AARCH64_SHA256=$(fetch_arch "$ZROK_VER" "linux_arm64")
 ZROK_LINUX_ARMV7L_SHA256=$(fetch_arch "$ZROK_VER" "linux_armv7")
+ZROK_DARWIN_X64_SHA256=$(fetch_arch "$ZROK_VER" "darwin_amd64")
+ZROK_DARWIN_ARM64_SHA256=$(fetch_arch "$ZROK_VER" "darwin_arm64")
 
 sed -i "s/version = \".*\"/version = \"$ZROK_VER\"/" "$NIX_DRV"
 
 replace_sha "x86_64-linux" "$ZROK_LINUX_X64_SHA256"
 replace_sha "aarch64-linux" "$ZROK_LINUX_AARCH64_SHA256"
 replace_sha "armv7l-linux" "$ZROK_LINUX_ARMV7L_SHA256"
+replace_sha "x86_64-darwin" "$ZROK_DARWIN_X64_SHA256"
+replace_sha "aarch64-darwin" "$ZROK_DARWIN_ARM64_SHA256"

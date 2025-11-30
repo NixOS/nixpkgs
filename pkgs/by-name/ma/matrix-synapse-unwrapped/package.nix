@@ -135,7 +135,7 @@ python3Packages.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.filter (pkg: !pkg.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  ++ lib.filter (pkg: !pkg.meta.broken) (lib.concatAttrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
