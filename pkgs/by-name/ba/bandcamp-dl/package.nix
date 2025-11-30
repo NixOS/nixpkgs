@@ -1,8 +1,7 @@
 {
   lib,
-  fetchPypi,
   fetchFromGitHub,
-  python313Packages,
+  python3Packages,
 }:
 
 let
@@ -11,16 +10,18 @@ let
       pname = "unicode-slugify";
       version = "0.1.5";
     in
-    python313Packages.buildPythonPackage {
+    python3Packages.buildPythonPackage {
       format = "setuptools";
       inherit pname version;
 
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "sha256-JfQkJYMX5MtBCT4pUzdLOvHyMJcpdmRzHNs65G9r1sM=";
+      src = fetchFromGitHub {
+        owner = "mozilla";
+        repo = "unicode-slugify";
+        rev = "74d175dd4c9d21b1586842a3909118c7ec58f4ce";
+        hash = "sha256-m67ZvXr/iDOWL8UcRbKGWIw+zvV1WCUjMc3Y2hvzY0E=";
       };
 
-      propagatedBuildInputs = with python313Packages; [
+      propagatedBuildInputs = with python3Packages; [
         six
         unidecode
       ];
@@ -28,24 +29,25 @@ let
       doCheck = false;
     };
 in
-python313Packages.buildPythonPackage {
+python3Packages.buildPythonPackage rec {
   pname = "bandcamp-dl";
   version = "0.0.17";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Evolution0";
     repo = "bandcamp-dl";
-    rev = "d7b4c4d6e7bfe365ee36514d6c608caf883e4476";
-    sha256 = "sha256-PNyVEzwRMXE0AtTTg+JyWw6+FSuxobi3orXuxkG0kxw=";
+    tag = "v${version}";
+    hash = "sha256-PNyVEzwRMXE0AtTTg+JyWw6+FSuxobi3orXuxkG0kxw=";
   };
 
-  pyproject = true;
-  build-system = with python313Packages; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python313Packages; [
+  propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
     demjson3
     mutagen
@@ -53,11 +55,11 @@ python313Packages.buildPythonPackage {
     unicode-slugify
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple python script to download Bandcamp albums";
     homepage = "https://github.com/Evolution0/bandcamp-dl";
-    maintainers = [ maintainers.pivok ];
-    license = licenses.unlicense;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.pivok ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.all;
   };
 }
