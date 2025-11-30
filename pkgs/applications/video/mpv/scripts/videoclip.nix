@@ -10,13 +10,13 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0-unstable-2025-03-10";
+  version = "0-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "785eb86bc080c445e8feb947d7caa8f3a097bf2b";
-    hash = "sha256-oanc9MggMjVDrSW42XrQwwWw2YTrifiCVrg/r42oGx8=";
+    rev = "1c6531b649d3ee526cc7aa360e726aeedf43beb9";
+    hash = "sha256-lBXlvFrDC1Drz5JIiI6488UoFsXz18LAxqRpQmy1G0k=";
   };
 
   patchPhase = ''
@@ -30,7 +30,9 @@ buildLua {
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Easily create videoclips with mpv";
