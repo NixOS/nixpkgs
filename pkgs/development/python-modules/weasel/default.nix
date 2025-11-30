@@ -14,7 +14,7 @@
   requests,
   smart-open,
   srsly,
-  typer-slim,
+  typer,
   wasabi,
 
   # tests
@@ -35,6 +35,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg requirements.txt \
+      --replace "typer-slim" "typer"
+  '';
+
   dependencies = [
     cloudpathlib
     confection
@@ -43,7 +48,7 @@ buildPythonPackage rec {
     requests
     smart-open
     srsly
-    typer-slim
+    typer
     wasabi
   ];
 
