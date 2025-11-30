@@ -2147,7 +2147,7 @@ builtins.intersectAttrs super {
   lib.genAttrs
     [
       "2captcha"
-      "3d-graphics-example"
+      "3d-graphics-examples"
       "3dmodels"
       "4Blocks"
       "assert"
