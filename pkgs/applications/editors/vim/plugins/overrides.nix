@@ -1641,7 +1641,6 @@ assertNoAdditions {
 
   lean-nvim = super.lean-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-lspconfig
       plenary-nvim
     ];
   };
