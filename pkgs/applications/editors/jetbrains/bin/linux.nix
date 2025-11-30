@@ -19,7 +19,6 @@
   vmopts ? null,
   glibcLocales,
 }:
-
 {
   pname,
   product,
@@ -37,13 +36,11 @@
   extraBuildInputs ? [ ],
   ...
 }@args:
-
 let
   loName = lib.toLower productShort;
   hiName = lib.toUpper productShort;
   vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
 in
-
 with stdenv;
 lib.makeOverridable mkDerivation (
   rec {
