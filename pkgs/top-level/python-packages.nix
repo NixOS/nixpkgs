@@ -13668,8 +13668,6 @@ self: super: with self; {
 
   pylru = callPackage ../development/python-modules/pylru { };
 
-  pyls-flake8 = callPackage ../development/python-modules/pyls-flake8 { };
-
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
   pyls-memestra = callPackage ../development/python-modules/pyls-memestra { };
