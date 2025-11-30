@@ -24908,6 +24908,12 @@
     githubId = 2060836;
     name = "Casey Stark";
   };
+  starryreverie = {
+    email = "starryreverie@proton.me";
+    github = "StarryReverie";
+    githubId = 42143810;
+    name = "Justin Chen";
+  };
   starsep = {
     email = "nix@starsep.com";
     github = "starsep";
