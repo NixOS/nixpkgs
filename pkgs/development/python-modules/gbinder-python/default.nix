@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gbinder-python";
-  version = "1.1.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "erfanoabdi";
+    owner = "waydroid";
     repo = "gbinder-python";
     tag = version;
-    hash = "sha256-up1EDuR05a7TlCErd2BXkp01oqi6hEskt7xVxsJqquM=";
+    hash = "sha256-z0hMAvwB+uttPcP+in+C3o1ujhFSiDXKktOajnsXhPI=";
   };
 
   build-system = [
@@ -34,14 +34,13 @@ buildPythonPackage rec {
   postPatch = ''
     # Fix pkg-config name for cross-compilation
     substituteInPlace setup.py \
-      --replace-fail "pkg-config" "$PKG_CONFIG" \
-      --replace-fail "USE_CYTHON = False" "USE_CYTHON = True"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   meta = {
     description = "Python bindings for libgbinder";
-    homepage = "https://github.com/erfanoabdi/gbinder-python";
-    license = lib.licenses.gpl3;
+    homepage = "https://github.com/waydroid/gbinder-python";
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
