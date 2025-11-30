@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dpilger26";
     repo = "NumCpp";
     tag = "Version_${finalAttrs.version}";
-    hash = "sha256-+i4vUtd+UDP1e0Y+2Y31ldIWQenbtzssNrDazcU+tkQ=";
+    hash = "sha256-5HWemgBhTUvoeommFOChWOplfEZPOXwQktkCeO5FnSU=";
   };
 
   patches = [ ./pytest-CMakeLists.patch ];
