@@ -90,5 +90,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/meta-pytorch/tokenizers";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # See https://github.com/NixOS/nixpkgs/issues/466092
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
