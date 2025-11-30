@@ -22,9 +22,14 @@ let
   crossSupport = rec {
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
+    hasBuiltinTH = stdenv.hostPlatform.isGhcjs;
+
     canProxyTH =
       # iserv-proxy currently does not build on GHC 9.6
       lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+
+    # Many suites use Template Haskell for test discovery, including QuickCheck
+    canCheck = hasBuiltinTH || canProxyTH;
 
     iservWrapper =
       let
@@ -602,7 +607,7 @@ let
       export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
     fi
 
-    exec "$@"
+    exec ${if (isCross && crossSupport.canCheck) then "node" else crossSupport.emulator} "$@"
   '';
 
   testTargetsString =
