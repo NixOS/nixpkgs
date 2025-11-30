@@ -14273,10 +14273,6 @@ with pkgs;
     discord-development
     ;
 
-  discord-screenaudio =
-    qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio
-      { };
-
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
   };
