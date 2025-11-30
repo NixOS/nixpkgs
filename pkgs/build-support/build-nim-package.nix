@@ -3,8 +3,7 @@
   buildPackages,
   callPackage,
   stdenv,
-  nim1,
-  nim2,
+  nim,
   nim_builder,
   defaultNimVersion ? 2,
   nimOverrides,
@@ -37,7 +36,7 @@ let
       nim_builder --phase:install
       runHook postInstall
     '';
-    meta = { inherit (nim2.meta) maintainers platforms; };
+    meta = { inherit (nim.meta) maintainers platforms; };
   };
 
   fodFromLockEntry =
@@ -114,20 +113,17 @@ let
           passthru ? { },
           ...
         }:
-        (
-          if requiredNimVersion == 1 then
-            {
-              depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-              nativeBuildInputs = [ nim1 ] ++ nativeBuildInputs;
-            }
-          else if requiredNimVersion == 2 then
-            {
-              depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-              nativeBuildInputs = [ nim2 ] ++ nativeBuildInputs;
-            }
-          else
-            throw "requiredNimVersion ${toString requiredNimVersion} is not valid"
-        )
+        lib.warn
+          "warning: requiredNimVersion is deprecated and will be removed in a future release; please update your configuration."
+          (
+            if requiredNimVersion == 2 then
+              {
+                depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
+                nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
+              }
+            else
+              throw "requiredNimVersion ${toString requiredNimVersion} is not valid"
+          )
         // {
           nimFlags = lockFileNimFlags ++ nimFlags;
           passthru = passthru // {
