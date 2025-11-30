@@ -134,7 +134,7 @@ in
       systemd.services.cryptpad = {
         description = "Cryptpad service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "networking.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           BindReadOnlyPaths = [
             cryptpadConfigFile

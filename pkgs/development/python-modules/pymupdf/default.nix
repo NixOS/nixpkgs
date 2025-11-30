@@ -140,6 +140,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # mad about markdown table formatting
     "tests/test_tables.py::test_markdown"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 when getting widget options
+    "tests/test_4505.py"
+    "tests/test_widgets.py"
   ];
 
   pythonImportsCheck = [
@@ -161,7 +166,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
 }

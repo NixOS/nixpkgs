@@ -53,7 +53,7 @@ in
       description = "Govee2MQTT Service";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "networking.target"
+        "network.target"
         "network-online.target"
       ];
       requires = [ "network-online.target" ];
