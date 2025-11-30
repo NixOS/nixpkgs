@@ -242,6 +242,39 @@ let
       // {
         meta = { };
       };
+
+    dereferences-hard-links = (derivation {
+      name = "dereferences-hard-links";
+
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            # Create a script with binary data after the shebang
+            echo "#!/bin/bash" > $out/bin/test
+            chmod +x $out/bin/test
+            ln $out/bin/test $out/hard-link
+            patchShebangs $out/bin/test
+            if grep '^#!${stdenv.shell}' $out/hard-link > /dev/null; then
+              echo "Patching leaked to hard link"
+              exit 1
+            fi
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
   };
 in
 stdenv.mkDerivation {
@@ -258,6 +291,7 @@ stdenv.mkDerivation {
       preserves-read-only
       preserves-timestamp
       preserves-binary-data
+      dereferences-hard-links
       ;
   };
   buildCommand = ''
