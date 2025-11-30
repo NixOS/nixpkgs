@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Tool suite for analyzing and visualizing DNS and DNSSEC behavior";
+    homepage = "https://github.com/dnsviz/dnsviz";
     mainProgram = "dnsviz";
     longDescription = ''
       DNSViz is a tool suite for analysis and visualization of Domain Name System (DNS) behavior,

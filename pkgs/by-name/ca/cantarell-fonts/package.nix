@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Default typeface used in the user interface of GNOME since version 3.0";
+    homepage = "https://cantarell.gnome.org/";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
     maintainers = [ ];

@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "CUPS drivers for TSPL-based iDPRT thermal label printers (SP210, SP310, SP320, SP320E, SP410, SP410BT, SP420, SP450, SP460BT)";
+    homepage = "https://www.idprt.com/";
     platforms = [
       "x86_64-linux"
       "x86-linux"

@@ -60,6 +60,7 @@ gccStdenv.mkDerivation (finalAttrs: {
       compatibility and retain the feature set of the original ARJ archiver as
       provided by ARJ Software, Inc.
     '';
+    homepage = "https://arj.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.unix;

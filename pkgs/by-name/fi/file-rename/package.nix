@@ -30,6 +30,7 @@ perlPackages.buildPerlPackage {
 
   meta = with lib; {
     description = "Perl extension for renaming multiple files";
+    homepage = "https://metacpan.org/pod/File::Rename";
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];
     mainProgram = "rename";

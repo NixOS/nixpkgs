@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Udev helper for naming devices per BIOS names";
+    homepage = "https://github.com/dell/biosdevname";
     license = licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
