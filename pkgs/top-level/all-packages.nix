@@ -2078,13 +2078,13 @@ with pkgs;
 
   klaus = with python3Packages; toPythonApplication klaus;
 
-  klipper = callPackage ../servers/klipper { };
+  klipper-firmware = callPackage ../by-name/kl/klipper-firmware/package.nix {
+    simulatorConfig = ../by-name/kl/klipper-flash/simulator.cfg;
+  };
 
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
-
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
-
-  klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
+  klipper-flash = callPackage ../by-name/kl/klipper-flash/package.nix {
+    simulatorConfig = ../by-name/kl/klipper-flash/simulator.cfg;
+  };
 
   klog = qt5.callPackage ../applications/radio/klog { };
 

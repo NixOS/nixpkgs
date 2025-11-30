@@ -14,8 +14,9 @@ args@{
   avrdude,
   stm32flash,
   klipper-flash,
+  simulatorConfig,
   mcu ? "mcu",
-  firmwareConfig ? ./simulator.cfg,
+  firmwareConfig ? simulatorConfig,
 }:
 # are used by flash scripts
 # find those with `rg '\[\"lib'` inside of klipper repo

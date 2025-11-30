@@ -3,12 +3,13 @@
   writeShellApplication,
   klipper,
   klipper-firmware,
+  simulatorConfig,
   avrdude,
   dfu-util,
   stm32flash,
   mcu ? "mcu",
   flashDevice ? "/dev/null",
-  firmwareConfig ? ./simulator.cfg,
+  firmwareConfig ? simulatorConfig,
 }:
 let
   getConfigField =
