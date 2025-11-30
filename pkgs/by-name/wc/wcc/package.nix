@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   cargo,
   capstone,
   libbfd,
@@ -36,6 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     libiberty
     readline
+  ];
+
+  patches = [
+    # The upstream forgot to bump WVERSION in header before tagging `v0.0.11`.
+    (fetchpatch2 {
+      url = "https://github.com/endrazine/wcc/commit/4bea2dac8b49d82e4f72e42027d74fc654380f7b.patch?full_index=1";
+      hash = "sha256-RK0ue8hdK/G+njwGmWpaewclRHprO8aBdZ9vBGQIQOc=";
+    })
   ];
 
   postPatch = ''
