@@ -1667,18 +1667,6 @@ let
 
           scad-preview = ignoreCompilationError super.scad-preview; # elisp error
 
-          sdml-mode = super.sdml-mode.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "make-pretty-hydra-optional.patch";
-                  url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
-                  hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
-                })
-              ];
-            }
-          );
-
           # https://github.com/wanderlust/semi/pull/29
           # missing optional dependencies
           semi = addPackageRequires super.semi [ self.bbdb-vcard ];
