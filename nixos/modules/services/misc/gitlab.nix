@@ -19,10 +19,7 @@ let
   git = cfg.packages.gitaly.git;
 
   postgresqlPackage =
-    if config.services.postgresql.enable then
-      config.services.postgresql.package
-    else
-      pkgs.postgresql_14;
+    if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
