@@ -11,6 +11,7 @@
   common-updater-scripts,
   jq,
   gnused,
+  jvmArgs ? [ ],
 }:
 
 let
@@ -76,6 +77,7 @@ maven.buildMavenPackage rec {
     install -Dm644 org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar $out/share
 
     makeWrapper ${jre}/bin/java $out/bin/lemminx \
+      --add-flags "${lib.escapeShellArgs jvmArgs}" \
       --add-flags "-jar $out/share/org.eclipse.lemminx-uber.jar"
 
     runHook postInstall
