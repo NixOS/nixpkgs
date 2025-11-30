@@ -30,9 +30,13 @@ let
 
   baseAttrs = {
     src = fetchurl {
-      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
-        lib.replaceStrings [ "." ] [ "_" ] version
-      }-src.tgz";
+      url =
+        if lib.versionAtLeast version "78.1" then
+          "https://github.com/unicode-org/icu/releases/download/release-${version}/icu4c-${version}-sources.tgz"
+        else
+          "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
+            lib.replaceStrings [ "." ] [ "_" ] version
+          }-src.tgz";
       inherit hash;
     };
 
