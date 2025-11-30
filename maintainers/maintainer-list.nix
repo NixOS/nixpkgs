@@ -1410,6 +1410,11 @@
     matrix = "@amaan:amaanq.com";
     name = "Amaan Qureshi";
   };
+  am-on = {
+    name = "Amon Stopinšek";
+    github = "am-on";
+    githubId = 8530224;
+  };
   amadaluzia = {
     email = "amadaluzia@disroot.org";
     github = "amadaluzia";
