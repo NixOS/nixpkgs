@@ -12,7 +12,6 @@
     lib.mapAttrs (_: set: lib.recurseIntoAttrs set) {
       inherit (super)
         rPackages
-        sourceHanPackages
         ;
 
       # emacsPackages is an alias for emacs.pkgs
