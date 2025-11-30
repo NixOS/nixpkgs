@@ -6,6 +6,7 @@
   gnupg,
   php,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 let
@@ -44,8 +45,14 @@ buildPecl {
   '';
 
   patches = [
-    # https://github.com/php-gnupg/php-gnupg/issues/62
-    ./missing-new-line-test.patch
+    (fetchpatch {
+      url = "https://github.com/php-gnupg/php-gnupg/commit/6eda368b55044343349a8e76f6beda3ad54660dc.patch";
+      hash = "sha256-/c+cxfAj3Cg7m2+sFiHWQr4R9atPypQuAUVyAOI8ZeM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/php-gnupg/php-gnupg/commit/4b9160b94df1d831d7bcc4f980cb8969d9ab5c11.patch";
+      hash = "sha256-fJ/H1tbwMuLUpdWe0+oPyzhBFAsjG2QzmZSiuIsMekY=";
+    })
   ];
 
   doCheck = true;
