@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  mecab-ipadic,
   libiconv,
+  callPackage,
+  fetchFromGitHub,
 }:
 
 let
-  mecab-base = import ./base.nix { inherit fetchurl libiconv; };
+  mecab-base = import ./base.nix { inherit fetchFromGitHub libiconv; };
+  mecab-ipadic = callPackage ./ipadic.nix { };
 in
 stdenv.mkDerivation (
   finalAttrs:
@@ -21,13 +22,13 @@ stdenv.mkDerivation (
         ln -s ${mecab-ipadic} $out/lib/mecab/dic/ipadic
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Japanese morphological analysis system";
         homepage = "http://taku910.github.io/mecab";
-        license = licenses.bsd3;
-        platforms = platforms.unix;
+        license = lib.licenses.bsd3;
+        platforms = lib.platforms.unix;
         mainProgram = "mecab";
-        maintainers = with maintainers; [ auntie ];
+        maintainers = with lib.maintainers; [ auntie ];
       };
     }
   )

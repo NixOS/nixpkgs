@@ -1,11 +1,11 @@
 {
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   libiconv,
 }:
 
 let
-  mecab-base = import ./base.nix { inherit fetchurl libiconv; };
+  mecab-base = import ./base.nix { inherit fetchFromGitHub libiconv; };
 in
 stdenv.mkDerivation (
   finalAttrs:
