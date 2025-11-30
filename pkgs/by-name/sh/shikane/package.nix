@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    installManPage ./build/man/shikane.*
+    installManPage ./build/man/*
   '';
 
   # upstream has no tests

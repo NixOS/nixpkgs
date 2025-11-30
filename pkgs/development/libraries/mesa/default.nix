@@ -13,7 +13,6 @@
   spirv-tools,
   intltool,
   jdupes,
-  libdisplay-info,
   libdrm,
   libgbm,
   libglvnd,
@@ -69,10 +68,6 @@
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ]
-  ++ lib.optionals stdenv.hostPlatform.is64bit [
-    "ethosu" # ARM Ethos NPU, does not build on 32-bit
-    "rocket" # Rockchip NPU, probably horribly broken on 32-bit
   ],
   vulkanDrivers ? [
     "amd" # AMD (aka RADV)
@@ -80,7 +75,7 @@
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "gfxstream" # Android virtualized GPU
-    "imagination" # PowerVR Rogue (currently N/A)
+    "imagination-experimental" # PowerVR Rogue (currently N/A)
     "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
@@ -101,7 +96,6 @@
     "wayland"
   ],
   vulkanLayers ? [
-    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
@@ -150,7 +144,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    ./musl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37027
+    ./gallivm-llvm-21.patch
   ];
 
   postPatch = ''
@@ -261,7 +256,6 @@ stdenv.mkDerivation {
       elfutils
       expat
       spirv-tools
-      libdisplay-info
       libdrm
       libgbm
       libglvnd
@@ -341,7 +335,6 @@ stdenv.mkDerivation {
     moveToOutput bin/panfrost_compile $cross_tools
     moveToOutput bin/panfrost_texfeatures $cross_tools
     moveToOutput bin/panfrostdump $cross_tools
-    moveToOutput bin/pco_clc $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
     moveToOutput "lib/lib*OpenCL*" $opencl

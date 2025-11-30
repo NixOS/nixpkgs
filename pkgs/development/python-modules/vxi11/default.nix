@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   pytestCheckHook,
   fetchpatch2,
@@ -10,6 +11,9 @@ buildPythonPackage rec {
   pname = "python-vxi11";
   version = "0.9";
   format = "setuptools";
+
+  # vxi11 relies on xdrlib, which was removed in Python 3.13
+  disabled = pythonAtLeast "3.13";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
