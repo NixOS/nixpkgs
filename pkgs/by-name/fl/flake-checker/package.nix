@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flake-checker";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "flake-checker";
     rev = "v${version}";
-    hash = "sha256-elHpiMGwJ2KnN75EOTjsjpziYfXiRyTeixhY4rd85m0=";
+    hash = "sha256-zbNODGugDSFsTKc7V9r6X4+mNTAbjq/uD+ESprqzPgg=";
   };
 
-  cargoHash = "sha256-QS38tAJ1V0Avd7N+Mhexv23oh+kxtmr/qvQZLRwP9zA=";
+  cargoHash = "sha256-zfnaav/ndcwado7P93Qxh0xPWIaBFiAV0FIZ8jvnt/E=";
 
   meta = with lib; {
     description = "Health checks for your Nix flakes";
