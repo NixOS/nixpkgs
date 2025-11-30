@@ -138,6 +138,23 @@ module.exports = async ({ github, context, core, dry }) => {
     return users[id]
   }
 
+  // Same for teams
+  const teams = {}
+  function getTeam(id) {
+    if (!teams[id]) {
+      teams[id] = github
+        .request({
+          method: 'GET',
+          url: '/organizations/{orgId}/team/{id}',
+          orgId: github.repository_owner_id,
+          id,
+        })
+        .then((resp) => resp.data)
+    }
+
+    return teams[id]
+  }
+
   async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
@@ -170,17 +187,52 @@ module.exports = async ({ github, context, core, dry }) => {
     })
 
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
-    // Accounts could be deleted as well, so don't count them.
     const reviews = (
-      await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number,
-      })
-    ).filter(
+      await github.graphql(
+        `query($owner: String!, $repo: String!, $pr: Int!) {
+        repository(owner: $owner, name: $repo) {
+          pullRequest(number: $pr) {
+            # Unlikely that there's ever more than 100 reviews, so let's not bother,
+            # but if https://github.com/actions/github-script/issues/309 is resolved it would be easy
+            reviews(first: 100) {
+              nodes {
+                state
+                user: author {
+                  # Only get users, no bots
+                  ... on User {
+                    login
+                    # Assign the id field in the resulting JSON to the result of querying for databaseId
+                    # databaseId in GraphQL-land is the same as id in REST-land
+                    id: databaseId
+                  }
+                }
+                onBehalfOf(first: 100) {
+                  nodes {
+                    slug
+                  }
+                }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
+          }
+        }
+      }`,
+        {
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pr: pull_number,
+        },
+      )
+    ).repository.pullRequest.reviews.nodes.filter(
       (r) =>
-        r.user &&
-        !r.user.login.endsWith('[bot]') &&
-        r.user.type !== 'Bot' &&
+        // The `... on User` makes it such that .login only exists for users,
+        // but we still need to filter the others out.
+        // Accounts could be deleted as well, so don't count them.
+        r.user.login &&
+        // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
 
@@ -361,14 +413,17 @@ module.exports = async ({ github, context, core, dry }) => {
           pull_request,
           reviews,
           // TODO: Use maintainer map instead of the artifact.
-          maintainers: Object.keys(
+          userMaintainers: Object.keys(
             JSON.parse(
               await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
             ),
           ).map((id) => parseInt(id)),
+          teamMaintainers: Object.keys(
+            JSON.parse(await readFile(`${pull_number}/teams.json`, 'utf-8')),
+          ).map((id) => parseInt(id)),
           owners,
-          getTeamMembers,
           getUser,
+          getTeam,
         })
       }
     }
