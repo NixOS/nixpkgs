@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cacert,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "certifi";
   version = "2025.11.12";
   pyproject = true;
-
 
   src = fetchFromGitHub {
     owner = "certifi";
