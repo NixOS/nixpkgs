@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     gfortran
     cmake
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
