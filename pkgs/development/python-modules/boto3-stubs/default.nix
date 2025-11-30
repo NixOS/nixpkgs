@@ -358,13 +358,13 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.41.4";
+  version = "1.41.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
-    hash = "sha256-3hzThIpkfZpuj18QAKxWnncGZLAy2aplrY7Q5fKsfyI=";
+    hash = "sha256-UUokKCFHdgrx7G+QNcLEUckceIF9GEV8UNhB7lLaoIg=";
   };
 
   build-system = [ setuptools ];
