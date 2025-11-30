@@ -1100,8 +1100,8 @@ in
             '';
           };
           mail_smtpstreamoptions = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
+            type = lib.types.attrsOf (lib.types.attrsOf lib.types.anything);
+            default = { };
             description = ''
               This depends on `mail_smtpmode`. Array of additional streams options that will be passed to underlying Swift mailer implementation.
             '';
