@@ -454,7 +454,7 @@ in
           defaultText = literalExpression "true";
           description = ''
             Create the database and database user locally.
-            This currently only applies if database type "mysql" is selected.
+            This currently only applies if database type "mysql" or "postgres" is selected.
           '';
         };
       };
