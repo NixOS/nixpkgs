@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "8.6.0";
+  version = "8.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digital-asset";
     repo = "dazl-client";
     tag = "v${version}";
-    hash = "sha256-zFe6FomsT6aCR5B8hYEN6oTzaprVzs7fvdM3hv99LgY=";
+    hash = "sha256-Pw+AV4RunR3W1Xz4l9W9Bn2++cn1ls1fJYas9AF+T0M=";
   };
 
   pythonRelaxDeps = [
