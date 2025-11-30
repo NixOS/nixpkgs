@@ -1,9 +1,11 @@
 {
-  lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  pkg-config,
+  platformio,
+  writableTmpDirAsHomeHook,
   i2c-tools,
   libX11,
   libgpiod_1,
@@ -11,28 +13,36 @@
   libusb1,
   libuv,
   libxkbcommon,
-  udevCheckHook,
   ulfius,
   yaml-cpp,
+  udevCheckHook,
 }:
+let
+  version = "2.7.16.a597230";
+
+  platformio-deps-native = fetchzip {
+    url = "https://github.com/meshtastic/firmware/releases/download/v${version}/platformio-deps-native-tft-${version}.zip";
+    hash = "sha256-Jo7e6zsCaiJs6NyIRmD6BWJFwbs0xVlUih206ePUpwk=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "meshtasticd";
-  version = "2.6.11.25";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://download.opensuse.org/repositories/network:/Meshtastic:/beta/Debian_12/amd64/meshtasticd_${finalAttrs.version}~obs60ec05e~beta_amd64.deb";
-    hash = "sha256-7JCv+1YgsCLwboGE/2f+8iyLLoUsKn3YdJ9Atnfj7Zw=";
+  src = fetchFromGitHub {
+    owner = "meshtastic";
+    repo = "firmware";
+    hash = "sha256-oU3Z8qjBNeNGPGT74VStAPHgsGqsQJKngHJR6m2CBa0=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
+    pkg-config
+    platformio
+    writableTmpDirAsHomeHook
+    breakpointHook
   ];
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  strictDeps = true;
 
   buildInputs = [
     i2c-tools
@@ -46,24 +56,37 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libyaml-cpp.so.0.7"
-  ];
+  preConfigure = ''
+    mkdir -p platformio-deps-native
+    cp -ar ${platformio-deps-native}/. platformio-deps-native
+    chmod +w -R platformio-deps-native
+
+    substituteInPlace "platformio-deps-native/libdeps/native-tft/Pine libch341-spi Userspace library/libpinedio-usb.h" \
+      --replace-fail "#include <libusb-1.0/libusb.h>" "#include \"${libusb1.dev}/include/libusb-1.0/libusb.h\""
+
+    substituteInPlace "platformio-deps-native/packages/framework-portduino/cores/portduino/AsyncUDP.h" \
+      --replace-fail "#include <uv.h>" "#include \"${libuv.dev}/include/uv.h\""
+
+    export PLATFORMIO_CORE_DIR=platformio-deps-native/core
+    export PLATFORMIO_LIBDEPS_DIR=platformio-deps-native/libdeps
+    export PLATFORMIO_PACKAGES_DIR=platformio-deps-native/packages
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    substituteInPlace "src/platform/portduino/PortduinoGlue.h" \
+      --replace-fail "#include \"yaml-cpp/yaml.h\""   "#include \"${yaml-cpp}/include/yaml-cpp/yaml.h\""
+
+    platformio run --environment native-tft
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p {$out,$out/bin}
-    cp -r {usr,lib} $out/
-
-    patchelf --replace-needed libyaml-cpp.so.0.7 libyaml-cpp.so.0.8 $out/usr/bin/meshtasticd
-
-    ln -s $out/usr/bin/meshtasticd $out/bin/meshtasticd
-
-    substituteInPlace $out/lib/systemd/system/meshtasticd.service \
-      --replace-fail "/usr/bin/meshtasticd" "$out/bin/meshtasticd" \
-      --replace-fail 'User=meshtasticd' 'DynamicUser=yes' \
-      --replace-fail 'Group=meshtasticd' ""
+    # TODO
 
     runHook postInstall
   '';
@@ -81,8 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/meshtastic/firmware";
     mainProgram = "meshtasticd";
     license = lib.licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ drupol ];
   };
 })
