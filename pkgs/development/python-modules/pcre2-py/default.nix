@@ -82,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the PCRE2 library created by Philip Hazel";
     homepage = "https://github.com/grtetrault/pcre2.py";
-    changelog = "https://github.com/grtetrault/pcre2.py/releases/tag/v{version}";
+    changelog = "https://github.com/grtetrault/pcre2.py/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tochiaha ];
   };

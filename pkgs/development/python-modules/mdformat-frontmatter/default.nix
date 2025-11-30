@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
-    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
+    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       aldoborrero
