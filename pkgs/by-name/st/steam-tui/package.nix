@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dmadisetti/steam-tui";
     license = licenses.mit;
     maintainers = with maintainers; [
-      lom
       dmadisetti
     ];
     # steam only supports that platform

@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Nooo37/pinsel";
     # no license
     license = licenses.unfree;
-    maintainers = with maintainers; [ lom ];
+    maintainers = [ ];
     mainProgram = "pinsel";
   };
 }
