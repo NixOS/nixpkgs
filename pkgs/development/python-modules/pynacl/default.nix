@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pynacl";
-  version = "1.6.0";
+  version = "1.6.1";
   outputs = [
     "out"
     "doc"
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "pynacl";
     tag = version;
-    hash = "sha256-7SDJB2bXn0IGJQi597yehs9epdfmS7slbQ97vFVUkEA=";
+    hash = "sha256-6zZpR/tiA4ggSa5P87y5At+3n4jRgYGN6bOigMrpCs8=";
   };
 
   build-system = [
