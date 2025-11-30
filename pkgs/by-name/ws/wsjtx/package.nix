@@ -5,6 +5,7 @@
   asciidoc,
   asciidoctor,
   cmake,
+  gitUpdater,
   pkg-config,
   fftw,
   fftwFloat,
@@ -12,22 +13,18 @@
   hamlib_4,
   libtool,
   libusb1,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
-  qttools,
+  qt5,
   boost,
   texinfo,
-  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
   version = "2.7.0";
 
   src = fetchgit {
-    url = "http://git.code.sf.net/p/wsjt/wsjtx";
-    rev = "wsjtx-${version}";
+    url = "https://git.code.sf.net/p/wsjt/wsjtx";
+    rev = "wsjtx-${finalAttrs.version}";
     hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
@@ -39,24 +36,29 @@ stdenv.mkDerivation rec {
     hamlib_4 # rigctl
     libtool
     pkg-config
-    qttools
+    qt5.qttools
     texinfo
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     fftw
     fftwFloat
     hamlib_4
     libusb1
-    qtbase
-    qtmultimedia
-    qtserialport
+    qt5.qtbase
+    qt5.qtmultimedia
+    qt5.qtserialport
     boost
   ];
 
   strictDeps = true;
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "wsjtx-";
+    ignoredVersions = "(-rc).*";
+  };
+
+  meta = {
     description = "Weak-signal digital communication modes for amateur radio";
     longDescription = ''
       WSJT-X implements communication protocols or "modes" called FT4, FT8, JT4,
@@ -66,12 +68,12 @@ stdenv.mkDerivation rec {
       contacts under extreme weak-signal conditions.
     '';
     homepage = "https://wsjt.sourceforge.io";
-    license = with licenses; [ gpl3Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       lasandell
       numinit
       melling
     ];
   };
-}
+})
