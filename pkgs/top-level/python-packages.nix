@@ -19255,7 +19255,7 @@ self: super: with self; {
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
-  typer-slim = self.typer.override { package = "typer-slim"; };
+  typer-slim = callPackage ../development/python-modules/typer-slim { };
 
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 
