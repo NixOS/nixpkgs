@@ -5,7 +5,7 @@
   mltonBootstrap,
   url ? "https://github.com/mlton/mlton",
   rev,
-  sha256,
+  hash,
   stdenv,
   version,
   which,
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchgit {
-    inherit url rev sha256;
+    inherit url rev hash;
   };
 
   nativeBuildInputs = [

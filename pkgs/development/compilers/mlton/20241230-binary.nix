@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   patchelf,
+  bash,
   gmp,
 }:
 let
@@ -10,24 +11,38 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mlton";
-  version = "20180207";
+  version = "20241230";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       (fetchurl {
-        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux.tgz";
-        hash = "sha256-jkq9ufPvgcAbmJpmc03KKn9BicVWc6HIu61U58spmDg=";
+        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux.ubuntu-24.04_glibc2.39.tgz";
+        hash = "sha256-ldXnjHcWGu77LP9WL6vTC6FngzhxPFAUflAA+bpIFZM=";
+      })
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      (fetchurl {
+        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.arm64-linux.ubuntu-24.04-arm_glibc2.39.tgz";
+        hash = "sha256-rn65t253SfUShAM3kXiLQJHT7JS7EO3fAPB23LWIwfc=";
       })
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       (fetchurl {
-        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.gmp-static.tgz";
-        hash = "sha256-uy2YLvl9bvTv4HjSOgm68+Uvb9bI8aYAFuFiRDj0h7M=";
+        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.macos-13_gmp-static.tgz";
+        hash = "sha256-fW0hqjrWUcy+PIN8WHb1r4EYgfuwF9Zz3q7f2ZtxOi0=";
+      })
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      (fetchurl {
+        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.arm64-darwin.macos-15_gmp-static.tgz";
+        hash = "sha256-xhFP2plFjP/mbLz1CNtlZzkm0Kx6twfD/Dmn79Vj908=";
       })
     else
       throw "Architecture not supported";
 
-  buildInputs = [ gmp ];
+  buildInputs = [
+    bash
+    gmp
+  ];
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
+  strictDeps = true;
 
   buildPhase = ''
     make update \
