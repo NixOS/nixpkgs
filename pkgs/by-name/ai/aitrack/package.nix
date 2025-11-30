@@ -7,21 +7,23 @@
   spdlog,
   onnxruntime,
   libsForQt5,
+  cmake,
 }:
 stdenv.mkDerivation {
   pname = "aitrack";
-  version = "0.6.5";
+  version = "0-unstable-2024-10-17";
 
   src = fetchFromGitHub {
-    owner = "mdk97";
-    repo = "aitrack-linux";
-    rev = "00bcca9b685abf3a19e4eab653198ca2b1895ae4";
-    sha256 = "sha256-pPvYVLUPYdjtJKdxqZI+JN7OZ4xw9gZ3baYTnJUSTGE=";
+    owner = "franzitrone";
+    repo = "aitrack";
+    rev = "fda5d6220046fcb74b41ff7a9e826002aae09b06";
+    sha256 = "sha256-LSVQwFX+rtnPz6kYFlrm9iphBOOGHaQsxjNSfUuFz3Q=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    libsForQt5.qmake
+    cmake
+    libsForQt5.qt5.qttools
     libsForQt5.wrapQtAppsHook
   ];
 
@@ -37,9 +39,17 @@ stdenv.mkDerivation {
       --replace "/usr/share/" "$out/share/"
   '';
 
-  postInstall = ''
+  postBuild = ''
+    cp -r ../models models
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin aitrack
     install -Dt $out/share/aitrack/models models/*
+
+    runHook postInstall
   '';
 
   meta = with lib; {
