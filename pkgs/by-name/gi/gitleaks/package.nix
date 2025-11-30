@@ -53,8 +53,8 @@ buildGoModule rec {
       API keys and tokens in git repos.
     '';
     homepage = "https://github.com/gitleaks/gitleaks";
-    changelog = "https://github.com/gitleaks/gitleaks/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/gitleaks/gitleaks/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       friedow
