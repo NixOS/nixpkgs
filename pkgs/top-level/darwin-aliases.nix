@@ -94,20 +94,24 @@ in
 
 stubs
 // mapAliases {
-  bsdmake = pkgs.bmake; # Added 2024-10-03
+  # lib.warnOnInstantiate gives strange warnings during CI eval on aarch64-darwin:
+  #   warning: evaluation warning: `darwin.cctools` has been replaced by `pkgs.cctools`
+  # even there are seemingly no usages of it
   cctools = pkgs.cctools; # Added 2024-07-17
-  cctools-apple = pkgs.cctools; # Added 2024-07-01
-  cctools-llvm = pkgs.cctools; # Added 2024-07-01
-  cctools-port = pkgs.cctools; # Added 2024-07-17
-  discrete-scroll = pkgs.discrete-scroll; # Added 2024-11-27
-  ditto = throw "'darwin.ditto' has been removed, because it was impure and unused"; # Added 2025-10-18
-  iproute2mac = lib.warnOnInstantiate "darwin.iproute2mac has been renamed to iproute2mac" pkgs.iproute2mac; # Added 2024-12-08
-  libresolvHeaders = throw "darwin.libresolvHeaders has been removed; use `lib.getInclude darwin.libresolv`"; # Converted to throw 2025-07-29
-  libtapi = pkgs.libtapi; # Added 2024-08-16
-  libutilHeaders = throw "darwin.libutilHeaders has been removed; use `lib.getInclude darwin.libutil`"; # Converted to throw 2025-07-29
-  moltenvk = pkgs.moltenvk; # Added 2024-10-06
-  opencflite = pkgs.opencflite; # Added 2024-05-02
-  openwith = pkgs.openwith; # Added 2025-11-28
-  stdenvNoCF = throw "darwin.stdenvNoCF has been removed; use `stdenv` or `stdenvNoCC`"; # Converted to throw 2025-07-29
-  sudo = throw "'darwin.sudo' has been removed, because it was impure and unused"; # Added 2025-10-18
+
+  bsdmake = lib.warnOnInstantiate "`darwin.bsdmake` has been replaced by `pkgs.bmake`" pkgs.bmake; # Added 2025-11-30
+  cctools-apple = lib.warnOnInstantiate "`darwin.cctools-apple` has been replaced by `pkgs.cctools`" pkgs.cctools; # Added 2024-07-01
+  cctools-llvm = lib.warnOnInstantiate "`darwin.cctools-llvm` has been replaced by `pkgs.cctools`" pkgs.cctools; # Added 2024-07-01
+  cctools-port = lib.warnOnInstantiate "`darwin.cctools-port` has been replaced by `pkgs.cctools`" pkgs.cctools; # Added 2024-07-17
+  discrete-scroll = lib.warnOnInstantiate "`darwin.discrete-scroll` has been replaced by `pkgs.discrete-scroll`" pkgs.discrete-scroll; # Added 2024-11-27
+  ditto = throw "`darwin.ditto` has been removed, because it was impure and unused"; # Added 2025-10-18
+  iproute2mac = lib.warnOnInstantiate "`darwin.iproute2mac` has been replaced by `pkgs.iproute2mac`" pkgs.iproute2mac; # Added 2024-12-08
+  libresolvHeaders = throw "`darwin.libresolvHeaders` has been removed; use `lib.getInclude darwin.libresolv`"; # Converted to throw 2025-07-29
+  libtapi = lib.warnOnInstantiate "`darwin.libtapi` has been replaced by `pkgs.libtapi`" pkgs.libtapi; # Added 2024-08-16
+  libutilHeaders = throw "`darwin.libutilHeaders` has been removed; use `lib.getInclude darwin.libutil`"; # Converted to throw 2025-07-29
+  moltenvk = lib.warnOnInstantiate "`darwin.moltenvk` has been replaced by `pkgs.moltenvk`" pkgs.moltenvk; # Added 2024-10-06
+  opencflite = lib.warnOnInstantiate "`darwin.opencflite` has been replaced by `pkgs.opencflite`" pkgs.opencflite; # Added 2024-05-02
+  openwith = lib.warnOnInstantiate "`darwin.openwith` has been replaced by `pkgs.openwith`" pkgs.openwith; # Added 2025-11-28
+  stdenvNoCF = throw "`darwin.stdenvNoCF` has been removed; use `stdenv` or `stdenvNoCC`"; # Converted to throw 2025-07-29
+  sudo = throw "`darwin.sudo` has been removed, because it was impure and unused"; # Added 2025-10-18
 }
