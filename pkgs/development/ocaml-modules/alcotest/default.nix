@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  fetchurl,
+  fetchFromGitHub,
   astring,
   cmdliner,
   fmt,
@@ -11,13 +11,15 @@
   ocaml-syntax-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "alcotest";
   version = "1.9.1";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-${version}.tbz";
-    hash = "sha256-HinDtB1DKQYhBbcj39o6/4a4zvXnx1ANDkkfxf145II=";
+  src = fetchFromGitHub {
+    owner = "mirage";
+    repo = "alcotest";
+    tag = finalAttrs.version;
+    hash = "sha256-c5GmcB+VzpRkJ6yN9/KjzR8SxNQcgruC+dZ3NmU5WxI=";
   };
 
   nativeBuildInputs = [ ocaml-syntax-shims ];
@@ -33,10 +35,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/alcotest";
     description = "Lightweight and colourful test framework";
-    license = licenses.isc;
-    maintainers = [ maintainers.ericbmerritt ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ericbmerritt ];
   };
-}
+})

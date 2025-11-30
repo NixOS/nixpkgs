@@ -1,21 +1,23 @@
 {
   lib,
   buildDunePackage,
-  fetchurl,
+  fetchFromGitHub,
   ptime,
   alcotest,
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.13.0";
 
   pname = "asn1-combinators";
   version = "0.3.2";
 
-  src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-${version}.tbz";
-    hash = "sha256-KyaYX24nIgc9zZ+ENVvWdX4SZDtaSOMLPAf/fPsNin8=";
+  src = fetchFromGitHub {
+    owner = "mirleft";
+    repo = "ocaml-asn1-combinators";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CN/9L24TmEDRWRI1IkbQzRvunMqx5vfukRO7JXmwc2E=";
   };
 
   propagatedBuildInputs = [ ptime ];
@@ -28,9 +30,9 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/mirleft/ocaml-asn1-combinators";
-    changelog = "https://github.com/mirleft/ocaml-asn1-combinators/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/mirleft/ocaml-asn1-combinators/blob/v${finalAttrs.version}/CHANGES.md";
     description = "Combinators for expressing ASN.1 grammars in OCaml";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

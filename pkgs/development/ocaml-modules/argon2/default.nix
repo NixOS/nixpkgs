@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   ctypes,
   ctypes-foreign,
   dune-configurator,
@@ -9,15 +9,17 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "argon2";
   version = "1.0.2";
 
   minimalOCamlVersion = "4.02.3";
 
-  src = fetchurl {
-    url = "https://github.com/Khady/ocaml-argon2/releases/download/${version}/argon2-${version}.tbz";
-    hash = "sha256-NDsOV4kPT2SnSfNHDBAK+VKZgHDIKxW+dNJ/C5bQ8gU=";
+  src = fetchFromGitHub {
+    owner = "Khady";
+    repo = "ocaml-argon2";
+    tag = finalAttrs.version;
+    hash = "sha256-m5yOMT33Z9LfjQg6QRBW6mjHNyIySq6somTFuGmL9xI=";
   };
 
   buildInputs = [
@@ -37,4 +39,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ naora ];
   };
-}
+})
