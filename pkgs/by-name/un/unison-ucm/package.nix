@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       ceedubs
       sellout
       virusdave
-      LowYieldFire
     ];
     platforms = [
       "x86_64-darwin"
