@@ -10,11 +10,7 @@ let
 
   cfg = config.services.hedgedoc;
 
-  # 21.03 will not be an official release - it was instead 21.05.  This
-  # versionAtLeast statement remains set to 21.03 for backwards compatibility.
-  # See https://github.com/NixOS/nixpkgs/pull/108899 and
-  # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if lib.versionAtLeast config.system.stateVersion "21.03" then "hedgedoc" else "codimd";
+  name = if lib.versionAtLeast config.system.stateVersion "21.05" then "hedgedoc" else "codimd";
 
   settingsFormat = pkgs.formats.json { };
 in
@@ -25,7 +21,9 @@ in
   ];
 
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
+    (lib.mkRemovedOptionModule [ "services" "codimd" ] ''
+      This options group has been removed in favor of `services.hedgedoc`.
+    '')
     (lib.mkRenamedOptionModule
       [ "services" "hedgedoc" "configuration" ]
       [ "services" "hedgedoc" "settings" ]
