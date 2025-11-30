@@ -1,0 +1,11 @@
+--- libcddb-original/lib/cddb_net.c     2025-11-28 17:17:41.878439664 +0000
++++ libcddb-fixed/lib/cddb_net.c        2025-11-28 17:35:16.257511694 +0000
+@@ -305,7 +305,7 @@
+             int rv;
+             fd_set wfds;
+             struct timeval tv;
+-            size_t l;
++            socklen_t l;
+ 
+             /* set up select time out */
+             tv.tv_sec = timeout;
