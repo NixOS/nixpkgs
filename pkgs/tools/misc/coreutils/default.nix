@@ -48,11 +48,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.8";
+  version = "9.9";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
+    hash = "sha256-Gby2yoZxg8V9dxVerpRsXs7YgYMUO0XKUa19JsYoynU=";
   };
 
   patches = [
