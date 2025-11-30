@@ -20,12 +20,11 @@ in
     "x86_64-linux"
     "aarch64-linux"
   ],
-  variant ? "cuda",
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
       allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
-      "${variant}Support" = true;
+      cudaSupport = true;
       inHydra = true;
 
       # Don't evaluate duplicate and/or deprecated attributes
@@ -36,12 +35,6 @@ in
   },
   ...
 }@args:
-
-assert builtins.elem variant [
-  "cuda"
-  "rocm"
-  null
-];
 
 let
   mkReleaseLib = import ./release-lib.nix;
