@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     mainProgram = "avrogencpp";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rasendubi ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

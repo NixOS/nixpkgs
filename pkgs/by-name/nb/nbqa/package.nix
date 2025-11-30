@@ -70,7 +70,7 @@ let
         pytestCheckHook
         yapf
       ])
-      ++ lib.flatten (lib.attrValues optional-dependencies)
+      ++ lib.concatAttrValues optional-dependencies
       ++ [
         addBinToPathHook
         versionCheckHook

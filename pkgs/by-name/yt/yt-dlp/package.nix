@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+  dependencies = lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     default = with python3Packages; [

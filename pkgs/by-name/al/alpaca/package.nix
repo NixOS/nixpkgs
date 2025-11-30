@@ -96,7 +96,7 @@ pythonPackages.buildPythonApplication rec {
       gst-python
       opencv4
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
     speech-to-text = [

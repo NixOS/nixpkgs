@@ -53,7 +53,7 @@ buildPythonPackage rec {
       jschema-to-python
       sarif-om
     ];
-    full = lib.concatLists (lib.attrValues (lib.removeAttrs optional-dependencies [ "full" ]));
+    full = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "full" ]);
   };
 
   nativeCheckInputs = [

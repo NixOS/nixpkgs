@@ -192,6 +192,9 @@ stdenv.mkDerivation rec {
     "--disable-micropy"
   ];
 
+  # https://github.com/NixOS/nixpkgs/pull/463804
+  hardeningDisable = [ "libcxxhardeningfast" ];
+
   postInstall = ''
     # example Makefiles contain the full path to some commands
     # notably texlive, and we don't want texlive to become a runtime

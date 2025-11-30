@@ -90,7 +90,7 @@ buildPythonPackage rec {
     responses
     webob
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires secrets and additional configuration

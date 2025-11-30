@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Level metering according to the EBU R-128 recommendation";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

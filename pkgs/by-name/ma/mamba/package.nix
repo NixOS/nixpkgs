@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [
       magnetophon
-      orivej
     ];
     platforms = platforms.linux;
   };

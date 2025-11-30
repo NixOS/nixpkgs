@@ -73,7 +73,7 @@ buildPythonPackage rec {
     tornado
     trustme
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # test connects to the internet

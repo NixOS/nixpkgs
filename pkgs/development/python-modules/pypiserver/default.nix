@@ -57,7 +57,7 @@ buildPythonPackage rec {
     webtest
     build
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 

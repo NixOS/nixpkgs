@@ -128,7 +128,7 @@ buildPythonPackage rec {
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
