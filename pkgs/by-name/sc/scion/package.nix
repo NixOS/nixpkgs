@@ -8,16 +8,16 @@
 buildGoModule (finalAttrs: {
   pname = "scion";
 
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
+    hash = "sha256-JKQn7iudVgOS2bwuJOFTYzC2SS30uOqduIhLbr1fchU=";
   };
 
-  vendorHash = "sha256-Ew/hQM8uhaM89sCcPKUBbiGukDq3h5x+KID3w/8BDHg=";
+  vendorHash = "sha256-W+3oaP50w2zO9kv1o0hEOdg1wNOsI+p8EaDyfYHab+Q=";
 
   excludedPackages = [
     "acceptance"
