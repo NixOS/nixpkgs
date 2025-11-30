@@ -5,6 +5,7 @@
   pnpm_10,
   nodejs,
   versionCheckHook,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -88,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";
