@@ -309,7 +309,8 @@ let
 
       inherit (config.boot) resumeDevice;
 
-      inherit (config.system.nixos) distroName;
+      stage1Greeting = config.boot.initrd.stage1Greeting;
+      lustrateMessage = config.boot.initrd.lustrateMessage;
 
       inherit (config.system.build) earlyMountScript;
 
@@ -683,6 +684,24 @@ in
 
         - `boot.consoleLogLevel = 0;`
         - `boot.kernelParams = [ "quiet" "udev.log_level=3" ];`
+      '';
+    };
+
+    boot.initrd.stage1Greeting = mkOption {
+      type = types.str;
+      default = "<<< ${config.system.nixos.distroName} Stage 1 >>>";
+      defaultText = lib.literalExpression ''"<<< ''${config.system.nixos.distroName} Stage 1 >>>"'';
+      description = ''
+        The greeting message displayed during NixOS stage 1 boot.
+      '';
+    };
+
+    boot.initrd.lustrateMessage = mkOption {
+      type = types.str;
+      default = "\\e[1;33m<<< ${config.system.nixos.distroName} is now lustrating the root filesystem (cruft goes to /old-root) >>>\\e[0m";
+      defaultText = lib.literalExpression ''"\\e[1;33m<<< ''${config.system.nixos.distroName} is now lustrating the root filesystem (cruft goes to /old-root) >>>\\e[0m"'';
+      description = ''
+        The message displayed when lustrating the root filesystem.
       '';
     };
 
