@@ -7,6 +7,7 @@
   pnpmConfigHook,
   nodejs_22,
   versionCheckHook,
+  nix-update-script,
 }:
 let
   pnpm' = pnpm_10.override { nodejs = nodejs_22; };
@@ -96,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";
