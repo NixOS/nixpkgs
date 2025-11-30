@@ -34,6 +34,16 @@
     hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
   };
 
+  describe-tag = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "describe-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    hash = "sha256-y7l+46lVP2pzJwGON5qEV0EoxWofRoWAym5q9VXvpc8=";
+    postCheckout = ''
+      { git -C "$out" describe || echo "git describe failed"; } | tee "$out"/describe-output.txt
+    '';
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";
