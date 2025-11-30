@@ -241,18 +241,18 @@ lib.makeExtensible (self: {
     };
   };
 
-  git = self.makeLixScope {
-    attrName = "git";
+  lix_2_94 = self.makeLixScope {
+    attrName = "lix_2_94";
 
     lix-args = rec {
-      version = "2.94.0-pre-20251010_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "53d172a3083840846043f7579936e0a3e86737e5";
-        hash = "sha256-PPDHXtv6U5oIj8utzIqcH+ZSjMy4vXpv/y8c2I7dZ+g=";
+        rev = version;
+        hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
@@ -265,12 +265,41 @@ lib.makeExtensible (self: {
         # Bumping to toml11 ≥4.0.0 makes integer parsing throw (as it should) instead of saturate on overflow.
         # However, the updated version is not in nixpkgs yet, and the released versions still have the saturation bug.
         # Hence reverting the bump for now seems to be the least bad option.
-        ./revert-toml11-bump.patch
+        ./revert-toml11-bump-2_94.patch
       ];
     };
   };
 
-  latest = self.lix_2_93;
+  git = self.makeLixScope {
+    attrName = "git";
+
+    lix-args = rec {
+      version = "2.95.0-pre-20251121_${builtins.substring 0 12 src.rev}";
+
+      src = fetchFromGitea {
+        domain = "git.lix.systems";
+        owner = "lix-project";
+        repo = "lix";
+        rev = "b707403a308030739dfeacc5b0aaaeef8ba3f633";
+        hash = "sha256-kas7FT2J86DVJlPH5dNNHM56OgdQQyfCE/dX/EOKDp8=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+      };
+
+      patches = [
+        # Bumping to toml11 ≥4.0.0 makes integer parsing throw (as it should) instead of saturate on overflow.
+        # However, the updated version is not in nixpkgs yet, and the released versions still have the saturation bug.
+        # Hence reverting the bump for now seems to be the least bad option.
+        ./revert-toml11-bump-git.patch
+      ];
+    };
+  };
+
+  latest = self.lix_2_94;
 
   # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
   # See: https://git.lix.systems/lix-project/lix/issues/662
