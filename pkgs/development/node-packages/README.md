@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> There is currently an active project to [remove packages from `nodePackages`](https://github.com/NixOS/nixpkgs/issues/229475).
+> Please consider adding new packages using [another method](https://nixos.org/manual/nixpkgs/unstable/#javascript-tool-specific).
+
 This folder contains a generated collection of [npm packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
 As a rule of thumb, the package set should only provide _end-user_ software packages, such as command-line utilities.
