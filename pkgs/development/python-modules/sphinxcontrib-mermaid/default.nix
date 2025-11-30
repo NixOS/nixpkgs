@@ -1,21 +1,25 @@
 {
+  lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sphinx,
+  fetchFromGitHub,
+  myst-parser,
+  pytestCheckHook,
   pyyaml,
   rst2pdf,
-  lib,
+  setuptools,
+  sphinx,
 }:
+
 buildPythonPackage rec {
   pname = "sphinxcontrib-mermaid";
-  version = "1.0.0";
+  version = "1.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sphinxcontrib_mermaid";
-    hash = "sha256-Loq2fT4eKBZmP5NH0Cao3uSoWKzdStMt0cgIiT24gUY=";
+  src = fetchFromGitHub {
+    owner = "mgaitan";
+    repo = "sphinxcontrib-mermaid";
+    tag = version;
+    hash = "sha256-aeACJT5KWDTbjGJEB4s7ff9LilXcj/8Rxbz5uYXiUY8=";
   };
 
   build-system = [ setuptools ];
@@ -26,11 +30,17 @@ buildPythonPackage rec {
     rst2pdf
   ];
 
+  nativeCheckInputs = [
+    myst-parser
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "sphinxcontrib.mermaid" ];
 
   meta = {
     description = "Mermaid diagrams in yours sphinx powered docs";
     homepage = "https://github.com/mgaitan/sphinxcontrib-mermaid";
+    changelog = "https://github.com/mgaitan/sphinxcontrib-mermaid/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
