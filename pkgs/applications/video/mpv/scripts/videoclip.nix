@@ -30,7 +30,9 @@ buildLua {
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Easily create videoclips with mpv";
