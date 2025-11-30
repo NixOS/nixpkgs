@@ -22,17 +22,18 @@
   sqlite,
   desktop-file-utils,
   libxml2,
+  libsecret,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.96.4-beta";
+  version = "0.98.0-beta";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPkqTnC5Gg2hnzQ2Lul5aXF5QhYpHQ1MiilvNiKHFdc=";
+    hash = "sha256-pLs8aLm2CyT8eVtbB8UQj9xSqnjViRxKjuH3A6RErjA=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AISBkWJ0ZZy2HdZCwW6S5DcD09nVJOmglsoevCaD/3g=";
+    hash = "sha256-w6xZQP8QTTPKQgPCX20IvoWErrgWVisEIJKkxwtQHho=";
   };
 
   mesonBuildType = "release";
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     sqlite
     libxml2
+    libsecret
   ];
 
   meta = {
