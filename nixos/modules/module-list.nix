@@ -1407,6 +1407,7 @@
   ./services/networking/v2raya.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/veilid.nix
+  ./services/networking/vpp.nix
   ./services/networking/vsftpd.nix
   ./services/networking/vwifi.nix
   ./services/networking/wasabibackend.nix
