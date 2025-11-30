@@ -17,7 +17,6 @@
 , "grunt-cli"
 , "gulp-cli"
 , "js-yaml"
-, "jsdoc"
 , "lcov-result-merger"
 , "mathjax"
 , "node2nix"
