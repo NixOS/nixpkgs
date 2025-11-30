@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     black = [ black ];

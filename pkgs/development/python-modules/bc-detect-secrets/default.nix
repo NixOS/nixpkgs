@@ -50,7 +50,7 @@ buildPythonPackage rec {
     responses
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests are failing for various reasons (missing git repo, missing test data, etc.)

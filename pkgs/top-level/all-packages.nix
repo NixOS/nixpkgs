@@ -2192,8 +2192,6 @@ with pkgs;
     rainloop-standard
     ;
 
-  razergenie = callPackage ../applications/misc/razergenie { };
-
   roundcube = callPackage ../servers/roundcube { };
 
   roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
@@ -2628,8 +2626,6 @@ with pkgs;
   );
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
-
-  encfs = callPackage ../tools/filesystems/encfs { };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
@@ -3465,7 +3461,7 @@ with pkgs;
     toPythonApplication (
       nvchecker.overridePythonAttrs (oldAttrs: {
         propagatedBuildInputs =
-          oldAttrs.dependencies ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+          oldAttrs.dependencies ++ lib.concatAttrValues oldAttrs.optional-dependencies;
       })
     );
 
@@ -6712,8 +6708,6 @@ with pkgs;
   # pandoc takes long to build and documentation isn't needed for just running the cli
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
-  sloc = nodePackages.sloc;
-
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
   splint = callPackage ../development/tools/analysis/splint {
@@ -6745,8 +6739,6 @@ with pkgs;
     withGui = true;
     withTeensyduino = true;
   };
-
-  tytools = callPackage ../development/embedded/tytools { };
 
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
@@ -8599,8 +8591,6 @@ with pkgs;
       };
     };
   };
-
-  vc = callPackage ../development/libraries/vc { };
 
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
@@ -11751,8 +11741,6 @@ with pkgs;
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
   };
-
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
 
   mupdf-headless = mupdf.override {
     enableX11 = false;

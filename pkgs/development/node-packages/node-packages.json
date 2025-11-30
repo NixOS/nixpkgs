@@ -30,7 +30,6 @@
 , "purs-tidy"
 , "sass"
 , "semver"
-, "sloc"
 , "vega-cli"
 , "vercel"
 , "wavedrom-cli"

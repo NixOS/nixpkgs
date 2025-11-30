@@ -54,7 +54,7 @@ let
       tornado
       trustme
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

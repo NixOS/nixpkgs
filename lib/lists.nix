@@ -10,7 +10,7 @@ let
     id
     warn
     ;
-  inherit (lib.attrsets) mapAttrs attrNames;
+  inherit (lib.attrsets) mapAttrs attrNames attrValues;
   inherit (lib) max;
 in
 rec {
@@ -1997,4 +1997,26 @@ rec {
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
+  /**
+    Concatenate all attributes of an attribute set.
+    This assumes that every attribute of the set is a list.
+
+    # Inputs
+
+    `set`
+
+    : Attribute set with attributes that are lists
+
+    # Examples
+    :::{.example}
+    ## `lib.concatAttrValues` usage example
+
+    ```nix
+    concatAttrValues { a = [ 1 2 ]; b = [ 3 ]; }
+    => [ 1 2 3 ]
+    ```
+
+    :::
+  */
+  concatAttrValues = set: concatLists (attrValues set);
 }
