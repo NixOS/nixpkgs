@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Chris00/ocaml-magic";
     description = "Bindings for libmagic";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,14 +2,17 @@
   lib,
   stdenv,
   buildPythonPackage,
-  autoPatchelfHook,
   onnxruntime,
-  coloredlogs,
-  numpy,
-  packaging,
+  autoPatchelfHook,
+
+  # buildInputs
   oneDNN,
   re2,
 
+  # dependencies
+  coloredlogs,
+  numpy,
+  packaging,
 }:
 
 # onnxruntime requires an older protobuf.
@@ -65,17 +68,16 @@ buildPythonPackage {
       libcufft # libcufft.so.XX
       cudnn # libcudnn.soXX
       cuda_cudart # libcudart.so.XX
+    ]
+    ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
   );
 
-  propagatedBuildInputs = [
+  dependencies = [
     coloredlogs
-    # flatbuffers
     numpy
     packaging
-    # protobuf
-    # sympy
   ];
 
   meta = onnxruntime.meta;

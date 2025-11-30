@@ -41,6 +41,6 @@ buildPythonPackage rec {
     mainProgram = "yappi";
     homepage = "https://github.com/sumerc/yappi";
     license = licenses.mit;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

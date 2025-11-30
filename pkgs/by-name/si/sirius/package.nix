@@ -22,6 +22,12 @@
   boost,
   eigen,
   libvdwxc,
+  dftd4,
+  simple-dftd3,
+  mctc-lib,
+  jonquil,
+  toml-f,
+  multicharge,
   enablePython ? false,
   pythonPackages ? null,
   llvmPackages,
@@ -45,15 +51,15 @@ assert builtins.elem gpuBackend [
 ];
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.6.2";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
-    rev = "v${version}";
-    hash = "sha256-A3WiEzo2ianxdF9HMZN9cT0lFosToGEHh0o6uBSAYqU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bhY+LCxOikS1at0ONFAhmvfnWhAVHsRQ4GfXJOZbBA=";
   };
 
   outputs = [
@@ -84,6 +90,12 @@ stdenv.mkDerivation rec {
     boost
     eigen
     libvdwxc
+    jonquil
+    simple-dftd3
+    dftd4
+    mctc-lib
+    toml-f
+    multicharge
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
@@ -131,6 +143,8 @@ stdenv.mkDerivation rec {
     "-DSIRIUS_USE_VDWXC=ON"
     "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
     "-DSIRIUS_USE_OPENMP=ON"
+    "-DSIRIUS_USE_DFTD3=ON"
+    "-DSIRIUS_USE_DFTD4=ON"
     "-DBUILD_TESTING=ON"
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
@@ -168,4 +182,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
-}
+})

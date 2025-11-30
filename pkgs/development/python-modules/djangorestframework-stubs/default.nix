@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all tests are failing with 3.14.5 and below
   doCheck = false;
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
     changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = [ ];
   };
 }

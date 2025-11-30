@@ -32,7 +32,7 @@
 }:
 
 let
-  installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
+  installedPackageRoot = "${placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
     version = "0.25.2";

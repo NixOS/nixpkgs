@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       Br1ght0ne
-      neonfuz
     ];
     teams = [ teams.pantheon ];
     platforms = platforms.linux;

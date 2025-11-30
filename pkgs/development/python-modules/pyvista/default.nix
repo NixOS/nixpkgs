@@ -6,7 +6,6 @@
   numpy,
   pillow,
   pooch,
-  pythonAtLeast,
   scooby,
   setuptools,
   typing-extensions,
@@ -15,18 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.46.2";
+  version = "0.46.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-k5Sr41mmZJCEiIeEyyqulzYrI3cQYTWN5ooW41QUPuQ=";
+    hash = "sha256-FFrnLiGiP6LSwaoEHx4tih6XPdKCZ/9tjvz00NQDU0Q=";
   };
-
-  # remove this line once pyvista 0.46 is released
-  pythonRelaxDeps = [ "vtk" ];
 
   build-system = [ setuptools ];
 

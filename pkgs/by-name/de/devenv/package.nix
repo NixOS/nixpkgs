@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
@@ -15,7 +16,7 @@
 }:
 
 let
-  version = "1.8.2";
+  version = "1.11.1";
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
@@ -42,10 +43,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-j1IujIUZFdKKv33ldsptrcbe0avAX725SYhGtNrGJcI=";
+    hash = "sha256-xfvW7aF2bDXDXzUeaSOXE+bARfcDbf4YCMVfNp8DTv0=";
   };
 
-  cargoHash = "sha256-NNfqmdnDIKmp1upkBwJMp+VirSYsUXJNgGbAzcHs8LY=";
+  cargoHash = "sha256-jv/JwSdVMvL5ymO/1NxLNGbJ2Ly2QrVLGQHNTnSPpc0=";
 
   buildAndTestSubdir = "devenv";
 
@@ -59,6 +60,16 @@ rustPlatform.buildRustPackage {
     openssl
     dbus
   ];
+
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  preCheck = ''
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+  '';
 
   postInstall =
     let
@@ -101,6 +112,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    maintainers = with lib.maintainers; [ domenkozar ];
+    teams = [ lib.teams.cachix ];
   };
 }

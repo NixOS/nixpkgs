@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipu6-camera-bins";
-  version = "unstable-2024-09-27";
+  version = "unstable-2025-06-27";
 
   src = fetchFromGitHub {
     repo = "ipu6-camera-bins";
     owner = "intel";
-    rev = "98ca6f2a54d20f171628055938619972514f7a07";
-    hash = "sha256-DAjAzHMqX41mrfQVpDUJLw4Zjb9pz6Uy3TJjTGIkd6o=";
+    rev = "30e87664829782811a765b0ca9eea3a878a7ff29";
+    hash = "sha256-YPPzuK13o2jnRSB3ORoMUU5E9/IifKVSetAqZHRofhw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
+    for lib in $out/lib/lib*.so.*; do \
+      lib=''${lib##*/}; \
+      ln -s $lib $out/lib/''${lib%.*}; \
+    done
+
     for pcfile in $out/lib/pkgconfig/*.pc; do
       substituteInPlace $pcfile \
         --replace 'prefix=/usr' "prefix=$out"

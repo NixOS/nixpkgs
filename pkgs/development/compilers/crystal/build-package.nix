@@ -41,7 +41,7 @@ assert (
   ]
 );
 let
-  mkDerivationArgs = builtins.removeAttrs args [
+  mkDerivationArgs = removeAttrs args [
     "format"
     "installManPages"
     "lockFile"

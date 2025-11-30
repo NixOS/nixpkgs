@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "25.2.6";
+  version = "25.3.4";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    hash = "sha256-+gcecl04LSFTb9mn+2oJ07/z8aGYezP4AdeITlTS5OY=";
+    hash = "sha256-76FBaeTXSRbUN63AaV0XSj/QFi0UF+K/ig+LFjQQgFQ=";
   };
 
   patches = [
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/7376a99f060c26d6be8e56674da52a61662617b9/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       hash = "sha256-57yePuHWYb3XXrB4MjYO2h6jbqfs4SGTLlLG91el8M4=";
     })
+
+    # cmake 4 compatibility, upstream PR: https://github.com/intel/media-driver/pull/1919
+    ./cmake4.patch
   ];
 
   cmakeFlags = [

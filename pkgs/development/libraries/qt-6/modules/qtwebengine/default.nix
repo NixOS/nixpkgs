@@ -38,7 +38,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -60,6 +59,7 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
@@ -111,13 +111,14 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
     (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";
+      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
       stripLen = 1;
       extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-wcby9uD8xb4re9+s+rdl1hcpxDcHxuI68vUNAC7Baas=";
+      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
     })
   ];
 
@@ -208,7 +209,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -267,6 +267,7 @@ qtModule {
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [
@@ -282,7 +283,7 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
-  meta = with lib; {
+  meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
       "x86_64-darwin"

@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/arpa2/quick-der/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

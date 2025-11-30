@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.003";
 
   src = fetchzip {
-    url = "https://github.com/alif-type/amiri/releases/download/${version}/Amiri-${version}.zip";
+    url = "https://github.com/aliftype/amiri/releases/download/${version}/Amiri-${version}.zip";
     hash = "sha256-BsYPMBlRdzlkvyleZIxGDuGjmqhDlEJ4udj8zoKUSzA=";
   };
 

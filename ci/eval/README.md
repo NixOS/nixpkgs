@@ -8,7 +8,7 @@ Furthermore it also allows local evaluation using:
 nix-build ci -A eval.baseline
 ```
 
-The most important two arguments are:
+The two most important arguments are:
 - `--arg evalSystems`: The set of systems for which `nixpkgs` should be evaluated.
   Defaults to the four official platforms (`x86_64-linux`, `aarch64-linux`, `x86_64-darwin` and `aarch64-darwin`).
   Example: `--arg evalSystems '["x86_64-linux" "aarch64-darwin"]'`
@@ -33,13 +33,16 @@ Note that 16GB memory is the recommended minimum, while with less than 8GB memor
 To compare two commits locally, first run the following on the baseline commit:
 
 ```
-BASELINE=$(nix-build ci -A eval.baseline --no-out-link)
+nix-build ci -A eval.baseline --out-link baseline
 ```
 
 Then, on the commit with your changes:
 
 ```
-nix-build ci -A eval.full --arg baseline $BASELINE
+nix-build ci -A eval.full --arg baseline ./baseline
 ```
 
 Keep in mind to otherwise pass the same set of arguments for both commands (`evalSystems`, `quickTest`, `chunkSize`).
+Running this command will evaluate the difference between the baseline statistics and the ones at the time of running the command.
+From that difference, it will produce a human-readable report in `$out/step-summary.md`.
+If no packages were added or removed, then performance statistics will also be generated as part of this report.

@@ -50,9 +50,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       sayanarijit
       suryasr007
-      pyrox0
       mimame
-      figsoda
     ];
   };
 }

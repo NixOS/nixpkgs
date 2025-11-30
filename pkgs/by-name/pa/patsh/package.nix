@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/patsh";
     changelog = "https://github.com/nix-community/patsh/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

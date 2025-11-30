@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.25";
+  version = "6.4.47";
 
   src = fetchFromGitHub {
     owner = "praat";
-    repo = "praat";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-jTMXSVxhzaHF7zNr0/EWBDm3fIawTF4v6zuAcx/woeQ=";
+    repo = "praat.github.io";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g0y2iRSwxFZepfViGNvKFeNe6BOoY90aKiogqNZov7w=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp makefiles/makefile.defs.linux.pulse makefile.defs
+    cp makefiles/makefile.defs.linux.pulse-gcc makefile.defs
 
     runHook postConfigure
   '';
@@ -62,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Doing phonetics by computer";
     mainProgram = "praat";
     homepage = "https://www.fon.hum.uva.nl/praat/";
+    changelog = "https://github.com/praat/praat.github.io/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -60,7 +60,7 @@ let
     :::{.note}
     This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
 
-    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
@@ -99,7 +99,8 @@ let
                 prev = f final;
                 thisOverlay = overlay final prev;
                 warnForBadVersionOverride = (
-                  thisOverlay ? version
+                  prev ? src
+                  && thisOverlay ? version
                   && prev ? version
                   # We could check that the version is actually distinct, but that
                   # would probably just delay the inevitable, or preserve tech debt.
@@ -115,8 +116,8 @@ let
                 ${
                   args.name or "${pname}-${version}"
                 } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                  builtins.toString pos.line or "<unknown line>"
-                }:${builtins.toString pos.column or "<unknown column>"}.
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
                 This is most likely not what you want. In order to properly change the version of a package, override
                 both the `version` and `src` attributes:
@@ -130,7 +131,7 @@ let
                 })
 
                 (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              '' (prev // (builtins.removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
             );
         in
         makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
@@ -151,9 +152,11 @@ let
     "nostrictaliasing"
     "pacret"
     "pic"
-    "pie"
     "relro"
     "stackprotector"
+    "glibcxxassertions"
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
@@ -175,6 +178,7 @@ let
     "disallowedRequisites"
     "allowedReferences"
     "allowedRequisites"
+    "allowedImpureDLLs"
   ];
 
   inherit (stdenv)
@@ -197,6 +201,7 @@ let
     isLinux
     isDarwin
     isWindows
+    isCygwin
     isOpenBSD
     isStatic
     isMusl
@@ -224,14 +229,7 @@ let
 
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
-    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or
-    # fallback safe-ish set of flags
-    (
-      if isOpenBSD && isStatic then
-        knownHardeningFlags # Need pie, in fact
-      else
-        remove "pie" knownHardeningFlags
-    );
+    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
   stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
@@ -357,6 +355,8 @@ let
       sandboxProfile ? "",
       propagatedSandboxProfile ? "",
 
+      allowedImpureDLLs ? [ ],
+
       hardeningEnable ? [ ],
       hardeningDisable ? [ ],
 
@@ -421,7 +421,7 @@ let
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
-        if any (x: x == flag) list then (list ++ impliesFlags) else list;
+        if builtins.elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [
@@ -429,6 +429,8 @@ let
           (concretizeFlagImplications "fortify" [ "fortify3" ])
           # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
           (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+          # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+          (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
         ]
       );
       enabledHardeningOptions =
@@ -437,7 +439,7 @@ let
         else
           subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
+      erroneousHardeningFlags = subtractLists (knownHardeningFlags ++ [ "pie" ]) (
         hardeningEnable ++ remove "all" hardeningDisable
       );
 
@@ -478,6 +480,7 @@ let
           nativeBuildInputs
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
           ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
+          ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
@@ -634,7 +637,9 @@ let
               else
                 null
             } =
-              builtins.concatStringsSep " " enabledHardeningOptions;
+              lib.warnIf ((builtins.elem "pie" hardeningEnable) || (builtins.elem "pie" hardeningDisable))
+                "The 'pie' hardening flag has been removed in favor of enabling PIE by default in compilers and should no longer be used. PIE can be disabled with the -no-pie compiler flag, but this is usually not necessary as most build systems pass this if needed. Usage of the 'pie' hardening flag will become an error in future."
+                (builtins.concatStringsSep " " enabledHardeningOptions);
 
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf
@@ -700,6 +705,14 @@ let
               __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
             }
           )
+          // optionalAttrs (isWindows || isCygwin) {
+            allowedImpureDLLs =
+              allowedImpureDLLs
+              ++ lib.optionals isCygwin [
+                "KERNEL32.dll"
+                "cygwin1.dll"
+              ];
+          }
           // (
             if !__structuredAttrs then
               makeOutputChecks attrs
@@ -798,12 +811,12 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs ([
+        removeAttrs attrs [
           "meta"
           "passthru"
           "pos"
           "env"
-        ])
+        ]
         // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
@@ -847,7 +860,7 @@ let
       # for a fixed-output derivation, the corresponding inputDerivation should
       # *not* be fixed-output. To achieve this we simply delete the attributes that
       # would make it fixed-output.
-      deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [
+      deleteFixedOutputRelatedAttrs = lib.flip removeAttrs [
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
@@ -889,7 +902,7 @@ let
               "-c"
               ''
                 out="${placeholder "out"}"
-                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                 declare -p > $out
                 for var in $passAsFile; do
                     pathVar="''${var}Path"

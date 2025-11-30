@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Klasse-Methode";
     repo = "lauti";
     tag = "v${version}";
-    hash = "sha256-cO9rK7GAVRlv5x4WI/xbXNJ594QqB+KIPUteB3TifKM=";
+    hash = "sha256-eYIKVQG+Vj2qld/xKbxx0JpNqKhnGSjIOXXc7400BYo=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
@@ -22,7 +22,7 @@ buildGoModule rec {
   pname = "lauti";
   inherit version src;
 
-  vendorHash = "sha256-ushTvIpvRLZP3q6tLN6BA4tl2Xp/UImWugm2ZgTAm8k=";
+  vendorHash = "sha256-4LQ3PvwWAg+/KBQHroj2ZVQZst7jPq99XwLTHClDPCU=";
 
   ldflags = [
     "-s"

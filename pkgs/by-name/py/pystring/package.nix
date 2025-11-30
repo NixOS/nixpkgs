@@ -2,30 +2,27 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pystring";
-  version = "1.1.3";
+  version = "1.1.4-unstable-2025-10-07";
 
   src = fetchFromGitHub {
     owner = "imageworks";
     repo = "pystring";
-    rev = "v${version}";
-    sha256 = "1w31pjiyshqgk6zd6m3ab3xfgb0ribi77r6fwrry2aw8w1adjknf";
+    rev = "a09708a4870db7862e1a1aa42658c8e6e36547e7";
+    hash = "sha256-S43OkXcOCzPds2iDLunqg9a1zOiODo2dB9ReuOfe7Bw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "pystring-cmake-configuration.patch";
-      url = "https://github.com/imageworks/pystring/commit/4f653fc35421129eae8a2c424901ca7170059370.patch";
-      sha256 = "1hynzz76ff4vvmi6kwixsmjswkpyj6s4vv05d7nw0zscj4cdp8k3";
-    })
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
   ];
-
-  nativeBuildInputs = [ cmake ];
 
   doCheck = true;
 

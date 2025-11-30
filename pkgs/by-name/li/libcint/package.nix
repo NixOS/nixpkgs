@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/sunqm/libcint";
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

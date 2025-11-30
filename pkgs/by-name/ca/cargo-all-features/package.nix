@@ -6,14 +6,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-all-features";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/w3Xd7PXUNtqzRYmUqJtth+GDuXSnsk1NiYCTYsHuAQ=";
+    hash = "sha256-pD0lyI2zSOeEDk1Lch4Qf5mo8Z8Peiy2XF5iQ62vsaI=";
   };
 
-  cargoHash = "sha256-OgVeAuC36mP8rv4+XHsrOe7KKnpQ/u0M3g91NE0u98A=";
+  postPatch = ''
+    substituteInPlace tests/settings.rs \
+      --replace-fail 'cmd.env("RUSTFLAGS", "-Cinstrument-coverage");' '''
+  '';
+
+  cargoHash = "sha256-EKDeBib52Os1X3sgM9CtrNkl20l1Wn/cMBIBM1/KY5A=";
 
   meta = with lib; {
     description = "Cargo subcommand to build and test all feature flag combinations";
@@ -23,7 +28,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

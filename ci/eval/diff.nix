@@ -11,6 +11,14 @@
 }:
 
 let
+  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
+  # nix store paths around. These need to be turned into (fake) derivations again to track
+  # dependencies properly.
+  # We use two steps for evaluation, because we compare results from two different checkouts.
+  # CI additionalls spreads evaluation across multiple workers.
+  before = if lib.isDerivation beforeDir then beforeDir else lib.toDerivation beforeDir;
+  after = if lib.isDerivation afterDir then afterDir else lib.toDerivation afterDir;
+
   /*
     Computes the key difference between two attrs
 
@@ -64,15 +72,40 @@ let
     in
     builtins.fromJSON data;
 
-  beforeAttrs = getAttrs beforeDir;
-  afterAttrs = getAttrs afterDir;
+  beforeAttrs = getAttrs before;
+  afterAttrs = getAttrs after;
   diffAttrs = diff beforeAttrs afterAttrs;
   diffJson = writeText "diff.json" (builtins.toJSON diffAttrs);
+
+  # The maintainer list is not diffed, but just taken as is, to provide a map
+  # of maintainers on the target branch. A list of GitHub IDs is sufficient for
+  # all our purposes and reduces size massively.
+  meta = lib.importJSON "${after}/${evalSystem}/meta.json";
+  maintainers = lib.pipe meta [
+    (lib.mapAttrsToList (
+      k: v: {
+        # splits off the platform suffix
+        package = lib.pipe k [
+          (lib.splitString ".")
+          lib.init
+          (lib.concatStringsSep ".")
+        ];
+        maintainers = map (m: m.githubId) v.maintainers or [ ];
+      }
+    ))
+    # Some paths don't have a platform suffix, those will appear with an empty package here.
+    (lib.filter ({ package, maintainers }: package != "" && maintainers != [ ]))
+  ];
+  maintainersJson = writeText "maintainers.json" (builtins.toJSON maintainers);
 in
 runCommand "diff" { } ''
   mkdir -p $out/${evalSystem}
 
-  cp -r ${beforeDir} $out/before
-  cp -r ${afterDir} $out/after
+  cp -r --no-preserve=mode ${before} $out/before
+  cp -r --no-preserve=mode ${after} $out/after
+  # JSON files will be processed above explicitly, so avoid copying over
+  # the source files to keep the artifacts smaller.
+  find $out/before $out/after -iname '*.json' -delete
   cp ${diffJson} $out/${evalSystem}/diff.json
+  cp ${maintainersJson} $out/${evalSystem}/maintainers.json
 ''

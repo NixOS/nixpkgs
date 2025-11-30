@@ -5,6 +5,7 @@
   libtraceevent,
   nix-update-script,
   nixosTests,
+  pciutils,
   perl,
   pkg-config,
   sqlite,
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-veaqAbSJvoUzkn1OLYY3t3y9Bh8dzuenpLGO2yz/yaM=";
+    hash = "sha256-rk4CZrWQRe2wsx8/eXP0BIeaU/Gxmcb+Kry5F8t4YKQ=";
   };
 
   strictDeps = true;
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
         DBDSQLite
       ]
     ))
+    pciutils
     sqlite
   ]
   ++ lib.optionals enableDmidecode [
@@ -120,6 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ evils ];
+    maintainers = [ ];
   };
 })

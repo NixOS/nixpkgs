@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -30,11 +31,6 @@ buildGoModule rec {
     env GOFLAGS="" go generate ./jaeger/static
     env GOFLAGS="" go generate ./multicluster/static
     env GOFLAGS="" go generate ./viz/static
-
-    # Necessary for building Musl
-    if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-        export GOFLAGS="-buildmode=pie $GOFLAGS"
-    fi
   '';
 
   tags = [
@@ -51,6 +47,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/linkerd
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd linkerd \
       --bash <($out/bin/linkerd completion bash) \
       --zsh <($out/bin/linkerd completion zsh) \
@@ -71,7 +69,6 @@ buildGoModule rec {
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      bryanasdev000
       Gonzih
     ];
   };

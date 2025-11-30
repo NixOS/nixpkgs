@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     tag = "v${version}";
-    hash = "sha256-2ch9BxgrqbfIJ8fzFKYscha4+G7OAVz+OIOqYwX2gSA=";
+    hash = "sha256-rdV6XWHfNj+TFgIfqFPWYxn6bGG5w/frUHl9+qMALi4=";
   };
 
   build-system = [ flit-core ];

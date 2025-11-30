@@ -6,6 +6,7 @@
 
   # build-system
   hatchling,
+  uv-dynamic-versioning,
 
   # dependencies
   anyio,
@@ -40,22 +41,17 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.13.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-CxrUGgQfU1R87D3ZzZCHbQBMIOJRneH6CLbHS62sCaY=";
+    hash = "sha256-pvbrNkGfQaZX95JZyYXuuH2gMzWouuGXjaDxPyKW0Zw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "uv-dynamic-versioning"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  ''
-  + lib.optionalString stdenv.buildPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
     # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
     # testing this on macOS under load.
     substituteInPlace \
@@ -67,7 +63,10 @@ buildPythonPackage rec {
       --replace-fail "time.sleep(0.1)" "time.sleep(1)"
   '';
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   pythonRelaxDeps = [
     "pydantic-settings"
@@ -110,7 +109,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # attempts to run the package manager uv

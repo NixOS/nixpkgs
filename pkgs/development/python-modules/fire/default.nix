@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "python-fire";
     tag = "v${version}";
-    hash = "sha256-cYlkMnZOa0J6dOiWsWZplk/MajVRiCYe8tK3641fD0w=";
+    hash = "sha256-TZLL7pzX8xPtB/9k3l5395eHrNojmqTH7PfB1kf99Io=";
   };
 
   build-system = [ setuptools ];
@@ -65,6 +65,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
   };
 }

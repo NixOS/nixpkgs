@@ -11,7 +11,7 @@
   libGL,
   libpng,
   openexr,
-  tbb,
+  onetbb,
   xorg,
   ilmbase,
   llvmPackages,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     libGL
     libpng
     openexr
-    tbb
+    onetbb
     xorg.libX11
     xorg.libXcursor
     xorg.libXext
@@ -68,6 +68,11 @@ stdenv.mkDerivation {
     runHook preInstallCheck
     test "$(set -x; $out/bin/curv -x "2 + 2")" -eq "4"
     runHook postInstallCheck
+  '';
+
+  postPatch = ''
+    substituteInPlace extern/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   passthru.updateScript = unstableGitUpdater { };

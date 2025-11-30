@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.11";
+  version = "5.1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-yHoK7NGa91QEVFLeHqJo126qNg1pTE7W6LEtbCLy4sw=";
+    hash = "sha256-zRyI1aSRTyOjRogRj2Kgtr1jMPUTvoGHKypK2vQumhw=";
   };
 
   patches = [
@@ -71,11 +71,6 @@ buildPythonPackage rec {
       url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
       hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
     })
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://code.djangoproject.com/ticket/36499
-    # https://github.com/django/django/pull/19639
-    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
@@ -119,7 +114,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported

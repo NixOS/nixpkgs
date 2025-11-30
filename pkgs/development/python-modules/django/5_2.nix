@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.5";
+  version = "5.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-1Lw0L+mPynf9CmioiTQhePgqCLniUkv9E0ZIoHhhBTs=";
+    hash = "sha256-ruzQ3CUNqHa0RmxCDBVXbtetkMvz+G/D4/LB/2aBc8I=";
   };
 
   patches = [
@@ -63,11 +63,6 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that expects timezone issues
     ./django_5_disable_failing_tests.patch
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://code.djangoproject.com/ticket/36499
-    # https://github.com/django/django/pull/19639
-    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
@@ -111,7 +106,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported

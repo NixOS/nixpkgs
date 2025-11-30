@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.16";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-qAc9jKFpYgI0SdzKHhzmrPkWg4uSXDetD/oNEmHob2o=";
+    sha256 = "sha256-HbyQmuxwfEWlSe/y6w0ZRui0NCFYb0SJh7YA6PC3jdY=";
   };
 
   outputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
-    lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
+    lib.optional qrcodegenSupport "-DUSE_QRCODEGEN=ON"
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
   # https://github.com/dankamongmen/notcurses/issues/2661
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };
 }

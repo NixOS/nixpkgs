@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.13.3";
+  version = "2.13.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-M+Lko0O0xsEPHLghvIGHxIv22XBXaZsujJ2+bjBzGZ4=";
+    hash = "sha256-ZWiJmve1EhtwP9xo39N4f24g0KQMTPKJ43sDSfzi6r8=";
   };
 
   pythonRelaxDeps = [

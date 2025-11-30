@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "oelint-parser";
-  version = "8.2.4";
+  version = "8.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-parser";
     tag = version;
-    hash = "sha256-MFbDK/uahH4ZNRY3f8vW0uMFC2frlYtqVOZHT3NwA30=";
+    hash = "sha256-NpaIOJ517L9k2evuM6/mQc6Da2c+veFOAlRyeUHseKY=";
   };
 
   pythonRelaxDeps = [ "regex" ];

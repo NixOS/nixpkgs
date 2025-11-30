@@ -175,8 +175,10 @@ in
     assertions = [
       {
         assertion =
-          (cfg.settings.ldap_user_pass_file or null) != null || (cfg.settings.ldap_user_pass or null) != null;
-        message = "lldap: Default admin user password must be set. Please set the `ldap_user_pass` or better the `ldap_user_pass_file` setting.";
+          (cfg.settings.ldap_user_pass_file or null) != null
+          || (cfg.settings.ldap_user_pass or null) != null
+          || (cfg.environment.LLDAP_LDAP_USER_PASS_FILE or null) != null;
+        message = "lldap: Default admin user password must be set. Please set the `ldap_user_pass` or better the `ldap_user_pass_file` setting. Alternatively, you can set the `LLDAP_LDAP_USER_PASS_FILE` environment variable.";
       }
       {
         assertion =
@@ -222,7 +224,7 @@ in
           fi
         ''
         + ''
-          ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
+          exec ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
         '';
       serviceConfig = {
         StateDirectory = "lldap";

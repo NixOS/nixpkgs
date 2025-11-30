@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   cmake,
+  pkg-config,
   qtbase,
   qtdeclarative,
   qtmultimedia,
@@ -29,11 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Remove when https://gitlab.com/mymike00/rlottie-qml/-/merge_requests/1 merged
-    (fetchpatch {
-      name = "0001-rlottie-qml-Use-upstream-QuaZip-config-module.patch";
-      url = "https://gitlab.com/mymike00/rlottie-qml/-/commit/5656211dd8ae190795e343f47a3393fd3d8d25a4.patch";
-      hash = "sha256-t2NlYVU+D8hKd+AvBWPEavAhJKlk7Q3y2iAQSYtks5k=";
-    })
+    ./1001-Use-upstream-QuaZip-CMake-config.patch
+
+    # Remove when https://gitlab.com/mymike00/rlottie-qml/-/merge_requests/3 merged
+    ./1002-Find-rlottie-via-pkg-config.patch
   ];
 
   postPatch = ''
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [

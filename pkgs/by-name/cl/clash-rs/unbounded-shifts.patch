@@ -1,11 +1,11 @@
 --- a/clash-lib/src/lib.rs
 +++ b/clash-lib/src/lib.rs
-@@ -4,7 +4,7 @@
- #![feature(let_chains)]
+@@ -3,7 +3,7 @@
+ #![feature(sync_unsafe_cell)]
  #![feature(lazy_get)]
  #![feature(duration_millis_float)]
 -#![cfg_attr(not(version("1.87.0")), feature(unbounded_shifts))]
 +#![feature(unbounded_shifts)]
-
- #[macro_use]
- extern crate anyhow;
+ #![cfg_attr(not(version("1.88.0")), feature(let_chains))]
+ 
+ use crate::{

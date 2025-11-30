@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   buildGoModule,
   coreutils,
   pcsclite,
@@ -25,6 +26,16 @@ buildGoModule rec {
     forceFetchGit = true;
     hash = "sha256-ZIpsSNdQVkelo5b3H03N8qToHU7z+lalAE7Ur6m2YwY=";
   };
+
+  patches = [
+    # fix broken test TestHandler_RevokeCert
+    # https://github.com/smallstep/certificates/pull/2370
+    # TODO: remove at next release
+    (fetchpatch2 {
+      url = "https://github.com/smallstep/certificates/commit/b7e59c97f3b8a95a24153aeb85959118953f2bb4.patch?full_index=1";
+      hash = "sha256-GKGKUj4hpS4jo6sMvUhnD3BeE+f5vnxY5tK0a2pwpNM=";
+    })
+  ];
 
   vendorHash = "sha256-gGPrrl5J8UrjUpof2DaSs1fAQsMSsyAMlC67h5V75+k=";
 

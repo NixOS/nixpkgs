@@ -16,23 +16,28 @@
   callPackage,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VdeHb1HVGXA5RPenhhK4r/kkQiLG8/4qhdxoJ3xIqR4=";
+    hash = "sha256-Wsk4n6jLOAFhxYb5Hw8XvQem0xccGGoD729nRz3bRF0=";
   };
 
-  cargoHash = "sha256-Wu6skjs3Stux5nCX++yoQPeA33Qln67GoKcob++Ldng=";
+  cargoHash = "sha256-LFXpv8/rHQwzdKEyS4VplQSwFUnZrgv0qDIhZUOGfpo=";
+
+  depsBuildBuild = [
+    pkg-config
+    zstd
+  ];
 
   nativeBuildInputs = [
-    pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];
@@ -44,6 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
+
+  nativeCheckInputs = [
+    openssl
+  ];
 
   # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
@@ -169,7 +178,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
-    webadmin = callPackage ./webadmin.nix { };
+    webadmin = buildPackages.callPackage ./webadmin.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;

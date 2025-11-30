@@ -73,7 +73,7 @@ rec {
       let
         members = builtins.attrValues workspaceMembers;
       in
-      builtins.map (m: m.build) members;
+      map (m: m.build) members;
   };
 
   #
@@ -92,7 +92,7 @@ rec {
     #   inject test dependencies into the build
 
     crates = {
-      "asn1-rs" = rec {
+      "asn1-rs" = {
         crateName = "asn1-rs";
         version = "0.3.1";
         edition = "2018";
@@ -160,7 +160,7 @@ rec {
           "time"
         ];
       };
-      "asn1-rs-derive" = rec {
+      "asn1-rs-derive" = {
         crateName = "asn1-rs-derive";
         version = "0.1.0";
         edition = "2018";
@@ -189,7 +189,7 @@ rec {
         ];
 
       };
-      "asn1-rs-impl" = rec {
+      "asn1-rs-impl" = {
         crateName = "asn1-rs-impl";
         version = "0.1.0";
         edition = "2018";
@@ -214,7 +214,7 @@ rec {
         ];
 
       };
-      "autocfg 0.1.7" = rec {
+      "autocfg 0.1.7" = {
         crateName = "autocfg";
         version = "0.1.7";
         edition = "2015";
@@ -224,7 +224,7 @@ rec {
         ];
 
       };
-      "autocfg 1.0.1" = rec {
+      "autocfg 1.0.1" = {
         crateName = "autocfg";
         version = "1.0.1";
         edition = "2015";
@@ -234,7 +234,7 @@ rec {
         ];
 
       };
-      "base64" = rec {
+      "base64" = {
         crateName = "base64";
         version = "0.13.0";
         edition = "2018";
@@ -251,7 +251,7 @@ rec {
           "std"
         ];
       };
-      "base64ct" = rec {
+      "base64ct" = {
         crateName = "base64ct";
         version = "1.1.1";
         edition = "2018";
@@ -263,7 +263,7 @@ rec {
           "std" = [ "alloc" ];
         };
       };
-      "bitflags" = rec {
+      "bitflags" = {
         crateName = "bitflags";
         version = "1.3.2";
         edition = "2018";
@@ -281,7 +281,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "botan" = rec {
+      "botan" = {
         crateName = "botan";
         version = "0.8.1";
         edition = "2018";
@@ -309,7 +309,7 @@ rec {
           "vendored"
         ];
       };
-      "botan-src" = rec {
+      "botan-src" = {
         crateName = "botan-src";
         version = "0.21703.0";
         edition = "2018";
@@ -320,7 +320,7 @@ rec {
         ];
 
       };
-      "botan-sys" = rec {
+      "botan-sys" = {
         crateName = "botan-sys";
         version = "0.8.1";
         edition = "2015";
@@ -351,7 +351,7 @@ rec {
           "vendored"
         ];
       };
-      "bumpalo" = rec {
+      "bumpalo" = {
         crateName = "bumpalo";
         version = "3.9.1";
         edition = "2018";
@@ -363,7 +363,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "byteorder" = rec {
+      "byteorder" = {
         crateName = "byteorder";
         version = "1.4.3";
         edition = "2018";
@@ -375,7 +375,7 @@ rec {
           "default" = [ "std" ];
         };
       };
-      "cc" = rec {
+      "cc" = {
         crateName = "cc";
         version = "1.0.72";
         edition = "2018";
@@ -389,7 +389,7 @@ rec {
           "parallel" = [ "jobserver" ];
         };
       };
-      "cfg-if" = rec {
+      "cfg-if" = {
         crateName = "cfg-if";
         version = "1.0.0";
         edition = "2018";
@@ -406,7 +406,7 @@ rec {
           ];
         };
       };
-      "const-oid" = rec {
+      "const-oid" = {
         crateName = "const-oid";
         version = "0.6.2";
         edition = "2018";
@@ -417,7 +417,7 @@ rec {
         features = {
         };
       };
-      "crypto-bigint" = rec {
+      "crypto-bigint" = {
         crateName = "crypto-bigint";
         version = "0.2.11";
         edition = "2018";
@@ -457,7 +457,7 @@ rec {
           "rand_core"
         ];
       };
-      "cty" = rec {
+      "cty" = {
         crateName = "cty";
         version = "0.2.2";
         edition = "2015";
@@ -467,7 +467,7 @@ rec {
         ];
 
       };
-      "data-encoding" = rec {
+      "data-encoding" = {
         crateName = "data-encoding";
         version = "2.3.2";
         edition = "2018";
@@ -485,7 +485,7 @@ rec {
           "std"
         ];
       };
-      "der" = rec {
+      "der" = {
         crateName = "der";
         version = "0.4.5";
         edition = "2018";
@@ -524,7 +524,7 @@ rec {
           "std"
         ];
       };
-      "der-parser" = rec {
+      "der-parser" = {
         crateName = "der-parser";
         version = "7.0.0";
         edition = "2018";
@@ -577,7 +577,7 @@ rec {
           "std"
         ];
       };
-      "digest" = rec {
+      "digest" = {
         crateName = "digest";
         version = "0.9.0";
         edition = "2018";
@@ -601,7 +601,7 @@ rec {
           "std"
         ];
       };
-      "displaydoc" = rec {
+      "displaydoc" = {
         crateName = "displaydoc";
         version = "0.2.3";
         edition = "2018";
@@ -632,7 +632,7 @@ rec {
           "std"
         ];
       };
-      "foreign-types" = rec {
+      "foreign-types" = {
         crateName = "foreign-types";
         version = "0.3.2";
         edition = "2015";
@@ -648,7 +648,7 @@ rec {
         ];
 
       };
-      "foreign-types-shared" = rec {
+      "foreign-types-shared" = {
         crateName = "foreign-types-shared";
         version = "0.1.1";
         edition = "2015";
@@ -658,7 +658,7 @@ rec {
         ];
 
       };
-      "generic-array" = rec {
+      "generic-array" = {
         crateName = "generic-array";
         version = "0.14.5";
         edition = "2015";
@@ -684,7 +684,7 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "getrandom" = rec {
+      "getrandom" = {
         crateName = "getrandom";
         version = "0.2.4";
         edition = "2018";
@@ -727,7 +727,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "itoa" = rec {
+      "itoa" = {
         crateName = "itoa";
         version = "1.0.1";
         edition = "2018";
@@ -737,7 +737,7 @@ rec {
         ];
 
       };
-      "js-sys" = rec {
+      "js-sys" = {
         crateName = "js-sys";
         version = "0.3.56";
         edition = "2018";
@@ -753,7 +753,7 @@ rec {
         ];
 
       };
-      "lazy_static" = rec {
+      "lazy_static" = {
         crateName = "lazy_static";
         version = "1.4.0";
         edition = "2015";
@@ -777,7 +777,7 @@ rec {
           "spin_no_std"
         ];
       };
-      "libc" = rec {
+      "libc" = {
         crateName = "libc";
         version = "0.2.116";
         edition = "2015";
@@ -799,7 +799,7 @@ rec {
           "std"
         ];
       };
-      "libm" = rec {
+      "libm" = {
         crateName = "libm";
         version = "0.2.1";
         edition = "2018";
@@ -813,7 +813,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "log" = rec {
+      "log" = {
         crateName = "log";
         version = "0.4.14";
         edition = "2015";
@@ -849,7 +849,7 @@ rec {
           "value-bag" = [ "dep:value-bag" ];
         };
       };
-      "memchr" = rec {
+      "memchr" = {
         crateName = "memchr";
         version = "2.4.1";
         edition = "2018";
@@ -871,7 +871,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "minimal-lexical" = rec {
+      "minimal-lexical" = {
         crateName = "minimal-lexical";
         version = "0.2.1";
         edition = "2018";
@@ -884,7 +884,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "nom" = rec {
+      "nom" = {
         crateName = "nom";
         version = "7.1.0";
         edition = "2018";
@@ -924,7 +924,7 @@ rec {
           "std"
         ];
       };
-      "num-bigint" = rec {
+      "num-bigint" = {
         crateName = "num-bigint";
         version = "0.4.3";
         edition = "2018";
@@ -968,7 +968,7 @@ rec {
           "std"
         ];
       };
-      "num-bigint-dig" = rec {
+      "num-bigint-dig" = {
         crateName = "num-bigint-dig";
         version = "0.7.0";
         edition = "2015";
@@ -1070,7 +1070,7 @@ rec {
           "zeroize"
         ];
       };
-      "num-integer" = rec {
+      "num-integer" = {
         crateName = "num-integer";
         version = "0.1.44";
         edition = "2015";
@@ -1101,7 +1101,7 @@ rec {
           "std"
         ];
       };
-      "num-iter" = rec {
+      "num-iter" = {
         crateName = "num-iter";
         version = "0.1.42";
         edition = "2015";
@@ -1139,7 +1139,7 @@ rec {
           ];
         };
       };
-      "num-traits" = rec {
+      "num-traits" = {
         crateName = "num-traits";
         version = "0.2.14";
         edition = "2015";
@@ -1171,7 +1171,7 @@ rec {
           "std"
         ];
       };
-      "num_threads" = rec {
+      "num_threads" = {
         crateName = "num_threads";
         version = "0.1.3";
         edition = "2015";
@@ -1188,7 +1188,7 @@ rec {
         ];
 
       };
-      "oid-registry" = rec {
+      "oid-registry" = {
         crateName = "oid-registry";
         version = "0.4.0";
         edition = "2018";
@@ -1228,7 +1228,7 @@ rec {
           "x962"
         ];
       };
-      "once_cell" = rec {
+      "once_cell" = {
         crateName = "once_cell";
         version = "1.9.0";
         edition = "2018";
@@ -1250,7 +1250,7 @@ rec {
           "std"
         ];
       };
-      "openssl" = rec {
+      "openssl" = {
         crateName = "openssl";
         version = "0.10.38";
         edition = "2018";
@@ -1289,7 +1289,7 @@ rec {
           "vendored" = [ "ffi/vendored" ];
         };
       };
-      "openssl-sys" = rec {
+      "openssl-sys" = {
         crateName = "openssl-sys";
         version = "0.9.72";
         edition = "2015";
@@ -1329,7 +1329,7 @@ rec {
           "vendored" = [ "openssl-src" ];
         };
       };
-      "pem" = rec {
+      "pem" = {
         crateName = "pem";
         version = "1.0.2";
         edition = "2018";
@@ -1345,7 +1345,7 @@ rec {
         ];
 
       };
-      "pem-rfc7468" = rec {
+      "pem-rfc7468" = {
         crateName = "pem-rfc7468";
         version = "0.2.4";
         edition = "2018";
@@ -1364,7 +1364,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "alloc" ];
       };
-      "pkcs1" = rec {
+      "pkcs1" = {
         crateName = "pkcs1";
         version = "0.2.4";
         edition = "2018";
@@ -1414,7 +1414,7 @@ rec {
           "zeroize"
         ];
       };
-      "pkcs8" = rec {
+      "pkcs8" = {
         crateName = "pkcs8";
         version = "0.7.6";
         edition = "2018";
@@ -1497,7 +1497,7 @@ rec {
           "zeroize"
         ];
       };
-      "pkg-config" = rec {
+      "pkg-config" = {
         crateName = "pkg-config";
         version = "0.3.24";
         edition = "2015";
@@ -1507,7 +1507,7 @@ rec {
         ];
 
       };
-      "ppv-lite86" = rec {
+      "ppv-lite86" = {
         crateName = "ppv-lite86";
         version = "0.2.16";
         edition = "2018";
@@ -1523,7 +1523,7 @@ rec {
           "std"
         ];
       };
-      "proc-macro2" = rec {
+      "proc-macro2" = {
         crateName = "proc-macro2";
         version = "1.0.36";
         edition = "2018";
@@ -1546,7 +1546,7 @@ rec {
           "proc-macro"
         ];
       };
-      "quote" = rec {
+      "quote" = {
         crateName = "quote";
         version = "1.0.15";
         edition = "2018";
@@ -1570,7 +1570,7 @@ rec {
           "proc-macro"
         ];
       };
-      "rand" = rec {
+      "rand" = {
         crateName = "rand";
         version = "0.8.4";
         edition = "2018";
@@ -1652,7 +1652,7 @@ rec {
           "std_rng"
         ];
       };
-      "rand_chacha" = rec {
+      "rand_chacha" = {
         crateName = "rand_chacha";
         version = "0.3.1";
         edition = "2018";
@@ -1682,7 +1682,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "rand_core" = rec {
+      "rand_core" = {
         crateName = "rand_core";
         version = "0.6.3";
         edition = "2018";
@@ -1714,7 +1714,7 @@ rec {
           "std"
         ];
       };
-      "rand_hc" = rec {
+      "rand_hc" = {
         crateName = "rand_hc";
         version = "0.3.1";
         edition = "2018";
@@ -1730,7 +1730,7 @@ rec {
         ];
 
       };
-      "rcgen" = rec {
+      "rcgen" = {
         crateName = "rcgen";
         version = "0.9.2";
         edition = "2018";
@@ -1821,7 +1821,7 @@ rec {
           "zeroize"
         ];
       };
-      "ring" = rec {
+      "ring" = {
         crateName = "ring";
         version = "0.16.20";
         edition = "2018";
@@ -1938,7 +1938,7 @@ rec {
           "once_cell"
         ];
       };
-      "rsa" = rec {
+      "rsa" = {
         crateName = "rsa";
         version = "0.5.0";
         edition = "2018";
@@ -2062,7 +2062,7 @@ rec {
           "std"
         ];
       };
-      "rusticata-macros" = rec {
+      "rusticata-macros" = {
         crateName = "rusticata-macros";
         version = "4.0.0";
         edition = "2018";
@@ -2080,7 +2080,7 @@ rec {
         ];
 
       };
-      "smallvec" = rec {
+      "smallvec" = {
         crateName = "smallvec";
         version = "1.8.0";
         edition = "2018";
@@ -2094,7 +2094,7 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "spin" = rec {
+      "spin" = {
         crateName = "spin";
         version = "0.5.2";
         edition = "2015";
@@ -2105,7 +2105,7 @@ rec {
         ];
 
       };
-      "spki" = rec {
+      "spki" = {
         crateName = "spki";
         version = "0.4.1";
         edition = "2018";
@@ -2124,7 +2124,7 @@ rec {
           "std" = [ "der/std" ];
         };
       };
-      "subtle" = rec {
+      "subtle" = {
         crateName = "subtle";
         version = "2.4.1";
         edition = "2015";
@@ -2140,7 +2140,7 @@ rec {
           ];
         };
       };
-      "syn" = rec {
+      "syn" = {
         crateName = "syn";
         version = "1.0.86";
         edition = "2018";
@@ -2194,7 +2194,7 @@ rec {
           "visit"
         ];
       };
-      "synstructure" = rec {
+      "synstructure" = {
         crateName = "synstructure";
         version = "0.12.6";
         edition = "2018";
@@ -2244,7 +2244,7 @@ rec {
           "proc-macro"
         ];
       };
-      "thiserror" = rec {
+      "thiserror" = {
         crateName = "thiserror";
         version = "1.0.30";
         edition = "2018";
@@ -2260,7 +2260,7 @@ rec {
         ];
 
       };
-      "thiserror-impl" = rec {
+      "thiserror-impl" = {
         crateName = "thiserror-impl";
         version = "1.0.30";
         edition = "2018";
@@ -2285,7 +2285,7 @@ rec {
         ];
 
       };
-      "time" = rec {
+      "time" = {
         crateName = "time";
         version = "0.3.7";
         edition = "2018";
@@ -2357,7 +2357,7 @@ rec {
           "time-macros"
         ];
       };
-      "time-macros" = rec {
+      "time-macros" = {
         crateName = "time-macros";
         version = "0.2.3";
         edition = "2018";
@@ -2370,7 +2370,7 @@ rec {
         features = {
         };
       };
-      "typenum" = rec {
+      "typenum" = {
         crateName = "typenum";
         version = "1.15.0";
         edition = "2018";
@@ -2385,7 +2385,7 @@ rec {
           "scale_info" = [ "scale-info/derive" ];
         };
       };
-      "unicode-xid" = rec {
+      "unicode-xid" = {
         crateName = "unicode-xid";
         version = "0.2.2";
         edition = "2015";
@@ -2399,7 +2399,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "untrusted" = rec {
+      "untrusted" = {
         crateName = "untrusted";
         version = "0.7.1";
         edition = "2018";
@@ -2410,7 +2410,7 @@ rec {
         ];
 
       };
-      "vcpkg" = rec {
+      "vcpkg" = {
         crateName = "vcpkg";
         version = "0.2.15";
         edition = "2015";
@@ -2420,7 +2420,7 @@ rec {
         ];
 
       };
-      "version_check" = rec {
+      "version_check" = {
         crateName = "version_check";
         version = "0.9.4";
         edition = "2015";
@@ -2430,7 +2430,7 @@ rec {
         ];
 
       };
-      "wasi" = rec {
+      "wasi" = {
         crateName = "wasi";
         version = "0.10.2+wasi-snapshot-preview1";
         edition = "2018";
@@ -2454,7 +2454,7 @@ rec {
           "std"
         ];
       };
-      "wasm-bindgen" = rec {
+      "wasm-bindgen" = {
         crateName = "wasm-bindgen";
         version = "0.2.79";
         edition = "2018";
@@ -2497,7 +2497,7 @@ rec {
           "std"
         ];
       };
-      "wasm-bindgen-backend" = rec {
+      "wasm-bindgen-backend" = {
         crateName = "wasm-bindgen-backend";
         version = "0.2.79";
         edition = "2018";
@@ -2541,7 +2541,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "spans" ];
       };
-      "wasm-bindgen-macro" = rec {
+      "wasm-bindgen-macro" = {
         crateName = "wasm-bindgen-macro";
         version = "0.2.79";
         edition = "2018";
@@ -2566,7 +2566,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "spans" ];
       };
-      "wasm-bindgen-macro-support" = rec {
+      "wasm-bindgen-macro-support" = {
         crateName = "wasm-bindgen-macro-support";
         version = "0.2.79";
         edition = "2018";
@@ -2606,7 +2606,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "spans" ];
       };
-      "wasm-bindgen-shared" = rec {
+      "wasm-bindgen-shared" = {
         crateName = "wasm-bindgen-shared";
         version = "0.2.79";
         edition = "2018";
@@ -2616,7 +2616,7 @@ rec {
         ];
 
       };
-      "web-sys" = rec {
+      "web-sys" = {
         crateName = "web-sys";
         version = "0.3.56";
         edition = "2018";
@@ -4083,7 +4083,7 @@ rec {
           "Window"
         ];
       };
-      "webpki" = rec {
+      "webpki" = {
         crateName = "webpki";
         version = "0.22.0";
         edition = "2018";
@@ -4111,7 +4111,7 @@ rec {
           "std"
         ];
       };
-      "winapi" = rec {
+      "winapi" = {
         crateName = "winapi";
         version = "0.3.9";
         edition = "2015";
@@ -4139,7 +4139,7 @@ rec {
           "wtypesbase"
         ];
       };
-      "winapi-i686-pc-windows-gnu" = rec {
+      "winapi-i686-pc-windows-gnu" = {
         crateName = "winapi-i686-pc-windows-gnu";
         version = "0.4.0";
         edition = "2015";
@@ -4149,7 +4149,7 @@ rec {
         ];
 
       };
-      "winapi-x86_64-pc-windows-gnu" = rec {
+      "winapi-x86_64-pc-windows-gnu" = {
         crateName = "winapi-x86_64-pc-windows-gnu";
         version = "0.4.0";
         edition = "2015";
@@ -4159,7 +4159,7 @@ rec {
         ];
 
       };
-      "x509-parser" = rec {
+      "x509-parser" = {
         crateName = "x509-parser";
         version = "0.13.0";
         edition = "2018";
@@ -4231,7 +4231,7 @@ rec {
           "verify"
         ];
       };
-      "yasna" = rec {
+      "yasna" = {
         crateName = "yasna";
         version = "0.5.0";
         edition = "2018";
@@ -4259,7 +4259,7 @@ rec {
           "time"
         ];
       };
-      "zeroize" = rec {
+      "zeroize" = {
         crateName = "zeroize";
         version = "1.4.3";
         edition = "2018";
@@ -4284,7 +4284,7 @@ rec {
           "zeroize_derive"
         ];
       };
-      "zeroize_derive" = rec {
+      "zeroize_derive" = {
         crateName = "zeroize_derive";
         version = "1.3.1";
         edition = "2018";
@@ -4347,7 +4347,7 @@ rec {
     sourceFilter =
       name: type:
       let
-        baseName = builtins.baseNameOf (builtins.toString name);
+        baseName = baseNameOf (toString name);
       in
       !(
         # Filter out git
@@ -4603,7 +4603,7 @@ rec {
           let
             features = mergedFeatures."${packageId}" or [ ];
             crateConfig' = crateConfigs."${packageId}";
-            crateConfig = builtins.removeAttrs crateConfig' [
+            crateConfig = removeAttrs crateConfig' [
               "resolvedDefaultFeatures"
               "devDependencies"
             ];
@@ -4657,7 +4657,7 @@ rec {
                     version = package.version;
                   };
               in
-              lib.mapAttrs (name: choices: builtins.map versionAndRename choices) grouped;
+              lib.mapAttrs (name: choices: map versionAndRename choices) grouped;
           in
           buildRustCrateForPkgsFunc pkgs (
             crateConfig
@@ -4715,7 +4715,7 @@ rec {
       if builtins.isAttrs val then
         lib.mapAttrs (n: v: sanitizeForJson v) val
       else if builtins.isList val then
-        builtins.map sanitizeForJson val
+        map sanitizeForJson val
       else if builtins.isFunction val then
         "function"
       else
@@ -4826,7 +4826,7 @@ rec {
       assert (builtins.isAttrs target);
       assert (builtins.isBool runTests);
       let
-        crateConfig = crateConfigs."${packageId}" or (builtins.throw "Package not found: ${packageId}");
+        crateConfig = crateConfigs."${packageId}" or (throw "Package not found: ${packageId}");
         expandedFeatures = expandFeatures (crateConfig.features or { }) features;
         enabledFeatures = enableFeatures (crateConfig.dependencies or [ ]) expandedFeatures;
         depWithResolvedFeatures =
@@ -4984,7 +4984,7 @@ rec {
             dependencyPrefix = (dependency.rename or dependency.name) + "/";
             dependencyFeatures = builtins.filter (f: lib.hasPrefix dependencyPrefix f) features;
           in
-          builtins.map (lib.removePrefix dependencyPrefix) dependencyFeatures;
+          map (lib.removePrefix dependencyPrefix) dependencyFeatures;
       in
       defaultOrNil ++ explicitFeatures ++ additionalDependencyFeatures;
 
@@ -5002,7 +5002,7 @@ rec {
     deprecationWarning =
       message: value:
       if strictDeprecation then
-        builtins.throw "strictDeprecation enabled, aborting: ${message}"
+        throw "strictDeprecation enabled, aborting: ${message}"
       else
         builtins.trace message value;
 

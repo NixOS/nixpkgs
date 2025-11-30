@@ -1,9 +1,12 @@
 {
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   makeWrapper,
-  nix-update-script,
-  nodePackages,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
+  serve,
   stdenv,
   xsel,
   yarn-berry_4,
@@ -13,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-08-04";
+  version = "0-unstable-2025-11-27";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "64374c6b9a53b68ae7921604a1fbe231d3e4f067";
-    hash = "sha256-5baBKXmOxS0BOKNedMSbmw21rDBONZwmim9hlXn5OzQ=";
+    rev = "25c20daf88a7d7e8d816a7deed4e2fe134bdb97d";
+    hash = "sha256-GiMBCUT9wd/6bZ1hXt9431Ax1Z7BLHOXfWiiPxKZsCs=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-4SK1ecjEnnaow5Z2biCPaHirpX6J/5cytQWWicPgmB0=";
+    hash = "sha256-8LBMHdjWaxno4I+ZAwTw9WCVotX7O0eufhGJGg1a0w4=";
   };
 
   installPhase = ''
@@ -42,18 +45,26 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
-  postFixup =
-    let
-      serve = lib.getExe' nodePackages.serve "serve";
-    in
-    ''
-      makeWrapper ${serve} $out/bin/dokieli \
-        --prefix PATH : ${lib.makeBinPath [ xsel ]} \
-        --chdir $out
-    '';
+  postFixup = ''
+    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
+      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+      --chdir $out
+  '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    updateScriptSrc = unstableGitUpdater { };
+    updateScriptDeps = writeShellApplication {
+      name = "update-dokieli-berry-deps";
+      runtimeInputs = [
+        nix
+        yarn-berry.yarn-berry-fetcher
+      ];
+      text = lib.strings.readFile ./updateDeps.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc
+      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+    ];
   };
 
   meta = {

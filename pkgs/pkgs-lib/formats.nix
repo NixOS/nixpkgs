@@ -1,11 +1,16 @@
 { lib, pkgs }:
 let
   inherit (lib)
+    boolToString
     concatStringsSep
     escape
+    filterAttrs
     flatten
+    hasPrefix
     id
     isAttrs
+    isBool
+    isDerivation
     isFloat
     isInt
     isList
@@ -16,8 +21,11 @@ let
     optionalAttrs
     optionalString
     pipe
-    types
     singleton
+    strings
+    toPretty
+    types
+    versionAtLeast
     warn
     ;
 
@@ -49,6 +57,38 @@ let
     str
     submodule
     ;
+
+  /*
+    Creates a structured value type suitable for serialization formats.
+
+    Parameters:
+    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
+    - nullable: Whether the structured value type allows `null` values.
+
+    Returns a type suitable for structured data formats that supports:
+    - Basic types: boolean, integer, float, string, path
+    - Complex types: attribute sets and lists
+  */
+  mkStructuredType =
+    {
+      typeName,
+      nullable ? true,
+    }:
+    let
+      baseType = oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ];
+      valueType = (if nullable then nullOr baseType else baseType) // {
+        description = "${typeName} value";
+      };
+    in
+    valueType;
 
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
@@ -122,23 +162,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "JSON value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "JSON"; };
 
       generate =
         name: value:
@@ -152,7 +176,7 @@ optionalAttrs allowAliases aliases
               preferLocalBuild = true;
             }
             ''
-              jq . "$valuePath"> $out
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -179,23 +203,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.1 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.1"; };
 
     };
 
@@ -218,23 +226,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.2 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.2"; };
 
     };
 
@@ -417,10 +409,22 @@ optionalAttrs allowAliases aliases
     let
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
+
+      rawFormat = ini {
+        listsAsDuplicateKeys = true;
+        inherit mkKeyValue;
+      };
     in
-    ini {
-      listsAsDuplicateKeys = true;
-      inherit mkKeyValue;
+    rawFormat
+    // {
+      generate =
+        name: value:
+        lib.warn
+          "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
+          rawFormat.generate
+          name
+          value;
+      __functor = self: { }: rawFormat;
     };
 
   keyValue =
@@ -483,23 +487,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ]
-            // {
-              description = "TOML value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "TOML"; };
 
       generate =
         name: value:
@@ -532,23 +520,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "CDN value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -700,7 +672,7 @@ optionalAttrs allowAliases aliases
               description = "Elixir value";
             };
         in
-        attrsOf (attrsOf (valueType));
+        attrsOf (attrsOf valueType);
 
       lib =
         let
@@ -863,28 +835,117 @@ optionalAttrs allowAliases aliases
       lib.mkRaw = lib.mkLuaInline;
     };
 
+  nixConf =
+    {
+      package,
+      version,
+      extraOptions ? "",
+      checkAllErrors ? true,
+      checkConfig ? true,
+    }:
+    let
+      isNixAtLeast = versionAtLeast version;
+    in
+    assert isNixAtLeast "2.2";
+    {
+      type =
+        let
+          atomType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            package
+          ]);
+        in
+        attrsOf atomType;
+      generate =
+        name: value:
+        let
+
+          # note that list type has been omitted here as the separator varies, see `nix.settings.*`
+          mkValueString =
+            v:
+            if v == null then
+              ""
+            else if isInt v then
+              toString v
+            else if isBool v then
+              boolToString v
+            else if isFloat v then
+              strings.floatToString v
+            else if isDerivation v then
+              toString v
+            else if builtins.isPath v then
+              toString v
+            else if isString v then
+              v
+            else if strings.isConvertibleWithToString v then
+              toString v
+            else
+              abort "The nix conf value: ${toPretty { } v} can not be encoded";
+
+          mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
+
+          mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
+
+          isExtra = key: hasPrefix "extra-" key;
+
+        in
+        pkgs.writeTextFile {
+          inherit name;
+          # workaround for https://github.com/NixOS/nix/issues/9487
+          # extra-* settings must come after their non-extra counterpart
+          text = ''
+            # WARNING: this file is generated from the nix.* options in
+            # your NixOS configuration, typically
+            # /etc/nixos/configuration.nix.  Do not edit it!
+            ${mkKeyValuePairs (filterAttrs (key: _: !(isExtra key)) value)}
+            ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
+            ${extraOptions}
+          '';
+          checkPhase = lib.optionalString checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
+              ''
+                echo "Ignoring validation for cross-compilation"
+              ''
+            else
+              let
+                showCommand = if isNixAtLeast "2.20pre" then "config show" else "show-config";
+              in
+              ''
+                echo "Validating generated nix.conf"
+                ln -s $out ./nix.conf
+                set -e
+                set +o pipefail
+                NIX_CONF_DIR=$PWD \
+                  ${package}/bin/nix ${showCommand} ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
+                    ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
+                  |& sed -e 's/^warning:/error:/' \
+                  | (! grep '${if checkAllErrors then "^error:" else "^error: unknown setting"}')
+                set -o pipefail
+              ''
+          );
+        };
+    };
+
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars =
     { }:
     {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              float
-              int
-              path
-              str
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "Python value";
-            };
-        in
-        attrsOf valueType;
+      type = attrsOf (mkStructuredType {
+        typeName = "Python";
+      });
+
+      lib = {
+        mkRaw = value: {
+          inherit value;
+          _type = "raw";
+        };
+      };
+
       generate =
         name: value:
         pkgs.callPackage (
@@ -899,16 +960,43 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              value = builtins.toJSON value;
+              imports = builtins.toJSON (value._imports or [ ]);
+              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
               pythonGen = ''
                 import json
                 import os
 
+                def recursive_repr(value: any) -> str:
+                    if type(value) is list:
+                        return '\n'.join([
+                            "[",
+                            *[recursive_repr(x) + "," for x in value],
+                            "]",
+                        ])
+                    elif type(value) is dict and value.get("_type") == "raw":
+                        return value.get("value")
+                    elif type(value) is dict:
+                        return '\n'.join([
+                            "{",
+                            *[f"'{k.replace('\''', '\\\''')}': {recursive_repr(v)}," for k, v in value.items()],
+                            "}",
+                        ])
+                    else:
+                        return repr(value)
+
+                with open(os.environ["importsPath"], "r") as f:
+                    imports = json.load(f)
+                    if imports is not None:
+                        for i in imports:
+                            print(f"import {i}")
+                        print()
+
                 with open(os.environ["valuePath"], "r") as f:
                     for key, value in json.load(f).items():
-                        print(f"{key} = {repr(value)}")
+                        print(f"{key} = {recursive_repr(value)}")
               '';
               passAsFile = [
+                "imports"
                 "value"
                 "pythonGen"
               ];
@@ -929,23 +1017,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type =
-          let
-            valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
-              // {
-                description = "XML value";
-              };
-          in
-          valueType;
+        type = mkStructuredType { typeName = "XML"; };
 
         generate =
           name: value:
@@ -987,4 +1059,29 @@ optionalAttrs allowAliases aliases
     else
       throw "pkgs.formats.xml: Unknown format: ${format}";
 
+  plist =
+    {
+      escape ? true,
+    }:
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Property list (plist) value";
+            };
+        in
+        valueType;
+
+      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+    };
 }

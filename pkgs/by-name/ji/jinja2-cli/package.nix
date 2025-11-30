@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI for Jinja2";
     homepage = "https://github.com/mattrobenolt/jinja2-cli";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "jinja2";
   };
 }

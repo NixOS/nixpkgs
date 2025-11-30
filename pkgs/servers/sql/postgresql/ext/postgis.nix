@@ -35,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.3";
+  version = "3.6.1";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-rJxIZGsQhh8QAacgkepBzzC79McVhY9wFphQIVRQHA8=";
+    hash = "sha256-WVS2TWKishTnCWJ87Vvdcb0i3VR+g/qSjcTDO1cx1s0=";
   };
 
   buildInputs = [
@@ -74,10 +74,13 @@ postgresqlBuildExtension (finalAttrs: {
 
   dontDisableStatic = true;
 
+  checkInputs = [
+    cunit
+  ];
+
   nativeCheckInputs = [
     postgresql
     postgresqlTestHook
-    cunit
     libxslt
   ];
 

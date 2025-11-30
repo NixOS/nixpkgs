@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plasmusic-toolbar";
-  version = "3.3.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "ccatterina";
     repo = "plasmusic-toolbar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kjzutah8CIHN3NZcxGB1FXlCNn5dnTQxJITUptaXNrs=";
+    hash = "sha256-yCsNvco01dy72f8g1+BCYXo1yx/ERdfggLYchj/UXcw=";
   };
 
   installPhase = ''

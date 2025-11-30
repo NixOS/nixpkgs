@@ -51,10 +51,9 @@ let
     ];
   };
 
-  carbonOpts =
-    name: with config.ids; ''
-      --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
-    '';
+  carbonOpts = name: ''
+    --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
+  '';
 
   carbonEnv = {
     PYTHONPATH =
@@ -355,7 +354,7 @@ in
       ];
     })
 
-    (lib.mkIf cfg.web.enable ({
+    (lib.mkIf cfg.web.enable {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -416,7 +415,7 @@ in
       };
 
       environment.systemPackages = [ pkgs.python3Packages.graphite-web ];
-    }))
+    })
 
     (lib.mkIf cfg.seyren.enable {
       systemd.services.seyren = {

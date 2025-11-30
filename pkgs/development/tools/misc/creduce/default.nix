@@ -12,7 +12,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "creduce";
   version = "2.10.0-unstable-2024-06-01";
 
@@ -23,12 +23,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-RbxFqZegsCxnUaIIA5OfTzx1wflCPeF+enQt90VwMgA=";
   };
 
-  postPatch =
+  postPatch = ''
+    substituteInPlace {clex,clang_delta,delta,unifdef,creduce,.}/CMakeLists.txt --replace-fail \
+    "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+  ''
+  +
     # On Linux, c-reduce's preferred way to reason about
     # the cpu architecture/topology is to use 'lscpu',
     # so let's make sure it knows where to find it:
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace creduce/creduce_utils.pm --replace \
+      substituteInPlace creduce/creduce_utils.pm --replace-fail \
         lscpu ${util-linux}/bin/lscpu
     '';
 

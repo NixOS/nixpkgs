@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "os-agent";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "os-agent";
     tag = "${version}";
-    hash = "sha256-nny4gmSW8U9jdW//GXTn/zlmRhMbhf+4dbxju9Qs7zA=";
+    hash = "sha256-fPIoAtZJHn3eQsdDbSwyQRam9LZHzGCK+Tw+O8gSKME=";
   };
 
   vendorHash = "sha256-9boWe/mvJ/C/I8B7b4hJgz2dEDgpKCNTE/8pVAsNTxg=";

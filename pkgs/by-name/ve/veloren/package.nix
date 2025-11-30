@@ -7,8 +7,15 @@
   alsa-lib,
   udev,
   shaderc,
-  xorg,
+  libxcb,
   libxkbcommon,
+  autoPatchelfHook,
+  libX11,
+  libXi,
+  libXcursor,
+  libXrandr,
+  wayland,
+  stdenv,
 }:
 
 let
@@ -45,14 +52,22 @@ rustPlatform.buildRustPackage {
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+    # Fix assets path
+    substituteAllInPlace common/assets/src/lib.rs
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
+
   buildInputs = [
     alsa-lib
     udev
-    xorg.libxcb
+    libxcb
     libxkbcommon
+    shaderc
+    stdenv.cc.cc # libgcc_s.so.1
   ];
 
   buildNoDefaultFeatures = true;
@@ -77,18 +92,20 @@ rustPlatform.buildRustPackage {
   # Some tests require internet access
   doCheck = false;
 
-  postFixup = ''
-    # Add required but not explicitly requested libraries
-    patchelf --add-rpath '${
-      lib.makeLibraryPath [
-        xorg.libX11
-        xorg.libXi
-        xorg.libXcursor
-        xorg.libXrandr
+  appendRunpaths = [
+    (lib.makeLibraryPath (
+      [
+        libX11
+        libXi
+        libXcursor
+        libXrandr
         vulkan-loader
       ]
-    }' "$out/bin/veloren-voxygen"
-  '';
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
+        wayland
+      ]
+    ))
+  ];
 
   postInstall = ''
     # Icons
@@ -99,13 +116,13 @@ rustPlatform.buildRustPackage {
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     mainProgram = "veloren-voxygen";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       tomodachi94
     ];

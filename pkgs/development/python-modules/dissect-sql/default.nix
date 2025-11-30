@@ -5,23 +5,20 @@
   dissect-util,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-sql";
-  version = "3.11";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.sql";
     tag = version;
-    hash = "sha256-1rIsG4TUv7JkNMiyGCbEEnnp2RccP8QksE91p3z1zjY=";
+    hash = "sha256-ShyirE5gsACziciYrJIWweNCCe+0U+qJrc/9jsc1PPo=";
   };
 
   build-system = [

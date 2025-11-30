@@ -19,7 +19,7 @@ mkDerivation rec {
   version = "1.5";
   src = fetchFromGitHub {
     owner = "psi-im";
-    repo = pname;
+    repo = "psi";
     rev = version;
     sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
     fetchSubmodules = true;

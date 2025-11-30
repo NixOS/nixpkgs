@@ -145,7 +145,7 @@ in
         freeformType = configType;
 
         options.listen-address = mkOption {
-          type = types.str;
+          type = types.either types.str (types.listOf types.str);
           default = "127.0.0.1:8118";
           description = "Pair of address:port the proxy server is listening to.";
         };

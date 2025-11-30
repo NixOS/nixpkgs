@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "umoci";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "umoci";
     rev = "v${version}";
-    sha256 = "sha256-1nQMrA1GJAeEJ8m8YWMZE10exlx0u023XZakQCaO/YI=";
+    sha256 = "sha256-KgKrJcdYPwY6bSxa/r5HCUCeMnJ0GXSgNo8MKLDooFQ=";
   };
 
   vendorHash = null;

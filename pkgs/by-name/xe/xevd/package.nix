@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals (!lib.versionOlder "0.5.0" finalAttrs.version) (
-    builtins.map fetchpatch2 [
+    map fetchpatch2 [
       # Upstream accepted patches, should be dropped on next version bump.
       {
         url = "https://github.com/mpeg5/xevd/commit/7eda92a6ebb622189450f7b63cfd4dcd32fd6dff.patch?full_index=1";
@@ -63,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     optional isAarch64 (cmakeBool "ARM" true)
     ++ optional isDarwin (cmakeFeature "CMAKE_SYSTEM_NAME" "Darwin");
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString (
-    builtins.map (w: "-Wno-" + w) (
+  env.NIX_CFLAGS_COMPILE = toString (
+    map (w: "-Wno-" + w) (
       [
         # Evaluate on version bump whether still necessary.
         "sometimes-uninitialized"

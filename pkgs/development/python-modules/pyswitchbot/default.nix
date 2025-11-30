@@ -7,7 +7,6 @@
   cryptography,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   requests,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.69.0";
+  version = "0.72.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     tag = version;
-    hash = "sha256-5hXFfWGRWPY0fbokw/+61PGlGC6UlQV9FbLuXfWX0KI=";
+    hash = "sha256-QwCeq9EnE7oKqTtb6lmMcEw37dOK7WYbDEC984NujzY=";
   };
 
   build-system = [ setuptools ];
@@ -46,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "switchbot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control Switchbot IoT devices";
     homepage = "https://github.com/Danielhiversen/pySwitchbot";
     changelog = "https://github.com/Danielhiversen/pySwitchbot/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

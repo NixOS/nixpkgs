@@ -22,14 +22,14 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.05";
+  version = "4.06";
 
   src = fetchzip {
     urls = [
       "https://dl.xpdfreader.com/xpdf-${version}.tar.gz"
       "https://dl.xpdfreader.com/old/xpdf-${version}.tar.gz"
     ];
-    hash = "sha256-LBxKSrXTdoulZDjPiyYMaJr63jFHHI+VCgVJx310i/w=";
+    hash = "sha256-n8Qeb1OKELzkjK+wqWlKbjt2XVX/+6hfbbFvw3EzS1w=";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -95,13 +95,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [
       "CVE-2023-26930"
-      "CVE-2024-2971"
-      "CVE-2024-3247"
-      "CVE-2024-3248"
-      "CVE-2024-3900"
-      "CVE-2024-4141"
-      "CVE-2024-4568"
-      "CVE-2024-4976"
     ];
   };
 }

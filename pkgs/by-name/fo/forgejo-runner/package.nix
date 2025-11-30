@@ -33,6 +33,7 @@ let
     "TestCloneIfRequired"
     "TestActionCache"
     "TestRunContext_GetGitHubContext"
+    "TestSetJobResult_SkipsBannerInChildReusableWorkflow"
 
     # These tests rely on outbound IP address
     "TestHandler"
@@ -41,17 +42,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "9.1.1";
+  version = "11.3.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-tJ1BEGKthOUf//MM8GS712YEzkcr9w2LN1ejDbVOITU=";
+    hash = "sha256-jvHnTCkRvYaejeCiPpr18ldEmxcAkrEIaOLVVBY11eg=";
   };
 
-  vendorHash = "sha256-hdEpA7tG1uJOBRPQTaWst/D30Y9Uez4ecK2dkZCQITk=";
+  vendorHash = "sha256-7Ybh5qzkqT3CvGtRXiPkc5ShTYGlyvckTxg4EFagM/c=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -63,7 +64,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v9/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v11/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
@@ -91,14 +92,17 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    # Cannot process container options: '--pid=host --device=/dev/sda': 'unknown server OS: darwin'
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       adamcstephens
       emilylange
       christoph-heiss
+      tebriel
     ];
     mainProgram = "forgejo-runner";
   };

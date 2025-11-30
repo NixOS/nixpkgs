@@ -1,90 +1,90 @@
 {
   "platform_major": "4",
-  "platform_minor": "36",
-  "version": "4.36",
+  "platform_minor": "37",
+  "version": "4.37",
   "year": "2025",
-  "month": "06",
-  "buildmonth": "05",
-  "dayHourMinute": "281830",
+  "month": "09",
+  "buildmonth": "09",
+  "dayHourMinute": "050730",
   "eclipses": {
     "cpp": {
       "description": "Eclipse IDE for C/C++ Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-UEiL8AlghabRlAy29Blx7s+RAYSsfS1C1AozqBB11Sg=",
-        "aarch64": "sha256-MxRd2H+JSXPwGZjWuKWS1ocayQSFsinuYk21qBU+EzI="
+        "x86_64": "sha256-La+sX7ouIfvgbXPNIlmkpDzwwiT5VJfkl4ma4eFKjqw=",
+        "aarch64": "sha256-U1kFulGX7apNrlY3WPeu/FqQqu3SoxfsHHErbAscFtE="
       }
     },
     "dsl": {
       "description": "Eclipse IDE for Java and DSL Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-SoaX7jWQ6CtirHh8yq5neZs3b36HCkzGDjQIiRJmKSM=",
-        "aarch64": "sha256-Bi/HxncUPitaWKxntdQjVNlGcU8/kn2QxC3M3rejxXM="
+        "x86_64": "sha256-8zXSMxKKTPnL8rqW7YT+6Gtud1pyHFmcLKOSihJWjCA=",
+        "aarch64": "sha256-7nsn3iWBp9N/mdcpyPH7j5tfV+sL/jCTuhvpDHmKx8I="
       }
     },
     "embedcpp": {
       "description": "Eclipse IDE for Embedded C/C++ Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-8B0qiKNRSl8PPzYDoura6t8vsFVjg5mNVrzvWwf1UFQ=",
-        "aarch64": "sha256-NzzvijvwcW6jyy3QvwIRqLlNtHHdTsv79utkRMUfvew="
+        "x86_64": "sha256-48cEpt11ndShjxUCQDX2ObI+cx9frGloJ7EICjmErC8=",
+        "aarch64": "sha256-zSMDR+Y4JIdu+PoYFyk+FPNKcYbRiika2TeGg3g88pg="
       }
     },
     "modeling": {
       "description": "Eclipse Modeling Tools",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-r6cRPy4PgThRzVgMXpJS2X4m+tU6MFh7fLW8SGaYvGw=",
-        "aarch64": "sha256-cM0OQdcbVeOYl+IgsdwSU52+jobGIECFc1pnI2Y4dwY="
+        "x86_64": "sha256-9Qq5ziLa2vjX6bJjZ67qwF4nVNdqTQ80kz9GANtJCIw=",
+        "aarch64": "sha256-6//g6G3U1fC5mGgOci6Zgxx3YTJEZQ2pMBVjbJ9/mPE="
       }
     },
     "platform": {
       "description": "Eclipse Platform ${year}-${month}",
       "dropUrl": true,
       "hashes": {
-        "x86_64": "sha256-n5DtlmBqHUuzvuND0NLlDZxeHY7YvhHF5Sp4JdzvFYA=",
-        "aarch64": "sha256-OgGjb5TtqnAfiTs9PgF1h+W+lr32+okYC/3I513VPa4="
+        "x86_64": "sha256-C8P9x7C0tMYFQwJiBlF5JycWvWcF71ZWsDEwXPl1K34=",
+        "aarch64": "sha256-8qpNqHpi1BEHQt3nkFbeLzQccPSwu0op2THyWulhnLU="
       }
     },
     "SDK": {
       "description": "Eclipse ${year}-${month} Classic",
       "dropUrl": true,
       "hashes": {
-        "x86_64": "sha256-Wd90SkwUBSAOEMh+Qw7ATaPmHw98rVmyLak0M10h1Lw=",
-        "aarch64": "sha256-YwC/7rmd/mVyJITz8xYaYrMZtjdIlHmp6sos9lcnLig="
+        "x86_64": "sha256-Kx9WEpu4UbCeeKfmWV0iIyAd09xh9ffHm39dahlIlW8=",
+        "aarch64": "sha256-MWI2KpZQPTbw7Ro0+3Ab+nnIzbSTPGwqjhBfeu4tmE8="
       }
     },
     "java": {
       "description": "Eclipse IDE for Java Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-H3t1yYPqWYrPd3k6MwUwj86I4GDwlBhamqrbCYcSKOw=",
-        "aarch64": "sha256-vzV8OvYPJJwJQ/NxXF0u3htSgqQZbPEHv2KZcHp1eqA="
+        "x86_64": "sha256-L5vqC+jboYQAR+CtNAEXgDACxEG0r1rlx4ruc264cUc=",
+        "aarch64": "sha256-xxZjwmF24CbKeK7IQXkgylFTTGIHo1Wz6FnL/EUmCaQ="
       }
     },
     "jee": {
       "description": "Eclipse IDE for Enterprise Java and Web Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-5mYH71A/pCDQcjT7SZHacK5wl0k3n/sSfzrh5mE+r0E=",
-        "aarch64": "sha256-grKXfdIN3xSsyEScmKnDumLqH7fiNpbLmHyD8sPlhIA="
+        "x86_64": "sha256-bFCbFLRtltZ/GJwAoFd3MH/FknDF6hnvX9LQHQs9eKg=",
+        "aarch64": "sha256-DXw/dt4Gjz0e7szjJUaKB3wsUdnNj3wCX8cVpMlYkCc="
       }
     },
     "committers": {
       "description": "Eclipse IDE for Eclipse Committers and Eclipse Platform Plugin Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-BuXTbz4JaQw3GS7vnr+H0lBSJICbTTjqkYxl45mJfSw=",
-        "aarch64": "sha256-wpZwKN9gjb5r0yi8wNcN599KG9dWrIHHW5LhWWYWLzs="
+        "x86_64": "sha256-HF1RuiuDGFxwxFQrXXUcpssA4SnioTYGSjQrF0H/F2Q=",
+        "aarch64": "sha256-ZZ7Wy6Nua4sKPlFv/LaiM+pRrF23PEuUVK4I5rA40Sk="
       }
     },
     "rcp": {
       "description": "Eclipse IDE for RCP and RAP Developers",
       "dropUrl": false,
       "hashes": {
-        "x86_64": "sha256-fUVoq4h3nJ573CWREUJplEocz+f9ql5fa8AoC0B2ugs=",
-        "aarch64": "sha256-YAYMTzPXEGfmeNIQ1bnHyR/b3Jm6XvGbeaezNtBl2wU="
+        "x86_64": "sha256-jxLIw4MaLqAi+b6l6lf56cb9z7J8NBUJYbbxhv65uSc=",
+        "aarch64": "sha256-A+3dk2FZaXBO/pb9F/33imO0Fk6j4zszLfnDsP+znG4="
       }
     }
   }

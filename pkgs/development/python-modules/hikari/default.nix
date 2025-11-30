@@ -6,6 +6,7 @@
   pythonOlder,
   hatchling,
   aiohttp,
+  async-timeout,
   attrs,
   multidict,
   colorlog,
@@ -17,14 +18,14 @@
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.3.5";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
     tag = version;
-    hash = "sha256-jcPgO4tJKHzrA1fFeksSL9PVMsxnHuzh4CLVwTq06sM=";
+    hash = "sha256-lkJICN5uXFIKUZwxZI82FSYZLWFa7Cb6tDs6wV9DsY0=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -58,6 +59,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-randomly
     mock
+    async-timeout
   ];
 
   pythonImportsCheck = [ "hikari" ];

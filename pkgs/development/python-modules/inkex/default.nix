@@ -72,6 +72,9 @@ buildPythonPackage {
     "tests/test_inkex_gui_window.py"
     # Failed to find pixmap 'image-missing' in /build/source/tests/data/
     "tests/test_inkex_gui_pixmaps.py"
+    # Fails with libxml2 >= 2.15 with "lxml.etree was compiled without Schematron support"
+    "inkex/tester/test_inx_file.py"
+    "tests/test_inkex_inx.py"
   ];
 
   postPatch = ''

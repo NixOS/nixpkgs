@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Configurable cd wrapper that lets you define your environment per directory";
     homepage = "https://github.com/synoet/cdwe";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "cdwe";
   };
 }

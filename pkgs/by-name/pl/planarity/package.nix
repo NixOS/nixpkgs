@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planarity";
-  version = "4.0.0.0";
+  version = "4.0.1.0";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";
     repo = "edge-addition-planarity-suite";
     rev = "Version_${version}";
-    sha256 = "sha256-A7huHvMgUyvw2zM9qA7Ax/1Ai5VZ6A1PZIo3eiCpu44=";
+    sha256 = "sha256-uSCQSn3LRi3eQynh71fs1xhVIrPcOqVyGzdHAK9xj7E=";
   };
 
   nativeBuildInputs = [

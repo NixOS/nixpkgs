@@ -51,16 +51,20 @@
   pipewire,
   gst_all_1,
   adwaita-icon-theme,
+  glycin-loaders,
   gnome-bluetooth,
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
   bash-completion,
+  lcms2,
   libgbm,
   libGL,
   libXi,
   libX11,
+  libxkbcommon,
+  libsoup_3,
   libxml2,
 }:
 
@@ -69,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "48.4";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -78,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QOLtdLRTZ/DKOPv6oKtHCGjSNZHQPcQNCr1v930jtwc=";
+    hash = "sha256-0TuFXY35nev37M+BC24FT9sK64fvixMZGKbkyRl6Asc=";
   };
 
   patches = [
@@ -152,10 +156,13 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
+    lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
+    libxkbcommon
+    libsoup_3
     libxml2
 
     # recording
@@ -185,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       src/data-to-c.py \
-      meson/generate-app-list.py
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
@@ -215,9 +222,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Until glib’s xdgmime is patched
-      # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --prefix XDG_DATA_DIRS : ${
+        lib.makeSearchPath "share" [
+          # Until glib’s xdgmime is patched
+          # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
+          shared-mime-info
+          # For background images https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/4554
+          glycin-loaders
+        ]
+      }
     )
   '';
 

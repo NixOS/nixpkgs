@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmapshack";
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = "qmapshack";
     tag = "V_${finalAttrs.version}";
-    hash = "sha256-+M76EZeZOsBQ7RXtVplsrbrDgU0plRAht4/jz/GpIhM=";
+    hash = "sha256-vvpDjGFzkbsM/QUiU9EURuU0babWYL1gLzWTqJbHu0c=";
   };
 
   nativeBuildInputs = [

@@ -1,8 +1,8 @@
 diff --git a/elixir/apps/domain/lib/domain/config/definitions.ex b/elixir/apps/domain/lib/domain/config/definitions.ex
-index 8cd2e8d0f..92e18b10b 100644
+index 3bf383eac..ed0521045 100644
 --- a/elixir/apps/domain/lib/domain/config/definitions.ex
 +++ b/elixir/apps/domain/lib/domain/config/definitions.ex
-@@ -584,6 +590,7 @@ defmodule Domain.Config.Definitions do
+@@ -619,6 +619,7 @@ defmodule Domain.Config.Definitions do
            Swoosh.Adapters.Mailgun,
            Swoosh.Adapters.Mailjet,
            Swoosh.Adapters.Mandrill,
@@ -10,33 +10,11 @@ index 8cd2e8d0f..92e18b10b 100644
            Swoosh.Adapters.Postmark,
            Swoosh.Adapters.ProtonBridge,
            Swoosh.Adapters.SMTP,
-diff --git a/elixir/config/runtime.exs b/elixir/config/runtime.exs
-index 15037e0a3..475c4ddfb 100644
---- a/elixir/config/runtime.exs
-+++ b/elixir/config/runtime.exs
-@@ -226,8 +228,15 @@ if config_env() == :prod do
-   config :domain,
-          Domain.Mailer,
-          [
--           adapter: compile_config!(:outbound_email_adapter),
--           from_email: compile_config!(:outbound_email_from)
-+            adapter: compile_config!(:outbound_email_adapter),
-+            from_email: compile_config!(:outbound_email_from),
-+            protocol: String.to_atom(System.get_env("OUTBOUND_EMAIL_SMTP_PROTOCOL")),
-+            relay: System.get_env("OUTBOUND_EMAIL_SMTP_HOST"),
-+            port: String.to_integer(System.get_env("OUTBOUND_EMAIL_SMTP_PORT")),
-+            auth: [
-+              username: System.get_env("OUTBOUND_EMAIL_SMTP_USERNAME"),
-+              password: System.get_env("OUTBOUND_EMAIL_SMTP_PASSWORD")
-+            ]
-          ] ++ compile_config!(:outbound_email_adapter_opts)
- 
-   config :workos, WorkOS.Client,
 diff --git a/elixir/mix.exs b/elixir/mix.exs
-index 12782d631..dee1245d2 100644
+index df90739df..5c53e4383 100644
 --- a/elixir/mix.exs
 +++ b/elixir/mix.exs
-@@ -47,7 +47,9 @@ defmodule Firezone.MixProject do
+@@ -50,7 +50,9 @@ defmodule Firezone.MixProject do
        # Formatter doesn't track dependencies of children applications
        {:phoenix, "~> 1.7.0"},
        {:phoenix_live_view, "~> 1.0.0-rc.0"},
@@ -48,20 +26,21 @@ index 12782d631..dee1245d2 100644
    end
  
 diff --git a/elixir/mix.lock b/elixir/mix.lock
-index 8c4b65959..3d2f9faca 100644
+index 0b03b58d0..eefb202f4 100644
 --- a/elixir/mix.lock
 +++ b/elixir/mix.lock
-@@ -50,11 +50,13 @@
+@@ -49,11 +49,13 @@
    "junit_formatter": {:hex, :junit_formatter, "3.4.0", "d0e8db6c34dab6d3c4154c3b46b21540db1109ae709d6cf99ba7e7a2ce4b1ac2", [:mix], [], "hexpm", "bb36e2ae83f1ced6ab931c4ce51dd3dbef1ef61bb4932412e173b0cfa259dacd"},
-   "libcluster": {:hex, :libcluster, "3.3.3", "a4f17721a19004cfc4467268e17cff8b1f951befe428975dd4f6f7b84d927fe0", [:mix], [{:jason, "~> 1.1", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm", "7c0a2275a0bb83c07acd17dab3c3bfb4897b145106750eeccc62d302e3bdfee5"},
-   "logger_json": {:hex, :logger_json, "6.2.0", "13e2e9f5f7b195865c5c3ef3d296c3ad50e7ecb038d899433702a79e979b91d7", [:mix], [{:ecto, "~> 3.11", [hex: :ecto, repo: "hexpm", optional: true]}, {:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: false]}, {:plug, "~> 1.15", [hex: :plug, repo: "hexpm", optional: true]}, {:telemetry, "~> 1.0", [hex: :telemetry, repo: "hexpm", optional: true]}], "hexpm", "98366d02bedbb56e41b25a6d248d566d4f4bc224bae2b1e982df00ed04ba9219"},
+   "libcluster": {:hex, :libcluster, "3.5.0", "5ee4cfde4bdf32b2fef271e33ce3241e89509f4344f6c6a8d4069937484866ba", [:mix], [{:jason, "~> 1.1", [hex: :jason, repo: "hexpm", optional: false]}, {:telemetry, "~> 1.3", [hex: :telemetry, repo: "hexpm", optional: false]}], "hexpm", "ebf6561fcedd765a4cd43b4b8c04b1c87f4177b5fb3cbdfe40a780499d72f743"},
+   "logger_json": {:hex, :logger_json, "7.0.4", "e315f2b9a755504658a745f3eab90d88d2cd7ac2ecfd08c8da94d8893965ab5c", [:mix], [{:decimal, ">= 0.0.0", [hex: :decimal, repo: "hexpm", optional: true]}, {:ecto, "~> 3.11", [hex: :ecto, repo: "hexpm", optional: true]}, {:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: true]}, {:plug, "~> 1.15", [hex: :plug, repo: "hexpm", optional: true]}, {:telemetry, "~> 1.0", [hex: :telemetry, repo: "hexpm", optional: true]}], "hexpm", "d1369f8094e372db45d50672c3b91e8888bcd695fdc444a37a0734e96717c45c"},
 +  "mail": {:hex, :mail, "0.3.1", "cb0a14e4ed8904e4e5a08214e686ccf6f9099346885db17d8c309381f865cc5c", [:mix], [], "hexpm", "1db701e89865c1d5fa296b2b57b1cd587587cca8d8a1a22892b35ef5a8e352a6"},
    "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], [], "hexpm", "69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16"},
-   "mime": {:hex, :mime, "2.0.6", "8f18486773d9b15f95f4f4f1e39b710045fa1de891fada4516559967276e4dc2", [:mix], [], "hexpm", "c9945363a6b26d747389aac3643f8e0e09d30499a138ad64fe8fd1d13d9b153e"},
-   "mimerl": {:hex, :mimerl, "1.3.0", "d0cd9fc04b9061f82490f6581e0128379830e78535e017f7780f37fea7545726", [:rebar3], [], "hexpm", "a1e15a50d1887217de95f0b9b0793e32853f7c258a5cd227650889b38839fe9d"},
+   "mime": {:hex, :mime, "2.0.7", "b8d739037be7cd402aee1ba0306edfdef982687ee7e9859bee6198c1e7e2f128", [:mix], [], "hexpm", "6171188e399ee16023ffc5b76ce445eb6d9672e2e241d2df6050f3c771e80ccd"},
+   "mimerl": {:hex, :mimerl, "1.4.0", "3882a5ca67fbbe7117ba8947f27643557adec38fa2307490c4c4207624cb213b", [:rebar3], [], "hexpm", "13af15f9f68c65884ecca3a3891d50a7b57d82152792f3e19d88650aa126b144"},
    "mint": {:hex, :mint, "1.6.2", "af6d97a4051eee4f05b5500671d47c3a67dac7386045d87a904126fd4bbcea2e", [:mix], [{:castore, "~> 0.1.0 or ~> 1.0", [hex: :castore, repo: "hexpm", optional: true]}, {:hpax, "~> 0.1.1 or ~> 0.2.0 or ~> 1.0", [hex: :hpax, repo: "hexpm", optional: false]}], "hexpm", "5ee441dffc1892f1ae59127f74afe8fd82fda6587794278d924e4d90ea3d63f9"},
-   "mix_audit": {:hex, :mix_audit, "2.1.4", "0a23d5b07350cdd69001c13882a4f5fb9f90fbd4cbf2ebc190a2ee0d187ea3e9", [:make, :mix], [{:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: false]}, {:yaml_elixir, "~> 2.11", [hex: :yaml_elixir, repo: "hexpm", optional: false]}], "hexpm", "fd807653cc8c1cada2911129c7eb9e985e3cc76ebf26f4dd628bb25bbcaa7099"},
+   "mix_audit": {:hex, :mix_audit, "2.1.5", "c0f77cee6b4ef9d97e37772359a187a166c7a1e0e08b50edf5bf6959dfe5a016", [:make, :mix], [{:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: false]}, {:yaml_elixir, "~> 2.11", [hex: :yaml_elixir, repo: "hexpm", optional: false]}], "hexpm", "87f9298e21da32f697af535475860dc1d3617a010e0b418d2ec6142bc8b42d69"},
 +  "mua": {:hex, :mua, "0.2.4", "a9172ab0a1ac8732cf2699d739ceac3febcb9b4ffc540260ad2e32c0b6632af9", [:mix], [{:castore, "~> 0.1.0 or ~> 1.0", [hex: :castore, repo: "hexpm", optional: true]}], "hexpm", "e7e4dacd5ad65f13e3542772e74a159c00bd2d5579e729e9bb72d2c73a266fb7"},
    "multipart": {:hex, :multipart, "0.4.0", "634880a2148d4555d050963373d0e3bbb44a55b2badd87fa8623166172e9cda0", [:mix], [{:mime, "~> 1.2 or ~> 2.0", [hex: :mime, repo: "hexpm", optional: false]}], "hexpm", "3c5604bc2fb17b3137e5d2abdf5dacc2647e60c5cc6634b102cf1aef75a06f0a"},
-   "nimble_csv": {:hex, :nimble_csv, "1.2.0", "4e26385d260c61eba9d4412c71cea34421f296d5353f914afe3f2e71cce97722", [:mix], [], "hexpm", "d0628117fcc2148178b034044c55359b26966c6eaa8e2ce15777be3bbc91b12a"},
+   "nimble_csv": {:hex, :nimble_csv, "1.3.0", "b7f998dc62b222bce9596e46f028c7a5af04cb5dde6df2ea197c583227c54971", [:mix], [], "hexpm", "41ccdc18f7c8f8bb06e84164fc51635321e80d5a3b450761c4997d620925d619"},
    "nimble_options": {:hex, :nimble_options, "1.1.1", "e3a492d54d85fc3fd7c5baf411d9d2852922f66e69476317787a7b2bb000a61b", [:mix], [], "hexpm", "821b2470ca9442c4b6984882fe9bb0389371b8ddec4d45a9504f00a66f650b44"},
+

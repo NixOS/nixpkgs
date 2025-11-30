@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.5.23";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     rev = "v${version}";
-    hash = "sha256-gg8JrkZ9W93sEQ4uEqCh+oaAqtUH+xAz4FdS0GD4F90=";
+    hash = "sha256-aJRw1a/XJivNZS3NkZ4U6nC12+wY/aoNv33mbAzNl0k=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aws/s2n-tls";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

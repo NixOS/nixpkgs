@@ -60,7 +60,7 @@ let
     in
     [
       (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${headers}")
-      (lib.cmakeFeature "CUDA${version}_LIBS" "${cudaPackages.cuda_cudart.stubs}/lib/stubs/libcuda.so")
+      (lib.cmakeFeature "CUDA${version}_LIBS" "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs/libcuda.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_LIBS" "${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (
         lib.concatStringsSep ";" [
@@ -70,7 +70,7 @@ let
       ))
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dcgm";
   version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 

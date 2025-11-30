@@ -45,7 +45,7 @@ let
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0-source;
 
   package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
@@ -175,7 +175,9 @@ let
       $out/*/plugins/*/bin/*/linux/*/lib/python3.8/lib-dynload/* |
     xargs patchelf \
       --replace-needed libssl.so.10 libssl.so \
+      --replace-needed libssl.so.1.1 libssl.so \
       --replace-needed libcrypto.so.10 libcrypto.so \
+      --replace-needed libcrypto.so.1.1 libcrypto.so \
       --replace-needed libcrypt.so.1 libcrypt.so \
       ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
   '';

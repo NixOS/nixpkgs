@@ -19,7 +19,7 @@ flutter332.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   sourceRoot = "${src.name}/flutter/wind_send";
 
@@ -45,7 +45,7 @@ flutter332.buildFlutterApplication rec {
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "WindSend";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

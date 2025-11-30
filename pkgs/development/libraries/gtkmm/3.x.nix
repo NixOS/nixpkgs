@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "3.24.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
     sha256 = "erfiJmgIcW4mw5kkrOH7RtqGwX7znZiWJMQjFLMrWnY=";
   };
 
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}3";
+      packageName = "gtkmm";
+      attrPath = "gtkmm3";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

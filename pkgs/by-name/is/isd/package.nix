@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "isd";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "isd-project";
+    owner = "kainctl";
     repo = "isd";
     tag = "v${version}";
-    hash = "sha256-z9lyPSiuUAwu5bmZlcHj5SV3mHtP+GXtuEeJzOr1c9A=";
+    hash = "sha256-MEfjE0zRxSuBwBkjAz9cKhodS+I4CjjtuvbO+WwL9SM=";
   };
 
   build-system = with python3Packages; [
@@ -51,8 +51,8 @@ python3Packages.buildPythonApplication rec {
       units, auto-refreshing previews, smart `sudo` handling, and a fully
       customizable interface for power-users and newcomers alike.
     '';
-    homepage = "https://github.com/isd-project/isd";
-    changelog = "https://github.com/isd-project/isd/releases/tag/v${version}";
+    homepage = "https://github.com/kainctl/isd";
+    changelog = "https://github.com/kainctl/isd/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "isd";
     maintainers = with lib.maintainers; [

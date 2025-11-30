@@ -27,10 +27,7 @@ appimageTools.wrapType2 {
     description = "French TV service";
     homepage = "https://www.molotov.tv/";
     license = with licenses; [ unfree ];
-    maintainers = with maintainers; [
-      apeyroux
-      freezeboy
-    ];
+    maintainers = with maintainers; [ apeyroux ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "molotov";
   };

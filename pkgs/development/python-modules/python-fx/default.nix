@@ -45,6 +45,10 @@ buildPythonPackage rec {
     rm src/pyfx/model/common/jsonpath/*.py # upstream checks in generated files, remove to ensure they were regenerated
     antlr -Dlanguage=Python3 -visitor src/pyfx/model/common/jsonpath/*.g4
     rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
+
+    # https://github.com/cielong/pyfx/pull/148
+    substituteInPlace src/pyfx/view/common/frame.py \
+      --replace-fail "self.__super.__init__()" "super().__init__()"
   '';
 
   pythonRelaxDeps = true;
@@ -82,6 +86,11 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "pyfx" ];
+
+  disabledTests = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "test_start"
+  ];
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";

@@ -14,6 +14,7 @@
   sox,
   wsjtx,
   codecserver,
+  versionCheckHook,
 }:
 
 let
@@ -54,6 +55,12 @@ let
       hash = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_minimum_required (VERSION 3.0)" \
+        "cmake_minimum_required (VERSION 3.10)"
+    '';
+
     nativeBuildInputs = [
       cmake
       pkg-config
@@ -66,6 +73,10 @@ let
       rtl-sdr
       soapysdr-with-plugins
     ];
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgram = "${placeholder "out"}/bin/rtl_connector";
+    doInstallCheck = true;
 
     meta = {
       homepage = "https://github.com/jketterl/owrx_connector";
@@ -112,6 +123,9 @@ python3Packages.buildPythonApplication rec {
     "owrx"
     "test"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     inherit js8py owrx_connector;

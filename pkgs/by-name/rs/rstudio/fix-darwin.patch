@@ -56,37 +56,12 @@ index 40ae0f3..756fd5f 100644
     # Detect node.js, npm, and npx; use versions supplied by the dependency scripts
     find_program(NODEJS
 diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
-index 35438fd..f9b1951 100644
+index bccf5b3..0cc798a 100644
 --- a/src/node/desktop/CMakeLists.txt
 +++ b/src/node/desktop/CMakeLists.txt
-@@ -122,22 +122,9 @@ if (APPLE)
-    # configure Info.plist
-    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
-       ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-+endif()
- 
--   # copy sources to build directory. note that the build directory cannot
--   # be the "true" CMake directory as some files are resolved relative to
--   # the desktop project's relative path in the application structure
--   set(ELECTRON_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../desktop-build-${UNAME_M}" CACHE INTERNAL "")
--   file(REMOVE_RECURSE "${ELECTRON_BUILD_DIR}")
--   file(MAKE_DIRECTORY "${ELECTRON_BUILD_DIR}")
--   file(
--      COPY "${CMAKE_CURRENT_SOURCE_DIR}/"
--      DESTINATION "${ELECTRON_BUILD_DIR}/"
--      REGEX "/.webpack$" EXCLUDE
--      REGEX "/build$" EXCLUDE
--      REGEX "/bin$" EXCLUDE
--      REGEX "/out$" EXCLUDE
--      REGEX "/node_modules$" EXCLUDE)
--else()
-+if(true)
-    set(ELECTRON_BUILD_DIR "${ELECTRON_SOURCE_DIR}" CACHE INTERNAL "")
- endif()
- 
-@@ -233,16 +220,21 @@ if(WIN32)
-          PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-          DESTINATION "${RSTUDIO_INSTALL_BIN}")
+@@ -236,16 +236,21 @@ if(WIN32)
+    install(FILES ${VCRUNTIME_X86_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}/x86")
+    install(FILES ${VCRUNTIME_X64_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}")
  
 -elseif(LINUX)
 +elseif(LINUX OR APPLE)
@@ -104,8 +79,8 @@ index 35438fd..f9b1951 100644
 +   endif()
  
     install(
--      DIRECTORY "${ELECTRON_BUILD_DIR}/out/RStudio-linux-${ELECTRON_ARCH}/"
-+      DIRECTORY "${ELECTRON_BUILD_DIR}/out/RStudio-${ELECTRON_PLATFORM}-${ELECTRON_ARCH}/"
+-      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-linux-${ELECTRON_ARCH}/"
++      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-${ELECTRON_PLATFORM}-${ELECTRON_ARCH}/"
        DIRECTORY_PERMISSIONS
        OWNER_READ OWNER_WRITE OWNER_EXECUTE
        GROUP_READ GROUP_EXECUTE

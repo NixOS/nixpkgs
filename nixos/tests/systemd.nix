@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "systemd";
 
@@ -107,6 +107,14 @@
 
       # Will not succeed unless ConditionFirstBoot=yes
       machine.wait_for_unit("first-boot-complete.target")
+
+      machine.succeed(
+        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex pkgs.systemd.version} running'"
+      )
+
+      assert "systemd ${lib.versions.major pkgs.systemd.version} (${pkgs.systemd.version})" in machine.succeed(
+        "systemctl --version"
+      )
 
       # Make sure, a subsequent boot isn't a ConditionFirstBoot=yes.
       machine.reboot()
@@ -236,7 +244,7 @@
           assert "0B read, 0B written" not in output
 
       with subtest("systemd per-unit accounting works"):
-          assert "IP traffic received: 84B sent: 84B" in output_ping
+          assert "IP Traffic: received 84B, sent 84B" in output_ping
 
       with subtest("systemd environment is properly set"):
           machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ

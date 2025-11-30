@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "ipyvue";
-  version = "1.11.2";
+  version = "1.11.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OxOBvRIBhPlwpdZt6sM7hZKmZsjhq3pa/TPs/zQuCpU=";
+    hash = "sha256-gLO2EItEjrF7fJ6ww5ta04Rxir3NJKgvhTrTBiuDtBs=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Jupyter widgets base for Vue libraries";
     homepage = "https://github.com/mariobuikhuizen/ipyvue";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

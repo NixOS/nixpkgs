@@ -35,14 +35,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.12";
+  version = "5.13";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-s1tHVr4SvP2+1URo8wRD+lPyOFIKnOrVveLmxHc/vzk=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-CC7swzK3IvIj0/JRJibr5e9j+UqvXECeh1JsZURkrvU=";
   };
 
   nativeBuildInputs = [
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace bindings/python/__init__.py \
       --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
-      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${version}"};
+      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
   '';
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -120,13 +120,13 @@ stdenv.mkDerivation rec {
 
   passthru.docs = stdenv.mkDerivation {
     pname = "gnucash-docs";
-    inherit version;
+    inherit (finalAttrs) version;
 
     src = fetchFromGitHub {
       owner = "Gnucash";
       repo = "gnucash-docs";
-      rev = version;
-      hash = "sha256-9hXOgHdNtTcPOf44L2RrfOTXAgJi2Xu6gWnjDU7gHjU=";
+      tag = finalAttrs.version;
+      hash = "sha256-EVK36JzK8BPe6St4FhhZEqdc07oaiePJ/EH2NHm3r1U=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -139,11 +139,11 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # documentation
-      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
+      --prefix XDG_DATA_DIRS : ${finalAttrs.passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
       # gsettings schema location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"}
     )
   '';
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnucash.org/";
     description = "Free software for double entry accounting";
     longDescription = ''
@@ -200,13 +200,13 @@ stdenv.mkDerivation rec {
       - Scheduled Transactions
       - Financial Calculations
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nevivurn
       ryand56
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gnucash";
   };
-}
+})
 # TODO: investigate Darwin support

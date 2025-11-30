@@ -37,13 +37,13 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "4.32c";
+    version = "4.34c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       tag = "v${version}";
-      hash = "sha256-Fhf7dHyHd8IGXq7t1y9TwN9VN8SckLRkgfGGMvmqIqk=";
+      hash = "sha256-ymHt746cuZ+jyWs0vB3R1qNgpgAu6pUVXp9/g9Km9JI=";
     };
 
     enableParallelBuilding = true;
@@ -81,7 +81,8 @@ let
         --replace-fail "CLANG_BIN" '"${clang}/bin/clang"' \
         --replace-fail '"gcc"' '"${gcc}/bin/gcc"' \
         --replace-fail '"g++"' '"${gcc}/bin/g++"' \
-        --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
+        --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")" \
+        --replace-fail '#ifndef "${clang}/bin/clang"' '#ifndef CLANG_BIN'
 
       substituteInPlace src/afl-ld-lto.c \
         --replace-fail 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'

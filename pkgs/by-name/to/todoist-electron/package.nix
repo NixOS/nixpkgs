@@ -1,18 +1,21 @@
 {
   lib,
+  stdenv,
   appimageTools,
   fetchurl,
   asar,
+  makeWrapper,
 }:
 
 let
-  pname = "todoist-electron";
-  version = "9.18.0";
+  sources = import ./sources.nix;
 
-  src = fetchurl {
-    url = "https://electron-dl.todoist.net/linux/Todoist-linux-${version}-x86_64-latest.AppImage";
-    hash = "sha256-2X//beSpQ1rCqU4Wn5ELoxgfi2knFAJ2w1rn41TNP6g=";
-  };
+  pname = "todoist-electron";
+  version = sources.version;
+  src =
+    fetchurl
+      sources.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -38,6 +41,10 @@ appimageTools.wrapAppImage {
     substituteInPlace $out/share/applications/todoist.desktop \
       --replace-fail "Exec=AppRun" "Exec=todoist-electron --" \
       --replace-fail "Exec=todoist" "Exec=todoist-electron --"
+
+    . ${makeWrapper}/nix-support/setup-hook
+    wrapProgram $out/bin/todoist-electron \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   meta = {
@@ -49,6 +56,6 @@ appimageTools.wrapAppImage {
       kylesferrazza
       pokon548
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames sources;
   };
 }

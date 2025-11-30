@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://catb.org/~esr/galaxis/";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "galaxis";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

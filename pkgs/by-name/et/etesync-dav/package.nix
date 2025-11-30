@@ -46,7 +46,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "etesync-dav";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      thyol
       valodim
     ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing

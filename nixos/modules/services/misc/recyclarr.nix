@@ -11,6 +11,9 @@ let
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/recyclarr";
   configPath = "${stateDir}/config.json";
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.configuration configPath;
 in
 {
   options.services.recyclarr = {
@@ -47,14 +50,7 @@ in
         For detailed configuration options and examples, see the
         [official configuration reference](https://recyclarr.dev/wiki/yaml/config-reference/).
 
-        The configuration is processed using [utils.genJqSecretsReplacementSnippet](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/utils.nix#L232-L331) to handle secret substitution.
-
-        To avoid permission issues, secrets should be provided via systemd's credential mechanism:
-
-        ```nix
-        systemd.services.recyclarr.serviceConfig.LoadCredential = [
-          "radarr-api_key:''${config.sops.secrets.radarr-api_key.path}"
-        ];
+        The configuration is processed using [utils.genJqSecretsReplacement](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/utils.nix#L232-L331) to handle secret substitution.
         ```
       '';
     };
@@ -103,7 +99,7 @@ in
       description = "Recyclarr Service";
 
       # YAML is a JSON super-set
-      preStart = utils.genJqSecretsReplacementSnippet cfg.configuration configPath;
+      preStart = secretsReplacement.script;
 
       serviceConfig = {
         Type = "oneshot";
@@ -111,6 +107,7 @@ in
         Group = cfg.group;
         StateDirectory = "recyclarr";
         ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data ${stateDir} --config ${configPath}";
+        LoadCredential = secretsReplacement.credentials;
 
         ProtectSystem = "strict";
         ProtectHome = true;

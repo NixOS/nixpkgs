@@ -10,6 +10,7 @@
 
   # tests
   freezegun,
+  glibcLocales,
   pytestCheckHook,
   pytz,
   tzdata,
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    glibcLocales
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz

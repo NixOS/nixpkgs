@@ -23,7 +23,7 @@
 # Stages are described below along with their definitions.
 #
 # Debugging stdenv dependency graph:
-# An useful tool to explore dependencies across stages is to use
+# A useful tool to explore dependencies across stages is to use
 # '__bootPackages' attribute of 'stdenv. Examples of last 3 stages:
 # - stdenv
 # - stdenv.__bootPackages.stdenv
@@ -78,7 +78,12 @@
             else
               ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix
           );
-          powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
+          powerpc64-linux = import (
+            if localSystem.isAbiElfv2 then
+              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix
+            else
+              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv1.nix
+          );
           powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
           riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
           s390x-linux = import ./bootstrap-files/s390x-unknown-linux-gnu.nix;
@@ -425,6 +430,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               #   ...-binutils-patchelfed-ld-2.40/bin/ld: ...-xgcc-13.0.0/libexec/gcc/x86_64-unknown-linux-gnu/13.0.1/liblto_plugin.so:
               #     error loading plugin: ...-bootstrap-tools/lib/libpthread.so.0: undefined symbol: __libc_vfork, version GLIBC_PRIVATE
               enableLTO = false;
+
+              # relocatable libs may not be available in the bootstrap
+              # which will cause compilation to fail with
+              # configure: error: C compiler cannot create executables
+              enableDefaultPie = false;
             }
           )).overrideAttrs
             (a: {

@@ -54,6 +54,7 @@ assert lib.assertMsg (
   nlohmann_json,
   ninja,
   openssl,
+  pkgsStatic,
   rustc,
   toml11,
   pegtl,
@@ -66,6 +67,7 @@ assert lib.assertMsg (
   removeReferencesTo,
   xz,
   yq,
+  zstd,
   nixosTests,
   rustPlatform,
   # Only used for versions before 2.92.
@@ -78,7 +80,11 @@ assert lib.assertMsg (
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableStrictLLVMChecks ? true,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
   withDtrace ?
@@ -140,10 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
     # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
     (buildPackages.python3.withPackages (
       p:
-      [
-        p.python-frontmatter
-        p.toml
-      ]
+      [ p.python-frontmatter ]
+      ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]
       ++ lib.optionals finalAttrs.doInstallCheck [
         p.aiohttp
         p.pytest
@@ -182,7 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
   ++ lib.optionals usesCapnp [ capnproto ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ]
+  ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ];
 
   buildInputs = [
     boost
@@ -203,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals hasExternalLixDoc [ lix-doc ]
   ++ lib.optionals (!isLegacyParser) [ pegtl ]
+  ++ lib.optionals (lib.versionOlder version "2.94") [ libsodium ]
   # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
   # libunwind library path directly in the wrappers, but it does inject
   # -lunwind without injecting the library path...
@@ -286,7 +292,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-  ];
+  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+      [
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
+      ];
 
   ninjaFlags = [ "-v" ];
 
@@ -363,7 +375,6 @@ stdenv.mkDerivation (finalAttrs: {
   # fortify breaks the build with lto and musl for some reason
   ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
   enableParallelBuilding = true;
 

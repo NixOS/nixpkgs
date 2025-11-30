@@ -39,7 +39,7 @@ let
       pname = "thunderbird";
       inherit version updateScript applicationName;
       application = "comm/mail";
-      binaryName = pname;
+      binaryName = "thunderbird";
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
@@ -47,23 +47,7 @@ let
       extraPatches = [
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
-      ]
-      ++ lib.optional (lib.versionAtLeast version "140") (fetchpatch2 {
-        # https://bugzilla.mozilla.org/show_bug.cgi?id=1982003
-        name = "rustc-1.89.patch";
-        url = "https://raw.githubusercontent.com/openbsd/ports/3ef8a2538893109bea8211ef13a870822264e096/mail/mozilla-thunderbird/patches/patch-third_party_rust_allocator-api2_src_stable_vec_mod_rs";
-        extraPrefix = "";
-        hash = "sha256-eL+RNVLMkj8x/8qQJVUFHDdDpS0ahV1XEN1L0reaYG4=";
-      })
-      ++ lib.optionals (lib.versionOlder version "139") [
-        # clang-19 fixes for char_traits build issue
-        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
-        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
-        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
-        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
-        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
       ];
-
       extraPassthru = {
         icu73 = icu73';
         icu77 = icu77';
@@ -75,6 +59,7 @@ let
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
         maintainers = with lib.maintainers; [
+          booxter # darwin
           lovesegfault
           pierron
           vcunat
@@ -101,8 +86,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "142.0";
-    sha512 = "9a871846fc395c69688310dbf4a4569b75d3b2952a34ba1f7dc9ef5a60a34bd740087b4abb2a1a4d522dfa9d6640f2f4fcc9972a2b72160d1ed3e0df71c2901c";
+    version = "145.0";
+    sha512 = "f33835e4d740b32d072ac915124d988ef9d4cbe55d7c972c817991d19b64e8bc95b75b503ad3cb9abf4fd1d220fc7cb61720ea84dc49482faa13da1690d7d80e";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -115,8 +100,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.2.0esr";
-    sha512 = "6a10f95b805f00a0820c822ae07bc52ac39d0a55f084c319d27f01710d8a1d809b7b224da966632ae0a22658bf14e76c8fd7cec022718316c306c43809a4997d";
+    version = "140.5.0esr";
+    sha512 = "ce0d0ab4715831656e6c841d75a69109db6d64b4151ab69ecc954f1d3a045abf64e641e0fa46113cc7f3149bfe237687d4c11de1c14d013ce76e55679cadb1c5";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";
@@ -124,21 +109,9 @@ rec {
       versionSuffix = "esr";
     };
   };
-
-  thunderbird-128 = common {
-    applicationName = "Thunderbird ESR";
-
-    version = "128.14.0esr";
-    sha512 = "3ce2debe024ad8dafc319f86beff22feb9edecfabfad82513269e037a51210dfd84810fe35adcf76479273b8b2ceb8d4ecd2d0c6a3c5f6600b6b3df192bb798b";
-
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-128";
-      versionPrefix = "128";
-      versionSuffix = "esr";
-    };
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
+  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
 }

@@ -52,11 +52,6 @@ buildPythonPackage rec {
         "ProgressBar() if progress else None" \
         "print('Missing alive_progress needed for progress=True!') if progress else None"
 
-    substituteInPlace pymoo/algorithms/soo/nonconvex/es.py \
-      --replace-fail "np.math.ceil" "np.ceil"
-    substituteInPlace pymoo/util/mnn.py \
-      --replace-fail "np.product" "np.prod"
-
     substituteInPlace pymoo/config.py \
       --replace-fail \
         "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
@@ -81,9 +76,9 @@ buildPythonPackage rec {
     scipy
   ];
 
+  # Some tests require a grad backend to be configured, this is a hacky way to do so.
+  # The choice must be either "jax.numpy" or "autograd.numpy"
   preCheck = ''
-    # Some tests require a grad backend to be configured, this is a hacky way to do so.
-    # The choice must be either "jax.numpy" or "autograd.numpy"
     echo 'from pymoo.gradient import activate; activate("autograd.numpy")' >> tests/conftest.py
   '';
   nativeCheckInputs = [
@@ -102,6 +97,11 @@ buildPythonPackage rec {
 
     # sensitive to float precision
     "test_cd_and_pcd"
+
+    # AssertionError:
+    # Not equal to tolerance rtol=0, atol=0.0001
+    # Mismatched elements: 1200 / 1200 (100%)
+    "test_pf"
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_dascomp"

@@ -79,7 +79,6 @@ buildFHSEnv {
 
       # Adventure Game Studio
       allegro
-      dumb
 
       # Battle.net
       jansson
@@ -103,7 +102,7 @@ buildFHSEnv {
       gettext
       portaudio
       miniupnpc
-      mbedtls_2
+      mbedtls
       lzo
       sfml
       gsm

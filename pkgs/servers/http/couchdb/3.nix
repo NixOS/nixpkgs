@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ lostnet ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

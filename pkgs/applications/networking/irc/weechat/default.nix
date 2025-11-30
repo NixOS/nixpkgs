@@ -32,12 +32,13 @@
   tcl,
   phpSupport ? !stdenv.hostPlatform.isDarwin,
   php,
-  systemd,
+  systemdLibs,
   libxml2,
   pcre2,
   libargon2,
   extraBuildInputs ? [ ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -93,7 +94,7 @@ let
         pcre2
         libargon2
       ]
-      ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
@@ -104,15 +105,17 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.7.1";
+  version = "4.7.2";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-6D+3HKJRxd10vZxaa9P4XcLrjs7AlV9DwH8+CRHtt9M=";
+    hash = "sha256-ZmJL2QWm21igiTv73du4+kF7l6q0qa+MFA4LKc66JWk=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
-  patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
+  patches = lib.optionals gettext.gettextNeedsLdflags [
+    ./gettext-intl.patch
+  ];
 
   outputs = [
     "out"
@@ -136,7 +139,7 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoctor
   ]
-  ++ lib.optional enableTests cpputest;
+  ++ lib.optionals enableTests [ cpputest ];
 
   buildInputs = [
     ncurses
@@ -155,8 +158,6 @@ stdenv.mkDerivation rec {
   ++ lib.concatMap (p: p.buildInputs) enabledPlugins
   ++ extraBuildInputs;
 
-  hardeningEnable = [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
     # Fix '_res_9_init: undefined symbol' error
@@ -172,10 +173,8 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/weechat --version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell

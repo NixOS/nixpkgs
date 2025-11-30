@@ -60,7 +60,7 @@ let
       pytest-timeout
       pytestCheckHook
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {

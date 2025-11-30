@@ -5,21 +5,23 @@
   fetchFromGitHub,
   gtkmm4,
   libadwaita,
-  pcre2,
+  libuuid,
   pkg-config,
+  spdlog,
   stdenv,
   tinyxml-2,
   wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "progress-tracker";
-  version = "1.6";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "smolBlackCat";
     repo = "progress-tracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uUw3+BJWRoCT1VH27SZBEBRsEbbpaP4IahKonfSOyeM=";
+    hash = "sha256-ejXN10OyzvHi7n0ph7pnAxgonqexv1d3Yxi3s7ej2i4=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -32,19 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     catch2_3
     gtkmm4
     libadwaita
-    pcre2
+    libuuid
+    spdlog
     tinyxml-2
   ];
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "/usr/bin/" "${placeholder "out"}/bin/"
+  cmakeFlags = [
+    (lib.cmakeBool "DEVELOPMENT" false)
+  ];
 
-    substituteInPlace po/CMakeLists.txt \
-      --replace-fail "/usr/share/" "${placeholder "out"}/share/"
-
-    substituteInPlace data/CMakeLists.txt \
-      --replace-fail "/usr/share/" "${placeholder "out"}/share/"
+  postInstall = ''
+    glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   meta = {

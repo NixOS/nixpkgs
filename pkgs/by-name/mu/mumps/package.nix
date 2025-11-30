@@ -20,6 +20,7 @@
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
 let
+  scotch' = scotch.override { inherit withPtScotch; };
   profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
   LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
   LSCOTCH = toString (
@@ -47,8 +48,8 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "mumps";
-  version = "5.8.0";
+  pname = "mumps";
+  version = "5.8.1";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
   __structuredAttrs = true;
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
-    hash = "sha256-opJW7+Z/YhyUFwYTTTuWZuykz8Z4do6/XTBThHyTVCs=";
+    hash = "sha256-60hNYhbHONv9E9VY8G0goE83q7AwJh1u/Z+QRK8anHQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
-      "ISCOTCH=-I${lib.getDev scotch}/include"
+      "ISCOTCH=-I${lib.getDev scotch'}/include"
       "LMETIS=${LMETIS}"
       "LSCOTCH=${LSCOTCH}"
       "ORDERINGSF=${ORDERINGSF}"
@@ -107,16 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional mpiSupport mpi
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
-  buildInputs =
-    lib.optional withParmetis parmetis
-    ++ lib.optional mpiSupport scalapack
-    ++ [
-      blas
-      lapack
-      metis
-      scotch
-    ];
+  buildInputs = [
+    blas
+    lapack
+    metis
+    scotch'
+  ]
+  ++ lib.optional mpiSupport scalapack
+  ++ lib.optional withParmetis parmetis;
 
   doInstallCheck = true;
 

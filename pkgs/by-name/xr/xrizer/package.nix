@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   libGL,
   libxkbcommon,
@@ -9,19 +10,28 @@
   rustPlatform,
   shaderc,
   vulkan-loader,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${version}";
-    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
+    hash = "sha256-o6/uGbczYp5t6trjFIltZAMSM61adn+BvNb1fBhBSsk=";
   };
 
-  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
+  patches = [
+    (fetchpatch2 {
+      name = "xrizer-fix-flaky-tests.patch";
+      url = "https://github.com/Supreeeme/xrizer/commit/f58d797e75a8d920982abeaeedee83877dd3c493.diff?full_index=1";
+      hash = "sha256-TI++ZY7QX1iaj3WT0woXApSY2Tairraao5kzF77ewYY=";
+    })
+  ];
+
+  cargoHash = "sha256-kXcnD98ZaqRAA3jQvIoWSRC37Uq8l5PUYEzubxfMuUI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,9 +53,17 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/lib/xrizer/bin/linux64
-    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/bin/linux64/vrclient.so"
+    mkdir -p $out/lib/xrizer/$platformPath
+    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
   '';
+
+  platformPath =
+    {
+      "aarch64-linux" = "bin/linuxarm64";
+      "i686-linux" = "bin";
+      "x86_64-linux" = "bin/linux64";
+    }
+    ."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -54,9 +72,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Supreeeme/xrizer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    # TODO: support more systems
-    # To do so, we need to map systems to the format openvr expects.
-    # i.e. x86_64-linux -> linux64, aarch64-linux -> linuxarm64
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
   ffmpeg-full,
   gtk3,
   pango,
@@ -11,7 +12,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "escrotum";
-  version = "unstable-2020-12-07";
+  version = "1.0.1-unstable-2020-12-07";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -57,11 +58,15 @@ python3Packages.buildPythonApplication {
     cp man/escrotum.1 $man/share/man/man1/
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = with lib; {
     homepage = "https://github.com/Roger/escrotum";
     description = "Linux screen capture using pygtk, inspired by scrot";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rasendubi ];
+    maintainers = [ ];
     license = licenses.gpl3;
     mainProgram = "escrotum";
   };

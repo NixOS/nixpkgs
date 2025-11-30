@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ihaveamac/pyctr";
     changelog = "https://github.com/ihaveamac/pyctr/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ rileyinman ];
+    maintainers = [ ];
   };
 }

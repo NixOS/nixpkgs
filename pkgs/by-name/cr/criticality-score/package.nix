@@ -1,11 +1,11 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "criticality-score";
   version = "2.0.4";
 

@@ -19,6 +19,7 @@
   pkgs,
   plotly,
   poetry-core,
+  poetry-dynamic-versioning,
   polars,
   pyecharts,
   pygments,
@@ -42,20 +43,21 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.22.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-sxbQVMX7zN+sSKDzMzOpgt9WqNVF/yjOnKKzDFb3+So=";
+    hash = "sha256-otHPWOdTrlmf2VQUOhr3196MhN6ihk97y5sOEmnXuAw=";
   };
 
   pythonRelaxDeps = [ "requests" ];
 
   build-system = [
     poetry-core
+    poetry-dynamic-versioning
     setuptools
   ];
 
@@ -103,7 +105,7 @@ buildPythonPackage rec {
     webdriver-manager
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nicegui" ];
 

@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   postgresql,
   postgresqlBuildExtension,
@@ -16,8 +17,13 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
 
-  # https://github.com/citusdata/postgresql-hll/issues/166#issuecomment-3165489050
-  NIX_CFLAGS_COMPILE = "-Wno-error=missing-variable-declarations";
+  patches = [
+    (fetchpatch {
+      name = "fix-postgresql-18.patch";
+      url = "https://github.com/citusdata/postgresql-hll/commit/f998e234653ea397ddddc1278d1c02d8d011bd16.patch";
+      hash = "sha256-gF4f+B4Gu/QEyCGMfKLmRK6lNwgfd8lML55wMkhsSY4=";
+    })
+  ];
 
   meta = {
     description = "HyperLogLog for PostgreSQL";

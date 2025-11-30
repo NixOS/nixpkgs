@@ -2,9 +2,11 @@
   lib,
 
   buildPythonPackage,
+  callPackages,
   fetchFromGitHub,
   pythonOlder,
 
+  keymap-drawer,
   nix-update-script,
   pcpp,
   platformdirs,
@@ -59,6 +61,12 @@ buildPythonPackage {
   versionCheckProgram = "${placeholder "out"}/bin/keymap";
   versionCheckProgramArg = "--version";
 
+  passthru.tests = callPackages ./tests {
+    # Explicitly pass the correctly scoped package.
+    # The top-level package will still resolve to itself, because the way
+    # `toPythonApplication` interacts with scopes is weird.
+    inherit keymap-drawer;
+  };
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -70,5 +78,10 @@ buildPythonPackage {
       MattSturgeon
     ];
     mainProgram = "keymap";
+    # keymap-drawer currently requires tree-sitter 0.24.0
+    # See https://github.com/caksoylar/keymap-drawer/issues/183
+    # top-level package `keymap-drawer` is not broken due to this
+    # incompatibility, thanks to a Python override
+    broken = lib.versionAtLeast tree-sitter.version "0.25.0";
   };
 }

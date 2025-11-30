@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  scdoc,
   wayland,
   wayland-scanner,
 }:
@@ -26,11 +27,17 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    scdoc
     wayland-scanner
   ];
   buildInputs = [ wayland ];
   depsBuildBuild = [
     pkg-config
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   meta = with lib; {

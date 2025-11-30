@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.23";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-QAzT8T3bf3R3gwI/iWDYYDz0SxgLZsP61oMk72dYz4s=";
+    hash = "sha256-bEaBrCsYbBTguNYrY/CibVj1d3SXjFKNToF4iyTj7ZI=";
   };
 
   postgresqlTestSetupPost = ''
@@ -58,15 +58,12 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  # Temporarily disabled until the following is solved:
-  # https://github.com/NixOS/nixpkgs/pull/425384
-  doCheck = false;
-  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    (postgresql.withPackages (p: with p; [ pgvector ]))
+    (postgresql.withPackages (p: [ pgvector ]))
     postgresqlTestHook
   ];
 
@@ -87,6 +84,7 @@ buildPythonPackage rec {
     "test_vector_search_with_filters"
     "test_vector_search_pagination"
     "test_vector_search_edge_cases"
+    "test_non_ascii"
     # Flaky under a parallel build (database in use)
     "test_store_ttl"
   ];

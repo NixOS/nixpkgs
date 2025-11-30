@@ -19,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.25.1";
+  version = "2.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
     tag = "v${version}";
-    hash = "sha256-lh4t03upQQxY2KGwucXfEeNvqVVXlZ6hjR/e47imetk=";
+    hash = "sha256-BA2OWzr0sH77YUkFqMsGJQppqbG3R4sQ2kepicdzejE=";
   };
 
   build-system = [ setuptools ];
@@ -79,7 +77,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.api_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core Library for Google Client Libraries";
     longDescription = ''
       This library is not meant to stand-alone. Instead it defines common
@@ -87,7 +85,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
   };
 }

@@ -19,4 +19,4 @@ nix-update --subpackage rustDep mangayomi
 
 curl -sL https://raw.githubusercontent.com/kodjodevf/mangayomi/${latestTag}/pubspec.lock | yq . >$PACKAGE_DIR/pubspec.lock.json
 
-$PACKAGE_DIR/update-gitHashes.py
+$(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json

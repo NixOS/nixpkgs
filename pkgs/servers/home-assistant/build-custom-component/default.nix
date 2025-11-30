@@ -22,10 +22,6 @@ home-assistant.python.pkgs.buildPythonPackage (
     pname = "${owner}/${domain}";
     inherit version format;
 
-    buildPhase = ''
-      true
-    '';
-
     installPhase = ''
       runHook preInstall
 
@@ -64,7 +60,7 @@ home-assistant.python.pkgs.buildPythonPackage (
     // args.meta or { };
 
   }
-  // builtins.removeAttrs args [
+  // removeAttrs args [
     "meta"
     "nativeCheckInputs"
     "passthru"

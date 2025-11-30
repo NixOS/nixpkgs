@@ -50,8 +50,8 @@ python3Packages.buildPythonApplication rec {
           xz
           lzip
         ]
-        ++ lib.optional (unzipSupport) unzip
-        ++ lib.optional (unrarSupport) unrar
+        ++ lib.optional unzipSupport unzip
+        ++ lib.optional unrarSupport unrar
       );
     in
     [

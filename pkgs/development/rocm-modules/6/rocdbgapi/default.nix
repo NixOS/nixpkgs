@@ -5,13 +5,13 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  git,
   rocm-comgr,
   rocm-runtime,
   hwdata,
   texliveSmall,
   doxygen,
   graphviz,
+  writableTmpDirAsHomeHook,
   buildDocs ? true,
 }:
 
@@ -37,22 +37,17 @@ let
         helvetic
         wasy
         courier
-        # FIXME: The following packages are used in the Doxygen table
-        # workaround, can be removed once
-        # https://github.com/doxygen/doxygen/issues/11634 is fixed, depending
-        # on what the fix is
         tabularray
+        ltablex
         ninecolors
-        codehigh
-        catchfile
-        environ
+        xltabular
       ]
     )
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -65,25 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
+    hash = "sha256-Rr8+SNeFps0rjk4Jn2+rFmtRJfL42l0tNOz13oZQy+I=";
   };
-
-  # FIXME: remove once https://github.com/doxygen/doxygen/issues/11634 is resolved
-  # Applies workaround based on what was suggested in
-  # https://github.com/doxygen/doxygen/issues/11634#issuecomment-3027000655,
-  # but rewritten to use the `tabularray` LaTeX package. Unfortunately,
-  # verbatim code snippets in the documentation are not formatted very nicely
-  # with this workaround.
-  postPatch = ''
-    substituteInPlace doc/Doxyfile.in --replace 'LATEX_EXTRA_STYLESHEET =' 'LATEX_EXTRA_STYLESHEET = ${./override_doxygen_tables.sty}'
-  '';
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    git
   ]
   ++ lib.optionals buildDocs [
+    writableTmpDirAsHomeHook
     latex
     doxygen
     graphviz
@@ -106,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Unfortunately, it seems like we have to call make on this manually
   postBuild = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
     make -j$NIX_BUILD_CORES doc
   '';
 

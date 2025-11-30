@@ -17,6 +17,7 @@
   libpulseaudio,
   libxkbfile,
   libxml2,
+  metacity,
   pkg-config,
   polkit,
   gdm,
@@ -34,43 +35,13 @@
   buildEnv,
 }:
 
-let
-  # From data/sessions/Makefile.am
-  requiredComponentsCommon =
-    enableGnomePanel: [ "gnome-flashback" ] ++ lib.optional enableGnomePanel "gnome-panel";
-  requiredComponentsGsd = [
-    "org.gnome.SettingsDaemon.A11ySettings"
-    "org.gnome.SettingsDaemon.Color"
-    "org.gnome.SettingsDaemon.Datetime"
-    "org.gnome.SettingsDaemon.Housekeeping"
-    "org.gnome.SettingsDaemon.Keyboard"
-    "org.gnome.SettingsDaemon.MediaKeys"
-    "org.gnome.SettingsDaemon.Power"
-    "org.gnome.SettingsDaemon.PrintNotifications"
-    "org.gnome.SettingsDaemon.Rfkill"
-    "org.gnome.SettingsDaemon.ScreensaverProxy"
-    "org.gnome.SettingsDaemon.Sharing"
-    "org.gnome.SettingsDaemon.Smartcard"
-    "org.gnome.SettingsDaemon.Sound"
-    "org.gnome.SettingsDaemon.UsbProtection"
-    "org.gnome.SettingsDaemon.Wacom"
-    "org.gnome.SettingsDaemon.XSettings"
-  ];
-  requiredComponents =
-    wmName: enableGnomePanel:
-    "RequiredComponents=${
-      lib.concatStringsSep ";" (
-        [ wmName ] ++ requiredComponentsCommon enableGnomePanel ++ requiredComponentsGsd
-      )
-    };";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-flashback";
-  version = "3.56.0";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-flashback/${lib.versions.majorMinor finalAttrs.version}/gnome-flashback-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LQ+iLzc9sIDq7w5Wk7lijN6ETyVjPVqQMTsEndlSkmA=";
+    hash = "sha256-qqI+cEJHfnQfJCebRoudIK9OwZXuQ7PTEs2q+E2YwyE=";
   };
 
   patches = [
@@ -90,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Check that our expected RequiredComponents match the stock session files, but then don't install them.
-    # They can be installed using mkSessionForWm.
-    grep '${requiredComponents "metacity" true}' $out/share/gnome-session/sessions/gnome-flashback-metacity.session || (echo "RequiredComponents have changed, please update gnome-flashback/default.nix."; false)
-
     rm -r $out/share/gnome-session
     rm -r $out/share/xsessions
     rm $out/libexec/gnome-flashback-metacity
@@ -167,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       {
         wmName,
         wmLabel,
-        enableGnomePanel,
       }:
       writeTextFile {
         name = "gnome-flashback-${wmName}-gnome-session";
@@ -175,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
         text = ''
           [GNOME Session]
           Name=GNOME Flashback (${wmLabel})
-          ${requiredComponents wmName enableGnomePanel}
         '';
       };
 
@@ -209,11 +174,33 @@ stdenv.mkDerivation (finalAttrs: {
         wmCommand,
         enableGnomePanel,
       }:
-      runCommand "gnome-flashback-${wmName}.target" { } ''
-        mkdir -p $out/lib/systemd/user
-        cp -r "${finalAttrs.finalPackage}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
-          "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
-      '';
+      runCommand "gnome-flashback-${wmName}.target" { } (
+        ''
+          if [ "${wmName}" = "metacity" ]; then
+            echo "Use `services.xserver.windowManager.metacity.enable` instead."
+            exit 1
+          fi
+
+          mkdir -p $out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d
+          cp "${finalAttrs.finalPackage}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d/session.conf" \
+            "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d/session.conf"
+
+          substitute ${finalAttrs.finalPackage}/lib/systemd/user/gnome-session-x11@gnome-flashback-metacity.target \
+            "$out/lib/systemd/user/gnome-session-x11@gnome-flashback-${wmName}.target" \
+            --replace-fail "(Metacity)" "(${wmLabel})"
+
+          echo -e "[Unit]\nWants=${wmName}.service" >> "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d/${wmName}.conf"
+
+          substitute ${metacity}/lib/systemd/user/metacity.service \
+            "$out/lib/systemd/user/${wmName}.service" \
+            --replace-fail "Description=Metacity" "Description=${wmLabel}" \
+            --replace-fail "ExecStart=${metacity}/bin/metacity" "ExecStart=${wmCommand}"
+        ''
+        + lib.optionalString (!enableGnomePanel) ''
+          substituteInPlace "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d/session.conf" \
+            --replace-fail "Wants=gnome-panel.service" ""
+        ''
+      );
 
     tests = {
       inherit (nixosTests) gnome-flashback;

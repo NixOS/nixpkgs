@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.7.0";
+  version = "9.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_cinderclient";
     inherit version;
-    hash = "sha256-GMRQHlSWd5hNhbCxD9B0770mXjCt0qeW0oF2BVqNfc8=";
+    hash = "sha256-vT7p+Uh8XnmVfwGKaz8t7OcFna2PYVXYPdS265RHoR0=";
   };
 
   nativeBuildInputs = [

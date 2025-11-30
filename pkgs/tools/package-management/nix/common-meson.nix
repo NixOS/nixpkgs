@@ -12,8 +12,9 @@
   },
   patches ? [ ],
   maintainers ? [
-    lib.maintainers.lovesegfault
     lib.maintainers.artturin
+    lib.maintainers.philiptaron
+    lib.maintainers.lovesegfault
   ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,
@@ -99,8 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "doc"
   ];
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   hardeningDisable = [
     "shadowstack"

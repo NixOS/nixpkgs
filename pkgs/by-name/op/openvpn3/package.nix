@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
+    ./v25-latest-linux-fix.patch
+  ];
+
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
     #define PACKAGE_GUIVERSION "v${builtins.replaceStrings [ "_" ] [ ":" ] version}"
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
   pythonPath = python3.withPackages (ps: [
     ps.dbus-python
     ps.pygobject3
-    ps.systemd
+    ps.systemd-python
   ]);
 
   nativeBuildInputs = [

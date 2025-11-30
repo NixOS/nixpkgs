@@ -1,12 +1,9 @@
 diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
+index ad2e65cf7..61fb78db8 100644
 --- a/daemon/gdm-local-display-factory.c
 +++ b/daemon/gdm-local-display-factory.c
-@@ -245,9 +245,9 @@ struct GdmDisplayServerConfiguration {
-         const char *session_type;
- } display_server_configuration[] = {
- #ifdef ENABLE_WAYLAND_SUPPORT
--        { "wayland", GDM_KEY_WAYLAND_ENABLE, "/usr/bin/Xwayland", "wayland" },
-+        { "wayland", GDM_KEY_WAYLAND_ENABLE, "@xwayland@/bin/Xwayland", "wayland" },
+@@ -272,7 +272,7 @@ struct GdmDisplayServerConfiguration {
+         { "wayland", GDM_KEY_WAYLAND_ENABLE, NULL, "wayland" },
  #endif
  #ifdef ENABLE_X11_SUPPORT
 -        { "xorg", GDM_KEY_XORG_ENABLE, "/usr/bin/Xorg", "x11" },
@@ -15,10 +12,10 @@ diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-facto
          { NULL, NULL, NULL },
  };
 diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
-index fc5aef6ac..c61e0046b 100644
+index 457dcf88d..a71b89ba8 100644
 --- a/daemon/gdm-manager.c
 +++ b/daemon/gdm-manager.c
-@@ -151,7 +151,7 @@ plymouth_is_running (void)
+@@ -154,7 +154,7 @@ plymouth_is_running (void)
          GError  *error;
  
          error = NULL;
@@ -27,7 +24,7 @@ index fc5aef6ac..c61e0046b 100644
                                           NULL, NULL, &status, &error);
          if (! res) {
                  g_debug ("Could not ping plymouth: %s", error->message);
-@@ -169,7 +169,7 @@ plymouth_prepare_for_transition (void)
+@@ -172,7 +172,7 @@ plymouth_prepare_for_transition (void)
          GError  *error;
  
          error = NULL;
@@ -36,7 +33,7 @@ index fc5aef6ac..c61e0046b 100644
                                           NULL, NULL, NULL, &error);
          if (! res) {
                  g_warning ("Could not deactivate plymouth: %s", error->message);
-@@ -184,7 +184,7 @@ plymouth_quit_with_transition (void)
+@@ -187,7 +187,7 @@ plymouth_quit_with_transition (void)
          GError  *error;
  
          error = NULL;
@@ -45,7 +42,7 @@ index fc5aef6ac..c61e0046b 100644
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
-@@ -200,7 +200,7 @@ plymouth_quit_without_transition (void)
+@@ -203,7 +203,7 @@ plymouth_quit_without_transition (void)
          GError  *error;
  
          error = NULL;
@@ -54,30 +51,32 @@ index fc5aef6ac..c61e0046b 100644
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
-diff --git a/daemon/gdm-session.c b/daemon/gdm-session.c
-index a4c4b2dcf..67416b204 100644
---- a/daemon/gdm-session.c
-+++ b/daemon/gdm-session.c
-@@ -3193,16 +3193,16 @@ gdm_session_start_session (GdmSession *self,
-                  */
-                 if (run_launcher) {
-                         if (is_x11) {
--                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"dbus-run-session -- %s\"",
-+                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
-                                                            register_session ? "--register-session " : "",
-                                                            self->selected_program);
-                         } else {
--                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"dbus-run-session -- %s\"",
-+                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
-                                                            register_session ? "--register-session " : "",
-                                                            self->selected_program);
-                         }
-                 } else {
--                        program = g_strdup_printf ("dbus-run-session -- %s",
-+                        program = g_strdup_printf ("@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s",
-                                                    self->selected_program);
-                 }
-         }
+diff --git a/daemon/gdm-wayland-session.c b/daemon/gdm-wayland-session.c
+index d0404d2c1..e916c2723 100644
+--- a/daemon/gdm-wayland-session.c
++++ b/daemon/gdm-wayland-session.c
+@@ -136,7 +136,7 @@ spawn_bus (State        *state,
+ 
+         bus_address_fd_string = g_strdup_printf ("%d", BUS_ADDRESS_FILENO);
+ 
+-        g_ptr_array_add (arguments, "dbus-daemon");
++        g_ptr_array_add (arguments, "@dbus@/bin/dbus-daemon");
+ 
+         g_ptr_array_add (arguments, "--print-address");
+         g_ptr_array_add (arguments, bus_address_fd_string);
+diff --git a/daemon/gdm-x-session.c b/daemon/gdm-x-session.c
+index a998d1555..4fe50a2d0 100644
+--- a/daemon/gdm-x-session.c
++++ b/daemon/gdm-x-session.c
+@@ -463,7 +463,7 @@ spawn_bus (State        *state,
+ 
+         bus_address_fd_string = g_strdup_printf ("%d", BUS_ADDRESS_FILENO);
+ 
+-        g_ptr_array_add (arguments, "dbus-daemon");
++        g_ptr_array_add (arguments, "@dbus@/bin/dbus-daemon");
+ 
+         g_ptr_array_add (arguments, "--print-address");
+         g_ptr_array_add (arguments, bus_address_fd_string);
 diff --git a/data/gdm.service.in b/data/gdm.service.in
 index 17e8a8de8..afc709778 100644
 --- a/data/gdm.service.in

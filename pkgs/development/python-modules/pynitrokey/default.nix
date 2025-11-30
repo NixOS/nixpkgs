@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   installShellFiles,
@@ -24,7 +25,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.10.0";
+  version = "0.11.2";
   mainProgram = "nitropy";
 in
 
@@ -34,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kr6VtBADLvXUva7csbsHujGzBfRG1atJLF7qbIWmToM=";
+    hash = "sha256-x0OWFSp6PrW4wTWNP8mLJpbrrYZ66XKOBi8l1vCsko4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -72,7 +73,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pynitrokey" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${mainProgram} \
       --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
       --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
@@ -89,7 +90,6 @@ buildPythonPackage {
     ];
     maintainers = with maintainers; [
       frogamic
-      raitobezarius
     ];
     inherit mainProgram;
   };

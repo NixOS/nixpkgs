@@ -31,14 +31,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.5";
+  version = "1.28.7";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-panel";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-P1zrOH1xTbKXIoP13azAFDv2Q05dubR1AfmuLbgh250=";
+    hash = "sha256-8GS6JY5kS2YKscItAo8dzudgkZeG51JsSBUj0EfLiZQ=";
   };
 
   nativeBuildInputs = [

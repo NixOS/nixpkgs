@@ -19,7 +19,7 @@
   brightnessctl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "avizo";
   version = "1.3-unstable-2024-11-03";
 
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/volumectl --suffix PATH : $out/bin:${lib.makeBinPath ([ pamixer ])}
-    wrapProgram $out/bin/lightctl --suffix PATH : $out/bin:${lib.makeBinPath ([ brightnessctl ])}
+    wrapProgram $out/bin/volumectl --suffix PATH : $out/bin:${lib.makeBinPath [ pamixer ]}
+    wrapProgram $out/bin/lightctl --suffix PATH : $out/bin:${lib.makeBinPath [ brightnessctl ]}
   '';
 
   meta = with lib; {

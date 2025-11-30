@@ -28,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-JKCTn2YkdyGLvchMT9C61PxjYxuQFzt3SjCE9JvgtVc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [
     poetry-core
     poetry-dynamic-versioning
@@ -37,6 +41,14 @@ buildPythonPackage rec {
     docutils
     pygments
     sphinx
+  ];
+
+  # upstream pins these unnecessarily in their requirements.txt
+  pythonRelaxDeps = [
+    "certifi"
+    "requests"
+    "urllib3"
+    "zipp"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

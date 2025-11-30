@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.7.0";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VPwPf1cQ7jGx9aGv4sjdwu945Nlh3ZqgH9dxtFxiMP4=";
+    hash = "sha256-jJKy3LKO2ihtXtYMSOlVvq8RAfgpcxDgE8Ud9Fzd/Qg=";
   };
 
   hardeningDisable = [ "format" ];

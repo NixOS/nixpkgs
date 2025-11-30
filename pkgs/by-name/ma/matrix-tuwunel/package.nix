@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libredirect,
   bzip2,
   zstd,
   stdenv,
@@ -17,6 +18,8 @@
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
   nixosTests,
+  writeTextFile,
+  rustc-unwrapped,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -85,20 +88,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.3.0";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RuvGoXe/O48mQ4/rN+fh2N1NZ4uhvdtI1q4tRM/bRSE=";
+    hash = "sha256-EmIBhSxYD52BzwewcIL53e3/7GLY+5nccmAYGf1LPqI=";
   };
 
-  cargoHash = "sha256-LwVJe9EqBT7x7eBTzvo4Lu1geNI7CWpsIDNWL8AAg+U=";
+  cargoHash = "sha256-aVMJr216gkYpanCee6UhNGINAi/EZ0V5m0WaTYpQJcY=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  patches = [
+    # reduce closure size by not storing a reference to rustc-unwrapped
+    # alternative to https://github.com/NixOS/nixpkgs/pull/462394
+    ./dont-record-compilation-flags.patch
   ];
 
   buildInputs = [
@@ -137,6 +146,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional enableLiburing "io_uring";
 
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  preCheck =
+    let
+      fakeResolvConf = writeTextFile {
+        name = "resolv.conf";
+        text = ''
+          nameserver 0.0.0.0
+        '';
+      };
+    in
+    ''
+      export NIX_REDIRECTS="/etc/resolv.conf=${fakeResolvConf}"
+      export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
+    '';
+  doCheck = true;
+
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
@@ -150,6 +178,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       inherit (nixosTests) matrix-tuwunel;
     };
   };
+
+  disallowedReferences = [ rustc-unwrapped ];
 
   meta = {
     description = "Matrix homeserver written in Rust, official successor to conduwuit";

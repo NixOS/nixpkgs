@@ -19,6 +19,11 @@
 let
   packages = computeRequiredOctavePackages extraLibs;
 
+  # glibcLocalesUtf8 is null on darwin
+  localeArchiveArgs = lib.optionalString (glibcLocalesUtf8 != null) ''
+    --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
+  '';
+
 in
 buildEnv {
   name = "${octave.name}-env";
@@ -47,7 +52,7 @@ buildEnv {
            if [ -x $prg ]; then
               makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" \
                           --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc" \
-                          --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
+                          ${localeArchiveArgs}
            fi
        done
        cd $out
@@ -87,9 +92,9 @@ buildEnv {
   ''
   + postBuild;
 
-  inherit (octave) meta;
+  inherit (octave) meta version;
 
-  passthru = octave.passthru // {
+  passthru = (removeAttrs octave.passthru [ "tests" ]) // {
     interpreter = "$out/bin/octave";
     inherit octave;
     env = stdenv.mkDerivation {

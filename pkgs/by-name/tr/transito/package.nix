@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromSourcehut,
   pkg-config,
@@ -31,6 +32,7 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXcursor
     xorg.libXfixes
+    xorg.libxcb
     libGL
     sqlite
   ];
@@ -71,5 +73,6 @@ buildGoModule rec {
     maintainers = [ maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

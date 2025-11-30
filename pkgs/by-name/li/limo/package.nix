@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "LIMO_INSTALL_PREFIX" (placeholder "out"))
   ]
-  ++ lib.optionals (withUnrar) [
+  ++ lib.optionals withUnrar [
     (lib.cmakeBool "USE_SYSTEM_LIBUNRAR" true)
   ]
   ++ lib.optionals (!withUnrar) [

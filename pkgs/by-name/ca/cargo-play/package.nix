@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fanzeyi";
     repo = "cargo-play";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -42,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
+  patches = [
+    # Fix compat with CMake 4
+    # Remove when https://gitlab.com/ubports/development/core/geonames/-/merge_requests/4 merged & in release
+    ./1001-geonames-cmake4-compat.patch
+  ];
+
   postPatch = ''
     patchShebangs src/generate-locales.sh tests/setup-test-env.sh
   '';

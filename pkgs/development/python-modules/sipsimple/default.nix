@@ -4,10 +4,11 @@
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
+  nix-update-script,
   cython,
   setuptools,
   alsa-lib,
-  ffmpeg,
+  ffmpeg_7,
   libopus,
   libuuid,
   libv4l,
@@ -101,7 +102,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     alsa-lib
-    ffmpeg
+    ffmpeg_7
     libopus
     libuuid
     libv4l
@@ -141,6 +142,12 @@ buildPythonPackage rec {
 
   passthru = {
     inherit extDeps;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(.*)-mac$"
+      ];
+    };
   };
 
   meta = {

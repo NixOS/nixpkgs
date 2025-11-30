@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "postfix_exporter";
-  version = "0.12.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Hsn723";
     repo = "postfix_exporter";
     tag = "v${version}";
-    sha256 = "sha256-3Sj9qRAK7lDLYShE0G1UkZsDPAMlk4KZBucDeWcnS4I=";
+    sha256 = "sha256-PIZBzDZJkjttxy2pYUAs9G9C/byCNpnhWYuqWJlGgfM=";
   };
 
-  vendorHash = "sha256-HCKJA7T5kCQX9ZEClHWgZgjN71YG3BGF8gXc1aDKDJ8=";
+  vendorHash = "sha256-FY2bynGrgxBsSlQQ6bnr/NYHt9pmzF/6ST/Ea3cDfF8=";
 
   ldflags = [
     "-s"
@@ -37,12 +37,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       globin
     ];
   };

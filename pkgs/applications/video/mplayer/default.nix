@@ -7,7 +7,7 @@
   pkg-config,
   freetype,
   yasm,
-  ffmpeg,
+  ffmpeg_7,
   aalibSupport ? true,
   aalib,
   fontconfigSupport ? true,
@@ -140,7 +140,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     freetype
-    ffmpeg
+    ffmpeg_7
   ]
   ++ lib.optional aalibSupport aalib
   ++ lib.optional fontconfigSupport fontconfig
@@ -216,7 +216,7 @@ stdenv.mkDerivation {
   ++ lib.optional fribidiSupport "--enable-fribidi"
   ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) "--enable-vidix"
   ++ lib.optional stdenv.hostPlatform.isLinux "--enable-fbdev"
-  ++ lib.optionals (crossBuild) [
+  ++ lib.optionals crossBuild [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"

@@ -7,7 +7,7 @@
   cmake,
   cmakerc,
   curl,
-  fmt,
+  fmt_11,
   git,
   gzip,
   meson,
@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-07-21";
+  version = "2025-10-16";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-Q2CLqlHItNr4H4xFcuGd0BqootxsInZQ3unTZ7vtz8E=";
+    hash = "sha256-Qu7e2cb4fDAiJ4PXRzgdsvTMM8eo6dwRCNpd/w3vWLw=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmakerc
-    fmt
+    fmt_11
   ];
 
   patches = [

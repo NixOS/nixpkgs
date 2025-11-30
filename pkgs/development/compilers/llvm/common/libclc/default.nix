@@ -6,7 +6,7 @@
   monorepoSrc,
   llvm,
   buildPackages,
-  buildLlvmTools,
+  buildLlvmPackages,
   ninja,
   cmake,
   python3,
@@ -15,7 +15,7 @@
 }:
 let
   spirv-llvm-translator = buildPackages.spirv-llvm-translator.override {
-    inherit (buildLlvmTools) llvm;
+    inherit (buildLlvmPackages) llvm;
   };
 
   # The build requires an unwrapped clang but wrapped clang++ thus we need to
@@ -23,24 +23,18 @@ let
   # unwrapped clang++
   clang-only = runCommand "clang-only" { } ''
     mkdir -p "$out"/bin
-    ln -s "${lib.getExe' buildLlvmTools.clang.cc "clang"}" "$out"/bin
+    ln -s "${lib.getExe' buildLlvmPackages.clang.cc "clang"}" "$out"/bin
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir -p "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/libclc "$out"
-    ''
-  );
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/libclc "$out"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 
@@ -50,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./libclc-gnu-install-dirs.patch
+    (getVersionFile "libclc/gnu-install-dirs.patch")
   ]
   # LLVM 19 changes how host tools are looked up.
   # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
@@ -65,13 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString (lib.versionOlder release_version "19") ''
       substituteInPlace CMakeLists.txt \
         --replace-fail 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                  'find_program( LLVM_CLANG clang PATHS "${buildLlvmTools.clang.cc}/bin" NO_DEFAULT_PATH )' \
+                  'find_program( LLVM_CLANG clang PATHS "${buildLlvmPackages.clang.cc}/bin" NO_DEFAULT_PATH )' \
         --replace-fail 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                  'find_program( LLVM_AS llvm-as PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
+                  'find_program( LLVM_AS llvm-as PATHS "${buildLlvmPackages.llvm}/bin" NO_DEFAULT_PATH )' \
         --replace-fail 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                  'find_program( LLVM_LINK llvm-link PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
+                  'find_program( LLVM_LINK llvm-link PATHS "${buildLlvmPackages.llvm}/bin" NO_DEFAULT_PATH )' \
         --replace-fail 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                  'find_program( LLVM_OPT opt PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
+                  'find_program( LLVM_OPT opt PATHS "${buildLlvmPackages.llvm}/bin" NO_DEFAULT_PATH )' \
         --replace-fail 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
     ''
@@ -80,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           substituteInPlace CMakeLists.txt \
             --replace-fail 'COMMAND prepare_builtins' \
-                           'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
+                           'COMMAND ${buildLlvmPackages.libclc.dev}/bin/prepare_builtins'
         ''
       else
         ''
           substituteInPlace CMakeLists.txt \
             --replace-fail 'set( prepare_builtins_exe prepare_builtins )' \
-                           'set( prepare_builtins_exe ${buildLlvmTools.libclc.dev}/bin/prepare_builtins )'
+                           'set( prepare_builtins_exe ${buildLlvmPackages.libclc.dev}/bin/prepare_builtins )'
         ''
     );
 
@@ -95,9 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ]
-  ++ lib.optional (lib.versionAtLeast release_version "19") [
+  ++ lib.optionals (lib.versionAtLeast release_version "19") [
     clang-only
-    buildLlvmTools.llvm
+    llvm
     spirv-llvm-translator
   ];
   buildInputs = [ llvm ];

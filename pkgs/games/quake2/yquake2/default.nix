@@ -14,8 +14,6 @@
 }:
 
 let
-  mkFlag = b: if b then "yes" else "no";
-
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
   wrapper = import ./wrapper.nix {
@@ -32,13 +30,13 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.51";
+    version = "8.60";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-u8WXelbvfmbD+t6uTaE9z+kHBD3Re0P4SOUBL4MfAR4=";
+      sha256 = "sha256-XD0Fnx3TZwZUvjLOpzM5oWoIQFykDuBOddQXudkiyB0=";
     };
 
     postPatch = ''
@@ -58,7 +56,7 @@ let
     ++ lib.optional openalSupport openal;
 
     makeFlags = [
-      "WITH_OPENAL=${mkFlag openalSupport}"
+      "WITH_OPENAL=${lib.boolToYesNo openalSupport}"
       "WITH_SYSTEMWIDE=yes"
       "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
     ];

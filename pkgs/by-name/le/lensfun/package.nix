@@ -45,6 +45,16 @@ stdenv.mkDerivation {
     mkdir -p data/db
     tar xvf $TMPDIR/db/version_1.tar -C data/db
     date +%s > data/db/timestamp.txt
+  ''
+  # Backport CMake 4 support
+  # This is already on master, but not yet in a stable release:
+  # https://github.com/lensfun/lensfun/issues/2520
+  # https://github.com/lensfun/lensfun/commit/011de2e85813ff496a85404b30891352555de077
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR )' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.12 FATAL_ERROR)'
   '';
 
   nativeBuildInputs = [

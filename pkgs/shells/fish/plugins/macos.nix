@@ -7,13 +7,13 @@
 
 buildFishPlugin rec {
   pname = "macos";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "halostatue";
     repo = "fish-macos";
     tag = "v${version}";
-    hash = "sha256-gAbmpEmUvM3pFEZ6oSFM//dmu4sXu6ncMiOH75iq5A4=";
+    hash = "sha256-yTwN2ztdU+vk+AXEfsJUN7J4KqrbLSWHgA0q5rUT5CE=";
   };
 
   passthru.updateScript = nix-update-script { };

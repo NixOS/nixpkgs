@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "quantities";
-  version = "0.16.1";
+  version = "0.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "python-quantities";
     repo = "python-quantities";
     tag = "v${version}";
-    hash = "sha256-gXxUmuhFAqHVj8jqWt8Ed2M6UvnPxku6hr/yJoa3nXE=";
+    hash = "sha256-6Kl7TiSCSDtMjRKMNVweoGJ1y8kmo1j4SY0tikyAozs=";
   };
 
   build-system = [

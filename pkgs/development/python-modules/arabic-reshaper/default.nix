@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

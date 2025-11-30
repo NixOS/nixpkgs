@@ -24,7 +24,11 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+    ];
+  };
 
   meta = {
     description = "Distributed Networking Stack for Connecting Peers";
@@ -32,6 +36,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

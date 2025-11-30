@@ -11,21 +11,23 @@
   scikit-build-core,
 
   # dependencies
+  mlx-lm,
+  numpy,
   pydantic,
-  sentencepiece,
-  tiktoken,
   torch,
   transformers,
   triton,
 
   # tests
   pytestCheckHook,
+  sentencepiece,
+  tiktoken,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.23";
+  version = "0.1.24";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-asyxJsrsbfFNh1pLBDzM4kdmunQp7/mTDw3L8KuZf4g=";
+    hash = "sha256-K+GCHuWKF449JaGWr7FQrDeJS3pxmVKnGf68L53LrK0=";
   };
 
   patches = [
@@ -49,25 +51,29 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    numpy
     pydantic
-    sentencepiece
-    tiktoken
     torch
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    mlx-lm
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    sentencepiece
+    tiktoken
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
     # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
     "-ffat-lto-objects"
-  ];
+  ]);
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -98,10 +104,6 @@ buildPythonPackage rec {
     badPlatforms = [
       # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
       "aarch64-linux"
-
-      # clang++: error: unsupported option '-ffat-lto-objects' for target 'arm64-apple-darwin'
-      # idem for 'x86_64-apple-darwin'
-      lib.systems.inspect.patterns.isDarwin
     ];
   };
 }

@@ -167,7 +167,7 @@ Best practice is to name the map after the database role it manages to avoid nam
 ## Upgrading {#module-services-postgres-upgrading}
 
 ::: {.note}
-The steps below demonstrate how to upgrade from an older version to `pkgs.postgresql_13`.
+The steps below demonstrate how to upgrade from an older version to `pkgs.postgresql_15`.
 These instructions are also applicable to other versions.
 :::
 
@@ -176,8 +176,8 @@ each major version has some internal changes in the databases' state. Because of
 NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
 can be obtained like this:
 ```
-$ nix-instantiate --eval -A postgresql_13.psqlSchema
-"13"
+$ nix-instantiate --eval -A postgresql_15.psqlSchema
+"15"
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
@@ -193,7 +193,7 @@ For an upgrade, a script like this can be used to simplify the process:
       let
         # XXX specify the postgresql package you'd like to upgrade to.
         # Do not forget to list the extensions you need.
-        newPostgres = pkgs.postgresql_13.withPackages (pp: [
+        newPostgres = pkgs.postgresql_15.withPackages (pp: [
           # pp.plv8
         ]);
         cfg = config.services.postgresql;
@@ -229,22 +229,7 @@ The upgrade process is:
   2. Login as root (`sudo su -`).
   3. Run `upgrade-pg-cluster`. This will stop the old postgresql cluster, initialize a new one and migrate the old one to the new one. You may supply arguments like `--jobs 4` and `--link` to speedup the migration process. See <https://www.postgresql.org/docs/current/pgupgrade.html> for details.
   4. Change the postgresql package in NixOS configuration to the one you were upgrading to via [](#opt-services.postgresql.package). Rebuild NixOS. This should start the new postgres version using the upgraded data directory and all services you stopped during the upgrade.
-  5. After the upgrade it's advisable to analyze the new cluster:
-
-       - For PostgreSQL ≥ 14, use the `vacuumdb` command printed by the upgrades script.
-       - For PostgreSQL < 14, run (as `su -l postgres` in the [](#opt-services.postgresql.dataDir), in this example {file}`/var/lib/postgresql/13`):
-
-         ```
-         $ ./analyze_new_cluster.sh
-         ```
-
-     ::: {.warning}
-     The next step removes the old state-directory!
-     :::
-
-     ```
-     $ ./delete_old_cluster.sh
-     ```
+  5. After the upgrade it's advisable to analyze the new cluster with the `vacuumdb` command printed by the upgrades script.
 
 ## Versioning and End-of-Life {#module-services-postgres-versioning}
 
@@ -351,6 +336,60 @@ self: super: {
       });
     };
   };
+}
+```
+
+You can add a custom PostgreSQL extension to an environment by calling `postgresqlPackages.callPackage` on the derivation.
+In addition to the correct `postgresql` package, `callPackage` will provide additional functions to build those extensions:
+
+- `postgresqlBuildExtension`, extending `mkDerivation` for C and SQL extensions.
+- `buildPgrxExtension`, extending `mkDerivation` for pgrx (Rust) extensions.
+- `postgresqlTestExtension`, a helper to test these extensions on a PostgreSQL instance.
+
+We can define our extension as such:
+
+```nix
+# my-extension.nix
+{
+  postgresql,
+  postgresqlBuildExtension,
+  # other regular mkDerivation arguments
+  fetchFromGitHub,
+}:
+postgresqlBuildExtension (finalAttrs: {
+  pname = "myext";
+  # ...
+  src = fetchFromGitHub {
+    # ...
+  };
+  meta = {
+    platforms = postgresql.meta.platforms;
+    # other meta properties
+  };
+})
+```
+
+We can then build it with `callPackage`, for instance in a NixOS config:
+
+```nix
+{
+  services.postgresql.extensions =
+    ps: with ps; [
+      pg_repack
+      postgis
+      (ps.callPackage ./my-extension.nix { })
+    ];
+}
+```
+Or to include it in a shell environment:
+
+```nix
+{
+  postgresql_custom = self.postgresql_17.withPackages (ps: [
+    ps.pg_repack
+    ps.postgis
+    (ps.callPackage ./my-extension.nix { })
+  ]);
 }
 ```
 

@@ -5,20 +5,21 @@
   lzop,
   nix-update-script,
   rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "3cpio";
-  version = "0.10.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "bdrung";
     repo = "3cpio";
     tag = version;
-    hash = "sha256-UtXyJ4PDzi4BJ0nd9w/hygcJVfNd3H5WAIV+f23dtpk=";
+    hash = "sha256-NUOEeyYXAkQkUQuTQc+iIon0tuA5wAEZ6Q57iX++iB4=";
   };
 
-  cargoHash = "sha256-XGTa5Ui4yPHmuC4tTWGMTKN/erHSaiJVmxHglbt+udg=";
+  cargoHash = "sha256-wIGvEyB5DyCE62AxchW7ofrB53qOv4LM/VgpzEL+elc=";
 
   # Tests attempt to access arbitrary filepaths
   doCheck = false;
@@ -31,5 +32,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "3cpio";
+    # broken due to signature mismatch in libc crate on darwin:
+    # https://github.com/rust-lang/libc/issues/4360
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

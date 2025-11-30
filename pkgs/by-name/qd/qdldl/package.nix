@@ -7,14 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdldl";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "osqp";
     repo = "qdldl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qCeOs4UjZLuqlbiLgp6BMxvw4niduCPDOOqFt05zi2E=";
+    hash = "sha256-pRlxqy5G8mxKXTIn4ruV/95TzpzNB/ArJX+WrEJRqW4=";
   };
+
+  # fix abs dir concatenation
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "$<INSTALL_PREFIX>/$""{CMAKE_INSTALL_INCLUDEDIR}" \
+      "$""{CMAKE_INSTALL_INCLUDEDIR}"
+  '';
 
   nativeBuildInputs = [
     cmake

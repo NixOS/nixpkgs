@@ -3,6 +3,7 @@
   adlfs,
   appdirs,
   buildPythonPackage,
+  databackend,
   fastparquet,
   fetchFromGitHub,
   fsspec,
@@ -21,23 +22,24 @@
   pyyaml,
   requests,
   s3fs,
-  setuptools,
   setuptools-scm,
+  setuptools,
+  typing-extensions,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-1NoJ2PA0ov9ZOWaZdlajV23UqTelRzfW7jESMsfOxkg=";
+    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
   };
 
   build-system = [
@@ -47,6 +49,7 @@ buildPythonPackage rec {
 
   dependencies = [
     appdirs
+    databackend
     fsspec
     humanize
     importlib-metadata
@@ -56,6 +59,7 @@ buildPythonPackage rec {
     pandas
     pyyaml
     requests
+    typing-extensions
     xxhash
   ];
 
@@ -72,7 +76,7 @@ buildPythonPackage rec {
     pytest-parallel
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pins" ];
 

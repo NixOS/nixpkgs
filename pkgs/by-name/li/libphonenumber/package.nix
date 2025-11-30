@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.12";
+  version = "9.0.19";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ylEv1YtnzXGHLKVY1INEq2GXrxgfy6R0cL199ec8CyQ=";
+    hash = "sha256-mAf4jgI8aum/XbO8OKOoLCMWxwUMee5erDocxV8/TMA=";
   };
 
   patches = [
@@ -42,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     icu
     protobuf
-  ]
-  ++ lib.optionals enableTests [
+  ];
+
+  propagatedBuildInputs = lib.optionals enableTests [
     boost
   ];
 

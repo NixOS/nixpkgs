@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.2.0)" \
+      "cmake_minimum_required (VERSION 3.10.0)"
+  '';
+
   meta = with lib; {
     description = "Official library to interface with the Discord client";
     homepage = "https://github.com/discordapp/discord-rpc";

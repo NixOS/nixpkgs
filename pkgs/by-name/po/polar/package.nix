@@ -19,7 +19,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "polar";
   # The package has no releases so let's use the latest commit
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cmaion";
-    repo = pname;
+    repo = "polar";
     rev = "be15f5f897f8a919dd639009873147dca2a9cea0";
     sha256 = "0gqkqfrqnrsy6avg372xwqj22yz8g6r2hnzbw6197b1rf7zr1il7";
   };

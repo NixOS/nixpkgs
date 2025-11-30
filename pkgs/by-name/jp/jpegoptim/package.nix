@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.5";
+  version = "1.5.6";
   pname = "jpegoptim";
 
   src = fetchFromGitHub {
     owner = "tjko";
     repo = "jpegoptim";
     rev = "v${version}";
-    sha256 = "sha256-3p3kcUur1u09ROdKXG5H8eilu463Rzbn2yfYo5o6+KM=";
+    sha256 = "sha256-Nw9mz5zefkRwqkTIyBQyDlANHEx4dztiIiTuXUnuCKM=";
   };
 
   # There are no checks, it seems.
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Optimize JPEG files";
     homepage = "https://www.kokkonen.net/tjko/projects.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aristid ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "jpegoptim";
   };

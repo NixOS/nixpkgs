@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2025-04-11";
+  version = "0-unstable-2025-11-09";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "162249220bde1c9fef7d87f8bb9128be9323d93f";
-    hash = "sha256-wP8ELlqtMwYv6/jQzKahaX7vlMKLUBgxm5Io49tphsM=";
+    rev = "64e7ece68a61d90db0dcc11a6d6eecab04af8561";
+    hash = "sha256-BvPgBJ/2pEoe4hIgqYi5JXI0ihOJkc/pXAJK/Kf9lVg=";
   };
 
   nativeBuildInputs = [

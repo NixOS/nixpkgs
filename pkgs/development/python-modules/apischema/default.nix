@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest8_3CheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apischema" ];
 

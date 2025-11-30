@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.21.0";
+  version = "1.21.5";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-90YQOur7UhXxDBkGLSMnXQK7iQ6+Z8Mqx9PEG6FEXBs=";
+    hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,16 @@ stdenv.mkDerivation rec {
       icon = "vintagestory";
       comment = "Innovate and explore in a sandbox world";
       categories = [ "Game" ];
+    })
+
+    (makeDesktopItem {
+      name = "vsmodinstall-handler";
+      desktopName = "Vintage Story 1-click Mod Install Handler";
+      comment = "Handler for vintagestorymodinstall:// URI scheme";
+      exec = "vintagestory -i %u";
+      mimeTypes = [ "x-scheme-handler/vintagestorymodinstall" ];
+      noDisplay = true;
+      terminal = false;
     })
   ];
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-qnxfs";
-  version = "1.0";
+  version = "1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.qnxfs";
     tag = version;
-    hash = "sha256-UnEwBcaBP64qIWVYWcsxxjWuiAM9yOCGWevnNonQn+8=";
+    hash = "sha256-p+2Hs2cjqcnHsdtlbif/330WGeBNkDsGCcT+L6sEtAw=";
   };
 
   build-system = [

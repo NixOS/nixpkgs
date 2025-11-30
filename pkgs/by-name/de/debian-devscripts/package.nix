@@ -30,14 +30,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.18";
+  version = "2.25.26";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "devscripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-POmUwNYKfdWda80T44S6x2Dg2TpezMirXuiI95Z077Q=";
+    hash = "sha256-tO2IKC7ThHOrN6VZUPqPg8ezgv3Tq2U5GtESgNsmrYA=";
   };
 
   patches = [
@@ -136,7 +136,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Debian package maintenance scripts";

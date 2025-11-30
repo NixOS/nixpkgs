@@ -9,28 +9,47 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
+
+  # build-system
   setuptools,
-  cudaPackages,
+
+  # nativeBuildInputs
   cmake,
   ninja,
-  numpy,
-  torch,
-  pynvml,
+  cudaPackages,
+
+  # dependencies
+  click,
   einops,
+  numpy,
+  nvidia-ml-py,
+  tabulate,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "flashinfer";
-  version = "0.2.14";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${version}";
-    hash = "sha256-MZiZwdedz+Vxa1+VBfHDKf4NVSiOAytGboIJ0DvCXmk=";
     fetchSubmodules = true;
+    hash = "sha256-e9PfLfU0DdoLKlXiHylCbGd125c7Iw9y4NDIOAP0xHs=";
   };
+
+  patches = [
+    # TODO: remove patch with update to v0.5.2+
+    # Switch pynvml to nvidia-ml-py
+    (fetchpatch2 {
+      url = "https://github.com/flashinfer-ai/flashinfer/commit/a42f99255d68d1a54b689bd4985339c6b44963a6.patch?full_index=1";
+      hash = "sha256-3XJFcdQeZ/c5fwiQvd95z4p9BzTn8pjle21WzeBxUgk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -68,16 +87,22 @@ buildPythonPackage rec {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
+  pythonRemoveDeps = [
+    "nvidia-cudnn-frontend"
+  ];
   dependencies = [
-    numpy
-    torch
-    pynvml
+    click
     einops
+    numpy
+    nvidia-ml-py
+    tabulate
+    torch
+    tqdm
   ];
 
-  meta = with lib; {
+  meta = {
     broken = !torch.cudaSupport || !config.cudaSupport;
     homepage = "https://flashinfer.ai/";
     description = "Library and kernel generator for Large Language Models";
@@ -88,7 +113,10 @@ buildPythonPackage rec {
       and inference, and delivers state-of-the-art performance across diverse
       scenarios.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      breakds
+      daniel-fahey
+    ];
   };
 }

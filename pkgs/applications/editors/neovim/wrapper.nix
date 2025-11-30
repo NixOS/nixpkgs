@@ -1,8 +1,10 @@
 {
   stdenv,
   lib,
+  wayland,
   makeWrapper,
   bundlerEnv,
+  wl-clipboard,
   ruby,
   nodejs,
   writeText,
@@ -39,6 +41,7 @@ let
       # the function you would have passed to python3.withPackages
       extraPython3Packages ? (_: [ ]),
 
+      waylandSupport ? lib.meta.availableOn stdenv.hostPlatform wayland,
       withNodeJs ? false,
       withPerl ? false,
       withRuby ? true,
@@ -214,6 +217,7 @@ let
         inherit
           viAlias
           vimAlias
+          waylandSupport
           withNodeJs
           withPython3
           withPerl
@@ -234,7 +238,8 @@ let
             op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
             runtimeDeps = lib.foldl' op [ ] pluginsNormalized;
           in
-          lib.optional finalAttrs.withRuby rubyEnv
+          lib.optionals finalAttrs.waylandSupport [ wl-clipboard ]
+          ++ lib.optional finalAttrs.withRuby rubyEnv
           ++ lib.optional finalAttrs.withNodeJs nodejs
           ++ lib.optionals finalAttrs.autowrapRuntimeDeps runtimeDeps;
 

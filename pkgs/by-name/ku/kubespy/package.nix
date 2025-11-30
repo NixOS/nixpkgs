@@ -39,6 +39,6 @@ buildGoModule rec {
     mainProgram = "kubespy";
     homepage = "https://github.com/pulumi/kubespy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

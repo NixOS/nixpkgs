@@ -19,6 +19,12 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # These flags break pkgsCross.wasi32.llvmPackages.libcxx
+  hardeningDisable = [
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -33,9 +39,9 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   '';
 
   preBuild = ''
-    export SYSROOT_LIB=${builtins.placeholder "out"}/lib
-    export SYSROOT_INC=${builtins.placeholder "dev"}/include
-    export SYSROOT_SHARE=${builtins.placeholder "share"}/share
+    export SYSROOT_LIB=${placeholder "out"}/lib
+    export SYSROOT_INC=${placeholder "dev"}/include
+    export SYSROOT_SHARE=${placeholder "share"}/share
     mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
     makeFlagsArray+=(
       "SYSROOT_LIB:=$SYSROOT_LIB"
@@ -64,7 +70,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [
-      matthewbauer
       rvolosatovs
       wucke13
     ];

@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "netbox-community";
     repo = "netbox-floorplan-plugin";
     tag = version;
-    hash = "sha256-ecwPdcVuXU6OIVbafYGaY6+pbBHxhh1AlNmDBlUk1Ss=";
+    hash = "sha256-27rVf3b1MNiTil+yx+PWtf6CzQ24oyCqLgeoYUje14o=";
   };
 
   build-system = [ setuptools ];

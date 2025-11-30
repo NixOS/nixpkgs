@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -38,7 +39,7 @@ buildGoModule rec {
     "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dyff \
       --bash <($out/bin/dyff completion bash) \
       --fish <($out/bin/dyff completion fish) \

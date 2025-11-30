@@ -5,7 +5,6 @@
   setuptools,
   httpx,
   pyjwt,
-  pythonOlder,
   websockets,
   yarl,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "elmax-api";
   version = "0.0.6.4rc0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "albertogeniola";

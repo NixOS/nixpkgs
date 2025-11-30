@@ -47,14 +47,17 @@ def get_archive_derivation(uuid, artifact_name, url, sha256, closure_dependencie
 
             ''"""
   else:
+    # We provide gcc.cc.lib by default in order to get some common libraries
+    # like libquadmath.so. A number of packages expect this to be available and
+    # will give linker errors if it isn't.
     fixup = f"""fixupPhase = let
             libs = lib.concatMap (lib.mapAttrsToList (k: v: v.path))
                                [{" ".join(["uuid-" + x for x in depends_on])}];
             in ''
               find $out -type f -executable -exec \
-                patchelf --set-rpath \$ORIGIN:\$ORIGIN/../lib:${{lib.makeLibraryPath (["$out" glibc] ++ libs ++ (with pkgs; [{" ".join(other_libs)}]))}} {{}} \;
+                patchelf --set-rpath \\$ORIGIN:\\$ORIGIN/../lib:${{lib.makeLibraryPath (["$out" glibc gcc.cc.lib] ++ libs ++ (with pkgs; [{" ".join(other_libs)}]))}} {{}} \\;
               find $out -type f -executable -exec \
-                patchelf --set-interpreter ${{glibc}}/lib/ld-linux-x86-64.so.2 {{}} \;
+                patchelf --set-interpreter ${{glibc}}/lib/ld-linux-x86-64.so.2 {{}} \\;
             ''"""
 
   return f"""stdenv.mkDerivation {{
@@ -145,7 +148,7 @@ def main():
     if is_darwin:
       f.write("{ lib, fetchurl, pkgs, stdenv }:\n\n")
     else:
-      f.write("{ lib, fetchurl, glibc, pkgs, stdenv }:\n\n")
+      f.write("{ lib, fetchurl, gcc, glibc, pkgs, stdenv }:\n\n")
 
     f.write("rec {\n")
 

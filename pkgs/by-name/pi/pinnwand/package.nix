@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "supakeen";
-    repo = pname;
+    repo = "pinnwand";
     tag = "v${version}";
     hash = "sha256-oB7Dd1iVzGqr+5nG7BfZuwOQUgUnmg6ptQDZPGH7P5E=";
   };
@@ -46,6 +46,8 @@ buildPythonApplication rec {
   disabledTestPaths = [
     # out-of-date browser tests
     "test/e2e"
+    # click 8.2.0 exits with 2 instead of 0 when no args are passed
+    "test/integration/test_command.py::test_main"
   ];
 
   __darwinAllowLocalNetworking = true;

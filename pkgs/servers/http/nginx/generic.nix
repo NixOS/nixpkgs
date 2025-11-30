@@ -117,6 +117,7 @@ stdenv.mkDerivation {
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
+    "--with-http_v3_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -175,32 +176,37 @@ stdenv.mkDerivation {
   ++ configureFlags
   ++ map (mod: "--add-module=${mod.src}") modules;
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-I${libxml2.dev}/include/libxml2"
-      "-Wno-error=implicit-fallthrough"
-      (
-        # zlig-ng patch needs this
-        if stdenv.cc.isGNU then
-          "-Wno-error=discarded-qualifiers"
-        else
-          "-Wno-error=incompatible-pointer-types-discards-qualifiers"
-      )
-    ]
-    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
-      # fix build vts module on gcc11
-      "-Wno-error=stringop-overread"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=deprecated-declarations"
-      "-Wno-error=gnu-folding-constant"
-      "-Wno-error=unused-but-set-variable"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # fix sys/cdefs.h is deprecated
-      "-Wno-error=cpp"
-    ]
-  );
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-I${libxml2.dev}/include/libxml2"
+        "-Wno-error=implicit-fallthrough"
+        (
+          # zlig-ng patch needs this
+          if stdenv.cc.isGNU then
+            "-Wno-error=discarded-qualifiers"
+          else
+            "-Wno-error=incompatible-pointer-types-discards-qualifiers"
+        )
+      ]
+      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+        # fix build vts module on gcc11
+        "-Wno-error=stringop-overread"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "-Wno-error=deprecated-declarations"
+        "-Wno-error=gnu-folding-constant"
+        "-Wno-error=unused-but-set-variable"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        # fix sys/cdefs.h is deprecated
+        "-Wno-error=cpp"
+      ]
+    );
+  }
+  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    CONFIG_BIG_ENDIAN = if stdenv.hostPlatform.isBigEndian then "y" else "n";
+  };
 
   configurePlatforms = [ ];
 
@@ -218,6 +224,9 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
+      # Upstream may be against cross-compilation patches.
+      # https://trac.nginx.org/nginx/ticket/2240 https://trac.nginx.org/nginx/ticket/1928#comment:6
+      # That dev quit the project in 2024 so the stance could be different now.
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
@@ -231,6 +240,10 @@ stdenv.mkDerivation {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/103-sys_nerr.patch";
           sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
         })
+        (fetchpatch {
+          url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/104-endianness_fix.patch";
+          sha256 = "sha256-M7V3ZJfKImur2OoqXcoL+CbgFj/huWnfZ4xMCmvkqfc=";
+        })
       ]
       ++ mapModules "patches"
     )
@@ -241,8 +254,6 @@ stdenv.mkDerivation {
       --replace-fail '@nixStoreDir@' "$NIX_STORE" \
       --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
   '' postPatch;
-
-  hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
 
   enableParallelBuilding = true;
 
@@ -286,6 +297,7 @@ stdenv.mkDerivation {
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme.nginx;
+      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
     }
     // passthru.tests;
   };

@@ -1,66 +1,77 @@
 {
   lib,
   buildPythonPackage,
-  docopt,
   fetchFromGitHub,
-  matplotlib,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
   numpy,
   pandas,
   pyannote-core,
   pyannote-database,
-  pythonOlder,
   scikit-learn,
   scipy,
-  setuptools,
-  sympy,
+  # undeclared cli dependencies
+  docopt,
   tabulate,
-  versioneer,
+
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyannote-metrics";
-  version = "3.2.1";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";
     tag = version;
-    hash = "sha256-V4qyaCaFsoikfFILm2sccf6m7lqJSDTdLxS1sr/LXAY=";
+    hash = "sha256-Ga5oSRkVdeQkDnjFcFebdZnFljjyn/TrtV8Y6UJxT2c=";
   };
 
   postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
+    substituteInPlace src/pyannote/metrics/cli.py \
+      --replace-fail \
+        'version="Evaluation"' \
+        'version="${version}"'
   '';
 
   build-system = [
-    setuptools
-    versioneer
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
+    numpy
+    pandas
     pyannote-core
     pyannote-database
-    pandas
-    scipy
     scikit-learn
+    scipy
+    # Imported in pyannote/metrics/cli.py
     docopt
     tabulate
-    matplotlib
-    sympy
-    numpy
   ];
 
   pythonImportsCheck = [ "pyannote.metrics" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";
     homepage = "https://github.com/pyannote/pyannote-metrics";
     changelog = "http://pyannote.github.io/pyannote-metrics/changelog.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannote-metrics";
   };

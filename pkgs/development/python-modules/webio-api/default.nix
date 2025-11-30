@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "webio-api";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "webio_api";
     inherit version;
-    hash = "sha256-fPlAWu/P9gOjlQ62qAesLcLkNznAiMAAqxAlQi9oxZk=";
+    hash = "sha256-xS1uf407+ommERkZSYrElD6/tNXyBma3OFs4jUE5+tY=";
   };
 
   build-system = [ setuptools ];

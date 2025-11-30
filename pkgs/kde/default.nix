@@ -71,6 +71,7 @@ let
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
+        glaxnimate = self.callPackage ./misc/glaxnimate { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
         kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client { };
@@ -85,6 +86,7 @@ let
         oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
+        plasma-keyboard = self.callPackage ./misc/plasma-keyboard { };
         plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };

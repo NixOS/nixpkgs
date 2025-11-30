@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch,
   cmake,
   python3,
   boost186,
@@ -52,6 +53,14 @@ stdenv.mkDerivation rec {
     "-Wno-error=cast-user-defined"
     "-Wno-error=implicit-function-declaration"
     "-Wno-error=int-conversion"
+  ];
+
+  patches = [
+    # build: set cmake_minimum_required(VERSION 3.5) consistently
+    (fetchpatch {
+      url = "https://codeberg.org/wownero/wownero/commit/0d0a656618e396de7ff60368dde708ad9d45f866.patch";
+      hash = "sha256-xnpEZxWg5YzOhDIWZjNyXH8GBdK7c2rxL9DewPKghIg=";
+    })
   ];
 
   nativeBuildInputs = [

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # ImportError: No module named test
   doCheck = false;
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ];
+  meta = {
+    maintainers = [ ];
   };
 }

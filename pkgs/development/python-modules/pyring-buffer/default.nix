@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyring-buffer";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pyring-buffer";
     tag = "v${version}";
-    hash = "sha256-s0iIcY2cwTbOMrpw14uAYfeAl/MOJTLfZbJr+tmTM6U=";
+    hash = "sha256-YBkBuptoOc3d746WkqoCHOr0LuG+QlORt/z1oqSf+AA=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -29,7 +29,11 @@ npmConfigHook() {
     fi
 
     local -r cacheLockfile="$npmDeps/package-lock.json"
-    local -r srcLockfile="$PWD/package-lock.json"
+    if [[ -f npm-shrinkwrap.json ]]; then
+        local -r srcLockfile="$PWD/npm-shrinkwrap.json"
+    else
+        local -r srcLockfile="$PWD/package-lock.json"
+    fi
 
     echo "Validating consistency between $srcLockfile and $cacheLockfile"
 

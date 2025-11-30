@@ -30,6 +30,7 @@ let
     "background.slice"
     "basic.target"
     "bluetooth.target"
+    "capsule@.target"
     "default.target"
     "exit.target"
     "graphical-session-pre.target"
@@ -70,7 +71,7 @@ in
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
-      example = "DefaultCPUAccounting=yes";
+      example = "DefaultTimeoutStartSec=60";
       description = ''
         Extra config options for systemd user instances. See {manpage}`systemd-user.conf(5)` for
         available options.

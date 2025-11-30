@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.24.2";
+  version = "0.24.3";
 in
 python3Packages.buildPythonApplication {
   pname = "toml-sort";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "pappasam";
     repo = "toml-sort";
     tag = "v${version}";
-    hash = "sha256-PuTXG8RIN8Mui5J8DV0yxe94y6FNs4TgPyHjEhpcKqM=";
+    hash = "sha256-QlKksxwgdN37Z6nU1CloUT+G+mRNnkVnbI2++J3R+AY=";
   };
 
   build-system = [ python3Packages.poetry-core ];

@@ -9,15 +9,14 @@
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
-  version = "1.3.3";
-
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "calmjs";
     repo = "calmjs.parse";
     tag = version;
-    hash = "sha256-aGGIwQBHToujc69zzIeEbvmYwLKA5X3bamVWBRmJtSE=";
+    hash = "sha256-OX3031omx9PdrVeNbekWzJKrrrKleP7q7yDosKsvH8U=";
   };
 
   postPatch = ''
@@ -46,11 +45,11 @@ buildPythonPackage rec {
     "calmjs.parse.walkers"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/calmjs/calmjs.parse/blob/${src.rev}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/calmjs/calmjs.parse/blob/${src.tag}/CHANGES.rst";
     description = "Various parsers for ECMA standards";
     homepage = "https://github.com/calmjs/calmjs.parse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -33,7 +33,6 @@ melpaBuild {
         qrcode
       ]
       ++ ps.qrcode.optional-dependencies.pil;
-    eafOtherDeps = [ ];
   };
 
   meta = {

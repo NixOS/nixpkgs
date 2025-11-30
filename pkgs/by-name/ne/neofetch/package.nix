@@ -5,7 +5,7 @@
   bash,
   makeWrapper,
   pciutils,
-  x11Support ? !stdenvNoCC.hostPlatform.isOpenBSD,
+  x11Support ? stdenvNoCC.hostPlatform.isLinux,
   ueberzug,
   fetchpatch,
 }:

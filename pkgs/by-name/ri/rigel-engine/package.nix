@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 

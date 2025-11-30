@@ -5,20 +5,17 @@
   hatchling,
   llama-index-core,
   ollama,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.7.1";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-GJtl6iXAPGYMEFuA27UQnE/qjaaPHpBZKuv9/d5wiSg=";
+    hash = "sha256-zfoWf36oB0+/1Qs+gBU9bQX6O05y5TCxjcVPd1GFA9E=";
   };
 
   build-system = [ hatchling ];

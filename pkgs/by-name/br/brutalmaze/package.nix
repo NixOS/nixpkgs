@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "brutalmaze";
-    rev = version;
+    tag = version;
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 

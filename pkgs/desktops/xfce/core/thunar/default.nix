@@ -23,9 +23,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.20.4";
+  version = "4.20.6";
 
-  sha256 = "sha256-0yDZI82ePjZSSd0aKlfjr2IVPyNkvSWqa4l6Dse98w8=";
+  sha256 = "sha256-Ll1mJEkkxYGASWQ2z7GRiubNjggqeHXzgGSXQK+10qs=";
 
   nativeBuildInputs = [
     docbook_xsl

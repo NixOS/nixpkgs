@@ -82,6 +82,14 @@ let
     + ''
       runHook postInstall
     '';
+
+    postFixup = ''
+      # Link missing libfontconfig to fix font discovery
+      # https://github.com/warpdotdev/Warp/issues/5793
+      patchelf \
+        --add-needed libfontconfig.so.1 \
+        $out/opt/warpdotdev/warp-terminal/warp
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -115,6 +123,7 @@ let
       imadnyc
       FlameFlag
       johnrtitor
+      logger
     ];
     platforms = platforms.darwin ++ [
       "x86_64-linux"

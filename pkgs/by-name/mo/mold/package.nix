@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb_2022,
+  onetbb,
   zlib,
   zstd,
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    tbb_2022
+    onetbb
     zlib
     zstd
   ]
@@ -127,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
     maintainers = with lib.maintainers; [ azahi ];
   };

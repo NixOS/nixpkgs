@@ -49,7 +49,7 @@ buildGoModule rec {
     description = "Hard disk metrics collector for Scrutiny";
     homepage = "https://github.com/AnalogJ/scrutiny";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = [ ];
     mainProgram = "scrutiny-collector-metrics";
   };
 }

@@ -18,6 +18,12 @@ stdenv.mkDerivation {
     sha256 = "0kranb0x1k5qad8rwxnn1w9963sbfj2cfzdgpfmlivb04544m2j7";
   };
 
+  # Upstream doesn't yet support CMake 4, remove once fixed
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

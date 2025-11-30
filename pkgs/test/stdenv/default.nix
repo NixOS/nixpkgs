@@ -279,7 +279,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -288,7 +288,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           passAsFile = [ "dep2" ];
         })
@@ -319,7 +319,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -328,7 +328,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           name = "meow";
           outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
@@ -386,7 +386,7 @@ in
   ensure-no-execve-in-setup-sh =
     derivation {
       name = "ensure-no-execve-in-setup-sh";
-      system = stdenv.system;
+      inherit (stdenv.hostPlatform) system;
       builder = "${stdenv.bootstrapTools}/bin/bash";
       PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
       initialPath = [

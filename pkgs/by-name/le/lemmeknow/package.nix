@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       Br1ght0ne
     ];
     mainProgram = "lemmeknow";

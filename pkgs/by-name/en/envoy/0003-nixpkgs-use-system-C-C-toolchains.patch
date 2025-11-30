@@ -13,10 +13,11 @@ diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
 index 10be4b0b3f65e486c1dc8419337a5cf823431774..b0badb3ccab3b112043bd8616770f8014238d396 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -38,7 +38,11 @@ def envoy_dependency_imports(
+@@ -40,7 +40,11 @@ def envoy_dependency_imports(
          yq_version = YQ_VERSION,
          buf_sha = BUF_SHA,
          buf_version = BUF_VERSION):
+     compatibility_proxy_repo()
 -    rules_foreign_cc_dependencies()
 +    rules_foreign_cc_dependencies(
 +        register_default_tools=False,  # no prebuilt toolchains

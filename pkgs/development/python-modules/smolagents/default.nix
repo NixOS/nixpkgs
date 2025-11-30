@@ -52,24 +52,15 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.21.2";
+  version = "1.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-sm0G8z5Jaes8XybxeAUiRh3LVuzvnGaem5FLkcA5Qls=";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
   };
-
-  # TODO: remove at the next release
-  # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
-  # Caused by: https://github.com/huggingface/transformers/commit/1ecd52e50a31e7c344c32564e0484d7e9a0f2256
-  # Fixed in: https://github.com/huggingface/smolagents/pull/1625
-  postPatch = ''
-    substituteInPlace tests/test_types.py \
-      --replace-fail "require_soundfile" "require_torchcodec"
-  '';
 
   build-system = [ setuptools ];
 
@@ -137,7 +128,7 @@ buildPythonPackage rec {
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 

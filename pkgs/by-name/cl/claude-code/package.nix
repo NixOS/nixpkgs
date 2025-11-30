@@ -2,21 +2,23 @@
   lib,
   buildNpmPackage,
   fetchzip,
-  nodejs_20,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.95";
-
-  nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
+  # NOTE: Use the following command to update the package
+  # ```sh
+  # nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package vscode-extensions.anthropic.claude-code && nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package claude-code
+  # ```
+  version = "2.0.55";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-msAIwzvmzu9qherfXUAgyt7NMq+vZwhTKhu/9ksX6xs=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-wsjOkNxuBLMYprjaZQyUZHiqWl8UG7cZ1njkyKZpRYg=";
   };
 
-  npmDepsHash = "sha256-nUzpOO3GQ2ME0kwyTcqhy30OW0wOPlai2YX/GH8pgS4=";
+  npmDepsHash = "sha256-k7sCE3dyHz69qlxxrX+lnPuJUf8w/FAAUQtFuEdlTqA=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -24,7 +26,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  AUTHORIZED = "1";
+  env.AUTHORIZED = "1";
 
   # `claude-code` tries to auto-update by default, this disables that functionality.
   # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
@@ -35,6 +37,14 @@ buildNpmPackage rec {
       --unset DEV
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
+
   passthru.updateScript = ./update.sh;
 
   meta = {
@@ -43,10 +53,12 @@ buildNpmPackage rec {
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      adeci
       malo
       markus1189
       omarjatoi
+      xiaoxiangmoe
     ];
     mainProgram = "claude";
   };
-}
+})

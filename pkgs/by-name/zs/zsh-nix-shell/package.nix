@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash ];
   installPhase = ''
-    install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh-nix-shell
-    install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
+    install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh/plugins/zsh-nix-shell
+    install -D scripts/* --target-directory=$out/share/zsh/plugins/zsh-nix-shell/scripts
+    ln -s $out/share/zsh/plugins/zsh-nix-shell $out/share/zsh-nix-shell
   '';
 
   meta = with lib; {

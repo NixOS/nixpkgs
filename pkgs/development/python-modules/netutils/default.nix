@@ -7,23 +7,20 @@
   napalm,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.14.1";
+  version = "1.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
     tag = "v${version}";
-    hash = "sha256-w+31rv/0EgAT8gv/Oqlbq/djbHIgK3YF792sxBDXHEQ=";
+    hash = "sha256-bT/a6PhjNZ7vYXio7XOKNnzRfh7UqRn3+OYbhlYL3/I=";
   };
 
   build-system = [ poetry-core ];

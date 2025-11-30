@@ -60,6 +60,13 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
+  # Prevent double wrapping because of wrapGAppsHook3
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   strictDeps = false;
 
   meta = {

@@ -126,13 +126,13 @@
   },
   {
     "pname": "DiscordRichPresence",
-    "version": "1.2.1.24",
-    "hash": "sha256-oRNrlF1/yK0QvrW2+48RsmSg9h9/pDIfA56/bpoHXFU="
+    "version": "1.6.1.70",
+    "hash": "sha256-uXTNIWfZU7Gf/JpXQ5ufKA3SQdXYSkg3yLm5yCrBDd8="
   },
   {
     "pname": "DynamicData",
-    "version": "9.0.4",
-    "hash": "sha256-3pyiJeWRwfaT7p1ArsoR13aI78Jo13aHOEw3BelTS9g="
+    "version": "9.4.1",
+    "hash": "sha256-CX4NQj2LTk/8f4xDE5rUVBsqcY74H/1qUHFTrVX+9/0="
   },
   {
     "pname": "ExCSS",
@@ -151,8 +151,8 @@
   },
   {
     "pname": "Gommon",
-    "version": "2.7.1.1",
-    "hash": "sha256-2AnVtyEbg5A+K/LDjgOpKw/CNRDkAhjVa38L5LYYyrw="
+    "version": "2.7.2.1",
+    "hash": "sha256-QxrgAaVuHeUR8QZDHdT/9np9ADrE+nwjw9vT9DhXVf4="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -561,11 +561,6 @@
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
-    "version": "2.0.0",
-    "hash": "sha256-IEvBk6wUXSdyCnkj6tHahOJv290tVVT8tyemYcR0Yro="
-  },
-  {
-    "pname": "Microsoft.NETCore.Platforms",
     "version": "2.1.2",
     "hash": "sha256-gYQQO7zsqG+OtN4ywYQyfsiggS2zmxw4+cPXlK+FB5Q="
   },
@@ -583,11 +578,6 @@
     "pname": "Microsoft.TestPlatform.TestHost",
     "version": "17.9.0",
     "hash": "sha256-1BZIY1z+C9TROgdTV/tq4zsPy7Q71GQksr/LoMKAzqU="
-  },
-  {
-    "pname": "Microsoft.Win32.Registry",
-    "version": "4.5.0",
-    "hash": "sha256-WMBXsIb0DgPFPaFkNVxY9b9vcMxPqtgFgijKYMJfV/0="
   },
   {
     "pname": "MsgPack.Cli",
@@ -801,13 +791,26 @@
   },
   {
     "pname": "Ryujinx.LibHac",
-    "version": "0.20.0",
-    "hash": "sha256-msrn9BElOOGtQAz6oK3HbMeyLOQ10Xt8wT0Qyr8NwYU="
+    "version": "0.21.0-alpha.116",
+    "hash": "sha256-ldma+AbTb75/cwWdLbRg5V0eCIqtyovT6zjh50JRvgo=",
+    "url": "https://git.ryujinx.app/api/v4/projects/17/packages/nuget/download/ryujinx.libhac/0.21.0-alpha.116/ryujinx.libhac.0.21.0-alpha.116.nupkg"
   },
   {
     "pname": "Ryujinx.SDL2-CS",
     "version": "2.30.0-build32",
     "hash": "sha256-KrrlDq0pXcunnOhJL12dt1CAdNbaupbDlnza5gXuVKE="
+  },
+  {
+    "pname": "Ryujinx.Systems.Update.Common",
+    "version": "1.0.44",
+    "hash": "sha256-gYCmB2nbOlDJAd0hEAAjPXZmju4sd7DH+i6ciBWSRb4=",
+    "url": "https://git.ryujinx.app/api/v4/projects/71/packages/nuget/download/ryujinx.systems.update.common/1.0.44/ryujinx.systems.update.common.1.0.44.nupkg"
+  },
+  {
+    "pname": "Ryujinx.UpdateClient",
+    "version": "1.0.44",
+    "hash": "sha256-b/z8jPkU7Pc10g4gscgl8pD/NtQPT8EDA0SpKVZLW8U=",
+    "url": "https://git.ryujinx.app/api/v4/projects/71/packages/nuget/download/ryujinx.updateclient/1.0.44/ryujinx.updateclient.1.0.44.nupkg"
   },
   {
     "pname": "securifybv.PropertyStore",
@@ -821,8 +824,8 @@
   },
   {
     "pname": "Sep",
-    "version": "0.6.0",
-    "hash": "sha256-O7v1QBhdzoKTq0cGWEvXOk3H6l85TliETqCLeKnhZwE="
+    "version": "0.11.1",
+    "hash": "sha256-GkDWF51QOIKUu55By5ya471KrwXvQbm98DOo/zV0Bew="
   },
   {
     "pname": "shaderc.net",
@@ -1148,16 +1151,6 @@
     "pname": "System.Runtime.InteropServices",
     "version": "4.3.0",
     "hash": "sha256-8sDH+WUJfCR+7e4nfpftj/+lstEiZixWUBueR2zmHgI="
-  },
-  {
-    "pname": "System.Security.AccessControl",
-    "version": "4.5.0",
-    "hash": "sha256-AFsKPb/nTk2/mqH/PYpaoI8PLsiKKimaXf+7Mb5VfPM="
-  },
-  {
-    "pname": "System.Security.Principal.Windows",
-    "version": "4.5.0",
-    "hash": "sha256-BkUYNguz0e4NJp1kkW7aJBn3dyH9STwB5N8XqnlCsmY="
   },
   {
     "pname": "System.Text.Encoding",

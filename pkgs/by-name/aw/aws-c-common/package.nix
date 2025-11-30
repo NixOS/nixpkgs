@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     let
       ignoreTests = [
         "promise_test_multiple_waiters"
+        # Flaky test https://github.com/NixOS/nixpkgs/issues/443233
+        "test_memory_usage_maxrss"
       ];
     in
     ''
@@ -58,7 +60,6 @@ stdenv.mkDerivation rec {
     # https://github.com/awslabs/aws-c-common/issues/1175
     badPlatforms = platforms.bigEndian;
     maintainers = with maintainers; [
-      orivej
       r-burns
     ];
   };

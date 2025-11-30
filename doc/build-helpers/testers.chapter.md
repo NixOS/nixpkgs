@@ -98,7 +98,7 @@ It has two modes:
 
 : The path to the files to check.
 
-`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+`remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
   The values should be strings, derivations, or path values.
@@ -420,6 +420,11 @@ Check that two paths have the same contents.
 `postFailureMessage` (string)
 
 : A message that is printed last if the file system object contents at the two paths don't match exactly.
+
+`checkMetadata` (boolean)
+
+: Whether to fail on metadata differences, such as permissions or ownership.
+  Defaults to `true`.
 
 :::{.example #ex-testEqualContents-toyexample}
 

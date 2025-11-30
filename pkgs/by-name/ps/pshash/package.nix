@@ -5,12 +5,12 @@
 }:
 haskellPackages.mkDerivation rec {
   pname = "pshash";
-  version = "0.1.15.1";
+  version = "0.1.16.0";
   src = fetchFromGitHub {
     owner = "thornoar";
     repo = "pshash";
     tag = "v${version}";
-    hash = "sha256-TnMXT0sgUkHCbZ2YgDmSgOg8A2DKk/LyKK2XXwabrYc=";
+    hash = "sha256-3Qe52Hto3Z96b5q9TLz7XB7BzMfdNBd4p8V6dknH6VM=";
   };
 
   postPatch = ''

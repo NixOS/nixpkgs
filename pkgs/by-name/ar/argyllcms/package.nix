@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    hash = "sha256-jY6X9mQaP9NTIkbpW5QO31s+5Iv/mFEDgtwDgYXzIU4=";
+    hash = "sha256-QVugWtAk8xBn+/fRFqCoi072Q2q8OlB0LRhavrHC5MI=";
   };
 
   nativeBuildInputs = [

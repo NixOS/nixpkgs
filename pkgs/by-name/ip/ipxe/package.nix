@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-08-13";
+  version = "1.21.1-unstable-2025-11-26";
 
   nativeBuildInputs = [
     mtools
@@ -66,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "a53ec449327788e2015642bff21443d3a399c05b";
-    hash = "sha256-rcRWkuOgtHs6ZzcECbsVXCN+HS5cG/HlrVPP5+ZF+EM=";
+    rev = "d73981aece2544ee05685dccaf5a71b533fabb44";
+    hash = "sha256-xhq8VRXdC6wPlViTHxI3fPcgE8gYvzcZTC2zN1b0DXo=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       bsd3
       gpl2Only
-      gpl2UBDLPlus
+      ubdlException
       isc
       mit
       mpl11

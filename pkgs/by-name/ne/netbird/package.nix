@@ -68,16 +68,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.55.1";
+  version = "0.60.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bi5vHxKdl9eWWdTB7td+rHuvjt6Ic4kjytWzHJTpCtQ=";
+    hash = "sha256-8z0MMoY3ny64yuHK8iwV27HYLy96QKQe9ddAylRy+gk=";
   };
 
-  vendorHash = "sha256-C9qw6VDh+q1UD+Bc+cFAUjIzIXpQAy46cPdyfXwgBSA=";
+  vendorHash = "sha256-KuazgdFPc+ahBQCPvBvQajCNZi/roU8JrYNoiaOtcjc=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
 

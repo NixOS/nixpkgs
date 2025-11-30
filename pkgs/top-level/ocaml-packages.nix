@@ -145,6 +145,8 @@ let
 
         brr = callPackage ../development/ocaml-modules/brr { };
 
+        bstr = callPackage ../development/ocaml-modules/bstr { };
+
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
         bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
@@ -158,6 +160,10 @@ let
         ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
 
         ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
+
+        cachet = callPackage ../development/ocaml-modules/cachet { };
+
+        cachet-lwt = callPackage ../development/ocaml-modules/cachet/lwt.nix { };
 
         cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
@@ -226,8 +232,6 @@ let
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
-        chacha = callPackage ../development/ocaml-modules/chacha { };
-
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
@@ -267,6 +271,16 @@ let
         color = callPackage ../development/ocaml-modules/color { };
 
         colors = callPackage ../development/ocaml-modules/colors { };
+
+        conan = callPackage ../development/ocaml-modules/conan { };
+
+        conan-cli = callPackage ../development/ocaml-modules/conan/cli.nix { };
+
+        conan-database = callPackage ../development/ocaml-modules/conan/database.nix { };
+
+        conan-lwt = callPackage ../development/ocaml-modules/conan/lwt.nix { };
+
+        conan-unix = callPackage ../development/ocaml-modules/conan/unix.nix { };
 
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
@@ -402,11 +416,15 @@ let
 
         dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
 
+        dockerfile = callPackage ../development/ocaml-modules/dockerfile { };
+
         dolmen = callPackage ../development/ocaml-modules/dolmen { };
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
         dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
+        dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
         dolmen_type = callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
@@ -446,23 +464,9 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_1 = callPackage ../development/tools/ocaml/dune/1.nix { };
+        dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
-        dune_2 =
-          if lib.versionAtLeast ocaml.version "4.08" then
-            callPackage ../development/tools/ocaml/dune/2.nix { }
-          else if lib.versionAtLeast ocaml.version "4.02" then
-            pkgs.dune_2
-          else
-            throw "dune_2 is not available for OCaml ${ocaml.version}";
-
-        dune_3 =
-          if lib.versionAtLeast ocaml.version "4.08" then
-            callPackage ../development/tools/ocaml/dune/3.nix { }
-          else if lib.versionAtLeast ocaml.version "4.02" then
-            pkgs.dune_3
-          else
-            throw "dune_3 is not available for OCaml ${ocaml.version}";
+        dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
 
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
@@ -546,7 +550,7 @@ let
           in
           {
             ppx_deriving_0_15 = ppx_deriving_ "0.15";
-            ppx_deriving = ppx_deriving_ "0.33.0";
+            ppx_deriving_0_33 = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -591,6 +595,8 @@ let
         faraday-lwt-unix = callPackage ../development/ocaml-modules/faraday/lwt-unix.nix { };
 
         farfadet = callPackage ../development/ocaml-modules/farfadet { };
+
+        farith = callPackage ../development/ocaml-modules/farith { };
 
         fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
@@ -649,10 +655,6 @@ let
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
 
-        functoria = callPackage ../development/ocaml-modules/functoria { };
-
-        functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
-
         functory = callPackage ../development/ocaml-modules/functory { };
 
         ### G ###
@@ -664,6 +666,8 @@ let
         gen = callPackage ../development/ocaml-modules/gen { };
 
         gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
+
+        gendarme = callPackage ../development/ocaml-modules/gendarme { };
 
         genspio = callPackage ../development/ocaml-modules/genspio { };
 
@@ -1096,8 +1100,6 @@ let
 
         lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
-        lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
-
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
         lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
@@ -1304,7 +1306,9 @@ let
 
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
-        mopsa = callPackage ../development/ocaml-modules/mopsa { };
+        mopsa = callPackage ../development/ocaml-modules/mopsa {
+          inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+        };
 
         morbig = callPackage ../development/ocaml-modules/morbig { };
 
@@ -1327,7 +1331,11 @@ let
 
         multipart_form = callPackage ../development/ocaml-modules/multipart_form { };
 
+        multipart_form-eio = callPackage ../development/ocaml-modules/multipart_form/eio.nix { };
+
         multipart_form-lwt = callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
+
+        multipart_form-miou = callPackage ../development/ocaml-modules/multipart_form/miou.nix { };
 
         multipart-form-data = callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1345,8 +1353,6 @@ let
         nice_parser = callPackage ../development/ocaml-modules/nice_parser { };
 
         ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
-
-        nonstd = callPackage ../development/ocaml-modules/nonstd { };
 
         note = callPackage ../development/ocaml-modules/note { };
 
@@ -1449,6 +1455,7 @@ let
         ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
+        ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1479,6 +1486,8 @@ let
 
         ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
+        ocb = callPackage ../development/ocaml-modules/ocb { };
+
         ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
         ocf = callPackage ../development/ocaml-modules/ocf { };
@@ -1486,6 +1495,8 @@ let
         ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
 
         ocolor = callPackage ../development/ocaml-modules/ocolor { };
+
+        ocp-browser = callPackage ../development/tools/ocaml/ocp-browser { };
 
         ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
@@ -1556,15 +1567,21 @@ let
 
         omd = callPackage ../development/ocaml-modules/omd { };
 
+        opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install-cudf { };
+
         opam-core = callPackage ../development/ocaml-modules/opam-core {
           inherit (pkgs) opam;
         };
+
+        opam-client = callPackage ../development/ocaml-modules/opam-client { };
 
         opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
         opam-format = callPackage ../development/ocaml-modules/opam-format { };
 
         opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
+
+        opam-solver = callPackage ../development/ocaml-modules/opam-solver { };
 
         opam-state = callPackage ../development/ocaml-modules/opam-state { };
 
@@ -1578,6 +1595,8 @@ let
 
         ordering = callPackage ../development/ocaml-modules/ordering { };
 
+        osdp = callPackage ../development/ocaml-modules/osdp { };
+
         oseq = callPackage ../development/ocaml-modules/oseq { };
 
         otfed = callPackage ../development/ocaml-modules/otfed { };
@@ -1587,6 +1606,8 @@ let
         otoml = callPackage ../development/ocaml-modules/otoml { };
 
         otr = callPackage ../development/ocaml-modules/otr { };
+
+        oui = callPackage ../development/ocaml-modules/oui { };
 
         ounit = callPackage ../development/ocaml-modules/ounit { };
 
@@ -1959,6 +1980,8 @@ let
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
+        synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
+
         syslog = callPackage ../development/ocaml-modules/syslog { };
 
         syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
@@ -1983,7 +2006,7 @@ let
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
-        tcslib = callPackage ../development/ocaml-modules/tcslib { };
+        tcs-lib = callPackage ../development/ocaml-modules/tcs-lib { };
 
         tdigest = callPackage ../development/ocaml-modules/tdigest { };
 
@@ -2064,6 +2087,8 @@ let
         tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
 
         ### U ###
+
+        ubase = callPackage ../development/ocaml-modules/ubase { };
 
         uchar = callPackage ../development/ocaml-modules/uchar { };
 
@@ -2189,6 +2214,10 @@ let
 
         zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
 
+        ### _ ###
+
+        _0install-solver = callPackage ../development/ocaml-modules/0install-solver { };
+
         ### Exceptional packages kept out of order ###
 
         # Libs
@@ -2203,15 +2232,23 @@ let
 
         google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-        hol_light = callPackage ../applications/science/logic/hol_light { };
-
-        ocamlnat = callPackage ../development/ocaml-modules/ocamlnat { };
+        hol_light = callPackage ../applications/science/logic/hol_light {
+          camlp5 =
+            if lib.versionAtLeast camlp5.version "8.04.00" then
+              camlp5.overrideAttrs {
+                version = "8.03.2";
+                __intentionallyOverridingVersion = true;
+              }
+            else
+              camlp5;
+        };
 
         ### End ###
 
       }
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
+        chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
@@ -2224,56 +2261,6 @@ let
 in
 rec {
   inherit mkOcamlPackages;
-
-  ocamlPackages_4_00_1 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.00.1.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_01_0 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.01.0.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_02 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.02.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_03 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.03.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_04 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.04.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_05 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.05.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_06 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.06.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_07 = mkOcamlPackages (
-    callPackage ../development/compilers/ocaml/4.07.nix {
-      stdenv = pkgs.gcc13Stdenv;
-    }
-  );
-
-  ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
   ocamlPackages_4_09 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.09.nix { });
 
@@ -2295,6 +2282,8 @@ rec {
 
   ocamlPackages_5_3 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.3.nix { });
 
+  ocamlPackages_5_4 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.4.nix { });
+
   ocamlPackages_latest = ocamlPackages_5_3;
 
   ocamlPackages = ocamlPackages_5_3;
@@ -2306,4 +2295,23 @@ rec {
       unsafeStringSupport = true;
     }
   );
+}
+// lib.optionalAttrs config.allowAliases {
+  ocamlPackages_4_00_1 = throw "ocamlPackages_4_00_1 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_01_0 = throw "ocamlPackages_4_01_0 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_02 = throw "ocamlPackages_4_02 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_03 = throw "ocamlPackages_4_03 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_04 = throw "ocamlPackages_4_04 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_05 = throw "ocamlPackages_4_05 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_06 = throw "ocamlPackages_4_06 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_07 = throw "ocamlPackages_4_07 has been removed. Please use a newer version of OCaml.";
+
+  ocamlPackages_4_08 = throw "ocamlPackages_4_08 has been removed. Please use a newer version of OCaml.";
 }

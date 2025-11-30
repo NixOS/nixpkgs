@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jdepoix";
     repo = "youtube-transcript-api";
     tag = "v${version}";
-    hash = "sha256-nr8WeegMv7zSqlzcLSG224O9fRXA6jIlYQN4vV6lW24=";
+    hash = "sha256-UtKAT7BTWmG2wWnpK5OT/NeVksz6N8sLnRq9IpAm7D4=";
   };
 
   build-system = [ poetry-core ];

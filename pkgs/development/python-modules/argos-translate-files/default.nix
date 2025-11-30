@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "argos-translate-files";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vKnPL0xgyJ1vYtB2AgnKv4BqigSiFYmIm5HBq4hQ7nI=";
+    hash = "sha256-9ufNuExfyW3gr8+pIpp6Ie03e0hE4l3l3kk6EiVH0x8=";
   };
 
   build-system = [ setuptools ];

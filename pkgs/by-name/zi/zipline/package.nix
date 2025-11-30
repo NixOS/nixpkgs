@@ -28,33 +28,17 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
-
-  vips' = vips.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "8.17.1";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
-        postFetch = ''
-          rm -r $out/test/test-suite/images/
-        '';
-      };
-      outputs = lib.remove "devdoc" prevAttrs.outputs;
-      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
-    }
-  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.3";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
+    hash = "sha256-t83LYLjAdXQkQKZlzaBCIs1wKk3v3GVQi8QHUPRHC18=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -64,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
+    fetcherVersion = 2;
+    hash = "sha256-i5unHz7Hs9zvnjgLwHJaoFdM2z/5ucXZG8eouko1Res=";
   };
 
   buildInputs = [
     openssl
-    vips'
+    vips
   ];
 
   nativeBuildInputs = [
@@ -83,7 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  env = environment;
+  env = environment // {
+    DATABASE_URL = "dummy";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -101,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm prune --prod
+    CI=true pnpm prune --prod
     find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
@@ -132,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
   versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
   passthru = {

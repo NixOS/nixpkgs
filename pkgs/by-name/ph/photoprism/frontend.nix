@@ -13,7 +13,11 @@ buildNpmPackage {
     cd frontend
   '';
 
-  npmDepsHash = "sha256-3cytU/QaPSsGu/984AEh3YsdV4H5cjf/br3NSc5Zd1M=";
+  npmDepsHash = "sha256-IC92WESUAp+P0MbFasCTwpo0GcGoTfO8IkLbHfnrnNY=";
+
+  # Some dependencies are fetched from git repositories
+  forceGitDeps = true;
+  makeCacheWritable = true;
 
   installPhase = ''
     runHook preInstall

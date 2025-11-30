@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  requests,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
+  requests,
   urllib3,
   waitress,
 }:
 
 buildPythonPackage rec {
   pname = "requests-unixsocket2";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "thelabnyc";
     repo = "requests-unixsocket2";
     tag = "v${version}";
-    hash = "sha256-HD68YczUy7bexm3Rrh0OfgOux3ItSYQB9lj68p7WtnU=";
+    hash = "sha256-KgPIecKQibB5ZH+itw3OM9heSE3uDuodNS1R9dRkaHE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     requests

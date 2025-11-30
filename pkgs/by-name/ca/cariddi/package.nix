@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cariddi";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "cariddi";
     tag = "v${version}";
-    hash = "sha256-T9d1j2XH3D1JDb02jM3dXEs9FTXLpl8VXXNCJfFi5Kk=";
+    hash = "sha256-1u8UB4nK3Jqb3Ah+A6yCPqGkVOPJOG/oliJLUCNuVgI=";
   };
 
-  vendorHash = "sha256-RMqyD4OlymjlUFoTsLNd+wo1hhYaEsyqpKj1JHuW5FM=";
+  vendorHash = "sha256-nCxAlrIprCbdCHo/5IWriK19bo9sm5NQkJ+EwYCw+Bs=";
 
   ldflags = [
     "-w"

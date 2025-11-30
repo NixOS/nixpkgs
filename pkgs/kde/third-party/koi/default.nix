@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "koi";
-  version = "0.5.1";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "baduhai";
     repo = "Koi";
     tag = finalAttrs.version;
-    hash = "sha256-fXLGlq41Qwdp0cYJcNqPlYnlpVXsZk0imYxP7Bgdcvw=";
+    hash = "sha256-YRbS+WZaK0gJxNTU0KKi122Sn2hVk8t0vFhYr91sGfY=";
   };
 
   patches = [

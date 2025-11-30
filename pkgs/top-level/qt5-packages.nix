@@ -33,6 +33,7 @@ makeScopeWithSplicing' {
         let
           mkFrameworks = import ../development/libraries/kde-frameworks;
           attrs = {
+            inherit config;
             inherit libsForQt5;
             inherit (pkgs) lib fetchurl;
           };
@@ -91,27 +92,19 @@ makeScopeWithSplicing' {
 
         kdsoap = callPackage ../development/libraries/kdsoap { };
 
-        kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
-
         kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
 
         kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
         kproperty = callPackage ../development/libraries/kproperty { };
 
-        kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
         kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
-        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
-
         ldutils = callPackage ../development/libraries/ldutils { };
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
-
-        libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
         libiodata = callPackage ../development/libraries/libiodata { };
 
@@ -168,15 +161,11 @@ makeScopeWithSplicing' {
 
         qcoro = callPackage ../development/libraries/qcoro { };
 
-        qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
-
         qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
         qjson = callPackage ../development/libraries/qjson { };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-
-        qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
         qoauth = callPackage ../development/libraries/qoauth { };
 
@@ -224,21 +213,21 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        soqt = callPackage ../development/libraries/soqt { };
-
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
-
-        # Not a library, but we do want it to be built for every qt version there
-        # is, to allow users to choose the right build if needed.
-        sddm = callPackage ../applications/display-managers/sddm { };
 
         signond = callPackage ../development/libraries/signond { };
 
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+      }
+      // lib.optionalAttrs config.allowAliases {
+        kf5gpgmepp = throw ''
+          'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
+          Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
+        ''; # Added 2025-10-25
       }
     ))
   );

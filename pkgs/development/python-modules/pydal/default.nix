@@ -4,29 +4,25 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250629.2";
+  version = "20251115.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P65iULncYasN7ahwD75czGlwum+N4D1Y0WCd6XpBXSk=";
+    hash = "sha256-04G7DksOLeYaNNvw6+y8lbgXVCPzqOpksV0DZy4GcIA=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  checkInputs = [ legacy-cgi ];
 
   enabledTestPaths = [
     "tests/*.py"

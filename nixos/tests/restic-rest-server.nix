@@ -86,7 +86,7 @@ in
         "touch /opt/excluded_file_1 /opt/excluded_file_2",
 
         # test that remotebackup runs custom commands and produces a snapshot
-        "timedatectl set-time '2016-12-13 13:45'",
+        "date -s '2016-12-13 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
@@ -97,23 +97,23 @@ in
         "diff -ru ${testDir} /tmp/restore-1/opt",
 
         # test that we can create four snapshots in remotebackup and rclonebackup
-        "timedatectl set-time '2017-12-13 13:45'",
+        "date -s '2017-12-13 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
 
-        "timedatectl set-time '2018-12-13 13:45'",
+        "date -s '2018-12-13 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
 
-        "timedatectl set-time '2018-12-14 13:45'",
+        "date -s '2018-12-14 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
 
-        "timedatectl set-time '2018-12-15 13:45'",
+        "date -s '2018-12-15 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
 
-        "timedatectl set-time '2018-12-16 13:45'",
+        "date -s '2018-12-16 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
 

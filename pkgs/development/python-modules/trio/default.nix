@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenv,
 
   # build-system
   setuptools,
@@ -22,6 +21,7 @@
   pyopenssl,
   pytestCheckHook,
   pytest-trio,
+  pyyaml,
   trustme,
 }:
 
@@ -36,7 +36,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-spYHwVq3iNhnZQf2z7aTyDuSCiSl3X5PD6siXqLC4EA=";
+    hash = "sha256-cl1GstWVHDD3nWx835k2hnswt/+AnoTLXjxVIfLP6Es=";
   };
 
   build-system = [ setuptools ];
@@ -59,8 +59,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
-  # tests are failing on Darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     astor
@@ -68,6 +67,7 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     pytest-trio'
+    pyyaml
     trustme
   ];
 

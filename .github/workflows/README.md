@@ -64,7 +64,7 @@ This results in a key with the following semantics:
 
 ## Required Status Checks
 
-The "Required Status Checks" branch ruleset is implemented in two top-level workflows: `pr.yml` and `merge-group.yml`.
+The "Required Status Checks" branch ruleset is implemented in two top-level workflows: `pull-request-target.yml` and `merge-group.yml`.
 
 The PR workflow defines all checks that need to succeed to add a Pull Request to the Merge Queue.
 If no Merge Queue is set up for a branch, the PR workflow defines the checks required to merge into the target branch.

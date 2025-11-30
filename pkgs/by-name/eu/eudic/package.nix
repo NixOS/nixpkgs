@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r usr/share $out/share
     makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic \
       --inherit-argv0 \
-      --set GST_PLUGIN_PATH $out/share/eusoft-eudic/gstreamer-1.0
+      --set GST_PLUGIN_PATH $out/share/eusoft-eudic/gstreamer-1.0 \
+      --set QT_PLUGIN_PATH $out/share/eusoft-eudic/plugins
 
     runHook postInstall
   '';

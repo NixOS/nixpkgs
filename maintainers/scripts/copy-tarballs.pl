@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nix nix.perl-bindings
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nix
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -20,12 +20,49 @@ use File::Path;
 use File::Slurp;
 use JSON;
 use Net::Amazon::S3;
-use Nix::Store;
-
-isValidPath("/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-foo"); # FIXME: forces Nix::Store initialisation
 
 sub usage {
     die "Syntax: $0 [--dry-run] [--exclude REGEXP] [--expr EXPR | --file FILES...]\n";
+}
+
+sub computeFixedOutputPath {
+    my ($name, $algo, $hash) = @_;
+    my $expr = <<'EXPR';
+{ name, outputHashAlgo, outputHash }:
+builtins.toString (derivation {
+  inherit name outputHashAlgo outputHash;
+  builder = "false";
+  system = "dontcare";
+  outputHashMode = "flat";
+})
+EXPR
+    open(my $fh, "-|",
+        "nix-instantiate",
+        "--eval",
+        "--strict",
+        "-E", $expr,
+        "--argstr", "name", $name,
+        "--argstr", "outputHashAlgo", $algo,
+        "--argstr", "outputHash", $hash) or die "Failed to run nix-instantiate: $!";
+
+    my $storePathJson = <$fh>;
+    chomp $storePathJson;
+    my $storePath = decode_json($storePathJson);
+    close $fh;
+    return $storePath;
+}
+
+sub nixHash {
+    my ($algo, $base16, $path) = @_;
+    open(my $fh, "-|",
+        "nix-hash",
+        "--type", $algo,
+        "--flat",
+        ($base16 ? "--base16" : ()),
+        $path) or die "Failed to run nix-hash: $!";
+    my $hash = <$fh>;
+    chomp $hash;
+    return $hash;
 }
 
 my $dryRun = 0;
@@ -90,12 +127,12 @@ sub alreadyMirrored {
 sub uploadFile {
     my ($fn, $name) = @_;
 
-    my $md5_16 = hashFile("md5", 0, $fn) or die;
-    my $sha1_16 = hashFile("sha1", 0, $fn) or die;
-    my $sha256_32 = hashFile("sha256", 1, $fn) or die;
-    my $sha256_16 = hashFile("sha256", 0, $fn) or die;
-    my $sha512_32 = hashFile("sha512", 1, $fn) or die;
-    my $sha512_16 = hashFile("sha512", 0, $fn) or die;
+    my $md5_16 = nixHash("md5", 0, $fn) or die;
+    my $sha1_16 = nixHash("sha1", 0, $fn) or die;
+    my $sha256_32 = nixHash("sha256", 1, $fn) or die;
+    my $sha256_16 = nixHash("sha256", 0, $fn) or die;
+    my $sha512_32 = nixHash("sha512", 1, $fn) or die;
+    my $sha512_16 = nixHash("sha512", 0, $fn) or die;
 
     my $mainKey = "sha512/$sha512_16";
 
@@ -130,7 +167,7 @@ if (scalar @fileNames) {
     my $res = 0;
     foreach my $fn (@fileNames) {
         eval {
-            if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
+            if (alreadyMirrored("sha512", nixHash("sha512", 0, $fn))) {
                 print STDERR "$fn is already mirrored\n";
             } else {
                 uploadFile($fn, basename $fn);
@@ -176,7 +213,9 @@ elsif (defined $expr) {
 
         if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
             $algo = $1;
-            $hash = `nix --extra-experimental-features nix-command hash to-base16 $hash` or die;
+            open(my $fh, "-|", "nix", "--extra-experimental-features", "nix-command", "hash", "convert", "--to", "base16", $hash) or die;
+            $hash = <$fh>;
+            close $fh;
             chomp $hash;
         }
 
@@ -184,11 +223,13 @@ elsif (defined $expr) {
 
         # Convert non-SRI base-64 to base-16.
         if ($hash =~ /^[A-Za-z0-9+\/=]+$/) {
-            $hash = `nix --extra-experimental-features nix-command hash to-base16 --type '$algo' $hash` or die;
+            open(my $fh, "-|", "nix", "--extra-experimental-features", "nix-command", "hash", "convert", "--to", "base16", "--hash-algo", $algo, $hash) or die;
+            $hash = <$fh>;
+            close $fh;
             chomp $hash;
         }
 
-        my $storePath = makeFixedOutputPath(0, $algo, $hash, $name);
+        my $storePath = computeFixedOutputPath($name, $algo, $hash);
 
         for my $url (@$urls) {
             if (defined $ENV{DEBUG}) {
@@ -210,18 +251,15 @@ elsif (defined $expr) {
 
             print STDERR "mirroring $url ($storePath, $algo, $hash)...\n";
 
+
             if ($dryRun) {
                 $mirrored++;
                 last;
             }
-
-            # Substitute the output.
-            if (!isValidPath($storePath)) {
-                system("nix-store", "-r", $storePath);
-            }
+            my $isValidPath = system("nix-store", "-r", $storePath) == 0;
 
             # Otherwise download the file using nix-prefetch-url.
-            if (!isValidPath($storePath)) {
+            if (!$isValidPath) {
                 $ENV{QUIET} = 1;
                 $ENV{PRINT_PATH} = 1;
                 my $fh;

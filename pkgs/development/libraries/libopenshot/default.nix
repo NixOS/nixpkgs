@@ -35,6 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-link-magickcore.diff
   ];
 
+  postPatch = ''
+    # Fix FFmpeg 8.0 API compatibility (FF_PROFILE_* -> AV_PROFILE_*)
+    substituteInPlace src/FFmpegWriter.cpp \
+      --replace-fail "FF_PROFILE_H264_BASELINE" "AV_PROFILE_H264_BASELINE" \
+      --replace-fail "FF_PROFILE_H264_CONSTRAINED" "AV_PROFILE_H264_CONSTRAINED"
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -86,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -10,16 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.30.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jc7crSUV1p1PE3QAeDeBvNV9BUhQLq62ksdnW5Plm88=";
+    hash = "sha256-UosxxeTZzM/f2rqUdMqPxHgnu57/dUc/X7gFOySy+M4=";
   };
 
   vendorHash = null;
+  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [
@@ -33,12 +34,9 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withVlAgent [ "app/vlagent" ];
 
   postPatch = ''
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
-
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+    # Relax go version to major.minor
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
   '';
 
   ldflags = [

@@ -20,6 +20,7 @@
   # optional-dependencies
   black,
   dask,
+  duckdb,
   fastapi,
   geopandas,
   hypothesis,
@@ -31,25 +32,25 @@
   shapely,
 
   # tests
-  duckdb,
   joblib,
-  pyarrow,
   pyarrow-hotfix,
-  pytestCheckHook,
+  pyarrow,
   pytest-asyncio,
+  pytestCheckHook,
   pythonAtLeast,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.25.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-0YeLeGpunjHRWFvSvz0r2BokM4/eJKXuBajgcGquca4=";
+    hash = "sha256-r9lHK2fK1q2pHhpdW+Q83Kk+OZhAOwx8k3GgxHHlj/4=";
   };
 
   build-system = [
@@ -113,11 +114,12 @@ buildPythonPackage rec {
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
     joblib
     pyarrow
     pyarrow-hotfix
+    pytest-asyncio
+    pytestCheckHook
+    rich
   ]
   ++ optional-dependencies.all;
 
@@ -131,19 +133,28 @@ buildPythonPackage rec {
     # KeyError: 'dask'
     "tests/dask/test_dask.py::test_series_schema"
     "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
+
+    # TypeError: memtable() got an unexpected keyword argument 'name'
+    # https://github.com/unionai-oss/pandera/issues/2154
+    "tests/ibis/test_ibis_container.py"
   ];
 
-  disabledTests =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      # OOM error on ofborg:
-      "test_engine_geometry_coerce_crs"
-      # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
-      "test_schema_dtype_crs_with_coerce"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
-      "test_legacy_default_pandas_extension_dtype"
-    ];
+  disabledTests = [
+    # TypeError: __class__ assignment: 'GeoDataFrame' object...
+    "test_schema_model"
+    "test_schema_from_dataframe"
+    "test_schema_no_geometry"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OOM error on ofborg:
+    "test_engine_geometry_coerce_crs"
+    # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
+    "test_schema_dtype_crs_with_coerce"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
+    "test_legacy_default_pandas_extension_dtype"
+  ];
 
   pythonImportsCheck = [
     "pandera"

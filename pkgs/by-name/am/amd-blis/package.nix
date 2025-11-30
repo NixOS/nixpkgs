@@ -10,7 +10,7 @@
 
   # Target architecture. "amdzen" compiles kernels for all Zen
   # generations. To build kernels for specific Zen generations,
-  # use "zen", "zen2", "zen3", or "zen4".
+  # use "zen", "zen2", "zen3", "zen4", or "zen5".
   withArchitecture ? "amdzen",
 
   # Enable OpenMP-based threading.
@@ -22,16 +22,21 @@ let
   blasIntSize = if blas64 then "64" else "32";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amd-blis";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hqb/Q1CBqtC4AXqHNd7voewGUD675hJ9IwvP3Mn9b+M=";
   };
+
+  patches = [
+    # Set the date stamp to $SOURCE_DATE_EPOCH
+    ./build-date.patch
+  ];
 
   inherit blas64;
 
@@ -66,11 +71,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

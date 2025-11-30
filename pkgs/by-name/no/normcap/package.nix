@@ -29,7 +29,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.9";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -38,7 +38,7 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     tag = "v${version}";
-    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
+    hash = "sha256-jkaXwBpa09J6Q07vlnQW8TsUtpiYrPkfMspZI1TyE1g=";
   };
 
   pythonRemoveDeps = [
@@ -66,6 +66,7 @@ ps.buildPythonApplication rec {
     ps.pyside6
     ps.jeepney
     ps.toml
+    ps.zxing-cpp
   ];
 
   preFixup = ''

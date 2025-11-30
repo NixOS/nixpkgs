@@ -37,6 +37,8 @@ buildPythonPackage rec {
     sepaxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "fints" ];
 
   nativeCheckInputs = [

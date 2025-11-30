@@ -13,13 +13,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.17.8";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B17cPxdrQ8qMNgFh4XcDwwKryukMrn0GV2LNPHM7kBo=";
+    hash = "sha256-VQcuN+LU7iljpSWrmLBHX67esEQN1HYNPj5cLxUB7dI=";
 
   };
 
@@ -39,9 +39,6 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     substituteInPlace internal/config/config.go \
       --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
-      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
-    substituteInPlace tools/container/toolkit/toolkit.go \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace cmd/nvidia-cdi-hook/update-ldcache/update-ldcache.go \

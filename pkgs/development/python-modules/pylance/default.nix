@@ -13,6 +13,7 @@
   protobuf,
 
   # dependencies
+  lance-namespace,
   numpy,
   pyarrow,
 
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.34.0";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-scK68o8OCmNFjdNRT2M2odeCfX8RyAic5odqbtTTquE=";
+    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +52,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-7bUPVVvRZFtQjdyyBd8VJHL5Rfc7KDXCV7x5ejofxMw=";
+    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pyarrow" ];
 
   dependencies = [
+    lance-namespace
     numpy
     pyarrow
   ];
@@ -113,6 +115,10 @@ buildPythonPackage rec {
 
     # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
     # ModuleNotFoundError: No module named 'lance'
+    "test_lance_log_file"
+    "test_lance_log_file_invalid_path"
+    "test_lance_log_file_with_directory_creation"
+    "test_timestamp_precision"
     "test_tracing"
 
     # Flaky (AssertionError)

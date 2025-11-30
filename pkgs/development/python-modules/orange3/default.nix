@@ -222,7 +222,7 @@ let
       homepage = "https://orangedatamining.com/";
       changelog = "https://github.com/biolab/orange3/blob/${src.tag}/CHANGELOG.md";
       license = [ lib.licenses.gpl3Plus ];
-      maintainers = [ lib.maintainers.lucasew ];
+      maintainers = [ ];
       mainProgram = "orange-canvas";
     };
   };

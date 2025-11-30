@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # regex mismatch

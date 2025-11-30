@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;
@@ -103,6 +103,73 @@ let
 
         Changing the default will cause a mass rebuild.
       '';
+    };
+
+    gitConfig = mkOption {
+      type = types.attrsOf (types.attrsOf types.anything);
+      description = ''
+        The default [git configuration](https://git-scm.com/docs/git-config#_variables) for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        Among many other potential uses, this can be used to override URLs to point to local mirrors.
+
+        Changing this will not cause any rebuilds because `pkgs.fetchgit` produces a [fixed-output derivation](https://nix.dev/manual/nix/stable/glossary.html?highlight=fixed-output%20derivation#gloss-fixed-output-derivation).
+
+        To set the configuration file directly, use the [`gitConfigFile`](#opt-gitConfigFile) option instead.
+
+        To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
+      '';
+      default = { };
+      example = {
+        url."https://my-github-mirror.local".insteadOf = [ "https://github.com" ];
+      };
+    };
+
+    # A rendered version of gitConfig that can be reused by all pkgs.fetchgit calls
+    gitConfigFile = mkOption {
+      type = types.nullOr types.path;
+      description = ''
+        A path to a [git configuration](https://git-scm.com/docs/git-config#_variables) file, to be used for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        This overrides the [`gitConfig`](#opt-gitConfig) option, see its documentation for more details.
+      '';
+      default =
+        if config.gitConfig != { } then
+          builtins.toFile "gitconfig" (lib.generators.toGitINI config.gitConfig)
+        else
+          null;
+    };
+
+    npmRegistryOverrides = mkOption {
+      type = types.attrsOf types.str;
+      description = ''
+        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+
+        For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
+
+        For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
+
+        To set the string directly, see [`npmRegistryOverridesString`](#opt-npmRegistryOverridesString).
+      '';
+      default = { };
+      example = {
+        "registry.npmjs.org" = "my-mirror.local/registry.npmjs.org";
+      };
+    };
+
+    npmRegistryOverridesString = mkOption {
+      type = types.addCheck types.str (
+        s:
+        let
+          j = builtins.fromJSON s;
+        in
+        lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
+      );
+      description = ''
+        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+
+        This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
+      '';
+      default = builtins.toJSON config.npmRegistryOverrides;
     };
 
     doCheckByDefault = mkMassRebuild {
@@ -251,6 +318,19 @@ let
       default = false;
       description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
+
+    hashedMirrors = mkOption {
+      type = types.listOf types.str;
+      default = [ "https://tarballs.nixos.org" ];
+      description = ''
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
+        In case `pkgs.fetchurl` can't download from the given URLs,
+        it will try the hashed mirrors based on the expected output hash.
+
+        See [`copy-tarballs.pl`](https://github.com/NixOS/nixpkgs/blob/a2d829eaa7a455eaa3013c45f6431e705702dd46/maintainers/scripts/copy-tarballs.pl)
+        for more details on how hashed mirrors are constructed.
       '';
     };
 

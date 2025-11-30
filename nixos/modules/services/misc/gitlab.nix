@@ -588,12 +588,12 @@ in
             if versionAtLeast config.system.stateVersion "23.11" then
               pkgs.gitlab-container-registry
             else
-              pkgs.docker-distribution;
-          defaultText = literalExpression "pkgs.docker-distribution";
+              pkgs.distribution;
+          defaultText = literalExpression "pkgs.distribution";
           description = ''
             Container registry package to use.
 
-            External container registries such as `pkgs.docker-distribution` are not supported
+            External container registries such as `pkgs.distribution` are not supported
             anymore since GitLab 16.0.0.
           '';
         };
@@ -638,7 +638,7 @@ in
           description = "External address used to access registry from the internet";
         };
         externalPort = mkOption {
-          type = types.int;
+          type = types.port;
           description = "External port used to access registry from the internet";
         };
       };
@@ -1179,7 +1179,7 @@ in
         (
           cfg.registry.enable
           && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0"
-          && cfg.registry.package == pkgs.docker-distribution
+          && cfg.registry.package == pkgs.distribution
         )
         ''
           Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
@@ -1699,7 +1699,7 @@ in
         filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
         isSecret = v: isAttrs v && v ? _secret && isString v._secret;
         mkPagesKeyValue = lib.generators.toKeyValue {
-          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
             mkValueString =
               v:
               if isInt v then

@@ -14,58 +14,44 @@ let
 in
 
 {
-  julia_19-bin = wrapJulia (
-    callPackage (import ./generic-bin.nix {
-      version = "1.9.4";
-      sha256 = {
-        x86_64-linux = "07d20c4c2518833e2265ca0acee15b355463361aa4efdab858dad826cf94325c";
-        aarch64-linux = "541d0c5a9378f8d2fc384bb8595fc6ffe20d61054629a6e314fb2f8dfe2f2ade";
-        x86_64-darwin = "67eec264f6afc9e9bf72c0f62c84d91c2ebdfaed6a0aa11606e3c983d278b441";
-        aarch64-darwin = "67542975e86102eec95bc4bb7c30c5d8c7ea9f9a0b388f0e10f546945363b01a";
-      };
-      patches = [
-        # https://github.com/JuliaLang/julia/commit/f5eeba35d9bf20de251bb9160cc935c71e8b19ba
-        ./patches/1.9-bin/0001-allow-skipping-internet-required-tests.patch
-      ];
-    }) { }
-  );
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.9";
+      version = "1.10.10";
       sha256 = {
-        x86_64-linux = "5a2d2c5224594b683c97e7304cb72407fbcf0be4a0187789cba1a2f73f0cbf09";
-        aarch64-linux = "be222882e3674f960f43b6842f7bbb52a369977e40d5dcd26498793e1cd2dfb6";
-        x86_64-darwin = "f80c93c30a18d8a5dc7f37d0cc94757fd3857651268e4a9e2d42d3b1ea3372f1";
-        aarch64-darwin = "e62e00b22408159cba3d669f2d9e8b60c1d23b5c2d1c22ec25f4957d15ca98ef";
+        x86_64-linux = "6a78a03a71c7ab792e8673dc5cedb918e037f081ceb58b50971dfb7c64c5bf81";
+        aarch64-linux = "a4b157ed68da10471ea86acc05a0ab61c1a6931ee592a9b236be227d72da50ff";
+        x86_64-darwin = "942b0d4accc9704861c7781558829b1d521df21226ad97bd01e1e43b1518d3e6";
+        aarch64-darwin = "52d3f82c50d9402e42298b52edc3d36e0f73e59f81fc8609d22fa094fbad18be";
       };
     }) { }
   );
   julia_111-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.11.6";
+      version = "1.11.7";
       sha256 = {
-        x86_64-linux = "e99e52e2029d845097c68f2372d836186f0eb3fb897a9dde0bdf9ee9250d03d5";
-        aarch64-linux = "c2c5cdce017cacadaccb7d22aa070f549e4e87c4bb10f15853170ddcb50bf5f4";
-        x86_64-darwin = "195a897e031595f59821dbcaf87514faa8d64220334b285c3e9809fce4958f79";
-        aarch64-darwin = "01caaa9c25fa1f071003807c8a6739de4941b5ec13751131128e00e21880e639";
+        x86_64-linux = "aa5924114ecb89fd341e59aa898cd1882b3cb622ca4972582c1518eff5f68c05";
+        aarch64-linux = "f97f80b35c12bdaf40c26f6c55dbb7617441e49c9e6b842f65e8410a388ca6f4";
+        x86_64-darwin = "b2c11315df39da478ab0fa77fb228f3fd818f1eaf42dc5cc1223c703f7122fe5";
+        aarch64-darwin = "74df9d4755a7740d141b04524a631e2485da9d65065d934e024232f7ba0790b6";
       };
     }) { }
   );
-  julia_19 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.9.4";
-      hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
-      patches = [
-        ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
-      ];
+  julia_112-bin = wrapJulia (
+    callPackage (import ./generic-bin.nix {
+      version = "1.12.1";
+      sha256 = {
+        x86_64-linux = "7d2add9ee74ee2f12b5c268bc194794cc52ea440f8687fbab29db6afefbf69b7";
+        aarch64-linux = "2e3d6ca07e251721fa3e0cd3460fc240e60f2a9bd97bae0ea2144f586da19297";
+        x86_64-darwin = "7dd841cd853ad64f5e90a4b459631b49ee388891ceaba81857f5b8959392c4b2";
+        aarch64-darwin = "cc65620b71a725380e59d0e31dc0b4140f30229b70a4b8eec8e32c222bc54fc1";
+      };
     }) { }
   );
   julia_110 = wrapJulia (
     callPackage (import ./generic.nix {
-      version = "1.10.9";
-      hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
+      version = "1.10.10";
+      hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
       patches = [
-        ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
         # [build] Some improvements to the LLVM build system
         # Related: https://github.com/JuliaLang/julia/issues/55617
@@ -79,11 +65,14 @@ in
   );
   julia_111 = wrapJulia (
     callPackage (import ./generic.nix {
-      version = "1.11.6";
-      hash = "sha256-smje9BrcF0lsPg59y14nssvmocYcePZGNUTF9Mc0Foo=";
-      patches = [
-        ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
-      ];
+      version = "1.11.7";
+      hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
+    }) { }
+  );
+  julia_112 = wrapJulia (
+    callPackage (import ./generic.nix {
+      version = "1.12.1";
+      hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
     }) { }
   );
 }

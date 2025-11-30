@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fenics-basix";
-  version = "0.9.0";
+  version = "0.10.0.post0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "basix";
     tag = "v${version}";
-    hash = "sha256-jLQMDt6zdl+oixd5Qevn4bvxBsXpTNcbH2Os6TC9sRQ=";
+    hash = "sha256-iKG6Cs28D0scPEIRKoGk/CgquKzGZvIjf4UIj4MQXHA=";
   };
 
   dontUseCmakeConfigure = true;
@@ -52,10 +52,12 @@ buildPythonPackage rec {
     lapack
   ];
 
-  # Prefer finding BLAS and LAPACK via pkg-config.
-  # Avoid using the Accelerate.framework from the Darwin SDK.
-  # Also, avoid mistaking BLAS for LAPACK.
-  env.CMAKE_ARGS = lib.cmakeBool "BLA_PREFER_PKGCONFIG" true;
+  cmakeFlags = [
+    # Prefer finding BLAS and LAPACK via pkg-config.
+    # Avoid using the Accelerate.framework from the Darwin SDK.
+    # Also, avoid mistaking BLAS for LAPACK.
+    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
+  ];
 
   pythonImportsCheck = [
     "basix"

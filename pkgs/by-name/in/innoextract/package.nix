@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   cmake,
   makeWrapper,
   boost,
@@ -10,26 +9,19 @@
   libiconv,
   withGog ? false,
   unar ? null,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "innoextract";
-  version = "1.9";
+  version = "1.9-unstable-2025-02-06";
 
-  src = fetchurl {
-    url = "https://constexpr.org/innoextract/files/innoextract-${version}.tar.gz";
-    sha256 = "09l1z1nbl6ijqqwszdwch9mqr54qb7df0wp2sd77v17dq6gsci33";
+  src = fetchFromGitHub {
+    owner = "dscharrer";
+    repo = "innoextract";
+    rev = "6e9e34ed0876014fdb46e684103ef8c3605e382e";
+    hash = "sha256-bgACPDo1phjIiwi336JEB1UAJKyL2NmCVOhyZxBFLJo=";
   };
-
-  patches = [
-    # Fix boost-1.86 build:
-    #   https://github.com/dscharrer/innoextract/pull/169
-    (fetchpatch {
-      name = "boost-1.86.patch";
-      url = "https://github.com/dscharrer/innoextract/commit/264c2fe6b84f90f6290c670e5f676660ec7b2387.patch";
-      hash = "sha256-QYwrqLXC7FE4oYi6G1erpX/RUUtS5zNBv7/fO7AdZQg=";
-    })
-  ];
 
   buildInputs = [
     xz
@@ -52,6 +44,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/innoextract \
       --prefix PATH : ${lib.makeBinPath [ unar ]}
   '';
+
+  # use unstable as latest release does not yet support cmake-4
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Tool to unpack installers created by Inno Setup";

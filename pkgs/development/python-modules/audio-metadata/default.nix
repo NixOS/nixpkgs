@@ -7,6 +7,7 @@
   fetchFromGitHub,
   fetchpatch,
   more-itertools,
+  pendulum,
   poetry-core,
   pprintpp,
   pythonOlder,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "attrs"
     "more-itertools"
+    "pendulum"
   ];
 
   build-system = [ poetry-core ];
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     bidict
     bitstruct
     more-itertools
+    pendulum
     pprintpp
     tbm-utils
   ];

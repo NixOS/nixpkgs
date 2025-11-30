@@ -10,6 +10,7 @@
   shiboken6,
   llvmPackages,
   symlinkJoin,
+  fetchpatch,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -36,6 +37,7 @@ let
     qtsvg
     qtwebchannel
     qtwebsockets
+    qtwebview
     qtpositioning
     qtlocation
     qtshadertools
@@ -55,7 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
+  sourceRoot = "${finalAttrs.src.name}/sources/pyside6";
+
+  patches = [
+    # revert commit that breaks generated cmake files
+    (fetchpatch {
+      url = "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=05e328476f2d6ef8a0f3f44aca1e5b1cdb7499fc";
+      revert = true;
+      stripLen = 2;
+      hash = "sha256-PPLV5K+xp7ZdG0Tah1wpBdNWN7fsXvZh14eBzO0R55c=";
+    })
+  ];
 
   # Qt Designer plugin moved to a separate output to reduce closure size
   # for downstream things
@@ -114,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     cd ../../..
+    chmod +w .
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
 
@@ -132,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

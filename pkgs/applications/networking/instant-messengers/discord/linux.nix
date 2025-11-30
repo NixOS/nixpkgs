@@ -5,6 +5,7 @@
   meta,
   binaryName,
   desktopName,
+  self,
   autoPatchelfHook,
   makeDesktopItem,
   lib,
@@ -30,6 +31,7 @@
   libnotify,
   libpulseaudio,
   libuuid,
+  libva,
   libX11,
   libXScrnSaver,
   libXcomposite,
@@ -47,13 +49,14 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
   pipewire,
   python3,
   runCommand,
+  libunity,
   speechd-minimal,
   wayland,
   branch,
@@ -99,7 +102,7 @@ in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
 ) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit
     pname
     version
@@ -130,7 +133,7 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath (
     [
       libcxx
-      systemd
+      systemdLibs
       libpulseaudio
       libdrm
       libgbm
@@ -152,7 +155,9 @@ stdenv.mkDerivation rec {
       libnotify
       libX11
       libXcomposite
+      libunity
       libuuid
+      libva
       libXcursor
       libXdamage
       libXext
@@ -170,7 +175,7 @@ stdenv.mkDerivation rec {
       libdbusmenu
       wayland
     ]
-    ++ lib.optional withTTS speechd-minimal
+    ++ lib.optionals withTTS [ speechd-minimal ]
   );
 
   installPhase = ''
@@ -192,7 +197,7 @@ stdenv.mkDerivation rec {
         ''} \
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
+        --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -248,13 +253,21 @@ stdenv.mkDerivation rec {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
-    updateScript = writeScript "discord-update-script" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-      set -eou pipefail;
-      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=linux&format=tar.gz")
-      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
-    '';
+    updateScript = ./update.py;
+
+    tests = {
+      withVencord = self.override {
+        withVencord = true;
+      };
+      withEquicord = self.override {
+        withEquicord = true;
+      };
+      withMoonlight = self.override {
+        withMoonlight = true;
+      };
+      withOpenASAR = self.override {
+        withOpenASAR = true;
+      };
+    };
   };
-}
+})

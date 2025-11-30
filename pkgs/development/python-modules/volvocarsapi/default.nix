@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "volvocarsapi";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "thomasddn";
     repo = "volvo-cars-api";
     tag = "v${version}";
-    hash = "sha256-YMrhVxDm8Cp8vbMVtdq6yoaAu8nUB7L2YG+LSkvMdZs=";
+    hash = "sha256-GC2vktTFWh4z/sO+2hhsVKInSl5GQCtzq4q0YtfkfKg=";
   };
 
   build-system = [

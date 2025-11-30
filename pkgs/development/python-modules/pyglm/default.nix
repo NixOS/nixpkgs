@@ -19,11 +19,19 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "glm" ];
+  # Having the source root in `sys.path` causes import issues
+  preCheck = ''
+    cd test
+  '';
+
+  pythonImportsCheck = [
+    "pyglm"
+    "glm"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fzwoch";
-    repo = pname;
+    repo = "obs-gstreamer";
     rev = "v${version}";
     hash = "sha256-23LyxN1Vgol9uA7rDdfZXcmfhG4l0RfMYGbofbhObBE=";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
         package: "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.getLib package}/lib/gstreamer-1.0";
     in
     with gst_all_1;
-    builtins.map gstreamerHook [
+    map gstreamerHook [
       gstreamer
       gst-plugins-base
       gst-plugins-bad

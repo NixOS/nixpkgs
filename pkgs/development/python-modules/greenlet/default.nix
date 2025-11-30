@@ -37,7 +37,9 @@ let
     ];
 
     # https://github.com/python-greenlet/greenlet/issues/395
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isPower64 "-fomit-frame-pointer";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (
+      stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isLoongArch64
+    ) "-fomit-frame-pointer";
 
     preCheck = ''
       pushd ${placeholder "out"}/${python.sitePackages}

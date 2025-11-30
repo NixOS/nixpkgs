@@ -11,6 +11,7 @@
   libbpf,
   zlib,
   elfutils,
+  intel-ipsec-mb,
   jansson,
   openssl,
   libpcap,
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     jansson
     libbpf
     elfutils
+    intel-ipsec-mb
     libpcap
     numactl
     openssl.dev
@@ -111,8 +113,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      magenbluten
-      orivej
       mic92
       zhaofengli
     ];

@@ -22,7 +22,7 @@
   eigen,
   gtest,
   pybind11,
-  tbb_2022,
+  onetbb,
 
   # tests
   pytestCheckHook,
@@ -39,18 +39,17 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "25.05.1";
+  version = "25.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
-    # https://github.com/scipp/scipp/pull/3722
     tag = version;
-    hash = "sha256-AanXb+nF/YIZFuzG5UnoNPX97WScfPKuoSBY18uYt9k=";
+    hash = "sha256-/gCLWRpBnOjNMBEpJe0JSda496iXDFnCE+R+zIaRkWo=";
   };
   env = {
-    SKIP_CONAN = "true";
+    SKIP_REMOTE_SOURCES = "true";
   };
 
   build-system = [
@@ -75,7 +74,7 @@ buildPythonPackage rec {
     gtest
     pybind11
     units-llnl.passthru.top-level
-    tbb_2022
+    onetbb
   ];
 
   nativeCheckInputs = [

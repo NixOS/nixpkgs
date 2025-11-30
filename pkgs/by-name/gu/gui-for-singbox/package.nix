@@ -16,19 +16,20 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.8";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-9Vai/C9cJgqM3n+FzFPXismR5vF6eQNJHdI7o47zinI=";
+    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-iVD/9uTK3cUzKE20pJk67uk53UCtfj/YCpgwgxmmg8k=";
+      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
     };
 
     buildPhase = ''
@@ -86,7 +87,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-7pFjfUFkpXyYEVjiXbfFUC7FQSlZubKJJ5MI8WY0IVA=";
+  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -134,6 +135,8 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];

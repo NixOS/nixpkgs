@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arashi";
-  version = "25.08.3";
+  version = "25.10";
 
   src = fetchFromGitHub {
     owner = "0hStormy";
     repo = "Arashi";
     tag = finalAttrs.version;
-    hash = "sha256-wmYsAfgdwn6ZLF70avNmjoU5VZNBZdV7dPSe8ycNdHE=";
+    hash = "sha256-NdsHnN3yd8i4g90BrFr6m1HGYr3WrFvULLXyY1MhOA8=";
   };
 
   installPhase = ''

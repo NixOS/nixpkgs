@@ -81,9 +81,9 @@
 
 let
   baseName =
-    if (testing) then
+    if testing then
       "kicad-testing"
-    else if (stable) then
+    else if stable then
       "kicad"
     else
       "kicad-unstable";
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
-    inherit stable testing baseName;
+    inherit stable testing;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;
@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
   };
 
   inherit pname;
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 src.src.rev;
 
   src = base;
   dontUnpack = true;
@@ -195,14 +195,14 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath =
-    optionals (withScripting) [
+    optionals withScripting [
       wxPython
       python.pkgs.six
       python.pkgs.requests
     ]
     ++ addonsDrvs;
 
-  nativeBuildInputs = [ makeWrapper ] ++ optionals (withScripting) [ python.pkgs.wrapPython ];
+  nativeBuildInputs = [ makeWrapper ] ++ optionals withScripting [ python.pkgs.wrapPython ];
 
   # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
   # but it's used to find both the templates and the symbol/footprint library tables
@@ -245,10 +245,10 @@ stdenv.mkDerivation rec {
       in
       [ "--set-default NIX_KICAD9_STOCK_DATA_PATH ${stockDataPath}" ]
     )
-    ++ optionals (with3d) [
+    ++ optionals with3d [
       "--set-default KICAD9_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
     ]
-    ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+    ++ optionals withNgspice [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
     # infinisil's workaround for #39493
     ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ];
@@ -278,13 +278,13 @@ stdenv.mkDerivation rec {
     (concatStringsSep "\n" (flatten [
       "runHook preInstall"
 
-      (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
+      (optionalString withScripting "buildPythonPath \"${base} $pythonPath\" \n")
 
       # wrap each of the directly usable tools
       (map (
         tool:
         "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
-        + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
+        + optionalString withScripting " --set PYTHONPATH \"$program_PYTHONPATH\""
       ) tools)
 
       # link in the CLI utils
@@ -312,9 +312,9 @@ stdenv.mkDerivation rec {
   meta = {
     description =
       (
-        if (stable) then
+        if stable then
           "Open Source Electronics Design Automation suite"
-        else if (testing) then
+        else if testing then
           "Open Source EDA suite, latest on stable branch"
         else
           "Open Source EDA suite, latest on master branch"
@@ -326,7 +326,7 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ evils ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "kicad";

@@ -37,7 +37,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf,
+  protobuf_31,
   python3,
   rapidjson,
   re2,
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     lz4
     nlohmann_json # alternative JSON parser to rapidjson
-    protobuf # substrait requires protobuf
+    protobuf_31 # substrait requires protobuf
     rapidjson
     re2
     snappy
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableFlight [
     grpc
     openssl
-    protobuf
+    protobuf_31
     sqlite
   ]
   ++ lib.optionals enableS3 [
@@ -177,6 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
     LZ4_ROOT = lz4;
     ZSTD_ROOT = zstd.dev;
   };
+
+  # fails tests on glibc with this enabled
+  hardeningDisable = [ "glibcxxassertions" ];
 
   preConfigure = ''
     patchShebangs build-support/
@@ -287,6 +290,12 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # https://github.com/NixOS/nixpkgs/issues/460687
+        # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
+        "arrow-flight-internals-test"
+        "arrow-flight-sql-test"
       ];
     in
     ''

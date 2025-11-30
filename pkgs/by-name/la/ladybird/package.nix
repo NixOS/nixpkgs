@@ -9,7 +9,7 @@
   cmake,
   ninja,
   pkg-config,
-  curl,
+  curlFull, # Websocket support
   libavif,
   angle, # libEGL
   libjxl,
@@ -27,19 +27,19 @@
   skia,
   nixosTests,
   unstableGitUpdater,
-  apple-sdk_14,
   libtommath,
+  sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-08-19";
+  version = "0-unstable-2025-11-27";
 
   src = fetchFromGitHub {
-    owner = "LadybirdWebBrowser";
+    owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "658477620afe4c14b936227d1c8307b2dea56267";
-    hash = "sha256-WkEgZP5Ci0mlNDGq++93v4coz36dhp+kXtlKQu1xnVM=";
+    rev = "c790de24ddc7575a4ed2ea754d27afb6cde0ac22";
+    hash = "sha256-DZ4qj4polUH2xQvopY6ia/GyRe+L8WCGJPEryQAn/4E=";
   };
 
   postPatch = ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    curl
+    curlFull
     fast-float
     ffmpeg
     fontconfig
@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
+    sdl3
     simdutf
     (skia.overrideAttrs (prev: {
       gnFlags = prev.gnFlags ++ [
@@ -105,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   cmakeFlags = [

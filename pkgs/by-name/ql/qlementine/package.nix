@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlementine";
-  version = "1.2.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qlementine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-icImLN04Ux+pqWaBTNruCkZC+735vzMz8tzssyCncjI=";
+    hash = "sha256-sQp6geH0PqthSVbC+AmQfKRVykZZoAfDMjhIviYJ4RI=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -163,7 +163,7 @@ Nixpkgs provides the following functions for producing derivations which write t
 They are useful for creating files from Nix expression, and are all implemented as convenience wrappers around `writeTextFile`.
 
 Each of these functions will cause a derivation to be produced.
-When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`builtins.toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
+When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
 
 :::: {.note}
 Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
@@ -344,7 +344,7 @@ Write a text file to the Nix store.
 `allowSubstitutes` (Bool, _optional_)
 
 : Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
+  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `derivation`.
 
   It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
   Set it to true if the `checkPhase` step is expensive.
@@ -355,7 +355,7 @@ Write a text file to the Nix store.
 
 : Whether to prefer building locally, even if faster [remote build machines](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters) are available.
 
-  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `builtins.derivation`.
+  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `derivation`.
 
   It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
@@ -651,7 +651,7 @@ Write a Bash script to a "bin" subdirectory of a directory in the Nix store.
 : The contents of the file.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 This function is a combination of [](#trivial-builder-writeShellScript) and [](#trivial-builder-writeScriptBin).
 

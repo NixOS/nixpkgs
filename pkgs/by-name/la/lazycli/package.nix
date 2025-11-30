@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to static turn CLI commands into TUIs";
     homepage = "https://github.com/jesseduffield/lazycli";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "lazycli";
   };
 }

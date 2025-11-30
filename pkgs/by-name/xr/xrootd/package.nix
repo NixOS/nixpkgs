@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
   davix,
   cmake,
   gtest,
@@ -30,15 +31,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.8.1";
+  version = "5.8.4";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
+    hash = "sha256-r0wXAlm+K6TE6189QyZL/k3q5IKlouSBKWzWXz1Tws4=";
   };
+
+  patches = [
+    # Downgrade -Wnull-dereference from error to warning
+    # Should be removed in the release after next
+    (fetchpatch2 {
+      url = "https://github.com/xrootd/xrootd/commit/135b33b9631891219889fcaad449a4efb5e77d95.patch";
+      hash = "sha256-t6Cy2XWp3B+sbMBxLhsh3WjQlXg4Tb7fF+rGGgYollU=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs genversion.sh

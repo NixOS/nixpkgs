@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qtscrcpy";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src =
     (fetchFromGitHub {
       owner = "barry-ran";
       repo = "QtScrcpy";
       tag = "v${version}";
-      hash = "sha256-kDeMgSIEIQxaTDR/QAcIaEmPjkmUKBsGyF8fISRzu1M=";
+      hash = "sha256-UZgAFptVC67IXYdxTEmB18fJlFdaOrYrQY4JmdGEJXE=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -46,9 +46,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace QtScrcpy/QtScrcpyCore/{include/QtScrcpyCoreDef.h,src/device/server/server.h} \
-      --replace-fail 'serverVersion = "3.3.1"' 'serverVersion = "${scrcpy.version}"'
-    substituteInPlace QtScrcpy/util/config.cpp \
-      --replace-fail 'COMMON_SERVER_VERSION_DEF "3.3.1"' 'COMMON_SERVER_VERSION_DEF "${scrcpy.version}"'
+      --replace-fail 'serverVersion = "3.3.3"' 'serverVersion = "${scrcpy.version}"'
     substituteInPlace QtScrcpy/audio/audiooutput.cpp \
       --replace-fail 'sndcpy.sh' "$out/share/qtscrcpy/sndcpy.sh"
     substituteInPlace QtScrcpy/sndcpy/sndcpy.sh \

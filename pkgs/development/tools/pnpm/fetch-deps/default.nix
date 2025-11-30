@@ -31,7 +31,7 @@ in
       ...
     }@args:
     let
-      args' = builtins.removeAttrs args [
+      args' = removeAttrs args [
         "hash"
         "pname"
       ];
@@ -56,7 +56,7 @@ in
     ) true;
 
     assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "pnpm.fetchDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (builtins.map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+      "pnpm.fetchDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
     stdenvNoCC.mkDerivation (

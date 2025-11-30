@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiowinreg";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "skelsec";
     repo = "aiowinreg";
     tag = version;
-    hash = "sha256-XQDBvBfocz5loUg9eZQz4FKGiCGCaczwhYE/vhy7mC0=";
+    hash = "sha256-vY5SrGTFH/xsv9k2WciE0xNx9r3W53sxxLGXFX34EuE=";
   };
 
   nativeBuildInputs = [ setuptools ];

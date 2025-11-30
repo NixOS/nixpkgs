@@ -1,9 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   go-md2man,
 
+  llama-cpp-vulkan,
   podman,
   withPodman ? true,
 
@@ -11,30 +12,37 @@
   ramalama,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-Hozyf0yfB0XhxWeA3SS24BPfDDXYa2AXY8/gLh8ZFcU=";
+    hash = "sha256-4RoZX8CzMGNGsh8TawPYYMi2ZZXDIGfD/p94SS+326Y=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  dependencies = [
-    python3.pkgs.argcomplete
+  dependencies = with python3Packages; [
+    argcomplete
+    pyyaml
+    jsonschema
+    jinja2
   ];
 
   nativeBuildInputs = [
     go-md2man
   ];
+
+  postPatch = ''
+    substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+  '';
 
   preBuild = ''
     make docs
@@ -42,7 +50,21 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = lib.optionalString withPodman ''
     wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${lib.makeBinPath [ podman ]}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            llama-cpp-vulkan
+            podman
+          ]
+          ++ (
+            with python3Packages;
+            [
+              huggingface-hub
+            ]
+            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
+          )
+        )
+      }
   '';
 
   pythonImportsCheck = [
@@ -50,8 +72,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+    python3Packages.pytestCheckHook
+    podman
   ];
+
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   passthru = {
     tests = {

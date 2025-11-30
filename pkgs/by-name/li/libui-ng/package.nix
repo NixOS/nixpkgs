@@ -21,9 +21,9 @@ stdenv.mkDerivation {
     hash = "sha256-pnfrSPDIvG0tFYQoeMBONATkNRNjY/tJGp9n2I4cN/U=";
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
-  '';
+  patches = [
+    ./darwin-no-universal.patch
+  ];
 
   nativeBuildInputs = [
     cmocka

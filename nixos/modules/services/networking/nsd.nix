@@ -100,19 +100,19 @@ let
       # interfaces
     ${forEach "  ip-address: " cfg.interfaces}
 
-      ip-freebind:         ${yesOrNo cfg.ipFreebind}
-      hide-version:        ${yesOrNo cfg.hideVersion}
+      ip-freebind:         ${boolToYesNo cfg.ipFreebind}
+      hide-version:        ${boolToYesNo cfg.hideVersion}
       identity:            "${cfg.identity}"
-      ip-transparent:      ${yesOrNo cfg.ipTransparent}
-      do-ip4:              ${yesOrNo cfg.ipv4}
+      ip-transparent:      ${boolToYesNo cfg.ipTransparent}
+      do-ip4:              ${boolToYesNo cfg.ipv4}
       ipv4-edns-size:      ${toString cfg.ipv4EDNSSize}
-      do-ip6:              ${yesOrNo cfg.ipv6}
+      do-ip6:              ${boolToYesNo cfg.ipv6}
       ipv6-edns-size:      ${toString cfg.ipv6EDNSSize}
-      log-time-ascii:      ${yesOrNo cfg.logTimeAscii}
+      log-time-ascii:      ${boolToYesNo cfg.logTimeAscii}
       ${maybeString "nsid: " cfg.nsid}
       port:                ${toString cfg.port}
-      reuseport:           ${yesOrNo cfg.reuseport}
-      round-robin:         ${yesOrNo cfg.roundRobin}
+      reuseport:           ${boolToYesNo cfg.reuseport}
+      round-robin:         ${boolToYesNo cfg.roundRobin}
       server-count:        ${toString cfg.serverCount}
       ${maybeToString "statistics: " cfg.statistics}
       tcp-count:           ${toString cfg.tcpCount}
@@ -121,7 +121,7 @@ let
       verbosity:           ${toString cfg.verbosity}
       ${maybeString "version: " cfg.version}
       xfrd-reload-timeout: ${toString cfg.xfrdReloadTimeout}
-      zonefiles-check:     ${yesOrNo cfg.zonefilesCheck}
+      zonefiles-check:     ${boolToYesNo cfg.zonefilesCheck}
       zonefiles-write:     ${toString cfg.zonefilesWrite}
 
       ${maybeString "rrl-ipv4-prefix-length: " cfg.ratelimit.ipv4PrefixLength}
@@ -134,7 +134,7 @@ let
     ${keyConfigFile}
 
     remote-control:
-      control-enable:    ${yesOrNo cfg.remoteControl.enable}
+      control-enable:    ${boolToYesNo cfg.remoteControl.enable}
       control-key-file:  "${cfg.remoteControl.controlKeyFile}"
       control-cert-file: "${cfg.remoteControl.controlCertFile}"
     ${forEach "  control-interface: " cfg.remoteControl.interfaces}
@@ -147,7 +147,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  yesOrNo = b: if b then "yes" else "no";
   maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
   maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
@@ -183,8 +182,8 @@ let
       ${maybeToString "max-retry-time:   " zone.maxRetrySecs}
       ${maybeToString "min-retry-time:   " zone.minRetrySecs}
 
-      allow-axfr-fallback: ${yesOrNo zone.allowAXFRFallback}
-      multi-master-check: ${yesOrNo zone.multiMasterCheck}
+      allow-axfr-fallback: ${boolToYesNo zone.allowAXFRFallback}
+      multi-master-check: ${boolToYesNo zone.multiMasterCheck}
     ${forEach "  allow-notify: " zone.allowNotify}
     ${forEach "  request-xfr: " zone.requestXFR}
 

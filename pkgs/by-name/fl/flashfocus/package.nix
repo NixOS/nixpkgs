@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "pyyaml"
     "xcffib"
+    "cffi"
   ];
 
   propagatedBuildInputs = with python3Packages; [

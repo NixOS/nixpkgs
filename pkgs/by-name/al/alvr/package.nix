@@ -7,10 +7,12 @@
   pkg-config,
   autoAddDriverRunpath,
   alsa-lib,
+  android-tools,
   brotli,
   bzip2,
   celt,
   ffmpeg,
+  gmp,
   jack2,
   lame,
   libX11,
@@ -26,6 +28,7 @@
   libva,
   libvdpau,
   libxkbcommon,
+  openapv,
   openssl,
   openvr,
   pipewire,
@@ -37,7 +40,6 @@
   x264,
   xvidcore,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
   version = "20.14.1";
@@ -59,6 +61,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
+      --replace-fail 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
+      --replace-fail 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
+      --replace-fail 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
+      --replace-fail 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
+      --replace-fail 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
+  '';
+
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-lbrotlicommon"
@@ -77,6 +88,11 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
+  cargoBuildFlags = [
+    "--exclude alvr_xtask"
+    "--workspace"
+  ];
+
   nativeBuildInputs = [
     rust-cbindgen
     pkg-config
@@ -86,10 +102,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
+    android-tools
     brotli
     bzip2
     celt
     ffmpeg
+    gmp
     jack2
     lame
     libX11
@@ -105,6 +123,7 @@ rustPlatform.buildRustPackage rec {
     libva
     libvdpau
     libxkbcommon
+    openapv
     openssl
     openvr
     pipewire

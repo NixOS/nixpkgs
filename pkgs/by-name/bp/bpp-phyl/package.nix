@@ -9,7 +9,7 @@
 stdenv.mkDerivation rec {
   pname = "bpp-phyl";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";

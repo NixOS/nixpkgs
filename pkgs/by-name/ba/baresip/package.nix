@@ -31,14 +31,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.3.0";
   pname = "baresip";
 
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    hash = "sha256-Kun6fcDy7JQU0zrHfNxv9cV77Bm/WNrgrrGqCzrgTJ4=";
+    hash = "sha256-E8FfETn4VnPYscFtwrDGCaYB7L0KU0ZTkDMfBj1dfxA=";
   };
 
   patches = [
@@ -185,7 +185,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baresip/baresip";
     maintainers = with lib.maintainers; [
       raskin
-      ehmry
       rnhmjoj
     ];
     mainProgram = "baresip";

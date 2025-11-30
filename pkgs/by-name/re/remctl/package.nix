@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tests
     sed -i '\,server/acl/localgroup,d' tests/TESTS
+
+    substituteInPlace Makefile.am \
+      --replace-fail "tests/data/acls/val\#id" "'tests/data/acls/val#id'"
   '';
 
   nativeBuildInputs = [

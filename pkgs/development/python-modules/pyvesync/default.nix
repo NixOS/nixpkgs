@@ -1,35 +1,39 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  requests,
+  mashumaro,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
+  requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "2.18";
+  version = "3.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "webdjoe";
     repo = "pyvesync";
     tag = version;
-    hash = "sha256-bcjFa/6GgWk9UZLaB+oUOWVb6b7o0kKB2jzHr9I48eI=";
+    hash = "sha256-7QtyI5U1NRy0/iujfObdRHkwseetaD2M4f/buj8A9AY=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    aiohttp
+    mashumaro
+  ]
+  ++ mashumaro.optional-dependencies.orjson;
 
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
+    requests
   ];
 
   pythonImportsCheck = [ "pyvesync" ];
@@ -38,7 +42,7 @@ buildPythonPackage rec {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
     homepage = "https://github.com/webdjoe/pyvesync";
     changelog = "https://github.com/webdjoe/pyvesync/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp test/catch/catch.hpp
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -38,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "Small C++ wrapper for the native C ODBC API";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bzizou ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
   # in nixpkgs!
   # For that, check the `<dependencies>` section of `appinfo/info.xml`
   # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-zefoazreNUc3agbdeQRusYWwGNDZnC375ZlLlG+SPeg=";
+    hash = "sha256-yEls1s7tD/fcqul/BmEsRf2g5mqD74M8TKG+Na3jlcM=";
   };
 
   cargoHash = "sha256-+z9XaAzToLZg6/PoRigkvPVpZ/bX/t0VBR5bg3dCUVw=";
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     app = fetchNextcloudApp {
       appName = "notify_push";
       appVersion = version;
-      hash = "sha256-KIgXruwYPTLmpO3bMbEcm9jlRYjqX8JgTJt5hd7QugM=";
+      hash = "sha256-Yad1+kc0uCHRV4q7IDbQT8Ea2423YWGy9k42DHB0R1Q=";
       license = "agpl3Plus";
       homepage = "https://github.com/nextcloud/notify_push";
       url = "https://github.com/nextcloud-releases/notify_push/releases/download/v${version}/notify_push-v${version}.tar.gz";

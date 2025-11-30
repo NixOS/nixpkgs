@@ -32,19 +32,18 @@
   graphicsmagick,
   gdal,
   openimageio,
-  freeimage,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
+    hash = "sha256-UiC6s86i7UavW86EKm74oPVlEacvoKmwW7KETjpnNaI=";
   };
 
   patches = [
@@ -113,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
         graphicsmagick
         gdal
         openimageio
-        freeimage
         ;
 
       inherit (python3Packages) pillow imread;

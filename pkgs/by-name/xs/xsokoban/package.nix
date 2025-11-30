@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace Makefile.in --replace 4755 0755
+    substituteInPlace externs.h --replace 'malloc.h' 'stdlib.h'
   '';
 
   preConfigure = ''
@@ -65,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "xsokoban";
     license = licenses.publicDomain;
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

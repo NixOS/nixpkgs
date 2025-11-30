@@ -49,7 +49,7 @@
               index = "index.php index.html";
             };
           };
-        phpPackage = pkgs.php81;
+        phpPackage = pkgs.php84;
         enablePHP = true;
       };
 
@@ -78,8 +78,8 @@
     frps.wait_for_open_port(80)
     frpc.wait_for_unit("frp.service")
     response = frpc.succeed("curl -fvvv -s http://127.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
   '';
 }

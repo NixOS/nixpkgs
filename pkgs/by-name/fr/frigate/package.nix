@@ -2,32 +2,50 @@
   lib,
   stdenv,
   callPackage,
-  replaceVars,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
   sqlite-vec,
   frigate,
   nixosTests,
+  fetchpatch,
 }:
 
 let
-  version = "0.16.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-O1rOFRrS3hDbf4fVgfz+KASo20R1aqbDoIf3JKQ1jhs=";
+    hash = "sha256-8Lm4iLRdMqgZvy24WS1SOkbj855c2t9yg8n91WMg5Fg=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python312Packages.python;
+  python = python313Packages.python.override {
+    packageOverrides = self: super: {
+      joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "authlib";
+          repo = "joserfc";
+          tag = version;
+          hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
+        };
+      });
+      onnxruntime = super.onnxruntime.override (old: {
+        onnxruntime = old.onnxruntime.override (old: {
+          withFullProtobuf = true;
+        });
+      });
+    };
+  };
+  python3Packages = python.pkgs;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -56,7 +74,7 @@ let
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
 in
-python312Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
   format = "other";
@@ -65,11 +83,12 @@ python312Packages.buildPythonApplication rec {
 
   patches = [
     ./constants.patch
-
-    (replaceVars ./ffmpeg.patch {
-      ffmpeg = lib.getExe ffmpeg-headless;
-      ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
+    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
+    (fetchpatch {
+      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
+      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
     })
+    ./ffmpeg.patch
   ];
 
   postPatch = ''
@@ -109,7 +128,7 @@ python312Packages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  dependencies = with python312Packages; [
+  dependencies = with python3Packages; [
     # docker/main/requirements.txt
     scikit-build
     # docker/main/requirements-wheel.txt
@@ -122,7 +141,6 @@ python312Packages.buildPythonApplication rec {
     distlib
     fastapi
     filelock
-    future
     importlib-metadata
     importlib-resources
     google-generativeai
@@ -191,7 +209,8 @@ python312Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  nativeCheckInputs = with python312Packages; [
+  nativeCheckInputs = with python3Packages; [
+    ffmpeg-headless
     pytestCheckHook
   ];
 
@@ -213,7 +232,7 @@ python312Packages.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath = (python312Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
+    pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };

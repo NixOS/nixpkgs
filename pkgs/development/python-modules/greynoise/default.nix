@@ -9,6 +9,7 @@
   click-default-group,
   click-repl,
   dict2xml,
+  hatchling,
   jinja2,
   more-itertools,
   requests,
@@ -16,12 +17,15 @@
   pytestCheckHook,
   mock,
   pythonOlder,
+  # The REPL depends on click-repl, which is incompatible with our version of
+  # click.
+  withRepl ? false,
 }:
 
 buildPythonPackage rec {
   pname = "greynoise";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -32,18 +36,32 @@ buildPythonPackage rec {
     hash = "sha256-wJDO666HC3EohfR+LbG5F0Cp/eL7q4kXniWhJfc7C3s=";
   };
 
-  propagatedBuildInputs = [
+  patches = lib.optionals (!withRepl) [
+    ./remove-repl.patch
+  ];
+
+  build-system = [
+    hatchling
+  ];
+
+  pythonRelaxDeps = [
+    "click"
+  ];
+
+  dependencies = [
     click
     ansimarkup
     cachetools
     colorama
     click-default-group
-    click-repl
     dict2xml
     jinja2
     more-itertools
     requests
     six
+  ]
+  ++ lib.optionals withRepl [
+    click-repl
   ];
 
   nativeCheckInputs = [

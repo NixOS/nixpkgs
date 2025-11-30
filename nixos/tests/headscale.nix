@@ -38,13 +38,23 @@ in
             settings = {
               server_url = "https://headscale";
               ip_prefixes = [ "100.64.0.0/10" ];
-              derp.server = {
-                enabled = true;
-                region_id = 999;
-                stun_listen_addr = "0.0.0.0:${toString stunPort}";
+              derp = {
+                server = {
+                  enabled = true;
+                  region_id = 999;
+                  stun_listen_addr = "0.0.0.0:${toString stunPort}";
+                };
+                urls = [ ];
               };
               dns = {
                 base_domain = "tailnet";
+                extra_records = [
+                  {
+                    name = "foo.bar";
+                    type = "A";
+                    value = "100.64.0.2";
+                  }
+                ];
                 override_local_dns = false;
               };
             };
@@ -90,5 +100,6 @@ in
     # Check that they are reachable from the tailnet
     peer1.wait_until_succeeds("tailscale ping peer2")
     peer2.wait_until_succeeds("tailscale ping peer1.tailnet")
+    assert (res := peer1.wait_until_succeeds("${lib.getExe pkgs.dig} +short foo.bar").strip()) == "100.64.0.2", f"Domain {res} did not match 100.64.0.2"
   '';
 }

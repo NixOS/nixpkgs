@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
   substitute,
   cmake,
   coreutils,
@@ -35,17 +34,19 @@
   buildServer ? true,
   SDL2,
   useSDL2 ? true,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.13.0";
+  version = "5.14.0";
 
   src = fetchFromGitHub {
     owner = "luanti-org";
     repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-TvI0+G7bRwwkEegv/AN4aBIN05M1AnWsaYD4lr3VTb8=";
+    hash = "sha256-y4Bnlq3nE2u4PN0VPyBP31YORrG6LPPoSb7T5i9JnVM=";
   };
 
   patches = [
@@ -141,10 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = gitUpdater {
-    allowedVersions = "\\.";
-    ignoredVersions = "-android$";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://www.luanti.org/";

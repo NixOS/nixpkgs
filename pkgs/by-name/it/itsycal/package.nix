@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "itsycal";
-  version = "0.15.5";
+  version = "0.15.8";
 
   src = fetchzip {
     url = "https://itsycal.s3.amazonaws.com/Itsycal-${finalAttrs.version}.zip";
-    hash = "sha256-kRO9zcyi8Di0NNuT158htKXt4wo7nVys+AV+1EgS1ZI=";
+    hash = "sha256-zo77yCfIzb2ZmExJslQ64GPQqakXtiRmm0UYEgj+3eM=";
   };
 
   installPhase = ''
@@ -21,6 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     changelog = "https://www.mowglii.com/itsycal/versionhistory.html";

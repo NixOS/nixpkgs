@@ -100,7 +100,7 @@ buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
@@ -111,7 +111,6 @@ buildPythonApplication rec {
     description = "Python Development Workflow for Humans";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ berdario ];
     mainProgram = "pipenv";
   };
 }

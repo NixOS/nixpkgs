@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     tag = "v${version}";
-    hash = "sha256-g0SDienJX7ZUbypeIAWSwjxgu40AFd3jVALuMhHj6mQ=";
+    hash = "sha256-RYHt0njzzom1wrHTP/7ch/D+YZcixqOeLMcfsGi+Kg8=";
     # solarxr
     fetchSubmodules = true;
   };

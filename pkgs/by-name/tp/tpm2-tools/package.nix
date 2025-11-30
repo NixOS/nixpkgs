@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ scottstephens ];
   };
 }

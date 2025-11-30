@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.65";
+  version = "0.2.66";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
     tag = version;
-    hash = "sha256-vc+oFjuo9JeK+pCdXKLG2wLGraBJZ+OYz2vOdySwLdU=";
+    hash = "sha256-v8K/mVNnun7ogBixaKAVYwSQgSrnnfvVw40/BeClCKY=";
   };
 
   build-system = [ setuptools ];
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ranaroussi/yfinance";
     changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

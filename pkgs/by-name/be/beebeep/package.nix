@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     mainProgram = "beebeep";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mglolenstine ];
+    maintainers = [ ];
   };
 }

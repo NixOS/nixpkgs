@@ -10,7 +10,6 @@
   rocprim,
   rocrand,
   clr,
-  git,
   pkg-config,
   openmp,
   openmpi,
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -42,14 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocALUTION";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-xdZ3HUiRGsreHfJH8RgL/s3jGyC5ABmBKcEfgtqWg8Y=";
+    hash = "sha256-bZx1Cc2jcIfysohKCKzj5mowM3IeCelRhVaBU73KnTo=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
     clr
-    git
     pkg-config
   ];
 
@@ -65,11 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  CXXFLAGS = "-I${openmp.dev}/include";
   cmakeFlags = [
-    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
     "-DROCM_PATH=${clr}"
     "-DHIP_ROOT_DIR=${clr}"
     "-DSUPPORT_HIP=ON"

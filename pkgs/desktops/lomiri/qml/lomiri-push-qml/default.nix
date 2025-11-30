@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
+  gitUpdater,
   cmake,
   lomiri-api,
   lomiri-indicator-network,
@@ -13,23 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-push-qml";
-  version = "0-unstable-2022-09-15";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-push-qml";
-    rev = "6f87ee5cf92e2af0e0ce672835e71704e236b8c0";
-    hash = "sha256-ezLcQRJ7Sq/TVbeGJL3Vq2lzBe7StRRCrWXZs2CCUX8=";
+    tag = finalAttrs.version;
+    hash = "sha256-1HJkcAe5ixqmEACy4mSk5dSCPf4FsY3tzH6v09SSH+M=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-push-qml/-/merge_requests/6 merged
-    (fetchpatch {
-      name = "0001-lomiri-push-qml-Stop-using-qt5_use_modules.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-push-qml/-/commit/a4268c98b9f50fdd52da69c173d377f78ea93104.patch";
-      hash = "sha256-OijTB5+I9/wabT7dX+DkvoEROKzAUIKhBZkkhqq5Oig=";
-    })
-  ];
 
   postPatch = ''
     # Queries QMake for QML install location, returns QtBase build path
@@ -63,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For qmlplugindump
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Lomiri Push Notifications QML plugin";

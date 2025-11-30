@@ -1,0 +1,91 @@
+From 1a5f752e2a80e206474f04fe5c1990fdb08742bd Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sun, 22 Jun 2025 02:16:25 +0900
+Subject: [PATCH 07/30] musl: meson: gracefully disable gshadow, idn, nss, and
+ utmp support
+
+- musl does not support gshadow, and does not provide gshadow.h,
+- musl does not provide NI_IDN flag,
+- musl does not support nss, and does not provide nss.h which is necessary
+  for each nss modules,
+- musl does not support utmp, and all utmp related functions do nothing,
+  see https://github.com/kraj/musl/blob/v1.2.5/src/legacy/utmpx.c
+---
+ meson.build | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 71e422f545..5f235d5113 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1638,11 +1638,9 @@ foreach term : ['analyze',
+                 'efi',
+                 'environment-d',
+                 'firstboot',
+-                'gshadow',
+                 'hibernate',
+                 'hostnamed',
+                 'hwdb',
+-                'idn',
+                 'ima',
+                 'ipe',
+                 'initrd',
+@@ -1654,8 +1652,6 @@ foreach term : ['analyze',
+                 'mountfsd',
+                 'networkd',
+                 'nsresourced',
+-                'nss-myhostname',
+-                'nss-systemd',
+                 'oomd',
+                 'portabled',
+                 'pstore',
+@@ -1671,7 +1667,6 @@ foreach term : ['analyze',
+                 'tmpfiles',
+                 'tpm',
+                 'userdb',
+-                'utmp',
+                 'vconsole',
+                 'xdg-autostart']
+         have = get_option(term)
+@@ -1681,14 +1676,34 @@ endforeach
+ 
+ enable_sysusers = conf.get('ENABLE_SYSUSERS') == 1
+ 
++foreach term : ['gshadow',
++                'idn',
++                'nss-myhostname',
++                'nss-systemd',
++                'utmp']
++
++        have = get_option(term)
++        if have and get_option('libc') == 'musl'
++                warning('@0@ support is requested but it is not supported when building with musl, disabling it.'.format(term))
++                have = false
++        endif
++        name = 'ENABLE_' + term.underscorify().to_upper()
++        conf.set10(name, have)
++endforeach
++
+ foreach tuple : [['nss-mymachines', 'machined'],
+                  ['nss-resolve',    'resolve']]
+         want = get_option(tuple[0])
+-        if want.allowed()
+-                have = get_option(tuple[1])
+-                if want.enabled() and not have
+-                        error('@0@ is requested but @1@ is disabled'.format(tuple[0], tuple[1]))
++        if want.enabled()
++                if get_option('libc') == 'musl'
++                        error('@0@ is requested but it is not supported when building with musl.'.format(tuple[0]))
+                 endif
++                if not get_option(tuple[1])
++                        error('@0@ is requested but @1@ is disabled.'.format(tuple[0], tuple[1]))
++                endif
++                have = true
++        elif want.allowed()
++                have = get_option(tuple[1]) and get_option('libc') != 'musl'
+         else
+                 have = false
+         endif
+-- 
+2.51.0
+

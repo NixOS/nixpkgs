@@ -15,8 +15,8 @@
 }:
 
 let
-  sabctoolsVersion = "8.2.5";
-  sabctoolsHash = "sha256-ZEC813/JpGPEFL+nXKFAXFfUrrhECCIqONe27LwS00g=";
+  sabctoolsVersion = "8.2.6";
+  sabctoolsHash = "sha256-olZSIjfP2E1tkCG8WzEZfrBJuDEp3PZyFFE5LJODEZE=";
 
   pythonEnv = python3.withPackages (
     ps: with ps; [
@@ -45,6 +45,7 @@ let
       pysocks
       python-dateutil
       pytz
+      rarfile
       rebulk
       # sabnzbd requires a specific version of sabctools
       (sabctools.overridePythonAttrs (old: {
@@ -72,14 +73,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.5.2";
+  version = "4.5.5";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-8Q/6H9DfiVkonsIvlv7Y4yDHrvpE9dB/5KxUff14qkA=";
+    hash = "sha256-XEWMy+Ph47neyQubehegcOxucClB1Z9t1QDLN7FrxaY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -7,7 +7,9 @@
   libpng,
   libwebp,
   libtiff,
+  libjpeg,
   jasper,
+  libxrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +30,9 @@ stdenv.mkDerivation rec {
     libpng
     libwebp
     libtiff
+    libjpeg
     jasper
+    libxrandr
   ];
 
   meta = {

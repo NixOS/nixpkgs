@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debian-goodies";
-    rev = "debian/${version}";
+    tag = "debian/${version}";
     sha256 = "sha256-KPPRxYmCEYwlUAR29tc8w4rerXpswO/rbpEjXPoDV4Q=";
   };
 

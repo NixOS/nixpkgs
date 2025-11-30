@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -7,18 +8,18 @@
 
 buildGoModule rec {
   pname = "pinniped";
-  version = "0.40.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
     rev = "v${version}";
-    sha256 = "sha256-VFBiy7EKJ0J407PAWDlBNXxLWpZ4w3ai4yk32kn18rI=";
+    sha256 = "sha256-1r5EjF4Npt1iwlILTCHKlViO5MPcv8undKYJWN8cmVA=";
   };
 
   subPackages = "cmd/pinniped";
 
-  vendorHash = "sha256-OGZ9/pXudz9YmxeEkMP710+RwHOCig0yDqo+X/o9eJw=";
+  vendorHash = "sha256-aDP5yf0uGYSzvYqqRUS4P2ozLCRcS0eDJseicXv/99o=";
 
   ldflags = [
     "-s"
@@ -27,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pinniped \
       --bash <($out/bin/pinniped completion bash) \
       --fish <($out/bin/pinniped completion fish) \

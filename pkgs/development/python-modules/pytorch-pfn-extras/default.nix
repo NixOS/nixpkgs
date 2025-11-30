@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.8.3";
+  version = "0.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     tag = "v${version}";
-    hash = "sha256-aTWPFYEc29qHOPRZu15p+x9DofMNRnTHnVEhxdPQ0Ak=";
+    hash = "sha256-OrUYO0V5fWqkIjHiYkhvjeFy0YX8CxeRqzrw3NfGK2A=";
   };
 
   build-system = [ setuptools ];
@@ -85,6 +85,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_as_output.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export_testcase.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_helper.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_lax.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_load_model.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"

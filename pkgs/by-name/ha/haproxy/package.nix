@@ -2,7 +2,7 @@
   useLua ? true,
   usePcre ? true,
   withPrometheusExporter ? true,
-  sslLibrary ? "quictls",
+  sslLibrary ? "openssl",
   stdenv,
   lib,
   fetchurl,
@@ -12,7 +12,6 @@
   aws-lc,
   libressl,
   openssl,
-  quictls,
   wolfssl,
   lua5_4,
   pcre2,
@@ -22,7 +21,6 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "aws-lc"
   "libressl"
   "openssl"
-  "quictls"
   "wolfssl"
 ];
 let
@@ -31,7 +29,6 @@ let
       aws-lc
       libressl
       openssl
-      quictls
       ;
     wolfssl = wolfssl.override {
       variant = "haproxy";
@@ -42,11 +39,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.4";
+  version = "3.2.9";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XUsu5v5WuAmOu5yRqJnXKPh9ZM176IBNLdzF+TdJjB0=";
+    hash = "sha256-5mDRQbKQGfTRmHhbCDTMPpyW787rgHwv/y/JNb0zVMI=";
   };
 
   buildInputs = [

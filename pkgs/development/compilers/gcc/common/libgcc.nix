@@ -53,7 +53,10 @@ lib.pipe drv
         useLibgccFromTargetLibc = libcCross != null && libcCross ? passthru.libgcc;
 
         enableLibGccOutput =
-          (!stdenv.targetPlatform.isWindows || (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform))
+          (
+            !(stdenv.targetPlatform.isWindows || stdenv.targetPlatform.isCygwin)
+            || (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
+          )
           && !langJit
           && !stdenv.hostPlatform.isDarwin
           && enableShared

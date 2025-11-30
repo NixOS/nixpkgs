@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "otree";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "fioncat";
     repo = "otree";
     tag = "v${version}";
-    hash = "sha256-Pz9iAN5GMJeYYQ7T0QWUfRwvSfreRF8pJR8ctPVFAmA=";
+    hash = "sha256-l2hU1a2yfXo8u8wjSmvzL+nzniMQFKvdBhQ0eqqG3tg=";
   };
 
-  cargoHash = "sha256-Uz4oA8maAiUye+FRoVBRuMHoPytr5y8DUfPA4CuMSe4=";
+  cargoHash = "sha256-UyomqesHDaGDEBHVcQMwUI7kH8akOOuyXOL/r4gfiAo=";
 
   meta = {
     description = "Command line tool to view objects (JSON/YAML/TOML/XML) in TUI tree widget";

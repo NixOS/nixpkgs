@@ -4,7 +4,7 @@
   buildDunePackage,
   dune-configurator,
   pcre2,
-  version ? "8.0.3",
+  version ? "8.0.4",
 }:
 
 buildDunePackage {
@@ -17,7 +17,7 @@ buildDunePackage {
     owner = "camlp5";
     repo = "pcre2-ocaml";
     tag = version;
-    hash = "sha256-YqzpK4Syh9pP64+bwdSiphdfJdwsWQSaOrpKsoKSWyU=";
+    hash = "sha256-UCz8l7kx8d6wlRzLwIx4+LmkG7mwzxy9Ca2DwMT2u+E=";
   };
 
   buildInputs = [ dune-configurator ];

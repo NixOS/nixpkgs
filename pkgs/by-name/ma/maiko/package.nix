@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://interlisp.org/";
     changelog = "https://github.com/Interlisp/maiko/releases";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ehmry ];
     inherit (xorg.libX11.meta) platforms;
   };
 })

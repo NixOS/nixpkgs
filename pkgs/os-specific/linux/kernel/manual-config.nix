@@ -32,24 +32,18 @@ let
 
   readConfig =
     configfile:
-    lib.listToAttrs (
-      map
-        (
-          line:
-          let
-            match = lib.match "(.*)=\"?(.*)\"?" line;
-          in
-          {
-            name = lib.elemAt match 0;
-            value = lib.elemAt match 1;
-          }
-        )
-        (
-          lib.filter (line: !(lib.hasPrefix "#" line || line == "")) (
-            lib.splitString "\n" (builtins.readFile configfile)
-          )
-        )
-    );
+    let
+      matchLine =
+        line:
+        let
+          match = lib.match "(CONFIG_[^=]+)=([ym])" line;
+        in
+        lib.optional (match != null) {
+          name = lib.elemAt match 0;
+          value = lib.elemAt match 1;
+        };
+    in
+    lib.listToAttrs (lib.concatMap matchLine (lib.splitString "\n" (builtins.readFile configfile)));
 in
 lib.makeOverridable (
   {
@@ -165,6 +159,8 @@ lib.makeOverridable (
 
         isModular = config.isYes "MODULES";
         withRust = config.isYes "RUST";
+
+        target = kernelConf.target or "vmlinux";
 
         buildDTBs = kernelConf.DTB or false;
 
@@ -338,8 +334,9 @@ lib.makeOverridable (
 
         buildFlags = [
           "KBUILD_BUILD_VERSION=1-NixOS"
-          kernelConf.target
+          target
           "vmlinux" # for "perf" and things like that
+          "scripts_gdb"
         ]
         ++ optional isModular "modules"
         ++ optionals buildDTBs [
@@ -418,14 +415,10 @@ lib.makeOverridable (
         # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
         installTargets = [
           (kernelConf.installTarget or (
-            if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
+            if target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
               "uinstall"
             else if
-              (
-                kernelConf.target == "zImage"
-                || kernelConf.target == "Image.gz"
-                || kernelConf.target == "vmlinuz.efi"
-              )
+              (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
               && builtins.elem stdenv.hostPlatform.linuxArch [
                 "arm"
                 "arm64"
@@ -447,6 +440,10 @@ lib.makeOverridable (
         postInstall = optionalString isModular ''
           mkdir -p $dev
           cp vmlinux $dev/
+
+          mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+          cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+
           if [ -z "''${dontStrip-}" ]; then
             installFlags+=("INSTALL_MOD_STRIP=1")
           fi
@@ -472,6 +469,7 @@ lib.makeOverridable (
           # Keep some extra files on some arches (powerpc, aarch64)
           for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
             if [ -f "$buildRoot/$f" ]; then
+              mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
               cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
             fi
           done
@@ -483,12 +481,12 @@ lib.makeOverridable (
           # headers on 3.10 though.
 
           chmod u+w -R ..
-          arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
+          buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
 
           # Remove unused arches
           for d in $(cd arch/; ls); do
-            if [ "$d" = "$arch" ]; then continue; fi
-            if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+            if [ -d "$buildArchDir/$d" ]; then continue; fi
+            if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
             rm -rf arch/$d
           done
 
@@ -502,7 +500,7 @@ lib.makeOverridable (
           find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
           # Keep root and arch-specific Makefiles
-          chmod u-w Makefile arch/"$arch"/Makefile*
+          chmod u-w Makefile arch/*/Makefile*
 
           # Keep whole scripts dir
           chmod u-w -R scripts
@@ -540,6 +538,13 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
+          identifiers.cpeParts = {
+            part = "o";
+            vendor = "linux";
+            product = "linux_kernel";
+            inherit version;
+            update = "*";
+          };
         }
         // extraMeta;
       };
@@ -568,7 +573,6 @@ lib.makeOverridable (
           "fortify"
           "stackprotector"
           "pic"
-          "pie"
         ];
 
         makeFlags = [

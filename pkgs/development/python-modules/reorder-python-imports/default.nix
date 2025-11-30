@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.15.0";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = "reorder_python_imports";
     tag = "v${version}";
-    hash = "sha256-oBzEPKcJO/M13+KSLZYSeMgwo28J7TZOj6H2YHkFWHU=";
+    hash = "sha256-fncrrmksYS+8pz9qVucf4ktxxVvnrKEzIeM5kPrh0PQ=";
   };
 
   build-system = [ setuptools ];

@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.05.1";
+  version = "25.11";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z4viQZLgC2bIJ3VrzQnR+q2F3gAOEQpU1H5xHtX/2fs=";
+    hash = "sha256-FC9eYtSmplgxllCX4/3hJq5J3sXWKLSc7at8ZUxycVw=";
   };
 
   outputs = [
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-8ltuI94yIhff7JxIfe1mog4bDJ/7VFgLooMWOnSTREs=";
+  cargoHash = "sha256-X28M0jyhUtVtMQAYdxIPQF9mJ5a77v8jw1LKaXSjy7E=";
 
   strictDeps = true;
 
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
-    mv wiki $doc/share/doc/niri/wiki
+    mv docs/wiki $doc/share/doc/niri/wiki
 
     install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
   ''
@@ -122,6 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
+  checkFlags = [ "--skip=::egl" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
@@ -137,7 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      iogamaster
       foo-dogsquared
       sodiboo
       getchoo

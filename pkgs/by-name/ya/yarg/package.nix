@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarg";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchzip {
     url = "https://github.com/YARC-Official/YARG/releases/download/v${finalAttrs.version}/YARG_v${finalAttrs.version}-Linux-x86_64.zip";
     stripRoot = false;
-    hash = "sha256-3auQc4Vq0m/f40PvWgbo0U2jUWaDA6OzKOj96ZG2RxA=";
+    hash = "sha256-/r3TdeRZEnDJD4y58wFzKgamBAy87e+CtS5Ew2cbBFE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

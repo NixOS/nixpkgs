@@ -30,8 +30,8 @@ let
         }
       ];
 
-      adminuser = "root";
-      adminpass = "hunter2";
+      adminuser = pkgs.lib.mkDefault "root";
+      adminpass = pkgs.lib.mkDefault "hunter2";
 
       test-helpers.rclone = "${pkgs.writeShellScript "rclone" ''
         set -euo pipefail
@@ -75,8 +75,7 @@ let
           inherit (config) test-helpers;
         in
         mkBefore ''
-          nextcloud.start()
-          client.start()
+          start_all()
           nextcloud.wait_for_unit("multi-user.target")
 
           ${test-helpers.init}
@@ -129,17 +128,21 @@ let
           }
         );
     in
-    map callNextcloudTest [
-      ./basic.nix
-      ./with-declarative-redis-and-secrets.nix
-      ./with-mysql-and-memcached.nix
-      ./with-postgresql-and-redis.nix
-      ./with-objectstore.nix
-    ];
+    map callNextcloudTest (
+      [
+        ./basic.nix
+        ./with-declarative-redis-and-secrets.nix
+        ./with-mysql-and-memcached.nix
+        ./with-postgresql-and-redis.nix
+        ./with-objectstore.nix
+        ./with-mail.nix
+      ]
+      ++ (pkgs.lib.optional (version >= 32) ./without-admin-user.nix)
+    );
 in
 listToAttrs (
   concatMap genTests [
-    30
     31
+    32
   ]
 )

@@ -1,28 +1,39 @@
 {
   lib,
   aiohttp,
+  auth0-python,
   buildPythonPackage,
   fetchFromGitHub,
   requests,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.2.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-bojLyL16DOFgbU8rglzBRxcgsHwaTQQAsJQZCaXo5pw=";
+    hash = "sha256-VhWqYYGZRsEPW4g9kQznr50ujGhLcTs+TS3atxsqCng=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=9.2.0" "setuptools-scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp
+    auth0-python
     requests
   ];
 

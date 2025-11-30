@@ -15,7 +15,7 @@
   protobuf,
   sqlite,
   wrapQtAppsHook,
-  tinyxml2,
+  tinyxml,
   target ? "client",
 }:
 
@@ -77,7 +77,7 @@ mkDerivation rec {
     protobuf
     qtbase
     sqlite
-    tinyxml2
+    tinyxml
   ];
 
   qmakeFlags = [

@@ -19,7 +19,6 @@
   nugetPackageHook,
   xmlstarlet,
   pkgs,
-  recurseIntoAttrs,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -107,7 +106,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             sdk = finalAttrs.finalPackage;
             built = stdenv.mkDerivation {
               name = "${sdk.name}-test-${name}";
-              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional (usePackageSource) sdk.packages;
+              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional usePackageSource sdk.packages;
               # make sure ICU works in a sandbox
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
               unpackPhase =
@@ -281,8 +280,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
         };
       }
-      // lib.optionalAttrs (type == "sdk") ({
-        buildDotnetModule = recurseIntoAttrs (
+      // lib.optionalAttrs (type == "sdk") {
+        buildDotnetModule = lib.recurseIntoAttrs (
           (pkgs.appendOverlays [
             (self: super: {
               dotnet-sdk = finalAttrs.finalPackage;
@@ -304,6 +303,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           cs = mkWebTest "C#" "cs";
           fs = mkWebTest "F#" "fs";
         };
-      });
+      };
   };
 })

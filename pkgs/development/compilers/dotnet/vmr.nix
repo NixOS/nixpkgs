@@ -1,14 +1,14 @@
 {
-  clangStdenv,
+  llvmPackages_20,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
   git,
   cmake,
   pkg-config,
-  llvm,
   zlib,
   icu,
   lttng-ust_2_12,
@@ -18,7 +18,6 @@
   darwin,
   xcbuild,
   swiftPackages,
-  apple-sdk_13,
   openssl,
   getconf,
   python3,
@@ -37,7 +36,9 @@
 }:
 
 let
-  stdenv = if clangStdenv.hostPlatform.isDarwin then swiftPackages.stdenv else clangStdenv;
+  llvmPackages = llvmPackages_20;
+
+  stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
     isLinux
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
     # this gets copied into the tree, but we still need the sandbox profile
     bootstrapSdk
     # the propagated build inputs in llvm.dev break swift compilation
-    llvm.out
+    llvmPackages.llvm.out
     zlib
     _icu
     openssl
@@ -110,15 +111,12 @@ stdenv.mkDerivation rec {
     krb5
     lttng-ust_2_12
   ]
-  ++ lib.optionals isDarwin (
-    [
-      xcbuild
-      swift
-      krb5
-      sigtool
-    ]
-    ++ lib.optional (lib.versionAtLeast version "10") apple-sdk_13
-  );
+  ++ lib.optionals isDarwin [
+    xcbuild
+    swift
+    krb5
+    sigtool
+  ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -136,17 +134,17 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
+    lib.optionals (lib.versionAtLeast version "10") [
+      # https://github.com/dotnet/source-build/issues/5410
+      ./fix-prep-script.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "10") [
-      ./mscordac-fix-missing-libunwind-symbols-on-linux.patch
-      ./bundler-fix-file-size-estimation-when-bundling-symli.patch
     ];
 
   postPatch = ''
@@ -372,7 +370,6 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''
       dotnet nuget add source "${bootstrapSdk.artifacts}"
-      dotnet nuget add source "${bootstrapSdk.artifacts}/SourceBuildReferencePackages"
     ''
     + ''
       ${prepScript} $prepFlags
@@ -405,6 +402,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "10") [
+    "--branding rtm"
   ]
   ++ [
     "--"

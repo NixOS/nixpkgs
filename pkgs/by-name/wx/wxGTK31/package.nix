@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
   ]
@@ -126,8 +127,10 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = licenses.wxWindows;
-    maintainers = with maintainers; [ tfmoraes ];
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     platforms = platforms.unix;
   };
 }

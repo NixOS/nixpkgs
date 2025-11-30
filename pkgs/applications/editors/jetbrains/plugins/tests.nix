@@ -59,7 +59,7 @@ in
       plugins-for =
         with lib.asserts;
         ide:
-        builtins.map (plugin: plugin.name) (
+        map (plugin: plugin.name) (
           builtins.filter (
             plugin:
             (

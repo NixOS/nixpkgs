@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
     "--with-urlsession" # for wxWebRequest
@@ -127,9 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with lib.maintainers; [
-      tfmoraes
       fliegendewurst
       wegank
     ];

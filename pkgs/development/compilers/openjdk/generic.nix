@@ -20,7 +20,6 @@
   file,
   which,
   zip,
-  perl,
   zlib,
   cups,
   freetype,
@@ -48,6 +47,7 @@
 
   liberation_ttf,
   cacert,
+  jre-generate-cacerts,
 
   nixpkgs-openjdk-updater,
 
@@ -58,14 +58,12 @@
   enableJavaFX ? false,
   openjfx17,
   openjfx21,
-  openjfx23,
-  openjfx24,
+  openjfx25,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
-      "23" = openjfx23;
-      "24" = openjfx24;
+      "25" = openjfx25;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
@@ -78,16 +76,14 @@
   temurin-bin-11,
   temurin-bin-17,
   temurin-bin-21,
-  temurin-bin-23,
-  temurin-bin-24,
+  temurin-bin-25,
   jdk-bootstrap ?
     {
       "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
       "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
-      "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
+      "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
     }
     .${featureVersion},
 }:
@@ -103,7 +99,7 @@ let
   atLeast17 = lib.versionAtLeast featureVersion "17";
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
-  atLeast24 = lib.versionAtLeast featureVersion "24";
+  atLeast25 = lib.versionAtLeast featureVersion "25";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -147,8 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (
-      if atLeast24 then
-        ./24/patches/fix-java-home-jdk24.patch
+      if atLeast25 then
+        ./25/patches/fix-java-home-jdk25.patch
       else if atLeast21 then
         ./21/patches/fix-java-home-jdk21.patch
       else if atLeast11 then
@@ -157,8 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
         ./8/patches/fix-java-home-jdk8.patch
     )
     (
-      if atLeast24 then
-        ./24/patches/read-truststore-from-env-jdk24.patch
+      if atLeast25 then
+        ./25/patches/read-truststore-from-env-jdk25.patch
       else if atLeast11 then
         ./11/patches/read-truststore-from-env-jdk10.patch
       else
@@ -217,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
     })
   ]
-  ++ lib.optionals atLeast11 [
+  ++ lib.optionals (atLeast11 && !atLeast25) [
     # Fix build for gnumake-4.4.1:
     #   https://github.com/openjdk/jdk/pull/12992
     (fetchpatch {
@@ -225,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
       hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
     })
+  ]
+  ++ lib.optionals atLeast25 [
+    ./25/patches/make-4.4.1.patch
   ]
   ++ lib.optionals (!headless && enableGtk) [
     (
@@ -255,8 +254,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!atLeast11) [
     lndir
-    # Certificates generated using perl in `installPhase`
-    perl
   ]
   ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Certificates generated using keytool in `installPhase`
@@ -265,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals atLeast21 [
     ensureNewerSourcesForZipFilesHook
   ]
-  ++ lib.optionals atLeast24 [
+  ++ lib.optionals atLeast25 [
     pandoc
   ];
 
@@ -471,7 +468,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x configure
     patchShebangs --build configure
   ''
-  + lib.optionalString atLeast24 ''
+  + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
   '';
@@ -514,7 +511,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
+          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libfontmanager}.so
           rm $out/lib/openjdk/jre/bin/policytool
           rm $out/lib/openjdk/bin/{policytool,appletviewer}
         ''
@@ -555,7 +552,7 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       cd $jre/lib/openjdk/jre/lib/security
       rm cacerts
-      perl ${./8/generate-cacerts.pl} ${
+      ${jre-generate-cacerts} ${
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$jre/lib/openjdk/jre/bin/keytool"
         else

@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tzf-rs";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "ringsaturn";
     repo = "tzf-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cYi8FsB1aR0h1HxqkdFlLwCLzRwVM9Ak1LtjHezCSe0=";
+    hash = "sha256-aYsrwfmM9g9zUpcHpNMEI7HpR0oMkcuSAFnmEGtdwq4=";
   };
 
-  cargoHash = "sha256-9bUQpEP+vc3xwWCicHpl+56OYz3huirSOA4yw1iaxaY=";
+  cargoHash = "sha256-VGfxnl4rnDvyr4GjdtTDC6yaQVLqG/2eBw21BkR2AZ8=";
 
   passthru.updateScript = nix-update-script { };
 

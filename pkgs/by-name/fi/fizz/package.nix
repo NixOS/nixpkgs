@@ -13,6 +13,7 @@
   zstd,
   gflags,
   libevent,
+  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2025.04.21.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "bin"
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookincubator";
     repo = "fizz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-khaUbxcD8+9zznH0DE/BpweZeDKafTnr4EqPbmOpckU=";
+    hash = "sha256-MNkPf289QGZ1x6Yr2E8vnlCFan94Opjiw6RItodWGaw=";
   };
 
   patches = [
@@ -56,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     gflags
     libevent
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
@@ -112,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

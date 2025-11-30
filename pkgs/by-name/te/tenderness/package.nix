@@ -31,7 +31,6 @@ stdenvNoCC.mkDerivation {
     description = "Serif font designed by Sora Sagano with old-style figures";
     platforms = platforms.all;
     maintainers = with maintainers; [
-      leenaars
       minijackson
     ];
     license = licenses.ofl;

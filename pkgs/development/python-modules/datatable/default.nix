@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pipInstallHook,
+  pythonAtLeast,
   blessed,
   docutils,
   llvm,
@@ -13,28 +14,41 @@
 
 buildPythonPackage rec {
   pname = "datatable";
-  # python 3.10+ support is not in the 1.0.0 release
-  version = "unstable-2022-12-15";
+  version = "1.1.0";
   format = "pyproject";
+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "h2oai";
     repo = "datatable";
-    rev = "9522f0833d3e965656396de4fffebd882d39c25d";
-    hash = "sha256-lEXQwhx2msnJkkRrTkAwYttlYTISyH/Z7dSalqRrOhI=";
+    tag = "v${version}";
+    hash = "sha256-U6FYqjbVed/Qsxj/8bgwRd2UlK0dq/i61Fg56Br+lzs=";
   };
 
   postPatch = ''
     # tarball doesn't appear to have been shipped totally ready-to-build
     substituteInPlace ci/ext.py \
-      --replace \
+      --replace-fail \
         'shell_cmd(["git"' \
         '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
-    # TODO revert back to use ${version} when bumping to the next stable release
-    echo '1.0' > VERSION.txt
+    echo '${version}' > VERSION.txt
 
     # don't make assumptions about architecture
-    sed -i '/-m64/d' ci/ext.py
+    substituteInPlace ci/ext.py \
+      --replace-fail \
+        'ext.compiler.add_linker_flag("-m64")' \
+        'pass  # removed -m64 flag assumption'
+
+    # Fix flatbuffers span const member assignment issue
+    # Remove const from member variables to allow assignment operator to work
+    substituteInPlace src/core/lib/flatbuffers/stl_emulation.h \
+      --replace-fail \
+        'pointer const data_;' \
+        'pointer data_;' \
+      --replace-fail \
+        'const size_type count_;' \
+        'size_type count_;'
   '';
   DT_RELEASE = "1";
 

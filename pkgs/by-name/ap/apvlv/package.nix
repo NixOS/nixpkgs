@@ -1,43 +1,56 @@
 {
   cmake,
+  cmark,
   copyDesktopItems,
-  ebook_tools,
+  djvulibre,
   fetchFromGitHub,
+  fetchpatch,
   freetype,
   ghostscript,
-  gtk3,
+  harfbuzz,
   installShellFiles,
   lib,
-  libepoxy,
-  libpthreadstubs,
-  libXdmcp,
-  libxkbcommon,
-  libxml2,
-  libxshmfence,
   man,
-  pcre,
+  mupdf,
   pkg-config,
   poppler,
+  qt6,
+  qt6Packages,
   stdenv,
+  tesseract,
   testers,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apvlv";
 
   # If you change the version, please also update src.rev accordingly
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "naihe2010";
     repo = "apvlv";
-    tag = "v0.6.0-final";
-    hash = "sha256-iKhbLMXk5DpwO2El2yx6DvuK2HStkQVHlkXKwmGVbzM=";
+    tag = "v0.7.0-final";
+    hash = "sha256-PDqH3nROR16q11dHIkC5+jAiRSIIfp52M8o4IT1BaT0=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+  patches = [
+    # Update minimum CMake version, so it works with CMake 4
+    (fetchpatch {
+      name = "apvlv-cmake-4.patch";
+      url = "https://github.com/naihe2010/apvlv/commit/03b9e74173e1b5cbf4451b71bed066f1b58c9c78.patch";
+      hash = "sha256-OA3Qy+ECUW+Yq1FKiye+y6C01GD1ZLPbdzYK5ofM4Qg=";
+    })
+  ];
+
+  cmakeFlags = [
+    # Off by default on non-Windows
+    "-DAPVLV_WITH_POPPLER=ON"
+    # TODO: apvlv built with libreoffice support segfaults, tried
+    # - libreoffice-unwrapped in buildInputsto
+    # - env.NIX_LDFLAGS = "-L${libreoffice-unwrapped}/lib/libreoffice/program";
+    "-DAPVLV_WITH_OFFICE=OFF"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -46,23 +59,32 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     man
     pkg-config
-    wrapGAppsHook3
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    ebook_tools
-    freetype
-    gtk3
-    libepoxy
-    libpthreadstubs
-    libXdmcp
-    libxkbcommon
-    libxml2
-    libxshmfence # otherwise warnings in compilation
-    pcre
-    poppler
-    webkitgtk_4_1
+    cmark
+    djvulibre
+    # https://github.com/naihe2010/apvlv/blob/03b9e74173e1b5cbf4451b71bed066f1b58c9c78/src/CMakeLists.txt#L158
+    harfbuzz
+    mupdf
+    qt6Packages.poppler
+    qt6Packages.quazip
+    qt6.qtwebengine
+    tesseract
   ];
+
+  env = {
+    # UTF-8 locale for translation generation
+    LANG = "C.UTF8";
+    # accomodate #include <qt6/poppler-qt6.h>…
+    NIX_CFLAGS_COMPILE = "-I${qt6Packages.poppler.dev}/include/poppler";
+  };
+
+  preBuild = ''
+    mkdir -p ../share/doc/apvlv/translations
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -74,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     # displays pdfStartup.pdf as default pdf entry
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
-    cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
 
     mkdir -p $out/etc
     cp ../apvlvrc.example $out/etc/apvlvrc
@@ -90,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe finalAttrs.finalPackage} -v";
+      command = "QT_QPA_PLATFORM=offscreen ${lib.getExe finalAttrs.finalPackage} --version";
       package = finalAttrs.finalPackage;
       version = "${finalAttrs.version}-rel";
     };

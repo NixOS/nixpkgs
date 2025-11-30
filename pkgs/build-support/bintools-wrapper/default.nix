@@ -49,30 +49,15 @@
     "format"
     "fortify"
     "fortify3"
+    "libcxxhardeningextensive"
+    "libcxxhardeningfast"
     "pic"
     "relro"
     "stackclashprotection"
     "stackprotector"
     "strictoverflow"
     "zerocallusedregs"
-  ]
-  ++ lib.optional (
-    with stdenvNoCC;
-    lib.any (x: x) [
-      # OpenBSD static linking requires PIE
-      (with targetPlatform; isOpenBSD && isStatic)
-      (lib.all (x: x) [
-        # Musl-based platforms will keep "pie", other platforms will not.
-        # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-        # in the nixpkgs manual to inform users about the defaults.
-        (targetPlatform.libc == "musl")
-        # Except when:
-        #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-        #    - static armv7l, where compilation fails.
-        (!(targetPlatform.isAarch && targetPlatform.isStatic))
-      ])
-    ]
-  ) "pie",
+  ],
 }:
 
 assert propagateDoc -> bintools ? man;
@@ -346,6 +331,9 @@ stdenvNoCC.mkDerivation {
           }
         fi
       ''
+      + optionalString (libc.w32api or null != null) ''
+        echo '-L${lib.getLib libc.w32api}${libc.libdir or "/lib/w32api"}' >> $out/nix-support/libc-ldflags
+      ''
     )
 
     ##
@@ -478,7 +466,7 @@ stdenvNoCC.mkDerivation {
       libc_dev
       libc_lib
       ;
-    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    default_hardening_flags_str = toString defaultHardeningFlags;
   }
   // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.

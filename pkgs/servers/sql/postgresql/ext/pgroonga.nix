@@ -11,13 +11,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "4.0.1";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
     tag = "${finalAttrs.version}";
-    hash = "sha256-a5nNtlUiFBuuqWAjIN0gU/FaoV3VpJh+/fab8R/77dw=";
+    hash = "sha256-SXQH+L7FKhu+2+9QyQTNi+3nFYtkE7WXv2A5LdvjG2w=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,11 +34,6 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   meta = {
-    # PostgreSQL 18 support issue upstream: https://github.com/pgroonga/pgroonga/issues/708
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "4.0.1"
-    ) "Is postgresql18Packages.pgroonga still broken?" (lib.versionAtLeast postgresql.version "18");
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.

@@ -66,7 +66,7 @@ builtins.listToAttrs (
           client =
             { pkgs, ... }:
             {
-              environment.systemPackages = [ pkgs.curlHTTP3 ];
+              environment.systemPackages = [ pkgs.curl ];
               networking = {
                 interfaces.eth1 = {
                   ipv4.addresses = [
@@ -90,7 +90,6 @@ builtins.listToAttrs (
 
           server.wait_for_unit("nginx")
           server.wait_for_open_port(443)
-          client.wait_for_unit("network-online.target")
 
           # Check http connections
           client.succeed("curl --verbose --http3-only https://acme.test | grep 'Hello World!'")
@@ -114,7 +113,7 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angieQuic
-      pkgs.nginxQuic
+      pkgs.angie
+      pkgs.nginx
     ]
 )

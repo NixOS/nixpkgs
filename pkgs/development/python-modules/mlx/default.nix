@@ -12,8 +12,8 @@
   cmake,
 
   # buildInputs
-  apple-sdk_14,
-  fmt_11,
+  apple-sdk,
+  fmt,
   nanobind,
   nlohmann_json,
   pybind11,
@@ -48,7 +48,7 @@ let
 
     patches = [
       (replaceVars ./darwin-build-fixes.patch {
-        sdkVersion = apple-sdk_14.version;
+        sdkVersion = apple-sdk.version;
       })
     ];
 
@@ -95,8 +95,7 @@ let
     ];
 
     buildInputs = [
-      apple-sdk_14
-      fmt_11
+      fmt
       gguf-tools
       nanobind
       nlohmann_json

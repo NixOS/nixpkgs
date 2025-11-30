@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengamepadui";
-  version = "0.41.0";
+  version = "0.42.1";
 
   buildType = if withDebug then "debug" else "release";
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ShadowBlip";
     repo = "OpenGamepadUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8xYLPKCmpWENzG1D8q2yJeIZ5MdBLTio3LZ1BsY1HGg=";
+    hash = "sha256-v+nLluz3Zxvcvx491NxMx+obwfdRJycGLyBAhviRktU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-rs8L6dh1Ppmrez3aG9XwQAdfGnoXTlpNMXJvdAUyM6M=";
+    hash = "sha256-xewyt1KuQ96FNYBKlC9VT7KEDDTUasavTsl+/5WXnU4=";
   };
   cargoRoot = "extensions";
 

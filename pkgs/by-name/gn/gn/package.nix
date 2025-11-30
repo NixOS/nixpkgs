@@ -11,11 +11,11 @@
   version ?
     # This is a workaround for update-source-version to be able to update this
     let
-      _version = "0-unstable-2025-06-19";
+      _version = "0-unstable-2025-08-29";
     in
     _version,
-  rev ? "97b68a0bb62b7528bc3491c7949d6804223c2b82",
-  hash ? "sha256-gwptzuirIdPAV9XCaAT09aM/fY7d6xgBU7oSu9C4tmE=",
+  rev ? "5d0a4153b0bcc86c5a23310d5b648a587be3c56d",
+  hash ? "sha256-WERLGrReUATmn3RhxtmyZcJBxdIY/WZqBDranCLDYEg=",
 }:
 
 stdenv.mkDerivation {
@@ -94,7 +94,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       stesie
-      matthewbauer
       marcin-serwin
       emilylange
     ];

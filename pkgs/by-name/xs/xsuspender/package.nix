@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     libwnck
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/xsuspender \
       --prefix PATH : "${lib.makeBinPath [ procps ]}"

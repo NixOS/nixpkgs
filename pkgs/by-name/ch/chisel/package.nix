@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "chisel";
-  version = "1.10.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = "chisel";
     tag = "v${version}";
-    hash = "sha256-b3r4D/P7D3kfIyMd1s/ntciY04qMrvSTru9+HjAOrnA=";
+    hash = "sha256-JrDRcp0gImG/5b/BC0KWM2IqJrS2mzO+ZX6kbTtQYlM=";
   };
 
-  vendorHash = "sha256-+11Pd/QCxoLLkeazmU9/vnPBaB2MZXmx4cEZRDnyRcQ=";
+  vendorHash = "sha256-2H+YHqYE1xm+7qDG3jfFpwS9FbYkbwJ6uso2At2BZcU=";
 
   ldflags = [
     "-s"
@@ -35,8 +35,8 @@ buildGoModule rec {
       used to provide a secure endpoint into your network.
     '';
     homepage = "https://github.com/jpillora/chisel";
-    changelog = "https://github.com/jpillora/chisel/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/jpillora/chisel/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

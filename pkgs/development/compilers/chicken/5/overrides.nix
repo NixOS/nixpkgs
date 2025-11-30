@@ -31,7 +31,7 @@ in
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
-  botan = addToBuildInputsWithPkgConfig pkgs.botan2;
+  botan = broken;
   cairo =
     old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
@@ -87,7 +87,17 @@ in
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
-  iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
+  glut =
+    old:
+    (brokenOnDarwin old)
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) (
+      addToCscOptions [
+        "-I${(lib.getDev pkgs.libglut)}/include"
+        "-I${(lib.getDev pkgs.libGL)}/include"
+        "-I${(lib.getDev pkgs.libGLU)}/include"
+      ] old
+    )
+    // (addToBuildInputs pkgs.libglut old);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   inotify =
@@ -108,17 +118,34 @@ in
     };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
-  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
+  mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
-  opencl = addToBuildInputs ([
+  opencl = addToBuildInputs [
     pkgs.opencl-headers
     pkgs.ocl-icd
-  ]);
+  ];
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
+  # missing dependency in upstream egg
+  s9fes-char-graphics-shapes = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      utf8
+      s9fes-char-graphics
+    ]
+  );
+  # missing dependency in upstream egg
+  s9fes-char-graphics = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      srfi-1
+      utf8
+      record-variants
+    ]
+  );
   scheme2c-compatibility = addPkgConfig;
   sdl-base =
     old:
@@ -165,7 +192,6 @@ in
       addToNativeBuildInputs pkgs.taglib_1 old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;
@@ -194,7 +220,8 @@ in
     };
   opengl =
     old:
-    (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (brokenOnDarwin old)
+    // (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
       pkgs.libGL
       pkgs.libGLU
     ]) old)
@@ -261,6 +288,8 @@ in
   canvas-draw = broken;
   coops-utils = broken;
   crypt = broken;
+  gemini = broken;
+  gemini-client = broken;
   hypergiant = broken;
   iup = broken;
   kiwi = broken;
@@ -271,9 +300,13 @@ in
   sundials = broken;
   svn-client = broken;
   tokyocabinet = broken;
+  # webkitgtk_4_0 was removed
+  webview = broken;
 
   # mark broken darwin
 
+  # The last successful Darwin Hydra build was in 2024
+  iconv = brokenOnDarwin;
   # fatal error: 'mqueue.h' file not found
   posix-mq = brokenOnDarwin;
   # Undefined symbols for architecture arm64: "_pthread_setschedprio"

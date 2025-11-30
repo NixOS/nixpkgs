@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [
       kashw2
+      ProxyVT
     ];
     platforms = lib.platforms.linux;
   };

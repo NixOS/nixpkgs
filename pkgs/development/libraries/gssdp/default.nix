@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/gssdp-${version}.tar.xz";
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gssdp";
       freeze = true;
     };
 
@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
-    teams = [ teams.gnome ];
     platforms = platforms.all;
   };
 }

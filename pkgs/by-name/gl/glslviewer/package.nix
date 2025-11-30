@@ -12,7 +12,7 @@
   libXi,
   libXext,
   libGLU,
-  ffmpeg,
+  ffmpeg_7,
   ncurses,
 }:
 stdenv.mkDerivation rec {
@@ -39,9 +39,10 @@ stdenv.mkDerivation rec {
     libXext
     libGLU
     ncurses
-    ffmpeg
+    ffmpeg_7
   ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.20" ];
   meta = with lib; {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";

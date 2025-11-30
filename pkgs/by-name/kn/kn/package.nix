@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   getent,
@@ -8,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.19.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-nTWY6R8t14Z1xLvarAUqEWiQoBnQLCBQwglEX+hJpIE=";
+    hash = "sha256-rElNlb3NfbOZjCMWT2efknWM9B0+BFa5CCNmcA6afPY=";
   };
 
-  vendorHash = "sha256-ep9BkF2+pqFjDwY7mXuRVcPJyVyBv489zBhSp2MQxU4=";
+  vendorHash = "sha256-rZEkwiCy2kpeKOi4lhLoW1o+cws/p++c9Dz8fKhgNKQ=";
 
   env.GOWORK = "off";
 
@@ -27,7 +28,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-X knative.dev/client/pkg/commands/version.Version=v${finalAttrs.version}" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kn \
       --bash <($out/bin/kn completion bash) \
       --zsh <($out/bin/kn completion zsh)
@@ -49,6 +50,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/knative/client";
     changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = [ ];
   };
 })

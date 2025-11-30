@@ -33,9 +33,10 @@ buildFHSEnv {
       nspr
       expat
       pciutils
+      libdrm
       libxkbcommon
       libudev0-shim
-      tbb
+      onetbb
       xwayland
       qt5.qtwayland
       net-tools # needed by licensing tools
@@ -63,6 +64,8 @@ buildFHSEnv {
       libXScrnSaver
       libXrandr
       libxcb
+      libxkbfile
+      libxshmfence
       xcbutil
       xcbutilimage
       xcbutilrenderutil

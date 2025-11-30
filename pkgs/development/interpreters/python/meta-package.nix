@@ -38,11 +38,11 @@ buildPythonPackage {
 
     [project.optional-dependencies]
     ${lib.optionalString (optional-dependencies != { }) (
-      (lib.concatStringsSep "\n" (
+      lib.concatStringsSep "\n" (
         lib.mapAttrsToList (
           group: deps: group + " = " + builtins.toJSON (map lib.getName deps)
         ) optional-dependencies
-      ))
+      )
     )}
 
     [tool.hatch.build.targets.wheel]

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "apexcharts-card";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "RomRider";
     repo = "apexcharts-card";
     rev = "v${version}";
-    hash = "sha256-wHQmbNX96X4YT0xvLp13scD0c7MAADP4Ax47fwYRgbM=";
+    hash = "sha256-r8PjZLUWnC25XsA4CI1qCX5Np2HY6kp1sWSqfXfJrPk=";
   };
 
-  npmDepsHash = "sha256-5hCd/ksFSIOsNZfVr5aoun7qrtkIlAGvwQN1xr6AbMI=";
+  npmDepsHash = "sha256-w/TR+8Oo6dbSnlHKhKKVSpeDops4WoGdle6VTCyR7T4=";
 
   installPhase = ''
     runHook preInstall

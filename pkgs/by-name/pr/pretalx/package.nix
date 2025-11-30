@@ -105,6 +105,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css_inline"
     "cssutils"
+    "defusedcsv"
     "defusedxml"
     "django-compressor"
     "django-csp"
@@ -219,7 +220,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # tries to run npm run i18n:extract

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Minimalistic mocking library";
     homepage = "https://pypi.python.org/pypi/MiniMock";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

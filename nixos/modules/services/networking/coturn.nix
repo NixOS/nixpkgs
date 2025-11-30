@@ -50,7 +50,7 @@ in
     services.coturn = {
       enable = lib.mkEnableOption "coturn TURN server";
       listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 3478;
         description = ''
           TURN listener port for UDP and TCP.
@@ -59,7 +59,7 @@ in
         '';
       };
       tls-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5349;
         description = ''
           TURN listener port for TLS.
@@ -74,7 +74,7 @@ in
         '';
       };
       alt-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = cfg.listening-port + 1;
         defaultText = lib.literalExpression "listening-port + 1";
         description = ''
@@ -89,7 +89,7 @@ in
         '';
       };
       alt-tls-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = cfg.tls-listening-port + 1;
         defaultText = lib.literalExpression "tls-listening-port + 1";
         description = ''
@@ -130,14 +130,14 @@ in
         '';
       };
       min-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 49152;
         description = ''
           Lower bound of UDP relay endpoints
         '';
       };
       max-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 65535;
         description = ''
           Upper bound of UDP relay endpoints
@@ -263,7 +263,7 @@ in
         '';
       };
       cli-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5766;
         description = ''
           CLI server port.

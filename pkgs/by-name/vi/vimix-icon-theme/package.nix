@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook preInstall
 
       ./install.sh \
-        ${if colorVariants != [ ] then builtins.toString colorVariants else "-a"} \
+        ${if colorVariants != [ ] then toString colorVariants else "-a"} \
         -d $out/share/icons
 
       # replace duplicate files with symlinks

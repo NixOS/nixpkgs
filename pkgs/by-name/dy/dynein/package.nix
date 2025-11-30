@@ -23,11 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PA7Hvn+vYBD80thkIamwOhw4lJWAmU/TQBnwJro4r7c=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
-    cmake
   ];
 
   preBuild = ''
@@ -46,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/awslabs/dynein";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -119,7 +119,7 @@ rec {
     x;
 
   /**
-    Return the fixpoint that `f` converges to when called iteratively, starting
+    Returns the fixpoint that `f` converges to when called iteratively, starting
     with the input `x`.
 
     ```

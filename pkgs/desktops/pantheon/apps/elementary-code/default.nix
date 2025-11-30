@@ -11,6 +11,7 @@
   wrapGAppsHook3,
   editorconfig-core-c,
   granite,
+  gsettings-desktop-schemas,
   gtk3,
   gtksourceview4,
   gtkspell3,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.1.0";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
-    rev = version;
-    hash = "sha256-pL/xyD9jwuPixbVdjPa3vdZWHxI+T2ARI4BvcTV61jc=";
+    tag = version;
+    hash = "sha256-DZ6smq339VgR33jQm0OFD9CM8sQ0Rz7aHKL1EWFSyBM=";
   };
 
   strictDeps = true;
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     editorconfig-core-c
     granite
+    gsettings-desktop-schemas
     gtk3
     gtksourceview4
     gtkspell3

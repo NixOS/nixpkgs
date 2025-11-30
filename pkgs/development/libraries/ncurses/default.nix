@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
   setOutputFlags = false; # some aren't supported
+  separateDebugInfo = false;
 
   patches = [
     # linux-gnuabielfv{1,2} is not in ncurses' list of GNU-ish targets (or smth like that?).
@@ -57,14 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
-    "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
     "--with-versioned-syms"
   ]
-  ++ lib.optional unicodeSupport "--enable-widec"
+  ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
+  ++ lib.optional (unicodeSupport && abiVersion == "5") "--enable-widec"
+  ++ lib.optional (!unicodeSupport && abiVersion == "6") "--disable-widec"
   ++ lib.optional (!withCxx) "--without-cxx"
   ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
   ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
@@ -162,12 +164,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postFixup =
+  postInstall =
     let
       abiVersion-extension =
         if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}";
     in
+    lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
+      rm "$out"/lib/*.a
     ''
+    + ''
       # Determine what suffixes our libraries have
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
@@ -240,10 +245,6 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput "bin/infotocap" "$out"
       moveToOutput "bin/infocmp" "$out"
     '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
-    rm "$out"/lib/*.a
-  '';
 
   # I'm not very familiar with ncurses, but it looks like most of the
   # exec here will run hard-coded executables. There's one that is

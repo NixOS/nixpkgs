@@ -3,8 +3,8 @@
   yaml-cpp = fetchFromGitHub {
     owner = "jbeder";
     repo = "yaml-cpp";
-    rev = "2f86d13775d119edbb69af52e5f566fd65c6953b";
-    hash = "sha256-GtUTbEaRR3+GfVkt3t8EsqBHVffVKOl8urtQTaHozIo=";
+    tag = "0.8.0";
+    hash = "sha256-J87oS6Az1/vNdyXu3L7KmUGWzU0IAkGrGMUUha+xDXI=";
   };
   googletest = fetchFromGitHub {
     owner = "google";
@@ -18,17 +18,17 @@
     tag = "v1.2.6";
     hash = "sha256-qjy5KyAm7/WeCyxMu/5QrBVjDSJPs0q/ZPyQwXp0WLA=";
   };
-  magic_enum = fetchFromGitHub {
-    owner = "Neargye";
-    repo = "magic_enum";
-    tag = "v0.9.7";
-    hash = "sha256-P6fl/dcGOSE1lTJwZlimbvsTPelHwdQdZr18H4Zji20=";
-  };
   fmt = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
     tag = "11.1.4";
     hash = "sha256-sUbxlYi/Aupaox3JjWFqXIjcaQa0LFjclQAOleT+FRA=";
+  };
+  enchantum = fetchFromGitHub {
+    owner = "ZXShady";
+    repo = "enchantum";
+    rev = "8ca5b0eb7e7ebe0252e5bc6915083f1dd1b8294e";
+    hash = "sha256-q2bbNAMpNJYedekEDtTQ2qI2+GPdkTsuxAHCBaAnuTA=";
   };
   range-v3 = fetchFromGitHub {
     owner = "ericniebler";
@@ -78,17 +78,23 @@
     tag = "v3.7.0";
     hash = "sha256-q2IYhG84hPIZhuogWf6ojDG9S9ZyuJz9s14kQyIc6t0=";
   };
-  flatbuffers = fetchFromGitHub {
-    owner = "google";
-    repo = "flatbuffers";
-    tag = "v24.3.25";
-    hash = "sha256-uE9CQnhzVgOweYLhWPn2hvzXHyBbFiFVESJ1AEM3BmA=";
-  };
   simd-everywhere = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
     tag = "v0.8.2";
     hash = "sha256-igjDHCpKXy6EbA9Mf6peL4OTVRPYTV0Y2jbgYQuWMT4=";
+  };
+  msgpack = fetchFromGitHub {
+    owner = "msgpack";
+    repo = "msgpack-c";
+    tag = "cpp-6.1.0";
+    hash = "sha256-VqzFmm3MmMhWyooOsz1d9gwwbn/fnnxpkCFwqKR6los=";
+  };
+  tokenizers-cpp = fetchFromGitHub {
+    owner = "mlc-ai";
+    repo = "tokenizers-cpp";
+    rev = "55d53aa38dc8df7d9c8bd9ed50907e82ae83ce66";
+    hash = "sha256-CkW8S6LHHOY+tz3hHoWBzwGb3f25LFp41F/jH4pdKI4=";
   };
   spdlog = fetchFromGitHub {
     owner = "gabime";
@@ -99,14 +105,20 @@
   tt-logger = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-logger";
-    tag = "v1.1.3";
-    hash = "sha256-N7Rs6mrs800B7XONCOOxR8koVEMWakZ1f2pexRwnUh8=";
+    tag = "v1.1.5";
+    hash = "sha256-lw8L4pCAGObCkiuF/JFC9PmcQgwmJZOOo1cbaUMvo+I=";
   };
   nanomsg = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
     tag = "v1.8.0";
     hash = "sha256-E2uosZrmxO3fqwlLuu5e36P70iGj5xUlvhEb+1aSvOA=";
+  };
+  flatbuffers = fetchFromGitHub {
+    owner = "google";
+    repo = "flatbuffers";
+    tag = "v24.3.25";
+    hash = "sha256-uE9CQnhzVgOweYLhWPn2hvzXHyBbFiFVESJ1AEM3BmA=";
   };
   libuv = fetchFromGitHub {
     owner = "libuv";

@@ -104,9 +104,9 @@ let
           optionalString (
             config.networking.primaryIPAddress != ""
           ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (config.networking.primaryIPv6Address != "") (
-            "${config.networking.primaryIPv6Address} ${hostnames}"
-          )
+          + optionalString (
+            config.networking.primaryIPv6Address != ""
+          ) "${config.networking.primaryIPv6Address} ${hostnames}"
         );
 
         virtualisation.qemu.options = qemuOptions;

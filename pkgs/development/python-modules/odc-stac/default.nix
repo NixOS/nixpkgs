@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  flit-core,
 
   # dependencies
   affine,
@@ -16,6 +16,7 @@
   pystac,
   rasterio,
   toolz,
+  typing-extensions,
   xarray,
 
   # optional-dependencies
@@ -30,19 +31,17 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-Ekyavcin13B4DAxv0/XG5QTBuLE7PRospAXe40fHeX0=";
+    hash = "sha256-Zug52tjbdtRNpLMBUR+hksr/V2D3W4sXbtvdxSPyVlM=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     affine
@@ -54,6 +53,7 @@ buildPythonPackage rec {
     pystac
     rasterio
     toolz
+    typing-extensions
     xarray
   ];
 
@@ -81,14 +81,12 @@ buildPythonPackage rec {
     "test_output_geobox"
   ];
 
-  pythonImportsCheck = [
-    "odc.stac"
-  ];
+  pythonImportsCheck = [ "odc.stac" ];
 
   meta = {
     description = "Load STAC items into xarray Datasets";
     homepage = "https://github.com/opendatacube/odc-stac/";
-    changelog = "https://github.com/opendatacube/odc-stac/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-stac/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

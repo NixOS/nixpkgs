@@ -2,10 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch2,
   gitUpdater,
   testers,
   boost186,
   cmake,
+  ctestCheckHook,
   dbus,
   doxygen,
   graphviz,
@@ -19,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.4";
+  version = "5.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
+    hash = "sha256-+QqmZsBFmYRwaAFqRyMBxVFFrjZGBDdMaW4YD/7D2gU=";
   };
 
   outputs = [
@@ -33,6 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "examples"
+  ];
+
+  patches = [
+    # Provide more information when there's an issue in AsyncExecutionLoadTest.RepeatedlyInvokingAnAsyncFunctionWorks
+    # Remove when version > 5.0.5
+    (fetchpatch2 {
+      name = "0001-dbus-cpp-tests-async_execution_load_test-Print-received-error-on-DBus-method-failure.name";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/8390ce83153c2ae29f21afd2bf5e79e88c59e6d9.diff";
+      hash = "sha256-js2nXT7eG9dcX+yoFMNRVlamQxsbJclmKTX6/5RxxM4=";
+    })
   ];
 
   postPatch = ''
@@ -71,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     dbus
   ];
 
@@ -87,6 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
   # DBus, parallelism messes with communication
   enableParallelChecking = false;
 
+  disabledTests = [
+    # Possible memory corruption in Executor.TimeoutsAreHandledCorrectly
+    # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/10
+    "executor_test"
+  ];
+
   preFixup = ''
     moveToOutput libexec/examples $examples
   '';
@@ -94,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      versionCheck = true;
+      # Not bumped for 5.0.5: https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/9
+      # Try again on next bump.
+      versionCheck = finalAttrs.version != "5.0.5";
     };
     updateScript = gitUpdater { };
   };

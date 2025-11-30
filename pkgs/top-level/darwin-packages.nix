@@ -39,14 +39,10 @@ makeScopeWithSplicing' {
         callPackage = self.callPackage;
         directory = ../os-specific/darwin/apple-source-releases;
       };
-
-      # Must use pkgs.callPackage to avoid infinite recursion.
-      impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
     in
 
     lib.recurseIntoAttrs (
-      impure-cmds
-      // apple-source-packages
+      apple-source-packages
       // {
 
         inherit (self.adv_cmds) ps;
@@ -101,6 +97,8 @@ makeScopeWithSplicing' {
 
         libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+        libcxx = callPackage ../os-specific/darwin/libcxx { };
+
         sigtool = callPackage ../os-specific/darwin/sigtool { };
 
         signingUtils = callPackage ../os-specific/darwin/signing-utils { };
@@ -117,8 +115,6 @@ makeScopeWithSplicing' {
         };
 
         lsusb = callPackage ../os-specific/darwin/lsusb { };
-
-        openwith = callPackage ../os-specific/darwin/openwith { };
 
         trash = callPackage ../os-specific/darwin/trash { };
 
@@ -172,6 +168,12 @@ makeScopeWithSplicing' {
           xcode_16_2
           xcode_16_3
           xcode_16_4
+          xcode_26
+          xcode_26_Apple_silicon
+          xcode_26_0_1
+          xcode_26_0_1_Apple_silicon
+          xcode_26_1
+          xcode_26_1_Apple_silicon
           xcode
           requireXcode
           ;

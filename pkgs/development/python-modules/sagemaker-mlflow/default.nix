@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker-mlflow";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
     tag = "v${version}";
-    hash = "sha256-1bonIqZ+cFxCOxoFWn1MLBOIiB1wUX69/lUTPPupJaw=";
+    hash = "sha256-mHwlP1bVkUiT6RbVf8YLHG+tzkw5+UVrPzcExgcEoJM=";
   };
 
   postPatch = ''

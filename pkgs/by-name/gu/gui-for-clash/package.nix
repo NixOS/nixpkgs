@@ -16,19 +16,20 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.9.8";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-YwolOIN4pQ9ykXruKAetUDMFkNnQppkzioDNlrPefL8=";
+    hash = "sha256-kk6ZjG58gMIPd8f3Ib+1z7bie9X5kJvBq/CwioksbcU=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-iVD/9uTK3cUzKE20pJk67uk53UCtfj/YCpgwgxmmg8k=";
+      hash = "sha256-MvGLIB68itkCGsBIgAI6ak5xa5rFAJfoAwNuISPRw30=";
     };
 
     buildPhase = ''
@@ -85,7 +86,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-7pFjfUFkpXyYEVjiXbfFUC7FQSlZubKJJ5MI8WY0IVA=";
+  vendorHash = "sha256-6T9cFVzfRJnwnWjc61oSihifgnP81n3K+jlLHXGmA4I=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -133,6 +134,8 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];

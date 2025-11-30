@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pinecone-plugin-assistant";
-  version = "1.7.0";
+  version = "1.8.0";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "pinecone_plugin_assistant";
     inherit version;
-    hash = "sha256-4m47oQqLccPaDXd8/0B2aAIugpY8SRPQ/+tsVSch5II=";
+    hash = "sha256-joaCz/MPm66SQ7OEAhq6cckfTm7xZQ6dY+5kqrg8uoc=";
   };
 
   build-system = [

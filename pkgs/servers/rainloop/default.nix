@@ -10,7 +10,7 @@
 let
   common =
     { edition, sha256 }:
-    stdenv.mkDerivation (rec {
+    stdenv.mkDerivation rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.16.0";
 
@@ -73,7 +73,7 @@ let
         platforms = platforms.all;
         maintainers = with maintainers; [ das_j ];
       };
-    });
+    };
 in
 {
   rainloop-community = common {

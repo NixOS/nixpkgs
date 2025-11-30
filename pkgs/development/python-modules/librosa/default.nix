@@ -49,6 +49,11 @@ buildPythonPackage rec {
     hash = "sha256-T58J/Gi3tHzelr4enbYJi1KmO46QxE5Zlhkc0+EgvRg=";
   };
 
+  patches = [
+    # <https://github.com/librosa/librosa/pull/1977>
+    ./fix-with-numba-0.62.0.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -129,6 +134,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/librosa/librosa";
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    maintainers = with lib.maintainers; [ carlthome ];
   };
 }

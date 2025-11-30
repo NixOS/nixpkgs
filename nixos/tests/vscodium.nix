@@ -45,6 +45,10 @@ let
           turion
         ];
 
+        # x86_64: https://github.com/NixOS/nixpkgs/pull/452801#issuecomment-3415680343
+        # aarch64: https://github.com/NixOS/nixpkgs/issues/207234
+        meta.broken = name == "wayland";
+
         enableOCR = true;
 
         testScript = ''

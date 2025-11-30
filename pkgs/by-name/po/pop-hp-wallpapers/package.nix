@@ -8,15 +8,15 @@
 
 stdenvNoCC.mkDerivation {
   pname = "pop-hp-wallpapers";
-  version = "0-unstable-2022-04-01";
+  version = "0-unstable-2025-10-28";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "hp-wallpapers";
-    rev = "df86078846b0a2a4e3e64f584aaf2a21be47a7eb";
+    rev = "94f7df30f6bf1c3d71522018852d77c10b920ea3";
     forceFetchGit = true;
     fetchLFS = true;
-    hash = "sha256-NGSvPC9GadqqqgGH9uDNAYuSwfagosmCAE6QmDtmdMw=";
+    hash = "sha256-AthVQ9kQO+CvSH1xxz/U6WzAtpcXK1gvRwKyeo0vMSs=";
   };
 
   nativeBuildInputs = [ imagemagick ];

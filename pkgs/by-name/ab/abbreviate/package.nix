@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -27,7 +28,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd abbreviate \
       --bash <($out/bin/abbreviate completion bash) \
       --fish <($out/bin/abbreviate completion fish) \
@@ -40,6 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/dnnrly/abbreviate";
     changelog = "https://github.com/dnnrly/abbreviate/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

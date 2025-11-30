@@ -19,8 +19,8 @@
   ncurses,
   pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
   pam,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   sqlite,
   nlsSupport ? true,
   translateManpages ? true,
@@ -28,6 +28,7 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
+  coreutils,
   # Doesn't build on Darwin, only makes sense on systems which have pam
   withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
   gitUpdater,
@@ -37,13 +38,13 @@
 let
   isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
 in
-stdenv.mkDerivation (finalPackage: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.1";
+  version = "2.41.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
+    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
   };
 
   patches = [
@@ -81,11 +82,15 @@ stdenv.mkDerivation (finalPackage: rec {
     patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$bin/bin/umount"
+      --replace-fail "/bin/umount" "$bin/bin/umount"
+
+    # fix `mount -t` tab completion
+    substituteInPlace bash-completion/{blkid,mount,umount} \
+      --replace-fail "/lib/modules" "/run/booted-system/kernel-modules/lib/modules"
   ''
   + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "${shadow}/bin/login"
+      --replace-fail "/bin/login" "${shadow}/bin/login"
   ''
   + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace lib/c_strtod.c --replace-fail __APPLE__ __FreeBSD__
@@ -121,7 +126,7 @@ stdenv.mkDerivation (finalPackage: rec {
     (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "scanf_cv_type_modifier=ms"
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "scanf_cv_type_modifier=ms" ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # These features are all disabled in the freebsd-ports distribution
     "--disable-nls"
@@ -160,51 +165,47 @@ stdenv.mkDerivation (finalPackage: rec {
   ++ lib.optionals pamSupport [ pam ]
   ++ lib.optionals capabilitiesSupport [ libcap_ng ]
   ++ lib.optionals ncursesSupport [ ncurses ]
-  ++ lib.optionals systemdSupport [ systemd ];
-
-  doCheck = false; # "For development purpose only. Don't execute on production system!"
+  ++ lib.optionals systemdSupport [ systemdLibs ];
 
   enableParallelBuilding = true;
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      moveToOutput bin/mount "$mount"
-      moveToOutput bin/umount "$mount"
-      ln -svf "$mount/bin/"* $bin/bin/
-    ''
-    + ''
+  postInstall = ''
+    moveToOutput sbin/nologin "$login"
+    moveToOutput sbin/sulogin "$login"
+    prefix=$login _moveSbin
+    ln -svf "$login/bin/"* $bin/bin/
 
-      moveToOutput sbin/nologin "$login"
-      moveToOutput sbin/sulogin "$login"
-      prefix=$login _moveSbin
-      ln -svf "$login/bin/"* $bin/bin/
-    ''
-    + lib.optionalString withLastlog ''
-      # moveToOutput "lib/liblastlog2*" "$lastlog"
-      ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
-      moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
-      moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
-      substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
-        --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+    installShellCompletion --bash bash-completion/*
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    moveToOutput bin/mount "$mount"
+    moveToOutput bin/umount "$mount"
+    ln -svf "$mount/bin/"* $bin/bin/
 
-      moveToOutput "bin/lastlog2" "$lastlog"
-      ln -svf "$lastlog/bin/"* $bin/bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    moveToOutput sbin/swapon "$swap"
+    moveToOutput sbin/swapoff "$swap"
+    prefix=$swap _moveSbin
+    ln -svf "$swap/bin/"* $bin/bin/
+  ''
+  + lib.optionalString withLastlog ''
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
+    moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
 
-      moveToOutput sbin/swapon "$swap"
-      moveToOutput sbin/swapoff "$swap"
-      prefix=$swap _moveSbin
-      ln -svf "$swap/bin/"* $bin/bin/
-    ''
-    + ''
+    moveToOutput "bin/lastlog2" "$lastlog"
+    ln -svf "$lastlog/bin/"* $bin/bin/
 
-      ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
-      ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
+  ''
+  + lib.optionalString (withLastlog && systemdSupport) ''
+    moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
+    substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
+      --replace-fail "/usr/bin/mv" "${lib.getExe' coreutils "mv"}" \
+      --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+  '';
 
-      installShellCompletion --bash bash-completion/*
-    '';
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   passthru = {
     updateScript = gitUpdater {
@@ -226,7 +227,7 @@ stdenv.mkDerivation (finalPackage: rec {
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "Set of system utilities for Linux";
-    changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
+    changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/v${finalAttrs.version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with lib.licenses; [
       gpl2Only

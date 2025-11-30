@@ -25,7 +25,7 @@ let
 in
 {
   name = "hockeypuck";
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { ... }:

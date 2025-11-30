@@ -17,16 +17,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "voxinput";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "richiejp";
     repo = "VoxInput";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-04RLlE8e8W6vTOz7GF8yEkysp3cwTSOgE1Uk7qXG/ws=";
+    hash = "sha256-b+lyoVugm6FSGnmyB4UcrIRic5ZpTcB5BrJCona14zM=";
   };
 
-  vendorHash = "sha256-0osfAJROLn8Iru576M5lq5dwFaw2PVBs6LBscZf3Vxw=";
+  vendorHash = "sha256-CquIwApcQvq5r8CckrcL1Qmet0Y4G1L9R3sZyVrZNqw=";
 
   nativeBuildInputs = [
     makeWrapper

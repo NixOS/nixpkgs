@@ -4,25 +4,26 @@
   buildNpmPackage,
   fetchFromGitHub,
   versionCheckHook,
+  nixosTests,
   nix-update-script,
   go_1_25,
 }:
 buildGo125Module (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.0-beta-release";
+  version = "0.4.1-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-7ZfS46+aflKIQ8S9T18JjCb7bY8mB6cJl/lgJi5Hukg=";
+    hash = "sha256-Kg5aE4lkzSedo+VJgdsfO5XTKupsPU2DhZNdNhEQ/Q4=";
   };
 
   sshwifty-ui = buildNpmPackage {
     pname = "sshwifty-ui";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-I96VixL21cF2kp9AK6q0ipjphjdWuSETKakbsprGek0=";
+    npmDepsHash = "sha256-vX3CtjwjzcxxIPYG6QXsPybyBRow1YdS9pHr961P1HA=";
 
     npmBuildScript = "generate";
 
@@ -38,7 +39,7 @@ buildGo125Module (finalAttrs: {
     cp -r ${finalAttrs.sshwifty-ui}/lib/node_modules/sshwifty-ui/* .
   '';
 
-  vendorHash = "sha256-kLKydjvZtFEY7vjqxK1cCwZSTbdqYWPRmxYSN0LYqsg=";
+  vendorHash = "sha256-/SLUC0xM195QfKgX9te8UP1bbzRbKF+Npyugi19JijY=";
 
   ldflags = [
     "-s"
@@ -52,7 +53,17 @@ buildGo125Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) sshwifty; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=unstable"
+        "--version-regex=^([0-9.]+(?!.+-prebuild).+$)"
+        "--subpackage"
+        "sshwifty-ui"
+      ];
+    };
+  };
 
   meta = {
     description = "WebSSH & WebTelnet client";

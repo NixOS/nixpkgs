@@ -22,16 +22,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.24.3";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q0d+SKCLtT/gv9mrx0o8qIdWYVwNM2x8/LfRsG4J4rw=";
+    hash = "sha256-CRPZmycYaKtqjjiISKVGLf2jUvM6Xk6cUryKZcFX3tc=";
   };
 
-  npmDepsHash = "sha256-mCECqh2iRVD4lsCWYdf15VMuaH8dqpDfWWs/6q4H6Lo=";
+  npmDepsHash = "sha256-8v6r3DAUzNeMQqLl99mp5rUytbUe7wFj3jkHb6lbwFI=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -143,7 +143,7 @@ buildNpmPackage (finalAttrs: {
         ];
         runtimeEnv = {
           PNAME = finalAttrs.pname;
-          PKG_FILE = builtins.toString ./package.nix;
+          PKG_FILE = toString ./package.nix;
         };
         text = ''
           new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"

@@ -20,14 +20,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.6";
-  yarnHash = "sha256-G3iG11nPEtco7FJe1H4s85tMpHqmUgPbj68gADBqDfY=";
+  version = "9.10";
+  yarnHash = "sha256-1xbQedxNDQaEiAT9GPNzz17cVD0v4CoxEn0SugJHaz0=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-9WYyfioDb2eDf4oeMQ0kF/NUOuwki5gVZjlmels/+1g=";
+    hash = "sha256-AUkxv7rmlb+KYhLe4vj9OvZkmBnN+TL+b/0Xf1+Wyy4=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -219,6 +219,8 @@ pythonPackages.buildPythonApplication rec {
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
   doCheck = !postgresqlTestHook.meta.broken;
 
+  # for replication testing in regression tests for PostgreSql >= 17
+  env.postgresqlExtraSettings = "wal_level = logical";
   checkPhase = ''
     runHook preCheck
 
@@ -235,6 +237,18 @@ pythonPackages.buildPythonApplication rec {
     cp -v regression/test_config.json.in regression/test_config.json
     substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
     substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+
+    # test cases hardcode ports and host in subscription replication tests
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/17_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5917" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/18_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5434" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
 
     ## Browser test ##
     python regression/runtests.py --pkg browser --exclude ${skippedTests}

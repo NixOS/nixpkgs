@@ -7,27 +7,28 @@
   npmHooks,
   python3,
   cacert,
+  versionCheckHook,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "homebridge-config-ui-x";
-  version = "5.4.1";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "homebridge";
     repo = "homebridge-config-ui-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EF2dluZ23lK4CGhpJtB24iWfzw0OM8hPNJMrOEulHCU=";
+    hash = "sha256-pbE3s1MzZM8r29oJsZjHTCahRNuWExsvGfERue4RQv4=";
   };
 
   # Deps hash for the root package
-  npmDepsHash = "sha256-a19A7j2lGjmkuIL4BVFYq1jSe4PLcnKTBkrEtVnYyTg=";
+  npmDepsHash = "sha256-L7sC/4iHSGE9H562pbtESkFpty6eGdmkU60dpUWPQaQ=";
 
   # Deps src and hash for ui subdirectory
   npmDeps_ui = fetchNpmDeps {
     name = "npm-deps-ui";
     src = "${finalAttrs.src}/ui";
-    hash = "sha256-zKEsXxNEqCYm6LjKU6gr7QBNBJcdY22bod3CBf/8mHw=";
+    hash = "sha256-Yhk7cplZlmcChKPmwoI192MJujuq+v8+JXT08rwfL3Q=";
   };
 
   # Need to also run npm ci in the ui subdirectory
@@ -53,11 +54,17 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cacert ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";
     homepage = "https://github.com/homebridge/homebridge-config-ui-x";
     license = lib.licenses.mit;
-    mainProgram = "homebridge-config-ui-x";
+    mainProgram = "hb-service";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ fmoda3 ];
     # Works on darwin when not in sandbox because it downloads a prebuilt binary

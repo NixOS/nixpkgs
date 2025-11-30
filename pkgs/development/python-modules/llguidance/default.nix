@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
+  # nativeBuildInputs
   cargo,
   pkg-config,
   rustPlatform,
@@ -18,27 +18,26 @@
   pytestCheckHook,
   torch,
   transformers,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llguidance";
-  version = "0.7.19";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "llguidance";
     tag = "v${version}";
-    hash = "sha256-tfTiut8jiGGf2uQLGcC4ieNf4ePFauJZL6vNbWie078=";
+    hash = "sha256-+DRJIzFqJEeinwJVyXuRQ1niQmDoNhKLHrfvFnjDL8c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-I1sjkZgtsBpPVkGL596TjLi9txRmgP5oTIWaM1K5I1E=";
+    inherit src pname version;
+    hash = "sha256-SQ8ahSCJUaYF7PzPfRUjCdJTJ811oTyxiLDfRre2BO0=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cargo
     pkg-config
     rustPlatform.cargoSetupHook
@@ -88,11 +87,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Require internet access (https://huggingface.co)
+    "python/torch_tests/test_hf.py"
+    "python/torch_tests/test_llamacpp.py"
+    "python/torch_tests/test_tiktoken.py"
     "scripts/tokenizer_test.py"
   ];
-
-  # As dynamo is not supported on Python 3.13+, no successful tests remain.
-  doCheck = pythonOlder "3.13";
 
   meta = {
     description = "Super-fast Structured Outputs";

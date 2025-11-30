@@ -7,13 +7,14 @@
   makeWrapper,
   makeDesktopItem,
   cups,
-  qt5,
+  qt6,
   undmg,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "16.0";
+  version = "16.0.2";
 
   src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
@@ -27,14 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       makeWrapper
-      qt5.wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ undmg ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     cups
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
+    xorg.xkeyboardconfig
   ];
 
   installPhase =
@@ -47,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
       linuxInstall = ''
         mkdir -p $out/opt && cp -ar source/* $out/opt
 
-        # Use makeWrapper to clean environment and force xcb
+        # Wrap binary: clean env, fix XKB lookup
         makeWrapper $out/opt/010editor $out/bin/010editor \
           --unset QT_PLUGIN_PATH \
-          --set QT_QPA_PLATFORM xcb
+          --set XKB_CONFIG_ROOT ${xorg.xkeyboardconfig}/share/X11/xkb
 
-        # Copy the icon and generated desktop file
+        # Install icon + desktop entry
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
         install -D $desktopItem/share/applications/* -t $out/share/applications/
       '';
@@ -89,17 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchzip {
       url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-      hash = "sha256-DK+AIk90AC/KjZR0yBMHaRF7ajuX+UvT8rqDVdL678M=";
+      hash = "sha256-sFTP/z+aann3KdEVW+RSWhi/uyLZB4q3kBXaBkwHkKE=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-TWatSVqm9a+bVLXtJjiWAtkcB7qZqoeJ7Gmr62XUVz4=";
+      hash = "sha256-Ky7IvLeFogx6R2YAirASNNIClEL9/M0eEyCxbGAt0sU=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-CtExBuu6EL8ilq3+gtwjNwnMxXkKgPdrk34tYvjN2ps=";
+      hash = "sha256-gtfTq/e/BHSxkCv/Qg/o8Naoao+I8fzKOmGB1PXPSwI=";
     };
   };
 

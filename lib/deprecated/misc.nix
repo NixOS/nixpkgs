@@ -29,10 +29,7 @@ let
     nameValuePair
     tail
     toList
-    warn
     ;
-
-  inherit (lib.attrsets) removeAttrs mapAttrsToList;
 
   # returns default if env var is not set
   maybeEnv =
@@ -73,7 +70,7 @@ let
     name: default: attrs:
     attrs.${name} or default;
 
-  # Return the second argument if the first one is true or the empty version
+  # Returns the second argument if the first one is true or the empty version
   # of the second argument.
   ifEnable =
     cond: val:
@@ -89,7 +86,7 @@ let
     else
       null;
 
-  # Return true only if there is an attribute and it is true.
+  # Returns true only if there is an attribute and it is true.
   checkFlag =
     attrSet: name:
     if name == "true" then
@@ -250,9 +247,9 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
   closePropagationFast =
     list:
-    builtins.map (x: x.val) (
+    map (x: x.val) (
       builtins.genericClosure {
-        startSet = builtins.map (x: {
+        startSet = map (x: {
           key = x.outPath;
           val = x;
         }) (builtins.filter (x: x != null) list);
@@ -277,9 +274,6 @@ let
     );
 
   closePropagation = if builtins ? genericClosure then closePropagationFast else closePropagationSlow;
-
-  # calls a function (f attr value ) for each record item. returns a list
-  mapAttrsFlatten = warn "lib.misc.mapAttrsFlatten is deprecated, please use lib.attrsets.mapAttrsToList instead." mapAttrsToList;
 
   # attribute set containing one attribute
   nvs = name: value: listToAttrs [ (nameValuePair name value) ];
@@ -470,7 +464,6 @@ in
     innerClosePropagation
     innerModifySumArgs
     lazyGenericClosure
-    mapAttrsFlatten
     maybeAttr
     maybeAttrNullable
     maybeEnv

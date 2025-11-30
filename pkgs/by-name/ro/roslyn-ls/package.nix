@@ -5,7 +5,6 @@
   dotnetCorePackages,
   stdenvNoCC,
   testers,
-  roslyn-ls,
   jq,
   writeText,
   runCommand,
@@ -53,18 +52,18 @@ in
 buildDotnetModule (finalAttrs: rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.87.26";
+  vsVersion = "2.102.30-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-5XDE2fwBga1hhXgaNG46vruljnKulLR7yIT5BLjJBGA=";
+    hash = "sha256-C61Zew0W1r1klw3zGZfv3YNhZ7SrCd0UbGlXhqkfrbI=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.0.0-2.25371.17";
+  version = "5.3.0-2.25568.9";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -72,9 +71,6 @@ buildDotnetModule (finalAttrs: rec {
   nativeBuildInputs = [ jq ];
 
   patches = [
-    # until upstream updates net6.0 here:
-    # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
-    ./force-sdk_8_0.patch
     # until made configurable/and or different location
     # https://github.com/dotnet/roslyn/issues/76892
     ./cachedirectory.patch

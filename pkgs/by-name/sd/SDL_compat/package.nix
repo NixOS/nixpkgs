@@ -4,6 +4,7 @@
   cmake,
   darwin,
   fetchFromGitHub,
+  fetchpatch2,
   libGLU,
   libiconv,
   libX11,
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.68";
+  version = "1.2.70";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
+    hash = "sha256-vmbkeBpuzgq1B/6rp9/Gy8+Y7aF5uz8lC/mK0uA9v7I=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals openglSupport [ libGLU ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_SKIP_RPATH TRUE)' 'set(CMAKE_SKIP_RPATH FALSE)'
-  '';
-
   dontPatchELF = true; # don't strip rpath
 
   cmakeFlags =
@@ -79,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase = ''
     runHook preCheck
-    ./testver
+    ./test/testver
     runHook postCheck
   '';
 
@@ -89,10 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
   '';
 
-  # The setup hook scans paths of buildInputs to find SDL related packages and
-  # adds their include and library paths to environment variables. The sdl-config
-  # is patched to use these variables to produce correct flags for compiler.
-  patches = [ ./find-headers.patch ];
+  patches = [
+    # The setup hook scans paths of buildInputs to find SDL related packages and
+    # adds their include and library paths to environment variables. The sdl-config
+    # is patched to use these variables to produce correct flags for compiler.
+    ./find-headers.patch
+
+    # https://github.com/libsdl-org/sdl12-compat/issues/382
+    (fetchpatch2 {
+      url = "https://github.com/libsdl-org/sdl12-compat/commit/bef8f7412dd44edc4f7e14dc35d3b20399e25496.patch?full_index=1";
+      hash = "sha256-5kJawjmA8C3uH3OIXHmqQjnIRtoTJtXmm3iLxG3e1qc=";
+    })
+  ];
   setupHook = ./setup-hook.sh;
 
   passthru.tests = {

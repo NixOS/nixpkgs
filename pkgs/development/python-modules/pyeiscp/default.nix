@@ -36,6 +36,6 @@ buildPythonPackage {
     description = "Python asyncio module to interface with Anthem AVM and MRX receivers";
     homepage = "https://github.com/winterscar/python-eiscp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

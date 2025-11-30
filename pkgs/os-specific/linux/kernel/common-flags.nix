@@ -26,9 +26,15 @@
   "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
 ]
 # Add the built in headers the kernel needs
-++ lib.optionals (stdenv.cc.isClang) [
-  "CFLAGS_MODULE=-I${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
-  "CFLAGS_KERNEL=-I${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
-]
+++ lib.optionals (stdenv.cc.isClang) (
+  let
+    clangLib = lib.getLib stdenv.cc.cc;
+    majorVer = lib.versions.major clangLib.version;
+  in
+  [
+    "CFLAGS_MODULE=-I${clangLib}/lib/clang/${majorVer}/include"
+    "CFLAGS_KERNEL=-I${clangLib}/lib/clang/${majorVer}/include"
+  ]
+)
 ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
 ++ extraMakeFlags

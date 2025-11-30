@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "0-unstable-2025-03-29";
+  version = "0-unstable-2025-08-28";
   pyproject = true;
   # from `pdm show`
   realVersion =
@@ -22,10 +22,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "c26a72e59c786b38e0e989ae64c6c2560ca7c29c";
+    rev = "7e24efe2f6e95afddd0c1b56f1a9423c48caa472";
     # these files change depending on git branch status
     postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
-    hash = "sha256-qzm3No5dGvpPpPCtLal+dv7Tz93FbZPnLTQZjO9jbac=";
+    hash = "sha256-NkeSFmbiu5XtUEv/IfaY0P72SVH82HmERfPAHqIY+z8=";
   };
 
   build-system = [ pdm-backend ];

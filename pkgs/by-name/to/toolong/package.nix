@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "toolong";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication {
     command = "${lib.getExe toolong} --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal application to view, tail, merge, and search log files (plus JSONL)";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/textualize/toolong";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "tl";
   };
 }

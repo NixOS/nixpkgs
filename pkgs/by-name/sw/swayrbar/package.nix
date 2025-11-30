@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "swayrbar";
   };
 }

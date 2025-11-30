@@ -1,24 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   cryptography,
-  flit-core,
+  fetchpatch2,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography-vectors";
   # The test vectors must have the same version as the cryptography package
-  inherit (cryptography) version;
+  inherit (cryptography) version src;
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "cryptography_vectors";
-    inherit version;
-    hash = "sha256-+7BAjfj/LSs9vSkovFt/7r/dNvsJL6h5DVd4qbmh+e8=";
-  };
+  sourceRoot = "${src.name}/vectors";
 
-  build-system = [ flit-core ];
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/449568
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/pyca/cryptography/commit/5f311c1cbe09ddea6136b0bb737fb7df6df1b923.patch?full_index=1";
+      stripLen = 1;
+      includes = [ "pyproject.toml" ];
+      hash = "sha256-OdHK0OGrvOi3mS0q+v8keDLvKxtgQkDkHQSYnmC/vd4=";
+    })
+  ];
+
+  build-system = [ uv-build ];
 
   # No tests included
   doCheck = false;
@@ -33,6 +40,6 @@ buildPythonPackage rec {
       asl20
       bsd3
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ mdaniels5757 ];
   };
 }

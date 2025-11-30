@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "iwalton3";
     repo = "python-mpv-jsonipc";
     rev = "v${version}";
-    hash = "sha256-W9TNtbRhQmwZXhi0TJIDkZRtWhi92/iwL056YIcWnLM=";
+    hash = "sha256-ugdLUmo5w+IbtmL2b6+la1X01mWNmnXr9j6e99oPWpE=";
   };
 
   # 'mpv-jsonipc' does not have any tests
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

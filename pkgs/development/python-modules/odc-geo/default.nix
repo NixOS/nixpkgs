@@ -111,7 +111,7 @@ buildPythonPackage rec {
       with geospatial metadata and geo-registered `xarray` rasters.
     '';
     homepage = "https://github.com/opendatacube/odc-geo/";
-    changelog = "https://github.com/opendatacube/odc-geo/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

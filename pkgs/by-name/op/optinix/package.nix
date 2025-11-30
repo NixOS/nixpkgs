@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitLab,
   buildGoModule,
   installShellFiles,
@@ -20,7 +21,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd optinix \
       --bash <($out/bin/optinix completion bash) \
       --fish <($out/bin/optinix completion fish) \

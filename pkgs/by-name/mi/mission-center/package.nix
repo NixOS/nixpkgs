@@ -5,7 +5,6 @@
   fetchFromGitLab,
   rustPlatform,
   symlinkJoin,
-
   # nativeBuildInputs
   blueprint-compiler,
   cargo,
@@ -18,7 +17,6 @@
   python3,
   rustc,
   wrapGAppsHook4,
-
   # buildInputs
   appstream-glib,
   cairo,
@@ -37,11 +35,10 @@
   sqlite,
   udev,
   wayland,
-
   # magpie wrapper
+  addDriverRunpath,
   libGL,
   vulkan-loader,
-
   versionCheckHook,
 }:
 
@@ -128,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    cmake
+    addDriverRunpath
     blueprint-compiler
     cargo
     libxml2
@@ -147,7 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
     blueprint-compiler
     cairo
-    cmake
     dbus
     desktop-file-utils
     gdk-pixbuf
@@ -167,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/missioncenter";
+  versionCheckProgram = "${placeholder "out"}/bin/missioncenter";
   doInstallCheck = true;
 
   postFixup = ''
@@ -176,7 +174,12 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           # Make sure libGL libvulkan can be found by dlopen()
           libGL
+          libdrm
           vulkan-loader
+
+          # NVIDIA support requires linking libnvidia-ml.so at runtime:
+          # https://github.com/Syllo/nvtop/blob/3.2.0/src/extract_gpuinfo_nvidia.c#L274-L276
+          addDriverRunpath.driverLink
         ]
       }"
   '';

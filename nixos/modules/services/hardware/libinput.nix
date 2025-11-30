@@ -370,12 +370,12 @@ in
       (
         option:
         lib.mkRenamedOptionModule
-          ([
+          [
             "services"
             "xserver"
             "libinput"
             option
-          ])
+          ]
           [
             "services"
             "libinput"

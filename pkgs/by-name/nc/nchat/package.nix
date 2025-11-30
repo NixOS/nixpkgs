@@ -12,16 +12,17 @@
   cmake,
   gperf,
   nix-update-script,
+  withWhatsApp ? true,
 }:
 
 let
-  version = "5.9.15";
+  version = "5.11.32";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-I7A6+zhHXE+LSfqnWESsXF1U4Y0Bw1Vt7gZblRqWSMQ=";
+    hash = "sha256-iDy3h1km7Xg6hzkRg3bO8lNSe3CPBk6JOJV8Ph/Rm2w=";
   };
 
   libcgowm = buildGoModule {
@@ -29,7 +30,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-rovzblnXfDDyWyYR3G9irFaSopiZSeax+48R/vD/ktY=";
+    vendorHash = "sha256-f6UGMP+IASvII82XZR8GIRG2tEx9ejf6WgCkKnicnD0=";
 
     buildPhase = ''
       runHook preBuild
@@ -89,7 +90,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
   ];
 
   passthru = {

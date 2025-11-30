@@ -35,14 +35,19 @@ let
     "yellow"
     "all"
   ];
-  tweakVariantList = [
-    "nord"
-    "carbon"
-    "black"
-    "float"
-    "outline"
-    "macos"
-  ];
+  tweakVariantList =
+    map (scheme: scheme + "fox") [
+      "carbon"
+      "dusk"
+      "nord"
+      "tera"
+    ]
+    ++ [
+      "black"
+      "float"
+      "outline"
+      "macos"
+    ];
   iconVariantList = [
     "Duskfox"
     "Duskfox-Alt"
@@ -70,13 +75,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2025-08-21";
+    version = "0-unstable-2025-10-23";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Nightfox-GTK-Theme";
-      rev = "4d73329de5ac65dc3e957e1635d471c7d3122a6b";
-      hash = "sha256-QTsouPINcn8coLk5z2EFMG1egP97rFVPgiYqGhwu62c=";
+      rev = "f0212f2aa0d3d6cc0b313020d2d0122f313eafc9";
+      hash = "sha256-KZR5vuMQnLa7AK77YB11BqgqwQHVVFfIe/rXzcocbwk=";
     };
 
     propagatedUserEnvPkgs = [ gtk-engine-murrine ];

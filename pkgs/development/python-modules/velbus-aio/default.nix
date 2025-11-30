@@ -2,9 +2,10 @@
   lib,
   aiofile,
   backoff,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  lxml,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio,
@@ -15,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2025.8.0";
+  version = "2025.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     tag = version;
-    hash = "sha256-Z8aQ7UciafWjK3bND846BgolWtOakJv63qzc1eB94dc=";
+    hash = "sha256-/sceaihRNMebcdQzNuZdH9uPibaG7UjvSP50kJ85L+Q=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     aiofile
     backoff
+    beautifulsoup4
+    lxml
     pyserial
     pyserial-asyncio-fast
   ];

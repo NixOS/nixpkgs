@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   requests,
   paho-mqtt,
@@ -9,21 +9,20 @@
 }:
 let
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.1";
+  version = "0.2.5";
 in
 buildPythonPackage {
-  format = "setuptools";
   inherit pname version;
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cuLJfCIQmnySCN1yezxyqtFmnTUdhD9tY9sBYNh9iUI=";
+  src = fetchFromGitHub {
+    owner = "tuya";
+    repo = "tuya-device-sharing-sdk";
+    # no tags on GitHub: https://github.com/tuya/tuya-device-sharing-sdk/issues/2
+    # no sdist on PyPI: https://github.com/tuya/tuya-device-sharing-sdk/issues/41
+    rev = "b2156585daefa39fcd2feff964e9be53124697f1";
+    hash = "sha256-ypAS8tzO4Wyc8pVjSiGaNNl+2fkFNcC3Ftql3l2B8k8=";
   };
-
-  # workaround needed, upstream issue: https://github.com/tuya/tuya-device-sharing-sdk/issues/10
-  postPatch = ''
-    touch requirements.txt
-  '';
 
   build-system = [ setuptools ];
 

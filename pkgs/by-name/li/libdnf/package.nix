@@ -10,7 +10,7 @@
   check,
   json_c,
   libmodulemd,
-  libsmartcols,
+  util-linux,
   sqlite,
   librepo,
   libyaml,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.74.0";
+  version = "0.75.0";
 
   outputs = [
     "out"
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
-    repo = pname;
+    repo = "libdnf";
     tag = version;
-    hash = "sha256-NAnE8VPz2j7h/gB1A4FDwG/x7ki7QEmBjcfvOb6/+VY=";
+    hash = "sha256-ujkJVeI6wgapTW1DBIhj4F/rXJFBb+KdREpc5jfU124=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cppunit
     openssl
     json_c
-    libsmartcols
+    util-linux
     libyaml
     libmodulemd
     zchunk

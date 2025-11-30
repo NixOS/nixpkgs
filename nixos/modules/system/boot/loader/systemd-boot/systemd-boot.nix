@@ -83,19 +83,17 @@ let
       '';
 
       copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-        empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
           '') cfg.extraFiles
         )}
 
         ${concatStrings (
           mapAttrsToList (n: v: ''
             ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D /dev/null "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
           '') cfg.extraEntries
         )}
       '';
@@ -393,7 +391,7 @@ in
       type = types.attrsOf types.path;
       default = { };
       example = literalExpression ''
-        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
+        { "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi; }
       '';
       description = ''
         A set of files to be copied to {file}`$BOOT`.
@@ -580,7 +578,7 @@ in
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
+        "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi;
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.1.10";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-dtc+/FvYJPgdtrDRq+fofrlXW3NjgtFMDd6rCmweiMw=";
+    hash = "sha256-U8iJAhubMHGPXNph+kWhMzRDbh3e4bikgQKbPPeKqV8=";
   };
 
   nativeBuildInputs = [ imagemagick ];
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [
-    "FHEROES2_STRICT_COMPILATION=1"
     "FHEROES2_DATA=\"${placeholder "out"}/share/fheroes2\""
   ];
 

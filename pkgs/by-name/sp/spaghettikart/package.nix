@@ -4,6 +4,7 @@
   applyPatches,
   writeTextFile,
   fetchurl,
+  fetchpatch,
   stdenv,
   replaceVars,
   yaml-cpp,
@@ -100,6 +101,19 @@ let
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
   };
 
+  # Include cmake4 patch
+  # Remove when yaml-cpp.src is updated to include it
+  yaml-patched = applyPatches {
+    src = yaml-cpp.src;
+    patches = [
+      (fetchpatch {
+        name = "yaml-cpp-fix-cmake-4.patch";
+        url = "https://github.com/jbeder/yaml-cpp/commit/c2680200486572baf8221ba052ef50b58ecd816e.patch";
+        hash = "sha256-1kXRa+xrAbLEhcJxNV1oGHPmayj1RNIe6dDWXZA3mUA=";
+      })
+    ];
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
@@ -183,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TINYXML2" "${tinyxml-2}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-cpp.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-patched}")
   ];
 
   strictDeps = true;

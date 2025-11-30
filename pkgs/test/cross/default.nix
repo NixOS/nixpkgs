@@ -195,7 +195,7 @@ let
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
-    # Uses the expression that is used by the most cross-compil_ed_ GHCs
+    # Uses the expression that is used by the most cross-compiled GHCs
     pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948
 
   ]
@@ -206,7 +206,7 @@ let
     pkgs.pkgsMusl.pkgsCross.gnu64.hello
 
     # Two web browsers -- exercises almost the entire packageset
-    pkgs.pkgsCross.aarch64-multiplatform.qutebrowser-qt5
+    pkgs.pkgsCross.aarch64-multiplatform.qutebrowser
     pkgs.pkgsCross.aarch64-multiplatform.firefox
 
     # Uses pkgsCross.riscv64-embedded; see https://github.com/NixOS/nixpkgs/issues/267859

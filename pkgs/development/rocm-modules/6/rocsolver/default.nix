@@ -27,6 +27,7 @@
       "gfx1100"
       "gfx1101"
       "gfx1102"
+      "gfx1151"
       "gfx1200"
       "gfx1201"
     ]
@@ -35,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-+sGU+0CB48iolJSyYo+xH36q5LCUp+nKtOYbguzMuhg=";
+    hash = "sha256-JthNY5rkrrm9bf1fgkO9HnARdX6H0kiF9EW1jMbBmj4=";
   };
 
   nativeBuildInputs = [

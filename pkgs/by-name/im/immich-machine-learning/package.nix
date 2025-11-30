@@ -22,6 +22,10 @@ python.pkgs.buildPythonApplication rec {
     "pydantic-settings"
   ];
 
+  pythonRemoveDeps = [
+    "setuptools"
+  ];
+
   build-system = with python.pkgs; [
     hatchling
     cython
@@ -45,6 +49,7 @@ python.pkgs.buildPythonApplication rec {
       gunicorn
       huggingface-hub
       tokenizers
+      rapidocr
     ]
     ++ uvicorn.optional-dependencies.standard;
 

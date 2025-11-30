@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.18.1";
+  version = "0.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "datashader";
     tag = "v${version}";
-    hash = "sha256-nQsVuj4zK5bfF617K71n+El5/ZC7vNia7dhrIqv7t+M=";
+    hash = "sha256-ad1L0QyqLtMafFr+ZK1dItlFuPQZ0Caa96RgkLsqNkA=";
   };
 
   build-system = [

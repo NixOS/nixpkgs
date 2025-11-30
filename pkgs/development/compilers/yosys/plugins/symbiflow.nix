@@ -39,14 +39,13 @@ let
 
   static_gtest = gtest.overrideAttrs (old: {
     dontDisableStatic = true;
-    disableHardening = [ "pie" ];
     cmakeFlags = old.cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" ];
   });
 
 in
 lib.genAttrs plugins (
   plugin:
-  stdenv.mkDerivation (rec {
+  stdenv.mkDerivation rec {
     pname = "yosys-symbiflow-${plugin}-plugin";
     inherit src version plugin;
     enableParallelBuilding = true;
@@ -109,5 +108,5 @@ lib.genAttrs plugins (
         thoughtpolice
       ];
     };
-  })
+  }
 )

@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://bupstash.io";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrewchambers ];
+    maintainers = [ ];
     mainProgram = "bupstash";
   };
 }

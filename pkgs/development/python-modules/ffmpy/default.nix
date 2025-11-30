@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
   uv-build,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-u//L2vxucFlWmk1+pdp+iCrpzzMZUonDAn1LELgX86E=";
+    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
   };
 
   postPatch =

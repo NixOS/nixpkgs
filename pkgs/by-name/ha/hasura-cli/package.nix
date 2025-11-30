@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "hasura";
-  version = "2.48.3";
+  version = "2.48.6";
 
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphql-engine";
     rev = "v${version}";
-    sha256 = "sha256-HFikSDueHqmfilyPKszQO9pfucGPkOqJ+rd/VbJecZQ=";
+    sha256 = "sha256-99HxAjqZQ4GtUR4F7EbVNKT7BI9AHm0uj54XgZZC2Lc=";
   };
   modRoot = "./cli";
 

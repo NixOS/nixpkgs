@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   fetchurl,
-  fetchzip,
   stdenv,
   cmake,
   python3,
@@ -16,66 +15,16 @@
 
   debugBuild ? false,
 
-  glib,
   nss,
   nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  libGL,
-  expat,
-  libxcb,
-  libxkbcommon,
   libX11,
-  libXcomposite,
   libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libgbm,
-  gtk3,
-  pango,
-  cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  libxshmfence,
-  udev,
   boost,
   thrift,
+  cef-binary,
 }:
 
 let
-  rpath = lib.makeLibraryPath [
-    glib
-    nss
-    nspr
-    atk
-    at-spi2-atk
-    libdrm
-    libGL
-    expat
-    libxcb
-    libxkbcommon
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
-    libgbm
-    gtk3
-    pango
-    cairo
-    alsa-lib
-    dbus
-    at-spi2-core
-    cups
-    libxshmfence
-    udev
-  ];
-
   buildType = if debugBuild then "Debug" else "Release";
   platform =
     {
@@ -99,14 +48,42 @@ let
     .${platform};
   inherit (arches) depsArch projectArch targetArch;
 
+  # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
+  cef-name = "cef_binary_137.0.17+gf354b0e+chromium-137.0.7151.104_${platform}_minimal";
+
+  cef-bin = cef-binary.override {
+    version = "137.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
+    gitRevision = "f354b0e";
+    chromiumVersion = "137.0.7151.104";
+    srcHashes = {
+      aarch64-linux = "sha256-C9P4+TpzjyMD5z2qLbzubbrIr66usFjRx7QqiAxI2D8=";
+      x86_64-linux = "sha256-iDC3a/YN0NqjX/b2waKvUAZCaR0lkLmUPqBJphE037Q=";
+    };
+  };
+
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
+
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+  });
+
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "7a7b9383b3bf39c850feb0d103c6b829e2f48a6b";
+  rev = "bb9fb310ed7f3abf858faf248c53bbb707be21f7";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
   # Run `git rev-list --count HEAD`
-  version = "1014";
+  version = "1083";
 
   nativeBuildInputs = [
     cmake
@@ -125,31 +102,16 @@ stdenv.mkDerivation rec {
     libXdamage
     nss
     nspr
-    thrift
+    thrift20
   ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-ZMxx5mwmsBiUneULHFUDOrJQ8yKuK9bfPz89vN31ql4=";
+    hash = "sha256-BHmGEhfkrUWDfrUFR8d5AgIq8qkAr+blX9n7ZVg8mtc=";
   };
-  cef-bin =
-    let
-      # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-      name = "cef_binary_122.1.9+gd14e051+chromium-122.0.6261.94_${platform}_minimal";
-      hash =
-        {
-          "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
-          "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
-        }
-        .${platform};
-      urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
-    in
-    fetchzip {
-      url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-      inherit name hash;
-    };
+
   # Find the hash in tools/buildtools/linux64/clang-format.sha1
   clang-fmt = fetchurl {
     url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
@@ -161,12 +123,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    cp -r ${cef-bin} third_party/cef/${cef-bin.name}
-    chmod +w -R third_party/cef/${cef-bin.name}
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-    sed 's/-O0/-O2/' -i third_party/cef/${cef-bin.name}/cmake/cef_variables.cmake
+    cp -r ${cef-bin} third_party/cef/${cef-name}
+    chmod +w -R third_party/cef/${cef-name}
 
     sed \
       -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
@@ -184,7 +142,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift}/bin/thrift)|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build

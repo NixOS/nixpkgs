@@ -1,20 +1,20 @@
 diff --git a/test/surface_test.py b/test/surface_test.py
-index 4e4b5d4..ffc7ffb 100644
+index c2c91f4f5..58d916de8 100644
 --- a/test/surface_test.py
 +++ b/test/surface_test.py
-@@ -375,6 +375,7 @@ class SurfaceTypeTest(unittest.TestCase):
-         self.assertTrue(s1.get_flags() & pygame.RLEACCELOK)
-         self.assertTrue(not s2.get_flags() & pygame.RLEACCELOK)
- 
-+    @unittest.skipIf(True, "https://github.com/libsdl-org/sdl2-compat/issues/476")
-     def test_solarwolf_rle_usage(self):
-         """Test for error/crash when calling set_colorkey() followed
-         by convert twice in succession. Code originally taken
-@@ -403,6 +404,7 @@ class SurfaceTypeTest(unittest.TestCase):
+@@ -404,6 +404,7 @@ class SurfaceTypeTest(unittest.TestCase):
          finally:
              pygame.display.quit()
  
-+    @unittest.skipIf(True, "https://github.com/libsdl-org/sdl2-compat/issues/476")
++    @unittest.skipIf(True, "https://github.com/libsdl-org/SDL/pull/14429")
      def test_solarwolf_rle_usage_2(self):
          """Test for RLE status after setting alpha"""
  
+@@ -435,6 +436,7 @@ class SurfaceTypeTest(unittest.TestCase):
+         finally:
+             pygame.display.quit()
+ 
++    @unittest.skipIf(True, "https://github.com/libsdl-org/SDL/issues/14424")
+     def test_set_alpha__set_colorkey_rle(self):
+         pygame.display.init()
+         try:

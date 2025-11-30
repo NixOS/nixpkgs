@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     changelog = "https://www.jacoco.org/jacoco/trunk/doc/changes.html";
     license = licenses.epl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

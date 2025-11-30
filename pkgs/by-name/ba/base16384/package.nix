@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "base16384";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "fumiama";
     repo = "base16384";
     rev = "v${version}";
-    hash = "sha256-2HZeom+8eEH4CrphCoOV+wJbqhYKVUcAQrYLyEVACkQ=";
+    hash = "sha256-qaDnv+KpXMYdx6eqH7pU0pEjSpU5xg9I7afxpoO3iGs=";
   };
 
   nativeBuildInputs = [ cmake ];

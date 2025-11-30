@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   meson,
   ninja,
   gettext,
@@ -25,6 +26,7 @@
   gcr_4,
   isocodes,
   desktop-file-utils,
+  docutils,
   nettle,
   gdk-pixbuf,
   gst_all_1,
@@ -37,15 +39,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "48.5";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D2ZVKtZZPHlSo93uW/UVZWyMQ0hxB22fGpGnr5NGsbQ=";
+    hash = "sha256-s7o9aCE+h/gfFzPoVQDDe4K1k4+QCeT+iZlJY9X7K44=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
+    docutils # for rst2man
     gettext
     itstool
     meson

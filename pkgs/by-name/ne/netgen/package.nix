@@ -35,24 +35,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2504";
+  version = "6.2.2505";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4mmh2H2qvc+3Pa9CHm38arViI76Qvwp8fOVGZbMv1M=";
+    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
   };
 
   patches = [
-    # disable some platform specified code used by downstream ngsolve
-    # can be enabled with -march=armv8.3-a+simd when compiling ngsolve
-    # note compiling netgen itself is not influenced by this feature
-    (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/pull/197/commits/1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7.patch";
-      hash = "sha256-3Nom4uGhGLtSGn/k+qKKSxVxrGtGTHqPtcNn3D/gkZU";
-    })
-
     (fetchpatch2 {
       url = "${patchSource}/use-local-catch2.patch";
       hash = "sha256-h4ob8tl6mvGt5B0qXRFNcl9MxPXxRhYw+PrGr5iRGGk=";
@@ -114,11 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     ffmpeg
     mpi
+    python3Packages.pybind11
   ];
 
   propagatedBuildInputs = with python3Packages; [
     packaging
-    pybind11
     mpi4py
     numpy
   ];

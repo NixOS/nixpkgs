@@ -46,6 +46,7 @@
 
   # tests
   addBinToPathHook,
+  moyopy,
   pytest-xdist,
   pytestCheckHook,
 }:
@@ -122,10 +123,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     addBinToPathHook
+    moyopy
     pytestCheckHook
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     # ensure tests can find these
@@ -169,11 +171,7 @@ buildPythonPackage rec {
     "test_timer"
   ];
 
-  disabledTestPaths = [
-    # We have not packaged moyopy yet.
-    "tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crash when running the pmg command
     # Critical error: required built-in appearance SystemAppearance not found
     "tests/cli/test_pmg_plot.py"

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "re2";
-  version = "2025-08-05";
+  version = "2025-08-12";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = finalAttrs.version;
-    hash = "sha256-Q4/xab6Jqhai/WIMND5YWOrPmNyDDf3HysKDqum3RgQ=";
+    hash = "sha256-3cWbw8Wlnl1OMPIcbNlc3HnCsuL4VT7psuHWtldsWoQ=";
   };
 
   outputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit chromium grpc mercurial;
-    inherit (python3Packages) fb-re2 google-re2;
+    inherit (python3Packages) google-re2;
     haskell-re2 = haskellPackages.re2;
   };
 

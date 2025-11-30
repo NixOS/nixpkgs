@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
   glib,
   cmake,
   libxml2,
@@ -13,6 +13,8 @@
   systemd,
   polkit,
   udevCheckHook,
+  libssc,
+  libqmi,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,10 +35,19 @@ stdenv.mkDerivation rec {
       --replace 'polkit_policy_directory' "'$out/share/polkit-1/actions'"
   '';
 
+  patches = [
+    # https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/merge_requests/381
+    (fetchpatch {
+      url = "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/af17d8f3a7572ed2be40d5a28c6ce08c74bd36c7/temp/iio-sensor-proxy/0001-iio-sensor-proxy-depend-on-libssc.patch";
+      hash = "sha256-faOpfR6qit68R2b+sk9/k4XeA6Ao5UuerrfFzMaD3MM=";
+    })
+  ];
+
   buildInputs = [
     libgudev
     systemd
     polkit
+    libssc
   ];
 
   nativeBuildInputs = [
@@ -52,6 +63,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
     (lib.mesonOption "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonBool "ssc-support" true)
   ];
 
   doInstallCheck = true;

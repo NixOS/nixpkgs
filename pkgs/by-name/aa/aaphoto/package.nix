@@ -9,7 +9,7 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aaphoto";
   version = "0.45";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/${pname}
+    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/aaphoto
   '';
 
   meta = {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       one-by-one.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "aaphoto";
   };

@@ -23,6 +23,9 @@
   # tests
   pytestCheckHook,
   pytest-benchmark,
+  pytest-xdist,
+  cloudpickle,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +37,8 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-fWbvv9MiBZZiTZLu78tMR5Cx0/7xSuVIya3dkuahPE4=";
+    hash = "sha256-kduE5v1oQT76MRxMuGo+snCBdJ+yOjkOJFO45twcUIs=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
@@ -56,6 +60,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-benchmark
+    pytest-xdist
+    cloudpickle
+    hypothesis
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
@@ -65,6 +72,8 @@ buildPythonPackage rec {
     # Fatal Python error: Segmentation fault
     "test_numpy_conversion_4"
   ];
+
+  pythonImportsCheck = [ "boost_histogram" ];
 
   meta = {
     description = "Python bindings for the C++14 Boost::Histogram library";

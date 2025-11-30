@@ -9,6 +9,7 @@
   ffmpeg-headless,
   jemalloc,
   makeWrapper,
+  nix-update-script,
   nodejs,
   pango,
   pixman,
@@ -154,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.sharkey = nixosTests.sharkey;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Sharkish microblogging platform";
     homepage = "https://joinsharkey.org";
@@ -162,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sharkey";
     maintainers = with lib.maintainers; [
-      srxl
       tmarkus
     ];
   };

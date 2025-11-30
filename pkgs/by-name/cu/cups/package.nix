@@ -10,8 +10,8 @@
   libtiff,
   pam,
   dbus,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   acl,
   gmp,
   darwin,
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.12";
+  version = "2.4.14";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    hash = "sha256-sd3hkaSuJ2DEciDILKYVWijDgnAebBoBWdEFSZAjHVk=";
+    hash = "sha256-ZgKIAg3W95yveZgRxMGjIHpIaJiZrCCTlZ1wo73Ldpk=";
   };
 
   outputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     dbus
     acl
   ]
-  ++ lib.optional enableSystemd systemd;
+  ++ lib.optional enableSystemd systemdLibs;
 
   propagatedBuildInputs = [ gmp ];
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     homepage = "https://openprinting.github.io/cups/";
     description = "Standards-based printing system for UNIX";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

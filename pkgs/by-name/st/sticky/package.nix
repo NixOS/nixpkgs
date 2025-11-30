@@ -11,18 +11,19 @@
   glib,
   gspell,
   gtk3,
+  xapp-symbolic-icons,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
     rev = version;
-    hash = "sha256-IuYRcvoUyY03aEclkiOmamjb/c/JaYYIoqKdcwDSY8Q=";
+    hash = "sha256-6CRkeJ2xuUs3viyYxnrgGFUIakK7ANyVpPZuwU486NM=";
   };
 
   postPatch = ''
@@ -51,14 +52,13 @@ stdenv.mkDerivation rec {
     python-xapp
   ];
 
-  dontWrapGApps = true;
-
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
-    wrapProgram $out/bin/sticky \
-      --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      ''${gappsWrapperArgs[@]}
+    gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "$program_PYTHONPATH"
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
   '';
 
   passthru = {

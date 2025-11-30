@@ -21,7 +21,6 @@
   channels,
   click,
   colorcet,
-  coverage,
   firefox,
   geckodriver,
   isort,
@@ -81,7 +80,6 @@ buildPythonPackage rec {
     channels
     click
     colorcet
-    coverage
     firefox
     geckodriver
     isort
@@ -124,6 +122,6 @@ buildPythonPackage rec {
     mainProgram = "bokeh";
     homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

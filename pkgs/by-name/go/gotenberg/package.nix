@@ -24,7 +24,7 @@ let
 in
 buildGo125Module rec {
   pname = "gotenberg";
-  version = "8.22.0";
+  version = "8.25.0";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGo125Module rec {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${version}";
-    hash = "sha256-LrkJlUkcvW8ky9e2Ltj13wxcL0rvaE4NfVJrcrgPHL4=";
+    hash = "sha256-C/qUEyYYcp/VQ3++FbBK1etNhoJQ5om2PiCAgt6U91k=";
   };
 
-  vendorHash = "sha256-JHsuCYx9Ec/w8LBT2R4LxlrfjYyYve0+4/Xq0U1sq5I=";
+  vendorHash = "sha256-RxpQIx2HTEjpUi5RsRiV9Nc7VUBOJI0YA2rH40iHRXE=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
@@ -114,6 +114,6 @@ buildGo125Module rec {
     homepage = "https://gotenberg.dev";
     changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

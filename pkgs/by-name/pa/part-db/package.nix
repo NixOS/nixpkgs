@@ -16,7 +16,7 @@ let
   pname = "part-db";
   version = "1.14.5";
 
-  srcWithVendor = php.buildComposerProject ({
+  srcWithVendor = php.buildComposerProject {
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -50,7 +50,7 @@ let
       cd $out/
       php -d memory_limit=256M bin/console cache:warmup
     '';
-  });
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "terminus-font-ttf";
   version = "4.49.3";
 
   src = fetchzip {
-    url = "https://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
+    url = "https://files.ax86.net/terminus-ttf/files/${finalAttrs.version}/terminus-ttf-${finalAttrs.version}.zip";
     hash = "sha256-dK7MH4I1RhsIGzcnRA+7f3P5oi9B63RA+uASVDNtxNI=";
   };
 
@@ -26,14 +26,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clean fixed width TTF font";
     longDescription = ''
       Monospaced bitmap font designed for long work with computers
       (TTF version, mainly for Java applications)
     '';
     homepage = "https://files.ax86.net/terminus-ttf";
-    license = licenses.ofl;
-    maintainers = [ ];
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ azey7f ];
   };
-}
+})
