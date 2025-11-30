@@ -11,7 +11,7 @@
   useQt6 ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adwaita-qt";
   version = "1.4.2";
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "adwaita-qt";
-    rev = version;
-    sha256 = "sha256-K/+SL52C+M2OC4NL+mhBnm/9BwH0KNNTGIDmPwuUwkM=";
+    tag = finalAttrs.version;
+    hash = "sha256-K/+SL52C+M2OC4NL+mhBnm/9BwH0KNNTGIDmPwuUwkM=";
   };
 
   nativeBuildInputs = [
@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    qt5.qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libxcb
-  ]
-  ++ lib.optionals (!useQt6) [
-    qt5.qtx11extras
-  ]
-  ++ lib.optionals useQt6 [
-    qt6.qtwayland
-  ];
+  buildInputs =
+    lib.optionals (!useQt6) [
+      qt5.qtbase
+      qt5.qtx11extras
+    ]
+    ++ lib.optionals useQt6 [
+      qt6.qtbase
+      qt6.qtwayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libxcb
+    ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
   dontWrapQtApps = true;
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
