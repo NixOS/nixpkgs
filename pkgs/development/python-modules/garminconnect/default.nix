@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.2.34";
+  version = "0.2.35";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     tag = version;
-    hash = "sha256-gcqkSWyPSwkzykKSXhTPq363fi89TyP2DPQchSmGg/k=";
+    hash = "sha256-5bAM77qLeoG6BMkJOIJ+rKx1UOPXhVcYKJUXJva6UiU=";
   };
 
   pythonRelaxDeps = [
