@@ -26,8 +26,12 @@ in
   options.virtualisation.waydroid = {
     enable = lib.mkEnableOption "Waydroid";
     package = lib.mkPackageOption pkgs "waydroid" { } // {
-      default = if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid;
-      defaultText = lib.literalExpression ''if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid'';
+      default =
+        if config.networking.nftables.enable || lib.versionOlder config.kernel.version "6.16.9" then
+          pkgs.waydroid-nftables
+        else
+          pkgs.waydroid;
+      defaultText = lib.literalExpression ''if config.networking.nftables.enable || lib.versionOlder config.kernel.version "6.16.9" then pkgs.waydroid-nftables else pkgs.waydroid'';
     };
   };
 
