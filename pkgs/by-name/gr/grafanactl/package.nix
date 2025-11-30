@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafanactl";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafanactl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6fyjawZsqP2+F3ZhIVf9KVus37/Ezi4GcE9Ywi5yzhk=";
+    hash = "sha256-UaltfA3O9IkcWXCnxe0pOhYm3//5YZEvhVi3emCy1mM=";
   };
 
   vendorHash = "sha256-wIp05nwc4MICkNFoEAjOd4kjs1RE7RpINcdYzIdq4YY=";
