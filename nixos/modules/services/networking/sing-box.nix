@@ -89,6 +89,8 @@ in
           "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
         ];
       };
+      # After= is specified by upstream
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
     };
 
