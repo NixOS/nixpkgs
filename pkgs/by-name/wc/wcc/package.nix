@@ -19,8 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "endrazine";
     repo = "wcc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hyelDAsE3IFvUxBqttYW7QmM6NPEa6pOREmawFjW2Q8=";
-    deepClone = true;
+    hash = "sha256-cg8rf8R3xYNJTJhrDfIdVAUR/OOd6JjB0NYHRosUzvU=";
     fetchSubmodules = true;
   };
 
