@@ -520,7 +520,24 @@ let
               ghc948
               ;
           };
-        };
+        }
+        //
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskellPackages)
+                  ghc
+                  hello
+                  th-orphans
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
