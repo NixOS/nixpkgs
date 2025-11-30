@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
 }:
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -33,6 +35,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=timer::tests::test_notification_icon_config"
     "--skip=integration::"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd tomat \
+      --bash target/completions/tomat.bash \
+      --fish target/completions/tomat.fish \
+      --zsh target/completions/_tomat
+
+    installManPage target/man/*
+  '';
 
   meta = {
     description = "Pomodoro timer for status bars";

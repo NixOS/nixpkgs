@@ -6,15 +6,15 @@
 }:
 
 let
-  themeName = "Ant-Nebula";
+  themeName = "Ant";
 in
-stdenv.mkDerivation rec {
-  pname = "ant-nebula-theme";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ant-theme";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/EliverLara/${themeName}/releases/download/v${version}/${themeName}.tar";
-    sha256 = "1xpgw577nmgjk547mg2vvv0gdai60srgncykm5pb1w8dnlk69jbz";
+    url = "https://github.com/EliverLara/${themeName}/releases/download/v${finalAttrs.version}/${themeName}.tar";
+    hash = "sha256-vx2iwnJIB+JhFaEwZsYTQ0VXV3MCI4AbWexzb9Iu6eQ=";
   };
 
   propagatedUserEnvPkgs = [
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Nebula variant of the Ant theme";
+  meta = {
+    description = "Flat and light theme with a modern look";
     homepage = "https://github.com/EliverLara/${themeName}";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ alexarice ];
   };
-}
+})
