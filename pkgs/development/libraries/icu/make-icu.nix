@@ -22,7 +22,13 @@ let
 
   pname = "icu4c";
 
-  release = lib.replaceStrings [ "." ] [ "-" ] version;
+  sources =
+    if lib.versionOlder version "78.1" then
+      "${lib.replaceStrings [ "." ] [ "_" ] version}-src"
+    else
+      "${version}-sources";
+  release =
+    if lib.versionOlder version "78.1" then lib.replaceStrings [ "." ] [ "-" ] version else version;
   # To test rc versions of ICU replace the line above with the line below.
   #release = lib.replaceStrings [ "." ] [ "-" ] (
   #  if lib.hasSuffix "rc" version then lib.replaceStrings [ "1" ] [ "" ] version else version
@@ -30,9 +36,7 @@ let
 
   baseAttrs = {
     src = fetchurl {
-      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
-        lib.replaceStrings [ "." ] [ "_" ] version
-      }-src.tgz";
+      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${sources}.tgz";
       inherit hash;
     };
 
