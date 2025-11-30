@@ -62,7 +62,7 @@ buildDotnetModule rec {
 
       This derivation may be used as a vim plugin to provide syntax highlighting.
     '';
-    license = lib.licenses.mspl;
+    license = lib.licenses.mit;
     mainProgram = "boogie";
     maintainers = with lib.maintainers; [ taktoa ];
     platforms = with lib.platforms; linux ++ darwin;
