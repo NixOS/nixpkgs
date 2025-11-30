@@ -5,9 +5,8 @@
   nix-update-script,
   cmake,
   ninja,
-  qtbase,
-  qtwayland,
   qt5,
+  qt6,
   xorg,
   useQt6 ? false,
 }:
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
+    qt5.qtbase
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     qt5.qtx11extras
   ]
   ++ lib.optionals useQt6 [
-    qtwayland
+    qt6.qtwayland
   ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
