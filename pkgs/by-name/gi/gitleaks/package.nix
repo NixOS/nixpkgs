@@ -11,21 +11,21 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.28.0";
+  version = "8.30.0";
 
   src = fetchFromGitHub {
     owner = "gitleaks";
     repo = "gitleaks";
     tag = "v${version}";
-    hash = "sha256-smh3Ge278lYVEcs6r1F43daexgjgddy1HKhU5E4CBYM=";
+    hash = "sha256-nCalZlKvH3d75GKo3Qr5580kG77A2zTvsddLElYwZ8A=";
   };
 
-  vendorHash = "sha256-dd9sHt5t0s4Vff1rOwQY1OC+0FIw0SDt/cwJN+IL5D8=";
+  vendorHash = "sha256-whJtl34dNltH/dk9qWSThcCYXC0x9PzbAUOO97Int+k=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
   ];
 
   nativeBuildInputs = [
