@@ -2,34 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
+  pnpm_10,
+  nodejs,
   versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+let
+  pnpm = pnpm_10;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
   version = "4.19.3";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wdv2oqJNc6U0Fyv4jT+0LUcYaDfodHk1vQZGMdyFF/E=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_9.configHook
+    nodejs
+    pnpm.configHook
   ];
 
   buildInputs = [
-    nodejs_22
+    nodejs
   ];
 
   patchPhase = ''
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     # because tsx uses semantic-release, the package.json has a placeholder
     #  version number. this patches it to match the version of the nix package,
     #  which in turn is the release version in github.
-    substituteInPlace package.json --replace-fail "0.0.0-semantic-release" "${version}"
+    substituteInPlace package.json --replace-fail "0.0.0-semantic-release" "${finalAttrs.version}"
 
     runHook postPatch
   '';
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    npm run build
+    pnpm run build
 
     # remove devDependencies that are only required to build
     #  and package the typescript code
@@ -90,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sdedovic ];
     mainProgram = "tsx";
   };
-}
+})
