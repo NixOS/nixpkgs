@@ -1364,6 +1364,7 @@
   ./services/networking/spacecookie.nix
   ./services/networking/speedify.nix
   ./services/networking/spiped.nix
+  ./services/networking/sqm.nix
   ./services/networking/squid.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/sslh.nix
