@@ -57,7 +57,7 @@ let
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
-  vulkanRequested = shouldEnable "vulkan" false;
+  vulkanRequested = acceleration == "vulkan";
 
   enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
   enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
