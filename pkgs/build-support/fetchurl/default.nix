@@ -136,6 +136,7 @@ lib.extendMkDerivation {
 
       # Passthru information, if any.
       passthru ? { },
+
       # Doing the download on a remote machine just duplicates network
       # traffic, so don't do that by default
       preferLocalBuild ? true,
@@ -238,6 +239,8 @@ lib.extendMkDerivation {
 
     derivationArgs
     // {
+      __structuredAttrs = true;
+
       name =
         if finalAttrs.pname or null != null && finalAttrs.version or null != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
@@ -297,14 +300,13 @@ lib.extendMkDerivation {
         ''
       ) curlOpts;
 
-      curlOptsList = lib.escapeShellArgs curlOptsList;
-
       inherit
-        showURLs
-        mirrorsFile
-        postFetch
+        curlOptsList
         downloadToTemp
         executable
+        mirrorsFile
+        postFetch
+        showURLs
         ;
 
       impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
