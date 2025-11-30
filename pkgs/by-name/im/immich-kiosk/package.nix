@@ -8,25 +8,25 @@
 
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.26.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-NsnJa5+P0xm12o7HAmfD8+w3H46f5WR2GO78My+YAi0=";
+    hash = "sha256-vsQM3OiGGDtW7vdNs/UWI8nI3xLQuUDBJzBrijgO2pE=";
   };
 
   # Delete vendor directory to regenerate it consistently across platforms
   postPatch = ''
     rm -rf vendor
   '';
-  vendorHash = "sha256-Mx6dCC8xRTfE/7j4chLtdKzQLHQE9y+xtEasWPtn94k=";
+  vendorHash = "sha256-lOSUmLX/7C/9aN85Qq3iGrf1Guu/JlvVlKieR4flexI=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-En3y1fQRtwJm8fwxZ/VWuRfm1zPcnlDBuMNcY5WtxqM=";
+    hash = "sha256-pydLXW7MvX8v+HAJIIlAMJQCVJZYjOl2beZn7/dZspk=";
     fetcherVersion = 2;
   };
 
